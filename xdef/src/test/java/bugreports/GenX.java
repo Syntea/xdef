@@ -7,6 +7,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SBuffer;
 import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ANY_OBJ;
@@ -14,28 +15,30 @@ import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
 import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonUtils;
+import test.XDTester;
 
-/** Generate JSON from JSON model.
+/** Generate JSON model -> JSON, and JSON -> JSON model.
  * @author Vaclav Trojan
  */
-public final class GenXON {
+public final class GenX extends XDTester {
+
+	public GenX() {super();}
 
 	private static void test(final String json) {
-		String s = JsonModelToJson.parse(json, "STRING"); // to JSON conversion
+		String s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
 		XonUtils.parseXON(s.trim());// just test syntax
-		String t = JsonToJsonModel.parse(s, "STRING");
+		String t = GenXJsonToJsonModel.parse(s, "STRING");
 		if (!json.trim().equals(t.trim())) { //????
 			System.out.println("***\n" + json);
 			System.out.println("***\n" + s);
 			System.out.println("***\n" + t);
-			JsonModelToJson.parse(t, "STRING"); // test re-converted result
+			GenXJsonModelToJson.parse(t, "STRING"); // test re-converted result
 		}
 	}
 
+	@Override
 	/** Run test and display error information. */
-	public static void main(String[] args) {
-//		test("{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf= \" ref test\"]},\"jvalue();\"]}");
-//		if(true) return;
+	public void test() {
 		test(" { %anyName: %anyObj=\"*;\" } ");
 		/////////////////////////////////////////
 		test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
@@ -44,27 +47,31 @@ public final class GenXON {
 		/////////////////////////////////////////
 		test(" { %anyName: %anyObj=\"*;\" } ");
 		/////////////////////////////////////////
-		test("{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf = \"ref test\"]},\"jvalue();\"]}");
+		test("{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf=\"ref test\"]},\"jvalue();\"]}");
+		/////////////////////////////////////////
+		test("{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf =\" ref test\"]},\"jvalue();\"]}");
 		/////////////////////////////////////////
 		test("{%anyName:[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
 		/////////////////////////////////////////
 		test("/** Test */{%oneOf=\"optional;\",\"manager\":\"string()\",\"subordinates\":[\"* int();\"]}");
 		/////////////////////////////////////////
-		test("[%oneOf,\n"+
+		test(
+"[%oneOf,\n"+
 "    \"jvalue();\",\n"+
 "    [\"* jvalue();\" ],\n"+
 "    {%anyName:\n"+
 "       [%oneOf,\n"+
 "         \"jvalue();\",\n"+
 "         [\"* jvalue();\" ],\n"+
-"         {%anyName: [%oneOf=\" ref test\"]}\n"+
+"         {%anyName: [%oneOf =\" ref test\"]}\n"+
 "       ]\n"+
 "    }\n"+
 "]");
 		/////////////////////////////////////////
-		test("/* xxx */ [\n"+
+		test(
+"/* xxx */ [\n"+
 "  \"? jvalue()\",\n"+
-"  { %script= \"occurs 1..*;\",\n"+
+"  { %script =\"occurs 1..*;\",\n"+
 "    \"jmeno\": \"string();\",\n"+
 "    \"IP\": [ %script=\"?\",\n"+
 "             [ %script=\"*\", \"* ipAddr();\"]]\n"+
@@ -72,29 +79,39 @@ public final class GenXON {
 "]" +
 " # yyy");
 		/////////////////////////////////////////
-		test("{ \"cities\"  : [\n" +
-"    {%script=\"occurs 1..*\",\n" +
+		test(
+"{ \"cities\"  : [\n" +
+"    {%script = \"occurs 1..*\",\n" +
 "      \"from\": [\n" +
 "         \"string()\",\n" +
-"         {%script=\"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
+"         {%script = \"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
 "	  ]\n" +
 "    }\n" +
 "  ]\n" +
 "}");
 	}
 
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {
+			System.exit(1);
+		}
+	}
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Calss with methods for conversions X-definition JSON model -> JSON, and JSON -> X-definition JSON model
+// Class with methods for conversions X-definition JSON model -> JSON, and JSON -> X-definition JSON model
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class JsonXDConversionsBase extends StringParser {
+class GenXCommon extends StringParser {
 	final StringBuilder _sb; // here is result string
 
 	/** Create instance of JsonModelToJson.
 	 * @param jp parser of XON source.
 	 * @param source Reader with source data.
 	 */
-	public JsonXDConversionsBase(final String source) {
+	public GenXCommon(final String source) {
 		super(source, new ArrayReporter());
 		_sb = new StringBuilder();
 	}
@@ -113,8 +130,8 @@ class JsonXDConversionsBase extends StringParser {
 		}
 	}
 
-	/** Write parsed string from given positin to result.
-	 * @param pos source position wrom which to copy data,
+	/** Write parsed string from given position to result.
+	 * @param pos source position from which to copy data,
 	 */
 	final void out(final int pos) {
 		out(getParsedBufferPartFrom(pos));
@@ -164,16 +181,17 @@ class JsonXDConversionsBase extends StringParser {
 		error(JSON.JSON010, "[]{}"); //JSON simpleValue expected
 	}
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Conversion JSON -> X-definition JSON model
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class JsonToJsonModel extends JsonXDConversionsBase {
+class GenXJsonToJsonModel extends GenXCommon {
 
 	/** Create instance of JsonModelToJson.
 	 * @param jp parser of XON source.
 	 * @param source Reader with source data.
 	 */
-	public JsonToJsonModel(final String source) {
+	public GenXJsonToJsonModel(final String source) {
 		super(source);
 	}
 
@@ -191,10 +209,16 @@ class JsonToJsonModel extends JsonXDConversionsBase {
 			int i = isOneOfTokens('"' + SCRIPT_DIRECTIVE +'"', '"' + ONEOF_DIRECTIVE + '"');
 			if (i >= 0) {
 				out(new String[]{SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE}[i]);
-				writeSpacesOrComments();
+				String s = skipSpacesOrComments();
 				isChar(':');
+				s += skipSpacesOrComments();
+				if (s.length() > 0) {
+					out(s.substring(0, 1));
+				}
 				out('=');
-				writeSpacesOrComments();
+				if (s.length() > 1) {
+					out(s.substring(1));
+				}
 				if (isChar('"')) {
 					out('"');
 					int pos = getIndex();
@@ -284,9 +308,15 @@ class JsonToJsonModel extends JsonXDConversionsBase {
 		int i = isOneOfTokens('"' + SCRIPT_DIRECTIVE, '"' + ONEOF_DIRECTIVE);
 		if (i >= 0) {
 			out(new String[]{SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE}[i]);
-			writeSpacesOrComments();
+			String s = skipSpacesOrComments();
 			if (isChar('=')) {
+				if (s.length() > 0) {
+					out(s.substring(0,1));
+				}
 				out('=');
+				if (s.length() > 1) {
+					out(s.substring(1));
+				}
 				out('"');
 				writeSpacesOrComments();
 				int pos = getIndex();
@@ -373,7 +403,7 @@ class JsonToJsonModel extends JsonXDConversionsBase {
 	 * @return parsed XON or JSON object.
 	 */
 	public final static String parse(final String source, final String sysId) {
-		JsonToJsonModel xr = new JsonToJsonModel(source);
+		GenXJsonToJsonModel xr = new GenXJsonToJsonModel(source);
 		if (sysId != null) {
 			xr.setSysId(sysId);
 		}
@@ -386,16 +416,17 @@ class JsonToJsonModel extends JsonXDConversionsBase {
 		return xr._sb.toString();
 	}
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Conversion X-definition JSON model -> JSON
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class JsonModelToJson extends JsonXDConversionsBase {
+class GenXJsonModelToJson extends GenXCommon {
 
 	/** Create instance of JsonModelToJson.
 	 * @param jp parser of XON source.
 	 * @param source Reader with source data.
 	 */
-	public JsonModelToJson(final String source) {
+	public GenXJsonModelToJson(final String source) {
 		super(source);
 	}
 
@@ -408,14 +439,15 @@ class JsonModelToJson extends JsonXDConversionsBase {
 		if (i >= 0) {
 			String name = directives[i];
 			out('"' + name);
-			writeSpacesOrComments();
+			String s = skipSpacesOrComments();
 			if (isChar('=')) {
+				s += skipSpacesOrComments();
+				isChar('"');
 				if (sepChar == ':') {
 					out('"');
 				}
+				out(s);
 				out(sepChar);
-				writeSpacesOrComments();
-				isChar('"');
 				if (sepChar == ':') {
 					out('"');
 				}
@@ -588,7 +620,7 @@ class JsonModelToJson extends JsonXDConversionsBase {
 	 * @return parsed XON or JSON object.
 	 */
 	public final static String parse(final String source, final String sysId) {
-		JsonModelToJson xr = new JsonModelToJson(source);
+		GenXJsonModelToJson xr = new GenXJsonModelToJson(source);
 		if (sysId != null) {
 			xr.setSysId(sysId);
 		}
