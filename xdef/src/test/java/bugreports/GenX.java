@@ -26,6 +26,10 @@ public final class GenX extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
+		test("\"int\"");
+		test("%anyObj");
+		test("%anyObj=\"int()\"");
+		test("[%anyObj=\"*;\"]");
 		test(" { %anyName: %anyObj=\"*;\" } ");
 		test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
 		test("[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]");
