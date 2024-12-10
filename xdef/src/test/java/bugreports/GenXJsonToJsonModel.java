@@ -203,12 +203,15 @@ public class GenXJsonToJsonModel extends GenXCommon {
 			out('[');
 			readArray();
 		} else if (isToken('"' + ANY_OBJ)) {
-			out(ANY_OBJ + "=\"");
+			out(ANY_OBJ);
+			String s = "";
 			while(!isChar('"') && !eos()) {
-				out(getCurrentChar());
+				s += getCurrentChar();
 				nextChar();
 			}
-			out('"');
+			if (!s.isEmpty()) {
+				out("=\"" + s + '"');
+			}
 		} else {
 			int pos = getIndex();
 			readStringValue();
