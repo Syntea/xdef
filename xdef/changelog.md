@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.15, release-date 2024-12-09
+# Version 42.2.15, release-date 2024-12-10
 * .
 
 # Version 42.2.14, release-date 2024-12-09
