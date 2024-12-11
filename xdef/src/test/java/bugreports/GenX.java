@@ -64,7 +64,6 @@ public final class GenX extends XDTester {
 			test("%anyObj=\"int()\"");
 			test("[%anyObj=\"*;\"]");
 			test(" { %anyName: %anyObj=\"*;\" } ");
-//			test(" { %anyName: %anyObj =\"*;\" } ");
 			test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
 			test("[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]");
 			test(" { %anyName: %anyObj=\"*;\" } ");
@@ -81,11 +80,10 @@ public final class GenX extends XDTester {
 "       [%oneOf,\n"+
 "         \"jvalue();\",\n"+
 "         [\"* jvalue();\" ],\n"+
-/**/
-"         {%anyName: [%oneOf=\"ref test\"]}\n"+
-/**
-"         {%anyName: [%oneOf= \"ref test\"]}\n"+
-/**/
+"         {%anyName: [\n"+
+//"           [%oneOf= \"ref test\"],\n"+
+"           [%oneOf=\"ref test\"]\n"+
+"         ]}\n"+
 "       ]\n"+
 "    }\n"+
 "]");
