@@ -1,5 +1,6 @@
 package bugreports;
 
+import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
@@ -11,83 +12,77 @@ public final class GenX extends XDTester {
 
 	public GenX() {super();}
 
-	private static void test(final String json) {
-		String s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
-		XonUtils.parseXON(s.trim());// just test syntax
-		String t = GenXJsonToJsonModel.parse(s, "STRING");
-		String u;
-		if (!(u=json.trim()).equals(t=t.trim())) {
-			GenXJsonModelToJson.parse(t, "STRING"); // test re-converted result
-			int i = 0;
-			for (; i < t.length() && i < u.length(); i++) {
-				char c;
-				if ((c = u.charAt(i)) == t.charAt(i)) {
-					System.out.print(c);
-				} else {
-					int j = i;
-					for (j = i; j >= 0 && u.charAt(j) != '\n'; j--) {}
-					if (j < 0) {
-						j = 0;
+	private static String test(final String json) {
+		try {
+			String s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
+			XonUtils.parseXON(s);// just test syntax
+			String t = GenXJsonToJsonModel.parse(s, "STRING");
+			String u;
+			if (!(u=json).equals(t=t)) {
+				GenXJsonModelToJson.parse(t, "STRING"); // test re-converted result
+				int i = 0;
+				StringBuilder sb = new StringBuilder();
+				for (; i < t.length() && i < u.length(); i++) {
+					char c;
+					if ((c = u.charAt(i)) == t.charAt(i)) {
+						sb.append(c);
 					} else {
-						j++;
-					}
-					int k = i;
-					int len = u.length();
-					if (len > t.length()) len = t.length();
-					for (; k < len; k++) {
-						if (u.charAt(k) == '\n') {
-							break;
+						int j = i;
+						for (j = i; j >= 0 && u.charAt(j) != '\n'; j--) {}
+						if (j < 0) {
+							j = 0;
+						} else {
+							j++;
 						}
+						int k = i;
+						int len = u.length();
+						if (len > t.length()) len = t.length();
+						for (; k < len; k++) {
+							if (u.charAt(k) == '\n') {
+								break;
+							}
+						}
+						sb.append(u.substring(i,k)).append('\n');
+						sb.append(t.substring(j,k)).append('\n');
+						for (int n = j; n < i; n++) {
+							sb.append('.');
+						}
+						sb.append('|');
+						for (int n = i+1; n < len-1 && u.charAt(n) != '\n'; n++) {
+							sb.append('.');
+						}
+						sb.append('\n');
+						return sb.toString();
 					}
-					System.out.println(u.substring(i,k));
-					System.out.println(t.substring(j,k));
-					for (int n = j; n < i; n++) {
-						System.out.print('.');
-					}
-					System.out.print('|');
-					for (int n = i+1; n < len-1 && u.charAt(n) != '\n'; n++) {
-						System.out.print('.');
-					}
-					System.out.println();
-					break;
 				}
 			}
+			return "";
+		} catch (Exception ex) {
+			return printThrowable(ex);
 		}
 	}
 
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		try {
-			test("\"int\"");
-			test("%anyObj");
-			test("%anyObj=\"int()\"");
-			test("[%anyObj=\"*;\"]");
-			test(" { %anyName: %anyObj=\"*;\" } ");
-			test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
-			test("[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]");
-			test(" { %anyName: %anyObj=\"*;\" } ");
-			test("{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf=\"ref test\"]},\"jvalue();\"]}");
-			test("{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf =\" ref test\"]},\"jvalue();\"]}");
-			test("{%anyName:[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
-			test("/** Test */{%oneOf=\"optional;\",\"manager\":\"string()\",\"subordinates\":[\"* int();\"]}");
-			test("/*x*/\n[\"? jvalue\",{%script =\"+\",I:[%script=\"?\",[%script=\"*\",\"* int\"]]}]\n# y");
-			test(
-"[%oneOf,\n"+
-"    \"jvalue();\",\n"+
-"    [\"* jvalue();\" ],\n"+
-"    {%anyName:\n"+
-"       [%oneOf,\n"+
-"         \"jvalue();\",\n"+
-"         [\"* jvalue();\" ],\n"+
-"         {%anyName: [\n"+
-//"           [%oneOf= \"ref test\"],\n"+
-"           [%oneOf=\"ref test\"]\n"+
-"         ]}\n"+
-"       ]\n"+
-"    }\n"+
-"]");
-			test(
+		assertEq("", test("\"int\""));
+		assertEq("", test("%anyObj"));
+		assertEq("", test("%anyObj=\"int()\""));
+		assertEq("", test("[%anyObj=\"*;\"]"));
+		assertEq("", test(" { %anyName: %anyObj=\"*;\" } "));
+		assertEq("", test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}"));
+		assertEq("", test("[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]"));
+		assertEq("", test(" { %anyName: %anyObj=\"*;\" } "));
+		assertEq("", test(
+			"{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf=\"ref test\"]},\"jvalue();\"]}"));
+		assertEq("", test(
+			"{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf =\" ref test\"]},\"jvalue();\"]}"));
+		assertEq("", test("{%anyName:[%oneOf,\"string()\",[\"occurs *; string()\"]]}"));
+		assertEq("", test(
+			"/** x */{%oneOf=\"optional;\",\"manager\":\"string()\",\"subordinates\":[\"* int();\"]}"));
+		assertEq("", test(
+			"/*x*/\n[\"? jvalue\",{%script =\"+\",I:[%script=\"?\",[%script=\"*\",\"* int\"]]}]\n# y"));
+		assertEq("", test(
 "{ \"cities\"  : [\n" +
 "    {%script = \"occurs 1..*\",\n" +
 "      \"from\": [\n" +
@@ -96,8 +91,22 @@ public final class GenX extends XDTester {
 "	  ]\n" +
 "    }\n" +
 "  ]\n" +
-"}");
-		} catch (RuntimeException ex) {fail(ex);}
+"}"));
+		assertEq("", test(
+"  [%oneOf,\n"+
+"    \"jvalue();\",\n"+
+"    [\"* jvalue();\" ],\n"+
+"    {%anyName:\n"+
+"       [%oneOf,\n"+
+"         \"jvalue();\",\n"+
+"         [\"* jvalue();\" ],\n"+
+"         {%anyName: [\n"+
+"/* *?      [%oneOf= \"ref test\"], /* */\n"+
+"           [%oneOf=\"ref test\"]\n"+
+"         ]}\n"+
+"       ]\n"+
+"    }\n"+
+"  ]"));
 	}
 
 	/** Run test
