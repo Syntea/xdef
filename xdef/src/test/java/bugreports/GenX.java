@@ -25,28 +25,30 @@ public final class GenX extends XDTester {
 					System.out.print(c);
 				} else {
 					int j = i;
-					for (j = i; j >= 0; j--) {
-						if (u.charAt(j) == '\n') {
-							j++;
-							break;
-						}
+					for (j = i; j >= 0 && u.charAt(j) != '\n'; j--) {}
+					if (j < 0) {
+						j = 0;
+					} else {
+						j++;
 					}
-					if (j < 0) j = 0;
 					int k = i;
 					int len = u.length();
 					if (len > t.length()) len = t.length();
 					for (; k < len; k++) {
 						if (u.charAt(k) == '\n') {
-							k--;
 							break;
 						}
 					}
 					System.out.println(u.substring(i,k));
-					for (int n = j; n < i; n++) {
-						System.out.print(' ');
-					}
-					System.out.println('|');
 					System.out.println(t.substring(j,k));
+					for (int n = j; n < i; n++) {
+						System.out.print('.');
+					}
+					System.out.print('|');
+					for (int n = i+1; n < len-1 && u.charAt(n) != '\n'; n++) {
+						System.out.print('.');
+					}
+					System.out.println();
 					break;
 				}
 			}
@@ -62,6 +64,7 @@ public final class GenX extends XDTester {
 			test("%anyObj=\"int()\"");
 			test("[%anyObj=\"*;\"]");
 			test(" { %anyName: %anyObj=\"*;\" } ");
+//			test(" { %anyName: %anyObj =\"*;\" } ");
 			test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}");
 			test("[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]");
 			test(" { %anyName: %anyObj=\"*;\" } ");
@@ -78,8 +81,11 @@ public final class GenX extends XDTester {
 "       [%oneOf,\n"+
 "         \"jvalue();\",\n"+
 "         [\"* jvalue();\" ],\n"+
-//"         {%anyName: [%oneOf= \"ref test\"]}\n"+
-"         {%anyName: [%oneOf = \"ref test\"]}\n"+
+/**/
+"         {%anyName: [%oneOf=\"ref test\"]}\n"+
+/**
+"         {%anyName: [%oneOf= \"ref test\"]}\n"+
+/**/
 "       ]\n"+
 "    }\n"+
 "]");
