@@ -46,7 +46,7 @@ public class Koci extends XDTester {
 "   <Vehicle><Part xd:script=\"0..; ref X\"/></Vehicle>\n" +
 "   <X name=\"string()\">\n" +
 "      <Part xd:script=\"0..; ref X\"/>\n" + ///////
-"   </X>   \n" +
+"   </X>\n" +
 "</xd:def>";
 
 			compile(xdef);
@@ -63,7 +63,7 @@ public class Koci extends XDTester {
 "   <Vehicle><Part xd:script=\"0..; ref X\"/></Vehicle>\n" +
 "   <X xd:script=\"create from('Part')\" name=\"string()\">\n" +
 "      <Part xd:script=\"0..; ref X\"/>\n" + ///////
-"   </X>  \n" +
+"   </X>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
