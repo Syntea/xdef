@@ -37,6 +37,7 @@ import org.xdef.impl.XSelector;
 import org.xdef.impl.XSelectorEnd;
 import org.xdef.impl.XSequence;
 import org.xdef.impl.XVariableTable;
+import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.compile.CompileBase.ELEM_MODE;
 import static org.xdef.impl.compile.CompileBase.GLOBAL_MODE;
@@ -1836,8 +1837,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(en.getValue(), XDEF.XDEF353, en.getKey());//Unresolved reference &{0}
 						continue;
 					}
-					// if this bind item is connected to a class (and extends
-					// a component)
+					// if this bind item is connected to a class (and extends component)
 					String s = en.getValue().getString();
 					int ndx = s.indexOf(" %with ");
 					if (ndx > 0) {
@@ -1849,8 +1849,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								&& en.getValue().getString().equals(en1.getValue().getString())) {
 								XMNode xm = xdp.findModel(en1.getKey());
 								if (xm == null) {
-									//Unresolved reference &{0}
-									error(en1.getValue(), XDEF.XDEF353, en.getKey());
+									error(en1.getValue(),XDEF.XDEF353,en.getKey());//Unresolved reference &{0}
 								} else if (typ != getTypeId(xdp.findModel(en1.getKey()))) {
 									// same name in same class must have same typ
 									s = s.substring(ndx + 7, s.indexOf(' '));
@@ -2047,7 +2046,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				return false;
 			}
 			XElement y;
-			if ((y = (XElement) x)==xel && lenx==1 && xel.getAttrs().length==0){
+			if ((y = (XElement) x)==xel && lenx==1 && xel.getAttrs().length==0) {
 				//Self reference is not allowed: &{0}
 				error(xref.getSPosition(), XDEF.XDEF321, xref.getXDPosition());
 				XNode[] childNodes = xel._childNodes;
@@ -2061,8 +2060,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				//Too many nested references or reference loop in &{0}
 				error(xref.getSPosition(), XDEF.XDEF320, xref.getXDPosition());
 				return false;
-			} else if (!resolveReference(
-				y, level+1, ignoreOccurrence && xel.isSpecified(), hs)) {
+			} else if (!resolveReference(y, level+1, ignoreOccurrence && xel.isSpecified(), hs)) {
 				return false;
 			} else if (!checkIntegrity(y, level+1, hs)) {
 				return false;
@@ -2165,6 +2163,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 			if (xel._compose == -1 && y._compose != -1) {
 				xel._compose = y._compose;
+			} else if (xel._compose == -1 && level >= 1 && _scriptCompiler != null) {
+				if (xel.getNSUri() == null) { // no namespace
+					_scriptCompiler._g.addCode(
+						new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT, 1, xel.getName()));
+					xel._compose = _scriptCompiler._g._lastCodeIndex;
+					_scriptCompiler._g.genStop();
+				} // else TODO
 			}
 			if (xel._init == -1 && y._init != -1) {
 				xel._init = y._init;

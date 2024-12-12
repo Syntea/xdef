@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.15, release-date 2024-12-11
-* .
+# Version 42.2.15, release-date 2024-12-12
+* Fixed bug in construction mode with recursive reference to element model.
 
 # Version 42.2.14, release-date 2024-12-09
 * A new static method `XDFactory.writeXDPoolClass(...)` has been implemented. This method generates the source
