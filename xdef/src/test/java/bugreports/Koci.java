@@ -1,12 +1,6 @@
 package bugreports;
 
-import org.w3c.dom.Element;
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDPool;
-import org.xdef.impl.XConstants;
-import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -19,59 +13,66 @@ public class Koci extends XDTester {
 		super();
 		setChkSyntax(false); // here it MUST be false!
 	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		System.out.println("X-definition version: " + XDFactory.getXDVersion());
-////////////////////////////////////////////////////////////////////////////////
-		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-			XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);// true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef_debug
-//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
-////////////////////////////////////////////////////////////////////////////////
-		String xdef, xml;
+		String xml;
 		XDDocument xd;
-		XDPool xp;
-		Element el;
-		ArrayReporter reporter = new ArrayReporter();
-		try {
-			xdef =
+/**/
+		try {// OK
+			xd =  compile(
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
-"   <Vehicle><Part xd:script=\"0..; ref X\"/></Vehicle>\n" +
+"   <X a=\"string()\">\n" +
+"      <X xd:script=\"0..; create from('X'); ref X\"/>\n" + /////
+"   </X>\n" +
+"</xd:def>").createXDDocument();
+			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
+			xd.setXDContext(xml);
+			assertEq(xml, xd.xcreate("X", null)); // error
+		} catch (RuntimeException ex) {fail(ex);}
+		try {// ERROR
+			xd = compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"   <X a=\"string()\">\n" +
+"      <X xd:script=\"0..; ref X\"/>\n" + /////
+"   </X>\n" +
+"</xd:def>").createXDDocument();
+			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
+			xd.setXDContext(xml);
+			assertEq(xml, xd.xcreate("X", null)); // error
+		} catch (RuntimeException ex) {fail(ex);}
+/**/
+		try {// OK
+			xd = compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"   <Vehicle>\n" +
+//"     <Part xd:script=\"0..; create from('Part'); ref X\"/>\n" +
+"     <Part xd:script=\"0..; ref X\"/>\n" +
+"   </Vehicle>\n" +
+"   <X name=\"string()\">\n" +
+"      <Part xd:script=\"0..; create from('Part'); ref X\"/>\n" + ///////
+"   </X>\n" +
+"</xd:def>").createXDDocument();
+			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
+			xd.setXDContext(xml);
+			assertEq(xml, xd.xcreate("Vehicle", null));
+		} catch (RuntimeException ex) {fail(ex);}
+		try {// ERROR
+			xd = compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"   <Vehicle>\n" +
+"     <Part xd:script=\"0..; ref X\"/>\n" +
+"   </Vehicle>\n" +
 "   <X name=\"string()\">\n" +
 "      <Part xd:script=\"0..; ref X\"/>\n" + ///////
 "   </X>\n" +
-"</xd:def>";
-
-			compile(xdef);
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
+"</xd:def>").createXDDocument();
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
-			el = xd.xcreate("Vehicle", reporter);
-			assertEq(xml, el); // error?
+			assertEq(xml, xd.xcreate("Vehicle", null)); // error?
 		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
-"   <Vehicle><Part xd:script=\"0..; ref X\"/></Vehicle>\n" +
-"   <X xd:script=\"create from('Part')\" name=\"string()\">\n" +
-"      <Part xd:script=\"0..; ref X\"/>\n" + ///////
-"   </X>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
-			xd.setXDContext(xml);
-			el = xd.xcreate("Vehicle", reporter);
-			assertEq(xml, el);
-		} catch (RuntimeException ex) {fail(ex);}
+/**/
 	}
 
 	/**
