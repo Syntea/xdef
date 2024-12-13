@@ -2163,15 +2163,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if (xel._finaly == -1 && y._finaly != -1) {
 				xel._finaly = y._finaly;
 			}
-			if (xel._compose == -1 && y._compose != -1) {
-				xel._compose = y._compose;
-			} else if (xel._compose == -1 && _scriptCompiler != null) {
-				// default compose code in the refered model
-				String uri = xel.getNSUri();
-				String name = uri != null && !uri.isEmpty() ? '{'+uri+'}'+ xel.getLocalName() : xel.getName();
-				_scriptCompiler._g.addCode(new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT, 1, name));
-				xel._compose = _scriptCompiler._g._lastCodeIndex;
-				_scriptCompiler._g.genStop();
+			if (xel._compose == -1) {
+				if (y._compose != -1) {
+					xel._compose = y._compose;
+				} else if (level > 1) {//generate default compose section of model from recursive reference
+					String u = xel.getNSUri();
+					String name = u != null && !u.isEmpty() ? '{'+u+'}'+ xel.getLocalName() : xel.getName();
+					_scriptCompiler._g.addCode(new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT, 1, name));
+					xel._compose = _scriptCompiler._g._lastCodeIndex;
+					_scriptCompiler._g.genStop();
+				}
 			}
 			if (xel._init == -1 && y._init != -1) {
 				xel._init = y._init;
