@@ -1677,7 +1677,7 @@ public final class XCodeProcessor {
 					} else {
 						String s;
 						int ndx = (s = item.stringValue()).lastIndexOf('}');
-						NodeList nl = ndx < 0 ? KXmlUtils.getChildElementsNS(el, "", s)
+						NodeList nl = ndx < 0 ? KXmlUtils.getChildElements(el, s)
 							: KXmlUtils.getChildElementsNS(el, s.substring(1, ndx), s.substring(ndx + 1));
 						_stack[++sp] = new DefContainer(nl);
 					}

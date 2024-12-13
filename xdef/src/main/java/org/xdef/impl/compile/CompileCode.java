@@ -203,7 +203,7 @@ public final class CompileCode extends CompileBase {
 	private final static int STACK_SIZE = 512; //20 for tests is enough!
 	/** The parser (just for error reporting). */
 	XScriptParser _parser;
-	/** *  Mode of compilation:<br/>
+	/** Mode of compilation:<br/>
 	 * NO_MODE ... no mode<br/>
 	 * TEXT_MODE ... text events<br/>
 	 * ELEM_MODE ... element events<br/>
@@ -289,7 +289,6 @@ public final class CompileCode extends CompileBase {
 		final boolean chkWarnings,
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
-//		_spMax = 0; _parser = null; //java makes it
 		_ignoreUnresolvedExternals = ignoreUnresolvedExternals;
 		_externalMode = externalMode;
 		_chkWarnings = chkWarnings;
@@ -318,8 +317,7 @@ public final class CompileCode extends CompileBase {
 		var = new CompileVariable("$stdErr", XD_OUTPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
-		var = new CompileVariable("$stdIn",
-			XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
+		var = new CompileVariable("$stdIn", XD_INPUT, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true);
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$IDParser$", XD_PARSER, _globalVariables.getNextOffset(), (byte) 'G',null);
@@ -376,8 +374,7 @@ public final class CompileCode extends CompileBase {
 	 */
 	final CompileVariable addVariable(final String name,final short type,final byte kind,final SPosition pos){
 		if (type != X_PARSEITEM && getTypeId(name) >= 0) {
-			//Type identifier '&{0}' can't be used here
-			_parser.error(XDEF.XDEF463, name);
+			_parser.error(XDEF.XDEF463, name); //Type identifier '&{0}' can't be used here
 			return new CompileVariable("?", type, -1, (byte) 'L', pos);
 		}
 		CompileVariable result = null;
@@ -498,8 +495,7 @@ public final class CompileCode extends CompileBase {
 			_extClasses = _extClasses = new Class<?>[0];
 		}
 		if (extObjects != null && extObjects.length > 0) {
-			List<Class<?>> ar =
-				new ArrayList<>(Arrays.asList(_extClasses));
+			List<Class<?>> ar = new ArrayList<>(Arrays.asList(_extClasses));
 			for (Class<?> x: extObjects) {
 				if (x != null && !ar.contains(x)) {
 					ar.add(x);
@@ -551,8 +547,7 @@ public final class CompileCode extends CompileBase {
 			var = (CompileVariable) _varBlock.getXVariable(name);
 			if (var == null || var.getKind() == 'G') {
 				for (String s: _parser._importLocals) {
-					CompileVariable v =
-						(CompileVariable) _varBlock.getXVariable(s + name);
+					CompileVariable v = (CompileVariable) _varBlock.getXVariable(s + name);
 					if (v != null) {
 						var = v;
 						break;
@@ -637,8 +632,7 @@ public final class CompileCode extends CompileBase {
 		addCode(item);
 		if ((_sp += stackInc) > _spMax) {
 			if (_sp >= STACK_SIZE) {
-				//Overflow of compiler internal stack
-				_parser.error(XDEF.XDEF204);
+				_parser.error(XDEF.XDEF204); //Overflow of compiler internal stack
 				_sp -= stackInc;
 				return;
 			}
@@ -670,8 +664,7 @@ public final class CompileCode extends CompileBase {
 		String extName = name + typeList(params);
 		ScriptMethod gm = _scriptMethods.get(extName);
 		if (gm == null) {
-			_scriptMethods.put(extName,
-				new ScriptMethod(resultType, address, params, mode, spos));
+			_scriptMethods.put(extName, new ScriptMethod(resultType, address, params, mode, spos));
 		} else if (!gm.resolvePostDef(address, this)) {
 			//Repeated declaration of method '&{0}'&{#SYS000}&{1}({; (already declared: }{)}
 			putRedefinedError(null, XDEF.XDEF462, name, gm.getSourcePosition());
@@ -927,8 +920,7 @@ public final class CompileCode extends CompileBase {
 							m1 = m;
 							m = null;
 						} else {
-							if ((resultType = getClassTypeID(m.getReturnType()))
-								== XD_UNDEF) {
+							if ((resultType = getClassTypeID(m.getReturnType())) == XD_UNDEF) {
 								code = UNDEF_CODE;
 								m = null;
 							} else {
@@ -1110,8 +1102,8 @@ public final class CompileCode extends CompileBase {
 						break;
 					default:
 						if (var.getType() != XD_ANY) {
-							_parser.error(XDEF.XDEF457,//Incompatible types &{0}
-								getTypeName(var.getType()) + "," + getTypeName(xType));
+							//Incompatible types &{0}
+							_parser.error(XDEF.XDEF457, getTypeName(var.getType()) +","+ getTypeName(xType));
 							return;
 						}
 				}
@@ -1148,8 +1140,7 @@ public final class CompileCode extends CompileBase {
 		_cstack[_sp] = -1;
 	}
 
-	/** Add jump to the end of code.
-	 * If argument is an unconditional jump return. If it is a conditional jump then:
+	/** Add jump to the end of code. If argument is unconditional jump return. If it is conditional jump then:
 	 * <li>1. while the last code item is a logical 'not' operator reverse
 	 * jump true/false condition and remove the last 'not' code item.
 	 * <li>2. if the last code item is a operator (CMPIEQ .. CMPDGT) then replace it with the jump item object
@@ -1228,18 +1219,15 @@ public final class CompileCode extends CompileBase {
 		}
 	}
 
-	/** Generate sequence of two operations:
-	 * <li> LD_TRUE_AND_SKIP_CODE, LDC_FALSE_CODE.
-	 */
+	/** Generate sequence of two operations: <li> LD_TRUE_AND_SKIP_CODE, LDC_FALSE_CODE. */
 	final void genBoolJumpConvertor() {
 		addCode(new CodeOp(XD_BOOLEAN, LD_TRUE_AND_SKIP));
 		addCode(new DefBoolean(false), 1);
 		_cstack[_sp] = -1;
 	}
 
-	/** Check if code is an compare operation or conditional jump.
-	 * If yes, then the code is inverted to logical negation of given operation
-	 * and the method returns inverted code. Otherwise the method returns -1.
+	/** Check if code is a compare operation or conditional jump. If yes, then the code is inverted to logical
+	 * negation of given operation and the method returns inverted code. Otherwise the method returns -1.
 	 * @param code inspected code.
 	 * @return inverted code or -1.
 	 */
@@ -1290,8 +1278,7 @@ public final class CompileCode extends CompileBase {
 				return;
 			}
 			if (xType == XD_ANY) {//conversion from AnyValue
-				//dynamic type check
-				addCode(new CodeI1(resultType, CHECK_TYPE, resultType));
+				addCode(new CodeI1(resultType, CHECK_TYPE, resultType)); //dynamic type check
 				_tstack[_sp] = resultType;
 				return;
 			}
@@ -1320,8 +1307,7 @@ public final class CompileCode extends CompileBase {
 					}
 					break;
 				case XD_CHAR:
-					if (xType == XD_LONG || xType == XD_DOUBLE
-						|| xType == XD_DECIMAL) {
+					if (xType == XD_LONG || xType == XD_DOUBLE || xType == XD_DECIMAL) {
 						topXToChar(0);
 						return;
 					}
@@ -1360,33 +1346,25 @@ public final class CompileCode extends CompileBase {
 					addCode(new CodeI1(XD_CONTAINER, NEW_CONTAINER, 1));
 					_cstack[_sp] = -1;
 					return;
-				case XD_DATETIME: {
-					break;
-				}
-				case XD_DURATION: {
-					break;
-				}
-				case XD_ELEMENT:
-					break;
+				case XD_DATETIME: break;
+				case XD_DURATION: break;
+				case XD_ELEMENT: break;
 				case XD_PARSERESULT:
 					switch (xType) {
 						case XD_PARSER:
 							addCode(new CodeI1(XD_PARSERESULT,PARSE_OP,1),0);
 							return;
-						case XD_BOOLEAN:
-							return;
+						case XD_BOOLEAN: return;
 						case XD_BNFRULE:
 							addCode(new CodeI1(XD_PARSERESULT, BNFRULE_PARSE, 1), 0);
 							_tstack[_sp] = XD_PARSERESULT;
 							return;
-						default:
-							break;
+						default: break;
 					}
 					break;
-				default:
 			}
-			_parser.error(XDEF.XDEF457, //Incompatible types&{0}{: }
-				getTypeName(xType) + "," + getTypeName(resultType));
+			//Incompatible types&{0}{: }
+			_parser.error(XDEF.XDEF457, getTypeName(xType) + "," + getTypeName(resultType));
 			_tstack[_sp] = XD_UNDEF;
 		}
 	}
@@ -1416,7 +1394,7 @@ public final class CompileCode extends CompileBase {
 				_tstack[_sp] = XD_BOOLEAN;
 				_cstack[_sp] = -1;
 			} else {
-				_parser.error(XDEF.XDEF423,"boolean"); //Value of type '&{0}' expected
+				_parser.error(XDEF.XDEF423, "boolean"); //Value of type '&{0}' expected
 			}
 		}
 	}
@@ -1474,8 +1452,7 @@ public final class CompileCode extends CompileBase {
 			int xValue;
 			if ((xValue = _cstack[_sp]) >= 0) {//constant or attr or value
 				if (xType == X_ATTR_REF) { //attr
-					_code.set(xValue,
-						new CodeS1(XD_STRING, ATTR_REF, getCodeItem(xValue).stringValue()));
+					_code.set(xValue,new CodeS1(XD_STRING, ATTR_REF, getCodeItem(xValue).stringValue()));
 					_cstack[_sp] = -1;
 				} else { //constant
 					_code.set(xValue, new DefString(getCodeItem(xValue).stringValue()));
@@ -1505,18 +1482,19 @@ public final class CompileCode extends CompileBase {
 					} else {//value
 						addCode(new CodeI1(XD_DOUBLE, TO_FLOAT_X, index));
 						_cstack[sp] = -1;
-					}	break;
+					}
+					break;
 				case XD_DECIMAL:
 					if (_cstack[sp] >= 0) { //constant
 						_code.set(_cstack[sp], new DefDouble( getCodeItem(_cstack[sp]).floatValue()));
 					} else { //value
 						addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, index));
 						_cstack[sp] = -1;
-					}	break;
+					}
+					break;
 				default:
 					_parser.error(XDEF.XDEF439); //Value of type 'int' or 'float' expected
 					_cstack[sp] = -1;
-					break;
 			}
 			_tstack[sp] = XD_DOUBLE;
 		}
@@ -1663,7 +1641,7 @@ public final class CompileCode extends CompileBase {
 		} else {
 			for (int i = numPar - 1, j = _sp;  i >= 0; i--) {
 				if (j < 0 || pars[i] != _tstack[j--]) {
-					if (pars[i]!=XD_ANY&&_tstack[j+1]!=XD_ANY&&pars[i]!=XD_UNDEF &&_tstack[j+1]!=XD_UNDEF) {
+					if (pars[i]!=XD_ANY && _tstack[j+1]!=XD_ANY&&pars[i]!=XD_UNDEF && _tstack[j+1]!=XD_UNDEF){
 						_parser.error(XDEF.XDEF467); //Incorrect parameter type
 					}
 					break;
@@ -1727,8 +1705,7 @@ public final class CompileCode extends CompileBase {
 	 */
 	final String genMethod(final String name, final int numPar) {
 		String extName = name + typeList(numPar);
-		if (extName.indexOf('?') >= 0) {
-			//don't process searching of method with undefined parameter
+		if (extName.indexOf('?') >= 0) { //don't process searching of method with undefined parameter
 			_sp -= numPar -1;
 			_tstack[_sp] = XD_UNDEF;
 			_cstack[_sp] = -1;
@@ -1758,8 +1735,8 @@ public final class CompileCode extends CompileBase {
 			}
 		}
 		if (scriptMethod(extName, numPar) || numPar > 0 && _tstack[_sp] == XD_CONTAINER
-			&& scriptMethod(name + typeList(numPar), numPar)
-			|| externalMethod(name, extName, numPar) || internalMethod(name, numPar)) {
+			&& scriptMethod(name + typeList(numPar), numPar) || externalMethod(name, extName, numPar)
+			|| internalMethod(name, numPar)) {
 			return null;
 		}
 		String s = null;
@@ -1916,21 +1893,17 @@ public final class CompileCode extends CompileBase {
 			}
 		}
 		switch (ix) {
-			case 1:
-				//@name->String
-				_code.set(constPar, new CodeS1(XD_CONTAINER, GETATTR_FROM_CONTEXT, npar,name));
+			case 1: //@name->String
+				_code.set(constPar, new CodeS1(XD_CONTAINER, GETATTR_FROM_CONTEXT, npar, name));
 				_tstack[sp] = XD_CONTAINER;
 				break;
-			case 6:
-				// self::name -> element
-				_code.set(constPar, new CodeS1(XD_CONTAINER, GETELEM_FROM_CONTEXT, npar,name));
+			case 6: // self::name -> element
+				_code.set(constPar, new CodeS1(XD_CONTAINER, GETELEM_FROM_CONTEXT, npar, name));
 				_tstack[sp] = XD_CONTAINER;
 				break;
-			default:
-				// name -> Container
-				_code.set(constPar, new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT,npar,name));
+			default: // name -> Container
+				_code.set(constPar, new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT, npar, name));
 				_tstack[sp] = XD_CONTAINER;
-				break;
 		}
 		_cstack[sp] = -1;
 		return true;
@@ -1998,8 +1971,7 @@ public final class CompileCode extends CompileBase {
 				if (npar==1 && _tstack[_sp]==XD_CONTAINER && _cstack[_sp]==_lastCodeIndex) {//named params
 					DefContainer h = (DefContainer) getLastCodeItem();
 					int len = h.getXDNamedItemsNumber();
-					// check named parameters
-					for (int i = len - 1; i >= 0; i--) {
+					for (int i = len - 1; i >= 0; i--) { // check named parameters
 						String s = h.getXDNamedItemName(i);
 						boolean found = false;
 						for (CompileBase.KeyParam par : pars) {
@@ -2236,8 +2208,7 @@ public final class CompileCode extends CompileBase {
 				if (npar == xpar && _cstack[_sp] >= 0 && _tstack[_sp] == XD_STRING) {
 					String qname = getCodeItem(_cstack[_sp]).toString();
 					int i;
-					String prefix = (i = qname.indexOf(':')) >= 0
-						? qname.substring(0, i) : "";
+					String prefix = (i = qname.indexOf(':')) >= 0 ? qname.substring(0, i) : "";
 					Integer p = _nsPrefixes.get(prefix);
 					if (p == null) {
 						if (prefix.length() > 0) {
@@ -2285,11 +2256,9 @@ public final class CompileCode extends CompileBase {
 						if (par1typ != XD_ELEMENT) {
 							_parser.error(XDEF.XDEF423, "Element"); //Value of type '&{0}' expected
 						}
-						if (_cstack[_sp] == _lastCodeIndex) {
-							// COMPILE_XPATH -> skip
+						if (_cstack[_sp] == _lastCodeIndex) { // COMPILE_XPATH -> skip
 							String s = getCodeItem(_lastCodeIndex).toString();
-							DefXPathExpr xp = new DefXPathExpr(s,
-								getXDNamespaceContext(), null, null);
+							DefXPathExpr xp = new DefXPathExpr(s, getXDNamespaceContext(), null, null);
 							if (s.indexOf(':') < 0) {
 								xp.setCode(LD_CONST);
 							}
@@ -2455,13 +2424,12 @@ public final class CompileCode extends CompileBase {
 						_parser.error(XDEF.XDEF423, "String"); //Value of type '&{0}' expected
 						return;
 					}
-					break;
 				}
+				break;
 			case PUT_ERROR:
 				if (npar > 0) {
 					if (_tstack[_sp + 1 - npar] == XD_OUTPUT) { //first param
 						if (npar < 2) {
-
 							_parser.error(XDEF.XDEF460, name); //More parameters required for method &{0}							return;
 						} else if (npar > 4) {
 							_parser.error(XDEF.XDEF461, name); //Too many parameters for method &{0}
@@ -2520,7 +2488,7 @@ public final class CompileCode extends CompileBase {
 				if(par1const >= 0 && par2const >= 0) { //both are literals
 					StringParser p = new StringParser(_code.get(par1const).toString()); //mask
 					if (!p.isDatetime(_code.get(par2const).toString())) {
-						_parser.error("XDEF499","Incorrect value of date/time");
+						_parser.error("XDEF499"); //Incorrect value of date/time
 						return;
 					}
 					replaceTwo(new DefDate(p.getParsedSDatetime()));
@@ -2554,8 +2522,7 @@ public final class CompileCode extends CompileBase {
 				break;
 			}
 			case NEW_BNFGRAMAR: {
-				if (npar == 1 && par1const >= 0 && par1typ == XD_STRING) {
-					//string constant in BNF contructor
+				if (npar == 1 && par1const >= 0 && par1typ == XD_STRING) {//string constant in BNF contructor
 					SBuffer source = new SBuffer(getCodeItem(par1const).stringValue(), _parser);
 					DefBNFGrammar dd;
 					try {
@@ -2609,7 +2576,6 @@ public final class CompileCode extends CompileBase {
 				}
 				break;
 			}
-			default:
 		}
 		//check parameters
 		if ((method.getRestrictions() & _mode) == 0) {
@@ -2670,8 +2636,7 @@ public final class CompileCode extends CompileBase {
 
 	/** Return the code item with the last stop of the initialization code sequence or return null. */
 	final CodeI1 getLastStop() {
-		//prevents to generate redundant jumps.
-		if (_lastCodeIndex != -1 && _initEnd >= 0) {
+		if (_lastCodeIndex != -1 && _initEnd >= 0) {//prevents to generate redundant jumps.
 			if (_lastCodeIndex != _initEnd) {
 				return (CodeI1) getCodeItem(_initEnd);
 			}
@@ -2684,8 +2649,7 @@ public final class CompileCode extends CompileBase {
 	final void addInitCode(final int actAdr, final CodeI1 lastStop) {
 		if (actAdr == _lastCodeIndex + 1) {
 			genStop();
-		} else if (actAdr < _lastCodeIndex) {
-			//gen init section
+		} else if (actAdr < _lastCodeIndex) {//gen init section
 			if (_init == -1) {
 				_init = actAdr + 1;
 			} else if (lastStop != null) {
@@ -2700,13 +2664,13 @@ public final class CompileCode extends CompileBase {
 
 /** Object describing a script method. */
 final class ScriptMethod {
-	/** The offset of method. */
+	/** Offset of method. */
 	private int _address;
-	/** The List of types of parameters. */
+	/** List of types of parameters. */
 	private final short[] _params;
-	/** The type of result of method. */
+	/** Type of result of method. */
 	private final short _resultType;
-	/** The compilation mode of method (the purpose). */
+	/** Compilation mode of method (the purpose). */
 	private final short _mode;
 	/** List of code code addresses where method was called. */
 	private int[] _postdefs;
@@ -2714,14 +2678,13 @@ final class ScriptMethod {
 	private final SPosition _spos;
 
 	/** Create new instance of ScriptMethod.
-	 * @param resultType The result type of method.
-	 * @param address The code index of method start.
+	 * @param resultType result type of method.
+	 * @param address code index of method start.
 	 * @param params Array of parameters types.
-	 * @param mode The mode of method.
+	 * @param mode mode of method.
 	 * @param spos source position where the method was declared.
 	 */
-	ScriptMethod(final short resultType,
-		final int address,
+	ScriptMethod(final short resultType, final int address,
 		final short[] params,
 		final short mode,
 		final SPosition spos) {
@@ -2746,8 +2709,7 @@ final class ScriptMethod {
 		}
 	}
 
-	/** Resolves post-definition of a method (set address to all previous
-	 * references).
+	/** Resolve post-definition of a method (set address to all previous references).
 	 * @param address address of method.
 	 * @param g code generator.
 	 * @return false if address was already set(i.e. error), otherwise return true (i.e. OK).
