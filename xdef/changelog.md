@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.15, release-date 2024-12-12
+# Version 42.2.15, release-date 2024-12-13
 * Fixed bug in construction mode with recursive reference to element model.
 
 # Version 42.2.14, release-date 2024-12-09
