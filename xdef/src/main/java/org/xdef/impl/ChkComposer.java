@@ -50,7 +50,6 @@ import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_VALUE;
@@ -243,21 +242,16 @@ final class ChkComposer extends SReporter {
 					switch (result.getItemId()) {
 						case XD_RESULTSET: {
 							XDResultSet it = (XDResultSet) result;// is iterator
-							try {
-								XDValue item = it.nextXDItem(_rootChkElement);
-								if (item == null) {
-									result = null;
-									break;
-								}
-								result = item;
-								if (it.nextXDItem(_rootChkElement) != null) {
-									//Too many iterator items for &{0}
-									_rootChkElement.error(XDEF.XDEF565, _rootChkElement._name);
-									_rootChkElement._scp.closeResultSet(it);
-								}
-							} catch (SRuntimeException ex) {
-								_rootChkElement.putReport(ex.getReport());
-								return;
+							XDValue item = it.nextXDItem(_rootChkElement);
+							if (item == null) {
+								result = null;
+								break;
+							}
+							result = item;
+							if (it.nextXDItem(_rootChkElement) != null) {
+								//Too many iterator items for &{0}
+								_rootChkElement.error(XDEF.XDEF565, _rootChkElement._name);
+								_rootChkElement._scp.closeResultSet(it);
 							}
 							break;
 						}
@@ -318,7 +312,7 @@ final class ChkComposer extends SReporter {
 				error(rep.getMsgID(), rep.getText(), rep.getModification());
 				_rootChkElement._rootChkDocument.endDocument();
 			} else {
-				throw new SRuntimeException(e.getMessage(), e.getCause());
+				throw new RuntimeException(e.getMessage(), e.getCause());
 			}
 		}
 	}
@@ -416,65 +410,60 @@ final class ChkComposer extends SReporter {
 				}
 				int n = 0;
 				ChkElement chkElem = chkElement;
-				try {
-					for (; item != null; item = it.nextXDItem(chkElement)) {
-						if (n > 0) {
-							if (parentChkElem == null) { //root
-								chkElem.error(XDEF.XDEF539,xElem.getName());//Required element &{0} is missing
-								return; //root
-							}
-							chkElem = genChkElement(parentChkElem, null, xElem);
+				for (; item != null; item = it.nextXDItem(chkElement)) {
+					if (n > 0) {
+						if (parentChkElem == null) { //root
+							chkElem.error(XDEF.XDEF539,xElem.getName());//Required element &{0} is missing
+							return; //root
 						}
-						chkElem._iterator = (XDResultSet) result;
-						switch (item.getItemId()) {
-							case XD_ELEMENT:
-								if (n >= xElem.maxOccurs()) {
-									//Too many iterator items for &{0}
-									chkElem.error(XDEF.XDEF565, xElem.getName());
-									chkElem._scp.closeResultSet(it);
-									return;
-								}
-								el = item.getElement();
-								if (el != null) {
-									chkElem.setElemValue(el);
-									composeElAndTxt(parentChkElem,chkElem,el,xtxt);
-									n++;
-									continue;
-								}
-								break;
-							case XD_RESULTSET:
-								if (n >= xElem.maxOccurs()) {
-									//Too many iterator items for &{0}
-									chkElem.error(XDEF.XDEF565, xElem.getName());
-									chkElem._scp.closeResultSet(it);
-									return;
-								}
-								el = item.getElement();
-								if (el != null) {
-									chkElem.setElemValue(el);
-									composeElAndTxt(parentChkElem,chkElem,el,xtxt);
-									n++;
-									continue;
-								}
-								break;
-							case XD_STRING:
-								if (!item.stringValue().isEmpty()) {
-									el = it.getElement();
-									if (el != null) {
-										chkElem.setElemValue(el);
-										composeElAndTxt(parentChkElem, chkElem, el, xtxt);
-										n++;
-										continue;
-									}
-								}
-						}
-						chkElement.updateElement(null);
+						chkElem = genChkElement(parentChkElem, null, xElem);
 					}
-					chkElem._scp.closeResultSet(chkElem._iterator);
-				} catch (SRuntimeException ex) {
-					chkElem.putReport(ex.getReport());
-					return;
+					chkElem._iterator = (XDResultSet) result;
+					switch (item.getItemId()) {
+						case XD_ELEMENT:
+							if (n >= xElem.maxOccurs()) {
+								//Too many iterator items for &{0}
+								chkElem.error(XDEF.XDEF565, xElem.getName());
+								chkElem._scp.closeResultSet(it);
+								return;
+							}
+							el = item.getElement();
+							if (el != null) {
+								chkElem.setElemValue(el);
+								composeElAndTxt(parentChkElem,chkElem,el,xtxt);
+								n++;
+								continue;
+							}
+							break;
+						case XD_RESULTSET:
+							if (n >= xElem.maxOccurs()) {
+								//Too many iterator items for &{0}
+								chkElem.error(XDEF.XDEF565, xElem.getName());
+								chkElem._scp.closeResultSet(it);
+								return;
+							}
+							el = item.getElement();
+							if (el != null) {
+								chkElem.setElemValue(el);
+								composeElAndTxt(parentChkElem,chkElem,el,xtxt);
+								n++;
+								continue;
+							}
+							break;
+						case XD_STRING:
+							if (!item.stringValue().isEmpty()) {
+								el = it.getElement();
+								if (el != null) {
+									chkElem.setElemValue(el);
+									composeElAndTxt(parentChkElem, chkElem, el, xtxt);
+									n++;
+									continue;
+								}
+							}
+					}
+					chkElement.updateElement(null);
 				}
+				chkElem._scp.closeResultSet(chkElem._iterator);
 				if (n == 0) {
 					chkElem.updateElement(null);//no source; delete this element
 				}
@@ -760,17 +749,13 @@ final class ChkComposer extends SReporter {
 			switch (result.getItemId()) {
 				case XD_RESULTSET: {
 					XDResultSet it = (XDResultSet) result;
-					try {
-						chkEl._iterator = it;
-						XDValue item = it.nextXDItem(chkEl);
-						if (item != null) {
-							el = it.getElement();
-							result = it;
-						} else {
-							return new DefElement();
-						}
-					} catch (SRuntimeException ex) {
-						chkEl.putReport(ex.getReport());
+					chkEl._iterator = it;
+					XDValue item = it.nextXDItem(chkEl);
+					if (item != null) {
+						el = it.getElement();
+						result = it;
+					} else {
+						return new DefElement();
 					}
 					break;
 				}
@@ -1183,26 +1168,24 @@ final class ChkComposer extends SReporter {
 								childChkEl.initElem();
 								childChkEl.addElement();
 								break;
-							case XD_RESULTSET:
+							case XD_RESULTSET: {
 								XDResultSet it = (XDResultSet) result;
-								try {
-									XDValue item = it.nextXDItem(chkEl);
-									Document doc = chkEl.getDocument();
-									for(int j = 0, xmax = childChkEl._xElement.maxOccurs();
-										j <= xmax && item != null; j++, item = it.nextXDItem(childChkEl)) {
-										Node node = doc.importNode(item.getElement(), true);
-										if (item.getItemId() == XD_RESULTSET) {
-											chkEl._iterator=(XDResultSet)result;
-										}
-										childChkEl.initElem();
-										chkEl._element.insertBefore(node, el);
-										chkEl.incRefNum();
+								XDValue item = it.nextXDItem(chkEl);
+								Document doc = chkEl.getDocument();
+								for(int j = 0, xmax = childChkEl._xElement.maxOccurs();
+									j <= xmax && item != null; j++, item = it.nextXDItem(childChkEl)) {
+									Node node = doc.importNode(item.getElement(), true);
+									if (item.getItemId() == XD_RESULTSET) {
+										chkEl._iterator=(XDResultSet)result;
 									}
-									chkEl._element.removeChild(el);
-								} catch (SRuntimeException ex) {
-									chkEl.putReport(ex.getReport());
-								}	chkEl._scp.closeResultSet(it);
+									childChkEl.initElem();
+									chkEl._element.insertBefore(node, el);
+									chkEl.incRefNum();
+								}
+								chkEl._element.removeChild(el);
+								chkEl._scp.closeResultSet(it);
 								break;
+							}
 							default:
 								DefContainer dc = (DefContainer) result;
 								Document doc = chkEl.getDocument();
@@ -1229,11 +1212,11 @@ final class ChkComposer extends SReporter {
 										}
 										chkEl.incRefNum();
 									}
-								}	try {
+								}
+								try {
 									chkEl._element.removeChild(el);
 								} catch (DOMException ex) {} //ignore exception
 								break;
-
 						}
 					} else { //result here is not null!
 						if (result.isNull()) {
@@ -1246,7 +1229,7 @@ final class ChkComposer extends SReporter {
 
 						}
 						switch (result.getItemId()) {
-							case XD_STRING:
+							case XD_STRING: {
 								//create a dummy element with the text child
 								String text = result.stringValue();
 								if (text != null && !text.isEmpty()) {
@@ -1257,6 +1240,7 @@ final class ChkComposer extends SReporter {
 									childChkEl.updateElement(null);
 								}
 								break;
+							}
 							case XD_BOOLEAN:
 								for (int j = 0;;) {
 									if (j < childChkEl._xElement.maxOccurs() && result != null
@@ -1277,8 +1261,8 @@ final class ChkComposer extends SReporter {
 							default:
 								composeElement(chkEl, childChkEl, result, xtxt);
 								if (childDef._compose < 0 && result.getItemId() == XD_CONTAINER
-									&& childChkEl.getOccurrence() > 0) {
-									lastElem = // set last processeed item to lastElem
+									&& childChkEl.getOccurrence() > 0) {//set last processeed item to lastElem
+									lastElem =
 										((DefContainer)result).getXDElement(childChkEl.getOccurrence() - 1);
 								}
 						}
@@ -1293,8 +1277,7 @@ final class ChkComposer extends SReporter {
 				}
 				case XMTEXT: {
 					count = chkEl.getRefNum(index);
-					lastText = createTextNode(chkEl,
-						sourceEl, savedSource, (XData) xNode, lastText);
+					lastText = createTextNode(chkEl, sourceEl, savedSource, (XData) xNode, lastText);
 					if (chkEl._selector != null && chkEl._selector._kind == XMCHOICE
 						&& count < chkEl.getRefNum(i) && i < chkEl._selector._endIndex) {
 						//something created in xd:choice, so skip other variants
@@ -1315,8 +1298,7 @@ final class ChkComposer extends SReporter {
 					if ((addr = xsel._compose) >= 0) {
 						chkEl.debugXPos(XDDebug.CREATE);
 						result = chkEl.exec(addr, (byte) 'E');
-					} else {//default
-						 // force to create an optional model
+					} else {//default - force to create an optional model
 						result = new DefLong(xsel.minOccurs() == 0 ? 1 : xsel.minOccurs());
 					}
 					if (!chkEl.createGroup(xsel)) {
@@ -1330,7 +1312,7 @@ final class ChkComposer extends SReporter {
 						continue;
 					}
 					switch (result.getItemId()) {
-						case XD_LONG:
+						case XD_LONG: {
 							int xnum = (int) ((DefLong) result).intValue();
 							for(int j=0; j<xsel.maxOccurs() && j<xnum; j++) {
 								composeGroup(chkEl,sourceEl,savedSource,i,lastText,lastElem,savedUserObj);
@@ -1342,6 +1324,7 @@ final class ChkComposer extends SReporter {
 								}
 							}
 							break;
+						}
 						case XD_BOOLEAN:
 							for(int j = 0; j < xsel.maxOccurs(); j++) {
 								composeGroup(chkEl,sourceEl,savedSource,i,lastText,lastElem,savedUserObj);
@@ -1352,31 +1335,28 @@ final class ChkComposer extends SReporter {
 								}
 							}
 							break;
-						case XD_RESULTSET:
+						case XD_RESULTSET: {
 							XDResultSet it = (XDResultSet) result;
-							try {
-								XDValue item = it.nextXDItem(chkEl);
-								if (item == null) {// no raw
-									i = groupNotGenerated(chkEl, xsel);
-									continue;
+							XDValue item = it.nextXDItem(chkEl);
+							if (item == null) {// no raw
+								i = groupNotGenerated(chkEl, xsel);
+								continue;
+							}
+							for(int j=0; j<=xsel.maxOccurs() && item!=null;
+								item = it.nextXDItem(chkEl), j++) {
+								Element el = item.getElement();
+								if (el == null) {
+									el = prepareElement(chkEl, null, chkEl._xElement);
 								}
-								for(int j=0; j<=xsel.maxOccurs() && item!=null;
-									item = it.nextXDItem(chkEl), j++) {
-									Element el = item.getElement();
-									if (el == null) {
-										el = prepareElement(chkEl, null, chkEl._xElement);
-									}
-									composeGroup(chkEl, el, null, i, lastText, lastElem,savedUserObj);
-									if (xsel.getKind() != XMMIXED && j + 1 >= xsel.maxOccurs()) {
-										//Maximum occurrence of &{0} exceeded
-										chkEl.error(XDEF.XDEF558, xsel.getName().substring(1));
-									}
+								composeGroup(chkEl, el, null, i, lastText, lastElem,savedUserObj);
+								if (xsel.getKind() != XMMIXED && j + 1 >= xsel.maxOccurs()) {
+									//Maximum occurrence of &{0} exceeded
+									chkEl.error(XDEF.XDEF558, xsel.getName().substring(1));
 								}
-							} catch (SRuntimeException ex) {
-								chkEl.putReport(ex.getReport());
 							}
 							chkEl._scp.closeResultSet(it);
 							break;
+						}
 						default:
 							DefContainer dc;
 							int len;
@@ -1420,23 +1400,19 @@ final class ChkComposer extends SReporter {
 						return i;
 					}
 					continue; //never should happen
-				default:
-					i++; //never should happen
-					continue;
+				default: i++; continue; //never should happen
 			}
 			chkEl._actDefIndex = -1;
 			i++;
 			if (chkEl._selector != null) {
 				if (chkEl._selector._kind == XMCHOICE) {
 					if (count < chkEl.getRefNum(i)) { //node was created?
-						if (chkEl._selector._count >
-							chkEl._selector.maxOccurs()) {
+						if (chkEl._selector._count > chkEl._selector.maxOccurs()) {
 							i = chkEl._selector._endIndex;
 						}
 					}
 				}
-				//othewise force checking of next xdef item
-				chkEl._nextDefIndex = i;
+				chkEl._nextDefIndex = i; //othewise force checking of next xdef item
 			}
 		}
 		return i;
@@ -1520,29 +1496,29 @@ final class ChkComposer extends SReporter {
 		return chkElem._element.getOwnerDocument().createElementNS(u, n);
 	}
 
-	private ChkElement genChkElement(final ChkElement parentChkEl, final Element sourceEl,final XElement xEl){
-		Element el = prepareElement(parentChkEl, sourceEl, xEl);
-		ChkElement chkElem =  new ChkElement(parentChkEl, el, xEl, false);
-		chkElem._userObject = parentChkEl._userObject;
+	private ChkElement genChkElement(final ChkElement parentChkel, final Element sourceEl,final XElement xel){
+		Element el = prepareElement(parentChkel, sourceEl, xel);
+		ChkElement chkElem =  new ChkElement(parentChkel, el, xel, false);
+		chkElem._userObject = parentChkel._userObject;
 		return chkElem;
 	}
 
-	private ChkElement prepareChkElement(final ChkElement parentChkElem,
-		final Element sourceElem,
-		final XElement xElem,
+	private ChkElement prepareChkElement(final ChkElement parentChkel,
+		final Element sourceEl,
+		final XElement xel,
 		final int defIndex) {
-		ChkElement childChkEl = genChkElement(parentChkElem, sourceElem, xElem);
-		childChkEl._sourceElem = sourceElem == null ? parentChkElem._sourceElem : sourceElem;
-		parentChkElem._actDefIndex = defIndex;
-		if (parentChkElem._selector != null) {
-			if (parentChkElem._selector._kind == XMCHOICE) {
-				parentChkElem._nextDefIndex = parentChkElem._selector._endIndex;
+		ChkElement childChkEl = genChkElement(parentChkel, sourceEl, xel);
+		childChkEl._sourceElem = sourceEl == null ? parentChkel._sourceElem : sourceEl;
+		parentChkel._actDefIndex = defIndex;
+		if (parentChkel._selector != null) {
+			if (parentChkel._selector._kind == XMCHOICE) {
+				parentChkel._nextDefIndex = parentChkel._selector._endIndex;
 			} else {
-				parentChkElem._nextDefIndex = defIndex + 1;
+				parentChkel._nextDefIndex = defIndex + 1;
 			}
-			parentChkElem._selector._occur = true;
+			parentChkel._selector._occur = true;
 		} else {
-			parentChkElem._nextDefIndex = defIndex + 1;
+			parentChkel._nextDefIndex = defIndex + 1;
 		}
 		return childChkEl;
 	}
@@ -1556,8 +1532,7 @@ final class ChkComposer extends SReporter {
 	 * @param key The name of definition item used for search.
 	 * @return The required X-element or null.
 	 */
-	private static XElement getXElement(final XDefinition xdef,
-		final String key) {
+	private static XElement getXElement(final XDefinition xdef, final String key) {
 		int ndx = key.lastIndexOf('#');
 		String lockey;
 		XMDefinition def;
@@ -1584,16 +1559,16 @@ final class ChkComposer extends SReporter {
 	 * @param reporter array report writer.
 	 * @param xdef XDefinition.
 	 * @param rootName name of root element.
-	 * @param chkElem the ChkElement object from which this was called.
+	 * @param chkEl the ChkElement object from which this was called.
 	 * @return composed XML element.
 	 */
 	static Element compose(final ArrayReporter reporter,
 		final XDefinition xdef,
 		final String rootName,
-		final ChkElement chkElem) {
+		final ChkElement chkEl) {
 		String qname = null;
 		String nsURI = null;
-		Element sourceElem = chkElem._element;
+		Element sourceElem = chkEl._element;
 		if (rootName == null) {
 			if (sourceElem == null) {
 				XElement xe;
@@ -1612,13 +1587,13 @@ final class ChkComposer extends SReporter {
 				nsURI = xe.getNSUri();
 			} else {
 				//Model of element &{0} is missing in X-definition &{1}
-				chkElem.error(XDEF.XDEF601, rootName, xdef.getName());
+				chkEl.error(XDEF.XDEF601, rootName, xdef.getName());
 				return null;
 			}
 		}
-		ChkComposer cc = new ChkComposer(reporter, xdef, nsURI, qname, chkElem);
-		cc._rootChkElement._scp.setDebug(chkElem._scp.isDebugMode());
-		cc._rootChkElement._scp.setDebugger(chkElem._rootChkDocument.getDebugger());
+		ChkComposer cc = new ChkComposer(reporter, xdef, nsURI, qname, chkEl);
+		cc._rootChkElement._scp.setDebug(chkEl._scp.isDebugMode());
+		cc._rootChkElement._scp.setDebugger(chkEl._rootChkDocument.getDebugger());
 		cc.composeRoot(sourceElem);
 		if (cc.errorWarnings()) {
 			if (reporter == null) {
