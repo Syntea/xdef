@@ -13,7 +13,6 @@ import java.io.UnsupportedEncodingException;
  * @author Vaclav Trojan
  */
 public class FileReportReader implements ReportReader {
-
 	/** Parser used for reading of messages. */
 	private StringParser _parser;
 	/** reader (if format is NOT XML. */
@@ -23,32 +22,27 @@ public class FileReportReader implements ReportReader {
 	 * @param fname The pathname of file with the input data.
 	 * @throws SException if an error occurs.
 	 */
-	public FileReportReader(final String fname) throws SException {
-		this(new File(fname));
-	}
+	public FileReportReader(final String fname) throws SException {this(new File(fname));}
 
 	/** Create new empty KFileReportReader.
 	 * @param fname The pathname of file with the input data.
-	 * @param xmlFormat if true the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param xmlFormat if true the from of input data is in XML,otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
-	public FileReportReader(final String fname,
-		final boolean xmlFormat) throws SException {
+	public FileReportReader(final String fname, final boolean xmlFormat) throws SException {
 		this(new File(fname), xmlFormat);
 	}
 
 	/** Create new empty KFileReportReader.
 	 * @param fname The pathname of file with the input data.
-	 * @param encoding The name of encoding table (null =&gt; default
-	 * encoding).
-	 * @param xmlFormat if true the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param encoding The name of encoding table (null =&gt; default encoding).
+	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
-	public FileReportReader(final String fname,
-		final String encoding,
-		final boolean xmlFormat) throws SException {
+	public FileReportReader(final String fname, final String encoding, final boolean xmlFormat)
+		throws SException {
 		this(new File(fname), encoding, xmlFormat);
 	}
 
@@ -56,66 +50,52 @@ public class FileReportReader implements ReportReader {
 	 * @param in The file with the input data.
 	 * @throws SException if an error occurs.
 	 */
-	public FileReportReader(final File in) throws SException {
-		this(in, true);
-	}
+	public FileReportReader(final File in) throws SException {this(in, true);}
 
 	/** Create new empty KFileReportReader.
 	 * @param in The file with the input data.
-	 * @param xmlFormat if true the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param isXML if true the format of input data is  XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
-	public FileReportReader(final File in,
-		final boolean xmlFormat) throws SException {
-		this(in, null, xmlFormat);
-	}
+	public FileReportReader(final File in, final boolean isXML) throws SException {this(in, null, isXML);}
 
 	/** Create new empty KFileReportReader.
 	 * @param in The file with the input data.
-	 * @param encoding The name of encoding table (null =&gt; default
-	 * encoding).
-	 * @param xmlFormat if true the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param encoding The name of encoding table (null =&gt; default encoding).
+	 * @param isXML if true the format of input data is in XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
-	public FileReportReader(final File in,
-		final String encoding,
-		final boolean xmlFormat) throws SException {
+	public FileReportReader(final File in, final String encoding, final boolean isXML) throws SException {
 		try {
 			if (encoding != null && encoding.length() > 0) {
 				init(new InputStreamReader(new FileInputStream(in),
-					encoding), xmlFormat);
+					encoding), isXML);
 			} else {
-				init(new InputStreamReader(new FileInputStream(in)), xmlFormat);
+				init(new InputStreamReader(new FileInputStream(in)), isXML);
 			}
 		} catch (FileNotFoundException ex) {
 			throw new SException(SYS.SYS024, in);//File doesn't exist: &{0}
 		} catch (UnsupportedEncodingException ex) {
-			//Unsupported character set name: &{0}
-			throw new SException(SYS.SYS035, encoding);
+			throw new SException(SYS.SYS035, encoding); //Unsupported character set name: &{0}
 		}
 	}
 
 	/** Create new empty KFileReportReader.
 	 * @param in The input stream reader.
 	 */
-	public FileReportReader(final InputStreamReader in) {
-		init(in, true);
-	}
+	public FileReportReader(final InputStreamReader in) {init(in, true);}
 
 	/** Create new empty KFileReportReader.
 	 * @param in The input stream reader.
-	 * @param xmlFormat if true the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param isXML if true the format of input data is in XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 */
-	public FileReportReader(final InputStreamReader in,
-		final boolean xmlFormat) {
-		init(in, xmlFormat);
-	}
+	public FileReportReader(final InputStreamReader in, final boolean isXML) {init(in, isXML);}
 
-	private void init(final InputStreamReader in, final boolean xmlFormat) {
-		if (xmlFormat) {
+	private void init(final InputStreamReader in, final boolean isXML) {
+		if (isXML) {
 			_parser = new StringParser(in, null);
 			_reader = null;
 		} else {
@@ -151,8 +131,8 @@ public class FileReportReader implements ReportReader {
 		}
 	}
 
-	private static String[] REPORTSTARTTOKENS = new String[] {"<S>",
-		"<U","<T","<A","<M","<W","<L","<E","<F","<X","<D","<K","<I"};
+	private static String[] REPORTSTARTTOKENS =
+		new String[] {"<S>","<U","<T","<A","<M","<W","<L","<E","<F","<X","<D","<K","<I"};
 
 	@Override
 	/** Get next report from the list or null.
@@ -214,8 +194,8 @@ public class FileReportReader implements ReportReader {
 				}
 				throw new SIOException(SYS.SYS042);//Incorrect format of report
 			} catch (NumberFormatException | SIOException ex) {
-				throw new SRuntimeException(//Program exception&{0}{: }
-					SYS.SYS036, STester.printThrowable(ex));
+				//Program exception&{0}{: }
+				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 			}
 		} else if (_reader == null) {
 			return null;
@@ -242,8 +222,7 @@ public class FileReportReader implements ReportReader {
 				}
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, ex); //Program exception&{0}{: }
 		}
 		return Report.string(null, sb.toString());
 	}
@@ -266,9 +245,7 @@ public class FileReportReader implements ReportReader {
 	/** Write reports to String.
 	 * @return the String with reports.
 	 */
-	public final String printToString() {
-		return printToString(null);
-	}
+	public final String printToString() {return printToString(null);}
 
 	@Override
 	/** Write reports to String in specified language.
@@ -309,7 +286,7 @@ public class FileReportReader implements ReportReader {
 	 * @param language language id (ISO-639).
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final void printReports(final PrintStream out,final String language){
+	public final void printReports(final PrintStream out, final String language) {
 		Report rep;
 		while ((rep = getReport()) != null) {
 			out.println(rep.toString(language));
@@ -326,5 +303,4 @@ public class FileReportReader implements ReportReader {
 			reporter.putReport(rep);
 		}
 	}
-
 }

@@ -1,5 +1,6 @@
 package org.xdef.sys;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -16,22 +17,21 @@ public class BinReportReader implements ReportReader {
 	public final Report getReport() {
 		try {
 			return Report.readObj(_in);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 
 	@Override
 	public final void close() {
-		try {_in.getStream().close();} catch (Exception ex) {}
+		try {_in.getStream().close();} catch (IOException ex) {}
 	}
 
 	@Override
 	public final void printReports(final PrintStream out) {}
 
 	@Override
-	public final void printReports(final PrintStream out,
-		final String language) {}
+	public final void printReports(final PrintStream out, final String language) {}
 
 	@Override
 	public final String printToString() {return null;}

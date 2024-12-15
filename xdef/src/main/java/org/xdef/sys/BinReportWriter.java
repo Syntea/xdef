@@ -30,20 +30,10 @@ public class BinReportWriter implements ReportWriter {
 			report.writeObj(_out);
 			_size++;
 			switch (report.getType()) {
-				case Report.ERROR:
-					_errors++;
-					_lastErrorReport = report;
-					return;
-				case Report.LIGHTERROR:
-					_lightErrors++;
-					_lastErrorReport = report;
-					return;
-				case Report.FATAL:
-					_fatals++;
-					_lastErrorReport = report;
-					return;
-				case Report.WARNING:
-					_warnings++;
+				case Report.ERROR: _errors++; _lastErrorReport = report; return;
+				case Report.LIGHTERROR: _lightErrors++; _lastErrorReport = report; return;
+				case Report.FATAL: _fatals++; _lastErrorReport = report; return;
+				case Report.WARNING: _warnings++;
 			}
 		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS066, ex); //Internal error&{}{: }
@@ -54,9 +44,7 @@ public class BinReportWriter implements ReportWriter {
 	public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
-	public final void clearLastErrorReport() {
-		_lastErrorReport = null;
-	}
+	public final void clearLastErrorReport() {_lastErrorReport = null;}
 
 	@Override
 	public final void clearCounters() {
@@ -76,85 +64,67 @@ public class BinReportWriter implements ReportWriter {
 	@Override
 	/** Put fatal item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final long registeredID, final Object... mod) {
-		putReport(Report.fatal(registeredID, mod));
-	}
+	public final void fatal(final long ID, final Object... mod) {putReport(Report.fatal(ID, mod));}
 
 	@Override
 	/** Put error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final long registeredID, final Object... mod) {
-		putReport(Report.error(registeredID, mod));
-	}
+	public final void error(final long ID, final Object... mod) {putReport(Report.error(ID, mod));}
 
 	@Override
 	/** Put light error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lighterror(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void lighterror(final String id, final String msg, final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
 	@Override
 	/** Put light error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(final long registeredID, final Object... mod) {
-		putReport(Report.lightError(registeredID, mod));
-	}
+	public final void lightError(final long ID, final Object... mod) {putReport(Report.lightError(ID, mod));}
 
 	@Override
 	/** Put warning item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void warning(final String id, final String msg, final Object... mod) {
 		putReport(Report.warning(id, msg, mod));
 	}
 
 	@Override
 	/** Put warning item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
 	public final void warning(final long registeredID, final Object... mod) {
@@ -179,97 +149,75 @@ public class BinReportWriter implements ReportWriter {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final long registeredID, final Object... mod) {
-		putReport(Report.audit(registeredID, mod));
-	}
+	public final void audit(final long ID, final Object... mod) {putReport(Report.audit(ID, mod));}
 
 	@Override
 	/** Put message item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void message(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void message(final String id,final String msg, final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
 	@Override
 	/** Put message item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void mesage(final long registeredID, final Object... mod) {
-		putReport(Report.message(registeredID, mod));
-	}
+	public final void mesage(final long ID, final Object... mod) {putReport(Report.message(ID, mod));}
 
 	@Override
 	/** Put info item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void info(final String id, final String msg, final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
 	@Override
 	/** Put info item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final long registeredID, final Object... mod) {
-		putReport(Report.info(registeredID, mod));
-	}
+	public final void info(final long ID, final Object... mod) {putReport(Report.info(ID, mod));}
 
 	@Override
 	/** Put text item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void text(final String id, final String msg, final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
 	@Override
 	/** Put text item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final long registeredID, final Object... mod) {
-		putReport(Report.text(registeredID, mod));
-	}
+	public final void text(final long ID, final Object... mod) {putReport(Report.text(ID, mod));}
 
 	@Override
 	/** Put string item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void string(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void string(final String id, final String msg, final Object... mod) {
 		putReport(Report.string(id, msg, mod));
 	}
 
 	@Override
 	/** Put string item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void string(final long registeredID, final Object... mod) {
-		putReport(Report.string(registeredID, mod));
-	}
+	public final void string(final long ID, final Object... mod) {putReport(Report.string(ID, mod));}
 
 	@Override
 	public final boolean fatals() {return _fatals != 0;}
@@ -279,9 +227,7 @@ public class BinReportWriter implements ReportWriter {
 		return _fatals + _errors + _lightErrors != 0;}
 
 	@Override
-	public final boolean errorWarnings() {
-		return _fatals + _errors + _lightErrors + _warnings != 0;
-	}
+	public final boolean errorWarnings() {return _fatals + _errors + _lightErrors + _warnings != 0;}
 
 	@Override
 	public final int getFatalErrorCount() {return _fatals;}
@@ -302,41 +248,26 @@ public class BinReportWriter implements ReportWriter {
 	public final ReportReader getReportReader() {return null;}
 
 	@Override
-	public void close() {
-		try {
-			_out.getStream().close();
-		} catch (IOException ex) {}
+	public void close() {try {_out.getStream().close();} catch (IOException ex) {}
 	}
 
 	@Override
 	/** Flush report writer. */
-	public final void flush() {
-		try {
-			_out.getStream().flush();
-		} catch (IOException ex) {}
-	}
+	public final void flush() {try {_out.getStream().flush();} catch (IOException ex) {}}
 
 	@Override
-	public final void writeString(final String str) {
-		putReport(Report.string(null, str));
-	}
+	public final void writeString(final String str) {putReport(Report.string(null, str));}
 
 	@Override
-	/** Check error reports are present in the report writer. Return normally if
-	 * in no errors are found, otherwise throw exception with list of
-	 * error messages (max. MAX_REPORTS messages).
+	/** Check error reports are present in the report writer. Return normally if no errors are found.
+	 * Otherwise throw exception with list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
-	public final void checkAndThrowErrors() throws SRuntimeException {
-		if (errors()) {
-			throwReports(false);
-		}
-	}
+	public final void checkAndThrowErrors() throws SRuntimeException {if (errors()) throwReports(false);}
 
 	@Override
-	/** Check if error and/or warning reports  are present in the report writer.
-	 * Return normally if in no errors or warnings are found, otherwise throw
-	 * exception with the  list of error messages (max. MAX_REPORTS messages).
+	/** Check if error and/or warning reports  are present in the report writer. Return normally if no errors
+	 * or warnings are found, otherwise throw exception with list of error messages, max MAX_REPORTS messages.
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
 	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
@@ -345,10 +276,8 @@ public class BinReportWriter implements ReportWriter {
 		}
 	}
 
-	/** Throw runtime exception if reports with errors and (or even warnings)
-	 * are present in the report writer.
-	 * @param warnings display all warnings messages if this argument is true,
-	 * otherwise display only errors.
+	/** Throw runtime exception if reports with errors and (or even warnings) are present in the report writer.
+	 * @param warnings display all warnings messages if this argument is true otherwise display only errors.
 	 * @throws SRuntimeException with reports.
 	 */
 	private void throwReports(final boolean warnings) {
@@ -359,8 +288,7 @@ public class BinReportWriter implements ReportWriter {
 		if (reader == null) {
 			ArrayReporter r = new ArrayReporter();
 			r.putReport(getLastErrorReport());
-			// Can't get report reader from this report writer
-			r.putReport(Report.error(SYS.SYS045));
+			r.putReport(Report.error(SYS.SYS045)); // Can't get report reader from this report writer
 			reader = r.getReportReader();
 		}
 		StringBuilder sb = new StringBuilder();
@@ -368,26 +296,22 @@ public class BinReportWriter implements ReportWriter {
 		for (int i = 0; (rep=reader.getReport()) != null;) {
 			if (i >= MAX_REPORTS) {
 				sb.append("\n&{&&");
-				sb.append(KXmlUtils.toXmlText(
-					Report.text(null, "...").toXmlString(),'"',true));
+				sb.append(KXmlUtils.toXmlText(Report.text(null, "...").toXmlString(),'"',true));
 				sb.append("&}");
 				sb.append("\n&{&&");
-				sb.append(KXmlUtils.toXmlText(
-					//Too many errors
-					Report.error(SYS.SYS013).toXmlString(),'"',true));
+				//Too many errors
+				sb.append(KXmlUtils.toXmlText(Report.error(SYS.SYS013).toXmlString(),'"',true));
 				sb.append("&}");
 				break;
-			} else if (warnings || rep.getType() == Report.ERROR ||
-				rep.getType() == Report.LIGHTERROR ||
-				rep.getType() == Report.FATAL) {
+			} else if (warnings || rep.getType() == Report.ERROR || rep.getType() == Report.LIGHTERROR
+				|| rep.getType() == Report.FATAL) {
 				i++;
 				sb.append("\n&{&&");
 				sb.append(KXmlUtils.toXmlText(rep.toXmlString(),'"',true));
 				sb.append("&}");
 			}
 		}
-		//Errors detected: &{0}
-		throw new SRuntimeException(SYS.SYS012, sb.toString());
+		throw new SRuntimeException(SYS.SYS012, sb.toString()); //Errors detected: &{0}
 	}
 
 	@Override
@@ -400,5 +324,4 @@ public class BinReportWriter implements ReportWriter {
 			putReport(rep);
 		}
 	}
-
 }

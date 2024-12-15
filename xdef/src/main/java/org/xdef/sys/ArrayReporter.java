@@ -29,7 +29,6 @@ public class ArrayReporter extends ArrayList<Report>
 	public ArrayReporter() {
 		super();
 		_lastErrorReport = -1;
-//		_errors, _lastErrors,_warnings,_fatals,_index = 0; // sets Java
 	}
 
 	@Override
@@ -96,8 +95,7 @@ public class ArrayReporter extends ArrayList<Report>
 
 	/** Remove the report from the list.
 	 * @param msg The report.
-	 * @return <i>true</i> if the object was found and removed, otherwise
-	 * return false.
+	 * @return <i>true</i> if the object was found and removed, otherwise return false.
 	 */
 	public final boolean removeReport(final Report msg) {
 		if (msg == null || super.isEmpty()) {
@@ -111,25 +109,16 @@ public class ArrayReporter extends ArrayList<Report>
 		Report rep;
 		byte type;
 		switch (msg.getType()) {
-			case Report.ERROR:
-				_errors--;
-				break;
-			case Report.LIGHTERROR:
-				_lightErrors--;
-				break;
-			case Report.FATAL:
-				_fatals--;
-				break;
-			case Report.WARNING:
-				_warnings--;
-				break;
+			case Report.ERROR: _errors--; break;
+			case Report.LIGHTERROR: _lightErrors--; break;
+			case Report.FATAL: _fatals--; break;
+			case Report.WARNING: _warnings--; break;
 		}
 		if (_lastErrorReport == ndx) {
 			while (--ndx >= 0) {
 				rep = super.get(ndx);
 				type = rep.getType();
-				if (type == Report.FATAL || type == Report.ERROR ||
-					type == Report.LIGHTERROR) {
+				if (type == Report.FATAL || type == Report.ERROR || type == Report.LIGHTERROR) {
 					_lastErrorReport = ndx;
 					break;
 				}
@@ -142,29 +131,22 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Write string to reporter.
 	 * @param str String to be written.
 	 */
-	public final void writeString(final String str) {
-		super.add(Report.string(null, str));
-	}
+	public final void writeString(final String str) {super.add(Report.string(null, str));}
 
 	@Override
 	/** Get last error report.
-	 * @return last error report (or <i>null</i> if last report is not
-	 * available).
+	 * @return last error report (or <i>null</i> if last report is not available).
 	 */
-	public final Report getLastErrorReport() {
-		return _lastErrorReport < 0 ? null : get(_lastErrorReport);
-	}
+	public final Report getLastErrorReport() {return _lastErrorReport < 0 ? null : get(_lastErrorReport);}
 
 	@Override
-	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <i>getLastReport()</i> will be null. However,
-	 * the report has already been written to the report file.
+	/** Clear last error report. If last report has been available it will be erased (i.e. result
+	 * of getLastReport() will be null. However, the report has already been written to the report file.
 	 */
 	public final void clearLastErrorReport() {_lastErrorReport = -1;}
 
 	@Override
-	/** Clear counters of fatal errors, errors and warnings.
-	 */
+	/** Clear counters of fatal errors, errors and warnings. */
 	public final void clearCounters() {
 		_errors = 0;
 		_warnings = 0;
@@ -174,8 +156,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Get report from position.
 	 * @param index index of report to return.
 	 * @return the report at the specified position in this list.
-	 * @throws IndexOutOfBoundsException if index is out of range <i>(index
-	 * &lt; 0 || index &gt;= size())</i>.
+	 * @throws IndexOutOfBoundsException if index is out of range (index &lt; 0 || index &gt;= size()).
 	 */
 	@Override
 	public final Report get(final int index) {return super.get(index);}
@@ -192,10 +173,9 @@ public class ArrayReporter extends ArrayList<Report>
 	}
 
 	@Override
-	/** Returns report reader for reading created report file. If reader
-	 * can't be created <i>null</i> is returned. It is implementation
-	 * dependent if writing of reports can continue, rather it closes the
-	 * report file and resets it to read mode.
+	/** Returns report reader for reading created report file. If reader can't be created null is returned.
+	 * It is implementation dependent if writing of reports can continue, rather it closes the report file
+	 * and resets it to read mode.
 	 * @return The report reader or <i>null</i>.
 	 */
 	public final ReportReader getReportReader() {
@@ -221,10 +201,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Clear this ArrayReporter and return it.
 	 * @return this ArrayReporter.
 	 */
-	public final ArrayReporter clearArrayReporter() {
-		clear();
-		return this;
-	}
+	public final ArrayReporter clearArrayReporter() {clear(); return this;}
 
 	@Override
 	/** Get size of the list of reports.
@@ -235,145 +212,112 @@ public class ArrayReporter extends ArrayList<Report>
 	@Override
 	/** Put fatal item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(long registeredID, Object... mod) {
-		putReport(Report.fatal(registeredID, mod));
-	}
+	public final void fatal(long ID, Object... mod) {putReport(Report.fatal(ID, mod));}
 
 	@Override
 	/** Put error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(long registeredID, Object... mod) {
-		putReport(Report.error(registeredID, mod));
-	}
+	public final void error(long ID, Object... mod) {putReport(Report.error(ID, mod));}
 
 	@Override
 	/** Put light error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lighterror(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void lighterror(final String id, final String msg, final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
 	@Override
 	/** Put light error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(long registeredID, Object... mod) {
-		putReport(Report.lightError(registeredID, mod));
-	}
+	public final void lightError(long ID, Object... mod) {putReport(Report.lightError(ID, mod));}
 
 	@Override
 	/** Put warning item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void warning(final String id, final String msg, final Object... mod) {
 		putReport(Report.warning(id, msg, mod));
 	}
 
 	@Override
 	/** Put warning item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final long registeredID, final Object... mod) {
-		putReport(Report.warning(registeredID, mod));
-	}
+	public final void warning(final long ID, final Object... mod) {putReport(Report.warning(ID, mod));}
 
 	@Override
 	/** Put audit item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void audit(final String id, final String msg, final Object... mod) {
 		putReport(Report.audit(id, msg, mod));
 	}
 
 	@Override
 	/** Put audit item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final long registeredID, final Object... mod) {
-		putReport(Report.audit(registeredID, mod));
-	}
+	public final void audit(final long ID, final Object... mod) {putReport(Report.audit(ID, mod));}
 
 	@Override
 	/** Put message item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void message(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void message(final String id, final String msg, final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
 	@Override
 	/** Put message item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void mesage(final long registeredID, final Object... mod) {
-		putReport(Report.message(registeredID, mod));
-	}
+	public final void mesage(final long ID, final Object... mod) {putReport(Report.message(ID, mod));}
 
 	@Override
 	/** Put info item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void info(final String id, final String msg, final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
@@ -382,20 +326,15 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final long registeredID, final Object... mod) {
-		putReport(Report.info(registeredID, mod));
-	}
+	public final void info(final long ID, final Object... mod) {putReport(Report.info(ID, mod));}
 
 	@Override
 	/** Put text item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void text(final String id, final String msg, final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
@@ -404,9 +343,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final long registeredID, final Object... mod) {
-		putReport(Report.text(registeredID, mod));
-	}
+	public final void text(final long ID, final Object... mod) {putReport(Report.text(ID, mod));}
 
 	@Override
 	/** Put string item.
@@ -423,12 +360,10 @@ public class ArrayReporter extends ArrayList<Report>
 
 	@Override
 	/** Put string item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod The modification string of report text.
 	 */
-	public final void string(final long registeredID, final Object... mod) {
-		putReport(Report.string(registeredID, mod));
-	}
+	public final void string(final long ID, final Object... mod) {putReport(Report.string(ID, mod));}
 
 	@Override
 	/** Get number of fatal items.
@@ -464,9 +399,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Check if errors and/or fatal errors were generated.
 	 * @return <i>true</i> if and only if exists fatal errors.
 	 */
-	public final boolean errors() {
-		return (_fatals + _errors + _lightErrors) != 0;
-	}
+	public final boolean errors() {return (_fatals + _errors + _lightErrors) != 0;}
 
 	@Override
 	/** return true if warnings or errors reports are present.
@@ -477,9 +410,8 @@ public class ArrayReporter extends ArrayList<Report>
 	}
 
 	@Override
-	/** Check if error and warning reports were stored in report writer. Return
-	 * normally if in no errors or warnings are found, otherwise throw
-	 * exception with the  list of error reports (max. MAX_REPORTS reports).
+	/** Check if error and warning reports were stored in report writer. Return normally if in no errors or
+	 * warnings are found, otherwise throw exception with the list of error reports (max MAX_REPORTS reports).
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
 	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
@@ -489,9 +421,8 @@ public class ArrayReporter extends ArrayList<Report>
 	}
 
 	@Override
-	/** Check error reports stored in report writer. Return normally if
-	 * in no errors are found, otherwise throw exception with list of
-	 * error reports (max. MAX_REPORTS reports).
+	/** Check error reports stored in report writer. Return normally if in no errors are found, otherwise
+	 * throw exception with list of error reports (max. MAX_REPORTS reports).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
 	public final void checkAndThrowErrors() throws SRuntimeException {
@@ -500,10 +431,8 @@ public class ArrayReporter extends ArrayList<Report>
 		}
 	}
 
-	/** Throw runtime exception if reports with errors and (or even warnings)
-	 * are present in the report writer.
-	 * @param warnings display all warnings messages if this argument is true,
-	 * otherwise only errors.
+	/** Throw runtime exception if reports with errors and (or even warnings) are present in the report writer.
+	 * @param warnings display all warnings messages if this argument is true, otherwise only errors.
 	 * @throws SRuntimeException with reports.
 	 */
 	private void throwReports(final boolean warnings) throws SRuntimeException {
@@ -513,17 +442,14 @@ public class ArrayReporter extends ArrayList<Report>
 		for (int i = 0; (rep = getReport()) != null;) {
 			if (i >= MAX_REPORTS) {
 				sb.append("\n&{&&");
-				sb.append(KXmlUtils.toXmlText(
-					Report.text(null, "...").toXmlString(),'"',true));
+				sb.append(KXmlUtils.toXmlText(Report.text(null, "...").toXmlString(),'"',true));
 				sb.append("&}");
 				sb.append("\n&{&&");
 				// Too many errors
-				sb.append(KXmlUtils.toXmlText(Report.error(SYS.SYS013)
-					.toXmlString(),'"',true));
+				sb.append(KXmlUtils.toXmlText(Report.error(SYS.SYS013).toXmlString(),'"',true));
 				sb.append("&}");
 				break;
-			} else if (warnings || rep.getType() == Report.ERROR ||
-				rep.getType() == Report.LIGHTERROR ||
+			} else if (warnings || rep.getType() == Report.ERROR || rep.getType() == Report.LIGHTERROR ||
 				rep.getType() == Report.FATAL) {
 				i++;
 				sb.append("\n&{&&");
@@ -532,8 +458,7 @@ public class ArrayReporter extends ArrayList<Report>
 			}
 		}
 		_index = 0;
-		//Errors detected: &{0}
-		throw new SRuntimeException(SYS.SYS012, sb.toString());
+		throw new SRuntimeException(SYS.SYS012, sb.toString()); //Errors detected: &{0}
 	}
 
 	@Override
@@ -578,8 +503,7 @@ public class ArrayReporter extends ArrayList<Report>
 	 * @param language language id (ISO-639).
 	 * @param out The PrintStream where reports are printed.
 	 */
-	public final void printReports(final PrintStream out,
-		final String language) {
+	public final void printReports(final PrintStream out, final String language) {
 		Report rep;
 		_index = 0;
 		while ((rep = getReport()) != null) {
@@ -602,9 +526,6 @@ public class ArrayReporter extends ArrayList<Report>
 	}
 
 	@Override
-	public final String toString() {return printToString();}
-
-	@Override
 	/** Add to this reporter reports from report reader.
 	 * @param reporter report reader with reports to be added.
 	 */
@@ -625,4 +546,7 @@ public class ArrayReporter extends ArrayList<Report>
 			putReport(rep);
 		}
 	}
+
+	@Override
+	public final String toString() {return printToString();}
 }

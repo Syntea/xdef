@@ -24,13 +24,10 @@ public class NullReportWriter implements ReportWriter {
 	public boolean _throwException;
 
 	/** Creates a new instance of NulReportWriter
-	 * @param throwException if true the <i>putReport</i> method will
-	 * throw this exception if the message is light error, error or fatal error.
-	 * Otherwise the last error message is just stored to memory.
+	 * @param throwException if true the <i>putReport</i> method will throw this exception if the message is
+	 * light error, error or fatal error. Otherwise the last error message is just stored to memory.
 	 */
-	public NullReportWriter(final boolean throwException) {
-		_throwException = throwException;
-	}
+	public NullReportWriter(final boolean throwException) {_throwException = throwException;}
 
 	@Override
 	/** Set language (ISO-639 or ISO-639-2). This method has no effect here.
@@ -59,17 +56,13 @@ public class NullReportWriter implements ReportWriter {
 	/** Check if warnings and/or errors and/or fatal errors were generated.
 	 * @return true is warnings or errors reports are present.
 	 */
-	public final boolean errorWarnings() {
-		return _fatals + _errors + _lightErrors + _warnings != 0;
-	}
+	public final boolean errorWarnings() {return _fatals + _errors + _lightErrors + _warnings != 0;}
 
 	@Override
 	/** Check if errors and/or fatal errors were generated.
 	 * @return true is errors reports are present.
 	 */
-	public final boolean errors() {
-		return _fatals + _errors + _lightErrors != 0;
-	}
+	public final boolean errors() {return _fatals + _errors + _lightErrors != 0;}
 
 	@Override
 	/** Check if fatal errors were generated.
@@ -97,21 +90,18 @@ public class NullReportWriter implements ReportWriter {
 
 	@Override
 	/** Get last error report.
-	 * @return last error report (or <i>null</i> if last report is not
-	 * available).
+	 * @return last error report (or <i>null</i> if last report is not available).
 	 */
    public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
-	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <i>getLastReport()</i> will be null. However,
-	 * the report has already been written to the report file.
+	/** Clear last error report. If last report has been available it will be erased (i.e. result of
+	 * getLastReport() will be null. However, the report has already been written to the report file.
 	 */
 	public final void clearLastErrorReport() {_lastErrorReport = null;}
 
 	@Override
 	/** Returns <i>null</i> for this implementation.
-	 *
 	 * @return The value <i>null</i>.
 	 */
 	public final ReportReader getReportReader() {return null;}
@@ -123,10 +113,9 @@ public class NullReportWriter implements ReportWriter {
 	public final int getWarningCount() {return _warnings;}
 
 	@Override
-	/** Put the report - ignored if the type of msg argument is not error,
-	 * fatal error, light error or warning. If the type of msg argument is one
-	 * of error, fatal error or light error the msg is stored to memory as
-	 * the last error and if the switch _throwException is set on.
+	/** Put the report - ignored if the type of msg argument is not error, fatal error, light error or
+	 * warning. If the type of msg argument is one of error, fatal error or light error the msg is stored to
+	 * memory as the last error and if the switch _throwException is set on.
 	 * @param msg The report.
 	 * @throws SRuntimeException with message if msg is ERROR, LIGHT or FATAL.
 	 */
@@ -167,200 +156,155 @@ public class NullReportWriter implements ReportWriter {
 	@Override
 	/** Put fatal item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final long registeredID, final Object... mod) {
-		putReport(Report.fatal(registeredID, mod));
-	}
+	public final void fatal(final long ID, final Object... mod) {putReport(Report.fatal(ID, mod));}
 
 	@Override
 	/** Put error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final long registeredID, final Object... mod) {
-		putReport(Report.error(registeredID, mod));
-	}
+	public final void error(final long ID, final Object... mod) {putReport(Report.error(ID, mod));}
 
 	@Override
 	/** Put light error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lighterror(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void lighterror(final String id, final String msg, final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
 	@Override
 	/** Put light error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(final long registeredID, final Object... mod) {
-		putReport(Report.lightError(registeredID, mod));
-	}
+	public final void lightError(final long ID, final Object... mod) {putReport(Report.lightError(ID, mod));}
 
 	@Override
 	/** Put warning item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final String id,
-		final String msg,
-		final Object... mod){
+	public final void warning(final String id, final String msg, final Object... mod){
 		putReport(Report.warning(id, msg, mod));
 	}
 
 	@Override
 	/** Put warning item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final long registeredID, final Object... mod) {
-		putReport(Report.warning(registeredID, mod));
-	}
+	public final void warning(final long ID, final Object... mod) {putReport(Report.warning(ID, mod));}
 
 	@Override
 	/** Put audit item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void audit(final String id, final String msg, final Object... mod) {
 		putReport(Report.audit(id, msg, mod));
 	}
 
 	@Override
 	/** Put audit item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final long registeredID, final Object... mod) {
-		putReport(Report.audit(registeredID, mod));
-	}
+	public final void audit(final long ID, final Object... mod) {putReport(Report.audit(ID, mod));}
 
 	@Override
 	/** Put message item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void message(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void message(final String id, final String msg, final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
 	@Override
 	/** Put message item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void mesage(final long registeredID, final Object... mod) {
-		putReport(Report.message(registeredID, mod));
-	}
+	public final void mesage(final long ID, final Object... mod) {putReport(Report.message(ID, mod));}
 
 	@Override
 	/** Put info item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void info(final String id, final String msg, final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
 	@Override
 	/** Put info item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final long registeredID, final Object... mod) {
-		putReport(Report.info(registeredID, mod));
-	}
+	public final void info(final long ID, final Object... mod) {putReport(Report.info(ID, mod));}
 
 	@Override
 	/** Put text item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void text(final String id, final String msg, final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
 	@Override
 	/** Put text item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final long registeredID, final Object... mod) {
-		putReport(Report.text(registeredID, mod));
-	}
+	public final void text(final long ID, final Object... mod) {putReport(Report.text(ID, mod));}
 
 	@Override
 	/** Put string item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void string(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void string(final String id, final String msg, final Object... mod) {
 		putReport(Report.string(id, msg, mod));
 	}
 
 	@Override
 	/** Put string item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void string(final long registeredID, final Object... mod) {
-		putReport(Report.string(registeredID, mod));
-	}
+	public final void string(final long ID, final Object... mod) {putReport(Report.string(ID, mod));}
 
 	@Override
 	/** Write string to reporter  - ignored for this implementation.
@@ -369,21 +313,16 @@ public class NullReportWriter implements ReportWriter {
 	public final void writeString(final String str) {}
 
 	@Override
-	/** Check error reports are present in the report writer. Return normally if
-	 * in no errors are found, otherwise throw exception with list of
-	 * error messages (max. MAX_REPORTS messages).
+	/** Check error reports are present in the report writer. Return normally if in no errors are found,
+	 * otherwise throw exception with list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
-	public final void checkAndThrowErrors() throws SRuntimeException {
-		if (errors()) {
-			throwReports();
-		}
-	}
+	public final void checkAndThrowErrors() throws SRuntimeException {if (errors()) throwReports();}
 
 	@Override
-	/** Check if error and/or warning reports  are present in the report writer.
-	 * Return normally if in no errors or warnings are found, otherwise throw
-	 * exception with the  list of error messages (max. MAX_REPORTS messages).
+	/** Check if error and/or warning reports  are present in the report writer. Return normally if in no
+	 * errors or warnings are found, otherwise throw exception with the  list of error messages
+	 * (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
 	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
@@ -392,16 +331,14 @@ public class NullReportWriter implements ReportWriter {
 		}
 	}
 
-	/** Throw an exception if reports with errors and (or even warnings)
-	 * are present in the report writer.
+	/** Throw an exception if reports with errors and (or even warnings) are present in the report writer.
 	 * @throws SRuntimeException with reports.
 	 */
 	private void throwReports() throws SRuntimeException {
 		ArrayReporter r = new ArrayReporter();
 		r.putReport(getLastErrorReport());
 		if (r.isEmpty()) {
-			//Can't get report reader from this report writer
-			r.putReport(Report.error(SYS.SYS045));
+			r.putReport(Report.error(SYS.SYS045)); //Can't get report reader from this report writer
 		}
 		ReportReader reader = r.getReportReader();
 		StringBuilder sb = new StringBuilder();
@@ -409,13 +346,11 @@ public class NullReportWriter implements ReportWriter {
 		for (int i = 0; (rep=reader.getReport()) != null; i++) {
 			if (i >= MAX_REPORTS) {
 				sb.append("\n&{&&");
-				sb.append(KXmlUtils.toXmlText(
-					Report.text(null, "...").toXmlString(),'"',true));
+				sb.append(KXmlUtils.toXmlText(Report.text(null, "...").toXmlString(),'"',true));
 				sb.append("&}");
 				sb.append("\n&{&&");
 				sb.append(KXmlUtils.toXmlText(
-					//Too many errors*
-					Report.error(SYS.SYS013).toXmlString(),'"',true));
+					Report.error(SYS.SYS013).toXmlString(),'"',true)); //Too many errors*
 				sb.append("&}");
 				break;
 			} else {
@@ -424,8 +359,7 @@ public class NullReportWriter implements ReportWriter {
 				sb.append("&}");
 			}
 		}
-		//Errors detected: &{0}
-		throw new SRuntimeException(SYS.SYS012, sb.toString());
+		throw new SRuntimeException(SYS.SYS012, sb.toString()); //Errors detected: &{0}
 	}
 
 	@Override
@@ -446,5 +380,4 @@ public class NullReportWriter implements ReportWriter {
 			putReport(rep);
 		}
 	}
-
 }
