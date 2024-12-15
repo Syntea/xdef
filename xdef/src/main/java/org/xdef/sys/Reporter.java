@@ -67,9 +67,7 @@ public interface Reporter {
 	 * @param modif The modification string (may be <i>null</i>).
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void lightError(final String id,
-		final String msg,
-		final String modif);
+	public void lightError(final String id, final String msg, final String modif);
 
 	/** Put warning message.
 	 * @param id Message id (may be <i>null</i>).
@@ -90,9 +88,7 @@ public interface Reporter {
 	 * @param msg Message text.
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void fatal(final SPosition pos,
-		final String id,
-		final String msg);
+	public void fatal(final SPosition pos, final String id, final String msg);
 
 	/** Put fatal error message with modification parameters.
 	 * @param pos Source position.
@@ -101,10 +97,7 @@ public interface Reporter {
 	 * @param modif Modification string (may be <i>null</i>).
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void fatal(final SPosition pos,
-		final String id,
-		final String msg,
-		final String modif);
+	public void fatal(final SPosition pos, final String id, final String msg, final String modif);
 
 	/** Put error message.
 	 * @param pos Source position.
@@ -112,9 +105,7 @@ public interface Reporter {
 	 * @param msg Message text.
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void error(final SPosition pos,
-		final String id,
-		final String msg);
+	public void error(final SPosition pos, final String id, final String msg);
 
 	/** Put error message with modification parameters.
 	 * @param pos Source position.
@@ -123,10 +114,7 @@ public interface Reporter {
 	 * @param modif Modification string (may be <i>null</i>).
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void error(final SPosition pos,
-		final String id,
-		final String msg,
-		final String modif);
+	public void error(final SPosition pos, final String id, final String msg, final String modif);
 
 	/** Put light error message.
 	 * @param pos Source position.
@@ -134,9 +122,7 @@ public interface Reporter {
 	 * @param msg Message text.
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void lightError(final SPosition pos,
-		final String id,
-		final String msg);
+	public void lightError(final SPosition pos, final String id, final String msg);
 
 	/** Put light error message with modification parameters.
 	 * @param pos Source position.
@@ -145,18 +131,14 @@ public interface Reporter {
 	 * @param modif The modification string (may be <i>null</i>).
 	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void lightError(final SPosition pos,
-		final String id,
-		final String msg,
-		final String modif);
+	public void lightError(final SPosition pos, final String id, final String msg, final String modif);
 
 	/** Put warning message.
 	 * @param pos Source position.
 	 * @param id Message id (may be <i>null</i>).
 	 * @param msg Message text.
 	 */
-	public void warning(final SPosition pos,
-		final String id, final String msg);
+	public void warning(final SPosition pos, final String id, final String msg);
 
 	/** Put warning message with modification parameters.
 	 * @param pos Source position.
@@ -164,10 +146,7 @@ public interface Reporter {
 	 * @param msg Message text.
 	 * @param modif Modification string (may be <i>null</i>).
 	 */
-	public void warning(final SPosition pos,
-		final String id,
-		final String msg,
-		final String modif);
+	public void warning(final SPosition pos, final String id, final String msg, final String modif);
 
 	/** Put report. Type of report may be WARNING, ERROR or FATAL
 	 * (see {@link org.xdef.sys.Report#getMsgID()}).
@@ -200,21 +179,18 @@ public interface Reporter {
 	 * @param type Type of report.
 	 * @param id Identifier of message (may be <i>null</i>).
 	 * @param msg Default text of report.
-	 * @param modification Modification string or <i>null</i>.
+	 * @param modif modification string or <i>null</i>.
 	 * @throws SRuntimeException if reporter is <i>null</i> and if report
 	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i>.
 	 */
-	public void putReport(final char type,
-		final String id,
-		final String msg,
-		final String modification);
+	public void putReport(final char type, final String id, final String msg, final String modif);
 
 	/** Put message with modification parameters.
 	 * @param pos Source position.
 	 * @param type Type of report.
 	 * @param id Message id (may be <i>null</i>).
 	 * @param msg Message text.
-	 * @param modif Modification string (may be <i>null</i>).
+	 * @param modif modification string (may be <i>null</i>).
 	 * @throws SRuntimeException if reporter is <i>null</i> and if report
 	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i>.
 	 */

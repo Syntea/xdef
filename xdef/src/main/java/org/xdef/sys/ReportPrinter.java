@@ -27,8 +27,7 @@ import java.util.List;
  * @author Vaclav Trojan
  */
 public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
-	private final static DecimalFormat LINE_NUM_FORMAT =
-		new DecimalFormat(" 00000  ");
+	private final static DecimalFormat LINE_NUM_FORMAT = new DecimalFormat(" 00000  ");
 	/** Saved actual position. */
 	private final long _pos;
 	/** Saved actual line number. */
@@ -40,8 +39,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 
 	/** Create report with extracted position information. */
 	private ReportPrinter(final Report report) {
-		super(report.getType(),
-			report.getMsgID(), report.getText(), report.getModification());
+		super(report.getType(), report.getMsgID(), report.getText(), report.getModification());
 		_pos = extractNumParameter("&{pos}");
 		_line = extractNumParameter("&{line}");
 		_column = extractNumParameter("&{column}");
@@ -100,8 +98,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	public boolean equals(final Object o) {
 		if (o != null && o instanceof ReportPrinter) {
 			ReportPrinter rep = (ReportPrinter)o;
-			return rep._sysId.equals(_sysId)
-				&& rep._line==_line && rep._column==_column;
+			return rep._sysId.equals(_sysId) && rep._line==_line && rep._column==_column;
 		} else {
 			return false;
 		}
@@ -115,9 +112,9 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	}
 
 	@Override
-	/** Compares this object with the specified object for order. Comparison
-	 * respects 1. position (if specified), 2. time (if specified). This serves
-	 * to sort messages according to source position.
+	/** Compares this object with the specified object for order. Comparison respects
+	 * 1. position (if specified),
+	 * 2. time (if specified). This serves to sort messages according to source position.
 	 * @param rep Object to be compared.
 	 * @return A negative integer, zero, or a positive integer as this object
 	 * is less than, equal to, or greater than the specified object.
@@ -143,8 +140,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param prefix Message prefix.
 	 * @param out where to print.
 	 * @param language language of messages.
-	 * @param resolveReportReferences if true then all references to other
-	 * reports are resolved.
+	 * @param resolveReportReferences if true then all references to other reports are resolved.
 	 * @throws Exception if given prefix is not registered.
 	 */
 	public static void printMessages(final String prefix,
@@ -156,33 +152,26 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		Field field = clazz.getField(prefix);
 		String[] ids = (String[]) field.get(new String[]{});
 		for (String id: ids) {
-			out.println(prefix+id + ": " +
-				getMsgSource(prefix+id, language, resolveReportReferences));
+			out.println(prefix+id + ": " + getMsgSource(prefix+id, language, resolveReportReferences));
 		}
 	}
 
 	/** Get message source.
 	 * @param id message id .
 	 * @param language language of message.
-	 * @param resolveReferences if true then all references to other
-	 * reports are resolved.
+	 * @param resolveReferences if true then all references to other reports are resolved.
 	 * @return string with message source.
 	 */
-	public static String getMsgSource(final String id,
-		final String language,
-		final boolean resolveReferences) {
-		return resolveReferences ? Report.getReportText(id, language) :
-			Report.getRawReportText(id, language);
+	public static String getMsgSource(final String id, final String language,final boolean resolveReferences){
+		return resolveReferences ? Report.getReportText(id, language) :	Report.getRawReportText(id, language);
 	}
 
-	/** Print listing (with line numbers) from source string with message table
-	 * to a string.
+	/** Print listing (with line numbers) from source string with message table to a string.
 	 * @param source The source string (may be a string with XML or pathname).
 	 * @param reports Report file.
 	 * @return listing as a string.
 	 */
-	public static String printListing(final String source,
-		final ReportReader reports) {
+	public static String printListing(final String source, final ReportReader reports) {
 		CharArrayWriter out = new CharArrayWriter();
 		printListing(out, source, reports, true);
 		return out.toString();
@@ -199,8 +188,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		final ReportReader reports,
 		final boolean lineNumbers) {
 		if (source.charAt(0) == '<' || source.charAt(0) <= ' ') {
-			printListing(out,
-				new CharArrayReader(source.toCharArray()), reports,lineNumbers);
+			printListing(out, new CharArrayReader(source.toCharArray()), reports,lineNumbers);
 		} else {
 			printListing(out, new File(source), reports, lineNumbers);
 		}

@@ -21,17 +21,16 @@ public interface ReportWriter {
 
 	/** Put fatal item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
 	public void fatal(final String id, final String msg, final Object... mod);
 
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(long registeredID, Object... mod);
+	public void fatal(long ID, Object... mod);
 
 	/** Put error item.
 	 * @param id The report id. If id is null the default text is used.
@@ -42,16 +41,16 @@ public interface ReportWriter {
 	public void error(final String id, final String msg, final Object... mod);
 
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(long registeredID, Object... mod);
+	public void error(long ID, Object... mod);
 
 	/** Put light error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void lightError(long registeredID, Object... mod);
+	public void lightError(long ID, Object... mod);
 
 	/** Put light error item.
 	 * @param id The report id. If id is null the default text is used.
@@ -59,8 +58,7 @@ public interface ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public void lighterror(final String id,
-		final String msg, final Object... mod);
+	public void lighterror(final String id, final String msg, final Object... mod);
 
 	/** Put warning item.
 	 * @param id The report id. If id is null the default text is used.
@@ -71,10 +69,10 @@ public interface ReportWriter {
 	public void warning(final String id, final String msg, final Object... mod);
 
 	/** Put warning item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(long registeredID, Object... mod);
+	public void warning(long ID, Object... mod);
 
 	/** Put audit item.
 	 * @param id The report id. If id is null the default text is used.
@@ -85,38 +83,36 @@ public interface ReportWriter {
 	public void audit(final String id, final String msg, final Object... mod);
 
 	/** Put audit item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void audit(long registeredID, Object... mod);
+	public void audit(long ID, Object... mod);
 
 	/** Put message item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
 	public void message(final String id, final String msg, final Object... mod);
 
 	/** Put message item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void mesage(long registeredID, Object... mod);
+	public void mesage(long ID, Object... mod);
 
 	/** Put info item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
 	public void info(final String id, final String msg, final Object... mod);
 
 	/** Put info item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void info(long registeredID, Object... mod);
+	public void info(long ID, Object... mod);
 
 	/** Put text item.
 	 * @param id The report id. If id is null the default text is used.
@@ -127,42 +123,39 @@ public interface ReportWriter {
 	public void text(final String id, final String msg, final Object... mod);
 
 	/** Put text item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void text(long registeredID, Object... mod);
+	public void text(long ID, Object... mod);
 
 	/** Put string item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
 	public void string(final String id, final String msg, final Object... mod);
 
 	/** Put string item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void string(long registeredID, Object... mod);
+	public void string(long ID, Object... mod);
 
 	/** Get last error report.
-	 * @return last error report (or <i>null</i> if last report is not
-	 * available).
+	 * @return last error report (or <i>null</i> if last report is not available).
 	 */
 	public Report getLastErrorReport();
 
-	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <i>getLastReport()</i> will be null. However,
-	 * the report has already been written to the report file.
+	/** Clear last error report. If last report has been available it will be erased (i.e. result of
+	 * getLastReport() will be null. However, the report has already been written to the report file.
 	 */
 	public void clearLastErrorReport();
 
 	/** Clear counters of fatal errors, errors and warnings. */
 	public void clearCounters();
 
-	/** Clear the report file. All report items will be erased from the file.
-	 * Also last error report is cleared.
+	/** Clear the report file. All report items will be erased from the file. Also last error report
+	 * is cleared.
 	 * throws KException if it is not possible to clear reports.
 	 */
 	public void clear();
@@ -224,16 +217,15 @@ public interface ReportWriter {
 	 */
 	public void writeString(String str);
 
-	/** Check error reports stored in report writer. Return normally if
-	 * in no errors are found, otherwise throw exception with list of
-	 * error messages (max. MAX_REPORTS messages).
+	/** Check error reports stored in report writer. Return normally if in no errors are found, otherwise
+	 * throw exception with list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
 	public void checkAndThrowErrors() throws SRuntimeException;
 
-	/** Check if error and warning reports were stored in report writer. Return
-	 * normally if in no errors or warnings are found, otherwise throw
-	 * exception with the  list of error messages (max. MAX_REPORTS messages).
+	/** Check if error and warning reports were stored in report writer. Return normally if in no errors or
+	 * warnings are found, otherwise throw exception with the  list of error messages
+	 * (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
 	public void checkAndThrowErrorWarnings() throws SRuntimeException;
@@ -242,5 +234,4 @@ public interface ReportWriter {
 	 * @param reporter report reader with reports to be added.
 	 */
 	public void addReports(final ReportReader reporter);
-
 }

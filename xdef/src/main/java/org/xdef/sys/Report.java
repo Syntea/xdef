@@ -16,28 +16,22 @@ import org.w3c.dom.NodeList;
 /** Provides container of a report. Report object has following fields:
  * <ul>
  * <li>- type of report (see constants)
- * <li>- the identifier of the report (composed of the prefix and of the report
- * identifier)
- * <li>- the primary text of report used if id was not found
- * in report table (see {@link ReportTable})or if _reportId is
- * <i>null</i>
- * <li>- modification string containing the information for setting parameters
- * of the report. The parameters have the format
- * "<i>&amp;{parameter_name}</i>" followed by parameter value
+ * <li>- the identifier of the report (composed of the prefix and of the report identifier)
+ * <li>- the primary text of report used if id was not found in report table (see {@link ReportTable})or if
+ * _reportId is null
+ * <li>- modification string containing the information for setting parameters of the report. The parameters
+ * have the format "<i>&amp;{parameter_name}</i>" followed by parameter value
  * <li>- the timestamp information added to report (if required)
  * </ul>
- * <p>The manager of report texts is described in {@link ReportTable}). There is
- * described also the format of report files.
- * <p>If the modification string is not equal to <i>null</i>, then it is used
- * for modification of parameters in the report text. If parameter specification
- * is followed by the sequence "{inserted_text}", the inserted_text is inserted
- * before the value of the parameter. Specification of
- * "{&amp;default text&amp;inserted_text}" may be used to specify  default text
- * and/or inserted text. After specification of the inserted text may follow the
- * specification of "(appended_text)" - in this case the appended_text is
- * appended after the value of parameter. If the parameter is not present in the
- * modification string then the whole parameter description is replaced by
- * the empty string.
+ * <p>The manager of report texts is described in {@link ReportTable}). There is described also the format of
+ * report files.
+ * <p>If the modification string is not equal to null, then it is used for modification of parameters
+ * in the report text. If parameter specification is followed by the sequence "{inserted_text}", the
+ * inserted_text is inserted before the value of the parameter. Specification of
+ * "{&amp;default text&amp;inserted_text}" may be used to specify  default text and/or inserted text. After
+ * specification of the inserted text may follow the specification of "(appended_text)" - in this case the
+ * appended_text is appended after the value of parameter. If the parameter is not present in the modification
+ * string then the whole parameter description is replaced by the empty string.
  * <p>Examples of source report text and modification strings:
  * <pre><code><b>
  * report text: "a &amp;{0} &amp;{1} b"
@@ -79,7 +73,6 @@ import org.w3c.dom.NodeList;
  * @author Vaclav Trojan
  */
 public class Report {
-
 	/** Manager of report tables. */
 	private static final SManager MANAGER = SManager.getInstance();
 	/** Text report object (byte value of the character 'S'). */
@@ -110,17 +103,15 @@ public class Report {
 	public static final byte UNDEF = 'U';
 	/** Type of report (see constants above). */
 	private final byte _type;
-	/** Report identifier (used as link to associated item in report
-	 * table). Set to <i>null</i> if no report ID is associated with
-	 * the report (in this case the report can't be localized). */
+	/** Report identifier (used as link to associated item in report table). Set to null if no report ID
+	 * is associated with the report (in this case the report can't be localized). */
 	private final String _reportID;
-	/** Primary text of report. If no report Id is specified or if
-	 * the id is not found in the report table this text is used as default. */
+	/** Primary text of report. If no report Id is specified or if the id is not found in the report table
+	 * this text is used as default. */
 	private String _text;
 	/** String used for modification report of report text. */
 	private String _modification;
-	/** Timestamp of creation of report in milliseconds. Set to -1L if
-	 * no time information is not relevant. */
+	/** Timestamp of creation of report in milliseconds. Set to -1L if no time information is not relevant. */
 	private long _timeMillis;
 
 	/** Create new Report object; no time timestamp is generated.
@@ -129,10 +120,7 @@ public class Report {
 	 * @param text text of report.
 	 * @param mod modification array.
 	 */
-	public Report(final byte type,
-		final String reportID,
-		final String text,
-		final Object... mod) {
+	public Report(final byte type, final String reportID, final String text, final Object... mod) {
 		_type = registeredType(type);
 		_reportID  = reportID;
 		_text = text;
@@ -143,7 +131,7 @@ public class Report {
 	/** Create new Report object (registered); no time timestamp is generated.
 	 * @param type kind of report.
 	 * @param regID registered report Id.
-	 * @param mod modification string or <i>null</i>.
+	 * @param mod modification string or null.
 	 */
 	public Report(final byte type, final long regID, final Object... mod) {
 		_type = registeredType(type);
@@ -190,8 +178,7 @@ public class Report {
 	 */
 	public Report(final Throwable ex) {
 		_type = EXCEPTION;
-		_reportID = (ex instanceof SThrowable) ?
-			((SThrowable) ex).getMsgID() : null;
+		_reportID = (ex instanceof SThrowable) ? ((SThrowable) ex).getMsgID() : null;
 		CharArrayWriter caw = new CharArrayWriter();
 		ex.printStackTrace(new PrintWriter(caw));
 		_text = caw.toString();
@@ -208,20 +195,15 @@ public class Report {
 			for (int i = 0; i < mod.length; i++) {
 				Object o = mod[i];
 				if (o != null) {
-					String s =
-						o instanceof String ?
-						(String) o : o instanceof File ?
-						((File) o).getAbsolutePath() : o.toString();
+					String s = o instanceof String ? (String) o
+						: o instanceof File ? ((File) o).getAbsolutePath() : o.toString();
 					if (s.startsWith("&{") && !s.startsWith("&{#")) {
 						sb.append(s);
-					} else if (s.length() > 2 && s.charAt(0) == '{'
-						&& Character.isDigit(s.charAt(1)) && s.charAt(2)=='}') {
+					} else if (s.length() > 2 && s.charAt(0) == '{' && Character.isDigit(s.charAt(1))
+						&& s.charAt(2)=='}') {
 						sb.append('&').append(s);
 					} else { // we create &{i} prefix
-						sb.append("&{")
-							.append((char) (i + '0'))
-							.append('}')
-							.append(s);
+						sb.append("&{").append((char) (i + '0')).append('}').append(s);
 					}
 				}
 			}
@@ -305,8 +287,7 @@ public class Report {
 		StringBuilder sb = new StringBuilder();
 		switch (_type) {
 			case STRING:
-				return ((_text == null || _text.isEmpty()) ?
-					sb : sb.append(_text)).toString();
+				return ((_text == null || _text.isEmpty()) ? sb : sb.append(_text)).toString();
 			case TEXT:
 			   break;
 			case AUDIT:
@@ -321,21 +302,18 @@ public class Report {
 			case TRACE:
 			   sb.append((char) _type);
 				if (_reportID != null && _reportID.length() > 0) {
-					sb.append(' ');
-					sb.append(_reportID);
+					sb.append(' ').append(_reportID);
 				}
 				sb.append(": ");
 			   break;
 			default:
 			   sb.append('U');
 				if (_reportID != null && _reportID.length() > 0) {
-					sb.append(' ');
-					sb.append(_reportID);
+					sb.append(' ').append(_reportID);
 				}
 				sb.append(": ");
 		}
-		return sb.append(MANAGER.getLocalizedText(_reportID,
-			_text, _modification, language)).toString();
+		return sb.append(MANAGER.getLocalizedText(_reportID, _text, _modification, language)).toString();
 	}
 
 	/** Get type of the report.
@@ -344,23 +322,22 @@ public class Report {
 	public final byte getType() {return _type;}
 
 	/** Get report ID.
-	 * @return report ID or <i>null</i>.
+	 * @return report ID or null.
 	 */
 	public final String getMsgID() {return _reportID;}
 
 	/** Get primary text.
-	 * @return the primary text or of the report <i>null</i>.
+	 * @return the primary text or of the report null.
 	 */
 	public final String getText() {return _text;}
 
 	/** Set primary text.
-	 * @param text the argument will be set as primary text
-	 * (may be<i>null</i>).
+	 * @param text the argument will be set as primary text (may be null).
 	 */
 	public final void setText(String text) {_text = text;}
 
 	/** Get timestamp in milliseconds.
-	 * @return time in milliseconds or <i>-1</i>.
+	 * @return time in milliseconds or -1.
 	 */
 	public final long getTimestamp() {return _timeMillis;}
 
@@ -368,23 +345,23 @@ public class Report {
 	public final void setTimestamp() {setTimestamp(System.currentTimeMillis());}
 
 	/** Set timestamp in milliseconds.
-	 * @param millis time in milliseconds from 1990 or <i>-1</i>.
+	 * @param millis time in milliseconds from 1990 or -1.
 	 */
 	public final void setTimestamp(long millis) {_timeMillis = millis;}
 
 	/** Get modification part of the report.
-	 * @return value of the modification or <i>null</i>.
+	 * @return value of the modification or null.
 	 */
 	public final String getModification() {return _modification;}
 
 	/** Set modification part of the report.
-	 * @param mod value of the modification or <i>null</i>.
+	 * @param mod value of the modification or null.
 	 */
 	public final void setModification(String mod) {_modification = mod;}
 
 	/** Get value of parameter from modification string.
 	 * @param name parameter name.
-	 * @return value of the parameter or <i>null</i>.
+	 * @return value of the parameter or null.
 	 */
 	public final String getParameter(final String name) {
 		int ndx;
@@ -410,12 +387,11 @@ public class Report {
 		return null;
 	}
 
-
 	/** Set modification parameter.
 	 * @param name name of the parameter.
-	 * @param value value of the parameter. If the parameter exists, then
-	 *  if this argument is null, the original value of message modification
-	 * is removed or if the argument is not null the original value is replaced.
+	 * @param value value of the parameter. If the parameter exists, then if this argument is null, the
+	 * original value of message modification is removed or if the argument is not null the original value
+	 * is replaced.
 	 */
 	public final void setParameter(final String name, final String value) {
 		String p;
@@ -443,9 +419,8 @@ public class Report {
 			int ndx1 = ndx + p.length();
 			int ndx2;
 			if ((ndx2 = _modification.indexOf("&{", ndx1)) < 0) {//last param
-				_modification = value == null ?
-					ndx == 0 ? null : _modification.substring(0, ndx) :
-					_modification.substring(0, ndx1) + value;
+				_modification = value == null ? ndx == 0 ? null
+					: _modification.substring(0, ndx) : _modification.substring(0, ndx1) + value;
 				return;
 			}
 			while (_modification.indexOf("&{#", ndx2) == ndx2) {//reference
@@ -454,9 +429,8 @@ public class Report {
 				if ((ndx3 = _modification.indexOf('}', ndx2+ 3)) > 0) {
 					ndx2 = ndx3 + 1;
 					if ((ndx2 = _modification.indexOf("&{", ndx2)) < 0) {//last
-						_modification = value == null ?
-							ndx == 0 ? null : _modification.substring(0, ndx) :
-							_modification.substring(0, ndx1) + value;
+						_modification = value == null ? ndx == 0 ? null
+							: _modification.substring(0, ndx) : _modification.substring(0, ndx1) + value;
 						return;
 					}
 				}
@@ -465,12 +439,10 @@ public class Report {
 				if (ndx == 0) {
 					_modification = _modification.substring(ndx2 + 1);
 				} else {
-					_modification = _modification.substring(0, ndx) +
-						_modification.substring(ndx2);
+					_modification = _modification.substring(0, ndx) + _modification.substring(ndx2);
 				}
 			} else {
-				_modification = _modification.substring(0, ndx1) + value +
-					_modification.substring(ndx2);
+				_modification = _modification.substring(0, ndx1) + value + _modification.substring(ndx2);
 			}
 			return;
 		}
@@ -486,16 +458,14 @@ public class Report {
 		return MANAGER.getLocalizedText(_reportID, _text, _modification, null);
 	}
 
-	/** Create localized text of report in the language specified by argument.
-	 * If the text with this language is not available it will be returned the
-	 * in primary language (usually English).
-	 * @param language language id (ISO-639). If this argument is <i>null</i>
-	 * then it will be used the local language from system settings).
+	/** Create localized text of report in the language specified by argument. If the text with this language
+	 * is not available it will be returned the in primary language (usually English).
+	 * @param language language id (ISO-639). If this argument is null then it will be used the local language
+	 * from system settings).
 	 * @return text of report in specified language.
 	 */
 	public final String getLocalizedText(final String language) {
-		return MANAGER.getLocalizedText(_reportID,
-			_text, _modification, language);
+		return MANAGER.getLocalizedText(_reportID, _text, _modification, language);
 	}
 
 	/** Create string with XML element from the report.
@@ -506,29 +476,20 @@ public class Report {
 		sb.append("<");
 		sb.append((char) _type);
 		if (_type == STRING) {
-			sb.append(">");
-			sb.append(KXmlUtils.toXmlText(_text, '<', false));
+			sb.append(">").append(KXmlUtils.toXmlText(_text, '<', false));
 			return sb.append("</S>").toString();
 		}
 		if (_reportID != null && _reportID.length() > 0) {
-			sb.append(" id=\"");
-			sb.append(_reportID);
-			sb.append('"');
+			sb.append(" id=\"").append(_reportID).append('"');
 		}
 		if (_text != null && _text.length() > 0) {
-			sb.append(" txt=\"");
-			sb.append(KXmlUtils.toXmlText(_text, '"', false));
-			sb.append('"');
+			sb.append(" txt=\"").append(KXmlUtils.toXmlText(_text, '"', false)).append('"');
 		}
 		if (_modification != null) {
-			sb.append(" mod=\"");
-			sb.append(KXmlUtils.toXmlText(_modification, '"', false));
-			sb.append('"');
+			sb.append(" mod=\"").append(KXmlUtils.toXmlText(_modification, '"', false)).append('"');
 		}
 		if (_timeMillis != -1L) {
-			sb.append(" time=\"");
-			sb.append(Long.toHexString(_timeMillis));
-			sb.append('"');
+			sb.append(" time=\"").append(Long.toHexString(_timeMillis)).append('"');
 		}
 		return sb.append("/>").toString();
 	}
@@ -563,155 +524,121 @@ public class Report {
 	////////////////////////////////////////////////////////////////////////////
 
 	/** Set default language assigned to report table.
-	 * @param language language code (ISO-639 two letters
-	 * or ISO-639-2 three letters).
+	 * @param language language code (ISO-639 two letters or ISO-639-2 three letters).
 	 * @return object which may be used for synchronization purposes
 	 */
-	public static Object setLanguage(final String language) {
-		return SManager.setLanguage(language);
-	}
+	public static Object setLanguage(final String language) {return SManager.setLanguage(language);}
 
 	/** Create new Report object with type AUDIT.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report audit(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report audit(final String id, final String msg, final Object... mod) {
 		return new Report(AUDIT, id, msg, mod);
 	}
 
 	/** Create new Report object with type FATAL.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files  this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report fatal(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report fatal(final String id, final String msg, final Object... mod) {
 		return new Report(FATAL, id, msg, mod);
 	}
 
 	/** Create new Report object with type ERROR.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report error(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report error(final String id, final String msg, final Object... mod) {
 		return new Report(ERROR, id, msg, mod);
 	}
 
 	/** Create new Report object with type LIGHT (light error).
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report lightError(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report lightError(final String id, final String msg, final Object... mod) {
 		return new Report(LIGHTERROR, id, msg, mod);
 	}
 
 	/** Create new Report object with type WARNING.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report warning(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report warning(final String id, final String msg, final Object... mod) {
 		return new Report(WARNING, id, msg, mod);
 	}
 
 	/** Create new Report object with type MESSAGE.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report message(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report message(final String id, final String msg, final Object... mod) {
 		return new Report(MESSAGE, id, msg, mod);
 	}
 
 	/** Create new Report object with type INFO.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report info(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report info(final String id, final String msg, final Object... mod) {
 		return new Report(INFO, id, msg, mod);
 	}
 
 	/** Create new Report object with type STRING.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report string(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report string(final String id, final String msg, final Object... mod) {
 		return new Report(STRING, id, msg, mod);
 	}
 
 	/** Create new Report object with type TEXT.
 	 * @param id report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report text(final String id,
-		final String msg,
-		final Object... mod) {
+	public static Report text(final String id, final String msg, final Object... mod) {
 		return new Report(TEXT, id, msg, mod);
 	}
 
-	/** Get "raw" text of report from report table {i.e. references to other
-	 * reports are not resolved).
+	/** Get "raw" text of report from report table {i.e. references to other reports are not resolved).
 	 * @param reportID report ID.
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return text of report.
 	 */
-	public static String getRawReportText(final String reportID,
-		final String language) {
+	public static String getRawReportText(final String reportID, final String language) {
 		return MANAGER.getReportText(reportID, language, false);
 	}
 
-	/** Get text of report from report table. All references to other reports
-	 * are resolved.
+	/** Get text of report from report table. All references to other reports are resolved.
 	 * @param reportID report ID.
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return text of report.
 	 */
-	public static String getReportText(final String reportID,
-		final String language) {
+	public static String getReportText(final String reportID, final String language) {
 		return MANAGER.getReportText(reportID, language, true);
 	}
 
-	/** Get text of report from report table in the actual language. All
-	 * references to other reports are resolved.
+	/** Get text of report from report table in the actual language. All references to other reports
+	 * are resolved.
 	 * @param reportID report ID.
 	 * @return text of report.
 	 */
@@ -719,43 +646,37 @@ public class Report {
 		return MANAGER.getReportText(reportID, null, true);
 	}
 
-	/** Get modified text of localized report (see description of this
-	 * class above) .
+	/** Get modified text of localized report (see description of this class above) .
 	 * @param reportID report id.
 	 * @param msgText default report text.
 	 * @param modification modification string.
 	 * @param language language code (ISO-639) or null (i.e. default language).
-	 * @return The text of localized report in given language or <i>null</i>.
+	 * @return The text of localized report in given language or null.
 	 */
 	public static String getLocalizedText(final String reportID,
 		final String msgText,
 		final String modification,
 		final String language) {
-		return MANAGER.getLocalizedText(
-			reportID, msgText, modification, language);
+		return MANAGER.getLocalizedText(reportID, msgText, modification, language);
 	}
 
 	/** Get sorted array of parameter names from report text.
 	 * @param reportID report ID.
 	 * @param language language code (ISO-639) or null (i.e. default language).
-	 * @return sorted array of parameter names or <i>null</i>.
+	 * @return sorted array of parameter names or null.
 	 */
-	public static String[] getReportParamNames(final String reportID,
-		final String language) {
+	public static String[] getReportParamNames(final String reportID, final String language) {
 		return MANAGER.getReportParamNames(reportID, language);
 	}
 
-	/** Get modified text of localized registered report (see description of
-	 * this class above) .
-	 * @param registeredID registered report ID.
+	/** Get modified text of localized registered report (see description of this class above).
+	 * @param ID registered report ID.
 	 * @param modification modification string.
 	 * @param language language code (ISO-639) or null (i.e. default language).
-	 * @return text of localized report in given language or <i>null</i>.
+	 * @return text of localized report in given language or null.
 	 */
-	public static String getLocalizedText(final long registeredID,
-		final String modification,
-		final String language) {
-		return MANAGER.getLocalizedText(registeredID, modification, language);
+	public static String getLocalizedText(final long ID, String modification, final String language) {
+		return MANAGER.getLocalizedText(ID, modification, language);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -763,138 +684,107 @@ public class Report {
 	////////////////////////////////////////////////////////////////////////////
 
 	/** Create new registered report object with type AUDIT.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report audit(final long registeredID,
-		final Object... mod) {
-		return new Report(AUDIT, registeredID, mod);
-	}
+	public static Report audit(final long ID, final Object... mod) {return new Report(AUDIT, ID, mod);}
 
 	/** Create new registered report object with type FATAL.
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report fatal(final long registeredID,
-		final Object... mod) {
-		return new Report(FATAL, registeredID, mod);
-	}
+	public static Report fatal(final long ID, final Object... mod) {return new Report(FATAL, ID, mod);}
 
 	/** Create new registered report object with type ERROR.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report error(final long registeredID,
-		final Object... mod) {
-		return new Report(ERROR, registeredID, mod);
-	}
+	public static Report error(final long ID, final Object... mod) {return new Report(ERROR, ID, mod);}
 
 	/** Create new registered report object with type LIGHT (light error).
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report lightError(final long registeredID,
-		final Object... mod) {
-		return new Report(LIGHTERROR, registeredID, mod);
-	}
+	public static Report lightError(final long ID,final Object... mod) {return new Report(LIGHTERROR,ID,mod);}
 
 	/** Create new registered report object with type WARNING.
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report warning(long registeredID,
-		final Object... mod) {
-		return new Report(WARNING, registeredID, mod);
-	}
+	public static Report warning(long ID, final Object... mod) {return new Report(WARNING, ID, mod);}
 
 	/** Create new registered report object with type MESSAGE.
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report message(final long registeredID, final Object... mod) {
-		return new Report(MESSAGE, registeredID, mod);
-	}
+	public static Report message(final long ID, final Object... mod) {return new Report(MESSAGE, ID, mod);}
 
 	/** Create new registered report object with type INFO.
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report info(final long registeredID, final Object... mod) {
-		return new Report(INFO, registeredID, mod);
-	}
+	public static Report info(final long ID, final Object... mod) {return new Report(INFO, ID, mod);}
 
 	/** Create new registered report object with type STRING.
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report string(final long registeredID, final Object... mod) {
-		return new Report(STRING, registeredID, mod);
-	}
+	public static Report string(final long ID, final Object... mod) {return new Report(STRING, ID, mod);}
 
 	/** Create new registered report object with type TEXT.
-	 * @param registeredID Registered report id.
+	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report text(final long registeredID, final Object... mod) {
-		return new Report(TEXT, registeredID, mod);
-	}
+	public static Report text(final long ID, final Object... mod) {return new Report(TEXT, ID, mod);}
 
 	/** Get string with the report ID created from registered ID.
-	 * @param registeredID registered report ID.
-	 * @return string with report ID or <i>null</i>.
+	 * @param ID registered report ID.
+	 * @return string with report ID or null.
 	 */
-	public static String getReportID(final long registeredID) {
-		return SManager.getReportID(registeredID);
-	}
+	public static String getReportID(final long ID) {return SManager.getReportID(ID);}
 
 	/** Get "raw" text of report from report table {i.e. references to other
 	 * reports are not resolved).
-	 * @param registeredID registered report ID.
+	 * @param ID registered report ID.
 	 * @param language language code.
 	 * @return text of report.
 	 */
-	public static String getRawReportText(final long registeredID,
-		final String language) {
-		return MANAGER.getReportText(registeredID, language, false);
+	public static String getRawReportText(final long ID, final String language) {
+		return MANAGER.getReportText(ID, language, false);
 	}
 
-	/** Get text of report from report table. All references to other reports
+	/** Get text of report from report table. All references to other reports are resolved.
+	 * @param ID registered report ID.
+	 * @param language language code.
+	 * @return text of report.
+	 */
+	public static String getReportText(final long ID,
+		final String language) {
+		return MANAGER.getReportText(ID, language, true);
+	}
+
+	/** Get text of report from report table in the actual language. All references to other reports
 	 * are resolved.
-	 * @param registeredID registered report ID.
-	 * @param language language code.
+	 * @param ID registered report ID.
 	 * @return text of report.
 	 */
-	public static String getReportText(final long registeredID,
-		final String language) {
-		return MANAGER.getReportText(registeredID, language, true);
-	}
-
-	/** Get text of report from report table in the actual language.
-	 * All references to other reports are resolved.
-	 * @param registeredID registered report ID.
-	 * @return text of report.
-	 */
-	public static String getReportText(final long registeredID) {
-		return MANAGER.getReportText(registeredID, null, true);
-	}
+	public static String getReportText(final long ID) {return MANAGER.getReportText(ID, null, true);}
 
 	/** Get info report with system build information.
 	 * @return report with build information.
 	 */
 	public static Report buildInfo() {
 		//Compiled: &{c}, build version: &{v}, date: &{d}
-		return Report.info(SYS.SYS010,
-			"&{v}" + XDConstants.BUILD_VERSION
-				+ "&{d}" + XDConstants.BUILD_DATETIME);
+		return Report.info(SYS.SYS010, "&{v}"+ XDConstants.BUILD_VERSION +"&{d}"+ XDConstants.BUILD_DATETIME);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -917,10 +807,7 @@ public class Report {
 	 * @throws IOException if an error occurs.
 	 */
 	public static Report readObj(SObjectReader r) throws IOException {
-		Report x = new Report(r.readByte(),
-			r.readString(),
-			r.readString(),
-			r.readString());
+		Report x = new Report(r.readByte(), r.readString(), r.readString(), r.readString());
 		x._timeMillis = r.readLong();
 		return x;
 	}

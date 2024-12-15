@@ -1,19 +1,16 @@
 package org.xdef.sys;
 
-
 import java.io.PrintStream;
 
 /** Interface for processing tables of source report messages.
  * @author  Vaclav Trojan
  */
-
 public interface ReportReader {
 
 	/** Get next report from the list or null.
 	 * @return The report or null.
 	 */
 	public Report getReport();
-
 
 	/** Close the report stream. */
 	public void close();
