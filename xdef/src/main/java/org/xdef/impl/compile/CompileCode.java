@@ -195,6 +195,10 @@ import static org.xdef.impl.compile.CompileBase.getTypeId;
 import static org.xdef.impl.compile.CompileBase.getTypeMethod;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.sys.SException;
+//		if (numPar < pars.length) {
+//			_parser.error(XDEF.XDEF460, name);//More parameters required for method &{0}
+//		} else if (numPar > pars.length) {
+//			_parser.error(XDEF.XDEF461, name);//Too many parameters for method &{0}
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -1626,11 +1630,10 @@ public final class CompileCode extends CompileBase {
 			}
 		}
 		short[] pars = lm.getParams();
-		if (numPar != pars.length) {
-			long errcode = numPar < pars.length
-				? XDEF.XDEF460 //More parameters required for method &{0}
-				: XDEF.XDEF461;//Too many parameters for method &{0}
-			_parser.error(errcode, name);
+		if (numPar < pars.length) {
+			_parser.error(XDEF.XDEF460, name);//More parameters required for method &{0}
+		} else if (numPar > pars.length) {
+			_parser.error(XDEF.XDEF461, name);//Too many parameters for method &{0}
 		} else {
 			for (int i = numPar - 1, j = _sp;  i >= 0; i--) {
 				if (j < 0 || pars[i] != _tstack[j--]) {
@@ -2728,7 +2731,7 @@ final class ScriptMethod {
 	/** Get array  with the list of parameter types. */
 	final short[] getParams() {return _params;}
 
-	/** Get address of method. */
+	/** Get mode of method. */
 	final short getMode() {return _mode;}
 
 	/** Clear post-definition info. */
