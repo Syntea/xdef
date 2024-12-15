@@ -93,20 +93,21 @@ public final class GenX extends XDTester {
 "  ]\n" +
 "}"));
 		assertEq("", test(
-"  [%oneOf,\n"+
+"[ %oneOf,\n"+
 "    \"jvalue();\",\n"+
-"    [\"* jvalue();\" ],\n"+
-"    {%anyName:\n"+
+"    [ \"* jvalue();\" ],\n"+
+"    { %anyName:\n"+
 "       [%oneOf,\n"+
 "         \"jvalue();\",\n"+
-"         [\"* jvalue();\" ],\n"+
-"         {%anyName: [\n"+
-"/* *?      [%oneOf= \"ref test\"], /* */\n"+
-"           [%oneOf=\"ref test\"]\n"+
-"         ]}\n"+
+"         [ \"* jvalue();\" ],\n"+
+"         { %anyName: [\n"+
+"/* *?        [ %oneOf= \"ref test\" ], /* */\n"+
+"             [ %oneOf=\"ref test\" ]\n"+
+"           ]\n"+
+"         }\n"+
 "       ]\n"+
 "    }\n"+
-"  ]"));
+"]"));
 	}
 
 	/** Run test
