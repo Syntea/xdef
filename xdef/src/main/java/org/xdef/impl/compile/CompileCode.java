@@ -194,6 +194,7 @@ import static org.xdef.impl.compile.CompileBase.getTypeClass;
 import static org.xdef.impl.compile.CompileBase.getTypeId;
 import static org.xdef.impl.compile.CompileBase.getTypeMethod;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
+import org.xdef.sys.SException;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -782,10 +783,9 @@ public final class CompileCode extends CompileBase {
 				}
 			}
 		}
-		if (m == null && _externalMode != 1) {//new
-			//new style, ChkElement and array: type m(ChkElement, DefItem[])
-			if ((m = getExtMethod(clazz, name,
-				new Class<?>[] {XXElement.class, XDValue[].class})) != null) {
+		if (m == null && _externalMode != 1) {
+			// new style, ChkElement and array: type m(ChkElement, DefItem[])
+			if ((m = getExtMethod(clazz, name, new Class<?>[] {XXElement.class, XDValue[].class})) != null) {
 				modifiers = m.getModifiers();
 				if ((modifiers & Modifier.STATIC) == 0 && obj == null) {
 					m1 = m;
@@ -804,9 +804,8 @@ public final class CompileCode extends CompileBase {
 					}
 				}
 			}
-			if (m == null && (m = getExtMethod(clazz, name, new Class<?>[] {
-				XXNode.class,
-				XDValue[].class})) != null) {
+			if (m == null
+				&& (m = getExtMethod(clazz, name, new Class<?>[] {XXNode.class, XDValue[].class})) != null) {
 				modifiers = m.getModifiers();
 				if ((modifiers & Modifier.STATIC) == 0 && obj == null) {
 					m1 = m;
@@ -838,15 +837,15 @@ public final class CompileCode extends CompileBase {
 					} else {
 						code = EXTMETHOD_XXNODE_XDARRAY;
 						modifiers = m.getModifiers();
-						if ((modifiers & Modifier.STATIC)==0 && obj==null) {
+						if ((modifiers & Modifier.STATIC)==0 && obj == null) {
 							m1 = m;
 							m = null;
 						}
 					}
 				}
 			}
-			if (m == null && (m = getExtMethod(clazz, name, new Class<?>[] {
-				XDValue[].class})) != null) {
+			if (m == null
+				&& (m = getExtMethod(clazz, name, new Class<?>[] {XDValue[].class})) != null) {
 				modifiers = m.getModifiers();
 				if ((modifiers & Modifier.STATIC) == 0 && obj == null) {
 					m1 = m;
@@ -866,8 +865,7 @@ public final class CompileCode extends CompileBase {
 				}
 			}
 		}
-		if (m == null && _externalMode != 1) {//new
-			//new style, XXNode and params: type m(XXNode[,p[,...]])
+		if (m == null && _externalMode != 1) {//new style, XXNode and params: type m(XXNode[,p[,...]])
 			Class<?>[] params = new Class<?>[numPar + 1];
 			params[0] = XXNode.class;
 			for (int j = 0; j < numPar; j++) {
@@ -926,8 +924,7 @@ public final class CompileCode extends CompileBase {
 							} else {
 								code = EXTMETHOD_XXNODE;
 								modifiers = m.getModifiers();
-								if ((modifiers & Modifier.STATIC) == 0 &&
-									obj == null) {
+								if ((modifiers & Modifier.STATIC) == 0 && obj == null) {
 									m1 = m;
 									m = null;
 								}
@@ -1102,8 +1099,8 @@ public final class CompileCode extends CompileBase {
 						break;
 					default:
 						if (var.getType() != XD_ANY) {
-							//Incompatible types &{0}
-							_parser.error(XDEF.XDEF457, getTypeName(var.getType()) +","+ getTypeName(xType));
+							_parser.error(XDEF.XDEF457, //Incompatible types &{0}
+								getTypeName(var.getType()) +","+ getTypeName(xType));
 							return;
 						}
 				}
@@ -1128,7 +1125,6 @@ public final class CompileCode extends CompileBase {
 				break;
 			default:
 				code = ST_LOCAL;
-				break;
 		}
 		addCode(new CodeS1(xType, code, var.getOffset(), var.getName()));
 		_sp--;
@@ -1351,15 +1347,12 @@ public final class CompileCode extends CompileBase {
 				case XD_ELEMENT: break;
 				case XD_PARSERESULT:
 					switch (xType) {
-						case XD_PARSER:
-							addCode(new CodeI1(XD_PARSERESULT,PARSE_OP,1),0);
-							return;
+						case XD_PARSER: addCode(new CodeI1(XD_PARSERESULT,PARSE_OP,1),0); return;
 						case XD_BOOLEAN: return;
 						case XD_BNFRULE:
 							addCode(new CodeI1(XD_PARSERESULT, BNFRULE_PARSE, 1), 0);
 							_tstack[_sp] = XD_PARSERESULT;
 							return;
-						default: break;
 					}
 					break;
 			}
@@ -1665,8 +1658,7 @@ public final class CompileCode extends CompileBase {
 			return false;
 		}
 		// try to find this method in XExtUtils class
-		CodeExtMethod method = findExternalMethod(name,
-			numPar, XExtUtils.class, null);
+		CodeExtMethod method = findExternalMethod(name, numPar, XExtUtils.class, null);
 		if (method == null) {
 			// not found, try to find it in the java.lang.Math class
 			method = findExternalMethod(name, numPar, Math.class, null);
@@ -1730,8 +1722,7 @@ public final class CompileCode extends CompileBase {
 				|| var.getType() == X_PARSEITEM && numPar == 0) {
 				//check type ID (unique type, unique value)
 				addCode(new CodeI1(XD_BOOLEAN, CALL_OP, var.getParseMethodAddr()), 1);
-				// return null if it is OK, otherwise return method name
-				return numPar != 0 ? name : null;
+				return numPar != 0 ? name : null; // return null if it is OK, otherwise return method name
 			}
 		}
 		if (scriptMethod(extName, numPar) || numPar > 0 && _tstack[_sp] == XD_CONTAINER
@@ -1740,8 +1731,7 @@ public final class CompileCode extends CompileBase {
 			return null;
 		}
 		String s = null;
-		if (!_ignoreUnresolvedExternals) {
-			//create string with the method name and the list of parameter types
+		if (!_ignoreUnresolvedExternals) {//create string with the method name and the list of parameter types
 			s = name + "(";
 			for (int i = _sp - numPar + 1, j = i; i <= _sp; i++) {
 				if (i > j) {
@@ -2088,7 +2078,7 @@ public final class CompileCode extends CompileBase {
 									p.setNamedParams(null, d);
 									genLDC(p);
 									return;
-								} catch (Exception ex) {} //never happens
+								} catch (SException ex) {} //never happens
 							} else {
 								addCode(new CodeS1(XD_NAMEDVALUE, CREATE_NAMEDVALUE, sqParamNames[0]),0);
 								addCode(new CodeParser(resultType,
@@ -2110,7 +2100,7 @@ public final class CompileCode extends CompileBase {
 						} else {
 							d = new DefContainer(); //empty map
 						}
-						if (npar > 0 && npar <= 2 && sqParamNames!=null && sqParamNames.length == 2){
+						if (npar > 0 && npar <= 2 && sqParamNames!=null && sqParamNames.length == 2) {
 							String s1 = sqParamNames[0]; //1. parameter name
 							String s2 = sqParamNames.length > 1 ? sqParamNames[1] : s1; //2. parameter name
 							if (npar-- == 1) {// only one sequential parameter
@@ -2154,12 +2144,8 @@ public final class CompileCode extends CompileBase {
 								}
 								p.setNamedParams(null, d);
 							}
-						} catch (Exception ex) {
-							if (ex instanceof SThrowable) {
-								_parser.putReport(((SThrowable)ex).getReport());
-							} else {
-								_parser.error(XDEF.XDEF471); //Incorrect parameter value
-							}
+						} catch (SException ex) {
+							_parser.putReport(ex.getReport());
 						}
 						genLDC(p);
 					} else {
@@ -2714,8 +2700,7 @@ final class ScriptMethod {
 	 * @param g code generator.
 	 * @return false if address was already set(i.e. error), otherwise return true (i.e. OK).
 	 */
-	final boolean resolvePostDef(final int address,
-		final CompileCode g) {
+	final boolean resolvePostDef(final int address, final CompileCode g) {
 		if (_address != -1) {
 			return false;
 		}
