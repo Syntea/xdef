@@ -55,5 +55,4 @@ public interface SThrowable {
 
 	/* Print stacktrace on System.err stream. */
 	public void printStackTrace();
-
 }

@@ -39,8 +39,8 @@ public class SUtils extends FUtils {
 		'0','1','2','3','4','5','6','7','8','9',             //52..61
 		'+','/'};                                            //62,63
 	/** Hexadecimal digits. */
-	private static final byte[] HEXDIGITS =
-		new byte[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	private static final byte[] HEXDIGITS = new byte[]
+		{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 	/** Cache to accelerate 2 letters/3 letter language methods.*/
 	private static final Map<String, Locale> LANGUAGES = new LinkedHashMap<>();
 	/** Cache to accelerate 2 letters/3 letter country methods.*/
@@ -49,9 +49,8 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // initialize static final variables
 ////////////////////////////////////////////////////////////////////////////////
-	/** Version of Java VM as an integer composed from the string where
-	 * the version part is multiplied by 100 and subversion part is added.
-	 * E.g. "1.6" is converted to 106. The build version is ignored.
+	/** Version of Java VM as an integer composed from the string where the version part is multiplied
+	 * by 100 and subversion part is added. E.g. "1.6" is converted to 106. The build version is ignored.
 	 */
 	public static final int JAVA_RUNTIME_VERSION_ID;
 	/** String with the last part of Java VM version information.
@@ -63,11 +62,8 @@ public class SUtils extends FUtils {
 		try {
 			s = Runtime.class.getPackage().getImplementationVersion();
 			if (s == null) {
-				Class<?> cls = Runtime.class;
-				java.lang.reflect.Method m = cls.getDeclaredMethod("version");
-				Object o = m.invoke(null);
-				cls = o.getClass();
-				m = cls.getDeclaredMethod("version");
+				java.lang.reflect.Method m = Runtime.class.getDeclaredMethod("version");
+				m = m.invoke(null).getClass().getDeclaredMethod("version");
 				s = m.invoke(null).toString();
 			}
 		} catch (Exception ex) {
@@ -311,7 +307,7 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
-	/** Decodes array of hexadedimal digits to the array of bytes.
+	/** Decodes array of hexadecimal digits to the array of bytes.
 	 * @param chars array with hexadecimal data.
 	 * @return byte array decoded from the source.
 	 * @throws SException SYS047 HEX format error.
@@ -749,7 +745,7 @@ public class SUtils extends FUtils {
 	 * <br>SYS036 .. Program exception: {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final byte[] decodeBase64(final SParser in) throws SException{
+	public static final byte[] decodeBase64(final SParser in) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		decodeBase64(in, out);
 		return out.toByteArray();
@@ -821,7 +817,7 @@ public class SUtils extends FUtils {
 			return source;
 		}
 		return ndx == 0 ? replacement + source.substring(keylen)
-			: source.substring(0,ndx)+replacement+source.substring(ndx+keylen);
+			: source.substring(0, ndx) + replacement+source.substring(ndx + keylen);
 	}
 
 	/** Replace all occurrences of the key in the source by the value.
@@ -832,13 +828,12 @@ public class SUtils extends FUtils {
 	 */
 	public static final String modifyString(final String source, final String key, final String rep) {
 		int pos, keylen, strlen;
-		if (source == null || (strlen = source.length()) == 0 ||
-			(keylen = key.length()) == 0 ||
-			(pos = source.indexOf(key)) < 0) {
+		if (source == null || (strlen = source.length()) == 0 || (keylen = key.length()) == 0
+			|| (pos = source.indexOf(key)) < 0) {
 			return source;
 		}
-		StringBuilder result = pos == 0
-			? new StringBuilder(rep) : new StringBuilder(source.substring(0, pos)).append(rep);
+		StringBuilder result = pos == 0 ? new StringBuilder(rep)
+			: new StringBuilder(source.substring(0, pos)).append(rep);
 		int lastpos = pos += keylen;
 		while (lastpos < strlen && (pos = source.indexOf(key, lastpos)) > 0) {
 			result.append(source.substring(lastpos, pos)).append(rep);
@@ -994,8 +989,7 @@ public class SUtils extends FUtils {
 		}
 		if (s.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
-				if (s.equals(x.getISO3Language())
-					|| s.equals(x.getLanguage())) {
+				if (s.equals(x.getISO3Language()) || s.equals(x.getLanguage())) {
 					LANGUAGES.put(s, x);
 					return x.getISO3Language();
 				}
@@ -1033,7 +1027,7 @@ public class SUtils extends FUtils {
 		}
 		for (String country : Locale.getISOCountries()) {
 			loc = new Locale("", country);
-			if (s.equals(loc.getCountry())||s.equals(loc.getISO3Country())){
+			if (s.equals(loc.getCountry()) || s.equals(loc.getISO3Country())) {
 				COUNTRIES.put(s, loc);
 				return country;
 			}
@@ -1082,8 +1076,7 @@ public class SUtils extends FUtils {
 	 */
 	public static final boolean implementsInterface(final Class<?> clazz, final String interfaceName) {
 		for (Class<?> x: clazz.getInterfaces()) {
-			if (x.getName().equals(interfaceName)
-				|| implementsInterface(x, interfaceName)) {
+			if (x.getName().equals(interfaceName) || implementsInterface(x, interfaceName)) {
 				return true;
 			}
 		}
@@ -1157,8 +1150,7 @@ public class SUtils extends FUtils {
 	 * @param o Object where is the filed.
 	 * @param name name of filed.
 	 * @return value of field.
-	 * @throws SRuntimeException if the field was not found in the object's
-	 * class.
+	 * @throws SRuntimeException if the field was not found in the object's class.
 	 */
 	public static final Object getObjectField(final Object o, final String name) {
 		Class<?> cls = o.getClass();
@@ -1184,8 +1176,7 @@ public class SUtils extends FUtils {
 	 * @param o Object where is the filed.
 	 * @param name name of filed.
 	 * @param v the value to be set.
-	 * @throws SRuntimeException if the field was not found in the object's
-	 * class or it is not accessible.
+	 * @throws SRuntimeException if the field was not found in the object's class or it is not accessible.
 	 */
 	public static final void setObjectField(final Object o, final String name, final Object v) {
 		Class<?> cls = o.getClass();
@@ -1271,8 +1262,7 @@ public class SUtils extends FUtils {
 // Execute a process.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** This is the auxiliary thread for piping of output streams of method
-	 * execute (stdout, stderr).*/
+	/** This is the auxiliary thread for piping of output streams of method execute(stdout, stderr).*/
 	private static final class PipedOutStream extends Thread {
 		private final BufferedReader _in;
 		private final PrintStream _out;
@@ -1300,25 +1290,22 @@ public class SUtils extends FUtils {
 	}
 
 	/** Executes the specified command and arguments in a separate process with the specified environment
-	 * and working directory.
-	 * If there is a security manager, its checkExec method is called with the first component of the array
-	 * cmdArray as its argument. This may result in a security exception.
-	 * Given an array of strings cmdArray, representing the tokens of a command line, and an array of strings
-	 * envVars, representing "environment" variable settings, this method creates a new process
-	 * in which to execute the specified command.
-	 * If envVars is null, the sub-process inherits the environment settings of the current process.
-	 * The working directory of the new sub-process is specified by actDir. If actDir is null, the sub-process
-	 * inherits the current working directory of the current process.
-	 * If out is null the output stream is printed to System.out, otherwise it is written to given stream out.
-	 * If err is null the output stream is printed to System.err, otherwise it is written to given stream err.
-	 * If stdIn is null the input stream passed to program is empty, otherwise it is passed from the stream
-	 * from the parameter.
+	 * and working directory. If there is a security manager, its checkExec method is called with the first
+	 * component of the array cmdArray as its argument. This may result in a security exception. Given an
+	 * array of strings cmdArray, representing the tokens of a command line, and an array of strings envVars,
+	 * representing "environment" variable settings, this method creates a new process in which to execute the
+	 * specified command. If envVars is null, the sub-process inherits the environment settings of the current
+	 * process. The working directory of the new sub-process is specified by actDir. If actDir is null,
+	 * the sub-process inherits the current working directory of the current process. If out is null the
+	 * output stream is printed to System.out, otherwise it is written to given stream out. If err is null the
+	 * output stream is printed to System.err, otherwise it is written to given stream err. If stdIn is null
+	 * the input stream passed to program is empty, otherwise it is passed from the stream from the parameter.
 	 * If waitFlag is true the current thread waits until the executed process has been terminated.
 	 * @param command array containing a command and its arguments.
-	 * @param envVars array of strings, each element of which has environment
-	 * variable settings in format name=value.
-	 * @param actDir the working directory of the sub-process, or null if the
-	 * sub-process should inherit the working directory of the current process.
+	 * @param envVars array of strings, each element of which has environment variable settings in format
+	 * name=value.
+	 * @param actDir the working directory of the sub-process, or null if the sub-process should inherit the
+	 * working directory of the current process.
 	 * @param stdOut output stream for standard output stream or null.
 	 * @param stdErr output stream for standard error stream or null.
 	 * @param stdIn input stream with standard input data or null.
@@ -1357,8 +1344,7 @@ public class SUtils extends FUtils {
 	 * @return Process object for managing the executed sub-process.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final Process execute(final String... command)
-		throws Exception {
+	public static final Process execute(final String... command) throws Exception {
 		return execute(command, null, null, System.out, System.err, null, true);
 	}
 

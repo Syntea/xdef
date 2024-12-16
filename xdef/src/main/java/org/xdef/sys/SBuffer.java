@@ -35,8 +35,7 @@ public class SBuffer extends SPosition {
 	 * @param value the value to be added.
 	 */
 	public void appendToBuffer(final SBuffer value) {
-		appendPos(_source.length(),
-			(SPosition) value, value._source.length(), false);
+		appendPos(_source.length(), (SPosition) value, value._source.length(), false);
 		_source += value._source;
 	}
 
@@ -44,18 +43,14 @@ public class SBuffer extends SPosition {
 	 * @param pos starting position.
 	 * @return the parsed string.
 	 */
-	public final String getStringFromPosition(int pos) {
-		return _source.substring(pos, getIndex());
-	}
+	public final String getStringFromPosition(int pos) {return _source.substring(pos, getIndex());}
 
 	/** Get part of source buffer from given position.
 	 * @param start starting position.
 	 * @param end starting position.
 	 * @return the parsed string.
 	 */
-	public final String getStringFromPosition(int start, int end) {
-		return _source.substring(start, end);
-	}
+	public final String getStringFromPosition(int start, int end) {return _source.substring(start, end);}
 
 	/** Add string to buffer.
 	 * @param s string to be added.
@@ -74,5 +69,4 @@ public class SBuffer extends SPosition {
 
 	@Override
 	public String toString() {return super.toString() + ";\n" + _source;}
-
 }

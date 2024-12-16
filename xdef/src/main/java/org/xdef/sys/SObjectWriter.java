@@ -44,15 +44,13 @@ public class SObjectWriter {
 	 * @param x byte value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeByte(final byte x) throws IOException {
-		_out.write(x);
-	}
+	synchronized public final void writeByte(final byte x) throws IOException {_out.write(x);}
 
 	/** Write short value.
 	 * @param x short value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeShort(final short x) throws IOException{
+	synchronized public final void writeShort(final short x) throws IOException {
 		_out.write(x >> 8);
 		_out.write(x);
 	}
@@ -61,9 +59,7 @@ public class SObjectWriter {
 	 * @param x char value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeChar(final char x) throws IOException {
-		writeShort((short) x);
-	}
+	synchronized public final void writeChar(final char x) throws IOException {writeShort((short) x);}
 
 	/** Write integer value.
 	 * @param x integer value to be written.
@@ -80,7 +76,7 @@ public class SObjectWriter {
 	 * @param x float value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeFloat(final float x) throws IOException{
+	synchronized public final void writeFloat(final float x) throws IOException {
 		writeInt(Float.floatToRawIntBits(x));
 	}
 

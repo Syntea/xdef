@@ -8,8 +8,7 @@ import java.io.IOException;
 public interface SReader {
 
 	/** Read.byte or character from the source stream.
-	 * @return integer value of byte or character or return -1 if end of stream
-	 * is reached.
+	 * @return integer value of byte or character or return -1 if end of stream is reached.
 	 * @throws IOException if an error occurs.
 	 */
 	public int read() throws IOException;

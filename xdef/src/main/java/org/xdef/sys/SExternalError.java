@@ -14,9 +14,7 @@ public class SExternalError extends SError implements SThrowable {
 	 * @param ex The object which caused the error.
 	 * @param mod Message modification parameters.
 	 */
-	public SExternalError(final long registeredID,
-		final Throwable ex,
-		final Object... mod) {
+	public SExternalError(final long registeredID, final Throwable ex, final Object... mod) {
 		super(Report.fatal(registeredID, mod), ex);
 	}
 
@@ -24,9 +22,7 @@ public class SExternalError extends SError implements SThrowable {
 	 * @param msg The text of message.
 	 * @param ex The object which caused the error.
 	 */
-	public SExternalError(final String msg, final Throwable ex) {
-		this(null, msg, ex);
-	}
+	public SExternalError(final String msg, final Throwable ex) {this(null, msg, ex);}
 
 	/** Creates new instance of SExternalError with modified registered message.
 	 * @param id The message ID
@@ -34,10 +30,7 @@ public class SExternalError extends SError implements SThrowable {
 	 * @param ex The object which caused the error.
 	 * @param mod Message modification parameters.
 	 */
-	public SExternalError(final String id,
-		final String msg,
-		final Throwable ex,
-		final Object... mod) {
+	public SExternalError(final String id, final String msg, final Throwable ex, final Object... mod) {
 		super(id, msg, mod);
 		if (ex != null && ex instanceof InvocationTargetException) {
 			setCause(((InvocationTargetException) ex).getTargetException());
@@ -64,8 +57,8 @@ public class SExternalError extends SError implements SThrowable {
 	 * @return The text of localized message.
 	 */
 	public String getLocalizedMessage() {
-		return super.getLocalizedMessage() + (null!=getCause()
-				? "; Caused by " + getCause().getClass().getName() : "");
+		return super.getLocalizedMessage()
+			+ (null != getCause() ? "; Caused by " + getCause().getClass().getName() : "");
 	}
 
 	@Override
@@ -73,8 +66,6 @@ public class SExternalError extends SError implements SThrowable {
 	 * @return The text of message.
 	 */
 	public String getMessage() {
-		return super.getMessage() + (null!=getCause()
-			? "; Caused by " + getCause().getClass().getName() : "");
+		return super.getMessage() + (null!=getCause()? "; Caused by " + getCause().getClass().getName(): "");
 	}
-
 }

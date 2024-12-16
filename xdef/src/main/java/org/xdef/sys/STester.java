@@ -26,13 +26,11 @@ import org.w3c.dom.Node;
 import org.xdef.msg.SYS;
 import org.xdef.xml.KXmlUtils;
 
-/** Abstract class for creating test classes. This class enables to run tests
- * without test tools and it provides few more tests using xdef (junit etc.).
- * You can create a test class as an extension of this class. You have to
- * implement the public void method test(). In this method you implement fail
- * methods and/or assertEq, assertTrue methods. You start the testing if you
- * invoke static method runTest(args) (usually in main method). This method
- * returns number of errors. Example:
+/** Abstract class for creating test classes. This class enables to run tests without test tools and it
+ * provides few more tests using xdef (junit etc.). You can create a test class as an extension of this class.
+ * You have to implement the public void method test(). In this method you implement fail methods and/or
+ * assertEq, assertTrue methods. You start the testing if you invoke static method runTest(args) (usually
+ * in main method). This method returns number of errors. Example:
  * <pre><code>
  public class TestMyCode extends org.xdef.sys.STester {
    TestMyCode() {}
@@ -421,9 +419,8 @@ public abstract class STester {
 	 */
 	public final void assertEq(final String a1, final String a2, final Object msg) {
 		if ((a1!=null && a2!=null && !a1.equals(a2)) || a1==null && a2!=null || a1!=null && a2==null) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "a1=" + (a1 == null ? "null" : "'" + a1 + "'")
-				+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1="
+				+ (a1 == null ? "null" : "'" + a1 + "'")+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
 		}
 	}
 	/** Check elements.
@@ -514,11 +511,11 @@ public abstract class STester {
 			} else if (a2 instanceof BigInteger) {
 				return (a1 instanceof BigInteger) ? a2.equals(a1) : a2.equals(new BigInteger(a1.toString()));
 			} else if ((a1 instanceof Byte || a1 instanceof Short || a1 instanceof Integer
-				|| a1 instanceof Long) &&
-				(a2 instanceof Byte || a2 instanceof Short || a2 instanceof Integer || a2 instanceof Long)) {
+				|| a1 instanceof Long) && (a2 instanceof Byte || a2 instanceof Short || a2 instanceof Integer
+				|| a2 instanceof Long)) {
 				return ((Number) a1).longValue() == ((Number) a2).longValue();
-			} else if ((a1 instanceof Float || a1 instanceof Double) && (a2 instanceof Float
-				|| a2 instanceof Double)) {
+			} else if ((a1 instanceof Float || a1 instanceof Double)
+				&& (a2 instanceof Float || a2 instanceof Double)) {
 				return ((Number) a1).doubleValue()==((Number) a2).doubleValue();
 			}
 		} else if (a1 instanceof byte[] && a2 instanceof byte[]) {
@@ -622,8 +619,7 @@ public abstract class STester {
 	 * @param msg message to be printed or null.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
-	public final void assertErrorwarnings(
-		final ArrayReporter reporter, final String msg) {
+	public final void assertErrorwarnings(final ArrayReporter reporter, final String msg) {
 		if (!reporter.errorWarnings()) {
 			fail(msg);
 		}
@@ -633,8 +629,7 @@ public abstract class STester {
 	 * @param msg message to be printed or null.
 	 * @param reporter the reporter to be checked for errors and no warnings.
 	 */
-	public final void assertErrorwarningsAndClear(
-		final ArrayReporter reporter, final String msg) {
+	public final void assertErrorwarningsAndClear(final ArrayReporter reporter, final String msg) {
 		if (!reporter.errorWarnings()) {
 			fail(msg);
 		} else {
@@ -686,8 +681,7 @@ public abstract class STester {
 	 * @param reporter reporter to be checked for no errors.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertNoErrors(final ReportWriter reporter,
-		final Object msg) {
+	public final void assertNoErrors(final ReportWriter reporter, final Object msg) {
 		if (reporter.errors()) {
 			if (msg == null) {
 				fail();
@@ -717,9 +711,8 @@ public abstract class STester {
 			}
 		}
 	}
-	/** Initialize fields of this class. It is automatically called by the
-	 * method runTest, or it may be called by user. Note all fields are
-	 * reinitialized.
+	/** Initialize fields of this class. It is automatically called by the method runTest, or it may be called
+	 * by user. Note all fields are reinitialized.
 	 * @param out The print stream for result information or null
 	 * @param err The print stream for error messages or null.
 	 * @param log The print stream all messages or null.
@@ -808,16 +801,13 @@ public abstract class STester {
 		}
 		File f;
 		if (_sourceDir.contains("src/test/java/test/") && (f = new File(s = SUtils.modifyString(_sourceDir,
-				"src/test/java/test/" ,
-				"src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
+			"src/test/java/test/" , "src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
 		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(
-				_sourceDir, "test/test/" ,
-				"test/resources/test/") + "data/")).exists() && f.isDirectory()) {
+			_sourceDir, "test/test/" , "test/resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
 		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(
-				_sourceDir, "test/test/" ,
-				"resources/test/") + "data/")).exists() && f.isDirectory()) {
+			_sourceDir, "test/test/" , "resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
 		} else {
 			f = new File(s = _homeDir + "test/data/");
@@ -849,9 +839,7 @@ public abstract class STester {
 			Constructor c = Class.forName(className).getDeclaredConstructor(new Class<?>[0]);
 			c.setAccessible(true);
 			return (STester) c.newInstance(new Object[0]);
-		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-			| InstantiationException | NoSuchMethodException | SecurityException
-			| InvocationTargetException ex) {
+		} catch (Exception ex) {
 			throw new RuntimeException("Can't invoke: new " + className + "()");
 		}
 	}
@@ -930,8 +918,7 @@ public abstract class STester {
 	 * @return string with path to compiled classes.
 	 */
 	public final String compileSources(final String classpath, final String classDir, final String... src) {
-		// where are compiled classes of X-definitions
-		// prepare parameters
+		// where are compiled classes of X-definitions prepare parameters
 		List<String> ar = new ArrayList<>();
 		ar.add("-encoding");
 		ar.add(getEncoding());
@@ -960,8 +947,7 @@ public abstract class STester {
 				}
 				err.write("End params\n".getBytes());
 			} catch (IOException ex) {} // never sould happen
-			throw new RuntimeException(
-				"Java compilation failed:\n" + err.toString());
+			throw new RuntimeException("Java compilation failed:\n" + err.toString());
 		}
 		return classDir;
 	}
@@ -1138,8 +1124,8 @@ public abstract class STester {
 			float duration =
 				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
 			String s = "[INFO] " + (_errors == 0 ? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
-			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
-				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
+			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo) + ", time="
+				+ new DecimalFormat("0.00").format(duration) + "s";
 			out.flush();
 			System.err.flush();
 			if (log != null) {
@@ -1158,8 +1144,7 @@ public abstract class STester {
 	 * @param log The print stream all messages or null.
 	 * @param tests The array of objects to be tested.
 	 * @param info The information text.
-	 * @param printOK if false then the result is printed only if
-	 * an error was reported.
+	 * @param printOK if false then the result is printed only if an error was reported.
 	 * @param args list of arguments.
 	 * @return the number of errors.
 	 */

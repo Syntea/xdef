@@ -55,10 +55,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @param start start of period (may be null).
 	 * @param end end of period (may be null).
 	 */
-	public SDuration(final SDatetime start, final SDatetime end) {
-		_start = start;
-		_end = end;
-	}
+	public SDuration(final SDatetime start, final SDatetime end) {_start = start; _end = end;}
 
 	/** Creates a new instance of SDuration from source string.
 	 * @param source source data duration in ISO 8601 format.
@@ -70,15 +67,13 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 			if (p.chkDuration(false) && p.eos()) {
 				copyValues(p.getParsedSDuration());
 			} else {
-				//Icorrect format of time period
-				throw new SRuntimeException(SYS.SYS056);
+				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 		} catch (SRuntimeException ex) {
 			if (ex instanceof SThrowable) {
 				throw new SRuntimeException(((SThrowable) ex).getReport());
 			} else {
-				//Program exception&{0}{: }
-				throw new SRuntimeException(SYS.SYS036, ex);
+				throw new SRuntimeException(SYS.SYS036, ex); //Program exception&{0}{: }
 			}
 		}
 	}
@@ -111,11 +106,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set negative switch.
 	 * @param negative value of switch.
 	 */
-	public void setNegative(final boolean negative) {
-		synchronized(this) {
-			_negative = negative?-1:1;
-		}
-	}
+	public void setNegative(final boolean negative) {synchronized(this) { _negative = negative ? -1 : 1; }}
 
 	/** Check if value is negative.
 	 * @return true if value is negative.
@@ -125,11 +116,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of recurrences.
 	 * @param recurrence number of recurrences.
 	 */
-	public void setRecurrence(final int recurrence) {
-		synchronized(this) {
-			_recurrence = recurrence;
-		}
-	}
+	public void setRecurrence(final int recurrence) {synchronized(this) { _recurrence = recurrence; }}
 
 	/** Get number of recurrences.
 	 * @return number of recurrences or 0.
@@ -139,11 +126,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set start of period.
 	 * @param start datetime specifying start of period.
 	 */
-	public void setStart(final SDatetime start) {
-		synchronized(this) {
-			_start = start;
-		}
-	}
+	public void setStart(final SDatetime start) {synchronized(this) { _start = start; }}
 
 	/** Get start of period.
 	 * @return start datetime.
@@ -153,11 +136,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set end of period.
 	 * @param end datetime specifying end of period.
 	 */
-	public void setEnd(final SDatetime end) {
-		synchronized(this) {
-			_end = end;
-		}
-	}
+	public void setEnd(final SDatetime end) {synchronized(this) { _end = end; }}
 
 	/** Get end of period.
 	 * @return end datetime.
@@ -167,11 +146,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of years of period. Weeks parameter is cleared if specified.
 	 * @param years number of years.
 	 */
-	public void setYears(final int years) {
-		synchronized(this) {
-			_years = years;
-		}
-	}
+	public void setYears(final int years) {synchronized(this) { _years = years; }}
 
 	@Override
 	/** Get number of years of period.
@@ -182,11 +157,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of months of period. Weeks parameter is cleared if specified.
 	 * @param months number of months.
 	 */
-	public void setMonths(final int months) {
-		synchronized(this) {
-			_months = months;
-		}
-	}
+	public void setMonths(final int months) {synchronized(this) { _months = months; }}
 
 	@Override
 	/** Get number of months of period.
@@ -197,11 +168,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of days of period. Weeks parameter is cleared if specified.
 	 * @param days number of days.
 	 */
-	public void setDays(final int days) {
-		synchronized(this) {
-			_days = days;
-		}
-	}
+	public void setDays(final int days) {synchronized(this) { _days = days; }}
 
 	@Override
 	/** Get number of days of period.
@@ -212,11 +179,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of hours of period.
 	 * @param hours number of hours.
 	 */
-	public void setHours(final int hours) {
-		synchronized(this) {
-			_hours = hours;
-		}
-	}
+	public void setHours(final int hours) {synchronized(this) { _hours = hours; }}
 
 	@Override
 	/** Get number of hours of period.
@@ -227,11 +190,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of minutes of period.
 	 * @param minutes number of minutes.
 	 */
-	public void setMinutes(final int minutes) {
-		synchronized(this) {
-			_minutes = minutes;
-		}
-	}
+	public void setMinutes(final int minutes) {synchronized(this) { _minutes = minutes; }}
 
 	@Override
 	/** Get number of minutes of period.
@@ -242,11 +201,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of seconds of period.
 	 * @param seconds number of seconds.
 	 */
-	public void setSeconds(final int seconds) {
-		synchronized(this) {
-			_seconds = seconds;
-		}
-	}
+	public void setSeconds(final int seconds) {synchronized(this) { _seconds = seconds; }}
 
 	@Override
 	/** Get number of seconds of period.
@@ -258,9 +213,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @param milliseconds number of milliseconds.
 	 */
 	public void setMilliseconds(final int milliseconds) {
-		synchronized(this) {
-			_fraction = milliseconds * 0.001D;
-		}
+		synchronized(this) { _fraction = milliseconds * 0.001D; }
 	}
 
 	/** Get number of milliseconds of period.
@@ -274,9 +227,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @param nanoseconds number of nanoseconds.
 	 */
 	public void setNanoseconds(final int nanoseconds) {
-		synchronized(this) {
-			_fraction = nanoseconds * 0.000000001D;
-		}
+		synchronized(this) { _fraction = nanoseconds * 0.000000001D; }
 	}
 
 	/** Get number of nanoseconds of period.
@@ -293,12 +244,10 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	public void setFraction(final double fraction)
 	throws SRuntimeException {
 		if (fraction < 0 || fraction >= 1.0D) {
-			throw new SRuntimeException(SYS.SYS072, //Data error&{0}{: }
-				"fraction of second out of interval 0..1");
+			//Data error&{0}{: }
+			throw new SRuntimeException(SYS.SYS072, "fraction of second out of interval 0..1");
 		} else {
-			synchronized(this) {
-				_fraction = fraction;
-			}
+			synchronized(this) { _fraction = fraction; }
 		}
 	}
 
@@ -334,7 +283,6 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 					sb.append('-');
 				}
 				sb.append('P');
-//				empty = false;
 			}
 			sb.append("T");
 			if (_hours != 0) {
@@ -368,8 +316,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		if (_start != null) {
 			sb.append(_start.toString());
 		}
-		if (_years != 0 || _months != 0 || _days != 0 ||
-			_hours != 0 || _minutes != 0 || _seconds != 0) {
+		if (_years != 0 || _months != 0 || _days != 0 || _hours != 0 || _minutes != 0 || _seconds != 0) {
 			if (_start != null) {
 				sb.append('/');
 			}
@@ -386,18 +333,13 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @return new SDuration object as a clone this one.
 	 */
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		super.clone();
-		return new SDuration(this);
-	}
+	public Object clone() throws CloneNotSupportedException {super.clone(); return new SDuration(this);}
 
 	@Override
-	/** Partial order relation comparison with this <i>SDuration</i>
-	 * instance.
+	/** Partial order relation comparison with this SDuration instance.
 	 * <p>Comparison result must be in accordance with
-	 * <a href="http://www.w3.org/TR/xmlschema-2/#duration-order">W3C
-	 * XML Schema 1.0 Part 2, Section 3.2.7.6.2,
-	 * <i>Order relation on duration</i></a>.
+	 * <a href="http://www.w3.org/TR/xmlschema-2/#duration-order">
+	 * W3C XML Schema 1.0 Part 2, Section 3.2.7.6.2, Order relation on duration</a>.
 	 * <p>Return:
 	 * <ul>
 	 *  <li>-1 if this <i>SDuration</i> is shorter than parameter rhs
@@ -408,11 +350,9 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @return the relationship between <i>this</i> <i>SDuration</i>
 	 * and <i>other</i> parameter.
 	 * @throws NullPointerException if <i>hs</i> is <i>null</i>.
-	 * @throws SIllegalArgumentException if this object is not comparable
-	 * with the argument <i>rhs</i>.
+	 * @throws SIllegalArgumentException if this object is not comparable with the argument <i>rhs</i>.
 	 */
-	public int compareTo(final SDuration other)
-		throws NullPointerException, SIllegalArgumentException {
+	public int compareTo(final SDuration other) throws NullPointerException, SIllegalArgumentException {
 		if (_start == null && other._start == null) {
 			int i,j,k,l;
 			i = compare(other, new SDatetime(1696, 9, 1));
@@ -421,14 +361,12 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 			l = compare(other, new SDatetime(1903, 7, 1));
 			if (i == j && i == k && i == l) {
 				 if (i == 0) {
-					 return _fraction == other._fraction ? 0 :
-						 _fraction < other._fraction ? -1 : 1;
+					 return _fraction == other._fraction ? 0 : _fraction < other._fraction ? -1 : 1;
 				 } else {
 					 return i;
 				 }
 			}
-			//Incomparable arguments
-			throw new SIllegalArgumentException(SYS.SYS085);
+			throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 		}
 		if (_start == null) {
 			return 1;
@@ -446,25 +384,19 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 
 	@Override
 	public boolean equals(final Object obj) {
-		return (obj != null && obj instanceof SDuration)
-			? equals((SDuration) obj) : false;
+		return (obj != null && obj instanceof SDuration) ? equals((SDuration) obj) : false;
 	}
 
 	/** Compare is this duration object and the other duration object are equal.
 	 * @param other the other duration object.
-	 * @return true if is this duration object and the other duration object
-	 * are equal.
+	 * @return true if is this duration object and the other duration object are equal.
 	 */
 	public boolean equals(SDuration other) {return compareTo(other) == 0;}
 
 	private SDatetime addDate(SDatetime S) {
-		if (_negative < 0) {
-			return S.add(-_years,
-				-_months, -_days, -_hours, -_minutes, -_seconds, -_fraction);
-		} else {
-			return S.add(_years,
-				_months, _days, _hours, _minutes, _seconds, _fraction);
-		}
+		return _negative < 0
+			? S.add(-_years, -_months, -_days, -_hours, -_minutes, -_seconds, -_fraction)
+			: S.add(_years, _months, _days, _hours, _minutes, _seconds, _fraction);
 	}
 
 	public void writeObj(final SObjectWriter w) throws IOException {
@@ -503,9 +435,9 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		synchronized(this) {
 			int result = _start == null ? 0 : _start.hashCode();
 			result += _end == null ? 0 : 3*_end.hashCode();
-			return 5*(result + 7*(_years + 13*(_months + 17*(_days +
-				19*(_hours + 23*(_minutes + 29*(_seconds + 31*(_recurrence +
-				(_fraction == 0.0D ? 0 : 37) + (_negative == -1?1:0)))))))));
+			return 5*(result + 7*(_years + 13*(_months + 17*(_days + 19*(_hours + 23*(_minutes
+				+ 29*(_seconds + 31*(_recurrence + (_fraction == 0.0D ? 0 : 37)
+				+ (_negative == -1?1:0)))))))));
 		}
 	}
 
@@ -566,19 +498,13 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	}
 
 	@Override
-	public Duration add(final Duration rhs) {
-		throw new SUnsupportedOperationException();
-	}
+	public Duration add(final Duration rhs) {throw new SUnsupportedOperationException();}
 
 	@Override
-	public void addTo(final Calendar calendar) {
-		throw new SUnsupportedOperationException();
-	}
+	public void addTo(final Calendar calendar) {throw new SUnsupportedOperationException();}
 
 	@Override
-	public Duration multiply(final BigDecimal factor) {
-		throw new SUnsupportedOperationException();
-	}
+	public Duration multiply(final BigDecimal factor) {throw new SUnsupportedOperationException();}
 
 	@Override
 	public Duration negate() {
@@ -588,16 +514,13 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	}
 
 	@Override
-	public Duration normalizeWith(final Calendar startTimeInstant) {
-		throw new SUnsupportedOperationException();
-	}
+	public Duration normalizeWith(final Calendar startTime) {throw new SUnsupportedOperationException();}
 
 	@Override
 	public int compare(final Duration duration) {
 		if (duration instanceof SDuration) {
 			return compareTo((SDuration) duration);
 		}
-		throw new SIllegalArgumentException(
-			"Compare not supported for " + duration);
+		throw new SIllegalArgumentException("Compare not supported for " + duration);
 	}
 }

@@ -27,11 +27,9 @@ public class PomInfo {
 	/** init instance - load pominfo.properties. */
 	public PomInfo() {
 		try {
-			InputStream ppIs =
-				PomInfo.class.getResourceAsStream(POMINFOPROPSNAME);
+			InputStream ppIs = PomInfo.class.getResourceAsStream(POMINFOPROPSNAME);
 			if (ppIs == null) {
-				throw new FileNotFoundException("java-resource "
-					+ POMINFOPROPSNAME + " not found");
+				throw new FileNotFoundException("java-resource " + POMINFOPROPSNAME + " not found");
 			}
 			loadProps(ppIs);
 		} catch (IOException ex) {
@@ -73,16 +71,14 @@ public class PomInfo {
 	 * @return product-identifier
 	 */
 	public String getProductIdentifier() {
-		return
-			groupId + ":" + artifactId + ":" + version + " (" +
-			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
-			(gitCommitIdAbbrev.isEmpty() ? "" :
-				", commit " + gitCommitIdAbbrev + " " + gitCommitTime +
-				", tags: "   + (gitTags  .isEmpty() ? "[NoTags]"   : gitTags  ) +
-				", branch: " + (gitBranch.isEmpty() ? "[NoBranch]" : gitBranch)
-			) +
-			")"
-		;
+		return groupId + ":" + artifactId + ":" + version + " ("
+			+ (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate)
+			+ (gitCommitIdAbbrev.isEmpty() ? ""
+				: ", commit " + gitCommitIdAbbrev + " " + gitCommitTime + ", tags: "
+				+ (gitTags.isEmpty() ? "[NoTags]" : gitTags)
+				+ ", branch: "
+				+ (gitBranch.isEmpty() ? "[NoBranch]" : gitBranch))
+			+ ")";
 	}
 
 	public String getGroupId() {return groupId;}

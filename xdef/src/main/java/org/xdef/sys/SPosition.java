@@ -39,7 +39,6 @@ public class SPosition {
 		_line = line == 0 ? 0 : line < 0 ? Integer.MAX_VALUE - line : line;
 		_sysId = pubId == null ? sysId : sysId == null
 			? "$pubid[" + pubId + ']' : (sysId + "$pubid[" + pubId + ']');
-//		_modificationInfo = null; _filePos = _startLine = 0L; //Java makes it!
 	}
 
 	/** Creates a new instance of SPosition as copy of given position.
@@ -59,7 +58,6 @@ public class SPosition {
 		_startLine = startLine;
 		_filePos = filePos;
 		_sysId = rawSysId;
-//		_modificationInfo = null; //Java makes it!
 	}
 
 	/** Creates a new instance of SPosition as copy of given position.
@@ -84,14 +82,10 @@ public class SPosition {
 	 * @param sysId system ID or null.
 	 * @param pubId public ID or null.
 	 */
-	public final void setPosition(final int line,
-		final int column,
-		final String sysId,
-		final String pubId) {
+	public final void setPosition(final int line, final int column,  final String sysId, final String pubId) {
 		_bufIndex = column > 0 ? column - 1 : 0;
 		_line = line == 0 ? 0 : line < 0 ? Integer.MAX_VALUE - line : line;
-		_sysId = pubId == null ? sysId : sysId == null
-			? "$pubid[" + pubId + ']' : (sysId + "$pubid[" + pubId + ']');
+		_sysId = pubId==null ? sysId : sysId==null ? "$pubid["+pubId+']' : (sysId+"$pubid["+pubId+']');
 		_filePos = 0L;
 		_startLine = 0L;
 		_modificationInfo = null;
@@ -177,12 +171,10 @@ public class SPosition {
 	 */
 	public final void setSysId(final String sysId) {_sysId = sysId;}
 
-	/** Return the line number where the current document event ends. Lines are
-	 * delimited by line ends (0x0D). Warning: The return value from the method
-	 * is intended only as an approximation for the sake of diagnostics.
-	 * If possible, the parser should provide the line position of the first
-	 * character after the text associated with the document event. The first
-	 * line is line 1.
+	/** Return the line number where the current document event ends. Lines are delimited by line ends (0x0D).
+	 * Warning: The return value from the method is intended only as an approximation for the sake of
+	 * diagnostics. If possible, the parser should provide the line position of the first character after
+	 * the text associated with the document event. The first line is line 1.
 	 * @return The line number, or -1 if none is available.
 	 */
 	public final long getLineNumber() { return _line; }
@@ -192,13 +184,11 @@ public class SPosition {
 	 */
 	public final void setLineNumber(long x) { _line = x; }
 
-	/** Return the column number where the current document event ends. This is
-	 * one-based number of Java char values since the last line end. Warning:
-	 * The return value from the method is intended only as an approximation for
-	 * the sake of diagnostics.
-	 * If possible, the parser should provide the line position of the first
-	 * character after the text associated with the document event. The first
-	 * column in each line is column 1.
+	/** Return the column number where the current document event ends. This is one-based number of Java char
+	 * values since the last line end. Warning: The return value from the method is intended only as an
+	 * approximation for the sake of diagnostics. If possible, the parser should provide the line position of
+	 * the first character after the text associated with the document event. The first* column in each line
+	 * is column 1.
 	 * @return The column number, or -1 if none is available.
 	 */
 	public final long getColumnNumber() {
@@ -214,24 +204,21 @@ public class SPosition {
 		}
 	}
 
-	/** Return the system identifier for the current document. The return value
-	 * is the system identifier (the name of source data) of the document. If
-	 * the system identifier is a URL, the parser must resolve it fully before
-	 * passing it to the application. For example, a file name must always be
-	 * provided as a file:... URL, and other kinds of relative URI are also
-	 * resolved against their bases.
+	/** Return the system identifier for the current document. The return value is the system identifier (the
+	 * name of source data) of the document. If the system identifier is a URL, the parser must resolve it
+	 * fully before passing it to the application. For example, a file name must always be provided as
+	 * a file:... URL, and other kinds of relative URI are also resolved against their bases.
 	 * @return A string containing the system identifier, or null if none is
 	 * available.
 	 */
 	public final String getSystemId() {
 		int ndx;
-		return _sysId != null && (ndx = _sysId.indexOf("$pubid[")) >= 0 &&
-			_sysId.endsWith("]") ? _sysId.substring(0, ndx) : _sysId;
+		return _sysId != null && (ndx = _sysId.indexOf("$pubid[")) >= 0 && _sysId.endsWith("]")
+			? _sysId.substring(0, ndx) : _sysId;
 	}
 
 	/** Return the public identifier for the current document.
-	 * @return A string containing the public identifier, or null if none is
-	 * available.
+	 * @return A string containing the public identifier, or null if none is available.
 	 */
 	public final String getPublicId() {
 		int ndx;
@@ -253,8 +240,8 @@ public class SPosition {
 		return _modificationInfo == null ? this : correctPosition(_bufIndex);
 	}
 
-	/** Return the position corrected to original buffer (before modifications).
-	 * Position modifications are resolved (the result does not contain them).
+	/** Return the position corrected to original buffer (before modifications). Position modifications are
+	 * resolved (the result does not contain them).
 	 * @param pos Relative position in actual buffer.
 	 * @return the position in original buffer.
 	 */
@@ -315,13 +302,11 @@ public class SPosition {
 		String sysId;
 		String modification = report.getModification();
 		if (modification == null) {
-			modification = (getSourcePosition() < 0 ?
-				"": "&{pos}" + getSourcePosition()) +
-				(_line <= 0 ? "" : "&{line}" + _line) +
-				(_line <= 0 || getColumnNumber() < 0 ?
-					"" : "&{column}" + getColumnNumber()) +
-				((sysId = getSystemId()) == null || sysId.isEmpty() ?
-					"" : "&{sysId}" + sysId);
+			modification = (getSourcePosition() < 0 ? ""
+				: "&{pos}" + getSourcePosition()) + (_line <= 0 ? ""
+				: "&{line}" + _line) + (_line <= 0 || getColumnNumber() < 0 ? ""
+				: "&{column}" + getColumnNumber()) + ((sysId = getSystemId()) == null || sysId.isEmpty()
+				? "" : "&{sysId}" + sysId);
 			if (modification.contains("&{line}")
 				&& !text.contains("&{#SYS000}") && !text.contains("&{line}")) {
 				text += "&{line}{; line=}";
@@ -336,22 +321,21 @@ public class SPosition {
 			}
 			report.setModification(modification);
 		} else {
-			if (!modification.contains("&{line}")	&& _line > 0) {
+			if (!modification.contains("&{line}") && _line > 0) {
 				if (!text.contains("&{line}") && !text.contains("&{#SYS000}")) {
 					text += "&{line}{; line=}";
 				}
 				modification += "&{line}" + _line;
 			}
-			if (_line > 0 && !modification.contains("&{column}") &&
-				getColumnNumber() > 0) {
-				if (!text.contains("&{column}")&& !text.contains("&{#SYS000}")){
+			if (_line > 0 && !modification.contains("&{column}") && getColumnNumber() > 0) {
+				if (!text.contains("&{column}")&& !text.contains("&{#SYS000}")) {
 					text += "&{column}{; column=}";
 				}
 				modification += "&{column}" + getColumnNumber();
 			}
 			if (!modification.contains("&{sysId}") &&
 				(sysId = getSystemId()) != null && sysId.length() > 0) {
-				if (!text.contains("&{sysId}") && !text.contains("&{#SYS000}")){
+				if (!text.contains("&{sysId}") && !text.contains("&{#SYS000}")) {
 					text += "&{sysId}{; source='}{'}";
 				}
 				modification += "&{sysId}" + sysId;
@@ -362,8 +346,8 @@ public class SPosition {
 				}
 				modification += "&{pos}" + getSourcePosition();
 			}
-			if (modification.contains("&{xpath}") &&
-				!text.contains("&{xpath}") && !text.contains("&{#SYS000}")) {
+			if (modification.contains("&{xpath}")
+				&& !text.contains("&{xpath}") && !text.contains("&{#SYS000}")) {
 				text += "&{xpath}{; xpath=}";
 			}
 			if (modification.contains("&{xdpos}") &&
@@ -375,18 +359,15 @@ public class SPosition {
 		report.setModification(modification);
 	}
 
-	/** Put report with position information to the report writer.
-	 * If report writer is null and report type is ERROR or FATAL
-	 * is thrown the SRuntimeException created from the report.
+	/** Put report with position information to the report writer. If report writer is null and report type
+	 * is ERROR or FATAL is thrown the SRuntimeException created from the report.
 	 * @param pos The source buffer position.
 	 * @param report Report to be sent to reporter or thrown.
 	 * @param reportWriter Report writer or null.
-	 * @throws SRuntimeException if report writer is null and report type
-	 * is ERROR or FATAL.
+	 * @throws SRuntimeException if report writer is null and report type is ERROR or FATAL.
 	 */
-	public final void putReport(final int pos,
-		final Report report,
-		final ReportWriter reportWriter) throws SRuntimeException {
+	public final void putReport(final int pos, final Report report, final ReportWriter reportWriter)
+		throws SRuntimeException {
 		SPosition p = correctPosition(pos);
 		p.genPositionInfo(report);
 		if (reportWriter == null) {
@@ -402,16 +383,13 @@ public class SPosition {
 		reportWriter.checkAndThrowErrors();
 	}
 
-	/** Put report with position information to the report writer.
-	 * If report writer is null and report type is ERROR or FATAL
-	 * is thrown the SRuntimeException created from the report.
+	/** Put report with position information to the report writer. If report writer is null and report type
+	 * is ERROR or FATAL is thrown the SRuntimeException created from the report.
 	 * @param report Report to be sent to reporter or thrown.
 	 * @param reportWriter Report writer or null.
-	 * @throws SRuntimeException if report writer is null and report type
-	 * is ERROR or FATAL.
+	 * @throws SRuntimeException if report writer is null and report type is ERROR or FATAL.
 	 */
-	public final void putReport(final Report report,
-		final ReportWriter reportWriter) throws SRuntimeException {
+	public final void putReport(final Report report,final ReportWriter reportWriter) throws SRuntimeException{
 		correctPosition().genPositionInfo(report);
 		if (reportWriter == null) {
 			if (report.getType() == Report.WARNING) {
@@ -429,8 +407,8 @@ public class SPosition {
 	@Override
 	/** Check if some object is equal to this position.
 	 * @param obj Object to be compared.
-	 * @return true if the argument is considered as the same
-	 * position as this one position; otherwise return false.
+	 * @return true if the argument is considered as the same position as this one position; otherwise
+	 * return false.
 	 */
 	public final boolean equals(final Object obj) {
 		if (obj == null || !(obj instanceof SPosition)) {
@@ -454,19 +432,16 @@ public class SPosition {
 		return 79 * hash + (int) (_filePos ^ (_filePos >>> 32));
 	}
 
-	/** Compares this position with the specified object for order. Returns a
-	 * negative integer, zero, or a positive integer as this position is less
-	 * than, equal to, or greater than the specified object.<p>
+	/** Compares this position with the specified object for order. Return a negative integer, zero, or
+	 * a positive integer as this position is less than, equal to, or greater than the specified object.
 	 * <br>The compare algorithm checks:
 	 * <br>1. source name
 	 * <br>2. line
 	 * <br>2. column
 	 * <br>This helps to sort messages according to source position.
 	 * @param pos the SPosition to be compared.
-	 * @return -1, zero, or +1 as this position
-	 * is less than, equal to, or greater than the specified object.
-	 * @throws ClassCastException if the specified object's type prevents it
-	 * from being compared to this Object.
+	 * @return -1, zero, or +1 as this position is less than, equal to, or greater than the specified object.
+	 * @throws ClassCastException if specified object's type prevents it from being compared to this Object.
 	 */
 	public int compareTo(final SPosition pos) {
 		if (_sysId != null) {
@@ -481,8 +456,7 @@ public class SPosition {
 		return fpos1 == fpos ? 0 : fpos1 < fpos ? 1 : -1;
 	}
 
-	/** Add line position. All line positions MUST be set at the end of actual
-	 * position modifications list.
+	/** Add line position. All line positions MUST be set at the end of actual position modifications list.
 	 * @param pos relative position in the buffer.
 	 * @param line line number.
 	 * @param startLine position of actual line in the file.
@@ -502,15 +476,12 @@ public class SPosition {
 			new Replacement(pos, diff, line, startLine, fixed, _sysId));
 	}
 
-	/** Add line position. All line positions MUST be set at the end of actual
-	 * position modifications list.
+	/** Add line position. All line positions MUST be set at the end of actual position modifications list.
 	 * @param pos The position of line in the buffer.
 	 * @param line line number.
 	 * @param startLine position of actual line in the file.
 	 */
-	public final void addLine(final int pos,
-	final long line,
-	final long startLine) {
+	public final void addLine(final int pos, final long line, final long startLine) {
 		if (_modificationInfo == null) {
 			//first replacement
 			_modificationInfo = new ArrayList<>();
@@ -519,17 +490,13 @@ public class SPosition {
 			new Replacement(pos, 0, line, startLine, false, _sysId));
 	}
 
-	/** Add position to internal list of positions. (This method is not public,
-	 * it is used only in SBuffer).
+	/** Add position to internal list of positions. (This method is not public, it is used only in SBuffer).
 	 * @param pos position in buffer.
 	 * @param spos source position object.
 	 * @param len length of text in buffer described by this position.
 	 * @param fixed if true then internal position is not printed.
 	 */
-	final void appendPos(final int pos,
-		final SPosition spos,
-		final int len,
-		final boolean fixed) {
+	final void appendPos(final int pos, final SPosition spos, final int len, final boolean fixed) {
 		if (_modificationInfo == null) {
 			_modificationInfo = new ArrayList<>();
 		}
@@ -556,24 +523,19 @@ public class SPosition {
 		}
 	}
 
-	/** Update list of modifications when given interval is changed to
-	 * the new length. (This method is not public, it is used only in
-	 * StringParser).
+	/** Update list of modifications when given interval is changed to the new length. (This method is not
+	 * public, it is used only in StringParser).
 	 * @param pos The buffer position of modification.
 	 * @param length The length of modified original.
 	 * @param newLength The length of modification.
 	 * @param fixed if true one position will be used for whole range.
 	 */
-	public final void updatePositions(final int pos,
-		final int length,
-		final int newLength,
-		final boolean fixed) {
+	public final void updatePositions(final int pos,final int length,final int newLength,final boolean fixed){
 		int diff = length - newLength;
 		int newEndPos = pos + newLength;
 		int endPos = pos + length;
-		// The replacement may be a modification of existing source
-		// (newPos == null) or it may be considered as the independent
-		// part (newPos != null). Overlapnig replacements are considered
+		// The replacement may be a modification of existing source (newPos == null) or it may be considered
+		// as the independent part (newPos != null). Overlapnig replacements are considered
 		// as the part of the first replacement.
 
 		// There are 5 situations of replacement position:
@@ -592,10 +554,8 @@ public class SPosition {
 			n = _modificationInfo.size(); // number of items in the list
 		}
 		if (n == 0) { // create first replacement - situation 0
-			_modificationInfo.add(new Replacement(
-				pos, 0, _line, _startLine, true, _sysId));
-			_modificationInfo.add(new Replacement(
-				pos + newLength, diff, _line, _startLine, true, _sysId));
+			_modificationInfo.add(new Replacement(pos, 0, _line, _startLine, true, _sysId));
+			_modificationInfo.add(new Replacement(pos + newLength, diff, _line, _startLine, true, _sysId));
 			return;
 		}
 		Replacement item = null;
@@ -606,16 +566,18 @@ public class SPosition {
 			if (item._bufIndex > pos) {
 				if (endPos <= item._bufIndex) { // insert before an item
 					if (i == 0) { // insert before the first item
-						_modificationInfo.add(0, new Replacement(pos,
-							0, _line, _startLine, true, _sysId));
-						_modificationInfo.add(1, new Replacement(pos+newLength,
-							diff, _line, _startLine, true, _sysId));
+						_modificationInfo.add(0, new Replacement(pos, 0, _line, _startLine, true, _sysId));
+						_modificationInfo.add(1,
+							new Replacement(pos+newLength, diff, _line, _startLine, true, _sysId));
 						return;
 					} else {
 						// insert between lastItem and item
 						_modificationInfo.add(i, new Replacement(pos,
-							lastItem._bufIndex - pos, lastItem._line,
-							lastItem._startLine, true, lastItem._sysId));
+							lastItem._bufIndex - pos,
+							lastItem._line,
+							lastItem._startLine,
+							true,
+							lastItem._sysId));
 					}
 					if (endPos < item._bufIndex) {
 						_modificationInfo.add(++i, new Replacement(newEndPos,
@@ -636,8 +598,8 @@ public class SPosition {
 					}
 					return;
 				} else {
-					_modificationInfo.add(0, new Replacement(
-						pos, 0, item._line, item._startLine, true,item._sysId));
+					_modificationInfo.add(0,
+						new Replacement(pos, 0, item._line, item._startLine, true,item._sysId));
 					n++; i++;
 					//update all following items
 					while (i < n) {
@@ -650,8 +612,11 @@ public class SPosition {
 							} else {
 								_modificationInfo.add(i,
 									new Replacement(newEndPos,
-										diff, item._line,
-										item._startLine, true, item._sysId));
+										diff,
+										item._line,
+										item._startLine,
+										true,
+										item._sysId));
 							}
 							break;
 						}
@@ -668,34 +633,24 @@ public class SPosition {
 				}
 			}
 		}
-		_modificationInfo.add(new Replacement(pos,
-			0, item._line, item._startLine, true, item._sysId));
-		_modificationInfo.add(new Replacement(pos,
-			diff, item._line, item._startLine, true, item._sysId));
+		_modificationInfo.add(new Replacement(pos, 0, item._line, item._startLine, true, item._sysId));
+		_modificationInfo.add(new Replacement(pos, diff, item._line, item._startLine, true, item._sysId));
 	}
 
-
-	/** Copy modification information from given position to this position.
-	 * (raw copy). (This method is not public, it is used only in StringParser
-	 * and StreamParser).
+	/** Copy modification information from given position to this position. (raw copy). (This method is not
+	 * public, it is used only in StringParser and StreamParser).
 	 * @param pos position from which copy should be copied.
 	 */
-	final void copyModificationInfo(final SPosition pos) {
-		_modificationInfo = pos._modificationInfo;
-	}
+	final void copyModificationInfo(final SPosition pos) {_modificationInfo = pos._modificationInfo;}
 
-	/** Set clone of modification information from given position to this
-	 * position. (This method is not public, it is used only in StringParser
-	 * and StreamParser).
+	/** Set clone of modification information from given position to this* position. (This method is not
+	 * public, it is used only in StringParser and StreamParser).
 	 * @param pos position from which copy should be copied.
 	 */
-	final void cloneModificationInfo(final SPosition pos) {
-		_modificationInfo = pos.cloneModificationInfo();
-	}
+	final void cloneModificationInfo(final SPosition pos) {_modificationInfo = pos.cloneModificationInfo();}
 
 	/** Clear modification information (used only internally). */
 	final void clearModificationInfo() { _modificationInfo = null; }
-
 
 	@Override
 	public String toString() {
@@ -712,8 +667,7 @@ public class SPosition {
 		}
 		sb.append("; replacements:\n");
 		for (int i = 0; i < _modificationInfo.size(); i++) {
-			sb.append("[").append(i <= 9 ? "0"+i : String.valueOf(i)).
-				append("] ");
+			sb.append("[").append(i <= 9 ? "0"+i : String.valueOf(i)).append("] ");
 			sb.append(_modificationInfo.get(i));
 		}
 		return sb.toString();
@@ -756,8 +710,7 @@ public class SPosition {
 				long startLine = r.readLong();
 				boolean fixed = r.readBoolean();
 				String sysId = r.readString();
-				x._modificationInfo.add(new Replacement(
-					pos, diff, line, startLine, fixed, sysId));
+				x._modificationInfo.add(new Replacement(pos, diff, line, startLine, fixed, sysId));
 			}
 		}
 		return x;
@@ -814,10 +767,8 @@ public class SPosition {
 		@Override
 		/** Get printable format of source position. */
 		public String toString() {
-			return "bufIdex" + _bufIndex +
-				", line:" + _line +
-				", diff:" + _diff + ", startLine:" + _startLine +
-				", fixed:" + _fixed + ", sysId:" + _sysId;
+			return "bufIdex" + _bufIndex + ", line:" + _line + ", diff:" + _diff
+				+ ", startLine:" + _startLine + ", fixed:" + _fixed + ", sysId:" + _sysId;
 		}
 	}
 }

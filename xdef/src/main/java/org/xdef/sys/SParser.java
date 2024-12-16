@@ -41,8 +41,7 @@ public interface SParser {
 	public String getParsedBufferPartFrom(int pos);
 
 	/** Get parsed string from positions.
-	 * @param from start position from which parsed string will be
-	 *  extracted.
+	 * @param from start position from which parsed string will be extracted.
 	 * @param to end position from which parsed string will be extracted.
 	 * @return parsed string from given positions.
 	 */
@@ -69,8 +68,7 @@ public interface SParser {
 	public void setIndex(int pos);
 
 	/** Check if the position is at the end of source.
-	 * @return true if and only if the position of parsed object
-	 * is at the end of source.
+	 * @return true if and only if the position of parsed object is at the end of source.
 	 */
 	public boolean eos();
 
@@ -78,58 +76,47 @@ public interface SParser {
 	public void setEos();
 
 	/** Parse white space.
-	 * @return true if white space was present at actual position,
-	 * otherwise return false.
+	 * @return true if white space was present at actual position, otherwise return false.
 	 */
 	public boolean isSpace();
 
-	/** Skip all white spaces an if at least one was found return
-	 * true.
-	 * @return true if and only if at least one white space was
-	 * found.
+	/** Skip all white spaces an if at least one was found return true.
+	 * @return true if and only if at least one white space was found.
 	 */
 	public boolean isSpaces();
 
-	/** Check if the character from argument is at the current source
-	 * position and update current source position.
+	/** Check if character from argument is at the current source position and update current source position.
 	 * @param ch required character.
-	 * @return true if and only if the character is at current
-	 * position.
+	 * @return true if and only if the character is at current position.
 	 */
 	public boolean isChar(char ch);
 
-	/** If character on actual position is not character specified by
-	 * argument the method returns the actual character and sets
-	 * position to next character. Otherwise it returns NOCHAR and actual
-	 * position remains unchanged.
+	/** If character on actual position is not character specified by argument the method returns the actual
+	 * character and sets position to next character. Otherwise it returns NOCHAR and actual position
+	 * remains unchanged.
 	 * @param ch Character to be checked.
 	 * @return character on actual position or NOCHAR.
 	 */
 	public char notChar(char ch);
 
-	/** Check if actual position points to a character in given interval.
-	 * Set the actual position to the next character if given character
-	 * was in the specified interval.
+	/** Check if actual position points to a character in given interval. Set the actual position to the next
+	 * character if given character was in the specified interval.
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
-	 * @return the actual character character from actual position,
-	 * otherwise return <code>NOCHAR</code>.
+	 * @return the actual character character from actual position, otherwise return <code>NOCHAR</code>.
 	 */
 	public char isInInterval(char minCh, char maxCh);
 
-	/** Check if actual position points to a character out of given interval.
-	 * Set the actual position to the next character if given character was
-	 * recognized.
+	/** Check if actual position points to a character out of given interval. Set the actual position to the
+	 * next character if given character was recognized.
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
-	 * @return the actual character character from actual position,
-	 * otherwise return <code>NOCHAR</code>.
+	 * @return the actual character character from actual position, otherwise return <code>NOCHAR</code>.
 	 */
 	public char notInInterval(char minCh, char maxCh);
 
-	/** If actual character is one of characters specified in given string the
-	 * method returns this character and sets position to the next
-	 * character. Otherwise it returns NOCHAR.
+	/** If actual character is one of characters specified in given string the method returns this character
+	 * and sets position to the next character. Otherwise it returns NOCHAR.
 	 * @param chars String with characters to be checked.
 	 * @return the actual character or NOCHAR.
 	 */
@@ -141,16 +128,13 @@ public interface SParser {
 	public int isDigit();
 
 	/** Parse unsigned integer number.
-	 * @return true if and only if an integer number was
-	 * recognized.
+	 * @return true if and only if an integer number was recognized.
 	 */
 	public boolean isInteger();
 
-	/** Check if actual position points to signed integer number. Set the
-	 * actual position to the next character after the number if number
-	 * was recognized.
-	 * @return true if signed integer was parsed, otherwise
-	 * return false.
+	/** Check if actual position points to signed integer number. Set the actual position to the next
+	 * character after the number if number was recognized.
+	 * @return true if signed integer was parsed, otherwise return false.
 	 */
 	public boolean isSignedInteger();
 
@@ -159,9 +143,9 @@ public interface SParser {
 	 */
 	public boolean isFloat();
 
-	/** Parse signed float number. Set actual position to the next character
-	 * after the number if number was recognized.
-	 * @return <i>true</i> if and only if float number was parsed.
+	/** Parse signed float number. Set actual position to the next character after the number if number was
+	 * recognized.
+	 * @return true if and only if float number was parsed.
 	 */
 	public boolean isSignedFloat();
 
@@ -176,79 +160,68 @@ public interface SParser {
 	public char isLetterOrDigit();
 
 	/** Get current character from source and set position to the next
-	 * character. If the current position is at the end of source return
-	 * zero.
+	 * character. If the current position is at the end of source return zero.
 	 * @return current character or zero.
 	 */
 	public char peekChar();
 
-	/** Check if actual position points to upper case letter. Set the
-	 * source position to the next character if letter was recognized and
-	 * return the character otherwise return NOCHAR and source position
+	/** Check if actual position points to upper case letter. Set the source position to the next character
+	 * if letter was recognized and return the character otherwise return NOCHAR and source position
 	 * remains unchanged.
 	 * @return character or NOCHAR.
 	 */
 	public char isUpperCaseLetter();
 
-	/** Check if actual position points to lower case letter. Set the source
-	 * position to the next character if letter was recognized and return
-	 * the character otherwise return NOCHAR and source position remains
+	/** Check if actual position points to lower case letter. Set the source position to the next character
+	 * if letter was recognized and return the character otherwise return NOCHAR and source position remains
 	 * unchanged.
 	 * @return character or NOCHAR.
 	 */
 	public char isLowerCaseLetter();
 
-	/** Check if actual position points to given token (case insensitive).
-	 * Set the actual position to the next character after the token if
-	 * given token was recognized.
+	/** Check if actual position points to given token (case insensitive). Set the actual position to the next
+	 * character after the token if given token was recognized.
 	 * @param token The token to be checked case insensitive.
-	 * @return <i>true</i> if token was present at actual position.
+	 * @return true if token was present at actual position.
 	 */
 	public boolean isTokenIgnoreCase(String token);
 
-	/** Check if a token from argument is at the current source position and
-	 * update actual source position.
+	/** Check if a token from argument is at the current source position and update actual source position.
 	 * @param s required token.
 	 * @return true if the token is at current position.
 	 */
 	public boolean isToken(String s);
 
-	/** If on source position is one of tokens specified in the argument the
-	 * method returns index to this item and sets position to the next
-	 * position after a token. Otherwise it returns -1.
+	/** If on source position is one of tokens specified in the argument the method returns index to this item
+	 * and sets position to the next position after a token. Otherwise it returns -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
 	 */
 	public int isOneOfTokens(final String... tokens);
 
-	/** If on source position is one of tokens (ignored case) specified
-	 * in the argument the method returns index to this item and sets position
-	 * to the next position after a token. Otherwise it returns -1.
+	/** If on source position is one of tokens (ignored case) specified in the argument the method returns
+	 * index to this item and sets position to the next position after a token. Otherwise it returns -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
 	 */
 	public int isOneOfTokensIgnoreCase(final String... tokens);
 
-	/** Find token. If the token was found returns true and sets
-	 * position <b>to</b> the position of token. Otherwise returns
-	 * false and sets position to the end of source.
+	/** Find token. If the token was found returns true and sets position to the position of token. Otherwise
+	 * return false and set position to the end of source.
 	 * @param token Token to be found.
 	 * @return true if the token was found.
 	 */
 	public boolean findToken(final String token);
 
-	/** Skip to specified character. The position is set <b>to</b> the found
-	 * character. Returns true and sets position <b>to</b>
-	 * the position of character. Otherwise returns false and sets
-	 * position to the end of source.
+	/** Skip to specified character. The position is set to the found character. Return true and set position
+	 * to the position of character. Otherwise return false and set* position to the end of source.
 	 * @param ch Character to be searched for.
 	 * @return <i>true</i> if the character was found.
 	 */
 	public boolean findChar(char ch);
 
-	/** Skip to first occurrence of one of specified character set.
-	 * The position is set <b>to</b> the found character.Return a character
-	 * from the list of characters if the character was found, otherwise
+	/** Skip to first occurrence of one of specified character set. The position is set to the found
+	 * character.Return a character from the list of characters if the character was found, otherwise
 	 * return NOCHAR and set the position to the end of source.
 	 * @param chars String with set of characters.
 	 * @return found character or NOCHAR.
