@@ -2583,16 +2583,16 @@ final public class TestCompose extends XDTester {
 			}
 		}
 		try { //Test create mode with recursive reference.
-			xd =  compile(
+			xd =  compile( // create section
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
 "   <X a=\"string()\">\n" +
-"      <X xd:script=\"0..; create from('X'); ref X\"/>\n" + /////
+"      <X xd:script=\"0..; create from('X'); ref X\"/>\n" +
 "   </X>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null)); // error
-			xd = compile(
+			assertEq(xml, xd.xcreate("X", null));
+			xd =  compile( // no create section
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
 "   <X a=\"string()\">\n" +
 "      <X xd:script=\"0..; ref X\"/>\n" +
@@ -2601,28 +2601,39 @@ final public class TestCompose extends XDTester {
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("X", null));
-			xd = compile(
+			xd = compile( // create section
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
-"   <X a=\"string()\">\n" +
-"      <X xd:script=\"0..; ref X\"/>\n" + /////
-"   </X>\n" +
+"   <X xd:script=\"ref Y\"/>\n" +
+"   <Y a=\"string()\">\n" +
+"      <X xd:script=\"0..; create from('X'); ref Y\"/>\n" +
+"   </Y>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("X", null));
-			xd = compile(
+			xd = compile( // no create section
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"   <X xd:script=\"ref Y\"/>\n" +
+"   <Y a=\"string()\">\n" +
+"      <X xd:script=\"0..; ref Y\"/>\n" +
+"   </Y>\n" +
+"</xd:def>").createXDDocument();
+			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
+			xd.setXDContext(xml);
+			assertEq(xml, xd.xcreate("X", null));
+			xd = compile( // create section
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
 "   </Vehicle>\n" +
 "   <X name=\"string()\">\n" +
-"      <Part xd:script=\"0..; create from('Part'); ref X\"/>\n" + ///////
+"      <Part xd:script=\"0..; create from('Part'); ref X\"/>\n" +
 "   </X>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("Vehicle", null));
-			xd = compile(
+			xd = compile( // no create section
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
