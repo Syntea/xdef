@@ -18,7 +18,6 @@ import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BOOLEAN;
-import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_VOID;
@@ -38,9 +37,7 @@ import org.xdef.impl.XSelector;
 import org.xdef.impl.XSelectorEnd;
 import org.xdef.impl.XSequence;
 import org.xdef.impl.XVariableTable;
-import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeTable;
-import static org.xdef.impl.code.CodeTable.GETELEMS_FROM_CONTEXT;
 import static org.xdef.impl.compile.CompileBase.ELEM_MODE;
 import static org.xdef.impl.compile.CompileBase.GLOBAL_MODE;
 import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
@@ -2127,16 +2124,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if (xel._finaly == -1 && y._finaly != -1) {
 				xel._finaly = y._finaly;
 			}
-			if (xel._compose == -1) {
-				if (y._compose != -1) {
-					xel._compose = y._compose;
-				} else if (level > 1) {//generate default compose section of model from recursive reference
-					String u = xel.getNSUri();
-					String name = u != null && !u.isEmpty() ? '{'+u+'}'+ xel.getLocalName() : xel.getName();
-					_scriptCompiler._g.addCode(new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT, 1, name));
-					xel._compose = _scriptCompiler._g._lastCodeIndex;
-					_scriptCompiler._g.genStop();
-				}
+			if (xel._compose == -1 && y._compose != -1) {
+				xel._compose = y._compose;
 			}
 			if (xel._init == -1 && y._init != -1) {
 				xel._init = y._init;

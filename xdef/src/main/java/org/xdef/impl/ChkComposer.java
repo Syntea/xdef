@@ -709,40 +709,46 @@ final class ChkComposer extends SReporter {
 	private XDValue execComposeElement(final ChkElement chkEl,
 		final Element sourceElem,
 		final Element lastElement) {
-		int addr;
-		if ((addr = chkEl._xElement._compose) < 0) {
+		XDValue result;
+		if (chkEl._xElement._compose >= 0) {
+			chkEl.debugXPos(XDDebug.CREATE);
+			chkEl.setElemValue(sourceElem);
+			result = chkEl.exec(chkEl._xElement._compose, (byte) 'E');
+		} else { //no create section specified
 			if (sourceElem == null) {
 				if (chkEl._xElement.minOccurs() <= 0) {
 					return null;
 				}
 				String qname = "$any".equals(chkEl._xElement.getName()) ? "_ANY_" : chkEl._xElement.getName();
-				chkEl._sourceElem = KXmlUtils.newDocument(
-					chkEl._xElement.getNSUri(), qname,null).getDocumentElement();
+				chkEl._sourceElem =
+					KXmlUtils.newDocument(chkEl._xElement.getNSUri(), qname,null).getDocumentElement();
 				return new DefElement(chkEl._sourceElem);
 			}
-			//default contex (no script specified)
-			DefContainer xdc = new DefContainer();
-			getChildElementsByName(xdc, chkEl, sourceElem, lastElement);
-			Element el = xdc.getXDElement(0);
-			//if somethig found, set first element as source context,otherwise set source from the argument.
-			chkEl._sourceElem = el != null ? el : sourceElem;
-			if (el == null ||
-				xdc.getXDItemsNumber() < chkEl._xElement.minOccurs()) {
-				if (chkEl._parent != null && chkEl._parent.getItemId() != XX_DOCUMENT
-					&& ((ChkElement) chkEl._parent)._selector != null
-					&& ((ChkElement) chkEl._parent)._selector._kind != XMSEQUENCE) {
-					return xdc; //if choice or mixed do not create dummy items
+			if (!chkEl._xElement.isReference()) { //not reference
+				DefContainer xdc = new DefContainer(); //create default contex
+				getChildElementsByName(xdc, chkEl, sourceElem, lastElement);
+				Element el = xdc.getXDElement(0);
+				//if somethig found, set first element as source context,otherwise set source from argument.
+				chkEl._sourceElem = el != null ? el : sourceElem;
+				if (el == null || xdc.getXDItemsNumber() < chkEl._xElement.minOccurs()) {
+					if (chkEl._parent != null && chkEl._parent.getItemId() != XX_DOCUMENT
+						&& ((ChkElement) chkEl._parent)._selector != null
+						&& ((ChkElement) chkEl._parent)._selector._kind != XMSEQUENCE) {
+						return xdc; //if choice or mixed then do not create dummy items
+					}
+					//create required minimum number of items ???
+					for (int i = xdc.getXDItemsNumber(); i < chkEl._xElement.minOccurs(); i++) {
+						xdc.addXDItem(new DefElement(sourceElem));
+					}
 				}
-				//create required minimum number of items
-				for (int i = xdc.getXDItemsNumber(); i < chkEl._xElement.minOccurs(); i++) {
-					xdc.addXDItem(new DefElement(sourceElem));
-				}
+				return xdc;
 			}
-			return xdc;
+			//model is a refenece to another model; in the actual context find elements with same name and URI
+			String u = chkEl._xElement.getNSUri();
+			result = new DefContainer(u != null && !u.isEmpty() // is namespace URI
+				? KXmlUtils.getChildElementsNS(sourceElem, u, chkEl._xElement.getLocalName())
+				: KXmlUtils.getChildElements(sourceElem, chkEl._xElement.getName()));
 		}
-		chkEl.setElemValue(sourceElem);
-		chkEl.debugXPos(XDDebug.CREATE);
-		XDValue result = chkEl.exec(addr, (byte) 'E');
 		chkEl.copyTemporaryReports();
 		if (result != null && !result.isNull()) {
 			Element el = null;
