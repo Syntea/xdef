@@ -24,15 +24,15 @@ public class XDParseEnum extends XDParserAbstract {
 	String[] _list;
 
 	public XDParseEnum() {super();}
+
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int i;
 		if ((i=p.isOneOfTokens(_list)) >= 0) {
 			p.setParsedValue(_list[i]);
 			return;
 		}
-		//Incorrect value of &{0}&{1}{: }
-		p.errorWithString(XDEF.XDEF809, parserName());
+		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 	}
 	@Override
 	public void setParseSQParams(final Object... params) {
@@ -64,18 +64,15 @@ public class XDParseEnum extends XDParserAbstract {
 				}
 				if (_list == null || _list.length == 0) {
 					//Incorrect value of '&{0}'&{1}{: }
-					throw new SException(XDEF.XDEF809,
-						parserName()+" ("+name+ ")", val);
+					throw new SException(XDEF.XDEF809, parserName()+" ("+name+ ")", val);
 				}
 			} else {
 				//Illegal parameter name '&{0}'
-				throw new SException(XDEF.XDEF801,
-					parserName() + " (" + name + ")");
+				throw new SException(XDEF.XDEF801, parserName() + " (" + name + ")");
 			}
 		}
 	}
-	/** Create _list of strings sorted descendant according to length
-	 * and equal items are ignored.
+	/** Create _list of strings sorted descendant according to length and equal items are ignored.
 	 * @param val argument to be converted.
 	 * @throws SException if an error occurs.
 	 */
@@ -94,8 +91,7 @@ public class XDParseEnum extends XDParserAbstract {
 		int num = container.getXDItemsNumber();
 		if (num == 0) {
 			//Incorrect value of '&{0}'&{1}{: }
-			throw new SException(XDEF.XDEF809, parserName() + " (argument)",
-				container);
+			throw new SException(XDEF.XDEF809, parserName() + " (argument)", container);
 		}
 		List<String> list = new ArrayList<>();
 		for(int j = num-1; j >= 0; j--) {
@@ -166,7 +162,6 @@ public class XDParseEnum extends XDParserAbstract {
 			return false;
 		}
 		XDParseEnum x = (XDParseEnum) o;
-		return _list == null && x. _list == null ||
-			 _list != null && Arrays.equals(_list, x._list);
+		return _list == null && x. _list == null || _list != null && Arrays.equals(_list, x._list);
 	}
 }

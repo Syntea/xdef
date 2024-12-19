@@ -10,13 +10,14 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SRuntimeException;
 
-/** Parse GPS value.
+/** Parse value "gps".
  * @author Vaclav Trojan
  */
 public class XDParseGPS extends XDParserAbstract {
 	private static final String ROOTBASENAME = "gps";
 
 	public XDParseGPS() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
@@ -34,14 +35,12 @@ public class XDParseGPS extends XDParserAbstract {
 				if (p.isChar(',') && (p.isChar(' ') || true)) {
 					pos1 = p.getIndex();
 					if ((p.isSignedFloat() || p.isSignedInteger())) {
-						double longitude = Double.parseDouble(
-							p.getBufferPart(pos1, p.getIndex()));
+						double longitude = Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
 						double altitude = Double.MIN_VALUE;
 						if (p.isChar(',') && (p.isChar(' ') || true)) {
 							pos1 = p.getIndex();
 							if ((p.isSignedFloat() || p.isSignedInteger())) {
-								altitude = Double.parseDouble(
-									p.getBufferPart(pos1, p.getIndex()));
+								altitude = Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
 								if (p.isChar(',') && (p.isChar(' ') || true)) {
 									name = readGPSName(p);
 								}
@@ -52,8 +51,7 @@ public class XDParseGPS extends XDParserAbstract {
 							name = readGPSName(p);
 						}
 						if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
-							GPSPosition gpos = new GPSPosition(
-								latitude, longitude, altitude, name);
+							GPSPosition gpos = new GPSPosition(latitude, longitude, altitude, name);
 							p.setParsedValue(new XDGPSPosition(gpos));
 							return;
 						}
@@ -66,8 +64,7 @@ public class XDParseGPS extends XDParserAbstract {
 		}
 		p.setParsedValue(new XDGPSPosition()); //null GPS
 		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809,
-			parserName(), p.getBufferPart(pos, p.getIndex()));
+		p.errorWithString(XDEF.XDEF809, parserName(), p.getBufferPart(pos, p.getIndex()));
 	}
 	/** Read name of position. */
 	private String readGPSName(final XDParseResult p) {
@@ -90,16 +87,13 @@ public class XDParseGPS extends XDParserAbstract {
 			}
 		} else if ((ch=p.isLetter()) != SParser.NOCHAR) {
 			sb.append(ch);
-			while ((ch=p.getCurrentChar()) > ' '
-				&& (Character.isLetterOrDigit(ch) || ch == '_' || ch == '-')) {
+			while ((ch=p.getCurrentChar()) > ' ' && (Character.isLetterOrDigit(ch) || ch=='_' || ch=='-')) {
 				sb.append(p.peekChar());
 			}
 			return sb.toString();
 		}
-		//Incorrect GPS position &amp;{0}{: }
-		throw new SRuntimeException(XDEF.XDEF222, "name error");
+		throw new SRuntimeException(XDEF.XDEF222, "name error"); //Incorrect GPS position &amp;{0}{: }
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

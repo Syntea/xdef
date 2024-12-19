@@ -14,10 +14,11 @@ import java.math.BigInteger;
  */
 public class XSParseUnsignedLong extends XSParseInteger {
 	private static final String ROOTBASENAME = "unsignedLong";
-	private static final BigDecimal MAX_VALUE =
-		new BigDecimal("18446744073709551615");
+	private static final BigDecimal MAX_VALUE = new BigDecimal("18446744073709551615");
 	private int _totalDigits;
+
 	public XSParseUnsignedLong() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
@@ -27,8 +28,7 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		int totalDigits = 0;
 		int i;
 		if ((i = p.isDigit()) < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		} else if (i > 0) {
 			totalDigits++;
@@ -45,8 +45,7 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		try {
 			val = new BigInteger(plus ? s = s.substring(1) : s);
 		} catch (Exception ex) {
-			//Value of '&{0}' is out of range&{1}{: }
-			p.error(XDEF.XDEF806, parserName(), s);
+			p.error(XDEF.XDEF806, parserName(), s); //Value of '&{0}' is out of range&{1}{: }
 			return;
 		}
 		p.setParsedValue(new DefBigInteger(val));
@@ -67,8 +66,7 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		BigDecimal val = x.decimalValue();
 		if (val.signum() < 0 ||
 			val.compareTo(new BigDecimal("18446744073709551615")) > 0) {
-			//Incorrect range specification of &{0}
-			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
 		}
 	}
 	@Override

@@ -15,6 +15,7 @@ public class XDParseEnumi extends XDParseEnum {
 	private static final String ROOTBASENAME = "enumi";
 
 	public XDParseEnumi() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos = p.getIndex();
@@ -33,8 +34,7 @@ public class XDParseEnumi extends XDParseEnum {
 			p.setParsedValue(p.getSourceBuffer().substring(pos, i));
 			p.setIndex(i);
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
 	@Override
@@ -55,7 +55,6 @@ public class XDParseEnumi extends XDParseEnum {
 			return false;
 		}
 		XDParseEnumi x = (XDParseEnumi) o;
-		return _list == null && x. _list == null ||
-			 _list != null && Arrays.equals(_list, x._list);
+		return _list == null && x. _list == null || _list != null && Arrays.equals(_list, x._list);
 	}
 }

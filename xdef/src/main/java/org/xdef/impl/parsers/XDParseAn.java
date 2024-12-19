@@ -13,6 +13,7 @@ public class XDParseAn extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "an";
 
 	public XDParseAn() {super();}
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -21,8 +22,7 @@ public class XDParseAn extends XSAbstractParseToken {
 		XDParseResult q = quoted?new DefParseResult(XonTools.readJString(p)):p;
 		int pos = p.getIndex();
 		if (q.isLetterOrDigit() == 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		while(q.isLetterOrDigit() != 0){}

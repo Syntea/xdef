@@ -13,10 +13,8 @@ public class XSParseInteger extends XSAbstractParseComparable {
 	private static final String ROOTBASENAME = "integer";
 	private long _totalDigits;
 
-	public XSParseInteger() {
-		super();
-		_totalDigits = -1;
-	}
+	public XSParseInteger() {super(); _totalDigits = -1;}
+
 	@Override
 	public  void initParams() {
 		_whiteSpace = WS_COLLAPSE;
@@ -58,8 +56,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		int totalDigits = 0;
 		int i;
 		if ((i = p.isDigit()) < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		} else if (i > 0) {
 			totalDigits++;
@@ -76,8 +73,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		try {
 			val = new BigInteger(s = sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), s);
+			p.error(XDEF.XDEF809, parserName(), s); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.setParsedValue(new DefBigInteger(val));

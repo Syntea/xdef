@@ -32,11 +32,8 @@ public class XSParseList extends XSAbstractParser {
 	long _maxLength;
 	XDValue[] _enumeration;
 
-	public XSParseList() {
-		super();
-		_whiteSpace = WS_COLLAPSE;
-		_minLength = _maxLength = -1;
-	}
+	public XSParseList() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
+
 	@Override
 	public  void initParams() {
 		_whiteSpace = WS_COLLAPSE;
@@ -68,10 +65,7 @@ public class XSParseList extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
-	public boolean addTypeParser(final XDValue x) {
-		_itemType = valueToParser(x);
-		return true;
-	}
+	public boolean addTypeParser(final XDValue x) {_itemType = valueToParser(x); return true;}
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
 	@Override
@@ -89,8 +83,7 @@ public class XSParseList extends XSAbstractParser {
 		if (item.getItemId() == XD_PARSER) {
 			_itemType = (XDParser) item;
 		} else {
-			//Value of type '&amp;{0}' expected
-			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+			throw new SRuntimeException(XDEF.XDEF423, "Parser"); //Value of type '&amp;{0}' expected
 		}
 	}
 	@Override
@@ -107,13 +100,9 @@ public class XSParseList extends XSAbstractParser {
 		_enumeration = e;
 	}
 	@Override
-	public void check(final XXNode xnode, final XDParseResult p) {
-		parse(xnode,p,true);
-	}
+	public void check(final XXNode xnode, final XDParseResult p) {parse(xnode,p,true);}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		parse(xnode, p, false);
-	}
+	public void parseObject(final XXNode xnode, final XDParseResult p) {parse(xnode, p, false);}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		boolean isFinal){
@@ -134,8 +123,7 @@ public class XSParseList extends XSAbstractParser {
 		while(t.length() > 0) {
 			count++;
 			if (_maxLength != -1 && count > _maxLength) {
-				//"Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-				p.error(XDEF.XDEF813, parserName(),
+				p.error(XDEF.XDEF813, parserName(), //"Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 					(_maxLength == _minLength?"length":"maxLength"), t);
 				return;
 			}
@@ -176,8 +164,7 @@ public class XSParseList extends XSAbstractParser {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		if (_minLength != -1 && count < _minLength) {
-			//Length of value of '&{0}' is too short&{0}'&{1}
-			p.errorWithString(XDEF.XDEF814, parserName());
+			p.errorWithString(XDEF.XDEF814, parserName());//Length of value of '&{0}' is too short&{0}'&{1}
 			return;
 		}
 		if (_enumeration != null) {
@@ -189,8 +176,7 @@ public class XSParseList extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF810, parserName());
+				p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of '&{0}'&{1}{: }
 				return;
 			}
 		}
@@ -219,15 +205,11 @@ public class XSParseList extends XSAbstractParser {
 		}
 	}
 	@Override
-	public short getAlltemsType() {
-		return _itemType == null ? XD_STRING : _itemType.parsedType();
-	}
-
+	public short getAlltemsType() {return _itemType == null ? XD_STRING : _itemType.parsedType();}
 	/** Get parser of items in this list.
 	 * @return parser of items in this list.
 	 */
 	public XDParser getItemParser() {return _itemType;}
-
 	/** Set parser of items to this list.
 	 * @param p new parser of items in this list.
 	 */

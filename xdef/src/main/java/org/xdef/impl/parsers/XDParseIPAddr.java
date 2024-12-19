@@ -10,7 +10,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.SParser;
 import org.xdef.xon.XonTools;
 
-/** Parse Internet IP address.
+/** Parse "ipAddr".
  * @author Vaclav Trojan
  */
 public class XDParseIPAddr extends XDParserAbstract {
@@ -49,8 +49,7 @@ public class XDParseIPAddr extends XDParserAbstract {
 		}
 		p.setIndex(pos);
 		p.setParsedValue(new DefIPAddr()); //null IPAddr
-		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809,parserName(), s);
+		p.errorWithString(XDEF.XDEF809,parserName(), s); //Incorrect value of '&{0}'&{1}{: }
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

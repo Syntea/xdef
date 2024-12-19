@@ -14,6 +14,7 @@ public class XDParseContainsi extends XDParseEqi {
 	private static final String ROOTBASENAME = "containsi";
 
 	public XDParseContainsi() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -21,8 +22,7 @@ public class XDParseContainsi extends XDParseEqi {
 			p.setParsedValue(s);
 			p.setEos();
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 		return p;
 	}
@@ -31,8 +31,7 @@ public class XDParseContainsi extends XDParseEqi {
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
 		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
 		if (s.toLowerCase().contains(_param.toLowerCase())) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			p.setParsedValue(s);
 			p.setEos();
@@ -46,7 +45,6 @@ public class XDParseContainsi extends XDParseEqi {
 			return false;
 		}
 		XDParseContainsi x = (XDParseContainsi) o;
-		return _param == null && x._param == null ||
-			_param != null && _param.equals(x._param);
+		return _param == null && x._param == null || _param != null && _param.equals(x._param);
 	}
 }

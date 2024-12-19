@@ -9,6 +9,7 @@ public class XSParseGYearMonth extends XSParseDate {
 	private static final String ROOTBASENAME = "gYearMonth";
 
 	public XSParseGYearMonth() {super();}
+
 	@Override
 	boolean parse(final StringParser parser) {return parser.isXMLYearMonth();}
 	@Override

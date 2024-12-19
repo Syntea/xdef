@@ -22,11 +22,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 	long _minLength;
 	long _maxLength;
 
-	XSAbstractParseToken() {
-		super();
-		_whiteSpace = WS_COLLAPSE;
-		_minLength = _maxLength = -1;
-	}
+	XSAbstractParseToken() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
 	@Override
 	public  void initParams() {
 		_whiteSpace = WS_COLLAPSE;
@@ -101,12 +97,10 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 				XDValue val = p.getParsedValue();
 				String s = val.toString();
 				if (_minLength!=-1 && s.length() < _minLength) {
-					//Length of value of '&{0}' is too short&{0}'&{1}
-					p.error(XDEF.XDEF814, parserName(), s);
+					p.error(XDEF.XDEF814, parserName(), s);//Length of value of '&{0}' is too short&{0}'&{1}
 					return;
 				} else if (_maxLength!=-1 && s.length() > _maxLength) {
-					//Length of value of '&{0}' is too long&{0}'{: }
-					p.error(XDEF.XDEF815, parserName(), s);
+					p.error(XDEF.XDEF815, parserName(), s);//Length of value of '&{0}' is too long&{0}'{: }
 					return;
 				}
 				checkEnumeration(p);

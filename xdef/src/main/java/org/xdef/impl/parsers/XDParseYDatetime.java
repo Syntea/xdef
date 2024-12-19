@@ -31,12 +31,9 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
 	private String _outFormat;
 
 	public XDParseYDatetime() {super();}
+
 	@Override
-	public void initParams() {
-		super.initParams();
-		_format = null;
-		_outFormat = null;
-	}
+	public void initParams() {super.initParams(); _format = null; _outFormat = null;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +

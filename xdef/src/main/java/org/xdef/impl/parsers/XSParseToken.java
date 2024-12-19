@@ -11,6 +11,7 @@ public class XSParseToken extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "token";
 
 	public XSParseToken() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -19,8 +20,7 @@ public class XSParseToken extends XSAbstractParseToken {
 		}
 		String s = p.nextToken();
 		if (s == null) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), s);
+			p.error(XDEF.XDEF809, parserName(), s);//Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		String token;

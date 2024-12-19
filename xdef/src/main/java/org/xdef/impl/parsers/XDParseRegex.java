@@ -21,12 +21,12 @@ public class XDParseRegex extends XDParserAbstract {
 	private XDRegex _regex;
 
 	public XDParseRegex() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		String s = p.getUnparsedBufferPart();
 		if (!_regex.matches(s)) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			p.setParsedValue(s);
 			p.setEos();
@@ -46,13 +46,11 @@ public class XDParseRegex extends XDParserAbstract {
 			if ("argument".equals(name)) {
 				XDValue val = items[i].getValue();
 				if (val == null) {
-					//Value of enumeration for 'eq' must be just one
-					throw new SException(XDEF.XDEF816);
+					throw new SException(XDEF.XDEF816); //Value of enumeration for 'eq' must be just one
 				}
 				_regex = new XDRegex(val.toString(), false);
 			} else {
-				//Illegal parameter name '&{0}'
-				throw new SException(XDEF.XDEF801, name);
+				throw new SException(XDEF.XDEF801, name); //Illegal parameter name '&{0}'
 			}
 		}
 	}
@@ -74,7 +72,6 @@ public class XDParseRegex extends XDParserAbstract {
 			return false;
 		}
 		XDParseRegex x = (XDParseRegex) o;
-		return _regex == null && x._regex == null ||
-			_regex != null && _regex.equals(x._regex);
+		return _regex == null && x._regex == null || _regex != null && _regex.equals(x._regex);
 	}
 }

@@ -13,14 +13,14 @@ public class XDParsePic extends XDParseEq {
 	private static final String ROOTBASENAME = "pic";
 
 	public XDParsePic() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		parseObject(xnode, p);
 		if (!p.eos()) {
 			if (p.matches()) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			}
 		}
 		return p;
@@ -29,36 +29,31 @@ public class XDParsePic extends XDParseEq {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		for (int i = 0; (i < _param.length()); i++) {
 			if (p.eos()) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 				return;
 			}
 			switch (_param.charAt(i)) {
 				case '9':
 					if (p.isDigit() < 0) {
-						//Incorrect value of '&{0}'&{1}{: }
-						p.errorWithString(XDEF.XDEF809, parserName());
+						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 					continue;
 				case 'A':
 					if (p.isLetter() <= 0) {
-						//Incorrect value of '&{0}'&{1}{: }
-						p.errorWithString(XDEF.XDEF809, parserName());
+						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 					continue;
 				case 'X':
 					if (p.isLetterOrDigit() <= 0) {
-						//Incorrect value of '&{0}'&{1}{: }
-						p.errorWithString(XDEF.XDEF809, parserName());
+						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 					continue;
 				default:
 					if (!p.isChar(_param.charAt(i))) {
-						//Incorrect value of '&{0}'&{1}{: }
-						p.errorWithString(XDEF.XDEF809, parserName());
+						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 			}
@@ -72,7 +67,6 @@ public class XDParsePic extends XDParseEq {
 			return false;
 		}
 		XDParsePic x = (XDParsePic) o;
-		return _param == null && x._param == null
-			|| _param != null && _param.equals(x._param);
+		return _param == null && x._param == null || _param != null && _param.equals(x._param);
 	}
 }

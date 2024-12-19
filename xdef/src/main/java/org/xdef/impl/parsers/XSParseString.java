@@ -6,11 +6,7 @@ package org.xdef.impl.parsers;
 public class XSParseString extends XSAbstractParseString {
 	private static final String ROOTBASENAME = "string";
 
-	public XSParseString() {
-		super();
-		_whiteSpace = 0;
-		_minLength = _maxLength = -1;
-	}
+	public XSParseString() {super(); _whiteSpace = 0; _minLength = _maxLength = -1;}
 
 	@Override
 	public int getLegalKeys() {
@@ -40,12 +36,8 @@ public class XSParseString extends XSAbstractParseString {
 		_whiteSpace = 0;
 		_minLength = _maxLength = -1;
 	}
-
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
-	/** Get name of value.
-	 * @return The name.
-	 */
 	public String parserName() {return ROOTBASENAME;}
 }

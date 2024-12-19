@@ -28,11 +28,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	long _maxLength;
 	XDValue[] _enumeration;
 
-	public XSParseBase64Binary() {
-		super();
-		_whiteSpace = 'c';
-		_minLength = _maxLength = -1;
-	}
+	public XSParseBase64Binary() {super(); _whiteSpace = 'c'; _minLength = _maxLength = -1;}
+
 	@Override
 	public void initParams() {
 		_whiteSpace = 'c';
@@ -99,8 +96,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			while ((i=r.read()) != -1) {
 				if (i != ' ') {
 					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809,
-						parserName(), p.getSourceBuffer());
+					p.errorWithString(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 					return;
 				}
 			}
@@ -110,8 +106,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			check(p);
 		} catch (SException ex) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName(),
-				p.getSourceBuffer());
+			p.errorWithString(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 		}
 	}
 	/** Check XDParseResult on pattern, enumeration, length.
@@ -127,8 +122,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 				//Length of value of '&{0}' is too short&{0}'&{1}
 				p.errorWithString(XDEF.XDEF814,  parserName());
 			} else if (_maxLength != -1 && bytes.getBytes().length>_maxLength) {
-				//Length of value of '&{0}' is too long&{0}'{: }
-				p.errorWithString(XDEF.XDEF815, parserName());
+				p.errorWithString(XDEF.XDEF815, parserName());//Length of value of '&{0}' is too long&{0}'{: }
 			}
 		}
 	}
@@ -136,7 +130,6 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_BYTES;}
-
 	/** This class is used as reader of parsed string in XSParseBase94Binary. */
 	static final class XSParseReader implements SReader {
 		private final int _quoted;

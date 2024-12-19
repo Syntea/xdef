@@ -16,10 +16,8 @@ import org.w3c.dom.NamedNodeMap;
 public class XSParseNOTATION extends XSAbstractParseString {
 	private static final String ROOTBASENAME = "NOTATION";
 
-	public XSParseNOTATION() {
-		super();
-		_minLength = _maxLength = -1;
-	}
+	public XSParseNOTATION() {super(); _minLength = _maxLength = -1;}
+
 	@Override
 	public  void initParams() {
 		_patterns = null;
@@ -59,8 +57,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			p.setSourceBuffer(s);
 			p.setParsedValue(s);
 			if (!XSParseENTITY.chkEntity(s, xnode.getElement())) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			}
 		} else {//preserve or replace
 			String s = p.getUnparsedBufferPart().trim();
@@ -77,8 +74,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script
-			//of attribute or text node
+			//The validation method &{0} can be called only from the X-script of attribute or text node
 			p.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}
@@ -100,11 +96,9 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			}
 		}
 		if (!notationFound) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), id);
+			p.error(XDEF.XDEF809, parserName(), id); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
-
 	@Override
 	/** Get name of value.
 	 * @return The name.

@@ -22,6 +22,7 @@ public class XDParseEq extends XDParserAbstract {
 	String _param;
 
 	public XDParseEq() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xn, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -33,14 +34,12 @@ public class XDParseEq extends XDParserAbstract {
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
 		if (quoted) {
 			if (!_param.equals(XonTools.readJString(p))) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			}
 			return;
 		}
 		if (!p.isToken(_param)) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
 	@Override
@@ -65,13 +64,11 @@ public class XDParseEq extends XDParserAbstract {
 			XDValue val = items[i].getValue();
 			if ("argument".equals(name)) {
 				if (val == null) {
-					//Value of enumeration for 'eq' must be just one
-					throw new SException(XDEF.XDEF816);
+					throw new SException(XDEF.XDEF816); //Value of enumeration for 'eq' must be just one
 				}
 				_param = val.toString();
 			} else {
-				//Illegal parameter name '&{0}'
-				throw new SException(XDEF.XDEF801, name);
+				throw new SException(XDEF.XDEF801, name); //Illegal parameter name '&{0}'
 			}
 		}
 	}

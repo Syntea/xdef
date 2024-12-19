@@ -20,17 +20,12 @@ public class XDParseJValue extends XSAbstractParser {
 	private static final String ROOTBASENAME = "jvalue";
 	XDValue[] _enumeration;
 	private final XDParser[] _itemTypes = new XDParser[] {
-		new XDParseJNull(),
-		new XDParseJBoolean(),
-		new XDParseJNumber(),
-		new XDParseJString()};
+		new XDParseJNull(), new XDParseJBoolean(), new XDParseJNumber(), new XDParseJString()};
 
 	public XDParseJValue() {super();}
+
 	@Override
-	public  void initParams() {
-		_patterns = null;
-		_enumeration = null;
-	}
+	public  void initParams() {_patterns = null; _enumeration = null;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -52,16 +47,10 @@ public class XDParseJValue extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public void check(final XXNode xnode, final XDParseResult p) {
-		parse(xnode,p,true);
-	}
+	public void check(final XXNode xnode, final XDParseResult p) {parse(xnode,p,true);}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		parse(xnode,p,false);
-	}
-	private void parse(final XXNode xnode,
-		final XDParseResult p,
-		final boolean isFinal) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {parse(xnode,p,false);}
+	private void parse(final XXNode xnode, final XDParseResult p, final boolean isFinal) {
 		int pos = p.getIndex();
 		String source = p.getSourceBuffer();
 		for (int i = 0; i < _itemTypes.length; i++) {
@@ -110,8 +99,7 @@ public class XDParseJValue extends XSAbstractParser {
 			return;
 		}
 		p.setIndex(pos);
-		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809, parserName());
+		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 	}
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}

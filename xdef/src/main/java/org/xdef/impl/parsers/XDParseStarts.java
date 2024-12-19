@@ -13,14 +13,14 @@ public class XDParseStarts extends XDParseEq {
 	private static final String ROOTBASENAME = "starts";
 
 	public XDParseStarts() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		parseObject(xnode, p);
 		if (!p.eos()) {
 			if (p.matches()) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			}
 		}
 		return p;
@@ -32,8 +32,7 @@ public class XDParseStarts extends XDParseEq {
 			p.setParsedValue(p.getSourceBuffer().substring(i));
 			p.setEos();
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
 	@Override

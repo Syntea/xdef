@@ -38,6 +38,7 @@ public class XDParseJList extends XSAbstractParser {
 		_whiteSpace = WS_COLLAPSE;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public void initParams() {
 		_patterns = null;
@@ -69,8 +70,7 @@ public class XDParseJList extends XSAbstractParser {
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		boolean isFinal) {
-		XDParser itemParser = _itemType != null ? _itemType // item parser
-			: new XDParseJValue(); // default parser jvalue
+		XDParser itemParser = _itemType != null ? _itemType : new XDParseJValue(); // default parser jvalue
 		DefContainer results = new DefContainer();
 		String source = p.getSourceBuffer();
 		p.setSourceBuffer(source);
@@ -80,8 +80,7 @@ public class XDParseJList extends XSAbstractParser {
 			for (;;) {
 				p.isSpaces();
 				if (p.eos()) {
-					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809, parserName());
+					p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 					break; //error
 				}
 				if (p.isChar(']')) {
@@ -121,8 +120,7 @@ public class XDParseJList extends XSAbstractParser {
 						end = start + q.getIndex();
 					} else {
 						char ch = 0;
-						while (!p.eos() && (ch=p.getCurrentChar())>' '
-							&& ch!=',' && ch!='[' && ch!=']') {
+						while (!p.eos() && (ch=p.getCurrentChar()) > ' ' && ch!=',' && ch!='[' && ch!=']') {
 							p.nextChar();
 						}
 						end = p.getIndex();
@@ -145,8 +143,7 @@ public class XDParseJList extends XSAbstractParser {
 				p.isSpaces();
 				if (!p.isChar(',')) {
 					if (!p.isChar(']')) {
-						//Incorrect value of '&{0}'&{1}{: }
-						p.errorWithString(XDEF.XDEF809, parserName());
+						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 					}
 					break;
 				}
@@ -154,8 +151,7 @@ public class XDParseJList extends XSAbstractParser {
 		}
 		p.setParsedValue(results);
 		if (_minLength != -1 && count < _minLength) {
-			//Length of value of '&{0}' is too short&{0}'&{1}
-			p.errorWithString(XDEF.XDEF814, parserName());
+			p.errorWithString(XDEF.XDEF814, parserName()); //Length of value of '&{0}' is too short&{0}'&{1}
 			return;
 		}
 		if (_enumeration != null) {
@@ -167,8 +163,7 @@ public class XDParseJList extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF810, parserName());
+				p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of '&{0}'&{1}{: }
 				return;
 			}
 		}
@@ -192,8 +187,7 @@ public class XDParseJList extends XSAbstractParser {
 		if (item.getItemId() == XD_PARSER) {
 			_itemType = (XDParser) item;
 		} else {
-			//Value of type '&amp;{0}' expected
-			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+			throw new SRuntimeException(XDEF.XDEF423, "Parser"); //Value of type '&amp;{0}' expected
 		}
 	}
 	@Override
@@ -225,9 +219,7 @@ public class XDParseJList extends XSAbstractParser {
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		parse(xnode, p, false);
-	}
+	public void parseObject(final XXNode xnode, final XDParseResult p) {parse(xnode, p, false);}
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XSParseList)) {

@@ -12,10 +12,8 @@ import org.xdef.proc.XXNode;
 public class XDParseChar extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "char";
 
-	public XDParseChar() {
-		super();
-		_whiteSpace = WS_PRESERVE;
-	}
+	public XDParseChar() {super(); _whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public void initParams() {_whiteSpace = WS_PRESERVE;}
 	@Override
@@ -25,8 +23,7 @@ public class XDParseChar extends XSAbstractParseToken {
 		int pos = p.getIndex();
 		if (!parse(p)) {
 			if (p.matches()) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			}
 			return;
 		}

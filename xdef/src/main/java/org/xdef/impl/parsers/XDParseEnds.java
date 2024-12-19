@@ -13,12 +13,12 @@ public class XDParseEnds extends XDParseEq {
 	private static final String ROOTBASENAME = "ends";
 
 	public XDParseEnds() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		if (!s.endsWith(_param)) {
-			//Incorrect value of &{0}&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 		} else {
 			p.setEos();
 		}
@@ -27,8 +27,7 @@ public class XDParseEnds extends XDParseEq {
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		if (!p.getUnparsedBufferPart().endsWith(_param)) {
-			//Incorrect value of &{0}&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 		}
 		p.setEos();
 	}

@@ -31,6 +31,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	private String _outFormat;
 
 	public XDParseXDatetime() {super();}
+
 	@Override
 	public void initParams() {
 		super.initParams();

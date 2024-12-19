@@ -32,10 +32,8 @@ public class XDParseSequence extends XSAbstractParser {
 	long _minLength;
 	long _maxLength;
 
-	public XDParseSequence() {
-		super();
-		_minLength = _maxLength = -1;
-	}
+	public XDParseSequence() {super(); _minLength = _maxLength = -1;}
+
 	@Override
 	public void initParams() {
 		_patterns = null;
@@ -140,8 +138,7 @@ public class XDParseSequence extends XSAbstractParser {
 		}
 		val.addXDItem(p.getParsedValue());
 		for (int i = 1; i < _itemTypes.length; i++) {
-			if (_separatorChars != null && !_separatorChars.isEmpty()
-				&& !isSeparator(p, _separatorChars)) {
+			if (_separatorChars != null && !_separatorChars.isEmpty() && !isSeparator(p, _separatorChars)) {
 				break;
 			}
 			if (p.eos()) {
@@ -154,17 +151,13 @@ public class XDParseSequence extends XSAbstractParser {
 			}
 			if (p.matches()) {
 				val.addXDItem(p.getParsedValue());
-				s += (_separatorChars == null ? ' ' : _separatorChars.charAt(0))
-					+ p.getParsedBufferPartFrom(pos1);
+				s += (_separatorChars == null ? ' '
+					: _separatorChars.charAt(0)) + p.getParsedBufferPartFrom(pos1);
 			} else {
-				 //'&{0}' expected
-				p.error(XDEF.XDEF570, _itemTypes[i].parserName());
+				p.error(XDEF.XDEF570, _itemTypes[i].parserName()); //'&{0}' expected
 				return;
 			}
 		}
-//		if (_separatorChars != null && !_separatorChars.isEmpty()) {
-//			isSeparator(p, _separatorChars); // may end with separator???
-//		}
 		if (isFinal) {
 			p.isSpaces();
 		}
@@ -178,17 +171,14 @@ public class XDParseSequence extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF810, parserName());
+				p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of '&{0}'&{1}{: }
 				return;
 			}
 		}
 		if (_minLength != -1 && val.getXDItemsNumber() < _minLength) {
-			//Length of value of '&{0}' is too short&{0}'{: }
-			p.errorWithString(XDEF.XDEF814, parserName());
+			p.errorWithString(XDEF.XDEF814, parserName());//Length of value of '&{0}' is too short&{0}'{: }
 		} else if (_maxLength != -1 && val.getXDItemsNumber() > _maxLength) {
-			//Length of value of '&{0}' is too long&{0}'{: }
-			p.errorWithString(XDEF.XDEF815, parserName());
+			p.errorWithString(XDEF.XDEF815, parserName());//Length of value of '&{0}' is too long&{0}'{: }
 		}
 		p.replaceParsedBufferFrom(pos0, s);
 		if (isFinal) {
@@ -197,8 +187,7 @@ public class XDParseSequence extends XSAbstractParser {
 				p.errorWithString(XDEF.XDEF804, parserName());
 			}
 		}
-		//replace source from pos0 to actual position by 's' and set
-		//the actual position after it.
+		//replace source from pos0 to actual position by 's' and setthe actual position after it.
 	}
 	@Override
 	public void addNamedParams(final XDContainer map) {

@@ -19,10 +19,8 @@ import org.xdef.xon.XonTools;
 public class XDParseJString extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "jstring";
 
-	public XDParseJString() {
-		super();
-		_whiteSpace = WS_PRESERVE;
-	}
+	public XDParseJString() {super(); _whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public void initParams() {
 		_whiteSpace = WS_PRESERVE;
@@ -58,17 +56,14 @@ public class XDParseJString extends XSAbstractParseToken {
 		if (xn != null && xn.getXonMode() > 0 && p.isChar('"')) {
 			String s = XonTools.readJString(p);
 			if (s == null || p.errors()) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 				return;
 			}
 			p.setParsedValue(s);
 		} else {//not quoted string -> check JSON simple values
 			if (((p.isOneOfTokens("false","true","null") >= 0
-				|| ((p.isChar('-') || true) && (p.isFloat() || p.isInteger())))
-				&& p.eos()) || p.eos()) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				|| ((p.isChar('-') || true) && (p.isFloat() || p.isInteger()))) && p.eos()) || p.eos()) {
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 				return;
 			}
 			while (!p.eos()) {

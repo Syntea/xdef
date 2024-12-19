@@ -5,13 +5,14 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBytes;
 
-/** Parser of X-Script "hexBinary" type.
+/** Parser of X-Script "hex" type.
  * @author Vaclav Trojan
  */
 public class XDParseHex extends XSParseBase64Binary {
 	private static final String ROOTBASENAME = "hex";
 
 	public XDParseHex() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -26,8 +27,7 @@ public class XDParseHex extends XSParseBase64Binary {
 			p.isSpaces();
 		}
 		if (quoted == 0 && !p.isChar(')') || quoted == 1 && !p.isChar('"')) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		String s;
@@ -38,8 +38,7 @@ public class XDParseHex extends XSParseBase64Binary {
 				s = "";
 				bytes = new byte[0];
 			} else {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 				return;
 			}
 		} else {

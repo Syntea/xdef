@@ -13,11 +13,10 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.SParser;
 import org.xdef.sys.StringParser;
 
-/** Parse list of email address (separator white space, ',' or ';')..
+/** Parse "emailAddrList" (separator white space, ',' or ';')..
  * @author Vaclav Trojan
  */
 public class XDParseEmailAddrList extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "emailAddrList";
 
 	@Override
@@ -39,8 +38,7 @@ public class XDParseEmailAddrList extends XDParserAbstract {
 			}
 		} catch (Exception ex) {}
 		p.setParsedValue(DefNull.genNullValue(parsedType()));
-		//Incorrect value of &{0}&{1}{: }
-		p.errorWithString(XDEF.XDEF809, parserName());
+		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

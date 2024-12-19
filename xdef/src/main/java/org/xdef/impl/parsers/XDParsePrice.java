@@ -18,6 +18,7 @@ public class XDParsePrice extends XDParserAbstract {
 	private static final String ROOTBASENAME = "price";
 
 	public XDParsePrice() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
@@ -35,8 +36,7 @@ public class XDParsePrice extends XDParserAbstract {
 				int i = 0;
 				for (;;) {
 					p.nextChar();
-					if (++i < 3
-						&& ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
+					if (++i < 3 && ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
 						code += ch;
 					} else {
 						break;
@@ -55,8 +55,7 @@ public class XDParsePrice extends XDParserAbstract {
 		}
 		p.setParsedValue(new XDPrice()); //null price
 		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809,
-			parserName(), p.getBufferPart(pos, p.getIndex()));
+		p.errorWithString(XDEF.XDEF809, parserName(), p.getBufferPart(pos, p.getIndex()));
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

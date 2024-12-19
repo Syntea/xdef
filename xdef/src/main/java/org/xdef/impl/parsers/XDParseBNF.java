@@ -23,9 +23,7 @@ import org.xdef.xon.XonTools;
  * @author Vaclav Trojan
  */
 public class XDParseBNF extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "BNF";
-
 	private DefBNFRule _rule;
 
 	public XDParseBNF() {super(); _rule = null;} // dummy
@@ -39,8 +37,7 @@ public class XDParseBNF extends XDParserAbstract {
 	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		StringParser parser = quoted
-			? new StringParser(XonTools.readJString(p), pos0)
+		StringParser parser = quoted ? new StringParser(XonTools.readJString(p), pos0)
 			: new StringParser(p.getSourceBuffer(), pos0);
 		XDParseResult r = _rule.perform(parser);
 		p.setParsedValue(r.getParsedValue());
@@ -66,8 +63,7 @@ public class XDParseBNF extends XDParserAbstract {
 				if (x.getItemId() == XD_BNFRULE) {
 					_rule = (DefBNFRule) x;
 				} else if (x.getItemId() != XD_BNFGRAMMAR) {
-					//Incorrect method parameter
-					throw new SException(BNF.BNF014);
+					throw new SException(BNF.BNF014); //Incorrect method parameter
 				} else {
 					g = (DefBNFGrammar) x;
 				}
@@ -85,8 +81,7 @@ public class XDParseBNF extends XDParserAbstract {
 			}
 		}
 		if (_rule == null) {
-			//Rule '&{0}' doesn't exist
-			throw new SException(BNF.BNF901, ruleName);
+			throw new SException(BNF.BNF901, ruleName); //Rule '&{0}' doesn't exist
 		}
 	}
 	@Override
@@ -97,8 +92,7 @@ public class XDParseBNF extends XDParserAbstract {
 		String ruleName = params[1].toString();
 		_rule = g.getRule(ruleName);
 		if (_rule == null) {
-			// Rule '&{0}' doesn't exist
-			throw new SRuntimeException(BNF.BNF901, ruleName);
+			throw new SRuntimeException(BNF.BNF901, ruleName); // Rule '&{0}' doesn't exist
 		}
 	}
 	@Override

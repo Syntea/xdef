@@ -6,7 +6,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
 
-/** Parser which any value sets as incorrect.
+/** Parser which any value sets as incorrect ("false_parser").
  * @author Vaclav Trojan
  */
 public class XDParseFalse extends XDParserAbstract {
@@ -14,8 +14,7 @@ public class XDParseFalse extends XDParserAbstract {
 
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
-		p.error(XDEF.XDEF809, "false_parser");
+		p.error(XDEF.XDEF809, "false_parser"); //Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

@@ -13,10 +13,7 @@ import org.xdef.sys.SRuntimeException;
 public class XSParseDouble extends XSAbstractParseComparable {
 	private static final String ROOTBASENAME = "double";
 
-	public XSParseDouble() {
-		super();
-		_whiteSpace = WS_COLLAPSE;
-	}
+	public XSParseDouble() {super(); _whiteSpace = WS_COLLAPSE;}
 
 	@Override
 	public  void initParams() {
@@ -52,8 +49,7 @@ public class XSParseDouble extends XSAbstractParseComparable {
 		int pos = p.getIndex();
 		if (!p.isSignedFloat() && p.isOneOfTokens(new String[]
 			{"NaN", "INF", "-INF", "+INF"})	< 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);
@@ -70,8 +66,7 @@ public class XSParseDouble extends XSAbstractParseComparable {
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.doubleValue()== Double.NaN) {
-			//Incorrect range specification of &{0}
-			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
 		}
 	}
 }

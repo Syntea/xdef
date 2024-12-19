@@ -11,10 +11,8 @@ import org.xdef.impl.code.DefBoolean;
 public class XSParseBoolean extends XSAbstractParser {
 	private static final String ROOTBASENAME = "boolean";
 
-	public XSParseBoolean() {
-		super();
-		_whiteSpace = WS_COLLAPSE;
-	}
+	public XSParseBoolean() {super(); _whiteSpace = WS_COLLAPSE;}
+
 	@Override
 	public void initParams() {_whiteSpace = WS_COLLAPSE;}
 	@Override
@@ -46,8 +44,7 @@ public class XSParseBoolean extends XSAbstractParser {
 		int pos = p.getIndex();
 		int i = p.isOneOfTokens("false", "0", "true", "1");
 		if (i < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();

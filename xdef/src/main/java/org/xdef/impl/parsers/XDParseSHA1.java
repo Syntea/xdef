@@ -6,10 +6,8 @@ package org.xdef.impl.parsers;
 public class XDParseSHA1 extends XSParseHexBinary {
 	private static final String ROOTBASENAME = "SHA1";
 
-	public XDParseSHA1() {
-		super();
-		_minLength = _maxLength = 20;
-	}
+	public XDParseSHA1() {super(); _minLength = _maxLength = 20;}
+
 	@Override
 	public void initParams() {
 		_whiteSpace = WS_COLLAPSE;

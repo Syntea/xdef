@@ -6,7 +6,7 @@ import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 
-/** Parse email address.
+/** Parse emailAddr.
  * @author Vaclav Trojan
  */
 public class XDParseEmailAddr extends XDParserAbstract {
@@ -30,16 +30,14 @@ public class XDParseEmailAddr extends XDParserAbstract {
 		final String s,
 		final String parserName) {
 		if (s == null || s.isEmpty()) {
-			//Incorrect value of &{0}&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName);
+			p.errorWithString(XDEF.XDEF809, parserName); //Incorrect value of &{0}&{1}{: }
 		} else {
 			try {
 				p.setParsedValue(new DefEmailAddr(s));
 				return true;
 			} catch (Exception ex) {}
 			p.setParsedValue(new DefEmailAddr()); // null email
-			//Incorrect value of &{0}&{1}&{: }
-			p.errorWithString(XDEF.XDEF809, parserName, s);
+			p.errorWithString(XDEF.XDEF809, parserName, s); //Incorrect value of &{0}&{1}&{: }
 		}
 		return false;
 	}

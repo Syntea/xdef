@@ -7,13 +7,14 @@ import static org.xdef.XDValueID.XD_CURRENCY;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parse currency (see ISO 4217).
+/** Parse "currency" (see ISO 4217).
  * @author Vaclav Trojan
  */
 public class XDParseCurrency extends XDParserAbstract {
 	private static final String ROOTBASENAME = "currency";
 
 	public XDParseCurrency() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
