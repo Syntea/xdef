@@ -102,7 +102,6 @@ public abstract class XCodeDescriptor extends XNode {
 		super(nsUri, name, xp, kind);
 		setUnspecified(); // occurrence
 		clearActions();
-//		_varsize = 0; _vartable = null; clearOptions(); // Java makes it!
 	}
 
 	/** Creates the new instance as a copy of given argument.
@@ -120,10 +119,7 @@ public abstract class XCodeDescriptor extends XNode {
 	 * @param kind The kind of object.
 	 * @param x the XCodeDescriptor object from which is the copy created.
 	 */
-	public XCodeDescriptor(final String name,
-		final String nsURI,
-		final short kind,
-		XCodeDescriptor x) {
+	public XCodeDescriptor(final String name, final String nsURI, final short kind, XCodeDescriptor x) {
 		super(nsURI, name, x.getXDPool(), kind);
 		_varsize = x._varsize;
 		_vartable = x._vartable == null ? null : x._vartable.cloneTable();
@@ -153,11 +149,9 @@ public abstract class XCodeDescriptor extends XNode {
 	}
 
 	public final void clearOptions() {
-		_ignoreComments = _attrWhiteSpaces = _textWhiteSpaces =
-			_ignoreEmptyAttributes = _attrValuesCase =
-			_textValuesCase = _trimAttr = _trimText = _moreElements =
-			_moreText = _xon = _moreAttributes = _resolveEntities =
-			_resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = 0;
+		_ignoreComments = _attrWhiteSpaces = _textWhiteSpaces = _ignoreEmptyAttributes = _attrValuesCase
+			= _textValuesCase = _trimAttr = _trimText = _moreElements = _moreText = _xon = _moreAttributes
+			= _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = 0;
 	}
 
 	public final void copyActions(final XCodeDescriptor x) {
@@ -180,9 +174,8 @@ public abstract class XCodeDescriptor extends XNode {
 	}
 
 	public final void clearActions() {
-		_init = _finaly = _match = _compose = _check = _onTrue = _onFalse =
-		_deflt = _onStartElement = _onAbsence = _onExcess = _onIllegalAttr =
-		_onIllegalText = _onIllegalElement = _varinit = -1;
+		_init = _finaly = _match = _compose = _check = _onTrue = _onFalse = _deflt = _onStartElement
+			= _onAbsence = _onExcess = _onIllegalAttr = _onIllegalText = _onIllegalElement = _varinit = -1;
 	}
 
 	final void writeXCodeDescriptor(XDWriter xw) throws IOException {

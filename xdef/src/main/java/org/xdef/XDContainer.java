@@ -2,8 +2,8 @@ package org.xdef;
 
 import org.w3c.dom.Element;
 
-/** Map of named items and sequence items in X-script. Contains both, the table
- * of named items and the sequence of items.
+/** Map of named items and sequence items in X-script. Contains both, the table of named items and
+ * sequence of items.
  * @author Vaclav Trojan
  */
 public interface XDContainer extends XDValue {
@@ -62,16 +62,16 @@ public interface XDContainer extends XDValue {
 
 	/** Set named item to the table of named items.
 	 * @param item the named item.
-	 * @return if the named item not exists then return null or return
-	 * the named item value which was replaced in the table of named items.
+	 * @return if the named item not exists then return null or return the named item value which was replaced
+	 * in the table of named items.
 	 */
 	public XDValue setXDNamedItem(XDNamedValue item);
 
 	/** Set named item to the table of named items.
 	 * @param name the name of item.
 	 * @param value the value of item.
-	 * @return if the named item not exists in the table of named items then
-	 * return null or return the value which was replaced.
+	 * @return if the named item not exists in the table of named items then* return null or return the value
+	 * which was replaced.
 	 */
 	public XDValue setXDNamedItem(String name, XDValue value);
 
@@ -97,8 +97,7 @@ public interface XDContainer extends XDValue {
 
 	/** Get value of named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return if item not exists the return null or
-	 * return the named item.
+	 * @return if item not exists the return null or return the named item.
 	 */
 	public XDValue getXDNamedItemValue(String name);
 
@@ -160,8 +159,8 @@ public interface XDContainer extends XDValue {
 	 */
 	public String getXDText();
 
-	/** Get string from n-th item from this XDContainer. If the node does not
-	 * exist or if it is not text then return the empty string.
+	/** Get string from n-th item from this XDContainer. If the node does not exist or if it is not text
+	 * then return the empty string.
 	 * @param n The index of item.
 	 * @return The string.
 	 */
@@ -180,9 +179,9 @@ public interface XDContainer extends XDValue {
 	public XDContainer sortXD(boolean asc);
 
 	/** Sorts this XDContainer.
-	 * @param key String with xpath expression or null (if null or empty string
-	 * then for org.w3c.Node items it is used as a key the text value of
-	 * an item). For items other then  org.w3c.Node objects this parameter is ignored.
+	 * @param key String with xpath expression or null (if null or empty string then for org.w3c.Node items
+	 * it is used as a key the text value of an item). For items other then  org.w3c.Node objects this
+	 * parameter is ignored.
 	 * @param asc if true the XDContainer will be sorted ascendant, otherwise descendant.
 	 * @return this XDContainer sorted.
 	 */

@@ -9,7 +9,6 @@ import static org.xdef.XDValueType.OBJECT;
  * @author  Vaclav Trojan
  */
 public final class DefObject extends XDValueAbstract {
-
 	/** The value associated with this item. */
 	private Object _value;
 
@@ -52,7 +51,6 @@ public final class DefObject extends XDValueAbstract {
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return toString();}
 	@Override
@@ -64,15 +62,12 @@ public final class DefObject extends XDValueAbstract {
 	public int hashCode() {return _value.hashCode();}
 	@Override
 	public boolean equals(final Object arg) {
-		if (arg instanceof DefObject) {
-			return _value.equals(((DefObject) arg)._value);
-		}
-		return false;
+		return arg instanceof DefObject ? _value.equals(((DefObject) arg)._value) : false;
 	}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return <i>true</i> ig objects are equal.
+	 * @return true ig objects are equal.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {

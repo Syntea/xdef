@@ -15,8 +15,8 @@ import java.util.Properties;
 import java.util.TimeZone;
 import org.xdef.sys.ArrayReporter;
 
-/** Provides the interface to object containing compiled code of set of
- * X-definitions. You can create from XDPool the XDDocument.
+/** Provides the interface to object containing compiled code of set of X-definitions.
+ * You can create from XDPool the XDDocument.
  * @author Vaclav Trojan
  */
 public interface XDPool extends Serializable {
@@ -39,8 +39,7 @@ public interface XDPool extends Serializable {
 
 	/** Check compatibility of this instance of XDPool with given version.
 	 * @param version the version to be checked.
-	 * @return true if this instance of XDPool is compatible with given version.
-	 * Otherwise return false.
+	 * @return true if this instance of XDPool is compatible with given version. Otherwise return false.
 	 */
 	public boolean chkCompatibility(final String version);
 
@@ -56,10 +55,9 @@ public interface XDPool extends Serializable {
 	public XDDocument createXDDocument();
 
 	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or either null or empty string
-	 * if X-definition without name is checked).
-	 * @return true if and only if the X-definition of given name exists in
-	 * the XDPool.
+	 * @param name the name of X-definition (or either null or empty string if X-definition without name
+	 * is checked).
+	 * @return true if and only if the X-definition of given name exists in the XDPool.
 	 */
 	boolean exists(String name);
 
@@ -160,9 +158,8 @@ public interface XDPool extends Serializable {
 	 */
 	public boolean isChkWarnings();
 
-	/** Get switch if the actullal reporter is cleared in the executed code of
-	 * the 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'
-	 * sections. Default value is 'true'.
+	/** Get switch if the actullal reporter is cleared in the executed code of the 'onFalse', 'onIllegalAttr',
+	 * 'onIllegalText', 'onEllegalElement' sections. Default value is 'true'.
 	 * @return true if reporter will be cleared.
 	 */
 	public boolean isClearReports();
@@ -202,10 +199,8 @@ public interface XDPool extends Serializable {
 	 */
 	public SDatetime[] getSpecialDates();
 
-	/** Get the object with the map of source items of compiled X-definitions
-	 * and with editing information.
-	 * @return object with the map of source items of compiled X-definitions
-	 * and with editing information.
+	/** Get the object with the map of source items of compiled X-definitions and with editing information.
+	 * @return object with the map of source items of compiled X-definitions and with editing information.
 	 */
 	public XDSourceInfo getXDSourceInfo();
 
@@ -215,8 +210,7 @@ public interface XDPool extends Serializable {
 	public Properties getProperties();
 
 	/** Get debug editor class name.
-	 * @return debug editor class name (if null the default debug editor
-	 * will be used).
+	 * @return debug editor class name (if null the default debug editor will be used).
 	 */
 	public String getDebugEditor();
 
@@ -226,10 +220,9 @@ public interface XDPool extends Serializable {
 	public String getXdefEditor();
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param fdir directory where write the source code. The file names
-	 * will be constructed from %class statements as "className.java".
-	 * @param charset the character set name or null (if null then it is used
-	 * the system character set name).
+	 * @param fdir directory where write the source code. The file names will be constructed from %class
+	 * statements as "className.java".
+	 * @param charset the character set name or null (if null then it is used the system character set name).
 	 * @param genJavadoc switch to generate JavaDoc.
 	 * @param suppressPrintWarnings switch suppress print of warnings.
 	 * @return ArrayReporter with errors and warnings

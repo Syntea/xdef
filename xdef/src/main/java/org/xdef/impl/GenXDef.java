@@ -40,8 +40,7 @@ public final class GenXDef {
 	 * @return RuntimeException created from throwable object.
 	 */
 	private static RuntimeException getRuntimeExeception(final Throwable ex) {
-		if (ex instanceof SThrowable &&
-			"JSON101".equals(((SThrowable) ex).getMsgID())) {
+		if (ex instanceof SThrowable && "JSON101".equals(((SThrowable) ex).getMsgID())) {
 			return new RuntimeException("Neither XML nor JSON");
 		}
 		throw new RuntimeException("Neither XML nor JSON or YAML", ex);
@@ -136,9 +135,7 @@ public final class GenXDef {
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data).
 	 * @return Element with created XDefinition.
 	 */
-	public static final Element genXdef(final Object obj) {
-		return genXdef(obj, null);
-	}
+	public static final Element genXdef(final Object obj) {return genXdef(obj, null);}
 
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data).
@@ -147,8 +144,7 @@ public final class GenXDef {
 	 */
 	public static final Element genXdef(final Object obj, final String xdName) {
 		Object o = readData(obj);
-		return o != null && o instanceof Element
-			? GenXDefXML.genXdef((Element) o, xdName)
+		return o != null && o instanceof Element ? GenXDefXML.genXdef((Element) o, xdName)
 			: GenXDefXON.genXdef(o, xdName);
 	}
 }

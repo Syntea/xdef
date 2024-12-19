@@ -55,15 +55,13 @@ public final class XBuilder implements XDBuilder {
 	 * @param extObjects The array of classes where are available methods
 	 * referred from definitions (may be null).
 	 */
-	public XBuilder(final Properties props, final Class<?>... extObjects) {
-		this(null, props, extObjects);
-	}
+	public XBuilder(final Properties props, final Class<?>... extObjects) {this(null, props, extObjects);}
 
 	/** Creates instance of XDBuilder with properties and external objects.
 	 * @param reporter ReportWriter or null.
 	 * @param props Properties or null.
-	 * @param extObjects The array of classes where are available methods
-	 * referred from definitions (may be null).
+	 * @param extObjects The array of classes where are available methods referred from definitions
+	 * (may be null).
 	 */
 	public XBuilder(final ReportWriter reporter,
 		final Properties props,
@@ -76,49 +74,37 @@ public final class XBuilder implements XDBuilder {
 	}
 
 	@Override
-	/** Add source data of X-definition or collection. If the argument starts
-	 * with "&lt;" character then it is interpreted as source X-definition data,
-	 * otherwise it can be the pathname of the file or URL. If it is a pathname
-	 * format then it may contain also wildcard characters representing a group
-	 * of files.
+	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then
+	 * it is interpreted as source X-definition data, otherwise it can be the pathname of the file or URL.
+	 * If it is a pathname format then it may contain also wildcard characters representing a group of files.
 	 * @param source The string with source X-definition.
-	 * @param sourceId name of source source data corresponding to
-	 * the argument source (may be null).
+	 * @param sourceId name of source source data corresponding to the argument source (may be null).
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final String source,final String sourceId){
+	public final XDBuilder setSource(final String source, final String sourceId) {
 		_xp.setSource(source, sourceId);
 		return this;
 	}
 
 	@Override
-	/** Add source data of X-definitions or collections. If an item starts with
-	 * "&lt;" character then it is interpreted as source data, otherwise
-	 * it can be the pathname of the file or URL. If it is a pathname format,
-	 * then it may contain also wildcard characters representing a group
-	 * of files.
+	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then
+	 * it is interpreted as source data, otherwise it can be the pathname of the file or URL. If it is
+	 * a pathname format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final String... sources) {
-		_xp.setSource(sources, null);
-		return this;
-	}
+	public final XDBuilder setSource(final String... sources) {_xp.setSource(sources, null); return this;}
 
 	@Override
-	/** Add source data of X-definitions or collections. If an item starts with
-	 * "&lt;" character then it is interpreted as source data, otherwise
-	 * it can be the pathname of the file or URL. If it is a pathname format,
-	 * then it may contain also wildcard characters representing a group
-	 * of files.
+	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then it is
+	 * interpreted as source data, otherwise it can be the pathname of the file or URL. If it is a pathname
+	 * format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
-	 * @param sourceIds array of names of source source data corresponding to
-	 * the sources argument (any item or even this argument
-	 * may be null).
+	 * @param sourceIds array of names of source source data corresponding to the sources argument (any item
+	 * or even this argument may be null).
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final String[] sources,
-		final String[] sourceIds) {
+	public final XDBuilder setSource(final String[] sources, final String[] sourceIds) {
 		_xp.setSource(sources, sourceIds);
 		return this;
 	}
@@ -128,31 +114,23 @@ public final class XBuilder implements XDBuilder {
 	 * @param sources array of files with sources.
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final File... sources) {
-		_xp.setSource(sources);
-		return this;
-	}
+	public final XDBuilder setSource(final File... sources) {_xp.setSource(sources); return this;}
 
 	@Override
 	/** Add URLs with source data of X-definitions or collections.
 	 * @param sources array of URLs with sources.
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final URL... sources) {
-		_xp.setSource(sources);
-		return this;
-	}
+	public final XDBuilder setSource(final URL... sources) {_xp.setSource(sources); return this;}
 
 	@Override
 	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
-	 * @param srcId name of source source data corresponding to
-	 * stream from the argument sources (any item or even this argument
-	 * may be null).
+	 * @param srcId name of source source data corresponding to stream from the argument sources (any item
+	 * or even this argument may be null).
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final InputStream source,
-		final String srcId) {
+	public final XDBuilder setSource(final InputStream source,final String srcId) {
 		_xp.setSource(source, srcId);
 		return this;
 	}
@@ -160,12 +138,11 @@ public final class XBuilder implements XDBuilder {
 	@Override
 	/** Add input streams with sources data of X-definitions or collections.
 	 * @param sources array of input streams with sources.
-	 * @param sourceIds array of names of source source data corresponding to
-	 * the sources argument (any item may be null).
+	 * @param sourceIds array of names of source source data corresponding to the sources argument
+	 * (any item may be null).
 	 * @return this XDBuilde object.
 	 */
-	public final XDBuilder setSource(final InputStream sources[],
-		final String sourceIds[]) {
+	public final XDBuilder setSource(final InputStream sources[],final String sourceIds[]) {
 		_xp.setSource(sources, sourceIds);
 		return this;
 	}
@@ -222,8 +199,7 @@ public final class XBuilder implements XDBuilder {
 	public final XDPool compileXD() {
 		XPool result = _xp;
 		if (result == null || result._compiler == null) {
-			//XDPool object was already created
-			throw new SRuntimeException(XDEF.XDEF901);
+			throw new SRuntimeException(XDEF.XDEF901); //XDPool object was already created
 		}
 		_xp = null;
 		CompileXDPool p = result._compiler;
@@ -236,13 +212,12 @@ public final class XBuilder implements XDBuilder {
 		}
 		byte displayMode = result.getDisplayMode();
 		boolean display = displayMode == XPool.DISPLAY_TRUE
-			|| (reporter.errorWarnings()&&(displayMode==XPool.DISPLAY_ERRORS));
+			|| reporter.errorWarnings() && (displayMode == XPool.DISPLAY_ERRORS);
 		try {
 			p.compileXPool(result);
 		} catch (RuntimeException ex) {
 			String s = STester.printThrowable(ex);
-			//Program exception&{0}{: }
-			reporter.putReport(display
+			reporter.putReport(display //Program exception&{0}{: }
 				? Report.error(SYS.SYS036, s) : Report.fatal(SYS.SYS036, s));
 		}
 		for (Object x: p.getPrecompiler().getIncluded()) { // add imported items
@@ -274,15 +249,12 @@ public final class XBuilder implements XDBuilder {
 				c.setAccessible(true);
 				xeditor = (XEditor) c.newInstance();
 			}
-		} catch (ClassNotFoundException | IllegalAccessException
-			| IllegalArgumentException | InstantiationException
-			| NoSuchMethodException | SecurityException
+		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+			| InstantiationException | NoSuchMethodException | SecurityException
 			| InvocationTargetException ex) {
 			xeditor = null;
-			// Class with the external debug editor &{0}{"}{"}
-			// is not available.
-			throw new SRuntimeException(
-				XDEF.XDEF850, ex, result.getXdefEditor());
+			// Class with the external debug editor &{0}{"}{"} is not available.
+			throw new SRuntimeException(XDEF.XDEF850, ex, result.getXdefEditor());
 		}
 		if (xeditor == null) {
 			// create editor with the default screen position.
@@ -317,8 +289,7 @@ public final class XBuilder implements XDBuilder {
 			} catch (Exception ex) {
 				if (!(ex instanceof SThrowable)) {
 					//Program exception&{0}{: }
-					reporter.putReport(Report.error(
-						SYS.SYS036, STester.printThrowable(ex)));
+					reporter.putReport(Report.error(SYS.SYS036, STester.printThrowable(ex)));
 				}
 			}
 			result._compiler = null;
@@ -332,8 +303,8 @@ public final class XBuilder implements XDBuilder {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDDocument xparse(final InputStream source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static final XDDocument xparse(final InputStream source, final ReportWriter reporter)
+		throws SRuntimeException {
 		ChkDocument chkdoc = new ChkDocument((Properties) null);
 		chkdoc.xparse(source, null, reporter);
 		return chkdoc;
@@ -345,8 +316,8 @@ public final class XBuilder implements XDBuilder {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDDocument xparse(final String source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static final XDDocument xparse(final String source, final ReportWriter reporter)
+		throws SRuntimeException {
 		ChkDocument chkdoc = new ChkDocument((Properties) null);
 		chkdoc.xparse(source, reporter);
 		return chkdoc;

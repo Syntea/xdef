@@ -82,7 +82,7 @@ public final class XDWriter extends SObjectWriter {
 	static final byte ID_CODESLIST = 8;
 	static final byte ID_CODEXD = 9;
 	static final byte ID_CODEEXT = 10;
-	static final byte ID_CODEUNDEF = 11;
+//	static final byte ID_CODEUNDEF = 11;
 
 	/** Creates a new instance of XDWriter.
 	 * @param out Output stream where data of XD objects will be written.
@@ -120,51 +120,31 @@ public final class XDWriter extends SObjectWriter {
 		writeShort(code);
 		writeShort(type);
 		switch (code) {
-			case COMPILE_BNF:
-				writeBNF((DefBNFGrammar) x);
-				return;
-			case COMPILE_XPATH:
-				writeXPath((DefXPathExpr) x);
-				return;
+			case COMPILE_BNF: writeBNF((DefBNFGrammar) x); return;
+			case COMPILE_XPATH: writeXPath((DefXPathExpr) x); return;
 			case LD_CONST:
 				switch (type) {
-					case XD_BNFGRAMMAR:
-						writeBNF((DefBNFGrammar) x);
-						return;
+					case XD_BNFGRAMMAR: writeBNF((DefBNFGrammar) x); return;
 					case XD_BNFRULE: {
 						DefBNFRule y = (DefBNFRule) x;
 						writeString(y.getName()); // ???
 						return;
 					}
-					case XD_BOOLEAN:
-						writeBoolean(x.booleanValue());
-						return;
+					case XD_BOOLEAN: writeBoolean(x.booleanValue()); return;
 					case XD_BYTES:
 						writeBytes(x.getBytes());
 						writeBoolean(((XDBytes) x).isBase64());
 						return;
-					case XD_DATETIME: {
-						writeSDatetime(x.datetimeValue());
-						return;
-					}
-					case XD_DECIMAL:
-						writeBigDecimal(x.decimalValue());
-						return;
-					case XD_BIGINTEGER:
-						writeBigInteger(x.integerValue());
-						return;
-					case XD_DURATION: {
-						writeSDuration(x.durationValue());
-						return;
-					}
+					case XD_DATETIME: writeSDatetime(x.datetimeValue()); return;
+					case XD_DECIMAL: writeBigDecimal(x.decimalValue()); return;
+					case XD_BIGINTEGER: writeBigInteger(x.integerValue()); return;
+					case XD_DURATION: writeSDuration(x.durationValue()); return;
 					case XD_ANYURI: {
 						URI u = (URI) x.getObject();
 						writeString(u == null ? null : u.toASCIIString());
 						return;
 					}
-					case XD_EMAIL:
-						writeString(x.stringValue());
-						return;
+					case XD_EMAIL: writeString(x.stringValue()); return;
 					case XD_EXCEPTION: {
 						DefException y = (DefException) x;
 						writeReport(y.reportValue());
@@ -180,15 +160,9 @@ public final class XDWriter extends SObjectWriter {
 						writeString(z.getVariant());
 						return;
 					}
-					case XD_XPATH:
-						writeXPath((DefXPathExpr) x);
-						return;
-					case XD_DOUBLE:
-						writeDouble(x.doubleValue());
-						return;
-					case XD_LONG:
-						writeLong(x.longValue());
-						return;
+					case XD_XPATH: writeXPath((DefXPathExpr) x); return;
+					case XD_DOUBLE: writeDouble(x.doubleValue()); return;
+					case XD_LONG: writeLong(x.longValue()); return;
 					case XD_CONTAINER: {
 						XDContainer y = (XDContainer) x;
 						int len = y.getXDItemsNumber();
@@ -248,12 +222,8 @@ public final class XDWriter extends SObjectWriter {
 						writeBoolean(y.isXMLSchema());
 						return;
 					}
-					case XD_STRING:
-						writeString(x.stringValue());
-						return;
-					case XD_XQUERY:
-						writeString(x.stringValue());
-						return;
+					case XD_STRING: writeString(x.stringValue()); return;
+					case XD_XQUERY: writeString(x.stringValue()); return;
 					case X_UNIQUESET:
 					case X_UNIQUESET_M: {
 						CodeUniqueset y = (CodeUniqueset) x;
@@ -278,11 +248,8 @@ public final class XDWriter extends SObjectWriter {
 						writeString(y.getName());
 						return;
 					}
-					default:
-						if (x.isNull()) return;
-						//Internal error&{0}{: }
-						throw new SError(SYS.SYS066,
-							"TODO type: " + type + ";" + x);
+					default: if (x.isNull()) return;
+					throw new SError(SYS.SYS066, "TODO type: " + type + ";" + x); //Internal error&{0}{: }
 				}
 				default: {
 					if (x instanceof CodeExtMethod) {
@@ -386,8 +353,7 @@ public final class XDWriter extends SObjectWriter {
 						return;
 					}
 					throw new SIOException(SYS.SYS066, //Internal error&{0}{: }
-						"Illegal object: " + x.getClass().getName() +
-						"/code=" + code + "/type" + type);
+						"Illegal object: " + x.getClass().getName() + "/code=" + code + "/type" + type);
 				}
 		}
 	}

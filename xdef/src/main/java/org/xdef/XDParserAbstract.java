@@ -50,6 +50,11 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 */
 	public void setBase(final XDParser x) {_base = x;};
 
+	/** Set separator. (May be overwritten.)
+	 * @param x string to be used as separator
+	 */
+	public void setSeparator(final String x) {} // default do nothing
+
 	@Override
 	/** Check value of string.
 	 * @param source string to be checked.
@@ -84,9 +89,8 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	}
 
 	@Override
-	/** This method provides some final checks which are dependent on the
-	 * context of parsing (such as ENTITY, ENTITIES, ID, IDREF, IDREFS).
-	 * Usually this method is empty and you do not need to override this method.
+	/** This method provides some final checks which are dependent on the context of parsing (such as ENTITY,
+	 * ENTITIES, ID, IDREF, IDREFS). Usually this method is empty and you do not need to override this method.
 	 * @param p Parsed result to be checked.
 	 * @param xnode Actual check node or null.
 	 */
@@ -238,8 +242,6 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	public short getAlltemsType() {return parsedType();} // default parsedType
 	@Override
 	public String getSeparator() {return null;} // default null (not set)
-
-	public void setSeparator(final String x) {} // default do nothing
 	/** Check if separator follows.
 	 * @param p parser used for parsing.
 	 * @param separator string with separator characters.

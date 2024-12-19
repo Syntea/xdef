@@ -242,9 +242,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Unary operators. */
 	private static final String OP_UNARY = new String(new char[]{NEG_SYM, NOT_SYM, PLUS_SYM, MINUS_SYM});
 	/** Assignment operators */
-	private static final String OP_ASSGN = new String(new char[]{ASSGN_SYM, LSH_EQ_SYM, RSH_EQ_SYM,
-		RRSH_EQ_SYM, MUL_EQ_SYM, DIV_EQ_SYM, MOD_EQ_SYM, AND_EQ_SYM,
-		PLUS_EQ_SYM, MINUS_EQ_SYM, OR_EQ_SYM, XOR_EQ_SYM});
+	private static final String OP_ASSGN = new String(new char[] {ASSGN_SYM, LSH_EQ_SYM, RSH_EQ_SYM,
+		RRSH_EQ_SYM, MUL_EQ_SYM, DIV_EQ_SYM, MOD_EQ_SYM, AND_EQ_SYM, PLUS_EQ_SYM, MINUS_EQ_SYM, OR_EQ_SYM,
+		XOR_EQ_SYM});
 
 	/** Code generator */
 	final CompileCode _g;
@@ -401,7 +401,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Read value of method parameter and return true if it was a constant.
-	 * @return <i>true</i> if and only if the parameter is a constant.
+	 * @return true if and only if the parameter is a constant.
 	 */
 	private boolean readParam() {
 		int sp = _g._sp;
@@ -866,17 +866,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						if (var.getType() == X_UNIQUESET_NAMED) {
 							// this is very nasty code. If the variable refers to a declared type and
 							// the parser is constant we use the code with the parser as a value (and it
-							// is a constant).
-							// TODO if it is not a constant.
+							// is a constant). TODO if it is not a constant.
 							_g.genLD(var);
-							_g.addCode(new CodeS1(var.getParseResultType(),
-								UNIQUESET_GETVALUEX, var.getValue().toString()),
-								0);
+							_g.addCode(new CodeS1(var.getParseResultType(), UNIQUESET_GETVALUEX,
+								var.getValue().toString()), 0);
 							break;
-						} else if (var.getParseMethodAddr() >= 0
-							&& var.getParseMethodAddr() > _g._lastCodeIndex) {
+						} else if (var.getParseMethodAddr()>=0 && var.getParseMethodAddr()>_g._lastCodeIndex){
 							break; // ??? error, probably unknown type or method
-						} else if (var.getType()==X_PARSEITEM
+						} else if (var.getType() == X_PARSEITEM
 							&& var.getParseMethodAddr() >= 0 //parse method exist
 							&& (xv = _g._code.get(var.getParseMethodAddr())).getCode() == LD_CONST // constant
 							&& xv.getItemId() == XD_PARSER
@@ -1073,8 +1070,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					if (xValue >= 0 && yValue >= 0) { // both constants
 						long x = _g.getCodeItem(xValue).longValue();
 						long y = _g.getCodeItem(yValue).longValue();
-						_g.replaceTwo(
-							new DefLong(operator==MUL_SYM ? x * y : operator==DIV_SYM ? x / y : x % y));
+						_g.replaceTwo(new DefLong(operator==MUL_SYM ? x*y : operator==DIV_SYM ? x/y : x%y));
 					} else { // not both constants
 						_g.addCode(new CodeOp(XD_LONG,
 							operator==MUL_SYM ? MUL_I : operator==DIV_SYM ? DIV_I : MOD_I), -1);
@@ -1085,8 +1081,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					if (xValue >= 0 && yValue >= 0) { // both constants
 						double x = _g.getCodeItem(xValue).doubleValue();
 						double y = _g.getCodeItem(yValue).doubleValue();
-						_g.replaceTwo(new DefDouble(operator==MUL_SYM
-							? x * y : operator==DIV_SYM ? x / y : x % y));
+						_g.replaceTwo(new DefDouble(operator==MUL_SYM ? x*y : operator==DIV_SYM ? x/y : x%y));
 					} else { // not both constants
 						_g.addCode(new CodeOp(XD_DOUBLE,
 							operator==MUL_SYM ? MUL_R : operator==DIV_SYM ? DIV_R : MOD_R), -1);
@@ -1745,9 +1740,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Compile Boolean expression.
-	 * @param jumpCondition if <i>true</i> then result will be generated as
-	 * conditional jump sequence.
-	 * @return CompileJumpVector object or <i>null</i>.
+	 * @param jumpCondition if true then result will be generated as conditional jump sequence.
+	 * @return CompileJumpVector object or null.
 	 */
 	private CompileJumpVector boolExpression(final boolean jumpCondition) {
 		int sp = _g._sp;
@@ -2738,8 +2732,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Compile variable declaration statement.
 	 * @param type the type of variable (XD_LONG, XD_STRING etc).
 	 * @param varName the name of variable.
-	 * @param isFinal if <i>true</i> variable is declared as final.
-	 * @param isExternal if <i>true</i> variable is declared as external.
+	 * @param isFinal if true variable is declared as final.
+	 * @param isExternal if true variable is declared as external.
 	 * @param varKind kind of variable ('G' .. global,'L' local,'X' .. X-model).
 	 * @param spos source position where the variable was declared.
 	 */
@@ -2897,10 +2891,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Parse expression in parenthesis and generate conditioned jump.
 	 * If result of expression is a constant value result of the method is
-	 * fixed jump or <i>null</i>.
+	 * fixed jump or null.
 	 * <p>parExpression::= "(" expression ")"
 	 * @param boolean jumpCondition;
-	 * @return conditioned jump, fixed jump, or <i>null</i>;
+	 * @return conditioned jump, fixed jump, or null;
 	 */
 	private CompileJumpVector parBoolExpression(final boolean jumpCondition) {
 		checkSymbol(LPAR_SYM); // '('

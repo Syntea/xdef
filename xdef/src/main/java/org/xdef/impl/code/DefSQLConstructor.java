@@ -12,17 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.w3c.dom.Attr;
 
-/** The class DefSQLConstructor implements the XDConstructor for database
- * query.
+/** The class DefSQLConstructor implements the XDConstructor for database query.
  * @author Vaclav Trojan
  */
 public class DefSQLConstructor implements XDConstructor {
-
 	private ResultSet _rs;
 
-	public DefSQLConstructor(final XDResultSet rs) {
-		_rs = (ResultSet) rs.getObject();
-	}
+	public DefSQLConstructor(final XDResultSet rs) {_rs = (ResultSet) rs.getObject();}
 
 	@Override
 	public XDValue construct(XDResultSet rs, XXNode xnode) {
@@ -39,17 +35,12 @@ public class DefSQLConstructor implements XDConstructor {
 	}
 
 	public final class MyElement extends XDElementAbstract {
-
 		MyElement() {super();}
-
-		MyElement(String nsUri, String name) {
-			super(nsUri, name);
-		}
+		MyElement(String nsUri, String name) {super(nsUri, name);}
 		@Override
 		public String getAttribute(String name)  {
 			try {
-				//if value of a column is null then return the empty string!
-				String s;
+				String s; //if value of a column is null then return the empty string!
 				return (s=_rs.getString(name)) == null ? "" : s;
 			} catch (SQLException ex) {
 				return "";
@@ -75,8 +66,7 @@ public class DefSQLConstructor implements XDConstructor {
 		}
 		@Override
 		public Attr getAttributeNodeNS(String url, String name) {
-			return url != null && url.length() > 0 ?
-				null : getAttributeNode(name);
+			return url != null && url.length() > 0 ? null : getAttributeNode(name);
 		}
 		@Override
 		public boolean hasAttributeNS(String url, String name) {
@@ -121,19 +111,17 @@ public class DefSQLConstructor implements XDConstructor {
 		}
 		@Override
 		/** Check if the object is empty.
-		 * @return <i>true</i> if the object is empty; otherwise returns
-		 * <i>false</i>.
+		 * @return true if the object is empty; otherwise return false.
 		 */
 		public boolean isEmpty() {
 			try {
 				return _rs == null || _rs.isAfterLast();
 			} catch (SQLException ex) {
 				String msg = ex.getMessage();
-				//Database statement error&{0}{: }
 				if (msg == null || msg.isEmpty()) {
-					throw new SRuntimeException(XDEF.XDEF568, ex);
+					throw new SRuntimeException(XDEF.XDEF568, ex);//Database statement error&{0}{: }
 				}
-				throw new SRuntimeException(XDEF.XDEF568, msg);
+				throw new SRuntimeException(XDEF.XDEF568, msg);//Database statement error&{0}{: }
 			}
 		}
 	}

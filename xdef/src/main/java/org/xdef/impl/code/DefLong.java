@@ -11,7 +11,6 @@ import static org.xdef.XDValueType.LONG;
  * @author Vaclav Trojan
  */
 public final class DefLong extends XDValueAbstract {
-
 	/** The value associated with this item. */
 	private final long _value;
 	private final boolean _isNull;
@@ -28,10 +27,7 @@ public final class DefLong extends XDValueAbstract {
 	/** Creates a new instance of DefInteger
 	 * @param value The string with integer value.
 	 */
-	public DefLong(final String value) {
-		_value = Long.parseLong(value);
-		_isNull = false;
-	}
+	public DefLong(final String value) {_value = Long.parseLong(value); _isNull = false;}
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation of XDValue interface
@@ -59,7 +55,6 @@ public final class DefLong extends XDValueAbstract {
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return isNull() ? "" : String.valueOf(_value);}
 	@Override
@@ -70,13 +65,11 @@ public final class DefLong extends XDValueAbstract {
 	@Override
 	public int hashCode() {return (int) _value;}
 	@Override
-	public boolean equals(final Object arg) {
-		return arg instanceof XDValue ? equals((XDValue) arg) :  false;
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) :  false;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return <i>true</i> if argument is same type as this XDValue and the
+	 * @return true if argument is same type as this XDValue and the
 	 * value of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
@@ -121,9 +114,8 @@ public final class DefLong extends XDValueAbstract {
 	@Override
 	public boolean booleanValue() {return isNull() ? false : _value != 0;}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() {return _isNull;}
 }

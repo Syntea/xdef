@@ -14,7 +14,6 @@ import org.w3c.dom.ProcessingInstruction;
 import static org.xdef.XDConstants.XDEF_INSTANCE_NS_URI;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
-import static org.xdef.impl.ChkParser.XDEF31_INSTANCE_NS_URI;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
@@ -89,8 +88,7 @@ class ChkDOMParser extends SReporter {
 					String name = atrs.item(i).getNodeName();
 					String val = atrs.item(i).getNodeValue();
 					if (name.startsWith("xmlns:")) {
-						if (XDEF_INSTANCE_NS_URI.equals(val)
-							|| XDEF31_INSTANCE_NS_URI.equals(val)) {
+						if (XDEF_INSTANCE_NS_URI.equals(val)) {
 							xdefInstancePrefix = name.substring(6);
 							break;
 						}
@@ -109,33 +107,28 @@ class ChkDOMParser extends SReporter {
 							case 0:
 								//SYSTEM
 								if (!p.isSpaces()) {
-									//Whitespace expected after '&{0}'
-									error(XML.XML014, "PUBLIC");
-								}	if ((systemLiteral = p.readString())==null){
-									//Quoted string declaration expected"
-									error(XDEF.XDEF504);
+									error(XML.XML014, "PUBLIC"); //Whitespace expected after '&{0}'
+								}
+								if ((systemLiteral = p.readString())==null){
+									error(XDEF.XDEF504); //Quoted string declaration expected"
 									return;
 								}
 								break;
 							case 1:
 								//PUBLIC
 								if (!p.isSpaces()) {
-									//Whitespace expected after '&{0}'
-									error(XML.XML014, "PUBLIC");
+									error(XML.XML014, "PUBLIC"); //Whitespace expected after '&{0}'
 								}	if (p.readString() != null) {
 									if (!p.isSpaces()) {
-										//Whitespace expected after '&{0}'
-										error(XML.XML014, "PUBLIC");
+										error(XML.XML014, "PUBLIC"); //Whitespace expected after '&{0}'
 										return;
 									}
 									if ((systemLiteral = p.readString())==null){
-										//Quoted string declaration expected"
-										error(XDEF.XDEF504);
+										error(XDEF.XDEF504); //Quoted string declaration expected"
 										return;
 									}
 								} else {
-									//Quoted string declaration expected"
-									error(XDEF.XDEF504);
+									error(XDEF.XDEF504); //Quoted string declaration expected"
 									return;
 								}
 								break;
@@ -144,21 +137,17 @@ class ChkDOMParser extends SReporter {
 						}
 						URL u;
 						try {
-							u = SUtils.resolveSystemID(systemLiteral,
-								SUtils.getActualPath());
+							u = SUtils.resolveSystemID(systemLiteral, SUtils.getActualPath());
 						} catch (SException ex) {
 							Report rep = ex.getReport();
-							fatal(rep.getMsgID(),
-								rep.getText(),
-								rep.getModification());
+							fatal(rep.getMsgID(), rep.getText(), rep.getModification());
 							return;
 						}
 						XDPool xdp;
 						try {
 							xdp = new XBuilder(null).setSource(u).compileXD();
 						} catch (Exception ex) {
-							//In X-definition are errors&{0}{: }
-							fatal(XDEF.XDEF543, ex);
+							fatal(XDEF.XDEF543, ex); //In X-definition are errors&{0}{: }
 							return;
 						}
 						key = xdefInstancePrefix+":xdefName"; // xdi:definition
@@ -181,11 +170,9 @@ class ChkDOMParser extends SReporter {
 									value = val.trim();
 									int index = value.indexOf(',');
 									if (index >= 0) {
-										String encoding =
-											value.substring(index + 1).trim();
+										String encoding = value.substring(index + 1).trim();
 										value = value.substring(0,index).trim();
-										stdOut = new DefOutStream(value,
-											encoding);
+										stdOut = new DefOutStream(value, encoding);
 									} else {
 										stdOut = new DefOutStream(value);
 									}
@@ -196,26 +183,20 @@ class ChkDOMParser extends SReporter {
 									value = val;
 									int index = value.indexOf(',');
 									if (index >= 0) {
-										String encoding =
-											value.substring(index + 1).trim();
+										String encoding = value.substring(index + 1).trim();
 										value = value.substring(0,index).trim();
-										setReportWriter(
-											new FileReportWriter(
-												value,encoding,true));
+										setReportWriter(new FileReportWriter(value,encoding,true));
 									} else {
-										setReportWriter(
-											new FileReportWriter(value));
+										setReportWriter(new FileReportWriter(value));
 									}
 								}
 								_chkDoc = (ChkDocument) def.createXDDocument();
-								_chkDoc._reporter.setReportWriter(
-									getReportWriter());
+								_chkDoc._reporter.setReportWriter(getReportWriter());
 								if (stdOut != null) {
 									_chkDoc.setStdOut(stdOut);
 								}
 							} else {
-								//Missing X-definition &{0}{: }
-								fatal(XDEF.XDEF530, value);
+								fatal(XDEF.XDEF530, value); //Missing X-definition &{0}{: }
 								return;
 							}
 						}
@@ -224,16 +205,14 @@ class ChkDOMParser extends SReporter {
 				Element el = _doc.createElementNS(ns, elementName);
 				for (int i = 0; i < maxAttr; i++) {
 					Node n = atrs.item(i);
-					el.setAttributeNS(n.getNamespaceURI(),
-						n.getNodeName(), n.getNodeValue());
+					el.setAttributeNS(n.getNamespaceURI(), n.getNodeName(), n.getNodeValue());
 				}
 				chkEl = _chkDoc.createRootChkElement(el, true);
 			} else {
 				Element el = _doc.createElementNS(ns, elementName);
 				for (int i = 0; i < maxAttr; i++) {
 					Node n = atrs.item(i);
-					el.setAttributeNS(n.getNamespaceURI(),
-						n.getNodeName(), n.getNodeValue());
+					el.setAttributeNS(n.getNamespaceURI(), n.getNodeName(), n.getNodeValue());
 				}
 				chkEl = parentNode.createChkElement(el);
 			}
@@ -241,10 +220,8 @@ class ChkDOMParser extends SReporter {
 			// Process atrributes which have model
 			for (XMData x: chkEl.getXMElement().getAttrs()) {
 				String uri = x.getNSUri();
-				Attr att = uri == null
-					? (Attr) atrs.getNamedItem(x.getName())
-					: (Attr) atrs.getNamedItemNS(uri,
-						x.getQName().getLocalPart());
+				Attr att = uri == null ? (Attr) atrs.getNamedItem(x.getName())
+					: (Attr) atrs.getNamedItemNS(uri, x.getQName().getLocalPart());
 				if (att != null) {
 					chkEl.newAttribute(att);
 					atrs1.add(att);
@@ -272,8 +249,7 @@ class ChkDOMParser extends SReporter {
 						_text.append(item.getNodeValue());
 						continue;
 					case Node.ENTITY_REFERENCE_NODE:
-						_text.append(KXmlUtils.nodeToString(
-							item, false, false, false));
+						_text.append(KXmlUtils.nodeToString(item, false, false, false));
 						continue;
 					case Node.ELEMENT_NODE:
 						addText(chkEl);
@@ -314,8 +290,7 @@ class ChkDOMParser extends SReporter {
 			setReportWriter(chkDoc._reporter.getReportWriter());
 			setIndex(-1);
 			setLineNumber(-1);
-			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
-				// open debugger
+			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) { // open debugger
 				_chkDoc.getDebugger().openDebugger(props, _chkDoc.getXDPool());
 			}
 			_chkDoc._scp.initscript(); //Initialize variables and methods
@@ -324,43 +299,30 @@ class ChkDOMParser extends SReporter {
 		}
 
 		@Override
-		public final void warning(final String id,
-			final String msg,
-			final Object... mod) {
+		public final void warning(final String id, final String msg, final Object... mod) {
 			putReport(Report.warning(id, msg, mod));
 		}
 		@Override
-		public final void lightError(final String id,
-			final String msg,
-			final Object... mod) {
+		public final void lightError(final String id, final String msg, final Object... mod) {
 			putReport(Report.lightError(id, msg, mod));
 		}
 		@Override
-		public final void error(final String id,
-			final String msg,
-			final Object... mod) {
+		public final void error(final String id, final String msg, final Object... mod) {
 			putReport(Report.error(id, msg, mod));
 		}
 		@Override
-		public final void fatal(final String id,
-			final String msg,
-			final Object... mod) {
+		public final void fatal(final String id, final String msg, final Object... mod) {
 			putReport(Report.fatal(id, msg, mod));
 		}
 		@Override
-		public final void putReport(final Report report) {
-			super.putReport(report);
-		}
-		public final void putReport(final byte type,
-			final String id,
-			final String msg,
-			final Object... modif) {
+		public final void putReport(final Report report) {super.putReport(report);}
+		public final void putReport(final byte type, final String id, final String msg, final Object... mod) {
 			if (getReportWriter() == null) {
 				if (type != Report.WARNING) {
-					throw new SRuntimeException(id, msg, modif);
+					throw new SRuntimeException(id, msg, mod);
 				}
 			} else {
-				putReport(new Report(type, id, msg, modif));
+				putReport(new Report(type, id, msg, mod));
 			}
 		}
 	}

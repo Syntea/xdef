@@ -6,7 +6,6 @@ import org.xdef.XDValue;
  * @author  Vaclav Trojan
  */
 public class CodeL2 extends CodeI1 {
-
 	private long _param2;
 
 	/** Creates a new instance of CodeL2.
@@ -15,10 +14,7 @@ public class CodeL2 extends CodeI1 {
 	 * @param param The code parameter 1.
 	 * @param param2 The code parameter 2.
 	 */
-	public CodeL2(final short resultType,
-		final short code,
-		final int param,
-		final long param2) {
+	public CodeL2(final short resultType, final short code, final int param, final long param2) {
 		super(resultType, code, param);
 		_param2 = param2;
 	}
@@ -54,8 +50,8 @@ public class CodeL2 extends CodeI1 {
 			return false;
 		}
 		CodeL2 x = (CodeL2) o;
-		return getCode() == x.getCode() && _resultType == x.getItemId() &&
-			getParam() == x.getParam() && _param2 == x._param2;
+		return getCode() == x.getCode() && _resultType == x.getItemId()
+			&& getParam() == x.getParam() && _param2 == x._param2;
 	}
 	@Override
 	public String toString() {return CodeDisplay.codeToString(this);}

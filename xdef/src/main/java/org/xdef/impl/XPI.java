@@ -13,23 +13,20 @@ public final class XPI extends XData {
 	 * @param name The name of processing instruction.
 	 * @param xp Refers to the XDefPool object.
 	 */
-	public XPI(final String name,
-		final XDPool xp) {
+	public XPI(final String name, final XDPool xp) {
 		super(name, null, xp, XMPI);
 		setOccurrence(1, Integer.MAX_VALUE); //???
 	}
 
 	@Override
 	/** Write this XPI to XDWriter. */
-	public final void writeXNode(final XDWriter xw,
-		final List<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeString(getName());
 		xw.writeString(getNSUri());
 		writeXCodeDescriptor(xw);
 	}
 
-	final static XPI readXPI(final XDReader xr, final XDefinition xd)
-		throws IOException {
+	final static XPI readXPI(final XDReader xr, final XDefinition xd) throws IOException {
 		String name = xr.readString();
 		XPI x = new XPI(name, xd.getXDPool());
 		x.readXCodeDescriptor(xr);

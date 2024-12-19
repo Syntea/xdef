@@ -64,8 +64,7 @@ public abstract class XNode implements XMNode {
 	 */
 	public final void setName(String name) {_name = name;}
 
-	/** Change namespace of node. Both the new namespace and tho old one must not be empty. Otherwise
-	 * the command is ignored.
+	/** Change namespace of node. Both new namespace and tho old one must not be empty. Otherwise do nothing.
 	 * @param ns the new name of node.
 	 */
 	public final void changeNS(String ns) {
@@ -282,8 +281,7 @@ public abstract class XNode implements XMNode {
 	 * @return true if both local names are equal.
 	 */
 	protected final boolean compareNameAndNS(final XNode y, final ArrayReporter rep) {
-		if (!getLocalName().equals(y.getLocalName())
-			|| getNSUri() != null && !getNSUri().equals(y.getNSUri())
+		if (!getLocalName().equals(y.getLocalName()) || getNSUri() != null && !getNSUri().equals(y.getNSUri())
 			|| getNSUri() == null && y.getNSUri() != null) {
 			rep.error(XDEF.XDEF289, getXDPosition(), y.getXDPosition()); //Names differs: &{0} and &{1}
 			compareNamespace(y, rep);

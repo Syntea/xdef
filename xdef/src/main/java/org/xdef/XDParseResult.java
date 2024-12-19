@@ -23,8 +23,8 @@ public interface XDParseResult extends XDValue, SParser {
 	 */
 	public void setParsedValue(String value);
 
-	/** Get text until current position and the first occurrence of a white
-	 * space or the end of source. Set current position after the token.
+	/** Get text until current position and the first occurrence of a white space or the end of source.
+	 * Set current position after the token.
 	 * @return found token or null.
 	 */
 	public String nextToken();
@@ -47,15 +47,14 @@ public interface XDParseResult extends XDValue, SParser {
 	/** Clear all reports. */
 	public void clearReports();
 
-	/** Replace parsed string from the position from argument upto parsed
-	 * position by string from argument.
+	/** Replace parsed string from the position from argument upto parsed position by string from argument.
 	 * @param from position from to replace.
 	 * @param s replace string.
 	 */
 	public void replaceParsedBufferFrom(int from, String s);
 
-	/** Put the registered report object with type ERROR with the last
-	 * parameter containing the string from the ParseResult object.
+	/** Put the registered report object with type ERROR with the last parameter containing the string from
+	 * the ParseResult object.
 	 * @param registeredID registered report id.
 	 * @param mod modification string of report text.
 	 */

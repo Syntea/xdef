@@ -264,8 +264,8 @@ public final class CompileXonXdef extends XScriptParser {
 			List<Object> sectionList = parseXscript(val);
 			SBuffer matchItem = findSection("match", sectionList);
 			if (matchItem == null) {
-				matchItem = new SBuffer(matchexpr, sectionList.isEmpty()
-					? pn._name : (SBuffer) sectionList.get(1));
+				matchItem =
+					new SBuffer(matchexpr, sectionList.isEmpty() ? pn._name : (SBuffer) sectionList.get(1));
 				sectionList.add("match");
 				sectionList.add(matchItem);
 			} else {

@@ -60,9 +60,7 @@ public final class GenXDefXML {
 		boolean _required;
 		XAttr(String type) {_type = type; _required = true;}
 		@Override
-		public String toString() {
-			return (_required ? "" : "optional ") + _type;
-		}
+		public String toString() {return (_required ? "" : "optional ") + _type;}
 	}
 
 	/** Model of element or text node. */
@@ -98,10 +96,7 @@ public final class GenXDefXML {
 			return result;
 		}
 
-		XModel(final String text) {
-			this(new QName("#text"));
-			_value = genType(this, text);
-		}
+		XModel(final String text) {this(new QName("#text")); _value = genType(this, text);}
 
 		XModel(final Element elem) {
 			this(getQName(elem));
@@ -113,8 +108,7 @@ public final class GenXDefXML {
 				if (att.getNodeName().startsWith("xmlns")) {
 					_atts.put(qname, new XAttr(att.getNodeValue().trim()));
 				} else {
-					_atts.put(qname,
-						new XAttr(genType(this, att.getNodeValue().trim())));
+					_atts.put(qname, new XAttr(genType(this, att.getNodeValue().trim())));
 				}
 			}
 			final NodeList nl = elem.getChildNodes();
@@ -122,13 +116,10 @@ public final class GenXDefXML {
 				Node n = nl.item(i);
 				if (n.getNodeType() == Node.ELEMENT_NODE) {
 					_models.add(new XModel((Element) n));
-				} else if (n.getNodeType() == Node.TEXT_NODE ||
-					n.getNodeType() == Node.CDATA_SECTION_NODE) {
+				} else if (n.getNodeType() == Node.TEXT_NODE || n.getNodeType() == Node.CDATA_SECTION_NODE) {
 					String s = n.getNodeValue();
-					while (i + 1 <  nl.getLength() &&
-						(n = nl.item(i+1)).getNodeType() != Node.ELEMENT_NODE) {
-						if (n.getNodeType() == Node.TEXT_NODE
-							|| n.getNodeType() == Node.CDATA_SECTION_NODE) {
+					while (i + 1 <  nl.getLength() && (n = nl.item(i+1)).getNodeType() != Node.ELEMENT_NODE) {
+						if (n.getNodeType() == Node.TEXT_NODE || n.getNodeType() == Node.CDATA_SECTION_NODE) {
 							s += n.getNodeValue();
 						}
 						i++;
@@ -175,11 +166,9 @@ public final class GenXDefXML {
 							_mixed = true;
 							for (int j = 0; j < i; j++) {
 								if(_models.get(j)._qname.equals(name)) {
-									XModel z = _models.get(j)
-										.compareModel(_models.get(i));
+									XModel z = _models.get(j).compareModel(_models.get(i));
 									if (z != null) {
-										z._options.addAll(
-											_models.get(i)._options);
+										z._options.addAll(_models.get(i)._options);
 										z._max++;
 										_models.set(j, z);
 										_models.remove(i);
@@ -200,8 +189,7 @@ public final class GenXDefXML {
 			}
 			if (x.startsWith("string(") || y.startsWith("string(")) {
 				return "string()";
-			} else if (x.equals("int()") && y.equals("long()")
-				||x.equals("long()") && y.equals("int()")) {
+			} else if (x.equals("int()") && y.equals("long()") ||x.equals("long()") && y.equals("int()")) {
 				return "long()";
 			} else if (x.equals("int()") && y.equals("integer()")
 				|| x.equals("integer()") && y.equals("int()")) {
@@ -211,10 +199,8 @@ public final class GenXDefXML {
 			} else if (x.equals("integer()") && (y.equals("int()")
 				|| y.equals("long()") || y.equals("int()"))) {
 				return "integer()";
-			} else if ((x.equals("MD5()") || x.equals("SHA1()"))
-				&& y.equals("hexBinary()")
-				|| x.equals("hexBinary()")
-				&& (y.equals("MD5()") || y.equals("SHA1()"))) {
+			} else if ((x.equals("MD5()") || x.equals("SHA1()"))&& y.equals("hexBinary()")
+				|| x.equals("hexBinary()") && (y.equals("MD5()") || y.equals("SHA1()"))) {
 				return "hexBinary()";
 			}
 			return "string()";
@@ -292,8 +278,7 @@ public final class GenXDefXML {
 								ym._models.clear();
 								ym._models.addAll(model._models);
 								ym.optimize();
-								if (xm._value != null && ym._value != null
-									&& !xm._value.equals(ym._value)) {
+								if (xm._value != null && ym._value != null && !xm._value.equals(ym._value)) {
 									model._value = "string";
 								}
 								ym._mixed |= xm._mixed;
@@ -324,40 +309,33 @@ public final class GenXDefXML {
 		}
 
 		@Override
-		public String toString() {
-			return _qname + " " + _min + ".." + _max
-				+ "; size=" + _models.size();
-		}
+		public String toString() {return _qname + " " + _min + ".." + _max + "; size=" + _models.size();}
 	}
 
 	private static QName checkQName(final QName qname) {
 		String uri = qname.getNamespaceURI();
-		if (XDEF31_NS_URI.equals(uri) || XDEF32_NS_URI.equals(uri)
-			|| XDEF40_NS_URI.equals(uri) || XDEF41_NS_URI.equals(uri)
-			|| XDEF42_NS_URI.equals(uri)) {
+		if (XDEF31_NS_URI.equals(uri) || XDEF32_NS_URI.equals(uri) || XDEF40_NS_URI.equals(uri)
+			|| XDEF41_NS_URI.equals(uri) || XDEF42_NS_URI.equals(uri)) {
 			//Namespace of X-definition is not allowed in XML input data
 			throw new SRuntimeException(XDEF.XDEF882);
 		}
 		if (XDEF_NS_PREFIX.equals(qname.getPrefix())) {
-			//Prefix "xd" is not allowed in XML input data
-			throw new SRuntimeException(XDEF.XDEF881);
+			throw new SRuntimeException(XDEF.XDEF881); //Prefix "xd" is not allowed in XML input data
 		}
 		return qname;
 	}
 
 	private static QName getQName(Node node) {
-		QName qn = new QName(node.getNamespaceURI(), node.getLocalName(),
-			node.getPrefix() == null ? "" : node.getPrefix());
+		QName qn = new QName(node.getNamespaceURI(),
+			node.getLocalName(), node.getPrefix() == null ? "" : node.getPrefix());
 		return checkQName(qn);
 	}
 
 	private static String getNameFromQName(final QName name) {
 		String uri = name.getNamespaceURI();
 		String prefix = name.getPrefix();
-		if (uri==null || uri.isEmpty() || prefix==null || prefix.isEmpty()) {
-			return name.getLocalPart();
-		}
-		return prefix + ':' + name.getLocalPart();
+		return uri==null || uri.isEmpty() || prefix==null || prefix.isEmpty() ? name.getLocalPart()
+			: prefix + ':' + name.getLocalPart();
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
@@ -365,22 +343,19 @@ public final class GenXDefXML {
 	 * @param xdName name of XDefinition or null.
 	 * @return org.w3c.dom.Document object with X-definition.
 	 */
-	public static final Element genXdef(final Element elem,
-		final String xdName) {
+	public static final Element genXdef(final Element elem, final String xdName) {
 		Element el = (Element) elem.cloneNode(true);
 		el.normalize();
 		KXmlUtils.trimTextNodes(el, true);
 		canonizeXML(el);
 		Document doc = el.getOwnerDocument();
-		doc = doc.getImplementation().createDocument(
-			XDEF42_NS_URI, XDEF_NS_PREFIX + ":def", doc.getDoctype());
+		doc = doc.getImplementation().createDocument(XDEF42_NS_URI, XDEF_NS_PREFIX+ ":def", doc.getDoctype());
 		Element xdef = doc.getDocumentElement();
 		xdef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF42_NS_URI);
 		final String s = el.getNodeName();
 		if (el.getNamespaceURI() != null) {
 			int i = s.indexOf(':');
-			String t = i > 0 ? "xmlns:" + s.substring(0, i) : "xmlns";
-			xdef.setAttribute(t, el.getNamespaceURI());
+			xdef.setAttribute(i > 0 ? "xmlns:" + s.substring(0, i) : "xmlns", el.getNamespaceURI());
 		}
 		xdef.setAttribute("root", s);
 		if (xdName != null && !xdName.isEmpty()) {
@@ -410,8 +385,7 @@ public final class GenXDefXML {
 					while(i > 0) {
 						Node x = nl.item(i-1);
 						switch (x.getNodeType()) {
-							case Node.ELEMENT_NODE:
-								break;
+							case Node.ELEMENT_NODE: break;
 							case Node.TEXT_NODE:
 							case Node.CDATA_SECTION_NODE:
 								s = x.getNodeValue() + s;
@@ -438,16 +412,13 @@ public final class GenXDefXML {
 			return "string(0,*)";
 		}
 		if (new XSParseInt().check(null, data).matches()) {
-			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
-				? "num()" : "int()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0' ? "num()" : "int()";
 		}
 		if (new XSParseLong().check(null, data).matches()) {
-			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
-				? "num()" : "long()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0' ? "num()" : "long()";
 		}
 		if (new XSParseInteger().check(null, data).matches()) {
-			return data.trim().length() > 1 && data.trim().charAt(0) == '0'
-				? "num()" : "integer()";
+			return data.trim().length() > 1 && data.trim().charAt(0) == '0' ? "num()" : "integer()";
 		}
 		if (new XSParseDecimal().check(null, data).matches()) {
 			return "decimal()";
@@ -482,20 +453,16 @@ public final class GenXDefXML {
 		if (new XSParseGYear().check(null, data).matches()) {
 			return "gYear()";
 		}
-		if (data.length() == 32
-			&& new XDParseMD5().check(null, data).matches()) {
+		if (data.length() == 32 && new XDParseMD5().check(null, data).matches()) {
 			return "MD5()";
 		}
-		if (data.length() == 40
-			&& new XDParseSHA1().check(null, data).matches()) {
+		if (data.length() == 40 && new XDParseSHA1().check(null, data).matches()) {
 			return "SHA1()";
 		}
-		if (data.length() > 16
-			&& new XSParseHexBinary().check(null, data).matches()) {
+		if (data.length() > 16 && new XSParseHexBinary().check(null, data).matches()) {
 			return "hexBinary()";
 		}
-		if (data.length() > 16
-			&& new XSParseBase64Binary().check(null, data).matches()) {
+		if (data.length() > 16 && new XSParseBase64Binary().check(null, data).matches()) {
 			return "base64Binary()";
 		}
 		if (new XDParseEmailDate().check(null, data).matches()) {
@@ -575,22 +542,19 @@ public final class GenXDefXML {
 		el.appendChild(el.getOwnerDocument().createTextNode(text));
 	}
 
-	private static Element createElement(final Element el,
-		final String ns,
-		final String name) {
-		return ns == null ? el.getOwnerDocument().createElement(name)
-			: el.getOwnerDocument().createElementNS(ns, name);
+	private static Element createElement(final Element el, final String ns, final String name) {
+		return ns == null
+			? el.getOwnerDocument().createElement(name) : el.getOwnerDocument().createElementNS(ns, name);
 	}
 
-	/** Recursive generation of X-definition model from given element.
-	 * Result is added to parent (i.e. a node from X-definition).
+	/** Recursive generation of X-definition model from given element. Result is added to parent
+	 * (i.e. a node from X-definition).
 	 * @param parent node to which model is added.
 	 * @param x model from which a model is generated.
 	 */
 	private static void genModel(final Element parent, final XModel x) {
 		if (new QName("#text").equals(x._qname)) {
-			String val = (x._min == 0 ? "optional " : "required ")
-				+ x._value + ";";
+			String val = (x._min == 0 ? "optional " : "required ") + x._value + ";";
 			appendText(parent, val);
 			return;
 		}
@@ -624,8 +588,7 @@ public final class GenXDefXML {
 		QName scriptQName = new QName(XDEF42_NS_URI, "script");
 		XAttr att = x._atts.get(scriptQName);
 		if (att != null) { // to be the first attribute
-			model.setAttributeNS(XDEF42_NS_URI,
-				XDEF_NS_PREFIX + ":script", att._type);
+			model.setAttributeNS(XDEF42_NS_URI, XDEF_NS_PREFIX + ":script", att._type);
 			x._atts.remove(scriptQName);
 		}
 		for (Map.Entry<QName, XAttr> entry : x._atts.entrySet()) {
@@ -646,8 +609,7 @@ public final class GenXDefXML {
 		}
 		parent.appendChild(model);
 		if (x._mixed) {
-			final Element el = createElement(model,
-				XDEF42_NS_URI, XDEF_NS_PREFIX + ":mixed");
+			final Element el = createElement(model, XDEF42_NS_URI, XDEF_NS_PREFIX + ":mixed");
 			model.appendChild(el);
 			model = el;
 		}

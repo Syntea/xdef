@@ -13,6 +13,7 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class XDebugInfo implements XMDebugInfo {
+	/** Array with wariables. */
 	XVariable[][] _varTables;
 	/** List of statement info. */
 	List<XStatementInfo> _statementList;
@@ -31,8 +32,8 @@ public class XDebugInfo implements XMDebugInfo {
 	 */
 	public final int addInfo(final SPosition pos, final String defName, final int adr, final XVariable[] tab){
 		SPosition sp = pos.correctPosition();
-		XStatementInfo x =
-			new XStatementInfo(sp.getLineNumber(), sp.getColumnNumber(), sp.getSystemId(), defName, adr, tab);
+		XStatementInfo x = new XStatementInfo(
+			sp.getLineNumber(), sp.getColumnNumber(), sp.getSystemId(), defName, adr, tab);
 		if (_statementList.isEmpty() || !_statementList.get(_statementList.size() - 1).equals(x)) {
 			int result = _statementList.size();
 			_statementList.add(x);
@@ -93,15 +94,12 @@ public class XDebugInfo implements XMDebugInfo {
 	}
 
 	@Override
-	/** Get array of statement information objects assigned to given
-	 * X-definition and source line.
+	/** Get array of statement information objects assigned to given X-definition and source line.
 	 * @param line source line.
 	 * @param xdName name of X-definition.
-	 * @return array XMStatementInfo objects (if no statement information
-	 * is found the array is empty).
+	 * @return array XMStatementInfo objects (if no statement information is found the array is empty).
 	 */
-	public final XMStatementInfo[] getStatementInfo(final long line,
-		final String xdName) {
+	public final XMStatementInfo[] getStatementInfo(final long line, final String xdName) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo x = _statementList.get(i);
 			if (line == x._line && ((xdName==null && (x._xdName==null || x._xdName.isEmpty()))

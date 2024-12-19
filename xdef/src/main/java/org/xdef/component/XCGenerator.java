@@ -77,8 +77,7 @@ final class XCGenerator extends XCGeneratorXON {
 		XElement xe;
 		String xelName = xelem.getName();
 		if (isRoot && xelem.getXonMode() > 0 //XON/JSON
-			&& xelem._childNodes.length == 1
-			&& xelem._childNodes[0].getKind() == XMELEMENT) {
+			&& xelem._childNodes.length == 1 && xelem._childNodes[0].getKind() == XMELEMENT) {
 			xe = (XElement) xelem._childNodes[0]; /**/
 			xelName = xelem.getLocalName();
 		} else {
@@ -103,8 +102,7 @@ final class XCGenerator extends XCGeneratorXON {
 		final StringBuilder creators = new StringBuilder();
 		final StringBuilder  listNodes = new StringBuilder();
 		final StringBuilder innerClasses = new StringBuilder();
-		final StringBuilder sbi = // interface
-			interfcName.isEmpty() ? null : new StringBuilder();
+		final StringBuilder sbi = interfcName.isEmpty() ? null : new StringBuilder(); // interface
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
 		final Map<String, String> atttab = new LinkedHashMap<>();
@@ -128,14 +126,14 @@ final class XCGenerator extends XCGeneratorXON {
 						if (isRoot) {
 							ext = true;
 							extClazz=" extends "+name.substring(ndx+7)+extClazz;
-							//"In command "%class &{0}" is missing parameter
-							//"extends". In command "%bind &{2}" is parameter "%with &{1}!
+							//In command "%class &amp;{0}" is missing parameter "extends". In command
+							// "%bind &amp;{2}" is parameter "%with &amp;{1}"!
 							_reporter.error(XDEF.XDEF375,
 								className, name.substring(ndx+7), name.substring(0, ndx));
 							name = name.substring(0, ndx);
 						} else {
 							//Class &{0} is not root. It can't be extended
-							//to &{1} according to command %bind &{2}
+							// to &{1} according to command %bind &{2}
 							_reporter.error(XDEF.XDEF376,
 								className, name.substring(ndx+7), name.substring(0, ndx));
 						}
@@ -150,8 +148,7 @@ final class XCGenerator extends XCGeneratorXON {
 				genBaseVarsGettersSetters(xdata, name, 1, "attribute", vars, getters, setters, xpathes, sbi);
 			}
 			genCreatorOfAttribute(xdata, name, creators);
-			atttab.put(xdata.getXDPosition(),
-				getParsedResultGetter(xdata) + ";" + name);
+			atttab.put(xdata.getXDPosition(), getParsedResultGetter(xdata) + ";" + name);
 		}
 		// Generate namespace attributes
 		for (Map.Entry<Object, Object> item : nsmap.entrySet()) {
@@ -197,9 +194,9 @@ final class XCGenerator extends XCGeneratorXON {
 						String xclear = "";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
 							xclear += (String) choiceStack.get(j-1) //iname
-								+ ((Integer)choiceStack.get(j)>1
+								+ ((Integer)choiceStack.get(j) > 1
 								? ".clear();"//it is final List so clear it!
-									: "=null;"); //othrewise set null
+								: "=null;"); //othrewise set null
 							if ((Integer) choiceStack.get(j-3) == groupFirst) {
 								break; // index == first, finish;
 							}
@@ -217,8 +214,7 @@ final class XCGenerator extends XCGeneratorXON {
 									typeName, iname, max, "element", getters, setters, sbi, xclear);
 							}
 							XMData keyAttr;
-							if (xe1.getXonMode() != 0
-								&& (keyAttr=xe1.getAttr(XonNames.X_KEYATTR)) != null
+							if (xe1.getXonMode() != 0 && (keyAttr=xe1.getAttr(XonNames.X_KEYATTR)) != null
 								&& keyAttr.getFixedValue() != null) {
 								keys.add(keyAttr.getFixedValue().stringValue());
 								keys.add(typeName);
@@ -287,8 +283,8 @@ final class XCGenerator extends XCGeneratorXON {
 (groupMax > 1 ? "new StringBuilder()" : "(char) -1") + ";"+LN);
 					vars.append(s);
 					genTextNodeCreator(xdata, name, groupMax,  listNodes);
-					txttab.put(node.getXDPosition(), (groupMax == 1 ? "1" : "2")
-						+ "," + getParsedResultGetter(xdata) + ";" + name);
+					txttab.put(node.getXDPosition(),
+						(groupMax == 1 ? "1" : "2") + "," + getParsedResultGetter(xdata) + ";" + name);
 					if (isRoot && nodes.length==1 && xe.getAttrs().length==0) {
 						 // no attrs,only text; direct getters/setters for text child
 						genDirectSetterAndGetter(
@@ -375,7 +371,7 @@ final class XCGenerator extends XCGeneratorXON {
 					if (!name.equals(iname)) {
 						if (ext) {
 							//Getter/setter name &{0} in &{1} can't be used.
-							//Please change name by command %bind
+							// Please change name by command %bind
 							_reporter.error(XDEF.XDEF371, name, node.getXDPosition());
 						} else {
 							//Getter/setter name &{0} in &{1} was changed to &{2}.
@@ -413,8 +409,7 @@ final class XCGenerator extends XCGeneratorXON {
 					if (!ext) {
 						genVariableFromModel(null,
 							typeName, iname, max, "element", vars);
-						if (xnds.length==1 && xnds[0].getKind()==XMTEXT
-							&& groupKind != XMCHOICE
+						if (xnds.length==1 && xnds[0].getKind()==XMTEXT && groupKind != XMCHOICE
 							&& xe1.getAttrs().length == 0) {//no attrs,only text
 							// direct getters/setters for text child
 							genDirectSetterAndGetter(xe1, iname, typeName, false, setters, getters, sbi);
@@ -451,8 +446,8 @@ final class XCGenerator extends XCGeneratorXON {
 							newClassName, //class name
 							"", //no class extension and interfaces
 							(xcClass0 != null)? xcClass0.substring(10): "",
-							(packageName.length() > 0
-								? packageName+"." : "")+classNameBase+'#'+newClassName, //interface
+							(packageName.length() > 0 //interface
+								? packageName+"." : "")+classNameBase+'#'+newClassName,
 							"", //classNameBase
 							_components, //Map with components
 							classNames, //Set with class names or null
@@ -496,8 +491,24 @@ final class XCGenerator extends XCGeneratorXON {
 		_interfaces = sbi;
 		// generate Java source
 		return genSource(xe,
-			xelName, model, index, xdname, isRoot, clazz, extClazz, interfcName, vars,
-			creators, getters, setters, xpathes, listNodes, innerClasses, atttab, txttab, xctab);
+			xelName,
+			model,
+			index,
+			xdname,
+			isRoot,
+			clazz,
+			extClazz,
+			interfcName,
+			vars,
+			creators,
+			getters,
+			setters,
+			xpathes,
+			listNodes,
+			innerClasses,
+			atttab,
+			txttab,
+			xctab);
 	}
 
 	/** Generate XComponent Java source class from X-definition.

@@ -35,8 +35,7 @@ public final class XScriptMacro {
 		final SBuffer body,
 		final ReportWriter reporter) {
 		SBuffer ibody = body == null ? new SBuffer("") : body;
-		ReportWriter rwi =
-			reporter == null ? new ArrayReporter() : reporter;
+		ReportWriter rwi = reporter == null ? new ArrayReporter() : reporter;
 		_name = (defName != null ? defName + '#' + name : name).intern();
 		int numParams = params.size();
 		_paramNames = new ArrayList<>(params.keySet());
@@ -54,8 +53,7 @@ public final class XScriptMacro {
 			}
 			sb.append(p.getBufferPart(lastPos,p.getIndex() - 2));
 			if (!isName(p)) {
-				//Reference to macro parameter is not integer
-				p.error(XDEF.XDEF490);
+				p.error(XDEF.XDEF490); //Reference to macro parameter is not integer
 				break;
 			}
 			String paramName = p.getParsedString();
@@ -117,19 +115,15 @@ public final class XScriptMacro {
 
 	@Override
 	/** Returns hash code of the object. */
-	public int hashCode() {
-		return _name.hashCode();
-	}
+	public int hashCode() {return _name.hashCode();}
 
 	@Override
 	/** This enables to use the method <i>indexOf(anObject)</i>.
 	 * @param anObject The object to be compared with this one.
-	 * @return <i>true</i> if and only if the object is considered to be
-	 * equal with this one.
+	 * @return <i>true</i> if and only if the object is considered to be equal with this one.
 	 */
 	public boolean equals(final Object anObject) {
-		return (anObject instanceof XScriptMacro) ?
-			((XScriptMacro) anObject)._name.equals(_name) : false;
+		return (anObject instanceof XScriptMacro) ? ((XScriptMacro) anObject)._name.equals(_name) : false;
 	}
 
 	/** Expand macro reference

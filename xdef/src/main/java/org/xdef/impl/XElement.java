@@ -44,8 +44,7 @@ public final class XElement extends XCodeDescriptor
 	private KNamespace _nsContext;
 	/** "forget" flag - if true the created object is removed. */
 	public byte _forget;
-	/** "clearAdoptedForgets" flag - if true all forgets in referred nodes
-	 * are cleared. */
+	/** "clearAdoptedForgets" flag - if true all forgets in referred nodes are cleared. */
 	public byte _clearAdoptedForgets;
 	/** Switch if the actual reporter is cleared on invoked action. */
 	public byte _clearReports;
@@ -71,8 +70,7 @@ public final class XElement extends XCodeDescriptor
 		_definition = xdef;
 		_attrs = new LinkedHashMap<>();
 		_childNodes = new XNode[0];
-		//copy global options from the definition
-		copyOptions(xdef);
+		copyOptions(xdef); //copy global options from the definition
 	}
 
 	/** Creates the new instance of XElement as a copy of given argument.
@@ -458,10 +456,9 @@ public final class XElement extends XCodeDescriptor
 			}
 			switch (ix.getKind()) {
 				case XMNode.XMELEMENT:
-					if (!((XElement) ix).compareElement((XElement) iy,
-						rep, full)) {
-						rep.error(XDEF.XDEF283, //Child nodes differs: &{0} and &{1}
-							ix.getXDPosition(), iy.getXDPosition());
+					if (!((XElement) ix).compareElement((XElement) iy, rep, full)) {
+						//Child nodes differs: &{0} and &{1}
+						rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
 						return -1;
 					}
 					continue;
@@ -475,13 +472,12 @@ public final class XElement extends XCodeDescriptor
 				case XMNode.XMMIXED:
 				case XMNode.XMSEQUENCE:
 					if ((j=compareGroup(x, y, j+1, rep, full)) < 0) {
-						rep.error(XDEF.XDEF283, //Child nodes differs: &{0} and &{1}
-							ix.getXDPosition(), iy.getXDPosition());
+						//Child nodes differs: &{0} and &{1}
+						rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
 						return -1;
 					}
 					continue;
-				case XMNode.XMSELECTOR_END:
-					return j + 1;
+				case XMNode.XMSELECTOR_END: return j + 1;
 			}
 		}
 		return j;
@@ -559,12 +555,10 @@ public final class XElement extends XCodeDescriptor
 
 	/** Compare structure of this element model with the model from argument.
 	 * @param y model to be compared.
-	 * @param full if true, then names of both models must be equal
-	 * (i.e. as "implements").
+	 * @param full if true, then names of both models must be equal (i.e. as "implements").
 	 * @return reporter with messages with differences, or returns null.
 	 */
-	public final ArrayReporter compareModel(final XMElement y,
-		final boolean full) {
+	public final ArrayReporter compareModel(final XMElement y, final boolean full) {
 		ArrayReporter reporter = new ArrayReporter();
 		if (!(y instanceof XElement)) {
 			//Can't compare different XDPool objects: &{0} and &{1}
@@ -607,8 +601,7 @@ public final class XElement extends XCodeDescriptor
 		return _digest;
 	}
 
-	private static void genDataDigestInfo(final SObjectWriter xw,
-		final XData x) throws Exception {
+	private static void genDataDigestInfo(final SObjectWriter xw, final XData x) throws Exception {
 		xw.writeShort(x.getKind());
 		xw.writeString(x.getName());
 		xw.writeInt(x.minOccurs());

@@ -12,7 +12,6 @@ import org.xdef.XDValueType;
  * @author  Vaclav Trojan
  */
 public final class DefText extends XDValueAbstract {
-
 	/** CharacterData value of this item. */
 	private final CharacterData _value;
 
@@ -28,9 +27,7 @@ public final class DefText extends XDValueAbstract {
 	 * @param doc the Document where data is to be created.
 	 * @param value string value.
 	 */
-	public DefText(final Document doc, final String value) {
-		_value = doc.createTextNode(value);
-	}
+	public DefText(final Document doc, final String value) {_value = doc.createTextNode(value);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -69,14 +66,12 @@ public final class DefText extends XDValueAbstract {
 	@Override
 	public int hashCode() {return _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		return (arg instanceof DefText) ? equals((DefText) arg) : false;
-	}
+	public boolean equals(final Object arg) {return (arg instanceof DefText) ? equals((DefText) arg) : false;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
+	 * equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {

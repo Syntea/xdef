@@ -88,5 +88,4 @@ final class CompileJumpVector {
 		}
 		_falseJumpList = null;
 	}
-
 }

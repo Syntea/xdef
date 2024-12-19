@@ -82,30 +82,30 @@ public interface XDParser extends XDValue {
 	 */
 	public void setBase(final XDParser x);
 
-	/** Create parseResult object from String. After parsing it skips white
-	 * spaces (if whiteSpace='collapse') and provides final check.
+	/** Create parseResult object from String. After parsing it skips white spaces (if whiteSpace='collapse')
+	 * and provides final check.
 	 * @param source string to be checked.
 	 * @param xnode actual XXNode object or null.
 	 * @return XDParseResult object as result of parsing.
 	 */
 	public XDParseResult check(XXNode xnode, String source);
 
-	/** Create parseResult object from StringParser. The parser skip white
-	 * spaces (if whiteSpace='collapse') and provides final check.
+	/** Create parseResult object from StringParser. The parser skip white spaces (if whiteSpace='collapse')
+	 * and provides final check.
 	 * @param p Parse result containing the position of the source.
 	 * @param xnode actual XXNode object or null.
 	 */
 	public void check(XXNode xnode, XDParseResult p);
 
-	/** Parse source and create XDParseResult object. Does not skip white
-	 * spaces after parsing and does not execute final check.
+	/** Parse source and create XDParseResult object. Does not skip white spaces after parsing and does
+	 * not execute final check.
 	 * @param p Parse result containing the position of the source.
 	 * @param xnode actual XXNode object or null.
 	 */
 	public void parseObject(XXNode xnode, XDParseResult p);
 
-	/** This method provides some final checks which are dependent on the context of parsing
-	 * (such as ENTITY, ENTITIES, ID, IDREF, IDREFS). Usually this method is empty.
+	/** This method provides some final checks which are dependent on the context of parsing (such as ENTITY,
+	 * ENTITIES, ID, IDREF, IDREFS). Usually this method is empty.
 	 * @param p Parsed result to be checked.
 	 * @param xnode Actual check node or null.
 	 */
@@ -126,8 +126,7 @@ public interface XDParser extends XDValue {
 	 * @param xnode actual XXNode object or null.
 	 * @throws SException if an error occurs.
 	 */
-	public void setNamedParams(XXNode xnode, XDContainer params)
-		throws SException;
+	public void setNamedParams(XXNode xnode, XDContainer params) throws SException;
 
 	/** Set value of "sequential" parameters of parser.
 	 * @param param "sequential" parameters.
@@ -139,9 +138,9 @@ public interface XDParser extends XDValue {
 	 */
 	public short parsedType();
 
-	/** *  In union, list, sequence and other complex types if arsed result type
-	 * of all items is equal, the result is the type of items, if not, it is
-	 * XD_ANY (Object).For other parse methods it is result of parsedType().
+	/** *  In union, list, sequence and other complex types if arsed result type of all items is equal,
+	 * the result is the type of items, if not, it is XD_ANY (Object).For other parse methods it is result
+	 * of parsedType().
 	 * @return result type of parsed item.
 	 */
 	public short getAlltemsType();

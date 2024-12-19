@@ -12,7 +12,6 @@ import static org.xdef.XDValueType.DECIMAL;
  * @author Vaclav Trojan
  */
 public final class DefDecimal extends XDValueAbstract {
-
 	/** The value associated with this item. */
 	private final BigDecimal _value;
 
@@ -53,9 +52,8 @@ public final class DefDecimal extends XDValueAbstract {
 	 */
 	public XDValueType getItemType() {return DECIMAL;}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise returns false.
 	 */
 	public boolean isNull() {return _value == null;}
 	@Override
@@ -66,7 +64,6 @@ public final class DefDecimal extends XDValueAbstract {
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return toString();}
 	@Override
@@ -74,20 +71,17 @@ public final class DefDecimal extends XDValueAbstract {
 	 * @return the object with the copy of this one.
 	 */
 	public XDValue cloneItem() {
-		return _value == null ? new DefDecimal() :
-			new DefDecimal(new BigDecimal(_value.toString()));
+		return _value == null ? new DefDecimal() : new DefDecimal(new BigDecimal(_value.toString()));
 	}
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
-	public boolean equals(final Object x) {
-		return x instanceof XDValue ? equals((XDValue) x) : false;
-	}
+	public boolean equals(final Object x) {return x instanceof XDValue ? equals((XDValue) x) : false;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param x other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
 	 */
 	public boolean equals(final XDValue x) {
 		return isNull() ? x == null || x.isNull()
@@ -96,9 +90,8 @@ public final class DefDecimal extends XDValueAbstract {
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param x other XDValue object to which is to be compared.
-	 * @return If both objects are comparable then returns -1, 0, or a 1
-	 * as this XDValue object is less than, equal to, or greater than the
-	 * specified object.
+	 * @return If both objects are comparable then returns -1, 0, or a 1 as this XDValue object is less than,
+	 * equal to, or greater than the specified object.
 	 * @throws SIllegalArgumentException if objects are not comparable.
 	 */
 	public int compareTo(final XDValue x) throws SIllegalArgumentException {
@@ -119,11 +112,7 @@ public final class DefDecimal extends XDValueAbstract {
 	@Override
 	public BigDecimal decimalValue() {return _value;}
 	@Override
-	public BigInteger integerValue() {
-		return  _value==null ? null : _value.toBigInteger();
-	}
+	public BigInteger integerValue() {return  _value==null ? null : _value.toBigInteger();}
 	@Override
-	public boolean booleanValue() {
-		return isNull() ? false : !_value.equals(BigDecimal.ZERO);
-	}
+	public boolean booleanValue() {return isNull() ? false : !_value.equals(BigDecimal.ZERO);}
 }

@@ -10,9 +10,7 @@ import static org.xdef.impl.compile.CompileBase.UNDEF_CODE;
 class CodeUndefined extends CodeOp {
 
 	/** Creates a new instance of CodeUndefined. */
-	public CodeUndefined() {
-		super(UNDEF_CODE, XD_ANY);
-	}
+	public CodeUndefined() {super(UNDEF_CODE, XD_ANY);}
 	@Override
 	public String toString() {return "UNDEF";}
 	@Override

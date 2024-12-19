@@ -25,12 +25,10 @@ import static org.xdef.model.XMNode.XMSELECTOR_END;
  * @author Vaclav Trojan
  */
 final class CompileReference extends XNode {
-
 	/** Kind of XNode XReference */
 	static final short XMREFERENCE = XMSELECTOR_END + 1;
 	/** Kind of XNode  XINCLUDE */
 	static final short XMINCLUDE = XMREFERENCE + 1;
-
 	private final String _refXdefName;
 	/** The X-definition associated with parent. */
 	private final XDefinition _definition;
@@ -260,7 +258,6 @@ final class CompileReference extends XNode {
 	public int getOnIllegalElementCode() {return -1;} //not supported here
 	@Override
 	public int getVarinitCode() {return -1;} //not supported here
-
 	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		throw new SRuntimeException(SYS.SYS066, "this method can't be called here");//Internal error&{0}{: }

@@ -17,33 +17,15 @@ public final class XComment extends XData implements XMNode {
 		super("#comment", null, xp, XMCOMMENT);
 		setOccurrence(REQUIRED, Integer.MAX_VALUE); //???unlimited
 	}
-//
-//	public XComment(final XComment x) {
-//		super(x);
-//		setOccurrence(x.minOccurs(), x.maxOccurs());
-//		setSPosition(x.getSPosition());
-//		setXDPosition(x.getXDPosition());
-//	}
-//
-//	@Override
-//	/** Get XMDefinition assigned to this node.
-//	 * @return root XMDefintion node.
-//	 */
-//	public XMDefinition getXMDefinition() {return null;} //TODO!
-//
+
 	@Override
 	/** Write this XComment to XDWriter. */
-	public final void writeXNode(final XDWriter xw,
-		final List<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		 //TODO!
 		writeXCodeDescriptor(xw);
 	}
 
-	final static XComment readXComment(final XDReader xr,
-		final XDefinition xd)
-		throws IOException {
-//		xr.readString(); // NS URI
-//		xr.readString(); // name
+	final static XComment readXComment(final XDReader xr, final XDefinition xd) throws IOException {
 		XComment x = new XComment(xd.getXDPool());
 		x.readXCodeDescriptor(xr);
 		return x;

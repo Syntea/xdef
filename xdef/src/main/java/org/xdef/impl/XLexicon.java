@@ -27,14 +27,13 @@ public final class XLexicon implements XDLexicon {
 	 * @return ID of language.
 	 * @throws SRuntimeException if language is not declared in lexicon.
 	 */
-	public final int getLanguageID(final String language) {
+	public final int getLanguageID(final String language) throws SRuntimeException {
 		for (int index = 0; index < _languages.length; index++) {
 			if (_languages[index].equals(language)) {
 				return index;
 			}
 		}
-		//Incorrect lexicon language ID: &{0}
-		throw new SRuntimeException(XDEF.XDEF144, language);
+		throw new SRuntimeException(XDEF.XDEF144, language); //Incorrect lexicon language ID: &{0}
 	}
 
 	/** Set lexicon item.
@@ -47,8 +46,7 @@ public final class XLexicon implements XDLexicon {
 		final int languageID,
 		final String text) {
 		if (languageID < 0 || languageID >= _languages.length) {
-			//Incorrect lexicon language ID: &{0}
-			throw new SRuntimeException(XDEF.XDEF144, languageID);
+			throw new SRuntimeException(XDEF.XDEF144, languageID); //Incorrect lexicon language ID: &{0}
 		}
 		String[] words = _dictionaries.get(key);
 		if (words == null) {
@@ -57,10 +55,8 @@ public final class XLexicon implements XDLexicon {
 			_dictionaries.put(key, words);
 		}
 		if (words[languageID] != null && !words[languageID].equals(text)) {
-			//Redefinition of reference alias &{0} and language &{1}: the
-			//word &{2} already exists as &{3}.
-			throw new SRuntimeException(XDEF.XDEF145,
-				key, _languages[languageID], text, words[languageID]);
+			//Redefinition of reference alias &{0} and language &{1}: theword &{2} already exists as &{3}.
+			throw new SRuntimeException(XDEF.XDEF145, key, _languages[languageID], text, words[languageID]);
 		}
 		words[languageID] = text;
 	}

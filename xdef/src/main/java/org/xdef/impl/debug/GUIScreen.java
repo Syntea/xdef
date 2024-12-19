@@ -124,9 +124,8 @@ public class GUIScreen extends GUIBase {
 					if (i >=0) {
 						i += 7;
 						j = s.indexOf("&{", i);
-						spos._line = (j > 0)
-							? Integer.parseInt(s.substring(i, j))
-							: Integer.parseInt(s.substring(i));
+						spos._line =
+							(j > 0) ? Integer.parseInt(s.substring(i, j)) : Integer.parseInt(s.substring(i));
 					} else {
 						spos._line = 1;
 					}
@@ -134,9 +133,8 @@ public class GUIScreen extends GUIBase {
 					if (i >=0) {
 						i += 9;
 						j = s.indexOf("&{", i);
-						spos._column = (j > 0)
-							? Integer.parseInt(s.substring(i, j))
-							: Integer.parseInt(s.substring(i));
+						spos._column =
+							(j > 0) ? Integer.parseInt(s.substring(i, j)) : Integer.parseInt(s.substring(i));
 					} else {
 						spos._column = 1;
 					}
@@ -144,16 +142,14 @@ public class GUIScreen extends GUIBase {
 					if (i >=0) {
 						i += 8;
 						j = s.indexOf("&{", i);
-						spos._sysId = (j > 0)
-							? s.substring(i, j) : s.substring(i);
+						spos._sysId = (j > 0) ? s.substring(i, j) : s.substring(i);
 					} else {
 						if ("XDEF903".equals(report.getMsgID())) {
 							i = s.indexOf("&{0}");
 							if (i >=0) {
 								i += 4;
 								j = s.indexOf("&{", i);
-								spos._sysId =
-									(j > 0) ? s.substring(i,j) : s.substring(i);
+								spos._sysId = (j > 0) ? s.substring(i,j) : s.substring(i);
 							}
 						}
 					}
@@ -208,19 +204,19 @@ public class GUIScreen extends GUIBase {
 	public void initSourceWindow() {
 		_sourceArea.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
-			public void changedUpdate(DocumentEvent de) {
+			public void changedUpdate(final DocumentEvent de) {
 				if (_sourceItem != null) {
 					_sourceItem._changed = true;
 				}
 			}
 			@Override
-			public void insertUpdate(DocumentEvent de) {
+			public void insertUpdate(final DocumentEvent de) {
 				if (_sourceItem != null) {
 					_sourceItem._changed = true;
 				}
 			}
 			@Override
-			public void removeUpdate(DocumentEvent de) {
+			public void removeUpdate(final DocumentEvent de) {
 				if (_sourceItem != null) {
 					_sourceItem._changed = true;
 				}
@@ -235,7 +231,7 @@ public class GUIScreen extends GUIBase {
 		_sourceArea.getActionMap().put("Undo", new AbstractAction("Undo") {
 			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
-			public void actionPerformed(ActionEvent evt) {
+			public void actionPerformed(final ActionEvent evt) {
 				try {
 					int i = _undo.getLimit() - 1;
 					if (_undo.canUndo() && i > UNDO_LIMIT) {
@@ -249,7 +245,7 @@ public class GUIScreen extends GUIBase {
 		_sourceArea.getActionMap().put("Redo", new AbstractAction("Redo") {
 			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
-			public void actionPerformed(ActionEvent evt) {
+			public void actionPerformed(final ActionEvent evt) {
 				try {
 					if (_undo.canRedo()) {
 						_undo.setLimit(_undo.getLimit() + 1);
@@ -262,7 +258,7 @@ public class GUIScreen extends GUIBase {
 		_sourceArea.getActionMap().put("Compile", new AbstractAction("Compile"){
 			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
-			public void actionPerformed(ActionEvent evt) {
+			public void actionPerformed(final ActionEvent evt) {
 				updateSourceItem();
 				_actionFinished = false;
 				notifyFrame();
@@ -272,11 +268,9 @@ public class GUIScreen extends GUIBase {
 		_sourceArea.getActionMap().put("Save", new AbstractAction("Save") {
 			private static final long serialVersionUID = 4377386270269629176L;
 			@Override
-			public void actionPerformed(ActionEvent evt) {
+			public void actionPerformed(final ActionEvent evt) {
 				updateSourceItem();
-				if (_sourceItem!=null
-					&& _sourceItem._changed
-					&& _sourceItem._url==null) {
+				if (_sourceItem!=null && _sourceItem._changed && _sourceItem._url==null) {
 					_sourceItem._source = _sourceArea.getText();
 					_sourceItem._saved = true;
 				}
@@ -284,22 +278,16 @@ public class GUIScreen extends GUIBase {
 			}
 		});
 		// Bind the undo actions
-		_sourceArea.getInputMap().put(
-			KeyStroke.getKeyStroke("control Z"), "Undo");
-		_sourceArea.getInputMap().put(
-			KeyStroke.getKeyStroke("control Y"), "Redo");
-		_sourceArea.getInputMap().put(
-			KeyStroke.getKeyStroke("F9"), "Compile");
-		_sourceArea.getInputMap().put(
-			KeyStroke.getKeyStroke("control S"), "Save");
+		_sourceArea.getInputMap().put(KeyStroke.getKeyStroke("control Z"), "Undo");
+		_sourceArea.getInputMap().put(KeyStroke.getKeyStroke("control Y"), "Redo");
+		_sourceArea.getInputMap().put(KeyStroke.getKeyStroke("F9"), "Compile");
+		_sourceArea.getInputMap().put(KeyStroke.getKeyStroke("control S"), "Save");
 	}
 
 	/** Set source area (from error information positions array).
 	 * @param index the index of _sourceNames array.
 	 */
-	public final void setSource(int index) {
-		setSource(_positions[index]._sysId);
-	}
+	public final void setSource(int index) {setSource(_positions[index]._sysId);}
 
 	/** Set source area from sourceID name.
 	 * @param sourceID name of source item.
@@ -307,8 +295,7 @@ public class GUIScreen extends GUIBase {
 	public final void setSource(String sourceID) {
 		if (sourceID == null || sourceID.isEmpty()) {
 			_sourceID = null;
-			_frame.setTitle((_windowName != null ? _windowName + " " : "")
-				+ "UNKNOWN SOURCE");
+			_frame.setTitle((_windowName != null ? _windowName + " " : "") + "UNKNOWN SOURCE");
 			_sourceArea.setText(null);
 			_sourceArea.setEditable(false);
 			_undo.discardAllEdits();
@@ -328,8 +315,7 @@ public class GUIScreen extends GUIBase {
 					newSrc = _sources.get(u.toExternalForm());
 					if (newSrc == null) {
 						File f = new File(u.getFile());
-						newSrc = _sources.get(
-							f.getCanonicalPath().replace('\\','/'));
+						newSrc = _sources.get(f.getCanonicalPath().replace('\\','/'));
 						if (newSrc == null) {
 							return;
 						}
@@ -406,11 +392,10 @@ public class GUIScreen extends GUIBase {
 								s = "" + ex;
 							}
 							JOptionPane.showConfirmDialog(null,
-								"Error when writing to " + file.getName()+": "+s);
+								"Error when writing to " + file.getName() + ": " + s);
 						}
 					}
-					JOptionPane.showMessageDialog(null,
-						"Can't write to file " + file.getName());
+					JOptionPane.showMessageDialog(null, "Can't write to file " + file.getName());
 					again = true;
 				}
 			}

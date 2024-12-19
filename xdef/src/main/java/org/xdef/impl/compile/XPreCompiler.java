@@ -93,12 +93,11 @@ public class XPreCompiler implements PreCompiler {
 		final boolean debugMode,
 		final boolean ignoreUnresolvedExternals) {
 		_displayMode = displayMode;
-		 //"xml"
-		DEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
-		//"xmlns",
-		DEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
-		_g = new CompileCode(extClasses,
-			2, chkWarnings, debugMode, ignoreUnresolvedExternals);
+
+		DEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX); //"xml"
+
+		DEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX); //"xmlns",
+		_g = new CompileCode(extClasses, 2, chkWarnings, debugMode, ignoreUnresolvedExternals);
 		_g._namespaceURIs.add("."); //dummy namespace
 		_g._namespaceURIs.add(XMLConstants.XML_NS_URI);
 		_g._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
@@ -111,17 +110,14 @@ public class XPreCompiler implements PreCompiler {
 		_xmlReader = new PreReaderXML(this);
 	}
 
-	/** Get "name" (or "prefix:name") of node.
-	 * If the argument required is set to true put error message that
+	/** Get "name" (or "prefix:name") of node. If the argument required is set to true put error message that
 	 * required attribute is missing.
 	 * @param pnode PNode where the attribute "name" is required.
 	 * @param required if true the attribute is required.
 	 * @param remove if true the attribute is removed.
 	 * @return the name or null.
 	 */
-	final String getNameAttr(final PNode pnode,
-		final boolean required,
-		final boolean remove) {
+	final String getNameAttr(final PNode pnode, final boolean required, final boolean remove) {
 		PAttr pa = getXdefAttr(pnode, "name", required, remove);
 		if (pa == null) {
 			// if required do not return null!
@@ -145,25 +141,21 @@ public class XPreCompiler implements PreCompiler {
 		if (pa == null) {
 			return; // Attribute "include" is not declared in X-definition
 		}
-		/* Process list of file specifications and/or URLs. Result of list
-		 * is added to the includeList (if the includeList already contains
-		 * an item the item it is skipped. If reporter is null then
+		/* Process list of file specifications and/or URLs. Result of list is added to the includeList
+		 * (if the includeList already contains an item the item it is skipped. If reporter is null then
 		 * SRuntimeException is thrown.*/
 		SBuffer include = pa._value;
 		String actPath = pnode._name.getSysId();
 		ReportWriter reporter = getReportWriter();
-		ReportWriter myreporter =
-			reporter == null ? new ArrayReporter() : reporter;
-		StringTokenizer st =
-			new StringTokenizer(include.getString(), " \t\n\r\f,;");
+		ReportWriter myreporter = reporter == null ? new ArrayReporter() : reporter;
+		StringTokenizer st = new StringTokenizer(include.getString(), " \t\n\r\f,;");
 		while (st.hasMoreTokens()) {
 			String sid = st.nextToken(); // system ID
 			URL u;
-			if (sid.startsWith("//") ||
-				(sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) { // is URL
+			if (sid.startsWith("//") || (sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12)) { // is URL
 				try {
 					for (String x : SUtils.getSourceGroup(sid)) {
-						if (!_includeList.contains(u=SUtils.getExtendedURL(x))){
+						if (!_includeList.contains(u=SUtils.getExtendedURL(x))) {
 							_includeList.add(u); // file is not in list
 						}
 					}
@@ -171,8 +163,7 @@ public class XPreCompiler implements PreCompiler {
 					myreporter.error(SYS.SYS024, sid);//File doesn't exist: &{0}
 				}
 			} else {
-				if (sid.indexOf(':') < 0 &&
-					!sid.startsWith("/") && !sid.startsWith("\\")) {//no path
+				if (sid.indexOf(':') < 0 && !sid.startsWith("/") && !sid.startsWith("\\")) {//no path
 					if (actPath != null) {//take path from sysId
 						try {
 							u = SUtils.getExtendedURL(actPath);
@@ -188,14 +179,12 @@ public class XPreCompiler implements PreCompiler {
 								}
 								continue;
 							} else {
-								String p = new File(u.getFile()).
-									getCanonicalPath().replace('\\', '/');
+								String p = new File(u.getFile()).getCanonicalPath().replace('\\', '/');
 								int i = p.lastIndexOf('/');
 								sid = i>0 ? p.substring(0, i+1)+sid : ('/'+sid);
 							}
 						} catch (Exception ex) {
-							//File doesn't exist: &{0}
-							myreporter.error(SYS.SYS024, sid);
+							myreporter.error(SYS.SYS024, sid); //File doesn't exist: &{0}
 							sid = ""; // no file
 						}
 					}
@@ -211,8 +200,7 @@ public class XPreCompiler implements PreCompiler {
 							}
 							continue;
 						}
-						//File doesn't exist: &{0}
-						myreporter.error(SYS.SYS024, sid);
+						myreporter.error(SYS.SYS024, sid); //File doesn't exist: &{0}
 					}
 				}
 			}
@@ -242,9 +230,8 @@ public class XPreCompiler implements PreCompiler {
 				if (!wasColon && c == ':') { // we allow one colon inside name
 					wasColon = true;
 					if (i + 1 < name.length()
-						&& StringParser.getXmlCharType(
-							name.charAt(++i), xmlVersion)
-						!= StringParser.XML_CHAR_NAME_START){//must follow name
+						&& StringParser.getXmlCharType(name.charAt(++i), xmlVersion)
+						!= StringParser.XML_CHAR_NAME_START) { //must follow name
 						continue;
 					}
 				}
@@ -287,8 +274,7 @@ public class XPreCompiler implements PreCompiler {
 				macro._value,
 				getReportWriter());
 			if (_macros.containsKey(m.getName())) {
-				//Macro '&{0}' redefinition
-				Report rep = Report.error(XDEF.XDEF482, m.getName());
+				Report rep = Report.error(XDEF.XDEF482, m.getName()); //Macro '&{0}' redefinition
 				macro._name.putReport(rep, getReportWriter());
 			} else {
 				_macros.put(m.getName(), m);
@@ -308,9 +294,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param uri uri to he found.
 	 * @return index of uri from argument.
 	 */
-	public int getNSURIIndex(final String uri) {
-		return _g._namespaceURIs.indexOf(uri);
-	}
+	public int getNSURIIndex(final String uri) {return _g._namespaceURIs.indexOf(uri);}
 
 	@Override
 	/** Set URI. If the URI already exists just return the index
@@ -332,9 +316,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param uri URI to set.
 	 * @return original URI or null.
 	 */
-	public String setURIOnIndex(final int i, final String uri) {
-		return _g._namespaceURIs.set(i, uri);
-	}
+	public String setURIOnIndex(final int i, final String uri) {return _g._namespaceURIs.set(i, uri);}
 
 	@Override
 	/** Report not legal attributes. All allowed attributes should be
@@ -343,16 +325,14 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public final void reportNotAllowedAttrs(final PNode pnode) {
 		for (PAttr attr: pnode.getAttrs()) {
-			 //Attribute '&{0}' not allowed here
-			error(attr._value, XDEF.XDEF254, attr._name);
+			error(attr._value, XDEF.XDEF254, attr._name); //Attribute '&{0}' not allowed here
 		}
 		pnode.getAttrs().clear();
 	}
 
 	@Override
-	/** Get attribute of given name with or without name space prefix from
-	 * node. The attribute is removed from the list. If the argument
-	 * required is set to true put error message that required attribute
+	/** Get attribute of given name with or without name space prefix from node. The attribute is removed
+	 * from the list. If the argument required is set to true put error message that required attribute
 	 * is missing.
 	 * @param pnode where to find attribute.
 	 * @param localName The local name of attribute.
@@ -376,16 +356,14 @@ public class XPreCompiler implements PreCompiler {
 			}
 		}
 		if (xattr != null && attr != null) {
-			//The attribute '&{0}' can't be specified simultanously
-			//with and without namespace
+			//The attribute '&{0}' can't be specified simultanously with and without namespace
 			error(attr._value, XDEF.XDEF230, localName);
 		} else if (xattr == null) {
 			xattr = attr;
 		}
 		if (xattr == null) {
 			if (required) {
-				//Required attribute '&{0}' is missing
-				error(pnode._name, XDEF.XDEF323, "xd:"+localName);
+				error(pnode._name, XDEF.XDEF323, "xd:"+localName);//Required attribute '&{0}' is missing
 			}
 			return null;
 		} else {
@@ -401,9 +379,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param source The source string with definitions.
 	 * @throws RutimeException if an error occurs.
 	 */
-	public final void parseString(final String source) {
-		parseString(source, null);
-	}
+	public final void parseString(final String source) {parseString(source, null);}
 
 	@Override
 	/** Parse string and addAttr it to the set of X-definitions.
@@ -415,27 +391,22 @@ public class XPreCompiler implements PreCompiler {
 		File f = new File(source);
 		if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
 			&& source.charAt(source.trim().length()-1) == '>' && !f.exists()) {
-			ByteArrayInputStream baos = new ByteArrayInputStream(
-				source.trim().getBytes(StandardCharsets.UTF_8));
-			_xmlReader.parseStream(baos, srcName);
+			ByteArrayInputStream b = new ByteArrayInputStream(source.trim().getBytes(StandardCharsets.UTF_8));
+			_xmlReader.parseStream(b, srcName);
 		} else {
 			parseFile(f);
 		}
 	}
 
 	@Override
-	/** Parse file with source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param fileName pathname of file with with X-definitions.
 	 * @throws RutimeException if an error occurs.
 	 */
-	public final void parseFile(final String fileName) {
-		parseFile(new File(fileName));
-	}
+	public final void parseFile(final String fileName) {parseFile(new File(fileName));}
 
 	@Override
-	/** Parse file with source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param file The file with with X-definitions.
 	 * @throws RutimeException if an error occurs.
 	 */
@@ -454,17 +425,14 @@ public class XPreCompiler implements PreCompiler {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
 			}
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception &{0}
 		}
 	}
 
 	@Override
-	/** Parse InputStream source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
 	 * @param in input stream with the X-definition.
-	 * @param srcName name of source data used in reporting (SysId) or
-	 * <i>null</i>.
+	 * @param srcName name of source data used in reporting (SysId) or null.
 	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
@@ -484,8 +452,7 @@ public class XPreCompiler implements PreCompiler {
 			if (ex instanceof SThrowable) {
 				throw new SRuntimeException(((SThrowable) ex).getReport(), ex);
 			}
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception &{0}
 		}
 	}
 
@@ -505,8 +472,7 @@ public class XPreCompiler implements PreCompiler {
 			if (ex instanceof SThrowable) {
 				throw new SRuntimeException(((SThrowable) ex).getReport(), ex);
 			}
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception &{0}
 		}
 	}
 
@@ -518,8 +484,7 @@ public class XPreCompiler implements PreCompiler {
 		for (PNode p: pnode.getChildNodes()) {
 			if (pnode._nsindex != 0 || !"declaration".equals(pnode._localName)
 				|| !"macro".equals(p._localName)) {
-				//Nested child elements are not allowed here
-				error(p._name, XDEF.XDEF219);
+				error(p._name, XDEF.XDEF219); //Nested child elements are not allowed here
 			}
 		}
 	}
@@ -571,8 +536,7 @@ public class XPreCompiler implements PreCompiler {
 							if (x._nsindex==0 && "macro".equals(x._localName)) {
 								if (local) {
 									// local mactro
-									PAttr defAttr = new PAttr("#def",
-										new SBuffer(defName), "", -1);
+									PAttr defAttr = new PAttr("#def", new SBuffer(defName), "", -1);
 									defAttr._localName = "#def";
 									x.setAttr(defAttr);
 								}
@@ -689,9 +653,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param registeredID registered report id.
 	 * @param mod Array with message modification parameters.
 	 */
-	public void fatal(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	public void fatal(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.fatal(registeredID, mod));
 	}
 
@@ -701,9 +663,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	public final void error(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.error(registeredID, mod));
 	}
 
@@ -713,9 +673,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	public final void lightError(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.lightError(registeredID, mod));
 	}
 
@@ -725,9 +683,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	public final void warning(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.warning(registeredID, mod));
 	}
 
@@ -742,18 +698,14 @@ public class XPreCompiler implements PreCompiler {
 
 	@Override
 	/** Put error to compiler reporter.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final long registeredID, final Object... mod) {
-		getReportWriter().error(registeredID, mod);
-	}
+	public final void error(final long ID, final Object... mod) {getReportWriter().error(ID, mod);}
 
 	@Override
 	/** Put report to compiler reporter.
 	 * @param rep Report.
 	 */
-	public final void putReport(final Report rep) {
-		getReportWriter().putReport(rep);
-	}
+	public final void putReport(final Report rep) {getReportWriter().putReport(rep);}
 }

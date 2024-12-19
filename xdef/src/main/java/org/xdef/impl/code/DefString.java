@@ -20,8 +20,7 @@ public final class DefString extends XDValueAbstract {
 	 */
 	public DefString(final String value) {_value = value;}
 
-	/** Get value of item as String representation of value in the form of
-	 * a X-definition script.
+	/** Get value of item as String representation of value in the form of X-definition script.
 	 * @return The string representation of value of the object.
 	 */
 	public String sourceValue() {
@@ -31,26 +30,13 @@ public final class DefString extends XDValueAbstract {
 		for (int i=0; i < _value.length(); i++) {
 			char c;
 			switch (c = _value.charAt(i)) {
-				case '\n':
-					sb.append("\\n");
-					break;
-				case '\r':
-					sb.append("\\r");
-					break;
-				case '\t':
-					sb.append("\\t");
-					break;
-				case '\'':
-					sb.append("\\'");
-					break;
-				case '"':
-					sb.append("\\\"");
-					break;
-				case '\\':
-					sb.append("\\\\");
-					break;
-				default:
-					sb.append(c);
+				case '\n': sb.append("\\n"); break;
+				case '\r': sb.append("\\r"); break;
+				case '\t': sb.append("\\t"); break;
+				case '\'': sb.append("\\'"); break;
+				case '"': sb.append("\\\""); break;
+				case '\\': sb.append("\\\\"); break;
+				default: sb.append(c);
 			}
 		}
 		return sb.append('\'').toString();
@@ -84,13 +70,10 @@ public final class DefString extends XDValueAbstract {
 	 */
 	public String toString() {return _value == null ? "" : _value;}
 	@Override
-	public char charValue() {
-		return isNull() || _value.length() != 1 ? 0 : _value.charAt(0);
-	}
+	public char charValue() {return isNull() || _value.length() != 1 ? 0 : _value.charAt(0);}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return _value;}
 	@Override
@@ -103,14 +86,12 @@ public final class DefString extends XDValueAbstract {
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		return arg instanceof XDValue ? equals(((XDValue) arg)) : false;
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals(((XDValue) arg)) : false;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
 		return isNull() ? arg == null || arg.isNull()
@@ -127,10 +108,9 @@ public final class DefString extends XDValueAbstract {
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return If both objects are comparable then returns -1, 0, or a 1
-	 * as this XDValue object is less than, equal to, or greater than the
-	 * specified object. If both objects are not comparable the return
-	 * <i>Integer.MIN_VALUE</i>.
+	 * @return If both objects are comparable then returns -1, 0, or a 1 as this XDValue object is less than,
+	 * equal to, or greater than the specified object. If both objects are not comparable the return
+	 * Integer.MIN_VALUE.
 	 */
 	public int compareTo(final XDValue arg) {
 		return _value == null ? arg.stringValue() == null ? 0 : -1 :
@@ -138,9 +118,8 @@ public final class DefString extends XDValueAbstract {
 					1 : _value.compareTo(arg.stringValue());
 	}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() {return _value == null;}
 }

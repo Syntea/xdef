@@ -33,8 +33,8 @@ public final class XDRegex extends XDValueAbstract {
 
 	/** Creates new instance of XDRegex.
 	 * @param s The string with regular expression source.
-	 * @param mode if true, then it is a regular expression in XML Schema
-	 * format, otherwise it is a regular expression in Java format.
+	 * @param mode if true, then it is a regular expression in XML Schema format, otherwise it is a regular
+	 * expression in Java format.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public XDRegex(final String s, final boolean mode) {
@@ -47,8 +47,8 @@ public final class XDRegex extends XDValueAbstract {
 			if (t == null) {
 				t = ex.toString();
 			}
-			//Incorrect regular expression: &{0}
-			throw new SRuntimeException(XDEF.XDEF650, s + "; (" + t + ")");
+
+			throw new SRuntimeException(XDEF.XDEF650, s +"; ("+ t +")");//Incorrect regular expression: &{0}
 		}
 	}
 
@@ -60,17 +60,13 @@ public final class XDRegex extends XDValueAbstract {
 	 * @param x The data to be checked.
 	 * @return true if and only if the data matches regular expression.
 	 */
-	public final boolean matches(final String x) {
-		return _value.matcher(x).matches();
-	}
+	public final boolean matches(final String x) {return _value.matcher(x).matches();}
 
 	/** Return regex result.
 	 * @param x string to be processed with this regular expression.
 	 * @return XDRegexResult object.
 	 */
-	public final XDRegexResult getRegexResult(final String x) {
-		return new XDRegexResult(_value.matcher(x));
-	}
+	public final XDRegexResult getRegexResult(final String x) {return new XDRegexResult(_value.matcher(x));}
 
 	/** Get value of item as String representation of value.
 	 * @return The string representation of value of the object.
@@ -128,12 +124,10 @@ public final class XDRegex extends XDValueAbstract {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/* Translates a source of XML Schema regular expression into Java format.
-	 * (This code ia the modified version of the source code originally written
-	 * by James Clark and modified by Michael Kay.)
+	/** Translates a source of XML Schema regular expression into Java format. (This code ia the modified
+	 * version of the source code originally written by James Clark and modified by Michael Kay.)
 	 * @see java.util.regex.Pattern
-	 * @see <a href="http://www.w3.org/TR/xmlschema-2/#regexs">
-	 *   XML Schema Part 2</a>
+	 * @see <a href="http://www.w3.org/TR/xmlschema-2/#regexs">  XML Schema Part 2</a>
 	 * ***********************************************
 	 * *   Syntax of XML schema regular expression   *
 	 * ***********************************************
@@ -190,13 +184,13 @@ public final class XDRegex extends XDValueAbstract {
 			"PrivateUse", "[\ue000-\uf8ff\udb80\udc00-\udbbf\udffd\udbc0\udc00-\udbff\udffd]","^",
 		};
 
-		/** Charset block names which differs in XML schema and Java.
-		 * Each block name is represented by three items:
+		/** Charset block names which differs in XML schema and Java. Each block name is represented by three
+		 * items:
 		 * <p>1) block name
 		 * <p>2) string with charGroups for this block name or null
 		 * <p>3) string with charGroups for the complement of this this block name.
-		 * If it is the string with one character "^" the it will be generated
-		 * the complement of the string from 2)
+		 * If it is the string with one character "^" the it will be generated the complement of the string
+		 * from 2)
 		 */
 		static private final String[] BLOCKNAMESNOTDIFFERENT = {
 			"Arabic", "Armenian", "Bengali", "Cherokee", "Cyrillic",
@@ -240,13 +234,13 @@ public final class XDRegex extends XDValueAbstract {
 			"Cc", "Cf", "Co",
 		};
 
-		/** Charset categories which differs in XML schema and Java.
-		 * Each block name is represented by three items:
+		/** Charset categories which differs in XML schema and Java. Each block name is represented by three
+		 * items:
 		 * <p>1) block name</p>
 		 * <p>2) string with charGroups for this block name or null</p>
 		 * <p>3) string with charGroups for the complement of this this block name.
-		 * If it is the string with one character "^" the it will be generated
-		 * the complement of the string from 2)</p>
+		 * If it is the string with one character "^" the it will be generated* the complement of the string
+		 * from 2)</p>
 		 */
 		static private final String[] CATEGORIESDIFFERENT = {
 			"Lu", "[\\p{Lu}\u03f4]", "^",
@@ -296,12 +290,12 @@ public final class XDRegex extends XDValueAbstract {
 			if (eos()) {
 				return _result.toString();
 			}
-			//Regex: error in expression near position &{0}
-			throw new SRuntimeException(XDEF659, getIndex());
+			throw new SRuntimeException(XDEF659, getIndex()); //Regex: error in expression near position &{0}
 		}
 
-		// methods providing syntax rules
-
+////////////////////////////////////////////////////////////////////////////////
+// methods providing syntax rules
+////////////////////////////////////////////////////////////////////////////////
 		/** regExp::= branch ( '|' branch )*
 		 * @return true if regExp parsed.
 		 */
@@ -374,8 +368,8 @@ public final class XDRegex extends XDValueAbstract {
 						if (isInteger()) {
 							int j = getParsedInt();
 							if (i > j) {
-								//Regex: lower bound of quantifier is greater
-								//than upper bound near position &{0}
+								//Regex: lower bound of quantifier is greater than upper bound near
+								// position &{0}
 								throw new SRuntimeException(XDEF658, pos);
 							}
 						}
@@ -439,16 +433,13 @@ public final class XDRegex extends XDValueAbstract {
 		/** singleChar::= singleCharEsc | singleCharNoEsc
 		 * @return true if a singleChar parsed.
 		 */
-		private boolean singleChar() {
-			return singleCharEsc() || singleCharNoEsc();
-		}
+		private boolean singleChar() {return singleCharEsc() || singleCharNoEsc();}
 
 		/** charClass::= singleCharEsc|charClassEsc|charClassExpr|wildcardEsc
 .		 * @return true if a charclass parsed.
 		 */
 		private boolean charClass() {
-			return singleCharEsc() || charClassEsc() || charClassExpr()
-				|| wildcardEsc();
+			return singleCharEsc() || charClassEsc() || charClassExpr() || wildcardEsc();
 		}
 
 		/** charClassEsc::= ( multiCharEsc | catEsc | complEsc )
@@ -456,8 +447,7 @@ public final class XDRegex extends XDValueAbstract {
 		 *  catEsc::= '\p{' charProp '}'
 		 *  complEsc::= '\P{' charProp '}'
 		 *  charProp:: isCategory | isBlock
-		 *  isCategory::= letters | marks | numbers | punctuation
-		 *                 | separators | symbols | others
+		 *  isCategory::= letters | marks | numbers | punctuation | separators | symbols | others
 		 *  letters::= 'L' [ultmo]?
 		 *  marks::= 'M' [nce]?
 		 *  numbers::= 'N' [dlo]?
@@ -486,18 +476,14 @@ public final class XDRegex extends XDValueAbstract {
 				char c = isLetter();
 				if (c == NOCHAR) {
 					//regex: expected "&{0}" near position &{1}
-					throw new SRuntimeException(XDEF654,
-						"letter", getIndex());
+					throw new SRuntimeException(XDEF654, "letter", getIndex());
 				}
 				String name = String.valueOf(c);
 				c = isLetter();
 				if (c != NOCHAR) {
 					name += c;
 					c = getCurrentChar();
-					while ((c >= 'a' && c <= 'z')
-						|| (c >= 'A' && c <= 'Z')
-						|| (c >= '0' && c <= '9')
-						|| c == '-') {
+					while ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='-') {
 						name += c;
 						c = nextChar();
 					}
@@ -511,8 +497,8 @@ public final class XDRegex extends XDValueAbstract {
 					// isBlock
 					for (String blockNameParent : BLOCKNAMESNOTDIFFERENT) {
 						if (name.equals(blockNameParent)) {
-							_result.append("\\").append(escChar).append('{')
-								.append("In").append(name).append('}');
+							_result.append("\\").append(escChar).append('{').append("In").append(name)
+								.append('}');
 							return true;
 						}
 					}
@@ -522,44 +508,21 @@ public final class XDRegex extends XDValueAbstract {
 							String s;
 							if (escChar == 'p') {
 								s = p == null ? "\\"+escChar+"(In"+name+')' : p;
-//
-//								if (p == null) {
-//
-//									_result.append("\\").append(escChar)
-//										.append('{').append("In")
-//										.append(name).append('}');
-//								} else {
-//									_result.append(p);
-//								}
 							} else {
 								String q = BLOCKNAMESDIFFERENT[i + 2];
 								s = q == null ? "\\"+escChar+"{In"+name+'}'
 									: "^".equals(q) ? "[^"+p.substring(1) : q;
-//								if (q == null) {
-//									_result.append("\\").append(escChar)
-//										.append('{').append("In")
-//										.append(name).append('}');
-//								} else {
-//									if ("^".equals(q)) {
-//										_result.append('[').append('^')
-//											.append(p.substring(1));
-//									} else {
-//										_result.append(q);
-//									}
-//								}
 							}
 							_result.append(s);
 							return true;
 						}
 					}
-					//regex: unrecognized Unicode block name: "&{0}"
-					//near position &{1}
+					//regex: unrecognized Unicode block name: "&{0}" near position &{1}
 					throw new SRuntimeException(XDEF651, name, getIndex());
 				} else {
 					for (String categoriesNotDifferent: CATEGORIESNOTDIFFERENT){
 						if (name.equals(categoriesNotDifferent)) {
-							_result.append("\\").append(escChar).append('{')
-								.append(name).append('}');
+							_result.append("\\").append(escChar).append('{').append(name).append('}');
 							return true;
 						}
 					}
@@ -569,33 +532,15 @@ public final class XDRegex extends XDValueAbstract {
 							String p = CATEGORIESDIFFERENT[i + 1];
 							if (escChar == 'p') {
 								s = p == null ? "\\"+escChar+"{"+name+"}" : p;
-//								if (p == null) {
-//									_result.append("\\").append(escChar)
-//										.append('{').append(name).append('}');
-//								} else {
-//									_result.append(p);
-//								}
 							} else {
 								String q = CATEGORIESDIFFERENT[i + 2];
 								s = q == null ? "\\"+escChar+"("+name+")"
 									: "^".equals(q) ? "[^"+p.substring(1) : q;
-//								if (q == null) {
-//									_result.append("\\").append(escChar)
-//										.append('{').append(name).append('}');
-//								} else {
-//									if ("^".equals(q)) {
-//										_result.append('[').append('^')
-//											.append(p.substring(1));
-//									} else {
-//										_result.append(q);
-//									}
-//								}
 							}
 							_result.append(s);
 						}
 					}
-					//regex: unrecognized Unicode block name: "&{0}"
-					//near position &{1}
+					//regex: unrecognized Unicode block name: "&{0}" near position &{1}
 					throw new SRuntimeException(XDEF651, name, getIndex());
 				}
 			}
@@ -643,8 +588,7 @@ public final class XDRegex extends XDValueAbstract {
 					_result.append('-');
 					if (!charClassExpr()) {
 						//regex: expected "&{0}" near position &{1}
-						throw new SRuntimeException(XDEF654, "charClassExpr",
-							getIndex());
+						throw new SRuntimeException(XDEF654, "charClassExpr", getIndex());
 					}
 				}
 				return true;
@@ -681,9 +625,7 @@ public final class XDRegex extends XDValueAbstract {
 		/** charGroupPart::= singleChar | charRange | charClassEsc
 		 * @return true if a charGroupPart parsed.
 		 */
-		private boolean charGroupPart() {
-			return singleChar() || charRange() || charClassEsc();
-		}
+		private boolean charGroupPart() {return singleChar() || charRange() || charClassEsc();}
 
 		/** charRange::= singleChar '-' singleChar
 		 * @return true if a charRange parsed.
@@ -696,8 +638,7 @@ public final class XDRegex extends XDValueAbstract {
 						return true;
 					}
 					//regex: expected "&{0}" near position &{1}
-					throw new SRuntimeException(XDEF654,
-						"singleChar", getIndex());
+					throw new SRuntimeException(XDEF654, "singleChar", getIndex());
 				}
 			}
 			return false;

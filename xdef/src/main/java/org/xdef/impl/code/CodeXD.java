@@ -15,10 +15,7 @@ public class CodeXD extends CodeI1 {
 	 * @param param The code parameter 1.
 	 * @param param2 The code parameter 2.
 	 */
-	public CodeXD(final short resultType,
-		final short code,
-		final int param,
-		final XDValue param2) {
+	public CodeXD(final short resultType, final short code, final int param, final XDValue param2) {
 		super(resultType, code, param);
 		_p2 = param2;
 	}
@@ -43,9 +40,7 @@ public class CodeXD extends CodeI1 {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {
-		return CodeDisplay.getCodeName(_code)+"("+_param+","+_p2+")";
-	}
+	public String toString() {return CodeDisplay.getCodeName(_code)+"("+_param+","+_p2+")";}
 
 	@Override
 	/** Compare this object with other CodeItem.
@@ -57,7 +52,7 @@ public class CodeXD extends CodeI1 {
 			return false;
 		}
 		CodeXD x = (CodeXD) o;
-		return getCode() == x.getCode() && _resultType == x.getItemId() &&
-			getParam() == x.getParam() && _p2 == x._p2;
+		return getCode() == x.getCode() && _resultType == x.getItemId()
+			&& getParam() == x.getParam() && _p2 == x._p2;
 	}
 }

@@ -17,8 +17,7 @@ import org.xdef.xml.KXmlUtils;
 public final class PNode {
 	private final List<PAttr> _attrs = new ArrayList<>(); //attributes
 	private final List<PNode> _childNodes = new ArrayList<>();//child nodes
-	// namespace prefixes
-	final Map<String,Integer> _nsPrefixes = new LinkedHashMap<>();
+	final Map<String,Integer> _nsPrefixes = new LinkedHashMap<>(); // namespace prefixes
 	SBuffer _name; //qualified name of node
 	String _localName;  //local name of node
 	String _nsURI;  //namespace URI
@@ -36,17 +35,13 @@ public final class PNode {
 	 * @param name The node name.
 	 * @param position The position in the source text.
 	 * @param parent The parent node.
-	 * @param xdVersion version of XDefinition.
-	 * @param xmlVersion version of XDefinition.
+	 * @param xdVer version of XDefinition.
+	 * @param xmlVer version of XDefinition.
 	 */
-	PNode(final String name,
-		final SPosition position,
-		final PNode parent,
-		final byte xdVersion,
-		final byte xmlVersion) {
+	PNode(final String name,final SPosition position,final PNode parent,final byte xdVer,final byte xmlVer) {
 		_name = new SBuffer(name, position);
-		_xdVersion = xdVersion;
-		_xmlVersion = xmlVersion;
+		_xdVersion = xdVer;
+		_xmlVersion = xmlVer;
 		if (parent == null) {
 			_nsPrefixes.putAll(XPreCompiler.DEFINED_PREFIXES);
 			_template = false;
@@ -56,7 +51,6 @@ public final class PNode {
 		}
 		_parent = parent;
 		_nsindex = -1;
-//       java makes it: _value = null; _def = null;
 	}
 
 	/** Get node name (as SBufer).
@@ -138,14 +132,12 @@ public final class PNode {
 	public final SBuffer getValue() {return _value;}
 
 	/** Get version of the X-Definition.
-	 * @return version of the X-Definition
-	 * ("2.0"....40 see org.xdef.impl.XConstants.XDxx).
+	 * @return version of the X-Definition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
 	 */
 	public final byte getXdefVersion() {return _xdVersion;}
 
 	/** Get version of XML document.
-	 * @return version of XML document ("1.0" .. 10, "1.1" .. 11;
-	 * see org.xdef.impl.XConstants.XMLxx).
+	 * @return version of XML document ("1.0" .. 10, "1.1" .. 11; see org.xdef.impl.XConstants.XMLxx).
 	 */
 	public final byte getXMLVersion() {return _xmlVersion;}
 
@@ -206,10 +198,8 @@ public final class PNode {
 		final String actDefName,
 		final Map<String, XScriptMacro> macros) {
 		if ("macro".equals(_localName)
-			&& (XDConstants.XDEF31_NS_URI.equals(_nsURI)
-				|| XDConstants.XDEF32_NS_URI.equals(_nsURI)
-				|| XDConstants.XDEF40_NS_URI.equals(_nsURI)
-				|| XDConstants.XDEF41_NS_URI.equals(_nsURI)
+			&& (XDConstants.XDEF31_NS_URI.equals(_nsURI) || XDConstants.XDEF32_NS_URI.equals(_nsURI)
+				|| XDConstants.XDEF40_NS_URI.equals(_nsURI) || XDConstants.XDEF41_NS_URI.equals(_nsURI)
 				|| XDConstants.XDEF42_NS_URI.equals(_nsURI))) {
 			return; // it is not a macro definition
 		}
@@ -242,12 +232,10 @@ public final class PNode {
 
 	/** Create XML element from PNode.
 	 * @param p the PNode.
-	 * @param node w3c.dom.Node where to create child element (if null, then
-	 * root element is created).
+	 * @param node w3c.dom.Node where to create child element (if null, then root element is created).
 	 * @return created element.
 	 */
-	private static org.w3c.dom.Element pnodeToXML(final PNode p,
-		final org.w3c.dom.Node node) {
+	private static org.w3c.dom.Element pnodeToXML(final PNode p, final org.w3c.dom.Node node) {
 		org.w3c.dom.Document doc;
 		org.w3c.dom.Node parent;
 		if (node == null) {
@@ -256,12 +244,10 @@ public final class PNode {
 			doc = node.getOwnerDocument();
 			parent = node;
 		}
-		org.w3c.dom.Element e =
-			doc.createElementNS(p.getNamespace(), p.getName().getString());
+		org.w3c.dom.Element e = doc.createElementNS(p.getNamespace(), p.getName().getString());
 		parent.appendChild(e);
 		for (PAttr a: p.getAttrs()) {
-			e.setAttributeNS(
-				a.getNamespace(), a.getName(), a.getValue().getString());
+			e.setAttributeNS(a.getNamespace(), a.getName(), a.getValue().getString());
 		}
 		for (PNode child: p.getChildNodes()) {
 			pnodeToXML(child, e);

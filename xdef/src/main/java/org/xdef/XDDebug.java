@@ -41,15 +41,11 @@ public interface XDDebug {
 	public static final char CREATE = 'J';
 	/** Event "init". */
 	public static final char INIT = 'K';
-//	/** Event "match". */
-//	public static final char MATCH = 'L';
 	/** Event "finally". */
 	public static final char FINALLY = 'M';
 	/** Event "parse". */
 	public static final char PARSE = 'N';
 
-//	/** Event "match" in selector. */
-//	public static final char SELECTORMATCH = 'a';
 	/** Event "init" in selector. */
 	public static final char SELECTORINIT = 'd';
 	/** Event "create" in selector. */

@@ -195,10 +195,6 @@ import static org.xdef.impl.compile.CompileBase.getTypeId;
 import static org.xdef.impl.compile.CompileBase.getTypeMethod;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.sys.SException;
-//		if (numPar < pars.length) {
-//			_parser.error(XDEF.XDEF460, name);//More parameters required for method &{0}
-//		} else if (numPar > pars.length) {
-//			_parser.error(XDEF.XDEF461, name);//Too many parameters for method &{0}
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan
@@ -282,7 +278,7 @@ public final class CompileCode extends CompileBase {
 	/* Error id (to ensure to generate the unique identifier).*/
 	private int _errIdIndex = 1000;
 
-	/** Creates a new instance of GenCodeObj.
+	/** Create new instance of GenCodeObj.
 	 * @param extClasses Array of external classes.
 	 * @param externalMode id of mode external methods (old=1, new=2, both=0).
 	 * @param chkWarnings if false warnings are generated as error.
@@ -328,8 +324,8 @@ public final class CompileCode extends CompileBase {
 		var = new CompileVariable("$IDParser$", XD_PARSER, _globalVariables.getNextOffset(), (byte) 'G',null);
 		var.setInitialized(true);  // prevent to report errors
 		_globalVariables.addVariable(var);
-		var = new CompileVariable("$IDuniqueSet$",
-			X_UNIQUESET_M, _globalVariables.getNextOffset(), (byte) 'G', null);
+		var = new CompileVariable(
+			"$IDuniqueSet$", X_UNIQUESET_M, _globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true); // prevent to report errors
 		_globalVariables.addVariable(var);
 		_globalPredefSize = _globalVariables.getLastOffset();
@@ -422,8 +418,8 @@ public final class CompileCode extends CompileBase {
 		}
 		//Repeated declaration of variable '&{0}'&{#SYS000}&{1}({; (already declared: }{)}
 		putRedefinedError(null, XDEF.XDEF450, name, result == null ? null : result.getSourcePosition());
-		return (result != null && result.getName().equals(name)
-			&& result.getType() == type) ? result : new CompileVariable("?", type, -1, (byte) 'L', null);
+		return (result != null && result.getName().equals(name) && result.getType() == type)
+			? result : new CompileVariable("?", type, -1, (byte) 'L', null);
 	}
 
 	/** Put error with the first declared item position.
@@ -593,8 +589,8 @@ public final class CompileCode extends CompileBase {
 	 */
 	final void setCodeItem(final int index, final XDValue item) {_code.set(index, item);}
 
-	/** Replace last code item with the item given by argument. The code
-	 * of the item is changing the type of the top of the stack.
+	/** Replace last code item with the item given by argument. The code of the item is changing the type
+	 * of the top of the stack.
 	 * @param item The item which replaces the last code item.
 	 */
 	final void replaceTop(final XDValue item) {
@@ -603,8 +599,8 @@ public final class CompileCode extends CompileBase {
 		_cstack[_sp] = (item.getCode() == LD_CONST) ? _lastCodeIndex : -1;
 	}
 
-	/** Replace two last code items with the item given by argument. The code
-	 * of the item is changing the type of the top of the stack.
+	/** Replace two last code items with the item given by argument. The code of the item is changing the type
+	 * of the top of the stack.
 	 * @param item The item which replaces the last two code items.
 	 */
 	final void replaceTwo(final XDValue item) {
@@ -1121,14 +1117,9 @@ public final class CompileCode extends CompileBase {
 		short code;
 		short xType = var.getType();
 		switch (var.getKind()) {
-			case 'G':
-				code = ST_GLOBAL;
-				break;
-			case 'X':
-				code = ST_XMODEL;
-				break;
-			default:
-				code = ST_LOCAL;
+			case 'G': code = ST_GLOBAL; break;
+			case 'X': code = ST_XMODEL; break;
+			default: code = ST_LOCAL;
 		}
 		addCode(new CodeS1(xType, code, var.getOffset(), var.getName()));
 		_sp--;
@@ -1251,9 +1242,8 @@ public final class CompileCode extends CompileBase {
 			case CMPGT: // CMPxGT -> CMPxLE
 			case JMPGT: // JMPxGT -> JMPxLE
 				return (short) (code - 3);
-			default:
-				return -1;
 		}
+		return -1;
 	}
 
 	/** Generate default conversion of the item on the top of stack.
@@ -1261,8 +1251,7 @@ public final class CompileCode extends CompileBase {
 	 */
 	final void convertTopToType(final short resultType) {
 		short xType;
-		if (_sp >= 0 && resultType != XD_UNDEF &&
-			resultType != (xType = _tstack[_sp])) {
+		if (_sp >= 0 && resultType != XD_UNDEF && resultType != (xType = _tstack[_sp])) {
 			if (xType == resultType) {
 				return;
 			}
@@ -1283,9 +1272,7 @@ public final class CompileCode extends CompileBase {
 				return;
 			}
 			switch (resultType) {
-				case XD_STRING:
-					topToString();
-					return;
+				case XD_STRING: topToString(); return;
 				case XD_DOUBLE:
 					if (xType == XD_LONG || xType == XD_DECIMAL) {
 						topToFloat();
@@ -1294,16 +1281,12 @@ public final class CompileCode extends CompileBase {
 					break;
 				case XD_LONG:
 					switch (xType) {
-						case XD_DATETIME:
-							topToMillis();
-							return;
+						case XD_DATETIME: topToMillis(); return;
 						case XD_DECIMAL:
 							addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
 							_cstack[_sp] = -1;
 							return;
-						case XD_CHAR:
-							topXToInt(0);
-							return;
+						case XD_CHAR: topXToInt(0); return;
 					}
 					break;
 				case XD_CHAR:
@@ -1374,7 +1357,6 @@ public final class CompileCode extends CompileBase {
 			Object o;
 			if (xType == X_ATTR_REF && (codesize = _code.size() - 1) >= 0
 				&& (o = getCodeItem(codesize)) instanceof CodeS1 && (cs = (CodeS1) o)._code == ATTR_REF) {
-				//attribute
 				cs._code = ATTR_EXIST;
 				_cstack[_sp] = -1;
 				_tstack[_sp] = XD_BOOLEAN;
@@ -1564,25 +1546,17 @@ public final class CompileCode extends CompileBase {
 	}
 
 	/** Generate conversion of two top stack items to float. */
-	final void operandsToFloat() {
-		topXToFloat(1);
-		topToFloat();
-	}
+	final void operandsToFloat() {topXToFloat(1); topToFloat();}
 
 	/** Conversion of two top stack items to string. */
-	final void operandsToString() {
-		topXToString(1);
-		topToString();
-	}
+	final void operandsToString() {topXToString(1); topToString();}
 
 	/** Remove code from codeIndex to end and clear associated stack.
 	 * @param codeIndex The point from which code is removed.
 	 * @param sp The saved stack pointer.
 	 * @param spMax The saved max. stack pointer.
 	 */
-	 final void removeCodeFromIndexAndClearStack(final int codeIndex,
-		final int sp,
-		final int spMax) {
+	 final void removeCodeFromIndexAndClearStack(final int codeIndex, final int sp, final int spMax) {
 		for (int i = _lastCodeIndex; i > codeIndex; i--) {
 			_code.remove(i);
 		}
@@ -1722,8 +1696,7 @@ public final class CompileCode extends CompileBase {
 				}
 				return null; //OK
 			} else if (var.getType() == X_UNIQUESET && var.getCodeAddr() == -1
-				|| var.getType() == X_PARSEITEM && numPar == 0) {
-				//check type ID (unique type, unique value)
+				|| var.getType() == X_PARSEITEM && numPar == 0) { //check type ID (unique type, unique value)
 				addCode(new CodeI1(XD_BOOLEAN, CALL_OP, var.getParseMethodAddr()), 1);
 				return numPar != 0 ? name : null; // return null if it is OK, otherwise return method name
 			}
@@ -1926,16 +1899,14 @@ public final class CompileCode extends CompileBase {
 		final CompileBase.InternalMethod imethod) {
 		short code = imethod.getCode();
 		int npar = numPar; //is modified, should be local
-		short par1typ = npar > 0 ? _tstack[_sp - (npar - 1)] : -1; //first parameter type
+		short par1typ = npar > 0 ? _tstack[_sp - (npar - 1)] : -1;
 		//first parameter value constant pointer or -1
 		int par1const = npar > 0 ? _cstack[_sp - (npar - 1)] : -1;
 		CompileBase.InternalMethod method = imethod;
 		short resultType = method.getResultType();
 		XDValue operator = null;
 		switch (code) {
-			case FROM_ELEMENT://deprecated
-				reportDeprecated("fromElement", "from");
-				break;
+			case FROM_ELEMENT: reportDeprecated("fromElement", "from"); break;//deprecated
 			case LD_CONST: {
 				if (resultType != XD_PARSER) { // this should never happen!
 					_parser.error(XDEF.XDEF202,"const type: "+resultType); //Internal error: &{0}
@@ -2340,8 +2311,7 @@ public final class CompileCode extends CompileBase {
 							break;
 						case XD_ANY:
 							break;
-						default:
-							_parser.error(XDEF.XDEF469); //Format mask supported only for numbers or dates
+						default: _parser.error(XDEF.XDEF469);//Format mask supported only for numbers or dates
 					}
 					method = genInternalMethod(code, XD_STRING,
 						method.getRestrictions(),

@@ -131,10 +131,7 @@ public final class XPool implements XDPool, Serializable {
 // Constructors
 ////////////////////////////////////////////////////////////////////////////////
 
-	private XPool() {
-		_xdefs = new LinkedHashMap<>();
-		_sourceInfo = new XDSourceInfo();
-	}
+	private XPool() {_xdefs = new LinkedHashMap<>(); _sourceInfo = new XDSourceInfo();}
 
 	/** Creates instance of XDPool with properties, external objects and reporter.
 	 * @param props Properties or <i>null</i>.
@@ -149,22 +146,19 @@ public final class XPool implements XDPool, Serializable {
 		// Set values of properties
 		//debug mode
 		_debugMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DEBUG,
-			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE,
-				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
-				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
+			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE, XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
+			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
 		//showErrors display mode
 		_displayMode = (byte) readProperty(_props,
 			XDConstants.XDPROPERTY_DISPLAY,
 			new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE,
-				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
-				XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
+				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS, XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
 		_debugEditor = SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG_EDITOR);
 		_xdefEditor = SManager.getProperty(_props, XDConstants.XDPROPERTY_XDEF_EDITOR);
 		//set DOCTYPE illegal
 		_illegalDoctype = readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
-			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
-				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
+			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;  //default is false
 		//switch if the actullal reporter is cleared on invoked action
 		_clearReports=readProperty(_props,XDConstants.XDPROPERTY_CLEAR_REPORTS,
@@ -197,7 +191,7 @@ public final class XPool implements XDPool, Serializable {
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
 		_compiler = new CompileXDPool(this,
-			_reporter!=null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
+			_reporter != null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -224,8 +218,8 @@ public final class XPool implements XDPool, Serializable {
 			try {
 				return Integer.parseInt(val);
 			} catch (NumberFormatException ex) {
-				throw new SRuntimeException(XDEF.XDEF214, //Error of property &{0} = &{1} (it must be &{2}
-					key, val,"integer");
+				//Error of property &{0} = &{1} (it must be &{2}
+				throw new SRuntimeException(XDEF.XDEF214, key, val,"integer");
 			}
 		}
 	}
@@ -275,9 +269,9 @@ public final class XPool implements XDPool, Serializable {
 		return 0; // default value
 	}
 
-	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then
-	 * it is interpreted as source X-definition data, otherwise it can be the pathname of the file or URL.
-	 * If it is a pathname format then it may contain also wildcard characters representing a group of files.
+	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then it is
+	 * interpreted as source X-definition data, otherwise it can be the pathname of the file or URL. If it is
+	 * a pathname format then it may contain also wildcard characters representing a group of files.
 	 * @param source The string with source X-definition.
 	 * @param sourceId name of source source data corresponding to the argument source used in reporting.
 	 * @throws RuntimeException if source is missing or if an error occurs.
@@ -303,7 +297,7 @@ public final class XPool implements XDPool, Serializable {
 					}
 					if (src != null) { // Generate a X-definition from XML
 						src = KXmlUtils.nodeToString(
-							GenXDef.genXdef(KXmlUtils.parseXml(src).getDocumentElement()),true);
+							GenXDef.genXdef(KXmlUtils.parseXml(src).getDocumentElement()), true);
 						setSource(src, sid);
 						return;
 					}
@@ -349,8 +343,8 @@ public final class XPool implements XDPool, Serializable {
 			if (ex instanceof SThrowable) {
 				_compiler.getReportWriter().putReport(((SThrowable) ex).getReport());
 			} else {
-				_compiler.getReportWriter().error(SYS.SYS036, //Program exception &{0}
-					STester.printThrowable(ex));
+				//Program exception &{0}
+				_compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 	}
@@ -394,8 +388,8 @@ public final class XPool implements XDPool, Serializable {
 			if (ex instanceof SThrowable) {
 				_compiler.getReportWriter().putReport(((SThrowable) ex).getReport());
 			} else {
-				_compiler.getReportWriter().error(SYS.SYS036,//Program exception&{0}{: }
-					STester.printThrowable(ex));
+				//Program exception&{0}{: }
+				_compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 	}
@@ -430,8 +424,8 @@ public final class XPool implements XDPool, Serializable {
 			if (ex instanceof SThrowable) {
 				_compiler.getReportWriter().putReport( ((SThrowable) ex).getReport());
 			} else {
-				_compiler.getReportWriter().error(SYS.SYS036, //Program exception&{0}{: }
-					STester.printThrowable(ex));
+				//Program exception&{0}{: }
+				_compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 	}
@@ -473,14 +467,14 @@ public final class XPool implements XDPool, Serializable {
 				_compiler.parseStream(source, s);
 			}
 		} catch (Exception ex) {
-			_compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex));//Program exception &{0}
+			//Program exception&{0}{: }
+			_compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
 	/** Add input streams with sources data of X-definitions or collections.
 	 * @param sources array of input streams with sources.
-	 * @param sourceIds array of names of source source data corresponding to
-	 * streams (may be null).
+	 * @param sourceIds array of names of source source data corresponding to streams (may be null).
 	 */
 	final void setSource(final InputStream sources[], final String sourceIds[]) {
 		if (sources == null || sources.length == 0) {
@@ -652,9 +646,7 @@ public final class XPool implements XDPool, Serializable {
 		return _variables!=null ? (XVariable) _variables.getVariable(name):null;
 	}
 
-	private static void checkModel(List<XElement> reflist,
-		Set<XElement> refset,
-		XElement xe) {
+	private static void checkModel(List<XElement> reflist, Set<XElement> refset, XElement xe) {
 		if (refset.add(xe)) {
 			if (xe._childNodes == null) {
 				if (xe.isReference() && xe._childNodes == null) {
@@ -982,7 +974,7 @@ public final class XPool implements XDPool, Serializable {
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
 	 */
-	public final void setXComponents(Map<String, String> p) {_components=p;}
+	public final void setXComponents(Map<String, String> p) {_components = p;}
 	/** Get list of XComponent binds.
 	 * @return list of XComponent binds.
 	 */

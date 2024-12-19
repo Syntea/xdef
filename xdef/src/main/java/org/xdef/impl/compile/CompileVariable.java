@@ -31,15 +31,12 @@ public final class CompileVariable extends XVariable {
 		super(name, typ, kind, offset, false, false, false);
 		_spos = pos;
 		_codeAddr = -1;
-//		_postdefs = null; //java does it
 	}
 
-	/** Resolves post-definition of a method (set address to all previous
-	 * references).
+	/** Resolves post-definition of a method (set address to all previous references).
 	 * @param address address of method.
 	 * @param g code generator.
-	 * @return <i>false</i> if address was already set(i.e. error), otherwise
-	 * return <i>true</i> (i.e. OK).
+	 * @return false if address was already set(i.e. error), otherwise return true (i.e. OK).
 	 */
 	final boolean resolvePostDef(final int address, final CompileCode g) {
 		if (getOffset() != -1 || getKind() != 'G') {
@@ -80,8 +77,8 @@ public final class CompileVariable extends XVariable {
 
 	@Override
 	/** Set value of variable. */
-	public String toString() {return super.toString()
-		+ ", parseMethodAddr=" + getParseMethodAddr() + ", codeAddr=" + _codeAddr
-		+ ", parseResultType="  + getTypeName(getParseResultType()) + ", val=" + _value;
+	public String toString() {
+		return super.toString() + ", parseMethodAddr=" + getParseMethodAddr() + ", codeAddr=" + _codeAddr
+			+ ", parseResultType="  + getTypeName(getParseResultType()) + ", val=" + _value;
 	}
 }

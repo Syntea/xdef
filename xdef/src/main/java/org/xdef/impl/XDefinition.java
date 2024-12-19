@@ -154,8 +154,8 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 
 	@Override
 	/** Get version of X-definition.
-	 * @return version of X-definition
-	 * (see {@link org.xdef.XDConstants#XD2_0} or {@link org.xdef.XDConstants#XD3_1}).
+	 * @return version of X-definition (see {@link org.xdef.XDConstants#XD2_0}
+	 * or {@link org.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 

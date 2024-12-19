@@ -11,7 +11,6 @@ import org.xdef.sys.SError;
  * @author Vaclav Trojan
  */
 public class CodeOp extends XDValueAbstract {
-
 	/** method code id. */
 	public short _code;
 
@@ -22,10 +21,7 @@ public class CodeOp extends XDValueAbstract {
 	 * @param resultType The type of result.
 	 * @param code The code.
 	 */
-	public CodeOp(final short resultType, final short code) {
-		_resultType = resultType;
-		_code = code;
-	}
+	public CodeOp(final short resultType, final short code) {_resultType = resultType; _code = code;}
 	@Override
 	/** Get code of operation.
 	 * @return code of operation.
@@ -52,21 +48,18 @@ public class CodeOp extends XDValueAbstract {
 	 * @return parameter.
 	 */
 	public int getParam() {
-		//Internal error&{0}{: }
-		throw new SError(SYS.SYS066, "setParam on CodeOp");
+		throw new SError(SYS.SYS066, "setParam on CodeOp"); //Internal error&{0}{: }
 	}
 	@Override
 	/** Set parameter of operation.
 	 * @param param value of operation parameter.
 	 */
 	public void setParam(final int param) {
-		//Internal error&{0}{: }
-		throw new SError(SYS.SYS066, "setParam on CodeOp");
+		throw new SError(SYS.SYS066, "setParam on CodeOp"); //Internal error&{0}{: }
 	}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() { return toString(); }
 	@Override
@@ -87,8 +80,7 @@ public class CodeOp extends XDValueAbstract {
 		return getCode() == x.getCode() && _resultType == x.getItemId();
 	}
 	@Override
-	public String toString() {return CodeDisplay.codeToString(this);}
-
-	@Override
 	public XDValueType getItemType() {return OBJECT;}
+	@Override
+	public String toString() {return CodeDisplay.codeToString(this);}
 }

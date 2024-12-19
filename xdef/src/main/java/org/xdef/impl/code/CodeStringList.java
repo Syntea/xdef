@@ -6,7 +6,6 @@ import org.xdef.XDValue;
  * @author  Vaclav Trojan
  */
 public class CodeStringList extends CodeI1 {
-
 	private String[] _list;
 
 	/** Creates a new instance of CodeStringList
@@ -23,9 +22,7 @@ public class CodeStringList extends CodeI1 {
 	 * @param code The code.
 	 * @param list The array of objects.
 	 */
-	public CodeStringList(final short resultType,
-		final short code,
-		final String[] list) {
+	public CodeStringList(final short resultType, final short code, final String[] list) {
 		super(resultType, code, list.length);
 		_list = list;
 	}

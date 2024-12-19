@@ -21,16 +21,12 @@ public final class PAttr {
 	 * @param nsindex index to the namespace list.
 	 * @param parent parent node.
 	 */
-	PAttr(final String name,
-		final SBuffer value,
-		final String nsURI,
-		final int nsindex) {
+	PAttr(final String name, final SBuffer value,final String nsURI, final int nsindex) {
 		_name = name;
 		_localName = null;
 		_nsURI = nsURI;
 		_nsindex = nsindex;
 		_value = value;
-		// _parent = null; // java makes it
 	}
 
 	/** Get node name.
@@ -66,16 +62,12 @@ public final class PAttr {
 			return false;
 		}
 		PAttr attr = (PAttr) o;
-		return _localName.equals(attr._localName) &&
-			_nsindex == attr._nsindex;
+		return _localName.equals(attr._localName) && _nsindex == attr._nsindex;
 	}
 
 	@Override
 	/** Returns hash code of the object. */
-	public int hashCode() {
-		int hash = 89 * 7 + _localName.hashCode();
-		return 89 * hash + _nsindex;
-	}
+	public int hashCode() {return 89 * (89 * 7 + _localName.hashCode()) + _nsindex;}
 
 	@Override
 	public String toString() {return _name + "=" + _value.getString();}

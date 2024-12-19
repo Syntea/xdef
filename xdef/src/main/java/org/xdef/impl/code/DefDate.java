@@ -14,7 +14,6 @@ import static org.xdef.XDValueType.DATETIME;
  * @author Vaclav Trojan
  */
 public final class DefDate extends XDValueAbstract implements XDDatetime {
-
 	/** value of this object */
 	private SDatetime _value;
 
@@ -52,9 +51,7 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 	/** Set datetime.
 	 * @param value SDatetime object.
 	 */
-	public void setCalendar(final Calendar value) {
-		_value = new SDatetime(value);
-	}
+	public void setCalendar(final Calendar value) {_value = new SDatetime(value);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -75,32 +72,26 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 	 */
 	public XDValueType getItemType() {return DATETIME;}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() {return _value == null;}
 	@Override
 	/** Get value as String.
-	 * @return ISO8601 string created from value or "null".
+	 * @return ISO8601 string created from this object or "null".
 	 */
 	public String toString() {return _value == null ? "" : _value.toISO8601();}
 	@Override
 	/** Get ISO8601 string value of this object.
-	 * @return ISO8601 string created from value or "null".
+	 * @return ISO8601 string created from this object or "null".
 	 */
 	public String stringValue() {return toString();}
 	@Override
-	public XDValue cloneItem() {
-		return _value == null ?
-			new DefDate() : new DefDate((SDatetime) _value.clone());
-	}
+	public XDValue cloneItem() {return _value==null? new DefDate() : new DefDate((SDatetime) _value.clone());}
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		return (arg instanceof XDValue) ? equals((XDValue) arg) : false;
-	}
+	public boolean equals(final Object arg) {return (arg instanceof XDValue) ? equals((XDValue) arg) : false;}
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {

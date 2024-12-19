@@ -34,9 +34,7 @@ public final class DefLocale extends XDValueAbstract {
 	 * @param country uppercase two-letter ISO-3166 code.
 	 * @param variant vendor and browser specific code..
 	 */
-	public DefLocale(final String lang,
-		final String country,
-		final String variant) {
+	public DefLocale(final String lang, final String country, final String variant) {
 		_value = new Locale(lang.toLowerCase(), country.toUpperCase(), variant);
 	}
 
@@ -88,17 +86,12 @@ public final class DefLocale extends XDValueAbstract {
 	@Override
 	public int hashCode() {return _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		if (arg instanceof XDValue) {
-			return equals(((XDValue) arg));
-		}
-		return false;
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals(((XDValue) arg)) : false;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
+	 * equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
@@ -110,9 +103,8 @@ public final class DefLocale extends XDValueAbstract {
 		return _value.equals(((DefLocale)arg)._value);
 	}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise returns false.
 	 */
 	public boolean isNull() {return _value == null;}
 }

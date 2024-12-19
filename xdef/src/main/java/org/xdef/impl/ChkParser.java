@@ -62,9 +62,6 @@ import org.xml.sax.XMLReader;
 final class ChkParser extends DomBaseHandler implements XParser {
 	/** SAXParserFactory used in this class. */
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
-	/** The namespace URI for X-definition instance (version 3.1; deprecated).*/
-	static final String XDEF31_INSTANCE_NS_URI =
-		"http://www.syntea.cz/xdef/instance";
 	/** Allocation unit for node list. */
 	private static final int NODELIST_ALLOC_UNIT = 8;
 	/** Nested level of parsed object.*/
@@ -101,16 +98,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			SPF.setXIncludeAware(true);
 			SPF.setValidating(false);
 			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
-			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes",
-				false);
-			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings",
-				true);
-			SPF.setFeature("http://xml.org/sax/features/string-interning",
-				true);
+			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
+			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings", true);
+			SPF.setFeature("http://xml.org/sax/features/string-interning", true);
 			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
 			SPF.setFeature( // do not create xml:base attributes
-				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false);
+				"http://apache.org/xml/features/xinclude/fixup-base-uris", false);
 			SPF.setSchema(null);
 		} catch (ParserConfigurationException | SAXNotRecognizedException
 			| SAXNotSupportedException ex) {
@@ -138,11 +131,9 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_xmlEncoding = h.getXmlEncoding();
 			_pubId = h.getPubId();
 			_sysId = h.getSysId();
-
 			_elemLocator = h._elemLocator;
 			_isDTD = h._isDTD;
 			mr.setHandler((DomBaseHandler) h);
-
 			h.setReader(mr);
 			h.setXMLReader(null);
 			h.setInputSource(null);
@@ -162,7 +153,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			h.setXmlEncoding(_xmlEncoding);
 			h.setSysId(_sysId);
 			h.setPubId(_pubId);
-
 			h._isDTD = _isDTD;
 			h._elemLocator = _elemLocator;
 		}
@@ -171,8 +161,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	private ChkParser(final ReportWriter reporter) {
 		super();
 		_stackReader = new Stack<>();
-		_sReporter = new SReporter(
-			reporter == null ?  new ArrayReporter() : reporter);
+		_sReporter = new SReporter(reporter == null ?  new ArrayReporter() : reporter);
 		_entities = new LinkedHashMap<>();
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
@@ -180,14 +169,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		_entities.put("apos", "'");
 		_entities.put("quot", "\"");
 		_resolveIncludes = true;
-//		_illegalDoctype = false; // java makes it
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
 			xr = sp.getXMLReader();
 		} catch (ParserConfigurationException | SAXException ex) {
-			//shouldn't happen
-			throw new RuntimeException("Parse configuration error", ex);
+			throw new RuntimeException("Parse configuration error", ex); //shouldn't happen
 		}
 		xr.setContentHandler(this);
 		xr.setErrorHandler(this);
@@ -207,8 +194,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		String s = source.trim();
 		if (s.length() > 0 && s.charAt(0) == '<') {
 			_sysId = "STRING";
-			_in = new ByteArrayInputStream(
-				source.getBytes(StandardCharsets.UTF_8));
+			_in = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
 		} else {
 			try {
 				URL u = SUtils.getExtendedURL(s);
@@ -220,8 +206,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 					_sysId = f.getCanonicalPath();
 					_in = new FileInputStream(s);
 				} catch (IOException exx) {
-					//File doesn't exist: &{0}
-					throw new SRuntimeException(SYS.SYS024, s);
+					throw new SRuntimeException(SYS.SYS024, s); //File doesn't exist: &{0}
 				}
 			}
 		}
@@ -234,15 +219,14 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	ChkParser(final ReportWriter reporter, final File source) {
 		this(reporter);
 		if (source == null) {
-			//File doesn't exist: &{0}
-			throw new SRuntimeException(SYS.SYS024, "null");
+			throw new SRuntimeException(SYS.SYS024, "null"); //File doesn't exist: &{0}
 		}
 		try {
 			_sysId = source.getCanonicalPath();
 			_in = new FileInputStream(source);
 		} catch (IOException ex) {
-			throw new SRuntimeException(SYS.SYS024,//File doesn't exist: &{0}
-				source.getAbsoluteFile());
+			throw new SRuntimeException(SYS.SYS024, source.getAbsoluteFile()); //File doesn't exist: &{0}
+
 		}
 	}
 
@@ -256,7 +240,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		final String sourceName) {
 		this(reporter);
 		if (in == null) {
-			throw new SRuntimeException(SYS.SYS024, "null");
+			throw new SRuntimeException(SYS.SYS024, "null"); //File does not exist: &{0}
 		}
 		_sysId = sourceName;
 		_in = in;
@@ -275,7 +259,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		try {
 			_in = source.openStream();
 		} catch (IOException ex) {
-			throw new SRuntimeException(SYS.SYS024, _sysId);
+			throw new SRuntimeException(SYS.SYS024, _sysId); //File does not exist: &{0}
 		}
 	}
 
@@ -320,8 +304,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/////////////////////////////////////////////////////////////
 
 	@Override
-	public InputSource resolveEntity(final String pubID, final String sysID)
-		throws SAXException, IOException {
+	public InputSource resolveEntity(final String pubID, final String sysID) throws SAXException, IOException{
 		InputSource is;
 		if (_isDTD && pubID != null) {
 			InputStream in = new ByteArrayInputStream(new byte[0]);
@@ -336,14 +319,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			InputStream in = new ByteArrayInputStream(new byte[0]);
 			if (_isDTD && _illegalDoctype) {
 				_sReporter.fatal(XML.XML099);//DOCTYPE is set as not allowed
-			} else if ((_isDTD && _chkDoc._xdef._resolveEntities != 'F')
-				|| !_isDTD) {
+			} else if ((_isDTD && _chkDoc._xdef._resolveEntities != 'F') || !_isDTD) {
 				try {
 					URL u = SUtils.getExtendedURL(sysID);
 					in = u.openStream();
 				} catch (IOException ex) {
-					//URL &{0} error: &{1}{; }
-					_sReporter.fatal(SYS.SYS076, sysID);
+					_sReporter.fatal(SYS.SYS076, sysID); //URL &{0} error: &{1}{; }
 				}
 				if  (!_resolveIncludes) {
 					_sReporter.error(XML.XML309); //XInclude forbidden
@@ -359,12 +340,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/////////////////////////////////////////////////////////////
 	// Implementation of ContentHandler
 	/////////////////////////////////////////////////////////////
-
-	// implemented DomBaseHandler:
-	// void setDocumentLocator(Locator x)
-	// public void startPrefixMapping(final String prefix, final String uri)
-	// public void endPrefixMapping(final String prefix)
-	// public void skippedEntity(final String name)
 
 	private void updateLocator() {
 		if (_locator != null) {
@@ -412,13 +387,11 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				String s = mr.getProlog() + "<" + qName;
 				if (uri != null && !uri.isEmpty()) {
 					int ndx = qName.indexOf(':');
-					String attrName = "xmlns"
-						+ (ndx > 0 ? ':' + qName.substring(0, ndx) : "");
+					String attrName = "xmlns" + (ndx > 0 ? ':' + qName.substring(0, ndx) : "");
 					s += " " + attrName + "=\"" + uri + '"';
 				}
 				s += "/>";
-				InputStream in = new ByteArrayInputStream(
-					s.getBytes(getReader().getEncoding()));
+				InputStream in = new ByteArrayInputStream(s.getBytes(getReader().getEncoding()));
 				String sysId = _is.getSystemId();
 				_docBuilder.setEntityResolver(this);
 				boolean isDTD = _isDTD;
@@ -447,8 +420,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		_text = null;
 		KParsedElement parsedElem = new KParsedElement();
 		List<Object[]> list = null;
-		if (_locationDetails
-			&& !(list = mr.getElementPositions(qName)).isEmpty()) {
+		if (_locationDetails && !(list = mr.getElementPositions(qName)).isEmpty()) {
 			SPosition ep = (SPosition) ((Object[])list.get(0))[1];
 			parsedElem.setParsedNameParams(uri, qName, ep);
 			mr.releaseScanned();
@@ -457,17 +429,14 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				name = !name.isEmpty() ? "xmlns:" + name : "xmlns";
 				Object[] item = findAttr(list, name);
 				SPosition sp = item != null ? (SPosition) item[1] : ep;
-				KParsedAttr att = new KParsedAttr(
-					XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, x.getValue(),sp);
+				KParsedAttr att = new KParsedAttr(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, x.getValue(),sp);
 				parsedElem.addAttr(att);
 			}
 			for (int i = 0; i < atts.getLength(); i++) {
 				String name = atts.getQName(i);
 				Object[] item = findAttr(list, name);
-				SPosition sp = item != null
-					? (SPosition) ((SPosition) item[1]).correctPosition() : ep;
-				KParsedAttr att = new KParsedAttr(
-					atts.getURI(i), name, atts.getValue(i), sp);
+				SPosition sp = item != null ? (SPosition) ((SPosition) item[1]).correctPosition() : ep;
+				KParsedAttr att = new KParsedAttr(atts.getURI(i), name, atts.getValue(i), sp);
 				parsedElem.addAttr(att);
 			}
 		} else {
@@ -478,21 +447,18 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			for (Map.Entry<String, String> x: _prefixes.entrySet()) {
 				String name = x.getKey();
 				name = !name.isEmpty() ? "xmlns:" + name : "xmlns";
-				KParsedAttr item = new KParsedAttr(
-					XMLConstants.XMLNS_ATTRIBUTE_NS_URI,name,x.getValue(),ePos);
+				KParsedAttr item =new KParsedAttr(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,name,x.getValue(),ePos);
 				parsedElem.addAttr(item);
 			}
 			for (int i = 0; i < atts.getLength(); i++) {
-				KParsedAttr item = new KParsedAttr(
-					atts.getURI(i), atts.getQName(i), atts.getValue(i), null);
+				KParsedAttr item = new KParsedAttr(atts.getURI(i), atts.getQName(i), atts.getValue(i), null);
 				parsedElem.addAttr(item);
 			}
 		}
 		int len = parsedElem.getLength();
 		for (int i = 0; i < len; i++) {
 			KParsedAttr att = parsedElem.getAttr(i);
-			_element.setAttributeNS(att.getNamespaceURI(),
-				att.getName(), att.getValue());
+			_element.setAttributeNS(att.getNamespaceURI(), att.getName(), att.getValue());
 		}
 		_prefixes.clear();
 		updateLocator();
@@ -531,9 +497,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	}
 
 	@Override
-	public void ignorableWhitespace(final char[] ch,
-		final int start,
-		final int length) throws SAXException {
+	public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
 		appendText(String.valueOf(ch, start, length));
 		updateLocator();
 	}
@@ -550,10 +514,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	}
 
 	@Override
-	public void endDocument() throws SAXException {
-		_text = null;
-		_chkDoc.endDocument();
-	}
+	public void endDocument() throws SAXException {_text = null; _chkDoc.endDocument();}
 
 	/////////////////////////////////////////////////////////////
 	// Implementation of LexicalHandler
@@ -600,8 +561,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/////////////////////////////////////////////////////////////
 
 	private SPosition getPos(final SAXParseException x) {
-		SPosition result = new SPosition(x.getLineNumber(),
-			x.getColumnNumber(), _sysId, x.getPublicId());
+		SPosition result = new SPosition(x.getLineNumber(), x.getColumnNumber(), _sysId, x.getPublicId());
 		return result;
 	}
 
@@ -614,14 +574,14 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			}
 		}
 		_sReporter.setPosition(getPos(x));
-		_sReporter.warning(XML.XML075, m);
+		_sReporter.warning(XML.XML075, m); //XML error&{0}{: }
 	}
 
 	@Override
 	public final void error(final SAXParseException x) {
 		String m = x.getMessage();
 		_sReporter.setPosition(getPos(x));
-		_sReporter.error(XML.XML075, m);
+		_sReporter.error(XML.XML075, m); //XML error&{0}{: }
 	}
 
 	@Override
@@ -632,9 +592,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				return;
 			}
 			if (m.contains("must not contain the '<' character")) {
-				//Character "<" can't be used here
 				_sReporter.setPosition(getPos(x));
-				_sReporter.error(XML.XML041);
+				_sReporter.error(XML.XML041); //Character "<" can't be used here
 				return;
 			}
 			if (m.contains("--")) {
@@ -658,7 +617,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 					}
 				}
 				_sReporter.setPosition(getPos(x));
-				_sReporter.error(XML.XML024, s);
+				_sReporter.error(XML.XML024, s); //Expected end tag "&{0}"
 				return;
 			}
 			if (m.contains("Recursive include detected.")) {
@@ -669,7 +628,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 					int ndx2 = m.indexOf(" was already processed.", ndx1);
 					String fname = m.substring(ndx1 + 1, ndx2 - 1);
 					_sReporter.setPosition(getPos(x));
-					_sReporter.error(XML.XML306, fname);
+					_sReporter.error(XML.XML306, fname); //XInclude - recursive include &{0}
 					return;
 				}
 			}
@@ -685,7 +644,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 							ndx2 = m.indexOf('"', ndx + 1);
 							String attName = m.substring(ndx+1, ndx2);
 							_sReporter.setPosition(getPos(x));
-							_sReporter.error(XML.XML047, attName);
+							_sReporter.error(XML.XML047, attName);//Unknown NameSpace for qualified name &{0}
 							return;
 						}
 					}
@@ -738,12 +697,9 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_doc = _chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
 			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
 			setIgnoringComments(true); // ????
-			_illegalDoctype = !getBooleanProperty(xdp.isIllegalDoctype(),
-				XDPROPERTY_DOCTYPE, props);
-			_resolveIncludes = getBooleanProperty(xdp.isResolveIncludes(),
-				XDPROPERTY_XINCLUDE, props);
-			_locationDetails = getBooleanProperty(xdp.isLocationsdetails(),
-				XDPROPERTY_LOCATIONDETAILS, props);
+			_illegalDoctype = !getBooleanProperty(xdp.isIllegalDoctype(), XDPROPERTY_DOCTYPE, props);
+			_resolveIncludes = getBooleanProperty(xdp.isResolveIncludes(), XDPROPERTY_XINCLUDE, props);
+			_locationDetails = getBooleanProperty(xdp.isLocationsdetails(), XDPROPERTY_LOCATIONDETAILS,props);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);
@@ -767,8 +723,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				Report err = Report.fatal(
 					XML.XML080, "SAXException; "+ex.getMessage());
 				int adr;
-				if (_chkDoc != null && _chkDoc._xElement != null
-					&& _chkDoc._xElement._definition != null
+				if (_chkDoc != null && _chkDoc._xElement != null && _chkDoc._xElement._definition != null
 					&& (adr=_chkDoc._xElement._definition._onXmlError) >= 0) {
 					if (_chkDoc._chkRoot != null) {
 						_chkDoc._chkRoot.clearTemporaryReporter();
@@ -805,9 +760,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	 * @param props properties.
 	 * @return value from property or default value.
 	 */
-	private static boolean getBooleanProperty(final boolean deflt,
-		final String key,
-		final Properties props) {
+	private static boolean getBooleanProperty(final boolean deflt, final String key, final Properties props) {
 		String val = SManager.getProperty(props, key);
 		return "true".equals(val) ? true : "false".equals(val) ? false : deflt;
 	}
@@ -824,8 +777,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_text = null;
 		}
 		if (_locationDetails && mr != null) {
-			while (mr.scanCDATA() >= 0 ||  mr.scanPI() >= 0
-				|| mr.scanEntity() >= 0 || mr.scanComment() >= 0
+			while (mr.scanCDATA() >= 0 ||  mr.scanPI() >= 0 || mr.scanEntity() >= 0 || mr.scanComment() >= 0
 				 || mr.scanText() >= 0) {}
 		}
 	}
@@ -839,9 +791,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		_level++;
 		if (_level == 0) {
 			int ndx = parsedElem.indexOfNS(XDEF_INSTANCE_NS_URI, "location");
-			if (ndx < 0) { // deprecated instance specification
-				ndx = parsedElem.indexOfNS(XDEF31_INSTANCE_NS_URI, "location");
-			}
 			KParsedAttr ka;
 			String s;
 			if (ndx >= 0 &&	(ndx =
@@ -852,8 +801,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				parsedElem.remove(s);
 				parsedElem.remove(xPrefix + "location"); //xdi:location
 				_element.removeAttribute(xPrefix + "location");
-				if ((_chkDoc == null || ka != null &&
-					"#".equals(_chkDoc._xdef.getName()))){
+				if ((_chkDoc == null || ka != null && "#".equals(_chkDoc._xdef.getName()))) {
 					XPool xdp;
 					String systemLiteral = getExternalId(
 						new SBuffer(ka.getValue(), ka.getPosition()));
@@ -890,8 +838,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 						value = parsedElem.getParsedName();
 					}
 					if (xdp != null) {
-						XDefinition def =
-							(XDefinition) xdp.getXMDefinition(value);
+						XDefinition def = (XDefinition) xdp.getXMDefinition(value);
 						if (def != null) {
 							XDOutput stdOut = null;
 							//xdi:stdOut
@@ -900,11 +847,9 @@ final class ChkParser extends DomBaseHandler implements XParser {
 								value = ka.getValue().trim();
 								int index = value.indexOf(',');
 								if (index >= 0) {
-									String encoding =
-										value.substring(index + 1).trim();
+									String encoding = value.substring(index + 1).trim();
 									value = value.substring(0,index).trim();
-									stdOut =
-										new DefOutStream(value, encoding);
+									stdOut = new DefOutStream(value, encoding);
 								} else {
 									stdOut = new DefOutStream(value);
 								}
@@ -915,28 +860,22 @@ final class ChkParser extends DomBaseHandler implements XParser {
 								value = ka.getValue().trim();
 								int index = value.indexOf(',');
 								if (index >= 0) {
-									String encoding =
-										value.substring(index + 1).trim();
+									String encoding = value.substring(index + 1).trim();
 									value = value.substring(0,index).trim();
-									_sReporter.setReportWriter(
-										new FileReportWriter(
-											value, encoding, true));
+									_sReporter.setReportWriter(new FileReportWriter(value, encoding, true));
 								} else {
-									_sReporter.setReportWriter(
-										new FileReportWriter(value));
+									_sReporter.setReportWriter(new FileReportWriter(value));
 								}
 							}
 							if (_chkDoc == null) {
 								_chkDoc = new ChkDocument(def);
-								_chkDoc._reporter.setReportWriter(
-									_sReporter.getReportWriter());
+								_chkDoc._reporter.setReportWriter(_sReporter.getReportWriter());
 								_chkDoc._doc = _element.getOwnerDocument();
 								_chkDoc.setStdOut(stdOut);
 							} else {
 								XCodeProcessor scp = _chkDoc._scp;
 								ChkDocument cd = new ChkDocument(def);
-								_chkDoc._reporter.setReportWriter(
-									_sReporter.getReportWriter());
+								_chkDoc._reporter.setReportWriter(_sReporter.getReportWriter());
 								_chkDoc._scp = cd._scp;
 								_chkDoc._scp.setDebugger(scp.getDebugger());
 								_chkDoc._scp.setProperties(scp.getProperties());
@@ -944,8 +883,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 								_chkDoc._xdef = cd._xdef;
 							}
 						} else {
-							//Missing X-definition &{0}{:}
-							_sReporter.fatal(XDEF.XDEF530, value);
+							_sReporter.fatal(XDEF.XDEF530, value); //Missing X-definition &{0}{:}
 							return;
 						}
 					}
@@ -961,16 +899,14 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				_element.removeAttribute(xPrefix + "stdIn");
 			}
 			if (_chkDoc == null) {
-				//X-definition is not specified
-				throw new SRuntimeException(XDEF.XDEF550);
+				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
 			}
 			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {
 			_chkEl = _chkEl.createChkElement(_element);
 		}
 		if (_level >= _chkElemStack.length) { //increase nodelist
-			ChkElement[] newList =
-				new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
+			ChkElement[] newList = new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
 			System.arraycopy(_chkElemStack, 0, newList, 0, _chkElemStack.length);
 			_chkElemStack = newList;
 		}
@@ -981,8 +917,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				if (_locationDetails) {
 					_sReporter.setPosition(ka.getPosition());
 				}
-				_chkEl.newAttribute(
-					_element.getAttributeNode(ka.getName()));
+				_chkEl.newAttribute(_element.getAttributeNode(ka.getName()));
 				ka.setValue(null);
 			}
 		}
@@ -992,8 +927,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				if (_locationDetails) {
 					_sReporter.setPosition(ka.getPosition());
 				}
-				_chkEl.newAttribute(
-					_element.getAttributeNode(ka.getName()));
+				_chkEl.newAttribute(_element.getAttributeNode(ka.getName()));
 			}
 		}
 		if (_locationDetails) {
@@ -1016,17 +950,15 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		}
 		if (i == 1) { //PUBLIC
 			if (!p.isSpaces()) {
-				_sReporter.putReport(val, //Whitespace expected after '&{0}'
-					Report.lightError(XML.XML014, "PUBLIC"));
+				//Whitespace expected after '&{0}'
+				_sReporter.putReport(val, Report.lightError(XML.XML014, "PUBLIC"));
 			}
 			if (p.readString() == null) {
-				//Quoted string declaration expected
-				_sReporter.error(XDEF.XDEF504);
+				_sReporter.error(XDEF.XDEF504); //Quoted string declaration expected
 			}
 			if (!p.isSpaces()) {
 				//Whitespace expected after '&{0}'
-				_sReporter.putReport(val, Report.lightError(XML.XML014,
-					"PUBLIC identifier"));
+				_sReporter.putReport(val, Report.lightError(XML.XML014, "PUBLIC identifier"));
 			}
 		} else if (!p.isSpaces()) {
 			//Whitespace expected after '&{0}'

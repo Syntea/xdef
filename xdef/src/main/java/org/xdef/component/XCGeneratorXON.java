@@ -41,9 +41,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	 * @param reporter Reporter where to write error and warning messages.
 	 * @param genJavadoc if true generate Javadoc to X-definition source.
 	 */
-	XCGeneratorXON(final XDPool xp,
-		final ArrayReporter reporter,
-		final boolean genJavadoc) {
+	XCGeneratorXON(final XDPool xp, final ArrayReporter reporter, final boolean genJavadoc) {
 		super(xp, reporter, genJavadoc);
 	}
 
@@ -735,8 +733,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		String name;
 		if (keyAttr != null && keyAttr.getFixedValue() == null) { // %anyName
 			String prefix = "anyItem$";
-			name = getUniqueName(prefix, RESERVED_NAMES);
-			name = getUniqueName(name, varNames);
+			name = getUniqueName(getUniqueName(prefix, RESERVED_NAMES), varNames);
 			varNames.add(name);
 			name = name.substring(prefix.length());
 			template =
@@ -843,9 +840,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	 * @param getters where to generate getter methods.
 	 * @param vars where to generate toXOn() method.
 	 */
-	final void genToXonMethod(final XElement xe,
-		final StringBuilder getters,
-		final StringBuilder vars) {
+	final void genToXonMethod(final XElement xe, final StringBuilder getters, final StringBuilder vars) {
 		boolean any = false;
 		XMNode[] nodes = xe.getChildNodeModels();
 		String s;

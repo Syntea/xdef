@@ -3,10 +3,9 @@ package org.xdef;
 import org.xdef.sys.config.PomInfo;
 
 /** Important constants used by X-definition.
- * Note the constants with the name starting with prefix "XDPROPERTY"
- * are names of properties. To each such constant are also defined the constants
- * with the name starting with prefix "XDPROPERTYVALUE" and there are
- * defined the valid values of a respective property.
+ * Note the constants with the name starting with prefix "XDPROPERTY" are names of properties.
+ * To each such constant are also defined the constants with the name starting with prefix "XDPROPERTYVALUE"
+ * and there are defined the valid values of a respective property.
  * @author Vaclav Trojan
  */
 public interface XDConstants {
@@ -41,8 +40,7 @@ public interface XDConstants {
 	public static final String XDPROPERTYVALUE_DOCTYPE_TRUE = "true";
 
 	/** Set the XML parser will generate detailed location in reports. */
-	public static final String XDPROPERTY_LOCATIONDETAILS =
-		"xdef_locationsdetails";
+	public static final String XDPROPERTY_LOCATIONDETAILS = "xdef_locationsdetails";
 	/** Value "false" of property "xdef_locationsdetails" (default). */
 	public static final String XDPROPERTYVALUE_LOCATIONDETAILS_FALSE = "false";
 	/** Value "true" of property "xdef_locationsdetails" */
@@ -89,8 +87,7 @@ public interface XDConstants {
 	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_FALSE = "false";
 	/** Property defines if unresolved external methods are reported (used
 	 * for syntax checking of X-definition (default is "false"). */
-	public static final String XDPROPERTY_IGNORE_UNDEF_EXT =
-		"xdef_ignoreUnresolvedExternals";
+	public static final String XDPROPERTY_IGNORE_UNDEF_EXT = "xdef_ignoreUnresolvedExternals";
 	/** Value "true" of property "xdef_ignoreUnresolvedExternals" */
 	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE = "true";
 	/** Value "false" of property "xdef_ignoreUnresolvedExternals" */

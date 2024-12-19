@@ -8,22 +8,17 @@ import org.xdef.impl.compile.CompileBase;
  * @author  Vaclav Trojan
  */
 public class CodeParser extends CodeS1 {
-
 	private final XDParser _parser;
-
 	private final String[] _sqParamNames;
 
 	/** Creates a new instance of CodeString.
 	 * @param resultType type of result.
 	 * @param code code.
 	 * @param name name of parser.
-	 * @param sqParamNames Array with names of sequential parameters.
+	 * @param paramNames Array with names of sequential parameters.
 	 */
-	public CodeParser(final short resultType,
-		final short code,
-		final String name,
-		final String[] sqParamNames) {
-		this(resultType, code, 0, name, sqParamNames);
+	public CodeParser(final short resultType, final short code, final String name, final String[] paramNames){
+		this(resultType, code, 0, name, paramNames);
 	}
 
 	/** Creates a new instance of CodeString.
@@ -31,16 +26,16 @@ public class CodeParser extends CodeS1 {
 	 * @param code code.
 	 * @param param integer parameter.
 	 * @param name name of parser.
-	 * @param sqParamNames Array with names of sequential parameters.
+	 * @param paramNames Array with names of sequential parameters.
 	 */
 	public CodeParser(final short resultType,
 		final short code,
 		int param,
 		final String name,
-		final String[] sqParamNames) {
+		final String[] paramNames) {
 		super(resultType, code, param, name);
 		_parser = CompileBase.getParser(name);
-		_sqParamNames = sqParamNames;
+		_sqParamNames = paramNames;
 	}
 
 	/** Get the list of names of sequential parameters.
@@ -64,8 +59,7 @@ public class CodeParser extends CodeS1 {
 		}
 		CodeParser x = (CodeParser) o;
 		return getCode() == x.getCode() && getParam() == x.getParam()
-			&& (_parser == null && x._parser == null
-				|| _parser != null && _parser.equals(x._parser));
+			&& (_parser == null && x._parser == null || _parser != null && _parser.equals(x._parser));
 	}
 	@Override
 	public String toString() {return CodeDisplay.codeToString(this);}

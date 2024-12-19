@@ -19,5 +19,4 @@ public interface XEditor {
 	 * @param msg text of message to be shown. If null no message is shown.
 	 */
 	public void closeXEditor(String msg);
-
 }

@@ -30,7 +30,7 @@ public final class XDCurrency extends XDValueAbstract {
 	public XDCurrency(final String code) {
 		_value = Currency.getInstance(code);
 		if (_value == null) {
-			//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}&{#SYS000}
+			//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
 			throw new SRuntimeException(XDEF.XDEF809, "Currency", code);
 		}
 	}
@@ -69,7 +69,7 @@ public final class XDCurrency extends XDValueAbstract {
 				return 0;
 			}
 		}
-		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+		throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 	}
 	@Override
 	public final short getItemId() {return XD_CURRENCY;}

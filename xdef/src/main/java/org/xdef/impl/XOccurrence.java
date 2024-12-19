@@ -66,8 +66,7 @@ public class XOccurrence implements XMOccurrence {
 				sp.isSpaces();
 				if (sp.isInteger()) {
 					_max = sp.getParsedInt();
-				} else {
-					//if (isChar('*));
+				} else { //if (isChar('*'))
 					_max = Integer.MAX_VALUE;
 				}
 			} else {
@@ -96,66 +95,60 @@ public class XOccurrence implements XMOccurrence {
 
 	@Override
 	/** Return true if value of occurrence had been specified.
-	 * @return <i>true</i> if and only if occurrence is specified.
+	 * @return true if and only if occurrence is specified.
 	 */
 	public final boolean isSpecified() {return _min != UNDEFINED;}
 
 
 	@Override
 	/** Return true if value of occurrence is set as illegal.
-	 * @return <i>true</i> if and only if occurrence is set as illegal.
+	 * @return true if and only if occurrence is set as illegal.
 	 */
 	public final boolean isIllegal() {return _min == ILLEGAL;}
 
 	@Override
 	/** Return true if value of occurrence is set as ignored.
-	 * @return <i>true</i> if and only if occurrence is set as ignored.
+	 * @return true if and only if occurrence is set as ignored.
 	 */
 	public final boolean isIgnore() {return _min == IGNORE;}
 
 	@Override
 	/** Return true if value of occurrence is set as fixed.
-	 * @return <i>true</i> if and only if occurrence is set as fixed.
+	 * @return true if and only if occurrence is set as fixed.
 	 */
 	public final boolean isFixed() {return _min == XData.FIXED && _max == 1;}
 
 	@Override
 	/** Return true if value of occurrence is set as required.
-	 * @return <i>true</i> if and only if occurrence is set as required.
+	 * @return true if and only if occurrence is set as required.
 	 */
 	public final boolean isRequired() {return _min == 1 && _max == 1;}
 
 	@Override
 	/** Return true if value of occurrence is set as optional.
-	 * @return <i>true</i> if and only if occurrence is set as optional.
+	 * @return true if and only if occurrence is set as optional.
 	 */
 	public final boolean isOptional() {return _min == 0 && _max == 1;}
 
 	@Override
 	/** Return true if value of occurrence is set as unbounded.
-	 * @return <i>true</i> if and only if occurrence is set as unbounded.
+	 * @return true if and only if occurrence is set as unbounded.
 	 */
-	public final boolean isUnbounded() {
-		return _min == 0 && _max == Integer.MAX_VALUE;
-	}
+	public final boolean isUnbounded() {return _min == 0 && _max == Integer.MAX_VALUE;}
 
 	@Override
 	/** Return true if minimum is greater then 0 and maximum is unbounded.
-	 * @return <i>true</i> if and only if minimum is greater then 0 and
+	 * @return true if and only if minimum is greater then 0 and
 	 * maximum is unbounded..
 	 */
-	public final boolean isMaxUnlimited() {
-		return _min > 0 && _max == Integer.MAX_VALUE;
-	}
+	public final boolean isMaxUnlimited() {return _min > 0 && _max == Integer.MAX_VALUE;}
 
 	////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public String toString() {return toString(true);}
-
 	@Override
 	public int hashCode() {return 31 * (_min + 217) + _max;} //217 == 7 * 31
-
 	@Override
 	public boolean equals(final Object o) {
 		return (o instanceof XMOccurrence) ? equals((XMOccurrence) o) : false;
@@ -166,12 +159,9 @@ public class XOccurrence implements XMOccurrence {
 ////////////////////////////////////////////////////////////////////////////////
 	/** Compare with other XMOccurrence.
 	 * @param x XMOccurrence to be compared.
-	 * @return true if and only if the occurrence value from the argument x is
-	 * equal to this object.
+	 * @return true if and only if the occurrence value from the argument x is equal to this object.
 	 */
-	public final boolean equals(final XMOccurrence x) {
-		return _min == x.minOccurs() && _max == x.maxOccurs();
-	}
+	public final boolean equals(final XMOccurrence x) {return _min == x.minOccurs() && _max == x.maxOccurs();}
 
 	/** Get string with canonized form of occurrence specification.
 	 * @param isValue if <i>true</i> the script describes a value of
@@ -191,9 +181,8 @@ public class XOccurrence implements XMOccurrence {
 		} else if (isOptional()) {
 			return isValue ? "optional" : "occurs ?";
 		} else {
-			return "occurs " + (_max == Integer.MAX_VALUE ?
-				_min == 0 ? "*" : _min == 1 ? "+" : (_min + "..*") :
-				(_min == _max ? String.valueOf(_min) : _min + ".." + _max));
+			return "occurs " + (_max==Integer.MAX_VALUE ? _min==0 ? "*"
+				: _min==1 ? "+" : (_min + "..*") : (_min==_max ? String.valueOf(_min) : _min + ".." + _max));
 		}
 	}
 
@@ -210,19 +199,13 @@ public class XOccurrence implements XMOccurrence {
 	/** Set occurrence values.
 	 * @param occ occurrence object from which values are imported.
 	 */
-	public final void setOccurrence(final XMOccurrence occ) {
-		_min = occ.minOccurs();
-		_max = occ.maxOccurs();
-	}
+	public final void setOccurrence(final XMOccurrence occ) {_min = occ.minOccurs(); _max = occ.maxOccurs();}
 
 	/** Set occurrence from parameters.
 	 * @param min minimum.
 	 * @param max maximum.
 	 */
-	public final void setOccurrence(final int min,
-		final int max) {
-		_min = min; _max = max;
-	}
+	public final void setOccurrence(final int min,final int max) {_min = min; _max = max;}
 
 	/** Set value of occurrence as illegal. */
 	public final void setIllegal() {_min = ILLEGAL; _max = 0;}
@@ -244,5 +227,4 @@ public class XOccurrence implements XMOccurrence {
 
 	/** Set value of occurrence as unbounded. */
 	public final void setUnbounded() {_min = 0; _max = Integer.MAX_VALUE;}
-
 }

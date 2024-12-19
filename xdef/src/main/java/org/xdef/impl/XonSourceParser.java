@@ -62,8 +62,7 @@ public final class XonSourceParser implements XonParser, XParser {
 
 	XonSourceParser(final File f) {
 		try {
-			XonReader p = new XonReader(
-				XonReader.getXonReader(new FileInputStream(f)), this);
+			XonReader p = new XonReader(XonReader.getXonReader(new FileInputStream(f)), this);
 			p.setXonMode();
 			p.setSysId(f.getCanonicalPath());
 			_p = p;
@@ -75,8 +74,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	XonSourceParser(final URL url) {
 		String id = url.toExternalForm();
 		try {
-			XonReader p =
-				new XonReader(XonReader.getXonReader(url.openStream()), this);
+			XonReader p = new XonReader(XonReader.getXonReader(url.openStream()), this);
 			p.setXonMode();
 			p.setSysId(id);
 			_p = p;
@@ -109,19 +107,16 @@ public final class XonSourceParser implements XonParser, XParser {
 	/** Set reporter to the parser.
 	 * @param reporter where to write reports.
 	 */
-	public final void setReporter(ReportWriter reporter) {
-		_p.setReportWriter(reporter);
-	}
+	public final void setReporter(ReportWriter reporter) {_p.setReportWriter(reporter);}
 
 
-	/** This method is called after all attributes of the current element
-	 * attribute list was reached. The implementation may check the list of
-	 * attributes and to invoke appropriate actions. The method is invoked
-	 * when parser reaches the end of the attribute list.
+	/** This method is called after all attributes of the current element attribute list was reached.
+	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
+	 * is invoked when parser reaches the end of the attribute list.
+	 * @param elemName name of element.
 	 */
 	private void elementStart(final SBuffer elemName) {
-		Element e = _doc.createElementNS(XDConstants.XON_NS_URI_W,
-			elemName.getString());
+		Element e = _doc.createElementNS(XDConstants.XON_NS_URI_W, elemName.getString());
 		String name = null;
 		if (_name != null) {
 			name = XonTools.toXmlName(_name.getString());
@@ -134,14 +129,12 @@ public final class XonSourceParser implements XonParser, XParser {
 		}
 		if (++_level == 0) {
 			_el = e;
-			_el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-				"xmlns", XDConstants.XON_NS_URI_W);
+			_el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns", XDConstants.XON_NS_URI_W);
 			QName qName = KXmlUtils.getQName(e);
 			_chkDoc._xElement = _chkDoc.findXElement(qName);
 			if (_chkDoc._xElement == null) {
 				//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
-				throw new SRuntimeException(XDEF.XDEF315,
-					"json", e.getNodeName());
+				throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
 			}
 			_chkEl = _chkDoc.createRootChkElement(_el, true);
 		} else {
@@ -149,8 +142,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			_chkEl = _chkEl.createChkElement(_el);
 		}
 		if (_level >= _chkElemStack.length) { //increase nodelist
-			ChkElement[] newList =
-				new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
+			ChkElement[] newList = new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
 			System.arraycopy(_chkElemStack, 0, newList, 0,_chkElemStack.length);
 			_chkElemStack = newList;
 		}
@@ -190,8 +182,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	@Override
 	/** Put value to result.
 	 * @param value JValue to be added to result object.
-	 * @return null or name of pair if value pair already exists in
-	 * the currently processed map.
+	 * @return null or name of pair if value pair already exists in the currently processed map.
 	 */
 	public void putValue(final XonTools.JValue value) {
 		_value = value;
@@ -207,8 +198,7 @@ public final class XonSourceParser implements XonParser, XParser {
 		String s = name.getString();
 		boolean result = false;
 		for (SBuffer x : _names) {
-			if (s.equals(x.getString())) {
-//				//Value pair &{0} already exists (error(JSON.JSON022, name)
+			if (s.equals(x.getString())) { //Value pair &{0} already exists (error(JSON.JSON022, name)
 				result = true;
 				break;
 			}
@@ -220,9 +210,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	/** Array started.
 	 * @param pos source position.
 	 */
-	public void arrayStart(final SPosition pos) {
-		elementStart(new SBuffer(X_ARRAY, pos));
-	}
+	public void arrayStart(final SPosition pos) {elementStart(new SBuffer(X_ARRAY, pos));}
 	@Override
 	/** Array ended.
 	 * @param pos source position.
@@ -240,10 +228,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	/** Map ended.
 	 * @param pos source position.
 	 */
-	public void mapEnd(final SPosition pos) {
-		elementEnd();
-		_names = _mapNames.pop();
-	}
+	public void mapEnd(final SPosition pos) {elementEnd();_names = _mapNames.pop();}
 
 	@Override
 	/** Processed comment.
@@ -251,8 +236,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void comment(SBuffer value){/*we ingore it here*/}
 	@Override
-	/** X-script item parsed, not used methods for XON/JSON parsing
-	 * (used in X-definition compiler).
+	/** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value value of item.
 	 */
@@ -286,24 +270,19 @@ public final class XonSourceParser implements XonParser, XParser {
 	public SReporter getReporter() {return _chkDoc.getReporter();}
 	@Override
 	/** Close reader of parsed data. */
-	public void closeReader() {
-		try {_p.closeReader();} catch (Exception ex) {} // ignore exception
-	}
+	public void closeReader() {try {_p.closeReader();} catch (Exception ex) {}} // ignore exception
+
 
 	////////////////////////////////////////////////////////////////////////////
 	/** XML W3C parser of XON/JSON object from XON/JSON object.
 	 * @author Vaclav Trojan
 	 */
 	private static class XonObjectParser implements XonParsers {
-		/** Empty position. */
-		private static final SPosition NULPOS = new SPosition();
+		private static final SPosition NULPOS = new SPosition(); /** Empty position. */
 		private final Object _obj;
 		private final XonParser _jp;
 
-		XonObjectParser(final Object obj, final XonParser jp) {
-			_obj = obj;
-			_jp = jp;
-		}
+		XonObjectParser(final Object obj, final XonParser jp) {_obj = obj; _jp = jp;}
 
 		/** Parsing of an XON/JSON object.
 		 * @param o the object to parse.

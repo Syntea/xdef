@@ -430,7 +430,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return;
 			}
-			//Bytes
 			case BYTES_ADDBYTE: ((DefBytes) p1).add(p2.intValue()); return; //Add byte
 			//Report
 			case PUT_REPORT:
@@ -454,17 +453,13 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				DecimalFormat ds;
 				if (s.length() > 2 && s.startsWith("{L(") &&
 					(ndx = s.indexOf(")}")) > 0) {
-					StringTokenizer st =
-						new StringTokenizer(s.substring(3,ndx), " \n\t\r,");
+					StringTokenizer st = new StringTokenizer(s.substring(3,ndx), " \n\t\r,");
 					s = s.substring(ndx + 2);
 					ds = new DecimalFormat(s);
 					String s1 = st.nextToken().toLowerCase();
-					String s2 =
-						(st.hasMoreTokens() ? st.nextToken():"").toUpperCase();
+					String s2 = (st.hasMoreTokens() ? st.nextToken():"").toUpperCase();
 					DecimalFormatSymbols dfs = new DecimalFormatSymbols(
-						st.hasMoreTokens() ?
-							new Locale(s1,s2,st.nextToken()) :
-							new Locale(s1,s2));
+						st.hasMoreTokens() ? new Locale(s1,s2,st.nextToken()) : new Locale(s1,s2));
 					ds.setDecimalFormatSymbols(dfs);
 				} else {
 					ds = new DecimalFormat(s);
@@ -487,14 +482,12 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case ADD_SECOND: return new DefDate(p1.datetimeValue().add(	0, 0, 0, 0, 0, p2.intValue(), 0.0));
 			case ADD_MILLIS: {//Add millisecs to date.
 				long amount = p2.longValue();
-				return new DefDate(p1.datetimeValue().add(0, 0, 0, 0, 0,
-					(int) amount/1000, (amount%1000)/1000.0));
+				return new DefDate(p1.datetimeValue().add(0,0,0,0,0,(int) amount/1000,(amount%1000)/1000.0));
 			}
 			case ADD_NANOS: {//Add nanosecs to date.
 				long amount = p2.longValue();
-				return new DefDate(p1.datetimeValue().add(0, 0, 0, 0, 0,
-					(int) (amount / 1000000000L),
-					(amount % 1000000000L)/1000000000.0));
+				return new DefDate(p1.datetimeValue().add(0,
+					0, 0, 0, 0, (int) (amount / 1000000000L), (amount % 1000000000L)/1000000000.0));
 			}
 			case SET_DAY: {//Set day from date.
 				SDatetime t = p1.datetimeValue();
@@ -603,13 +596,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 	 * @return new value of stack pointer.
 	 * @throws Exception
 	 */
-	static final int perform(final XCodeProcessor cp,
-		final XDValue item,
-		final int sp1,
-		final XDValue[] stack) throws Exception {
+	static final int perform(final XCodeProcessor cp, final XDValue item, final int sp1,final XDValue[] stack)
+		throws Exception {
 		int sp = sp1;
 		switch (item.getCode()) {
-			//Bytes
 			case BYTES_INSERT: {//Insert byte before
 				int b = stack[sp--].intValue();
 				int pos = stack[sp--].intValue();
@@ -644,7 +634,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					: DefNull.genNullValue(XD_DATETIME);
 				return sp;
 			}
-			// Element
 			case ELEMENT_TOSTRING: { //Get text value of the element
 				boolean indent = item.getParam() == 2 ? stack[sp--].booleanValue() : false;
 				Element el = stack[sp].getElement();
@@ -817,9 +806,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						}
 						break;
 					}
-					default:
-						stack[sp] = new DefInStream(stack[sp].toString(), false);
-						break;
+					default: stack[sp] = new DefInStream(stack[sp].toString(), false);
 				}
 				return sp;
 			case NEW_OUTSTREAM: {
@@ -835,9 +822,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						stack[sp] = new DefOutStream(stack[sp].toString(), s);
 						break;
 					}
-					default:
-						stack[sp] = new DefOutStream(stack[sp].toString());
-						break;
+					default: stack[sp] = new DefOutStream(stack[sp].toString());
 				}
 				return sp;
 			}
@@ -1056,12 +1041,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						sp--;
 						rep = Report.error(stack[sp].toString(), stack[sp].toString());
 						break;
-					default:
-						//if (item.getParam() == 3)
+					default: //if (item.getParam() == 3)
 						sp -= 2;
 						rep = Report.error(
 							stack[sp].toString(), stack[sp + 1].toString(), stack[sp + 2].toString());
-						break;
 				}
 				stack[sp] = new DefException(rep, chkNode != null ? chkNode.getXPos() : null, pc);
 				return sp;
@@ -1225,10 +1208,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_GPSPOSITION:
 									case XD_PRICE:
 									case XD_EMAIL: pars[j + k] = stack[i]; break;
-									default:
-										throw new SError(XDEF.XDEF202,//Internal error: &{0}
-											"Undefined type on PC=" + (pc - 1) + "; "
-												+ cmd.getClass().getName() + "; code= " + code);
+									default: throw new SError(XDEF.XDEF202,//Internal error: &{0}
+										"Undefined type on PC=" + (pc - 1) + "; "
+											+ cmd.getClass().getName() + "; code= " + code);
 								}
 							}
 						} else {
@@ -1240,8 +1222,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								case EXTMETHOD_CHKEL_ARRAY: pars = new Object[] {chkNode, parlist}; break;
 								case EXTMETHOD_XXNODE_XDARRAY:
 									pars=new Object[]{(XXNode)chkNode, parlist}; break;
-								default: //EXTERNAL_METHOD_ARRAY_CODE
-									pars = new Object[]	{parlist};
+								default: pars = new Object[] {parlist}; //EXTERNAL_METHOD_ARRAY_CODE
 							}
 						}
 						sp -= paramCount;
@@ -1266,7 +1247,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_DOUBLE: stack[++sp] = new DefDouble(x.doubleValue()); break;
 									case XD_BOOLEAN:stack[++sp] = new DefBoolean(x.booleanValue()); break;
 									case XD_STRING: stack[++sp] = new DefString(x.stringValue()); break;
-									default: stack[++sp] = x; break;
+									default: stack[++sp] = x;
 								}
 							}
 						}
@@ -1288,10 +1269,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							case XD_PARSER: stack[++sp] = (XDParser) o; break;
 							case XD_PARSERESULT: stack[++sp] = (XDParseResult) o; break;
 							case XD_ANY: stack[++sp] = (XDValue) o; break;
-							default:
-								throw new SError(XDEF.XDEF202,//Internal error: &{0}
-									"Undefined result type on PC = " + (pc-1) +"; "+ cmd.getClass().getName()
-										 + "; code= " + code + "; type= " + dm.getItemId());
+							default: throw new SError(XDEF.XDEF202,//Internal error: &{0}
+								"Undefined result type on PC = " + (pc-1) +"; "+ cmd.getClass().getName()
+									 + "; code= " + code + "; type= " + dm.getItemId());
 						}
 					}
 					return sp;
@@ -1303,10 +1283,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return sp;
 			}
-			default:
-
-				throw new XXException(XDEF.XDEF202, //Internal error: &{0}
-					"Undefined code on PC = " + (pc - 1) + "; " + cmd.toString() + "; code="
+			default: throw new XXException(XDEF.XDEF202, //Internal error: &{0}
+				"Undefined code on PC = " + (pc - 1) + "; " + cmd.toString() + "; code="
 					+ CodeDisplay.getCodeName(cmd.getCode()));
 		}
 	}

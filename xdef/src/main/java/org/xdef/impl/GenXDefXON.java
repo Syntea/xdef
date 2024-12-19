@@ -35,22 +35,16 @@ public final class GenXDefXON {
 		/** Create new XItem from XON object.
 		 * @param XON onject.
 		 */
-		XItem(Object x) {
-			_occ = new XOccurrence(1,1);
-			_item = x;
-		}
+		XItem(final Object x) {_occ = new XOccurrence(1,1); _item = x;}
 
-		boolean isSimpleType(XItem x) {
-			return _item instanceof String && x._item instanceof String;
-		}
+		boolean isSimpleType(final XItem x) {return _item instanceof String && x._item instanceof String;}
 
 		/** Check if type of the argument is same as the type of this object.
 		 * @param x the object to be checked.
 		 * @return true if types are equal.
 		 */
-		boolean isSameType(XItem x) {
-			return isSimpleType(x)
-				|| _item instanceof List && x._item instanceof List
+		boolean isSameType(final XItem x) {
+			return isSimpleType(x) || _item instanceof List && x._item instanceof List
 				|| _item instanceof Map && x._item instanceof Map;
 		}
 
@@ -58,7 +52,7 @@ public final class GenXDefXON {
 		 * @param x the object to be checke for compatibility.
 		 * @return true if object is compatible.
 		 */
-		boolean isSame(XItem x) {
+		boolean isSame(final XItem x) {
 			if (!isSameType(x) || !_occ.equals(x._occ)) {
 				return false;
 			}
@@ -105,8 +99,7 @@ public final class GenXDefXON {
 		 * @return string with occurrence information or an empty string,
 		 */
 		private String occToString(final boolean isAtt) {
-			return _occ.isRequired() ? ""
-				: isAtt ? _occ.toString(isAtt)+" " : _occ.toString(isAtt)+";";
+			return _occ.isRequired() ? "" : isAtt ? _occ.toString(isAtt)+" " : _occ.toString(isAtt)+";";
 		}
 
 		/** Optimize model. */
@@ -153,7 +146,7 @@ public final class GenXDefXON {
 		 * @param indent indentation or an empty string.
 		 * @return indented source of created model.
 		 */
-		String toXonModel(String indent) {
+		private String toXonModel(final String indent) {
 			if (_item instanceof String) {
 				return indent + "\"" + occToString(true) + _item + ";\"";
 			}
@@ -208,8 +201,7 @@ public final class GenXDefXON {
 					}
 					XItem xi = (XItem) map.get(key);
 					sb.append(": ");
-					sb.append(xi.toXonModel(
-						xi._item instanceof String ? "" : nIndent + "  "));
+					sb.append(xi.toXonModel(xi._item instanceof String ? "" : nIndent + "  "));
 				}
 				sb.append(indent.isEmpty() ? "\n" : indent).append('}');
 			}
@@ -291,8 +283,7 @@ public final class GenXDefXON {
 	 */
 	private static XItem genModel(final Object data) {
 		return data instanceof Map ? genMap((Map) data)
-			: data instanceof List ? genList((List) data)
-			: new XItem(genItem(data));
+			: data instanceof List ? genList((List) data) : new XItem(genItem(data));
 	}
 
 	private static String[] getKeys(Map m) {
@@ -322,8 +313,7 @@ public final class GenXDefXON {
 		xmodel.setAttributeNS(XDEF42_NS_URI, "xd:name", modelName);
 		XItem xi = genModel(xon);
 		xi.optimize();
-		xmodel.appendChild(
-			xmodel.getOwnerDocument().createTextNode(xi.toXonModel("")));
+		xmodel.appendChild(xmodel.getOwnerDocument().createTextNode(xi.toXonModel("")));
 		xdef.appendChild(xmodel);
 		return xdef;
 	}

@@ -98,8 +98,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		String codeName = getCodeName(code);
 		switch (code) {
 			case LD_CONST:
-				return "CONST" + getTypeAbbrev(type)
-					+ " " + (type == XD_STRING ? item instanceof DefString
+				return "CONST" + getTypeAbbrev(type) + " "
+					+ (type == XD_STRING ? item instanceof DefString
 					? ((DefString) item).sourceValue() : item.toString()
 					: type == XD_REGEX ? ((XDRegex) item).sourceValue()
 					: type == XD_XPATH ? ((DefXPathExpr) item).sourceValue()
@@ -111,15 +111,11 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			case ST_GLOBAL:
 			case LD_XMODEL:
 			case ST_XMODEL:
-				return codeName + getTypeAbbrev(type)
-					+ " name=" + item.stringValue() + ", " + item.intValue();
-			case INIT_PARAMS_OP:
-				return codeName + " " + item.getParam() + "," + item.intValue();
+				return codeName + getTypeAbbrev(type) +" name="+ item.stringValue() +", "+ item.intValue();
+			case INIT_PARAMS_OP: return codeName + " " + item.getParam() + "," + item.intValue();
 			case ATTR_EXIST:
-			case ATTR_REF:
-				return codeName + " '" + item.stringValue() + "'";
-			case COMPILE_XPATH:
-				return codeName + " \"" + item.stringValue() + '"';
+			case ATTR_REF: return codeName + " '" + item.stringValue() + "'";
+			case COMPILE_XPATH: return codeName + " \"" + item.stringValue() + '"';
 			case EXTMETHOD:
 			case EXTMETHOD_ARRAY:
 			case EXTMETHOD_CHECK:
@@ -132,49 +128,38 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			case EXTMETHOD_CHKEL_ARRAY:
 			case EXTMETHOD_CHKEL_XDARRAY :
 			case EXTMETHOD_XXNODE_XDARRAY:
-			case EXTMETHOD_XDARRAY: {
-				CodeExtMethod method = (CodeExtMethod) item;
-				return codeName + " " + method.getExtMethod().toString()
-					+ "," + item.getParam();
-			}
-			case COMPILE_BNF: {
-				return (codeName + " source:\n"
-					+ item.toString().trim() + "\n=== BNF source end ===");
-			}
-			case SRCINFO_CODE: //source info
-				return "SRCINFO " + item.stringValue();
+			case EXTMETHOD_XDARRAY:
+				return codeName +" "+ ((CodeExtMethod) item).getExtMethod().toString() +","+ item.getParam();
+			case COMPILE_BNF:
+				return (codeName + " source:\n" + item.toString().trim() + "\n=== BNF source end ===");
+			case SRCINFO_CODE: return "SRCINFO " + item.stringValue(); //source info
 			default:
 				if (item instanceof CodeSWTableInt) {
 					CodeSWTableInt x = (CodeSWTableInt) item;
 					StringBuilder sb = new StringBuilder(codeName);
-					sb.append(' ').append(String.valueOf(item.getParam()));
-					sb.append('[');
+					sb.append(' ').append(String.valueOf(item.getParam())).append('[');
 					for (int i = 0; i < x._list.length; i++) {
 						if (i > 0) {
 							sb.append(',');
 						}
-						sb.append(String.valueOf(x._list[i])).append(':');
-						sb.append(String.valueOf(x._adrs[i]));
+						sb.append(String.valueOf(x._list[i])).append(':').append(String.valueOf(x._adrs[i]));
 					}
 					return sb.append(']').toString();
 				} else if (item instanceof CodeSWTableStr) {
 					CodeSWTableStr x = (CodeSWTableStr) item;
 					StringBuilder sb = new StringBuilder(codeName);
-					sb.append(' ').append(String.valueOf(item.getParam()));
-					sb.append('[');
+					sb.append(' ').append(String.valueOf(item.getParam())).append('[');
 					for (int i = 0; i < x._list.length; i++) {
 						if (i > 0) {
 							sb.append(',');
 						}
-						sb.append(x._list[i]).append(':');
-						sb.append(String.valueOf(x._adrs[i]));
+						sb.append(x._list[i]).append(':').append(String.valueOf(x._adrs[i]));
 					}
 					return sb.append(']').toString();
 				} else if (item instanceof CodeStringList) {
 					CodeStringList x = (CodeStringList) item;
 					StringBuilder sb = new StringBuilder(codeName);
-					sb.append(' ').append(String.valueOf(item.getParam()));
-					sb.append('[');
+					sb.append(' ').append(String.valueOf(item.getParam())).append('[');
 					String[] list = x.getStringList();
 					for (int i = 0; i < list.length; i++) {
 						if (i > 0) {
@@ -186,14 +171,11 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				} else if (item instanceof CodeXD) {
 					return ((CodeXD) item).toString();
 				} else if (item instanceof CodeS1) {
-					return codeName + " " + item.getParam()
-						+ ",'" + item.stringValue() + "'";
+					return codeName + " " + item.getParam() + ",'" + item.stringValue() + "'";
 				} else if (item instanceof CodeL2) {
-					return codeName + " " + item.getParam()
-						+ "," + item.longValue();
+					return codeName + " " + item.getParam() + "," + item.longValue();
 				} else if (item instanceof CodeI2) {
-					return codeName + " " + item.getParam()
-						+ "," + item.intValue();
+					return codeName + " " + item.getParam() + "," + item.intValue();
 				} else if (item instanceof CodeI1) {
 					return codeName + " " + item.getParam();
 				} else if (item instanceof CodeOp) {
@@ -225,9 +207,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 */
 	private static void displayDesriptor(final XCodeDescriptor sc,
 		final PrintStream out) {
-		out.println(sc.getXDPosition() + ": " + sc.getName() + " "
-			+ sc.minOccurs() + ".." + (sc.maxOccurs() == Integer.MAX_VALUE
-				? "*" : String.valueOf(sc.maxOccurs())));
+		out.println(sc.getXDPosition() + ": " + sc.getName() + " " + sc.minOccurs() + ".."
+			+ (sc.maxOccurs() == Integer.MAX_VALUE ? "*" : String.valueOf(sc.maxOccurs())));
 		if (sc.getKind() == XMELEMENT) {
 			if (((XElement)sc)._forget != 0) {
 				out.print("forget= " + (char) ((XElement)sc)._forget);
@@ -310,17 +291,10 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	private static void displaySelector(final XNode xn, final PrintStream out) {
 		XSelector xsel = (XSelector) xn;
 		switch (xsel.getKind()) {
-			case XMSEQUENCE:
-				out.print("-- Sequence: ");
-				break;
-			case XMMIXED:
-				out.print("-- Mixed:");
-				break;
-			case XMCHOICE:
-				out.print("-- Choice:");
-				break;
-			default:
-				return;
+			case XMSEQUENCE: out.print("-- Sequence: "); break;
+			case XMMIXED: out.print("-- Mixed:"); break;
+			case XMCHOICE: out.print("-- Choice:"); break;
+			default: return;
 		}
 		out.print("min=" + xsel.minOccurs());
 		out.print(",max=" + xsel.maxOccurs());
@@ -359,9 +333,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		out.println();
 	}
 
-	public static final void displayDefNode(final XNode xn,
-		final PrintStream out,
-		final Set<XNode> processed) {
+	public static final void displayDefNode(final XNode xn, final PrintStream out,final Set<XNode> processed){
 		if (!processed.add(xn)) {
 			out.println(" * ref " + xn.getXDPosition());
 			return;
@@ -410,8 +382,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				out.println("=== End XMDefinition: " + def.getName() + "\n");
 				return;
 			}
-			default:
-				out.println("UNKNOWN: " + xn.getName() + "; " + xn.getKind());
+			default: out.println("UNKNOWN: " + xn.getName() + "; " + xn.getKind());
 		}
 	}
 
@@ -439,8 +410,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			int to = toAddr > code.length ? code.length : toAddr;
 			if (to >= fromAddr) {
 				for (int i = from; i < to; i++) {
-					out.println(new java.text.DecimalFormat("000000").format(i)
-						+ " " + codeToString(code[i]));
+					out.println(new java.text.DecimalFormat("000000").format(i) +" "+ codeToString(code[i]));
 				}
 			}
 		}
@@ -450,8 +420,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param xp XDPool object.
 	 * @param out PrintStream where debug information is printed.
 	 */
-	public static final void displayDebugInfo(final XDPool xp,
-		final PrintStream out) {
+	public static final void displayDebugInfo(final XDPool xp, final PrintStream out) {
 		XDebugInfo di = (XDebugInfo) xp.getDebugInfo();
 		if (di == null) {
 			out.println("No debug information");

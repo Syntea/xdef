@@ -14,29 +14,22 @@ import static org.xdef.XDValueType.DURATION;
  * @author Vaclav Trojan
  */
 public final class DefDuration extends XDValueAbstract implements XDDuration {
-
 	/** value of this object */
 	private SDuration _value;
 
-	/** Creates a new instance of DefDuration. The value is set to the current
-	 * time.
-	 */
+	/** Creates a new instance of DefDuration. The value is set to the current time. */
 	public DefDuration() {_value = null;}
 
-	/** Creates a new instance of DefDuration. The value is set from
-	 * parameter.
+	/** Creates a new instance of DefDuration. The value is set from parameter.
 	 * @param value The duration value.
 	 */
 	public DefDuration(final SDuration value) {_value = value;}
 
-	/** Creates a new instance of DefDuration. The value is set from
-	 * parameter.
+	/** Creates a new instance of DefDuration. The value is set from parameter.
 	 * @param value The string with duration value.
 	 * @throws SRuntimeException if value is incorrect.
 	 */
-	public DefDuration(final String value) throws SRuntimeException {
-		_value = new SDuration(value);
-	}
+	public DefDuration(final String value) throws SRuntimeException {_value = new SDuration(value);}
 
 	@Override
 	public SDuration durationValue() {return _value;}
@@ -66,15 +59,12 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 	public String stringValue() {return toString();}
 	@Override
 	public XDValue cloneItem() {
-		return _value == null ?
-			new DefDuration() : new DefDuration(new SDuration(_value));
+		return _value == null ?new DefDuration() : new DefDuration(new SDuration(_value));
 	}
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		return (arg instanceof XDValue) ? equals((XDValue) arg) : false;
-	}
+	public boolean equals(final Object arg) {return (arg instanceof XDValue) ? equals((XDValue) arg) : false;}
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {

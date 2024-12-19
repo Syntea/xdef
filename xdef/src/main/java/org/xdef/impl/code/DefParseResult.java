@@ -32,8 +32,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	/** Creates a new empty instance of DefParseResult. */
 	public DefParseResult() {}
 
-	/** Creates a new instance of DefParseResult, both source and value are
-	 * set initialized with source.
+	/** Creates a new instance of DefParseResult, both source and value are set initialized with source.
 	 * @param source the source string.
 	 */
 	public DefParseResult(final String source) {_source = source;}
@@ -116,8 +115,8 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	@Override
 	public final boolean isSpace() {
 		char ch;
-		if (_srcIndex < _source.length()
-			&& ((ch= _source.charAt(_srcIndex)) == ' ' || ch == '\n' || ch == '\r' || ch == '\t')) {
+		if (_srcIndex < _source.length() && ((ch= _source.charAt(_srcIndex)) == ' '
+			|| ch == '\n' || ch == '\r' || ch == '\t')) {
 			_srcIndex++;
 			return true;
 		}
@@ -126,11 +125,11 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	@Override
 	public final boolean isSpaces() {
 		char ch;
-		if (_srcIndex < _source.length()
-			&& ((ch=_source.charAt(_srcIndex))==' ' || ch=='\n' || ch=='\r' || ch=='\t')) {
+		if (_srcIndex < _source.length() && ((ch=_source.charAt(_srcIndex))==' '
+			|| ch=='\n' || ch=='\r' || ch=='\t')) {
 			_srcIndex++;
-			while (_srcIndex < _source.length()
-				&& ((ch=_source.charAt(_srcIndex))==' ' || ch=='\n' || ch=='\r' || ch=='\t')) {
+			while (_srcIndex < _source.length() && ((ch=_source.charAt(_srcIndex))==' '
+				|| ch=='\n' || ch=='\r' || ch=='\t')) {
 				_srcIndex++;
 			}
 			return true;
@@ -165,8 +164,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	public final char isUpperCaseLetter() {
 		char ch;
 		if (_srcIndex < _source.length()) {
-			if (Character.isLetter(ch = _source.charAt(_srcIndex))
-				&& ch == Character.toUpperCase(ch)) {
+			if (Character.isLetter(ch = _source.charAt(_srcIndex)) && ch == Character.toUpperCase(ch)) {
 				char c = ch;
 				return c;
 			}
@@ -270,8 +268,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	@Override
 	public final char isLetterOrDigit() {
 		char c;
-		if (_srcIndex >= _source.length()
-			|| !Character.isLetterOrDigit(c = _source.charAt(_srcIndex))) {
+		if (_srcIndex >= _source.length() || !Character.isLetterOrDigit(c = _source.charAt(_srcIndex))) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -335,8 +332,8 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	@Override
 	public final boolean isTokenIgnoreCase(String token) {
 		int len = token.length();
-		if (_srcIndex + len <= _source.length() &&
-			token.equalsIgnoreCase(_source.substring(_srcIndex, _srcIndex + len))) {
+		if (_srcIndex + len <= _source.length()
+			&& token.equalsIgnoreCase(_source.substring(_srcIndex, _srcIndex + len))) {
 			_srcIndex+= len;
 			return true;
 		}
@@ -427,9 +424,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 		putReport(Report.error(id, msg, mod));
 	}
 	@Override
-	public final void error(final long registeredID, final Object... mod) {
-		putReport(Report.error(registeredID, mod));
-	}
+	public final void error(final long ID, final Object... mod) {putReport(Report.error(ID, mod));}
 	@Override
 	public final void putReport(final Report report) {
 		if (_ar == null) {
@@ -438,8 +433,8 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 		_ar.putReport(report);
 	}
 	@Override
-	/** Put the registered report object with type ERROR and add the last
-	 * parameter containing the string from the ParseResult object.
+	/** Put the registered report object with type ERROR and add the last parameter containing the string
+	 * from the ParseResult object.
 	 * @param registeredID registered report id.
 	 * @param mod modification string of report text.
 	 */
@@ -456,9 +451,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	}
 	@Override
 	/** Put default parse error message (XDEF515). */
-	public final void putDefaultParseError() {
-		errorWithString(XDEF.XDEF515); //Value error&{0}{: }
-	}
+	public final void putDefaultParseError() {errorWithString(XDEF.XDEF515);} //Value error&{0}{: }
 	@Override
 	public final void addReports(final ArrayReporter reporter) {
 		if (reporter != null && reporter.errors()) {
@@ -470,9 +463,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 		}
 	}
 	@Override
-	public final boolean booleanValue() {
-		return _value == null ? false : ((XDValue)_value).booleanValue();
-	}
+	public final boolean booleanValue() {return _value == null ? false : ((XDValue)_value).booleanValue();}
 	@Override
 	public byte byteValue() {return _value == null ? 0 : ((XDValue)_value).byteValue();}
 	@Override

@@ -47,6 +47,7 @@ public final class XDSourceInfo {
 		_sourcesMap.putAll(x.getMap());
 
 	}
+
 	/** Write this XDSourceIinfo object (screen position is ignored).
 	 * @param xw Writer where to write
 	 * @throws IOException if an error occurs.
@@ -69,8 +70,7 @@ public final class XDSourceInfo {
 	 * @return XDSourceInfo object
 	 * @throws IOException if an error occurs.
 	 */
-	public static final XDSourceInfo readXDSourceInfo(final XDReader xr)
-		throws IOException {
+	public static final XDSourceInfo readXDSourceInfo(final XDReader xr) throws IOException {
 		XDSourceInfo result = new XDSourceInfo();
 		result._xpos = xr.readInt();
 		result._ypos = xr.readInt();
@@ -84,5 +84,4 @@ public final class XDSourceInfo {
 		}
 		return result;
 	}
-
 }

@@ -49,25 +49,19 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 		/**	Get the raw IP address in a string format.
 	 * @return raw IP address in a string format.
 	 */
-	public String getHostAddress() {
-		return _value != null ? _value.getHostAddress() : null;
-	}
+	public String getHostAddress() {return _value != null ? _value.getHostAddress() : null;}
 
 	@Override
 	/**	Check if IP address of this IPAddrress object is IPv6 version.
 	 * @return true if IP address of this IPAddress object is IPv6 version.
 	 */
-	public boolean isIPv6() {
-		return _value == null ? false : _value.getAddress().length == 16;
-	}
+	public boolean isIPv6() {return _value == null ? false : _value.getAddress().length == 16;}
 
 	/** Get bytes from the internal InetAddress.
 	 * @return bytes from InetAddress.
 	 */
 	@Override
-	public byte[] getBytes() {
-		return _value != null ? _value.getAddress(): null;
-	}
+	public byte[] getBytes() {return _value != null ? _value.getAddress(): null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -75,9 +69,7 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		return arg instanceof XDValue ? equals((XDValue) arg) : false;
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefIPAddr) {
@@ -100,9 +92,7 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 	@Override
 	public XDValueType getItemType() {return IPADDR;}
 	@Override
-	public String stringValue() {
-		return isNull() ? "null" :_value.toString().substring(1);
-	}
+	public String stringValue() {return isNull() ? "null" :_value.toString().substring(1);}
 	@Override
 	public boolean isNull() {return _value == null;}
 	@Override

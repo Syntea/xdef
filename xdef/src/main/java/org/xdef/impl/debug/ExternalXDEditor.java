@@ -22,25 +22,22 @@ import org.xdef.sys.SRuntimeException;
  */
 public abstract class ExternalXDEditor implements XEditor {
 
-	/** Execute the external editor of X-definitions (must be implemented).
-	 * The external editor MUST return the file with the result information.
+	/** Execute the external editor of X-definitions (must be implemented). The external editor MUST return
+	 * the file with the result information.
 	 * @param defPool filename of the file with XDPool.
 	 * @param reports filename of the file with reports written by compiler.
-	 * @param resultInfo the file name of the file where the external editor
-	 * writes results of editing (if edition was finished and the map of
-	 * source items).
+	 * @param resultInfo the file name of the file where the external editor writes results of editing
+	 * (if edition was finished and the map of source items).
 	 * @throws Exception if an error occurs.
 	 */
-	abstract public void executeExternalXDEditor(String defPool,
-		String reports,
-		String resultInfo) throws Exception;
+	abstract public void executeExternalXDEditor(String defPool, String reports, String resultInfo)
+		throws Exception;
 
 	@Override
 	/** Set and open the XEditor.
 	 * @param xp XDPool.
 	 * @param err error reporter.
-	 * @return if true the editing was finished otherwise XDPool will
-	 * be recompiled.
+	 * @return if true the editing was finished otherwise XDPool will be recompiled.
 	 */
 	public boolean setXEditor(final XDPool xpool, final ArrayReporter reporter){
 		try {
@@ -60,8 +57,7 @@ public abstract class ExternalXDEditor implements XEditor {
 			// we need file names to pass as parameters (see "main"  method)
 			String defPool = poolFile.getCanonicalPath();
 			String reports = reportFile.getCanonicalPath();
-			// the name of file where the external process will write
-			// the result information
+			// the name of file where the external process will write the result information
 			String resultInfo = resultFile.getCanonicalPath();
 			executeExternalXDEditor(defPool, reports, resultInfo);
 			// wait max. 4 hours for the resultFile (14400 = 2*2*3600)
@@ -71,8 +67,7 @@ public abstract class ExternalXDEditor implements XEditor {
 				}
 			}
 			if (!resultFile.exists() || !resultFile.canRead()) {
-				//No response from the external editor
-				throw new SRuntimeException(XDEF.XDEF860);
+				throw new SRuntimeException(XDEF.XDEF860); //No response from the external editor
 			}
 			if (resultFile.length() == 0) {
 				//In the external editor is aleady opened the other project
@@ -97,8 +92,7 @@ public abstract class ExternalXDEditor implements XEditor {
 			resultFile.delete();
 			return editingFinished;
 		} catch (Exception ex) {
-			//Internal error&{0}{: }
-			throw new SRuntimeException(SYS.SYS066, ex.getCause(), ex);
+			throw new SRuntimeException(SYS.SYS066, ex.getCause(), ex); //Internal error&{0}{: }
 		}
 	}
 
@@ -118,19 +112,17 @@ public abstract class ExternalXDEditor implements XEditor {
 
 	@Override
 	/** Close XEditor.
-	 * @param msg text of message to be shown at the end of editing.
-	 * If null no message is shown.
+	 * @param msg text of message to be shown at the end of editing. If null no message is shown.
 	 */
 	public final void closeXEditor(final String msg) {}
 
-	/** Create XDPool from the file. The external editor can use this method
-	 * to get XDPool from the file it was prepared and passed to it.
+	/** Create XDPool from the file. The external editor can use this method to get XDPool from the file
+	 * it was prepared and passed to it.
 	 * @param defPool filename of the file with XDPool.
 	 * @return XDPool generated from the file from the argument defPool.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final XDPool readXDPool(final String defPool)
-		throws IOException {
+	public static final XDPool readXDPool(final String defPool) throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
 		try {
@@ -142,15 +134,13 @@ public abstract class ExternalXDEditor implements XEditor {
 		}
 	}
 
-	/** Create ArrayReporter from the file. The external editor can use this
-	 * method to get ArrayReporter from the file it was prepared and
-	 * passed to it.
+	/** Create ArrayReporter from the file. The external editor can use this method to get ArrayReporter
+	 * from the file it was prepared and passed to it.
 	 * @param reports filename with reports.
 	 * @return ArrayReporter created from the file from the argument defPool.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final ArrayReporter readReporter(final String reports)
-		throws Exception {
+	public static final ArrayReporter readReporter(final String reports) throws Exception {
 		File reps = new File(reports);
 		reps.deleteOnExit(); // we do not need this file more.
 		FileReportReader frr = new FileReportReader(reps);
@@ -161,11 +151,11 @@ public abstract class ExternalXDEditor implements XEditor {
 		return ar;
 	}
 
-	/** Create file with results of editor. This file is used by
-	 * the X-definition engine when the external editor finished.
+	/** Create file with results of editor. This file is used by the X-definition engine when the
+	 * external editor finished.
 	 * @param fileName the filename of the file to be created.
-	 * @param editingFinished true if editing was finished, otherwise
-	 * recompile XDPool with the files returned from editor.
+	 * @param editingFinished true if editing was finished, otherwise recompile XDPool with the files
+	 * returned from editor.
 	 * @param sourceItems map of description of items returned from the editor.
 	 * @throws Exception if an error occurs.
 	 */
@@ -205,8 +195,7 @@ public abstract class ExternalXDEditor implements XEditor {
 			}
 		}
 		if (count >= 100) { // Can't rename file &{0} to &{1}
-			throw new SRuntimeException(SYS.SYS031,
-				tmpFile.getAbsolutePath(), resultFile.getAbsolutePath());
+			throw new SRuntimeException(SYS.SYS031, tmpFile.getAbsolutePath(), resultFile.getAbsolutePath());
 		}
 	}
 }

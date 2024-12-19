@@ -7,9 +7,8 @@ import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Provides the interface for usage of internal objects of X-script.
- * This interface provides general access methods to values of variables and
- * of parameters of methods in X-definitions.
+/** Provides the interface for usage of internal objects of X-script. This interface provides general access
+ * methods to values of variables and of parameters of methods in X-definitions.
  * @author Vaclav Trojan
  */
 public interface XDValue extends Comparable<XDValue>, XDValueID {
@@ -141,17 +140,16 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
 	 */
 	public boolean equals(XDValue arg);
 
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return If both objects are comparable then returns -1, 0, or a 1
-	 * as this XDValue object is less than, equal to, or greater than the
-	 * specified object.
+	 * @return If both objects are comparable then returns -1, 0, or a 1 as this XDValue object is less than,
+	 * equal to, or greater than the specified object.
 	 * @throws IllegalArgumentException If both objects are not comparable.
 	 */
 	public int compareTo(XDValue arg) throws IllegalArgumentException;
@@ -163,34 +161,32 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 
 	////////////////////////////////////////////////////////////////////////////
 
-	/** Get code of operation. This method is used internally only in the
-	 * code interpreter. Any user implementation of this interface
-	 * MUST return 0!
+	/** Get code of operation. This method is used internally only in the code interpreter. Any user
+	 * implementation of this interface MUST return 0!
 	 * @return code of operation.
 	 */
 	public short getCode();
 
 	/** This method is used internally only in the code interpreter.
-	 * Get parameter of operation. Any user implementation of this interface
-	 * MUST return 0!.
+	 * Get parameter of operation. Any user implementation of this interface MUST return 0!.
 	 * @return parameter.
 	 */
 	public int getParam();
 
-	/** This method is used internally only in the code interpreter.
-	 * Set code of an operation (if this is not an operation it makes nothing).
+	/** This method is used internally only in the code interpreter. Set code of an operation (if this is not
+	 * an operation it makes nothing).
 	 * @param code the new code of operation.
 	 */
 	public void setCode(final short code);
 
-	/** This method is used internally only in the code interpreter.
-	 * Set result type of operation (if this is an operation it makes nothing).
+	/** This method is used internally only in the code interpreter. Set result type of operation (if this is
+	 * an operation it makes nothing).
 	 * @param type id of type.
 	 */
 	public void setItemType(final short type);
 
-	/** This method is used internally only in the code interpreter.
-	 * Set parameter of operation (if this is an operation it makes nothing).
+	/** This method is used internally only in the code interpreter. Set parameter of operation (if this is
+	 * an operation it makes nothing).
 	 * @param param value of operation parameter.
 	 */
 	public void setParam(final int param);

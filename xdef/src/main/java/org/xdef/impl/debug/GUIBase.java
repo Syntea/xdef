@@ -35,7 +35,6 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 public class GUIBase {
-
 	/** Font used for source and information area. */
 	Font FONT_TEXT;
 	/** Font used for source position information. */
@@ -52,7 +51,6 @@ public class GUIBase {
 	Color COLOR_INFO;
 	/** Source area background color. */
 	Color COLOR_SOURCE;
-
 	/** Error marked line number.*/
 	Style STYLE_ERROR;
 	/** Normal line number.*/
@@ -61,7 +59,6 @@ public class GUIBase {
 	Style STYLE_BREAKPOINT;
 	/** Source area white. */
 	Style STYLE_WHITE;
-
 	/** The frame. */
 	public JFrame _frame;
 	/** Menu bar of frame. */
@@ -72,7 +69,6 @@ public class GUIBase {
 	public JTextPane _sourceArea;
 	/** Kill project. */
 	public boolean _kill;
-
 	// Position information
 	/** Information about caret position in source area. */
 	public JLabel _sourcePositionInfo;
@@ -87,7 +83,6 @@ public class GUIBase {
 	public String _sourceID;
 	/** Map with source items.*/
 	public Map<String, XDSourceItem> _sources;
-
 	/** Line numbers. */
 	JTextPane _lineNumberArea;
 	/** Source pane. */
@@ -108,16 +103,13 @@ public class GUIBase {
 	public final void openGUI(final XDSourceInfo si) {
 		// GUI fonts, colors and styles
 		FONT_TEXT = new Font("monospaced", Font.BOLD, 14);
-		FONT_POSITIONINFO = new Font("monospaced", Font.BOLD, 15)
-			.deriveFont(Font.TYPE1_FONT);
-
+		FONT_POSITIONINFO = new Font("monospaced", Font.BOLD, 15).deriveFont(Font.TYPE1_FONT);
 		COLOR_LINENUMBERS = new Color(222, 222, 222);
 		COLOR_ERROR = Color.RED;
 		COLOR_BREAKPOINT = Color.CYAN;
 		COLOR_POSITION = Color.MAGENTA;
 		COLOR_INFO = new Color(200, 200, 255);
 		COLOR_SOURCE = Color.WHITE;
-
 		StyleContext context = new StyleContext();
 		STYLE_ERROR = context.addStyle("marked", null);
 		StyleConstants.setBackground(STYLE_ERROR, COLOR_ERROR);
@@ -127,7 +119,6 @@ public class GUIBase {
 		StyleConstants.setBackground(STYLE_BREAKPOINT, COLOR_BREAKPOINT);
 		STYLE_WHITE = context.addStyle("white", null);
 		StyleConstants.setBackground(STYLE_WHITE, COLOR_SOURCE);
-
 		// GUI variables
 		si._xpos = si._xpos < 0 ? 10 : si._xpos; // x position of frame
 		si._ypos = si._ypos < 0 ? 10 : si._ypos; // y position of frame
@@ -135,7 +126,6 @@ public class GUIBase {
 		si._height = si._height < 0 ? 700 : si._height;//height
 		_positions = new SourcePos[0];
 		_si = si;
-
 		// GUI SWING components
 		_frame = new JFrame();
 		_frame.setVisible(false);
@@ -155,19 +145,15 @@ public class GUIBase {
 		_sourcePositionInfo.setFont(FONT_POSITIONINFO);
 		_sourceArea.setFont(FONT_TEXT);
 		_sourceArea.addCaretListener((CaretEvent e) -> {
-			SourcePos spos =
-				new SourcePos(_sourceArea.getText(), e.getDot());
-			_sourcePositionInfo.setText("  (Line:" + spos._line
-				+ ", column:" + spos._column + ")");
+			SourcePos spos = new SourcePos(_sourceArea.getText(), e.getDot());
+			_sourcePositionInfo.setText("  (Line:" + spos._line + ", column:" + spos._column + ")");
 		});
-
 		// Source window
 		_sourcePane = new JPanel(new BorderLayout());
 		_sourcePane.add(_sourceArea);
 		JScrollPane jsp = new JScrollPane(_sourcePane);
 		jsp.setRowHeaderView(_lineNumberArea);
 		_frame.getContentPane().add(jsp);
-
 		// Errors info window
 		jsp = new JScrollPane();
 		jsp.getViewport().add(_infoArea);
@@ -201,9 +187,8 @@ public class GUIBase {
 				return;
 			} catch (IOException | SException ex) {
 				if (is != null) try {is.close();} catch (IOException x) {}
-				String s = (src._url != null
-					&& "file".equals(src._url.getProtocol())) ?
-					src._url.getFile() : key;
+				String s = (src._url != null && "file".equals(src._url.getProtocol()))
+					? src._url.getFile() : key;
 				try {
 					s =URLDecoder.decode(s,System.getProperty("file.encoding"));
 				} catch (UnsupportedEncodingException exx) {}
@@ -352,9 +337,7 @@ public class GUIBase {
 	}
 
 	/** Notify event action performed. */
-	public final void notifyFrame() {
-		synchronized(_waitobj) {_waitobj.notifyAll();}
-	}
+	public final void notifyFrame() {synchronized(_waitobj) {_waitobj.notifyAll();}}
 
 	/** Source position container. */
 	static class SourcePos implements Comparable<SourcePos> {
@@ -362,10 +345,8 @@ public class GUIBase {
 		long _line;
 		long _column;
 		String _sysId;
-
 		/** Create empty object.*/
 		SourcePos() {_pos = -1; _sysId = "";}
-
 		/** Create object with line and column position and sourceID.
 		 * @param source the text where we search the line number
 		 * and column number.
@@ -379,20 +360,14 @@ public class GUIBase {
 			_column = column;
 			_sysId = sourceID;
 		}
-
-		/** Create object with computed line and column numbers from the
-		 * position in source text.
+		/** Create object with computed line and column numbers from the position in source text.
 		 * @param source string with source text.
 		 * @param pos position to source.
 		 * @param sourceID name of source item.
 		 */
-		SourcePos(String source, int pos, String sourceID) {
-			this(source, pos);
-			_sysId = sourceID;
-		}
+		SourcePos(String source, int pos, String sourceID) {this(source, pos); _sysId = sourceID;}
 
-		/** Create object with computed line and column numbers from the
-		 * position in source text.
+		/** Create object with computed line and column numbers from the position in source text.
 		 * @param source string with source text.
 		 * @param pos position to source.
 		 */
@@ -411,8 +386,7 @@ public class GUIBase {
 			_column = pos - oldpos;
 		}
 
-		/** Create object and compute position in source text
-		 * from line number and column number.
+		/** Create object and compute position in source text from line number and column number.
 		 * @param source string with source text.
 		 * @param line line number (starting with 1);
 		 * @param column column number (starting with 1).
