@@ -97,8 +97,7 @@ public class KDOMUtils {
 	}
 
 	/** Get all child Elements.
-	 * @param node node which child nodes are inspected for occurrence
-	 * of Elements.
+	 * @param node node which child nodes are inspected for occurrence of Elements.
 	 * @return NodeList with Elements found.
 	 */
 	public static final NodeList getChildElements(final Node node) {
@@ -134,8 +133,7 @@ public class KDOMUtils {
 	 * @param node node which blank text nodes will be removed.
 	 * @param deep if true this method will be applied also to child elements.
 	 */
-	public static final void trimTextNodes(final Node node,
-		boolean deep) {
+	public static final void trimTextNodes(final Node node, boolean deep) {
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			NamedNodeMap nnm = node.getAttributes();
 			for (int i = 0; nnm != null && i < nnm.getLength(); i++) {
@@ -147,8 +145,7 @@ public class KDOMUtils {
 			}
 		}
 		for (Node n = node.getLastChild(); n != null;){
-			if (n.getNodeType() == Node.TEXT_NODE ||
-				n.getNodeType() == Node.CDATA_SECTION_NODE) {
+			if (n.getNodeType() == Node.TEXT_NODE || n.getNodeType() == Node.CDATA_SECTION_NODE) {
 				StringBuilder sb = new StringBuilder();
 				for (;;) {
 					String s = n.getNodeValue();
@@ -185,8 +182,7 @@ public class KDOMUtils {
 	 * @param ns required namespace.
 	 * @return NamedNodeMap with attributes with namespace from argument.
 	 */
-	public static final NamedNodeMap getAttributesNS(final Node node,
-		final String ns) {
+	public static final NamedNodeMap getAttributesNS(final Node node, final String ns) {
 		NamedNodeMap nnm = node.getAttributes();
 		if (nnm == null) {
 			return new KNamedNodeMap();
@@ -213,15 +209,12 @@ public class KDOMUtils {
 		return nnm;
 	}
 
-	/** Get all child nodes frmo the node which are Elements with the name
-	 * equal to the argument tagName.
-	 * @param node node which children are inspected for Elements
-	 * with given tag name.
+	/** Get all child nodes frmo the node which are Elements with the name equal to the argument tagName.
+	 * @param node node which children are inspected for Elements with given tag name.
 	 * @param tagName required tag name.
 	 * @return NodeList with Elements found.
 	 */
-	public static final NodeList getChildElements(final Node node,
-		final String tagName) {
+	public static final NodeList getChildElements(final Node node, final String tagName) {
 		if (node == null) {
 			return EMPTYNODELIST;
 		}
@@ -233,22 +226,19 @@ public class KDOMUtils {
 		final KNodeList result = new KNodeList();
 		for (int i = 0; i < len; i++) {
 			final Node item = nl.item(i);
-			if (tagName.equals(item.getNodeName())){
+			if (tagName.equals(item.getNodeName())) {
 				result.addItem(item);
 			}
 		}
 		return result;
 	}
 
-	/** Get all child node which are Elements and have the NameSpace URI
-	 * equal to the argument ns.
+	/** Get all child node which are Elements and have the NameSpace URI equal to the argument ns.
 	 * @param ns NameSpace URI.
-	 * @param node node which children are inspected for Elements
-	 * with given NameSpace URI.
+	 * @param node node which children are inspected for Elements with given NameSpace URI.
 	 * @return NodeList with Elements found.
 	 */
-	public static final NodeList getChildElementsNS(final Node node,
-		final String ns) {
+	public static final NodeList getChildElementsNS(final Node node, final String ns) {
 		if (node == null) {
 			return EMPTYNODELIST;
 		}
@@ -271,18 +261,15 @@ public class KDOMUtils {
 		return result;
 	}
 
-	/** Get all child nodes which are Elements with the NameSpace equal to
-	 * argument ns and the local name equal to the argument localName.
-	 * URI and local name equal to values from arguments.
+	/** Get all child nodes which are Elements with the NameSpace equal to argument ns and the local name
+	 * equal to the argument localName. URI and local name equal to values from arguments.
 	 * @param ns NameSpace URI.
 	 * @param localName required local name of Element.
-	 * @param node node which child nodes are inspected for occurrence of
-	 * Element with URI and local name equal to arguments above
+	 * @param node node which child nodes are inspected for occurrence of Element with URI and local name
+	 * equal to arguments above
 	 * @return Element found or null.
 	 */
-	public static final NodeList getChildElementsNS(final Node node,
-		final String ns,
-		final String localName) {
+	public static final NodeList getChildElementsNS(final Node node, final String ns, final String localName){
 		if (node == null) {
 			return EMPTYNODELIST;
 		}
@@ -309,8 +296,8 @@ public class KDOMUtils {
 		return result;
 	}
 
-	/** Get all child nodes which are Elements with the tag name equal
-	 * to one of names from the list from the argument tagnameList.
+	/** Get all child nodes which are Elements with the tag name equal to one of names from the list
+	 * from the argument tagnameList.
 	 * @param node node which children are inspected.
 	 * @param tagnameList array with list of required tag names.
 	 * @return Element found or null.
@@ -341,18 +328,14 @@ public class KDOMUtils {
 		return result;
 	}
 
-	/** Get the first child node which is an Element with NameSpace URI
-	 * equal to argument nsURI and a local name equal to one of names from
-	 * argument with array of names frm the argument localnameList.
+	/** Get the first child node which is an Element with NameSpace URI equal to argument nsURI and a local
+	 * name equal to one of names from argument with array of names frm the argument localnameList.
 	 * @param ns NameSpace URI of an Element to be found.
 	 * @param localnameList array with list of local names.
-	 * @param node children of this node are inspected for occurrence of
-	 * an Element requiring to arguments.
+	 * @param node children of this node are inspected for occurrence of an Element requiring to arguments.
 	 * @return Element found or null.
 	 */
-	public static final NodeList getChildElementsNS(final Node node,
-		String ns,
-		final String[] localnameList) {
+	public static final NodeList getChildElementsNS(final Node node, String ns, final String[] localnameList){
 		if (node == null) {
 			return EMPTYNODELIST;
 		}
@@ -406,15 +389,13 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the first child node which is an Element with the tag name equal to
-	 * the argument tagName.
-	 * @param node a node of which child nodes are inspected for the first
-	 * occurrence of an Element with with name equal to argument.
+	/** Get the first child node which is an Element with the tag name equal to the argument tagName.
+	 * @param node a node of which child nodes are inspected for the first occurrence of an Element with with
+	 * name equal to argument.
 	 * @param tagName required tag name.
 	 * @return Element found or null.
 	 */
-	public static final Element firstElementChild(final Node node,
-		final String tagName) {
+	public static final Element firstElementChild(final Node node, final String tagName) {
 		if (node == null) {
 			return null;
 		}
@@ -432,15 +413,13 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the first child node which is an Element with the tag name equal
-	 * to one of names from the list from the argument tagnameList.
-	 * @param node children of this node are inspected for first occurrence of
-	 * an Element requiring to argument.
+	/** Get the first child node which is an Element with the tag name equal to one of names from the list
+	 * from the argument tagnameList.
+	 * @param node children of this node are inspected for first occurrence of Element requiring to argument.
 	 * @param tagnameList array with list of tag names
 	 * @return Element found or null.
 	 */
-	public static final Element firstElementChild(final Node node,
-		final String[] tagnameList) {
+	public static final Element firstElementChild(final Node node, final String[] tagnameList) {
 		if (node == null) {
 			return null;
 		}
@@ -464,15 +443,13 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the first child node which is an Element with the NameSpace URI
-	 * equal to the argument ns.
-	 * @param node a node of which child nodes are inspected for the first
-	 * occurrence of an Element with URI from argument.
+	/** Get the first child node which is an Element with the NameSpace URI equal to the argument ns.
+	 * @param node a node of which child nodes are inspected for the first occurrence of an Element with URI
+	 * from argument.
 	 * @param ns required NameSpace URI.
 	 * @return Element found or null.
 	 */
-	public static final Element firstElementChildNS(final Node node,
-		final String ns){
+	public static final Element firstElementChildNS(final Node node, final String ns){
 		if (node == null) {
 			return null;
 		}
@@ -494,18 +471,15 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the first child node which is an Element with the NameSpace
-	 * URI and local name equal to values from arguments ns and localName.
-	 * @param node a node which child nodes are inspected for first occurrence
-	 * of an Element with URI and local name equal to arguments nsURI and
-	 * local name.
+	/** Get the first child node which is an Element with the NameSpace URI and local name equal to values
+	 * from arguments ns and localName.
+	 * @param node a node which child nodes are inspected for first occurrence of an Element with URI and
+	 * local name equal to arguments nsURI and local name.
 	 * @param ns required NameSpace URI.
 	 * @param localName required local name.
 	 * @return Element found or null.
 	 */
-	public static final Element firstElementChildNS(final Node node,
-		final String ns,
-		final String localName) {
+	public static final Element firstElementChildNS(final Node node, final String ns, final String localName){
 		if (node == null) {
 			return null;
 		}
@@ -540,13 +514,11 @@ public class KDOMUtils {
 		return (ndx <= 0) ? qname : qname.substring(ndx+1);
 	}
 
-	/** Get the first child node which is an Element with NameSpace URI
-	 * equal to argument nsURI and a local name equal to one of names from
-	 * the argument localnameList.
+	/** Get the first child node which is an Element with NameSpace URI equal to argument nsURI and
+	 * a local name equal to one of names from the argument localnameList.
 	 * @param ns namespace of Element to be found.
 	 * @param localnameList array with list of local names.
-	 * @param node children of this node are inspected for first occurrence of
-	 * an Element requiring to arguments.
+	 * @param node children of this node are inspected for first occurrence of Element requiring to arguments.
 	 * @return Element found or null.
 	 */
 	public static final Element firstElementChildNS(final Node node,
@@ -588,19 +560,16 @@ public class KDOMUtils {
 			return null;
 		}
 		Node item = node;
-		while ((item = item.getNextSibling()) != null &&
-			item.getNodeType() != Node.ELEMENT_NODE){}
+		while ((item = item.getNextSibling()) != null && item.getNodeType() != Node.ELEMENT_NODE) {}
 		return (Element) item;
 	}
 
-	/** Return the first next node which is an Element type with given NameSpace
-	 * URI frm the argument ns.
+	/** Return the first next node which is an Element type with given NameSpace URI frm the argument ns.
 	 * @param node actual node of which next sibling Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @return Element found or null.
 	 */
-	public static final Element nextElementSiblingNS(final Node node,
-		final String ns) {
+	public static final Element nextElementSiblingNS(final Node node, final String ns) {
 		if (node == null) {
 			return null;
 		}
@@ -622,27 +591,23 @@ public class KDOMUtils {
 	 * @param tagName tag name of Element to be found.
 	 * @return Element found or null.
 	 */
-	public static final Element nextElementSibling(final Node node,
-		final String tagName) {
+	public static final Element nextElementSibling(final Node node, final String tagName) {
 		if (node == null) {
 			return null;
 		}
 		Node item = node;
-		while ((item = item.getNextSibling()) != null
-			&& !tagName.equals(item.getNodeName())) {}
+		while ((item = item.getNextSibling()) != null && !tagName.equals(item.getNodeName())) {}
 		return (Element) item;
 	}
 
-	/** Return the first next node which is an Element type with name equal
-	 * to the NameSpace URI and the name equal to arguments.
+	/** Return the first next node which is an Element type with name equal to the NameSpace URI and the name
+	 * equal to arguments.
 	 * @param node actual node of which next Element is returned.
 	 * @param localname local name of Element to be found.
 	 * @param ns namespace of Element to be found.
 	 * @return Element found or null.
 	 */
-	public static final Element nextElementSiblingNS(final Node node,
-		final String ns,
-		final String localname) {
+	public static final Element nextElementSiblingNS(final Node node, final String ns,final String localname){
 		if (node == null) {
 			return null;
 		}
@@ -650,23 +615,21 @@ public class KDOMUtils {
 		final String uri = ns == null ? "" : ns;
 		while ((item = item.getNextSibling()) != null) {
 			String u;
-			if (item.getNodeType() == Node.ELEMENT_NODE &&
-				removePrefix(localname).equals(item.getNodeName()) &&
-				uri.equals((u=item.getNamespaceURI()) == null ? "" : u)) {
+			if (item.getNodeType() == Node.ELEMENT_NODE && removePrefix(localname).equals(item.getNodeName())
+				&& uri.equals((u=item.getNamespaceURI()) == null ? "" : u)) {
 				return (Element) item;
 			}
 		}
 		return (Element) item;
 	}
 
-	/** Return the first next node which is an Element type with tag name
-	 * equal to one of names from the argument tagnameList.
+	/** Return the first next node which is an Element type with tag name equal to one of names from
+	 * the argument tagnameList.
 	 * @param node actual node of which next Element is returned.
 	 * @param tagnameList array with tag names.
 	 * @return Element found or null.
 	 */
-	public static final Element nextElementSibling(final Node node,
-		final String[] tagnameList) {
+	public static final Element nextElementSibling(final Node node, final String[] tagnameList) {
 		if (node == null) {
 			return null;
 		}
@@ -683,17 +646,14 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Return the first next node which is an Element type with NameSpace URI
-	 * equal to argument and local name equal to one of names from the
-	 * argument nameList.
+	/** Return the first next node which is an Element type with NameSpace URI equal to argument and local
+	 * name equal to one of names from the argument nameList.
 	 * @param node actual node of which next Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @param nameList array with local names.
 	 * @return Element found or null.
 	 */
-	public static final Element nextElementSiblingNS(final Node node,
-		final String ns,
-		final String[] nameList) {
+	public static final Element nextElementSiblingNS(final Node node,final String ns,final String[] nameList){
 		if (node == null) {
 			return null;
 		}
@@ -738,8 +698,7 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the last child node which is an Element with the tag name equal to
-	 * the argument tagName.
+	/** Get the last child node which is an Element with the tag name equal to the argument tagName.
 	 * @param node actual node of which last Element is returned.
 	 * @param tagName tag name of Element to be found.
 	 * @return Element found or null.
@@ -756,16 +715,14 @@ public class KDOMUtils {
 		}
 		for (i--; i >= 0; i--) {
 			Node item = nl.item(i);
-			if (item.getNodeType() == Node.ELEMENT_NODE &&
-				tagName.equals(item.getNodeName())) {
+			if (item.getNodeType() == Node.ELEMENT_NODE && tagName.equals(item.getNodeName())) {
 				return (Element) item;
 			}
 		}
 		return null;
 	}
 
-	/** Get the last child node which is an Element with the NameSpace URI
-	 * equal to the argument ns.
+	/** Get the last child node which is an Element with the NameSpace URI equal to the argument ns.
 	 * @param node actual node of which last Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @return Element found or null.
@@ -793,16 +750,14 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the last child node which is an Element with the NameSpace
-	 * URI and local name equal to values from arguments.
+	/** Get the last child node which is an Element with the NameSpace URI and local name equal to values
+	 * from arguments.
 	 * @param node actual node of which last Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @param lname local name of Element to be found.
 	 * @return Element found or null.
 	 */
-	public static Element lastElementChildNS(final Node node,
-		final String ns,
-		final String lname) {
+	public static Element lastElementChildNS(final Node node, final String ns, final String lname) {
 		if (node == null) {
 			return null;
 		}
@@ -828,14 +783,13 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the last child node which is an Element with the tag name equal
-	 * to one of names from the argument tagnameList.
+	/** Get the last child node which is an Element with the tag name equal to one of names from the argument
+	 * tagnameList.
 	 * @param tagnameList array with list of names.
 	 * @param node actual node of which last Element is returned.
 	 * @return Element found or null.
 	 */
-	public static Element lastElementChild(final Node node,
-		final String[] tagnameList) {
+	public static Element lastElementChild(final Node node, final String[] tagnameList) {
 		if (node == null) {
 			return null;
 		}
@@ -859,17 +813,14 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get the last child node which is an Element with NameSpace URI
-	 * equal to given argument and a local name equal to one of names from
-	 * the argument nameList.
+	/** Get the last child node which is an Element with NameSpace URI equal to given argument and a local
+	 * name equal to one of names from the argument nameList.
 	 * @param ns namespace of Element to be found.
 	 * @param nameList array with list of local names.
 	 * @param node actual node of which last Element is returned.
 	 * @return Element found or null.
 	 */
-	public static final Element lastElementChildNS(final Node node,
-		final String ns,
-		final String[] nameList) {
+	public static final Element lastElementChildNS(final Node node, final String ns, final String[] nameList){
 		if (node == null) {
 			return null;
 		}
@@ -909,8 +860,7 @@ public class KDOMUtils {
 			return null;
 		}
 		Node item = node;
-		while ((item = item.getPreviousSibling()) != null &&
-			item.getNodeType() != Node.ELEMENT_NODE){}
+		while ((item = item.getPreviousSibling()) != null && item.getNodeType() != Node.ELEMENT_NODE) {}
 		return (Element) item;
 	}
 
@@ -920,8 +870,7 @@ public class KDOMUtils {
 	 * @param ns namespace of Element to be found.
 	 * @return Element found or null.
 	 */
-	public static final Element previousElementSiblingNS(final Node node,
-		final String ns) {
+	public static final Element previousElementSiblingNS(final Node node, final String ns) {
 		if (node == null) {
 			return null;
 		}
@@ -943,19 +892,17 @@ public class KDOMUtils {
 	 * @param tagName tag name of Element to be found.
 	 * @return Element found or null.
 	 */
-	public static final Element previousElementSibling(final Node node,
-		final String tagName) {
+	public static final Element previousElementSibling(final Node node, final String tagName) {
 		if (node == null) {
 			return null;
 		}
 		Node item = node;
-		while ((item = item.getPreviousSibling()) != null &&
-			!tagName.equals(item.getNodeName())) {}
+		while ((item = item.getPreviousSibling()) != null && !tagName.equals(item.getNodeName())) {}
 		return (Element) item;
 	}
 
-	/** Return the first previous node which is an Element type with name equal
-	 * to the NameSpace URI and the name equal to arguments.
+	/** Return the first previous node which is an Element type with name equal to the NameSpace URI and
+	 * the name equal to arguments.
 	 * @param node actual node from which previous Element is returned.
 	 * @param localname local name of Element to be found.
 	 * @param ns namespace of Element to be found.
@@ -971,23 +918,20 @@ public class KDOMUtils {
 		final String uri = ns == null ? "" : ns;
 		while ((item = item.getPreviousSibling()) != null) {
 			String u;
-			if (item.getNodeType() == Node.ELEMENT_NODE &&
-				removePrefix(localname).equals(item.getNodeName()) &&
-				uri.equals((u=item.getNamespaceURI()) == null ? "" : u)) {
+			if (item.getNodeType() == Node.ELEMENT_NODE && removePrefix(localname).equals(item.getNodeName())
+				&& uri.equals((u=item.getNamespaceURI()) == null ? "" : u)) {
 				return (Element) item;
 			}
 		}
 		return (Element) item;
 	}
 
-	/** Return the previous next node which is an Element type with tag name
-	 * equal to one of names from the list.
+	/** Return the previous next node which is an Element type with tag name equal to one of names from the list.
 	 * @param node actual node from which previous Element is returned.
 	 * @param tagnameList array with tag names.
 	 * @return Element found or null.
 	 */
-	public static final Element previousElementSibling(final Node node,
-		final String[] tagnameList) {
+	public static final Element previousElementSibling(final Node node, final String[] tagnameList) {
 		if (node == null) {
 			return null;
 		}
@@ -1041,11 +985,7 @@ public class KDOMUtils {
 		String _value; // value of namespace URI
 		int _counter; // number of usage
 		boolean _ignore; // if this namespace item should be ignored
-		NsItem(final String value) {
-			_value = value;
-			_counter = 0;
-			_ignore = false;
-		}
+		NsItem(final String value) {_value = value; _counter = 0; _ignore = false;}
 	}
 
 	/** Remove redundant xmlns attributes.
@@ -1098,8 +1038,7 @@ public class KDOMUtils {
 	/** Find xmlns attributes in el and all child elements.
 	 * @param el element where find xmlns attributes in el and child elements.
 	 */
-	private static void createXmlnsMap(final Element el,
-		final Map<String, NsItem> namespaces) {
+	private static void createXmlnsMap(final Element el, final Map<String, NsItem> namespaces) {
 		createPrefixItem(el, namespaces);
 		NamedNodeMap nnm = el.getAttributes();
 		for (int i = 0; i < nnm.getLength(); i++) {
@@ -1129,11 +1068,9 @@ public class KDOMUtils {
 	}
 
 	/** Remove redundant xmlns attributes from child elements of el.
-	 * @param el element where redundant xmlns attributes of child elements
-	 * are removed.
+	 * @param el element where redundant xmlns attributes of child elements are removed.
 	 */
-	private static void removeRedundantXmlnsAttrs(final Element el,
-		final Map<String, NsItem> namespaces) {
+	private static void removeRedundantXmlnsAttrs(final Element el, final Map<String, NsItem> namespaces) {
 		NodeList nl = el.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
@@ -1175,15 +1112,13 @@ public class KDOMUtils {
 	 * @param context actual NameSpace context.
 	 * @param el element to which XMLns attributes will be added.
 	 */
-	private static void setNecessaryXmlnsAttrs(final Element el,
-		final KNamespace context) {
+	private static void setNecessaryXmlnsAttrs(final Element el, final KNamespace context) {
 		String ns = el.getNamespaceURI();
 		if (ns != null) {
 			String qname;
 			int ndx;
 			String prefix =
-				(ndx = (qname = el.getNodeName()).indexOf(':')) > 0 ?
-					qname.substring(0, ndx) : "";
+				(ndx = (qname = el.getNodeName()).indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
 			if (!prefix.equals(context.getPrefix(ns))) {
 				context.setPrefix(prefix, ns);
 			}
@@ -1218,8 +1153,7 @@ public class KDOMUtils {
 		if (prefixes != null && (len = prefixes.length) > 0) {
 			for (int i = 0; i < len; i++) {
 				final String prefix = prefixes[i];
-				final String attname = prefix.length() > 0
-					? "xmlns:"+prefix : "xmlns";
+				final String attname = prefix.length() > 0 ? "xmlns:"+prefix : "xmlns";
 				el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 					attname, context.getNamespaceURI(prefix));
 			}
@@ -1237,8 +1171,8 @@ public class KDOMUtils {
 		}
 	}
 
-	/** Return clone of an element and all attributes and child nodes with
-	 * changed given NameSpace URI to the new value.
+	/** Return clone of an element and all attributes and child nodes with changed given NameSpace URI
+	 * to the new value.
 	 * @param elem source element.
 	 * @param oldns old NameSpace URI (may be null, NOT an empty string!).
 	 * @param newns new NameSpace (may be null, NOT an empty string!).
@@ -1260,8 +1194,8 @@ public class KDOMUtils {
 		return result;
 	}
 
-	/** Return clone of an element and all attributes and child nodes with
-	 * changed given NameSpace URI to the new value.
+	/** Return clone of an element and all attributes and child nodes with changed given NameSpace URI
+	 * to the new value.
 	 * @param doc owner document.
 	 * @param elem source element.
 	 * @param newelem new element.
@@ -1306,13 +1240,11 @@ public class KDOMUtils {
 				if (!qname.startsWith("xmlns")) {
 					//change ns if it is required
 					if (qname.indexOf(':') >= 0) {
-						if ((ns = n.getNamespaceURI()) != null &&
-							ns.equals(oldns) && newns != null) {
+						if ((ns = n.getNamespaceURI()) != null && ns.equals(oldns) && newns != null) {
 							ns = newns;
 						}
 						if (ns != null) {
-							newelem.setAttributeNS(
-								ns, qname, n.getNodeValue());
+							newelem.setAttributeNS( ns, qname, n.getNodeValue());
 						} else {
 							//error: qualified name without NameSpace
 							newelem.setAttribute(qname, n.getNodeValue());
@@ -1328,8 +1260,7 @@ public class KDOMUtils {
 			for (int i = 0; i < len; i++) {
 				final Node n = nl.item(i);
 				if (n.getNodeType() == Node.ELEMENT_NODE) {
-					newelem.appendChild(
-						changeNamespace(doc, (Element) n, oldns, newns));
+					newelem.appendChild(changeNamespace(doc, (Element) n, oldns, newns));
 				} else {
 					newelem.appendChild(n.cloneNode(true));
 				}
@@ -1338,11 +1269,9 @@ public class KDOMUtils {
 		return newelem;
 	}
 
-	/** Get concatenated text from all child nodes (see
-	 * org.w3c.dom.Node.getTesxtcontent() DOM Level 3).
+	/** Get concatenated text from all child nodes (see org.w3c.dom.Node.getTesxtcontent() DOM Level 3).
 	 * @param node node from which text content is collected.
-	 * @return String with text concatenated from all child nodes or
-	 * the empty string.
+	 * @return String with text concatenated from all child nodes or the empty string.
 	 */
 	public static final String getTextContent(final Node node) {
 		final StringBuilder sb = new StringBuilder();
@@ -1350,8 +1279,7 @@ public class KDOMUtils {
 		return sb.toString();
 	}
 
-	private static void getTextContent(final Node item,
-		final StringBuilder sb) {
+	private static void getTextContent(final Node item, final StringBuilder sb) {
 		if (item != null) {
 			switch (item.getNodeType()) {
 				case Node.DOCUMENT_NODE:
@@ -1375,8 +1303,8 @@ public class KDOMUtils {
 		}
 	}
 
-	/** Get text nodes from all textual child nodes of node from argument.
-	 * As textual nodes are considered nodes of type:
+	/** Get text nodes from all textual child nodes of node from argument. As textual nodes are considered
+	 * nodes of type:
 	 * <br> - org.w3c.dom.CDATASection
 	 * <br> - org.w3c.dom.Text
 	 * <br> - org.w3c.dom.EntityReference
@@ -1384,8 +1312,7 @@ public class KDOMUtils {
 	 * @param coalesce if true text nodes are coalesced.
 	 * @return NodeList with text nodes.
 	 */
-	public static final NodeList getTextNodes(final Node node,
-		final boolean coalesce) {
+	public static final NodeList getTextNodes(final Node node, final boolean coalesce) {
 		if (node == null) {
 			return EMPTYNODELIST;
 		}
@@ -1399,18 +1326,14 @@ public class KDOMUtils {
 			final Node item = nl.item(i);
 			switch (item.getNodeType()) {
 				case Node.CDATA_SECTION_NODE:
-				case Node.TEXT_NODE:
-					result.addItem(item);
-					continue;
+				case Node.TEXT_NODE: result.addItem(item); continue;
 				case Node.ENTITY_REFERENCE_NODE: {
 					final NodeList nl1 = item.getChildNodes();
 					for (int j = 0; j < nl1.getLength(); j++) {
 						Node item1 = nl1.item(j);
 						switch (item1.getNodeType()) {
 							case Node.CDATA_SECTION_NODE:
-							case Node.TEXT_NODE:
-								result.addItem(item1);
-								continue;
+							case Node.TEXT_NODE: result.addItem(item1); continue;
 							case Node.ENTITY_REFERENCE_NODE: {
 								final NodeList nl2 = getTextNodes(item1, true);
 								for (int k = 0; k < nl2.getLength(); k++) {
@@ -1452,12 +1375,10 @@ public class KDOMUtils {
 			switch (item.getNodeType()) {
 				case Node.ENTITY_REFERENCE_NODE: {
 					if (text == null) {
-						text =
-							doc.createTextNode(getEntityReferenceValue(item));
+						text = doc.createTextNode(getEntityReferenceValue(item));
 						result.addItem(text);
 					} else {
-						text.setData(text.getNodeValue() +
-							getEntityReferenceValue(item));
+						text.setData(text.getNodeValue() + getEntityReferenceValue(item));
 					}
 					continue;
 				}
@@ -1467,13 +1388,11 @@ public class KDOMUtils {
 						text = doc.createTextNode(item.getNodeValue());
 						result.addItem(text);
 					} else {
-						text.setNodeValue(
-							text.getNodeValue() + item.getNodeValue());
+						text.setNodeValue(text.getNodeValue() + item.getNodeValue());
 					}
 				}
 				continue;
-				default:
-					text = null;
+				default: text = null;
 			}
 		}
 		return result;
@@ -1490,10 +1409,8 @@ public class KDOMUtils {
 		switch (node.getNodeType()) {
 			case Node.ATTRIBUTE_NODE:
 			case Node.CDATA_SECTION_NODE:
-			case Node.TEXT_NODE:
-				return node.getNodeValue();
-			case Node.ENTITY_REFERENCE_NODE:
-				return getEntityReferenceValue((EntityReference) node);
+			case Node.TEXT_NODE: return node.getNodeValue();
+			case Node.ENTITY_REFERENCE_NODE: return getEntityReferenceValue((EntityReference) node);
 		}
 		final StringBuilder sb = new StringBuilder();
 		NodeList nl = node.getChildNodes();
@@ -1504,11 +1421,8 @@ public class KDOMUtils {
 			final Node item = nl.item(i);
 			switch (item.getNodeType()) {
 				case Node.CDATA_SECTION_NODE:
-				case Node.TEXT_NODE:
-					sb.append(item.getNodeValue());
-					continue;
-				case Node.ENTITY_REFERENCE_NODE:
-					sb.append(getEntityReferenceValue((EntityReference) item));
+				case Node.TEXT_NODE: sb.append(item.getNodeValue()); continue;
+				case Node.ENTITY_REFERENCE_NODE: sb.append(getEntityReferenceValue((EntityReference) item));
 			}
 		}
 		return sb.toString();
@@ -1527,9 +1441,7 @@ public class KDOMUtils {
 			case Node.ATTRIBUTE_NODE:
 			case Node.CDATA_SECTION_NODE:
 			case Node.TEXT_NODE:
-			case Node.ENTITY_REFERENCE_NODE:
-				knl.addItem(node);
-				return knl;
+			case Node.ENTITY_REFERENCE_NODE: knl.addItem(node); return knl;
 		}
 		NodeList nl = node.getChildNodes();
 		if (nl.getLength() == 0) {
@@ -1541,8 +1453,7 @@ public class KDOMUtils {
 				case Node.ATTRIBUTE_NODE:
 				case Node.CDATA_SECTION_NODE:
 				case Node.TEXT_NODE:
-				case Node.ENTITY_REFERENCE_NODE:
-					knl.addItem(item);
+				case Node.ENTITY_REFERENCE_NODE: knl.addItem(item);
 			}
 		}
 		return knl;
@@ -1579,27 +1490,22 @@ public class KDOMUtils {
 		return ndx >= 0 ? qname.substring(ndx + 1) : qname;
 	}
 
-	/** Return element bound to a node. If the argument is an Element then
-	 * it is returned. If it is a Document then document element is returned.
-	 * If it is an Attribute, then owner element is returned. Otherwise if
-	 * the parent node is an element it is returned. If no it is no one of
-	 * above cases null is returned.
+	/** Return element bound to a node. If the argument is an Element then it is returned. If it is
+	 * a Document then document element is returned. If it is an Attribute, then owner element is returned.
+	 * Otherwise if the parent node is an element it is returned. If it is no one of above cases return null.
 	 * @param node node which bound element is returned.
 	 * @return bound element or null.
 	 */
 	public static final Element getBoundElement(Node node) {
 		if (node != null) {
 			switch (node.getNodeType()) {
-				case Node.ELEMENT_NODE:
-					return (Element) node;
-				case Node.ATTRIBUTE_NODE:
-					return ((Attr) node).getOwnerElement();
-				default: {
+				case Node.ELEMENT_NODE: return (Element) node;
+				case Node.ATTRIBUTE_NODE: return ((Attr) node).getOwnerElement();
+				default:
 					final Node n = node.getParentNode();
 					if (n != null && n.getNodeType() == Node.ELEMENT_NODE) {
 						return (Element) n;
 					}
-				}
 			}
 		}
 		return null;
@@ -1610,10 +1516,8 @@ public class KDOMUtils {
 	 * @param elem element in which context an URI is searched.
 	 * @return URI or empty string.
 	 */
-	public static final String getNSURI(final String prefix,
-		final Element elem) {
-		final String nsAttr = prefix == null || prefix.isEmpty() ?
-			"xmlns" : "xmlns:" + prefix;
+	public static final String getNSURI(final String prefix, final Element elem) {
+		final String nsAttr = prefix == null || prefix.isEmpty() ? "xmlns" : "xmlns:" + prefix;
 		Element element = elem;
 		for (;;) {
 			if (element.hasAttribute(nsAttr)) {
@@ -1622,15 +1526,14 @@ public class KDOMUtils {
 			final Node n = element.getParentNode();
 			if (n != null && n.getNodeType() == Node.ELEMENT_NODE) {
 				element = (Element) n;
-			} else { //returns empty string if NameSpace not found
+			} else { //return empty string if NameSpace not found
 				return "";
 			}
 		}
 	}
 
-	/** Create copy of node in given Document. This method is similar to
-	 * org.w3c.dom.Node.cloneNode(deep). However, if document of given node
-	 * is not equal to document from argument doc then the new copy
+	/** Create copy of node in given Document. This method is similar to org.w3c.dom.Node.cloneNode(deep).
+	 * However, if document of given node is not equal to document from argument doc then the new copy
 	 * of node is created in the document from argument.
 	 * @param doc document where clone of node is created.
 	 * @param node object which to be cloned/copied.
@@ -1638,9 +1541,8 @@ public class KDOMUtils {
 	 * @return copy of node from argument created in given document.
 	 * @throws SRuntimeException XML201 if an error occurs.
 	 */
-	public static final Node createNodeCopyInDocument(final Document doc,
-		final Node node,
-		final boolean deep) throws SRuntimeException {
+	public static final Node createNodeCopyInDocument(final Document doc, final Node node,final boolean deep)
+		throws SRuntimeException {
 		if (doc == node.getOwnerDocument()) {
 			return node.cloneNode(deep);
 		}
@@ -1648,17 +1550,13 @@ public class KDOMUtils {
 			case Node.ATTRIBUTE_NODE: {
 				final String u = node.getNamespaceURI();
 				final Attr a = (u != null && u.length() > 0)
-					? doc.createAttributeNS(u, node.getNodeName())
-					: doc.createAttribute(node.getNodeName());
+					? doc.createAttributeNS(u, node.getNodeName()) : doc.createAttribute(node.getNodeName());
 				a.setValue(node.getNodeValue());
 				return a;
 			}
-			case Node.COMMENT_NODE:
-				return doc.createComment(node.getNodeValue());
-			case Node.CDATA_SECTION_NODE:
-				return doc.createCDATASection(node.getNodeValue());
-			case Node.TEXT_NODE:
-				return doc.createTextNode(node.getNodeValue());
+			case Node.COMMENT_NODE: return doc.createComment(node.getNodeValue());
+			case Node.CDATA_SECTION_NODE: return doc.createCDATASection(node.getNodeValue());
+			case Node.TEXT_NODE: return doc.createTextNode(node.getNodeValue());
 			case Node.ELEMENT_NODE: {
 				String u = node.getNamespaceURI();
 				final String name = node.getNodeName();
@@ -1666,8 +1564,7 @@ public class KDOMUtils {
 				if (u != null && u.length() > 0) {
 					e = doc.createElementNS(u, name);
 					final int x = name.indexOf(':');
-					final String s = x >= 0
-						? "xmlns:" + name.substring(0, x) : "xmlns";
+					final String s = x >= 0 ? "xmlns:" + name.substring(0, x) : "xmlns";
 					if (!((Element) node).hasAttribute(s)) {
 						e.setAttribute(s, u);
 					}
@@ -1677,8 +1574,7 @@ public class KDOMUtils {
 				final NamedNodeMap nm = node.getAttributes();
 				if (nm != null) {
 					for (int i = 0, maxi = nm.getLength(); i < maxi; i++) {
-						Attr a = (Attr) createNodeCopyInDocument(doc,
-							nm.item(i), deep);
+						Attr a = (Attr) createNodeCopyInDocument(doc, nm.item(i), deep);
 						if ((u = a.getNamespaceURI()) != null &&
 							u.length() > 0) {
 							e.setAttributeNodeNS(a);
@@ -1690,8 +1586,7 @@ public class KDOMUtils {
 				if (deep) {
 					final NodeList nl = node.getChildNodes();
 					for (int i = 0, maxi = nl.getLength(); i < maxi; i++) {
-						e.appendChild(createNodeCopyInDocument(doc,
-							nl.item(i), true));
+						e.appendChild(createNodeCopyInDocument(doc, nl.item(i), true));
 					}
 				}
 				return e;
@@ -1702,20 +1597,17 @@ public class KDOMUtils {
 				final NodeList nl = node.getChildNodes();
 				if (nl != null) {
 					for (int i = 0, maxi = nl.getLength(); i < maxi; i++) {
-						eref.appendChild(createNodeCopyInDocument(doc,
-							nl.item(i), true)); //allways deep!
+						eref.appendChild(createNodeCopyInDocument(doc, nl.item(i), true)); //allways deep!
 					}
 				}
 				return eref;
 			}
 			case Node.PROCESSING_INSTRUCTION_NODE: {
 				final ProcessingInstruction pi = (ProcessingInstruction) node;
-				return doc.createProcessingInstruction(
-					pi.getTarget(), pi.getData());
+				return doc.createProcessingInstruction(pi.getTarget(), pi.getData());
 			}
 			default:
-				//Can't create clone of node to given document
-				throw new SRuntimeException(XML.XML201);
+				throw new SRuntimeException(XML.XML201);//Can't create clone of node to given document
 		}
 	}
 
@@ -1742,9 +1634,7 @@ public class KDOMUtils {
 	 * @param context namespaceContext
 	 * @return the node or null.
 	 */
-	public static final Node resolveXPosition(final Node n,
-		final String xpos,
-		final NamespaceContext context) {
+	public static final Node resolveXPosition(final Node n, final String xpos,final NamespaceContext context){
 		if (n == null || xpos == null || xpos.isEmpty()) {
 			return null;
 		}
@@ -1758,9 +1648,7 @@ public class KDOMUtils {
 			m = n;
 		}
 		byte xmlVersion = n.getOwnerDocument() == null
-			? (byte) 10
-			: "1.1".equals(n.getOwnerDocument().getXmlVersion())
-				? (byte) 11 : 10;
+			? (byte) 10 : "1.1".equals(n.getOwnerDocument().getXmlVersion()) ? (byte) 11 : 10;
 		final StringParser p = new StringParser();
 		p.setSourceBuffer(xpos);
 		if (p.isChar('/')) {
@@ -1787,8 +1675,7 @@ public class KDOMUtils {
 						return null;
 					}
 				} else {
-					final String uri =
-						context.getNamespaceURI(name.substring(0,ndx));
+					final String uri = context.getNamespaceURI(name.substring(0,ndx));
 					String localName = m.getLocalName();
 					if (localName == null) {
 						localName = m.getNodeName();
@@ -1822,11 +1709,9 @@ public class KDOMUtils {
 						}
 						return ((Element) n).getAttributeNode(name);
 					} else {
-						final String u =
-							context.getNamespaceURI(name.substring(0,ndx));
+						final String u = context.getNamespaceURI(name.substring(0,ndx));
 						if (u != null) {
-							return ((Element) n).getAttributeNodeNS(
-								u, name.substring(ndx + 1));
+							return ((Element) n).getAttributeNodeNS(u, name.substring(ndx + 1));
 						}
 					}
 					return null;
@@ -1849,33 +1734,27 @@ public class KDOMUtils {
 					final Node m = nl.item(j);
 					if (name.charAt(0) == '#') {//"#text"
 						final short type = m.getNodeType();
-						if ((type == Node.TEXT_NODE ||
-							type == Node.CDATA_SECTION_NODE) && --i == 0) {
+						if ((type == Node.TEXT_NODE || type == Node.CDATA_SECTION_NODE) && --i == 0) {
 							return resolveXPosition(m, p, context, xmlVersion);
 						}
 					} else if (m.getNodeType() == Node.ELEMENT_NODE) {
 						int ndx;
-						if (context == null ||
-							(ndx = name.indexOf(':')) < 0) {
+						if (context == null || (ndx = name.indexOf(':')) < 0) {
 							if (name.charAt(0) == ':') {
 								name = name.substring(1);
 							}
 							if (name.equals(m.getNodeName()) && --i == 0) {
-								return resolveXPosition(
-									m, p, context, xmlVersion);
+								return resolveXPosition(m, p, context, xmlVersion);
 							}
 						} else {
-							final String u =
-								context.getNamespaceURI(name.substring(0, ndx));
+							final String u = context.getNamespaceURI(name.substring(0, ndx));
 							String localName = m.getLocalName();
 							if (localName == null) {
 								localName = m.getNodeName();
 							}
-							if (u != null &&
-								name.substring(ndx + 1).equals(localName)
+							if (u != null && name.substring(ndx + 1).equals(localName)
 								&& u.equals(m.getNamespaceURI()) && --i == 0) {
-									return resolveXPosition(
-										m, p, context, xmlVersion);
+									return resolveXPosition(m, p, context, xmlVersion);
 							}
 						}
 					}
@@ -1895,8 +1774,7 @@ public class KDOMUtils {
 			} else {
 				final String u = context.getNamespaceURI(name.substring(0,ndx));
 				if (u != null) {
-					return ((Element) n).getAttributeNodeNS(
-						u, name.substring(ndx + 1));
+					return ((Element) n).getAttributeNodeNS(u, name.substring(ndx + 1));
 				}
 			}
 		} else if (p.eos()) {
@@ -1923,7 +1801,8 @@ public class KDOMUtils {
 				final Element el = ((Attr) n).getOwnerElement();
 				if (el == null) {
 					return null;
-				}	getXPosition(el, sb);
+				}
+				getXPosition(el, sb);
 				sb.append("/@");
 				sb.append(n.getNodeName());
 				break;
@@ -1932,14 +1811,14 @@ public class KDOMUtils {
 				final Node m = n.getParentNode();
 				if (m == null || m.getNodeType() != Node.ELEMENT_NODE) {
 					return null;
-				}	getXPosition(m, sb);
+				}
+				getXPosition(m, sb);
 				sb.append("/text()");
 				final NodeList nl = m.getChildNodes();
 				final int len = nl.getLength();
 				for (int i = 0, ndx = 0; i < len; i++) {
 					final Node o = nl.item(i);
-					if (o.getNodeType() == Node.TEXT_NODE ||
-						o.getNodeType() == Node.CDATA_SECTION_NODE) {
+					if (o.getNodeType() == Node.TEXT_NODE || o.getNodeType() == Node.CDATA_SECTION_NODE) {
 						ndx++;
 						if (o == n) {
 							if (len > 1) {
@@ -1948,15 +1827,11 @@ public class KDOMUtils {
 							break;
 						}
 					}
-				}	break;
-			case Node.ELEMENT_NODE:
-				getXPosition(n, sb);
+				}
 				break;
-			case Node.DOCUMENT_NODE:
-				getXPosition(((Document) n).getDocumentElement(), sb);
-				break;
-			default:
-				return null;
+			case Node.ELEMENT_NODE: getXPosition(n, sb); break;
+			case Node.DOCUMENT_NODE: getXPosition(((Document) n).getDocumentElement(), sb); break;
+			default: return null;
 		}
 		return sb.toString();
 	}
@@ -2034,28 +1909,23 @@ public class KDOMUtils {
 		public final Node item(int index) {return null;}
 		@Override
 		public final Node removeNamedItem(final String name) {
-			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
-				"Empty map");
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
 		@Override
 		public final Node removeNamedItemNS(final String namespaceURI,
 			final String localName)	{
-			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
-				"Empty map");
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
 		@Override
 		public final Node setNamedItem(Node arg) {
-			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
-				"Empty map");
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
 		@Override
 		public final Node setNamedItemNS(Node arg) {
-			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
-				"Empty map");
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
 		@Override
-		public final Node getNamedItemNS(final String namespaceURI,
-			final String localName) {
+		public final Node getNamedItemNS(final String namespaceURI, final String localName) {
 			return null;
 		}
 		@Override
