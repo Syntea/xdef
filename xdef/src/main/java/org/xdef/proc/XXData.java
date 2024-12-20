@@ -21,5 +21,4 @@ public interface XXData extends XXNode {
 	 * @param value the value to be set to attribute or text node.
 	 */
 	public void setTextValue(String value);
-
 }

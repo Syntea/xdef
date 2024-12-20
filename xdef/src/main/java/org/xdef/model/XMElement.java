@@ -8,20 +8,17 @@ import org.xdef.XDDocument;
 public interface XMElement extends XMNode {
 
 	/** Check if this model allows other elements.
-	 * @return true if and only if this model may contain other elements then
-	 * defined.
+	 * @return true if and only if this model may contain other elements then defined.
 	 */
 	public boolean hasOtherElements();
 
 	/** Check if this model allows other attributes.
-	 * @return true if and only if this model may contain other attributes then
-	 * defined.
+	 * @return true if and only if this model may contain other attributes then defined.
 	 */
 	public boolean hasOtherAttrs();
 
 	/** Check if this model allows other text nodes.
-	 * @return true if and only if this model may contain other text nodes then
-	 * defined.
+	 * @return true if and only if this model may contain other text nodes then defined.
 	 */
 	public boolean hasOtherText();
 
@@ -32,14 +29,14 @@ public interface XMElement extends XMNode {
 
 	/** Get model of attribute (no name space URI).
 	 * @param name name of attribute.
-	 * @return attribute model or <i>null</i> if attribute is hot specified.
+	 * @return attribute model or null if attribute is hot specified.
 	 */
 	public XMData getAttr(String name);
 
 	/** Get model of attribute with name space URI.
-	 * @param nsURI name space URI of attribute or <i>null</i>.
+	 * @param nsURI name space URI of attribute or null.
 	 * @param name local name of attribute.
-	 * @return attribute model or <i>null</i> if attribute is hot specified.
+	 * @return attribute model or null if attribute is hot specified.
 	 */
 	public XMData getAttrNS(String nsURI, String name);
 
@@ -58,10 +55,8 @@ public interface XMElement extends XMNode {
 	 */
 	public boolean isReference();
 
-	/** Get reference position if this model was created from other model
-	 * (reference) or return null.
-	 * @return reference position if this model was created from other model
-	 * (reference) or return null.
+	/** Get reference position if this model was created from other model (reference) or return null.
+	 * @return reference position if this model was created from other model (reference) or return null.
 	 */
 	public String getReferencePos();
 
@@ -74,5 +69,4 @@ public interface XMElement extends XMNode {
 	 * @return message digest of this XDPool.
 	 */
 	public String getDigest();
-
 }

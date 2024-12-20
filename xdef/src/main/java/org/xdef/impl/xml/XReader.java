@@ -9,29 +9,22 @@ import java.io.Reader;
  * @author Vaclav Trojan
  */
 public class XReader extends XAbstractReader {
-
 	/** The reader. */
 	private final Reader _in;
 	private boolean _notScanning;
 
-	public XReader(final XInputStream mi) throws IOException {
-		this(mi.getInputStream(), mi.getXMLEncoding());
-	}
+	public XReader(final XInputStream mi) throws IOException {this(mi.getInputStream(), mi.getXMLEncoding());}
 
-	public XReader(final InputStream in, final String encoding)
-		throws IOException {
-		this("X-ISO-10646-UCS-4-2143".equals(encoding)
-			? new Reader_UCS_4_2143(in)
-			: "X-ISO-10646-UCS-4-3412".equals(encoding)
-				? new Reader_UCS_4_3412(in)
-				: new InputStreamReader(in,encoding));
+	public XReader(final InputStream in, final String encoding) throws IOException {
+		this("X-ISO-10646-UCS-4-2143".equals(encoding) ? new Reader_UCS_4_2143(in)
+			: "X-ISO-10646-UCS-4-3412".equals(encoding) ? new Reader_UCS_4_3412(in)
+			: new InputStreamReader(in,encoding));
 	}
 
 	public XReader(final Reader in) {
 		super();
 		_in = in;
-		setEncoding((in instanceof InputStreamReader)
-			? ((InputStreamReader) in).getEncoding() : null);
+		setEncoding((in instanceof InputStreamReader) ? ((InputStreamReader) in).getEncoding() : null);
 	}
 
 	@Override

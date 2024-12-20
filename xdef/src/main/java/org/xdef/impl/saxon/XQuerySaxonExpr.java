@@ -21,17 +21,15 @@ import org.xdef.xml.KXquery;
  * @author Vaclav Trojan
  */
 public class XQuerySaxonExpr implements KXquery {
-	private final static XQDataSource XDS
-		= new com.saxonica.xqj.SaxonXQDataSource();
+	private final static XQDataSource XDS = new com.saxonica.xqj.SaxonXQDataSource();
 	/** XQuery engine. */
 	private XQConnection _conn;
 	XQPreparedExpression _value;
 
 	public XQuerySaxonExpr() {}
 
-	/** Creates a new instance of KXqueryExpr from other expression with
-	 * compiled new expression. The name space context, functions and variables
-	 * are retrieved  from the argument.
+	/** Creates a new instance of KXqueryExpr from other expression with compiled new expression.
+	 * The name space context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 */
 	private XQuerySaxonExpr(String source) {
@@ -39,21 +37,17 @@ public class XQuerySaxonExpr implements KXquery {
 			_conn = XDS.getConnection();
 			_value = _conn.prepareExpression(source);
 		} catch (XQException ex) {
-			//XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
 		}
 	}
 
 	@Override
-	/** Creates a new instance of KXQueryExpr from other expression with
-	 * compiled new expression. The name space context, functions and variables
-	 * are retrieved  from the argument.
+	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
+	 * The name space context, functions and variables* are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */
-	public KXquery newExpression(final String source) {
-		return new XQuerySaxonExpr(source);
-	}
+	public KXquery newExpression(final String source) {return new XQuerySaxonExpr(source);}
 
 	@Override
 	/** Set implicit time zone.
@@ -64,8 +58,7 @@ public class XQuerySaxonExpr implements KXquery {
 		try {
 			_value.setImplicitTimeZone(tz);
 		} catch (XQException ex) {
-			//XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
 		}
 	}
 
@@ -78,14 +71,13 @@ public class XQuerySaxonExpr implements KXquery {
 		try {
 			return _value.getImplicitTimeZone();
 		} catch (XQException ex) {
-			//XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
 		}
 	}
 
 	@Override
 	/** Get array with QNames of external variables
-	 * @return array with QNames of external variables or <i>null</i>.
+	 * @return array with QNames of external variables or null.
 	 */
 	public QName[] getAllExternalVariables() {
 		try {
@@ -97,14 +89,13 @@ public class XQuerySaxonExpr implements KXquery {
 
 	@Override
 	/** Get array with QNames of unbound external variables
-	 * @return array with QNames of unbound external variables or <i>null</i>.
+	 * @return array with QNames of unbound external variables or null.
 	 */
 	public QName[] getAllUnboundExternalVariables() {
 		try {
 			return _value.getAllUnboundExternalVariables();
 		} catch (XQException ex) {
-			//XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
 		}
 	}
 
@@ -114,8 +105,7 @@ public class XQuerySaxonExpr implements KXquery {
 	 * @param value object to be bound.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void bindValue(final QName qname, final Object value)
-		throws SRuntimeException {
+	public void bindValue(final QName qname, final Object value) throws SRuntimeException {
 		QName[] qnames = getAllExternalVariables();
 		if (qnames == null || qnames.length == 0 || value == null) {
 			return;
@@ -147,21 +137,16 @@ public class XQuerySaxonExpr implements KXquery {
 			} else {
 				if (value instanceof SDatetime) {
 					int i = XQItemType.XQBASETYPE_DATETIME;
-					_value.bindAtomicValue(qname,
-						((SDatetime) value).toISO8601(),
-						_conn.createAtomicType(i));
+					_value.bindAtomicValue(qname, ((SDatetime) value).toISO8601(), _conn.createAtomicType(i));
 				} else if (value instanceof SDuration) {
 					int i = XQItemType.XQBASETYPE_DURATION;
-					_value.bindAtomicValue(qname,
-						value.toString(),
-						_conn.createAtomicType(i));
+					_value.bindAtomicValue(qname, value.toString(), _conn.createAtomicType(i));
 				} else {
 					_value.bindString(qname, value.toString(), null);
 				}
 			}
 		} catch (XQException ex) {
-			//XQuery expression error&amp;{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&amp;{0}{: }
 		}
 	}
 
@@ -170,19 +155,17 @@ public class XQuerySaxonExpr implements KXquery {
 	 * @param value value to be bound.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void bindValue(final QName qname, final long value)
-	throws SRuntimeException {
+	public void bindValue(final QName qname, final long value) throws SRuntimeException {
 		try {
 			_value.bindLong(qname, value, null);
 		} catch (XQException ex) {
-			 //"XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //"XQuery expression error&{0}{: }
 		}
 	}
 
 	@Override
 	/** Execute precompiled XQuery expression and return result.
-	 * @param node node or <i>null</i>.
+	 * @param node node or null.
 	 * @return object with result of XQuery expression.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -192,34 +175,28 @@ public class XQuerySaxonExpr implements KXquery {
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.DOCUMENT_NODE) {
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
-					_conn.createItemFromNode(node,
-					_conn.createDocumentType()));
+					_conn.createItemFromNode(node, _conn.createDocumentType()));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.ELEMENT_NODE) {
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
 					_conn.createItemFromNode(node,
-						_conn.createElementType(KXmlUtils.getQName(node),
-							XQItemType.XQBASETYPE_ANYTYPE)));
+						_conn.createElementType(KXmlUtils.getQName(node), XQItemType.XQBASETYPE_ANYTYPE)));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.TEXT_NODE) {
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
 					_conn.createItemFromNode(node, _conn.createTextType()));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
-				_value.bindItem(XQConstants.CONTEXT_ITEM,
-					_conn.createItemFromNode(node,
-					_conn.createProcessingInstructionType(
-					node.getNodeValue())));
+				_value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(
+					node,_conn.createProcessingInstructionType(node.getNodeValue())));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.COMMENT_NODE) {
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
 					_conn.createItemFromNode(node, _conn.createCommentType()));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-				_value.bindItem(XQConstants.CONTEXT_ITEM,
-					_conn.createItemFromNode(node,
-						_conn.createAttributeType(KXmlUtils.getQName(node),
-							XQItemType.XQBASETYPE_ANYATOMICTYPE)));
+				_value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node,
+					_conn.createAttributeType(KXmlUtils.getQName(node),XQItemType.XQBASETYPE_ANYATOMICTYPE)));
 				return _value.executeQuery();
 			} else {
 				//XQuery expression error&{0}{: }
@@ -232,23 +209,19 @@ public class XQuerySaxonExpr implements KXquery {
 			if (node == null) {
 				return null;
 			}
-			 //"XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //"XQuery expression error&{0}{: }
 		}
 	}
 
 	@Override
-	/** Execute XQuery expression and return result.
-	/* If result type is <i>null</i> then result types are checked in
-	 * following sequence:
+	/** Execute XQuery expression and return result. If result type is null then result types are checked.
 	 * @return object with result of XQuery expression.
 	 */
 	public Object evaluate() {
 		try {
 			return _value.executeQuery();
 		} catch (XQException ex) {
-			//XQuery expression error&{0}{: }
-			throw new SRuntimeException(XML.XML506, ex);
+			throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
 		}
 	}
 }

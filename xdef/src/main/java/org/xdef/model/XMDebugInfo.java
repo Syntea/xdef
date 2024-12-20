@@ -30,17 +30,12 @@ public interface XMDebugInfo {
 	 * @param xdName name of X-definition (may be null).
 	 * @return XMStatementInfo object or null.
 	 */
-	public XMStatementInfo getStatementInfo(long line,
-		long column,
-		String sourceID,
-		String xdName);
+	public XMStatementInfo getStatementInfo(long line, long column, String sourceID, String xdName);
 
-	/** Get array of statement information objects assigned to given
-	 * X-definition and line.
+	/** Get array of statement information objects assigned to given X-definition and line.
 	 * @param line source line.
 	 * @param xdName name of X-definition.
-	 * @return array XMStatementInfo objects (if no statement information
-	 * is found the array is empty).
+	 * @return array XMStatementInfo objects (if no statement information is found the array is empty).
 	 */
 	public XMStatementInfo[] getStatementInfo(long line, String xdName);
 
@@ -48,5 +43,4 @@ public interface XMDebugInfo {
 	 * @return array of XMStatementInfo objects.
 	 */
 	public XMStatementInfo[] getStatementInfo();
-
 }

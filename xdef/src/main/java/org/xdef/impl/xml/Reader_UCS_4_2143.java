@@ -9,10 +9,7 @@ public class Reader_UCS_4_2143 extends Reader_UCS_4_xxxx {
 	/** four bytes. */
 	private final byte[] _b4 = new byte[4];
 
-	public Reader_UCS_4_2143(final InputStream in) {
-		super(in);
-		setEncoding("X-ISO-10646-UCS-4-2143");
-	}
+	public Reader_UCS_4_2143(final InputStream in) {super(in); setEncoding("X-ISO-10646-UCS-4-2143");}
 
 	@Override
 	final void changeBuffer(final byte[] byteBuf, final int len) {

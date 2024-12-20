@@ -48,7 +48,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Vaclav Trojan
  */
 public class XDGenCollection {
-
 	/** Created XML document. */
 	private final Document _doc;
 	/** Root element of collection. */
@@ -65,7 +64,6 @@ public class XDGenCollection {
 	private final List<Element> _lexiconList;
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros;
-
 	/** Prepared SAX parser instance. */
 	private static final SAXParserFactory SPF;
 	/** Properties with ignore unresolved externals, ignore warnings. */
@@ -73,29 +71,23 @@ public class XDGenCollection {
 
 	static {
 		PROPS_NOEXT = new Properties();
-		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
-		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_WARNINGS,
-			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+		PROPS_NOEXT.setProperty(
+			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
+		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 		try {
 			SPF = SAXParserFactory.newInstance();
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
 			SPF.setValidating(false);
 			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
-			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes",
-				false);
-			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings",
-				true);
-			SPF.setFeature("http://xml.org/sax/features/string-interning",
-				true);
+			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
+			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings", true);
+			SPF.setFeature("http://xml.org/sax/features/string-interning", true);
 			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
-			SPF.setFeature(
-				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false); // do not create xml:base attributes
+			// do not create xml:base attributes
+			SPF.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
 			SPF.setSchema(null);
-		} catch (ParserConfigurationException | SAXNotRecognizedException
-			| SAXNotSupportedException ex) {
+		} catch (ParserConfigurationException | SAXNotRecognizedException | SAXNotSupportedException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -142,47 +134,38 @@ public class XDGenCollection {
 				_element = el;
 			}
 			for (int i = 0; i < atts.getLength(); i++) {
-				el.setAttributeNS(atts.getURI(i),
-					atts.getQName(i), atts.getValue(i));
+				el.setAttributeNS(atts.getURI(i), atts.getQName(i), atts.getValue(i));
 			}
 			for (Map.Entry<String, String> x: _prefixes.entrySet()) {
 				String name = x.getKey();
 				name = !name.isEmpty() ? "xmlns:" + name : "xmlns";
 				if (!el.hasAttribute(name)) {
-					el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-						name, x.getValue());
+					el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, x.getValue());
 				}
 			}
 			_prefixes.clear();
 		}
 
 		@Override
-		public void endElement(final String uri,
-			final String localName,
-			final String qName) throws SAXException {
+		public void endElement(final String uri, final String localName, final String qName)
+			throws SAXException {
 			addText();
 			Node n = _element.getParentNode();
-			_element = n != null && n.getNodeType() == Node.ELEMENT_NODE
-				? (Element) n : null;
+			_element = n != null && n.getNodeType() == Node.ELEMENT_NODE ? (Element) n : null;
 		}
 
 		@Override
-		public void characters(final char[] ch,
-			final int start,
-			final int length) throws SAXException {
+		public void characters(final char[] ch, final int start, final int length) throws SAXException {
 			_text.append(String.valueOf(ch, start, length));
 		}
 
 		@Override
-		public void ignorableWhitespace(final char[] ch,
-			final int start,
-			final int length) throws SAXException {
-			_text.append(String.valueOf(ch, start, length));
+		public void ignorableWhitespace(final char[] ch, final int start, final int len) throws SAXException {
+			_text.append(String.valueOf(ch, start, len));
 		}
 
 		@Override
-		public void startPrefixMapping(String prefix, String uri) throws
-			SAXException {
+		public void startPrefixMapping(String prefix, String uri) throws SAXException {
 			_prefixes.put(prefix, uri);
 		}
 
@@ -190,16 +173,15 @@ public class XDGenCollection {
 			try {
 				InputSource is;
 				if (_pathname.charAt(0) == '<') {
-					is = new InputSource(new ByteArrayInputStream(
-						_pathname.getBytes(StandardCharsets.UTF_8)));
+					is = new InputSource(
+						new ByteArrayInputStream(_pathname.getBytes(StandardCharsets.UTF_8)));
 					is.setSystemId("STRING");
 				} else {
 					is = new InputSource(_pathname);
 				}
 				SAXParser parser = SPF.newSAXParser();
 				parser.parse(is, this);
-			} catch (IOException | ParserConfigurationException
-				| SAXException ex) {
+			} catch (IOException | ParserConfigurationException | SAXException ex) {
 				throw new RuntimeException(ex);
 			}
 		}
@@ -220,7 +202,7 @@ public class XDGenCollection {
 			return null;
 		}
 		if (node.getNodeType() == Node.COMMENT_NODE) {
-			_collection.appendChild(node.cloneNode(true)); //we append coment
+			_collection.appendChild(node.cloneNode(true)); // append coment
 			return null;
 		}
 		if (node.getNodeType() != Node.ELEMENT_NODE) {
@@ -311,18 +293,15 @@ public class XDGenCollection {
 			sourcePath = "";
 		} else {
 			String file = "file:/";
-			sourcePath = source.startsWith(file)
-				? source.substring(file.length()): source;
+			sourcePath = source.startsWith(file) ? source.substring(file.length()): source;
 			File f = new File(sourcePath);
 			sourcePath = f.getParentFile().getCanonicalPath();
 			sourcePath += File.separator;
 		}
 		String uri = getXDNodeNS(root);
 		if ("collection".equals(root.getLocalName())
-			&& (XDConstants.XDEF31_NS_URI.equals(uri)
-			|| XDConstants.XDEF32_NS_URI.equals(uri)
-			|| XDConstants.XDEF40_NS_URI.equals(uri)
-			|| XDConstants.XDEF41_NS_URI.equals(uri)
+			&& (XDConstants.XDEF31_NS_URI.equals(uri) || XDConstants.XDEF32_NS_URI.equals(uri)
+			|| XDConstants.XDEF40_NS_URI.equals(uri) || XDConstants.XDEF41_NS_URI.equals(uri)
 			|| XDConstants.XDEF42_NS_URI.equals(uri))) {
 			if (_collection == null) {
 				genCollection(uri);
@@ -339,10 +318,8 @@ public class XDGenCollection {
 				}
 			}
 		} else {
-			if (!XDConstants.XDEF31_NS_URI.equals(uri)
-				&& !XDConstants.XDEF32_NS_URI.equals(uri)
-				&& !XDConstants.XDEF40_NS_URI.equals(uri)
-				&& !XDConstants.XDEF41_NS_URI.equals(uri)
+			if (!XDConstants.XDEF31_NS_URI.equals(uri) && !XDConstants.XDEF32_NS_URI.equals(uri)
+				&& !XDConstants.XDEF40_NS_URI.equals(uri) && !XDConstants.XDEF41_NS_URI.equals(uri)
 				&& !XDConstants.XDEF42_NS_URI.equals(uri)) {
 				uri = XDConstants.XDEF42_NS_URI;
 			}
@@ -383,7 +360,7 @@ public class XDGenCollection {
 
 	/** Check if given node is XDEF element.
 	 * @param n node to be inspected.
-	 * @return <i>true</i> if node is element with X-definition namespace.
+	 * @return true if node is element with X-definition namespace.
 	 */
 	private static boolean isXdefElement(final Node n) {
 		String uri = n.getNamespaceURI();
@@ -404,7 +381,7 @@ public class XDGenCollection {
 	/** Check if given node is the XDEF element.
 	 * @param n node to be inspected.
 	 * @param name required name of element.
-	 * @return <i>true</i> if node is element with X-definition name space.
+	 * @return true if node is element with X-definition name space.
 	 */
 	public static boolean isXdefElement(final Node n, final String name) {
 		return name.equals(n.getLocalName()) && isXdefElement(n);
@@ -416,9 +393,7 @@ public class XDGenCollection {
 	 * @param localname name of attribute
 	 * @return true if attribute with given local name exists.
 	 */
-	public static boolean hasXdefAttr(final Element el,
-		final String xdUri,
-		final String localname) {
+	public static boolean hasXdefAttr(final Element el, final String xdUri, final String localname) {
 		return el.hasAttribute(localname) || el.hasAttributeNS(xdUri,localname);
 	}
 
@@ -426,7 +401,7 @@ public class XDGenCollection {
 	 * @param el element from which an attribute should be taken.
 	 * @param xdUri namespace URI of X-definition.
 	 * @param localname local name of attribute
-	 * @param remove if <i>true</i> then the attribute is removed.
+	 * @param remove if true then the attribute is removed.
 	 * @return value of attribute or an empty string.
 	 */
 	static String getXdefAttr(final Element el,
@@ -453,8 +428,7 @@ public class XDGenCollection {
 	 * @param xdUri namespace of X-definition.
 	 * @param defName name of X-definition or null.
 	 * @param macros list of macros.
-	 * @param resolve if true, the macro references are resolved and the macro
-	 * definitions are removed.
+	 * @param resolve if true, the macro references are resolved and the macro definitions are removed.
 	 */
 	private static void addMacro(final Element macro,
 		final String xdUri,
@@ -480,15 +454,14 @@ public class XDGenCollection {
 		SBuffer v = new SBuffer(KXmlUtils.getTextContent(macro).trim());
 		XScriptMacro m = new XScriptMacro(macName, defName, params, v , null);
 		if (macros.containsKey(m.getName())) {
-			//Macro '&{0}' redefinition
-			throw new SRuntimeException(XDEF.XDEF482, m.getName());
+			throw new SRuntimeException(XDEF.XDEF482, m.getName()); //Macro '&{0}' redefinition
 		} else {
 			macros.put(m.getName(), m);
 		}
 	}
 
-	/** Reads all macros to the table macros. If parameter resolve is specified
-	 * macros are expanded and macro definitions are removed from collection.
+	/** Reads all macros to the table macros. If parameter resolve is specified macros are expanded
+	 * and macro definitions are removed from collection.
 	 * @param collection Collection of X-definitions.
 	 * @param macros HashMap with macros.
 	 * @param resolve switch if macros will be expanded and removed.
@@ -515,8 +488,7 @@ public class XDGenCollection {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element el = (Element) nl.item(i);
 			String xdUri = el.getNamespaceURI();
-			if (!"def".equals(el.getLocalName())
-				|| xdUri == null){
+			if (!"def".equals(el.getLocalName()) || xdUri == null) {
 				continue;
 			}
 			NodeList nl1 = KXmlUtils.getChildElementsNS(el, xdUri, "macro");
@@ -548,8 +520,7 @@ public class XDGenCollection {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element def = (Element) nl.item(i);
 				String xdUri = def.getNamespaceURI();
-				if (("def".equals(def.getLocalName())
-					|| "declaration".equals(def.getLocalName()))
+				if (("def".equals(def.getLocalName()) || "declaration".equals(def.getLocalName()))
 					&& xdUri != null) {
 					String defName = getXdefAttr(def, xdUri, "name", false);
 					expandMacros(def, defName, macros);
@@ -567,8 +538,7 @@ public class XDGenCollection {
 		final String defName,
 		final Map<String, XScriptMacro> macros) {
 		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
-			"1.1".equals(el.getOwnerDocument().getXmlVersion())
-				? StringParser.XMLVER1_1 : StringParser.XMLVER1_0,
+			"1.1".equals(el.getOwnerDocument().getXmlVersion())?StringParser.XMLVER1_1:StringParser.XMLVER1_0,
 			macros,
 			new ArrayReporter());
 		NodeList nl = el.getChildNodes();
@@ -606,8 +576,7 @@ public class XDGenCollection {
 	 * @param script script source.
 	 * @param defName name of actual X-definition.
 	 * @param removeActions if true all actions except validation are removed.
-	 * @param isValue if true the script describes a value of an attribute or
-	 * of a text node.
+	 * @param isValue if true the script describes a value of an attribute or of a text node.
 	 * @return canonized script.
 	 */
 	static String canonizeScript(final String script,
@@ -637,10 +606,8 @@ public class XDGenCollection {
 			for (int i = 0; nm != null && i < nm.getLength(); i++) {
 				Attr a = (Attr) nm.item(i);
 				if (!a.getName().startsWith("xmlns")) {
-					boolean isValue = !"script".equals(a.getLocalName())
-						|| !xdUri.equals(a.getNamespaceURI());
-					String s = canonizeScript(a.getValue(),
-						defName, removeActions, isValue);
+					boolean isValue = !"script".equals(a.getLocalName()) || !xdUri.equals(a.getNamespaceURI());
+					String s = canonizeScript(a.getValue(), defName, removeActions, isValue);
 					a.setValue(s);
 				}
 			}
@@ -691,11 +658,10 @@ public class XDGenCollection {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				Element e = (Element) nl.item(i);
 				if (xdUri.equals(e.getNamespaceURI())) {
-					if ("text".equals(e.getLocalName())
-						&& xdUri.equals(e.getNamespaceURI())) {
-						String s = hasXdefAttr(e, xdUri, "script") ?
-							getXdefAttr(e, xdUri, "script", true)
-							: KXmlUtils.getTextValue(e);
+					if ("text".equals(e.getLocalName()) && xdUri.equals(e.getNamespaceURI())) {
+						String s = hasXdefAttr(e,
+							xdUri,
+							"script") ? getXdefAttr(e, xdUri, "script", true) : KXmlUtils.getTextValue(e);
 						s = canonizeScript(s, defName, removeActions, true);
 						if (s.isEmpty()) {
 							s = "required string()";
@@ -704,10 +670,8 @@ public class XDGenCollection {
 						txtEl.appendChild(doc.createTextNode(s));
 						el.replaceChild(txtEl, e);
 						continue;
-					} else if ("sequence".equals(e.getLocalName())
-							|| "mixed".equals(e.getLocalName())
-							|| "choice".equals(e.getLocalName())
-							|| "list".equals(e.getLocalName())) {
+					} else if ("sequence".equals(e.getLocalName()) || "mixed".equals(e.getLocalName())
+							|| "choice".equals(e.getLocalName()) || "list".equals(e.getLocalName())) {
 						String s = getXdefAttr(e, xdUri, "empty", true);
 						if (s.length() > 0) {
 							if ((s = s.trim()).equals("true")) {
@@ -718,20 +682,16 @@ public class XDGenCollection {
 				}
 				canonizeXDText(e, xdUri, defName, removeActions);
 			} else if (n.getNodeType() == Node.TEXT_NODE) {
-				if (!("declaration".equals(el.getLocalName())
-					|| "component".equals(el.getLocalName())
-					|| "BNFGrammar".equals(el.getLocalName())
-					|| "thesaurus".equals(el.getLocalName())
-					|| "lexicon".equals(el.getLocalName())
-					|| "json".equals(el.getLocalName())
+				if (!("declaration".equals(el.getLocalName()) || "component".equals(el.getLocalName())
+					|| "BNFGrammar".equals(el.getLocalName()) || "thesaurus".equals(el.getLocalName())
+					|| "lexicon".equals(el.getLocalName()) || "json".equals(el.getLocalName())
 					|| "xon".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
 					String s = ((Text) n).getData();
 					s = canonizeScript(s, defName, removeActions, true);
 					if (s.length() > 0){
-						Element txtEl =
-							doc.createElementNS(xdUri, "xd:text");
+						Element txtEl = doc.createElementNS(xdUri, "xd:text");
 						txtEl.appendChild(doc.createTextNode(s));
 						el.replaceChild(txtEl, txt);
 					} else {
@@ -745,29 +705,26 @@ public class XDGenCollection {
 	/** Changes all XD:text elements to text nodes.
 	 * @param xdef element with a X-definition.
 	 * @param removeActions if true all actions except validation are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 */
 	public static void canonizeXDefinition(final Element xdef,
 		final boolean removeActions,
 		final boolean genModelVariants) {
 		NodeList nl = KXmlUtils.getChildElements(xdef);
 		String xdUri = xdef.getNamespaceURI();
-		String defName = xdef.hasAttribute("name") ? xdef.getAttribute("name")
-			: xdef.getAttributeNS(xdUri,"name");
+		String defName =
+			xdef.hasAttribute("name") ? xdef.getAttribute("name") : xdef.getAttributeNS(xdUri,"name");
 		for (int i = 0; i < nl.getLength(); i++) {
 			canonizeXDText((Element) nl.item(i), xdUri, defName, removeActions);
 		}
 	}
 
-	/** Reads all X-definitions in collection and changes XD:text elements
-	 * to text nodes.
+	/** Reads all X-definitions in collection and changes XD:text elements to text nodes.
 	 * @param collection Collection of X-definitions.
 	 * @param removeActions if true all actions except validation are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 */
 	public static void canonizeCollection(final Element collection,
 		final boolean removeActions,
@@ -775,17 +732,14 @@ public class XDGenCollection {
 		NodeList nl = collection.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
-			if (n.getNodeType() == Node.ELEMENT_NODE
-				&& "def".equals(n.getLocalName())
+			if (n.getNodeType() == Node.ELEMENT_NODE && "def".equals(n.getLocalName())
 				&& n.getNamespaceURI() != null) {
 				canonizeXDefinition((Element) n,removeActions,genModelVariants);
 			}
 		}
 	}
 
-	private static Element getRefModel(Element collection,
-		final Element xdef,
-		final String ref) {
+	private static Element getRefModel(Element collection, final Element xdef, final String ref) {
 		String modelName;
 		Element xd = xdef;
 		int ndx;
@@ -803,10 +757,8 @@ public class XDGenCollection {
 					Element e = (Element) nl.item(j);
 					String uri = e.getNamespaceURI();
 					if ("def".equals(e.getLocalName())
-						&& (XDConstants.XDEF31_NS_URI.equals(uri)
-							|| XDConstants.XDEF32_NS_URI.equals(uri)
-							|| XDConstants.XDEF40_NS_URI.equals(uri)
-							|| XDConstants.XDEF41_NS_URI.equals(uri)
+						&& (XDConstants.XDEF31_NS_URI.equals(uri) || XDConstants.XDEF32_NS_URI.equals(uri)
+							|| XDConstants.XDEF40_NS_URI.equals(uri) || XDConstants.XDEF41_NS_URI.equals(uri)
 							|| XDConstants.XDEF42_NS_URI.equals(uri))) {
 						s = getXdefAttr(e, uri, "name", false);
 						if (xdName.equals(s)) {
@@ -817,8 +769,7 @@ public class XDGenCollection {
 				}
 			}
 			if (xd == null) {
-				//XDEF269=X-definition &{0}{'}{' }doesn't exist
-				throw new SRuntimeException(XDEF.XDEF269);
+				throw new SRuntimeException(XDEF.XDEF269); //XDEF269=X-definition &{0}{'}{' }doesn't exist
 			}
 		}
 		String modelLocalName;
@@ -827,9 +778,7 @@ public class XDGenCollection {
 			modelNSURI = null;
 			modelLocalName = modelName;
 		} else {
-			modelNSURI = xdef.getAttributeNS(
-				XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-				modelName.substring(0, ndx)); //prefix
+			modelNSURI = xdef.getAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,modelName.substring(0, ndx));
 			modelLocalName = modelName.substring(ndx + 1); //local name
 		}
 		NodeList nl = xd.getChildNodes();
@@ -838,8 +787,7 @@ public class XDGenCollection {
 			String childLocalName = child.getLocalName();
 			String childNsURI = child.getNamespaceURI();
 			if (modelLocalName.equals(childLocalName)
-				&& (modelNSURI == null
-					? childNsURI == null :modelNSURI.equals(childNsURI))) {
+				&& (modelNSURI == null ? childNsURI == null :modelNSURI.equals(childNsURI))) {
 				return (Element) nl.item(j);
 			}
 		}
@@ -854,8 +802,7 @@ public class XDGenCollection {
 	public static Element copyToNewElement(String newName, Element orig) {
 		String u = orig.getNamespaceURI();
 		Document doc = orig.getOwnerDocument();
-		Element result = u == null
-			? doc.createElement(newName) : doc.createElementNS(u, newName);
+		Element result = u == null ? doc.createElement(newName) : doc.createElementNS(u, newName);
 		NamedNodeMap nm1 = orig.getAttributes();
 		for (int k = 0; k < nm1.getLength(); k++) {
 			Attr ak = (Attr) nm1.item(k);
@@ -873,8 +820,8 @@ public class XDGenCollection {
 		return result;
 	}
 
-	/** Get id which creates unique identifier of child element. If result is 0
-	 * then original name itself is unique.
+	/** Get id which creates unique identifier of child element. If result is 0 then original name itself
+	 * is unique.
 	 * @param el element where id is searched.
 	 * @param origName tested identifier.
 	 * @return id of unique identifier or 0.
@@ -900,24 +847,18 @@ public class XDGenCollection {
 		}
 	}
 
-	/** Lookup if "extensions" of attribute descriptions in the model are not
-	 * redefining the attribute descriptions which are already defined in the
-	 * model.
+	/** Lookup if "extensions" of attribute descriptions in the model are not redefining the attribute
+	 * descriptions which are already defined in the model.
 	 * @param collection root of collection of X-definitions.
 	 * @param xdef "actual" X-definition.
 	 * @param xel inspected model.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genVars if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 */
-	private static void preprocXModel(Element collection,
-		Element xdef,
-		Element xel,
-		final boolean genModelVariants) {
+	private static void preprocXModel(Element collection, Element xdef, Element xel, final boolean genVars) {
 		String xdURI = getXDNodeNS(xdef);
 		Attr a;
-		if (!xdURI.equals(xel.getNamespaceURI())
-			&& (a = xel.getAttributeNodeNS(xdURI, "script")) != null) {
+		if (!xdURI.equals(xel.getNamespaceURI()) && (a = xel.getAttributeNodeNS(xdURI, "script")) != null) {
 			String ref = XDParsedScript.getXdScript(a)._reference;
 			if (ref.length() != 0) {
 				Element refModel = getRefModel(collection, xdef, ref);
@@ -944,24 +885,20 @@ public class XDGenCollection {
 						String t2 = x2._type;
 						xel.removeAttributeNode(aa); //remove the attribute
 						//check if type differs and/or if occurrence differs
-						if (genModelVariants
-							&& (!x1._xOccurrence.equals(x2._xOccurrence)
+						if (genVars && (!x1._xOccurrence.equals(x2._xOccurrence)
 							|| (t1.length() != 0 && !t1.equals(t2)))) {
 							//differs
 							if (newRefModel == null) { //create new model
 								String refName = refModel.getNodeName();
 								Element xdef1=(Element)refModel.getParentNode();
 								int id = genUniqueID(xdef1, refName);
-								newRefModel =
-									copyToNewElement(refName+"_"+id, refModel);
+								newRefModel = copyToNewElement(refName+"_"+id, refModel);
 								xdef1.appendChild(newRefModel);
 								XDParsedScript xa=XDParsedScript.getXdScript(a);
 								String t = xa._type;
 								// modify reference
-								a.setNodeValue(xa.getxOccurrence()
-									.toString(true)
-									+ (t.length() > 0 ? ";" + t : "")
-									+ ";ref " + ref + "_" + id);
+								a.setNodeValue(xa.getxOccurrence().toString(true)
+									+ (t.length() > 0 ? ";" + t : "") + ";ref " + ref + "_" + id);
 							}
 							if (t1.isEmpty()) {
 								t1 = t2;
@@ -982,23 +919,19 @@ public class XDGenCollection {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				preprocXModel(collection, xdef, (Element) n, genModelVariants);
+				preprocXModel(collection, xdef, (Element) n, genVars);
 			}
 		}
 	}
 
-	/** Lookup if "extensions" of attribute descriptions in the model are not
-	 * redefining the attribute descriptions which are already defined in tne
-	 * model.
+	/** Lookup if "extensions" of attribute descriptions in the model are not redefining the attribute
+	 * descriptions which are already defined in tne model.
 	 * @param collection root of collection of X-definitions.
 	 * @param xdef "actual" X-definition.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute re defining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * re defining type or occurrence (important for XML schema generation).
 	 */
-	public static void preprocXdef(Element collection,
-		Element xdef,
-		final boolean genModelVariants) {
+	public static void preprocXdef(Element collection, Element xdef, final boolean genModelVariants) {
 		NodeList nl = xdef.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
@@ -1135,14 +1068,9 @@ public class XDGenCollection {
 	public static final String getXDNodeNS(final Node n) {
 		Element e;
 		switch (n.getNodeType()) {
-			case Node.ATTRIBUTE_NODE:
-				e = ((Attr) n).getOwnerElement();
-				break;
-			case Node.ELEMENT_NODE:
-				e = (Element) n;
-				break;
-			default:
-				return null;
+			case Node.ATTRIBUTE_NODE: e = ((Attr) n).getOwnerElement(); break;
+			case Node.ELEMENT_NODE: e = (Element) n; break;
+			default: return null;
 		}
 		String uri = e.getNamespaceURI();
 		if (uri == null || uri.isEmpty()) {
@@ -1152,45 +1080,33 @@ public class XDGenCollection {
 		if ("collection".equals(localName)) {
 			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF31_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF32_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF40_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF41_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF42_NS_URI;
 			}
-			return uri.equals(XDConstants.XDEF31_NS_URI)
-				|| uri.equals(XDConstants.XDEF32_NS_URI)
-				|| uri.equals(XDConstants.XDEF40_NS_URI)
-				|| uri.equals(XDConstants.XDEF41_NS_URI)
+			return uri.equals(XDConstants.XDEF31_NS_URI) || uri.equals(XDConstants.XDEF32_NS_URI)
+				|| uri.equals(XDConstants.XDEF40_NS_URI)|| uri.equals(XDConstants.XDEF41_NS_URI)
 				|| uri.equals(XDConstants.XDEF42_NS_URI) ? uri : null;
 		}
 		if ("def".equals(localName)) {
 			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF31_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF32_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF40_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF41_NS_URI;
-			}
-			if (e.hasAttributeNS(XDConstants.XDEF42_NS_URI, "metaNamespace")) {
+			} else if (e.hasAttributeNS(XDConstants.XDEF42_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF42_NS_URI;
 			}
-			String s = uri.equals(XDConstants.XDEF31_NS_URI)
-				|| uri.equals(XDConstants.XDEF32_NS_URI)
-				|| uri.equals(XDConstants.XDEF40_NS_URI)
-				|| uri.equals(XDConstants.XDEF41_NS_URI)
+			String s = uri.equals(XDConstants.XDEF31_NS_URI) || uri.equals(XDConstants.XDEF32_NS_URI)
+				|| uri.equals(XDConstants.XDEF40_NS_URI) || uri.equals(XDConstants.XDEF41_NS_URI)
 				|| uri.equals(XDConstants.XDEF42_NS_URI) ? uri : null;
 			if (s != null) {
 				return s;
@@ -1198,10 +1114,8 @@ public class XDGenCollection {
 			return getXDNodeNS(e.getParentNode());
 		}
 		if ("declaration".equals(localName)) {
-			String s = uri.equals(XDConstants.XDEF31_NS_URI)
-				|| uri.equals(XDConstants.XDEF32_NS_URI)
-				|| uri.equals(XDConstants.XDEF40_NS_URI)
-				|| uri.equals(XDConstants.XDEF41_NS_URI)
+			String s = uri.equals(XDConstants.XDEF31_NS_URI) || uri.equals(XDConstants.XDEF32_NS_URI)
+				|| uri.equals(XDConstants.XDEF40_NS_URI) || uri.equals(XDConstants.XDEF41_NS_URI)
 				|| uri.equals(XDConstants.XDEF42_NS_URI) ? uri : null;
 			if (s != null) {
 				return s;
@@ -1214,9 +1128,8 @@ public class XDGenCollection {
 	 * @param sources array of source paths, wildcards are permitted.
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all actions except validation are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute to redefine type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * to redefine type or occurrence (important for XML schema generation).
 	 * @return element with collection of X-definitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -1227,13 +1140,11 @@ public class XDGenCollection {
 		if (!isXML(sources)) {
 			// File paths
 			File[] files = SUtils.getFileGroup(sources);
-			return genCollection(
-				files, resolvemacros, removeActions, genModelVariants);
+			return genCollection(files, resolvemacros, removeActions, genModelVariants);
 		} else {
 			// XML sources
 			if (sources == null || sources.length == 0) {
-				throw new SRuntimeException(
-					"Unavailable source with X-definition");
+				throw new SRuntimeException("Unavailable source with X-definition");
 			}
 			chkXdef(sources);
 			XDGenCollection x = new XDGenCollection();
@@ -1257,13 +1168,11 @@ public class XDGenCollection {
 				}
 			}
 			if (!found) {
-				//X-definition &{0}{'}{' }doesn't exist
-				throw new SRuntimeException(XDEF.XDEF269);
+				throw new SRuntimeException(XDEF.XDEF269); //X-definition &{0}{'}{' }doesn't exist
 			}
 			if (removeActions) {
 				for (int i = 0; i < nl.getLength(); i++) {
-					preprocXdef(x._collection,
-						(Element) nl.item(i), genModelVariants);
+					preprocXdef(x._collection, (Element) nl.item(i), genModelVariants);
 				}
 			}
 			return x._collection;
@@ -1274,9 +1183,8 @@ public class XDGenCollection {
 	 * @param files array of source files.
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all actions except validation are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 * @return element with collection of X-definitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -1285,8 +1193,7 @@ public class XDGenCollection {
 		final boolean removeActions,
 		final boolean genModelVariants) throws Exception {
 		if (files == null || files.length == 0) {
-			//XDEF269=X-definition &{0}{'}{' }doesn't exist
-			throw new SRuntimeException(XDEF.XDEF269);
+			throw new SRuntimeException(XDEF.XDEF269); //X-definition &{0}{'}{' }doesn't exist
 		}
 		chkXdef(files); // just check
 		XDGenCollection x = new XDGenCollection();
@@ -1308,13 +1215,11 @@ public class XDGenCollection {
 			}
 		}
 		if (!found) {
-			//XDEF269=X-definition &{0}{'}{' }doesn't exist
-			throw new SRuntimeException(XDEF.XDEF269);
+			throw new SRuntimeException(XDEF.XDEF269); //X-definition &{0}{'}{' }doesn't exist
 		}
 		if (removeActions) {
 			for (int i = 0; i < nl.getLength(); i++) {
-				preprocXdef(x._collection,
-					(Element) nl.item(i), genModelVariants);
+				preprocXdef(x._collection, (Element) nl.item(i), genModelVariants);
 			}
 		}
 		return x._collection;
@@ -1324,9 +1229,8 @@ public class XDGenCollection {
 	 * @param urls array of source urls.
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all actions except validation are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 * @return element with collection of X-definitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */

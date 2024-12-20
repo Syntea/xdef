@@ -39,5 +39,4 @@ public interface XMVariable {
 	 * @return offset of variable.
 	 */
 	public int getOffset();
-
 }

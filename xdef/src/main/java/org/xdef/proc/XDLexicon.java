@@ -15,8 +15,7 @@ public interface XDLexicon {
 	/** Find text assigned to a key for given language.
 	 * @param key reference key.
 	 * @param languageID language ID.
-	 * @return word assigned for given language to the reference alias or return
-	 * null if such alias doesn't exist.
+	 * @return word assigned for given language to the reference alias or return null if alias doesn't exist.
 	 */
 	public String findText(final String key, final int languageID);
 
@@ -35,5 +34,4 @@ public interface XDLexicon {
 	 * @return array of all keys from lexicon.
 	 */
 	public String[] getKeys();
-
 }

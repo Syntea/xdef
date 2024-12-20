@@ -4,5 +4,4 @@ package org.xdef.model;
  * @author Vaclav Trojan
  */
 public interface XMPI extends XMNode {
-
 }

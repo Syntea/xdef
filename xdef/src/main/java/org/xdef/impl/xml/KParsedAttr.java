@@ -6,7 +6,6 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class KParsedAttr {
-
 	private String _nsURI;
 	private final String _name;
 	private String _value;
@@ -57,8 +56,6 @@ public class KParsedAttr {
 
 	@Override
 	public String toString() {
-		return _name + " = \"" + _value + '"' +
-			(_nsURI == null ? "" : "; URI = " + _nsURI);
+		return _name + " = \"" + _value + '"' + (_nsURI == null ? "" : "; URI = " + _nsURI);
 	}
-
 }
