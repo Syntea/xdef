@@ -14,8 +14,7 @@ import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.util.xsd2xd.xd.Schema_1_0_Processor;
 import org.xml.sax.SAXException;
 
-/** Represents XML Schema to X-definition convertor.
- * (see {@link org.xdef.util.XsdToXdef#main(String[])})
+/** Represents XML Schema to X-definition convertor (see {@link org.xdef.util.XsdToXdef#main(String[])}).
  * @author Ilia Alexandrov
  */
 public class XsdToXdef {
@@ -29,21 +28,19 @@ public class XsdToXdef {
 	/** Reporter for reporting warnings and errors. */
 	private final SReporter _reporter;
 
-	/** Creates instance of Convertor with default settings. X-definition nodes
-	 * prefix as "xd", input XML Schema version as XML Schema 1.0, output
-	 * X-definition version as X-definition 2.0, debug mode is set to off and
-	 * reporter is set to print reports to System.err print stream.
+	/** Creates instance of Convertor with default settings. X-definition nodes prefix as "xd", input
+	 * XML Schema version as XML Schema 1.0, output X-definition version as X-definition 2.0, debug mode
+	 * is set to off and reporter is set to print reports to System.err print stream.
 	 */
 	private XsdToXdef(String xdefPrefix,
 		PrintStream out) {
 		_xdefPrefix = xdefPrefix == null ? "xd" : xdefPrefix;
 		_schemaVersion = SCHEMA1_0;
-		_reporter = new SReporter(new FileReportWriter(
-			out == null ? System.out : out, false));
+		_reporter = new SReporter(new FileReportWriter(out == null ? System.out : out, false));
 	}
 
-	/** Generates collection with X-definitions from root schema at given URL
-	 * and saves file with given file name.
+	/** Generates collection with X-definitions from root schema at given URL and saves file with given
+	 * file name.
 	 * @param schemaFile File with root schema.
 	 * @param collectionFileName name of collection of X-definitions file.
 	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
@@ -54,8 +51,7 @@ public class XsdToXdef {
 		String collectionFileName,
 		String xdefPrefix,
 		PrintStream out) throws IOException {
-		genCollection(
-			schemaFile.toURI().toURL(), collectionFileName, xdefPrefix, out);
+		genCollection(schemaFile.toURI().toURL(), collectionFileName, xdefPrefix, out);
 	}
 
 	/** Generates collection with X-definitions from root schema at given URL
@@ -79,8 +75,8 @@ public class XsdToXdef {
 		c.getXdefGenerator(schemaURL,false).writeCollection(collectionFileName);
 	}
 
-	/** Generates collection with X-definitions from root schema at given path
-	 * and saves file with given file name.
+	/** Generates collection with X-definitions from root schema at given path and saves file with given
+	 * file name.
 	 * @param schemaFilePath path to root schema file.
 	 * @param collectionFileName name of collection of X-definitions file.
 	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
@@ -98,45 +94,37 @@ public class XsdToXdef {
 		genCollection(url, collectionFileName, xdefPrefix, out);
 	}
 
-	/** Generates collection from a schema at given path and prints it
-	 * to standard output.
+	/** Generates collection from a schema at given path and prints it to standard output.
 	 * @param schemaFilePath path to schema file.
 	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if an error occurs.
 	 */
-	public static void genCollection(String schemaFilePath,
-		String xdefPrefix,
-		PrintStream out) throws IOException {
+	public static void genCollection(String schemaFilePath, String xdefPrefix, PrintStream out)
+		throws IOException {
 		URL url = new URL("file", "", schemaFilePath);
 		genCollection(url, xdefPrefix, out);
 	}
 
-	/** Generates collection from a schema at given URL and prints it to
-	 * standard output.
+	/** Generates collection from a schema at given URL and prints it to standard output.
 	 * @param schemaFile File with schema schema.
 	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if an error occurs.
 	 */
-	public static void genCollection(File schemaFile,
-		String xdefPrefix,
-		PrintStream out) throws IOException {
+	public static void genCollection(File schemaFile, String xdefPrefix, PrintStream out) throws IOException {
 		XsdToXdef c = new XsdToXdef(xdefPrefix, out);
 		URL schemaURL = schemaFile.toURI().toURL();
 		c.checkSchema(schemaURL);
 		c.getXdefGenerator(schemaURL, false).printCollection();
 	}
 
-	/** Generates collection from a schema at given URL and prints it to
-	 * standard output.
+	/** Generates collection from a schema at given URL and prints it to standard output.
 	 * @param schemaURL url of schema.
 	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 */
-	public static void genCollection(URL schemaURL,
-		String xdefPrefix,
-		PrintStream out) {
+	public static void genCollection(URL schemaURL, String xdefPrefix, PrintStream out) {
 		XsdToXdef c = new XsdToXdef(xdefPrefix, out);
 		c.checkSchema(schemaURL);
 		c.getXdefGenerator(schemaURL, false).printCollection();
@@ -155,8 +143,7 @@ public class XsdToXdef {
 		String directoryName,
 		String xdefPrefix,
 		PrintStream out) throws IOException {
-		genXdefFiles(
-			schemaFile.toURI().toURL(), directoryName, xdefPrefix, out);
+		genXdefFiles(schemaFile.toURI().toURL(), directoryName, xdefPrefix, out);
 	}
 
 	/** Generates X-definition file per XML schema file from root schema
@@ -201,12 +188,11 @@ public class XsdToXdef {
 
 	/** Creates and returns proper X-definition generator implementation
 	 * according to set parameters.
-	 * @param separetely XML Schema file as X-definiiton file.
+	 * @param separetely XML Schema file as X-definition file.
 	 */
 	private Convertor getXdefGenerator(URL schemaURL, boolean separately) {
 		if (_schemaVersion == SCHEMA1_0) {
-			return new Schema_1_0_Processor(
-				_xdefPrefix, _reporter, schemaURL, separately);
+			return new Schema_1_0_Processor(_xdefPrefix, _reporter, schemaURL, separately);
 		}
 		throw new RuntimeException("Could not find implementation of "
 			+ "X-definition generator according to set parameters");
@@ -242,8 +228,7 @@ public class XsdToXdef {
 			if (!schemaFile.exists()) {
 				throw new RuntimeException("Schema file does not exists");
 			}
-			SchemaFactory factory = SchemaFactory.newInstance(
-				XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			Schema schema = factory.newSchema(schemaFile);
 			return schema.newValidator();
 		} catch (SAXException ex) {
@@ -289,37 +274,26 @@ public class XsdToXdef {
 		for (String parameter : args) {
 			if (valueGetMode) {
 				if (parameter.startsWith("-")) {
-					err.append("Parameter value for '")
-						.append(type).append("' is missing\n");
+					err.append("Parameter value for '").append(type).append("' is missing\n");
 					break;
 				}
 				if (null == type) {
 					if (parameter.startsWith("-")) {
-						err.append("Parameter value for '")
-							.append(type).append("' is missing\n");
+						err.append("Parameter value for '").append(type).append("' is missing\n");
 					} else {
-						err.append("Unknown parameter value type '")
-							.append(type).append("'\n");
+						err.append("Unknown parameter value type '").append(type).append("'\n");
 					}
 					break;
 				} else {
 					switch (type) {
-						case "--input":
-							input = parameter;
-							break;
-						case "--output":
-							output = parameter;
-							break;
-						case "--xdefPrefix":
-							prefix = parameter;
-							break;
+						case "--input": input = parameter; break;
+						case "--output": output = parameter; break;
+						case "--xdefPrefix": prefix = parameter; break;
 						default:
 							if (parameter.startsWith("-")) {
-								err.append("Parameter value for '")
-									.append(type).append("' is missing\n");
+								err.append("Parameter value for '").append(type).append("' is missing\n");
 							} else {
-								err.append("Unknown parameter value type '")
-									.append(type).append("'\n");
+								err.append("Unknown parameter value type '").append(type).append("'\n");
 							}
 							break;
 					}
@@ -329,41 +303,41 @@ public class XsdToXdef {
 				switch (parameter) {
 					case "-h":
 					case "-?":
-					case "--help":
-						System.out.println(info);
-						return;
+					case "--help": System.out.println(info); return;
 					case "-i":
 					case "--input":
 						if (input != null) {
 							err.append("Input file is already set\n");
-						}	valueGetMode = true;
+						}
+						valueGetMode = true;
 						type = "--input";
 						break;
 					case "-o":
 					case "--output":
 						if (output != null) {
 							err.append("Output file is already set\n");
-						}	valueGetMode = true;
+						}
+						valueGetMode = true;
 						type = "--output";
 						break;
 					case "-s":
 					case "--separated":
 						if (separated) {
 							err.append("Separated mode already set\n");
-						}	separated = true;
+						}
+						separated = true;
 						break;
 					case "-p":
 					case "--xdefPrefix":
 						if (prefix != null) {
-							err.append(
-								"Prefix for X-definition elements already set\n");
+							err.append("Prefix for X-definition elements already set\n");
 							return;
-						}	valueGetMode = true;
+						}
+						valueGetMode = true;
 						type = "--xdefPrefix";
 						break;
 					default:
-						err.append("Unknown parameter: ").append(parameter)
-							.append("\n");
+						err.append("Unknown parameter: ").append(parameter).append("\n");
 						break OUTER;
 				}
 			}

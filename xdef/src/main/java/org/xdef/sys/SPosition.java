@@ -31,14 +31,10 @@ public class SPosition {
 	 * @param sysId system ID or null.
 	 * @param pubId public ID or null.
 	 */
-	public SPosition(final int line,
-		final int column,
-		final String sysId,
-		final String pubId) {
+	public SPosition(final int line, final int column, final String sysId, final String pubId) {
 		_bufIndex = column > 0 ? column - 1 : 0;
 		_line = line == 0 ? 0 : line < 0 ? Integer.MAX_VALUE - line : line;
-		_sysId = pubId == null ? sysId : sysId == null
-			? "$pubid[" + pubId + ']' : (sysId + "$pubid[" + pubId + ']');
+		_sysId = pubId==null ? sysId : sysId==null ? "$pubid["+ pubId + ']' : (sysId +"$pubid["+ pubId + ']');
 	}
 
 	/** Creates a new instance of SPosition as copy of given position.
@@ -91,10 +87,7 @@ public class SPosition {
 		_modificationInfo = null;
 	}
 
-	public final void setNewLine() {
-		_line++;
-		_startLine = _filePos + _bufIndex + 1;
-	}
+	public final void setNewLine() {_line++; _startLine = _filePos + _bufIndex + 1;}
 
 	/** Set position from other position.
 	 * @param spos other position.
@@ -165,8 +158,8 @@ public class SPosition {
 	 */
 	public final String getSysId() {return _sysId;}
 
-	/** Set file name or URL of source data (or null). Note that public id can
-	 * be appended to sysId as "$pubid["... public ..."]".
+	/** Set file name or URL of source data (or null). Note that public id can be appended to sysId
+	 * as "$pubid["... public ..."]".
 	 * @param sysId the file name or URL of source data (or null).
 	 */
 	public final void setSysId(final String sysId) {_sysId = sysId;}
@@ -222,9 +215,8 @@ public class SPosition {
 	 */
 	public final String getPublicId() {
 		int ndx;
-		return _sysId != null && (ndx = _sysId.indexOf("$pubid[")) >= 0 &&
-			_sysId.endsWith("]") ?
-			_sysId.substring(ndx + 7, _sysId.length() - 1) :  null;
+		return _sysId != null && (ndx = _sysId.indexOf("$pubid[")) >= 0 && _sysId.endsWith("]")
+			? _sysId.substring(ndx + 7, _sysId.length() - 1) :  null;
 	}
 
 	/** Get position related to the start of source data.
@@ -272,8 +264,7 @@ public class SPosition {
 				lastItem = item;
 			}
 		}
-		return new SPosition((lastItem._fixed) // return corrected position
-			? - lastItem._diff : pos - lastItem._bufIndex - lastItem._diff,
+		return new SPosition((lastItem._fixed) ? - lastItem._diff : pos - lastItem._bufIndex - lastItem._diff,
 			lastItem._line,
 			lastItem._startLine,
 			lastItem._startLine,
@@ -307,16 +298,16 @@ public class SPosition {
 				: "&{line}" + _line) + (_line <= 0 || getColumnNumber() < 0 ? ""
 				: "&{column}" + getColumnNumber()) + ((sysId = getSystemId()) == null || sysId.isEmpty()
 				? "" : "&{sysId}" + sysId);
-			if (modification.contains("&{line}")
-				&& !text.contains("&{#SYS000}") && !text.contains("&{line}")) {
+			if (modification.contains("&{line}") && !text.contains("&{#SYS000}")
+				&& !text.contains("&{line}")){
 				text += "&{line}{; line=}";
 			}
-			if (modification.contains("&{column}")
-				&&!text.contains("&{#SYS000}") && !text.contains("&{column}")) {
+			if (modification.contains("&{column}") &&!text.contains("&{#SYS000}")
+				&& !text.contains("&{column}")) {
 				text += "&{column}{; column=}";
 			}
-			if (modification.contains("&{sysId}")
-				&& !text.contains("&{#SYS000}") && !text.contains("&{sysId}")) {
+			if (modification.contains("&{sysId}") && !text.contains("&{#SYS000}")
+				&& !text.contains("&{sysId}")) {
 				text += "&{sysId}{; source='}{'}";
 			}
 			report.setModification(modification);
@@ -346,12 +337,12 @@ public class SPosition {
 				}
 				modification += "&{pos}" + getSourcePosition();
 			}
-			if (modification.contains("&{xpath}")
-				&& !text.contains("&{xpath}") && !text.contains("&{#SYS000}")) {
+			if (modification.contains("&{xpath}") && !text.contains("&{xpath}")
+				&& !text.contains("&{#SYS000}")) {
 				text += "&{xpath}{; xpath=}";
 			}
-			if (modification.contains("&{xdpos}") &&
-				!text.contains("&{xdpos}") && !text.contains("&{#SYS000}")) {
+			if (modification.contains("&{xdpos}") && !text.contains("&{xdpos}")
+				&& !text.contains("&{#SYS000}")) {
 				text += "&{xdpos}{; X-position=}";
 			}
 		}
@@ -363,52 +354,51 @@ public class SPosition {
 	 * is ERROR or FATAL is thrown the SRuntimeException created from the report.
 	 * @param pos The source buffer position.
 	 * @param report Report to be sent to reporter or thrown.
-	 * @param reportWriter Report writer or null.
+	 * @param reporter Report writer or null.
 	 * @throws SRuntimeException if report writer is null and report type is ERROR or FATAL.
 	 */
-	public final void putReport(final int pos, final Report report, final ReportWriter reportWriter)
+	public final void putReport(final int pos, final Report report, final ReportWriter reporter)
 		throws SRuntimeException {
 		SPosition p = correctPosition(pos);
 		p.genPositionInfo(report);
-		if (reportWriter == null) {
+		if (reporter == null) {
 			if (report.getType() == Report.WARNING) {
 				return;
 			}
 			throw new SRuntimeException(report);
 		}
-		reportWriter.putReport(report);
+		reporter.putReport(report);
 		if (report.getType() != Report.FATAL) {
 			return;
 		}
-		reportWriter.checkAndThrowErrors();
+		reporter.checkAndThrowErrors();
 	}
 
 	/** Put report with position information to the report writer. If report writer is null and report type
 	 * is ERROR or FATAL is thrown the SRuntimeException created from the report.
 	 * @param report Report to be sent to reporter or thrown.
-	 * @param reportWriter Report writer or null.
+	 * @param reporter Report writer or null.
 	 * @throws SRuntimeException if report writer is null and report type is ERROR or FATAL.
 	 */
-	public final void putReport(final Report report,final ReportWriter reportWriter) throws SRuntimeException{
+	public final void putReport(final Report report,final ReportWriter reporter) throws SRuntimeException {
 		correctPosition().genPositionInfo(report);
-		if (reportWriter == null) {
+		if (reporter == null) {
 			if (report.getType() == Report.WARNING) {
 				return;
 			}
 			throw new SRuntimeException(report);
 		}
-		reportWriter.putReport(report);
+		reporter.putReport(report);
 		if (report.getType() != Report.FATAL) {
 			return;
 		}
-		reportWriter.checkAndThrowErrors();
+		reporter.checkAndThrowErrors();
 	}
 
 	@Override
 	/** Check if some object is equal to this position.
 	 * @param obj Object to be compared.
-	 * @return true if the argument is considered as the same position as this one position; otherwise
-	 * return false.
+	 * @return true if argument is considered as the same position as this one, otherwise return false.
 	 */
 	public final boolean equals(final Object obj) {
 		if (obj == null || !(obj instanceof SPosition)) {
@@ -427,8 +417,7 @@ public class SPosition {
 
 	@Override
 	public int hashCode() {
-		int hash = 79 * 7 + _bufIndex;
-		hash = 79 * hash + (_sysId != null ? _sysId.hashCode() : 0);
+		int hash = 79 * 79 * 7 + _bufIndex + (_sysId != null ? _sysId.hashCode() : 0);
 		return 79 * hash + (int) (_filePos ^ (_filePos >>> 32));
 	}
 
@@ -441,7 +430,6 @@ public class SPosition {
 	 * <br>This helps to sort messages according to source position.
 	 * @param pos the SPosition to be compared.
 	 * @return -1, zero, or +1 as this position is less than, equal to, or greater than the specified object.
-	 * @throws ClassCastException if specified object's type prevents it from being compared to this Object.
 	 */
 	public int compareTo(final SPosition pos) {
 		if (_sysId != null) {
@@ -469,8 +457,7 @@ public class SPosition {
 		final int diff,
 		final boolean fixed) {
 		if (_modificationInfo == null) {
-			//first replacement
-			_modificationInfo = new ArrayList<>();
+			_modificationInfo = new ArrayList<>(); //first replacement
 		}
 		_modificationInfo.add(
 			new Replacement(pos, diff, line, startLine, fixed, _sysId));
@@ -483,8 +470,7 @@ public class SPosition {
 	 */
 	public final void addLine(final int pos, final long line, final long startLine) {
 		if (_modificationInfo == null) {
-			//first replacement
-			_modificationInfo = new ArrayList<>();
+			_modificationInfo = new ArrayList<>(); //first replacement
 		}
 		_modificationInfo.add(
 			new Replacement(pos, 0, line, startLine, false, _sysId));
@@ -512,8 +498,7 @@ public class SPosition {
 			(n = spos._modificationInfo.size()) > 0) {
 			for (int i = 0; i < n; i++) {
 				Replacement item = spos._modificationInfo.get(i);
-				_modificationInfo.add(new Replacement(
-					pos + item._bufIndex - diff,
+				_modificationInfo.add(new Replacement(pos + item._bufIndex - diff,
 					diff,
 					item._line,
 					item._startLine,
@@ -537,8 +522,7 @@ public class SPosition {
 		// The replacement may be a modification of existing source (newPos == null) or it may be considered
 		// as the independent part (newPos != null). Overlapnig replacements are considered
 		// as the part of the first replacement.
-
-		// There are 5 situations of replacement position:
+		// There are 6 situations of replacement position:
 		// 1. There is no replacement block yet -> add first replacement
 		// 2. is between two existing or before the first one -> insert before
 		// 3. covers whole area between the existing ones -> join and/or extend

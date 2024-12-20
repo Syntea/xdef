@@ -18,9 +18,8 @@ import java.util.Map;
 import org.xdef.impl.xml.XInputStream;
 import org.xdef.impl.xml.XReader;
 
-/** Generate formatted source of the X-definitions.
- * Also provides main method for calling the program from command line.
- * (see {@link org.xdef.util.PrettyXdef#main(String[])})
+/** Generate formatted source of the X-definitions. Also provides main method for calling the program
+ * from command line. (see {@link org.xdef.util.PrettyXdef#main(String[])})
  * @author Vaclav Trojan
  */
 public class PrettyXdef extends XReader {
@@ -39,13 +38,10 @@ public class PrettyXdef extends XReader {
 
 	/** Create new instance of PrettyXdef.
 	 * @param mi XInputStream reader.
-	 * @param indentStep number of indent spaces (0 .. no indenting).
+	 * @param indent number of indent spaces (0 .. no indenting).
 	 * @throws IOException if an error occurs,
 	 */
-	private PrettyXdef(XInputStream mi, int indentStep) throws IOException {
-		super(mi);
-		_indentStep = indentStep;
-	}
+	private PrettyXdef(XInputStream mi, int indent) throws IOException {super(mi); _indentStep = indent;}
 
 	/** Get string with given number of spaces.
 	 * @param num Number of spaces.
@@ -63,9 +59,7 @@ public class PrettyXdef extends XReader {
 		return sb.toString();
 	}
 
-	private void addToResult(String s) {
-		_result.append(getIndentSpaces(_level * _indentStep)).append(s);
-	}
+	private void addToResult(String s) {_result.append(getIndentSpaces(_level * _indentStep)).append(s);}
 
 	private int parseCommentOrPI() {
 		int i;
@@ -127,8 +121,7 @@ public class PrettyXdef extends XReader {
 					String value = getBufPart(i, getPos());
 					if (_trimAttr) {
 						char quote = value.charAt(0);
-						value = quote +
-							value.substring(1, value.length()-1).trim() + quote;
+						value = quote + value.substring(1, value.length()-1).trim() + quote;
 					}
 					return new Attr(s, value);
 				}
@@ -144,8 +137,7 @@ public class PrettyXdef extends XReader {
 		int i;
 		for(;;) {
 			addText();
-			if ((i = scanPI()) != -1 || (i = scanComment()) != -1
-				|| (i = scanCDATA()) != -1) {
+			if ((i = scanPI()) != -1 || (i = scanComment()) != -1 || (i = scanCDATA()) != -1) {
 				addToResult(getBufPart(i, getPos()));
 			} else if ((i = scanText()) != -1 || (i = scanEntity()) != -1) {
 				do {
@@ -170,16 +162,16 @@ public class PrettyXdef extends XReader {
 			boolean wasAttr = false;
 			for (Attr a : attrs) {
 				if (a._name.startsWith("xmlns")) {//write first xmlns attributes
-					String indent = wasAttr && _indentStep > 0 ?
-						getIndentSpaces(name.length()+2)+_level*_indentStep:" ";
+					String indent = wasAttr && _indentStep > 0
+						? getIndentSpaces(name.length()+2)+_level*_indentStep : " ";
 					_result.append(indent).append(a.toString());
 					wasAttr = true;
 				}
 			}
 			for (Attr a : attrs) {//otehr attributes
 				if (!a._name.startsWith("xml")) {
-					String indent = wasAttr && _indentStep > 0 ?
-						getIndentSpaces(_level*_indentStep+name.length()+2):" ";
+					String indent = wasAttr && _indentStep > 0
+						? getIndentSpaces(_level*_indentStep+name.length()+2) : " ";
 					_result.append(indent).append(a.toString());
 					wasAttr = true;
 				}
@@ -217,14 +209,11 @@ public class PrettyXdef extends XReader {
 	 * @return the encoding of written XML.
 	 * @throws IOException if an error occurs.
 	 */
-	public static String prettyWrite(String source,
-		int indentStep,
-		OutputStream out,
-		String encoding) throws IOException {
+	public static String prettyWrite(String source, int indentStep, OutputStream out, String encoding)
+		throws IOException {
 		InputStream in;
 		if (source.startsWith("<")) {
-			in = new ByteArrayInputStream(
-				source.getBytes(StandardCharsets.UTF_8));
+			in = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
 		} else {
 			URL u = SUtils.getExtendedURL(source);
 			in = u.openStream();
@@ -240,20 +229,17 @@ public class PrettyXdef extends XReader {
 	 * @return the encoding of written XML.
 	 * @throws IOException if an error occurs.
 	 */
-	public static String prettyWrite(InputStream in,
-		int indentStep,
-		OutputStream out,
-		String encoding) throws IOException {
+	public static String prettyWrite(InputStream in, int indentStep, OutputStream out, String encoding)
+		throws IOException {
 		XInputStream mi = new XInputStream(in);
 		String enc = encoding != null ? encoding : mi.getXMLEncoding();
 		String ver = mi.getXMLVersion();
 		PrettyXdef p = new PrettyXdef(mi, indentStep);
 		p.parse();
 		try (OutputStreamWriter wr = new OutputStreamWriter(out, enc)) {
-			if (!"1.0".equals(ver) || !"UTF-8".equals(enc)
-				|| mi.getXMLStandalone()) {
+			if (!"1.0".equals(ver) || !"UTF-8".equals(enc) || mi.getXMLStandalone()) {
 				wr.write("<?xml version=\""+ver+"\" encoding=\""+enc+"\"" +
-					(mi.getXMLStandalone()? " standalone=\"yes\"" : "")+"?>\n");
+					(mi.getXMLStandalone() ? " standalone=\"yes\"" : "")+"?>\n");
 			}
 			wr.write(p._result.toString());
 		}
@@ -268,10 +254,8 @@ public class PrettyXdef extends XReader {
 	 * @return the encoding of written XML.
 	 * @throws IOException if an error occurs.
 	 */
-	public static String prettyWriteToDir(File file,
-		File outDir,
-		int indentStep,
-		String encoding) throws IOException {
+	public static String prettyWriteToDir(File file, File outDir, int indentStep, String encoding)
+		throws IOException {
 		String outDirName = outDir.getAbsolutePath().replace('\\','/');
 		if (!outDirName.endsWith("/")) {
 			outDirName += '/';
@@ -299,10 +283,8 @@ public class PrettyXdef extends XReader {
 	 * @param encoding The character encoding name or null.
 	 * @throws IOException if an error occurs.
 	 */
-	public static void prettyWrite(File[] files,
-		File outDir,
-		int indentStep,
-		String encoding) throws IOException {
+	public static void prettyWrite(File[] files, File outDir, int indentStep, String encoding)
+		throws IOException {
 		for (File file : files) {
 			prettyWriteToDir(file, outDir, indentStep, encoding);
 		}
@@ -313,16 +295,13 @@ public class PrettyXdef extends XReader {
 	 * <i>[-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file</i>
 	 * <ul>
 	 *  <li><i>-o outFile</i> - output file or output directory.
-	 * If this parameter is not specified then input file is replaced by the
-	 * formatted version.
-	 *  <li><i>-d outDir</i> - output directory. If this parameter is not
-	 * specified the formated files will be replaced by the the formated
-	 * version.
-	 *  <li><i>-i n</i> - number of spaces used for indentation. If this
-	 * parameter is not specified the parameter is set to 2.
-	 * If n is equal to 0 no indentation is provided.
-	 *  <li><i>-e encoding</i> - name of character set. If this parameter
-	 * is not specified it will be used the original character set.
+	 * If this parameter is not specified then input file is replaced by the formatted version.
+	 *  <li><i>-d outDir</i> - output directory. If this parameter is not specified the formatted files will
+	 * be replaced by the the formatted version.
+	 *  <li><i>-i n</i> - number of spaces used for indentation. If this parameter is not specified the
+	 * parameter is set to 2. If n is equal to 0 no indentation is provided.
+	 *  <li><i>-e encoding</i> - name of character set. If this parameter is not specified it will be used
+	 * the original character set.
 	 *  <li><i>file</i> - the file with source X-definition.
 	 * </ul>
 	 * @throws IOException if an error occurs.
@@ -377,13 +356,11 @@ public class PrettyXdef extends XReader {
 			switch (c) {
 				case 'd': {//output file
 					if (fileName != null) {
-						msg +=
-							"'-o' and '-d' swithes can't be specified both.\n";
+						msg += "'-o' and '-d' swithes can't be specified both.\n";
 						continue;
 					}
 					if (s == null) {
-						msg += "Parameter [" + swNum +
-							"], '" + args[swNum-1]
+						msg += "Parameter [" + swNum + "], '" + args[swNum-1]
 							+ "': missing following argument\n";
 						continue;
 					}
@@ -399,9 +376,8 @@ public class PrettyXdef extends XReader {
 				}
 				case 'i': {
 					if (s == null) {
-						msg += "Parameter [" + swNum +
-							"], '" + args[swNum-1] +
-							"': missing following argument\n";
+						msg += "Parameter [" + swNum + "], '" + args[swNum-1]
+							+ "': missing following argument\n";
 						continue;
 					}
 					if (indent == Integer.MIN_VALUE) {
@@ -414,20 +390,17 @@ public class PrettyXdef extends XReader {
 								continue;
 							}
 						} catch (NumberFormatException ex) {}
-						msg += "Incorrect indentation parameter;" +
-							" indentation must be >= 0\n";
+						msg += "Incorrect indentation parameter; indentation must be >= 0\n";
 					}
 					continue;
 				}
 				case 'o': {//output directory
 					if (outDir != null) {
-						msg += "Swithes '-o' and '-d' can't be" +
-							" used simultaneously.\n";
+						msg += "Swithes '-o' and '-d' can't be used simultaneously.\n";
 						continue;
 					}
 					if (s == null) {
-						msg += "Parameter [" + swNum +
-							"], '" + args[swNum-1] +
+						msg += "Parameter [" + swNum + "], '" + args[swNum-1] +
 							"': missing following argument\n";
 						continue;
 					}
@@ -435,12 +408,10 @@ public class PrettyXdef extends XReader {
 					File f = new File(fileName);
 					if (f.exists()) {
 						if (f.isDirectory()) {
-							msg += "Output file " + fileName +
-								" can't be directory\n";
+							msg += "Output file " + fileName + " can't be directory\n";
 							continue;
-						} else if (f.exists() && !f.canWrite()){
-							msg += "Can't write to output file "
-								+ fileName + "\n";
+						} else if (f.exists() && !f.canWrite()) {
+							msg += "Can't write to output file " + fileName + "\n";
 							continue;
 						}
 					}
@@ -451,9 +422,7 @@ public class PrettyXdef extends XReader {
 					continue;
 				}
 				default:
-					msg += "Parameter [" + swNum +
-						"], '" + args[swNum-1] +
-						" is incorrect switch\n";
+					msg += "Parameter [" + swNum + "], '" + args[swNum-1] + " is incorrect switch\n";
 			}
 		}
 		if (i < args.length) {
@@ -483,13 +452,11 @@ public class PrettyXdef extends XReader {
 			indent = 2;
 		}
 		if (xdefs.size() == 1 && fileName != null) {
-			InputStream in =
-				new FileInputStream((File)xdefs.values().toArray()[0]);
+			InputStream in = new FileInputStream((File)xdefs.values().toArray()[0]);
 			OutputStream out = new FileOutputStream(fileName);
 			prettyWrite(in, indent, out, encoding);
 		} else if (fileName != null) {
-			throw new RuntimeException(
-				"'-o' switch can't be used for group of files\n" + info);
+			throw new RuntimeException("'-o' switch can't be used for group of files\n" + info);
 		} else {
 			File[] files = new File[xdefs.values().size()];
 			xdefs.values().toArray(files);

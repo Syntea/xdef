@@ -18,9 +18,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.sys.SRuntimeException;
 
-/** Process the XML file with the X-definition in the construction mode.
- * Also provides main method for calling the program from command line.
- * (see {@link org.xdef.util.XCompose#main(String[])})
+/** Process the XML file with the X-definition in the construction mode. Also provides main method for calling
+ * the program from command line. (see {@link org.xdef.util.XCompose#main(String[])})
  * @author  Vaclav Trojan
  */
 public class XCompose {
@@ -37,13 +36,8 @@ public class XCompose {
 	 * @param repw Report writer.
 	 * @return true if result was composed.
 	 */
-	public static boolean compose(
-		File sourceFile,
-		File outFile,
-		String encoding,
-		ReportWriter repw) {
-		return compose(sourceFile,
-			null, null, null, null, outFile, encoding, repw);
+	public static boolean compose(File sourceFile, File outFile, String encoding, ReportWriter repw) {
+		return compose(sourceFile, null, null, null, null, outFile, encoding, repw);
 	}
 
 	/** Compose xml file with given definition.
@@ -91,8 +85,7 @@ public class XCompose {
 			rootName = xDefName;
 		}
 		try {
-			XDPool defPool = XDFactory.compileXD(new Properties(),
-				(Object[]) xdefFiles);
+			XDPool defPool = XDFactory.compileXD(new Properties(), (Object[]) xdefFiles);
 			XDDocument chkDoc;
 			if (xDefName != null && xDefName.length() > 0) {
 				if (!defPool.exists(xDefName)) {
@@ -110,8 +103,7 @@ public class XCompose {
 				System.err.println("Can't create result");
 				return false;
 			} else {
-				KXmlUtils.writeXml(outFile.getAbsolutePath(),
-					encoding, result, true, true);
+				KXmlUtils.writeXml(outFile.getAbsolutePath(), encoding, result, true, true);
 			}
 		} catch (IOException | SRuntimeException ex) {
 			repw.error(null, "Unexpected error: " + ex);
@@ -119,8 +111,7 @@ public class XCompose {
 		return !repw.errors();
 	}
 
-	/** Validation of pool ox X-definitions. This method is possible to invoke
-	 * from command line.
+	/** Validation of pool ox X-definitions. This method is possible to invoke from command line.
 	 * @param args Array of strings containing command line arguments.
 	 * <p>
 	 * <i>[-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile
@@ -159,9 +150,7 @@ public class XCompose {
 		while (i < args.length && args[i].startsWith("-")) {
 			int swNum = i + 1;
 			if (args[i].length() == 1) {
-				throw new RuntimeException(
-					"Incorrect parameter [" + swNum + "]: '-'" + args[i] +"\n"
-					+ info);
+				throw new RuntimeException("Incorrect parameter [" + swNum + "]: '-'" + args[i] +"\n" + info);
 			}
 			char c = args[i].charAt(1);
 			switch (c) {
@@ -174,8 +163,7 @@ public class XCompose {
 			if (args[i].length() == 2) {
 				i++;
 				if (i >= args.length) {
-					throw new RuntimeException(
-						"Parameter [" + swNum + "], \"" + args[swNum-1]
+					throw new RuntimeException("Parameter [" + swNum + "], \"" + args[swNum-1]
 						+ "\": missing following argument\n" + info);
 				}
 				s = args[i];
@@ -186,27 +174,23 @@ public class XCompose {
 			switch (c) {
 				case 'i':
 					if (sourceFile != null) {
-						throw new RuntimeException(
-							"Redefinition of input file\n" + info);
+						throw new RuntimeException("Redefinition of input file\n" + info);
 					}
 					sourceFile = new File(s);
 					if (!sourceFile.exists()) {
-						throw new RuntimeException(
-							"File " + sourceFile.getAbsolutePath()
+						throw new RuntimeException("File " + sourceFile.getAbsolutePath()
 							+ " doesn't exist\n" + info);
 					}
 					if (!sourceFile.canRead()) {
-						throw new RuntimeException(
-							"Can't read file "
-								+ sourceFile.getAbsolutePath() + "\n" + info);
+						throw new RuntimeException("Can't read file "
+							+ sourceFile.getAbsolutePath() + "\n" + info);
 					}
 					continue;
 				case 'd':
 					if (xdefFiles == null) {
 						xdefFiles = SUtils.getFileGroup(s);
 					} else {
-						throw new RuntimeException(
-							"Parameter [" + swNum +	"], \"" + args[swNum-1]
+						throw new RuntimeException("Parameter [" + swNum +	"], \"" + args[swNum-1]
 							+ "\": redefinition\n" + info);
 					}
 					continue;
@@ -214,8 +198,7 @@ public class XCompose {
 					if (encoding == null) {
 						encoding = s;
 					} else {
-						throw new RuntimeException(
-							"Parameter [" + swNum + "], \"" + args[swNum-1]
+						throw new RuntimeException("Parameter [" + swNum + "], \"" + args[swNum-1]
 							+ "\": redefinition\n" + info);
 					}
 					continue;
@@ -227,16 +210,13 @@ public class XCompose {
 								outFile.delete();
 							}
 							if (!outFile.createNewFile()) {
-								throw new RuntimeException(
-									"Can't write to file " + s + "\n" + info);
+								throw new RuntimeException("Can't write to file " + s + "\n" + info);
 							}
 						} catch (IOException | RuntimeException ex) {
-							throw new RuntimeException(
-								"Can't write to file " + s + "\n" + info);
+							throw new RuntimeException("Can't write to file " + s + "\n" + info);
 						}
 					} else {
-						throw new RuntimeException(
-							"Parameter [" + swNum + "], \"" + args[swNum-1]
+						throw new RuntimeException("Parameter [" + swNum + "], \"" + args[swNum-1]
 							+ "\": redefinition\n" + info);
 					}
 					continue;
@@ -248,14 +228,13 @@ public class XCompose {
 							try {
 								repw = new FileReportWriter(s);
 							} catch (Exception ex) {
-								throw new RuntimeException(
-									"Can't create refort writer from ["+swNum
-									+"]: \"" + args[swNum-1] + "\"\n" + info);
+								throw new RuntimeException("Can't create refort writer from [" + swNum
+									+ "]: \"" + args[swNum-1] + "\"\n" + info);
 							}
 						}
 					} else {
 						throw new RuntimeException("Parameter [" + swNum +
-							"]: \""+args[swNum-1]+ "\": redefinition\n" + info);
+							"]: \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				case 'n':
@@ -263,7 +242,7 @@ public class XCompose {
 						rootNS = s;
 					} else {
 						throw new RuntimeException("Parameter [" + swNum +
-							"]: \""+args[swNum-1]+ "\": redefinition\n" + info);
+							"]: \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				case 'r':
@@ -271,7 +250,7 @@ public class XCompose {
 						rootName = s;
 					} else {
 						throw new RuntimeException("Parameter [" + swNum +
-							"]: \""+args[swNum-1]+ "\": redefinition\n" + info);
+							"]: \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				case 'x':
@@ -279,12 +258,12 @@ public class XCompose {
 						xdefName = s;
 					} else {
 						throw new RuntimeException("Parameter [" + swNum +
-							"]: \""+args[swNum-1]+ "\": redefinition\n" + info);
+							"]: \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				default:
 					throw new RuntimeException("Parameter [" + swNum +
-							"]: \""+args[swNum-1]+ "\": unknown switch\n"+info);
+							"]: \"" + args[swNum-1] + "\": unknown switch\n"+info);
 			}
 		}
 		if (sourceFile == null) {
@@ -315,5 +294,4 @@ public class XCompose {
 			throw new RuntimeException(repw.getReportReader().printToString());
 		}
 	}
-
 }

@@ -28,21 +28,16 @@ import org.xdef.sys.STester;
  */
 public class XValidate {
 
-	/** Creates a new instance of XValidate.
-	 * (just to prevents user to instantiate this object).
-	 */
+	/** Create new instance of XValidate. (just to prevents user to instantiate this object). */
 	private XValidate() {}
 
 	/** Validate xml file with given definition.
 	 * @param props properties to be set to X-definitions.
 	 * @param xmlFile The file with XML.
 	 * @param repw Report writer.
-	 * @return The XDDocument object or <i>null</i> if the XDDocument was
-	 * not created.
+	 * @return The XDDocument object or <i>null</i> if the XDDocument was not created.
 	 */
-	public static XDDocument validate(final Properties props,
-		final File xmlFile,
-		final ReportWriter repw) {
+	public static XDDocument validate(final Properties props, final File xmlFile, final ReportWriter repw) {
 		return validate(props,
 			xmlFile,
 			null, //xdefFile
@@ -57,8 +52,7 @@ public class XValidate {
 	 * @param xdefFiles Array of files with definitions.
 	 * @param rootDefName Name of root definition.
 	 * @param repw Report writer.
-	 * @return The XDDocument object or <i>null</i> if the XDDocument was
-	 * not created.
+	 * @return The XDDocument object or <i>null</i> if the XDDocument was not created.
 	 */
 	public static XDDocument validate(final Properties props,
 		final File xmlFile,
@@ -84,8 +78,7 @@ public class XValidate {
 	 * @param xdefFiles Array of files with definitions.
 	 * @param rootDefName Name of root definition.
 	 * @param repw Report writer.
-	 * @return The XDDocument object or <i>null</i> if the XDDocument was
-	 * not created.
+	 * @return The XDDocument object or <i>null</i> if the XDDocument was not created.
 	 */
 	public static XDDocument validate(final Properties props,
 		final File xmlFile,
@@ -147,10 +140,8 @@ public class XValidate {
 	 * @param poolFile The file with serialized XDPool or null.
 	 * @param xdefFiles Array of files with definitions or null.
 	 * @param rootDefName Name of root definition.
-	 * @param repw Report writer; if <i>null</i> then an RuntimeEexception
-	 * is thrown.
-	 * @return XDDocument object or <i>null</i> if the XDDocument was
-	 * not created.
+	 * @param repw Report writer; if <i>null</i> then an RuntimeEexception is thrown.
+	 * @return XDDocument object or <i>null</i> if the XDDocument was not created.
 	 */
 	public static XDDocument validate(final Properties props,
 		final DefOutStream out,
@@ -168,17 +159,14 @@ public class XValidate {
 			try {
 				xp = XDFactory.readXDPool(poolFile);
 			} catch (IOException ex) {
-				 //Program exception &{0}
-				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
+				repw.fatal(SYS.SYS036, STester.printThrowable(ex)); //Program exception &{0}
 				return null;
 			}
 		}
 		if (xp != null) {
 			try {
-				if (rootDefName != null && rootDefName.length() > 0
-					&& xp.getXMDefinition(rootDefName) == null) {
-					//X-definition '&{0}' doesn't exist
-					repw.fatal(XDEF.XDEF269, rootDefName);
+				if (rootDefName!=null && rootDefName.length() > 0 && xp.getXMDefinition(rootDefName) == null){
+					repw.fatal(XDEF.XDEF269, rootDefName); //X-definition '&{0}' doesn't exist
 				} else {
 					XDDocument xd = xp.createXDDocument(rootDefName);
 					xd.setProperties(props);
@@ -186,16 +174,14 @@ public class XValidate {
 					return xd;
 				}
 			} catch (Exception ex) {
-				 //Program exception &{0}
-				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
+				repw.fatal(SYS.SYS036, STester.printThrowable(ex));//Program exception &{0}
 				return null;
 			}
 		}
 		try {
 			return XDFactory.xparse(xmlFile.getCanonicalPath(), repw);
 		} catch (IOException | SRuntimeException ex) {
-			 //Program exception &{0}
-			repw.fatal(SYS.SYS036, STester.printThrowable(ex));
+			repw.fatal(SYS.SYS036, STester.printThrowable(ex));//Program exception &{0}
 			return null;
 		}
 	}
@@ -218,8 +204,7 @@ public class XValidate {
 		chkdoc.xparse(xmlFile, repw);
 	}
 
-	/** Validation of pool ox X-definitions. This method is possible to invoke
-	 * from command line.
+	/** Validation of pool ox X-definitions. This method is possible to invoke from command line.
 	 * @param args Array of strings containing command line arguments.
 		 * <p>Arguments:
 		 * <ul>
@@ -253,8 +238,7 @@ public class XValidate {
 		while (i < args.length && args[i].startsWith("-")) {
 			int swNum = i + 1;
 			if (args[i].length() == 1) {
-				throw new RuntimeException(
-					"Incorrect parameter ["+swNum+"]: \""+args[i]+"\"\n"+info);
+				throw new RuntimeException("Incorrect parameter ["+swNum+"]: \""+args[i]+"\"\n"+info);
 			}
 			char c = args[i].charAt(1);
 			switch (c) {
@@ -267,8 +251,7 @@ public class XValidate {
 			if (args[i].length() == 2) {
 				i++;
 				if (i >= args.length) {
-					throw new RuntimeException("Parameter [" + swNum +
-						"], \"" + args[swNum-1]
+					throw new RuntimeException("Parameter [" + swNum + "], \"" + args[swNum-1]
 						+ "\": missing following argument\n" + info);
 				}
 				s = args[i];
@@ -279,17 +262,15 @@ public class XValidate {
 			switch (c) {
 				case 'i': {
 					if (xmlFile != null) {
-						throw new RuntimeException("Parameter ["+swNum+
-							"], \""+args[swNum-1]+"\": redefinition\n"+info);
+						throw new RuntimeException("Parameter [" + swNum +
+							"], \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					xmlFile = new File(s);
 					if (!xmlFile.exists()) {
-						throw new RuntimeException("File "
-							+ xmlFile.getAbsolutePath()+" doesn't exist.");
+						throw new RuntimeException("File " + xmlFile.getAbsolutePath()+" doesn't exist.");
 					}
 					if (!xmlFile.canRead()) {
-						throw new RuntimeException(
-							"Can't read file " + xmlFile.getAbsolutePath());
+						throw new RuntimeException("Can't read file " + xmlFile.getAbsolutePath());
 					}
 					continue;
 				}
@@ -299,38 +280,34 @@ public class XValidate {
 						StringTokenizer st = new StringTokenizer(s, ";");
 						while (st.hasMoreTokens()) {
 							try {
-								File[] files =
-									SUtils.getFileGroup(st.nextToken());
+								File[] files = SUtils.getFileGroup(st.nextToken());
 								for (File f : files) {
 									fileTab.add(f.getCanonicalFile());
 								}
 							} catch (IOException ex) {
-								throw new RuntimeException(
-									"Can't open file: " + args[i]);
+								throw new RuntimeException("Can't open file: " + args[i]);
 							}
 						}
 						xdefFiles = new File[fileTab.size()];
 						fileTab.toArray(xdefFiles);
 					} else {
-						throw new RuntimeException("Parameter ["+swNum+
-							"], \""+args[swNum-1]+"\": redefinition\n"+info);
+						throw new RuntimeException("Parameter [" + swNum +
+							"], \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				case 'p': {
 					if (poolFile != null || xdefFiles != null) {
-						throw new RuntimeException("Parameter ["+swNum+
-							"], \""+args[swNum-1]+"\": redefinition\n"+info);
+						throw new RuntimeException("Parameter [" + swNum +
+							"], \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					poolFile = new File(s);
 					if (!poolFile.exists()) {
-						throw new RuntimeException(
-							"File "+poolFile.getAbsolutePath()
-							+" doesn't exist\n" + info);
+						throw new RuntimeException("File "+poolFile.getAbsolutePath()
+							+ " doesn't exist\n" + info);
 					}
 					if (!poolFile.canRead()) {
-						throw new RuntimeException(
-							"Can't read file " + poolFile.getAbsolutePath()
-							+"\n" + info);
+						throw new RuntimeException("Can't read file " + poolFile.getAbsolutePath()
+							+ "\n" + info);
 					}
 					continue;
 				}
@@ -342,27 +319,26 @@ public class XValidate {
 							try {
 								repw = new FileReportWriter(s);
 							} catch (Exception ex) {
-								throw new RuntimeException(
-									"Can't create report writer from ["+swNum+
-									"], \"" + args[swNum-1] + "\"\n" + info);
+								throw new RuntimeException("Can't create report writer from [" + swNum
+									+ "], \"" + args[swNum-1] + "\"\n" + info);
 							}
 						}
 					} else {
-						throw new RuntimeException("Parameter ["+swNum+
-							"], \""+args[swNum-1]+"\": redefinition\n"+info);
+						throw new RuntimeException("Parameter [" + swNum
+							+ "], \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				case 'x':
 					if (xdefName == null) {
 						xdefName = s;
 					} else {
-						throw new RuntimeException("Parameter ["+swNum+
-							"], \""+args[swNum-1]+"\": redefinition\n"+info);
+						throw new RuntimeException("Parameter [" + swNum
+							+ "], \"" + args[swNum-1] + "\": redefinition\n" + info);
 					}
 					continue;
 				default:
-					throw new RuntimeException("Parameter [" + swNum +
-						"], \"" + args[swNum-1] + "\": unknown switch\n"+info);
+					throw new RuntimeException("Parameter [" + swNum
+						+ "], \"" + args[swNum-1] + "\": unknown switch\n" + info);
 			}
 		}
 		if (xmlFile == null) {
@@ -377,10 +353,8 @@ public class XValidate {
 		}
 
 		try {
-			XDDocument chkDoc = validate(System.getProperties(),
-				xmlFile, poolFile, xdefFiles, xdefName, repw);
-			int errors = repw.getErrorCount() + repw.getFatalErrorCount() +
-				repw.getWarningCount();
+			XDDocument chkDoc = validate(System.getProperties(), xmlFile, poolFile, xdefFiles, xdefName,repw);
+			int errors = repw.getErrorCount() + repw.getFatalErrorCount() + repw.getWarningCount();
 			String fname = xmlFile.getCanonicalPath();
 			if (repw instanceof ArrayReporter) {
 				if (errors != 0) {

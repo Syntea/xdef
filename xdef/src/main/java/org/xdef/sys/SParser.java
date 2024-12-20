@@ -91,9 +91,8 @@ public interface SParser {
 	 */
 	public boolean isChar(char ch);
 
-	/** If character on actual position is not character specified by argument the method returns the actual
-	 * character and sets position to next character. Otherwise it returns NOCHAR and actual position
-	 * remains unchanged.
+	/** If character on actual position is not character specified by argument return the actual character and
+	 * set position to next character. Otherwise return NOCHAR and actual position remains unchanged.
 	 * @param ch Character to be checked.
 	 * @return character on actual position or NOCHAR.
 	 */
@@ -115,8 +114,8 @@ public interface SParser {
 	 */
 	public char notInInterval(char minCh, char maxCh);
 
-	/** If actual character is one of characters specified in given string the method returns this character
-	 * and sets position to the next character. Otherwise it returns NOCHAR.
+	/** If actual character is one of characters specified in given string return this character and set
+	 * position to the next character. Otherwise return NOCHAR.
 	 * @param chars String with characters to be checked.
 	 * @return the actual character or NOCHAR.
 	 */
@@ -139,7 +138,7 @@ public interface SParser {
 	public boolean isSignedInteger();
 
 	/** Parse unsigned float number.
-	 * @return <i>true</i> if and only if an float number was recognized.
+	 * @return true if and only if an float number was recognized.
 	 */
 	public boolean isFloat();
 
@@ -166,15 +165,13 @@ public interface SParser {
 	public char peekChar();
 
 	/** Check if actual position points to upper case letter. Set the source position to the next character
-	 * if letter was recognized and return the character otherwise return NOCHAR and source position
-	 * remains unchanged.
+	 * if letter was recognized and return the character otherwise return NOCHAR don't change position.
 	 * @return character or NOCHAR.
 	 */
 	public char isUpperCaseLetter();
 
 	/** Check if actual position points to lower case letter. Set the source position to the next character
-	 * if letter was recognized and return the character otherwise return NOCHAR and source position remains
-	 * unchanged.
+	 * if letter was recognized and return the character otherwise return NOCHAR and don't change position.
 	 * @return character or NOCHAR.
 	 */
 	public char isLowerCaseLetter();
@@ -193,14 +190,14 @@ public interface SParser {
 	public boolean isToken(String s);
 
 	/** If on source position is one of tokens specified in the argument the method returns index to this item
-	 * and sets position to the next position after a token. Otherwise it returns -1.
+	 * and set position to the next position after a token. Otherwise it return -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
 	 */
 	public int isOneOfTokens(final String... tokens);
 
-	/** If on source position is one of tokens (ignored case) specified in the argument the method returns
-	 * index to this item and sets position to the next position after a token. Otherwise it returns -1.
+	/** If on source position is one of tokens (ignored case) specified in the argument the method return
+	 * index to this item and set position to the next position after a token. Otherwise return -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
 	 */
@@ -214,9 +211,9 @@ public interface SParser {
 	public boolean findToken(final String token);
 
 	/** Skip to specified character. The position is set to the found character. Return true and set position
-	 * to the position of character. Otherwise return false and set* position to the end of source.
+	 * to the position of character. Otherwise return false and set position to the end of source.
 	 * @param ch Character to be searched for.
-	 * @return <i>true</i> if the character was found.
+	 * @return true if the character was found.
 	 */
 	public boolean findChar(char ch);
 

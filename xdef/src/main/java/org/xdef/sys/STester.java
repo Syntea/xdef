@@ -614,8 +614,7 @@ public abstract class STester {
 			reporter.clear();
 		}
 	}
-	/** Check if the reporter contains errors or warnings. If not then invoke the method
-	 * fail with the argument msg.
+	/** Check if the reporter contains errors or warnings. If not then invoke method fail with argument msg.
 	 * @param msg message to be printed or null.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
@@ -624,8 +623,8 @@ public abstract class STester {
 			fail(msg);
 		}
 	}
-	/** Check if the reporter contains errors or warnings. If not then
-	 * invoke the method fail with the argument msg. Finally clear reporter.
+	/** Check if the reporter contains errors or warnings. If not then invoke the method fail with the
+	 * argument msg. Finally clear reporter.
 	 * @param msg message to be printed or null.
 	 * @param reporter the reporter to be checked for errors and no warnings.
 	 */
@@ -736,7 +735,6 @@ public abstract class STester {
 		_sourceDir = null;
 		_resultInfo = "";
 		_errors = 0;
-
 		_className = clazz.getName();
 		_package = clazz.getPackage().getName();
 		_name = clazz.getName();
@@ -803,11 +801,11 @@ public abstract class STester {
 		if (_sourceDir.contains("src/test/java/test/") && (f = new File(s = SUtils.modifyString(_sourceDir,
 			"src/test/java/test/" , "src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
-		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(
-			_sourceDir, "test/test/" , "test/resources/test/") + "data/")).exists() && f.isDirectory()) {
+		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(_sourceDir,
+			"test/test/" , "test/resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
-		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(
-			_sourceDir, "test/test/" , "resources/test/") + "data/")).exists() && f.isDirectory()) {
+		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(_sourceDir,
+			"test/test/" , "resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
 		} else {
 			f = new File(s = _homeDir + "test/data/");

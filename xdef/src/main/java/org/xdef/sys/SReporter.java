@@ -21,10 +21,7 @@ public class SReporter extends SPosition {
 	/** Creates a new instance of SReporter with reporter and given parameters taken from another reporter.
 	 * @param reporter The reporter.
 	 */
-	public SReporter(final SReporter reporter) {
-		super(reporter);
-		_reportWriter = reporter._reportWriter;
-	}
+	public SReporter(final SReporter reporter) {super(reporter); _reportWriter = reporter._reportWriter;}
 
 	/** Creates a new instance of SReporter with reporter and given parameters.
 	 * @param reportWriter Report Writer.
@@ -38,7 +35,7 @@ public class SReporter extends SPosition {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get report writer.
-	 * @return Report writer associated with this reporter or <i>null</i>.
+	 * @return Report writer associated with this reporter or null.
 	 */
 	public final ReportWriter getReportWriter() {return _reportWriter;}
 
@@ -52,7 +49,7 @@ public class SReporter extends SPosition {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Put fatal error message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
 	 */
@@ -61,12 +58,12 @@ public class SReporter extends SPosition {
 	}
 
 	/** Put error message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 */
 	public void error(final String id) {putReport(Report.error(id, null), _reportWriter);}
 
 	/** Put error message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
 	 */
@@ -75,7 +72,7 @@ public class SReporter extends SPosition {
 	}
 
 	/** Put light error message with modification parameters.
-	 * @param id The message id (may be <i>null</i>).
+	 * @param id The message id (may be null).
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
@@ -84,7 +81,7 @@ public class SReporter extends SPosition {
 	}
 
 	/** Put warning message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
@@ -109,7 +106,7 @@ public class SReporter extends SPosition {
 	/** Put light error message with modification parameters.
 	 * @param ID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
+	 * @throws SRuntimeException if reporter is null.
 	 */
 	public void lightError(final long ID, final Object... mod) {
 		putReport(Report.lightError(ID, mod), _reportWriter);
@@ -121,19 +118,16 @@ public class SReporter extends SPosition {
 	 */
 	public void warning(final long ID, final Object... mod) {putReport(Report.warning(ID,mod),_reportWriter);}
 
-	/** Put report. Type of report may be WARNING, ERROR or FATAL
-	 * (see {@link org.xdef.sys.Report#getMsgID()}).
+	/** Put report. Type of report may be WARNING, ERROR or FATAL; see {@link org.xdef.sys.Report#getMsgID()}.
 	 * @param report The report.
-	 * @throws SRuntimeException if reporter is <i>null</i> and if report
-	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i> .
+	 * @throws SRuntimeException if reporter is null and if report type is FATAL, ERROR or LIGHTERROR .
 	 */
 	public void putReport(final Report report) {putReport(report, _reportWriter);}
 
 	/** Put report at position.
 	 * @param pos Source position.
 	 * @param report The report.
-	 * @throws SRuntimeException if reporter is <i>null</i> and if report
-	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i> .
+	 * @throws SRuntimeException if reporter is null and if report type is FATAL, ERROR or LIGHTERROR .
 	 */
 	public void putReport(final SPosition pos, final Report report) {pos.putReport(report, _reportWriter);}
 
@@ -147,9 +141,9 @@ public class SReporter extends SPosition {
 	 */
 	public int getWarningCount() {return _reportWriter == null ? 0 : _reportWriter.getWarningCount();}
 
-	/** Return <i>true</i> if and only if errors or fatal errors or light
+	/** Return true if and only if errors or fatal errors or light
 	 * errors were generated.
-	 * @return <i>true</i> if an error occurred.
+	 * @return true if an error occurred.
 	 */
 	public boolean errors() {return _reportWriter == null ? false : _reportWriter.errors();}
 

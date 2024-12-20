@@ -5,8 +5,7 @@ import org.xdef.msg.SYS;
 /** Extension of SUnsupportedOperationException implementing SThrowable.
  * @author Vaclav Trojan
  */
-public class SUnsupportedOperationException
-	extends UnsupportedOperationException implements SThrowable {
+public class SUnsupportedOperationException extends UnsupportedOperationException implements SThrowable {
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -7555233586913590382L;
 	/** Cause of exception. */
@@ -49,9 +48,7 @@ public class SUnsupportedOperationException
 	 * @param cause - the cause (which is saved for later retrieval by the Throwable.getCause() method).
 	 * (A null value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 */
-	public SUnsupportedOperationException(final String msg, final Throwable cause) {
-		this(null, msg, cause);
-	}
+	public SUnsupportedOperationException(final String msg, final Throwable cause) {this(null, msg, cause);}
 
 	/** Creates a new instance of SUnsupportedOperationException.
 	 * @param id The message ID
@@ -100,10 +97,7 @@ public class SUnsupportedOperationException
 	 * @param report The Report object.
 	 * @param ex The object which caused the error.
 	 */
-	public SUnsupportedOperationException(final Report report, final Throwable ex) {
-		this(report);
-		_cause = ex;
-	}
+	public SUnsupportedOperationException(final Report report, final Throwable ex) {this(report);_cause = ex;}
 
 	@Override
 	/** Set cause of exception.
@@ -112,7 +106,7 @@ public class SUnsupportedOperationException
 	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
-	/** Get cause of exception. If cause was not set return <i>null</i>.
+	/** Get cause of exception. If cause was not set return null.
 	 * @return cause The object with cause data.
 	 */
 	public final Throwable getCause() {return _cause;}
@@ -135,7 +129,7 @@ public class SUnsupportedOperationException
 
 	@Override
 	/** Get id of message.
-	 * @return The message id (may be <i>null</i>).
+	 * @return The message id (may be null).
 	 */
 	public final String getMsgID() {return _msgID;}
 

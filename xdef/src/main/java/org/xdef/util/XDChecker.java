@@ -18,7 +18,6 @@ import org.xdef.sys.SUtils;
  */
 public class XDChecker {
 
-//	private final Class<?>[] _classes;
 	private final String _options;
 	private final String _methods;
 	private final String _declarations;
@@ -26,7 +25,6 @@ public class XDChecker {
 
 	/** Constructor of XDChecker.*/
 	public XDChecker() {
-//		_classes = null;
 		_methods = null;
 		_declarations = null;
 		_options = null;
@@ -42,11 +40,8 @@ public class XDChecker {
 	 * @param options string with options list <i>null</i>.
 	 * @throws SRuntimeException if there is an error.
 	 */
-	public XDChecker(Class<?>[] classes,
-		String methods,
-		String declarations,
-		String options) throws SRuntimeException {
-//		_classes = classes;
+	public XDChecker(Class<?>[] classes, String methods, String declarations, String options)
+		throws SRuntimeException {
 		_methods = methods;
 		_declarations = declarations;
 		_options = options;
@@ -85,9 +80,6 @@ public class XDChecker {
 		XDParseResult result;
 		try {
 			XDBuilder xb = XDFactory.getXDBuilder(ar, _properties);
-//			if (_classes != null && _classes.length > 0) {
-//				xb.setExternals(_classes);
-//			}
 			String xdef =
 "<x:def xmlns:x='"+ XDConstants.XDEF42_NS_URI + "' root = 'a'>";
 		if (_declarations != null || _methods != null) {
@@ -106,8 +98,7 @@ public class XDChecker {
 		}
 		xdef += " a=\""+
 			SUtils.modifyString(SUtils.modifyString(type,
-				"\"","&quot;"),	"'", "&apos;")
-				+ "\"/>\n</x:def>";
+				"\"","&quot;"), "'", "&apos;") + "\"/>\n</x:def>";
 			xb.setSource(xdef);
 			xp = xb.compileXD();
 			if (ar.errors()) {
@@ -125,11 +116,9 @@ public class XDChecker {
 		if (value == null) {
 			result = XDFactory.createParseResult(null);
 			if (xel.getXMElement().getAttr("a").getOccurence().isRequired()) {
-				//Missing required attribute &amp;{0}
-				result.error(XDEF.XDEF526, "a");
+				result.error(XDEF.XDEF526, "a"); //Missing required attribute &amp;{0}
 			} else {
 				result = XDFactory.createParseResult("");
-//				result.setSourceBuffer(null);
 			}
 		} else {
 			xel.addAttribute("a", value);

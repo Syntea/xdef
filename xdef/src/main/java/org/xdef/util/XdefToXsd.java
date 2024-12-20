@@ -14,14 +14,12 @@ import org.xdef.sys.SUtils;
 import org.xdef.util.xd2xsd.Xd2Xsd;
 import org.xdef.xml.KXmlUtils;
 
-/** Convertor of X-definition to XML schema.
- * (see {@link org.xdef.util.XdefToXsd#main(String[])})
+/** Convertor of X-definition to XML schema (see {@link org.xdef.util.XdefToXsd#main(String[])}).
  * @author Vaclav Trojan
  */
 public class XdefToXsd {
 
-	/** Generates XML Schema from given X-definition files and saves schema
-	 * files to given output directory.
+	/** Generates XML Schema from given X-definition files and saves schema files to given output directory.
 	 * @param xdefs X-definition file.
 	 * @param outDir output schema files directory.
 	 * @param xdName name of X-definition. May be null, then the nameless
@@ -51,12 +49,10 @@ public class XdefToXsd {
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 		XDPool xp = XDFactory.compileXD(props, xdefs);
 		String xname = xdName == null
-			? xp.getXMDefinition("") != null ? ""
-			: xp.getXMDefinitions()[0].getName()
-			: xdName;
+			? xp.getXMDefinition("") != null ? "" : xp.getXMDefinitions()[0].getName() : xdName;
 		String oname = outName == null ? xname : outName;
-		Map<String, Element> schemaMap = Xd2Xsd.genSchema(xp,
-			xname, modelName, oname, outType, genInfo, genXdateOutFormat);
+		Map<String, Element> schemaMap =
+			Xd2Xsd.genSchema(xp, xname, modelName, oname, outType, genInfo, genXdateOutFormat);
 		writeSchema(outDir, schemaMap);
 	}
 
@@ -73,8 +69,7 @@ public class XdefToXsd {
 			for (String key: schemaMap .keySet()) {
 				String fileName = key + ".xsd";
 				// source line length is 130
-				KXmlUtils.writeXml(new File(outDir, fileName),
-					"UTF-8", schemaMap.get(key), true, true, 130);
+				KXmlUtils.writeXml(new File(outDir, fileName), "UTF-8", schemaMap.get(key), true, true, 130);
 			}
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
@@ -101,8 +96,7 @@ public class XdefToXsd {
 		final String outType,
 		final boolean genAnnotation,
 		final boolean genXdateOutFormat) {
-		return Xd2Xsd.genSchema(xp, xdName, modelName,
-			outName, outType, genAnnotation, genXdateOutFormat);
+		return Xd2Xsd.genSchema(xp, xdName, modelName, outName, outType, genAnnotation, genXdateOutFormat);
 	}
 
 	/** Run XML schema generator from command line.
@@ -160,28 +154,24 @@ public class XdefToXsd {
 				case "-o":
 				case "--outDir":
 					if (outDir != null) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					outDir =  new File(args[++i]);
 					if (!outDir.exists() || !outDir.isDirectory()) {
-						throw new RuntimeException(
-							"\"-outDir\" is not directory.\n" + info);
+						throw new RuntimeException("\"-outDir\" is not directory.\n" + info);
 					}
 					continue;
 				case "-s":
 				case "--outName":
 					if (outName != null) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					outName = args[++i];
 					continue;
 				case "-t":
 				case "--outType":
 					if (outType != null) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					outType = args[++i];
 					continue;
@@ -200,31 +190,27 @@ public class XdefToXsd {
 				case "-x":
 				case "--xdName":
 					if (xdName != null) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					xdName = args[++i];
 					continue;
 				case "-r":
 				case "--root":
 					if (modelName != null) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					modelName = args[++i];
 					continue;
 				case "-v":
 				case "--genInfo":
 					if (genDecInfo) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					genDecInfo = true;
 					continue;
 				case "--xx":
 					if (genXdateOutFormat) {
-						throw new RuntimeException(
-							"Redefinition of "+arg+".\n" + info);
+						throw new RuntimeException("Redefinition of "+arg+".\n" + info);
 					}
 					genXdateOutFormat = true;
 					continue;

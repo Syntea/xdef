@@ -27,8 +27,7 @@ public class CheckXdef {
 		ReportWriter reporter = new ArrayReporter();
 		try {
 			Properties props = new Properties();
-			XDFactory.getXDBuilder(reporter, props)
-				.setSource(sources).compileXD();
+			XDFactory.getXDBuilder(reporter, props).setSource(sources).compileXD();
 			if (reporter.errorWarnings()) {
 				reporter.getReportReader().printReports(System.err);
 				return false;
@@ -49,8 +48,7 @@ public class CheckXdef {
 	 * <p>where:
 	 * <ul>
 	 * <li>FileName the path and name of the source X-definition.
-	 * <i>Note the file names may contain the "wildcards" as '*' or '?' to
-	 * specify the group of source files.</i>
+	 * Note the file names may contain the "wildcards" as '*' or '?' to specify the group of source files.
 	 * </ul>
 	 */
 	public static void main(String... args) {
@@ -67,8 +65,7 @@ public class CheckXdef {
 		for (String arg : args) {
 			java.io.File[] files = SUtils.getFileGroup(arg);
 			if (files == null || files.length == 0) {
-				throw new RuntimeException("\"No available file: "
-					+ arg + "\n" + info);
+				throw new RuntimeException("\"No available file: " + arg + "\n" + info);
 			} else {
 				for (File file : files) {
 					if (file.exists() && file.canRead()) {
