@@ -1,4 +1,4 @@
-package test.xdef;
+package test.xdutils;
 
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
@@ -20,16 +20,12 @@ public class TestXDGen extends XDTester {
 
 	public TestXDGen() {super();}
 
-	private static ReportWriter genXDefXml(final String x) throws Exception{
-		return genXDefXml(x, false);
-	}
+	private static ReportWriter genXDefXml(final String x) throws Exception {return genXDefXml(x, false);}
 
-	private static ReportWriter genXDefXml(final String x, boolean display)
-		throws Exception{
+	private static ReportWriter genXDefXml(final String x, boolean display) throws Exception{
 		String s = KXmlUtils.nodeToString(GenXDefinition.genXdef(x), true);
 		if (display) {
-			System.out.println("== xml ==\n"
-				+ KXmlUtils.nodeToString(KXmlUtils.parseXml(x), true).trim()
+			System.out.println("== xml ==\n" + KXmlUtils.nodeToString(KXmlUtils.parseXml(x), true).trim()
 				+ "\n== xdef ==\n"+ s.trim());
 		}
 		ArrayReporter reporter = new ArrayReporter();
@@ -42,16 +38,13 @@ public class TestXDGen extends XDTester {
 		return KXmlUtils.compareElements(x, el, true);
 	}
 
-	private static ReportWriter genXDefXon(final String x) throws Exception{
-		return genXDefXon(x, false);
-	}
+	private static ReportWriter genXDefXon(final String x) throws Exception{return genXDefXon(x, false);}
 
 	private static ReportWriter genXDefXon(final String x, boolean display)
 		throws Exception{
 		String s = KXmlUtils.nodeToString(GenXDefinition.genXdef(x), true);
 		if (display) {
-			System.out.println("== xon ==\n"
-				+ XonUtils.toXonString(XonUtils.parseXON(x), true).trim()
+			System.out.println("== xon ==\n" + XonUtils.toXonString(XonUtils.parseXON(x), true).trim()
 				+ "\n== xdef ==\n"+ s.trim());
 		}
 		ArrayReporter reporter = new ArrayReporter();
@@ -71,17 +64,15 @@ public class TestXDGen extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		final String dataDir = getDataDir() + "test/";
-		// test xdef from XML
-		try {
+		String dataDir = getDataDir();
+		int ndx = dataDir.indexOf("/xdutils/");
+		dataDir = dataDir.substring(0, ndx) + "/xdef/data/test/";
+		try { // test xdef from XML
 			assertNoErrorwarnings(genXDefXml("<a></a>"));
 			assertNoErrorwarnings(genXDefXml("<a><b>2015-01-01T23:00</b></a>"));
-			assertNoErrorwarnings(
-				genXDefXml("<a><b>1</b><c/><b a='1'/><b b='x'/></a>"));
-			assertNoErrorwarnings(
-				genXDefXml("<a><b>1<c>text</c></b><b>2<c/></b></a>"));
-			assertNoErrorwarnings(
-				genXDefXml("<z:a xmlns:z='www.a.b'><b>0</b></z:a>"));
+			assertNoErrorwarnings(genXDefXml("<a><b>1</b><c/><b a='1'/><b b='x'/></a>"));
+			assertNoErrorwarnings(genXDefXml("<a><b>1<c>text</c></b><b>2<c/></b></a>"));
+			assertNoErrorwarnings(genXDefXml("<z:a xmlns:z='www.a.b'><b>0</b></z:a>"));
 			assertNoErrorwarnings(genXDefXml("<a xmlns='www.a.b'><b>1</b></a>"));
 			assertNoErrorwarnings(genXDefXml("<a><b>1<c>1</c></b></a>"));
 			assertNoErrorwarnings(genXDefXml("<a><b/><b><c/></b></a>"));
@@ -89,13 +80,10 @@ public class TestXDGen extends XDTester {
 			assertNoErrorwarnings(genXDefXml("<a><b>1<c/></b><b/></a>"));
 			assertNoErrorwarnings(genXDefXml("<a><b>1<c>1</c></b><b/></a>"));
 			assertNoErrorwarnings(genXDefXml("<a><b>1<c>1</c></b><b>xx</b></a>"));
-			assertNoErrorwarnings(
-				genXDefXml("<a>\n <b/>\n <b>1</b><b>1<c/></b>\n</a>"));
-			assertNoErrorwarnings(
-				genXDefXml("<a><b>1<c>1</c></b><b a='a'/><b/></a>"));
+			assertNoErrorwarnings(genXDefXml("<a>\n <b/>\n <b>1</b><b>1<c/></b>\n</a>"));
+			assertNoErrorwarnings(genXDefXml("<a><b>1<c>1</c></b><b a='a'/><b/></a>"));
 			assertNoErrorwarnings(genXDefXml("<a><b c='a'/><b/><b c='b'/></a>"));
-			assertNoErrorwarnings(genXDefXml(
-				"<a r='true'>1<b>1</b><b a='1' b='a'/><b b='c'/></a>"));
+			assertNoErrorwarnings(genXDefXml("<a r='true'>1<b>1</b><b a='1' b='a'/><b b='c'/></a>"));
 			assertNoErrorwarnings(genXDefXml(
 "<a>\n"+
 "  <b>1<c>1</c></b>\n"+

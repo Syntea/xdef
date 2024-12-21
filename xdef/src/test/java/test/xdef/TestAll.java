@@ -44,7 +44,6 @@ public class TestAll {
 			new TestUserMethods(),
 			new TestUserQuery(),
 			new TestXComponents(),
-			new TestXDGen(),
 			new TestXDService(),
 			new TestXSTypes(),
 			new TestXdef(),

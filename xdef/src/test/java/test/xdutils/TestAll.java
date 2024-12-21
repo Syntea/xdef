@@ -21,6 +21,7 @@ public class TestAll {
 			new TestPrettyXdef(),
 			new TestValidate(),
 			new TestXDChecker(),
+			new TestXDGen(),
 			new TestXd2XsdConv(),
 			new TestXsd2XdConv(),
 		};
