@@ -50,7 +50,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
 /** Convertor of X-definition to XML Schema.
- * @author Vaclav Trojan; Anna Kchmascheva
+ * @author Vaclav Trojan, Anna Kchmascheva
  */
 public class Xd2Xsd {
 	/** Prefix used for the XML schema namespace. */
@@ -58,8 +58,7 @@ public class Xd2Xsd {
 	/** Target namespace of XML schema with declared user types. */
 	private static final String USERTYPES_URI = "$_types_$";
 	/** QName of schema element. */
-	private static final QName SCHEMA_QNAME =
-		new QName(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
+	private static final QName SCHEMA_QNAME = new QName(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
 	/** Prefix used for the type in XML schema. */
 	private static final String TYPE = "_Type";
 	/** Map of file names and XML schema elements.*/
@@ -68,8 +67,7 @@ public class Xd2Xsd {
 	private final Document _doc = KXmlUtils.newDocument();
 	/** Switch if generate annotation with documentation information. */
 	private final boolean _genInfo;
-	/** If true use as mask to validate XML data the parameter describing output
-	 * format from the "xdatetime" method. */
+	/** If true use mask to validate XML data parameter describing output format from "xdatetime" method.*/
 	private final boolean _genXdateOutFormat;
 	/** Name of root XML schema file. */
 	private final String _rootName;
@@ -83,8 +81,8 @@ public class Xd2Xsd {
 	 * @param outName name base of XML schema names.
 	 * @param outType name of XML schema file with type declarations.
 	 * @param genInfo if true the annotations with documentation is generated.
-	 * @param genXdateOutFormat if true, use as mask to validate XML data the
-	 * parameter describing output format from the "xdatetime" method.
+	 * @param genXdateOutFormat if true, use as mask to validate XML data the parameter describing output
+	 * format from the "xdatetime" method.
 	 */
 	private Xd2Xsd(final XDPool xp,
 		final String outName,
@@ -118,8 +116,7 @@ public class Xd2Xsd {
 			if (v.getName().charAt(0) != '$') {
 				XData xdata = new XData("$text", null, xp, XMTEXT);
 				xdata._check = ((XVariable)v).getParseMethodAddr();
-				GenParser parserInfo =
-					GenParser.genParser( (XMData) xdata, _genXdateOutFormat);
+				GenParser parserInfo = GenParser.genParser( (XMData) xdata, _genXdateOutFormat);
 				String typeName = genDeclaredName(parserInfo);
 				String vName =  v.getName().replace('#', '_');
 				if (typeName != null && !typeName.isEmpty()
@@ -162,7 +159,6 @@ public class Xd2Xsd {
 				XMLConstants.W3C_XML_SCHEMA_NS_URI, "annotation");
 			Element anotation =  (nl != null && nl.getLength() > 0)
 				? (Element) nl.item(0) : genSchemaElem(parent, "annotation");
-
 			Element documentation = genSchemaElem(anotation, "documentation");
 			documentation.appendChild(_doc.createTextNode(text.trim()));
 		}
@@ -181,37 +177,29 @@ public class Xd2Xsd {
 	 * @param parserInfo object containing restriction information.
 	 * @return element with restrictions.
 	 */
-	private Element genRestrictions(final Element parent,
-		final GenParser parserInfo) {
+	private Element genRestrictions(final Element parent, final GenParser parserInfo) {
 		addDocumentation(parent, parserInfo.getInfo());
 		String typeName = getSchemaTypeName(parserInfo);
 		switch(typeName) {
 			case "xs:union": {
-				XDParser[] parsers =
-					((XSParseUnion) parserInfo.getParser()).getParsers();
+				XDParser[] parsers = ((XSParseUnion) parserInfo.getParser()).getParsers();
 				Element union = genSchemaElem(parent, "union");
 				for (XDValue xval: parsers) {
 					XDParser p = (XDParser) xval;
 					Element simpletp = genSchemaElem(union, "simpleType");
-					genRestrictions(simpletp,
-						SCHEMA_PFX+p.parserName(),
-						p.getNamedParams().getXDNamedItems());
+					genRestrictions(simpletp, SCHEMA_PFX+p.parserName(),p.getNamedParams().getXDNamedItems());
 				}
 				return union;
 			}
 			case "xs:list": {
 				Element list = genSchemaElem(parent, "list");
-				XDParser p =
-					((XSParseList) parserInfo.getParser()).getItemParser();
+				XDParser p = ((XSParseList) parserInfo.getParser()).getItemParser();
 				Element simpletp = genSchemaElem(list, "simpleType");
-				genRestrictions(simpletp,
-					SCHEMA_PFX+p.parserName(),
-					p.getNamedParams().getXDNamedItems());
+				genRestrictions(simpletp, SCHEMA_PFX+p.parserName(), p.getNamedParams().getXDNamedItems());
 				return list;
 			}
 		}
-		XDNamedValue[] xdv =
-			parserInfo.getParser().getNamedParams().getXDNamedItems();
+		XDNamedValue[] xdv = parserInfo.getParser().getNamedParams().getXDNamedItems();
 		return genRestrictions(parent, typeName, xdv);
 	}
 
@@ -240,8 +228,7 @@ public class Xd2Xsd {
 						XDContainer xdc = (XDContainer) xval;
 						for (int i = 0; i < xdc.getXDItemsNumber(); i++) {
 							param = genSchemaElem(restr, paramName);
-							param.setAttribute("value",
-								xdc.getXDItem(i).toString());
+							param.setAttribute("value", xdc.getXDItem(i).toString());
 						}
 					} else {
 						param = genSchemaElem(restr, paramName);
@@ -272,8 +259,7 @@ public class Xd2Xsd {
 		/* AK */
 		Element element = el;
 		NodeList children = element.getChildNodes();
-		if (children.getLength() > 0 && children.item(0)
-				.getNodeName().endsWith("complexContent")) {
+		if (children.getLength() > 0 && children.item(0).getNodeName().endsWith("complexContent")) {
 			children = children.item(0).getChildNodes();
 			if (children.getLength() > 0) {
 				Node firstNode = children.item(0);
@@ -287,15 +273,13 @@ public class Xd2Xsd {
 
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
-			if (child instanceof Element
-					&& child.getNodeName().contains("sequence")) {
+			if (child instanceof Element && child.getNodeName().contains("sequence")) {
 				return (Element) child;
 			}
 		}
 
 		return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(element.getNamespaceURI())
-				&& "sequence".equals(element.getLocalName())
-				? element : genSchemaElem(element, "sequence");
+			&& "sequence".equals(element.getLocalName()) ? element : genSchemaElem(element, "sequence");
 		/* AK */
 	}
 
@@ -305,8 +289,7 @@ public class Xd2Xsd {
 	 */
 	private Element genRestrictionElement(final Element el) {
 		return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(el.getNamespaceURI())
-		 && "restriction".equals(el.getLocalName())
-			? el : genSchemaElem(el, "restriction");
+		 && "restriction".equals(el.getLocalName()) ? el : genSchemaElem(el, "restriction");
 	}
 
 	/** Generate group of models.
@@ -347,22 +330,19 @@ public class Xd2Xsd {
 								min++;
 							}
 							if (occ.maxOccurs() >= 1) {
-								max = occ.maxOccurs() == Integer.MAX_VALUE
-									|| max==Integer.MAX_VALUE
+								max = occ.maxOccurs() == Integer.MAX_VALUE || max==Integer.MAX_VALUE
 									? Integer.MAX_VALUE : max + occ.maxOccurs();
 							}
 					}
 				}
 				sel = genSequenceElement(parent);
 				sel = genSchemaElem(sel, "choice");
-				sel.setAttribute("maxOccurs", max == Integer.MAX_VALUE
-					? "unbounded" : String.valueOf(max));
+				sel.setAttribute("maxOccurs", max == Integer.MAX_VALUE ? "unbounded" : String.valueOf(max));
 				sel.setAttribute("minOccurs", String.valueOf(min));
 				return genSequence(complt, sel, children, index, endIndex);
 			}
 			default:
-				//"&{0}" not implemented
-				throw new SRuntimeException(XDCONV.XDCONV205, xsel);
+				throw new SRuntimeException(XDCONV.XDCONV205, xsel); //"&{0}" not implemented
 		}
 	}
 
@@ -419,8 +399,7 @@ public class Xd2Xsd {
 		int maxOcc = occ.maxOccurs();
 		if (minOcc != 1 || maxOcc != 1) {
 			el.setAttribute("minOccurs", String.valueOf(minOcc));
-			el.setAttribute("maxOccurs", Integer.MAX_VALUE==maxOcc
-				? "unbounded":String.valueOf(maxOcc));
+			el.setAttribute("maxOccurs", Integer.MAX_VALUE==maxOcc ? "unbounded":String.valueOf(maxOcc));
 		}
 	}
 
@@ -434,7 +413,7 @@ public class Xd2Xsd {
 			String[] parts = s.split(";");
 			if (parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
 				int ndx = s.indexOf('#');
-				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
+				return ndx>=0 ? s.substring(0,ndx) + "_" + s.substring(ndx + 1) : s;
 			}
 		}
 		return null;
@@ -457,16 +436,13 @@ public class Xd2Xsd {
 			} else {
 				String declaration = "";
 				CompileVariable xmVariable =
-						(CompileVariable) x.getXDPool()
-											.getVariableTable()
-											.getVariable(baseName);
+					(CompileVariable) x.getXDPool().getVariableTable().getVariable(baseName);
 				if (xmVariable != null) {
 					SPosition sPosition = xmVariable.getSourcePosition();
 					String sysId = sPosition.getSysId();
 					int lastH = sysId.lastIndexOf("/");
 					if (lastH >= 0) {
-						declaration = sysId.substring(lastH + 1)
-											.replace(".xdef", "") + "_";
+						declaration = sysId.substring(lastH + 1).replace(".xdef", "") + "_";
 					}
 				}
 				baseName = declaration + baseName;
@@ -474,8 +450,7 @@ public class Xd2Xsd {
 			String baseType = baseName + TYPE;
 			String nsUri = x.getNSUri();
 			String schemaName = findSchemaItem(nsUri);
-			Element schema = (nsUri == null)
-					? getSchemaRoot(element) : _xsdSources.get(schemaName);
+			Element schema = (nsUri == null) ? getSchemaRoot(element) : _xsdSources.get(schemaName);
 			String targetNs = schema.getAttribute("targetNamespace");
 			String namespace = getNamespace(nsUri);
 			String nameNamespace = namespace.replaceAll(":", "");
@@ -536,8 +511,7 @@ public class Xd2Xsd {
 			}
 			String typeName = genDeclaredName(parserInfo);
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
-				String parserName =
-					SCHEMA_PFX + parserInfo.getParser().parserName();
+				String parserName = SCHEMA_PFX + parserInfo.getParser().parserName();
 				if (typeName == null) {
 					att.setAttribute("type",parserName);
 				} else {
@@ -571,12 +545,9 @@ public class Xd2Xsd {
 	}
 	/* AK */
 
-	/** Adds a namespace declaration to both the parent schema element
-	 * and the child element
-	 * @param schema the parent {@link Element} to which the namespace
-	 *               declaration is added.
-	 * @param child the child {@link Element} to which the namespace
-	 *              declaration is also added.
+	/** Adds a namespace declaration to both the parent schema element and the child element
+	 * @param schema the parent {@link Element} to which the namespace declaration is added.
+	 * @param child the child {@link Element} to which the namespace declaration is also added.
 	 * @param nsUri the namespace URI to be declared.
 	 */
 	private void addXmlns(Element schema, Element child, String nsUri) {
@@ -590,8 +561,7 @@ public class Xd2Xsd {
 
 	/** Retrieves a specific {@link Element} from a given XML element.
 	 * @param element The starting XML {@link Element} to search within.
-	 * @return The found {@link Element} corresponding to the "extension"
-	 * node if it exists;
+	 * @return The found {@link Element} corresponding to the "extension" node if it exists;
 	 * otherwise, the original {@link Element} if no "extension" node is found.
 	 */
 	private Element getElement(Element element) {
@@ -616,9 +586,9 @@ public class Xd2Xsd {
 
 	/** Finds a child element with a specific node name and attribute value.
 	 * @param element The parent element to search within.
-	 * @param name    The value of the "name" attribute to match.
-	 * @return the child element that matches the given node name and
-	 * name attribute, or {@code null} if no such element is found.
+	 * @param name The value of the "name" attribute to match.
+	 * @return the child element that matches the given node name and name attribute,
+	 * or null if no such element is found.
 	 */
 	private Element findChild(Element element, String name) {
 		NodeList childrenSchema = element.getChildNodes();
@@ -669,8 +639,7 @@ public class Xd2Xsd {
 
 	/** Extracts the namespace from the given ns URI.
 	 * @param nsUri The namespace URI to be processed.
-	 * @return The extracted namespace with a colon appended.
-	 * If the URI is null or empty, returns an empty string.
+	 * @return The extracted namespace with a colon appended. If nsUri is null or empty, return empty string.
 	 */
 	private String getNamespace(String nsUri) {
 		if (nsUri == null || nsUri.isEmpty()) {
@@ -703,8 +672,7 @@ public class Xd2Xsd {
 	private Element findSchematype(final Element el, final String name) {
 		if (name != null) {
 			Element root = getSchemaRoot(el);
-			NodeList nl = KXmlUtils.getChildElementsNS(
-				root, XMLConstants.W3C_XML_SCHEMA_NS_URI, "simpleType");
+			NodeList nl = KXmlUtils.getChildElementsNS(root, XMLConstants.W3C_XML_SCHEMA_NS_URI,"simpleType");
 			for (int i=0; i < nl.getLength(); i++) {
 				Element stype = (Element)nl.item(i);
 				if (stype.getAttribute("name").equals(name)) {
@@ -729,8 +697,7 @@ public class Xd2Xsd {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				schema = (Element) node;
 			} else {
-				//XML shema not found
-				throw new SRuntimeException(XDCONV.XDCONV206);
+				throw new SRuntimeException(XDCONV.XDCONV206); //XML shema not found
 			}
 		}
 	}
@@ -817,9 +784,8 @@ public class Xd2Xsd {
 				el.setAttribute("type", nameEl);
 			}
 		}
-		if (children.length == 1 && attrs.length == 0
-				&& children[0].getKind() == XMTEXT
-				&& !children[0].isOptional()) {
+		if (children.length == 1 && attrs.length == 0 && children[0].getKind() == XMTEXT
+			&& !children[0].isOptional()) {
 			return genTextElement(schema, el, nameEl, children[0]);
 		}
 		Element complexType = genSchemaElem(schema, "complexType");
@@ -832,8 +798,7 @@ public class Xd2Xsd {
 		}
 		if (children.length > 0) {
 			XMNode x = children[0];
-			if (x.getKind()==XMNode.XMMIXED
-				&& ((XMSelector) x).getEndIndex()==children.length-1) {
+			if (x.getKind()==XMNode.XMMIXED && ((XMSelector) x).getEndIndex()==children.length-1) {
 				// try tu generate xs:all
 				boolean allPossible = true;
 				for (int i = 1; i < children.length; i++) {
@@ -870,8 +835,7 @@ public class Xd2Xsd {
 				case XMNode.XMMIXED:
 				case XMNode.XMSEQUENCE:
 					if (((XMSelector) x).getEndIndex() == children.length - 1) {
-						genGroup(complexType,
-								complexType, (XMSelector) children[0], children, 0);
+						genGroup(complexType, complexType, (XMSelector) children[0], children, 0);
 						addAttrs(complexType, attrs);
 						return el;
 					}
@@ -886,7 +850,7 @@ public class Xd2Xsd {
 	/* AK */
 	/** Generates a reference element within the provided element schema.
 	 * @param element The element to be modified or extended with references.
-	 * @param xel     The XMElement containing reference and attribute data.
+	 * @param xel The XMElement containing reference and attribute data.
 	 */
 	private void genRef(Element element, XMElement xel) {
 		Element schema = getSchemaRoot(element);
@@ -900,10 +864,9 @@ public class Xd2Xsd {
 		}
 	}
 
-	/** Creates a new complex type element for the given XMElement that
-	 * does not reference another element.
+	/** Creates a new complex type element for the given XMElement that does not reference another element.
 	 * @param element The element to which the new complex type will be added.
-	 * @param xel     The XMElement containing child nodes and attributes.
+	 * @param xel The XMElement containing child nodes and attributes.
 	 */
 	private void createEndNotRefElement(Element element, XMElement xel) {
 		Element schema = getSchemaRoot(element);
@@ -913,9 +876,7 @@ public class Xd2Xsd {
 			schema.setAttribute("xmlns:tns", targetNs);
 		}
 		XMNode[] children = xel.getChildNodeModels();
-		if (children.length == 1
-				&& children[0].getKind() == XMTEXT
-				&& xel.getAttrs().length == 0) {
+		if (children.length == 1 && children[0].getKind() == XMTEXT && xel.getAttrs().length == 0) {
 			XMData xmData = (XMData) children[0];
 			String nameText = getNameElement(xmData.getXDPosition());
 			genTextElement(schema, element, nameText, xmData);
@@ -926,13 +887,8 @@ public class Xd2Xsd {
 			Element choice = null;
 			for (XMNode child : children) {
 				switch (child.getKind()) {
-					case XMNode.XMTEXT:
-						complexType.setAttribute("mixed", "true");
-						break;
-					case XMCHOICE:
-						choice = genSchemaElem(sequence, "choice");
-						sequence = choice;
-						break;
+					case XMNode.XMTEXT: complexType.setAttribute("mixed", "true"); break;
+					case XMCHOICE: choice = genSchemaElem(sequence, "choice"); sequence = choice; break;
 					case XMSELECTOR_END:
 						if (choice != null) {
 							sequence = (Element) choice.getParentNode();
@@ -945,8 +901,7 @@ public class Xd2Xsd {
 						String childRefPos = ((XMElement) child).getReferencePos();
 						boolean alreadyDefined = false;
 						if (childRefPos != null) {
-							XMElement refXMElem =
-								(XMElement) xel.getXDPool().findModel(childRefPos);
+							XMElement refXMElem = (XMElement) xel.getXDPool().findModel(childRefPos);
 							NodeList nodes = schema.getChildNodes();
 							for (int i = 0; i < nodes.getLength(); i++) {
 								Node n = nodes.item(i);
@@ -963,8 +918,7 @@ public class Xd2Xsd {
 											&& ((XMElement) child).getReferencePos() != null) {
 											genRef(refElem, (XMElement) child);
 										} else {
-											refElem.setAttribute(
-												"type",namespace+refXMElem.getLocalName());
+											refElem.setAttribute("type",namespace+refXMElem.getLocalName());
 										}
 										break;
 									}
@@ -990,7 +944,6 @@ public class Xd2Xsd {
 		if (namespace.equals("tns:")) {
 			schema.setAttribute("xmlns:tns", targetNs);
 		}
-
 		String refName = refElement.getLocalName();
 		String xelName = xel.getLocalName();
 		boolean cycle = isCycleDetected(element, refName);
@@ -1001,8 +954,7 @@ public class Xd2Xsd {
 			refRefElem = (XMElement) xel.getXDPool().findModel(refRefPos);
 		}
 		XMNode[] refChildren = refElement.getChildNodeModels();
-		Set<XMNode> filteredRefChildren =
-			Arrays.stream(refChildren).collect(Collectors.toSet());
+		Set<XMNode> filteredRefChildren = Arrays.stream(refChildren).collect(Collectors.toSet());
 		if (refRefElem != null) {
 			Set<XMNode> newFilteredChildren = new LinkedHashSet<>();
 			for (XMNode xmNode : filteredRefChildren) {
@@ -1012,7 +964,6 @@ public class Xd2Xsd {
 			}
 			filteredRefChildren = newFilteredChildren;
 		}
-
 		XMNode[] xelChildren = xel.getChildNodeModels();
 		Set<XMNode> filteredXelChildren = new LinkedHashSet<>();
 		for (XMNode xmNode : xelChildren) {
@@ -1021,27 +972,22 @@ public class Xd2Xsd {
 			} else {
 				filteredXelChildren.add(xmNode);
 			}
-
 		}
 		filteredXelChildren.removeAll(filteredRefChildren);
-
 		XMData[] xelAttrs = xel.getAttrs();
 		XMData[] refAttrs = refElement.getAttrs();
-		Set<String> refAttrNames = Arrays.stream(refAttrs)
-				.map(XMData::getLocalName)
-				.collect(Collectors.toSet());
-		Set<XMData> filteredRefAttrs = Arrays.stream(xelAttrs)
-				.filter(xelAttr -> refAttrNames.contains(xelAttr.getLocalName()))
-				.collect(Collectors.toCollection(LinkedHashSet::new));
-		Set<XMData> filteredXelAttrs = Arrays.stream(xelAttrs)
-				.collect(Collectors.toCollection(LinkedHashSet::new));
+		Set<String> refAttrNames =
+			Arrays.stream(refAttrs).map(XMData::getLocalName).collect(Collectors.toSet());
+		Set<XMData> filteredRefAttrs =
+			Arrays.stream(xelAttrs).filter(xelAttr -> refAttrNames.contains(xelAttr.getLocalName()))
+			.collect(Collectors.toCollection(LinkedHashSet::new));
+		Set<XMData> filteredXelAttrs =
+			Arrays.stream(xelAttrs).collect(Collectors.toCollection(LinkedHashSet::new));
 		filteredXelAttrs.removeAll(filteredRefAttrs);
-
 		if (cycle) {
 			element.setAttribute("type", namespace + refName);
-		} else if (filteredXelAttrs.isEmpty() &&
-				filteredXelChildren.size() == 1 &&
-				filteredXelChildren.iterator().next().getKind() == XMTEXT) {
+		} else if (filteredXelAttrs.isEmpty() && filteredXelChildren.size() == 1
+			&& filteredXelChildren.iterator().next().getKind() == XMTEXT) {
 			String nameText = getNameElement(refElement.getXDPosition());
 			element.setAttribute("type", namespace + nameText + TYPE);
 			XMData xmData = (XMData) filteredXelChildren.iterator().next();
@@ -1069,7 +1015,6 @@ public class Xd2Xsd {
 						genElem(sequence, (XMElement) xmNode);
 					}
 				}
-
 				addAttrs(extension, filteredXelAttrs.toArray(new XMData[0]));
 			} else if (element.getAttribute("type").isEmpty()) {
 				element.setAttribute("type", namespace + refName);
@@ -1091,17 +1036,12 @@ public class Xd2Xsd {
 		}
 	}
 
-	/** Processes a set of XML nodes by checking if the given node is a child of
-	 * a specified element name.
-	 * @param xelName The name of the element to match against
-	 *                the parent name of the `xmNode`.
+	/** Processes a set of XML nodes by checking if the given node is a child of a specified element name.
+	 * @param xelName The name of the element to match against the parent name of the `xmNode`.
 	 * @param xmNodes A set of `XMNode` objects where matching nodes will be added.
-	 * @param xmNode  The `XMNode` object to be processed and
-	 *                potentially added to the set.
+	 * @param xmNode  The `XMNode` object to be processed and potentially added to the set.
 	 */
-	private void processChildren(String xelName,
-		Set<XMNode> xmNodes,
-		XMNode xmNode) {
+	private void processChildren(String xelName, Set<XMNode> xmNodes, XMNode xmNode) {
 		String xmNodeXdPos = xmNode.getXDPosition();
 		String[] parts = xmNodeXdPos.split("/");
 		if (parts.length >= 2) {
@@ -1116,12 +1056,11 @@ public class Xd2Xsd {
 		}
 	}
 
-	/** Checks if there is a cycle detected in the XML by comparing the name
-	 *  of the given
+	/** Checks if there is a cycle detected in the XML by comparing the name  of the given
 	 * @param element The {@link Element} from which to start checking for cycles.
 	 * @param refName The reference name used to detect a cycle.
-	 * @return {@code true} if a cycle is detected (i.e., a parent element with
-	 * a matching name or concatenated name is found); {@code false} otherwise.
+	 * @return {@code true} if a cycle is detected (i.e., a parent element with a matching name
+	 * or concatenated name is found); {@code false} otherwise.
 	 */
 	private boolean isCycleDetected(Element element, String refName) {
 		Node parentNode = element.getParentNode();
@@ -1144,9 +1083,7 @@ public class Xd2Xsd {
 	 * @param parserInfo The parser information used to generate restrictions.
 	 * @return The newly created simple type element.
 	 */
-	private Element createSimpleTypeElement(Element schema,
-		String nameEl,
-		GenParser parserInfo) {
+	private Element createSimpleTypeElement(Element schema, String nameEl, GenParser parserInfo) {
 		Element simpleElement = genSchemaElem(schema, "simpleType");
 		genRestrictions(simpleElement, parserInfo);
 		simpleElement.setAttribute("name", nameEl);
@@ -1172,21 +1109,19 @@ public class Xd2Xsd {
 	 */
 	public final void addSchema(final String name, final Element schema) {
 		if (_xsdSources.containsKey(name)) {
-			//XML schema "&{0}" already exists
-			throw new SRuntimeException(XDCONV.XDCONV207, name);
+			throw new SRuntimeException(XDCONV.XDCONV207, name); //XML schema "&{0}" already exists
 		}
 		_xsdSources.put(name, schema);
 	}
 
-	/** Create new element with XML schema namespace and given name and add
-	 * it to the parent node (if parent is not null).
+	/** Create new element with XML schema namespace and given name and add it to the parent node (if parent
+	 * is not null).
 	 * @param parent parent node.
 	 * @param name local name of element to be created.
 	 * @return created element.
 	 */
 	private Element genSchemaElem(final Element parent, final String name) {
-		Element result = _doc.createElementNS(
-			XMLConstants.W3C_XML_SCHEMA_NS_URI, SCHEMA_PFX + name);
+		Element result = _doc.createElementNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, SCHEMA_PFX + name);
 		if (parent != null) {
 			if (name.equals("sequence")) {
 				Node firstChild = parent.getFirstChild();
@@ -1197,7 +1132,6 @@ public class Xd2Xsd {
 		}
 		return result;
 	}
-
 
 	/** Create new Schema element.
 	 * @return created element.
@@ -1243,14 +1177,14 @@ public class Xd2Xsd {
 	/** Run XML schema generator.
 	 * @param xp compiled XDPool.
 	 * @param xdName name of root X-definition.
-	 * @param modelName name of the root model. May be null, then all values
-	 * from "xs:root" parameter are used to create models.
+	 * @param modelName name of the root model. May be null, then all values from "xs:root" parameter
+	 * are used to create models.
 	 * @param outName name of root XML schema file.
-	 * @param outType name of XML schema file with type declarations (may be
-	 * null, then declared simple types are generated to the file with model).
+	 * @param outType name of XML schema file with type declarations (may be null, then declared simple
+	 * types are generated to the file with model).
 	 * @param genInfo switch if generate annotation with documentation.
-	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
-	 * parameter (the second sequential) is used as mask to validate datetime.
+	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat parameter (the second
+	 * sequential) is used as mask to validate datetime.
 	 * @return map with names of XML schema files and corresponding Elements.
 	 */
 	public static Map<String, Element> genSchema(final XDPool xp,
@@ -1263,8 +1197,7 @@ public class Xd2Xsd {
 		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
 		XMDefinition xdef = xp.getXMDefinition(xname);
 		if (xdef == null) {
-			//Can't find an X-definition&{0}{ "}{"}
-			throw new SRuntimeException(XDCONV.XDCONV201, xname);
+			throw new SRuntimeException(XDCONV.XDCONV201, xname); //Can't find an X-definition&{0}{ "}{"}
 		}
 		String mname;
 		XMElement[] roots;
@@ -1273,8 +1206,7 @@ public class Xd2Xsd {
 			if (roots != null && roots.length > 0) {
 				mname = roots[0].getLocalName();
 			} else {
-				//XML model not specified
-				throw new SRuntimeException(XDCONV.XDCONV202);
+				throw new SRuntimeException(XDCONV.XDCONV202); //XML model not specified
 			}
 		} else {
 			roots = xp.getXMDefinition(xname).getModels();
@@ -1288,8 +1220,7 @@ public class Xd2Xsd {
 				}
 			}
 			if (mname == null) {
-				//Can't find root model&{0}{ "}{"}
-				throw new SRuntimeException(XDCONV.XDCONV203, modelName);
+				throw new SRuntimeException(XDCONV.XDCONV203, modelName); //Can't find root model&{0}{ "}{"}
 			}
 			XMDefinition xmdef = xp.getXMDefinition(xname);
 			roots = new XMElement[1];
@@ -1298,19 +1229,16 @@ public class Xd2Xsd {
 		String oname = outName == null ? mname.replace(':', '_') : outName;
 		String otype = outType;
 		if (otype != null && !otype.isEmpty()) {
-			if ((modelName == null || modelName.isEmpty())
-				&& (outName == null || outName.isEmpty())) {
+			if ((modelName == null || modelName.isEmpty()) && (outName == null || outName.isEmpty())) {
 				roots = null;
 			}
 		} else {
 			otype = null;
 			if (mname == null || mname.isEmpty()) {
-				//The name of xsd file is missing
-				throw new SRuntimeException(XDCONV.XDCONV204);
+				throw new SRuntimeException(XDCONV.XDCONV204); //The name of xsd file is missing
 			}
 		}
-		Xd2Xsd generator =
-			new Xd2Xsd(xp, oname, otype, genInfo, genXdateOutFormat);
+		Xd2Xsd generator = new Xd2Xsd(xp, oname, otype, genInfo, genXdateOutFormat);
 		if (roots != null) {
 			Element schema = generator.genNewSchema(oname);
 			XMElement xmel = roots[0];
@@ -1338,8 +1266,7 @@ public class Xd2Xsd {
 	}
 
 	/* AK */
-	/** Clears and optimizes an XML schema element by removing duplicates
-	 * and adjusting attribute values.
+	/** Clears and optimizes an XML schema element by removing duplicates and adjusting attribute values.
 	 * @param schema The XML schema element to be cleared and optimized.
 	 * @return A cleaned and optimized version of the input XML schema element.
 	 */
@@ -1348,13 +1275,11 @@ public class Xd2Xsd {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document newDoc = builder.newDocument();
-
 			List<Node> imports = new LinkedList<>();
 			List<Node> elements = new LinkedList<>();
 			List<Node> simpleTypes = new LinkedList<>();
 			List<Node> complexTypes = new LinkedList<>();
 			List<Node> attributes = new LinkedList<>();
-
 			Node rootNode = newDoc.importNode(schema, false);
 			newDoc.appendChild(rootNode);
 			NodeList children = schema.getChildNodes();
@@ -1395,10 +1320,8 @@ public class Xd2Xsd {
 					}
 				}
 			}
-
-			List<String> complexNames = complexTypes.stream()
-					.map(el -> ((Element) el).getAttribute("name"))
-					.collect(Collectors.toList());
+			List<String> complexNames = complexTypes.stream().map(el -> ((Element) el)
+				.getAttribute("name")).collect(Collectors.toList());
 			List<Node> newSimpleNodes = new ArrayList<>();
 			boolean[] visited = new boolean[simpleTypes.size()];
 			for (int i = 0; i < simpleTypes.size(); i++) {
@@ -1412,7 +1335,6 @@ public class Xd2Xsd {
 					if (complexNames.contains(newName1)) {
 						baseNum++;
 					}
-
 					int count = 0;
 					for (Node newE : newSimpleNodes) {
 						String nameNewE = ((Element) newE).getAttribute("name");
@@ -1437,7 +1359,6 @@ public class Xd2Xsd {
 						newName1 = oldName1 + baseNum;
 					}
 					simpleEl1.setAttribute("name", newName1);
-
 					resetTypeBase(simpleTypes, nameEl1, newName1);
 					resetTypeBase(newSimpleNodes, nameEl1, newName1);
 					resetTypeBase(complexTypes, nameEl1, newName1);
@@ -1446,8 +1367,7 @@ public class Xd2Xsd {
 			}
 			simpleTypes = orderElements(newSimpleNodes);
 			complexTypes = orderElements(complexTypes);
-			addElements(rootNode, imports, simpleTypes,
-						complexTypes, elements, attributes);
+			addElements(rootNode, imports, simpleTypes, complexTypes, elements, attributes);
 			return newDoc.getDocumentElement();
 		} catch (ParserConfigurationException e) {
 /*#if DEBUG*#/
@@ -1458,10 +1378,8 @@ public class Xd2Xsd {
 	}
 
 	/** Extracts and returns the attribute name from the given string.
-	 * @param name The input string from which the attribute name
-	 *             is to be extracted.
-	 * @return The extracted attribute name if both "$" and "@" are present,
-	 *         otherwise the original string.
+	 * @param name The input string from which the attribute name is to be extracted.
+	 * @return The extracted attribute name if both "$" and "@" are present, otherwise the original string.
 	 */
 	private static String getAttributeName(final String name) {
 		int indexJ = name.lastIndexOf("$");
@@ -1480,14 +1398,12 @@ public class Xd2Xsd {
 	 */
 	private static List<Node> orderElements(final List<Node> nodes) {
 		return nodes.stream()
-				.sorted(Comparator.comparing(Xd2Xsd::getAttributeValue))
-				.collect(Collectors.toList());
+			.sorted(Comparator.comparing(Xd2Xsd::getAttributeValue)).collect(Collectors.toList());
 	}
 
 	/** Retrieves the value of a specified attribute from an XML node.
 	 * @param node The XML node from which to retrieve the attribute value.
-	 * @return the value of the attribute, or an empty string
-	 * if the attribute is not found
+	 * @return the value of the attribute, or an empty string if the attribute is not found
 	 */
 	private static String getAttributeValue(final Node node) {
 		NamedNodeMap attributes = node.getAttributes();
@@ -1543,8 +1459,7 @@ public class Xd2Xsd {
 	 */
 	private static void addComment(final Node parentNode, final long id) {
 		Report message = Report.info(id);
-		Comment comment = parentNode.getOwnerDocument()
-									.createComment(message.getLocalizedText());
+		Comment comment = parentNode.getOwnerDocument().createComment(message.getLocalizedText());
 		parentNode.appendChild(comment);
 	}
 
@@ -1561,28 +1476,23 @@ public class Xd2Xsd {
 	 * @param root     The parent Node to which elements will be added.
 	 * @param elements The set of Node elements to be added.
 	 */
-	private static void addElements(Node root, List<Node> elements) {
+	private static void addElements(final Node root, final List<Node> elements) {
 		for (Node node : elements) {
 			root.appendChild(node);
 		}
 	}
 
-	/** Resets the type attribute of XML elements and attributes
-	 *  from an old name to a new name.
+	/** Resets the type attribute of XML elements and attributes from an old name to a new name.
 	 * This method recursively processes the given element and all its child elements.
 	 * @param elements The XML elements to process.
 	 * @param oldName  The old type name to be replaced.
 	 * @param newName  The new type name to replace with.
 	 */
-	private static void resetTypeBase(List<Node> elements,
-									  String oldName,
-									  String newName) {
+	private static void resetTypeBase(final List<Node> elements, final String oldName, final String newName) {
 		elements.forEach(el -> resetTypeBase((Element) el, oldName, newName));
 	}
 
-	private static void resetTypeBase(Element element,
-		String oldName,
-		String newName) {
+	private static void resetTypeBase(final Element element, final String oldName, final String newName) {
 		String elTagName = element.getTagName();
 		if (elTagName.contains("element") || elTagName.contains("attribute")) {
 			String type = element.getAttribute("type");
@@ -1597,7 +1507,6 @@ public class Xd2Xsd {
 				element.setAttribute("base", namespace + newName);
 			}
 		}
-
 		NodeList children = element.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
@@ -1609,10 +1518,10 @@ public class Xd2Xsd {
 
 	/** Extracts the namespace from a given string that represents a position.
 	 * @param position the qualified name string from which to extract the namespace.
-	 * @return the extracted namespace followed by a colon if a namespace
-	 * is present and non-empty; otherwise, returns an empty string.
+	 * @return the extracted namespace followed by a colon if a namespace is present and non-empty;
+	 * otherwise, returns an empty string.
 	 */
-	private static String extractNamespace(String position) {
+	private static String extractNamespace(final String position) {
 		String namespace = "";
 		if (position.contains(":")) {
 			String[] parts = position.split(":");
@@ -1626,21 +1535,18 @@ public class Xd2Xsd {
 		return namespace;
 	}
 
-	/** Copies a Node from a source Document to a destination Document,
-	 * including its attributes and child nodes.
-	 * @param destDoc    The destination XML Document where the copied Node
-	 *                   will be created.
+	/** Copies Node from source Document to a destination Document, including its attributes and child nodes.
+	 * @param destDoc The destination XML Document where the copied Node  will be created.
 	 * @param sourceNode The source Node to be copied.
-	 * @return A copied Node in the destination Document with attributes
-	 * and child nodes preserved.
+	 * @return A copied Node in the destination Document with attributes and child nodes preserved.
 	 */
-	private static Node copyNode(Document destDoc, Node sourceNode) {
+	private static Node copyNode(final Document destDoc, final Node sourceNode) {
 		Node copiedNode = null;
 		switch (sourceNode.getNodeType()) {
 			case Node.ELEMENT_NODE:
 				Element sourceElement = (Element) sourceNode;
-				Element newElement = destDoc.createElementNS(
-						sourceElement.getNamespaceURI(), sourceElement.getTagName());
+				Element newElement =
+					destDoc.createElementNS(sourceElement.getNamespaceURI(), sourceElement.getTagName());
 				NamedNodeMap attributes = sourceElement.getAttributes();
 				for (int i = 0; i < attributes.getLength(); i++) {
 					Attr attribute = (Attr) attributes.item(i);
@@ -1656,17 +1562,12 @@ public class Xd2Xsd {
 				}
 				copiedNode = newElement;
 				break;
-			case Node.TEXT_NODE:
-				copiedNode = destDoc.createTextNode(sourceNode.getNodeValue());
-				break;
-			default:
-				break;
+			case Node.TEXT_NODE: copiedNode = destDoc.createTextNode(sourceNode.getNodeValue()); break;
 		}
 		return copiedNode;
 	}
 
-	/** Generates a text element within the provided schema element if
-	 * it does not already exist.
+	/** Generates a text element within the provided schema element if it does not already exist.
 	 * @param schema The schema element to which the new element will be added.
 	 * @param el     The element that will be modified with attributes.
 	 * @param nameEl The name of the element to be generated.
@@ -1674,10 +1575,10 @@ public class Xd2Xsd {
 	 * @return The modified element with added attributes,
 	 * or null if the element already exists.
 	 */
-	private Element genTextElement(Element schema,
-		Element el,
-		String nameEl,
-		XMNode child) {
+	private Element genTextElement(final Element schema,
+		final Element el,
+		final String nameEl,
+		final XMNode child) {
 		String nameElement = nameEl.replace("_text", "_Text");
 		if (child.getKind() == XMNode.XMTEXT) {
 			XMData xmData = (XMData) child;
@@ -1727,7 +1628,7 @@ public class Xd2Xsd {
 	 * @param el         The element to which the attributes will be added.
 	 * @param parserInfo The parser information containing the fixed or default values.
 	 */
-	private void setElementValueType(Element el, GenParser parserInfo) {
+	private void setElementValueType(final Element el, final GenParser parserInfo) {
 		if (parserInfo.getFixed() != null) {
 			el.setAttribute("fixed", parserInfo.getFixed());
 		} else if (parserInfo.getDefault() != null) {
@@ -1742,7 +1643,7 @@ public class Xd2Xsd {
 	 * @return the child element that matches the given node name and name attribute,
 	 * or {@code null} if no such element is found
 	 */
-	private Element findChild(Element element, String nodeName, String name) {
+	private Element findChild(final Element element, final String nodeName, final String name) {
 		NodeList childrenSchema = element.getChildNodes();
 		for (int i = 0; i < childrenSchema.getLength(); i++) {
 			Node node = childrenSchema.item(i);

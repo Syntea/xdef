@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 import org.xdef.sys.StringParser;
 
 /** Generator of regular expression patterns (e.g. from xdatetime mask).
- * @author Trojan
+ * @author Vaclav Trojan, Anna Kchmascheva
  */
 class GenRegex {
 
@@ -19,27 +19,17 @@ class GenRegex {
 		StringParser p = new StringParser(mask);
 		while (!p.eos()) {
 			if (p.isToken("DDD")) { // Day in year with leading zeros
-				ret.append(
-				"(00[1-9]|0[1-9]\\d|[1-2]\\d\\d|3[0-5]\\d|36[0-6])");
+				ret.append("(00[1-9]|0[1-9]\\d|[1-2]\\d\\d|3[0-5]\\d|36[0-6])");
 			} else if (p.isChar('D')) { // Day in year without leading zeros
-				ret.append(
-				"([1-9]|[1-9]\\d|[1-2]\\d\\d|3[0-5]\\d|36[0-5])");
+				ret.append("([1-9]|[1-9]\\d|[1-2]\\d\\d|3[0-5]\\d|36[0-5])");
 			} else if (p.isChar('d')) { // Day in month
-				ret.append(p.isChar('d')
-					? "(0[1-9]|[1-2]\\d|3[0-1])" // with leading zero
-					: "([1-9]|[0-2]\\d|3[0-1])"); // without leading zero
+				ret.append(p.isChar('d') ? "(0[1-9]|[1-2]\\d|3[0-1])" : "([1-9]|[0-2]\\d|3[0-1])");
 			} else if (p.isChar('H')) { // HOUR 0..24
-				 ret.append(p.isChar('H')
-					 ? "([0-1]\\d|2[0-3])" //with leading zero
-					 : "(\\d|[0-1]\\d|2[0-3])"); //without leading zero
+				 ret.append(p.isChar('H') ? "([0-1]\\d|2[0-3])" : "(\\d|[0-1]\\d|2[0-3])");
 			} else if (p.isChar('h')) { // HOUR 0..12
-				 ret.append(p.isChar('h')
-					 ? "(0\\d|1[0-2])" //with leading zero
-					 :"([1-9]|0[1-9]|1[0-2])"); //without leading zero
+				 ret.append(p.isChar('h') ? "(0\\d|1[0-2])" : "([1-9]|0[1-9]|1[0-2])");
 			} else if (p.isChar('K')) { // Hour from 0-11
-				ret.append(p.isChar('K')
-					? "(0\\d|1[0-1])" //with leading zero
-					: "(1?[0-1])"); //without leading zero
+				ret.append(p.isChar('K') ? "(0\\d|1[0-1])" : "(1?[0-1])"); //without leading zero
 			} else if (p.isChar('M')) { // Month
 				if (!p.isChar('M')) { // Month without leading zero (M)
 					ret.append("([1-9]|0[1-9]|1[0-2])");
@@ -55,28 +45,20 @@ class GenRegex {
 				while (p.isChar('G')){}
 				ret.append("[a-zA-Z]*(\\s[a-zA-Z])*");
 			} else if (p.isChar('m')) { // minute 0..59
-				ret.append(p.isChar('m')
-					? "[0-5]\\d" // with leading zero
-					: "(\\d|[1-5]\\d)"); // without leading zero
+				ret.append(p.isChar('m') ? "[0-5]\\d" : "(\\d|[1-5]\\d)");
 			} else if (p.isToken("s")) { // seconds 0..59
-				ret.append(p.isChar('s')
-					? "[0-5]\\d" // with leading zero
-					: "([1-9]|[1-5]\\d)"); // without leading zero
+				ret.append(p.isChar('s') ? "[0-5]\\d" : "([1-9]|[1-5]\\d)");
 			} else if (p.isChar('S')) { //Seconds fraction
 				while (p.isChar('S')) {}
 				ret.append("\\d+");
 			} else if (p.isChar('k')) { //Hour in day from interval 1-24
-				ret.append(p.isChar('k')
-					? "(0[1-9]|1\\d|2[0-4])" // with leading zero
-					: "([1-9]|1\\d|2[0-4])"); // without leading zero
+				ret.append(p.isChar('k') ? "(0[1-9]|1\\d|2[0-4])" : "([1-9]|1\\d|2[0-4])");
 			} else if (p.isChar('y')) { // Year
 				int i = 1;
 				while (p.isChar('y')) i++;
 				switch (i) {
-					case 2: // Year as 2 digits.
-						ret.append("\\d{2}"); break;
-					case 4: // Year as 4 digits.
-						ret.append("(-)?\\d{4}"); break;
+					case 2: ret.append("\\d{2}"); break; // Year as 2 digits.
+					case 4: ret.append("(-)?\\d{4}"); break; // Year as 4 digits.
 					case 1:// Year
 					default: ret.append("(-)?\\d+");//any number of digits???
 				}
@@ -96,38 +78,29 @@ class GenRegex {
 			} else if (p.isChar('z')) { //zone name
 				int i = 1;
 				while (p.isChar('z')) i++;
-				ret.append(i == 1
-					? "[a-zA-Z0-9]{1,5}" // short zone name
+				ret.append(i == 1 ? "[a-zA-Z0-9]{1,5}" // short zone name
 					: "([A-Z][a-z]*(\\s[A-Z][a-z]*)*)"); // full zone name
 			} else if (p.isChar('Z')) { // zone base format
 				int i = 1;
 				while (p.isChar('Z')) i++;
 				switch (i) {
-					case 2: //+/-HHmm format
-						ret.append("[+-](0\\d|1\\d|2[0-3])[0-5]\\d");
-						break;
+					case 2: ret.append("[+-](0\\d|1\\d|2[0-3])[0-5]\\d"); break; //+/-HHmm format
 					case 3:
-					case 4: //+/-HHmm format
-						ret.append("[+-](0\\d|1\\d|2[0-3])[0-5]\\d");
-						break;
-					case 5: // short zone name
-						ret.append("[a-zA-Z]{1,5}");
-						break;
+					case 4: ret.append("[+-](0\\d|1\\d|2[0-3])[0-5]\\d"); break; //+/-HHmm format
+					case 5: ret.append("[a-zA-Z]{1,5}"); break; // short zone name
 					case 6: //+/-HH:mm format
 					default: //???
 						ret.append("[+-](0\\d|1\\d|2[0-3]):[0-5]\\d");
 				}
 			} else if (p.isChar('a')) { //Information about day part (am, pm).
-				while (p.isChar('a')){}
+				while (p.isChar('a')) {}
 				ret.append("[a-zA-Z]+");
 			} else if (p.isChar('{')) {
 				p.findCharAndSkip('}');
 			} else if (p.isChar('E')) { //Day in week
 				int i = 1;
 				while (p.isChar('E')) i++;
-				ret.append(i < 4
-					? "[a-zA-z]{1,3}" // short name
-					: "[a-zA-z]+"); // full name
+				ret.append(i < 4 ? "[a-zA-z]{1,3}" : "[a-zA-z]+"); // // short name : full name
 			} else if (p.isChar('e')) { //Day in week as number
 				ret.append("[1-7]");
 			} else if (p.isChar('[')) {
@@ -152,15 +125,14 @@ class GenRegex {
 	 * @return string with the character or escaped special character.
 	 */
 	protected static String createEscapedChar(final char c) {
-		return "\\|.-?*+{}(){}^".indexOf(c) >= 0
-			? "\\"+ c : ' ' == c ? "\\s" :  String.valueOf(c);
+		return "\\|.-?*+{}(){}^".indexOf(c) >= 0 ? "\\"+ c : ' ' == c ? "\\s" :  String.valueOf(c);
 	}
 
 	/** Return string with escaped special characters.
 	 * @param string string to modify.
 	 * @return modified string with escaped special characters.
 	 */
-	protected static String escapeCharsInString(String string) {
+	protected static String escapeCharsInString(final String string) {
 		StringBuilder ret = new StringBuilder();
 		for (int i = 0; i < string.length(); i++) {
 			ret.append(createEscapedChar(string.charAt(i)));
@@ -176,9 +148,7 @@ class GenRegex {
 		String mask = "";
 		for (char c: s.toCharArray()) {
 			mask += Character.isLetter(c)
-				? "[" + Character.toLowerCase(c)
-					+ Character.toUpperCase(c) + "]"
-				: createEscapedChar(c);
+				? "[" + Character.toLowerCase(c) + Character.toUpperCase(c) + "]" : createEscapedChar(c);
 		}
 		return mask;
 	}
@@ -187,7 +157,7 @@ class GenRegex {
 	 * @param mask xdatetime mask.
 	 * @return set with regex strings.
 	 */
-	protected static String[] getRegexes(String mask) {
+	protected static String[] getRegexes(final String mask) {
 		Set<String> ret = new HashSet<>();
 		StringTokenizer st = new StringTokenizer(mask, "|");
 		while (st.hasMoreTokens()) {
