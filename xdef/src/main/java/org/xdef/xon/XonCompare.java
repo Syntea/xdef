@@ -97,8 +97,8 @@ final class XonCompare {
 		return s + "]\n";
 	}
 
-	/** Compare two XON/JSON objects. Return an empty string if both objects are equal.
-	 * Otherwise, return string with different items.
+	/** Compare two XON/JSON objects. Return an empty string if both objects are equal. Otherwise, return
+	 * string with different items.
 	 * @param a first object with XON/JSON data.
 	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
@@ -190,8 +190,8 @@ final class XonCompare {
 		} else if (n1 instanceof Long || n1 instanceof Integer || n1 instanceof Short || n1 instanceof Byte) {
 			if (n2 instanceof Long || n2 instanceof Integer || n2 instanceof Short || n2 instanceof Byte) {
 				return n1.longValue() == n2.longValue();
-			} else if (n2 instanceof Double || n2 instanceof Float
-				|| n2 instanceof BigInteger || n2 instanceof BigDecimal) {
+			} else if (n2 instanceof Double || n2 instanceof Float || n2 instanceof BigInteger
+				|| n2 instanceof BigDecimal) {
 				return equalNumber(n2, n1);
 			}
 		} else if (n2 instanceof BigInteger || n2 instanceof BigDecimal) {

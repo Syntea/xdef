@@ -295,8 +295,7 @@ class XonToString extends XonTools {
 		return result;
 	}
 
-	/** Convert XON map to JSON (all values except of Number, String, Boolean
-	 * or null are converted to strings).
+	/** Convert XON map to JSON (all values except of Number, String, Boolean or null converted to strings).
 	 * @param xmap XON map object
 	 * @return XON map converted to JSON.
 	 */
@@ -316,8 +315,8 @@ class XonToString extends XonTools {
 	 * @return XON object converted to JSON.
 	 */
 	final static Object xonToJson(final Object x) {
-		if (x == null || x instanceof String || x instanceof Boolean
-			|| x instanceof Number || x instanceof XonTools.JNull) {
+		if (x == null || x instanceof String || x instanceof Boolean || x instanceof Number
+			|| x instanceof XonTools.JNull) {
 			return x;
 		} else if (x instanceof Map) {
 			return xonMapToJson((Map) x);

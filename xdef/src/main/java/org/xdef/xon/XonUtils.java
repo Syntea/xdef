@@ -30,7 +30,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final List<Object> parseCSV(final InputStream src, final char sep, final boolean skipHeader) {
+	public static final List<Object> parseCSV(final InputStream src, final char sep,final boolean skipHeader){
 		return parseCSV(src, sep, skipHeader, null);
 	}
 
@@ -72,8 +72,7 @@ public class XonUtils {
 		final char sep,
 		final boolean skipHeader,
 		final String sysid) {
-		return CsvReader.parseCSV(src,
-			sep, skipHeader, sysid == null ? "READER" : sysid);
+		return CsvReader.parseCSV(src, sep, skipHeader, sysid == null ? "READER" : sysid);
 	}
 
 	/** Parse CSV data from a file(value separator is comma).
@@ -184,9 +183,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseJSON(final Reader in) {
-		return XonReader.parseJSON(in, null, true);
-	}
+	public static final Object parseJSON(final Reader in) {return XonReader.parseJSON(in, null, true);}
 
 	/** Parse JSON document from input reader.
 	 * @param in reader with JSON source.
@@ -198,8 +195,8 @@ public class XonUtils {
 		return XonReader.parseJSON(in, sysid == null ? "READER" : sysid, true);
 	}
 
-	/** Parse JSON document from input source data.
-	 * The source data may be either file pathname or URL or JSON source.
+	/** Parse JSON document from input source data. The source data may be either file pathname or URL
+	 * or JSON source.
 	 * @param source file pathname or URL or string with JSON source.
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
@@ -215,7 +212,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseJSON(final File source) throws SRuntimeException{
+	public static final Object parseJSON(final File source) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseJSON(indata._in, indata._sysId);
 	}
@@ -225,7 +222,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public static final Object parseJSON(final URL source) throws SRuntimeException{
+	public static final Object parseJSON(final URL source) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseJSON(indata._in, indata._sysId);
 	}
@@ -245,8 +242,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseJSON(final InputStream source, final String sysId)
-		throws SRuntimeException {
+	public static final Object parseJSON(final InputStream source,final String sysId)throws SRuntimeException{
 		return XonReader.parseJSON(source, sysId==null ? "INPUTSTREAM" : sysId, true);
 	}
 
@@ -276,8 +272,8 @@ public class XonUtils {
 		return XonReader.parseXON(in, sysid == null ? "READER" : sysid, bytes);
 	}
 
-	/** Parse XON document from input source data.
-	 * The source data may be either file pathname or URL or JSON source.
+	/** Parse XON document from input source data. The source data may be either file pathname or URL
+	 * or JSON source.
 	 * @param source file pathname or URL or string with XON source.
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
@@ -293,7 +289,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseXON(final File source) throws SRuntimeException{
+	public static final Object parseXON(final File source) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseXON(indata._in, indata._sysId);
 	}
@@ -303,7 +299,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public static final Object parseXON(final URL url) throws SRuntimeException{
+	public static final Object parseXON(final URL url) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(url, null);
 		return parseXON(indata._in, indata._sysId);
 	}
@@ -364,7 +360,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseYAML(final File f) throws SRuntimeException{
+	public static final Object parseYAML(final File f) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(f, null);
 		return parseYAML(indata._in, indata._sysId);
 	}
@@ -374,7 +370,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public static final Object parseYAML(final URL url) throws SRuntimeException{
+	public static final Object parseYAML(final URL url) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(url, null);
 		return parseYAML(indata._in, indata._sysId);
 	}
@@ -403,7 +399,6 @@ public class XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 //  to String tools
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create CSV string from CSV object.
 	 * @param x CSV object.
 	 * @return CSV string created from CSV object.
@@ -415,6 +410,7 @@ public class XonUtils {
 	 * @return string with INI/Properties format.
 	 */
 	public static final String toIniString(final Map<String, Object> x) {return IniReader.toIniString(x);}
+
 	/** Create JSON string from object (no indentation).
 	 * @param x JSON object.
 	 * @return string with JSON source format.
@@ -437,7 +433,7 @@ public class XonUtils {
 	 * @param indent if true the result will be indented.
 	 * @return string with XCN source data.
 	 */
-	public static final String toXonString(final Object x,final boolean indent){
+	public static final String toXonString(final Object x,final boolean indent) {
 		StringBuilder sb = new StringBuilder();
 		XonToString.objectToString(x, indent ? "\n" : null, sb, true);
 		return sb.toString();
@@ -447,7 +443,7 @@ public class XonUtils {
 	 * @param x the XON object.
 	 * @return string with XCN source data.
 	 */
-	public static final String toXonString(final Object x){
+	public static final String toXonString(final Object x) {
 		StringBuilder sb = new StringBuilder();
 		XonToString.objectToString(x, null, sb, true);
 		return sb.toString();
@@ -468,7 +464,6 @@ public class XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // XML to object...
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XML element with CSV data.
 	 * @param x object with CSV data.
 	 * @return Element created from CSV data.
@@ -516,7 +511,6 @@ public class XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // to XML tools
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XML from INI/Properties object in "W" format.
 	 * @param ini path toINI/Properties source data.
 	 * @return XML element created from INI/Properties data.
@@ -650,7 +644,6 @@ public class XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // Compare two objects (JSON,XON, INI, CSV, ...).
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Compare two XON/JSON objects.
 	 * @param a first object with XON/JSON data.
 	 * @param b second object with XON/JSON data.
@@ -660,8 +653,8 @@ public class XonUtils {
 		return (a == null && b == null) || (a != null && b != null && XonCompare.equalValue(a,b));
 	}
 
-	/** Compare two XON/JSON objects. Return an empty string if both objects
-	 * are equal, otherwise, return string with different items.
+	/** Compare two XON/JSON objects. Return an empty string if both objects are equal, otherwise,
+	 * return string with different items.
 	 * @param a first object with XON/JSON data.
 	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.

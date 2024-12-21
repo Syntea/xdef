@@ -20,10 +20,6 @@ import static org.xdef.xon.XonNames.X_VALUE;
  * @author Vaclav Trojan
  */
 class XonFromXml extends XonUtils {
-
-////////////////////////////////////////////////////////////////////////////////
-// Keywords of names of XON/JSON types
-////////////////////////////////////////////////////////////////////////////////
 	/** XON/JSON string item. */
 	private final static String J_STRING = "string";
 	/** XON/JSON number item. */
@@ -92,8 +88,8 @@ class XonFromXml extends XonUtils {
 	}
 
 	/** Create XON/JSON object (array, map, or primitive value).
-	 * @param elem element from XDConstants.XON_NS_URI_XD name space with
-	 * XON/JSON array, map, or primitive value.
+	 * @param elem element from XDConstants.XON_NS_URI_XD name space with XON/JSON array, map,
+	 * or primitive value.
 	 * @return XON/JSON array, map, or primitive value.
 	 */
 	private Object fromXmlW(final Element elem) {
@@ -117,7 +113,6 @@ class XonFromXml extends XonUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Add string with a simple value or with the list of simple values.
 	 * to the array from the argument.
 	 * <UL>
@@ -336,7 +331,6 @@ class XonFromXml extends XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // internal format
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XON/JSON array from array element.
 	 * @param elem array element from XDConstants.XON_NS_URI_XD name space.
 	 * @return created XON/JSON array.
@@ -380,7 +374,6 @@ class XonFromXml extends XonUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XON/JSON object (map, array or primitive value) from an element.
 	 * @param node XML node with XON/JSON data.
 	 * @return created XON/JSON object (map, array or primitive value).

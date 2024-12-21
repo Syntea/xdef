@@ -864,8 +864,7 @@ public class KDOMUtils {
 		return (Element) item;
 	}
 
-	/** Return the first previous node which is an Element type with given
-	 * NameSpace URI from the qrument ns.
+	/** Return the first previous node which is an Element type with given NameSpace URI from the qrument ns.
 	 * @param node actual node from which previous Element is returned.
 	 * @param ns namespace of Element to be found.
 	 * @return Element found or null.
@@ -926,7 +925,8 @@ public class KDOMUtils {
 		return (Element) item;
 	}
 
-	/** Return the previous next node which is an Element type with tag name equal to one of names from the list.
+	/** Return the previous next node which is an Element type with tag name equal to one of names from
+	 * the list.
 	 * @param node actual node from which previous Element is returned.
 	 * @param tagnameList array with tag names.
 	 * @return Element found or null.
@@ -948,15 +948,14 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Return the first previous node which is an Element type with NameSpace
-	 * URI equal to argument and local name equal to one of names from the list.
+	/** Return the first previous node which is an Element type with NameSpace URI equal to argument and
+	 * local name equal to one of names from the list.
 	 * @param node actual node from which previous Element is returned.
 	 * @param ns NameSpace of Element to be found.
 	 * @param nameList array with local names.
 	 * @return Element found or null.
 	 */
-	public static final Element previousElementSiblingNS(final Node node,
-		final String ns,
+	public static final Element previousElementSiblingNS(final Node node, final String ns,
 		final String[] nameList) {
 		if (node == null) {
 			return null;
@@ -1004,8 +1003,7 @@ public class KDOMUtils {
 			if (val._counter <= 0) {
 				el.removeAttribute(name);
 			} else  if (!val._ignore) {
-				el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-					name, val._value);
+				el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, val._value);
 			}
 		}
 		removeRedundantXmlnsAttrs(el, namespaces);
@@ -1117,8 +1115,7 @@ public class KDOMUtils {
 		if (ns != null) {
 			String qname;
 			int ndx;
-			String prefix =
-				(ndx = (qname = el.getNodeName()).indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
+			String prefix = (ndx=(qname = el.getNodeName()).indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
 			if (!prefix.equals(context.getPrefix(ns))) {
 				context.setPrefix(prefix, ns);
 			}
@@ -1245,8 +1242,7 @@ public class KDOMUtils {
 						}
 						if (ns != null) {
 							newelem.setAttributeNS( ns, qname, n.getNodeValue());
-						} else {
-							//error: qualified name without NameSpace
+						} else { //error: qualified name without NameSpace
 							newelem.setAttribute(qname, n.getNodeValue());
 						}
 					} else {
@@ -1282,14 +1278,10 @@ public class KDOMUtils {
 	private static void getTextContent(final Node item, final StringBuilder sb) {
 		if (item != null) {
 			switch (item.getNodeType()) {
-				case Node.DOCUMENT_NODE:
-					getTextContent(((Document) item).getDocumentElement(), sb);
-					return;
+				case Node.DOCUMENT_NODE: getTextContent(((Document) item).getDocumentElement(), sb); return;
 				case Node.ATTRIBUTE_NODE:
 				case Node.CDATA_SECTION_NODE:
-				case Node.TEXT_NODE:
-					sb.append(item.getNodeValue());
-					return;
+				case Node.TEXT_NODE: sb.append(item.getNodeValue()); return;
 				case Node.ENTITY_REFERENCE_NODE:
 				case Node.ENTITY_NODE:
 				case Node.ELEMENT_NODE: {
@@ -1348,13 +1340,13 @@ public class KDOMUtils {
 		return result;
 	}
 
-	/** Get coalesced text nodes from all textual child nodes of a node.
-	 * As textual nodes are considered nodes of type:
+	/** Get coalesced text nodes from all textual child nodes of a node. As textual nodes are considered nodes
+	 * of type:
 	 * <br> - org.w3c.dom.CDATASection
 	 * <br> - org.w3c.dom.Text
 	 * <br> - org.w3c.dom.EntityReference
-	 * All node items in the returned NodeList object are created as new
-	 * Text nodes, i.e. consequently their parents are null.
+	 * All node items in the returned NodeList object are created as new Text nodes, i.e. consequently their
+	 * parents are null.
 	 * @param node it's children are inspected.
 	 * @return NodeList with text nodes.
 	 */
@@ -1533,8 +1525,8 @@ public class KDOMUtils {
 	}
 
 	/** Create copy of node in given Document. This method is similar to org.w3c.dom.Node.cloneNode(deep).
-	 * However, if document of given node is not equal to document from argument doc then the new copy
-	 * of node is created in the document from argument.
+	 * However, if document of given node is not equal to document from argument doc then the new copy of node
+	 * is created in the document from argument.
 	 * @param doc document where clone of node is created.
 	 * @param node object which to be cloned/copied.
 	 * @param deep if true child nodes are created, otherwise ignored.
@@ -1592,8 +1584,7 @@ public class KDOMUtils {
 				return e;
 			}
 			case Node.ENTITY_REFERENCE_NODE: {
-				final EntityReference eref =
-					doc.createEntityReference(node.getNodeName());
+				final EntityReference eref = doc.createEntityReference(node.getNodeName());
 				final NodeList nl = node.getChildNodes();
 				if (nl != null) {
 					for (int i = 0, maxi = nl.getLength(); i < maxi; i++) {
@@ -1602,12 +1593,10 @@ public class KDOMUtils {
 				}
 				return eref;
 			}
-			case Node.PROCESSING_INSTRUCTION_NODE: {
+			case Node.PROCESSING_INSTRUCTION_NODE:
 				final ProcessingInstruction pi = (ProcessingInstruction) node;
 				return doc.createProcessingInstruction(pi.getTarget(), pi.getData());
-			}
-			default:
-				throw new SRuntimeException(XML.XML201);//Can't create clone of node to given document
+			default: throw new SRuntimeException(XML.XML201);//Can't create clone of node to given document
 		}
 	}
 
@@ -1624,10 +1613,9 @@ public class KDOMUtils {
 		return resolveXPosition(n, xpos, null);
 	}
 
-	/** Resolve relative position in given node. Note that the position is NOT
-	 * full XPath expression. XPosition may contain only an abbreviated location
-	 * path with single "/" selectors and with index specifiers "[n]" where n is
-	 * an integer and the last step may point only to an attribute ("@name") or
+	/** Resolve relative position in given node. Note that the position is NOT full XPath expression.
+	 * XPosition may contain only an abbreviated location path with single "/" selectors and with index
+	 * specifiers "[n]" where n is an integer and the last step may point only to an attribute ("@name") or
 	 * to a text node ("text()[n]") or element node (name[n]).
 	 * @param n a node.
 	 * @param xpos XPath position.
@@ -1783,13 +1771,11 @@ public class KDOMUtils {
 		return null;
 	}
 
-	/** Get string with xpath position of a node. The result position is NOT
-	 * the full XPath expression. Generated position cotains the abbreviated
-	 * location path with single "/" selectors and with index specifiers "[n]"
-	 * where n is index of a child node. If the argument is an attribute then
-	 * the last step is "@name", if it is a text node thle last step is
-	 * "text()[n]" and if it is an element node than ths last location step is
-	 * the name of element followed with the childnode index [n].
+	/** Get string with xpath position of a node. The result position is NOT the full XPath expression.
+	 * Generated position cotains the abbreviated location path with single "/" selectors and with index
+	 * specifiers "[n]" where n is index of a child node. If the argument is an attribute then the last step
+	 * is "@name", if it is a text node thle last step is "text()[n]" and if it is an element node than
+	 * ths last location step is the name of element followed with the childnode index [n].
 	 * @param n node of which xpath position is to be created.
 	 * @return string with the XPath position.
 	 */
@@ -1925,9 +1911,7 @@ public class KDOMUtils {
 			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
 		@Override
-		public final Node getNamedItemNS(final String namespaceURI, final String localName) {
-			return null;
-		}
+		public final Node getNamedItemNS(final String namespaceURI, final String localName) {return null;}
 		@Override
 		public final Node getNamedItem(final String name) {return null;}
 	}

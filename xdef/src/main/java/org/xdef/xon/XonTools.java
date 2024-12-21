@@ -37,7 +37,6 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XonTools {
-
 	/** Value of null in XON/JSON objects. */
 	public static final JNull JNULL = new JNull();
 
@@ -49,9 +48,7 @@ public class XonTools {
 	 * @param c character to be converted.
 	 * @return string with converted character.
 	 */
-	final static String genXmlHexChar(final char c) {
-		return "_x" + Integer.toHexString(c) + '_';
-	}
+	final static String genXmlHexChar(final char c) {return "_x" + Integer.toHexString(c) + '_';}
 
 	/** Check and get hexadecimal digit as integer.
 	 * @param ch character with hexadecimal digit.
@@ -81,8 +78,7 @@ public class XonTools {
 			hexDigit(s.charAt(index+2)) < 0) {
 			return false;
 		}
-		// parse hexdigits
-		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
+		for (int i = index + 3; i < index + 7 && i < s.length(); i++) { // parse hexdigits
 			char ch = s.charAt(i);
 			if (hexDigit(ch) < 0) {// not hexadecimal digit.
 				return ch == '_'; //if '_' return true otherwise return false
@@ -103,7 +99,6 @@ public class XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // public methods (used also in X-definition compilation and X-components)
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create string from XON/JSON source string data.
 	 * @param s XON/JSON string.
 	 * @return string created from XON/JSON string data.
@@ -194,8 +189,7 @@ public class XonTools {
 						for(;;) {
 							if (p.isChar('\\')) {
 								if (p.eos()) {
-									throw new RuntimeException(
-										"JList error");
+									throw new RuntimeException("JList error");
 								}
 								p.nextChar();
 							} else if ((ch=p.getCurrentChar()) == ' ' || ch == ',' || ch == ']' || ch == '['){
@@ -287,8 +281,7 @@ public class XonTools {
 				switch (ch) {
 					case 'T': return new DefTelephone(s);
 					case 'e': return new DefEmailAddr(s);
-					case 'u':
-						return new DefURI(s);
+					case 'u': return new DefURI(s);
 					case 'C':
 						if ((r = chkValue(s, new XDParseCurrency())).matches()){
 							return r.getParsedValue().getObject();
@@ -532,7 +525,6 @@ public class XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // Interface and classes used when XON/JSON is parsed in X-definition compiler.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Interface of JSON/XON object. */
 	public interface JObject {
 		public SPosition getPosition();
@@ -733,8 +725,7 @@ public class XonTools {
 						break;
 					default:
 						if (ch < ' '|| StringParser.getXmlCharType(ch,
-							StringParser.XMLVER1_0) ==
-							StringParser.XML_CHAR_ILLEGAL) {
+							StringParser.XMLVER1_0) == StringParser.XML_CHAR_ILLEGAL) {
 							if (!addQuot) { // force quote
 								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
 								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
@@ -757,8 +748,8 @@ public class XonTools {
 	}
 
 	/** Get InputStream or Reader from object.
-	 * @param source if it is string check file name, URL or input data
-	 * otherwise it can be a File, InputStream or Reader.
+	 * @param source if it is string check file name, URL or input data otherwise it can be a File,
+	 * InputStream or Reader.
 1	 * @param sysId System ID or null.
 	 * @param charset name or null.
 	 * @return InputData object.
@@ -804,15 +795,12 @@ public class XonTools {
 		final Reader _reader;
 		final InputStream _in;
 		final String _sysId;
-
 		protected InputData(final Reader reader, final String sysId) {
 			_reader = reader;
 			_in = null;
 			_sysId=sysId;
 		}
-
-		protected InputData(final InputStream in, final String sysId)
-			throws Exception{
+		protected InputData(final InputStream in, final String sysId) throws Exception{
 			_sysId = sysId;
 			_reader = null;
 			_in = in;

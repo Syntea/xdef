@@ -61,8 +61,8 @@ public final class XonYaml {
 		try {
 			return _yamlLoadReader.invoke(_yaml, source);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new RuntimeException(
-				ex.getCause() != null && ex.getCause().getMessage() != null ? ex.getCause() : ex);
+			throw new RuntimeException(ex.getCause() != null && ex.getCause().getMessage() != null
+				? ex.getCause() : ex);
 		}
 	}
 
@@ -71,8 +71,8 @@ public final class XonYaml {
 		try {
 			return _yamlLoadInputStream.invoke(_yaml, source);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new RuntimeException(
-				ex.getCause() != null && ex.getCause().getMessage() != null ? ex.getCause() : ex);
+			throw new RuntimeException(ex.getCause() != null && ex.getCause().getMessage() != null
+				? ex.getCause() : ex);
 		}
 	}
 

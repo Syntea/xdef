@@ -42,13 +42,11 @@ public class KXmlOutStream {
 	 * written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
-	public KXmlOutStream(final OutputStream out,
-		final String encoding,
-		final boolean writeDocumentHeader) throws IOException {
+	public KXmlOutStream(final OutputStream out, final String encoding, final boolean writeDocumentHeader)
+		throws IOException {
 		_file = null;
 		_encoding = encoding == null ? "UTF-8" : encoding;
-		_writer = new OutputStreamWriter(
-			out, KCharsetNames.getJavaCharsetName(_encoding));
+		_writer = new OutputStreamWriter(out, KCharsetNames.getJavaCharsetName(_encoding));
 		_writeDocumentHeader = writeDocumentHeader;
 	}
 
@@ -67,36 +65,30 @@ public class KXmlOutStream {
 		_writeDocumentHeader = writeDocumentHeader;
 	}
 
-	/** Creates new instance of DefXmlOutStream with the name of output file.
-	 * If the file already exists it is deleted. The file will be created
-	 * only if something was written.
+	/** Creates new instance of DefXmlOutStream with the name of output file. If the file already exists it
+	 * is deleted. The file will be created only if something was written.
 	 * @param filename the name of file where to write XML.
 	 * @param encoding encoding of XML stream.
 	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
-	public KXmlOutStream(final String filename,
-		final String encoding,
-		final boolean writeDocumentHeader) throws IOException {
+	public KXmlOutStream(final String filename, final String encoding, final boolean writeDocumentHeader)
+		throws IOException {
 		_file = new File(filename).getCanonicalFile();
 		if (_file.exists()) {
 			if (!_file.canWrite()) {
-				//Can't write to output stream&{0}{; }
-				throw new SIOException(SYS.SYS027, filename);
+				throw new SIOException(SYS.SYS027, filename); //Can't write to output stream&{0}{; }
 			}
 			if (!_file.delete()) {
-				//Can't write to output stream&{0}{; }
-				throw new SIOException(SYS.SYS027, filename);
+				throw new SIOException(SYS.SYS027, filename); //Can't write to output stream&{0}{; }
 			}
 		}
 		if (!_file.createNewFile()) {
-			//Can't write to output stream&{0}{; }
-			throw new SIOException(SYS.SYS027, filename);
+			throw new SIOException(SYS.SYS027, filename); //Can't write to output stream&{0}{; }
 		}
 		if (!_file.delete()) {
-			//Can't write to output stream&{0}{; }
-			throw new SIOException(SYS.SYS027, filename);
+			throw new SIOException(SYS.SYS027, filename);//Can't write to output stream&{0}{; }
 		}
 		_encoding = encoding == null ? "UTF-8" : encoding;
 		_writeDocumentHeader = writeDocumentHeader;
@@ -107,14 +99,11 @@ public class KXmlOutStream {
 	 */
 	public void setIndenting(boolean indent) {_indent = indent ? "\n" : null;}
 
-	/** Create stack of XML namespace information and add necessary
-	 * xmlns attributes.
+	/** Create stack of XML namespace information and add necessary xmlns attributes.
 	 * @param elem element where xmlns attributes will be written.
-	 * @param node the node from which namespace context is updated (may be an
-	 * element or an attribute).
+	 * @param node the node from which namespace context is updated (may be an element or an attribute).
 	 */
-	private boolean procNS(final Node node, final String indent)
-		throws IOException{
+	private boolean procNS(final Node node, final String indent) throws IOException{
 		String name = node.getNodeName();
 		if (!name.toLowerCase().startsWith("xml")) {
 			String uri = node.getNamespaceURI();
@@ -140,8 +129,7 @@ public class KXmlOutStream {
 	private void initWriter() throws IOException {
 		if (_writer == null) {
 			String e = _encoding == null ? "UTF-8" : _encoding;
-			_writer = new BufferedWriter(
-				new OutputStreamWriter(new FileOutputStream(_file),
+			_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_file),
 				KCharsetNames.getJavaCharsetName(e)));
 		}
 	}
@@ -158,8 +146,7 @@ public class KXmlOutStream {
 		String savedIndent = _indent;
 		_indent = "";
 		boolean somethingWritten;
-		Document doc = node.getNodeType() == Node.DOCUMENT_NODE
-			? (Document) node : node.getOwnerDocument();
+		Document doc = node.getNodeType() == Node.DOCUMENT_NODE ? (Document) node : node.getOwnerDocument();
 		_writer.write("<?xml version=\"");
 		_writer.write(doc.getXmlVersion());
 		_writer.write("\" encoding=\"");
@@ -187,9 +174,7 @@ public class KXmlOutStream {
 		_writer.flush();
 	}
 
-	private void wrAttr(final String indent,
-		final String name,
-		final String val) throws IOException {
+	private void wrAttr(final String indent, final String name, final String val) throws IOException {
 		_writer.write(indent);
 		_writer.write(name);
 		_writer.write("=\"");
@@ -198,18 +183,10 @@ public class KXmlOutStream {
 			for (int j = 0; j < len; j++) {
 				char c;
 				switch (c = val.charAt(j)) {
-					case '<':
-						_writer.write("&lt;");
-						break;
-					case '&':
-						_writer.write("&amp;");
-						break;
-					case '"':
-						_writer.write("&quot;");
-						break;
-					case ' ':
-						_writer.write(c); //default print char
-						break;
+					case '<': _writer.write("&lt;"); break;
+					case '&': _writer.write("&amp;"); break;
+					case '"': _writer.write("&quot;"); break;
+					case ' ': _writer.write(c); break; //default print char
 					default:
 						if (c < ' ') {
 							_writer.write("&#");
@@ -267,8 +244,7 @@ public class KXmlOutStream {
 			}
 			_rootWritten = true;
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		}
 	}
 
@@ -281,8 +257,7 @@ public class KXmlOutStream {
 			_writer.write('>');
 			_writer.flush();
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		}
 	}
 
@@ -301,14 +276,11 @@ public class KXmlOutStream {
 			_writer.write('>');
 			_writer.flush();
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		}
 	}
 
-	public void writeElementEnd() {
-		writeElementEnd(_names.pop());
-	}
+	public void writeElementEnd() {writeElementEnd(_names.pop());}
 
 	/** Write XML end tag.
 	 * @param elem element of which the tag will be written.
@@ -316,8 +288,7 @@ public class KXmlOutStream {
 	public final void writeElementEnd(final Element elem) {
 		String name = _names.pop();
 		if (!elem.getNodeName().equals(name)) {
-			//Start and end of element differs
-			throw new SRuntimeException(XML.XML602);
+			throw new SRuntimeException(XML.XML602); //Start and end of element differs
 		}
 		writeElementEnd(name);
 	}
@@ -350,15 +321,12 @@ public class KXmlOutStream {
 				_writer.write(_indent);
 			}
 			if (!_rootWritten && _writeDocumentHeader) {
-				//Can not write text node before root element
-				throw new SRuntimeException(XML.XML601);
+				throw new SRuntimeException(XML.XML601); //Can not write text node before root element
 			}
 			for (int j = 0; j < len; j++) {
 				char c;
 				switch (c = s.charAt(j)) {
-					case '<':
-						_writer.write("&lt;");
-						continue;
+					case '<': _writer.write("&lt;"); continue;
 					case '>':
 						if (j >= 2 && s.charAt(j - 1) == ']' &&
 							s.charAt(j - 2) == ']') {
@@ -367,9 +335,7 @@ public class KXmlOutStream {
 							_writer.write('>');
 						}
 						continue;
-					case '&':
-						_writer.write("&amp;");
-						continue;
+					case '&': _writer.write("&amp;"); continue;
 					case '\r': {
 						if (j < len && s.charAt(j + 1) == '\n') {
 							j++;
@@ -379,9 +345,7 @@ public class KXmlOutStream {
 					}
 					case '\t':
 					case '\n':
-					case ' ':
-						_writer.write(c); // default print char
-						continue;
+					case ' ': _writer.write(c);  continue; // default print char
 					default:
 						if (c < ' ') {
 							_writer.write("&#");
@@ -394,8 +358,7 @@ public class KXmlOutStream {
 			}
 			_writer.flush();
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
@@ -431,8 +394,8 @@ public class KXmlOutStream {
 							writeElementEnd(elem);
 						}
 					} catch (IOException ex) {
-						throw new SRuntimeException(//Program exception&{0}{: }
-							SYS.SYS036, STester.printThrowable(ex));
+						throw new SRuntimeException(SYS.SYS036,//Program exception&{0}{: }
+							STester.printThrowable(ex));
 					}
 					return;
 				}
@@ -469,13 +432,10 @@ public class KXmlOutStream {
 					_writer.write("?>");
 					_writer.flush();
 					return;
-				default:
-					//Can't write this node
-					throw new SRuntimeException(SYS.SYS093);
+				default: throw new SRuntimeException(SYS.SYS093); //Can't write this node
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		}
 	}
 
@@ -496,8 +456,8 @@ public class KXmlOutStream {
 				try {
 					_writer.flush();
 				} catch (IOException ex) {
-					throw new SRuntimeException(//Program exception&{0}{: }
-						SYS.SYS036, STester.printThrowable(ex));
+					//Program exception&{0}{: }
+					throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 				}
 			}
 		}
@@ -511,8 +471,7 @@ public class KXmlOutStream {
 				_writer.close();
 				_writer = null;
 			} catch (IOException ex) {
-				throw new SRuntimeException(//Program exception&{0}{: }
-					SYS.SYS036, STester.printThrowable(ex));
+				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{:}
 			}
 		}
 		_names.clear();

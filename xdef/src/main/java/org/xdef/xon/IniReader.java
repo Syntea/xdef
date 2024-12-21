@@ -32,37 +32,25 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public IniReader(final SBuffer source, final XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
+	public IniReader(final SBuffer source, final XonParser jp) {super(source); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public IniReader(final String source, final XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
+	public IniReader(final String source, final XonParser jp) {super(source); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source Reader with source data.
 	 */
-	public IniReader(final Reader source, final XonParser jp) {
-		super(source, new ArrayReporter());
-		_jp = jp;
-	}
+	public IniReader(final Reader source, final XonParser jp) {super(source, new ArrayReporter()); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source URL with source data.
 	 */
-	public IniReader(final URL source, final XonParser jp) {
-		super(source, new ArrayReporter(), 0);
-		_jp = jp;
-	}
+	public IniReader(final URL source, final XonParser jp) {super(source, new ArrayReporter(), 0); _jp = jp;}
 
 	public Object getValue() {return _jp.getResult();}
 
@@ -442,7 +430,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	@SuppressWarnings("unchecked")
 	public static final Element iniToXmlW(final Object ini) {
 		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX + ":"+XonNames.X_MAP, null).getDocumentElement();
+			XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null).getDocumentElement();
 		iniToXml((Map<String,Object>) ini, el);
 		return el;
 	}

@@ -12,7 +12,6 @@ import org.w3c.dom.Node;
 public class KXqueryExpr implements KXquery {
 	/** Implementation of XQuery expression. */
 	private static final KXquery XDS;
-
 	/** Executable XQuery engine. */
 	private final KXquery _impl;
 	/** Source string with XQuery expression. */
@@ -23,18 +22,16 @@ public class KXqueryExpr implements KXquery {
 		try {
 			Class<?> cls = Class.forName("org.xdef.impl.saxon.XQuerySaxonExpr");
 			x = (KXquery) cls.getConstructor().newInstance();
-		} catch (ClassNotFoundException | IllegalAccessException
-			| IllegalArgumentException | InstantiationException
-			| NoSuchMethodException | SecurityException
+		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+			| InstantiationException | NoSuchMethodException | SecurityException
 			| InvocationTargetException | Error ex) {
 			x = null;
 		}
 		XDS = x;
 	}
 
-	/** Creates a new instance of KXqueryExpr from other expression with
-	 * compiled new expression. The name space context, functions and variables
-	 * are retrieved  from the argument.
+	/** Creates a new instance of KXqueryExpr from other expression with compiled new expression.
+	 * The name space context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 */
 	public KXqueryExpr(String source) {
@@ -47,15 +44,12 @@ public class KXqueryExpr implements KXquery {
 	}
 
 	@Override
-	/** Creates a new instance of KXQueryExpr from other expression with
-	 * compiled new expression. The name space context, functions and variables
-	 * are retrieved  from the argument.
+	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression. The name
+	 * space context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */
-	public KXqueryExpr newExpression(final String source) {
-		return new KXqueryExpr(source);
-	}
+	public KXqueryExpr newExpression(final String source) {return new KXqueryExpr(source);}
 
 	@Override
 	/** Set implicit time zone.
@@ -99,8 +93,7 @@ public class KXqueryExpr implements KXquery {
 	 * @param value object to be bound.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void bindValue(final QName qname, final Object value)
-		throws SRuntimeException {
+	public void bindValue(final QName qname, final Object value) throws SRuntimeException {
 		if (_impl != null) {
 			_impl.bindValue(qname, value);
 		}
@@ -117,14 +110,11 @@ public class KXqueryExpr implements KXquery {
 	}
 
 	@Override
-	/** Execute XQuery expression and return result.
-	/* If result type is null then result types are checked in
+	/** Execute XQuery expression and return result. If result type is null then result types are checked in
 	 * following sequence:
 	 * @return object with result of XQuery expression.
 	 */
-	public Object evaluate() {
-		return _impl != null ? _impl.evaluate() : null;
-	}
+	public Object evaluate() {return _impl != null ? _impl.evaluate() : null;}
 
 	/** Get string with source expression.
 	 * @return string with source expression.
@@ -137,8 +127,7 @@ public class KXqueryExpr implements KXquery {
 	 * @return the result of evaluation as XQResultSequence object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static Object evaluate(final String expr, final Node node)
-		throws SRuntimeException {
+	public static Object evaluate(final String expr, final Node node) throws SRuntimeException {
 		return new KXqueryExpr(expr).evaluate(node);
 	}
 

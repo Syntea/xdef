@@ -29,50 +29,36 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public CsvReader(final SBuffer source, final XonParser jp) {
-		super(source);
-		_xp = jp;
-	}
+	public CsvReader(final SBuffer source, final XonParser jp) {super(source); _xp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public CsvReader(final String source, final XonParser jp) {
-		super(source);
-		_xp = jp;
-	}
+	public CsvReader(final String source, final XonParser jp) {super(source); _xp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source Reader with source data.
 	 */
-	public CsvReader(final Reader source, final XonParser jp) {
-		super(source, new ArrayReporter());
-		_xp = jp;
-	}
+	public CsvReader(final Reader source, final XonParser jp) {super(source, new ArrayReporter()); _xp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source URL with source data.
 	 */
-	public CsvReader(final URL source, final XonParser jp) {
-		super(source, new ArrayReporter(), 0);
-		_xp = jp;
-	}
+	public CsvReader(final URL source, final XonParser jp) {super(source, new ArrayReporter(), 0); _xp = jp;}
 
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Parse CSV from reader
 	 * @param source string with CSV data, filename, URL, File
 	 * @param separator value separator character.
-	 * @param skipHeader if true the header line is skipped.
+	 * @param skipHdr if true the header line is skipped.
 	 * @return list with parsed CSV data.
 	 */
-	public static final List<Object> parseCSV(final Object source,
-		final char separator,
-		final boolean skipHeader) {
-		return parseCSV(source, separator, skipHeader, null);
+	public static final List<Object> parseCSV(final Object source,final char separator,final boolean skipHdr){
+		return parseCSV(source, separator, skipHdr, null);
 	}
 
 	@SuppressWarnings("unchecked")

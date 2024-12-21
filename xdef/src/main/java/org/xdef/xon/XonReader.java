@@ -59,19 +59,13 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param jp parser of XON source.
 	 * @param source String with source data.
 	 */
-	public XonReader(final SBuffer source, XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
+	public XonReader(final SBuffer source, XonParser jp) {super(source); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of XON source.
 	 * @param source Reader with source data.
 	 */
-	public XonReader(final Reader source, XonParser jp) {
-		super(source, new ArrayReporter());
-		_jp = jp;
-	}
+	public XonReader(final Reader source, XonParser jp) {super(source, new ArrayReporter()); _jp = jp;}
 
 	/** Set mode for XON/JSON parsing (with comments). */
 	public final void setCommentsMode() {_acceptComments = true;}
@@ -357,20 +351,16 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				try {
 					switch(ch) {
-						case 'c': // character
-							return returnValue(spos, s.charAt(0));
+						case 'c': return returnValue(spos, s.charAt(0)); // character
 						case 'u': // URI
 							try {
 								return returnValue(spos, new URI(s));
 							} catch (URISyntaxException ex) {}
 							setIndex(pos);
 							break;
-						case 'e':
-							return returnValue(spos, new DefEmailAddr(s));
-						case 'b':
-							return returnValue(spos, SUtils.decodeBase64(s));
-						case 'x':
-							return returnValue(spos, SUtils.decodeHex(s));
+						case 'e': return returnValue(spos, new DefEmailAddr(s));
+						case 'b': return returnValue(spos, SUtils.decodeBase64(s));
+						case 'x': return returnValue(spos, SUtils.decodeHex(s));
 						case 'd':
 							return returnValue(spos, SDatetime.parse(s,
 								"yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
@@ -379,15 +369,13 @@ public final class XonReader extends StringParser implements XonParsers {
 								"|---dd[Z]"+ //day
 								"|yyyy-MM[Z]"+ // year month
 								"|yyyy[Z]")); // year
-						case 'p':
-							return returnValue(spos, new Price(s));
+						case 'p': return returnValue(spos, new Price(s));
 						case 'g':
 						case 'i':
 						case 'C':
 						case 't':
 						case 'P':
-						default:
-							return returnValue(spos, s);
+						default: return returnValue(spos, s);
 					}
 				} catch (SException ex) {}
 			}
@@ -405,32 +393,21 @@ public final class XonReader extends StringParser implements XonParsers {
 			if (_xonMode) {
 				if (floatNumber) {
 					switch(isOneOfChars("fDd")) {
-						case 'f':
-							return returnValue(spos, Float.valueOf(s));
-						case 'D':
-							return returnValue(spos, new BigDecimal(s));
+						case 'f': return returnValue(spos, Float.valueOf(s));
+						case 'D': return returnValue(spos, new BigDecimal(s));
 						case 'd':
-						default:
-							return returnValue(spos, Double.valueOf(s));
+						default: return returnValue(spos, Double.valueOf(s));
 					}
 				} else {
 					switch(isOneOfChars("lisbNfDd")) {
-						case 'l':
-							return returnValue(spos, Long.valueOf(s));
-						case 'i':
-							return returnValue(spos, Integer.valueOf(s));
-						case 's':
-							return returnValue(spos, Short.valueOf(s));
-						case 'b':
-							return returnValue(spos, Byte.valueOf(s));
-						case 'N':
-							return returnValue(spos, new BigInteger(s));
-						case 'f':
-							return returnValue(spos, Float.valueOf(s));
-						case 'D':
-							return returnValue(spos, new BigDecimal(s));
-						case 'd':
-							return returnValue(spos, Double.valueOf(s));
+						case 'l': return returnValue(spos, Long.valueOf(s));
+						case 'i': return returnValue(spos, Integer.valueOf(s));
+						case 's': return returnValue(spos, Short.valueOf(s));
+						case 'b': return returnValue(spos, Byte.valueOf(s));
+						case 'N': return returnValue(spos, new BigInteger(s));
+						case 'f': return returnValue(spos, Float.valueOf(s));
+						case 'D': return returnValue(spos, new BigDecimal(s));
+						case 'd': return returnValue(spos, Double.valueOf(s));
 						default:
 							try {
 								return returnValue(spos, Long.valueOf(s));
@@ -659,8 +636,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				error(JSON.JSON018); //Value in X-definition must be a string with X-script
 				if (jv != null) {
 					Object val = jv.getValue();
-					jv = new XonTools.JValue(jv.getPosition(),
-						val == null ? "null" : val.toString());
+					jv = new XonTools.JValue(jv.getPosition(), val == null ? "null" : val.toString());
 				}
 			}
 			_jp.putValue(jv);
@@ -677,10 +653,7 @@ public final class XonReader extends StringParser implements XonParsers {
 
 	@Override
 	/** Set mode that XON is parsed. */
-	public final void setXonMode() {
-		_jdef = false;
-		_acceptComments = _xonMode = true;
-	}
+	public final void setXonMode() {_jdef = false; _acceptComments = _xonMode = true;}
 
 	@Override
 	/** Set mode for strict JSON parsing (JSON, no comments). */
