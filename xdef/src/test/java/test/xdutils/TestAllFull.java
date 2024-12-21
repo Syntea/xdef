@@ -15,7 +15,7 @@ public class TestAllFull {
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String... args) {
+	public static final int runTests(final String... args) {
 		XDTester.setFulltestMode(true);
 		PrintStream log;
 		FileOutputStream fis = null;
@@ -62,7 +62,7 @@ public class TestAllFull {
 	/** Run all available tests in this package
 	 * @param args list of of arguments
 	 */
-	public static void main(String... args) {
+	public static final void main(final String... args) {
 		XDTester.setFulltestMode(true);
 		System.exit(runTests(args));
 	}

@@ -29,7 +29,7 @@ import test.common.xon.TestIni;
  */
 public class TestAll {
 
-	public static STester[] getTests() {
+	static final STester[] getTests() {
 		return new STester[] {
 			// sys
 			new TestReport(),
@@ -60,7 +60,7 @@ public class TestAll {
 	 * @param args The array of arguments.
 	 * @return  error code (number of errors).
 	 */
-	public static int runTests(String... args) {
+	public static final int runTests(final String... args) {
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
@@ -86,7 +86,7 @@ public class TestAll {
 	/** Run all available tests in this package.
 	 * @param args The array of arguments (not used).
 	 */
-	public static void main(String... args) {
+	public static final void main(final String... args) {
 		if (runTests(args) > 0) {System.exit(1);}
 	}
 }

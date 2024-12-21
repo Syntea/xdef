@@ -12,7 +12,7 @@ import org.xdef.sys.STester;
  */
 public class TestAll {
 
-	public static XDTester[] getTests() {
+	static final XDTester[] getTests() {
 		 return new XDTester[] {
 			new Test000(),
 			new Test001(),
@@ -44,7 +44,6 @@ public class TestAll {
 			new TestUserMethods(),
 			new TestUserQuery(),
 			new TestXComponents(),
-			new TestXDChecker(),
 			new TestXDGen(),
 			new TestXDService(),
 			new TestXSTypes(),
@@ -59,7 +58,7 @@ public class TestAll {
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String... args) {
+	public static final int runTests(final String... args) {
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
@@ -89,7 +88,7 @@ public class TestAll {
 	/** Run all basic tests
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public static final void main(final String... args) {
 		XDTester.setFulltestMode(false);
 		if (runTests(args) > 0) {System.exit(1);}
 	}

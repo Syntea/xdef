@@ -11,7 +11,7 @@ import test.XDTester;
  */
 public class TestAll {
 
-	public static XDTester[] getTests() {
+	static final XDTester[] getTests() {
 		 return new XDTester[] {
 			new TestDTDToXdef(),
 			new TestGenCollection(),
@@ -20,6 +20,7 @@ public class TestAll {
 			new TestParseType(),
 			new TestPrettyXdef(),
 			new TestValidate(),
+			new TestXDChecker(),
 			new TestXd2XsdConv(),
 			new TestXsd2XdConv(),
 		};
@@ -29,7 +30,7 @@ public class TestAll {
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String... args) {
+	public static final int runTests(final String... args) {
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
@@ -59,7 +60,7 @@ public class TestAll {
 	/** Run all available tests in this package
 	 * @param args list of of arguments
 	 */
-	public static void main(String... args) {
+	public static final void main(final String... args) {
 		XDTester.setFulltestMode(false);
 		System.exit(runTests(args));
 	}
