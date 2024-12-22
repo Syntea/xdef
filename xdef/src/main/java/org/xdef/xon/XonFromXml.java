@@ -88,7 +88,7 @@ class XonFromXml extends XonUtils {
 	}
 
 	/** Create XON/JSON object (array, map, or primitive value).
-	 * @param elem element from XDConstants.XON_NS_URI_XD name space with XON/JSON array, map,
+	 * @param elem element from XDConstants.XON_NS_URI_XD namespace with XON/JSON array, map,
 	 * or primitive value.
 	 * @return XON/JSON array, map, or primitive value.
 	 */
@@ -332,7 +332,7 @@ class XonFromXml extends XonUtils {
 // internal format
 ////////////////////////////////////////////////////////////////////////////////
 	/** Create XON/JSON array from array element.
-	 * @param elem array element from XDConstants.XON_NS_URI_XD name space.
+	 * @param elem array element from XDConstants.XON_NS_URI_XD namespace.
 	 * @return created XON/JSON array.
 	 */
 	private List<Object> createArrayW(final Element elem) {
@@ -348,7 +348,7 @@ class XonFromXml extends XonUtils {
 	}
 
 	/** Create XON/JSON object (map) from map element.
-	 * @param elem map element from XDConstants.XON_NS_URI_XD name space.
+	 * @param elem map element from XDConstants.XON_NS_URI_XD namespace.
 	 * @return created XON/JSON object (map).
 	 */
 	private Map<String, Object> createMapW(final Element elem) {

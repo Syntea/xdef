@@ -134,7 +134,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t/** Update parameters of XComponent."+LN+
 "\t * @param parent p XComponent."+LN+
 "\t * @param name name of element."+LN+
-"\t * @param ns name space."+LN+
+"\t * @param ns namespace."+LN+
 "\t * @param xPos XDPosition."+LN+
 "\t */"+LN : "") +
 "\tpublic void xInit(org.xdef.component.XComponent p,"+LN+

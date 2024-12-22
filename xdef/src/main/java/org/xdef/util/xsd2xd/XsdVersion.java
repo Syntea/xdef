@@ -6,7 +6,6 @@ import javax.xml.XMLConstants;
  * @author Ilia Alexandrov
  */
 public class XsdVersion {
-
 	/** XML Schema <code>1.0</code> version. */
 	public static final XsdVersion SCHEMA_1_0 =
 		new XsdVersion(Id.SCHEMA_1_0, XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -15,7 +14,7 @@ public class XsdVersion {
 	/** Version id. */
 	private final int _id;
 
-	/** Creates enumeration of XML Schema version with given namespace URI.
+	/** Create enumeration of XML Schema version with given namespace URI.
 	 * @param id version id.
 	 * @param nsURI version namespace URI.
 	 * @throws NullPointerException if given version namespace URI is null.

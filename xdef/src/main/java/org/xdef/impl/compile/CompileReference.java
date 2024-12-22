@@ -68,7 +68,7 @@ final class CompileReference extends XNode {
 	/** Creates a new instance of XReference.
 	 * @param kind type of object: XMREFERENCE or XMINCLUDE.
 	 * @param parent parent - X-definition or XArchive object.
-	 * @param nsURI name space URI of identifier.
+	 * @param nsURI namespace URI of identifier.
 	 * @param refName reference name.
 	 * @param position source position where the reference was specified.
 	 * @param xsel XSelector object.

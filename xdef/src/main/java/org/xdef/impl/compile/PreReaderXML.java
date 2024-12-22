@@ -45,7 +45,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	/** This method is called after all attributes of the current element attribute list was reached.
 	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
 	 * is invoked when parser reaches the end of the attribute list.
-	 * @param parsedElem contains name of the element, name space URI and the list of attributes.
+	 * @param parsedElem contains name of the element, namespace URI and the list of attributes.
 	 */
 	public final void elementStart(final KParsedElement parsedElem) {
 		String qName = parsedElem.getParsedName();

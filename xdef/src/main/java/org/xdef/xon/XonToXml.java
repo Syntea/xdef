@@ -53,7 +53,7 @@ class XonToXml extends XonTools {
 
 	/** Create and append new element and push context.
 	 * @param n node to which new element will be appended.
-	 * @param namespace name space URI.
+	 * @param namespace namespace URI.
 	 * @param tagname tag name of element.
 	 * @return created element.
 	 */
@@ -65,7 +65,7 @@ class XonToXml extends XonTools {
 		return e;
 	}
 
-	/** Append to node the element with XON/JSON name space.
+	/** Append to node the element with XON/JSON namespace.
 	 * @param n node where to append new element.
 	 * @param name local name of element.
 	 * @return created element.

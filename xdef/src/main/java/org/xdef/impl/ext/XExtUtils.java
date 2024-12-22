@@ -72,10 +72,10 @@ public final class XExtUtils {
 	 */
 	public static final boolean isXPath2Supported() {return XDFactory.isXPath2Supported();}
 
-	/**	Get name space URI of qualified name.
+	/**	Get namespace URI of qualified name.
 	 * @param qname qualified name
-	 * @param elem element where name space URI is searched.
-	 * @return name space URI or an empty string.
+	 * @param elem element where namespace URI is searched.
+	 * @return namespace URI or an empty string.
 	 */
 	public static final String getQnameNSUri(final String qname, final Element elem) {
 		byte xmlVersion = "1.1".equals(elem.getOwnerDocument().getXmlVersion())
@@ -88,10 +88,10 @@ public final class XExtUtils {
 		return getNSUri(prefix, elem);
 	}
 
-	/** Get name space URI of given prefix from the context of an element.
+	/** Get namespace URI of given prefix from the context of an element.
 	 * @param pfx string with the prefix.
 	 * @param elem the element.
-	 * @return name space URI.
+	 * @return namespace URI.
 	 */
 	public static final String getNSUri(final String pfx, final Element elem) {
 		Element el;
@@ -432,7 +432,9 @@ public final class XExtUtils {
 	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
-	public static final void cancel(final String msg) {throw new SError(Report.error(XDEF.XDEF906, msg));}
+	public static final void cancel(final String msg) {
+		throw new SError(Report.error(XDEF.XDEF906, msg)); //X-definition canceled&{0}{; }
+	}
 
 	/** Parse base64 data.
 	 * @param s base64 data
@@ -498,13 +500,13 @@ public final class XExtUtils {
 			return new DefContainer();
 		}
 		Element el = val.getElement();
-		DefXPathExpr xe = new DefXPathExpr(
-			exp, xel.getXXNamespaceContext(), xel.getXXFunctionResolver(), xel.getXXVariableResolver());
+		DefXPathExpr xe = new DefXPathExpr(exp,
+			xel.getXXNamespaceContext(), xel.getXXFunctionResolver(), xel.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
 	public static final XDContainer fromRoot(final XXNode xElem, final String exp, final Element elem) {
-		DefXPathExpr xe = new DefXPathExpr(
-			exp, xElem.getXXNamespaceContext(), xElem.getXXFunctionResolver(), xElem.getXXVariableResolver());
+		DefXPathExpr xe = new DefXPathExpr(exp,
+			xElem.getXXNamespaceContext(), xElem.getXXFunctionResolver(), xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
 	public static final XDContainer fromRoot(final XXNode xElem, final String expr) {
@@ -544,9 +546,7 @@ public final class XExtUtils {
 	}
 	public static final SDatetime parseEmailDate(final String x) {
 		StringParser p = new StringParser((x == null) ? "" : x.trim());
-		return p.isRFC822Datetime() && p.eos() &&
-			p.testParsedDatetime()
-			? p.getParsedSDatetime() : null;
+		return p.isRFC822Datetime() && p.eos() && p.testParsedDatetime() ? p.getParsedSDatetime() : null;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -663,7 +663,7 @@ public final class XExtUtils {
 	public static final BigDecimal subtract(final BigDecimal a, final long b) {
 		return a.subtract(new BigDecimal(b));
 	}
-	public static final BigDecimal subtract(final BigDecimal a, final double b){
+	public static final BigDecimal subtract(final BigDecimal a, final double b) {
 		return a.subtract(new BigDecimal(b));
 	}
 	public static final BigDecimal ulp(final BigDecimal a) {return a.ulp();}

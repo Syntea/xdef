@@ -14,8 +14,7 @@ public interface Convertor {
 	 * @throws IOException problems creating file.
 	 * @throws IllegalStateException current state does not support this method.
 	 */
-	void writeCollection(String collectionFileName)
-		throws IOException, IllegalStateException;
+	void writeCollection(String collectionFileName) throws IOException, IllegalStateException;
 
 	/** Creates collection and prints it to standart output. */
 	void printCollection();
@@ -23,23 +22,19 @@ public interface Convertor {
 	/** Creates directory with given name containing X-definition files.
 	 * @param directoryName name of directory.
 	 * @throws IOException exception during creating file.
-	 * @throws IllegalStateException if current state does not support this
-	 * method.
+	 * @throws IllegalStateException if current state does not support this method.
 	 */
-	void writeXdefFiles(String directoryName)
-		throws IOException, IllegalStateException;
+	void writeXdefFiles(String directoryName) throws IOException, IllegalStateException;
 
 	/** Returns Document object of collection.
 	 * @return Document object of collection.
-	 * @throws IllegalStateException if current state does not support this
-	 * method.
+	 * @throws IllegalStateException if current state does not support this method.
 	 */
 	Document getCollectionDocument() throws IllegalStateException;
 
 	/** Returns set of X-definitions Document objects.
 	 * @return set of X-definitions Document objects.
-	 * @throws IllegalStateException if current state does not support this
-	 * method.
+	 * @throws IllegalStateException if current state does not support this method.
 	 */
 	Set getXdefDocuments() throws IllegalStateException;
 }

@@ -53,7 +53,7 @@ public interface KXquery {
 	public Object evaluate() throws SRuntimeException;
 
 	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
-	 * The name space context, functions and variables are retrieved  from the argument.
+	 * The namespace context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */

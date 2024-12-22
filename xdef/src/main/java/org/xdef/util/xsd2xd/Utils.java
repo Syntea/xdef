@@ -14,7 +14,6 @@ import org.w3c.dom.NodeList;
  * @author Ilia Alexandrov
  */
 public class Utils {
-
 	/** Namespace URI for XML Schema 1.0. */
 	public static final String NSURI_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 	/** Local name for XML schema all element. */
@@ -77,7 +76,7 @@ public class Utils {
 	/** Private constructor. */
 	private Utils() {}
 
-	/** Returns namespace of given element according to settings in ancestor
+	/** Return namespace of given element according to settings in ancestor
 	 * schema. If namespace is not declared returns empty string.
 	 * @param element XML schema item element.
 	 * @return namespace or empty string.
@@ -89,8 +88,7 @@ public class Utils {
 			return "";
 		} else {
 			//is schema child
-			if (isSchemaChild(element)
-				|| DOMUtils.isChild(element, NSURI_SCHEMA, REDEFINE)) {
+			if (isSchemaChild(element) || DOMUtils.isChild(element, NSURI_SCHEMA, REDEFINE)) {
 				return targetNamespace;
 			} else {
 				String type = element.getLocalName();
@@ -118,8 +116,7 @@ public class Utils {
 	/** Returns true if given element (element or attribute) is set to be
 	 * qualified by default. If element is not XML schema attribute or element
 	 * declaration it throws exception.
-	 * @param element XML schema attribute or element
-	 * declaration.
+	 * @param element XML schema attribute or element declaration.
 	 * @return true if given node typoe is set to be qualified by default.
 	 */
 	public static boolean isQualifiedByDefault(Element element) {
@@ -129,67 +126,53 @@ public class Utils {
 				+ "schema attribute or element declaration");
 		}
 		return "qualified".equals(getSchemaElement(element)
-			.getAttribute(ATTRIBUTE.equals(localName)
-				? "attributeFormDefault" : "elementFormDefault"));
+			.getAttribute(ATTRIBUTE.equals(localName) ? "attributeFormDefault" : "elementFormDefault"));
 	}
 
 	/** Returns true if given node is a valid XML schema element.
 	 * @param node node to test.
 	 * @return true if given node is a valid XML schema element.
 	 */
-	public static boolean isSchema(Node node) {
-		return DOMUtils.isElement(node, NSURI_SCHEMA, SCHEMA);
-	}
+	public static boolean isSchema(Node node) {return DOMUtils.isElement(node, NSURI_SCHEMA, SCHEMA);}
 
 	/** Returns true if given node is a valid XML schema element child.
 	 * @param node node to test.
 	 * @return true if given node is a valid XML schema element child.
 	 */
-	public static boolean isSchemaChild(Node node) {
-		return DOMUtils.isChild(node, NSURI_SCHEMA, SCHEMA);
-	}
+	public static boolean isSchemaChild(Node node) {return DOMUtils.isChild(node, NSURI_SCHEMA, SCHEMA);}
 
 	/** Returns true if given node is element node, that is child of
-	 * XML Schema group element, that is child of schema
-	 * element.
+	 * XML Schema group element, that is child of schema element.
 	 * @param node testing node.
-	 * @return true if given node is element node, that is child of
-	 * XML Schema group element, that is child of schema
-	 * element.
+	 * @return true if given node is element node, that is child of XML Schema group element, that is child
+	 * of schema element.
 	 */
 	public static boolean isSchemaGroupChild(Node node) {
-		return (DOMUtils.isChild(node, NSURI_SCHEMA, GROUP)
-			&& isSchemaChild(node.getParentNode()));
+		return (DOMUtils.isChild(node, NSURI_SCHEMA, GROUP) && isSchemaChild(node.getParentNode()));
 	}
 
-	/** Returns true if given node is descendant of schema child, that
-	 * is attribute group declaration.
+	/** Returns true if given node is descendant of schema child, that is attribute group declaration.
 	 * @param node node to test.
-	 * @return true if given node is descendant of schema child, that
-	 * is attribute group declaration.
+	 * @return true if given node is descendant of schema child, that is attribute group declaration.
 	 */
 	public static boolean isSchemaDescendantAttrGroupChild(Node node) {
 		return isAttributeGroup(getSchemaChild(node));
 	}
 
-	/** Returns true if given node is XML schema
-	 * attributeGroup element.
+	/** Returns true if given node is XML schema attributeGroup element.
 	 * @param node node to test.
-	 * @return true if given node is XML schema
-	 * attributeGroup element.
+	 * @return true if given node is XML schema attributeGroup element.
 	 */
 	private static boolean isAttributeGroup(Node node) {
 		return DOMUtils.isElement(node, NSURI_SCHEMA, ATTRIBUTE_GROUP);
 	}
 
-	/** Recursive method that returns ancestor of given node that is schema
-	 * child.
+	/** Recursive method that returns ancestor of given node that is schema child.
 	 * @param schemaChildDescendant schema child descendant node.
 	 * @return schema child element.
 	 * @throws IllegalArgumentException if node is not a schema descendant.
 	 */
-	private static Element getSchemaChild(Node schemaChildDescendant)
-		throws IllegalArgumentException {
+	private static Element getSchemaChild(Node schemaChildDescendant) throws IllegalArgumentException {
 		//node is schema child
 		if (isSchemaChild(schemaChildDescendant)) {
 			return (Element) schemaChildDescendant;
@@ -198,8 +181,7 @@ public class Utils {
 		if (parent != null) {
 			return getSchemaChild(parent);
 		}
-		throw new IllegalArgumentException("Given node is not a schema "
-				+ "child descendant");
+		throw new IllegalArgumentException("Given node is not a schema child descendant");
 	}
 
 	/** Gets ancestor XML schema element of given node or throws exception.
@@ -207,20 +189,17 @@ public class Utils {
 	 * @return ancestor XML schema schema element.
 	 * @throws IllegalArgumentException if node is not a schema descendant.
 	 */
-	public static Element getSchemaElement(Node node)
-		throws IllegalArgumentException {
+	public static Element getSchemaElement(Node node) throws IllegalArgumentException {
 		return DOMUtils.getElement(node, NSURI_SCHEMA, SCHEMA);
 	}
 
 	/** Gets target namespace of schema element, that is ancestor of given node.
-	 * Returns empty string if schema does not have target namespace declared.
-	 * Throws exception if node is not a schema descendant.
+	 * Return empty string if schema does not have target namespace declared.
 	 * @param node schema descendant node.
 	 * @return target namespace URI or empty string.
 	 * @throws IllegalArgumentException if node is not a schema descendant.
 	 */
-	public static String getTargetNamespace(Node node)
-		throws IllegalArgumentException {
+	public static String getTargetNamespace(Node node) throws IllegalArgumentException {
 		return getSchemaElement(node).getAttribute("targetNamespace");
 	}
 
@@ -233,15 +212,13 @@ public class Utils {
 		return minOccurs.isEmpty() ? 1 : Integer.valueOf(minOccurs);
 	}
 
-	/** Gets maximal occurrence of given schema item. If is unbounded
-	 *  then returns -1.
+	/** Get maximal occurrence of given schema item. If is unbounded  then return -1.
 	 * @param schemaItem XML schema item.
 	 * @return maximal occurrence, -1 for unbounded.
 	 */
 	public static Integer getMaxOccurrence(Element schemaItem) {
 		String maxOccurs = schemaItem.getAttribute("maxOccurs");
-		return maxOccurs.isEmpty() ? 1 :
-			"unbounded".equals(maxOccurs) ? -1 : Integer.valueOf(maxOccurs);
+		return maxOccurs.isEmpty() ? 1 : "unbounded".equals(maxOccurs) ? -1 : Integer.valueOf(maxOccurs);
 	}
 
 	/** Gets set of URLs of imported schemas in given schema element.
@@ -251,17 +228,13 @@ public class Utils {
 	 * @throws MalformedURLException if cannot create URL.
 	 * @throws IllegalArgumentException if not supported type.
 	 */
-	private static Set<URL> getExternalSchemaURLs(URL schemaURL,
-		Element schemaElement, String type) throws MalformedURLException,
-		IllegalArgumentException {
-		if (!IMPORT.equals(type) && !INCLUDE.equals(type)
-			&& !REDEFINE.equals(type)) {
-			throw new IllegalArgumentException(
-				"Given type is not supported by this method");
+	private static Set<URL> getExternalSchemaURLs(URL schemaURL, Element schemaElement, String type)
+		throws MalformedURLException, IllegalArgumentException {
+		if (!IMPORT.equals(type) && !INCLUDE.equals(type) && !REDEFINE.equals(type)) {
+			throw new IllegalArgumentException("Given type is not supported by this method");
 		}
 		Set<URL> ret = new HashSet<URL>();
-		NodeList externals = DOMUtils.getChildElementsNS(schemaElement,
-			NSURI_SCHEMA, type);
+		NodeList externals = DOMUtils.getChildElementsNS(schemaElement, NSURI_SCHEMA, type);
 		for (int i = 0; i < externals.getLength(); i++) {
 			Element external = (Element) externals.item(i);
 			String schemaLocation = external.getAttribute("schemaLocation");
@@ -282,14 +255,13 @@ public class Utils {
 		return ret;
 	}
 
-	/** Creates URL from given URL context and given relative schema location.
+	/** Create URL from given URL context and given relative schema location.
 	 * @param parrentURL context URL.
 	 * @param schemaLocation relative position to given URL.
 	 * @return URL object.
 	 * @throws RuntimeException if cannot create URL.
 	 */
-	public static URL getURL(URL parrentURL, String schemaLocation)
-		throws RuntimeException {
+	public static URL getURL(URL parrentURL, String schemaLocation) throws RuntimeException {
 		String sourceBase;
 		String s = parrentURL.toExternalForm().replace('\\', '/');
 		int ndx = s.lastIndexOf('/');
@@ -310,8 +282,7 @@ public class Utils {
 		try {
 			return new URL(location);
 		} catch (MalformedURLException ex) {
-			throw new RuntimeException(
-				"Error creating URL from String: " + location, ex);
+			throw new RuntimeException("Error creating URL from String: " + location, ex);
 		}
 	}
 
@@ -321,8 +292,7 @@ public class Utils {
 	 * @return set of imported schema URLs.
 	 * @throws MalformedURLException if cannot create URL.
 	 */
-	public static Set getImportedSchemaURLs(URL schemaURL,
-		Element schemaElement) throws MalformedURLException {
+	public static Set getImportedSchemaURLs(URL schemaURL,Element schemaElement) throws MalformedURLException{
 		return getExternalSchemaURLs(schemaURL, schemaElement, IMPORT);
 	}
 
@@ -332,19 +302,19 @@ public class Utils {
 	 * @return set of included schema URLs.
 	 * @throws MalformedURLException if cannot create URL.
 	 */
-	public static Set<URL> getIncludedSchemaURLs(URL schemaURL,
-		Element schemaElement) throws MalformedURLException {
+	public static Set<URL> getIncludedSchemaURLs(URL schemaURL, Element schemaElement)
+		throws MalformedURLException {
 		return getExternalSchemaURLs(schemaURL, schemaElement, INCLUDE);
 	}
 
-	/** Gets all redefined schema URLs of given schema at given URL.
+	/** Get all redefined schema URLs of given schema at given URL.
 	 * @param schemaURL URL of schema element.
 	 * @param schemaElement schema element.
 	 * @return set of redefined schema URLs.
 	 * @throws MalformedURLException if cannot create URL.
 	 */
-	public static Set<URL> getRedefinedSchemaURLs(URL schemaURL,
-		Element schemaElement) throws MalformedURLException {
+	public static Set<URL> getRedefinedSchemaURLs(URL schemaURL, Element schemaElement)
+		throws MalformedURLException {
 		return getExternalSchemaURLs(schemaURL, schemaElement, REDEFINE);
 	}
 
@@ -355,25 +325,22 @@ public class Utils {
 	 * @return set of URLs of imported schemas.
 	 * @throws MalformedURLException if cannot create URL.
 	 */
-	public static Set<URL> getImportedSchemaURLs(URL schemaURL,
-		Element schemaElement, String namespace) throws MalformedURLException {
+	public static Set<URL> getImportedSchemaURLs(URL schemaURL, Element schemaElement, String namespace)
+		throws MalformedURLException {
 		Set<URL> ret = new HashSet<URL>();
-		NodeList imports = DOMUtils.getChildElementsNS(schemaElement,
-			NSURI_SCHEMA, IMPORT);
+		NodeList imports = DOMUtils.getChildElementsNS(schemaElement, NSURI_SCHEMA, IMPORT);
 		for (int i = 0; i < imports.getLength(); i++) {
 			Element importElement = (Element) imports.item(i);
 			String namespaceAttribute = importElement.getAttribute("namespace");
 			if (namespaceAttribute.equals(namespace)) {
-				String schemaLocation =
-					importElement.getAttribute("schemaLocation");
+				String schemaLocation = importElement.getAttribute("schemaLocation");
 				if (!"".equals(schemaLocation)) {
 					URL url = Utils.getURL(schemaURL, schemaLocation);
 					ret.add(url);
 				} else {
 					URL url;
 					try {
-						url = new URL(URLDecoder.decode(namespaceAttribute,
-							"UTF-8"));
+						url = new URL(URLDecoder.decode(namespaceAttribute, "UTF-8"));
 					} catch (Exception ex) {
 						url = new URL(namespaceAttribute);
 					}
@@ -392,7 +359,6 @@ public class Utils {
 	 * that is child of schema element.
 	 */
 	public static boolean isRedefineSchemaChild(Element element) {
-		return DOMUtils.isChild(element, NSURI_SCHEMA, REDEFINE)
-			&& isSchemaChild(element.getParentNode());
+		return DOMUtils.isChild(element, NSURI_SCHEMA, REDEFINE) && isSchemaChild(element.getParentNode());
 	}
 }

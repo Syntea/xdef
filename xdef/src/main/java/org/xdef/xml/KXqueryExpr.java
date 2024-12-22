@@ -31,7 +31,7 @@ public class KXqueryExpr implements KXquery {
 	}
 
 	/** Creates a new instance of KXqueryExpr from other expression with compiled new expression.
-	 * The name space context, functions and variables are retrieved  from the argument.
+	 * The namespace context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 */
 	public KXqueryExpr(String source) {
@@ -44,8 +44,8 @@ public class KXqueryExpr implements KXquery {
 	}
 
 	@Override
-	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression. The name
-	 * space context, functions and variables are retrieved  from the argument.
+	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
+	 * The namespace context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */
@@ -75,9 +75,7 @@ public class KXqueryExpr implements KXquery {
 	/** Get array with QNames of external variables
 	 * @return array with QNames of external variables or null.
 	 */
-	public QName[] getAllExternalVariables() {
-		return (_impl != null) ? _impl.getAllExternalVariables() : null;
-	}
+	public QName[] getAllExternalVariables() {return (_impl!=null) ? _impl.getAllExternalVariables() : null;}
 
 	@Override
 	/** Get array with QNames of unbound external variables

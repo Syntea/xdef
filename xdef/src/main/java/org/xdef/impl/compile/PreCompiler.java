@@ -126,7 +126,7 @@ public interface PreCompiler {
 	 */
 	public void reportNotAllowedAttrs(final PNode pnode);
 
-	/** Get attribute of given name with or without name space prefix from node. The attribute is removed from
+	/** Get attribute of given name with or without namespace prefix from node. The attribute is removed from
 	 * the list. If the argument required is set to true put error message that required attribute is missing.
 	 * @param pnode where to find attribute.
 	 * @param localName The local name of attribute.

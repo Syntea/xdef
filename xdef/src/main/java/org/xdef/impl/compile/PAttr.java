@@ -54,7 +54,7 @@ public final class PAttr {
 
 	@Override
 	/** Check another attribute if it is equal to this one. We consider
-	 * two attributes equal if both local names and name spaces are equal.
+	 * two attributes equal if both local names and namespaces are equal.
 	 * @param o The object to be compared.
 	 */
 	public boolean equals(final Object o) {

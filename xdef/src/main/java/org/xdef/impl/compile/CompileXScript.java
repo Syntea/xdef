@@ -110,7 +110,7 @@ final class CompileXScript extends CompileStatement {
 	/** Creates a new instance of CompileScript
 	 * @param g The code generator.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see org.xdef.impl.XConstants.XMLxx).
-	 * @param nsPrefixes array with name space prefixes.
+	 * @param nsPrefixes array with namespace prefixes.
 	 * @param clsLoader The Class loader (used for external objects).
 	 */
 	CompileXScript(final CompileCode g,

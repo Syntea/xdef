@@ -97,7 +97,7 @@ public class KParsedElement {
 	}
 
 	/** Get attribute with given raw name from the list.
-	 * @param nsURI name space URI.
+	 * @param nsURI namespace URI.
 	 * @param name local name or qualified name.
 	 * @return attribute with given name or null.
 	 */

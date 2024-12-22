@@ -337,10 +337,9 @@ public final class XdUtils {
 		return new XdDef(defName);
 	}
 
-	/** Returns set of models name space URIs contained in given X-definition
-	 * def element.
+	/** Returns set of models namespace URIs contained in given X-definition def element.
 	 * @param def X-definition def element.
-	 * @return set of (String) models name space URIs.
+	 * @return set of (String) models namespace URIs.
 	 */
 	public static Set<String> getModelsNS(final Element def) {
 		Set<String> namespaces = new HashSet<>();

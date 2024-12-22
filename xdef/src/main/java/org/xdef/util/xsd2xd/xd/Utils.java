@@ -28,15 +28,14 @@ public final class Utils extends KDOMUtils {
 	 */
 	public static KDOMBuilder getBuilder() {return BUILDER;}
 
-	/** Returns true if given node is element node and has same
-	 * name space as given name space and same local name as given local name.
+	/** Returns true if given node is element node and has same namespace as given namespace and same local
+	 * name as given local name.
 	 * @param node node to test.
-	 * @param namespace name space URI.
+	 * @param namespace namespace URI.
 	 * @param localName local name.
-	 * @return true if given node is element node and has same
-	 * name space as given name space and same local name as given local name.
-	 * @throws NullPointerException if given node or element local name is
-	 * null.
+	 * @return true if given node is element node and has same namespace as given namespace and same
+	 * local name as given local name.
+	 * @throws NullPointerException if given node or element local name is null.
 	 * @throws IllegalArgumentException if given element local name is empty.
 	 */
 	public static boolean isElement(Node node,
@@ -49,8 +48,7 @@ public final class Utils extends KDOMUtils {
 			throw new NullPointerException("Given element local name is null");
 		}
 		if (localName.length() == 0) {
-			throw new IllegalArgumentException(
-				"Given element local name is empty");
+			throw new IllegalArgumentException("Given element local name is empty");
 		}
 		return Node.ELEMENT_NODE ==
 			node.getNodeType() && namespace == null || "".equals(namespace)
@@ -59,15 +57,13 @@ public final class Utils extends KDOMUtils {
 				&& localName.equals(node.getLocalName());
 	}
 
-	/** Returns true if given child node is a valid child node
-	 * of parent element with given name space and given local name.
+	/** Returns true if given child node is a valid child node of parent element with given namespace
+	 * and given local name.
 	 * @param child child node to test.
-	 * @param namespace parent node name space URI.
+	 * @param namespace parent node namespace URI.
 	 * @param localName parent node local name.
-	 * @return true if given child node is a valid child node of parent
-	 * element with given name space and given local name.
-	 * @throws NullPointerException if given child node or parent node local
-	 * name is null.
+	 * @return true if given child node is a valid child node of parent element with namespace and local name.
+	 * @throws NullPointerException if given child node or parent node local name is null.
 	 * @throws IllegalArgumentException if parent node local name is empty.
 	 */
 	public static boolean isChild(Node child,
@@ -87,17 +83,15 @@ public final class Utils extends KDOMUtils {
 		return isElement(parent, namespace, localName);
 	}
 
-	/** Gets value of an attribute with given name space and given local name
-	 * contained in given node.
+	/** Gets value of an attribute with given namespace and given local name contained in given node.
 	 * @param node node to get attribute value from.
-	 * @param namespace attribute name space.
+	 * @param namespace attribute namespace.
 	 * @param localName attribute local name.
 	 * @return attribute value.
-	 * @throws NullPointerException if given node or attribute local name is
-	 * null.
+	 * @throws NullPointerException if given node or attribute local name is null.
 	 * @throws IllegalArgumentException if given attribute local name is empty
-	 * or given node is not an element node or if given node does not contain
-	 * attribute with such name space and local name.
+	 * or given node is not an element node or if given node does not contain attribute with such namespace
+	 * and local name.
 	 */
 	public static String getAttrValue(Node node,
 		String namespace,
@@ -129,17 +123,14 @@ public final class Utils extends KDOMUtils {
 		return attr.getValue();
 	}
 
-	/** Adds attribute node with given name space, given qualified name and
-	 * given value to given parent element.
+	/** Add attribute node with given namespace, qualified name, and value to parent element.
 	 * @param parent parent element to add attribute to.
-	 * @param namespace attribute name space.
+	 * @param namespace attribute namespace.
 	 * @param qName attribute qualified name.
 	 * @param value attribute value.
 	 * @return created and added attribute node.
-	 * @throws NullPointerException if given parent element or attribute
-	 * qualified name is null.
-	 * @throws IllegalArgumentException if given attribute qualified name
-	 * is empty.
+	 * @throws NullPointerException if given parent element or attribute qualified name is null.
+	 * @throws IllegalArgumentException if given attribute qualified name is empty.
 	 */
 	public static Attr addAttr(Element parent, String namespace, String qName,
 			String value) {
@@ -168,11 +159,9 @@ public final class Utils extends KDOMUtils {
 	 * @param name attribute name.
 	 * @param value attribute value.
 	 * @return created and added attribute node.
-	 * @throws NullPointerException if given parent element or attribute name
-	 * is null.
+	 * @throws NullPointerException if given parent element or attribute name is null.
 	 * @throws IllegalArgumentException if given attribute name is empty.
-	 * @throws RuntimeException if could not add name space declaration
-	 * attribute to given parent element.
+	 * @throws RuntimeException if could not add namespace declaration attribute to given parent element.
 	 */
 	public static Attr addAttr(Element parent, String name, String value) {
 		if (parent == null) {
@@ -235,15 +224,13 @@ public final class Utils extends KDOMUtils {
 		return new MyQName(prefix, localName).getQName();
 	}
 
-	/** Adds namespace declaration attribute with given prefix and namespace URI
-	 * to given element.
+	/** Add namespace declaration attribute with given prefix and namespace URI to given element.
 	 * @param element element to add namespace declaration.
-	 * @param prefix prefix of name space or null.
-	 * @param namespaceURI name space URI of name space.
-	 * @return name space declaration attribute declaration.
-	 * @throws NullPointerException if given element or name space URI is
-	 * null.
-	 * @throws IllegalArgumentException if given name space URI is empty.
+	 * @param prefix prefix of namespace or null.
+	 * @param namespaceURI namespace URI of namespace.
+	 * @return namespace declaration attribute declaration.
+	 * @throws NullPointerException if given element or namespace URI is null.
+	 * @throws IllegalArgumentException if given namespace URI is empty.
 	 */
 	public static Attr addNamespaceDecl(Element element,
 		String prefix,
@@ -268,15 +255,14 @@ public final class Utils extends KDOMUtils {
 		}
 	}
 
-	/** Adds name space declaration with given name space URI to given element
-	 * node and returns prefix for that name space declaration.
-	 * @param element element to add name space declaration.
-	 * @param namespaceURI name space URI of declaration.
-	 * @return name space prefix.
-	 * @throws RuntimeException if cannot add name space declaration.
+	/** Add namespace declaration with given namespace URI to element node and return prefix for that
+	 * namespace declaration.
+	 * @param element element to add namespace declaration.
+	 * @param namespaceURI namespace URI of declaration.
+	 * @return namespace prefix.
+	 * @throws RuntimeException if cannot add namespace declaration.
 	 */
-	public static String addNamespaceDeclaration(Element element,
-			String namespaceURI) throws RuntimeException {
+	public static String addNamespaceDeclaration(Element element,String namespaceURI) throws RuntimeException{
 		final String prefixes = "abcdefghijklmnopqrstuvwxyz";
 		for (int i = 0; i < prefixes.length(); i++) {
 			String prefix = prefixes.substring(i, i + 1);
@@ -333,16 +319,13 @@ public final class Utils extends KDOMUtils {
 		return MyQName.parseQName(qualifiedName);
 	}
 
-	/** Returns name space prefix of name space declaration with given
-	 * name space URI in given context element. If given element does not
-	 * contain name space declaration it looks in parent element.
+	/** Returns namespace prefix of namespace declaration with given namespace URI in given context element.
+	 * If given element does not contain namespace declaration it looks in parent element.
 	 * @param contextNode context node to search in.
-	 * @param namespaceURI name space URI of searched name space declaration.
-	 * @return prefix of name space declaration or null if there is
-	 * no such name space declaration.
-	 * @throws NullPointerException if given context element or name space URI
-	 * is null.
-	 * @throws IllegalArgumentException if given name space URI is empty.
+	 * @param namespaceURI namespace URI of searched namespace declaration.
+	 * @return prefix of namespace declaration or null if there is no such namespace declaration.
+	 * @throws NullPointerException if given context element or namespace URI is null.
+	 * @throws IllegalArgumentException if given namespace URI is empty.
 	 */
 	public static String getNSPrefix(Node contextNode, String namespaceURI) {
 		if (contextNode == null) {
@@ -357,13 +340,11 @@ public final class Utils extends KDOMUtils {
 		return getNSPrefixRec(contextNode, namespaceURI);
 	}
 
-	/** Returns name space prefix of name space declaration with given
-	 * name space URI in given context element. If given element does not
-	 * contain name space declaration it looks in parent element.
+	/** Return namespace prefix of namespace declaration with given namespace URI in given context element.
+	 * If given element does not contain namespace declaration it looks in parent element.
 	 * @param contextNode context node to search in.
-	 * @param namespaceURI name space URI of searched name space declaration.
-	 * @return prefix of name space declaration or null if there is
-	 * no such name space declaration.
+	 * @param namespaceURI namespace URI of searched namespace declaration.
+	 * @return prefix of namespace declaration or null if there is no such namespace declaration.
 	 */
 	private static String getNSPrefixRec(Node contextNode, String namespaceURI){
 		//get prefix in node
@@ -389,14 +370,12 @@ public final class Utils extends KDOMUtils {
 		return null;
 	}
 
-	/** Returns prefix of name space declaration with given name space URI
-	 * in given node.
+	/** Returns prefix of namespace declaration with given namespace URI in given node.
 	 * @param node node to search in.
-	 * @param namespaceURI name space URI of name space declaration.
-	 * @return prefix of given name space URI declaration if declaration exists,
-	 * empty string if name space is declared as default name space or
-	 * null if given node does not contain name space declaration with
-	 * given name space URI.
+	 * @param namespaceURI namespace URI of namespace declaration.
+	 * @return prefix of given namespace URI declaration if declaration exists, empty string if namespace
+	 * is declared as default namespace or null if given node does not contain namespace declaration with
+	 * given namespace URI.
 	 */
 	private static String getNSPrefixInNode(Node node, String namespaceURI) {
 		if (Node.ELEMENT_NODE == node.getNodeType()) {
@@ -415,15 +394,14 @@ public final class Utils extends KDOMUtils {
 		return null;
 	}
 
-	/** Returns true if given element node has attribute node with
-	 * given name space URI and given local name declaration.
+	/** Return true if given element node has attribute node with given namespace URI and given
+	 * local name declaration.
 	 * @param contextElem context element to search in.
-	 * @param attrNS attribute name space URI or null.
+	 * @param attrNS attribute namespace URI or null.
 	 * @param attrLocalName attribute local name.
 	 * @return true if given element node has attribute node with
-	 * given name space URI and given local name declaration.
-	 * @throws NullPointerException if given context element or attribute
-	 * local name is null.
+	 * given namespace URI and given local name declaration.
+	 * @throws NullPointerException if given context element or attribute local name is null.
 	 * @throws IllegalArgumentException if given attribute local name is empty.
 	 */
 	public static boolean hasAttrDecl(Element contextElem,

@@ -27,14 +27,14 @@ public interface XMElement extends XMNode {
 	 */
 	public XMNode[] getChildNodeModels();
 
-	/** Get model of attribute (no name space URI).
+	/** Get model of attribute (no namespace URI).
 	 * @param name name of attribute.
 	 * @return attribute model or null if attribute is hot specified.
 	 */
 	public XMData getAttr(String name);
 
-	/** Get model of attribute with name space URI.
-	 * @param nsURI name space URI of attribute or null.
+	/** Get model of attribute with namespace URI.
+	 * @param nsURI namespace URI of attribute or null.
 	 * @param name local name of attribute.
 	 * @return attribute model or null if attribute is hot specified.
 	 */

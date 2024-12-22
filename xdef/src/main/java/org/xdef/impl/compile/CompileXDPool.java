@@ -1404,7 +1404,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				case "list":
 					_precomp.chkNestedElements(pnode);
 					if (level == 1) {
-						//Node '&{0}' from the name space of X-definition is not allowed here
+						//Node '&{0}' from the namespace of X-definition is not allowed here
 						error(pnode._name, XDEF.XDEF265, pnode._localName);
 						return;
 					}
@@ -1422,7 +1422,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						new XVariableTable(_scriptCompiler._g._varBlock, ((XElement)newNode).getSqId());
 					((XElement) newNode).setSPosition(copySPosition(pnode._name));
 					if (level == 1) {
-						//Node '&{0}' from the name space of X-definition is not allowed here
+						//Node '&{0}' from the namespace of X-definition is not allowed here
 						error(pnode._name, XDEF.XDEF265, pnode._localName);
 						return;
 					}
@@ -1444,7 +1444,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					break;
 				default:
 					if (level > 1 || !"macro".equals(pnode._localName)) {
-						//Node '&{0}' from the name space of X-definition is not allowed here
+						//Node '&{0}' from the namespace of X-definition is not allowed here
 						error(pnode. _name, XDEF.XDEF265, xchildName);
 					}
 					return;

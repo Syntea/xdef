@@ -50,7 +50,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Creates a new instance of Definition
 	 * @param name name of definition.
 	 * @param xp XPool object.
-	 * @param uri Name space URI of X-definition.
+	 * @param uri Namespace URI of X-definition.
 	 * @param pos source position of X-definition.
 	 * @param ver XML version of X-definition source.
 	 */

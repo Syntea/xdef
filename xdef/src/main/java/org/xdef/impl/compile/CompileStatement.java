@@ -272,7 +272,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param g The code generator.
 	 * @param xmlVersion 10 -> ""1.0, 11 -> "1.1".
 	 * @param mode The compilation mode.
-	 * @param nsPrefixes array with name space prefixes.
+	 * @param nsPrefixes array with namespace prefixes.
 	 * @param classLoader The Class loader (used for external objects).
 	 */
 	CompileStatement(final CompileCode g,
@@ -324,7 +324,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * @param source buffer wit source code.
 	 * @param actDefName name of actually processed X-definition.
 	 * @param xdVersion version of X-definition.
-	 * @param nsPrefixes table with prefixes and name spaces.
+	 * @param nsPrefixes table with prefixes and namespaces.
 	 */
 	final void setSource(final SBuffer source,
 		final String actDefName,

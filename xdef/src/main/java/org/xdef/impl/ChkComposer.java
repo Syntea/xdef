@@ -1460,7 +1460,7 @@ final class ChkComposer extends SReporter {
 	 * when the composer is called from script.
 	 * @param reporter temporary reporter from script processor.
 	 * @param xdef the XDefinition.
-	 * @param nsURI Name space URI of the element.
+	 * @param nsURI Namespace URI of the element.
 	 * @param qname Qualified name of the element.
 	 * @param chkElem the ChkElement object from which the constructor was called.
 	 */

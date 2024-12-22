@@ -233,7 +233,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	/** This method is called after all attributes of the current element attribute list was reached.
 	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
 	 * is invoked when parser reaches the end of the attribute list.
-	 * @param parsedElem contains name of the element, name space URI and the list of attributes.
+	 * @param parsedElem contains name of the element, namespace URI and the list of attributes.
 	 */
 	abstract void elementStart(final KParsedElement parsedElem);
 	/** This method is invoked when parser reaches the end of element. */

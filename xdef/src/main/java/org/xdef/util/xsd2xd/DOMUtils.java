@@ -16,8 +16,7 @@ public class DOMUtils extends KDOMUtils {
 	 * @return URL representation of given namespace.
 	 * @throws Exception if cannot create URL from path.
 	 */
-	public static URL getURLFromNamespace(final String namespace)
-		throws Exception {
+	public static URL getURLFromNamespace(final String namespace) throws Exception {
 		return new URL(URLDecoder.decode(namespace, "UTF-8"));
 	}
 
@@ -29,13 +28,11 @@ public class DOMUtils extends KDOMUtils {
 		return schemaElement.getAttribute("xmlns");
 	}
 
-	/** Returns true if given node is element, has name as given name
-	 * and is in given namespace.
+	/** Returns true if given node is element, has name as given name and is in given namespace.
 	 * @param node node.
 	 * @param nsURI namespace URI
 	 * @param name local name.
-	 * @return true if given node is element, has name as given
-	 * name and is in given namespace.
+	 * @return true if given node is element, has name as given name and is in given namespace.
 	 */
 	public static boolean isElement(Node node, String nsURI, String name) {
 		String nodeFullName = node.getNodeName();
@@ -46,22 +43,18 @@ public class DOMUtils extends KDOMUtils {
 		} else {
 			localName = nodeFullName;
 		}
-		return (Node.ELEMENT_NODE == node.getNodeType() &&
-			localName.equals(name) &&
-			node.getNamespaceURI().equals(nsURI));
+		return (Node.ELEMENT_NODE == node.getNodeType() && localName.equals(name)
+			&& node.getNamespaceURI().equals(nsURI));
 	}
 
-	/** Gets ancestor element with given name and in given namespace of given
-	 * node.
+	/** Gets ancestor element with given name and in given namespace of given node.
 	 * @param context node.
 	 * @param nsURI namespace URI.
 	 * @param name local name.
-	 * @throws IllegalArgumentException node is not descendant of element with
-	 * given parameters
+	 * @throws IllegalArgumentException node is not descendant of element with given parameters
 	 * @return element.
 	 */
-	public static Element getElement(Node context, String nsURI, String name)
-		throws IllegalArgumentException {
+	public static Element getElement(Node context, String nsURI, String name) throws IllegalArgumentException {
 		if (isElement(context, nsURI, name)) {
 			return (Element) context;
 		}
@@ -72,20 +65,16 @@ public class DOMUtils extends KDOMUtils {
 			"of element with given namespace URI and local name");
 	}
 
-	/** Returns true if given node is child of element with given
-	 * namespace URI and given local name.
-	 * @param node      node.
-	 * @param nsURI     namespace URI of parent element.
+	/** Returns true if given node is child of element with given namespace URI and given local name.
+	 * @param node node.
+	 * @param nsURI namespace URI of parent element.
 	 * @param localName local name of parent element.
-	 * @return          true if given node is child of element with
-	 *                  given namespace URI and given local name.
+	 * @return true if given node is child of element with given namespace URI and given local name.
 	 */
 	public static boolean isChild(Node node, String nsURI, String localName) {
 		Node parent;
-		return (parent = node.getParentNode()) != null &&
-			parent.getNodeType() == Node.ELEMENT_NODE &&
-			parent.getNamespaceURI().equals(nsURI) &&
-			parent.getLocalName().equals(localName);
+		return (parent = node.getParentNode()) != null && parent.getNodeType() == Node.ELEMENT_NODE
+			&& parent.getNamespaceURI().equals(nsURI) && parent.getLocalName().equals(localName);
 	}
 
 	/** Gets prefix of given namespace URI in given element or null.
@@ -93,8 +82,7 @@ public class DOMUtils extends KDOMUtils {
 	 * @param namespaceURI namesapce URI.
 	 * @return prefix of namespace URI declaration or null.
 	 */
-	public static String getNamespaceDeclarationPrefix(Element element,
-		String namespaceURI) {
+	public static String getNamespaceDeclarationPrefix(Element element, String namespaceURI) {
 		NamedNodeMap attrs = element.getAttributes();
 		for (int i = 0; i < attrs.getLength(); i++) {
 			Attr attr = (Attr) attrs.item(i);
@@ -150,14 +138,12 @@ public class DOMUtils extends KDOMUtils {
 		}
 		for (int i = 0; i < prefixes.length(); i++) {
 			for (int j = 0; j < prefixes.length(); j++) {
-				String prefix = prefixes.substring(i, i + 1) +
-					prefixes.substring(j, j + 1);
+				String prefix = prefixes.substring(i, i + 1) + prefixes.substring(j, j + 1);
 				if (addNamespaceDeclaration(element, prefix, namespaceURI)) {
 					return prefix;
 				}
 			}
 		}
-		throw new RuntimeException("Could not add namespace declaration to " +
-			"given element node");
+		throw new RuntimeException("Could not add namespace declaration to given element node");
 	}
 }

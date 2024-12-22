@@ -1632,7 +1632,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * about attribute redefinition.
 	 * @param name The name of attribute.
 	 * @param data The value of attribute.
-	 * @param nsURI The value of name space URI.
+	 * @param nsURI The value of namespace URI.
 	 * @return true if attribute was created according to X-definition.
 	 */
 	public final boolean setAttribute(final String name, final String data, final String nsURI) {

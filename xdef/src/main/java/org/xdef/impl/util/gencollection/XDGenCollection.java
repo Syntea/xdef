@@ -381,7 +381,7 @@ public class XDGenCollection {
 	/** Check if given node is the XDEF element.
 	 * @param n node to be inspected.
 	 * @param name required name of element.
-	 * @return true if node is element with X-definition name space.
+	 * @return true if node is element with X-definition namespace.
 	 */
 	public static boolean isXdefElement(final Node n, final String name) {
 		return name.equals(n.getLocalName()) && isXdefElement(n);
@@ -389,7 +389,7 @@ public class XDGenCollection {
 
 	/** Check if XDEF attribute exists.
 	 * @param el element to be inspected.
-	 * @param xdUri name space URI of X-definition.
+	 * @param xdUri namespace URI of X-definition.
 	 * @param localname name of attribute
 	 * @return true if attribute with given local name exists.
 	 */
@@ -400,24 +400,21 @@ public class XDGenCollection {
 	/** Get attribute from an element (with or without prefix).
 	 * @param el element from which an attribute should be taken.
 	 * @param xdUri namespace URI of X-definition.
-	 * @param localname local name of attribute
+	 * @param localn local name of attribute
 	 * @param remove if true then the attribute is removed.
 	 * @return value of attribute or an empty string.
 	 */
-	static String getXdefAttr(final Element el,
-		final String xdUri,
-		final String localname,
-		final boolean remove) {
+	static String getXdefAttr(final Element el,final String xdUri,final String localn,final boolean remove) {
 		String result = "";
-		if (el.hasAttribute(localname)) {
-			result = el.getAttribute(localname).trim();
+		if (el.hasAttribute(localn)) {
+			result = el.getAttribute(localn).trim();
 			if (remove) {
-				el.removeAttribute(localname);
+				el.removeAttribute(localn);
 			}
-		} else if (el.hasAttributeNS(xdUri, localname)) {
-			result = el.getAttributeNS(xdUri, localname).trim();
+		} else if (el.hasAttributeNS(xdUri, localn)) {
+			result = el.getAttributeNS(xdUri, localn).trim();
 			if (remove) {
-				el.removeAttributeNS(xdUri, localname);
+				el.removeAttributeNS(xdUri, localn);
 			}
 		}
 		return result;
@@ -592,7 +589,7 @@ public class XDGenCollection {
 
 	/** Changes all XD:text elements to text nodes.
 	 * @param el inspected element
-	 * @param xdUri name space of X-definitions.
+	 * @param xdUri namespace of X-definitions.
 	 * @param defName name of actual X-definition.
 	 * @param removeActions if true all actions except validation are removed.
 	 */

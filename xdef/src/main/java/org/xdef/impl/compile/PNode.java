@@ -144,7 +144,7 @@ public final class PNode {
 	/** Get attribute of given name with X=definition name space.
 	 * If required attribute doesn't exist return null.
 	 * @param localName key name of attribute.
-	 * @param nsIndex The index of name space (0 == XDEF).
+	 * @param nsIndex The index of namespace (0 == XDEF).
 	 * @return the object SParsedData with the attribute value or null.
 	 */
 	final PAttr getAttrNS(final String localName, final int nsIndex) {
