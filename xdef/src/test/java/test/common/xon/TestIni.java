@@ -44,6 +44,29 @@ public class TestIni extends STester {
 "[selfupdate]\n" +
 "version=11.0.0.550";
 		assertEq("", test(s));
+		String data =
+" \t ###### comment 1 ########## \n" +
+"; comment 2\n" +
+" [X]\n" +
+"name = Novak \t\n\n" +
+"email =\t\n" +
+"  ;;;;;;comment 3 ;;;;;;;; \n" +
+"[X.Y]\n" +
+" IP = 255.0.0.0\n";
+		Map<String, Object> ini = XonUtils.parseINI(data);
+		data = "";
+		for (String section:  ini.keySet()) {
+			data += "[" + section + "]\n";
+			Map item = (Map) ini.get(section);
+			for (Object x:  item.keySet()) {
+				s = (String) item.get(x);
+				if (s == null) {
+					s = "";
+				}
+				data += x + "=" + s + '\n';
+			}
+		}
+		assertEq("[X]\nname=Novak\nemail=\n[X.Y]\nIP=255.0.0.0\n", data);
 	}
 
 	public static void main (String[] args) throws Exception {

@@ -54,7 +54,20 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	public Object getValue() {return _jp.getResult();}
 
+	private void skipSpacesAndComments() {
+		for (;;) {
+			isSpaces();
+			char c = getCurrentChar();
+			if (c != ';' &&  c != '#') {
+				return;
+			}
+			while (!eos() && nextChar() != '\n') {}
+		}
+	}
+
+
 	private SBuffer readLine() {
+		skipSpacesAndComments();
 		if (eos()) {
 			return null;
 		}
@@ -152,8 +165,9 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 			p.isSpaces();
 			spos = p.getPosition();
 			String val = "";
+			char c;
 			while (!p.eos()) {
-				char c = p.peekChar();
+				c = p.peekChar();
 				if (c == '\\') {
 					c = p.peekChar();
 					int i = "u\"\\/bfnrt01234567:".indexOf(c);
@@ -180,8 +194,16 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 					val += c;
 				}
 			}
-			if (val.isEmpty()) {
-				val = "null";
+			// remove spaces at the end of line
+			int len = val.length();
+			int i = len;
+			while (i > 0 && ((c=val.charAt(i-1)) == ' ' || c == '\n' || c == '\r' || c == '\t')) {
+				i--;
+			}
+			if (i == 0) {
+				val = null;
+			} else if (i < len) {
+				val = val.substring(0, i);
 			}
 			_jp.putValue(new XonTools.JValue(spos, val));
 			return true;
@@ -213,9 +235,9 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	/** Read INI file from source. */
 	private void readINI() {
-		isSpaces();
 		_jp.mapStart(this);
 		SBuffer prop;
+//		skipSpacesAndComments();
 		while (putProperty(prop = readPropText())) {}
 		while (prop != null) {
 			StringParser p = new StringParser(prop);
