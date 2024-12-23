@@ -54,20 +54,15 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	public Object getValue() {return _jp.getResult();}
 
-	private void skipSpacesAndComments() {
+	private SBuffer readLine() {
 		for (;;) {
 			isSpaces();
 			char c = getCurrentChar();
 			if (c != ';' &&  c != '#') {
-				return;
+				break;
 			}
 			while (!eos() && nextChar() != '\n') {}
 		}
-	}
-
-
-	private SBuffer readLine() {
-		skipSpacesAndComments();
 		if (eos()) {
 			return null;
 		}
@@ -237,7 +232,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	private void readINI() {
 		_jp.mapStart(this);
 		SBuffer prop;
-//		skipSpacesAndComments();
 		while (putProperty(prop = readPropText())) {}
 		while (prop != null) {
 			StringParser p = new StringParser(prop);
