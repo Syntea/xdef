@@ -52,8 +52,9 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 */
 	public IniReader(final URL source, final XonParser jp) {super(source, new ArrayReporter(), 0); _jp = jp;}
 
-	public Object getValue() {return _jp.getResult();}
-
+	/** Read source line, skip comment lines.
+	 * @return SBuffer with a line or return null.
+	 */
 	private SBuffer readLine() {
 		for (;;) {
 			isSpaces();
@@ -76,6 +77,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return new SBuffer(sb.toString(), spos);
 	}
 
+	/** Check if the line ends with backslash character.
+	 * @param s string with a line.
+	 * @return true if the line ends with backslash character.
+	 */
 	private static boolean endsWithBackslash(String s) {
 		int i = s.length() - 1;
 		for (; i <= 0; i--) {
@@ -90,6 +95,9 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return ((j - i) & 1) > 0;
 	}
 
+	/** Read text of proerty.
+	 * @return SBuffer with property or return null;
+	 */
 	private SBuffer readPropText() {
 		SBuffer sbuf = readLine();
 		if (sbuf == null) {
@@ -139,6 +147,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return null;
 	}
 
+	/** Put property to ini object.
+	 * @param s String with property.
+	 * @return true if a proprty was added to ini object.
+	 */
 	private boolean putProperty(SBuffer s) {
 		if (s == null || s.getString().charAt(0) == '[') {
 			return false;
@@ -200,6 +212,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	/** Parse INI/Properties from reader
 	 * @param in reader with source data.
 	 * @param sysId system ID
@@ -344,6 +357,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
+	/** Convert value object to string;
+	 * @param val object to be converted.
+	 * @return object converted to string
+	 */
 	private static String valueToString(final Object val) {
 		if (val == null) {
 			return "";
@@ -369,6 +386,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		sb.append('\n');
 	}
 
+	@SuppressWarnings("unchecked")
 	/** Create string with INI/Property source format.
 	 * @param map Map object with INI/Property data.
 	 * @return created string with INI/Property source.
@@ -393,15 +411,12 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return sb.toString();
 	}
 
-	public static final Element iniToXml(final Object ini) {
-		Document doc = KXmlUtils.newDocument(
-			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
-		Element el = doc.getDocumentElement();
-		iniToXml((Map<String,Object>) ini, el);
-		return el;
-	}
-
-	private static void iniToXml(final Map<String,Object> ini,final Element el){
+	@SuppressWarnings("unchecked")
+	/** Add ini object to XML element element.
+	 * @param ini ini object.
+	 * @param el XML element where to add items.
+	 */
+	private static void iniToXml(final Map<String,Object> ini, final Element el){
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			if (!((o = x.getValue()) instanceof Map)) {
@@ -432,9 +447,14 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-	public static final Element iniToXmlW(final Object ini) {
-		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null).getDocumentElement();
+	@SuppressWarnings("unchecked")
+	/** Create XML Element from object.
+	 * @param ini object wioth Windows ini data.
+	 */
+	public static final Element iniToXml(final Object ini) {
+		Document doc = KXmlUtils.newDocument(
+			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
+		Element el = doc.getDocumentElement();
 		iniToXml((Map<String,Object>) ini, el);
 		return el;
 	}
