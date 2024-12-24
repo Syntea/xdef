@@ -200,7 +200,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return false;
 	}
 
-//	@SuppressWarnings("unchecked")
 	/** Parse INI/Properties from reader
 	 * @param in reader with source data.
 	 * @param sysId system ID
@@ -370,7 +369,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		sb.append('\n');
 	}
 
-//	@SuppressWarnings("unchecked")
 	/** Create string with INI/Property source format.
 	 * @param map Map object with INI/Property data.
 	 * @return created string with INI/Property source.
@@ -395,7 +393,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return sb.toString();
 	}
 
-//	@SuppressWarnings("unchecked")
 	public static final Element iniToXml(final Object ini) {
 		Document doc = KXmlUtils.newDocument(
 			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
@@ -404,7 +401,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return el;
 	}
 
-//	@SuppressWarnings("unchecked")
 	private static void iniToXml(final Map<String,Object> ini,final Element el){
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
@@ -436,7 +432,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-//	@SuppressWarnings("unchecked")
 	public static final Element iniToXmlW(final Object ini) {
 		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null).getDocumentElement();
