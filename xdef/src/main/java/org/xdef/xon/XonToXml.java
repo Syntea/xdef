@@ -50,7 +50,6 @@ class XonToXml extends XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // XON/JSON to XML (X-detinition format)
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create and append new element and push context.
 	 * @param n node to which new element will be appended.
 	 * @param namespace namespace URI.
@@ -91,8 +90,7 @@ class XonToXml extends XonTools {
 
 	/** Set attribute to element,
 	 * @param e element where to set attribute.
-	 * @param name name of attribute {if there is colon and namespace is null
-	 * then replace colon with "_x3a_"}
+	 * @param name name of attribute {if there is colon and namespace is null replace colon with "_x3a_"}
 	 * @param s string with value of attribute.
 	 */
 	private void setAttr(final Element e, final String name, final Object v) {
@@ -130,7 +128,7 @@ class XonToXml extends XonTools {
 			if (x instanceof Map) {
 				Map m = (Map) x;
 				Map.Entry en;
-				if (m.size()==1 && isSimpleValue((en=(Map.Entry) m.entrySet().iterator().next()).getValue())){
+				if (m.size()==1 && isSimpleValue((en=(Map.Entry)m.entrySet().iterator().next()).getValue())) {
 					Element e = addXonElem(elem, X_MAP);
 					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
 					_ns.popContext();
@@ -172,8 +170,8 @@ class XonToXml extends XonTools {
 		}
 	}
 
-	/** If all items of the array are simple values or arrays with simple values
-	 * return the string with the array. Otherwise, return null.
+	/** If all items of the array are simple values or arrays with simple values return string with the array.
+	 * Otherwise, return null.
 	 * @param list the array to be converted.
 	 * @param mode flag if to generate it to an attribute, text node or JList.
 	 * @return the string with array representation or null.
@@ -232,7 +230,7 @@ class XonToXml extends XonTools {
 			Map m = (Map) array.get(0);
 			if (len == 1) {
 				if (m.isEmpty()) {
-					//this is special case: the map is not interporeted as attrs so it will be empty element
+					//this is special case: the map is not interpreted as attrs so it will be an empty element
 					return;
 				}
 				e = addXonElem(elem, X_ARRAY);
@@ -302,7 +300,7 @@ class XonToXml extends XonTools {
 				}
 			}
 			Element ee = elem;
-			// if in the map are not simple items, so generate the map element with those items
+			// if in the map are not simple items generate the map element with those items
 			if (genMap) {
 				if (m.size() != 1) {
 					ee = addXonElem(elem, X_MAP);
@@ -333,12 +331,12 @@ class XonToXml extends XonTools {
 						addElem(elem, namespace, name);
 						_ns.popContext();
 					} else {
-						//add to element this map and remaining items from array
+						//add this map and remaining items from array to element
 						addArrayItems(elem, array, 1);
 					}
 				} else {
 					if (m.isEmpty()) {
-						// if map is empty nothing was generated yet, so add map
+						// if map is empty nothing was generated yet add map
 						addXonElem(elem, X_MAP);
 						_ns.popContext();
 					}
@@ -354,8 +352,7 @@ class XonToXml extends XonTools {
 				}
 				return;
 			} else {
-				if (array.size() >= 1 && (array.get(0) instanceof Map)
-					&& ((Map)array.get(0)).isEmpty()) {
+				if (array.size() >= 1 && (array.get(0) instanceof Map) && ((Map)array.get(0)).isEmpty()) {
 					addArrayItems(elem, array, 0); //force generation of empty map
 				} else {//map was generated
 					addArrayItems(elem, array, 1);
@@ -494,8 +491,8 @@ class XonToXml extends XonTools {
 				Map.Entry entry = (Map.Entry) x;
 				String name = (String) entry.getKey();
 				Object y = entry.getValue();
-				if (isSimpleValue(y) && name.startsWith("xmlns")) {
-					setAttr(e, name, y); // set only xmlns attributes
+				if (isSimpleValue(y) && name.startsWith("xmlns")) { // set only xmlns attributes
+					setAttr(e, name, y);
 				} else {
 					allXmlns = false;
 				}

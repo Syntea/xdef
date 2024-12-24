@@ -56,7 +56,7 @@ class XonToString extends XonTools {
 					return num;
 				} else if (x instanceof Double) {
 					return num.indexOf('.') < 0 && num.indexOf('e') < 0 && num.indexOf('E') < 0
-						?  num + 'd' : num;
+						? num + 'd' : num;
 				} else if (x instanceof Float) {
 					return num + 'f';
 				} else if (x instanceof Byte) {
@@ -191,11 +191,9 @@ class XonToString extends XonTools {
 		final StringBuilder sb,
 		final boolean xon) {
 		if (obj instanceof List) {
-			List x = (List) obj;
-			arrayToString(x, indent, sb, xon);
+			arrayToString((List) obj, indent, sb, xon);
 		} else if (obj instanceof Map) {
-			Map x = (Map) obj;
-			mapToString(x, indent, sb, xon);
+			mapToString((Map) obj, indent, sb, xon);
 		} else {
 			sb.append(valueToString(obj, xon));
 		}
@@ -282,7 +280,6 @@ class XonToString extends XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // XON to JSON contertor
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Convert XON array to JSON.
 	 * @param xlist XON array.
 	 * @return XON array converted to JSON.

@@ -49,8 +49,6 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	public CsvReader(final URL source, final XonParser jp) {super(source, new ArrayReporter(), 0); _xp = jp;}
 
-////////////////////////////////////////////////////////////////////////////////
-
 	/** Parse CSV from reader
 	 * @param source string with CSV data, filename, URL, File
 	 * @param separator value separator character.
@@ -191,7 +189,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // CVS to String
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create line with CSV data.
 	 * @param csvLine the array with CSV data from a row.
 	 * @param sb StringBuilder to which line is added.
@@ -252,7 +249,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // CSV to XML
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XML element with CSV data.
 	 * @param csv object with CSV data.
 	 * @return Element created from CSV data.
@@ -277,7 +273,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // XML to CSV
 ////////////////////////////////////////////////////////////////////////////////
-
 	@SuppressWarnings("unchecked")
 	/** Create CSV object from XML element.
 	 * @param el element from which the CSV object is created.
@@ -291,7 +286,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Parse INI/Properties source data.
 	 * @throws SRuntimeException if an error occurs,

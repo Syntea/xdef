@@ -41,6 +41,10 @@ public final class XonYaml {
 		}
 	}
 
+	/** Create string from YAML object.
+	 * @param o YAML object.
+	 * @return string creasted from YAML object.
+	 */
 	public static final String toYamlString(final Object o) {
 		prepareYAML();
 		try {
@@ -51,11 +55,19 @@ public final class XonYaml {
 		}
 	}
 
+	/** Parse YAML string and return YAML object.
+	 * @param source  string with YAML source or file name,
+	 * @return parsed  YAML object.
+	 */
 	public static final Object parseYAML(final String source) {
 		XonTools.InputData x = XonTools.getInputFromObject(source, null);
 		return x._reader != null ? parseYAML(x._reader) : parseYAML(x._in);
 	}
 
+	/** Parse YAML source and return YAML object.
+	 * @param source reader with YAML source,
+	 * @return parsed  YAML object.
+	 */
 	public static final Object parseYAML(final Reader source) {
 		prepareYAML();
 		try {
@@ -66,6 +78,10 @@ public final class XonYaml {
 		}
 	}
 
+	/** Parse YAML source and return YAML object.
+	 * @param source input stram with YAML source,
+	 * @return parsed  YAML object.
+	 */
 	public static final Object parseYAML(final InputStream source) {
 		prepareYAML();
 		try {
