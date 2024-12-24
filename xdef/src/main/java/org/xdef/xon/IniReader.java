@@ -135,6 +135,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 			}
 			return new SBuffer(s, spos);
 		}
+		error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 		return null;
 	}
 
@@ -199,7 +200,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	/** Parse INI/Properties from reader
 	 * @param in reader with source data.
 	 * @param sysId system ID
@@ -369,7 +370,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		sb.append('\n');
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	/** Create string with INI/Property source format.
 	 * @param map Map object with INI/Property data.
 	 * @return created string with INI/Property source.
@@ -394,22 +395,22 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return sb.toString();
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	public static final Element iniToXml(final Object ini) {
-		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
+		Document doc = KXmlUtils.newDocument(
+			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
 		Element el = doc.getDocumentElement();
 		iniToXml((Map<String,Object>) ini, el);
 		return el;
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	private static void iniToXml(final Map<String,Object> ini,final Element el){
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			if (!((o = x.getValue()) instanceof Map)) {
-				Element item = el.getOwnerDocument().createElementNS(XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_VALUE);
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_VALUE);
 				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(x.getKey()));
 				String s;
 				if (o == null) {
@@ -426,8 +427,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			if ((o = x.getValue()) instanceof Map) {
-				Element item = el.getOwnerDocument().createElementNS(XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
 				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(x.getKey()));
 				iniToXml((Map<String, Object>) o, item);
 				el.appendChild(item);
@@ -435,7 +436,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	public static final Element iniToXmlW(final Object ini) {
 		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null).getDocumentElement();
