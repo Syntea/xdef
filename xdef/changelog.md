@@ -1,8 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.16, release-date 2024-12-23
+# Version 42.2.16, release-date 2024-12-24
 * Fixed a bug in the Windows ini parser where white characters were not being skipped to the end of the line.
-* Fixed a bug in the Windows ini parser that did not skip comment lines (starting with '#' or ";").
+* Fixed a bug in the Windows ini parser that did not skip comment lines (starting with '#').
 
 # Version 42.2.15, release-date 2024-12-13
 * Fixed bug in construction mode with recursive reference to element model.

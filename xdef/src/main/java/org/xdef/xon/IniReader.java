@@ -57,11 +57,13 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	private SBuffer readLine() {
 		for (;;) {
 			isSpaces();
-			char c = getCurrentChar();
-			if (c != ';' &&  c != '#') {
+			if (!isChar('#')) {
 				break;
 			}
-			while (!eos() && nextChar() != '\n') {}
+			// skip comment lins
+			while (!eos() && !isNewLine()) {
+				nextChar();
+			}
 		}
 		if (eos()) {
 			return null;
@@ -89,26 +91,16 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	}
 
 	private SBuffer readPropText() {
-		SBuffer sbuf;
-		StringParser p;
-		for(;;) {
-			sbuf = readLine();
-			if (sbuf == null) {
-				return null;
-			}
-			p = new StringParser(sbuf);
-			p.isSpaces();
-			if (!p.eos() && !(p.isChar('#') || p.isChar('!') || p.isChar(';'))) {
-				break;
-			}
+		SBuffer sbuf = readLine();
+		if (sbuf == null) {
+			return null;
 		}
+		StringParser p = new StringParser(sbuf);
+		p.isSpaces();
 		if (p.getCurrentChar() == '[') {
 			return new SBuffer(p.getUnparsedBufferPart(), p.getPosition());
 		}
-		while (!p.eos() && p.getCurrentChar() != '=') {
-			p.peekChar();
-		}
-		if (p.isChar('=')) {
+		if (p.findChar('=')) {
 			p.isSpaces();
 			SPosition spos = p.getPosition();
 			String s = p.getSourceBuffer();
