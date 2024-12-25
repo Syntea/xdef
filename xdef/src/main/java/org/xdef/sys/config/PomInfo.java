@@ -23,8 +23,24 @@ import java.util.Properties;
  * All items must be one-lined or in the format of java.util.Properties.
  */
 public class PomInfo {
+	private String groupId             = null;
+	private String artifactId          = null;
+	private String version             = null;
+	private String name                = null;
+	private String description         = null;
+	private String releaseDate         = null;
+	private String buildTimestamp      = null;
+	private String gitTags             = null;
+	private String gitBranch           = null;
+	private String gitDirty            = null;
+	private String gitCommitId         = null;
+	private String gitCommitIdAbbrev   = null;
+	private String gitCommitTime       = null;
+	private static final String     POMINFOPROPSNAME = "pominfo.properties";
+	/** singleton instance */
+	public static final PomInfo     POMINFO          = new PomInfo();
 
-	/** init instance - load pominfo.properties. */
+	/** Create PomInfo instance - load pominfo.properties. */
 	public PomInfo() {
 		try {
 			InputStream ppIs = PomInfo.class.getResourceAsStream(POMINFOPROPSNAME);
@@ -106,23 +122,4 @@ public class PomInfo {
 	public String getGitCommitIdAbbrev() {return gitCommitIdAbbrev;}
 
 	public String getGitCommitTime() {return gitCommitTime;}
-
-
-	private String groupId             = null;
-	private String artifactId          = null;
-	private String version             = null;
-	private String name                = null;
-	private String description         = null;
-	private String releaseDate         = null;
-	private String buildTimestamp      = null;
-	private String gitTags             = null;
-	private String gitBranch           = null;
-	private String gitDirty            = null;
-	private String gitCommitId         = null;
-	private String gitCommitIdAbbrev   = null;
-	private String gitCommitTime       = null;
-
-	private static final String     POMINFOPROPSNAME = "pominfo.properties";
-	/** singleton instance */
-	public static final PomInfo     POMINFO          = new PomInfo();
 }

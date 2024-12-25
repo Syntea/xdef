@@ -52,10 +52,10 @@ public class TestIni extends STester {
 	public void test() {
 		String s =
 "address=dhcp\n" +
-"dns = 192.168.1.1\n"  +
-"name = John E\\\n"+
-" . \\\n"  +
-" Smith\n"  +
+"dns = 192.168.1.1\n" +
+"name = John E\\\n" +
+" . \\\n" +
+" Smith\n" +
 "  parser.factor.1=')' \\u00E9 esperado.\n" +
 "servertool.serverup=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
 		assertEq("", test(s));
@@ -77,13 +77,13 @@ public class TestIni extends STester {
 "# comment 2\n" +
 " \n" +
 " [X]\n" +
-" \n" +
+"#\n" +
 "name = Novak \t\n\n" +
 "email =\t\n" +
 "  #;;;;;comment 3 ;;;;;;;; \t \n" +
 " [X.Y] \t \n" +
-" IP = 255.0.0.0\n" +
-" \n";
+" IP = 255.0.0.0 \n \n" +
+"######\n";
 		s = MapToIni(XonUtils.parseINI(s));
 		assertEq("[X]\nname=Novak\nemail=\n[X.Y]\nIP=255.0.0.0\n", s);
 		s = "#\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]\n#";

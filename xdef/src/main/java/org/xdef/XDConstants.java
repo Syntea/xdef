@@ -3,35 +3,23 @@ package org.xdef;
 import org.xdef.sys.config.PomInfo;
 
 /** Important constants used by X-definition.
- * Note the constants with the name starting with prefix "XDPROPERTY" are names of properties.
- * To each such constant are also defined the constants with the name starting with prefix "XDPROPERTYVALUE"
- * and there are defined the valid values of a respective property.
- * @author Vaclav Trojan
+ * Note that constants with a name starting with the prefix "XDPROPERTY" are property names.  There are also
+ * constants defined for each constant with a name starting with the prefix "XDPROPERTYVALUE", and there are
+ * constants with a name starting with the prefix "XDPROPERTYVALUE" to which the corresponding property value
+ * options are defined.
+  @author Vaclav Trojan
  */
 public interface XDConstants {
-
 ////////////////////////////////////////////////////////////////////////////////
 // Properties
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Property defines debug mode (default is false).*/
 	public static final String XDPROPERTY_DEBUG = "xdef_debug";
 	/** Value "true" of property "xdef_debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_TRUE = "true";
 	/** Value "false" of property "xdef_debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_FALSE = "false";
-	/** Property defines stream used for debug output (default is stdOut). */
-	public static final String XDPROPERTY_DEBUG_OUT = "xdef_debug_out";
-	/** Property defines stream used for debug input (default is stdIn). */
-	public static final String XDPROPERTY_DEBUG_IN = "xdef_debug_in";
 
-	/** Property defines debug editor class name.*/
-	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef_debugeditor";
-	/** Property defines X-definition editor class name.*/
-	public static final String XDPROPERTY_XDEF_EDITOR = "xdef_editor";
-
-	/** Property defines X-definition external editor class name.*/
-	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef_exteditor";
 	/** Property defines if XML DOCTYPE is permitted (default is "true"). */
 	public static final String XDPROPERTY_DOCTYPE = "xdef_doctype";
 	/** Value "false" of property "xdef_doctype" */
@@ -60,14 +48,31 @@ public interface XDConstants {
 	/** Value "false" of property "xdef_warnings" - warnings not generated.*/
 	public static final String XDPROPERTYVALUE_WARNINGS_FALSE = "false";
 
+	/** Property defines if the actual reporter is cleared in the invoked
+	 * action 'onFalse', 'onIllegalAttr', 'onIllegalText',
+	 * 'onEllegalElement'. Default value is 'true'*/
+	public static final String XDPROPERTY_CLEAR_REPORTS = "xdef_clearReports";
+	/** Value "true" of property "xdef_clearReports" */
+	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_TRUE = "true";
+	/** Value "false" of property "xdef_clearReports" */
+	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_FALSE = "false";
+
+	/** Property defines if unresolved external methods are reported (used
+	 * for syntax checking of X-definition (default is "false"). */
+	public static final String XDPROPERTY_IGNORE_UNDEF_EXT = "xdef_ignoreUnresolvedExternals";
+	/** Value "true" of property "xdef_ignoreUnresolvedExternals" */
+	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE = "true";
+	/** Value "false" of property "xdef_ignoreUnresolvedExternals" */
+	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE = "false";
+
 	/** Property defines debug mode (default is false).*/
 	public static final String XDPROPERTY_DISPLAY = "xdef_display";
 	/** Value "true" of property "xdef_display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_TRUE = "true";
-	/** Value "errors" of property "xdef_display" */
-	public static final String XDPROPERTYVALUE_DISPLAY_ERRORS = "errors";
 	/** Value "false" of property "xdef_display" */
 	public static final String XDPROPERTYVALUE_DISPLAY_FALSE = "false";
+	/** Value "errors" of property "xdef_display" */
+	public static final String XDPROPERTYVALUE_DISPLAY_ERRORS = "errors";
 
 	/** Property defines minimal valid year of date (default is no minimum). */
 	public static final String XDPROPERTY_MINYEAR = "xdef_minyear";
@@ -77,31 +82,27 @@ public interface XDConstants {
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
 	/** Property defines default time zone.*/
 	public static final String XDPROPERTY_DEFAULTZONE = "xdef_defaultZone";
-	/** Property defines if the actual reporter is cleared in the invoked
-	 * action 'onFalse', 'onIllegalAttr', 'onIllegalText',
-	 * 'onEllegalElement'. Default value is 'true'*/
-	public static final String XDPROPERTY_CLEAR_REPORTS = "xdef_clearReports";
-	/** Value "true" of property "xdef_clearReports" */
-	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_TRUE = "true";
-	/** Value "false" of property "xdef_clearReports" */
-	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_FALSE = "false";
-	/** Property defines if unresolved external methods are reported (used
-	 * for syntax checking of X-definition (default is "false"). */
-	public static final String XDPROPERTY_IGNORE_UNDEF_EXT = "xdef_ignoreUnresolvedExternals";
-	/** Value "true" of property "xdef_ignoreUnresolvedExternals" */
-	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE = "true";
-	/** Value "false" of property "xdef_ignoreUnresolvedExternals" */
-	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE = "false";
 
 	/** Prefix of property names for setting of message table files. */
 	public static final String XDPROPERTY_MESSAGES = "xdef_msg_";
 	/** Name of property for setting language of messages. */
 	public static final String XDPROPERTY_MSGLANGUAGE = "xdef_language";
 
+	/** Property defines debug editor class name.*/
+	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef_debugeditor";
+	/** Property defines X-definition editor class name.*/
+	public static final String XDPROPERTY_XDEF_EDITOR = "xdef_editor";
+	/** Property defines X-definition external editor class name.*/
+	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef_exteditor";
+
+	/** Property defines stream used for debug output (default is stdOut). */
+	public static final String XDPROPERTY_DEBUG_OUT = "xdef_debug_out";
+	/** Property defines stream used for debug input (default is stdIn). */
+	public static final String XDPROPERTY_DEBUG_IN = "xdef_debug_in";
+
 //////////////////////////////////////////////////////////////////////////////////
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** URI of w3c XLink */
 	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
 	/** URI of w3c XInclude */
@@ -110,7 +111,6 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // X-definition
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Recommended namespace prefix used for X-definition nodes. */
 	public static final String XDEF_NS_PREFIX = "xd";
 	/** URI of X-definition 3.1. */
@@ -130,7 +130,6 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // XON/JSON/INI
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Recommended namespace prefix used for XON/JSON/INI XML format. */
 	public static final String XON_NS_PREFIX = "jx";
 	/** URI of XON/JSON/INI XML X-definition conversion. */
@@ -139,18 +138,16 @@ public interface XDConstants {
 	public static final String XON_NS_URI_W="http://www.xdef.org/xon/4.0/w";
 
 ////////////////////////////////////////////////////////////////////////////////
-// Platform dependent constants.
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Platform-dependent line separator (newline characters: LF, CR LF, etc.*/
-	public static final String LINE_SEPARATOR = String.format("%n");
-
-////////////////////////////////////////////////////////////////////////////////
 // Build version information.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Build version of software build from pom.xml */
 	public static final String BUILD_VERSION = PomInfo.POMINFO.getVersion();
 	/** Datetime of build version from pom.xml */
 	public static final String BUILD_DATETIME = PomInfo.POMINFO.getBuildTimestamp();
+
+////////////////////////////////////////////////////////////////////////////////
+// Platform dependent constants.
+////////////////////////////////////////////////////////////////////////////////
+	/** Platform-dependent line separator (newline characters: LF, CR LF, etc.*/
+	public static final String LINE_SEPARATOR = String.format("%n");
 }
