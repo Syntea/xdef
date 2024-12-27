@@ -36,20 +36,16 @@ public class GenXJsonModelToJson extends GenXCommon {
 			int i = isOneOfTokens(directives);
 			if (i >= 0) {
 				String name = directives[i];
-				out('"' + name);
-				String s = readSpacesOrComments();
+				out('"' + name + '"');
+				copySpacesOrComments();
 				if (isChar('=')) {
-					s += readSpacesOrComments();
+					copySpacesOrComments();
 					isChar('"');
-					out('"');
-					out(s);
 					out(':');
 					out('"');
 					int pos = getIndex();
 					XonTools.readJString(this);
 					out(pos);
-				} else {
-					out('"');
 				}
 			}
 			if (wasItem || i < 0) {

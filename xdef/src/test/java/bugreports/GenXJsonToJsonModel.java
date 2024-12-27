@@ -204,6 +204,7 @@ public class GenXJsonToJsonModel extends GenXCommon {
 			readArray();
 		} else if (isToken('"' + ANY_OBJ)) {
 			out(ANY_OBJ);
+			copySpacesOrComments();
 			String s = "";
 			while(!isChar('"') && !eos()) {
 				s += getCurrentChar();
