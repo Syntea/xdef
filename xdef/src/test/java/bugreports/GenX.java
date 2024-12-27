@@ -65,6 +65,8 @@ public final class GenX extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
+//		assertEq("", test("/*xx*/%anyObj=\"int()\"/*YY*/"));
+//if(true)return;
 		assertEq("", test("\"int\""));
 		assertEq("", test("#xxx\n\"int\"#xxx"));
 		assertEq("", test("/*xxx*/\n\"int\"/*xxx*/"));
@@ -72,6 +74,7 @@ public final class GenX extends XDTester {
 		assertEq("", test("#xxx\n%anyObj\n#xxx"));
 		assertEq("", test("/*xxx*/%anyObj/*xxx*/"));
 		assertEq("", test("%anyObj=\"int()\""));
+		assertEq("", test("/*xx*/%anyObj=\"int()\"/*YY*/"));
 		assertEq("", test("[%anyObj=\"*;\"]"));
 		assertEq("", test(" { %anyName: %anyObj=\"*;\" } "));
 		assertEq("", test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}"));
