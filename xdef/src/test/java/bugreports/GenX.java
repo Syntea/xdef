@@ -18,7 +18,7 @@ public final class GenX extends XDTester {
 			XonUtils.parseXON(s);// just test syntax
 			String t = GenXJsonToJsonModel.parse(s, "STRING");
 			String u;
-			if (!(u=json).equals(t=t)) {
+			if (!(u=json).equals(t)) {
 				GenXJsonModelToJson.parse(t, "STRING"); // test re-converted result
 				int i = 0;
 				StringBuilder sb = new StringBuilder();
@@ -66,22 +66,22 @@ public final class GenX extends XDTester {
 	/** Run test and display error information. */
 	public void test() {
 		assertEq("", test("\"int\""));
+		assertEq("", test("#xxx\n\"int\"#xxx"));
+		assertEq("", test("/*xxx*/\n\"int\"/*xxx*/"));
 		assertEq("", test("%anyObj"));
+		assertEq("", test("#xxx\n%anyObj\n#xxx"));
+		assertEq("", test("/*xxx*/%anyObj/*xxx*/"));
 		assertEq("", test("%anyObj=\"int()\""));
 		assertEq("", test("[%anyObj=\"*;\"]"));
 		assertEq("", test(" { %anyName: %anyObj=\"*;\" } "));
 		assertEq("", test("{\"Genre\":[%oneOf,\"string()\",[\"occurs *; string()\"]]}"));
-		assertEq("", test("[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]"));
+		assertEq("", test("/*xx*/\n[\n   [ %script = \"occurs 3\", \"occurs 3 jvalue()\" ]\n]\n/*xx*/"));
 		assertEq("", test(" { %anyName: %anyObj=\"*;\" } "));
-		assertEq("", test(
-			"{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf=\"ref test\"]},\"jvalue();\"]}"));
-		assertEq("", test(
-			"{%anyName:[%oneOf,[\"* jvalue();\" ],{%anyName:[%oneOf =\" ref test\"]},\"jvalue();\"]}"));
+		assertEq("", test("{%anyName:[%oneOf,[\"* jvalue\"],{%anyName:[%oneOf=\"ref test\"]},\"jvalue\"]}"));
+		assertEq("", test("{%anyName:[%oneOf,[\"* int\" ],{%anyName:[%oneOf =\" ref test\"]},\"jvalue\"]}"));
 		assertEq("", test("{%anyName:[%oneOf,\"string()\",[\"occurs *; string()\"]]}"));
-		assertEq("", test(
-			"/** x */{%oneOf=\"optional;\",\"manager\":\"string()\",\"subordinates\":[\"* int();\"]}"));
-		assertEq("", test(
-			"/*x*/\n[\"? jvalue\",{%script =\"+\",I:[%script=\"?\",[%script=\"*\",\"* int\"]]}]\n# y"));
+		assertEq("", test("{%oneOf=\"optional;\",\"manager\":\"string()\",\"subordinates\":[\"* int();\"]}"));
+		assertEq("", test("[\"? int\",{%script =\"+\",I:[%script=\"?\",[%script=\"*\",\"* int\"]]}]\n# y"));
 		assertEq("", test(
 "{ \"cities\"  : [\n" +
 "    {%script = \"occurs 1..*\",\n" +

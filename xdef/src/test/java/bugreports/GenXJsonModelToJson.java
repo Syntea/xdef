@@ -196,14 +196,16 @@ public class GenXJsonModelToJson extends GenXCommon {
 			SPosition spos = getPosition(); // xdef %anyObj
 			spos.setIndex(getIndex() - ANY_OBJ.length());
 			out('"' + ANY_OBJ);
-			copySpacesOrComments();
+			String s = readSpacesOrComments();
 			if (isChar('=')) {
+				out(s);
 				copySpacesOrComments();
 				int pos = getIndex();
 				readStringValue();
 				out(pos+1);
 			} else {
 				out('"');
+				out(s);
 			}
 		} else {
 			int pos = getIndex();
