@@ -2,7 +2,6 @@ package bugreports;
 
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
-import static org.xdef.sys.Report.error;
 import org.xdef.sys.StringParser;
 import org.xdef.xon.XonTools;
 
@@ -74,12 +73,10 @@ public class GenXCommon extends StringParser {
 
 	/** Read simple simpleValue (here it can be only string!). */
 	final void readStringValue() {
-		int pos = getIndex();
 		if (isChar('"')) { // string
 			XonTools.readJString(this);
 			return;
 		}
-		setIndex(pos); // error
 		error(JSON.JSON010, "[]{}"); //JSON simpleValue expected
 	}
 }

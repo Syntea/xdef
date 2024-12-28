@@ -1,6 +1,5 @@
 package bugreports;
 
-import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
@@ -13,7 +12,6 @@ public final class GenX extends XDTester {
 	public GenX() {super();}
 
 	private static String test(final String json) {
-		try {
 			String s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
 			XonUtils.parseXON(s);// just test syntax
 			String t = GenXJsonToJsonModel.parse(s, "STRING");
@@ -27,7 +25,7 @@ public final class GenX extends XDTester {
 					if ((c = u.charAt(i)) == t.charAt(i)) {
 						sb.append(c);
 					} else {
-						int j = i;
+						int j;
 						for (j = i; j >= 0 && u.charAt(j) != '\n'; j--) {}
 						if (j < 0) {
 							j = 0;
@@ -57,18 +55,16 @@ public final class GenX extends XDTester {
 				}
 			}
 			return "";
-		} catch (Exception ex) {
-			return printThrowable(ex);
-		}
 	}
 
 	@Override
 	/** Run test and display error information. */
 	public void test() {
 //		assertEq("", test("/*www*/%anyObj/*xx*/=/*yy*/\"int()\"/*zz*/"));
+//assertEq("", test("/* */[ %oneOf= \"ref test\" ]/* */\n"));
 //if(true)return;
 		assertEq("", test("\"int\""));
-		assertEq("", test("#xxx\n\"int\"#xxx"));
+		assertEq("", test("#xxx\n\"int\"\n#xxx"));
 		assertEq("", test("/*xxx*/\n\"int\"/*xxx*/"));
 		assertEq("", test("%anyObj"));
 		assertEq("", test("#xxx\n%anyObj\n#xxx"));
@@ -97,6 +93,7 @@ public final class GenX extends XDTester {
 "  ]\n" +
 "}"));
 		assertEq("", test(
+"#xxx\n"+
 "[ %oneOf,\n"+
 "    \"jvalue();\",\n"+
 "    [ \"* jvalue();\" ],\n"+
@@ -105,13 +102,13 @@ public final class GenX extends XDTester {
 "         \"jvalue();\",\n"+
 "         [ \"* jvalue();\" ],\n"+
 "         { %anyName: [\n"+
-"/* *?        [ %oneOf= \"ref test\" ], /* */\n"+
 "             [ %oneOf=\"ref test\" ]\n"+
 "           ]\n"+
 "         }\n"+
 "       ]\n"+
 "    }\n"+
-"]"));
+"]\n"+
+"#yyy"));
 	}
 
 	/** Run test
