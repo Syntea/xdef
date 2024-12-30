@@ -11,10 +11,12 @@ public final class GenX extends XDTester {
 
 	public GenX() {super();}
 
-	private static String test(final String json) {
-			String s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
+	private String test(final String json) {
+		String s = null, t = null;
+		try {
+			s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
 			XonUtils.parseXON(s);// just test syntax
-			String t = GenXJsonToJsonModel.parse(s, "STRING");
+			t = GenXJsonToJsonModel.parse(s, "STRING");
 			String u;
 			if (!(u=json).equals(t)) {
 				GenXJsonModelToJson.parse(t, "STRING"); // test re-converted result
@@ -55,13 +57,17 @@ public final class GenX extends XDTester {
 				}
 			}
 			return "";
+		} catch (RuntimeException ex) {
+			return ex.getMessage() + "\n"
+				+ (s == null ? "json\n" + json : t == null ? "s\n" + s : "\nt\n" + t);
+		}
 	}
 
 	@Override
 	/** Run test and display error information. */
 	public void test() {
 //		assertEq("", test("/*www*/%anyObj/*xx*/=/*yy*/\"int()\"/*zz*/"));
-//assertEq("", test("/* */[ %oneOf= \"ref test\" ]/* */\n"));
+//		assertEq("", test("/* */[ %oneOf= \"ref test\" ]/* */\n"));
 //if(true)return;
 		assertEq("", test("\"int\""));
 		assertEq("", test("#xxx\n\"int\"\n#xxx"));
@@ -94,20 +100,20 @@ public final class GenX extends XDTester {
 "}"));
 		assertEq("", test(
 "#xxx\n"+
-"[ %oneOf,\n"+
-"    \"jvalue();\",\n"+
-"    [ \"* jvalue();\" ],\n"+
-"    { %anyName:\n"+
-"       [%oneOf,\n"+
-"         \"jvalue();\",\n"+
-"         [ \"* jvalue();\" ],\n"+
-"         { %anyName: [\n"+
-"             [ %oneOf=\"ref test\" ]\n"+
-"           ]\n"+
-"         }\n"+
-"       ]\n"+
-"    }\n"+
-"]\n"+
+"[ %oneOf,\n" +
+"    \"jvalue();\",\n" +
+"    [ \"* jvalue();\" ],\n" +
+"    { %anyName:\n" +
+"       [%oneOf,\n" +
+"         \"jvalue();\",\n" +
+"         [ \"* jvalue();\" ],\n" +
+"         { %anyName: [\n" +
+"             [ %oneOf=\"ref test\" ]\n" +
+"           ]\n" +
+"         }\n" +
+"       ]\n" +
+"    }\n" +
+"]\n" +
 "#yyy"));
 	}
 
