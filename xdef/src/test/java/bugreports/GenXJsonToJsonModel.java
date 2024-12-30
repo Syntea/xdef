@@ -156,6 +156,7 @@ public class GenXJsonToJsonModel extends GenXCommon {
 					out(pos);
 				} else {
 					isChar('"');
+					out(s);
 				}
 			}
 			if (wasItem || i < 0) {

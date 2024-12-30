@@ -142,6 +142,7 @@ public class GenXJsonModelToJson extends GenXCommon {
 					out(pos);
 				} else {
 					out('"');
+					out(s);
 				}
 			}
 			if (wasItem || i < 0) {
