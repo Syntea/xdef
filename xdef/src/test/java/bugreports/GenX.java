@@ -8,20 +8,17 @@ import test.XDTester;
  * @author Vaclav Trojan
  */
 public final class GenX extends XDTester {
-	int _tests = 0, _fail = 0;
 
 	public GenX() {super();}
 
 	private String test(final String json) {
 		String s = null, t = null;
-		_tests++;
 		try {
 			s = GenXJsonModelToJson.parse(json, "STRING"); // to JSON conversion
 			XonUtils.parseXON(s);// just test syntax
 			t = GenXJsonToJsonModel.parse(s, "STRING");
 			String u;
 			if (!(u=json).equals(t)) {
-				_fail++;
 				GenXJsonModelToJson.parse(t, "STRING"); // test re-converted result
 				int i = 0;
 				StringBuilder sb = new StringBuilder();
@@ -61,7 +58,6 @@ public final class GenX extends XDTester {
 			}
 			return "";
 		} catch (RuntimeException ex) {
-			_fail++;
 			return ex.getMessage() + "\n"
 				+ (s == null ? "json\n" + json : t == null ? "s\n" + s : "\nt\n" + t);
 		}
@@ -119,7 +115,6 @@ public final class GenX extends XDTester {
 "    }\n" +
 "]\n" +
 "#yyy"));
-		System.out.println("OK " + (_tests - _fail) + (_fail > 0 ? ", fail: " + _fail : ""));
 	}
 
 	/** Run test
