@@ -70,7 +70,7 @@ public class KXpathExpr {
 		final XPathFunctionResolver fr,
 		final XPathVariableResolver vr) {
 		_source = expr.trim();
-		try {//return compiled XPath as XPathExpressionImpl object
+		try {// create compiled XPath as XPathExpressionImpl object
 			if (chkSimpleExpr() >= 0) {
 				return;
 			}
@@ -80,9 +80,7 @@ public class KXpathExpr {
 			_xp.setXPathVariableResolver(vr!=null ? vr : new KVarResolver());
 			_value = _xp.compile(expr);
 		} catch (XPathExpressionException ex) {
-			String s = ex.getMessage();
-			s = (s != null && !s.trim().isEmpty() ? ": " + s.trim() : "XPathExpressionException");
-			throw new SRuntimeException(XML.XML505, s);
+			throw new SRuntimeException(XML.XML505, ex); //XPath error&{0}{: }
 		}
 	}
 
