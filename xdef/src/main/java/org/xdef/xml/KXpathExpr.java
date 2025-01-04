@@ -80,7 +80,7 @@ public class KXpathExpr {
 			_xp.setXPathVariableResolver(vr!=null ? vr : new KVarResolver());
 			_value = _xp.compile(expr);
 		} catch (XPathExpressionException ex) {
-			throw new SRuntimeException(XML.XML505, ex); //XPath error&{0}{: }
+			throw new SRuntimeException(XML.XML505, ex.getMessage()); //XPath error&{0}{: }
 		}
 	}
 
@@ -219,8 +219,7 @@ public class KXpathExpr {
 				return (NodeList) _value.evaluate(node, XPathConstants.NODESET);
 			} catch (XPathExpressionException ex) {
 				// !!!!!!!!!!!!!!!!!! This is very nasty code !!!!!!!!!!!!!!!!!!
-				if (type == null || type.equals(XPathConstants.NODESET)
-					&& ex instanceof XPathExpressionException) {
+				if (type == null || type.equals(XPathConstants.NODESET)) {
 					String s = ex.getMessage();
 					Throwable x = ex;
 					while (s == null && (x = x.getCause()) != null) {
@@ -244,8 +243,7 @@ public class KXpathExpr {
 						if (node == null) {
 							return null;
 						}
-						throw new SRuntimeException(XML.XML505, //XPath error&{0}{: }
-							ex.toString() + ",\n" + ex1.toString() + ",\n" + ex2.toString());
+						throw new SRuntimeException(XML.XML505, ex2.getMessage()); //XPath error&{0}{: }
 					}
 				}
 			}
@@ -256,7 +254,7 @@ public class KXpathExpr {
 				if (node == null) {
 					return null;
 				}
-				throw new SRuntimeException(XML.XML505,	ex.toString()); //XPath error&{0}{: }
+				throw new SRuntimeException(XML.XML505,	ex.getMessage()); //XPath error&{0}{: }
 			}
 		}
 	}
