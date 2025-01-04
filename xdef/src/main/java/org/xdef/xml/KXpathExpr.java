@@ -1,6 +1,5 @@
 package org.xdef.xml;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
@@ -39,9 +38,7 @@ public class KXpathExpr {
 		try {
 			Class<?> cls = Class.forName("net.sf.saxon.xpath.XPathFactoryImpl");
 			x = (XPathFactory) cls.getConstructor().newInstance();
-		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-			| InstantiationException | NoSuchMethodException | SecurityException| InvocationTargetException
-			| Error ex) {
+		} catch (Exception | Error ex) {
 			x = null;
 		}
 		XPF = (x == null) ? XPathFactory.newInstance() : x;
@@ -132,8 +129,7 @@ public class KXpathExpr {
 	public void setVariableResolver(final XPathVariableResolver vr) {_vr = vr;}
 
 	/** Execute XPath expression and return result. If result type is null then result types are checked in
-	 * following sequence:
-	 * <p> 1) NODESET, 2) STRING, 3) NODE.</p>
+	 * following sequence: <p> 1) NODESET, 2) STRING, 3) NODE.</p>
 	 * @param node node or null.
 	 * @param type QName with result type.
 	 * @return object with result of XPath expression.
@@ -146,8 +142,7 @@ public class KXpathExpr {
 				return null;
 			}
 			int i = chkSimpleExpr();
-			if (i == 1) {
-				//attributes
+			if (i == 1) { //attributes
 				int ndx =_source.indexOf(':');
 				Node x;
 				if (ndx<0 || _xp == null || _xp.getNamespaceContext() == null) {
@@ -158,20 +153,12 @@ public class KXpathExpr {
 					String uri = _xp.getNamespaceContext().getNamespaceURI(prefix);
 					x = el.getAttributeNodeNS(uri, localName);
 				}
-				if (type == null) {
-					return x == null ? null : new KNodeList(x);
-				}
-				if (type.equals(XPathConstants.STRING)) {
-					return x == null ? null : x.getNodeValue();
-				}
-				if (type.equals(XPathConstants.NODE))
-					return x;
-				if (type.equals(XPathConstants.NODESET))
-					return new KNodeList(x);
-				if (type.equals(XPathConstants.NUMBER))
-					return x==null ? 0 : 1;
-				if (type.equals(XPathConstants.BOOLEAN))
-					return x!=null;
+				if (type == null) return x == null ? null : new KNodeList(x);
+				if (type.equals(XPathConstants.STRING)) return x == null ? null : x.getNodeValue();
+				if (type.equals(XPathConstants.NODE)) return x;
+				if (type.equals(XPathConstants.NODESET)) return new KNodeList(x);
+				if (type.equals(XPathConstants.NUMBER)) return x==null ? 0 : 1;
+				if (type.equals(XPathConstants.BOOLEAN)) return x!=null;
 				return x!=null;
 			}
 			//elements
@@ -194,18 +181,13 @@ public class KXpathExpr {
 						lName = el.getNodeName();
 					}
 					if (lName.equals(localName)) {
-						if (uri == null) {
-							return el.getNamespaceURI() == null ? new KNodeList(el) : new KNodeList();
-						}
-						return uri.equals(el.getNamespaceURI()) ? new KNodeList(el) : new KNodeList();
+						return uri == null ? el.getNamespaceURI()==null ? new KNodeList(el) : new KNodeList()
+							: uri.equals(el.getNamespaceURI()) ? new KNodeList(el) : new KNodeList();
 					}
 					return new KNodeList();
 				}
-				if (uri == null) {
-					nl = KXmlUtils.getChildElements(node, _source);
-				} else {
-					nl = KXmlUtils.getChildElementsNS(node, uri, localName);
-				}
+				nl = (uri == null) ? KXmlUtils.getChildElements(node, _source)
+					: KXmlUtils.getChildElementsNS(node, uri, localName);
 			}
 			if (type == null || type.equals(XPathConstants.NODESET)) {
 				return nl;
