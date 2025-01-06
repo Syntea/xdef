@@ -417,8 +417,7 @@ public final class KXmlUtils extends KDOMUtils {
 		String uri = attr.getNamespaceURI();
 		int ndx;
 		String prefix;
-		if (uri != null && (ndx = name.indexOf(':')) >= 0
-			&& !(prefix = name.substring(0, ndx)).startsWith("xml")) {
+		if (uri!=null && (ndx = name.indexOf(':'))>=0 && !(prefix=name.substring(0, ndx)).startsWith("xml")) {
 			String xmlnsName = "xmlns:" + prefix;
 			if (!uri.equals(namespaceMap.get(xmlnsName))) {
 				unresolved.put(xmlnsName, uri);
@@ -482,8 +481,7 @@ public final class KXmlUtils extends KDOMUtils {
 		switch (type) {
 			case Node.ATTRIBUTE_NODE:
 				out.write(node.getNodeName() + "=");
-				out.write(createAttrValue(
-					node.getNodeValue(), removeIgnorableWhiteSpaces));
+				out.write(createAttrValue(node.getNodeValue(), removeIgnorableWhiteSpaces));
 				break;
 			case Node.COMMENT_NODE:
 				if (comments) {
@@ -676,7 +674,7 @@ public final class KXmlUtils extends KDOMUtils {
 							int len;
 							String s = item.getNodeValue();
 							if (s == null || (len=(s=removeIgnorableWhiteSpaces
-								|| indent!=null ? s.trim() : s).length()) == 0){
+								|| indent!=null ? s.trim() : s).length()) == 0) {
 								continue;
 							}
 							if (numItems == 1 && indent != null
@@ -786,11 +784,10 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 	}
 
-	/** Write node to output stream. Result will be indented if the argument <code>indentStep</code> is a
-	 * string with indenting spaces. If argument <code>indentStep</code> is null then output is not indented.
-	 * If argument <code>canonical</code> is true the output is in canonical form (i.e. without entity
-	 * references, CDATA sections are converted to text values). If argument <code>comments</code> is false
-	 * all <code>Comment</code> nodes are ignored.
+	/** Write node to output stream. Result will be indented if the argument "indentStep" is a string with
+	 * indenting spaces. If argument "indentStep" is null then output is not indented. If argument "canonical"
+	 * is true the output is in canonical form (i.e. without entity references, CDATA sections are converted
+	 * to text values). If argument "comments" is false all "Comment" nodes are ignored.
 	 * @param out output writer used for result.
 	 * @param node org.w3c.dom.Node to be converted.
 	 * @param encoding name of output code table.
@@ -878,13 +875,13 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean comments) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(fname);
 			OutputStreamWriter out = new OutputStreamWriter(fos,encoding)) {
-			writeXml(out,
-				encoding,
-				node,
-				(indenting ? "  " : null), //indentStep
-				true, //canonical
-				indenting, //removeIgnorableWhiteSpaces
-				comments);
+				writeXml(out,
+					encoding,
+					node,
+					(indenting ? "  " : null), //indentStep
+					true, //canonical
+					indenting, //removeIgnorableWhiteSpaces
+					comments);
 		}
 	}
 
@@ -955,29 +952,28 @@ public final class KXmlUtils extends KDOMUtils {
 		final int lineLen) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(file);
 			OutputStreamWriter out = new OutputStreamWriter(fos, encoding)) {
-			writeXml(out,
-				encoding,
-				node,
-				null, //line indent
-				(indenting ? "  " : null),//indentStep
-				true, //canonical
-				indenting, //removeIgnorableWhiteSpaces
-				comments,
-				ROOT_NSPREFIXMAP,
-				lineLen);
-			out.flush();
+				writeXml(out,
+					encoding,
+					node,
+					null, //line indent
+					(indenting ? "  " : null),//indentStep
+					true, //canonical
+					indenting, //removeIgnorableWhiteSpaces
+					comments,
+					ROOT_NSPREFIXMAP,
+					lineLen);
+				out.flush();
 		}
 	}
 
 	/** Write element in XML format in UTF-8 character set.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node org.w3c.dom.Node to be converted.
+	 * @param n org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs.
 	 */
-	public static final void writeXml(final File file, final String encoding, final Node node)
-		throws IOException {
-		writeXml(file, encoding, node, false, true);
+	public static final void writeXml(final File file, final String encoding,final Node n) throws IOException{
+		writeXml(file, encoding, n, false, true);
 	}
 
 	/** Write element in XML format and UTF-8 character set.
@@ -1004,7 +1000,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return nodeToString( node, comments, removeIgnorableWhiteSpaces, indent, LINELENGTH);
 	}
 
-	/** Create string in XML format from given argument. Output format may be either unindented (and without
+	/** Create string in XML format from given argument. Output format may be either not indented (and without
 	 * inserted new lines) or in the intended form.
 	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
@@ -1087,9 +1083,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final String source) {
-		return new KDOMBuilder().parse(source);
-	}
+	public static final Document parseXml(final String source) {return new KDOMBuilder().parse(source);}
 
 	/** Parse source file or a string with XML format and create org.w3c.dom.Document
 	 * (i.e. starts with &lt;).
@@ -1110,11 +1104,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.File in) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(in);
-	}
+	public static final Document parseXml(final java.io.File in) {return new KDOMBuilder().parse(in);}
 
 	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in The file with the source XML.
@@ -1134,11 +1124,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final URL in) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(in);
-	}
+	public static final Document parseXml(final URL in) {return new KDOMBuilder().parse(in);}
 
 	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in URL pointing to the source XML.
@@ -1158,11 +1144,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.InputStream in) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(in);
-	}
+	public static final Document parseXml(final java.io.InputStream in) {return new KDOMBuilder().parse(in);}
 
 	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
@@ -1540,7 +1522,8 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 	}
 
-	/** Compare list of attributes of two elements. Write differences to the reporter. Return true if and only if no differences were found.
+	/** Compare list of attributes of two elements. Write differences to the reporter. Return true
+	 * if and only if no differences were found.
 	 * @param e_A the first element.
 	 * @param e_B the second element.
 	 * @param reporter The report writer.
@@ -1655,7 +1638,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	@Deprecated
 	/** Compare XML documents. The result is reporter which contains error messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @return report writer with results of comparing.
@@ -1666,7 +1649,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	@Deprecated
 	/** Compare XML documents. The result is reporter which contains error messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @param reporter report writer or null and ArrayReporter is created.
@@ -1678,7 +1661,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	@Deprecated
 	/** Compare XML documents. The result is reporter which contains error messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @return report writer with results of comparing.
@@ -1689,7 +1672,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	@Deprecated
 	/** Compare XML documents. The result is reporter which contains error messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then all text values are rimmed before comparing.
@@ -1701,7 +1684,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	@Deprecated
 	/** Compare XML documents. The result is reporter which contains error messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then text values are trimmed before comparing and empty text nodes are removed.
