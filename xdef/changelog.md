@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.16, release-date 2025-01-04
+# Version 42.2.16, release-date 2025-01-06
 * Fixed a bug in the Windows ini parser where white characters were not being skipped to the end of the line.
 * Fixed a bug in the Windows ini parser that did not skip comment lines (starting with '#').
 

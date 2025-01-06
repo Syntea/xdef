@@ -39,17 +39,17 @@ public final class KXmlUtils extends KDOMUtils {
 		ROOT_NSPREFIXMAP.put("xmlns", "");
 	}
 
-	/** Creates an XML <code>Document</code> object with created document builder (see SetDOMImplementation).
-	 * @return new <code>Document</code> object.
+	/** Creates an XML org.w3c.Document object with created document builder (see SetDOMImplementation).
+	 * @return new org.w3c.Document object.
 	 */
 	public static final Document newDocument() {return new KDOMBuilder().newDocument();}
 
-	/** Creates an XML <code>Document</code> object with empty root element created by document builder
+	/** Creates an XML org.w3c.dom.Document object with empty root element created by document builder
 	 * (see SetDOMImplementation).
 	 * @param nsURI namespace of created root element (or null).
 	 * @param qname qualified name of root element.
 	 * @param docType DocumentType object or null.
-	 * @return new <code>Document</code> object with empty root element.
+	 * @return new org.w3c.dom.Document object with empty root element.
 	 */
 	public static final Document newDocument(final String nsURI,
 		final String qname,
@@ -57,9 +57,9 @@ public final class KXmlUtils extends KDOMUtils {
 		return new KDOMBuilder().newDocument(nsURI, qname, docType);
 	}
 
-	/** The <code>DOMImplementation</code> object that handles this document. A DOM application may use
+	/** The org.w3c.DOMImplementation object that handles this document. A DOM application may use
 	 * objects from multiple implementations.
-	 * @return  The <code>DOMImplementation</code> object.
+	 * @return  The org.w3c.DOMImplementation object.
 	 */
 	public static final DOMImplementation getDOMImplementation() {
 		return new KDOMBuilder().getDOMImplementation();
@@ -433,7 +433,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * (i.e. without  document type, entity references, CDATA  sections are converted to* text values).
 	 * If argument <code>comments</code> is false all <code>Comment</code> nodes are ignored.
 	 * @param out output writer for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param lineStart null or the line prefix.
 	 * @param indentStep null or the indenting string.
 	 * @param canonical if true the output is canonical form.
@@ -792,7 +792,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * references, CDATA sections are converted to text values). If argument <code>comments</code> is false
 	 * all <code>Comment</code> nodes are ignored.
 	 * @param out output writer used for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param encoding name of output code table.
 	 * @param indentStep null or the indenting string.
 	 * @param canonical if true the output is canonical form.
@@ -822,7 +822,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write node as XML to output stream. The character set encoding is set from the outputStreamWriter.
 	 * @param out output writer used for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an error occurs.
 	 */
 	public static final void writeXml(final OutputStreamWriter out, final Node node) throws IOException {
@@ -837,7 +837,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write node in XML format.
 	 * @param out output writer used for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
 	 * @param comments if true comment nodes are written to output.
@@ -866,7 +866,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param fname output file name.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs.
@@ -890,7 +890,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write element in XML format in UTF-8.
 	 * @param fname output file name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs
@@ -905,7 +905,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write element in XML format in given character set.
 	 * @param fname output file name.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static final void writeXml(final String fname, final String encoding, final Node node)
@@ -915,7 +915,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write element in XML format in UTF-8 character set.
 	 * @param fname output file name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static final void writeXml(final String fname, final Node node) throws IOException {
@@ -925,7 +925,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs
@@ -941,7 +941,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @param lineLen length of source line.
@@ -972,7 +972,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write element in XML format in UTF-8 character set.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs.
 	 */
 	public static final void writeXml(final File file, final String encoding, final Node node)
@@ -982,7 +982,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write element in XML format and UTF-8 character set.
 	 * @param file The output file.
-	 * @param node The <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node The org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static final void writeXml(final File file, final Node node) throws IOException {
@@ -990,7 +990,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 	/** Create string in XML format from given argument. Output format may be either unindented (and without
 	 * inserted new lines) or in the intended form.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
 	 * no indentation is generated.
 	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
@@ -1006,7 +1006,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Create string in XML format from given argument. Output format may be either unindented (and without
 	 * inserted new lines) or in the intended form.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
 	 * no indentation is generated.
 	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
@@ -1037,7 +1037,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Create string in XML format from given argument. The output format may be either unindented
 	 * (without inserted new lines) or in the intended form.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted to the string.
+	 * @param node org.w3c.dom.Node to be converted to the string.
 	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
 	 * no indentation is generated.
 	 * @return string with the XML representation of the parameter element.
@@ -1081,20 +1081,18 @@ public final class KXmlUtils extends KDOMUtils {
 		} catch (IOException ex) {return null;} //never happens
 	}
 
-	/** Parse source file or a string with XMLke format and create <code>org.w3c.dom.Document</code>
-	 * (i.e. it starts with &lt;).
+	/** Parse source file or a string with XML format and create org.w3c.dom.Document
+	 * (i.e. starts with &lt;).
 	 * @param source can be the path to a file or a string in XML format.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public static final Document parseXml(final String source) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(source);
+		return new KDOMBuilder().parse(source);
 	}
 
-	/** Parse source file or a string with XMLke format and create <code>org.w3c.dom.Document</code>
-	 * (i.e. it starts with &lt;).
+	/** Parse source file or a string with XML format and create org.w3c.dom.Document
+	 * (i.e. starts with &lt;).
 	 * @param source can be the path to a file or a string in XML format.
 	 * @param comments if true comment nodes are written to result document.
 	 * @return parsed document.
@@ -1107,7 +1105,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(source);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document
 	 * @param in file with the source XML.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1118,7 +1116,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in The file with the source XML.
 	 * @param comments if true comment nodes are written to result document.
 	 * @return parsed document.
@@ -1131,7 +1129,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in URL pointing to the source XML data.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1142,7 +1140,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in URL pointing to the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @return parsed document.
@@ -1155,7 +1153,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1166,7 +1164,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @return parsed document.
@@ -1179,7 +1177,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @param close if true the input stream is closed after parsing.
