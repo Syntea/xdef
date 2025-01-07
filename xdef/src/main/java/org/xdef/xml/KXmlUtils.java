@@ -35,35 +35,32 @@ public final class KXmlUtils extends KDOMUtils {
 	private final static int LINELENGTH = 80;
 	/** Root map of prefixes.*/
 	private final static Map<String, String> ROOT_NSPREFIXMAP = new LinkedHashMap<>();
-	static {
-		ROOT_NSPREFIXMAP.put("xmlns", "");
-	}
+	/** Default DomBuilder.*/
+	private final static KDOMBuilder BUILDER;
+
+	static {ROOT_NSPREFIXMAP.put("xmlns", ""); BUILDER = new KDOMBuilder();}
 
 	/** Creates an XML org.w3c.Document object with created document builder (see SetDOMImplementation).
 	 * @return new org.w3c.Document object.
 	 */
-	public static final Document newDocument() {return new KDOMBuilder().newDocument();}
+	public static final Document newDocument() {return BUILDER.newDocument();}
 
 	/** Creates an XML org.w3c.dom.Document object with empty root element created by document builder
 	 * (see SetDOMImplementation).
 	 * @param nsURI namespace of created root element (or null).
 	 * @param qname qualified name of root element.
-	 * @param docType DocumentType object or null.
+	 * @param type DocumentType object or null.
 	 * @return new org.w3c.dom.Document object with empty root element.
 	 */
-	public static final Document newDocument(final String nsURI,
-		final String qname,
-		final DocumentType docType) {
-		return new KDOMBuilder().newDocument(nsURI, qname, docType);
+	public static final Document newDocument(final String nsURI, final String qname, final DocumentType type){
+		return BUILDER.newDocument(nsURI, qname, type);
 	}
 
 	/** The org.w3c.DOMImplementation object that handles this document. A DOM application may use
 	 * objects from multiple implementations.
 	 * @return  The org.w3c.DOMImplementation object.
 	 */
-	public static final DOMImplementation getDOMImplementation() {
-		return new KDOMBuilder().getDOMImplementation();
-	}
+	public static final DOMImplementation getDOMImplementation() {return BUILDER.getDOMImplementation();}
 
 	/** Removes all namespaces and namespace prefixes from document and its attributes and all child nodes.
 	 * If an attribute with the local name already exists the it is not replaced.
@@ -79,12 +76,10 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 	}
 
-	/** Removes all namespaces and namespace prefixes from element and its attributes and all child nodes.
-	 * If an attribute with the local name already exists then it is left unchanged. All <code>xmlns</code>
-	 * attributes are removed.
+	/** Removes xmlns attributes, all namespaces and namespace prefixes from the element, its attributes, and
+	 * child nodes (if an attribute with a local name already exists, it remains unchanged).
 	 * @param elem element if scope of which all prefixes and namespaces are removed.
-	 * @return element without namespaces and namespace prefixes. If nothing was changed then the original
-	 * element is returned.
+	 * @return element without namespaces and namespace prefixes or the original element if nothing changed.
 	 */
 	public static final Element setAllNSToNull(final Element elem) {
 		NamedNodeMap nm = elem.getAttributes();
@@ -140,12 +135,12 @@ public final class KXmlUtils extends KDOMUtils {
 		return result;
 	}
 
-	/** Return a string in the XML format. All occurrences of special characters (<code>&lt;,&gt;,&amp;,
-	 * ",'</code>) are replaced with entity references. If the argument "ignoreSpaces" is true all ignorable
-	 * white spaces are removed. If the argument delimiter is "&lt;" the result string is created for a tex
-	 * t node, otherwise it will be created as a value of attribute and delimiter occurrence will be
-	 * transformed to the appropriate predefined entity. Note that the argument shouldn't contain an entity
-	 * reference or character reference.
+	/** Returns a string in XML format. All occurrences of special characters (&lt;,&gt;,&amp;, ',') are
+	 * replaced by entity references. If the "ignoreSpaces" argument is true, all ignorable whitespace is
+	 * removed. If the delimiter argument is "&lt;", the resulting string for the text node is created,
+	 * otherwise the attribute value is created and the occurrence of the delimiter is converted to the
+	 * appropriate predefined entity. Note that the argument should not contain a reference to an entity or
+	 * a reference to a character.
 	 * @param delimiter attributes: '"' or "'", text nodes: '&lt;'.
 	 * @param ignoreSpaces If true all ignorable white spaces are removed.
 	 * @param value The original string.
@@ -1083,7 +1078,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final String source) {return new KDOMBuilder().parse(source);}
+	public static final Document parseXml(final String source) {return BUILDER.parse(source);}
 
 	/** Parse source file or a string with XML format and create org.w3c.dom.Document
 	 * (i.e. starts with &lt;).
@@ -1104,7 +1099,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.File in) {return new KDOMBuilder().parse(in);}
+	public static final Document parseXml(final java.io.File in) {return BUILDER.parse(in);}
 
 	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in The file with the source XML.
@@ -1124,7 +1119,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final URL in) {return new KDOMBuilder().parse(in);}
+	public static final Document parseXml(final URL in) {return BUILDER.parse(in);}
 
 	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in URL pointing to the source XML.
@@ -1144,7 +1139,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.InputStream in) {return new KDOMBuilder().parse(in);}
+	public static final Document parseXml(final java.io.InputStream in) {return BUILDER.parse(in);}
 
 	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
