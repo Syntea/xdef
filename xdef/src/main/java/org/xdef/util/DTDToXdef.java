@@ -24,8 +24,7 @@ public class DTDToXdef {
 
 	/** Sets log file for logging.
 	 * @param logFile log file.
-	 * @throws IllegalArgumentException if log file is empty or log file name
-	 * is illegal.
+	 * @throws IllegalArgumentException if log file is empty or log file name is illegal.
 	 */
 	private void setLogFile(String logFile) {
 		if (logFile == null || "".equals(logFile)) {
@@ -37,8 +36,7 @@ public class DTDToXdef {
 			if (!log.exists()) {
 				log.createNewFile();
 			}
-			_reporter = new SReporter(new FileReportWriter(
-				new PrintWriter(new FileWriter(log, true)), false));
+			_reporter = new SReporter(new FileReportWriter(new PrintWriter(new FileWriter(log, true)),false));
 		} catch (IOException ex) {
 			throw new IllegalArgumentException("Log file name is illegal", ex);
 		}
@@ -53,13 +51,11 @@ public class DTDToXdef {
 		KXmlUtils.writeXml(file, doc);
 	}
 
-	/** Generates X-definition file with given name from given DTD file with
-	 * given root element.
+	/** Generates X-definition file with given name from given DTD file with given root element.
 	 * @param dtd DTD string or URL as string.
 	 * @param root root element.
 	 * @param outXdef output X-definition file.
-	 * @throws IllegalArgumentException if root element is empty of output file
-	 * is illegal.
+	 * @throws IllegalArgumentException if root element is empty of output file is illegal.
 	 * @throws RuntimeException if error occurred during writing files.
 	 */
 	public void genXdef(String dtd, String root, String outXdef) {
