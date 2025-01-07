@@ -1029,25 +1029,8 @@ public class GUIEditor extends GUIScreen {
 		throw new RuntimeException("Incorrect temp directory");
 	}
 
-	/** Call generation of a collection of X-definitions from a command line.
-	 * @param args array with command line arguments:
-	 * <ul>
-	 * <li><i>-p </i>file with the project
-	 * <li><i>-v [switches]</i>run validation mode
-	 * <li><i>-c [switches]</i>run construction mode
-	 * <li><i>-g [XML source]</i>Generate X-definition form XML data
-	 * </ul>
-	 * Switches:
-	 * <ul>
-	 * <li><i>-xdef file </i>specifies the source with the X-definition
-	 * <li><i>-data file</i>specifies input data or context
-	 * <li><i>-debug </i>sets the debug mode
-	 * <li><i>-editInput </i>enables to runEditor input data before execution
-	 * <li><i>-displayResult </i>displays result XML element
-	 * </ul>
-	 */
-	public static void main(String... args) {
-		final String info =
+	/** String with command line information. */
+	private static final String INFO =
 "Edit and run X-definition in graphical user interface.\n\n"+
 "Command line arguments:\n"+
 " -p project_file | -v [switches] |\n"+
@@ -1070,26 +1053,45 @@ public class GUIEditor extends GUIScreen {
 " -displayResult displays result data\n"+
 " -workDir directory where to store created data. This switch is optional;\n"+
 "    if not specified the work directory is created and deleted on exit.";
+
+	/** Call generation of a collection of X-definitions from a command line.
+	 * @param args array with command line arguments:
+	 * <ul>
+	 * <li><i>-p </i>file with the project
+	 * <li><i>-v [switches]</i>run validation mode
+	 * <li><i>-c [switches]</i>run construction mode
+	 * <li><i>-g [XML source]</i>Generate X-definition form XML data
+	 * </ul>
+	 * Switches:
+	 * <ul>
+	 * <li><i>-xdef file </i>specifies the source with the X-definition
+	 * <li><i>-data file</i>specifies input data or context
+	 * <li><i>-debug </i>sets the debug mode
+	 * <li><i>-editInput </i>enables to runEditor input data before execution
+	 * <li><i>-displayResult </i>displays result XML element
+	 * </ul>
+	 */
+	public static void main(String... args) {
 		if (args == null || args.length == 0) {
-			System.err.println("No parameters.\n" + info);
+			System.err.println("No parameters.\n" + INFO);
 			return;
 		}
 		String arg = args[0];
 		if ("-h".equals(arg)) {
-			System.out.println(info);
+			System.out.println(INFO);
 			return;
 		}
 		if ("-p".equals(arg)) {
 			switch (args.length) {
 				case 1:
-					System.err.println("Missing parameter with project\n"+info);
+					System.err.println("Missing parameter with project\n"+INFO);
 					break;
 				case 2:
 					runEditor('p', (char) 0, args[1]);
 					break;
 				default:
 					System.err.println("More parameters not allowed here\n"
-						+ info);
+						+ INFO);
 			}
 			return;
 		}
@@ -1106,7 +1108,7 @@ public class GUIEditor extends GUIScreen {
 		char param;
 		char format = (char) 0;
 		if (null == arg) {
-			System.err.println("Incorrect parameter: " + arg + "\n" + info);
+			System.err.println("Incorrect parameter: " + arg + "\n" + INFO);
 			return;
 		} else switch (arg) {
 			case "-c":
@@ -1126,7 +1128,7 @@ public class GUIEditor extends GUIScreen {
 					}
 				}	break;
 			default:
-				System.err.println("Incorrect parameter: " + arg + "\n" + info);
+				System.err.println("Incorrect parameter: " + arg + "\n" + INFO);
 				return;
 		}
 		while (i < args.length) {
@@ -1135,7 +1137,7 @@ public class GUIEditor extends GUIScreen {
 				case "-xdef":
 					if (param == 'g') {
 						System.err.println(
-							"Parameter -xdef not allowed with -g\n" + info);
+							"Parameter -xdef not allowed with -g\n" + INFO);
 						return;
 					}
 					wasXDefinition = true;
@@ -1155,7 +1157,7 @@ public class GUIEditor extends GUIScreen {
 				case "-format":
 					if (format != 0) {
 						System.err.println(
-							"Redefinition of format parameter -format\n"+info);
+							"Redefinition of format parameter -format\n"+INFO);
 						return;
 					}
 					String s = args[i++];
@@ -1167,14 +1169,14 @@ public class GUIEditor extends GUIScreen {
 						format = 'i';
 					} else {
 						System.err.println(
-							"Incorrect parameter -format\n" + info);
+							"Incorrect parameter -format\n" + INFO);
 						return;
 					}
 					continue;
 				case "-data":
 					if (wasDataPath) {
 						System.err.println(
-							"Redefinition of parameter \"-data\"\n" + info);
+							"Redefinition of parameter \"-data\"\n" + INFO);
 						return;
 					}
 					wasDataPath = true;
@@ -1183,7 +1185,7 @@ public class GUIEditor extends GUIScreen {
 				case "-debug":
 					if (debug != null) {
 						System.err.println(
-							"Redefinition of parameter \"-debug\"\n" + info);
+							"Redefinition of parameter \"-debug\"\n" + INFO);
 						return;
 					}
 					debug = "true";
@@ -1191,7 +1193,7 @@ public class GUIEditor extends GUIScreen {
 				case "-editInput":
 					if (editInput != null) {
 						System.err.println(
-							"Redefinition of parameter \"-editInput\"\n"+info);
+							"Redefinition of parameter \"-editInput\"\n"+INFO);
 						return;
 					}
 					editInput = "true";
@@ -1200,7 +1202,7 @@ public class GUIEditor extends GUIScreen {
 					if (displayResult != null) {
 						System.err.println(
 							"Redefinition of parameter \"-displayResult\"\n"
-								+info);
+								+INFO);
 						return;
 					}
 					displayResult = "true";
@@ -1208,7 +1210,7 @@ public class GUIEditor extends GUIScreen {
 				case "-workDir":
 					if (workDir != null) {
 						System.err.println(
-							"Redefinition of parameter \"-tempDir\"\n" +info);
+							"Redefinition of parameter \"-tempDir\"\n" +INFO);
 						return;
 					}
 					workDir = new File(args[i++]);
@@ -1364,7 +1366,7 @@ public class GUIEditor extends GUIScreen {
 			}
 		}
 		if (!msg.isEmpty()) {
-			System.err.println(msg + "\n" + info);
+			System.err.println(msg + "\n" + INFO);
 			return;
 		}
 		// Sources

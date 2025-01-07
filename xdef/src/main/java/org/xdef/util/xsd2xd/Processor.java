@@ -2,7 +2,6 @@ package org.xdef.util.xsd2xd;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import org.xdef.xml.KDOMBuilder;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 import org.w3c.dom.*;
+import org.xdef.xml.KXmlUtils;
 
 /** Abstract class that represents converting logic of XML Schema 1.0. Contains
  * abstract methods for processing schema items.
@@ -50,13 +50,10 @@ public abstract class Processor implements Convertor {
 	 * @param urlStack stack of already parsed URLs.
 	 * @param schemaURL URL of root schema file.
 	 * @return set of schema URLs related to given schema.
-	 * @throws RuntimeException can not create URL.
 	 */
-	private Map<URL, Element> getSchemaElements(Map<URL, Element>schemaElements, URL schemaURL)
-		throws RuntimeException {
-		KDOMBuilder kb = new KDOMBuilder();
+	private Map<URL, Element> getSchemaElements(Map<URL, Element>schemaElements, URL schemaURL) {
 		//getting schema element
-		Element schemaElement = kb.parse(schemaURL).getDocumentElement();
+		Element schemaElement = KXmlUtils.parseXml(schemaURL).getDocumentElement();
 		//checking schema element
 		if (!Utils.isSchema(schemaElement)) {
 			throw new RuntimeException("Not a schema!");

@@ -461,6 +461,16 @@ public class GenDTD {
 		}
 	}
 
+	/** String with command line information. */
+	private static final String INFO =
+"Generate DTD from X-definition.\n"+
+"Command line arguments:\n"+
+"  definition_name#root_element_name\n" +
+"  output_file_name\n" +
+"  [-e encoding]   (default is \"UTF-8\")\n" +
+"  file_xdef1 [file_xdef2] [...]\n" +
+"NOTE: wildcard chars '*' or '?' are possible for xdef files.";
+
 	/** Calling the program from command line.
 	 * @param args The array of arguments.
 		 * <code>definition_name#root_element_name output_file_name [-e encoding]
@@ -474,16 +484,8 @@ public class GenDTD {
 		 * </ul>
 	 */
 	public static void main(final String... args) {
-		final String info =
-"Generate DTD from X-definition.\n"+
-"Command line arguments:\n"+
-"  definition_name#root_element_name\n" +
-"  output_file_name\n" +
-"  [-e encoding]   (default is \"UTF-8\")\n" +
-"  file_xdef1 [file_xdef2] [...]\n" +
-"NOTE: wildcard chars '*' or '?' are possible for xdef files.";
 		if (args.length < 3) {
-			throw new RuntimeException("Missing parameters\n" + info);
+			throw new RuntimeException("Missing parameters\n" + INFO);
 		}
 		Map<File, FileInputStream> fileTab = new LinkedHashMap<>();
 		String encoding = "UTF-8";
@@ -491,7 +493,7 @@ public class GenDTD {
 			if (args[i].startsWith("-e")) {
 				if (args[i].length() == 2) {
 					if (++i == args.length) {
-						throw new RuntimeException("Missing encoding\n" + info);
+						throw new RuntimeException("Missing encoding\n" + INFO);
 					}
 					encoding = args[i];
 				} else {
@@ -501,7 +503,7 @@ public class GenDTD {
 			}
 			File f = new File(args[i]);
 			if (!f.exists() || !f.canRead()) {
-				throw new RuntimeException("Can't read file: " + args[i] + "\n" + info);
+				throw new RuntimeException("Can't read file: " + args[i] + "\n" + INFO);
 			} else {
 				try {
 					File[] files = SUtils.getFileGroup(args[i]);
@@ -509,18 +511,18 @@ public class GenDTD {
 						fileTab.put(file.getCanonicalFile(), new FileInputStream(file));
 					}
 				} catch (IOException ex) {
-					throw new RuntimeException("Can't open file: " + args[i] + "\n" + info);
+					throw new RuntimeException("Can't open file: " + args[i] + "\n" + INFO);
 				}
 			}
 		}
 		if (fileTab.isEmpty()) {
-			throw new RuntimeException("No valid input file\n" + info);
+			throw new RuntimeException("No valid input file\n" + INFO);
 		}
 		OutputStreamWriter out = null;
 		try {
 			out = new java.io.OutputStreamWriter(new java.io.FileOutputStream(args[1]), encoding);
 		} catch (FileNotFoundException | UnsupportedEncodingException ex) {
-			throw new RuntimeException("Invalid output file: " + args[1] + "\n" + info);
+			throw new RuntimeException("Invalid output file: " + args[1] + "\n" + INFO);
 		}
 		try {
 			out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>\n");

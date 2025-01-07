@@ -290,6 +290,23 @@ public class PrettyXdef extends XReader {
 		}
 	}
 
+	/** String with command line information. */
+	private static final String INFO =
+"Formating of source files with X-definitions.\n"+
+"Command line arguments:\n"+
+"    [-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file\n"+
+"Where:\n"+
+"-o outFile  Output file or out directory. If this parameter is not\n"+
+"            specified then input file is replaced by the formated version.\n"+
+"-d outDir   Output directory. If this parameter is not specified the\n"+
+"            formated files will be replaced by the the formated version.\n"+
+"-i n        Number of spaces used for indentation. If this parameter is\n"+
+"            not specified the parameter is set to 2.\n"+
+"            If n is equal to 0 no indentation is provided.\n"+
+"-e encoding Name of character set. If this parameter is not specified\n"+
+"            it will be used the original character set.\n"+
+"file        The file with source X-definition.";
+
 	/** Calling the program from command line.
 	 * @param args The array of strings with arguments.
 	 * <i>[-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file</i>
@@ -307,21 +324,6 @@ public class PrettyXdef extends XReader {
 	 * @throws IOException if an error occurs.
 	 */
 	public static void main(String... args) throws IOException {
-		final String info =
-"Formating of source files with X-definitions.\n"+
-"Command line arguments:\n"+
-"    [-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file\n"+
-"Where:\n"+
-"-o outFile  Output file or out directory. If this parameter is not\n"+
-"            specified then input file is replaced by the formated version.\n"+
-"-d outDir   Output directory. If this parameter is not specified the\n"+
-"            formated files will be replaced by the the formated version.\n"+
-"-i n        Number of spaces used for indentation. If this parameter is\n"+
-"            not specified the parameter is set to 2.\n"+
-"            If n is equal to 0 no indentation is provided.\n"+
-"-e encoding Name of character set. If this parameter is not specified\n"+
-"            it will be used the original character set.\n"+
-"file        The file with source X-definition.";
 		Map<String, File> xdefs = new LinkedHashMap<>();
 		File outDir = null;
 		String fileName = null;
@@ -338,7 +340,7 @@ public class PrettyXdef extends XReader {
 			}
 			char c = args[i].charAt(1);
 			if (c == 'h' || c == '?') {
-				System.out.println(info); //help
+				System.out.println(INFO); //help
 				return;
 			}
 			String s;
@@ -446,7 +448,7 @@ public class PrettyXdef extends XReader {
 			msg += "Input files missing.\n";
 		}
 		if (msg.length() > 0) {
-			throw new RuntimeException(msg + info);
+			throw new RuntimeException(msg + INFO);
 		}
 		if (indent == Integer.MIN_VALUE) {
 			indent = 2;
@@ -456,7 +458,7 @@ public class PrettyXdef extends XReader {
 			OutputStream out = new FileOutputStream(fileName);
 			prettyWrite(in, indent, out, encoding);
 		} else if (fileName != null) {
-			throw new RuntimeException("'-o' switch can't be used for group of files\n" + info);
+			throw new RuntimeException("'-o' switch can't be used for group of files\n" + INFO);
 		} else {
 			File[] files = new File[xdefs.values().size()];
 			xdefs.values().toArray(files);

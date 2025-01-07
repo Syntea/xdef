@@ -204,6 +204,17 @@ public class XValidate {
 		chkdoc.xparse(xmlFile, repw);
 	}
 
+	/** String with command line information. */
+	private static final String INFO =
+"Validation of XML document with X-definition.\n"+
+"\n"+
+"Command line arguments:\n"+
+"  [-d defList | -p XDPool ] [-x xDefName] [-l logFile] -i xmlFile\n"+
+"\n"+
+"  Items in the defList parameter are separated by path separators and may\n"+
+"  contain wildcard charaters in file names.\n"+
+"  Both -d and -p parameters can't be specified.";
+
 	/** Validation of pool ox X-definitions. This method is possible to invoke from command line.
 	 * @param args Array of strings containing command line arguments.
 		 * <p>Arguments:
@@ -217,17 +228,8 @@ public class XValidate {
 		 * </ul>
 	 */
 	public static void main(final String... args) {
-		final String info =
-"Validation of XML document with X-definition.\n"+
-"\n"+
-"Command line arguments:\n"+
-"  [-d defList | -p XDPool ] [-x xDefName] [-l logFile] -i xmlFile\n"+
-"\n"+
-"  Items in the defList parameter are separated by path separators and may\n"+
-"  contain wildcard charaters in file names.\n"+
-"  Both -d and -p parameters can't be specified.";
 		if (args.length == 0) {
-			throw new RuntimeException("Parameters missing\n" + info);
+			throw new RuntimeException("Parameters missing\n" + INFO);
 		}
 		File[] xdefFiles = null;
 		String xdefName = null;
@@ -238,13 +240,13 @@ public class XValidate {
 		while (i < args.length && args[i].startsWith("-")) {
 			int swNum = i + 1;
 			if (args[i].length() == 1) {
-				throw new RuntimeException("Incorrect parameter ["+swNum+"]: \""+args[i]+"\"\n"+info);
+				throw new RuntimeException("Incorrect parameter ["+swNum+"]: \""+args[i]+"\"\n"+INFO);
 			}
 			char c = args[i].charAt(1);
 			switch (c) {
 				case 'h':
 				case '?':
-					System.out.println(info);
+					System.out.println(INFO);
 					return;
 			}
 			String s;
@@ -252,7 +254,7 @@ public class XValidate {
 				i++;
 				if (i >= args.length) {
 					throw new RuntimeException("Parameter [" + swNum + "], \"" + args[swNum-1]
-						+ "\": missing following argument\n" + info);
+						+ "\": missing following argument\n" + INFO);
 				}
 				s = args[i];
 			} else {
@@ -263,7 +265,7 @@ public class XValidate {
 				case 'i': {
 					if (xmlFile != null) {
 						throw new RuntimeException("Parameter [" + swNum +
-							"], \"" + args[swNum-1] + "\": redefinition\n" + info);
+							"], \"" + args[swNum-1] + "\": redefinition\n" + INFO);
 					}
 					xmlFile = new File(s);
 					if (!xmlFile.exists()) {
@@ -292,22 +294,22 @@ public class XValidate {
 						fileTab.toArray(xdefFiles);
 					} else {
 						throw new RuntimeException("Parameter [" + swNum +
-							"], \"" + args[swNum-1] + "\": redefinition\n" + info);
+							"], \"" + args[swNum-1] + "\": redefinition\n" + INFO);
 					}
 					continue;
 				case 'p': {
 					if (poolFile != null || xdefFiles != null) {
 						throw new RuntimeException("Parameter [" + swNum +
-							"], \"" + args[swNum-1] + "\": redefinition\n" + info);
+							"], \"" + args[swNum-1] + "\": redefinition\n" + INFO);
 					}
 					poolFile = new File(s);
 					if (!poolFile.exists()) {
 						throw new RuntimeException("File "+poolFile.getAbsolutePath()
-							+ " doesn't exist\n" + info);
+							+ " doesn't exist\n" + INFO);
 					}
 					if (!poolFile.canRead()) {
 						throw new RuntimeException("Can't read file " + poolFile.getAbsolutePath()
-							+ "\n" + info);
+							+ "\n" + INFO);
 					}
 					continue;
 				}
@@ -320,12 +322,12 @@ public class XValidate {
 								repw = new FileReportWriter(s);
 							} catch (Exception ex) {
 								throw new RuntimeException("Can't create report writer from [" + swNum
-									+ "], \"" + args[swNum-1] + "\"\n" + info);
+									+ "], \"" + args[swNum-1] + "\"\n" + INFO);
 							}
 						}
 					} else {
 						throw new RuntimeException("Parameter [" + swNum
-							+ "], \"" + args[swNum-1] + "\": redefinition\n" + info);
+							+ "], \"" + args[swNum-1] + "\": redefinition\n" + INFO);
 					}
 					continue;
 				case 'x':
@@ -333,20 +335,20 @@ public class XValidate {
 						xdefName = s;
 					} else {
 						throw new RuntimeException("Parameter [" + swNum
-							+ "], \"" + args[swNum-1] + "\": redefinition\n" + info);
+							+ "], \"" + args[swNum-1] + "\": redefinition\n" + INFO);
 					}
 					continue;
 				default:
 					throw new RuntimeException("Parameter [" + swNum
-						+ "], \"" + args[swNum-1] + "\": unknown switch\n" + info);
+						+ "], \"" + args[swNum-1] + "\": unknown switch\n" + INFO);
 			}
 		}
 		if (xmlFile == null) {
-			throw new RuntimeException("No XML file to validate\n"+info);
+			throw new RuntimeException("No XML file to validate\n"+INFO);
 		}
 		//reading of xml files
 		if (i < args.length) {
-			throw new RuntimeException("Error in parameters\n"+info);
+			throw new RuntimeException("Error in parameters\n"+INFO);
 		}
 		if (repw == null) {
 			repw = new ArrayReporter();

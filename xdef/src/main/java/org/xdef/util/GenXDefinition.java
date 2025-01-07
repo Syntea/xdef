@@ -69,16 +69,8 @@ public class GenXDefinition {
 		}
 	}
 
-	/** Generate X-definition from XML (command line parameters).
-	 * @param args array with command line arguments:
-	 * <ul>
-	 * <li><i><b>-i file</b> ....... </i>XML, JSON/XON, or YAML file  pathname.
-	 * <li><i><b>-o file</b> ....... </i>X-definition output file pathname.
-	 * <li><i><b>-e encoding</b> ... </i>character set name of output.
-	 * </ul>
-	 */
-	public static final void main(String... args) {
-		final String info =
+	/** String with command line information. */
+	private static final String INFO =
 "Generate X-definition from XML.\n" +
 "\n"+
 "Command line arguments:\n"+
@@ -88,12 +80,22 @@ public class GenXDefinition {
 "  -o output   file\n" +
 "  -e encoding name of character set encoding\n" +
 "  -x name of X-definition";
+
+	/** Generate X-definition from XML (command line parameters).
+	 * @param args array with command line arguments:
+	 * <ul>
+	 * <li><i><b>-i file</b> ....... </i>XML, JSON/XON, or YAML file  pathname.
+	 * <li><i><b>-o file</b> ....... </i>X-definition output file pathname.
+	 * <li><i><b>-e encoding</b> ... </i>character set name of output.
+	 * </ul>
+	 */
+	public static final void main(String... args) {
 		if (args.length < 2) {
 			if (args.length == 1 && ("-h".equals(args[0]) || "/h".equals(args[0]))) {
-				System.out.println(info);
+				System.out.println(INFO);
 				return;
 			}
-			throw new RuntimeException(info + "Incorrect parameters");
+			throw new RuntimeException(INFO + "Incorrect parameters");
 		}
 		File inFile = null,	outFile = null;
 		String encoding = null;
@@ -102,27 +104,27 @@ public class GenXDefinition {
 		while (i < args.length) {
 			String arg = args[i];
 			if (arg == null || arg.isEmpty()) {
-				throw new RuntimeException(info + "Empty parameter " + (i + 1));
+				throw new RuntimeException(INFO + "Empty parameter " + (i + 1));
 			}
 			if ("-i".equals(arg)) {
 				if (inFile != null) {
-					throw new RuntimeException(info + "Redefinition of input file '-i'");
+					throw new RuntimeException(INFO + "Redefinition of input file '-i'");
 				}
 				if (++i < args.length && (arg = args[i]) != null &&
 					!arg.startsWith("-")) {
 					inFile = new File(arg);
 					if (!inFile.exists() || !inFile.canRead()) {
-						throw new RuntimeException(info + "Can't read intput file : " + arg);
+						throw new RuntimeException(INFO + "Can't read intput file : " + arg);
 					}
 					i++;
 					continue;
 				} else {
-					throw new RuntimeException(info + "After parameter '-i' is expected an input file");
+					throw new RuntimeException(INFO + "After parameter '-i' is expected an input file");
 				}
 			}
 			if ("-o".equals(arg)) {
 				if (outFile != null) {
-					throw new RuntimeException(info + "Redefinition of output file '-o'");
+					throw new RuntimeException(INFO + "Redefinition of output file '-o'");
 				}
 				if (++i < args.length && (arg = args[i]) != null
 					&& !arg.startsWith("-")) {
@@ -130,24 +132,24 @@ public class GenXDefinition {
 					i++;
 					continue;
 				} else {
-					throw new RuntimeException(info + "After parameter '-o' is expected an output file");
+					throw new RuntimeException(INFO + "After parameter '-o' is expected an output file");
 				}
 			}
 			if ("-e".equals(arg)) {
 				if (encoding != null) {
-					throw new RuntimeException(info + "Redefinition encoding '-e'");
+					throw new RuntimeException(INFO + "Redefinition encoding '-e'");
 				}
 				if (++i < args.length && (arg = args[i]) != null && !arg.startsWith("-")) {
 					encoding = arg;
 					i++;
 					continue;
 				} else {
-					throw new RuntimeException(info + "After parameter '-e' is expected an encoding name");
+					throw new RuntimeException(INFO + "After parameter '-e' is expected an encoding name");
 				}
 			}
 			if ("-x".equals(arg)) {
 				if (xdName != null) {
-					throw new RuntimeException(info + "Redefinition X-definition name '-x'");
+					throw new RuntimeException(INFO + "Redefinition X-definition name '-x'");
 				}
 				if (++i < args.length && (arg = args[i]) != null &&
 					!arg.startsWith("-")) {
@@ -155,16 +157,16 @@ public class GenXDefinition {
 					i++;
 					continue;
 				} else {
-					throw new RuntimeException(info + "After parameter '-e' is expected an encoding name");
+					throw new RuntimeException(INFO + "After parameter '-e' is expected an encoding name");
 				}
 			}
-			throw new RuntimeException(info + "Incorrect parameter: " + arg);
+			throw new RuntimeException(INFO + "Incorrect parameter: " + arg);
 		}
 		if (inFile == null) {
-			throw new RuntimeException(info + "No source input specified");
+			throw new RuntimeException(INFO + "No source input specified");
 		}
 		if (outFile == null) {
-			throw new RuntimeException(info + "No output file specified");
+			throw new RuntimeException(INFO + "No output file specified");
 		}
 		if (encoding == null) {
 			encoding = "UTF-8";

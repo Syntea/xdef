@@ -236,6 +236,16 @@ public class XsdToXdef {
 		}
 	}
 
+	/** String with command line information. */
+	private static final String INFO =
+"Using XsdToXdef: \n"
++ "-i, --input <PATH> input main schema location \n"
++ "-o, --output <PATH> output file or directory name \n"
++ "-s, --separated every schema to standalone xdefinition file \n"
++ "-p, --xdefPrefix <PREFIX> prefix for xdefinition nodes \n"
++ "-l, --logFile <PATH> log file name \n"
++ "-?, -h, --help help";
+
 	/** Run class from command line.
 	 * @param args array of string with command line arguments:
 	 * <ul>
@@ -251,16 +261,8 @@ public class XsdToXdef {
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		String info =
-"Using XsdToXdef: \n"
-+ "-i, --input <PATH> input main schema location \n"
-+ "-o, --output <PATH> output file or directory name \n"
-+ "-s, --separated every schema to standalone xdefinition file \n"
-+ "-p, --xdefPrefix <PREFIX> prefix for xdefinition nodes \n"
-+ "-l, --logFile <PATH> log file name \n"
-+ "-?, -h, --help help";
 		if (args == null || args.length == 0) {
-			throw new RuntimeException("Parameters missing!\n" + info);
+			throw new RuntimeException("Parameters missing!\n" + INFO);
 		}
 
 		final StringBuilder err = new StringBuilder();
@@ -303,7 +305,7 @@ public class XsdToXdef {
 				switch (parameter) {
 					case "-h":
 					case "-?":
-					case "--help": System.out.println(info); return;
+					case "--help": System.out.println(INFO); return;
 					case "-i":
 					case "--input":
 						if (input != null) {
@@ -351,7 +353,7 @@ public class XsdToXdef {
 			err.append("Output file or directory parameter is missing\n");
 		}
 		if (err.length() > 0) {
-			throw new RuntimeException(err + info);
+			throw new RuntimeException(err + INFO);
 		}
 		try {
 			if (separated) {
