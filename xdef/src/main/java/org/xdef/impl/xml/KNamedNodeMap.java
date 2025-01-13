@@ -12,6 +12,7 @@ import org.xdef.xml.KXmlUtils;
 public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 
 	public KNamedNodeMap() {super();}
+
 	public KNamedNodeMap(Node x) {
 		super();
 		if (x != null){
@@ -39,9 +40,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	}
 
 	@Override
-	public final Node setNamedItem(final Node arg) throws DOMException {
-		return setNamedItemNS(arg);
-	}
+	public final Node setNamedItem(final Node arg) throws DOMException {return setNamedItemNS(arg);}
 
 	@Override
 	public final Node removeNamedItem(final String name) throws DOMException {

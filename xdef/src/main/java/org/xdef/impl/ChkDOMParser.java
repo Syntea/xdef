@@ -314,8 +314,6 @@ class ChkDOMParser extends SReporter {
 		public final void fatal(final String id, final String msg, final Object... mod) {
 			putReport(Report.fatal(id, msg, mod));
 		}
-		@Override
-		public final void putReport(final Report report) {super.putReport(report);}
 		public final void putReport(final byte type, final String id, final String msg, final Object... mod) {
 			if (getReportWriter() == null) {
 				if (type != Report.WARNING) {

@@ -19,8 +19,8 @@ import org.xml.sax.ext.LexicalHandler;
 /** Reader used in SAX parser.
  * @author Vaclav Trojan
  */
-public abstract class DomBaseHandler
-	implements ContentHandler, EntityResolver, ErrorHandler, LexicalHandler, XHandler{
+public abstract class DomBaseHandler implements ContentHandler, EntityResolver, ErrorHandler,
+	LexicalHandler, XHandler {
 	private static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
 	public final DocumentBuilder _docBuilder;
 	public InputSource _is;
@@ -63,8 +63,7 @@ public abstract class DomBaseHandler
 	// DomBaseHandler
 	/////////////////////////////////////////////////////////////
 
-	public final void doParse(final InputStream in, final String sysId)
-		throws Exception {
+	public final void doParse(final InputStream in, final String sysId) throws Exception {
 		XInputStream myInputStream = new XInputStream(in);
 		try (XReader myReader = new XReader(myInputStream)) {
 			myReader.setHandler(this);

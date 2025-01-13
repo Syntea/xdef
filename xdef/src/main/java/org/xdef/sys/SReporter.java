@@ -101,7 +101,9 @@ public class SReporter extends SPosition {
 	 * @param ID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(final long ID, final Object... mod) {putReport(Report.error(ID, mod), _reportWriter);}
+	public void error(final long ID, final Object... mod) {
+		putReport(Report.error(ID, mod), _reportWriter);
+	}
 
 	/** Put light error message with modification parameters.
 	 * @param ID registered message ID.
@@ -116,7 +118,9 @@ public class SReporter extends SPosition {
 	 * @param ID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final long ID, final Object... mod) {putReport(Report.warning(ID,mod),_reportWriter);}
+	public void warning(final long ID, final Object... mod) {
+		putReport(Report.warning(ID,mod),_reportWriter);
+	}
 
 	/** Put report. Type of report may be WARNING, ERROR or FATAL; see {@link org.xdef.sys.Report#getMsgID()}.
 	 * @param report The report.
@@ -129,34 +133,38 @@ public class SReporter extends SPosition {
 	 * @param report The report.
 	 * @throws SRuntimeException if reporter is null and if report type is FATAL, ERROR or LIGHTERROR .
 	 */
-	public void putReport(final SPosition pos, final Report report) {pos.putReport(report, _reportWriter);}
+	public void putReport(final SPosition pos, final Report report) {
+		pos.putReport(report, _reportWriter);
+	}
 
 	/** Get number of errors.
 	 * @return Number of errors.
 	 */
-	public int getErrorCount() {return _reportWriter == null ? 0 : _reportWriter.getErrorCount();}
+	public final int getErrorCount() {return _reportWriter == null ? 0 : _reportWriter.getErrorCount();}
 
 	/** Get number of warnings.
 	 * @return Number of warnings.
 	 */
-	public int getWarningCount() {return _reportWriter == null ? 0 : _reportWriter.getWarningCount();}
+	public final int getWarningCount() {return _reportWriter == null ? 0 : _reportWriter.getWarningCount();}
 
 	/** Return true if and only if errors or fatal errors or light
 	 * errors were generated.
 	 * @return true if an error occurred.
 	 */
-	public boolean errors() {return _reportWriter == null ? false : _reportWriter.errors();}
+	public final boolean errors() {return _reportWriter == null ? false : _reportWriter.errors();}
 
 	/** Check if errors, light errors or warnings were generated.
 	 * @return true if errors or warnings occurred.
 	 */
-	public boolean errorWarnings() {return _reportWriter == null ? false : _reportWriter.errorWarnings();}
+	public final boolean errorWarnings() {
+		return _reportWriter == null ? false : _reportWriter.errorWarnings();
+	}
 
 	/** Check error reports in the reporter. Return normally if no error was reported, otherwise throws
 	 * the exception with the list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if an error was reported.
 	 */
-	public void checkAndThrowErrors() throws SRuntimeException {
+	public final void checkAndThrowErrors() throws SRuntimeException {
 		if (_reportWriter != null) {
 			_reportWriter.checkAndThrowErrors();
 		}
@@ -166,7 +174,7 @@ public class SReporter extends SPosition {
 	 * otherwise throws the exception with the list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if an error or warning was reported.
 	 */
-	public void checkAndThrowErrorWarnings() throws SRuntimeException {
+	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
 		if (_reportWriter != null) {
 			_reportWriter.checkAndThrowErrorWarnings();
 		}
@@ -176,10 +184,10 @@ public class SReporter extends SPosition {
 	 * Please use getReportReader().printReports(...).
 	 * @param out The output stream.
 	 */
-	public void printReports(final PrintStream out) {_reportWriter.getReportReader().printReports(out);}
+	public final void printReports(final PrintStream out) {_reportWriter.getReportReader().printReports(out);}
 
 	/** Write reports to String.
 	 * @return the String with reports.
 	 */
-	public String printToString() {return _reportWriter.getReportReader().printToString();}
+	public final String printToString() {return _reportWriter.getReportReader().printToString();}
 }

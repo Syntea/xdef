@@ -28,7 +28,7 @@ public class XReader extends XAbstractReader {
 	}
 
 	@Override
-	public int read() throws IOException {
+	public final int read() throws IOException {
 		if (_notScanning) {
 			return _in.read();
 		}
@@ -40,7 +40,7 @@ public class XReader extends XAbstractReader {
 	}
 
 	@Override
-	public int read(final char[] cbuf) throws IOException {
+	public final int read(final char[] cbuf) throws IOException {
 		if (_notScanning) {
 			return _in.read(cbuf);
 		}
@@ -54,7 +54,7 @@ public class XReader extends XAbstractReader {
 	}
 
 	@Override
-	public int read(final char[] cbuf,
+	public final int read(final char[] cbuf,
 		final int off, final int len) throws IOException {
 		if (_notScanning) {
 			return _in.read(cbuf, off, len);
@@ -67,7 +67,7 @@ public class XReader extends XAbstractReader {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public final void close() throws IOException {
 		if (!_closed) {
 			_in.close();
 			_closed = true;
@@ -78,5 +78,5 @@ public class XReader extends XAbstractReader {
 	}
 
 	@Override
-	public void stopScanning() {_notScanning = true;}
+	public final void stopScanning() {_notScanning = true;}
 }

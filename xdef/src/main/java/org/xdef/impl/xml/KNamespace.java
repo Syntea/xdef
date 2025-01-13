@@ -29,8 +29,7 @@ public class KNamespace implements NamespaceContext {
 	/** Table of namespace URIs. */
 	private String[] _uris;
 
-	/** Creates a new instance of KNamespaceImpl with default items
-	 * for prefixes "xml" and "xmlns".
+	/** Creates a new instance of KNamespaceImpl with default items for prefixes "xml" and "xmlns".
 	 */
 	public KNamespace() {}
 
@@ -41,7 +40,7 @@ public class KNamespace implements NamespaceContext {
 	@Override
 	/** Find namespace URI assigned to prefix from argument.
 	 * @param prefix namespace prefix to be searched.
-	 * @return namespace URI or <i>null</i> if no URI was found.
+	 * @return namespace URI or null if no URI was found.
 	 */
 	public final String getNamespaceURI(final String prefix) {
 		if (prefix != null && _size > 0) {
@@ -57,7 +56,7 @@ public class KNamespace implements NamespaceContext {
 	@Override
 	/** Find most recent prefix assigned to given namespace URI.
 	 * @param uri namespace URI to be searched.
-	 * @return namespace prefix or <i>null</i>.
+	 * @return namespace prefix or null.
 	 */
 	public final String getPrefix(final String uri) {
 		if (uri != null && _size > 0) {

@@ -193,7 +193,7 @@ public class XAbstractInputStream extends InputStream {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public int read() throws IOException {
+	public final int read() throws IOException {
 		if (_hdrIndex <= _len) {
 			if (_hdrIndex < _len) {
 				return _buf[_hdrIndex++];
@@ -204,7 +204,7 @@ public class XAbstractInputStream extends InputStream {
 	}
 
 	@Override
-	public int read(final byte[] b) throws IOException {
+	public final int read(final byte[] b) throws IOException {
 		if (_hdrIndex <= _len) {
 			int i = 0;
 			for (; i < b.length && _hdrIndex < _len; i++) {
@@ -221,9 +221,7 @@ public class XAbstractInputStream extends InputStream {
 	}
 
 	@Override
-	public int read(final byte[] b,
-		final int off,
-		final int len) throws IOException {
+	public final int read(final byte[] b, final int off, final int len) throws IOException {
 		if (_hdrIndex <= _len) {
 			int i = off;
 			for (; i < b.length && i < off + len && _hdrIndex < _len; i++){
@@ -240,7 +238,7 @@ public class XAbstractInputStream extends InputStream {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public final void close() throws IOException {
 		if (_in != null) {
 			_in.close();
 		}

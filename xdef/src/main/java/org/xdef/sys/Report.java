@@ -189,7 +189,7 @@ public class Report {
 	 * @param mod array of modifications.
 	 * @return string with modification information.
 	 */
-	public static String genModification(final Object... mod) {
+	public final static String genModification(final Object... mod) {
 		if (mod != null && mod.length > 0) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < mod.length; i++) {
@@ -277,19 +277,17 @@ public class Report {
 	/** Get text of report in the local language defined by the system.
 	 * @return report as a string.
 	 */
-	public String toString() {return toString(null);}
+	public final String toString() {return toString(null);}
 
 	/** Get localized text of report.
 	 * @param language language code (ISO-639).
 	 * @return report as a string.
 	 */
-	public String toString(final String language) {
+	public final String toString(final String language) {
 		StringBuilder sb = new StringBuilder();
 		switch (_type) {
-			case STRING:
-				return ((_text == null || _text.isEmpty()) ? sb : sb.append(_text)).toString();
-			case TEXT:
-			   break;
+			case STRING: return ((_text == null || _text.isEmpty()) ? sb : sb.append(_text)).toString();
+			case TEXT: break;
 			case AUDIT:
 			case MESSAGE:
 			case INFO:
@@ -334,7 +332,7 @@ public class Report {
 	/** Set primary text.
 	 * @param text the argument will be set as primary text (may be null).
 	 */
-	public final void setText(String text) {_text = text;}
+	public final void setText(final String text) {_text = text;}
 
 	/** Get timestamp in milliseconds.
 	 * @return time in milliseconds or -1.
@@ -347,7 +345,7 @@ public class Report {
 	/** Set timestamp in milliseconds.
 	 * @param millis time in milliseconds from 1990 or -1.
 	 */
-	public final void setTimestamp(long millis) {_timeMillis = millis;}
+	public final void setTimestamp(final long millis) {_timeMillis = millis;}
 
 	/** Get modification part of the report.
 	 * @return value of the modification or null.
@@ -357,7 +355,7 @@ public class Report {
 	/** Set modification part of the report.
 	 * @param mod value of the modification or null.
 	 */
-	public final void setModification(String mod) {_modification = mod;}
+	public final void setModification(final String mod) {_modification = mod;}
 
 	/** Get value of parameter from modification string.
 	 * @param name parameter name.
@@ -527,7 +525,7 @@ public class Report {
 	 * @param language language code (ISO-639 two letters or ISO-639-2 three letters).
 	 * @return object which may be used for synchronization purposes
 	 */
-	public static Object setLanguage(final String language) {return SManager.setLanguage(language);}
+	public static final Object setLanguage(final String language) {return SManager.setLanguage(language);}
 
 	/** Create new Report object with type AUDIT.
 	 * @param id report id. If id is null the default text is used.
@@ -535,7 +533,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report audit(final String id, final String msg, final Object... mod) {
+	public static final Report audit(final String id, final String msg, final Object... mod) {
 		return new Report(AUDIT, id, msg, mod);
 	}
 
@@ -545,7 +543,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report fatal(final String id, final String msg, final Object... mod) {
+	public static final Report fatal(final String id, final String msg, final Object... mod) {
 		return new Report(FATAL, id, msg, mod);
 	}
 
@@ -555,7 +553,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report error(final String id, final String msg, final Object... mod) {
+	public static final Report error(final String id, final String msg, final Object... mod) {
 		return new Report(ERROR, id, msg, mod);
 	}
 
@@ -565,7 +563,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report lightError(final String id, final String msg, final Object... mod) {
+	public static final Report lightError(final String id, final String msg, final Object... mod) {
 		return new Report(LIGHTERROR, id, msg, mod);
 	}
 
@@ -575,7 +573,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report warning(final String id, final String msg, final Object... mod) {
+	public static final Report warning(final String id, final String msg, final Object... mod) {
 		return new Report(WARNING, id, msg, mod);
 	}
 
@@ -585,7 +583,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report message(final String id, final String msg, final Object... mod) {
+	public static final Report message(final String id, final String msg, final Object... mod) {
 		return new Report(MESSAGE, id, msg, mod);
 	}
 
@@ -595,7 +593,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report info(final String id, final String msg, final Object... mod) {
+	public static final Report info(final String id, final String msg, final Object... mod) {
 		return new Report(INFO, id, msg, mod);
 	}
 
@@ -605,7 +603,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report string(final String id, final String msg, final Object... mod) {
+	public static final Report string(final String id, final String msg, final Object... mod) {
 		return new Report(STRING, id, msg, mod);
 	}
 
@@ -615,7 +613,7 @@ public class Report {
 	 * @param mod Message modification parameters.
 	 * @return generated report.
 	 */
-	public static Report text(final String id, final String msg, final Object... mod) {
+	public static final Report text(final String id, final String msg, final Object... mod) {
 		return new Report(TEXT, id, msg, mod);
 	}
 
@@ -624,7 +622,7 @@ public class Report {
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return text of report.
 	 */
-	public static String getRawReportText(final String reportID, final String language) {
+	public static final String getRawReportText(final String reportID, final String language) {
 		return MANAGER.getReportText(reportID, language, false);
 	}
 
@@ -633,7 +631,7 @@ public class Report {
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return text of report.
 	 */
-	public static String getReportText(final String reportID, final String language) {
+	public static final String getReportText(final String reportID, final String language) {
 		return MANAGER.getReportText(reportID, language, true);
 	}
 
@@ -642,7 +640,7 @@ public class Report {
 	 * @param reportID report ID.
 	 * @return text of report.
 	 */
-	public static String getReportText(final String reportID) {
+	public static final String getReportText(final String reportID) {
 		return MANAGER.getReportText(reportID, null, true);
 	}
 
@@ -653,7 +651,7 @@ public class Report {
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return The text of localized report in given language or null.
 	 */
-	public static String getLocalizedText(final String reportID,
+	public static final String getLocalizedText(final String reportID,
 		final String msgText,
 		final String modification,
 		final String language) {
@@ -665,7 +663,7 @@ public class Report {
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return sorted array of parameter names or null.
 	 */
-	public static String[] getReportParamNames(final String reportID, final String language) {
+	public static final String[] getReportParamNames(final String reportID, final String language) {
 		return MANAGER.getReportParamNames(reportID, language);
 	}
 
@@ -675,7 +673,7 @@ public class Report {
 	 * @param language language code (ISO-639) or null (i.e. default language).
 	 * @return text of localized report in given language or null.
 	 */
-	public static String getLocalizedText(final long ID, String modification, final String language) {
+	public static final String getLocalizedText(final long ID, String modification, final String language) {
 		return MANAGER.getLocalizedText(ID, modification, language);
 	}
 
@@ -688,69 +686,71 @@ public class Report {
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report audit(final long ID, final Object... mod) {return new Report(AUDIT, ID, mod);}
+	public static final Report audit(final long ID, final Object... mod) {return new Report(AUDIT, ID, mod);}
 
 	/** Create new registered report object with type FATAL.
 	 * @param ID Registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report fatal(final long ID, final Object... mod) {return new Report(FATAL, ID, mod);}
+	public static final Report fatal(final long ID, final Object... mod) {return new Report(FATAL, ID, mod);}
 
 	/** Create new registered report object with type ERROR.
 	 * @param ID registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report error(final long ID, final Object... mod) {return new Report(ERROR, ID, mod);}
+	public static final Report error(final long ID, final Object... mod) {return new Report(ERROR, ID, mod);}
 
 	/** Create new registered report object with type LIGHT (light error).
 	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report lightError(final long ID,final Object... mod) {return new Report(LIGHTERROR,ID,mod);}
+	public static final Report lightError(
+		final long ID,final Object... mod) {return new Report(LIGHTERROR,ID,mod);
+	}
 
 	/** Create new registered report object with type WARNING.
 	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report warning(long ID, final Object... mod) {return new Report(WARNING, ID, mod);}
+	public static final Report warning(long ID, final Object... mod) {return new Report(WARNING, ID, mod);}
 
 	/** Create new registered report object with type MESSAGE.
 	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report message(final long ID, final Object... mod) {return new Report(MESSAGE, ID, mod);}
+	public static final Report message(final long ID,final Object... mod) {return new Report(MESSAGE,ID,mod);}
 
 	/** Create new registered report object with type INFO.
 	 * @param ID Registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report info(final long ID, final Object... mod) {return new Report(INFO, ID, mod);}
+	public static final Report info(final long ID, final Object... mod) {return new Report(INFO, ID, mod);}
 
 	/** Create new registered report object with type STRING.
 	 * @param ID Registered report id.
 	 * @param mod modification string of report text.
 	 * @return generated report.
 	 */
-	public static Report string(final long ID, final Object... mod) {return new Report(STRING, ID, mod);}
+	public static final Report string(final long ID, final Object... mod) {return new Report(STRING,ID,mod);}
 
 	/** Create new registered report object with type TEXT.
 	 * @param ID Registered report id.
 	 * @param mod modification parameters.
 	 * @return generated report.
 	 */
-	public static Report text(final long ID, final Object... mod) {return new Report(TEXT, ID, mod);}
+	public static final Report text(final long ID, final Object... mod) {return new Report(TEXT, ID, mod);}
 
 	/** Get string with the report ID created from registered ID.
 	 * @param ID registered report ID.
 	 * @return string with report ID or null.
 	 */
-	public static String getReportID(final long ID) {return SManager.getReportID(ID);}
+	public static final String getReportID(final long ID) {return SManager.getReportID(ID);}
 
 	/** Get "raw" text of report from report table {i.e. references to other
 	 * reports are not resolved).
@@ -758,7 +758,7 @@ public class Report {
 	 * @param language language code.
 	 * @return text of report.
 	 */
-	public static String getRawReportText(final long ID, final String language) {
+	public static final String getRawReportText(final long ID, final String language) {
 		return MANAGER.getReportText(ID, language, false);
 	}
 
@@ -767,7 +767,7 @@ public class Report {
 	 * @param language language code.
 	 * @return text of report.
 	 */
-	public static String getReportText(final long ID,
+	public static final String getReportText(final long ID,
 		final String language) {
 		return MANAGER.getReportText(ID, language, true);
 	}
@@ -777,12 +777,12 @@ public class Report {
 	 * @param ID registered report ID.
 	 * @return text of report.
 	 */
-	public static String getReportText(final long ID) {return MANAGER.getReportText(ID, null, true);}
+	public static final String getReportText(final long ID) {return MANAGER.getReportText(ID, null, true);}
 
 	/** Get info report with system build information.
 	 * @return report with build information.
 	 */
-	public static Report buildInfo() {
+	public static final Report buildInfo() {
 		//Compiled: &{c}, build version: &{v}, date: &{d}
 		return Report.info(SYS.SYS010, "&{v}"+ XDConstants.BUILD_VERSION +"&{d}"+ XDConstants.BUILD_DATETIME);
 	}
@@ -793,7 +793,7 @@ public class Report {
 	 * @param w SObjectWriter where to write.
 	 * @throws IOException if an error occurs.
 	 */
-	public void writeObj(SObjectWriter w) throws IOException {
+	public final void writeObj(final SObjectWriter w) throws IOException {
 		w.writeByte(_type);
 		w.writeString(_reportID);
 		w.writeString(_text);
@@ -806,10 +806,9 @@ public class Report {
 	 * @return report from the SObjectReader
 	 * @throws IOException if an error occurs.
 	 */
-	public static Report readObj(SObjectReader r) throws IOException {
+	public static final Report readObj(final SObjectReader r) throws IOException {
 		Report x = new Report(r.readByte(), r.readString(), r.readString(), r.readString());
 		x._timeMillis = r.readLong();
 		return x;
 	}
-
 }

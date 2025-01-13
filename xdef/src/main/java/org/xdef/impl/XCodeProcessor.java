@@ -551,17 +551,11 @@ public final class XCodeProcessor {
 	/** List of items to be managed at the end of process. */
 	private List<XDValue> _finalList;
 	/** Map of named user objects. */
-	private final Map<String, Object> _userObjects;
+	private final Map<String, Object> _userObjects = new LinkedHashMap<>();
 	/** XPath function resolver. */
-	final XPathFunctionResolver _functionResolver;
+	final XPathFunctionResolver _functionResolver = new XDFunctionResolver();
 	/** XPath variable resolver. */
-	final XPathVariableResolver _variableResolver;
-
-	private XCodeProcessor() {
-		_userObjects = new LinkedHashMap<>();
-		_functionResolver = new XDFunctionResolver();
-		_variableResolver = new XDVariableResolver();
-	}
+	final XPathVariableResolver _variableResolver = new XDVariableResolver();
 
 	/** Creates a new instance of ScriptCodeProcessor
 	 * @param xd XDefinition.
@@ -571,7 +565,6 @@ public final class XCodeProcessor {
 	 * @param userObj Assigned user's object.
 	 */
 	XCodeProcessor(final XDefinition xd, final SReporter r, final XDOutput stdOut, final XDInput stdIn) {
-		this();
 		init(xd, null);
 		init1(xd, r.getReportWriter(), stdOut, stdIn);
 	}
@@ -582,7 +575,6 @@ public final class XCodeProcessor {
 	 * @param ce ChkElement from which the object is created.
 	 */
 	XCodeProcessor(final XDefinition xd, final ChkElement ce) {
-		this();
 		init(xd, ce._scp._props);
 		_globalVariables = ce._scp._globalVariables;
 		_debugger = ce._scp.getDebugger();

@@ -26,7 +26,7 @@ import java.util.List;
 /** Static methods for printing listings of parsed source.
  * @author Vaclav Trojan
  */
-public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
+public final class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	private final static DecimalFormat LINE_NUM_FORMAT = new DecimalFormat(" 00000  ");
 	/** Saved actual position. */
 	private final long _pos;
@@ -95,7 +95,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 
 	@Override
 	/** compares position of report - internally used for sorting. */
-	public boolean equals(final Object o) {
+	public final boolean equals(final Object o) {
 		if (o != null && o instanceof ReportPrinter) {
 			ReportPrinter rep = (ReportPrinter)o;
 			return rep._sysId.equals(_sysId) && rep._line==_line && rep._column==_column;
@@ -105,7 +105,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		int hash = 53 * 7 + (int) (_line ^ (_line >>> 32));
 		hash = 53 * hash + (int) (_column ^ (_column >>> 32));
 		return 53 * hash + (_sysId != null ? _sysId.hashCode() : 0);
@@ -119,7 +119,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @return A negative integer, zero, or a positive integer as this object
 	 * is less than, equal to, or greater than the specified object.
 	 */
-	public int compareTo(final ReportPrinter rep) {
+	public final int compareTo(final ReportPrinter rep) {
 		if (rep._line == -1) {
 			return -1;
 		}
@@ -143,7 +143,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param resolveReportReferences if true then all references to other reports are resolved.
 	 * @throws Exception if given prefix is not registered.
 	 */
-	public static void printMessages(final String prefix,
+	public static final void printMessages(final String prefix,
 		final PrintStream out,
 		final String language,
 		final boolean resolveReportReferences) throws Exception {
@@ -162,7 +162,8 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param resolveReferences if true then all references to other reports are resolved.
 	 * @return string with message source.
 	 */
-	public static String getMsgSource(final String id, final String language,final boolean resolveReferences){
+	public static final String getMsgSource(final String id,
+		final String language, final boolean resolveReferences) {
 		return resolveReferences ? Report.getReportText(id, language) :	Report.getRawReportText(id, language);
 	}
 
@@ -171,7 +172,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @return listing as a string.
 	 */
-	public static String printListing(final String source, final ReportReader reports) {
+	public static final String printListing(final String source, final ReportReader reports) {
 		CharArrayWriter out = new CharArrayWriter();
 		printListing(out, source, reports, true);
 		return out.toString();
@@ -183,7 +184,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final PrintStream out,
+	public static final void printListing(final PrintStream out,
 		final String source,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -200,7 +201,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final PrintStream out,
+	public static final void printListing(final PrintStream out,
 		final URL url,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -220,7 +221,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final PrintStream out,
+	public static final void printListing(final PrintStream out,
 		final File file,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -241,7 +242,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final PrintStream out,
+	public static final void printListing(final PrintStream out,
 		final Reader in,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -256,13 +257,12 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param name Filter source name (sysId).
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final PrintStream out,
+	public static final void printListing(final PrintStream out,
 		final Reader in,
 		final ReportReader reports,
 		final String name,
 		final boolean lineNumbers) {
-		printListing(
-			new OutputStreamWriter(out), in, reports, name, lineNumbers);
+		printListing(new OutputStreamWriter(out), in, reports, name, lineNumbers);
 	}
 
 	/** Print listing from source string with message table to output stream.
@@ -271,7 +271,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final Writer out,
+	public static final void printListing(final Writer out,
 		final File file,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -294,7 +294,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final Writer out,
+	public static final void printListing(final Writer out,
 		final String source,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -311,7 +311,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param reports Report file.
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final Writer out,
+	public static final void printListing(final Writer out,
 		final Reader in,
 		final ReportReader reports,
 		final boolean lineNumbers) {
@@ -326,7 +326,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 * @param name Filter source name (sysId).
 	 */
-	public static void printListing(final Writer out,
+	public static final void printListing(final Writer out,
 		final Reader in,
 		final ReportReader reports,
 		final String name,
@@ -345,7 +345,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param language Language ID or null (i.e. default).
 	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
-	public static void printListing(final Writer out,
+	public static final void printListing(final Writer out,
 		final Reader reader,
 		final ReportReader reports,
 		final String sysId,
@@ -476,9 +476,8 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	/** print message and help information and finish program.
 	 * @param msg The message.
 	 */
-	private static void printUsage(final String msg) {
-		System.err.println("ReportPrinter"
-			);
+	private static final void printUsage(final String msg) {
+		System.err.println("ReportPrinter");
 		System.err.println(msg);
 		System.err.println("Usage: -i errfile [-o output]\n"
 +"where:\n"
@@ -495,7 +494,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * <p>-i errfile ... file name with error records
 	 * <p>-o output  ... name of output file (default is standard output)
 	 */
-	public static void main(String... args) {
+	public static final void main(String... args) {
 		if (args.length == 0) {
 			printUsage("Error: missing parameters");
 		}

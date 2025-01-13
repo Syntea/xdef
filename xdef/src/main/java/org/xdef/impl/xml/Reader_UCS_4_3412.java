@@ -6,7 +6,6 @@ import java.io.InputStream;
  * @author Vaclav Trojan
  */
 public class Reader_UCS_4_3412 extends Reader_UCS_4_xxxx {
-
 	/** four bytes. */
 	private final byte[] _b4 = new byte[4];
 

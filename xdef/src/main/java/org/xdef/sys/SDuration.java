@@ -11,8 +11,7 @@ import javax.xml.datatype.Duration;
  * This class implements abstract methods from javax.xml.datatype.Duration.
  * @author Vaclav Trojan
  */
-public class SDuration extends Duration implements Comparable<SDuration> {
-
+public final class SDuration extends Duration implements Comparable<SDuration> {
 	private int _years;
 	private int _months;
 	private int _days;
