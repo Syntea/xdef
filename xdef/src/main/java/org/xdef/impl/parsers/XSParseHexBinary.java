@@ -13,6 +13,7 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 	private static final String ROOTBASENAME = "hexBinary";
 
 	public XSParseHexBinary() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -26,10 +27,8 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 			int j;
 			p.nextChar();
 			if (((j="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar())) < 0)){
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809,
-					parserName() +" (must be multiple of 2 chars)",
-					p.getSourceBuffer());
+				p.errorWithString(XDEF.XDEF809, //Incorrect value of '&{0}'&{1}{: }
+					parserName() +" (must be multiple of 2 chars)", p.getSourceBuffer());
 				return;
 			}
 			baos.write(j >= 16 ? i | j - 6 : i | j);

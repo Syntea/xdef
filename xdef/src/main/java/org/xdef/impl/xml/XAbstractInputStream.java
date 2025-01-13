@@ -17,10 +17,8 @@ public class XAbstractInputStream extends InputStream {
 	 * @param in Input stream with data.
 	 * @throws IOException if an error occurs.
 	 */
-	public XAbstractInputStream(final InputStream in) throws IOException {
-		_in = in;
-		_len = -1;
-	}
+	public XAbstractInputStream(final InputStream in) throws IOException {_in = in; _len = -1;}
+
 	public final void setHdrIndex(final int hdrIndex) {_hdrIndex = hdrIndex;}
 	public final InputStream getInputStream() {return _len == 0 ? _in : this;}
 	public final byte[] getparsedBytes() {return _buf;}
@@ -42,46 +40,37 @@ public class XAbstractInputStream extends InputStream {
 	 * <p>FF FE ## ##: UTF-16, little-endian
 	 * <li><p>Without a Byte Order Mark:
 	 * <b>00 00 00 3C, 3C 00 00 00, 00 00 3C 00, 00 3C 00 00:</b>
-	 * <p>UCS-4 or other encoding with a 32-bit code unit and ASCII
-	 * characters encoded as ASCII values, in respectively big-endian(1234),
-	 * little-endian(4321) and two unusual byte orders (2143 and 3412).
-	 * The encoding declaration must be read to determine which of UCS-4 or
-	 * other supported 32-bit encodings applies.
+	 * <p>UCS-4 or other encoding with a 32-bit code unit and ASCII characters encoded as ASCII values,
+	 * in respectively big-endian(1234), little-endian(4321) and two unusual byte orders (2143 and 3412).
+	 * The encoding declaration must be read to determine which of UCS-4 or other supported 32-bit encodings
+	 * applies.
 	 * <b>00 3C 00 3F</b>
-	 * <p>UTF-16BE or big-endian ISO-10646-UCS-2 or other encoding with a
-	 * 16-bit code unit in big-endian order and ASCII characters encoded as
-	 * ASCII values (the encoding declaration must be read to determine
-	 * which)
+	 * <p>UTF-16BE or big-endian ISO-10646-UCS-2 or other encoding with a 16-bit code unit in big-endian order
+	 * and ASCII characters encoded as ASCII values (the encoding declaration must be read to determine which)
 	 * <b>3C 00 3F 00:</b>
-	 * <p>UTF-16LE or little-endian ISO-10646-UCS-2 or other encoding with a
-	 * 16-bit code unit in little-endian order and ASCII characters encoded
-	 * as ASCII values (the encoding declaration must be read to determine
+	 * <p>UTF-16LE or little-endian ISO-10646-UCS-2 or other encoding with a 16-bit code unit in little-endian
+	 * order and ASCII characters encoded as ASCII values (the encoding declaration must be read to determine
 	 * which)
 	 * <b>3C 3F 78 6D:</b>
-	 * <p>UTF-8, ISO 646, ASCII, some part of ISO 8859, Shift-JIS, EUC, or
-	 * any other 7-bit, 8-bit, or mixed-width encoding which ensures that
-	 * the characters of ASCII have their normal positions, width, and
-	 * values; the actual encoding declaration must be read to detect which
-	 * of these applies, but since all of these encodings use the same bit
-	 * patterns for the relevant ASCII characters, the encoding declaration
-	 * itself may be read reliably
+	 * <p>UTF-8, ISO 646, ASCII, some part of ISO 8859, Shift-JIS, EUC, or any other 7-bit, 8-bit, or
+	 * mixed-width encoding which ensures that the characters of ASCII have their normal positions, width, and
+	 * values; the actual encoding declaration must be read to detect which of these applies, but since all
+	 * of these encodings use the same bit patterns for the relevant ASCII characters, the encoding
+	 * declaration itself may be read reliably
 	 * <b>4C 6F A7 94:</b>
 	 * <p>EBCDIC (in some flavor; the full encoding declaration must be read
 	 * to tell which code page is in use)
 	 * <b>Other:</b>
-	 * <p>UTF-8 without an encoding declaration, or else the data stream
-	 * is mislabeled (lacking a required encoding declaration), corrupt,
-	 * fragmentary, or enclosed in a wrapper of some kind.
+	 * <p>UTF-8 without an encoding declaration, or else the data stream is mislabeled (lacking a required
+	 * encoding declaration), corrupt, fragmentary, or enclosed in a wrapper of some kind.
 	 * </UL>
 	 * @param in InputStream where to read.
 	 * @param buf array of four bytes to which first bytes are read.
-	 * @return character set name. First two characters have a special mesaging.
-	 * The first character is number of read bytes and the second character
-	 * is the number of bytes to read next character.
+	 * @return character set name. First two characters have a special mesaging. The first character is number
+	 * of read bytes and the second character is the number of bytes to read next character.
 	 * @throws IOException if an IO error occurs.
 	 */
-	public static final String detectBOM(final InputStream in,
-		final byte[] buf) throws IOException {
+	public static final String detectBOM(final InputStream in, final byte[] buf) throws IOException {
 		int i1, i2, i3, i4;
 		buf[0] = (byte) (i1 = in.read());
 		if (i1 == -1) {
@@ -124,8 +113,7 @@ public class XAbstractInputStream extends InputStream {
 				: (i3 == 0 && i4 != 0) ? "44UTF-32BE" // 000<
 				: "41UTF-8"; // other
 		} else if (i1 == 0 && i2 != 0) {
-			return (i3 == 0 && i4 == 0) ? "44X-ISO-10646-UCS-4-3412" //0<00
-				: "42UTF-16BE";
+			return (i3 == 0 && i4 == 0) ? "44X-ISO-10646-UCS-4-3412" /*0<00*/ : "42UTF-16BE";
 		} else if (i1 != 0 && i2 == 0) {
 			return (i3 == 0 && i4 == 0) ? "44UTF-32LE" : "42UTF-16LE";
 		} else if (i1 == 0x4C && i2 == 0x6F && i3 == 0xA7 && i4 == 0x94) {
@@ -142,15 +130,12 @@ public class XAbstractInputStream extends InputStream {
 	 * @return converted string.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final String bytesToString(final byte[] buf,
-		final int off,
-		final int len,
-		String encoding) throws IOException {
+	public static final String bytesToString(final byte[] buf, final int off, final int len, String encoding)
+		throws IOException {
 		if (len == 0) {
 			return "";
 		}
-		if ("X-ISO-10646-UCS-4-2143".equals(encoding)
-			|| "X-ISO-10646-UCS-4-3412".equals(encoding)) {
+		if ("X-ISO-10646-UCS-4-2143".equals(encoding) || "X-ISO-10646-UCS-4-3412".equals(encoding)) {
 			byte[] b = new byte[len];
 			for (int i = 0; i < len / 4; i += 4) {
 				if (encoding.endsWith("2143")) {
@@ -208,7 +193,7 @@ public class XAbstractInputStream extends InputStream {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public int read() throws IOException {
+	public final int read() throws IOException {
 		if (_hdrIndex <= _len) {
 			if (_hdrIndex < _len) {
 				return _buf[_hdrIndex++];
@@ -219,7 +204,7 @@ public class XAbstractInputStream extends InputStream {
 	}
 
 	@Override
-	public int read(final byte[] b) throws IOException {
+	public final int read(final byte[] b) throws IOException {
 		if (_hdrIndex <= _len) {
 			int i = 0;
 			for (; i < b.length && _hdrIndex < _len; i++) {
@@ -236,9 +221,7 @@ public class XAbstractInputStream extends InputStream {
 	}
 
 	@Override
-	public int read(final byte[] b,
-		final int off,
-		final int len) throws IOException {
+	public final int read(final byte[] b, final int off, final int len) throws IOException {
 		if (_hdrIndex <= _len) {
 			int i = off;
 			for (; i < b.length && i < off + len && _hdrIndex < _len; i++){
@@ -255,7 +238,7 @@ public class XAbstractInputStream extends InputStream {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public final void close() throws IOException {
 		if (_in != null) {
 			_in.close();
 		}

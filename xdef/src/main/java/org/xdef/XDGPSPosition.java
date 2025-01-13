@@ -44,11 +44,10 @@ public final class XDGPSPosition extends XDValueAbstract {
 	 */
 	public final double altitude() {return _position.altitude();}
 
-	/** Get distance in meters from this position to position from the argument
-	 * (altitude is ignored).
+	/** Get distance in meters from this position to position from the argument (altitude is ignored).
 	 * @param x GPS position to which the distance is computed.
-	 * @return distance from this position to given position (note the
-	 * Earth radius used in Haversine formula is 6376500 m).
+	 * @return distance from this position to given position (note the Earth radius used in Haversine formula
+	 * is 6376500 m).
 	 */
 	public final double distanceTo(final XDGPSPosition x) {
 		return _position.distanceTo((GPSPosition) x.getObject());

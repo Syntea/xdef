@@ -49,14 +49,10 @@ import static org.xdef.msg.BNF.BNF041;
 import static org.xdef.sys.SParser.NOCHAR;
 
 /** Provides BNF grammar parsing and compiling.
- * BNFGrammar object you can create by the static method compile
- * see:
- * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, String,
-		ReportWriter)} or
- * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, File,
-		ReportWriter)} or
- * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, URL,
-		ReportWriter)}.
+ * BNFGrammar object you can create by the static method compile see:
+ * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, String, ReportWriter)} or
+ * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, File, ReportWriter)} or
+ * <p>{@link org.xdef.sys.BNFGrammar#compile(BNFGrammar, URL, ReportWriter)}.
  * <p>With the created BNFGrammar object you can parse data by method
  * {@link org.xdef.sys.BNFGrammar#parse(StringParser, String)}
  * @author Vaclav Trojan
@@ -194,9 +190,7 @@ public final class BNFGrammar {
 	/** Get parsed part of source.
 	 * @return string with parsed part.
 	 */
-	public final String getParsedString() {
-		return _p.getParsedBufferPartFrom(_spos.getIndex());
-	}
+	public final String getParsedString() {return _p.getParsedBufferPartFrom(_spos.getIndex());}
 
 	/** Get position of the parsed part of source.
 	 * @return position of the parsed part of source.
@@ -206,9 +200,7 @@ public final class BNFGrammar {
 	/** Get unparsed part of source buffer.
 	 * @return unparsed part of source buffer.
 	 */
-	public final String getUnparsedSourceBuffer() {
-		return _p.getUnparsedBufferPart();
-	}
+	public final String getUnparsedSourceBuffer() {return _p.getUnparsedBufferPart();}
 
 	/** Check if source was parsed to the end.
 	 * @return true if and only if source was parsed to the end.
@@ -260,8 +252,7 @@ public final class BNFGrammar {
 	public final boolean parse(final StringParser p, final String name) {
 		_actRule = _rootRule = (BNFRuleObj) getRule(name);
 		if (_rootRule == null) {
-			//Rule '&{0}' doesn't exist
-			throw new SRuntimeException(BNF.BNF901, name);
+			throw new SRuntimeException(BNF.BNF901, name); //Rule '&{0}' doesn't exist
 		}
 		return parse(p);
 	}
@@ -322,42 +313,35 @@ public final class BNFGrammar {
 	/** Compile BNF grammar.
 	 * @param source String with BNF grammar.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
-	public static BNFGrammar compile(final String source)
-		throws SRuntimeException {
+	public static BNFGrammar compile(final String source) throws SRuntimeException {
 		return compile(null, source, null);
 	}
 
 	@Override
 	/** Returns String with source BNF grammar. */
-	public String toString() {
-		return display(false);
-	}
+	public String toString() {return display(false);}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or null.
+	 * @param g the grammar to be extended or null.
 	 * @param source String with BNF grammar.
-	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is null then there is thrown an exception with
-	 * error information message.
+	 * @param reporter The reporter where error reports are recorded. If this argument is null then there
+	 * is thrown an exception with error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
-	public static BNFGrammar compile(final BNFGrammar grammar,
-		final String source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static BNFGrammar compile(final BNFGrammar g, final String source, 	final ReportWriter reporter)
+		throws SRuntimeException {
 		BNFCompiler compiler = new BNFCompiler();
 		if (reporter != null) {
 			compiler.setReportWriter(reporter);
 		}
 		compiler.setSourceBuffer(source);
-		if (grammar == null) {
+		if (g == null) {
 			compiler.newGrammar();
 		} else {
-			compiler._grammar = grammar.cloneGrammar();
+			compiler._grammar = g.cloneGrammar();
 		}
 		BNFGrammar result = compiler.compile();
 		compiler.checkAndThrowErrors();
@@ -365,27 +349,24 @@ public final class BNFGrammar {
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or null.
+	 * @param g the grammar to be extended or null.
 	 * @param source SBuffer with BNF grammar.
-	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is null then there is thrown an exception with
-	 * error information message.
+	 * @param reporter The reporter where error reports are recorded. If this argument is null then there
+	 * is thrown an exception with error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
-	public static BNFGrammar compile(final BNFGrammar grammar,
-		final SBuffer source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static BNFGrammar compile(final BNFGrammar g, final SBuffer source, final ReportWriter reporter)
+		throws SRuntimeException {
 		BNFCompiler compiler = new BNFCompiler();
 		if (reporter != null) {
 			compiler.setReportWriter(reporter);
 		}
 		compiler.setSourceBuffer(source);
-		if (grammar == null) {
+		if (g == null) {
 			compiler.newGrammar();
 		} else {
-			compiler._grammar = grammar.cloneGrammar();
+			compiler._grammar = g.cloneGrammar();
 		}
 		BNFGrammar result = compiler.compile();
 		if (reporter == null) {
@@ -397,36 +378,31 @@ public final class BNFGrammar {
 	/** Compile BNF grammar.
 	 * @param source The file with BNF grammar.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
-	public static BNFGrammar compile(final File source)
-		throws SRuntimeException {
+	public static BNFGrammar compile(final File source) throws SRuntimeException {
 		return compile(null, source, null);
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or null.
+	 * @param g the grammar to be extended or null.
 	 * @param source file with BNF grammar.
-	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is null then there is thrown an exception with
-	 * error information message.
+	 * @param reporter The reporter where error reports are recorded. If this argument is null then there
+	 * is thrown an exception with error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
-	public static BNFGrammar compile(final BNFGrammar grammar,
-		final File source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static BNFGrammar compile(final BNFGrammar g, final File source, final ReportWriter reporter)
+		throws SRuntimeException {
 		BNFCompiler compiler = new BNFCompiler();
 		if (reporter != null) {
 			compiler.setReportWriter(reporter);
 		}
 		compiler.setSourceReader(source, (String) null);
-		if (grammar == null) {
+		if (g == null) {
 			compiler.newGrammar();
 		} else {
-			compiler._grammar = grammar.cloneGrammar();
+			compiler._grammar = g.cloneGrammar();
 		}
 		BNFGrammar result = compiler.compile();
 		if (reporter == null) {
@@ -436,24 +412,21 @@ public final class BNFGrammar {
 	}
 
 	/** Compile BNF grammar.
-	 * @param grammar the grammar to be extended or null.
+	 * @param g the grammar to be extended or null.
 	 * @param source URL pointing to BNF grammar.
-	 * @param reporter The reporter where error reports are recorded. If this
-	 * argument is null then there is thrown an exception with
-	 * error information message.
+	 * @param reporter The reporter where error reports are recorded. If this argument is null then there
+	 * is thrown an exception with error information message.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
-	public static BNFGrammar compile(final BNFGrammar grammar,
-		final URL source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static BNFGrammar compile(final BNFGrammar g, final URL source, final ReportWriter reporter)
+		throws SRuntimeException {
 		BNFCompiler compiler = new BNFCompiler();
 		compiler.setSourceReader(source);
-		if (grammar == null) {
+		if (g == null) {
 			compiler.newGrammar();
 		} else {
-			compiler._grammar = grammar.cloneGrammar();
+			compiler._grammar = g.cloneGrammar();
 		}
 		BNFGrammar result = compiler.compile();
 		compiler.checkAndThrowErrors();
@@ -463,8 +436,7 @@ public final class BNFGrammar {
 	/** Compile BNF grammar.
 	 * @param source The reader with BNF grammar.
 	 * @return compiled grammar.
-	 * @throws SRuntimeException if the reporter argument is null and
-	 * an error occurs.
+	 * @throws SRuntimeException if the reporter argument is null and an error occurs.
 	 */
 	public static BNFGrammar compile(Reader source) throws SRuntimeException {
 		BNFCompiler compiler = new BNFCompiler();
@@ -524,21 +496,10 @@ public final class BNFGrammar {
 	 * @param p parser.
 	 * @return true if text was parsed successfully.
 	 */
-	private boolean parse(final StringParser p) {
-		_p = p;
-		return parse();
-	}
-
-	private BNFRuleObj newRule(final String name) {
-		return new BNFRuleObj(name, this);
-	}
-
-	private BNFChar newItemChar(final boolean i, final char c) {
-		return new BNFChar(i, c);
-	}
-	private BNFToken newItemToken(final boolean i, final String s) {
-		return new BNFToken(i, s);
-	}
+	private boolean parse(final StringParser p) {_p = p; return parse();}
+	private BNFRuleObj newRule(final String name) {return new BNFRuleObj(name, this);}
+	private BNFChar newItemChar(final boolean i, final char c) {return new BNFChar(i, c);}
+	private BNFToken newItemToken(final boolean i, final String s) {return new BNFToken(i, s);}
 	private BNFSequence newItemSequence() {return new BNFSequence();}
 	private BNFSelection newItemUnion() {return new BNFSelection();}
 	private BNFAll newItemAll() {return new BNFAll();}
@@ -546,25 +507,21 @@ public final class BNFGrammar {
 	private BNFReference newItemReference() {return new BNFReference();}
 	private BNFSet newItemIsSet() {return new BNFIsSet();}
 	private BNFSet newItemNotSet() {return new BNFNotSet();}
-	private BNFExtMethodObj newItemExtMethod(final String name,
-		final String fullName,
-		final List<Object> params ) {
-		return new BNFExtMethodObj(name, fullName, params);
+	private BNFExtMethodObj newItemExtMethod(final String name, final String fullName,final List<Object>pars){
+		return new BNFExtMethodObj(name, fullName, pars);
 	}
-	private BNFPredefined newInlineMethod(final String methodName,
-		final String name,
-		final List<Object> params) {
+	private BNFPredefined newInlineMethod(final String methodName, final String name, final List<Object>pars){
 		for(int i = 0; i < INLINE_METHOD_NAMES.length; i++) {
 			if (methodName.equals(INLINE_METHOD_NAMES[i])) {
-				return new BNFInline(i, name, params);
+				return new BNFInline(i, name, pars);
 			}
 		}
 		// compatibility with old version
 		if ("pushParsedObject".equals(methodName)
 			|| "pushParsedString".equals(methodName)) {
-			return new BNFInline(INL_PUSH, name, params);
+			return new BNFInline(INL_PUSH, name, pars);
 		} else if ("popParsedObject".equals(methodName)) {
-			return new BNFInline(INL_POP, name, params);
+			return new BNFInline(INL_POP, name, pars);
 		}
 		return null;
 	}
@@ -594,9 +551,7 @@ public final class BNFGrammar {
 // write/read object
 ////////////////////////////////////////////////////////////////////////////////
 
-	public final void writeObj(final SObjectWriter w) throws IOException {
-		w.writeString(display(false));
-	}
+	public final void writeObj(final SObjectWriter w) throws IOException {w.writeString(display(false));}
 
 	public static BNFGrammar readObj(final SObjectReader r) throws IOException {
 		return compile(null, r.readString(), null);
@@ -634,8 +589,7 @@ public final class BNFGrammar {
 	 */
 	private static String genBNFString(final String s,
 		final boolean genBrackets) {
-		StringTokenizer st = new StringTokenizer(
-			s, SPECCHARS + (s.indexOf('"') >= 0 ? '"' : '\''), true);
+		StringTokenizer st = new StringTokenizer(s, SPECCHARS + (s.indexOf('"') >= 0 ? '"' : '\''), true);
 		int numTokens = st.countTokens();
 		final StringBuilder sb = new StringBuilder();
 		if (genBrackets && numTokens > 1) {
@@ -682,8 +636,6 @@ public final class BNFGrammar {
 
 		final void setPosition() {_pos = _p.getPosition();}
 
-//		final SPosition getPosition() {return _pos;}
-
 		final void resetPosition() {_p.resetPosition(_pos);}
 
 		BNFRuleObj(final String name, BNFGrammar grammar) {
@@ -727,9 +679,7 @@ public final class BNFGrammar {
 					if (_traceOut != null) {
 						try {
 							if (_pos.getIndex() < _p.getIndex()) {
-								_traceOut.println(_name+"; ("
-									+ _pos.getIndex() + "," + _p.getIndex()
-									+ "); true");
+								_traceOut.println(_name+"; ("+_pos.getIndex()+","+_p.getIndex()+"); true");
 								_traceOut.flush();
 							}
 						} catch (Exception ex) {}
@@ -738,8 +688,7 @@ public final class BNFGrammar {
 				}
 				if (_traceOut != null) {
 					try {
-						_traceOut.println(_name + "; "
-							+ _pos.getIndex() + "; false");
+						_traceOut.println(_name + "; " + _pos.getIndex() + "; false");
 						_traceOut.flush();
 					} catch (Exception ex) {}
 				}
@@ -747,9 +696,7 @@ public final class BNFGrammar {
 				_p.freeBuffer();
 				return false;
 			} catch (StackOverflowError ex) {
-				StringBuilder sb = new StringBuilder(
-					"BNF recursive call of rule:\n" +
-					_name + " ::= ");
+				StringBuilder sb = new StringBuilder("BNF recursive call of rule:\n" + _name + " ::= ");
 				_item.display(sb);
 				sb.append("\nParsed source:\n");
 				sb.append(_p.getParsedBufferPart());
@@ -771,8 +718,7 @@ public final class BNFGrammar {
 
 		@Override
 		/** Parse string assigned to StringParser by this rule.
-		 * @param p StringParser containing string and position from which
-		 * parsing will be started.
+		 * @param p StringParser containing string and position from which parsing will be started.
 		 * @return true if parsing was successful.
 		 */
 		public final boolean parse(final StringParser p) {
@@ -808,13 +754,11 @@ public final class BNFGrammar {
 			display(sb);
 			return sb.toString();
 		}
-
 	}
 
 	private abstract class BNFItem {
 		SPosition _pos;
 		SPosition setPosition() {return _pos = _p.getPosition();}
-//		SPosition getPosition() {return _pos;}
 		void resetPosition() {_p.resetPosition(_pos);}
 		void resetPosition(SPosition pos) {_p.resetPosition(_pos = pos);}
 		int _min; //minimum occurrence
@@ -823,7 +767,6 @@ public final class BNFGrammar {
 		void setMin(int min) {_min = min;}
 		void setMax(int max) {_max = max;}
 		int getMin() {return _min;}
-//		int getMax() {return _max;}
 		abstract boolean perform();
 		abstract BNFItem adoptTo(BNFGrammar grammar);
 		abstract void display(final StringBuilder sb);
@@ -840,8 +783,7 @@ public final class BNFGrammar {
 				String result = '{' + String.valueOf(_min);
 				if (_min != _max) {
 					result += ',';
-					result += _max == Integer.MAX_VALUE ? "" :
-						String.valueOf(_max);
+					result += _max == Integer.MAX_VALUE ? "" : String.valueOf(_max);
 				}
 				return result + "} ";
 			}
@@ -851,19 +793,6 @@ public final class BNFGrammar {
 			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
 			return len > 0 ? _parsedObjects[len - 1] : null;
 		}
-//		Object popStack() {
-//			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
-//			if (len == 0) {
-//				return null;
-//			}
-//			Object result =  _parsedObjects[len - 1];
-//			Object[] old = _parsedObjects;
-//			_parsedObjects = new Object[len - 1];
-//			if (len > 1) {
-//				System.arraycopy(old, 0, _parsedObjects, 0, len - 1);
-//			}
-//			return result;
-//		}
 		void pushStack(final Object o) {
 			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
 			if (len == 0) {
@@ -925,8 +854,7 @@ public final class BNFGrammar {
 		@Override
 		final boolean perform() {
 			if (_max == 1) {
-				return _i ? _p.isTokenIgnoreCase(_token)
-					: (_p.isToken(_token) || _min == 0);
+				return _i ? _p.isTokenIgnoreCase(_token) : (_p.isToken(_token) || _min == 0);
 			}
 			setPosition();
 			for (int count = 0; count < _max; count++) {
@@ -969,13 +897,11 @@ public final class BNFGrammar {
 		@Override
 		final boolean perform() {
 			if (_max == 1) {
-				return (_i ? _p.isOneOfTokensIgnoreCase(_tokens)
-					: _p.isOneOfTokens(_tokens)) >= 0;
+				return (_i ? _p.isOneOfTokensIgnoreCase(_tokens) : _p.isOneOfTokens(_tokens)) >= 0;
 			}
 			setPosition();
 			for (int count = 0; count < _max; count++) {
-				if ((_i ? _p.isOneOfTokensIgnoreCase(_tokens)
-					: _p.isOneOfTokens(_tokens)) < 0) {
+				if ((_i ? _p.isOneOfTokensIgnoreCase(_tokens) : _p.isOneOfTokens(_tokens)) < 0) {
 					if (count < _min) {
 						resetPosition();
 						return false;
@@ -1021,9 +947,8 @@ public final class BNFGrammar {
 			}
 			sb.append(genBNFChars(_chars));
 			for (int i = 0; i < _intervals.length; i+=2) {
-				sb.append(genBNFChars(String.valueOf(_intervals[i]))).
-					append('-').
-					append(genBNFChars(String.valueOf(_intervals[i + 1])));
+				sb.append(genBNFChars(String.valueOf(_intervals[i])));
+				sb.append('-').append(genBNFChars(String.valueOf(_intervals[i + 1])));
 			}
 			sb.append("]").append(genQuantifier());
 		}
@@ -1161,16 +1086,14 @@ public final class BNFGrammar {
 			for (; count < _max; count++) {
 				SPosition xPos = null; //successfull position
 				Object xUserObject = null;
-				Object[] xParsedObjects = null,
-					parsedObjects = _parsedObjects;
+				Object[] xParsedObjects = null;
+				Object[] parsedObjects = _parsedObjects;
 				Object userObject = _userObject;
 				setPosition();
 				for (int i = 0;  !_p.eos() && i < _items.length; i++) {
 					if (_items[i].perform()) { // success
 						SPosition p = _p.getPosition();
-						if (xPos == null ||
-							xPos.getFilePos() + xPos.getIndex()
-							< p.getFilePos() + p.getIndex()) {
+						if (xPos==null || xPos.getFilePos()+xPos.getIndex() < p.getFilePos() + p.getIndex()) {
 							xPos = p;
 							xParsedObjects = _parsedObjects;
 							xUserObject = _userObject;
@@ -1307,8 +1230,7 @@ public final class BNFGrammar {
 							_p.resetPosition(pos);
 							_parsedObjects = parsedObjects;
 							if (count == 0) {
-								//first item in first loop so we
-								// need not reset position
+								//first item in first loop so we need not reset position
 								return _min == 0;
 							}
 							parsed = false;
@@ -1366,8 +1288,7 @@ public final class BNFGrammar {
 					if (!_items[i].perform()) {
 						_parsedObjects = parsedObjects;
 						if (count == 0 && i == 0) {
-							//first item in first loop so we
-							// need not reset position
+							//first item in first loop so we need not reset position
 							return _min == 0;
 						}
 						_p.resetPosition(pos);
@@ -1451,17 +1372,14 @@ public final class BNFGrammar {
 			return item;
 		}
 		@Override
-		final void display(final StringBuilder sb) {
-			sb.append(_rule.getName()).append(genQuantifier());
-		}
+		final void display(final StringBuilder sb) {sb.append(_rule.getName()).append(genQuantifier());}
 	}
 
 	public static final boolean dummy(final BNFExtMethod p) {return true;}
 	private final static Method DUMMY_METHOD;
 	static {
 		Method method;
-		try {
-			// set dummy method
+		try {// set dummy method
 			method = BNFGrammar.class.getMethod("dummy",BNFExtMethod.class);
 		} catch (NoSuchMethodException | SecurityException ex) {
 			method = null; // shouldn't happen
@@ -1474,9 +1392,7 @@ public final class BNFGrammar {
 		private String _name;
 		private Object[] _params;
 
-		BNFExtMethodObj(final String name,
-			 final String fullName,
-			final List<Object> params) {
+		BNFExtMethodObj(final String name, final String fullName, final List<Object> params) {
 			super();
 			_name = name;
 			_method = null;
@@ -1520,8 +1436,7 @@ public final class BNFGrammar {
 			final String methodName,
 			final Class<?>[] parameterTypes) {
 			try {
-				_method = Class.forName(className)
-					.getMethod(methodName, parameterTypes);
+				_method = Class.forName(className).getMethod(methodName, parameterTypes);
 				if (!"boolean".equals(_method.getReturnType().getName())
 					&& !"Boolean".equals(_method.getReturnType().getName())) {
 					_method = null;
@@ -1553,8 +1468,7 @@ public final class BNFGrammar {
 					pars = _params;
 				}
 				if (((Boolean)_method.invoke(_userObject, pars))) {
-					while (++count < _max
-						&& ((Boolean)_method.invoke(_userObject,_params))){}
+					while (++count < _max && ((Boolean)_method.invoke(_userObject,_params))){}
 					if (count < _min) {
 						_p.resetPosition(pos);
 						return false;
@@ -1569,8 +1483,7 @@ public final class BNFGrammar {
 				Report rep;
 				if ((_method.getModifiers() & Modifier.STATIC) == 0 &&
 					_userObject == null) {
-					//External method '&{0}' (rule &{1}) should be
-					//static or set user object
+					//External method '&{0}' (rule &{1}) should be static or set user object
 					rep = Report.fatal(BNF.BNF903, _name, _actRule._name);
 				} else {
 					//Runtime error in external method '&{0}', rule &{1}: &{2}
@@ -1673,11 +1586,11 @@ public final class BNFGrammar {
 			item._method = _method;
 			item._params = _params;
 			item._params[0] = item; //VERY IMPORTANT: instance of item.
-
 			item._min = _min;
 			item._max = _max;
 			return item;
 		}
+
 		@Override
 		final void display(final StringBuilder sb) {
 			sb.append('$');
@@ -1692,8 +1605,7 @@ public final class BNFGrammar {
 
 		@Override
 		BNFItem adoptTo(final BNFGrammar grammar) {
-			BNFPredefined item =
-				grammar.newInlineMethod(getName(), getName(), null);
+			BNFPredefined item = grammar.newInlineMethod(getName(), getName(), null);
 			item._min = _min;
 			item._max = _max;
 			return item;
@@ -1718,9 +1630,7 @@ public final class BNFGrammar {
 		 * @param name declared name of item.
 		 * @param params array with parameters.
 		 */
-		private BNFInline(final int code,
-			final String name,
-			final List<Object> params) {
+		private BNFInline(final int code, final String name, final List<Object> params) {
 			_code = code;
 			_name = name.intern();
 			if (params != null && !params.isEmpty()) {
@@ -1746,8 +1656,7 @@ public final class BNFGrammar {
 						}
 						_param = s;
 					}
-				} else if (code == INL_DATETIME	&& params.size() == 1
-					&& (params.get(0) instanceof String)) {
+				} else if (code == INL_DATETIME	&& params.size() == 1 && (params.get(0) instanceof String)) {
 					_param = (String) params.get(0);
 				} else if (code == INL_TOKENS && params.size() >= 1) {
 					 String[] x = new String[params.size()];
@@ -1756,19 +1665,12 @@ public final class BNFGrammar {
 					 }
 					 _param = x;
 				} else {
-					//No parameters are alowed in method &{0}
-					throw new SRuntimeException(BNF.BNF038, name);
+					throw new SRuntimeException(BNF.BNF038, name);//No parameters are alowed in method &{0}
 				}
 			}
 		}
 		private String genMethodParam(Object o) {
-			if (o == null) {
-				return "null";
-			} else if (o instanceof String) {
-				return genBNFString((String) o, false);
-			} else {
-				return o.toString();
-			}
+			return o == null ? "null" : o instanceof String ? genBNFString((String) o, false) : o.toString();
 		}
 
 		private final class MyReader extends Reader {
@@ -1870,60 +1772,34 @@ public final class BNFGrammar {
 						return true;
 					}
 					return false;
-				case INL_DIGIT: //digit
-					return _p.isDigit() >= 0;
-				case INL_LETTER: //letter
-					return _p.isLetter() != SParser.NOCHAR;
-				case INL_LOWERCASELETTER: //lowerCaseLetter
-					return _p.isLowerCaseLetter() != SParser.NOCHAR;
-				case INL_UPPERCASELETTER: //upperCaseLetter
-					return _p.isUpperCaseLetter() != SParser.NOCHAR;
-				case INL_LETTERORDIGIT: //letterordigit
-					return _p.isLetterOrDigit() != SParser.NOCHAR;
-				case INL_BOOLEAN: //boolean
-					return _p.isOneOfTokens("true", "false") >= 0;
+				case INL_DIGIT: return _p.isDigit() >= 0;
+				case INL_LETTER: return _p.isLetter() != SParser.NOCHAR;
+				case INL_LOWERCASELETTER: return _p.isLowerCaseLetter() != SParser.NOCHAR;
+				case INL_UPPERCASELETTER: return _p.isUpperCaseLetter() != SParser.NOCHAR;
+				case INL_LETTERORDIGIT: return _p.isLetterOrDigit() != SParser.NOCHAR;
+				case INL_BOOLEAN: return _p.isOneOfTokens("true", "false") >= 0;
 				case INL_DATETIME: //datetime
-					return _param == null ? _p.isISO8601DateAndTime()
-						: _p.isDatetime((String) _param);
-				case INL_DATE: //date
-					return _p.isISO8601Date();
-				case INL_TIME: //time
-					return _p.isISO8601Time();
-				case INL_YEARMONTH: //yearMonth
-					return _p.isDatetime("yyyy[-]MM[Z]");
-				case INL_MONTHDAY: //monthDay
-					return _p.isDatetime("--MM[-]dd");
-				case INL_YEAR: //year
-					return _p.isDatetime("[-]yyyy[Z]");
-				case INL_MONTH: //month
-					return _p.isDatetime("--MM");
-				case INL_DAY: //day
-					return _p.isDatetime("---dd");
-				case INL_DURATION: //duration
-					return _p.isDuration();
-				case INL_BASE64: //base64
-					return isBase64();
-				case INL_HEXDATA: //hexdata
-					return isHexdata();
-				case INL_XMLNAME: //xmlname
-					return _p.isXMLName(StringParser.XMLVER1_0);
-				case INL_NCNAME: //ncname
-					return _p.isNCName(StringParser.XMLVER1_0);
-				case INL_NMTOKEN: //nmtoken
-					return _p.isNMToken(StringParser.XMLVER1_0);
-				case INL_XMLCHAR: //xmlchar
-					return _p.isXMLChar(StringParser.XMLVER1_0)!=SParser.NOCHAR;
-				case INL_WHITESPACE: //whitespace
-					return _p.isXMLWhitespaceChar() != SParser.NOCHAR;
+					return _param == null ? _p.isISO8601DateAndTime() : _p.isDatetime((String) _param);
+				case INL_DATE: return _p.isISO8601Date();
+				case INL_TIME: return _p.isISO8601Time();
+				case INL_YEARMONTH: return _p.isDatetime("yyyy[-]MM[Z]");
+				case INL_MONTHDAY: return _p.isDatetime("--MM[-]dd");
+				case INL_YEAR: return _p.isDatetime("[-]yyyy[Z]");
+				case INL_MONTH: return _p.isDatetime("--MM");
+				case INL_DAY: return _p.isDatetime("---dd");
+				case INL_DURATION: return _p.isDuration();
+				case INL_BASE64: return isBase64();
+				case INL_HEXDATA: return isHexdata();
+				case INL_XMLNAME: return _p.isXMLName(StringParser.XMLVER1_0);
+				case INL_NCNAME: return _p.isNCName(StringParser.XMLVER1_0);
+				case INL_NMTOKEN: return _p.isNMToken(StringParser.XMLVER1_0);
+				case INL_XMLCHAR:  return _p.isXMLChar(StringParser.XMLVER1_0)!=SParser.NOCHAR;
+				case INL_WHITESPACE: return _p.isXMLWhitespaceChar() != SParser.NOCHAR;
 				case INL_XMLNAMESTARTCHAR: //xmlNamestartchar
-					return _p.isXMLNamestartChar(StringParser.XMLVER1_0)
-						!= SParser.NOCHAR;
+					return _p.isXMLNamestartChar(StringParser.XMLVER1_0) != SParser.NOCHAR;
 				case INL_XMLNAMEEXTCHAR: //xmlNameExtchar
-					return _p.isXMLNameExtensionChar(StringParser.XMLVER1_0)
-						!= SParser.NOCHAR;
-				case INL_CLEAR: //clearParsedObjects
-					_parsedObjects = null;
-					return true;
+					return _p.isXMLNameExtensionChar(StringParser.XMLVER1_0) != SParser.NOCHAR;
+				case INL_CLEAR: _parsedObjects = null; return true;//clearParsedObjects
 				case INL_PUSH: //pushParsedObject
 					if (_param != null) {
 						pushObject(_param);
@@ -1931,8 +1807,8 @@ public final class BNFGrammar {
 					}
 					pushObject(_actRule.getParsedString());
 					return true;
-				case INL_POP: //popParsedObject
-					return popObject() != null;
+				case INL_POP: return popObject() != null; //popParsedObject
+
 				case INL_ANYCHAR: {//anyChar
 					char c = _p.peekChar();
 					return c != SParser.NOCHAR && Character.isDefined(c);
@@ -1967,29 +1843,20 @@ public final class BNFGrammar {
 					_p.error(id, txt, modif);
 					return true;
 				}
-				case INL_JAVANAME: //JavaName
-					return _p.isJavaName();
-				case INL_JAVAQNAME: //JavaQName
-					return _p.isJavaQName();
+				case INL_JAVANAME: return _p.isJavaName();
+				case INL_JAVAQNAME: return _p.isJavaQName();
 				case INL_INFO:
-					pushObject("info: " + _actRule._name
-						+ (_param != null ? "(" +_param + ")": "")
+					pushObject("info: " + _actRule._name + (_param != null ? "(" +_param + ")": "")
 						+ "; pos=" + _p.getIndex());
 					return true;
-				case INL_TOKENS:
-					return _p.isOneOfTokens((String[]) _param) >= 0;
-				case INL_EOS:
-					return _p.eos();
+				case INL_TOKENS: return _p.isOneOfTokens((String[]) _param) >= 0;
+				case INL_EOS: return _p.eos();
 				case INL_RULE:
-					pushObject(_actRule._name + " " +
-						_actRule._pos.getIndex() + " " + _p.getIndex());
+					pushObject(_actRule._name + " " + _actRule._pos.getIndex() + " " + _p.getIndex());
 					return true;
-				case INL_TRUE:
-					return true;
-				case INL_FALSE:
-					return true;
-				case INL_SKIPTONEXTLINE:
-					return _p.skipToNextLine() || true;
+				case INL_TRUE: return true;
+				case INL_FALSE: return true;
+				case INL_SKIPTONEXTLINE: return _p.skipToNextLine() || true;
 				case INL_UTFCHAR:
 					if (!_p.eos() && Character.isDefined(_p.getCurrentChar())) {
 						_p.nextChar();
@@ -2002,8 +1869,7 @@ public final class BNFGrammar {
 					}
 					throw new SError("BNF stop");
 				default:
-					//Illegal BNF runtime code: &{0}
-					throw new SRuntimeException(BNF.BNF040, _code);
+					throw new SRuntimeException(BNF.BNF040, _code); //Illegal BNF runtime code: &{0}
 			}
 		}
 
@@ -2044,10 +1910,7 @@ public final class BNFGrammar {
 			if (_param != null) {
 				params.add(_param);
 			}
-			BNFPredefined item = grammar.newInlineMethod(
-				INLINE_METHOD_NAMES[_code],
-				_name,
-				params);
+			BNFPredefined item = grammar.newInlineMethod(INLINE_METHOD_NAMES[_code], _name, params);
 			item._min = _min;
 			item._max = _max;
 			return item;
@@ -2055,9 +1918,7 @@ public final class BNFGrammar {
 	}
 
 	/** Compiles BNF grammar from source.*/
-	private static class BNFCompiler extends StringParser
-		implements org.xdef.msg.BNF {
-
+	private static class BNFCompiler extends StringParser implements org.xdef.msg.BNF {
 		private static final short EOS_SYM = 0; //end of source
 		private static final short ALIAS_DECL_SYM = EOS_SYM + 1; //alias
 		private static final short ASSIGN_SYM = ALIAS_DECL_SYM + 1; //assign
@@ -2087,9 +1948,7 @@ public final class BNFGrammar {
 			String _name;
 			BNFReference _reference;
 			SPosition _pos;
-			UnresolvedReference(String name,
-				BNFReference reference,
-				SPosition pos) {
+			UnresolvedReference(String name, BNFReference reference, SPosition pos) {
 				_name = name;
 				_reference = reference;
 				_pos = pos;
@@ -2160,8 +2019,7 @@ public final class BNFGrammar {
 		}
 
 		/** Read a numeric character specification.
-		 * @return the value of the specified character (UTF16) or -1
-		 * if the value was incorrect.
+		 * @return the value of the specified character (UTF16) or -1 if the value was incorrect.
 		 */
 		private int readSpecChar() {
 			char c;
@@ -2173,8 +2031,7 @@ public final class BNFGrammar {
 				}
 				i = "0123456789ABCDEF".indexOf(Character.toUpperCase(c));
 				while((c = isOneOfChars("0123456789ABCDEFabcdef")) != NOCHAR) {
-					i = i * 16 +
-						"0123456789ABCDEF".indexOf(Character.toUpperCase(c));
+					i = i * 16 + "0123456789ABCDEF".indexOf(Character.toUpperCase(c));
 				}
 			} else { //decimal
 				if ((i = isDigit()) == -1) {
@@ -2227,9 +2084,7 @@ public final class BNFGrammar {
 						} else if (isInteger()) {
 							i = getParsedInt();
 							if (i < item.getMin()) {
-								// Maximal occurrence must be greater
-								// or equal to the minimum
-								error(BNF028);
+								error(BNF028);// Maximal occurrence must be greater or equal to the minimum
 							}
 						}
 						skipSeparators();
@@ -2237,8 +2092,7 @@ public final class BNFGrammar {
 					item.setMax(i);
 				}
 				if (!isChar('}')) {
-					//End character '}' of occurrence specification expected
-					error(BNF029);
+					error(BNF029); //End character '}' of occurrence specification expected
 					skipToNextLine();
 				}
 				skipSeparators();
@@ -2251,8 +2105,7 @@ public final class BNFGrammar {
 		/** Parse set specification. */
 		private void parseSetDecl() {
 			BNFSet item;
-			item = isChar('^')
-				? _grammar.newItemNotSet() : _grammar.newItemIsSet();
+			item = isChar('^') ? _grammar.newItemNotSet() : _grammar.newItemIsSet();
 			_item = item;
 			_parsedChars.setLength(0);
 			char c;
@@ -2289,7 +2142,8 @@ public final class BNFGrammar {
 							if (c == '#') {
 								int i = readSpecChar();
 								c = i == -1	? '#' : (char) i;
-							}	if (c < last) {
+							}
+							if (c < last) {
 								error(BNF006); //Incorrect interval in char set
 							} else {
 								intervals.append(last).append(c);
@@ -2436,18 +2290,15 @@ public final class BNFGrammar {
 					_item = _grammar.newItemReference();
 					BNFRuleObj cmd = (BNFRuleObj) _grammar.getRule(name);
 					if (cmd == null) {
-						_unresolvedRefs.add(new UnresolvedReference(name,
-							(BNFReference)_item, getPosition()));
+						_unresolvedRefs.add(new UnresolvedReference(name,(BNFReference)_item,getPosition()));
 						checkQuantifier(_item);
 					} else {
 						((BNFReference)_item).setRule(cmd);
 						SPosition spos = getPosition();
 						checkQuantifier(_item);
 						if(_item._max > 1 && cmd.getItem() instanceof BNFAll) {
-							//In "all" list can not be quantifier with
-							// maximum occurrence greater as 1
-							spos.putReport(Report.error(BNF041),
-								getReportWriter());
+							//In "all" list can not be quantifier with maximum occurrence greater as 1
+							spos.putReport(Report.error(BNF041), getReportWriter());
 						}
 					}
 					return _sym = ITEM_SYM;
@@ -2470,11 +2321,14 @@ public final class BNFGrammar {
 					_item = _grammar.newItemChar(i, _parsedChars.charAt(0));
 				} else {
 					_item = _grammar.newItemChar(i, '?');
-					SPosition spos1 = getPosition();
+					SPosition spos1 = getPosition(); // save position
 					setPosition(spos);
-					error(_parsedChars.length()==1 ? BNF004 //Unclosed literal
-						: BNF009);//Empty literal
-					setPosition(spos1);
+					if (_parsedChars.length()==1) {
+						error(BNF004); //Unclosed literal
+					} else {
+						error(BNF009); //Empty literal
+					}
+					setPosition(spos1); // reset position
 				}
 				checkQuantifier(_item);
 				return _sym = ITEM_SYM;
@@ -2560,10 +2414,8 @@ public final class BNFGrammar {
 				BNFExtMethodObj method;
 				method = _grammar.newItemExtMethod(name, fullName, params);
 				if (method._method == null) {
-					//Undefined external method '&{0}'
-					error(BNF015, method.getMethodName());
-				} else if (method._method.toString().contains(
-					"boolean org.xdef.sys.BNFGrammar.dummy(")) {
+					error(BNF015, method.getMethodName()); //Undefined external method '&{0}'
+				} else if (method._method.toString().contains("boolean org.xdef.sys.BNFGrammar.dummy(")) {
 					s = method.getMethodName();
 					if (s.charAt(0) != '$') {
 						error(BNF015, '$' + s);
@@ -2597,7 +2449,6 @@ public final class BNFGrammar {
 			}
 			resolveReferences();
 			optimize();
-
 			closeGrammar();
 			return true;
 		}
@@ -2644,8 +2495,7 @@ public final class BNFGrammar {
 							method += ',';
 						}
 						Object obj = params.get(i);
-						method += obj instanceof String
-							? genBNFString((String) obj, false)//MUST generate
+						method += obj instanceof String ? genBNFString((String) obj, false)//MUST generate
 							: obj == null ? "null" : obj.toString();
 					}
 					method += ')';
@@ -2710,8 +2560,7 @@ public final class BNFGrammar {
 						_item = null;
 						if (checkQuantifier(item)
 							&& item._max > 1 && item instanceof BNFAll) {
-							//In "all" list can not be quantifier with
-							// maximum occurrence greater as 1
+							//In "all" list can not be quantifier with maximum occurrence greater as 1
 							error(BNF041);
 						}
 						nextSymbol();
@@ -2726,8 +2575,7 @@ public final class BNFGrammar {
 		}
 
 		/** Parse constraint.
-		 * @return BNFItem if an constraint was recognized and parsed otherwise
-		 * return null.
+		 * @return BNFItem if an constraint was recognized and parsed otherwise return null.
 		 */
 		private BNFItem isConstraint() {
 			BNFItem item;
@@ -2751,8 +2599,7 @@ public final class BNFGrammar {
 		}
 
 		/** Parse sequence.
-		 * @return BNFItem if an sequence was recognized and parsed otherwise
-		 * return null.
+		 * @return BNFItem if an sequence was recognized and parsed otherwise return null.
 		 */
 		private BNFItem isSequence() {
 			BNFItem item;
@@ -2831,16 +2678,13 @@ public final class BNFGrammar {
 				if (cmd == null) {
 					result = false;
 					//Undefined rule reference: '&{0}'
-					getPosition().putReport(Report.error(BNF026,
-						ur.getName()),getReportWriter());
+					getPosition().putReport(Report.error(BNF026, ur.getName()),getReportWriter());
 				} else {
 					ur.getReference().setRule(cmd);
 					if(ur.getReference()._max > 1
 						&& cmd.getItem() instanceof BNFAll) {
-						//In "all" list can not be quantifier with
-						// maximum occurrence greater as 1
-						ur.getPosition().putReport(Report.error(BNF041),
-							getReportWriter());
+						//In "all" list can not be quantifier with maximum occurrence greater as 1
+						ur.getPosition().putReport(Report.error(BNF041), getReportWriter());
 					}
 				}
 			}
@@ -2924,9 +2768,7 @@ public final class BNFGrammar {
 			display(out, grammar, numLines);
 		}
 
-		private static void display(final StringBuilder out,
-			final BNFGrammar grammar,
-			final boolean numLines) {
+		private static void display(final StringBuilder out, final BNFGrammar grammar,final boolean numLines){
 			if (grammar._aliases != null && !grammar._aliases.isEmpty()) {
 				for (String key: grammar._aliases.keySet()) {
 					out.append("%define $");

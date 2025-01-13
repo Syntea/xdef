@@ -77,9 +77,7 @@ public class XVariable implements XMVariable {
 	/** Set this field is initialized.
 	 * @param init value of initialized flag.
 	 */
-	public final void setInitialized(final boolean init) {
-		_initialized = init;
-	}
+	public final void setInitialized(final boolean init) {_initialized = init;}
 	/** Set isFinal flag.
 	 * @param isFinal value of final flag.
 	 */
@@ -156,9 +154,8 @@ public class XVariable implements XMVariable {
 	public final int hashCode() {return _name.hashCode();}
 	@Override
 	public final boolean equals(final Object o) {
-		return (o == null) ? false :
-			(o instanceof XVariable) ? _name.equals(((XVariable) o)._name) :
-			(o instanceof String) ? _name.equals((String) o) : false;
+		return (o == null) ? false : (o instanceof XVariable) ? _name.equals(((XVariable) o)._name)
+			: (o instanceof String) ? _name.equals((String) o) : false;
 	}
 	@Override
 	public String toString() {

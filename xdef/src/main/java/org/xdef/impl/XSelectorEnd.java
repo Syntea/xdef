@@ -11,9 +11,7 @@ import org.xdef.sys.SUnsupportedOperationException;
 public final class XSelectorEnd extends XNode {
 
 	/* Create the new instance of XSelectorEnd object. */
-	public XSelectorEnd() {
-		super(null, "$selector_end", null, XMSELECTOR_END);
-	}
+	public XSelectorEnd() {super(null, "$selector_end", null, XMSELECTOR_END);}
 
 	@Override
 	/** Get XMDefinition assigned to this node.
@@ -38,32 +36,23 @@ public final class XSelectorEnd extends XNode {
 	@Override
 	public int getDefltCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnStartElementCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public int getOnStartElementCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public int getOnAbsenceCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public int getOnExcessCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnIllegalAttrCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public int getOnIllegalAttrCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnIllegalTextCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public int getOnIllegalTextCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnIllegalElementCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public int getOnIllegalElementCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public int getVarinitCode() {throw new SUnsupportedOperationException();}
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public final void writeXNode(final XDWriter xw,
-		final List<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 	}
 }

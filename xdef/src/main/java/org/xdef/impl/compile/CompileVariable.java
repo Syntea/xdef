@@ -22,28 +22,21 @@ public final class CompileVariable extends XVariable {
 
 	/** Creates a new instance of ScriptVariable.
 	 * @param name Name of variable.
-	 * @param type The type of variable.
+	 * @param typ The type of variable.
 	 * @param offset The offset of variable.
 	 * @param kind kind of variable: 'G' .. global, 'L' .. local, 'X' .. XModel.
-	 * @param spos source position where the variable was declared.
+	 * @param pos source position where the variable was declared.
 	 */
-	CompileVariable(final String name,
-		final short type,
-		final int offset,
-		final byte kind,
-		final SPosition spos) {
-		super(name, type, kind, offset, false, false, false);
-		_spos = spos;
+	CompileVariable(final String name,final short typ,final int offset,final byte kind,final SPosition pos) {
+		super(name, typ, kind, offset, false, false, false);
+		_spos = pos;
 		_codeAddr = -1;
-//		_postdefs = null; //java does it
 	}
 
-	/** Resolves post-definition of a method (set address to all previous
-	 * references).
+	/** Resolves post-definition of a method (set address to all previous references).
 	 * @param address address of method.
 	 * @param g code generator.
-	 * @return <i>false</i> if address was already set(i.e. error), otherwise
-	 * return <i>true</i> (i.e. OK).
+	 * @return false if address was already set(i.e. error), otherwise return true (i.e. OK).
 	 */
 	final boolean resolvePostDef(final int address, final CompileCode g) {
 		if (getOffset() != -1 || getKind() != 'G') {
@@ -57,19 +50,6 @@ public final class CompileVariable extends XVariable {
 			_postdefs = null;
 		}
 		return true;
-	}
-
-	/** Add address of post defined item to the list. */
-	final void addPostDef(final int codeIndex) {
-		if (_postdefs == null) {
-			_postdefs = new int[]{codeIndex};
-		} else {
-			int[] x = _postdefs;
-			int len = x.length;
-			_postdefs = new int[len + 1];
-			System.arraycopy(x, 0, _postdefs, 0, len);
-			_postdefs[len] = codeIndex;
-		}
 	}
 
 	/** Clear post-definition info. */
@@ -88,9 +68,7 @@ public final class CompileVariable extends XVariable {
 	final void setValue(final XDValue value) {_value = value;}
 
 	/** Check if value of variable is a constant. */
-	final boolean isConstant() {
-		return getType() != XD_BNFGRAMMAR && isFinal() && _value != null;
-	}
+	final boolean isConstant() {return getType() != XD_BNFGRAMMAR && isFinal() && _value != null;}
 
 	/** Get source position where the variable was declared.
 	 * @return source position where the variable was declared.
@@ -99,10 +77,8 @@ public final class CompileVariable extends XVariable {
 
 	@Override
 	/** Set value of variable. */
-	public String toString() {return super.toString()
-		+ ", parseMethodAddr=" + getParseMethodAddr()
-		+ ", codeAddr=" + _codeAddr
-		+ ", parseResultType="  + getTypeName(getParseResultType())
-		+ ", val=" + _value;
+	public String toString() {
+		return super.toString() + ", parseMethodAddr=" + getParseMethodAddr() + ", codeAddr=" + _codeAddr
+			+ ", parseResultType="  + getTypeName(getParseResultType()) + ", val=" + _value;
 	}
 }

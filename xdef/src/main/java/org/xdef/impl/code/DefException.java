@@ -11,7 +11,6 @@ import static org.xdef.XDValueType.EXCEPTION;
  * @author  Vaclav Trojan
  */
 public final class DefException extends XDValueAbstract implements XDException {
-
 	/** The value of this item. */
 	private final Report _value;
 	/** Address of code. */
@@ -27,9 +26,7 @@ public final class DefException extends XDValueAbstract implements XDException {
 	 * @param codeAddr Address of code.
 	 * @param xpos path of the actual node.
 	 */
-	public DefException(final Report report,
-		final String xpos,
-		final int codeAddr) {
+	public DefException(final Report report, final String xpos, final int codeAddr) {
 		_value = report;
 		_codeAddr = codeAddr;
 		_xpos = xpos;
@@ -81,8 +78,7 @@ public final class DefException extends XDValueAbstract implements XDException {
 	public XDValueType getItemType() {return EXCEPTION;}
 	@Override
 	public String toString() {
-		return "PC:" + _codeAddr +
-			(_xpos != null ? ", xpos:" + _xpos : "") + "; " + _value.toString();
+		return "PC:" + _codeAddr + (_xpos != null ? ", xpos:" + _xpos : "") + "; " + _value.toString();
 	}
 	@Override
 	public String stringValue() {return toString();}

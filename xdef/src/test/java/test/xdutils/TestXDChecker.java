@@ -1,4 +1,4 @@
-package test.xdef;
+package test.xdutils;
 
 import test.XDTester;
 import org.xdef.sys.SDatetime;
@@ -6,6 +6,7 @@ import org.xdef.util.XDChecker;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXData;
 import java.util.Arrays;
+import static org.xdef.sys.STester.runTest;
 
 /** Test XD value types.
  * @author Vaclav Trojan
@@ -14,24 +15,18 @@ public class TestXDChecker extends XDTester {
 
 	public TestXDChecker() {super();}
 
-	public static boolean typX(XXData xdata) {
-		return "xxx".equals(xdata .getTextValue());
-	}
+	public static boolean typX(XXData xdata) {return "xxx".equals(xdata .getTextValue());}
 
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		String methods = "boolean test.xdef.TestXDChecker.typX(XXData);";
+		String methods = "boolean " + TestXDChecker.class.getName() + ".typX(XXData);";
 		String declarations =
 "boolean typY() {\n"+
 " return 'yyy'.equals(getText());\n"+
 "}";
 		String options = "ignoreEmptyAttributes";
-		XDChecker chk = new XDChecker(
-			new Class<?>[]{test.xdef.TestXDChecker.class},
-			methods,
-			declarations,
-			options);
+		XDChecker chk = new XDChecker(new Class<?>[] {TestXDChecker.class}, methods, declarations, options);
 		XDParseResult x;
 		assertTrue(chk.checkType("string(2, 3)", "2").errors());
 		assertTrue(chk.checkType("string(2, 3)", "abcd").errors());
@@ -48,8 +43,7 @@ public class TestXDChecker extends XDTester {
 		assertTrue(chk.checkType("enum('ab','efg')", "cde").errors());
 		x = chk.checkType("hexBinary()", "cde0");
 		assertTrue(x.matches());
-		assertTrue(Arrays.equals(new byte[]{(byte) 205, (byte) 224},
-			x.getParsedValue().getBytes()));
+		assertTrue(Arrays.equals(new byte[]{(byte) 205, (byte) 224}, x.getParsedValue().getBytes()));
 		assertTrue(chk.checkType("hexBinary()", "00").matches());
 		assertTrue(chk.checkType("hexBinary()", " .").errors());
 		assertTrue(chk.checkType("enum('|Q','XY','A')", "|Q").matches());
@@ -70,7 +64,6 @@ public class TestXDChecker extends XDTester {
 		assertTrue(x.errors(), "Error not reported");
 		x = chk.checkType("? int()", null);
 		assertFalse(x.errors());
-
 		resetTester();
 	}
 

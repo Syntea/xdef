@@ -64,7 +64,6 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 public class ChkGUIDebug extends GUIBase implements XDDebug {
-
 	private boolean _debugMode = true;
 	private boolean _opened = false;
 
@@ -230,9 +229,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			@Override
 			public void windowClosing(WindowEvent e) {windowClosed(e);}
 			@Override
-			public void windowClosed(WindowEvent e) {
-				_debugMode = false;
-			}
+			public void windowClosed(WindowEvent e) {_debugMode = false;}
 			@Override
 			public void windowIconified(WindowEvent e) {}
 			@Override
@@ -296,8 +293,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_frame.pack();
 		_frame.setLocationByPlatform(true);
 		_frame.setBounds(_si._xpos, _si._ypos, _si._width, _si._height);
-		_sourceArea.setCaretPosition(
-			_sourceItem._pos>=0 ? _sourceItem._pos : 0);
+		_sourceArea.setCaretPosition(_sourceItem._pos>=0 ? _sourceItem._pos : 0);
 		_sourceArea.requestFocus();
 		_frame.setVisible(true);
 		_frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -305,8 +301,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 
 	private StopAddr createStopAddr(GUIBase.SourcePos spos) {
 		XMDebugInfo di = _xdpool.getDebugInfo();
-		XMStatementInfo si = di.getStatementInfo(spos._line,
-			spos._column, spos._sysId, null);
+		XMStatementInfo si = di.getStatementInfo(spos._line, spos._column, spos._sysId, null);
 		if (si == null || si.getAddr() < 0) {
 			return null;
 		}
@@ -324,26 +319,20 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		if (xi == null || (txt = xi._source) == null || si.getAddr() < 0) {
 			return null;
 		}
-		GUIBase.SourcePos spos = new GUIBase.SourcePos(txt,
-			(int) si.getLine(),	(int) si.getColumn());
+		GUIBase.SourcePos spos = new GUIBase.SourcePos(txt, (int) si.getLine(),	(int) si.getColumn());
 		spos._sysId = si.getSysId();
 		int pos = spos._pos;
 		if (si.getEndLine() >= 0) {
-			GUIBase.SourcePos spos1 = new GUIBase.SourcePos(txt,
-				(int) si.getEndLine(), (int) si.getEndColumn());
+			GUIBase.SourcePos spos1 = new GUIBase.SourcePos(txt, (int) si.getEndLine(), (int) si.getEndColumn());
 			if (spos1._pos >= pos) {
-				return new StopAddr(si.getAddr(),
-					pos, spos1._pos, spos._sysId);
+				return new StopAddr(si.getAddr(), pos, spos1._pos, spos._sysId);
 			}
 		}
 		XMStatementInfo nextsi = di.nextStatementInfo(si);
 		int endPos;
-		if (nextsi != null && spos._sysId.equals(nextsi.getSysId())
-			&& nextsi.getLine() == spos._line) {
-			long col = nextsi.getColumn() < 0 ? // macro ?
-				(spos._column -  nextsi.getColumn()) : nextsi.getColumn();
-			GUIBase.SourcePos sp = new GUIBase.SourcePos(txt,
-				(int) nextsi.getLine(), (int) col);
+		if (nextsi != null && spos._sysId.equals(nextsi.getSysId()) && nextsi.getLine() == spos._line) {
+			long col = nextsi.getColumn() < 0 ? (spos._column -  nextsi.getColumn()) : nextsi.getColumn();
+			GUIBase.SourcePos sp = new GUIBase.SourcePos(txt, (int) nextsi.getLine(), (int) col);
 			endPos = sp._pos > pos ? sp._pos : pos + 1;
 		} else {
 			endPos = pos + 1;
@@ -363,8 +352,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			for (StopAddr x: _stopAddresses) {
 				if (x._sourceID.equals(_sourceID)) {
 					if (x._startPos > p) {
-						sdoc.insertString(
-							p, s.substring(p, x._startPos), STYLE_WHITE);
+						sdoc.insertString(p, s.substring(p, x._startPos), STYLE_WHITE);
 						p = x._startPos;
 					}
 					if (x._endPos > p) {
@@ -415,8 +403,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						int len = _stopAddresses.length;
 						setStopAddr(sa);
 						markStopAddresses();
-						String s = "line:" + spos._line
-							+ ", column:" + spos._column;
+						String s = "line:" + spos._line + ", column:" + spos._column;
 						if (_stopAddresses.length > len) {
 							Object[] options = {"Set stop address", "Ignore"};
 							int n = JOptionPane.showOptionDialog(_sourceArea,
@@ -447,8 +434,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 							}
 						}
 					} else {
-						JOptionPane.showMessageDialog(_frame,
-							"No stop address available here");
+						JOptionPane.showMessageDialog(_frame, "No stop address available here");
 					}
 				}
 			}
@@ -478,7 +464,6 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
 		JMenuItem ji;
 		JMenu jp;
-
 		// Select source item (if more sources then one)
 		if (_sources.size() > 1) {
 			jp = new JMenu("Select Source...");
@@ -511,8 +496,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			ndx = s.indexOf('/');
 			ji = new JMenuItem(ndx >= 0 ? s.substring(0, ndx) : s);
 			if (ndx > 0) {
-				ji.setAccelerator(
-					KeyStroke.getKeyStroke(s.substring(ndx + 1).intern()));
+				ji.setAccelerator(KeyStroke.getKeyStroke(s.substring(ndx + 1).intern()));
 			}
 			ji.addActionListener(cmdListener);
 			jp.add(ji);
@@ -560,8 +544,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					newSrc = _sources.get(u.toExternalForm());
 					if (newSrc == null) {
 						File f = new File(u.getFile());
-						newSrc = _sources.get(
-							f.getCanonicalPath().replace('\\','/'));
+						newSrc = _sources.get(f.getCanonicalPath().replace('\\','/'));
 					}
 				} catch (IOException ex) {
 					return;
@@ -571,8 +554,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				_sourceItem._pos = _sourceArea.getCaretPosition();
 				_sourceItem._active = false;
 			}
-			_frame.setTitle((_windowName != null ? _windowName + " " : "")
-				+ sourceID);
+			_frame.setTitle((_windowName != null ? _windowName + " " : "") + sourceID);
 			_sourceArea.setVisible(false);
 			_sourceArea.setFocusable(false);
 			_sourceArea.setText(newSrc._source);
@@ -599,8 +581,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @param xp XDPool.
 	 */
 	public void openDebugger(Properties props, XDPool xp) {
-		if (xp == null || !xp.isDebugMode()
-			|| xp.getDisplayMode() == XDPool.DISPLAY_FALSE) {
+		if (xp == null || !xp.isDebugMode() || xp.getDisplayMode() == XDPool.DISPLAY_FALSE) {
 			return;
 		}
 		init(props);
@@ -795,21 +776,18 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			if (debugInfo!=null && (trace || pause && codeItem.getParam()>0)) {
 				si = debugInfo.prevStatementInfo(si);
 			}
-			txt = (trace ? "TRACE " : pause ?	"PAUSE " : codeItem.toString())
-				+ xpos + "; pc=" + pcounter
-				+ ((trace || pause) && codeItem.getParam() > 0 ?
-				"; \"" + stack[stackPointer].toString() + "\"; " : "");
+			txt = (trace ? "TRACE " : pause ?	"PAUSE " : codeItem.toString()) + xpos + "; pc=" + pcounter
+				+ ((trace || pause) && codeItem.getParam() > 0
+					? "; \"" + stack[stackPointer].toString() + "\"; " : "");
 		}
 		GUIBase.SourcePos spos;
 		String stmtInfo;
 		if (si != null) {
 			spos = new GUIBase.SourcePos(si.getLine(),si.getColumn(),si.getSysId());
-			stmtInfo = spos.toString() + ", xdef: " + si.getXDName() +
-				", pc: " + si.getAddr();
+			stmtInfo = spos.toString() + ", xdef: " + si.getXDName() + ", pc: " + si.getAddr();
 		} else {
 			SPosition x = xnode.getXMNode().getSPosition();
-			spos = new GUIBase.SourcePos(x.getLineNumber(),
-				x.getColumnNumber(), x.getSystemId());
+			spos = new GUIBase.SourcePos(x.getLineNumber(), x.getColumnNumber(), x.getSystemId());
 			stmtInfo = spos.toString();
 		}
 		StopAddr sa = null;
@@ -882,8 +860,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				case DBG_DISABLLE:
 					if (pause) {
 						if (codeItem != null) {
-							codeItem.setCode(
-								codeItem.getParam() == 0 ? NO_OP : POP_OP);
+							codeItem.setCode(codeItem.getParam() == 0 ? NO_OP : POP_OP);
 						}
 						display("Nothing to disable");
 						continue;
@@ -898,13 +875,11 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					return NOSTEP;
 				case DBG_SHOWSTACK: {
 					if (codeItem != null) {
-						if (stackPointer < 0 ||
-							stackPointer-codeItem.getParam() < 0) {
+						if (stackPointer < 0 || stackPointer-codeItem.getParam() < 0) {
 							display("Stack is empty");
 						} else {
 							display("Stack:");
-							for (int i = 0; i<=stackPointer-codeItem.getParam();
-								i++) {
+							for (int i = 0; i<=stackPointer-codeItem.getParam(); i++) {
 								display("[" + i + "]: " + stack[i]);
 							}
 						}
@@ -922,21 +897,19 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						display("No global variables");
 					} else {
 						display("Global variables:");
-						for (String name:  names) {
+						for (String name: names) {
 							display(name + ": " + xnode.getVariable(name));
 						}
 					}
 					if (xnode instanceof ChkElement) {
 						ChkElement xc =(ChkElement) xnode;
 						for (;;) {
-							XVariableTable vars =
-								((XElement) xc.getXMElement())._vartable;
+							XVariableTable vars = ((XElement) xc.getXMElement())._vartable;
 							names = vars!=null ? vars.getVariableNames() : null;
 							if (names != null && names.length > 0) {
 								display("Variables of " + xc.getXPos() + ":");
 								for (String name: names) {
-									display(name + ": "
-										+ xc.loadModelVariable(name));
+									display(name + ": " + xc.loadModelVariable(name));
 								}
 							}
 							XXNode xn = xc.getParent();
@@ -978,18 +951,15 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						int i;
 						if (reporter != null && reporter.errorWarnings()) {
 							txt = "";
-							i = reporter.getWarningCount()
-								+ ireporter.getWarningCount();
+							i = reporter.getWarningCount() + ireporter.getWarningCount();
 							if (i > 0) {
 								txt += "warnings: " + i + " ";
 							}
-							i = reporter.getErrorCount()
-								+ ireporter.getErrorCount();
+							i = reporter.getErrorCount() + ireporter.getErrorCount();
 							if (i > 0) {
 								txt += "errors: " + i + " ";
 							}
-							i = reporter.getFatalErrorCount()
-								+ ireporter.getFatalErrorCount();
+							i = reporter.getFatalErrorCount() + ireporter.getFatalErrorCount();
 							if (i > 0) {
 								txt += "fatals: " + i + " ";
 							}
@@ -1003,8 +973,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 								rep = reporter.getLastErrorReport();
 							}
 							if (rep != null) {
-								display("Last temporary error: " +
-									rep.toString());
+								display("Last temporary error: " + rep);
 							}
 						}
 					} else {
@@ -1015,8 +984,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				case DBG_SHOWTEXT:
 				case DBG_SETTEXT:
 					if (command == DBG_SHOWTEXT) {
-						display(xnode.getXPos()
-							+ ": = '" + ((XXData) xnode).getTextValue() + "'");
+						display(xnode.getXPos() + ": = '" + ((XXData) xnode).getTextValue() + "'");
 					} else {
 						try {
 							String s;
@@ -1024,8 +992,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 								display("Set value: ");
 								s = readLine();
 							} else {
-								s = JOptionPane.showInputDialog(_frame,
-									"Set value");
+								s = JOptionPane.showInputDialog(_frame, "Set value");
 							}
 							if (s != null) {
 								((XXData) xnode).setTextValue(s);
@@ -1068,8 +1035,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 "  kill     - kill the process\n"+
 "  can      - cancel\n");
 					} else {
-						JOptionPane.showMessageDialog(_frame,
-							"See \"File (F10)\" in menu bar");
+						JOptionPane.showMessageDialog(_frame, "See \"File (F10)\" in menu bar");
 					}
 				}
 			}
@@ -1078,9 +1044,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 
 	@Override
 	/** Clear XScript break point area. */
-	public void clearStopAddrs() {
-		_stopAddresses = new StopAddr[0];
-	}
+	public void clearStopAddrs() {_stopAddresses = new StopAddr[0];}
 
 	@Override
 	/** Check if break point area contains the stop address.
@@ -1179,8 +1143,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 							System.arraycopy(old, 0, _stopAddresses, 0, i);
 						}
 						if (i < _stopAddresses.length) {
-							System.arraycopy(old,
-								i+1, _stopAddresses,i,_stopAddresses.length-i);
+							System.arraycopy(old, i+1, _stopAddresses, i, _stopAddresses.length-i);
 						}
 					}
 					return true;
@@ -1199,8 +1162,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @return true if break point area contains the XPos item.
 	 */
 	public boolean hasXPos(String xpos) {
-		return !_debugMode || _xposItems == null ? false :
-			Arrays.binarySearch(_xposItems, xpos) >= 0;
+		return !_debugMode || _xposItems == null ? false : Arrays.binarySearch(_xposItems, xpos) >= 0;
 	}
 
 	@Override
@@ -1246,8 +1208,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					System.arraycopy(old, 0, _xposItems, 0, i);
 				}
 				if (i < _xposItems.length) {
-					System.arraycopy(old,
-						i + 1, _xposItems, i, _xposItems.length - i);
+					System.arraycopy(old, i + 1, _xposItems, i, _xposItems.length - i);
 				}
 			}
 		}

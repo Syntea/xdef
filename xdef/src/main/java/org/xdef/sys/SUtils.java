@@ -39,8 +39,8 @@ public class SUtils extends FUtils {
 		'0','1','2','3','4','5','6','7','8','9',             //52..61
 		'+','/'};                                            //62,63
 	/** Hexadecimal digits. */
-	private static final byte[] HEXDIGITS =
-		new byte[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	private static final byte[] HEXDIGITS = new byte[]
+		{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 	/** Cache to accelerate 2 letters/3 letter language methods.*/
 	private static final Map<String, Locale> LANGUAGES = new LinkedHashMap<>();
 	/** Cache to accelerate 2 letters/3 letter country methods.*/
@@ -49,9 +49,8 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // initialize static final variables
 ////////////////////////////////////////////////////////////////////////////////
-	/** Version of Java VM as an integer composed from the string where
-	 * the version part is multiplied by 100 and subversion part is added.
-	 * E.g. "1.6" is converted to 106. The build version is ignored.
+	/** Version of Java VM as an integer composed from the string where the version part is multiplied
+	 * by 100 and subversion part is added. E.g. "1.6" is converted to 106. The build version is ignored.
 	 */
 	public static final int JAVA_RUNTIME_VERSION_ID;
 	/** String with the last part of Java VM version information.
@@ -63,11 +62,8 @@ public class SUtils extends FUtils {
 		try {
 			s = Runtime.class.getPackage().getImplementationVersion();
 			if (s == null) {
-				Class<?> cls = Runtime.class;
-				java.lang.reflect.Method m = cls.getDeclaredMethod("version");
-				Object o = m.invoke(null);
-				cls = o.getClass();
-				m = cls.getDeclaredMethod("version");
+				java.lang.reflect.Method m = Runtime.class.getDeclaredMethod("version");
+				m = m.invoke(null).getClass().getDeclaredMethod("version");
 				s = m.invoke(null).toString();
 			}
 		} catch (Exception ex) {
@@ -91,7 +87,6 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // enconding/decoding of hexadecimal format
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Encodes a byte array to hexadecimal format, no blanks or line breaks are inserted.
 	 * @param bytes The array of bytes to be encoded.
 	 * @return the array of hexadecimal digits.
@@ -161,7 +156,7 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes binary input byte stream in to the output stream out as a stream of hexadecimal digits.
+	/** Encodes binary input byte stream "in" to the output stream "out" as a stream of hexadecimal digits.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out OutputStream where hexadecimal digits are written.
 	 * @throws SException when I/O error occurs.
@@ -197,8 +192,7 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Encodes binary input byte stream <b>in</b> to the output writer
-	 * <b>out</b> as a stream of hexadecimal digits.
+	/** Encodes binary input byte stream "in" to the output writer "out" as a stream of hexadecimal digits.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out Writer where hexadecimal digits are written.
 	 * @throws SException when I/O error occurs.
@@ -311,7 +305,7 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
-	/** Decodes array of hexadedimal digits to the array of bytes.
+	/** Decodes array of hexadecimal digits to the array of bytes.
 	 * @param chars array with hexadecimal data.
 	 * @return byte array decoded from the source.
 	 * @throws SException SYS047 HEX format error.
@@ -336,16 +330,14 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // enconding/decoding of base64 format
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** Encodes a byte array to Base64 format, no blanks or line breaks
-	 * are inserted.
+	/** Encode a byte array to Base64 format, no blanks or line breaks are inserted.
 	 * @param bytes array of bytes to be encoded.
 	 * @return byte array with the Base64 encoded data.
 	 * @throws SRuntimeException when an error occurs.
 	 */
 	public static final byte[] encodeBase64(final byte[] bytes) {return encodeBase64(bytes, 0, bytes.length);}
 
-	/** Encodes a byte array to Base64 format, no blanks or line breaks are inserted.
+	/** Encode a byte array to Base64 format, no blanks or line breaks are inserted.
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param length number of bytes to read from the buffer.
@@ -362,7 +354,7 @@ public class SUtils extends FUtils {
 		return outbuf;
 	}
 
-	/** Encodes a byte array to byte array in the Base64 format, no blanks or line breaks are inserted.
+	/** Encode a byte array to byte array in the Base64 format, no blanks or line breaks are inserted.
 	 * @param outbuf output buffer where encoded data will be stored.
 	 * @param outoff offset to output buffer where to start.
 	 * @param inbuf input buffer with bytes to be encoded.
@@ -404,7 +396,7 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes a byte array to char array in the Base64 format, no blanks or line breaks are inserted.
+	/** Encode a byte array to char array in the Base64 format, no blanks or line breaks are inserted.
 	 * @param outbuf output buffer where encoded data will be stored.
 	 * @param outoff offset to output buffer where to start.
 	 * @param inbuf input buffer with bytes to be encoded.
@@ -446,7 +438,7 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes binary input byte stream in to the output stream out in the form of MIME/BASE64.
+	/** Encode binary input byte stream in to the output stream out in the form of MIME/BASE64.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out OutputStream for encoded Base64 result.
 	 * @param lines if true the output is break to lines (72 bytes).
@@ -487,7 +479,7 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Encodes binary input byte stream in to the writer out in the form of MIME/BASE64.
+	/** Encode binary input byte stream in to the writer out in the form of MIME/BASE64.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out Writer for encoded Base64 resulting character stream.
 	 * @param lines if true the output is broken into lines (72 bytes).
@@ -528,7 +520,7 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Encodes binary input byte array to the output array in the form of MIME/BASE64.
+	/** Encode binary input byte array to the output array in the form of MIME/BASE64.
 	 * @param bytes array of bytes to be encoded.
 	 * @param lines if true the output is broken into lines (72 bytes).
 	 * @return string with encoded Base64.
@@ -547,7 +539,7 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Encodes binary input byte array to the output array in the form of MIME/BASE64.
+	/** Encode binary input byte array to the output array in the form of MIME/BASE64.
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param len maximum number of bytes to read from the buffer.
@@ -576,12 +568,9 @@ public class SUtils extends FUtils {
 	 * <li>64 represents white blanks
 	 * <li>65 padding character ('=')
 	 * <li>66-70 incorrect characters
-	 * Syntax of input:
-	 * Base64Binary  ::=  ((B64S B64S B64S B64S)*
-	 *                    ((B64S B64S B64S B64) |
-	 *                    (B64S B64S B16S '=') |
-	 *                    (B64S B04S '=' #x20? '=')))?
-	 *
+	 * Syntax of input:<br/>
+	 * Base64Binary ::= ((B64S B64S B64S B64S)* ((B64S B64S B64S B64) |
+	 *                    (B64S B64S B16S '=') | (B64S B04S '=' #x20? '=')))?
 	 * B64S         ::= B64 #x20?
 	 * B16S         ::= B16 #x20?
 	 * B04S         ::= B04 #x20?
@@ -703,7 +692,7 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Decodes binary input MIME/BASE64 stream <b>in</b> to the output stream of bytes.
+	/** Decode binary input MIME/BASE64 stream <b>in</b> to the output stream of bytes.
 	 * @param in java.io.Reader with Base64 character stream.
 	 * @param out Output stream for decoded byte stream.
 	 * @throws SException
@@ -716,7 +705,7 @@ public class SUtils extends FUtils {
 			public final int read() throws IOException {return in.read();}}, out);
 	}
 
-	/** Decodes input MIME/BASE64 Reader <b>in</b> to output stream.
+	/** Decode input MIME/BASE64 Reader <b>in</b> to output stream.
 	 * @param in java.io.Reader with Base64 data.
 	 * @param out Output stream for decoded byte stream.
 	 * @throws SException
@@ -729,7 +718,7 @@ public class SUtils extends FUtils {
 			public final int read() throws IOException {return in.read();}}, out);
 	}
 
-	/** Decodes input MIME/BASE64 from SPaser <b>in</b> to the output stream.
+	/** Decode input MIME/BASE64 from SPaser <b>in</b> to the output stream.
 	 * @param in SAParser with Base64 data.
 	 * @param out Writer for decoded byte stream.
 	 * @throws SException
@@ -739,23 +728,25 @@ public class SUtils extends FUtils {
 	public static final void decodeBase64(final SParser in, final OutputStream out) throws SException {
 		decodeBase64(new SReader() {
 			@Override
-			public final int read() {return in.eos() ? -1 : in.peekChar();}}, out);
+			public final int read() {return in.eos() ? -1 : in.peekChar();}
+		},
+		out);
 	}
 
-	/** Decodes input MIME/BASE64 from SPaser <b>in</b> to byte array.
+	/** Decode input MIME/BASE64 from SPaser <b>in</b> to byte array.
 	 * @param in SAParser with Base64 data.
 	 * @return byte array decoded from source.
 	 * @throws SException
 	 * <br>SYS036 .. Program exception: {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final byte[] decodeBase64(final SParser in) throws SException{
+	public static final byte[] decodeBase64(final SParser in) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		decodeBase64(in, out);
 		return out.toByteArray();
 	}
 
-	/** Decodes input MIME/BASE64 from byte array <b>in</b> to byte array.
+	/** Decode input MIME/BASE64 from byte array <b>in</b> to byte array.
 	 * @param in byte array with base64 data.
 	 * @return byte array decoded from source.
 	 * @throws SException SYS048 Base64 format error.
@@ -766,7 +757,7 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
-	/** Decodes input MIME/BASE64 from character array <b>in</b> to byte array.
+	/** Decode input MIME/BASE64 from character array <b>in</b> to byte array.
 	 * @param in char array with base64 encoded data.
 	 * @return byte array decoded from source.
 	 * @throws SException SYS048 Base64 format error.
@@ -777,7 +768,7 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
-	/** Decodes binary input MIME/BASE64 string <b>in</b> to byte array.
+	/** Decode binary input MIME/BASE64 string <b>in</b> to byte array.
 	 * @param in string with base64 encoded data.
 	 * @return byte array decoded from source.
 	 * @throws SException SYS048 Base64 format error.
@@ -792,7 +783,7 @@ public class SUtils extends FUtils {
 // String tools
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Returns string of given length created from given characters.
+	/** Return string of given length created from given characters.
 	 * If argument "length" is less or equal zero then returns the empty string.
 	 * @param length required length of result.
 	 * @param ch character used for creation of the result.
@@ -821,7 +812,7 @@ public class SUtils extends FUtils {
 			return source;
 		}
 		return ndx == 0 ? replacement + source.substring(keylen)
-			: source.substring(0,ndx)+replacement+source.substring(ndx+keylen);
+			: source.substring(0, ndx) + replacement+source.substring(ndx + keylen);
 	}
 
 	/** Replace all occurrences of the key in the source by the value.
@@ -832,9 +823,8 @@ public class SUtils extends FUtils {
 	 */
 	public static final String modifyString(final String source, final String key, final String rep) {
 		int pos, keylen, strlen;
-		if (source == null || (strlen = source.length()) == 0 ||
-			(keylen = key.length()) == 0 ||
-			(pos = source.indexOf(key)) < 0) {
+		if (source == null || (strlen = source.length()) == 0 || (keylen = key.length()) == 0
+			|| (pos = source.indexOf(key)) < 0) {
 			return source;
 		}
 		StringBuilder result = pos == 0
@@ -923,8 +913,7 @@ public class SUtils extends FUtils {
 	/** Return trimmed string from argument and replace there all multiple* sequences of white spaces
 	 * by one regular space character.
 	 * @param value input string.
-	 * @return trimmed string with multiple white spaces replaced by the
-	 * space character.
+	 * @return trimmed string with multiple white spaces replaced by the space character.
 	 */
 	public static final String trimAndRemoveMultipleWhiteSpaces(final String value) {
 		StringBuilder sb = new StringBuilder(value.trim());
@@ -950,7 +939,6 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // Localization
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Get ISO 639-2 (3 letters) language ID.
 	 * @param language The language code (ISO 639 3 letters) or (ISO 639-2 3 letters).
 	 * @return the ISO 639-2 language ID (three letters).
@@ -994,8 +982,7 @@ public class SUtils extends FUtils {
 		}
 		if (s.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
-				if (s.equals(x.getISO3Language())
-					|| s.equals(x.getLanguage())) {
+				if (s.equals(x.getISO3Language()) || s.equals(x.getLanguage())) {
 					LANGUAGES.put(s, x);
 					return x.getISO3Language();
 				}
@@ -1033,7 +1020,7 @@ public class SUtils extends FUtils {
 		}
 		for (String country : Locale.getISOCountries()) {
 			loc = new Locale("", country);
-			if (s.equals(loc.getCountry())||s.equals(loc.getISO3Country())){
+			if (s.equals(loc.getCountry()) || s.equals(loc.getISO3Country())) {
 				COUNTRIES.put(s, loc);
 				return country;
 			}
@@ -1073,7 +1060,6 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // Access objects from a class.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Check if a class implements given interface.
 	 * @param clazz the class to be checked.
 	 * @param interfaceName the qualified name of interface (including package
@@ -1082,8 +1068,7 @@ public class SUtils extends FUtils {
 	 */
 	public static final boolean implementsInterface(final Class<?> clazz, final String interfaceName) {
 		for (Class<?> x: clazz.getInterfaces()) {
-			if (x.getName().equals(interfaceName)
-				|| implementsInterface(x, interfaceName)) {
+			if (x.getName().equals(interfaceName) || implementsInterface(x, interfaceName)) {
 				return true;
 			}
 		}
@@ -1157,8 +1142,7 @@ public class SUtils extends FUtils {
 	 * @param o Object where is the filed.
 	 * @param name name of filed.
 	 * @return value of field.
-	 * @throws SRuntimeException if the field was not found in the object's
-	 * class.
+	 * @throws SRuntimeException if the field was not found in the object's class.
 	 */
 	public static final Object getObjectField(final Object o, final String name) {
 		Class<?> cls = o.getClass();
@@ -1184,8 +1168,7 @@ public class SUtils extends FUtils {
 	 * @param o Object where is the filed.
 	 * @param name name of filed.
 	 * @param v the value to be set.
-	 * @throws SRuntimeException if the field was not found in the object's
-	 * class or it is not accessible.
+	 * @throws SRuntimeException if the field was not found in the object's class or it is not accessible.
 	 */
 	public static final void setObjectField(final Object o, final String name, final Object v) {
 		Class<?> cls = o.getClass();
@@ -1270,9 +1253,7 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // Execute a process.
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** This is the auxiliary thread for piping of output streams of method
-	 * execute (stdout, stderr).*/
+	/** This is the auxiliary thread for piping of output streams of method execute(stdout, stderr). */
 	private static final class PipedOutStream extends Thread {
 		private final BufferedReader _in;
 		private final PrintStream _out;
@@ -1299,26 +1280,23 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Executes the specified command and arguments in a separate process with the specified environment
-	 * and working directory.
-	 * If there is a security manager, its checkExec method is called with the first component of the array
-	 * cmdArray as its argument. This may result in a security exception.
-	 * Given an array of strings cmdArray, representing the tokens of a command line, and an array of strings
-	 * envVars, representing "environment" variable settings, this method creates a new process
-	 * in which to execute the specified command.
-	 * If envVars is null, the sub-process inherits the environment settings of the current process.
-	 * The working directory of the new sub-process is specified by actDir. If actDir is null, the sub-process
-	 * inherits the current working directory of the current process.
-	 * If out is null the output stream is printed to System.out, otherwise it is written to given stream out.
-	 * If err is null the output stream is printed to System.err, otherwise it is written to given stream err.
-	 * If stdIn is null the input stream passed to program is empty, otherwise it is passed from the stream
-	 * from the parameter.
+	/** Execute the specified command and arguments in a separate process with the specified environment
+	 * and working directory. If there is a security manager, its checkExec method is called with the first
+	 * component of the array cmdArray as its argument. This may result in a security exception. Given an
+	 * array of strings cmdArray, representing the tokens of a command line, and an array of strings envVars,
+	 * representing "environment" variable settings, this method creates a new process in which to execute the
+	 * specified command. If envVars is null, the sub-process inherits the environment settings of the current
+	 * process. The working directory of the new sub-process is specified by actDir. If actDir is null,
+	 * the sub-process inherits the current working directory of the current process. If out is null the
+	 * output stream is printed to System.out, otherwise it is written to given stream out. If err is null the
+	 * output stream is printed to System.err, otherwise it is written to given stream err. If stdIn is null
+	 * the input stream passed to program is empty, otherwise it is passed from the stream from the parameter.
 	 * If waitFlag is true the current thread waits until the executed process has been terminated.
 	 * @param command array containing a command and its arguments.
-	 * @param envVars array of strings, each element of which has environment
-	 * variable settings in format name=value.
-	 * @param actDir the working directory of the sub-process, or null if the
-	 * sub-process should inherit the working directory of the current process.
+	 * @param envVars array of strings, each element of which has environment variable settings in format
+	 * name=value.
+	 * @param actDir the working directory of the sub-process, or null if the sub-process should inherit the
+	 * working directory of the current process.
 	 * @param stdOut output stream for standard output stream or null.
 	 * @param stdErr output stream for standard error stream or null.
 	 * @param stdIn input stream with standard input data or null.
@@ -1352,18 +1330,18 @@ public class SUtils extends FUtils {
 		return process;
 	}
 
-	/** Executes a separate process with arguments.
+	/** Execute a separate process with arguments.
 	 * @param command array containing a command and its arguments.
 	 * @return Process object for managing the executed sub-process.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final Process execute(final String... command)
-		throws Exception {
+	public static final Process execute(final String... command) throws Exception {
 		return execute(command, null, null, System.out, System.err, null, true);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-
+// Deprecated mthods
+////////////////////////////////////////////////////////////////////////////////
 	/** Get ISO 639-2 (3 letters) System language ID.
 	 * @deprecated please use getISO3Language(System.getProperties().getProperty("user.language"))
 	 * @return ISO 639-2 (3 letters) language ID.

@@ -6,14 +6,14 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/**
- *
+/** Parser of X-Script "countries" type.
  * @author Vaclav Trojan
  */
 public class XDParseCountries  extends XDParseNCNameList {
 	private static final String ROOTBASENAME = "countries";
 
 	public XDParseCountries() {super();}
+
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser p) {
 		p.isSpaces();

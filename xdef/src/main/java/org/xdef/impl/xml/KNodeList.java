@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Implementation of org.w3c.dom.NodeList interface. It also allows
- * to use methods addItem, clearItems, addAllItems and containsItem.
+/** Implementation of org.w3c.dom.NodeList interface. It also allows to use methods addItem, clearItems,
+ * addAllItems and containsItem.
  * @author Vaclav Trojan
  */
 public class KNodeList extends ArrayList<Node> implements NodeList {

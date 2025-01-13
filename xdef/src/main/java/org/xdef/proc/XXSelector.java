@@ -19,5 +19,4 @@ public interface XXSelector extends XXNode {
 	 * @return the index of beginning of the group.
 	 */
 	public int getEndIndex();
-
 }

@@ -41,10 +41,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			0;
 	}
 	@Override
-	public void initParams() {
-		super.initParams();
-		_elem = null;
-	}
+	public void initParams() {super.initParams(); _elem = null;}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -85,8 +82,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			} else {
 				if (!p.eos()) {
 					p.setEos();
-					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809, parserName());
+					p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 					return;
 				}
 				if (_whiteSpace == WS_REPLACE) { //replace
@@ -96,8 +92,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			p.setParsedValue(s);
 			int len = s.length();
 			if (_maxLength != -1 && len > _maxLength) {
-				//Length of value of '&{0}' is too long&{0}'{: }
-				p.errorWithString(XDEF.XDEF815, ROOTBASENAME);
+				p.errorWithString(XDEF.XDEF815, ROOTBASENAME);//Length of value of '&{0}' is too long&{0}'{: }
 			} else if (_minLength != -1 && len < _minLength) {
 				//Length of value of '&{0}' is too short&{0}'{: }
 				p.errorWithString(XDEF.XDEF814, ROOTBASENAME, s);

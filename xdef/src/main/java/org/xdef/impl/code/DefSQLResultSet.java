@@ -23,7 +23,6 @@ import static org.xdef.XDValueType.RESULTSET;
  * @author Vaclav Trojan
  */
 public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
-
 	private ResultSet _resultSet;
 	private DefSQLStatement stmt;
 	protected int _count;
@@ -50,18 +49,14 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	 * @param itemName name of required column.
 	 * @param resultSet created result set.
 	 */
-	public DefSQLResultSet(String itemName, ResultSet resultSet) {
-		this(resultSet);
-		_itemName = itemName;
-	}
+	public DefSQLResultSet(String itemName, ResultSet resultSet) {this(resultSet); _itemName = itemName;}
 
 	/** Create new DefDBIterator.
 	 * @param query db query statement.
 	 * @param params parameters of statement (sequence of values).
 	 * @throws SRuntimeException id an error occurs.
 	 */
-	DefSQLResultSet(DefSQLStatement query, XDValue params)
-		throws SRuntimeException {
+	DefSQLResultSet(DefSQLStatement query, XDValue params) throws SRuntimeException {
 		_constructor = new DefSQLConstructor(this);
 		execute(query, params);
 	}
@@ -72,9 +67,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	 * @param itemName name of item from which the iterator will be constructed.
 	 * @throws SRuntimeException id an error occurs.
 	 */
-	DefSQLResultSet(DefSQLStatement query,
-		String itemName,
-		XDValue params) throws SRuntimeException {
+	DefSQLResultSet(DefSQLStatement query, String itemName, XDValue params) throws SRuntimeException {
 		_itemName = itemName;
 		execute(query, params);
 	}
@@ -87,8 +80,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	 * @param params parameters of statement (sequence of values).
 	 * @throws SRuntimeException id an error occurs.
 	 */
-	private void execute(final DefSQLStatement query, final XDValue params)
-		throws SRuntimeException {
+	private void execute(final DefSQLStatement query, final XDValue params) throws SRuntimeException {
 		try {
 			if (_resultSet != null) {
 				_resultSet.close();
@@ -101,10 +93,9 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 			close();
 			String msg = ex.getMessage();
 			if (msg == null || msg.isEmpty()) {
-				//Database statement error&{0}{: }
-				throw new SRuntimeException(XDEF.XDEF568, ex);
+				throw new SRuntimeException(XDEF.XDEF568, ex); //Database statement error&{0}{: }
 			}
-			throw new SRuntimeException(XDEF.XDEF568, msg);
+			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
 
@@ -142,11 +133,11 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	*/
 	public boolean isClosed() {return _resultSet == null;}
 	@Override
-	/** Get next item of this iterator or <i>null</i>. If the object
+	/** Get next item of this iterator or null. If the object
 	 * has to be closed then if no more values are available the close() method
 	 * must be invoked.
 	 * @param xnode XXnode from which this method was called.
-	 * @return the next value of this iterator or return <i>null</i>.
+	 * @return the next value of this iterator or return null.
 	 * @throws SRuntimeException id an error occurs.
 	 */
 	public XDValue nextXDItem(XXNode xnode) throws SRuntimeException {
@@ -179,8 +170,8 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 		}
 	}
 	@Override
-	/** Get the item returned by last nextItem method or return <i>null</i>.
-	 * @return item returned by last nextItem method or return <i>null</i>.
+	/** Get the item returned by last nextItem method or return null.
+	 * @return item returned by last nextItem method or return null.
 	 */
 	public XDValue lastXDItem() {return _item;}
 	@Override
@@ -189,18 +180,14 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	 */
 	public int getCount() {return _count;}
 	@Override
-	/** Return value of iterated object if it has value (text of element),
-	 * otherwise return <i>null</i>.
-	 * @return value of iterated object or return <i>null</i>.
+	/** Return value of iterated object if it has value (text of element), otherwise return null.
+	 * @return value of iterated object or return null.
 	 */
-	public String itemAsString() {
-		return _itemName == null ? null : _item.stringValue();
-	}
+	public String itemAsString() {return _itemName == null ? null : _item.stringValue();}
 	@Override
-	/** If the iterated object is an array then return relevant item value,
-	 * otherwise return <i>null</i>.
+	/** If the iterated object is an array then return relevant item value, otherwise return null.
 	 * @param index the index of item.
-	 * @return value of the array item as a string or return <i>null</i>.
+	 * @return value of the array item as a string or return null.
 	 */
 	public String itemAsString(int index) {
 		try {
@@ -209,10 +196,9 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 		return null;
 	}
 	@Override
-	/** If the iterated object is a map, then return relevant item value,
-	 * otherwise return <i>null</i>.
+	/** If the iterated object is a map, then return relevant item value, otherwise return null.
 	 * @param name the name of map item.
-	 * @return value of map item as a string or return <i>null</i>.
+	 * @return value of map item as a string or return null.
 	 */
 	public String itemAsString(String name) {
 		try {
@@ -221,15 +207,13 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 		return null;
 	}
 	@Override
-	/** If the iterated object contains the specified item then return
-	 * <i>true</i>.
+	/** If the iterated object contains the specified item then return true.
 	 * @param name name item.
-	 * @return <i>true</i> if and only if the specified item exists.
+	 * @return true if and only if the specified item exists.
 	 */
 	public boolean hasItem(String name) {return itemAsString(name) != null;}
 	@Override
-	/** If this iterator is created from an array then return the size of array,
-	 * otherwise otherwise return -1.
+	/** If this iterator is created from an array then return size of array, otherwise otherwise return -1.
 	 * @return size of array or -1.
 	 */
 	public int getSize()  {
@@ -247,18 +231,15 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	/** Set constructor for creation of item.
 	 * @param constructor constructor for creation of item.
 	 */
-	public void setXDConstructor(XDConstructor constructor){
-		_constructor = constructor;
-	}
+	public void setXDConstructor(XDConstructor constructor){_constructor = constructor;}
 	@Override
 	/** Get constructor for creation of item.
 	 * @return constructor for creation of item.
 	 */
 	public XDConstructor getXDConstructor() {return _constructor;}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() { return _resultSet == null;}
 
@@ -301,7 +282,5 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	@Override
 	public XDValueType getItemType() {return RESULTSET;}
 	@Override
-	public String toString() {
-		return _resultSet == null ? "null" : _resultSet.toString();
-	}
+	public String toString() {return _resultSet == null ? "null" : _resultSet.toString();}
 }

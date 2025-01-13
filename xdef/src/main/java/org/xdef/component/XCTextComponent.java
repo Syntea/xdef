@@ -7,7 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Implementation of the interface XComponent for text nodes.
+/** Implementation of XComponent for text nodes.
  * @author Vaclav Trojan
  */
 public class XCTextComponent implements XComponent {
@@ -32,16 +32,16 @@ public class XCTextComponent implements XComponent {
 	public Object xGetValue() {return _value;}
 
 	@Override
-	/** Create XML element from this XComponent (marshal).
-	 * If the argument is null <i>null</i> then document is created with created document element.
+	/** Create XML element from this XComponent (marshal). If the argument is null then document is created
+	 * with created document element.
 	 * @return XML element created from this object.
 	 */
 	public Element toXml() {return null;}
 
 	@Override
 	/** Create XML element or text node from default model as element created from given document.
-	 * @param doc XML Document or <i>null</i>.
-	 * If the argument is null <i>null</i> then document is created with created document element.
+	 * @param doc XML Document or null. If the argument is null then document is created with created
+	 * document element.
 	 * @return XML node belonging to given document from default model.
 	 */
 	public Node toXml(final Document doc) {return doc.createTextNode(_value);}

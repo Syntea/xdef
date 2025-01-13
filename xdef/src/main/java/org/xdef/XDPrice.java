@@ -33,25 +33,18 @@ public final class XDPrice extends XDValueAbstract {
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
 	 */
-	public String currencyCode() {
-		return _amount != null ? _amount.currencyCode() : null;
-	}
+	public String currencyCode() {return _amount != null ? _amount.currencyCode() : null;}
 
-	/** Get the default number of fraction digits used with this currency.
-	 * In the case of pseudo-currencies -1 is returned.
+	/** Get the default number of fraction digits used with this currency. In the case of pseudo-currencies
+	 * -1 is returned.
 	 * @return default number of fraction digits used with this currency.
 	 */
-	public int fractionDigits() {
-		return _amount != null ? _amount.fractionDigits() : -1;
-	}
+	public int fractionDigits() {return _amount != null ? _amount.fractionDigits() : -1;}
 
 	/** Get printable form of this currency amount.
-	 * @return printable form of this currency amount with required decimal
-	 * digits.
+	 * @return printable form of this currency amount with required decimal digits.
 	 */
-	public final String display() {
-		return _amount != null ? _amount.display() : "null";
-	}
+	public final String display() {return _amount != null ? _amount.display() : "null";}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of methods from XDValue interface
@@ -61,8 +54,7 @@ public final class XDPrice extends XDValueAbstract {
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof XDPrice) {
 			XDPrice x = (XDPrice) arg;
-			return _amount != null ? _amount.equals(x._amount)
-				: x._amount == null;
+			return _amount != null ? _amount.equals(x._amount) : x._amount == null;
 		}
 		return false;
 	}
@@ -73,7 +65,7 @@ public final class XDPrice extends XDValueAbstract {
 				return 0;
 			}
 		}
-		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+		throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 	}
 	@Override
 	public short getItemId() {return XD_PRICE;}

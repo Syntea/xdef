@@ -50,44 +50,27 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	private SBuffer _text;
 	public final StringBuilder _sb = new StringBuilder();
 	static {
-		try {
-			// Set SAX parser parameters
+		try {// Set SAX parser parameters
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
 			SPF.setValidating(false);
 			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
-			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes",
-				false);
-			SPF.setFeature(
-				"http://apache.org/xml/features/allow-java-encodings", true);
-			SPF.setFeature("http://xml.org/sax/features/string-interning",
-				true);
+			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
+			SPF.setFeature( "http://apache.org/xml/features/allow-java-encodings", true);
+			SPF.setFeature("http://xml.org/sax/features/string-interning", true);
 			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
 			// do not validate document with DTD and Schema)
-			SPF.setFeature(
-				"http://apache.org/xml/features/validation/dynamic", false);
-			SPF.setFeature(
-				"http://apache.org/xml/features/nonvalidating/load-dtd-grammar",
-				false);
-			SPF.setFeature(
-				"http://xml.org/sax/features/external-parameter-entities",
-				false);
-			SPF.setFeature(
-				"http://xml.org/sax/features/external-general-entities", false);
-			SPF.setFeature(
-				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false);
-			SPF.setFeature(
-				"http://apache.org/xml/features/xinclude/fixup-language",false);
-			SPF.setFeature( // do not create xml:base attributes
-				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false);
-			SPF.setFeature(
-				"http://apache.org/xml/features/xinclude/fixup-language",false);
-			SPF.setFeature(
-				"http://xml.org/sax/features/external-general-entities", true);
-			SPF.setFeature(
-				"http://xml.org/sax/features/external-parameter-entities",true);
+			SPF.setFeature("http://apache.org/xml/features/validation/dynamic", false);
+			SPF.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+			SPF.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+			SPF.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			SPF.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
+			SPF.setFeature("http://apache.org/xml/features/xinclude/fixup-language",false);
+			// do not create xml:base attributes
+			SPF.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris",false);
+			SPF.setFeature("http://apache.org/xml/features/xinclude/fixup-language",false);
+			SPF.setFeature("http://xml.org/sax/features/external-general-entities", true);
+			SPF.setFeature("http://xml.org/sax/features/external-parameter-entities",true);
 			SPF.setSchema(null);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -102,13 +85,11 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		private final String _xmlEncoding;
 		private final String _pubId;
 		private final String _sysId;
-
 		private final boolean _isDTD;
 		private final Locator _locator;
 		private final Map<String, String> _entities;
 
-		private HandlerInfo(final XmlDefReader h,
-			final XAbstractReader mr) {
+		private HandlerInfo(final XmlDefReader h, final XAbstractReader mr) {
 			_mr = h.getReader();
 			_xr = h.getXMLReader();
 			_is = h.getInputSource();
@@ -116,13 +97,10 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			_xmlEncoding = h.getXmlEncoding();
 			_pubId = h.getPubId();
 			_sysId = h.getSysId();
-
 			_isDTD = h._isDTD;
 			_locator = h._locator;
 			_entities = h._entities;
-
 			mr.setHandler((DomBaseHandler) h);
-
 			h.setReader(mr);
 			h.setXMLReader(null);
 			h.setInputSource(null);
@@ -130,7 +108,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			h.setXmlEncoding(null);
 			h.setPubId(null);
 			h.setSysId(mr.getSysId());
-
 			h._isDTD = false;
 			h._entities = new LinkedHashMap<>(_entities);
 		}
@@ -164,8 +141,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		try {
 			SAXParser sp = SPF.newSAXParser();
 			xr = sp.getXMLReader();
-			xr.setProperty(
-				"http://xml.org/sax/properties/declaration-handler", this);
+			xr.setProperty("http://xml.org/sax/properties/declaration-handler", this);
 		} catch (Exception ex) {
 			throw new RuntimeException("Parse configuration error", ex);
 		}
@@ -217,9 +193,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			try {
 				SAXParser sp = SPF.newSAXParser();
 				xr = sp.getXMLReader();
-				xr.setProperty(
-					"http://xml.org/sax/properties/declaration-handler",
-					this);
+				xr.setProperty("http://xml.org/sax/properties/declaration-handler", this);
 			} catch (Exception ex) {
 				throw new RuntimeException("Parse configuration error", ex);
 			}
@@ -227,17 +201,14 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			xr.setErrorHandler(this);
 			xr.setEntityResolver(this);
 			setXMLReader(xr);
-
-			xr.setFeature( // continue after fatal error
-				"http://apache.org/xml/features/continue-after-fatal-error",
-				true);
+			// continue after fatal error
+			xr.setFeature("http://apache.org/xml/features/continue-after-fatal-error", true);
 			xr.parse(is);
 			getReader().close();
 		} catch (RuntimeException ex) {
 			thwn = ex;
 		} catch (Error | Exception ex) {
-			//XML parser was canceled by error&amp;{0}{: }
-			thwn = new SRuntimeException(XML.XML080, ex);
+			thwn = new SRuntimeException(XML.XML080, ex); //XML parser was canceled by error&amp;{0}{: }
 		}
 		try {
 			getReader().close();
@@ -259,12 +230,10 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param text SBuffer with value of text node.
 	 */
 	abstract void text(final SBuffer text);
-	/** This method is called after all attributes of the current element
-	 * attribute list was reached. The implementation may check the list of
-	 * attributes and to invoke appropriate actions. The method is invoked
-	 * when parser reaches the end of the attribute list.
-	 * @param parsedElem contains name of the element, name space URI and
-	 * the list of attributes.
+	/** This method is called after all attributes of the current element attribute list was reached.
+	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
+	 * is invoked when parser reaches the end of the attribute list.
+	 * @param parsedElem contains name of the element, namespace URI and the list of attributes.
 	 */
 	abstract void elementStart(final KParsedElement parsedElem);
 	/** This method is invoked when parser reaches the end of element. */
@@ -274,7 +243,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	//ErrorHandler
 	////////////////////////////////////////////////////////////////////////////
 	private SPosition getPosition(final SAXParseException x) {
-		return new SPosition(x.getLineNumber(),x.getColumnNumber(),_sysId,null);
+		return new SPosition(x.getLineNumber(), x.getColumnNumber(), _sysId,null);
 	}
 
 	@Override
@@ -282,29 +251,29 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		String m = x.getMessage();
 		if (m != null) {
 			if (m.contains("Include operation failed, reverting to fallback.")){
-				return; // we do not report it
+				return; // do not report it
 			}
 		}
 		warning(getPosition(x), XML.XML075, x.getMessage());
 	}
 	@Override
 	public final void error(final SAXParseException x) {
-		error(getPosition(x), XML.XML075, x.getMessage());
+		error(getPosition(x), XML.XML075, x.getMessage()); //XML error&{0}{: }
 	}
 	@Override
 	public final void fatalError(final SAXParseException x) {
 		String m = x.getMessage();
 		if (m != null) {
 			if (m.contains("no fallback element was found")){
-				error(getPosition(x), XML.XML308);
+				error(getPosition(x), XML.XML308); //XInclude - Can't access URL object&{0}{: "}{"}
 			} else if (m.contains("must not contain the '<' character")){
-				error(getPosition(x), XML.XML041);
+				error(getPosition(x), XML.XML041); //Character "<" can't be used here
 			} else if (m.contains("prefix ") && m.contains(" is not bound")) {
-				error(getPosition(x), XML.XML047);
+				error(getPosition(x), XML.XML047); //Unknown NameSpace for qualified name "&{0}"
 			} else if (m.contains("Premature end of file")) {
-				error(getPosition(x), XML.XML005);
+				error(getPosition(x), XML.XML005); //Unexpected end of source
 			} else {
-				error(getPosition(x), XML.XML075, x.getMessage());
+				error(getPosition(x), XML.XML075, x.getMessage()); //XML error&{0}{: }
 			}
 		}
 	}
@@ -433,9 +402,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param type 0 .. CDATA section, 1 .. text, 2 .. attribute
 	 * @return corrected buffer and created modifications in position.
 	 */
-	private String resolveReferences(final SPosition sp,
-		final String src,
-		final int type) {
+	private String resolveReferences(final SPosition sp, final String src, final int type) {
 		StringBuilder sb = new StringBuilder();
 		int p = sp.getIndex();
 		int len = src.length();
@@ -476,10 +443,8 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 						replacement = "";
 					}
 					if (type == 2) { // attribute value => replace with space
-						replacement = replacement.replace('\n', ' ')
-							.replace('\r', ' ')
-							.replace('\f', ' ')
-							.replace('\t', ' ');
+						replacement = replacement.replace('\n',' ')
+							.replace('\r',' ').replace('\f',' ').replace('\t',' ');
 					}
 				}
 				// Replace entity reference with result
@@ -552,8 +517,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				String s = mr.getProlog()  + "<" + qName;
 				int ndx = qName.indexOf(':');
 				if (ndx > 0) {
-					s += " " + "xmlns:" + qName.substring(0, ndx)
-						+ "=\"" + nsuri + '"';
+					s += " " + "xmlns:" + qName.substring(0, ndx) + "=\"" + nsuri + '"';
 				} else if (nsuri != null && !nsuri.isEmpty()) {
 					s += " " + "xmlns" + "=\"" + nsuri + '"';
 				}
@@ -571,16 +535,14 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 				String sysId = _is.getSystemId();
 				_isDTD = true;
 				_docBuilder.setEntityResolver(this);
-				doc = _docBuilder.parse(
-					new ByteArrayInputStream(s.getBytes(encoding)), sysId);
+				doc = _docBuilder.parse(new ByteArrayInputStream(s.getBytes(encoding)), sysId);
 				Element el = doc.getDocumentElement();
 				if (!_entities.isEmpty()) {
 					_entities.clear();
 					NodeList nl = el.getElementsByTagName("*");
 					for (int i = nl.getLength() - 1; i >= 0; i--) {
 						Node n = nl.item(i);
-						_entities.put(n.getNodeName(),
-							n.getTextContent());
+						_entities.put(n.getNodeName(), n.getTextContent());
 						el.removeChild(n);
 					}
 				}
@@ -600,16 +562,14 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		}
 		List<Object[]> list = mr.getElementPositions(qName);
 		KParsedElement parsedElem = new KParsedElement();
-		parsedElem.setParsedNameParams(nsuri, qName,
-			(SPosition) ((Object[])list.get(0))[1]);
+		parsedElem.setParsedNameParams(nsuri, qName, (SPosition) ((Object[])list.get(0))[1]);
 		mr.releaseScanned();
 		for (Map.Entry<String, String> x: _prefixes.entrySet()) {
 			String name = x.getKey();
 			name = !name.isEmpty() ? "xmlns:" + name : "xmlns";
 			Object[] item = findAttr(list, name);
 			SPosition sp = item != null ? (SPosition) item[1] : null;
-			KParsedAttr att = new KParsedAttr(
-				XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, x.getValue(),sp);
+			KParsedAttr att = new KParsedAttr(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, name, x.getValue(),sp);
 			parsedElem.addAttr(att);
 		}
 		for (int i = 1; i < list.size(); i++) {
@@ -617,8 +577,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			String name = (String) item[0];
 			SPosition sp = item != null ? (SPosition) item[1] : null;
 			int j = atts.getIndex(name);
-			KParsedAttr att = new KParsedAttr(
-				atts.getURI(j), name, atts.getValue(j), sp);
+			KParsedAttr att = new KParsedAttr(atts.getURI(j), name, atts.getValue(j), sp);
 			if (item != null) {
 				String s = (String) item[2];
 				s = resolveReferences(sp, s, 2);
@@ -633,9 +592,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	}
 
 	@Override
-	public void endElement(final String uri,
-		final String localName,
-		final String qName) {
+	public void endElement(final String uri, final String localName, final String qName) {
 		_level--; // increase nesting level
 		XAbstractReader mr = getReader();
 		if (mr != null) {
@@ -649,8 +606,8 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 					parseText(mr);
 				} else {
 					parseText(mr);
-					if (_text == null && _sb.length() > 0 ||  (_text != null
-						&& !_sb.toString().equals(_text.getString()))) {
+					if (_text == null && _sb.length() > 0
+						||  (_text != null && !_sb.toString().equals(_text.getString()))) {
 							if (mr.getXInclude() != null) { // XInclude fallback
 								_text = new SBuffer(_sb.toString(),
 								_text == null ? mr.getSPosition() : _text);
@@ -684,11 +641,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	}
 
 	@Override
-	public void characters(final char[] ch,
-		final int start,
-		final int length) {
-		_sb.append(ch, start, length);
-	}
+	public void characters(final char[] ch, final int start, final int length) {_sb.append(ch, start,length);}
 
 	@Override
 	public void ignorableWhitespace(final char[] ch,
@@ -729,11 +682,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	public void elementDecl(String name, String model) {}
 
 	@Override
-	public void attributeDecl(String eName,
-		String aName,
-		String type,
-		String mode,
-		String value) {}
+	public void attributeDecl(String eName, String aName, String type, String mode, String value) {}
 
 	@Override
 	public void internalEntityDecl(String name, String value) {
@@ -743,9 +692,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	}
 
 	@Override
-	public void externalEntityDecl(String name,
-		String publicId,
-		String systemId) {
+	public void externalEntityDecl(String name, String publicId, String systemId) {
 		if (!name.startsWith("%")) {
 			_entities.put(name, systemId);
 		}
@@ -792,7 +739,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param n name of attribute.
 	 * @return found item or null.
 	 */
-	private static Object[] findAttr(final List<Object[]> list, final String n){
+	private static Object[] findAttr(final List<Object[]> list, final String n) {
 		if (list != null) {
 			for (int i = 1; i < list.size(); i++) {
 				Object[] item = list.get(i);
@@ -823,9 +770,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	final void error(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	final void error(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.error(registeredID, mod));
 	}
 
@@ -834,9 +779,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	final void lightError(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	final void lightError(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.lightError(registeredID, mod));
 	}
 
@@ -845,9 +788,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	final void warning(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	final void warning(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.warning(registeredID, mod));
 	}
 

@@ -10,13 +10,9 @@ import org.xdef.impl.code.DefLong;
  */
 public class XSParseLong extends XSAbstractParseComparable {
 	private static final String ROOTBASENAME = "long";
-
 	private long _totalDigits;
 
-	public XSParseLong() {
-		super();
-		_totalDigits = -1;
-	}
+	public XSParseLong() {super(); _totalDigits = -1;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -50,8 +46,7 @@ public class XSParseLong extends XSAbstractParseComparable {
 		int totalDigits = 0;
 		int i;
 		if ((i = p.isDigit()) < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		} else if (i > 0) {
 			totalDigits++;
@@ -68,15 +63,13 @@ public class XSParseLong extends XSAbstractParseComparable {
 		try {
 			val = Long.parseLong(s = sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
-			//Value of '&{0}' is out of range&{1}{: }
-			p.error(XDEF.XDEF806, parserName(), s);
+			p.error(XDEF.XDEF806, parserName(), s);//Value of '&{0}' is out of range&{1}{: }
 			return;
 		}
 		p.setParsedValue(new DefLong(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
-				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-				p.error(XDEF.XDEF813, s, "totalDigits", val);
+				p.error(XDEF.XDEF813, s, "totalDigits", val);//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
 				return;
 			}
 		}

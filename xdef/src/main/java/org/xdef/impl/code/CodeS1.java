@@ -6,7 +6,6 @@ import org.xdef.XDValue;
  * @author  Vaclav Trojan
  */
 public class CodeS1 extends CodeI1 {
-
 	private String _param2;
 
 	/** Creates a new instance of CodeString.
@@ -14,9 +13,7 @@ public class CodeS1 extends CodeI1 {
 	 * @param code The code.
 	 * @param spar The parameter string.
 	 */
-	public CodeS1(final short resultType,
-		final short code,
-		final String spar) {
+	public CodeS1(final short resultType, final short code, final String spar) {
 		this(resultType, code, 0, spar);
 	}
 
@@ -26,10 +23,7 @@ public class CodeS1 extends CodeI1 {
 	 * @param param The integer parameter.
 	 * @param spar The parameter string.
 	 */
-	public CodeS1(final short resultType,
-		final short code,
-		int param,
-		final String spar) {
+	public CodeS1(final short resultType, final short code, int param, final String spar) {
 		super(resultType, code, param);
 		_param2 = spar;
 	}
@@ -52,8 +46,7 @@ public class CodeS1 extends CodeI1 {
 			return false;
 		}
 		CodeS1 x = (CodeS1) o;
-		if (getCode() != x.getCode() ||	getParam() != x.getParam() ||
-			_resultType != x.getItemId()) {
+		if (getCode() != x.getCode() ||	getParam() != x.getParam() || _resultType != x.getItemId()) {
 			return false;
 		}
 		return _param2 == null ? x._param2 == null : _param2.equals(x._param2);

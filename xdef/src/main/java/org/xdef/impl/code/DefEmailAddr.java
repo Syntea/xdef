@@ -32,9 +32,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** Creates a new instance of DefEmail as null.*/
 	public DefEmailAddr() {this((String) null);}
 
-	private static String readStackItem(final StringParser q,
-		final String s,
-		final String src) {
+	private static String readStackItem(final StringParser q, final String s, final String src) {
 		if (q.isToken(s) && q.isSpaces()) {
 			if (q.isInteger()) {
 				int i = q.getParsedInt();
@@ -84,8 +82,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		StringParser p = new StringParser(value);
 		String[] result = parseEmail(p);
 		if (result == null || !p.eos()) {
-			//Incorrect value of &{0}&{1}&{: }
-			throw new SRuntimeException(XDEF.XDEF809, "email");
+			throw new SRuntimeException(XDEF.XDEF809, "email"); //Incorrect value of &{0}&{1}&{: }
 		}
 		_value = result[0];
 		_localPart = result[1];
@@ -96,8 +93,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	public DefEmailAddr(StringParser p) {
 		String[] result = parseEmail(p);
 		if (result == null) {
-			//Incorrect value of &{0}&{1}&{: }
-			throw new SRuntimeException(XDEF.XDEF809, "email");
+			throw new SRuntimeException(XDEF.XDEF809, "email"); //Incorrect value of &{0}&{1}&{: }
 		}
 		_value = result[0];
 		_localPart = result[1];
@@ -216,18 +212,14 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 */
 	public XDValue cloneItem() {return new DefEmailAddr(_value);}
 	@Override
-	public int hashCode() {
-		return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;
-	}
+	public int hashCode() {return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;}
 	@Override
-	public boolean equals(final Object arg) {
-		return arg instanceof XDValue ?  equals((XDValue) arg) : false;
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ?  equals((XDValue) arg) : false;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
@@ -253,9 +245,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() {return _value == null;}
 

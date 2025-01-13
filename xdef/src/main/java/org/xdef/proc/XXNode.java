@@ -33,7 +33,7 @@ public interface XXNode extends XDValue {
 	public String getXXName();
 
 	/** Get namespace URI of the model.
-	 * @return namespace URI or <i>null</i>.
+	 * @return namespace URI or null.
 	 */
 	public String getXXNSURI();
 
@@ -43,7 +43,7 @@ public interface XXNode extends XDValue {
 	public String getNodeName();
 
 	/** Get namespace URI of actual node.
-	 * @return namespace URI or <i>null</i>.
+	 * @return namespace URI or null.
 	 */
 	public String getNodeURI();
 
@@ -60,19 +60,19 @@ public interface XXNode extends XDValue {
 	/** Set named user object.
 	 * @param id identifier of the object.
 	 * @param obj user object.
-	 * @return previous value of the object or <i>null</i>.
+	 * @return previous value of the object or null.
 	 */
 	public Object setUserObject(String id, Object obj);
 
 	/** Remove named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <i>null</i>.
+	 * @return value of the object or null.
 	 */
 	public Object removeUserObject(String id);
 
 	/** Get named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <i>null</i>.
+	 * @return value of the object or null.
 	 */
 	public Object getUserObject(String id);
 
@@ -82,7 +82,7 @@ public interface XXNode extends XDValue {
 	public String getXPos();
 
 	/** Get source position of this model in X-definition.
-	 * @return SPosition or <i>null</i> if position is not available.
+	 * @return SPosition or null if position is not available.
 	 */
 	public SPosition getSPosition();
 
@@ -138,8 +138,7 @@ public interface XXNode extends XDValue {
 
 	/** Get value of variable from X-definition.
 	 * @param name name of variable.
-	 * @return XDValue object or <i>null</i> if variable with the name not
-	 * exists.
+	 * @return XDValue object or null if variable with the name not exists.
 	 */
 	public XDValue getVariable(String name);
 
@@ -178,14 +177,12 @@ public interface XXNode extends XDValue {
 	public ReportWriter getReportWriter();
 
 	/** Check if errors, fatal errors, light errors or warnings were reported.
-	 * @return <i>true</i> if and only if errors, fatal errors, light errors
-	 * or warnings were reported.
+	 * @return true if and only if errors, fatal errors, light errors or warnings were reported.
 	 */
 	public boolean errorWarnings();
 
 	/** Check if errors, fatal errors or light errors were reported.
-	 * @return <i>true</i> if and only if errors, fatal errors or light errors
-	 * were reported.
+	 * @return true if and only if errors, fatal errors or light errors were reported.
 	 */
 	public boolean errors();
 
@@ -210,8 +207,7 @@ public interface XXNode extends XDValue {
 	public boolean removeTemporaryReport(final Report rep);
 
 	/** Copy temporary reports to global reporter.
-	 * @return true if and only if temporary reporter contained errors before it
-	 * was cleared.
+	 * @return true if and only if temporary reporter contained errors before it was cleared.
 	 */
 	public boolean copyTemporaryReports();
 
@@ -226,21 +222,21 @@ public interface XXNode extends XDValue {
 	public boolean chkTemporaryErrors();
 
 	/** Put fatal error message with modification parameters.
-	 * @param id The message id or <i>null</i>.
+	 * @param id The message id or null.
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
 	public void fatal(final String id, final String msg, final Object... mod);
 
 	/** Put error message with modification parameters.
-	 * @param id The message id or <i>null</i>.
+	 * @param id The message id or null.
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
 	public void error(final String id, final String msg, final Object... mod);
 
 	/** Put warning message with modification parameters.
-	 * @param id The message id or <i>null</i>.
+	 * @param id The message id or null.
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
@@ -290,7 +286,7 @@ public interface XXNode extends XDValue {
 	public XDParseResult getParseResult();
 
 	/** Get actual creation context (XDResultSet).
-	 * @return the XDResultSet or <i>null</i> if it is not available.
+	 * @return the XDResultSet or null if it is not available.
 	 */
 	public XDValue getXDContext();
 
@@ -321,9 +317,8 @@ public interface XXNode extends XDValue {
 	public void setXONContext(String data) throws SRuntimeException;
 
 	/** Set XON/JSON data as context for create mode.
-	 * @param data the JSON data. It can be either XON/JSON object or
-	 * File, URL or InputStream with XON/JSON data* or XDResultSet
-	 * or XML data to be converted to XON/JSON.
+	 * @param data the JSON data. It can be either XON/JSON object or File, URL or InputStream with
+	 * XON/JSON data or XDResultSet or XML data to be converted to XON/JSON.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
 	public void setXONContext(Object data) throws SRuntimeException;
@@ -334,7 +329,7 @@ public interface XXNode extends XDValue {
 	public XMNode getXMNode();
 
 	/** Get XComponent.
-	 * @return The XComponent object (may be <i>null</i>).
+	 * @return The XComponent object (may be null).
 	 */
 	public XComponent getXComponent();
 

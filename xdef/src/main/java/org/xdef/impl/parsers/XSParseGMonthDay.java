@@ -9,6 +9,7 @@ public class XSParseGMonthDay extends XSParseDate {
 	private static final String ROOTBASENAME = "gMonthDay";
 
 	public XSParseGMonthDay() {super();}
+
 	@Override
 	boolean parse(final StringParser parser) {return parser.isXMLMonthDay();}
 	@Override

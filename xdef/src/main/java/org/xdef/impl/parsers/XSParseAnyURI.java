@@ -23,16 +23,12 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XSParseAnyURI extends XSAbstractParser {
 	private static final String ROOTBASENAME = "anyURI";
-
 	protected long _minLength;
 	protected long _maxLength;
 	protected DefURI[] _enumeration;
 
-	public XSParseAnyURI() {
-		super();
-		_whiteSpace = WS_COLLAPSE;
-		_minLength = _maxLength = -1;
-	}
+	public XSParseAnyURI() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
+
 	@Override
 	public void initParams() {
 		_patterns = null;
@@ -70,8 +66,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 		try {
 			p.setParsedValue(new DefURI(new URI(s)));
 		} catch (URISyntaxException ex) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.isSpaces();
@@ -143,8 +138,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 				//Length of value of '&{0}' is too short"&{0}'&{1}
 				p.errorWithString(XDEF.XDEF814, parserName());
 			} else if (_maxLength != -1 && len > _maxLength) {
-				//Length of value of '&{0}' is too long&{0}'{: }
-				p.errorWithString(XDEF.XDEF815, parserName());
+				p.errorWithString(XDEF.XDEF815, parserName());//Length of value of '&{0}' is too long&{0}'{: }
 			}
 		}
 	}
@@ -159,8 +153,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 					return;
 				}
 			}
-			//Doesn't fit enumeration list of &{0}&{1}{: }
-			p.errorWithString(XDEF.XDEF810, parserName());
+			p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of &{0}&{1}{: }
 		}
 	}
 	@Override

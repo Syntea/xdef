@@ -33,27 +33,19 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	 */
 	public DefElement(final Element value) {_value = value;}
 
-	/** Creates a new instance of DefElement and create nwe empty element
-	 * with given name.
+	/** Creates a new instance of DefElement and create nwe empty element with given name.
 	 * @param doc The document where the new element will be created.
 	 * @param name The name of element.
 	 */
-	public DefElement(final Document doc, final String name) {
-		_value = doc.createElementNS(null, name);
-	}
+	public DefElement(final Document doc, final String name) {_value = doc.createElementNS(null, name);}
 
-	/** Creates a new instance of DefElement and create nwe empty element
-	 * with given name.
+	/** Creates a new instance of DefElement and create nwe empty element with given name.
 	 * @param doc The document where the new element will be created.
 	 * @param name The name of element.
 	 * @param ns namespace uri.
 	 */
 	public DefElement(final Document doc, final String ns, final String name) {
-		if (ns == null || ns.length() == 0) {
-			_value = doc.createElementNS(null, name);
-		} else {
-			_value = doc.createElementNS(ns, name);
-		}
+		_value = ns==null || ns.length()==0 ? doc.createElementNS(null, name) : doc.createElementNS(ns, name);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -63,17 +55,13 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Get name of underlying element or empty string.
 	 * @return element name or empty string.
 	 */
-	public String getName() {
-		return _value == null ? "" : _value.getNodeName();
-	}
+	public String getName() {return _value == null ? "" : _value.getNodeName();}
 
 	@Override
 	/** Get namespace URI of underlying element or null.
 	 * @return namespace URI of underlying element or null.
 	 */
-	public String getNamespaceURI() {
-		return _value == null ? null : _value.getNamespaceURI();
-	}
+	public String getNamespaceURI() {return _value == null ? null : _value.getNamespaceURI();}
 
 	@Override
 	/** Get local name of underlying element or the empty string.
@@ -106,11 +94,9 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 			Node x = nl.item(i);
 			if (x.getNodeType() == Node.ELEMENT_NODE) {
 				c.addXDItem(elementToContainer((Element) x));
-			} else if (x.getNodeType() == Node.TEXT_NODE
-				|| x.getNodeType() == Node.CDATA_SECTION_NODE) {
+			} else if (x.getNodeType() == Node.TEXT_NODE || x.getNodeType() == Node.CDATA_SECTION_NODE) {
 				String s = x.getNodeValue();
-				while (i + 1 < nl.getLength()
-					&& ((x = nl.item(i + 1)).getNodeType() == Node.TEXT_NODE
+				while (i + 1 < nl.getLength() && ((x = nl.item(i + 1)).getNodeType() == Node.TEXT_NODE
 					|| x.getNodeType() == Node.CDATA_SECTION_NODE)) {
 					s += x.getNodeValue();
 					i++;
@@ -131,9 +117,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Create XDContainer from this object.
 	 * @return XDContainer constructed from this object.
 	 */
-	public XDContainer toContainer() {
-		return _value == null ? new DefContainer() : elementToContainer(_value);
-	}
+	public XDContainer toContainer() {return _value==null ? new DefContainer() : elementToContainer(_value);}
 
 	////////////////////////////////////////////////////////////////////////////
 	// Implementation of XDContainer
@@ -145,18 +129,11 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 			return null;
 		}
 		switch (n.getNodeType()) {
-			case Node.ELEMENT_NODE:
-				return new DefElement((Element) n);
+			case Node.ELEMENT_NODE: return new DefElement((Element) n);
 			case Node.TEXT_NODE:
-			case Node.CDATA_SECTION_NODE:
-				return new DefText((CharacterData) n);
-//			case Node.COMMENT_NODE:
-//				return new DefCommentNode((Comment) n);
-//			case Node.PROCESSING_INSTRUCTION_NODE:
-//				return new DefPINode((ProcessingInstruction) n);
-			default:
-				return null;
+			case Node.CDATA_SECTION_NODE: return new DefText((CharacterData) n);
 		}
+		return null;
 	}
 
 	@Override
@@ -178,10 +155,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	public XDValue removeXDItem(final int index) {return null;}//ignore
 
 	@Override
-	public int getXDItemsNumber() {
-		return _value == null ? 0 : _value.getChildNodes().getLength();
-
-	}
+	public int getXDItemsNumber() {return _value == null ? 0 : _value.getChildNodes().getLength();}
 
 	@Override
 	public XDValue[] getXDItems() {
@@ -196,31 +170,24 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	public XDValue setXDNamedItem(final XDNamedValue item) {return null;}//ignore
 
 	@Override
-	public XDValue setXDNamedItem(final String name, final XDValue value) {
-		return null; //ignore
-	}
+	public XDValue setXDNamedItem(final String name, final XDValue value) {return null;}//ignore
 
 	@Override
-	public boolean hasXDNamedItem(final String name) {
-		return _value != null && _value.hasAttribute(name);
-	}
+	public boolean hasXDNamedItem(final String name) {return _value != null && _value.hasAttribute(name);}
 
 	@Override
 	public XDNamedValue getXDNamedItem(final String name) {
-		return _value != null && _value.hasAttribute(name) ?
-			new DefAttr(_value.getAttributeNode(name)) : null;
+		return _value!=null && _value.hasAttribute(name) ? new DefAttr(_value.getAttributeNode(name)) : null;
 	}
 
 	@Override
 	public String getXDNamedItemAsString(final String name) {
-		return _value != null && _value.hasAttribute(name) ?
-			_value.getAttribute(name) :	null;
+		return _value!=null && _value.hasAttribute(name) ? _value.getAttribute(name) :	null;
 	}
 
 	@Override
 	public XDValue getXDNamedItemValue(final String name) {
-		return _value != null && _value.hasAttribute(name) ?
-			new DefString(_value.getAttribute(name)) : null;
+		return _value != null && _value.hasAttribute(name) ? new DefString(_value.getAttribute(name)) : null;
 	}
 
 	@Override
@@ -264,10 +231,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Create new XDContainer with all elements from context.
 	 * @return new XDContainer with elements.
 	 */
-	public XDContainer getXDElements() {
-		return new DefContainer(KXmlUtils.getChildElements(_value));
-
-	}
+	public XDContainer getXDElements() {return new DefContainer(KXmlUtils.getChildElements(_value));}
 
 	@Override
 	/** Get the n-th element from context or null.
@@ -276,8 +240,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	 */
 	public Element getXDElement(final int n) {
 		NodeList nl = KXmlUtils.getChildElements(_value);
-		return n < nl.getLength() ?
-			(Element) KXmlUtils.getChildElements(_value).item(n) : null;
+		return n < nl.getLength() ? (Element) KXmlUtils.getChildElements(_value).item(n) : null;
 	}
 
 	@Override
@@ -296,21 +259,18 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	 * @return new Container with all elements with given name and namespace.
 	 */
 	public XDContainer getXDElementsNS(final String nsURI,final String localName){
-		return new DefContainer(KXmlUtils.getChildElementsNS(_value,
-			nsURI, localName));
+		return new DefContainer(KXmlUtils.getChildElementsNS(_value, nsURI, localName));
 	}
 
 	@Override
 	/** Get all text nodes concatenated as a string.
 	 * @return The string with all text nodex.
 	 */
-	public String getXDText() {
-		return KXmlUtils.getTextValue(_value);
-	}
+	public String getXDText() {return KXmlUtils.getTextValue(_value);}
 
 	@Override
-	/** Get string form text node with index i. If the node does not exist or if
-	 * it is not text node return empty string.
+	/** Get string form text node with index i. If the node does not exist or if it is not text node
+	 * return empty string.
 	 * @param index The index of node item.
 	 * @return The string.
 	 */
@@ -337,8 +297,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 					if (uri == null) {
 						el.setAttribute(n.getNodeName(), n.getNodeValue());
 					} else {
-						el.setAttributeNS(uri,
-							n.getNodeName(), n.getNodeValue());
+						el.setAttributeNS(uri, n.getNodeName(), n.getNodeValue());
 					}
 				}
 			}
@@ -356,16 +315,13 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	 * the text value of an item).
 	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 */
-	public XDContainer sortXD(final boolean asc) {
-		return new DefContainer(_value.getChildNodes()).sortXD(asc);
-	}
+	public XDContainer sortXD(final boolean asc){return new DefContainer(_value.getChildNodes()).sortXD(asc);}
 
 	@Override
 	/** Sorts this context.
-	 * @param key String with XPath expression or null (if null or empty string
-	 * then for org.w3c.Node items it is used as a key the text value of
-	 * an item). For items other then  org.w3c.Node objects this parameter is
-	 * ignored.
+	 * @param key String with XPath expression or null (if null or empty string then for org.w3c.Node items
+	 * it is used as a key the text value of an item). For items other then  org.w3c.Node objects this
+	 * parameter is ignored.
 	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 */
 	public XDContainer sortXD(String key, boolean asc) {
@@ -394,14 +350,11 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {
-		return _value == null ? "" : KXmlUtils.nodeToString(_value);
-	}
+	public String toString() {return _value == null ? "" : KXmlUtils.nodeToString(_value);}
 
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return KXmlUtils.getTextValue(_value);}
 
@@ -416,17 +369,14 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 
 	@Override
 	public boolean equals(final Object arg) {
-		if (arg instanceof DefElement) {
-			return equals((DefElement) arg);
-		}
-		return false;
+		return arg instanceof DefElement ? equals((DefElement) arg) : false;
 	}
 
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
@@ -441,9 +391,8 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return If both objects are comparable then returns -1, 0, or a 1
-	 * as this XDValue object is less than, equal to, or greater than the
-	 * specified object.
+	 * @return If both objects are comparable then returns -1, 0, or a 1 as this XDValue object is less than
+	 * equal to, or greater than the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
@@ -455,8 +404,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 
 	/** Compares this object with the other DefElement object.
 	 * @param arg other DefElement object to which is to be compared.
-	 * @return returns -1, 0, or a 1 as this object is less than, equal to, or
-	 * greater than the specified object.
+	 * @return returns -1, 0, or a 1 as this object is less than, equal to, or greater than specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final DefElement arg) throws SIllegalArgumentException{
@@ -467,16 +415,14 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	}
 
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() { return _value == null;}
 
 	@Override
 	/** Check if the object is empty.
-	 * @return <i>true</i> if the object is empty; otherwise returns
-	 * <i>false</i>.
+	 * @return true if the object is empty; otherwise return false.
 	 */
 	public boolean isEmpty() {
 		NodeList nl = _value.getChildNodes();

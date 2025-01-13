@@ -15,16 +15,12 @@ import org.xdef.xon.XonTools;
 public class XDParseEmpty extends XSAbstractParser {
 	private static final String ROOTBASENAME = "empty";
 
-	public XDParseEmpty() {
-		super();
-		_whiteSpace = WS_PRESERVE;
-	}
+	public XDParseEmpty() {super(); _whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public int getLegalKeys() {return BASE;}
 	@Override
-	public void initParams() {
-		_whiteSpace = WS_PRESERVE;
-	}
+	public void initParams() {_whiteSpace = WS_PRESERVE;}
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
@@ -38,8 +34,7 @@ public class XDParseEmpty extends XSAbstractParser {
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
 		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
 		if (!s.isEmpty()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 		p.setParsedValue(s);
 	}

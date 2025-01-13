@@ -26,17 +26,14 @@ public class XDParseFile extends XDParserAbstract {
 	 * @param parserName name of parser.
 	 * @return true if the string contains correct filename.
 	 */
-	final static boolean chkFile(final XDParseResult p,
-		final String s,
-		final String parserName) {
+	final static boolean chkFile(final XDParseResult p, final String s, final String parserName) {
 		if (!s.isEmpty()) {
 			try {
 				new File(s).getCanonicalFile();
 				return true;
 			} catch (Exception ex) {}
 		}
-		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
+		p.errorWithString(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of '&{0}'&{1}{: }
 		return false;
 	}
 	@Override

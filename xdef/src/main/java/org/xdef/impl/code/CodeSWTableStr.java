@@ -8,7 +8,6 @@ import static org.xdef.impl.code.CodeTable.SWITCH_S;
  * @author Vaclav Trojan
  */
 public class CodeSWTableStr extends CodeI1 {
-
 	/** List of string values. */
 	public String[] _list;
 	/** List of addresses. */

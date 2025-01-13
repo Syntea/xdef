@@ -104,9 +104,7 @@ public class SObjectReader {
 	 * @return char value.
 	 * @throws IOException if an error occurs.
 	 */
-	public final char readChar() throws IOException {
-		return (char) readShort();
-	}
+	public final char readChar() throws IOException {return (char) readShort();}
 
 	/** Read integer value.
 	 * @return integer value.
@@ -114,17 +112,14 @@ public class SObjectReader {
 	 */
 	public final int readInt() throws IOException {
 		byte[] x = readBytes(4);
-		return (0xff & x[0]) << 24 | (0xff & x[1]) << 16
-			| (0xff & x[2]) << 8 | 0xff & x[3];
+		return (0xff & x[0]) << 24 | (0xff & x[1]) << 16 | (0xff & x[2]) << 8 | 0xff & x[3];
 	}
 
 	/** Read float value.
 	 * @return float value.
 	 * @throws IOException if an error occurs.
 	 */
-	public final float readFloat() throws IOException {
-		return Float.intBitsToFloat(readInt());
-	}
+	public final float readFloat() throws IOException {return Float.intBitsToFloat(readInt());}
 
 	/** Read long value.
 	 * @return long value.
@@ -146,9 +141,7 @@ public class SObjectReader {
 	 * @return double value.
 	 * @throws IOException if an error occurs.
 	 */
-	public final double readDouble() throws IOException {
-		return Double.longBitsToDouble(readLong());
-	}
+	public final double readDouble() throws IOException {return Double.longBitsToDouble(readLong());}
 
 	/** Read BigDecimal value.
 	 * @return BigDecimal value.
@@ -174,8 +167,7 @@ public class SObjectReader {
 	 */
 	public final String readString() throws IOException {
 		byte[] bytes = readBytes();
-		return bytes == null
-			? null : new String(bytes, StandardCharsets.UTF_8);
+		return bytes == null ? null : new String(bytes, StandardCharsets.UTF_8);
 	}
 
 	/** Read SPosition value.
@@ -206,9 +198,7 @@ public class SObjectReader {
 	 * @return Report value.
 	 * @throws IOException if an error occurs.
 	 */
-	public final Report readReport() throws IOException {
-		return (readBoolean()) ? Report.readObj(this) : null;
-	}
+	public final Report readReport() throws IOException {return (readBoolean())? Report.readObj(this) : null;}
 
 	/** Read BNFGrammar value.
 	 * @return BNFGrammar value.

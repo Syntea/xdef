@@ -42,12 +42,10 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	PreReaderXML(final XPreCompiler pcomp) {super(); _pcomp = pcomp;}
 
 	@Override
-	/** This method is called after all attributes of the current element
-	 * attribute list was reached. The implementation may check the list of
-	 * attributes and to invoke appropriate actions. The method is invoked
-	 * when parser reaches the end of the attribute list.
-	 * @param parsedElem contains name of the element, name space URI and
-	 * the list of attributes.
+	/** This method is called after all attributes of the current element attribute list was reached.
+	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
+	 * is invoked when parser reaches the end of the attribute list.
+	 * @param parsedElem contains name of the element, namespace URI and the list of attributes.
 	 */
 	public final void elementStart(final KParsedElement parsedElem) {
 		String qName = parsedElem.getParsedName();
@@ -87,16 +85,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				String projectNS; // = XDConstants.XDEFxxx_NS_URI;
 				KParsedAttr ka;
 				byte ver;
-				if ((ka = parsedElem.getAttrNS(
-						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
-					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF32_NS_URI, "metaNamespace")) != null
-					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF40_NS_URI, "metaNamespace")) != null
-					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF41_NS_URI, "metaNamespace")) != null
-					|| (ka = parsedElem.getAttrNS(
-						XDConstants.XDEF42_NS_URI, "metaNamespace")) != null) {
+				if ((ka = parsedElem.getAttrNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(XDConstants.XDEF32_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(XDConstants.XDEF41_NS_URI, "metaNamespace")) != null
+					|| (ka = parsedElem.getAttrNS(XDConstants.XDEF42_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
 					ver = XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD31
@@ -115,10 +108,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 					parsedElem.remove(ka);
 				} else {
-					if (XDConstants.XDEF31_NS_URI.equals(uri)
-						|| XDConstants.XDEF32_NS_URI.equals(uri)
-						|| XDConstants.XDEF40_NS_URI.equals(uri)
-						|| XDConstants.XDEF41_NS_URI.equals(uri)
+					if (XDConstants.XDEF31_NS_URI.equals(uri) || XDConstants.XDEF32_NS_URI.equals(uri)
+						|| XDConstants.XDEF40_NS_URI.equals(uri) || XDConstants.XDEF41_NS_URI.equals(uri)
 						|| XDConstants.XDEF42_NS_URI.equals(uri)) {
 						ver = XDConstants.XDEF31_NS_URI.equals(uri)
 							? XConstants.XD31
@@ -130,8 +121,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 							? XConstants.XD41 : XConstants.XD42;
 						projectNS = uri;
 					} else {
-						//Namespace of X-definitions is required
-						error(_actPNode._name, XDEF.XDEF256);
+						error(_actPNode._name, XDEF.XDEF256); //Namespace of X-definitions is required
 						projectNS = XDConstants.XDEF42_NS_URI;
 						ver = XConstants.XD42;
 					}
@@ -144,8 +134,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_pcomp.setURIOnIndex(0, projectNS);
 			} else {
 				_pcomp.setURIOnIndex(0, uri);
-				//X-definition or X-collection expected
-				error(_actPNode._name, XDEF.XDEF255);
+				error(_actPNode._name, XDEF.XDEF255); //X-definition or X-collection expected
 			}
 		} else {
 			_actPNode._parent.addChildNode(_actPNode);
@@ -164,8 +153,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("collection".equals(elemLocalName) &&
 				key.startsWith("impl-")) {//continue; ignore, just documentation
 			} else {
-				PAttr item = new PAttr(key,
-					new SBuffer(value, ka.getPosition()), null, -1);
+				PAttr item = new PAttr(key, new SBuffer(value, ka.getPosition()), null, -1);
 				_actPNode.setAttr(item);
 				if ((ndx = key.indexOf(':')) >= 0) {
 					String prefix = key.substring(0, ndx);
@@ -182,12 +170,12 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						item._nsURI = _pcomp.getNSURI(nsndx);
 						if ((item._nsindex=nsndx) == XPreCompiler.NS_XDEF_INDEX
 							&& "script".equals(item._localName)) {
-							XScriptParser xp =
-								new XScriptParser(_actPNode._xmlVersion);
+							XScriptParser xp = new XScriptParser(_actPNode._xmlVersion);
 							xp.setSource(new SBuffer(value, ka.getPosition()),
-								_actPNode._xdef == null ? null
-									: _actPNode._xdef.getName(),
-								null,_actPNode._xmlVersion, item._xpathPos);
+								_actPNode._xdef == null ? null : _actPNode._xdef.getName(),
+								null,
+								_actPNode._xmlVersion,
+								item._xpathPos);
 							xp.skipBlanksAndComments();
 							if (xp.isToken("template")) {
 								xp.skipBlanksAndComments();
@@ -213,11 +201,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				String nsuri = _pcomp.getNSURI(urindx);
 				Element elem;
 				if (_includeElement == null) {
-					elem = _includeElement = KXmlUtils.newDocument(nsuri,
-						_actPNode._name.getString(), null).getDocumentElement();
+					elem = _includeElement =
+						KXmlUtils.newDocument(nsuri, _actPNode._name.getString(), null).getDocumentElement();
 				} else {
-					elem = _includeElement.getOwnerDocument().createElementNS(
-						nsuri, _actPNode._name.getString());
+					elem =
+						_includeElement.getOwnerDocument().createElementNS(nsuri,_actPNode._name.getString());
 					_includeElement.appendChild(elem);
 				}
 				for (PAttr aval: _actPNode.getAttrs()) {
@@ -225,8 +213,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						elem.setAttribute(aval._name, aval._value.getString());
 					} else {
 						elem.setAttributeNS(_pcomp.getNSURI(aval._nsindex),
-							aval._name,
-							aval._value.getString());
+							aval._name, aval._value.getString());
 					}
 				}
 				return;
@@ -242,8 +229,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_level = -1; // collection must be -1!
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				 _pcomp.getPBNFs().add(_actPNode);
-			} else if ("lexicon".equals(elemLocalName)
-				|| ("thesaurus".equals(elemLocalName)
+			} else if ("lexicon".equals(elemLocalName) || ("thesaurus".equals(elemLocalName)
 					&&_actPNode._xdVersion <= 31)) {
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
@@ -255,26 +241,22 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				if (defName == null) {
 					defName = "";
 				}
-				// Because there is not yet connected an X-definition to
-				// the PNode we create a dumy one in fact just to store
-				// the X-definition name (we nead it to be able to compile
-				// internal declarations, BNGGrammars, components and
-				// lexicon items).
-				_actPNode._xdef = new XDefinition(defName,
-					null, _actPNode._nsURI, null, _actPNode._xmlVersion);
+				// Because there is not yet connected an X-definition to the PNode we create a dumy one
+				// in fact just to store the X-definition name (we nead it to be able to compile internal
+				// declarations, BNGGrammars, components and lexicon items).
+				_actPNode._xdef = new XDefinition(defName, null,_actPNode._nsURI,null,_actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
 				// check duplicate of X-definition
 				for (PNode pn: _pcomp.getPXDefs()) {
 					if (defName.equals(pn._xdef.getName())) {
-						XScriptParser xp =
-							new XScriptParser(_actPNode._xmlVersion);
+						XScriptParser xp = new XScriptParser(_actPNode._xmlVersion);
 						xp.setSource(_actPNode._name,
-							_actPNode._xdef == null ? null
-								: _actPNode._xdef.getName(),
-							null,_actPNode._xmlVersion,_actPNode._xpathPos);
+							_actPNode._xdef == null ? null : _actPNode._xdef.getName(),
+							null,
+							_actPNode._xmlVersion,
+							_actPNode._xpathPos);
 						if (defName.length() == 0) {
-							//Only one X-definition in the compiled XDPool
-							// may be without name
+							//Only one X-definition in the compiled XDPool may be without name
 							xp.error(_actPNode._name, XDEF.XDEF212);
 						} else {
 							//X-definition '&{0}' already exists
@@ -291,8 +273,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 	}
 
-	/** Get "name" (or "prefix:name") of node.
-	 * If the argument required is set to true put error message that
+	/** Get "name" (or "prefix:name") of node. If the argument required is set to true put error message that
 	 * required attribute is missing.
 	 * @param pnode PNode where the attribute "name" is required.
 	 * @param required if true the attribute is required.
@@ -304,13 +285,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		final boolean remove) {
 		PAttr pa = _pcomp.getXdefAttr(pnode, "name", required, remove);
 		if (pa == null) {
-			// if required do not return null!
-			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null;
+			return required ? ("_UNKNOWN_REQUIRED_NAME_") : null; // if required do not return null!
 		}
 		String name = pa._value.getString();
 		if (name.length() == 0) {
-			//Incorrect name
-			error(pa._value, XDEF.XDEF258);
+			error(pa._value, XDEF.XDEF258); //Incorrect name
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
 		if (!PreReaderXML.chkDefName(name, pnode._xmlVersion)) {
@@ -331,10 +310,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				for (int i = 0; i < nm.getLength(); i++) {
 					Node n = nm.item(i);
 					String name = n.getNodeName();
-					if (!"href".equals(name) && !"parse".equals(name)
-						&& !ns.equals(name)) {
-						//Xinclude - unknown attribute &{0}
-						error(_actPNode._name, XML.XML305, n.getNodeName());
+					if (!"href".equals(name) && !"parse".equals(name) && !ns.equals(name)) {
+						error(_actPNode._name,XML.XML305,n.getNodeName());//Xinclude - unknown attribute &{0}
 					}
 				}
 			}
@@ -399,8 +376,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			xparser.setSourceBuffer(_actPNode._value);
 			// it still may be a comment
 			if (xparser.nextSymbol() != XScriptParser.NOCHAR) {
-				//Text value is not allowed here
-				lightError(_actPNode._value, XDEF.XDEF260);
+				lightError(_actPNode._value, XDEF.XDEF260); //Text value is not allowed here
 			}
 			_actPNode._value = null;//prevent repeated message, remove this text
 		}
@@ -416,10 +392,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			}
 		}
 		PNode pn = new PNode(name,
-			new SPosition(_actPNode._value),
-			_actPNode,
-			_actPNode._xdVersion,
-			_actPNode._xmlVersion);
+			new SPosition(_actPNode._value), _actPNode, _actPNode._xdVersion, _actPNode._xmlVersion);
 		pn._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
 		pn._nsindex = XPreCompiler.NS_XDEF_INDEX;
 		pn._localName = "text";
@@ -431,8 +404,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	}
 
 	private void processText() {
-		if (_actPNode._template && _level > 0
-			&& _actPNode._nsindex != XPreCompiler.NS_XDEF_INDEX) {
+		if (_actPNode._template && _level > 0 && _actPNode._nsindex != XPreCompiler.NS_XDEF_INDEX) {
 			genTextNode();
 			return;
 		}
@@ -445,8 +417,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			return;
 		}
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("xon".equals(_actPNode._localName) //xon
-				|| "json".equals(_actPNode._localName) //json
+			if ("xon".equals(_actPNode._localName) || "json".equals(_actPNode._localName) //json
 				|| "ini".equals(_actPNode._localName)) { // ini
 				if (_level != 1) {
 					//JSON model can be declared only as a child of X-definition
@@ -460,17 +431,14 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				SBuffer sval = paName == null ? null : paName._value;
 				if (sval == null) {
 					sval = new SBuffer(xdname, pnode._name);
-					//The name of XON/JSON model is required
-					error(pnode._name, XDEF.XDEF317, xdname);
+					error(pnode._name, XDEF.XDEF317, xdname); //The name of XON/JSON model is required
 				} else {
 					String s = sval.getString().trim();
 					if (!StringParser.chkNCName(s, StringParser.XMLVER1_0)) {
-						//The name of {0} model "&{0}" can't contain ":"
-						error(sval, XDEF.XDEF316, xdname, s);
+						error(sval, XDEF.XDEF316, xdname, s); //The name of {0} model "&{0}" can't contain ":"
 					}
 				}
-				CompileXonXdef compileXon =
-					new CompileXonXdef(_actPNode, sval, getReportWriter());
+				CompileXonXdef compileXon = new CompileXonXdef(_actPNode, sval, getReportWriter());
 				pnode._xonMode = XConstants.XON_ROOT;
 				if (pnode._value==null || pnode._value.getString().isEmpty()) {
 					//XON/JSON model is missing in JSON definition
@@ -478,13 +446,10 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					return;
 				}
 				for (PAttr pattr:  pnode.getAttrs()) {
-					//Attribute '&{0}' not allowed here
-					error(pattr._value, XDEF.XDEF254, pattr._name);
+					error(pattr._value, XDEF.XDEF254, pattr._name); //Attribute '&{0}' not allowed here
 				}
-				String anyXpos = compileXon.genXdef(pnode,
-					xdname.equals("json") ? "xon" : xdname,
-					sval, // model source code
-					_pcomp.getReportWriter());
+				String anyXpos = compileXon.genXdef(
+					pnode, xdname.equals("json") ? "xon" : xdname, sval, _pcomp.getReportWriter());
 				pnode._name = paName!=null ? paName._value : new SBuffer("");
 				pnode._localName = paName!=null ? paName._value.getString(): "";
 				pnode._nsURI = null; // set no namespace
@@ -510,25 +475,17 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					compileXon.genXonAnyModels(_actPNode, anyXpos);
 				}
 				return;
-			} else if ("text".equals(_actPNode._localName)
-				|| "BNFGrammar".equals(_actPNode._localName)
-				|| "lexicon".equals(_actPNode._localName)
-				|| "thesaurus".equals(_actPNode._localName)
-//					&& _actPNode._xdVersion == 31
-				|| "declaration".equals(_actPNode._localName)
-				|| "component".equals(_actPNode._localName)
+			} else if ("text".equals(_actPNode._localName) || "BNFGrammar".equals(_actPNode._localName)
+				|| "lexicon".equals(_actPNode._localName) || "thesaurus".equals(_actPNode._localName)
+				|| "declaration".equals(_actPNode._localName) || "component".equals(_actPNode._localName)
 				|| "macro".equals(_actPNode._localName)) {
 				return; //text is processed in the pnode
-			} else if (!"mixed".equals(_actPNode._localName)
-				&& !"choice".equals(_actPNode._localName)
+			} else if (!"mixed".equals(_actPNode._localName) && !"choice".equals(_actPNode._localName)
 				&& !"list".equals(_actPNode._localName)
-//				&& !"PI".equals(_actPNode._localName) //TODO
-//				&& !"comment".equals(_actPNode._localName) //TODO
-//				&& !"document".equals(_actPNode._localName) //TODO
-//				&& !"value".equals(_actPNode._localName) //TODO
+//				&& !"PI".equals(_actPNode._localName) && !"comment".equals(_actPNode._localName) //TODO
+//				&& !"document".equals(_actPNode._localName) && !"value".equals(_actPNode._localName) //TODO
 //				&&!"attlist".equals(_actPNode._localName) //TODO
-				&& !"sequence".equals(_actPNode._localName)
-				&& !"any".equals(_actPNode._localName)) {
+				&& !"sequence".equals(_actPNode._localName) && !"any".equals(_actPNode._localName)) {
 				//Unknown element from X-definotion namespace: '&{0}'
 				lightError(_actPNode._value, XDEF.XDEF259,_actPNode._localName);
 				_actPNode._value = null; //prevent repeated message
@@ -544,11 +501,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 	}
 
-	/** Parse InputStream source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
 	 * @param in input stream with the X-definition.
-	 * @param srcName name of source data used in reporting (SysId) or
-	 * <i>null</i>.
+	 * @param srcName name of source data used in reporting (SysId) or null.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
 		if (_pcomp.getSources().contains(in)) {
@@ -567,17 +522,15 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			_actPNode = null; //just let gc to do the job
 			if (_pcomp.getDispalyMode() > XDPool.DISPLAY_FALSE) {
 				if (!(ex instanceof SThrowable)) {
-					getReportWriter().error(SYS.SYS066, //Internal error&{0}{: }
-						"when parsing document\n" + ex);
+					//Internal error&{0}{: }
+					getReportWriter().error(SYS.SYS066, "when parsing document\n" + ex);
 				}
 			} else {
-				if (ex instanceof SThrowable &&
-					"SYS012".equals(((SThrowable) ex).getMsgID())) {
+				if (ex instanceof SThrowable && "SYS012".equals(((SThrowable) ex).getMsgID())) {
 					throw (SRuntimeException) ex; //Errors detected&{0}{: }
 				} else {
 					//Internal error: &{0}
-					throw new SRuntimeException(SYS.SYS066,
-						ex, "when parsing document\n" + ex);
+					throw new SRuntimeException(SYS.SYS066, ex, "when parsing document\n" + ex);
 				}
 			}
 		}
@@ -592,8 +545,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		if (name.length() == 0) {
 			return true; //nameless is also name
 		}
-		if (StringParser.getXmlCharType(name.charAt(0),  xmlVersion) !=
-			StringParser.XML_CHAR_NAME_START) {
+		if (StringParser.getXmlCharType(name.charAt(0),  xmlVersion) != StringParser.XML_CHAR_NAME_START) {
 			return false;
 		}
 		char c;
@@ -601,12 +553,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		for (int i = 1; i < name.length(); i++) {
 			if (StringParser.getXmlCharType(c = name.charAt(i),  xmlVersion) !=
 				StringParser.XML_CHAR_NAME_START && (c  < '0' && c > '9')) {
-				if (!wasColon && c == ':') { // we allow one colon inside name
+				if (!wasColon && c == ':') { // allow one colon inside name
 					wasColon = true;
 					if (i + 1 < name.length()
-						&& StringParser.getXmlCharType(
-							name.charAt(++i), xmlVersion)
-						!= StringParser.XML_CHAR_NAME_START){//must follow name
+						&& StringParser.getXmlCharType(name.charAt(++i), xmlVersion)
+							!= StringParser.XML_CHAR_NAME_START) { //must follow name
 						continue;
 					}
 				}

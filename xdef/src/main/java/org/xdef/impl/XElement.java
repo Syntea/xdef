@@ -44,8 +44,7 @@ public final class XElement extends XCodeDescriptor
 	private KNamespace _nsContext;
 	/** "forget" flag - if true the created object is removed. */
 	public byte _forget;
-	/** "clearAdoptedForgets" flag - if true all forgets in referred nodes
-	 * are cleared. */
+	/** "clearAdoptedForgets" flag - if true all forgets in referred nodes are cleared. */
 	public byte _clearAdoptedForgets;
 	/** Switch if the actual reporter is cleared on invoked action. */
 	public byte _clearReports;
@@ -65,16 +64,13 @@ public final class XElement extends XCodeDescriptor
 	 * @param nsURI namespace URI.
 	 * @param xdef X-definition object.
 	 */
-	public XElement(final String name,
-		final String nsURI,
-		final XDefinition xdef) {
+	public XElement(final String name, final String nsURI, final XDefinition xdef) {
 		super(name, nsURI, xdef.getXDPool(), XMELEMENT);
 		_sqId = ((XPool)xdef.getXDPool()).getSqId();
 		_definition = xdef;
 		_attrs = new LinkedHashMap<>();
 		_childNodes = new XNode[0];
-		//copy global options from the definition
-		copyOptions(xdef);
+		copyOptions(xdef); //copy global options from the definition
 	}
 
 	/** Creates the new instance of XElement as a copy of given argument.
@@ -96,7 +92,6 @@ public final class XElement extends XCodeDescriptor
 		setXDPosition(x.getXDPosition());
 	}
 
-	@Override
 	/** Add node as child.
 	 * @param xnode The node to be added.
 	 * @throws SRuntimeException if an error occurs.
@@ -120,8 +115,7 @@ public final class XElement extends XCodeDescriptor
 	public final void setReference(boolean isref) {_reference = isref;}
 
 	@Override
-	/** Get reference position if this model was created from other model
-	 * (reference) or return null.
+	/** Get reference position if this model was created from other model (reference) or return null.
 	 * @return reference position if this model was created from other model
 	 * (reference) or return null.
 	 */
@@ -167,9 +161,7 @@ public final class XElement extends XCodeDescriptor
 	 * @param languageID language ID of the actual language in lexicon.
 	 * @return the value of attribute definition.
 	 */
-	public final XData getDefAttrNS(final String nsURI,
-		final String key,
-		final int languageID) {
+	public final XData getDefAttrNS(final String nsURI, final String key, final int languageID) {
 		if (nsURI == null) {
 			return getDefAttr(key, languageID);
 		}
@@ -201,9 +193,7 @@ public final class XElement extends XCodeDescriptor
 	 * @param key The name of attribute.
 	 * @return true if the definition exists.
 	 */
-	public final boolean hasDefAttr(final String key) {
-		return getDefAttr(key, -1) != null;
-	}
+	public final boolean hasDefAttr(final String key) {return getDefAttr(key, -1) != null;}
 
 	/** Check if exists definition of attribute of given name.
 	 * @param nsURI namespace of attribute.
@@ -211,34 +201,25 @@ public final class XElement extends XCodeDescriptor
 	 * @return true if the definition exists.
 	 */
 	public final boolean hasDefAttrNS(final String nsURI, final String key) {
-		if (nsURI == null) {
-			return hasDefAttr(key);
-		}
-		return getDefAttrNS(nsURI, key, -1) != null;
+		return nsURI == null ? hasDefAttr(key) : getDefAttrNS(nsURI, key, -1) != null;
 	}
 
 	/** Check if exists definition of attribute of given name.
 	 * @param xAttr XData model of the attribute.
 	 * @return true if the definition exists.
 	 */
-	public final boolean hasDefAttr(final XData xAttr) {
-		return hasDefAttr(xAttr.getName());
-	}
+	public final boolean hasDefAttr(final XData xAttr) {return hasDefAttr(xAttr.getName());}
 
 	/** Set definition of attribute.
 	 * @param xAttr XData model of the attribute.
 	 */
-	public final void setDefAttr(final XData xAttr) {
-		_attrs.put(xAttr.getName(), xAttr);
-	}
+	public final void setDefAttr(final XData xAttr) {_attrs.put(xAttr.getName(), xAttr);}
 
 	/** Remove definition of attribute.
 	 * @param xAttr XData model of the attribute to be removed.
 	 * @return original value of attribute;
 	 */
-	public final XData removeDefAttr(final XData xAttr) {
-		return _attrs.remove(xAttr.getName());
-	}
+	public final XData removeDefAttr(final XData xAttr) {return _attrs.remove(xAttr.getName());}
 
 	/** Get names of attributes of this XElement.
 	 * @return The array of names of attributes.
@@ -253,9 +234,7 @@ public final class XElement extends XCodeDescriptor
 	 * if there is specified an attribute "xd:any".
 	 * @return value of option "isMoreAttributes".
 	 */
-	public final boolean isMoreAttributes() {
-		return _moreAttributes == 'T' | getDefAttr("$any", - 1) != null;
-	}
+	public final boolean isMoreAttributes() {return _moreAttributes == 'T' | getDefAttr("$any", - 1) != null;}
 
 	/** Get X-definition object.
 	 * @return X-definition object.
@@ -282,9 +261,7 @@ public final class XElement extends XCodeDescriptor
 	/** Set namespace context of this XElement.
 	 * @param nc namespace context to be set to this XElement.
 	 */
-	public final void setXDNamespaceContext(final KNamespace nc) {
-		_nsContext = nc;
-	}
+	public final void setXDNamespaceContext(final KNamespace nc) {_nsContext = nc;}
 
 	/** Get SqId of this object.
 	 * @return SqId of this object.
@@ -350,9 +327,7 @@ public final class XElement extends XCodeDescriptor
 		}
 	}
 
-	final static XElement readXElement(final XDReader xr,
-		final XDefinition xd,
-		final List<XNode> list)
+	final static XElement readXElement(final XDReader xr, final XDefinition xd, final List<XNode> list)
 		throws IOException {
 		String name = xr.readString();
 		String namespaceURI = xr.readString();
@@ -410,29 +385,25 @@ public final class XElement extends XCodeDescriptor
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	/** Check if this model allows other elements.
-	 * @return true if and only if this model may contain other elements then
-	 * defined.
+	 * @return true if and only if this model may contain other elements then defined.
 	 */
 	public final boolean hasOtherElements() {return _moreElements == 'T';}
 
 	@Override
 	/** Check if this model allows other attributes.
-	 * @return true if and only if this model may contain other attributes then
-	 * defined.
+	 * @return true if and only if this model may contain other attributes then defined.
 	 */
 	public final boolean hasOtherAttrs() {return _moreAttributes == 'T';}
 
 	@Override
 	/** Check if this model allows other text nodes.
-	 * @return true if and only if this model may contain other text nodes then
-	 * defined.
+	 * @return true if and only if this model may contain other text nodes then defined.
 	 */
 	public final boolean hasOtherText() {return _moreText == 'T';}
 
 	@Override
 	/** Check if this model allows other text nodes.
-	 * @return true if and only if this model may contain other text nodes then
-	 * defined.
+	 * @return true if and only if this model may contain other text nodes then defined.
 	 */
 	public final XMNode[] getChildNodeModels() {return _childNodes;}
 
@@ -466,8 +437,7 @@ public final class XElement extends XCodeDescriptor
 	/** Compare child nodes of this element model with the model from argument.
 	 * @param y model to be compared.
 	 * @param rep reporter where write error reports.
-	 * @param full if true, then names of both models must be equal
-	 * (i.e. as "implements").
+	 * @param full if true, then names of both models must be equal (i.e. as "implements").
 	 * @return true if structures are compatible.
 	 */
 	private int compareGroup(final XNode[] x,
@@ -486,11 +456,9 @@ public final class XElement extends XCodeDescriptor
 			}
 			switch (ix.getKind()) {
 				case XMNode.XMELEMENT:
-					if (!((XElement) ix).compareElement((XElement) iy,
-						rep, full)) {
+					if (!((XElement) ix).compareElement((XElement) iy, rep, full)) {
 						//Child nodes differs: &{0} and &{1}
-						rep.error(XDEF.XDEF283,
-							ix.getXDPosition(), iy.getXDPosition());
+						rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
 						return -1;
 					}
 					continue;
@@ -505,13 +473,11 @@ public final class XElement extends XCodeDescriptor
 				case XMNode.XMSEQUENCE:
 					if ((j=compareGroup(x, y, j+1, rep, full)) < 0) {
 						//Child nodes differs: &{0} and &{1}
-						rep.error(XDEF.XDEF283,
-							ix.getXDPosition(), iy.getXDPosition());
+						rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
 						return -1;
 					}
 					continue;
-				case XMNode.XMSELECTOR_END:
-					return j + 1;
+				case XMNode.XMSELECTOR_END: return j + 1;
 			}
 		}
 		return j;
@@ -520,33 +486,23 @@ public final class XElement extends XCodeDescriptor
 	/** Compare structure of this element model with the model from argument.
 	 * @param y model to be compared.
 	 * @param rep reporter where write error reports.
-	 * @param full if true, then names of both models must be equal
-	 * (i.e. as "implements").
+	 * @param full if true, then names of both models must be equal (i.e. as "implements").
 	 * @return true if structures are compatible.
 	 */
-	private boolean compareElement(final XElement y,
-		final ArrayReporter reporter,
-		final boolean full) {
-		return compareNameAndOccurrence(y, reporter)
-			& compareElementStructure(y, reporter, full);
+	private boolean compareElement(final XElement y, final ArrayReporter reporter, final boolean full) {
+		return compareNameAndOccurrence(y, reporter) && compareElementStructure(y, reporter, full);
 	}
 
 	/** Compare structure of this element model with the model from argument.
 	 * @param y model to be compared.
-	 * @param full if true, then names of both models must be equal
-	 * (i.e. as "implements").
+	 * @param full if true, then names of both models must be equal (i.e. as "implements").
 	 * @return reporter with messages with differences, or returns null.
 	 */
-	private boolean compareElementStructure(final XElement y,
-		final ArrayReporter reporter,
-		final boolean full) {
+	private boolean compareElementStructure(final XElement y,final ArrayReporter reporter,final boolean full){
 		boolean result = compareNamespace(y, reporter);
-		if (_nillable != y._nillable ||
-			_moreAttributes != y._moreAttributes ||
-			_moreElements != y._moreElements ||
-			_moreText != y._moreText) {
-			 //Options differs: &{0} and &{1}
-			reporter.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());
+		if (_nillable != y._nillable || _moreAttributes != y._moreAttributes ||
+			_moreElements != y._moreElements || _moreText != y._moreText) {
+			reporter.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
 			result = false;
 		}
 		//compare options
@@ -599,12 +555,10 @@ public final class XElement extends XCodeDescriptor
 
 	/** Compare structure of this element model with the model from argument.
 	 * @param y model to be compared.
-	 * @param full if true, then names of both models must be equal
-	 * (i.e. as "implements").
+	 * @param full if true, then names of both models must be equal (i.e. as "implements").
 	 * @return reporter with messages with differences, or returns null.
 	 */
-	public final ArrayReporter compareModel(final XMElement y,
-		final boolean full) {
+	public final ArrayReporter compareModel(final XMElement y, final boolean full) {
 		ArrayReporter reporter = new ArrayReporter();
 		if (!(y instanceof XElement)) {
 			//Can't compare different XDPool objects: &{0} and &{1}
@@ -647,8 +601,7 @@ public final class XElement extends XCodeDescriptor
 		return _digest;
 	}
 
-	private static void genDataDigestInfo(final SObjectWriter xw,
-		final XData x) throws Exception {
+	private static void genDataDigestInfo(final SObjectWriter xw, final XData x) throws Exception {
 		xw.writeShort(x.getKind());
 		xw.writeString(x.getName());
 		xw.writeInt(x.minOccurs());
@@ -666,7 +619,6 @@ public final class XElement extends XCodeDescriptor
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			SObjectWriter xw = new SObjectWriter(baos);
-//			xw.writeString(XDConstants.BUILD_VERSION); //check build version
 			xw.writeShort(XMELEMENT);
 			xw.writeString(xe.getName());
 			xw.writeString(xe.getNSUri());
@@ -706,11 +658,10 @@ public final class XElement extends XCodeDescriptor
 			xw.close();
 			MessageDigest md = MessageDigest.getInstance("SHA-256"); //was MD5
 			md.update(baos.toByteArray());
-			xe._digest = new String(
-				SUtils.encodeHex(md.digest()), StandardCharsets.UTF_8);
+			xe._digest = new String(SUtils.encodeHex(md.digest()), StandardCharsets.UTF_8);
 		} catch (Exception ex) {
-			//Internal error&{0}{: }
-			throw new SRuntimeException(SYS.SYS066, ex.getMessage());
+
+			throw new SRuntimeException(SYS.SYS066, ex.getMessage());//Internal error&{0}{: }
 		}
 	}
 }

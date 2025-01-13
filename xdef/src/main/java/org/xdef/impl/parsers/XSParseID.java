@@ -14,11 +14,11 @@ public class XSParseID extends XSParseQName {
 	private static final String ROOTBASENAME = "ID";
 
 	public XSParseID() {super();}
+
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script
-			//of attribute or text node
+			//The validation method &{0} can be called only from the X-script of attribute or text node
 			result.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}

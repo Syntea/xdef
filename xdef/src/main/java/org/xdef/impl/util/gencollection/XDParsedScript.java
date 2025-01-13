@@ -57,8 +57,7 @@ public class XDParsedScript {
 
 	/** Create instance of parsed script.
 	 * @param sp script parser.
-	 * @param isValue if true the script corresponds to a value of an attribute
-	 * or of a text node.
+	 * @param isValue if true the script corresponds to a value of an attribute or of a text node.
 	 */
 	public XDParsedScript(final XScriptParser sp, final boolean isValue) {
 		_isValue = isValue;
@@ -76,12 +75,11 @@ public class XDParsedScript {
 					}
 					continue;
 				} else if (_isValue) {
-					if (sp._sym == XScriptParser.IDENTIFIER_SYM
-						|| sp._sym == XScriptParser.LPAR_SYM) {
+					if (sp._sym == XScriptParser.IDENTIFIER_SYM || sp._sym == XScriptParser.LPAR_SYM) {
 						parseTypeSection(sp);
 						continue;
-					} else if (sp._sym == XScriptParser.CONSTANT_SYM &&
-						sp._parsedValue.getItemId()==XScriptParser.XD_STRING) {
+					} else if (sp._sym == XScriptParser.CONSTANT_SYM
+						&& sp._parsedValue.getItemId()==XScriptParser.XD_STRING) {
 						_xOccurrence.setFixed();
 						_default = '\'' + sp._parsedValue.toString() + '\'';
 						sp.nextSymbol();
@@ -92,8 +90,7 @@ public class XDParsedScript {
 			char sym = sp._sym;
 			sp.nextSymbol();
 			switch (sym) {
-				case XScriptParser.SEMICOLON_SYM:
-					continue;
+				case XScriptParser.SEMICOLON_SYM: continue;
 				case XScriptParser.OPTIONS_SYM:
 					while (sp._sym == XScriptParser.IDENTIFIER_SYM ||
 						sp._sym == XScriptParser.FORGET_SYM) {
@@ -108,48 +105,25 @@ public class XDParsedScript {
 						}
 					}
 					continue;
-				case XScriptParser.OCCURS_SYM:
-					sp.isOccurrenceInterval(_xOccurrence);
-					continue;
-				case XScriptParser.FIXED_SYM: {
+				case XScriptParser.OCCURS_SYM: sp.isOccurrenceInterval(_xOccurrence); continue;
+				case XScriptParser.FIXED_SYM:
 					_xOccurrence.setFixed();
 					_default = parseScriptSection(sp);
 					continue;
-				}
-				case XScriptParser.ON_TRUE_SYM:
-					_onTrue = parseScriptSection(sp);
-					continue;
-				case XScriptParser.ON_FALSE_SYM:
-					_onFalse = parseScriptSection(sp);
-					continue;
-				case XScriptParser.ON_ABSENCE_SYM:
-					_onAbsence = parseScriptSection(sp);
-					continue;
-				case XScriptParser.ON_ILLEGAL_ATTR_SYM:
-					_onIllegalAttr = parseScriptSection(sp);
-					continue;
-				case XScriptParser.CREATE_SYM:
-					_create = parseScriptSection(sp);
-					continue;
-				case XScriptParser.INIT_SYM:
-					_init = parseScriptSection(sp);
-					continue;
+				case XScriptParser.ON_TRUE_SYM: _onTrue = parseScriptSection(sp); continue;
+				case XScriptParser.ON_FALSE_SYM: _onFalse = parseScriptSection(sp); continue;
+				case XScriptParser.ON_ABSENCE_SYM: _onAbsence = parseScriptSection(sp); continue;
+				case XScriptParser.ON_ILLEGAL_ATTR_SYM: _onIllegalAttr = parseScriptSection(sp); continue;
+				case XScriptParser.CREATE_SYM: _create = parseScriptSection(sp); continue;
+				case XScriptParser.INIT_SYM: _init = parseScriptSection(sp); continue;
 				case XScriptParser.DEFAULT_SYM:
 					_xOccurrence.setOptional();
 					_default = parseScriptSection(sp);
 					continue;
-				case XScriptParser.FINALLY_SYM:
-					_finally = parseScriptSection(sp);
-					continue;
-				case XScriptParser.ON_START_ELEMENT_SYM:
-					_onStartElement = parseScriptSection(sp);
-					continue;
-				case XScriptParser.MATCH_SYM:
-					_match = parseScriptSection(sp);
-					continue;
-				case XScriptParser.ON_EXCESS_SYM: //only for xd:attrs or text
-					_onExcess = parseScriptSection(sp);
-					continue;
+				case XScriptParser.FINALLY_SYM: _finally = parseScriptSection(sp); continue;
+				case XScriptParser.ON_START_ELEMENT_SYM: _onStartElement = parseScriptSection(sp); continue;
+				case XScriptParser.MATCH_SYM: _match = parseScriptSection(sp); continue;
+				case XScriptParser.ON_EXCESS_SYM: _onExcess = parseScriptSection(sp); continue;
 				case XScriptParser.REFERENCE_SYM:
 					_reference = sp._idName;
 					if (_reference.indexOf('#') < 0) {
@@ -157,11 +131,8 @@ public class XDParsedScript {
 					}
 					sp.nextSymbol();
 					continue;
-				case XScriptParser.VAR_SYM:
-					_var = parseScriptSection(sp);
-					continue;
-				case XScriptParser.FORGET_SYM:
-					_forget = "forget";
+				case XScriptParser.VAR_SYM: _var = parseScriptSection(sp); continue;
+				case XScriptParser.FORGET_SYM: _forget = "forget";
 			}
 		}
 	}
@@ -218,75 +189,48 @@ public class XDParsedScript {
 		return result;
 	}
 
-	private static String addSection(final String result,
-		final String name,
-		final String content) {
+	private static String addSection(final String result, final String name, final String content) {
 		if (!content.isEmpty()) {
-			return result
-				+ (!result.endsWith(";") && !result.endsWith("}") ? ";" : "")
-				+ name + content;
+			return result + (!result.endsWith(";") && !result.endsWith("}") ? ";" : "") + name + content;
 		}
 		return result;
 	}
 
 	private static String symToString(final XScriptParser sp) {
 		switch (sp._sym) {
-			case XScriptParser.NOT_SYM:
-				return "!";
-			case XScriptParser.AND_SYM:
-				return " AND ";
-			case XScriptParser.AAND_SYM:
-				return " AAND ";
-			case XScriptParser.OR_SYM:
-				return "|";
-			case XScriptParser.OOR_SYM:
-				return "||";
-			case XScriptParser.GT_SYM:
-				return " GT ";
-			case XScriptParser.GE_SYM:
-				return " GE ";
-			case XScriptParser.LT_SYM:
-				return " LT ";
-			case XScriptParser.LE_SYM:
-				return " LE ";
-			case XScriptParser.EQ_SYM:
-				return "==";
-			case XScriptParser.NE_SYM:
-				return "!=";
-			case XScriptParser.ASSGN_SYM:
-				return "=";
-			case XScriptParser.MUL_SYM:
-				return "*";
-			case XScriptParser.DIV_SYM:
-				return "/";
-			case XScriptParser.COLON_SYM:
-				return ":";
-			case XScriptParser.MOD_SYM:
-				return "%";
-			case XScriptParser.PLUS_SYM:
-				return "+";
-			case XScriptParser.MINUS_SYM:
-				return "-";
-			case XScriptParser.INC_SYM:
-				return "++";
-			case XScriptParser.DEC_SYM:
-				return "--";
+			case XScriptParser.NOT_SYM: return "!";
+			case XScriptParser.AND_SYM: return " AND ";
+			case XScriptParser.AAND_SYM: return " AAND ";
+			case XScriptParser.OR_SYM: return "|";
+			case XScriptParser.OOR_SYM: return "||";
+			case XScriptParser.GT_SYM: return " GT ";
+			case XScriptParser.GE_SYM: return " GE ";
+			case XScriptParser.LT_SYM: return " LT ";
+			case XScriptParser.LE_SYM: return " LE ";
+			case XScriptParser.EQ_SYM: return "==";
+			case XScriptParser.NE_SYM: return "!=";
+			case XScriptParser.ASSGN_SYM: return "=";
+			case XScriptParser.MUL_SYM: return "*";
+			case XScriptParser.DIV_SYM: return "/";
+			case XScriptParser.COLON_SYM: return ":";
+			case XScriptParser.MOD_SYM: return "%";
+			case XScriptParser.PLUS_SYM: return "+";
+			case XScriptParser.MINUS_SYM:return "-";
+			case XScriptParser.INC_SYM: return "++";
+			case XScriptParser.DEC_SYM: return "--";
 			case XScriptParser.TYPE_SYM:
 			case XScriptParser.UNIQUE_SET_SYM:
 			case XScriptParser.ON_ABSENCE_SYM:
 			case XScriptParser.ON_TRUE_SYM:
 			case XScriptParser.ON_EXCESS_SYM:
-			case XScriptParser.ON_FALSE_SYM:
-				return XScriptParser.symToName(sp._sym) + ' ';
-			default:
-				return XScriptParser.symToName(sp._sym);
+			case XScriptParser.ON_FALSE_SYM: return XScriptParser.symToName(sp._sym) + ' ';
 		}
+		return XScriptParser.symToName(sp._sym); //default
 	}
 
 	private static boolean isSectionName(final XScriptParser sp) {
 		switch (sp._sym) {
 			case XScriptParser.DEFAULT_SYM:
-				return true;
 			case XScriptParser.CREATE_SYM:
 			case XScriptParser.FINALLY_SYM:
 			case XScriptParser.FIXED_SYM:
@@ -303,8 +247,7 @@ public class XDParsedScript {
 			case XScriptParser.ON_START_ELEMENT_SYM:
 			case XScriptParser.ON_TRUE_SYM:
 			case XScriptParser.ON_XML_ERROR_SYM:
-			case XScriptParser.VAR_SYM:
-				return true;
+			case XScriptParser.VAR_SYM: return true;
 		}
 		return false;
 	}
@@ -317,9 +260,7 @@ public class XDParsedScript {
 		if (sp._sym == XScriptParser.BEG_SYM) {
 			sp.nextSymbol();
 			_type = "{";
-			while (sp._sym != XScriptParser.END_SYM
-				&& sp._sym != XScriptParser.NOCHAR
-				&& !isSectionName(sp)) {
+			while (sp._sym != XScriptParser.END_SYM && sp._sym != XScriptParser.NOCHAR && !isSectionName(sp)){
 				_type += parseScriptSection(sp);
 				if (sp._sym == XScriptParser.SEMICOLON_SYM) {
 					sp.nextSymbol();
@@ -334,8 +275,7 @@ public class XDParsedScript {
 			_type = "";
 			StringBuilder sb = new StringBuilder();
 			boolean spaceNeeded = false;
-			while (sp._sym != XScriptParser.NOCHAR
-				&& sp._sym != XScriptParser.SEMICOLON_SYM
+			while (sp._sym != XScriptParser.NOCHAR && sp._sym != XScriptParser.SEMICOLON_SYM
 				&& !isSectionName(sp)) {
 				switch (sp._sym) {
 					case XScriptParser.IDENTIFIER_SYM:
@@ -346,10 +286,8 @@ public class XDParsedScript {
 						spaceNeeded = true;
 						break;
 					case XScriptParser.CONSTANT_SYM:
-						if (sp._parsedValue.getItemId() ==
-							XScriptParser.XD_STRING) {
-								sb.append(((DefString) sp._parsedValue)
-									.sourceValue());
+						if (sp._parsedValue.getItemId() == XScriptParser.XD_STRING) {
+							sb.append(((DefString) sp._parsedValue).sourceValue());
 						} else {
 							if (spaceNeeded) {
 								sb.append(' '); //must be separated by space
@@ -402,20 +340,18 @@ public class XDParsedScript {
 				if (sp._sym == XScriptParser.BEG_SYM) {
 					sb.append("{");
 					sp.nextSymbol();
-			OUTER: for (;;) {
+				OUTER: for (;;) {
 						switch (sp._sym) {
 							case XScriptParser.CASE_SYM:
 								sp.nextSymbol();
-								sb.append("case ")
-									.append(parseScriptSection(sp));
+								sb.append("case ").append(parseScriptSection(sp));
 								break;
 							case XScriptParser.DEFAULT_SYM:
 								sp.nextSymbol();
 								if (sp._sym == XScriptParser.COLON_SYM) {
 									sp.nextSymbol();
 								}
-								sb.append("default: ")
-									.append(parseScriptSection(sp));
+								sb.append("default: ").append(parseScriptSection(sp));
 								break;
 							default:
 								break OUTER;
@@ -445,14 +381,9 @@ public class XDParsedScript {
 					return sb.toString();
 				}
 				switch (sp._sym) {
-					case XScriptParser.TRY_SYM:
-						sb.append(parseScriptSection(sp));
-						break;
-					case XScriptParser.IF_SYM:
-						sb.append(parseScriptSection(sp));
-						break;
-					case XScriptParser.SWITCH_SYM:
-						sb.append(parseScriptSection(sp));
+					case XScriptParser.TRY_SYM: sb.append(parseScriptSection(sp)); break;
+					case XScriptParser.IF_SYM: sb.append(parseScriptSection(sp)); break;
+					case XScriptParser.SWITCH_SYM: sb.append(parseScriptSection(sp));
 				}
 				if (sp._sym == XScriptParser.BEG_SYM) {
 					sb.append("{");
@@ -483,13 +414,10 @@ public class XDParsedScript {
 			return sb.toString();
 		} else {
 			boolean spaceNeeded = false;
-			while (sp._sym != XScriptParser.NOCHAR
-				&& sp._sym != XScriptParser.END_SYM
-				&& sp._sym != XScriptParser.SEMICOLON_SYM
-				&& !isSectionName(sp)) {
+			while (sp._sym != XScriptParser.NOCHAR && sp._sym != XScriptParser.END_SYM
+				&& sp._sym != XScriptParser.SEMICOLON_SYM && !isSectionName(sp)) {
 				switch (sp._sym) {
-					case XScriptParser.BEG_SYM:
-						return sb.toString();
+					case XScriptParser.BEG_SYM: return sb.toString();
 					case XScriptParser.IF_SYM:
 					case XScriptParser.TRY_SYM:
 						if (spaceNeeded) {
@@ -560,8 +488,7 @@ public class XDParsedScript {
 				}
 				sp.nextSymbol();
 			}
-			if (sp._sym == XScriptParser.SEMICOLON_SYM
-				|| sp._sym == XScriptParser.END_SYM) {
+			if (sp._sym == XScriptParser.SEMICOLON_SYM || sp._sym == XScriptParser.END_SYM) {
 				sb.append(symToString(sp));
 				sp.nextSymbol();
 			}
@@ -596,21 +523,17 @@ public class XDParsedScript {
 	public static final XDParsedScript getXdScript(final Node n) {
 		String defName = "";
 		String xdUri = null;
-		Node n1 = n.getNodeType() == Node.ATTRIBUTE_NODE ?
-			((Attr) n).getOwnerElement(): n.getParentNode();
+		Node n1 = n.getNodeType() == Node.ATTRIBUTE_NODE ? ((Attr) n).getOwnerElement(): n.getParentNode();
 		boolean isValue = !"script".equals(n.getLocalName());
 		while (n1 != null && n1.getNodeType() == Node.ELEMENT_NODE) {
 			if ("def".equals(n1.getLocalName())) {
 				Node n2 = n1.getParentNode();
-				if (n2 != null && "collection".equals(n2.getLocalName()) &&
-					(n2.getParentNode() == null ||
-					n2.getParentNode().getNodeType() != Node.ELEMENT_NODE)) {
+				if (n2 != null && "collection".equals(n2.getLocalName()) && (n2.getParentNode() == null
+					|| n2.getParentNode().getNodeType() != Node.ELEMENT_NODE)) {
 					xdUri = n1.getNamespaceURI();
 					if (xdUri != null) {
-						defName = XDGenCollection.getXdefAttr(
-							(Element) n1, xdUri, "name", false);
-						isValue = !xdUri.equals(n.getNamespaceURI()) ||
-							!"script".equals(n.getLocalName());
+						defName = XDGenCollection.getXdefAttr((Element) n1, xdUri, "name", false);
+						isValue = !xdUri.equals(n.getNamespaceURI()) || !"script".equals(n.getLocalName());
 					}
 					break;
 				}
@@ -618,25 +541,21 @@ public class XDParsedScript {
 			n1 = n1.getParentNode();
 		}
 		String s = (n.getNodeType() == Node.ELEMENT_NODE)
-			? XDGenCollection.getXdefAttr(
-				(Element) n, xdUri, "script", false)
+			? XDGenCollection.getXdefAttr((Element) n, xdUri, "script", false)
 			: n.getNodeValue();
-		return s == null || (s = s.trim()).isEmpty()
-			? null : getXdScript(s, defName, isValue);
+		return s == null || (s = s.trim()).isEmpty() ? null : getXdScript(s, defName, isValue);
 	}
 
 	/** Create XdParsedScript object from the script.
-	 * @param script string with script.
+	 * @param s string with script.
 	 * @param defName name of X-definition.
-	 * @param isValue if <i>true</i> then script describes text value.
+	 * @param isVal if true then script describes text value.
 	 * @return XdParsedScript object created from the script.
 	 */
-	public static final XDParsedScript getXdScript(final String script,
-		final String defName,
-		final boolean isValue) {
+	public static final XDParsedScript getXdScript(final String s, final String defName, final boolean isVal){
 		XScriptParser sp = new XScriptParser(StringParser.XMLVER1_0);
-		sp.setSource(new SBuffer(script), defName, null, XConstants.XD32, null);
-		return new XDParsedScript(sp, isValue);
+		sp.setSource(new SBuffer(s), defName, null, XConstants.XD32, null);
+		return new XDParsedScript(sp, isVal);
 	}
 
 	/** @return the _xOccurrence */

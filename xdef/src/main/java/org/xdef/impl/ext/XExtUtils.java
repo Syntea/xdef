@@ -72,10 +72,10 @@ public final class XExtUtils {
 	 */
 	public static final boolean isXPath2Supported() {return XDFactory.isXPath2Supported();}
 
-	/**	Get name space URI of qualified name.
+	/**	Get namespace URI of qualified name.
 	 * @param qname qualified name
-	 * @param elem element where name space URI is searched.
-	 * @return name space URI or an empty string.
+	 * @param elem element where namespace URI is searched.
+	 * @return namespace URI or an empty string.
 	 */
 	public static final String getQnameNSUri(final String qname, final Element elem) {
 		byte xmlVersion = "1.1".equals(elem.getOwnerDocument().getXmlVersion())
@@ -88,10 +88,10 @@ public final class XExtUtils {
 		return getNSUri(prefix, elem);
 	}
 
-	/** Get name space URI of given prefix from the context of an element.
+	/** Get namespace URI of given prefix from the context of an element.
 	 * @param pfx string with the prefix.
 	 * @param elem the element.
-	 * @return name space URI.
+	 * @return namespace URI.
 	 */
 	public static final String getNSUri(final String pfx, final Element elem) {
 		Element el;
@@ -112,7 +112,7 @@ public final class XExtUtils {
 	}
 
 	/** Get w3c.dom.Node from the XXNode. */
-	private final static Node getActualNode(final XXNode x) {
+	private static Node getActualNode(final XXNode x) {
 		Element el = x.getElement();
 		return x.getItemId() == XXNode.XX_ELEMENT ? el : el.getLastChild();
 	}
@@ -415,13 +415,12 @@ public final class XExtUtils {
 		}
 		return DefNull.NULL_VALUE;
 	}
+
 	/** Get XDValue from XXElement containg XON value.
 	 * @param xel XXElement with XON value..
 	 * @return XDValue created from XXElement containg XON value.
 	 */
-	public static final XDValue getXDValueOfXon(final XXElement xel) {
-		return getXDValueOfObject(xel.getXon());
-	}
+	public static final XDValue getXDValueOfXon(final XXElement xel){return getXDValueOfObject(xel.getXon());}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of script methods.
@@ -430,11 +429,12 @@ public final class XExtUtils {
 	/** Cancel running X-definition process. */
 	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //X-definition canceled
 
-
 	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
-	public static final void cancel(final String msg) {throw new SError(Report.error(XDEF.XDEF906, msg));}
+	public static final void cancel(final String msg) {
+		throw new SError(Report.error(XDEF.XDEF906, msg)); //X-definition canceled&{0}{; }
+	}
 
 	/** Parse base64 data.
 	 * @param s base64 data
@@ -500,15 +500,13 @@ public final class XExtUtils {
 			return new DefContainer();
 		}
 		Element el = val.getElement();
-		DefXPathExpr xe = new DefXPathExpr(
-			exp, xel.getXXNamespaceContext(), xel.getXXFunctionResolver(), xel.getXXVariableResolver());
+		DefXPathExpr xe = new DefXPathExpr(exp,
+			xel.getXXNamespaceContext(), xel.getXXFunctionResolver(), xel.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
-	public static final XDContainer fromRoot(final XXNode xElem,
-		final String exp,
-		final Element elem) {
-		DefXPathExpr xe = new DefXPathExpr(
-			exp, xElem.getXXNamespaceContext(), xElem.getXXFunctionResolver(), xElem.getXXVariableResolver());
+	public static final XDContainer fromRoot(final XXNode xElem, final String exp, final Element elem) {
+		DefXPathExpr xe = new DefXPathExpr(exp,
+			xElem.getXXNamespaceContext(), xElem.getXXFunctionResolver(), xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
 	public static final XDContainer fromRoot(final XXNode xElem, final String expr) {
@@ -521,7 +519,6 @@ public final class XExtUtils {
 // PARSERESULT
 ////////////////////////////////////////////////////////////////////////////////
 	public static final void clearReports(final XDParseResult x) {x.clearReports();}
-
 	public static final String getSource(final XDParseResult x) {return x.getSourceBuffer();}
 ////////////////////////////////////////////////////////////////////////////////
 // dateTime
@@ -547,12 +544,9 @@ public final class XExtUtils {
 		}
 		xnode.getXDDocument().setSpecialDates(dates);
 	}
-
 	public static final SDatetime parseEmailDate(final String x) {
 		StringParser p = new StringParser((x == null) ? "" : x.trim());
-		return p.isRFC822Datetime() && p.eos() &&
-			p.testParsedDatetime()
-			? p.getParsedSDatetime() : null;
+		return p.isRFC822Datetime() && p.eos() && p.testParsedDatetime() ? p.getParsedSDatetime() : null;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -575,15 +569,9 @@ public final class XExtUtils {
 	public static final double hypot(final long a, long b) {return Math.hypot(a, b);}
 	public static final double hypot(final long a, double b) {return Math.hypot(a,b);}
 	public static final double hypot(double a, long b) {return Math.hypot(a,b);}
-	public static final double IEEEremainder(final long a, long b) {
-		return Math.IEEEremainder(a,b);
-	}
-	public static final double IEEEremainder(final long a, double b) {
-		return Math.IEEEremainder(a,b);
-	}
-	public static final double IEEEremainder(double a, long b) {
-		return Math.IEEEremainder(a,b);
-	}
+	public static final double IEEEremainder(final long a, long b) {return Math.IEEEremainder(a,b);}
+	public static final double IEEEremainder(final long a, double b) {return Math.IEEEremainder(a,b);}
+	public static final double IEEEremainder(double a, long b) {return Math.IEEEremainder(a,b);}
 	public static final double log(final long a) {return Math.log(a);}
 	public static final double log10(final long a) {return Math.log10(a);}
 	public static final double log1p(final long a) {return Math.log1p(a);}
@@ -652,7 +640,7 @@ public final class XExtUtils {
 	public static final BigDecimal multiply(final BigDecimal a, final long b) {
 		return a.multiply(new BigDecimal(b));
 	}
-	public static final BigDecimal multiply(final BigDecimal a, final double b){
+	public static final BigDecimal multiply(final BigDecimal a, final double b) {
 		return a.multiply(new BigDecimal(b));
 	}
 	public static final BigDecimal negate(final BigDecimal a) {return a.negate();}
@@ -666,7 +654,7 @@ public final class XExtUtils {
 		return a.remainder(new BigDecimal(b));
 	}
 	public static final BigDecimal round(final BigDecimal a){return a.round(MathContext.UNLIMITED);}
-	public static final BigDecimal scaleByPowerOfTen(final BigDecimal a,final long b){
+	public static final BigDecimal scaleByPowerOfTen(final BigDecimal a,final long b) {
 		return a.scaleByPowerOfTen((int) b);
 	}
 	public static final BigDecimal setScale(final BigDecimal a, final long b) {return a.setScale((int) b);}
@@ -675,7 +663,7 @@ public final class XExtUtils {
 	public static final BigDecimal subtract(final BigDecimal a, final long b) {
 		return a.subtract(new BigDecimal(b));
 	}
-	public static final BigDecimal subtract(final BigDecimal a, final double b){
+	public static final BigDecimal subtract(final BigDecimal a, final double b) {
 		return a.subtract(new BigDecimal(b));
 	}
 	public static final BigDecimal ulp(final BigDecimal a) {return a.ulp();}

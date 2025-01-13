@@ -27,7 +27,6 @@ import static org.xdef.impl.code.CodeTable.LD_CONST;
  * @author Vaclav Trojan
  */
 public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
-
 	/** Implementation of XQueryImpl. */
 	private final static XQueryImpl XQI;
 
@@ -35,13 +34,11 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 		XQueryImpl x;
 		if (KXqueryExpr.isXQueryImplementation()) {
 			try {
-				Class<?> cls =
-					Class.forName("org.xdef.impl.saxon.XQuerySaxonImpl");
+				Class<?> cls = Class.forName("org.xdef.impl.saxon.XQuerySaxonImpl");
 				Constructor<?> c = cls.getConstructor();
 				x = (XQueryImpl) c.newInstance();
-			} catch (Error | ClassNotFoundException | IllegalAccessException
-				| IllegalArgumentException | InstantiationException
-				| NoSuchMethodException | SecurityException
+			} catch (Error | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+				| InstantiationException | NoSuchMethodException | SecurityException
 				| InvocationTargetException ex) {
 				x = null;
 			}
@@ -71,7 +68,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 
 	@Override
 	/** Execute XQuery expression and return result.
-	 * @param xNode node model or <i>null</i>.
+	 * @param xNode node model or null.
 	 * @return result of execution of this object.
 	 */
 	public XDContainer exec(final Node node, final XXNode xNode) {
@@ -117,7 +114,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return always <i>false</i>.
+	 * @return always false.
 	 */
 	public boolean equals(final XDValue arg) {return this == arg;}
 	@Override

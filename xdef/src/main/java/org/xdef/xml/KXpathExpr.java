@@ -1,6 +1,5 @@
 package org.xdef.xml;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
@@ -25,7 +24,6 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class KXpathExpr {
-
 	private static final XPathFactory XPF;
 	private static final boolean XP2;
 	/** Source string with XPath expression. */
@@ -40,18 +38,14 @@ public class KXpathExpr {
 		try {
 			Class<?> cls = Class.forName("net.sf.saxon.xpath.XPathFactoryImpl");
 			x = (XPathFactory) cls.getConstructor().newInstance();
-		} catch (ClassNotFoundException | IllegalAccessException
-			| IllegalArgumentException | InstantiationException
-			| NoSuchMethodException | SecurityException
-			| InvocationTargetException | Error ex) {
+		} catch (Exception | Error ex) {
 			x = null;
 		}
 		XPF = (x == null) ? XPathFactory.newInstance() : x;
 		XP2 = x != null;
 	}
 
-	/** Creates a new instance of KXpathExpr without NameSpace context,
-	 * variables and functions.
+	/** Creates a new instance of KXpathExpr without NameSpace context, variables and functions.
 	 * @param expr String with XPath expression.
 	 */
 	public KXpathExpr(final String expr) {this(expr, null, null, null);}
@@ -60,9 +54,7 @@ public class KXpathExpr {
 	 * @param expr String with XPath expression.
 	 * @param nc NameSpace context or null.
 	 */
-	public KXpathExpr(final String expr, final NamespaceContext nc) {
-		this(expr, nc, null, null);
-	}
+	public KXpathExpr(final String expr, final NamespaceContext nc) {this(expr, nc, null, null);}
 
 	/** Creates a new instance of KXpathExpr
 	 * @param expr String with XPath expression.
@@ -75,7 +67,7 @@ public class KXpathExpr {
 		final XPathFunctionResolver fr,
 		final XPathVariableResolver vr) {
 		_source = expr.trim();
-		try {//return compiled XPath as XPathExpressionImpl object
+		try {// create compiled XPath as XPathExpressionImpl object
 			if (chkSimpleExpr() >= 0) {
 				return;
 			}
@@ -85,10 +77,7 @@ public class KXpathExpr {
 			_xp.setXPathVariableResolver(vr!=null ? vr : new KVarResolver());
 			_value = _xp.compile(expr);
 		} catch (XPathExpressionException ex) {
-			String s = ex.getMessage();
-			s = (s != null && !s.trim().isEmpty()
-				? ": " + s.trim() : "XPathExpressionException");
-			throw new SRuntimeException(XML.XML505, s);
+			throw new SRuntimeException(XML.XML505, ex.getMessage()); //XPath error&{0}{: }
 		}
 	}
 
@@ -102,8 +91,7 @@ public class KXpathExpr {
 		}
 		int ndx = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		s = s.substring(ndx);
-		return !s.contains("::")
-			&& StringParser.chkXMLName(s, StringParser.XMLVER1_0) ? ndx : -1;
+		return !s.contains("::") && StringParser.chkXMLName(s, StringParser.XMLVER1_0) ? ndx : -1;
 	}
 
 	/** Get variable resolver.
@@ -123,9 +111,7 @@ public class KXpathExpr {
 	/** Get namespace context.
 	 * @return namespace context.
 	 */
-	public NamespaceContext getNamespaceContext() {
-		return _xp == null ? null : _xp.getNamespaceContext();
-	}
+	public NamespaceContext getNamespaceContext() {return _xp == null ? null : _xp.getNamespaceContext();}
 
 	/** Set namespace context.
 	 * @param nc namespace context.
@@ -142,25 +128,21 @@ public class KXpathExpr {
 	 */
 	public void setVariableResolver(final XPathVariableResolver vr) {_vr = vr;}
 
-	/** Execute XPath expression and return result.
-	 * If result type is null then result types are checked in
-	 * following sequence:
-	 * 1) NODESET, 2) STRING, 3) NODE.
+	/** Execute XPath expression and return result. If result type is null then result types are checked in
+	 * following sequence: <p> 1) NODESET, 2) STRING, 3) NODE.</p>
 	 * @param node node or null.
 	 * @param type QName with result type.
 	 * @return object with result of XPath expression.
 	 */
 	public Object evaluate(Node node, final QName type) {
 		if (_value == null) {
-			Element el = node.getNodeType() == Node.DOCUMENT_NODE ?
-				((Document) node).getDocumentElement()
+			Element el = node.getNodeType() == Node.DOCUMENT_NODE ? ((Document) node).getDocumentElement()
 				: node.getNodeType()==Node.ELEMENT_NODE ? (Element) node : null;
 			if (el == null) {
 				return null;
 			}
 			int i = chkSimpleExpr();
-			if (i == 1) {
-				//attributes
+			if (i == 1) { //attributes
 				int ndx =_source.indexOf(':');
 				Node x;
 				if (ndx<0 || _xp == null || _xp.getNamespaceContext() == null) {
@@ -168,32 +150,22 @@ public class KXpathExpr {
 				} else {
 					String prefix = _source.substring(1, ndx);
 					String localName = _source.substring(ndx+1);
-					String uri =
-						_xp.getNamespaceContext().getNamespaceURI(prefix);
+					String uri = _xp.getNamespaceContext().getNamespaceURI(prefix);
 					x = el.getAttributeNodeNS(uri, localName);
 				}
-				if (type == null) {
-					return x == null ? null : new KNodeList(x);
-				}
-				if (type.equals(XPathConstants.STRING)) {
-					return x == null ? null : x.getNodeValue();
-				}
-				if (type.equals(XPathConstants.NODE))
-					return x;
-				if (type.equals(XPathConstants.NODESET))
-					return new KNodeList(x);
-				if (type.equals(XPathConstants.NUMBER))
-					return x==null ? 0 : 1;
-				if (type.equals(XPathConstants.BOOLEAN))
-					return x!=null;
+				if (type == null) return x == null ? null : new KNodeList(x);
+				if (type.equals(XPathConstants.STRING)) return x == null ? null : x.getNodeValue();
+				if (type.equals(XPathConstants.NODE)) return x;
+				if (type.equals(XPathConstants.NODESET)) return new KNodeList(x);
+				if (type.equals(XPathConstants.NUMBER)) return x==null ? 0 : 1;
+				if (type.equals(XPathConstants.BOOLEAN)) return x!=null;
 				return x!=null;
 			}
 			//elements
 			NodeList nl;
 			if (_xp == null) {
 				if (i == 6) { // self
-					return el.getNodeName().equals(_source.substring(6)) ?
-						new KNodeList(el) : new KNodeList();
+					return el.getNodeName().equals(_source.substring(6)) ? new KNodeList(el) :new KNodeList();
 				}
 				nl = KXmlUtils.getChildElements(node, _source);
 			} else { //element or attribute
@@ -201,8 +173,7 @@ public class KXpathExpr {
 				int ndx = name.indexOf(':');
 				String prefix = ndx > 0 ? name.substring(0, ndx): "";
 				String localName = ndx > 0 ? name.substring(ndx+1) : name;
-				String uri = _xp == null ? null :
-					_xp.getNamespaceContext() == null ? null
+				String uri = _xp == null ? null :_xp.getNamespaceContext() == null ? null
 					:_xp.getNamespaceContext().getNamespaceURI(prefix);
 				if (i == 6) { // self
 					String lName = el.getLocalName();
@@ -210,20 +181,13 @@ public class KXpathExpr {
 						lName = el.getNodeName();
 					}
 					if (lName.equals(localName)) {
-						if (uri == null) {
-							return el.getNamespaceURI() == null ?
-								new KNodeList(el) : new KNodeList();
-						}
-						return uri.equals(el.getNamespaceURI()) ?
-							new KNodeList(el) : new KNodeList();
+						return uri == null ? el.getNamespaceURI()==null ? new KNodeList(el) : new KNodeList()
+							: uri.equals(el.getNamespaceURI()) ? new KNodeList(el) : new KNodeList();
 					}
 					return new KNodeList();
 				}
-				if (uri == null) {
-					nl = KXmlUtils.getChildElements(node, _source);
-				} else {
-					nl = KXmlUtils.getChildElementsNS(node, uri, localName);
-				}
+				nl = (uri == null) ? KXmlUtils.getChildElements(node, _source)
+					: KXmlUtils.getChildElementsNS(node, uri, localName);
 			}
 			if (type == null || type.equals(XPathConstants.NODESET)) {
 				return nl;
@@ -237,8 +201,7 @@ public class KXpathExpr {
 				return (NodeList) _value.evaluate(node, XPathConstants.NODESET);
 			} catch (XPathExpressionException ex) {
 				// !!!!!!!!!!!!!!!!!! This is very nasty code !!!!!!!!!!!!!!!!!!
-				if (type == null || type.equals(XPathConstants.NODESET)
-					&& ex instanceof XPathExpressionException) {
+				if (type == null || type.equals(XPathConstants.NODESET)) {
 					String s = ex.getMessage();
 					Throwable x = ex;
 					while (s == null && (x = x.getCause()) != null) {
@@ -247,11 +210,9 @@ public class KXpathExpr {
 					if (s != null) {
 						try {
 							if (s.toUpperCase().contains("BOOLEAN"))
-								return _value.evaluate(node,
-									XPathConstants.BOOLEAN);
+								return _value.evaluate(node,XPathConstants.BOOLEAN);
 							if (s.toUpperCase().contains("NUMBER"))
-								return _value.evaluate(node,
-									XPathConstants.NUMBER);
+								return _value.evaluate(node, XPathConstants.NUMBER);
 						} catch (XPathExpressionException exx) {}
 					}
 				}
@@ -264,10 +225,7 @@ public class KXpathExpr {
 						if (node == null) {
 							return null;
 						}
-						//XPath error&{0}{: }
-						throw new SRuntimeException(XML.XML505,
-							ex.toString() + ",\n" + ex1.toString()
-							+ ",\n" + ex2.toString());
+						throw new SRuntimeException(XML.XML505, ex2.getMessage()); //XPath error&{0}{: }
 					}
 				}
 			}
@@ -278,16 +236,14 @@ public class KXpathExpr {
 				if (node == null) {
 					return null;
 				}
-				//XPath error&{0}{: }
-				throw new SRuntimeException(XML.XML505,	ex.toString());
+				throw new SRuntimeException(XML.XML505,	ex.getMessage()); //XPath error&{0}{: }
 			}
 		}
 	}
 
-	/** Execute XPath expression and return result.
-	/* If result type is null then result types are checked in
+	/** Execute XPath expression and return result. If result type is null then result types are checked in
 	 * following sequence:
-	 * 1) NODESET, 2) STRING, 3) NODE.
+	 * <p>1) NODESET, 2) STRING, 3) NODE.</p>
 	 * @param node node or null.
 	 * @param type QName with result type or null.
 	 * @param expr String with XPath expression.
@@ -305,10 +261,9 @@ public class KXpathExpr {
 		return new KXpathExpr(expr, nc, fr, vr).evaluate(node, type);
 	}
 
-	/** Execute XPath expression (no NameSpace context, no variables,
-	 * no functions) and return result.
+	/** Execute XPath expression (no NameSpace context, no variables, no functions) and return result.
 	 * Result types are checked in following sequence:
-	 * 1) NODESET, 2) STRING, 3) NODE.
+	 * <p>1) NODESET, 2) STRING, 3) NODE.</p>
 	 * @param node node or null.
 	 * @param expr String with XPath expression.
 	 * @return object with result of XPath expression.
@@ -317,18 +272,15 @@ public class KXpathExpr {
 		return new KXpathExpr(expr).evaluate(node, (QName) null);
 	}
 
-	/** Execute XPath expression (no NameSpace context, no variables,
-	 * no functions) and return result.
+	/** Execute XPath expression (no NameSpace context, no variables,* no functions) and return result.
 	 * Result types are checked in following sequence:
-	 * 1) NODESET, 2) STRING, 3) NODE.
+	 * <p>1) NODESET, 2) STRING, 3) NODE.</p>
 	 * @param node node or null.
 	 * @param expr String with XPath expression.
 	 * @param nc NameSpace context.
 	 * @return object with result of XPath expression.
 	 */
-	public static Object evaluate(final Node node,
-		final String expr,
-		final NamespaceContext nc) {
+	public static Object evaluate(final Node node, final String expr, final NamespaceContext nc) {
 		return new KXpathExpr(expr, nc).evaluate(node, (QName) null);
 	}
 
@@ -345,8 +297,7 @@ public class KXpathExpr {
 
 	private final class KFunResolver implements XPathFunctionResolver {
 		@Override
-		public final XPathFunction resolveFunction(final QName functionName,
-			final int arity) {
+		public final XPathFunction resolveFunction(final QName functionName, final int arity) {
 			return _fr!=null ? _fr.resolveFunction(functionName, arity) : null;
 		}
 	}

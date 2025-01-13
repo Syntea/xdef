@@ -43,33 +43,28 @@ class XonToXml extends XonTools {
 	 * @return element with given name and XON/JSON namespace and prefix..
 	 */
 	private Element genJElement(final String name) {
-		return _xPrefix == null || _xPrefix.isEmpty()
-			? _doc.createElementNS(_xNamespace, name)
+		return _xPrefix == null || _xPrefix.isEmpty() ? _doc.createElementNS(_xNamespace, name)
 			: _doc.createElementNS(_xNamespace, _xPrefix + ':' + name);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // XON/JSON to XML (X-detinition format)
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create and append new element and push context.
 	 * @param n node to which new element will be appended.
-	 * @param namespace name space URI.
+	 * @param namespace namespace URI.
 	 * @param tagname tag name of element.
 	 * @return created element.
 	 */
-	private Element addElem(final Node n,
-		final String namespace,
-		final String tagname) {
+	private Element addElem(final Node n, final String namespace, final String tagname) {
 		Element e = namespace != null
-			? _doc.createElementNS(namespace, tagname)
-			: _doc.createElement(replaceColonInXMLName(tagname));
+			? _doc.createElementNS(namespace, tagname) : _doc.createElement(replaceColonInXMLName(tagname));
 		_ns.pushContext();
 		n.appendChild(e);
 		return e;
 	}
 
-	/** Append to node the element with XON/JSON name space.
+	/** Append to node the element with XON/JSON namespace.
 	 * @param n node where to append new element.
 	 * @param name local name of element.
 	 * @return created element.
@@ -95,18 +90,14 @@ class XonToXml extends XonTools {
 
 	/** Set attribute to element,
 	 * @param e element where to set attribute.
-	 * @param name name of attribute {if there is colon and namespace is null
-	 * then replace colon with "_x3a_"}
+	 * @param name name of attribute {if there is colon and namespace is null replace colon with "_x3a_"}
 	 * @param s string with value of attribute.
 	 */
-	private void setAttr(final Element e,
-		final String name,
-		final Object v) {
+	private void setAttr(final Element e, final String name, final Object v) {
 		String u;
 		String s;
 		if (name.startsWith("xmlns")) {
-			s = v == null ?
-				XMLConstants.NULL_NS_URI : jstringToXML(v, 1);
+			s = v == null ? XMLConstants.NULL_NS_URI : jstringToXML(v, 1);
 			_ns.setPrefix("xmlns".equals(name) ? "" : name.substring(6), s);
 			u = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
 		} else {
@@ -130,17 +121,14 @@ class XonToXml extends XonTools {
 	 * @param array the array
 	 * @param pos starting position.
 	 */
-	private void addArrayItems(final Element elem,
-		final List array,
-		final int pos) {
+	private void addArrayItems(final Element elem, final List array, final int pos) {
 		int len = array.size();
 		for (int i = pos; i < len; i++) {
 			Object x = array.get(i);
 			if (x instanceof Map) {
 				Map m = (Map) x;
 				Map.Entry en;
-				if (m.size() == 1 && isSimpleValue((en=(Map.Entry) m.entrySet()
-						.iterator().next()).getValue())) {
+				if (m.size()==1 && isSimpleValue((en=(Map.Entry)m.entrySet().iterator().next()).getValue())) {
 					Element e = addXonElem(elem, X_MAP);
 					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
 					_ns.popContext();
@@ -159,8 +147,7 @@ class XonToXml extends XonTools {
 						continue;
 					}
 				} else { // simpleValue or simple array
-					if (i + 1 == len
-						|| genTextFromItem(array.get(i+1), 2) == null) {
+					if (i + 1 == len || genTextFromItem(array.get(i+1), 2) == null) {
 						addValueAsText((Element) elem, x);
 						continue;
 					} else {
@@ -183,8 +170,8 @@ class XonToXml extends XonTools {
 		}
 	}
 
-	/** If all items of the array are simple values or arrays with simple values
-	 * return the string with the array. Otherwise, return null.
+	/** If all items of the array are simple values or arrays with simple values return string with the array.
+	 * Otherwise, return null.
 	 * @param list the array to be converted.
 	 * @param mode flag if to generate it to an attribute, text node or JList.
 	 * @return the string with array representation or null.
@@ -243,8 +230,7 @@ class XonToXml extends XonTools {
 			Map m = (Map) array.get(0);
 			if (len == 1) {
 				if (m.isEmpty()) {
-					//this is special case: the map is not interporeted as attrs
-					// so it will be an empty element
+					//this is special case: the map is not interpreted as attrs so it will be an empty element
 					return;
 				}
 				e = addXonElem(elem, X_ARRAY);
@@ -267,8 +253,7 @@ class XonToXml extends XonTools {
 					}
 					if (x instanceof List) {
 						Map y = null;
-						if (!((List) x).isEmpty()
-							&& ((List) x).get(0) instanceof Map
+						if (!((List) x).isEmpty() && ((List) x).get(0) instanceof Map
 							&& (y = (Map) ((List) x).get(0)).size() != 1) {
 							if (!y.isEmpty()) {
 								boolean allSimple = true;
@@ -296,10 +281,8 @@ class XonToXml extends XonTools {
 					String s;
 					if ("xmlns".equals(key)||key.startsWith("xmlns:")) {
 						ns = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-						s = val == null ? XMLConstants.NULL_NS_URI
-							: jstringToXML(val, 1);
-						_ns.setPrefix("xmlns".equals(key)
-							? "" : key.substring(6), s);
+						s = val == null ? XMLConstants.NULL_NS_URI : jstringToXML(val, 1);
+						_ns.setPrefix("xmlns".equals(key) ? "" : key.substring(6), s);
 						elem.setAttributeNS(ns, key, s);
 					} else {
 						key = toXmlName(key);
@@ -307,8 +290,7 @@ class XonToXml extends XonTools {
 						if (getNamePrefix(key).isEmpty()) {
 							elem.setAttribute(key, s);
 						} else {
-							String namespace =
-							   _ns.getNamespaceURI(getNamePrefix(key));
+							String namespace = _ns.getNamespaceURI(getNamePrefix(key));
 							ns = getElementNamespace(m, key, namespace);
 							elem.setAttributeNS(ns, key, s);
 						}
@@ -318,8 +300,7 @@ class XonToXml extends XonTools {
 				}
 			}
 			Element ee = elem;
-			// if in the map are not simple items, so generate the map element
-			// with those items
+			// if in the map are not simple items generate the map element with those items
 			if (genMap) {
 				if (m.size() != 1) {
 					ee = addXonElem(elem, X_MAP);
@@ -344,20 +325,18 @@ class XonToXml extends XonTools {
 				if (mm.size() == 1) { // it is element
 					if (array.size() == 1) { // no oter items of array
 						// create element and return
-						Map.Entry entry =
-							(Map.Entry) m.entrySet().iterator().next();
+						Map.Entry entry = (Map.Entry) m.entrySet().iterator().next();
 						String name = toXmlName((String) entry.getKey());
-						String namespace =
-							_ns.getNamespaceURI(getNamePrefix(name));
+						String namespace = _ns.getNamespaceURI(getNamePrefix(name));
 						addElem(elem, namespace, name);
 						_ns.popContext();
 					} else {
-						//add to element this map and remaining items from array
+						//add this map and remaining items from array to element
 						addArrayItems(elem, array, 1);
 					}
 				} else {
 					if (m.isEmpty()) {
-						// if map is empty nothing was generated yet, so add map
+						// if map is empty nothing was generated yet add map
 						addXonElem(elem, X_MAP);
 						_ns.popContext();
 					}
@@ -368,18 +347,14 @@ class XonToXml extends XonTools {
 						namedItemToXmlXD(key, val, elem);
 					}
 					if (len > 1) {
-						// add remaining items
-						addArrayItems(elem, array, 1);
+						addArrayItems(elem, array, 1); // add remaining items
 					}
 				}
 				return;
 			} else {
-				if (array.size() >= 1 && (array.get(0) instanceof Map)
-					&& ((Map)array.get(0)).isEmpty()) {
-					//force generation of empty map
-					addArrayItems(elem, array, 0);
-				} else {
-					//map was generated
+				if (array.size() >= 1 && (array.get(0) instanceof Map) && ((Map)array.get(0)).isEmpty()) {
+					addArrayItems(elem, array, 0); //force generation of empty map
+				} else {//map was generated
 					addArrayItems(elem, array, 1);
 				}
 				return;
@@ -401,24 +376,19 @@ class XonToXml extends XonTools {
 	 * @param namespace actual namespace from namespace context.
 	 * @return the actual namespace.
 	 */
-	private String getElementNamespace(final Map map,
-		final String name,
-		final String namespace) {
+	private String getElementNamespace(final Map map, final String name, final String namespace) {
 		String prefix = getNamePrefix(name);
-		String uri =
-			(String) map.get(prefix.length() > 0 ? "xmlns:" + prefix : "xmlns");
+		String uri = (String) map.get(prefix.length() > 0 ? "xmlns:" + prefix : "xmlns");
 		return (uri == null) ? namespace : uri;
 	}
 
-	/** Create named item,
+	/** Create named item.
 	 * @param name name (XON/JSON name converted to XML name).
 	 * @param val Object to be created as named item.
 	 * @param parent parent node where the item will be appended.
 	 * @return created element.
 	 */
-	private Element namedItemToXmlXD(final String name,
-		final Object val,
-		final Node parent) {
+	private Element namedItemToXmlXD(final String name, final Object val, final Node parent) {
 		String namespace = _ns.getNamespaceURI(getNamePrefix(name));
 		Element e;
 		if (val instanceof Map) {
@@ -477,14 +447,11 @@ class XonToXml extends XonTools {
 			List array = (List) val;
 			namespace = _ns.getNamespaceURI(getNamePrefix(name));
 			if (!array.isEmpty() && array.get(0) instanceof Map) {
-				// if the first item is map and there is xmlns item
-				// in the map set this namespace for the element
-				namespace = getElementNamespace((Map) array.get(0),
-					name, namespace);
+				// if the first item is map and there is xmlns item in map set this namespace for the element
+				namespace = getElementNamespace((Map) array.get(0), name, namespace);
 			}
 			e = addElem(parent, namespace, name);
-			if (val instanceof List && ((List) val).size() == 1
-				&& isSimpleValue(((List) val).get(0))) {
+			if (val instanceof List && ((List) val).size() == 1 && isSimpleValue(((List) val).get(0))) {
 				addValueAsText(e, ((List) val).get(0));
 			} else {
 				addElementFromArray(array, e);
@@ -504,9 +471,7 @@ class XonToXml extends XonTools {
 	 * @param forceMap if true the Map element is generated.
 	 * @param parent node where to append map.
 	 */
-	private Element addMapToXmlXD(final Map map,
-		final Node parent,
-		final boolean forceMap) {
+	private Element addMapToXmlXD(final Map map, final Node parent, final boolean forceMap) {
 		int size = map.size();
 		if (size == 0) {
 			Element e = addXonElem(parent, X_MAP);
@@ -526,8 +491,8 @@ class XonToXml extends XonTools {
 				Map.Entry entry = (Map.Entry) x;
 				String name = (String) entry.getKey();
 				Object y = entry.getValue();
-				if (isSimpleValue(y) && name.startsWith("xmlns")) {
-					setAttr(e, name, y); // set only xmlns attributes
+				if (isSimpleValue(y) && name.startsWith("xmlns")) { // set only xmlns attributes
+					setAttr(e, name, y);
 				} else {
 					allXmlns = false;
 				}
@@ -539,8 +504,7 @@ class XonToXml extends XonTools {
 					String name = (String) entry.getKey();
 					if (isSimpleValue(y)) {
 						if (!name.startsWith("xmlns")) {
-							// other attributes
-							setAttr(e, toXmlName(name), y);
+							setAttr(e, toXmlName(name), y); // other attributes
 						}
 					} else {
 						namedItemToXmlXD(toXmlName(name), y, e);
@@ -620,9 +584,8 @@ class XonToXml extends XonTools {
 			x.addValueAsText(e, xon);
 			x._ns.popContext();
 		} else {
-			 //Not XON/JSON object&{0}
-			throw new SRuntimeException(JSON.JSON011,
-				xon == null ? null : xon.getClass());
+			//Not XON/JSON object&{0}
+			throw new SRuntimeException(JSON.JSON011, xon == null ? null : xon.getClass());
 		}
 		return x._doc.getDocumentElement();
 	}
@@ -672,8 +635,7 @@ class XonToXml extends XonTools {
 		while (it.hasNext()) {
 			Map.Entry en = (Map.Entry) it.next();
 			Object o = en.getKey(); // name
-			// NOTE in YAML it may be a byte array, otherwise it is String
-			// convert key to XML name
+			// NOTE in YAML it may be a byte array, otherwise it is String convert key to XML name
 			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
 			key = toXmlName(key);
 			o = en.getValue();

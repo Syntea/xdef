@@ -18,7 +18,6 @@ import static org.xdef.XDValueType.SERVICE;
  * @author Vaclav Trojan
  */
 public class DefSQLService extends XDValueAbstract implements XDService {
-
 	private final String _url;
 	private final String _user;
 	private Connection _conn;
@@ -32,19 +31,17 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	 * @param pasw user password.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefSQLService(String url, String user, String pasw)
-		throws SRuntimeException {
+	public DefSQLService(String url, String user, String pasw) throws SRuntimeException {
 		_url = url;
 		_user = user;
 		try {
 			_conn = DriverManager.getConnection(url, user, pasw);
 		} catch (SQLException ex) {
 			String msg = ex.getMessage();
-			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
-				throw new SRuntimeException(XDEF.XDEF568, ex);
+				throw new SRuntimeException(XDEF.XDEF568, ex); //Database statement error&{0}{: }
 			}
-			throw new SRuntimeException(XDEF.XDEF568, msg);
+			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
 
@@ -56,11 +53,10 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	public XDService serviceValue(){return this;}
    @Override
    /** Compile and prepare command.
-	* @param statement source statement.
+	 * @param statement source statement.
 	 * @throws SRuntimeException if an error occurs.
 	*/
-	public XDStatement prepareStatement(String statement)
-		throws SRuntimeException {
+	public XDStatement prepareStatement(String statement) throws SRuntimeException {
 		return new DefSQLStatement(_conn, statement);
 	}
 	@Override
@@ -70,8 +66,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDResultSet query(String statement, XDValue params)
-		throws SRuntimeException{
+	public XDResultSet query(String statement, XDValue params) throws SRuntimeException {
 		DefSQLStatement stmt = new DefSQLStatement(_conn, statement);
 		DefSQLResultSet rs = (DefSQLResultSet) stmt.query(params);
 		rs._closeStatement = true;
@@ -85,9 +80,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDResultSet queryItems(String statement,
-		String itemName,
-		XDValue params) throws SRuntimeException {
+	public XDResultSet queryItems(String statement, String itemName, XDValue params) throws SRuntimeException{
 		DefSQLStatement stmt = new DefSQLStatement(_conn, statement);
 		DefSQLResultSet rs = (DefSQLResultSet) stmt.queryItems(itemName,params);
 		rs._closeStatement = true;
@@ -96,7 +89,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	@Override
 	/** Execute statement with parameters.
 	 * @param statement source statement.
-	 * @param params parameters of statement or <i>null</i>.
+	 * @param params parameters of statement or null.
 	 * @return result of execution.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -115,9 +108,8 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 		}
 	}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() { return _conn == null;}
    @Override
@@ -125,7 +117,6 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	* @return true if and only if this object is closed.
 	*/
 	public boolean isClosed() {return _conn == null;}
-
 	@Override
 	/** Commit.
 	 * @throws SRuntimeException if an error occurs.
@@ -153,11 +144,10 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 			}
 		} catch (SQLException ex) {
 			String msg = ex.getMessage();
-			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
-				throw new SRuntimeException(XDEF.XDEF568, ex);
+				throw new SRuntimeException(XDEF.XDEF568, ex); //Database statement error&{0}{: }
 			}
-			throw new SRuntimeException(XDEF.XDEF568, msg);
+			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
 	@Override
@@ -173,17 +163,16 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 			}
 		} catch (SQLException ex) {
 			String msg = ex.getMessage();
-			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
-				throw new SRuntimeException(XDEF.XDEF568, ex);
+				throw new SRuntimeException(XDEF.XDEF568, ex); //Database statement error&{0}{: }
 			}
-			throw new SRuntimeException(XDEF.XDEF568, msg);
+			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
 	@Override
 	/** Get property.
 	 * @param name name of property.
-	 * @return value of property or <i>null</i>.
+	 * @return value of property or null.
 	 */
 	public String getProperty(String name) {
 		try {
@@ -222,12 +211,6 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
-	public String stringValue() {
-		if (_url == null) {
-			return "" + _conn;
-		}
-		return "user: " + _user + "; url: " + _url;
-	}
+	public String stringValue() {return _url == null ? "" + _conn : ("user: " + _user + "; url: " + _url);}
 }

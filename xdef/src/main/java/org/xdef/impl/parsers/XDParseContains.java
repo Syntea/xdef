@@ -14,6 +14,7 @@ public class XDParseContains extends XDParseEq {
 	private static final String ROOTBASENAME = "contains";
 
 	public XDParseContains() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -21,8 +22,7 @@ public class XDParseContains extends XDParseEq {
 			p.setParsedValue(s);
 			p.setEos();
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 		return p;
 	}
@@ -34,8 +34,7 @@ public class XDParseContains extends XDParseEq {
 			p.setParsedValue(s);
 			p.setEos();
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
 	@Override
@@ -46,7 +45,6 @@ public class XDParseContains extends XDParseEq {
 			return false;
 		}
 		XDParseContains x = (XDParseContains) o;
-		return _param == null && x._param == null ||
-			_param != null && _param.equals(x._param);
+		return _param == null && x._param == null || _param != null && _param.equals(x._param);
 	}
 }

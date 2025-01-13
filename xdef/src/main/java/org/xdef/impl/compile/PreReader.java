@@ -12,6 +12,5 @@ public interface PreReader {
 	 * @param sysId system ID of source data.
 	 * @throws Exception if an error occurs.
 	 */
-	public void doParse(final InputStream in, final String sysId)
-		throws Exception;
+	public void doParse(final InputStream in, final String sysId) throws Exception;
 }

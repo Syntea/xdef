@@ -369,13 +369,11 @@ public class CompileBase implements CodeTable, XDValueID {
 	static final byte GLOBAL_MODE = 4;
 	/** All modes. */
 	static final byte ANY_MODE = 127;
-
 	////////////////////////////////////////////////////////////////////////////
 	// Dummy codes, used by compiler
 	////////////////////////////////////////////////////////////////////////////
 	/** Undefined code - used by compiler. */
 	static final short UNDEF_CODE = LAST_CODE + 1;
-
 	////////////////////////////////////////////////////////////////////////////
 	//Value types
 	////////////////////////////////////////////////////////////////////////////
@@ -395,16 +393,13 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // Initialization.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Set type parameters.
 	 * @param type type ID (see org.xdef.XDValueID).
 	 * @param name the name of type used in script.
 	 * @param clazz the class rep[resenting the type.
 	 * @param typeCodeAbbr the abbreviation used in code display.
 	 */
-	private static void setType(final short type,
-		final String name,
-		final Class<?> clazz) {
+	private static void setType(final short type, final String name, final Class<?> clazz) {
 		TYPECLASSES[type] = clazz;
 		TYPENAMES[type] = name;
 	}
@@ -461,7 +456,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
 		setType(X_UNIQUESET_M, "uniqueSet", null);
-
 		// Table of type names and typeIds
 		TYPEIDS = ((char) XD_VOID) + ";void;" +
 			((char) XD_LONG) + ";int;" +
@@ -503,7 +497,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_RESULTSET) + ";XDResultSet;" +
 			((char) XD_NAMEDVALUE) + ";XDNamedItem;" +
 			((char) XD_XMLWRITER) + ";XDXmlOutStream;";
-
 		// Table of type names used only in an external object declatation.
 		EXT_TYPEIDS =
 			((char) XD_DOUBLE) + ";Double;" +
@@ -863,7 +856,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
 		parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
 		parser(im,org.xdef.impl.parsers.XDParseDomainAddr.class, "domainAddr");
-
 ////////////////////////////////////////////////////////////////////////////////
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -970,8 +962,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(SET_TEXT, XD_VOID, TEXT_MODE, 1, 1, XD_STRING), "setText");
 		method(ti, genInternalMethod(SET_USEROBJECT, XD_VOID, ANY_MODE, 1, 1, XD_OBJECT), "SetUserObject");
 		method(ti, genInternalMethod(GET_STRING_TAIL, XD_STRING, ANY_MODE, 2, 2, XD_STRING,XD_LONG), "tail");
-		method(ti, genInternalMethod(TO_STRING, XD_STRING, // toString(x,y)
-			ANY_MODE, 2, 2, XD_ANY,XD_STRING), "toString");
+		method(ti, genInternalMethod(TO_STRING, XD_STRING, ANY_MODE, 2, 2, XD_ANY,XD_STRING), "toString");
 		method(ti, genInternalMethod(DEBUG_TRACE, XD_VOID, ANY_MODE, 0, 2, XD_ANY), "trace");
 		method(ti, genInternalMethod(TRANSLATE_S, XD_STRING,
 			ANY_MODE, 3 ,3, XD_STRING,XD_STRING,XD_STRING), "translate");
@@ -983,40 +974,32 @@ public class CompileBase implements CodeTable, XDValueID {
 			method(ti, genInternalMethod(GET_XQUERY, XD_CONTAINER,
 				ANY_MODE, 1, 2, XD_STRING,XD_ANY), "xquery", "?fromXQ");
 		}
-
 ////////////////////////////////////////////////////////////////////////////////
 // auxiliary methods
 ////////////////////////////////////////////////////////////////////////////////
-		//getElement(list, index)
 		method(ti, genInternalMethod(CONTEXT_GETELEMENT_X, XD_ELEMENT,
 			ANY_MODE, 2, 2, XD_CONTAINER,XD_LONG), "#getElement");
-		//getText()
 		method(ti, genInternalMethod(GET_TEXTVALUE, XD_STRING, TEXT_MODE, 0, 0), "#getValue");
 ////////////////////////////////////////////////////////////////////////////////
 // methods above all types
 ////////////////////////////////////////////////////////////////////////////////
-		//get name of type
 		method(ti, genInternalMethod(GET_TYPENAME, XD_STRING, ANY_MODE, 1, 1, XD_ANY), "typeName");
 		method(ti, genInternalMethod(GET_TYPEID, XD_LONG, ANY_MODE, 1, 1, XD_ANY), "valueType");
-
 ////////////////////////////////////////////////////////////////////////////////
 // ATTR REFERENCE (reference to direct attribute of the processed element)
 ////////////////////////////////////////////////////////////////////////////////
 //		ti = X_ATTR_REF;
-
 ////////////////////////////////////////////////////////////////////////////////
 // ANY VALUE (touple name, value)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_ANY;
 		method(ti, genInternalMethod(GET_TYPEID, XD_LONG, ANY_MODE, 1, 1, XD_ANY), "valueType");
 		method(ti, genInternalMethod(GET_TYPENAME, XD_STRING, ANY_MODE, 1, 1, XD_ANY), "typeName");
-
 ////////////////////////////////////////////////////////////////////////////////
 // ANYURI (URI identifier object)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_ANYURI;
 		method(ti, genInternalMethod(NEW_URI, XD_ANYURI, ANY_MODE, 1, 1, XD_STRING), "#");
-
 ////////////////////////////////////////////////////////////////////////////////
 // BNF GRAMMAR
 ////////////////////////////////////////////////////////////////////////////////
@@ -1027,7 +1010,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 3, XD_BNFGRAMMAR, XD_STRING, XD_STRING), "parse", "?check");
 		method(ti, genInternalMethod(GET_BNFRULE, XD_BNFRULE,
 			ANY_MODE, 2, 2, XD_BNFGRAMMAR, XD_STRING), "rule");
-
 ////////////////////////////////////////////////////////////////////////////////
 // BNF RULE
 ////////////////////////////////////////////////////////////////////////////////
@@ -1036,7 +1018,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 2, XD_BNFRULE, XD_ANY), "parse", "?check");
 		method(ti, genInternalMethod(BNFRULE_VALIDATE, XD_BOOLEAN,
 			ANY_MODE, 1, 2, XD_BNFRULE, XD_ANY), "validate");
-
 ////////////////////////////////////////////////////////////////////////////////
 // BYTES (array)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1054,7 +1035,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 3, 3, XD_BYTES, XD_LONG, XD_LONG), "setAt");
 		method(ti, genInternalMethod(BYTES_TO_BASE64, XD_STRING, ANY_MODE, 1, 1, XD_BYTES), "toBase64");
 		method(ti, genInternalMethod(BYTES_TO_HEX, XD_STRING, ANY_MODE, 1, 1, XD_BYTES), "toHex");
-
 ////////////////////////////////////////////////////////////////////////////////
 // CONTAINER (general object envelope)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1093,14 +1073,12 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_BOOLEAN),"sort");
 		method(ti, genInternalMethod(CONTEXT_TO_ELEMENT, XD_ELEMENT,
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING), "toElement");
-
 ////////////////////////////////////////////////////////////////////////////////
 // CURRENCY
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_CURRENCY;
 		method(ti, genInternalMethod(NEW_CURRENCY, XD_CURRENCY, ANY_MODE, 1, 1, XD_STRING), "#");
 		method(ti, genInternalMethod(CURRENCYCODE, XD_STRING, ANY_MODE, 1, 1, XD_CURRENCY), "currencyCode");
-
 ////////////////////////////////////////////////////////////////////////////////
 // DATETIME
 ////////////////////////////////////////////////////////////////////////////////
@@ -1165,7 +1143,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(TO_MILLIS, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "toMillis");
 		method(ti, genInternalMethod(TO_STRING, XD_STRING,
 			ANY_MODE, 1, 2, XD_DATETIME, XD_STRING), "toString");
-
 ////////////////////////////////////////////////////////////////////////////////
 // DURATION
 ///////////////////////////////
@@ -1187,7 +1164,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(DURATION_GETSTART, XD_DATETIME,
 			ANY_MODE, 1, 1, XD_DURATION), "getStart");
 		method(ti, genInternalMethod(DURATION_GETYEARS, XD_LONG, ANY_MODE, 1, 1, XD_DURATION), "getYears");
-
 ////////////////////////////////////////////////////////////////////////////////
 // EMAILADDR
 ////////////////////////////////////////////////////////////////////////////////
@@ -1221,7 +1197,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_ELEMENT), "toContainer", "?toContext");
 		method(ti, genInternalMethod(ELEMENT_TOSTRING, XD_STRING,
 			ANY_MODE, 1, 2,XD_ELEMENT, XD_BOOLEAN), "toString");
-
 ////////////////////////////////////////////////////////////////////////////////
 // EXCEPTION (internal)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1230,13 +1205,11 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 3,XD_STRING, XD_STRING, XD_STRING), "#");
 		method(ti, genInternalMethod(GET_REPORT, XD_REPORT, ANY_MODE, 1, 1, XD_EXCEPTION), "getReport");
 		method(ti, genInternalMethod(GET_MESSAGE, XD_STRING, ANY_MODE, 1, 1, XD_EXCEPTION), "getMessage");
-
 ////////////////////////////////////////////////////////////////////////////////
 // IPADDR
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_IPADDR;
 		method(ti, genInternalMethod(NEW_IPADDR, XD_IPADDR, ANY_MODE, 1, 1, XD_STRING), "#");
-
 ////////////////////////////////////////////////////////////////////////////////
 // GPS POSITION
 ////////////////////////////////////////////////////////////////////////////////
@@ -1249,14 +1222,12 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GPS_NAME, XD_STRING, ANY_MODE, 1, 1, XD_GPSPOSITION), "name");
 		method(ti, genInternalMethod(GPS_DISTANCETO, XD_DOUBLE,
 			ANY_MODE, 2, 2, XD_GPSPOSITION,  XD_GPSPOSITION), "distanceTo");
-
 ////////////////////////////////////////////////////////////////////////////////
 // LOCALE
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_LOCALE;
 		method(ti, genInternalMethod(NEW_LOCALE, XD_LOCALE,
 			ANY_MODE, 1, 3, XD_STRING, XD_STRING, XD_STRING), "#");
-
 ////////////////////////////////////////////////////////////////////////////////
 // INPUT STREAM
 ////////////////////////////////////////////////////////////////////////////////
@@ -1265,7 +1236,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			GLOBAL_MODE, 1, 3, XD_STRING,XD_STRING,XD_BOOLEAN), "#");
 		method(ti, genInternalMethod(STREAM_EOF, XD_BOOLEAN, ANY_MODE, 0, 1, XD_INPUT), "eof");
 		method(ti, genInternalMethod(STREAM_READLN, XD_STRING, ANY_MODE, 0, 1, XD_INPUT), "readln");
-
 ////////////////////////////////////////////////////////////////////////////////
 // NAMED VALUE (touple name, value)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1275,12 +1245,10 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(NAMEDVALUE_GET, XD_ANY, ANY_MODE, 1, 1, XD_NAMEDVALUE), "getValue");
 		method(ti, genInternalMethod(NAMEDVALUE_SET, XD_VOID,
 			ANY_MODE, 2, 3, XD_NAMEDVALUE, XD_ANY), "setValue");
-
 ////////////////////////////////////////////////////////////////////////////////
 // OBJECT (not used)
 ////////////////////////////////////////////////////////////////////////////////
 //		ti = XD_OBJECT;
-
 ////////////////////////////////////////////////////////////////////////////////
 // OUTPUT STREAM
 ////////////////////////////////////////////////////////////////////////////////
@@ -1298,7 +1266,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID, ANY_MODE, 2,
 			Integer.MAX_VALUE, XD_OUTPUT, XD_ANY), "printf");
 		method(ti, genInternalMethod(PUT_REPORT, XD_VOID, ANY_MODE, 2, 2, XD_OUTPUT, XD_REPORT), "putReport");
-
 ////////////////////////////////////////////////////////////////////////////////
 // PARSER
 ////////////////////////////////////////////////////////////////////////////////
@@ -1337,7 +1304,6 @@ public class CompileBase implements CodeTable, XDValueID {
  //???
 		method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 			ANY_MODE, 2, 2, XD_PARSERESULT, XD_ANY), "setValue");
-
 ////////////////////////////////////////////////////////////////////////////////
 // PRICE
 ////////////////////////////////////////////////////////////////////////////////
@@ -1356,7 +1322,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_REGEX, XD_STRING), "getMatcher");
 		method(ti, genInternalMethod(MATCHES_REGEX, XD_BOOLEAN,
 			ANY_MODE, 2, 2, XD_REGEX, XD_STRING), "matches");
-
 ////////////////////////////////////////////////////////////////////////////////
 // REGEX RESULT
 ////////////////////////////////////////////////////////////////////////////////
@@ -1371,7 +1336,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(MATCHES_REGEX, XD_BOOLEAN, ANY_MODE, 1, 1, XD_REGEXRESULT), "matches");
 		method(ti, genInternalMethod(GET_REGEX_GROUP_START, XD_LONG,
 			ANY_MODE, 2, 2, XD_REGEXRESULT, XD_LONG), "start");
-
 ////////////////////////////////////////////////////////////////////////////////
 // REPORT (see org.xdef.sys.Report)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1385,7 +1349,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(REPORT_SETTYPE, XD_REPORT,
 			ANY_MODE, 2, 2, XD_REPORT, XD_STRING), "setType");
 		method(ti, genInternalMethod(REPORT_TOSTRING, XD_STRING, ANY_MODE, 1, 1, XD_REPORT), "toString");
-
 ////////////////////////////////////////////////////////////////////////////////
 // RESULT SET (result of statement of service)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1404,7 +1367,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(DB_ISCLOSED, XD_BOOLEAN, ANY_MODE, 1, 1, XD_RESULTSET), "isClosed");
 		method(ti, genInternalMethod(RESULTSET_NEXT, XD_BOOLEAN,
 			(byte) (TEXT_MODE + ELEM_MODE), 1, 1, XD_RESULTSET), "next");
-
 ////////////////////////////////////////////////////////////////////////////////
 // SERVICE (e.g. database)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1427,7 +1389,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(DB_ROLLBACK, XD_VOID, ANY_MODE, 1, 1, XD_SERVICE), "rollback");
 		method(ti, genInternalMethod(DB_SETPROPERTY, XD_BOOLEAN, ANY_MODE, 3, 3,
 			XD_SERVICE, XD_STRING, XD_STRING), "setProperty");
-
 ////////////////////////////////////////////////////////////////////////////////
 // STATEMENT (on service, e.g. database)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1442,7 +1403,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, Integer.MAX_VALUE, XD_STATEMENT, XD_STRING), "query");
 		method(ti, genInternalMethod(GET_DBQUERY_ITEM, XD_RESULTSET,
 			ANY_MODE, 2, Integer.MAX_VALUE, XD_STATEMENT, XD_STRING), "queryItem");
-
 ////////////////////////////////////////////////////////////////////////////////
 // STRING
 ////////////////////////////////////////////////////////////////////////////////
@@ -1474,13 +1434,11 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(LOWERCASE,	XD_STRING, ANY_MODE, 1, 1, XD_STRING), "toLower");
 		method(ti, genInternalMethod(UPPERCASE, XD_STRING, ANY_MODE, 1, 1, XD_STRING), "toUpper");
 		method(ti, genInternalMethod(TRIM_S, XD_STRING, ANY_MODE, 1, 1, XD_STRING), "trim");
-
 ////////////////////////////////////////////////////////////////////////////////
 // TELEPHONE
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_TELEPHONE;
 		method(ti, genInternalMethod(NEW_TELEPHONE, XD_TELEPHONE, ANY_MODE, 1, 1, XD_STRING), "#");
-
 ////////////////////////////////////////////////////////////////////////////////
 // X_UNIQUESET_KEY (part of key list)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1497,7 +1455,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			TEXT_MODE, 1, 2, X_UNIQUESET_KEY, XD_PARSERESULT), "IDREFS");
 		method(ti, genInternalMethod(UNIQUESET_CHKIDS, XD_PARSERESULT,
 			TEXT_MODE, 1, 2, X_UNIQUESET_KEY,XD_PARSERESULT), "CHKIDS");
-
 ////////////////////////////////////////////////////////////////////////////////
 // X_UNIQUESET_M (Multiple key uniqueset)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1522,14 +1479,12 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, X_UNIQUESET_M), "toContainer");
 		method(ti, genInternalMethod(UNIQUESET_GET_ACTUAL_KEY, XD_UNIQUESET_KEY,
 			ANY_MODE, 1, 1, X_UNIQUESET_M), "getActualKey");
-
 ////////////////////////////////////////////////////////////////////////////////
 // UNIQUESET_KEY (key uniqueSet)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_UNIQUESET_KEY;
 		method(ti, genInternalMethod(UNIQUESET_KEY_RESET, XD_VOID,
 			ANY_MODE, 1, 1, XD_UNIQUESET_KEY), "resetKey");
-
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1548,15 +1503,13 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 2, XD_XMLWRITER, XD_STRING), "writeText");
 		method(ti, genInternalMethod(CLOSE_XMLWRITER, XD_VOID, ANY_MODE, 1, 1, XD_XMLWRITER), "close");
 	}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Register parser.
 	 * @param im Internal method object.
 	 * @param clazz class of parser.
-	 * @param names alias names of the parser. If a name starts with "?" then
-	 * that item is deprecated (and the previous item is a recommended parser
-	 * name - i.e. alias name can't be the first one).
+	 * @param names alias names of the parser. If a name starts with "?" then that item is deprecated
+	 * (and the previous item is a recommended parser name - i.e. alias name can't be the first one).
 	 */
 	private static void parser(final InternalMethod im, final Class<?> clazz, final String... names) {
 		try {
@@ -1587,8 +1540,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	}
 
 	/** Register method.
-	 * @param typeId id of given type.
-	 * that item is deprecated (and the previous item is a recommended method
+	 * @param typeId id of given type. that item is deprecated (and the previous item is a recommended method
 	 * name - i.e. alias name can't be the first one).
 	 * @param im Internal method object.
 	 */
@@ -1651,7 +1603,6 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods called from classes of compiler.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create new internal method descriptor with void parsedResult type.
 	 * @param code The code of method.
 	 * @param resultType Id of the result type.
@@ -1794,7 +1745,6 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // Classes used by compiler.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Description item of an internal method. */
 	public static final class InternalMethod {
 		/** Code of the method.*/
@@ -1881,10 +1831,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			_parsedResult = x._parsedResult;
 			_recommended = recommended;
 		}
-
 		final short getCode() {return _code;}
 		final byte getRestrictions() {return _restrictions;}
-
 		public final int getMinParams() {return _minParams;}
 		public final int getMaxParams() {return _maxParams;}
 		public final String[] getSqParamNames() {return _sqKeynames;}

@@ -46,9 +46,7 @@ public class XonObjParser implements XonParser {
 			o = ((XDBytes) o).getBytes();
 		}
 		switch (_kind) {
-			case 1:
-				_arrays.peek().add(o);
-				break;
+			case 1: _arrays.peek().add(o);break;
 			case 2:
 				String name = _names.pop();
 				_maps.peek().put(name, o);
@@ -72,10 +70,7 @@ public class XonObjParser implements XonParser {
 	/** Array started.
 	 * @param pos source position.
 	 */
-	public void arrayStart(SPosition pos) {
-		_kinds.push(_kind = 1);
-		_arrays.push(new ArrayList<>());
-	}
+	public void arrayStart(SPosition pos) {_kinds.push(_kind = 1); _arrays.push(new ArrayList<>());}
 
 	@Override
 	/** Array ended.
@@ -97,10 +92,7 @@ public class XonObjParser implements XonParser {
 	/** Map started.
 	 * @param pos source position.
 	 */
-	public void mapStart(SPosition pos) {
-		_kinds.push(_kind = 2);
-		_maps.push(new LinkedHashMap<>());
-	}
+	public void mapStart(SPosition pos) {_kinds.push(_kind = 2); _maps.push(new LinkedHashMap<>());}
 
 	@Override
 	/** Map ended.
@@ -125,8 +117,7 @@ public class XonObjParser implements XonParser {
 	public void comment(SBuffer value){/*we ingore it here*/}
 
 	@Override
-	/** X-script item parsed, not used methods for XON/JSON parsing
-	 * (used in X-definition compiler).
+	/** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value of item.
 	 */

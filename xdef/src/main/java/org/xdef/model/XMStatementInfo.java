@@ -50,5 +50,4 @@ public interface XMStatementInfo {
 	 * @return  array of local variables.
 	 */
 	public XMVariable[] getLocalVariables();
-
 }

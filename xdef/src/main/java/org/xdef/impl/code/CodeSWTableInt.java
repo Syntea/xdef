@@ -8,7 +8,6 @@ import static org.xdef.impl.code.CodeTable.SWITCH_I;
  * @author Vaclav Trojan
  */
 public class CodeSWTableInt extends CodeI1 {
-
 	/** List of integer values. */
 	public long[] _list;
 	/** List of addresses. */

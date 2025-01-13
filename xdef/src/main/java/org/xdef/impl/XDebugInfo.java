@@ -13,6 +13,7 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class XDebugInfo implements XMDebugInfo {
+	/** Array with wariables. */
 	XVariable[][] _varTables;
 	/** List of statement info. */
 	List<XStatementInfo> _statementList;
@@ -23,21 +24,17 @@ public class XDebugInfo implements XMDebugInfo {
 	}
 
 	/** Add debug info item and return index.
-	 * @param spos Source position.
+	 * @param pos Source position.
 	 * @param defName name of X-definition.
-	 * @param codeAdr code address.
-	 * @param varTable local variables table.
+	 * @param adr code address.
+	 * @param tab local variables table.
 	 * @return index of debug info item or -1.
 	 */
-	public final int addInfo(final SPosition spos,
-		final String defName,
-		final int codeAdr,
-		final XVariable[] varTable) {
-		SPosition sp = spos.correctPosition();
-		XStatementInfo x = new XStatementInfo(sp.getLineNumber(),
-			sp.getColumnNumber(), sp.getSystemId(), defName, codeAdr, varTable);
-		if (_statementList.isEmpty()
-			|| !_statementList.get(_statementList.size() - 1).equals(x)) {
+	public final int addInfo(final SPosition pos, final String defName, final int adr, final XVariable[] tab){
+		SPosition sp = pos.correctPosition();
+		XStatementInfo x = new XStatementInfo(
+			sp.getLineNumber(), sp.getColumnNumber(), sp.getSystemId(), defName, adr, tab);
+		if (_statementList.isEmpty() || !_statementList.get(_statementList.size() - 1).equals(x)) {
 			int result = _statementList.size();
 			_statementList.add(x);
 			return result;
@@ -57,9 +54,8 @@ public class XDebugInfo implements XMDebugInfo {
 		String sysId = sp.getSystemId();
 		long line = sp.getLineNumber();
 		long column = sp.getColumnNumber();
-		if ((x._sysId != null && x._sysId.equals(sysId) ||
-			x._sysId == null && sysId == null)
-			&& (x._line == line  && x._column < column || x._line <= line)) {
+		if ((x._sysId!=null && x._sysId.equals(sysId)
+			|| x._sysId==null && sysId==null) && (x._line==line  && x._column<column || x._line<=line)) {
 			x._end_line = line;
 			x._end_column = column;
 		}
@@ -98,26 +94,21 @@ public class XDebugInfo implements XMDebugInfo {
 	}
 
 	@Override
-	/** Get array of statement information objects assigned to given
-	 * X-definition and source line.
+	/** Get array of statement information objects assigned to given X-definition and source line.
 	 * @param line source line.
 	 * @param xdName name of X-definition.
-	 * @return array XMStatementInfo objects (if no statement information
-	 * is found the array is empty).
+	 * @return array XMStatementInfo objects (if no statement information is found the array is empty).
 	 */
-	public final XMStatementInfo[] getStatementInfo(final long line,
-		final String xdName) {
+	public final XMStatementInfo[] getStatementInfo(final long line, final String xdName) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo x = _statementList.get(i);
-			if (line == x._line
-				&& ((xdName==null && (x._xdName==null || x._xdName.isEmpty()))
-				|| xdName.equals(x._xdName == null ? "" : x._xdName))) {
+			if (line == x._line && ((xdName==null && (x._xdName==null || x._xdName.isEmpty()))
+				|| xdName.equals(x._xdName==null ? "" : x._xdName))) {
 				int min = i, max = i;
 				for (int j = i + 1; j < _statementList.size(); j++) {
 					XStatementInfo y = _statementList.get(j);
-					if (line == y._line && ((xdName==null &&
-						(y._xdName==null || y._xdName.isEmpty()))
-						|| xdName.equals(y._xdName == null ? "" : y._xdName))) {
+					if (line == y._line && ((xdName==null && (y._xdName==null || y._xdName.isEmpty()))
+						|| xdName.equals(y._xdName==null ? "" : y._xdName))) {
 						max = j;
 					} else {
 						break;
@@ -182,8 +173,7 @@ public class XDebugInfo implements XMDebugInfo {
 		if (si != null) {
 			for (int i = 0; i < _statementList.size(); i++) {
 				if (si == _statementList.get(i)) {
-					return i >= _statementList.size() - 1 ? null :
-						_statementList.get(i + 1);
+					return i >= _statementList.size() - 1 ? null : _statementList.get(i + 1);
 				}
 			}
 		}
@@ -206,7 +196,7 @@ public class XDebugInfo implements XMDebugInfo {
 		return null;
 	}
 
-	final void writeXD(final XDWriter xw) throws IOException {
+	public final void writeXD(final XDWriter xw) throws IOException {
 		int size = _varTables == null ? 0 :_varTables.length;
 		xw.writeInt(size);
 		for (int i = 0; i < size; i++) {
@@ -237,12 +227,10 @@ public class XDebugInfo implements XMDebugInfo {
 		final String xdName,
 		final int codeAdr,
 		final int varTableIndex) {
-		return new XStatementInfo(line,
-			column, spos, xdName, codeAdr, varTableIndex);
+		return new XStatementInfo(line, column, spos, xdName, codeAdr, varTableIndex);
 	}
 
-	final static XDebugInfo readXDebugInfo(final XDReader xr)
-		throws IOException {
+	public final static XDebugInfo readXDebugInfo(final XDReader xr) throws IOException {
 		XDebugInfo xdi = new XDebugInfo();
 		int size = xr.readInt();
 		XVariable[][] tab = new XVariable[size][0];
@@ -262,8 +250,7 @@ public class XDebugInfo implements XMDebugInfo {
 			String spos = xr.readString();
 			String xdName = xr.readString();
 			int varTabIndex = xr.readInt();
-			XStatementInfo x = xdi.newXStatementInfo(line,
-				column, spos, xdName, codeAddr, varTabIndex);
+			XStatementInfo x = xdi.newXStatementInfo(line, column, spos, xdName, codeAddr, varTabIndex);
 			x._end_line = xr.readLong();
 			x._end_column = xr.readLong();
 			xdi._statementList.add(x);
@@ -374,26 +361,21 @@ public class XDebugInfo implements XMDebugInfo {
 			return _varTableIndex < 0 ? null : _varTables[_varTableIndex];
 		}
 		@Override
-		public int hashCode() {
-			return (int) (11*_codeAdr + 7*(_line + 5*(_column+_varTableIndex)));
-		}
+		public int hashCode() {return (int) (11*_codeAdr + 7*(_line + 5*(_column+_varTableIndex)));}
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj == null || !(obj instanceof XStatementInfo)) {
 				return false;
 			}
 			XStatementInfo x = (XStatementInfo) obj;
-			return _line == x._line && _column == x._column &&
-				(_xdName != null && _xdName.equals(x._xdName)
-					|| _xdName == null && x._xdName == null)
+			return _line == x._line && _column == x._column
+				&& (_xdName != null && _xdName.equals(x._xdName) || _xdName == null && x._xdName == null)
 				&& _codeAdr == x._codeAdr && _varTableIndex == x._varTableIndex;
 		}
 		@Override
 		public String toString() {
-			String s = "Line:" + getLine() + ", column: " + getColumn() +
-				", source: " + _sysId +
-				", addr: " + getAddr() + ", tabindex: " + _varTableIndex +
-				", xdef: " + _xdName;
+			String s = "Line:" + getLine() + ", column: " + getColumn() + ", source: " + _sysId +
+				", addr: " + getAddr() + ", tabindex: " + _varTableIndex + ", xdef: " + _xdName;
 			if (_varTableIndex >= 0) {
 				XVariable[] vars = _varTables[_varTableIndex];
 				boolean first = true;
@@ -412,8 +394,7 @@ public class XDebugInfo implements XMDebugInfo {
 
 		final boolean posIn(final long line, final long column) {
 			if (_end_line == -1) {
-				return line == _line
-					&& column >= _column  && column <= _column+2;
+				return line == _line && column >= _column  && column <= _column+2;
 			}
 			if (line == _line) {
 				if (_end_line > line) {

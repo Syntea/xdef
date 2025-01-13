@@ -25,5 +25,4 @@ public interface XMVariableTable {
 	 * @return number of items.
 	 */
 	public int size();
-
 }

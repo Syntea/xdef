@@ -17,7 +17,6 @@ import static org.xdef.XDValueType.STATEMENT;
  * @author Vaclav Trojan
  */
 public class DefSQLStatement extends XDValueAbstract implements XDStatement {
-
 	private PreparedStatement _stmt;
 	private final String _source;
 	private XDConstructor _constructor;
@@ -30,18 +29,16 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	 * @param query string with query statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	DefSQLStatement(Connection conn, String query)
-		throws SRuntimeException {
+	DefSQLStatement(Connection conn, String query) throws SRuntimeException {
 		_source = query;
 		try {
 			_stmt = conn.prepareStatement(query);
 		} catch (SQLException ex) {
 			String msg = ex.getMessage();
-			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
-				throw new SRuntimeException(XDEF.XDEF568, ex);
+				throw new SRuntimeException(XDEF.XDEF568, ex); //Database statement error&{0}{: }
 			}
-			throw new SRuntimeException(XDEF.XDEF568, msg);
+			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
 	@Override
@@ -51,9 +48,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	 * @param constructor constructor for result of statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public void setXDConstructor(XDConstructor constructor) {
-		_constructor = constructor;
-	}
+	public void setXDConstructor(XDConstructor constructor) {_constructor = constructor;}
 	@Override
 	public XDConstructor getXDConstructor() {return _constructor;}
 	@Override
@@ -107,18 +102,16 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	*/
 	public boolean isClosed() {return _stmt == null;}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() { return _stmt == null;}
 	@Override
 	/** Execute statement.
-	 * @param params parameters or <i>null</i>.
+	 * @param params parameters or null.
 	 * @throws SRuntimeException id an error occurs.
 	 */
-	public final XDValue execute(final XDValue params)
-		throws SRuntimeException {
+	public final XDValue execute(final XDValue params) throws SRuntimeException {
 		try {
 			if (params != null) {
 				bind(params);
@@ -127,11 +120,10 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 			return result;
 		} catch(SQLException | SRuntimeException ex) {
 			String msg = ex.getMessage();
-			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
-				throw new SRuntimeException(XDEF.XDEF568, ex);
+				throw new SRuntimeException(XDEF.XDEF568, ex); //Database statement error&{0}{: }
 			}
-			throw new SRuntimeException(XDEF.XDEF568, msg);
+			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
 	@Override
@@ -140,19 +132,17 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDResultSet query(XDValue params)
-		throws SRuntimeException {
+	public XDResultSet query(XDValue params) throws SRuntimeException {
 		return new DefSQLResultSet(this, params);
 	}
 	@Override
 	/** Execute query and return the specified items.
 	 * @param itemName name of items to be returned.
-	 * @param params parameters of statement or <i>null</i>.
+	 * @param params parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final XDResultSet queryItems(String itemName, XDValue params)
-		throws SRuntimeException{
+	public final XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException{
 		return new DefSQLResultSet(this, itemName, params);
 	}
 

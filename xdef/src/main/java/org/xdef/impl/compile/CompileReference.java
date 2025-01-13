@@ -20,17 +20,15 @@ import static org.xdef.model.XMNode.XMDEFINITION;
 import static org.xdef.model.XMNode.XMELEMENT;
 import static org.xdef.model.XMNode.XMSELECTOR_END;
 
-/** Provides an object for resolving references in X-definition source. This
- * object is pseudo XNode and will be replaced by referred object.
+/** Provides an object for resolving references in X-definition source. This object is pseudo XNode and
+ * will be replaced by referred object.
  * @author Vaclav Trojan
  */
 final class CompileReference extends XNode {
-
 	/** Kind of XNode XReference */
 	static final short XMREFERENCE = XMSELECTOR_END + 1;
 	/** Kind of XNode  XINCLUDE */
 	static final short XMINCLUDE = XMREFERENCE + 1;
-
 	private final String _refXdefName;
 	/** The X-definition associated with parent. */
 	private final XDefinition _definition;
@@ -70,7 +68,7 @@ final class CompileReference extends XNode {
 	/** Creates a new instance of XReference.
 	 * @param kind type of object: XMREFERENCE or XMINCLUDE.
 	 * @param parent parent - X-definition or XArchive object.
-	 * @param nsURI name space URI of identifier.
+	 * @param nsURI namespace URI of identifier.
 	 * @param refName reference name.
 	 * @param position source position where the reference was specified.
 	 * @param xsel XSelector object.
@@ -104,26 +102,17 @@ final class CompileReference extends XNode {
 		}
 		setSPosition(position);
 		switch (parent.getKind()) {
-			case XMELEMENT:
-				_definition = ((XElement) parent)._definition;
-				break;
-			case XMDEFINITION:
-				_definition = (XDefinition) parent;
-				break;
-			default:
-				throw new SRuntimeException(XDEF.XDEF202,//Internal error:&{0}
-					"Incorrect reference node: " + parent.getKind() +
-					": " + getName() +
-					(position == null ? ""
-						: (position.getLineNumber() > 0 ?
-						"&{line}" + position.getLineNumber()
-						+ "&{column}" + position.getColumnNumber() : "") +
-						(!position.getSystemId().isEmpty()
-							? "&{sysId}" + position.getSystemId() : "")));
+			case XMELEMENT: _definition = ((XElement) parent)._definition; break;
+			case XMDEFINITION: _definition = (XDefinition) parent; break;
+			default: //Internal error:&{0}
+				throw new SRuntimeException(XDEF.XDEF202,"Incorrect reference node: " + parent.getKind()
+					+ ": " + getName() + (position == null ? ""
+					: (position.getLineNumber() > 0
+						? "&{line}" + position.getLineNumber() + "&{column}" + position.getColumnNumber()
+					: "") + (!position.getSystemId().isEmpty() ? "&{sysId}" + position.getSystemId() : "")));
 		}
 		int ndx = refName.lastIndexOf('#');
-		_refXdefName = ndx > 0 ?
-			refName.substring(0, ndx) : ndx == 0 ? "" : _definition.getName();
+		_refXdefName = ndx > 0 ? refName.substring(0, ndx) : ndx == 0 ? "" : _definition.getName();
 	}
 
 	private static String getRefPart(final String refName) {
@@ -139,10 +128,8 @@ final class CompileReference extends XNode {
 	 */
 	void putTargetError(final ReportWriter reporter) {
 		String s = ((_refXdefName == null || (_refXdefName.length() == 0)
-			? (_definition.getName() + '#' + getName())
-			: (_refXdefName + '#' + getName())));
-		//Referred object doesn't exist: &{0}
-		getSPosition().putReport(Report.error(XDEF.XDEF122, s), reporter);
+			? (_definition.getName() + '#' + getName()) : (_refXdefName + '#' + getName())));
+		getSPosition().putReport(Report.error(XDEF.XDEF122, s),reporter);//Referred object doesn't exist: &{0}
 	}
 
 	/** Get reference target model XNode.
@@ -167,8 +154,7 @@ final class CompileReference extends XNode {
 		int ndx = name.indexOf('/');
 		String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
 		String uri;
-		if (getKind() <= 1 && _parent.getXMDefinition() != xdef) {
-			// uses or inplements
+		if (getKind() <= 1 && _parent.getXMDefinition() != xdef) { // uses or implements
 			uri = _parent.getNSUri();
 		} else {
 			uri = getNSUri();
@@ -209,8 +195,7 @@ final class CompileReference extends XNode {
 		}
 		if (xe == null) {
 			if (mName.endsWith("$choice")) { // mName  may be e.g. name$choice
-				xe = (XElement) xdef.getModel(
-					uri,mName.substring(0,mName.length() - "$choice".length()));
+				xe = (XElement) xdef.getModel(uri,mName.substring(0,mName.length() - "$choice".length()));
 			}
 		}
 		if (xe != null) {
@@ -238,10 +223,10 @@ final class CompileReference extends XNode {
 	public XMDefinition getXMDefinition() {return _definition;}
 	@Override
 	public String toString() {
-		return (getKind() == XMREFERENCE ? "REFERENCE: " + getName() :
-			getKind() == XMINCLUDE ? "INCLUDE: " + getName() :
-			super.toString()) +
-			getNSUri() != null ? '{' + getNSUri() + '}' : "";
+		return (getKind() == XMREFERENCE ? "REFERENCE: " + getName()
+			: getKind() == XMINCLUDE ? "INCLUDE: " + getName()
+			: super.toString()) + getNSUri() != null ? '{' + getNSUri() + '}'
+			: "";
 	}
 	@Override
 	public int getInitCode() {return -1;} //not supported here
@@ -273,11 +258,8 @@ final class CompileReference extends XNode {
 	public int getOnIllegalElementCode() {return -1;} //not supported here
 	@Override
 	public int getVarinitCode() {return -1;} //not supported here
-
 	@Override
-	public final void writeXNode(final XDWriter xw, final List<XNode> list)
-		throws IOException {
-		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
-			"this method can't be called here");
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
+		throw new SRuntimeException(SYS.SYS066, "this method can't be called here");//Internal error&{0}{: }
 	}
 }

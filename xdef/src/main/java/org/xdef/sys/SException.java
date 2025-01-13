@@ -23,10 +23,7 @@ public class SException extends Exception implements SThrowable {
 	/** Creates a new instance of SException.
 	 * @param ex The object which caused the error.
 	 */
-	public SException(final Throwable ex) {
-		this();
-		_cause = ex;
-	}
+	public SException(final Throwable ex) {this(); _cause = ex;}
 
 	/** Creates a new instance of SException with text message.
 	 * @param msg The text of message.
@@ -39,11 +36,7 @@ public class SException extends Exception implements SThrowable {
 	 * @param mod Message modification parameters.
 	 * @param ex The object which caused the error.
 	 */
-	public SException(final long id,
-		final Throwable ex,
-		final Object... mod) {
-		this(Report.error(id, mod), ex);
-	}
+	public SException(final long id,final Throwable ex,final Object... mod) {this(Report.error(id,mod), ex);}
 
 	/** Creates a new instance of SException.
 	 * @param id The message ID
@@ -51,10 +44,7 @@ public class SException extends Exception implements SThrowable {
 	 * @param modif The modification string.
 	 * @param ex The object which caused the error.
 	 */
-	public SException(final String id,
-		final String msg,
-		final Throwable ex,
-		final Object... modif) {
+	public SException(final String id, final String msg, final Throwable ex, final Object... modif) {
 		this(Report.error(id, msg, modif), ex);
 	}
 
@@ -62,10 +52,7 @@ public class SException extends Exception implements SThrowable {
 	 * @param report The Report object.
 	 * @param ex The object which caused the error.
 	 */
-	public SException(final Report report, final Throwable ex) {
-		this(report);
-		_cause = ex;
-	}
+	public SException(final Report report, final Throwable ex) {this(report); _cause = ex;}
 
 	/** Creates a new instance of SException with text message.
 	 * @param msg The text of message.
@@ -76,16 +63,14 @@ public class SException extends Exception implements SThrowable {
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public SException(final long registeredID, final Object... mod) {
-		this(Report.error(registeredID, mod));
-	}
+	public SException(final long registeredID, final Object... mod) {this(Report.error(registeredID, mod));}
 
 	/** Creates a new instance of SException.
 	 * @param id The message ID
 	 * @param msg The text of message.
 	 * @param mod Message modification parameters.
 	 */
-	public SException(final String id, final String msg, final Object... mod){
+	public SException(final String id, final String msg, final Object... mod) {
 		this(Report.error(id, msg, mod));
 		_cause = null;
 	}
@@ -127,9 +112,7 @@ public class SException extends Exception implements SThrowable {
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public final Report getReport() {
-		return Report.error(_msgID, _text, _modification);
-	}
+	public final Report getReport() {return Report.error(_msgID, _text, _modification);}
 
 	@Override
 	/** Get id of message.
@@ -142,9 +125,7 @@ public class SException extends Exception implements SThrowable {
 	 * @return The text of message.
 	 */
 	public final String getMessage() {
-		return _msgID == null
-			? Report.text(null, _text, _modification).toString()
-			: getReport().toString();
+		return _msgID == null ? Report.text(null, _text, _modification).toString() : getReport().toString();
 	}
 
 	@Override
@@ -153,9 +134,7 @@ public class SException extends Exception implements SThrowable {
 	 */
 	public final String getLocalizedMessage() {return getMessage();}
 
-	public static String getMsg(final String id,
-		final String msg,
-		final Object... mod) {
+	public static String getMsg(final String id, final String msg, final Object... mod) {
 		return Report.error(id, msg).getText();
 	}
 

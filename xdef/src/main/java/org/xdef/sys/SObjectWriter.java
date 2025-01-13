@@ -36,8 +36,7 @@ public class SObjectWriter {
 	 * @param x boolean value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeBoolean(final boolean x)
-		throws IOException {
+	synchronized public final void writeBoolean(final boolean x) throws IOException {
 		writeByte((byte) (x ? 1 : 0));
 	}
 
@@ -45,15 +44,13 @@ public class SObjectWriter {
 	 * @param x byte value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeByte(final byte x) throws IOException {
-		_out.write(x);
-	}
+	synchronized public final void writeByte(final byte x) throws IOException {_out.write(x);}
 
 	/** Write short value.
 	 * @param x short value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeShort(final short x) throws IOException{
+	synchronized public final void writeShort(final short x) throws IOException {
 		_out.write(x >> 8);
 		_out.write(x);
 	}
@@ -62,9 +59,7 @@ public class SObjectWriter {
 	 * @param x char value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeChar(final char x) throws IOException {
-		writeShort((short) x);
-	}
+	synchronized public final void writeChar(final char x) throws IOException {writeShort((short) x);}
 
 	/** Write integer value.
 	 * @param x integer value to be written.
@@ -81,7 +76,7 @@ public class SObjectWriter {
 	 * @param x float value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeFloat(final float x) throws IOException{
+	synchronized public final void writeFloat(final float x) throws IOException {
 		writeInt(Float.floatToRawIntBits(x));
 	}
 
@@ -104,8 +99,7 @@ public class SObjectWriter {
 	 * @param x double value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeDouble(final double x)
-		throws IOException {
+	synchronized public final void writeDouble(final double x) throws IOException {
 		writeLong(Double.doubleToRawLongBits(x));
 	}
 
@@ -113,8 +107,7 @@ public class SObjectWriter {
 	 * @param x byte array value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeBytes(final byte[] x)
-		throws IOException {
+	synchronized public final void writeBytes(final byte[] x) throws IOException {
 		if (x == null) {
 			writeLength(Integer.MAX_VALUE);
 		} else {
@@ -128,8 +121,7 @@ public class SObjectWriter {
 	 * @param x BigDecimal value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeBigDecimal(final BigDecimal x)
-		throws IOException {
+	synchronized public final void writeBigDecimal(final BigDecimal x) throws IOException {
 		writeString(x == null ? null : x.toString());
 	}
 
@@ -137,8 +129,7 @@ public class SObjectWriter {
 	 * @param x BigInteger value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeBigInteger(final BigInteger x)
-		throws IOException {
+	synchronized public final void writeBigInteger(final BigInteger x) throws IOException {
 		writeBytes(x == null ? null : x.toByteArray());
 	}
 
@@ -146,8 +137,7 @@ public class SObjectWriter {
 	 * @param x String value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeString(final String x)
-		throws IOException {
+	synchronized public final void writeString(final String x) throws IOException {
 		writeBytes((x == null) ? null : x.getBytes(StandardCharsets.UTF_8));
 	}
 
@@ -155,8 +145,7 @@ public class SObjectWriter {
 	 * @param x SPosition value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeSPosition(final SPosition x)
-		throws IOException {
+	synchronized public final void writeSPosition(final SPosition x) throws IOException {
 		if (x == null) {
 			writeBoolean(false);
 		} else {
@@ -169,8 +158,7 @@ public class SObjectWriter {
 	 * @param x SDatetime value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeSDatetime(final SDatetime x)
-		throws IOException {
+	synchronized public final void writeSDatetime(final SDatetime x) throws IOException {
 		if (x == null) {
 			writeBoolean(false);
 		} else {
@@ -183,8 +171,7 @@ public class SObjectWriter {
 	 * @param x SDuration value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeSDuration(final SDuration x)
-		throws IOException {
+	synchronized public final void writeSDuration(final SDuration x) throws IOException {
 		if (x == null) {
 			writeBoolean(false);
 		} else {
@@ -197,8 +184,7 @@ public class SObjectWriter {
 	 * @param x Report value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeReport(final Report x)
-		throws IOException {
+	synchronized public final void writeReport(final Report x) throws IOException {
 		if (x == null) {
 			writeBoolean(false);
 		} else {
@@ -211,8 +197,7 @@ public class SObjectWriter {
 	 * @param x BNFGrammar value to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	synchronized public final void writeBNFGrammar(final BNFGrammar x)
-		throws IOException {
+	synchronized public final void writeBNFGrammar(final BNFGrammar x) throws IOException {
 		if (x == null) {
 			writeBoolean(false);
 		} else {

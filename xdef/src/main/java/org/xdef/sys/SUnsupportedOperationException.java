@@ -5,8 +5,7 @@ import org.xdef.msg.SYS;
 /** Extension of SUnsupportedOperationException implementing SThrowable.
  * @author Vaclav Trojan
  */
-public class SUnsupportedOperationException
-	extends UnsupportedOperationException implements SThrowable {
+public class SUnsupportedOperationException extends UnsupportedOperationException implements SThrowable {
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -7555233586913590382L;
 	/** Cause of exception. */
@@ -18,32 +17,27 @@ public class SUnsupportedOperationException
 	/** Report modification (may be null). */
 	private String _modification;
 
-	/** Creates a new instance of <code>SUnsupportedOperationException</code>
-	 * with message containing class name and method name.
+	/** Creates a new instance of SUnsupportedOperationException with message containing
+	 * class name and method name.
 	 */
 	public SUnsupportedOperationException() {
 		super();
 		StackTraceElement ste = getStackTrace()[0];
 		//Unsupported operation &{0}&{1}{; }
-		setReport(Report.error(SYS.SYS090,
-			ste.getClassName() + '.' + ste.getMethodName()));
+		setReport(Report.error(SYS.SYS090, ste.getClassName() + '.' + ste.getMethodName()));
 	}
 
-	/** Constructs an instance of <code>SUnsupportedOperationException</code>
-	 * with the specified detail message.
+	/** Constructs an instance of SUnsupportedOperationException with the specified detail message.
 	 * @param msg the detail message.
 	 */
 	public SUnsupportedOperationException(final String msg) {this(null, msg);}
 
-	/** Constructs a new exception with the specified cause and a detail
-	 * message of (cause==null ? null : cause.toString()) (which typically
-	 * contains the class and detail message of cause). This constructor is
-	 * useful for exceptions that are little more than wrappers for other
-	 * throwables (for example, PrivilegedActionException).
-	 * with the specified detail message.
-	 * @param cause the cause (which is saved for later retrieval by the
-	 * Throwable.getCause() method). (A null value is permitted, and indicates
-	 * that the cause is nonexistent or unknown.)
+	/** Constructs a new exception with the specified cause and a detail message of
+	 * (cause==null ? null : cause.toString()) (which typically contains the class and detail message
+	 * of cause). This constructor is useful for exceptions that are little more than wrappers for other
+	 * throwables (for example, PrivilegedActionException) with the specified detail message.
+	 * @param cause the cause (which is saved for later retrieval by the Throwable.getCause() method).
+	 * (A null value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 */
 	public SUnsupportedOperationException(final Throwable cause) {
 		this(null, cause == null ? "" : cause.getMessage(), cause);
@@ -51,14 +45,10 @@ public class SUnsupportedOperationException
 
 	/** Constructs a new exception with the specified detail message and cause.
 	 * @param msg the detail message.
-	 * @param cause - the cause (which is saved for later retrieval by the
-	 * Throwable.getCause() method). (A null value is permitted, and indicates
-	 * that the cause is nonexistent or unknown.)
+	 * @param cause - the cause (which is saved for later retrieval by the Throwable.getCause() method).
+	 * (A null value is permitted, and indicates that the cause is nonexistent or unknown.)
 	 */
-	public SUnsupportedOperationException(final String msg,
-		final Throwable cause) {
-		this(null, msg, cause);
-	}
+	public SUnsupportedOperationException(final String msg, final Throwable cause) {this(null, msg, cause);}
 
 	/** Creates a new instance of SUnsupportedOperationException.
 	 * @param id The message ID
@@ -79,9 +69,7 @@ public class SUnsupportedOperationException
 	 * @param msg The text of message.
 	 * @param mod The modification parameters.
 	 */
-	public SUnsupportedOperationException(final String id,
-		final String msg,
-		final Object... mod) {
+	public SUnsupportedOperationException(final String id, final String msg, final Object... mod) {
 		super(SException.getMsg(id, msg, mod));
 		_msgID = id;
 		_text = msg;
@@ -90,13 +78,10 @@ public class SUnsupportedOperationException
 
 	/** Creates a new instance of SUnsupportedOperationException with
 	 * registered message.
-	 * @param registeredID registered message ID.
+	 * @param ID registered message ID.
 	 * @param mod The modification parameters.
 	 */
-	public SUnsupportedOperationException(final long registeredID,
-		final Object... mod) {
-		this(Report.error(registeredID, mod));
-	}
+	public SUnsupportedOperationException(final long ID, final Object... mod) {this(Report.error(ID, mod));}
 
 	/** Creates a new instance of SUnsupportedOperationException.
 	 * @param report The Report object.
@@ -112,11 +97,7 @@ public class SUnsupportedOperationException
 	 * @param report The Report object.
 	 * @param ex The object which caused the error.
 	 */
-	public SUnsupportedOperationException(final Report report,
-		final Throwable ex) {
-		this(report);
-		_cause = ex;
-	}
+	public SUnsupportedOperationException(final Report report, final Throwable ex) {this(report);_cause = ex;}
 
 	@Override
 	/** Set cause of exception.
@@ -125,7 +106,7 @@ public class SUnsupportedOperationException
 	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
-	/** Get cause of exception. If cause was not set return <i>null</i>.
+	/** Get cause of exception. If cause was not set return null.
 	 * @return cause The object with cause data.
 	 */
 	public final Throwable getCause() {return _cause;}
@@ -144,13 +125,11 @@ public class SUnsupportedOperationException
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public final Report getReport() {
-		return Report.error(_msgID, _text, _modification);
-	}
+	public final Report getReport() {return Report.error(_msgID, _text, _modification);}
 
 	@Override
 	/** Get id of message.
-	 * @return The message id (may be <i>null</i>).
+	 * @return The message id (may be null).
 	 */
 	public final String getMsgID() {return _msgID;}
 
@@ -159,9 +138,7 @@ public class SUnsupportedOperationException
 	 * @return The text of localized message.
 	 */
 	public final String getMessage() {
-		return _msgID == null
-			? Report.text(null, _text, _modification).toString()
-			: getReport().toString();
+		return _msgID == null ? Report.text(null, _text, _modification).toString() : getReport().toString();
 	}
 
 	@Override

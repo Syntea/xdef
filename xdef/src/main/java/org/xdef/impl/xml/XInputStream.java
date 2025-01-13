@@ -20,8 +20,7 @@ public class XInputStream extends XAbstractInputStream {
 	 * @param encoding name of encoding table.
 	 * @throws IOException if an error occurs.
 	 */
-	public XInputStream(final InputStream in, final String encoding)
-		throws IOException {
+	public XInputStream(final InputStream in, final String encoding) throws IOException {
 		super(in);
 		_encoding = encoding == null ? "UTF-8" : encoding;
 		_standalone = false;
@@ -48,13 +47,11 @@ public class XInputStream extends XAbstractInputStream {
 			&& !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
 			s = bytesToString(buf, 0, len, encoding);
 			int i;
-			while (s.length() < 2
-				&& (i = readChar(in, encoding, buf, count, baos)) != -1) {
+			while (s.length() < 2 && (i = readChar(in, encoding, buf, count, baos)) != -1) {
 				s += (char) i;
 			}
 			if (s.startsWith("<?")) {
-				while (s.length() < 5
-					&& (i=readChar(in, encoding,buf,count,baos)) != -1) {
+				while (s.length() < 5 && (i=readChar(in, encoding,buf,count,baos)) != -1) {
 					if (i == -1) {
 						break;
 					}
@@ -71,7 +68,7 @@ public class XInputStream extends XAbstractInputStream {
 						break;
 					}
 					s += (char) i;
-					if(i == '?' || i == '>') {
+					if (i == '?' || i == '>') {
 						break;
 					}
 				}
@@ -96,8 +93,7 @@ public class XInputStream extends XAbstractInputStream {
 	 * @param source
 	 * @return value of required parameter or null.
 	 */
-	private static String getXMLHeaderParam(final String paramName,
-		final String source) {
+	private static String getXMLHeaderParam(final String paramName, final String source) {
 		int ndx = source.indexOf(paramName);
 		if (ndx > 0) {
 			int ndx1 = source.indexOf('=', ndx + paramName.length());

@@ -11,10 +11,8 @@ import org.xdef.proc.XXNode;
 public class XDParseJBoolean extends XSParseBoolean {
 	private static final String ROOTBASENAME = "jboolean";
 
-	public XDParseJBoolean() {
-		super();
-		_whiteSpace = WS_PRESERVE;
-	}
+	public XDParseJBoolean() {super(); _whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public void initParams() {_whiteSpace = WS_PRESERVE;}
 	@Override
@@ -44,8 +42,7 @@ public class XDParseJBoolean extends XSParseBoolean {
 		int pos = p.getIndex();
 		int i = p.isOneOfTokens("false", "true");
 		if (i < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();

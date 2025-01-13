@@ -17,9 +17,7 @@ public class XXException extends SRuntimeException {
 	 * @param msg The text of message.
 	 * @param ex The object which caused the error.
 	 */
-	public XXException(final String msg, final Throwable ex) {
-		super(null, msg, ex);
-	}
+	public XXException(final String msg, final Throwable ex) {super(null, msg, ex);}
 
 	/** Creates a new instance of XXException.
 	 * @param id The message ID
@@ -27,10 +25,7 @@ public class XXException extends SRuntimeException {
 	 * @param mod Message modification parameters.
 	 * @param ex The object which caused the error.
 	 */
-	public XXException(final String id,
-		final String msg,
-		final Throwable ex,
-		final Object... mod) {
+	public XXException(final String id, final String msg, final Throwable ex, final Object... mod) {
 		super(Report.error(id, msg, ex, mod));
 	}
 
@@ -38,9 +33,7 @@ public class XXException extends SRuntimeException {
 	 * @param report The Report object.
 	 * @param ex The object which caused the error.
 	 */
-	public XXException(final Report report, final Throwable ex) {
-		super(report, ex);
-	}
+	public XXException(final Report report, final Throwable ex) {super(report, ex);}
 
 	/** Creates a new instance of XXException. */
 	public XXException() {super(null, "");}
@@ -54,17 +47,13 @@ public class XXException extends SRuntimeException {
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public XXException(final long registeredID, final Object... mod) {
-		super(Report.error(registeredID, mod));
-	}
+	public XXException(final long registeredID, final Object... mod) {super(Report.error(registeredID, mod));}
 
 	/** Creates a new instance of XXException.
 	 * @param id The message ID
 	 * @param msg The text of message.
 	 */
-	public XXException(final String id, final String msg) {
-		super(Report.error(id, msg));
-	}
+	public XXException(final String id, final String msg) {super(Report.error(id, msg));}
 
 	/** Creates a new instance of XXException.
 	 * @param id The message ID

@@ -31,7 +31,6 @@ import static org.xdef.impl.code.CodeTable.COMPILE_XPATH;
  * @author Vaclav Trojan
  */
 public final class DefXPathExpr extends KXpathExpr implements XDValue {
-
 	public XPathFunctionResolver _fr;
 	public XPathVariableResolver _vr;
 	public NamespaceContext _nc;
@@ -43,7 +42,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	 * @param vr Variable resolver or null.
 	 */
 	public DefXPathExpr(final String source,
-		NamespaceContext nc,
+		final NamespaceContext nc,
 		final XPathFunctionResolver fr,
 		final XPathVariableResolver vr) {
 		super(source, nc, fr, vr);
@@ -63,12 +62,10 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	 * @param node node or null.
 	 * @return result of XPath expression.
 	 */
-	public XDContainer exec(final Node node) {
-		return exec(node, false);
-	}
+	public XDContainer exec(final Node node) {return exec(node, false);}
 
 	/** Execute XPath expression and return result (it can repeat execution).
-	 * @param node node or <i>null</i>.
+	 * @param node node or null.
 	 * @param invoked if false it can be invoke again (if exception thrown)
 	 * @return result of XPath expression.
 	 */
@@ -81,8 +78,8 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 			if (o instanceof NodeList) {
 				NodeList nl = (NodeList) o;
 				int size = nl.getLength();
-				return size == 0 ? new DefContainer() : size == 1
-					? new DefContainer(nl.item(0)): new DefContainer(nl);
+				return size == 0
+					? new DefContainer() : size == 1 ? new DefContainer(nl.item(0)): new DefContainer(nl);
 			}
 			DefContainer result;
 			if (o instanceof Number) {
@@ -101,16 +98,14 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 			return result;
 		} catch (Exception ex) {
 			try {
-				return new DefContainer(
-					(String) evaluate(node, XPathConstants.STRING));
+				return new DefContainer((String) evaluate(node, XPathConstants.STRING));
 			} catch (Exception ex1) {
 				// Very nasted trick!!! (maybe bind???)
 				if (!invoked) {
 					XPathVariableResolver xpvr = getVariableResolver();
 					XCodeProcessor.XDVariableResolver x;
-					if (xpvr != null
-						&& (xpvr instanceof XCodeProcessor.XDVariableResolver)
-						&& (x=(XCodeProcessor.XDVariableResolver) xpvr).XPATH2){
+					if (xpvr != null && (xpvr instanceof XCodeProcessor.XDVariableResolver)
+						&& (x = (XCodeProcessor.XDVariableResolver) xpvr).XPATH2) {
 						x.convertToString = true;
 						return exec(node, true);// try to execute it again
 					}
@@ -123,48 +118,39 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
 	public short getItemId() {return XD_XPATH;}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public XDValueType getItemType() {return XPATH;}
-
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return toString();}
-
 	@Override
 	/** Clone the item - used internally in XD processor.
 	 * @return the object with the copy of this one.
 	 */
 	public XDValue cloneItem() {return this;}
-
 	@Override
 	public Object getObject() {return this;}
-
 	@Override
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.
 	 */
 	public byte[] getBytes() {return null;}
-
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return always <i>false</i>.
+	 * @return always false.
 	 */
 	public boolean equals(final XDValue arg) {return arg == this;}
-
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
@@ -177,14 +163,11 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() { return false;}
-
 	@Override
 	public char charValue() {return 0;}
 	@Override

@@ -45,7 +45,6 @@ public class XSParseDate extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
-
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
@@ -65,12 +64,9 @@ public class XSParseDate extends XSAbstractParseComparable {
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
 		checkDate(xnode, p);
 	}
-
 	boolean parse(final StringParser parser) {return parser.isXMLDate();}
-
 	@Override
 	public short parsedType() {return XD_DATETIME;}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

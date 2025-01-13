@@ -11,6 +11,7 @@ public class XDParseNum extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "num";
 
 	public XDParseNum() {super();}
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -18,14 +19,12 @@ public class XDParseNum extends XSAbstractParseToken {
 		int pos = p.getIndex();
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
 		if (p.isDigit() < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		while(p.isDigit() >= 0) {}
 		if (quoted && !p.isChar('"')) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.setParsedValue(p.getBufferPart(pos, p.getIndex()));

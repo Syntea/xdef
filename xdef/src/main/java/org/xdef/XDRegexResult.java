@@ -47,11 +47,9 @@ public final class XDRegexResult extends XDValueAbstract {
 		}
 	}
 
-	/** Get the start index of the subsequence captured by the given group
-	 * during the previous match operation.
+	/** Get the start index of subsequence captured by the given group during the previous match operation.
 	 * @param index The index of a capturing group in pattern.
-	 * @return the start index of the subsequence captured by the given group
-	 * or -1.
+	 * @return the start index of the subsequence captured by the given group or -1.
 	 */
 	public final int groupStart(final int index) {
 		try {
@@ -61,8 +59,8 @@ public final class XDRegexResult extends XDValueAbstract {
 		}
 	}
 
-	/** Get the offset after the last character of the subsequence captured
-	 * by the given group during the previous match operation or -1.
+	/** Get the offset after the last character of the subsequence captured by given group during the previous
+	 * match operation or -1.
 	 * @param index The index of a capturing group in pattern.
 	 * @return offset after the last character of the subsequence or -1.
 	 */

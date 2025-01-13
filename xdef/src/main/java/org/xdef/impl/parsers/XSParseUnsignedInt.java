@@ -11,7 +11,9 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XSParseUnsignedInt extends XSParseLong {
 	private static final String ROOTBASENAME = "unsignedInt";
+
 	public XSParseUnsignedInt() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		super.parseObject(xnode, p);
@@ -20,8 +22,7 @@ public class XSParseUnsignedInt extends XSParseLong {
 		}
 		long val = p.getParsedValue().longValue();
 		if (val > 4294967295L || val < 0) {
-			//Value of '&{0}' is out of range&{1}{: }
-			p.error(XDEF.XDEF806, parserName(), val);
+			p.error(XDEF.XDEF806, parserName(), val); //Value of '&{0}' is out of range&{1}{: }
 		}
 	}
 	@Override
@@ -30,8 +31,7 @@ public class XSParseUnsignedInt extends XSParseLong {
 	public void checkValue(final XDValue x) {
 		long val =  x.longValue();
 		if (val > 4294967295L || val < 0) {
-			//Incorrect range specification of &{0}
-			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
 		}
 	}
 	@Override

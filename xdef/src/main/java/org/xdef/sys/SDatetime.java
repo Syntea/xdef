@@ -99,18 +99,12 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @param source ISO8601 format of date.
 	 * @throws SRuntimeException if argument is not ISO8601 format of date.
 	 */
-	public SDatetime(final String source) throws SRuntimeException {
-		this(parse(source));
-		setOriginalValues();
-	}
+	public SDatetime(final String source) throws SRuntimeException {this(parse(source)); setOriginalValues();}
 
 	/** Create new instance of SDatetime with parameters from argument.
 	 * @param c Calendar object with date.
 	 */
-	public SDatetime(final Calendar c) {
-		setCalendar(c);
-		setOriginalValues();
-	}
+	public SDatetime(final Calendar c) {setCalendar(c); setOriginalValues();}
 
 	/** Create new instance of SDatetime with parameters from argument.
 	 * @param d Date object with date.
@@ -182,7 +176,9 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @param fraction fraction of second (must be greater or equal to 0
 	 * @param tz TimeZone or null.
 	 */
-	public SDatetime(final int year, final int month, final int day,
+	public SDatetime(final int year,
+		final int month,
+		final int day,
 		final int hour,
 		final int minute,
 		final int second,
@@ -242,18 +238,14 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	private static int modulo(final int a, final int b) {return a - iQuotient(a,b)*b;}
 
 	/** fQuotient(a, low, high) = iQuotient(a - low, high - low) */
-	private static int fQuotient(final int a, final int low, final int high) {
-		return iQuotient(a - low, high - low);
-	}
+	private static int fQuotient(final int a,final int low,final int high) {return iQuotient(a-low,high-low);}
 
 	/** modulo(a, low, high) = modulo(a - low, high - low) + low */
-	private static int modulo(final int a, final int low, final int high) {
-		return modulo(a - low, high - low) + low;
-	}
+	private static int modulo(final int a,final int low,final int high) {return modulo(a-low, high-low)+low;}
 
 	/** Create new datetime with added values of parameters (each parameter may be negative).
 	 * @param years number of years to add.
-	 * @param months number of monthss to add.
+	 * @param months number of months to add.
 	 * @param days number of days to add.
 	 * @param hours number of hours to add.
 	 * @param minutes number of minutes to add.
@@ -308,8 +300,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				day = day - maximumDayInMonthFor(year, month);
 				carry = 1;
 			} else {
-				return new SDatetime(year == 0 ? Integer.MIN_VALUE : year,
-					month, day, hour, minute, second, fract, _tz);
+				return new SDatetime(
+					year == 0 ? Integer.MIN_VALUE : year, month, day, hour, minute, second, fract, _tz);
 			}
 			nseconds = month + carry;
 			month = modulo(nseconds, 1, 13);
@@ -323,7 +315,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	public final boolean chkDatetime() {
 		if (_tz != null) {
 			int i = _tz.getRawOffset();
-			if (i < -50400000 /*-14:00*/ || i > 50400000 /*+14:00*/ 	|| i % 60000 != 0) {
+			if (i < -50400000 /*-14:00*/ || i > 50400000 /*+14:00*/ || i % 60000 != 0) {
 				return false; //not multiple of minutes -> incorrect zone offset
 			}
 		}
@@ -350,18 +342,15 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				return _month <= 12 && (_hour < 24 && _minute < 60 && _second < 60
 					|| _hour == 24 && _minute == 0 && _second == 0);
 			} else if (_day == 31) {
-				if (_month == 1 || _month == 3 || _month == 5 || _month == 7 || _month == 8
-					|| _month == 10 || _month == 12) {
-					return _hour < 24 && _minute < 60 && _second < 60
-						|| _hour == 24 && _minute == 0 && _second == 0;
+				if (_month==1|| _month==3 || _month==5 || _month==7 || _month==8 || _month==10 || _month==12){
+					return _hour<24 && _minute<60 && _second<60 || _hour==24 && _minute==0 && _second==0;
 				}
 				return false;
 			} else if (_month == 2) { // February
 				if (_day > 29 || (_day==29 && _year!=Integer.MIN_VALUE && !isLeapYear(_year)) ) {
 					return false;
 				}
-				return _hour < 24 && _minute < 60 && _second < 60
-					|| _hour == 24 && _minute == 0 && _second == 0;
+				return _hour<24 && _minute<60 && _second<60 || _hour==24 && _minute==0 && _second==0;
 			} else { // 30 days
 				return _month <= 12 && _day <= 30 && (_hour < 24 && _minute < 60 && _second < 60
 					|| _hour == 24 && _minute == 0 && _second == 0);
@@ -395,8 +384,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			_minute = c.isSet(Calendar.MINUTE) ? c.get(Calendar.MINUTE) : Integer.MIN_VALUE;
 			_second = c.isSet(Calendar.MINUTE) ? c.get(Calendar.SECOND) : Integer.MIN_VALUE;
 			if (c.isSet(Calendar.MILLISECOND)) {
-				_fraction = c.get(Calendar.MILLISECOND)/1000.0D;
-//				_fraction = _fraction == 0.0D ? Double.MIN_NORMAL : _fraction;
+				_fraction = c.get(Calendar.MILLISECOND) / 1000.0D;
 			}
 			if ((_tz=c.getTimeZone()) != null && "_null_".equals(_tz.getID())) {
 				_tz = null;
@@ -512,29 +500,28 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		if (_hour == Integer.MIN_VALUE) {
 			if (_year != Integer.MIN_VALUE) {
 				if (_month == Integer.MIN_VALUE) {
-					return formatDate("yyyy" + (_tz==null?"":"Z"));
+					return formatDate("yyyy" + (_tz==null ? "" : "Z"));
 				}
 				if (_day == Integer.MIN_VALUE) {
-					return formatDate("yyyy-MM" + (_tz==null?"":"Z"));
+					return formatDate("yyyy-MM" + (_tz==null ? "" : "Z"));
 				}
-				return formatDate("yyyy-MM-dd" + (_tz==null?"":"Z"));
+				return formatDate("yyyy-MM-dd" + (_tz==null ? "" : "Z"));
 			}
 			if (_month != Integer.MIN_VALUE) {
 				if (_day != Integer.MIN_VALUE) {
-					return formatDate("--MM-dd" + (_tz==null?"":"Z"));
+					return formatDate("--MM-dd" + (_tz==null ? "" : "Z"));
 				}
-				return formatDate("--MM" + (_tz==null?"":"Z"));
+				return formatDate("--MM" + (_tz==null ? "" : "Z"));
 			}
 			if (_day != Integer.MIN_VALUE) {
 				return formatDate("---dd" + (_tz==null?"":"Z"));
 			}
-			return formatDate("" + (_tz==null?"":"Z"));
+			return formatDate("" + (_tz==null ? "" : "Z"));
 		} else if (_year == Integer.MIN_VALUE && _minute != Integer.MIN_VALUE) {
 			if (_second == Integer.MIN_VALUE) {
-				return formatDate("HH:mm" + (_tz==null?"":"Z"));
+				return formatDate("HH:mm" + (_tz==null ? "" : "Z"));
 			}
-			return formatDate("HH:mm:ss"
-				+ (_fraction > Double.MIN_NORMAL ? ".S" : "") + (_tz==null ? "" : "Z"));
+			return formatDate("HH:mm:ss" + (_fraction>Double.MIN_NORMAL ? ".S" : "") + (_tz==null?"":"Z"));
 		}
 		return formatDate("yyyy-MM-ddTHH:mm:ss"+(_fraction>Double.MIN_NORMAL ? ".S":"") + (_tz==null?"":"Z"));
 	}
@@ -584,9 +571,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	/** Get milliseconds from this date. If millisecond is undefined return 0.
 	 * @return millisecond from this date or 0.
 	 */
-	public final int getMillisecond() {
-		return _fraction > Double.MIN_NORMAL ? (int) round(_fraction*1000.0D) : 0;
-	}
+	public final int getMillisecond(){return _fraction>Double.MIN_NORMAL ? (int)round(_fraction*1000.0D): 0;}
 
 	/** Get nanoseconds from this date. If nanosecond is undefined return 0.
 	 * @return millisecond from this date or 0.
@@ -630,9 +615,9 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		synchronized(this) {
 			_fraction = millis != 0 ? (millis % 1000) / 1000.0D : 0.0D; //Double.MIN_NORMAL ???
 			int nmillis;
-			_second = (nmillis = millis/1000)%60;
-			_minute = (nmillis = nmillis/60)%60;
-			_hour = (nmillis/60)%24;
+			_second = (nmillis = millis / 1000) % 60;
+			_minute = (nmillis = nmillis / 60) % 60;
+			_hour = (nmillis / 60) % 24;
 			_calendar = null;
 		}
 	}
@@ -695,7 +680,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @throws SRuntimeException if milliseconds is not in interval 0..999.
 	 */
 	public final void setMillisecond(final int millis) throws SRuntimeException {
-		if (millis != Integer.MIN_VALUE && (millis < 0 || millis > 1000)) {
+		if (millis != Integer.MIN_VALUE && (millis < 0 || millis >= 1000)) {
 			//Data error&{0}{: }
 			throw new SRuntimeException(SYS.SYS072, "milliseconds out of interval 0..999");
 		}
@@ -710,7 +695,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @throws SRuntimeException if milliseconds is not in interval 0..999.
 	 */
 	public final void setNanos(final int nanos) throws SRuntimeException {
-		if (nanos != Integer.MIN_VALUE && (nanos < 0 || nanos > 1000000000)) {
+		if (nanos != Integer.MIN_VALUE && (nanos < 0 || nanos >= 1000000000)) {
 			 //Data error&{0}{: }
 			throw new SRuntimeException(SYS.SYS072, "milliseconds out of interval 0..999");
 		}
@@ -850,8 +835,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	public final void setLastDayOfMonth() {setDay(getLastDayOfMonth());}
 
 	/** Get Easter Monday. The algorithm used here was published in
-	 * the Explanatory Supplement to the Astronomical Almanac,
-	 * Oudin J.M. (1940),  ed. Seidelmann P. K. (1992).
+	 * the Explanatory Supplement to the Astronomical Almanac, Oudin J.M. (1940), ed. Seidelmann P. K. (1992).
 	 * @return SDatetime object with Easter Monday.
 	 * @throws SRuntimeException if Easter Monday can't be computed.
 	 */
@@ -896,17 +880,16 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	/** Get the number of milliseconds the date differs from this object. The number returned
 	 * is based on the number of milliseconds the date is from the January 1, 1970, 00:00:00 GMT.
 	 * @param x time to be subtracted.
-	 * @return The number of milliseconds the date from the argument differs the date from this
-	 * object. If the date from the argument is before the date from this object the returned value
-	 * is negative.
+	 * @return The number of milliseconds the date from the argument differs the date from this object.
+	 * If the date from the argument is before the date from this object the returned value is negative.
 	 */
 	public final long getTimeDifference(final SDatetime x) {return getTimeInMillis() - x.getTimeInMillis();}
 
 	/** Get the number of milliseconds the date differs from this object. The number returned
 	 * is based on the number of milliseconds the date is from the January 1, 1970, 00:00:00 GMT.
 	 * @param x time to be subtracted.
-	 * @return differs of milliseconds this date from the argument. If the date from the argument
-	 * is before the date from this object the returned value is negative.
+	 * @return differs of milliseconds this date from the argument. If the date from the argument is before
+	 * the date from this object the returned value is negative.
 	 */
 	public final long timeDifference(final Calendar x) {return getTimeInMillis() - x.getTimeInMillis();}
 
@@ -1060,8 +1043,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @return the relationship between this SDatetime and the parameter.
 	 * @throws SIllegalArgumentException if  this object is not comparable with the argument.
 	 */
-	public final int compareTo(final SDatetime arg)
-		throws SIllegalArgumentException {
+	public final int compareTo(final SDatetime arg) throws SIllegalArgumentException {
 		SDatetime a1 = new SDatetime(this);
 		SDatetime a2 = new SDatetime(arg);
 		TimeZone tz1 = a1._tz;
@@ -1114,6 +1096,26 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 */
 	public final boolean equals(final SDatetime arg) {return compareTo(arg) == 0;}
 
+	@Override
+	public final int hashCode() {
+		synchronized(this) {
+			int hash = ((((((_day*3+_month)*5+_year)*7+_hour)*11+_minute)*13+_second)*17+getMillisecond())*23;
+			return  (_tz != null ? hash * 31 + _tz.hashCode() : hash);
+		}
+	}
+
+	@Override
+	/** Get printable format of SDatetime.
+	 * @return string with ISO 8601 format of SDatetime object.
+	 */
+	public final String toString() {return toISO8601();}
+
+	/** Clone SDatetime object.
+	 * @return new SDatetime object as a clone this one.
+	 */
+	@Override
+	public final Object clone() {return new SDatetime(this);}
+
 	/** Compare current object with given argument (both values are first converted to UTC).
 	 * @param arg object to be compared.
 	 * @return true if current time of this SDatetime is equal to the time and date from argument.
@@ -1144,14 +1146,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		return false;
 	}
 
-	@Override
-	public final int hashCode() {
-		synchronized(this) {
-			int hash = ((((((_day*3+_month)*5+_year)*7+_hour)*11+_minute)*13+_second)*17+getMillisecond())*23;
-			return  (_tz != null ? hash * 31 + _tz.hashCode() : hash);
-		}
-	}
-
 	/** Compare current date with given argument.
 	 * @param obj object to be compared (can be instance of SDatetime, Date or Calendar).
 	 * @return true if current date of this SDatetime is equal to the date from argument.
@@ -1176,8 +1170,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		}
 	}
 
-	/** Compare current day time with given argument (local time is compared, both values
-	 * are NOT converted to UTC).
+	/** Compare current day time with given argument. Local time is compared, values are NOT converted to UTC.
 	 * @param obj object to be compared (can be instance of SDatetime, Date or Calendar).
 	 * @return true if current day time of this SDatetime is equal to the day time from argument.
 	 */
@@ -1197,16 +1190,14 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			}
 		}
 		Calendar c1 = getCalendar();
-		return c.get(Calendar.HOUR_OF_DAY) == c1.get(Calendar.HOUR_OF_DAY) &&
-			c.get(Calendar.MINUTE) == c1.get(Calendar.MINUTE)  &&
-			c.get(Calendar.SECOND) == c1.get(Calendar.SECOND) &&
-			c.get(Calendar.MILLISECOND) == c1.get(Calendar.MILLISECOND);
+		return c.get(Calendar.HOUR_OF_DAY) == c1.get(Calendar.HOUR_OF_DAY)
+			&& c.get(Calendar.MINUTE) == c1.get(Calendar.MINUTE)
+			&& c.get(Calendar.SECOND) == c1.get(Calendar.SECOND)
+			&& c.get(Calendar.MILLISECOND) == c1.get(Calendar.MILLISECOND);
 	}
 
-	/** Get difference of calendar days with given argument without respect to
-	 * time zone offset.
-	 * @param obj object to be subtracted (can be instance of SDatetime,
-	 * Date or Calendar).
+	/** Get difference of calendar days with given argument without respect to time zone offset.
+	 * @param obj object to be subtracted (can be instance of SDatetime, Date or Calendar).
 	 * @return difference of calendar days.
 	 */
 	public final int getCalendarDaysDifference(final Object obj) {
@@ -1262,30 +1253,17 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	/** Convert day time to UTC. */
 	public final void toUTC() {toTimeZone(TimeZone.getTimeZone("UTC"));}
 
-	@Override
-	/** Get printable format of SDatetime.
-	 * @return string with ISO 8601 format of SDatetime object.
-	 */
-	public final String toString() {return toISO8601();}
-
-	/** Clone SDatetime object.
-	 * @return new SDatetime object as a clone this one.
-	 */
-	@Override
-	public final Object clone() {return new SDatetime(this);}
-
 	/** Check format of datetime.
 	 * @param format string with format.
-	 * @return integer where upper byte contain zone information and lower three bytes contains
-	 * number of repetition of millisecond pattern.
+	 * @return integer where upper byte contain zone information and lower three bytes contains number of
+	 * repetition of millisecond pattern.
 	 * @throws SRuntimeException if format is not correct.
 	 */
 	public final static int checkFormat(final String format) throws SRuntimeException {
 		int flen = format.length();
 		int ms = 0; //number of repetition of millisecond pattern
 		int zone = 0; //number of repetition of zone pattern
-		// Scan format and find milliseconds format to be able eventualy to round up millisendonds
-		// and seconds fields
+		//Scan format and find milliseconds format to be able eventualy to round up millis and seconds fields
 		int optional = 0;
 		char pat;
 		for (int fpos = 0; fpos < flen;) {
@@ -1446,8 +1424,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		int ms = checkFormat(format) & 0xffff; // number of repetition of millisecond pattern
 		DateFormatSymbols dfs = SDatetime.DFS;
 		Calendar calendar = getCalendar();
-		int year = calendar.get(Calendar.ERA) == 0
-			? - (calendar.get(Calendar.YEAR) - 1) : calendar.get(Calendar.YEAR);
+		int year = calendar.get(Calendar.ERA)==0
+			? -(calendar.get(Calendar.YEAR) - 1) : calendar.get(Calendar.YEAR);
 		int sec = calendar.get(Calendar.SECOND);
 		int min = calendar.get(Calendar.MINUTE);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -1534,8 +1512,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 						sb.append(format.charAt(++fpos)); //appends the first
 						while(fpos < flen) {
 							if (format.charAt(fpos++) == delim) {
-								if (fpos >= flen ||
-									format.charAt(fpos) != delim) {
+								if (fpos >= flen || format.charAt(fpos) != delim) {
 									break;
 								}
 								fpos++;
@@ -1568,8 +1545,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					sb.append(dfs.getAmPmStrings()[hour<12?0:1]);
 					continue;
 				case 'D': //day in year
-					if (year == Integer.MIN_VALUE || _month == Integer.MIN_VALUE
-						|| _day == Integer.MIN_VALUE) {
+					if (year==Integer.MIN_VALUE || _month==Integer.MIN_VALUE || _day==Integer.MIN_VALUE) {
 						setOptionInvalid(optionals);
 						valid = false;
 						continue;
@@ -1585,35 +1561,30 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					formatInt(sb, calendar.get(Calendar.DAY_OF_MONTH), i);
 					continue;
 				case 'E': //day in week (text)
-					if (year == Integer.MIN_VALUE || _month == Integer.MIN_VALUE
-						|| _day == Integer.MIN_VALUE) {
+					if (year==Integer.MIN_VALUE || _month==Integer.MIN_VALUE || _day==Integer.MIN_VALUE) {
 						setOptionInvalid(optionals);
 						valid = false;
 						continue;
 					}
 					if (i <= 3) {
-						sb.append(dfs.getShortWeekdays()[
-						calendar.get(Calendar.DAY_OF_WEEK)]);
+						sb.append(dfs.getShortWeekdays()[calendar.get(Calendar.DAY_OF_WEEK)]);
 					} else {
 						sb.append(dfs.getWeekdays()
 						[calendar.get(Calendar.DAY_OF_WEEK)]);
 					}
 					continue;
 				case 'e': {//day of week (number)
-					if (year == Integer.MIN_VALUE || _month == Integer.MIN_VALUE
-						|| _day == Integer.MIN_VALUE) {
+					if (year==Integer.MIN_VALUE || _month==Integer.MIN_VALUE || _day==Integer.MIN_VALUE) {
 						setOptionInvalid(optionals);
 						valid = false;
 						continue;
 					}
-					int j = (j = calendar.get(Calendar.DAY_OF_WEEK))
-						 == Calendar.SUNDAY ? 7 : --j;
+					int j = (j = calendar.get(Calendar.DAY_OF_WEEK)) == Calendar.SUNDAY ? 7 : --j;
 					formatInt(sb, j, i);
 					continue;
 				}
 				case 'F': //day of week in month
-					if (year == Integer.MIN_VALUE || _month == Integer.MIN_VALUE
-						|| _day == Integer.MIN_VALUE) {
+					if (year==Integer.MIN_VALUE || _month==Integer.MIN_VALUE || _day==Integer.MIN_VALUE) {
 						setOptionInvalid(optionals);
 						valid = false;
 						continue;
@@ -1682,12 +1653,11 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 						continue;
 					}
 /*
- Two digits year (see Oracle). Century is generated accroding following rules:
+ Two digits year (see Oracle). Century is generated accroding following rules.
  If RR is from the interval  00 .. 49 then
  a) if last two digits of the actual year are 00..49 then the century is taken from the actual year.
  b) if last two digits of the actual year are 50..99 then the century is taken
-	from the actual year increased by 1.
- If RR is from the interval  50 .. 99 then
+	from the actual year increased by 1. If RR is from the interval  50 .. 99 then
  c) if last two digits of the actual year are 00..49 then the century is taken
 	from the actual year decreased by 1.
  d) if last two digits of the actual year are 50..99 then the century is taken from the actual year.
@@ -1744,7 +1714,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					} else {
 						j = i == 2 ? 2 : i < 4 ? 4 : i;
 					}
-					formatInt(sb,i==2 ? year%100 : year, j);
+					formatInt(sb, i==2 ? year%100 : year, j);
 					continue;
 				}
 				case 'Y': {//year
@@ -1765,13 +1735,12 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					if (y / 100 != r) {
 						formatInt(sb, y, 4);
 					} else {
-						formatInt(sb, y%100, 2);
+						formatInt(sb, y % 100, 2);
 					}
 					continue;
 				}
 				case 'w': //week in year
-					if (year == Integer.MIN_VALUE || _month == Integer.MIN_VALUE
-						|| _day == Integer.MIN_VALUE) {
+					if (year==Integer.MIN_VALUE || _month==Integer.MIN_VALUE || _day==Integer.MIN_VALUE) {
 						setOptionInvalid(optionals);
 						valid = false;
 						continue;
@@ -1791,8 +1760,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					formatInt(sb, w, i);
 					continue;
 				case 'W': //week in month
-					if (year == Integer.MIN_VALUE || _month == Integer.MIN_VALUE
-						|| _day == Integer.MIN_VALUE) {
+					if (year==Integer.MIN_VALUE || _month==Integer.MIN_VALUE || _day==Integer.MIN_VALUE) {
 						setOptionInvalid(optionals);
 						valid = false;
 						continue;
@@ -1805,8 +1773,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 						valid = false;
 						continue;
 					}
-					int zoneHour = calendar.get(Calendar.DST_OFFSET)
-						+ calendar.get(Calendar.ZONE_OFFSET);
+					int zoneHour = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
 					if (zoneHour == 0 && i == 1) {
 						sb.append('Z');
 						continue;
@@ -1835,8 +1802,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 						valid = false;
 						continue;
 					}
-					sb.append(_tz.getDisplayName(
-						_tz.useDaylightTime(), i > 1 ? TimeZone.LONG : TimeZone.SHORT));
+					sb.append(_tz.getDisplayName(_tz.useDaylightTime(), i>1? TimeZone.LONG: TimeZone.SHORT));
 					continue;
 				}
 				default:
@@ -1925,7 +1891,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	public static final int getLastDayOfMonth(final Calendar c) {return new SDatetime(c).getLastDayOfMonth();}
 
 	/** Get Easter Monday. The algorithm used here was published in the Explanatory Supplement
-	 * to the Astronomical Almanac, Oudin J.M. (1940),  ed. Seidelmann P. K. (1992).
+	 * to the Astronomical Almanac, Oudin J.M. (1940), ed. Seidelmann P. K. (1992).
 	 * @param date the date containing year where we compute Easter Monday.
 	 * @return SDatetime object with Easter Monday.
 	 * @throws SRuntimeException if Easter Monday can't be computed.
@@ -1938,10 +1904,9 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	}
 
 	/** Get Easter Monday. The algorithm used here was published in the Explanatory Supplement
-	 * to the Astronomical Almanac, Oudin J.M. (1940),  ed. Seidelmann P. K. (1992).
+	 * to the Astronomical Almanac, Oudin J.M. (1940), ed. Seidelmann P. K. (1992).
 	 * @param year the year where we compute Easter Monday
-	 * @return SDatetime object with Easter Monday. If Easter Monday can't
-	 * be computed then returns null.
+	 * @return SDatetime object with Easter Monday. If Easter Monday can't be computed then return null.
 	 */
 	public static final SDatetime getEasterMonday(final int year) {
 		int julian_start = 325;
@@ -2034,8 +1999,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @param format format of created date.
 	 * @return string with formatted date.
 	 */
-	public static final String formatDate(final Calendar calendar,
-		final String format) {
+	public static final String formatDate(final Calendar calendar, final String format) {
 		StringBuffer sb = new StringBuffer();
 		new SDatetime(calendar).formatDate(sb, format);
 		return sb.toString();
@@ -2096,8 +2060,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		throw new SRuntimeException(SYS.SYS040); //Datetime error&{0}{: }
 	}
 
-	/** Parse date in ISO8601 format "yyyy-M-dTH:m[:s[.S]][Z]" (see
-	 * <a href = "http://www.w3.org/TR/NOTE-datetime"> www.w3.org/TR/NOTE-datetime</a>).
+	/** Parse date in ISO8601 format "yyyy-M-dTH:m[:s[.S]][Z]"
+	 * (see <a href = "http://www.w3.org/TR/NOTE-datetime"> www.w3.org/TR/NOTE-datetime</a>).
 	 * @param src String with date.
 	 * @param pos Position from which date is parsed.
 	 * @return true if date on current position suits to required format.
@@ -2108,8 +2072,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		return p.isISO8601Datetime() ? p.getParsedSDatetime() : null;
 	}
 
-	/** Parse date in ISO8601 format "yyyy-M-dTH:m[:s[.S]][Z]" (see
-	 * <a href = "http://www.w3.org/TR/NOTE-datetime"> www.w3.org/TR/NOTE-datetime</a>).
+	/** Parse date in ISO8601 format "yyyy-M-dTH:m[:s[.S]][Z]"
+	 * (see <a href = "http://www.w3.org/TR/NOTE-datetime"> www.w3.org/TR/NOTE-datetime</a>).
 	 * @param src String with date.
 	 * @return true if date on current position suits to required format, otherwise return false.
 	 */
@@ -2151,7 +2115,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		return p.isDatetime(format) ? p.getParsedSDatetime() : null;
 	}
 
-	/** maximumDayInMonthFor(yearValue, monthValue) =
+	/** maximumDayInMonthFor(yearValue, monthValue).
 	 *    M := modulo(monthValue, 1, 13)
 	 *    Y := yearValue + fQuotient(monthValue, 1, 13)
 	 * Return a value based on M and Y:
@@ -2173,6 +2137,11 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		}
 		return 28;
 	}
+
+	/** Get time zone from this instance of datetime.
+	 * @return TimeZone object.
+	 */
+	public final TimeZone getTimeZone() {return _tz;}
 
 	/** Write this object to given SObjectWriter.
 	 * @param w where to write.
@@ -2224,11 +2193,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		}
 		return x;
 	}
-
-	/** Get time zone from this instance of datetime.
-	 * @return TimeZone object.
-	 */
-	public final TimeZone getTimeZone() {return _tz;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of javax.xml.datatype.XMLGregorianCalendar
@@ -2293,7 +2257,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 */
 	public final void setTimezone(final int offset) {
 		synchronized(this) {
-			if(offset<-14*60 || 14*60<offset) {
+			if(offset<-14*60 || offset > 14*60) {
 				if(offset == Integer.MIN_VALUE) {
 					_tz = null;
 				} else {
@@ -2320,8 +2284,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 
 	@Override
 	public final BigInteger getEonAndYear() {
-		return _year == Integer.MIN_VALUE ? null
-			: _eon != 0 ? getEon().add(BigInteger.valueOf(_year)) : BigInteger.valueOf(_year);
+		return _year == Integer.MIN_VALUE
+			? null : _eon != 0 ? getEon().add(BigInteger.valueOf(_year)) : BigInteger.valueOf(_year);
 	}
 
 	@Override
@@ -2332,7 +2296,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		if (_tz == null) {
 			return Integer.MIN_VALUE;
 		}
-		if (_year != Integer.MIN_VALUE && _month != Integer.MIN_VALUE && _day != Integer.MIN_VALUE){
+		if (_year != Integer.MIN_VALUE && _month != Integer.MIN_VALUE && _day != Integer.MIN_VALUE) {
 			return _tz.getOffset(getTime().getTime()) / 60000;
 		}
 		return _tz.getRawOffset() / 60000;
@@ -2454,8 +2418,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			// use default if set
 			BigInteger defaultYear = (defaults != null) ? defaults.getEonAndYear() : null;
 			if (defaultYear != null) {
-				result.set(Calendar.ERA,
-					defaultYear.signum() == -1 ? GregorianCalendar.BC : GregorianCalendar.AD);
+				result.set(Calendar.ERA,defaultYear.signum()==-1? GregorianCalendar.BC: GregorianCalendar.AD);
 				result.set(Calendar.YEAR, defaultYear.abs().intValue());
 			}
 		}

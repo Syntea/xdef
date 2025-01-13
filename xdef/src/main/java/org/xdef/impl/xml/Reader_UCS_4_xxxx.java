@@ -22,10 +22,7 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 	/** Flag scanning is stopped. */
 	private boolean _notScanning;
 
-	Reader_UCS_4_xxxx(final InputStream in) {
-		super();
-		_in = in;
-	}
+	Reader_UCS_4_xxxx(final InputStream in) {super(); _in = in;}
 
 	abstract void changeBuffer(final byte[] byteBuf, final int len);
 
@@ -76,7 +73,7 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public int read() throws IOException {
+	public final int read() throws IOException {
 		if (_charBufIndex >= _numChars) {
 			readChars();
 			if (_numChars <= 0) {
@@ -94,12 +91,9 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 		}
 	}
 	@Override
-	public int read(final char[] cbuf) throws IOException {
-		return read(cbuf, 0, cbuf.length);
-	}
+	public final int read(final char[] cbuf) throws IOException {return read(cbuf, 0, cbuf.length);}
 	@Override
-	public int read(final char[] cbuf,
-		final int off, final int len) throws IOException {
+	public final int read(final char[] cbuf, final int off, final int len) throws IOException {
 		int i = off;
 		while (i < len) {
 			int numBytes = _numChars - _charBufIndex;
@@ -126,7 +120,7 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 		return i;
 	}
 	@Override
-	public void close() throws IOException {
+	public final void close() throws IOException {
 		if (!isClosed()) {
 			_in.close();
 			_closed = true;
@@ -136,8 +130,5 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 		}
 	}
 	@Override
-	public void stopScanning() {
-		_notScanning = true;
-	}
-
+	public final void stopScanning() {_notScanning = true;}
 }

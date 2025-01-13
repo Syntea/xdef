@@ -87,9 +87,7 @@ public final class CompileXonXdef extends XScriptParser {
 /*#end*/
 
 	/** Prepare instance of CompileXonXdef. */
-	CompileXonXdef(PNode pn,
-		final SBuffer name,
-		final ReportWriter reporter) {
+	CompileXonXdef(final PNode pn, final SBuffer name, final ReportWriter reporter) {
 		super(StringParser.XMLVER1_0);
 		_xdNamespace = pn._nsURI;
 		_xdPrefix = pn.getPrefix();
@@ -111,9 +109,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @param val SBuffer with the value of attribute.
 	 * @return created PAttr.
 	 */
-	private PAttr setAttr(final PNode pn,
-		final String name,
-		final SBuffer val) {
+	private PAttr setAttr(final PNode pn, final String name, final SBuffer val) {
 		PAttr pa = new PAttr(name, val, null, -1);
 		pa._localName = name;
 		pn.setAttr(pa);
@@ -136,9 +132,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @param val SBuffer with value of attribute.
 	 * @return created PAttr.
 	 */
-	private PAttr setXDAttr(final PNode pn,
-		final String name,
-		final SBuffer val) {
+	private PAttr setXDAttr(final PNode pn, final String name, final SBuffer val) {
 		int nsindex;
 		if (pn._nsPrefixes.containsKey(_xdPrefix)) {
 			nsindex = pn._nsPrefixes.get(_xdPrefix);
@@ -204,15 +198,11 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @param parent parent node.
 	 * @param nsURI namespace URI.
 	 * @param name qualified name of PNode.
-	 * @param spos source position.
+	 * @param pos source position.
 	 * @return created PNode.
 	 */
-	private PNode genPElement(final PNode parent,
-		final String nsURI,
-		final String name,
-		final SPosition spos) {
-		PNode result = new PNode(name,
-			spos, parent, parent._xdVersion, parent._xmlVersion);
+	private PNode genPElement(final PNode parent, final String nsURI, final String name, final SPosition pos){
+		PNode result = new PNode(name, pos, parent, parent._xdVersion, parent._xmlVersion);
 		int nsindex;
 		String localName;
 		if (nsURI != null) {
@@ -239,28 +229,21 @@ public final class CompileXonXdef extends XScriptParser {
 	/** Create PNode as XON/JSON element with given position,
 	 * @param parent parent PNode.
 	 * @param name local name of XON/JSON element.
-	 * @param spos source position
+	 * @param pos source position
 	 * @return created PNode,
 	 */
-	private PNode genJElement(final PNode parent,
-		final String name,
-		final SPosition spos) {
-		return genPElement(parent,
-			XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX + ":" + name,
-			spos);
+	private PNode genJElement(final PNode parent, final String name, final SPosition pos) {
+		return genPElement(parent, XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + name, pos);
 	}
 
 	/** Create PNode as XDef element with given position,
 	 * @param parent parent PNode.
 	 * @param name local name of XDef element.
-	 * @param spos source position
+	 * @param spos pos position
 	 * @return created PNode,
 	 */
-	private PNode genXDElement(final PNode parent,
-		final String name,
-		final SPosition spos) {
-		return genPElement(parent, _xdNamespace, _xdPrefix + ":" + name, spos);
+	private PNode genXDElement(final PNode parent, final String name, final SPosition pos) {
+		return genPElement(parent, _xdNamespace, _xdPrefix + ":" + name, pos);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -281,15 +264,14 @@ public final class CompileXonXdef extends XScriptParser {
 			List<Object> sectionList = parseXscript(val);
 			SBuffer matchItem = findSection("match", sectionList);
 			if (matchItem == null) {
-				matchItem = new SBuffer(matchexpr, sectionList.isEmpty()
-					? pn._name : (SBuffer) sectionList.get(1));
+				matchItem =
+					new SBuffer(matchexpr, sectionList.isEmpty() ? pn._name : (SBuffer) sectionList.get(1));
 				sectionList.add("match");
 				sectionList.add(matchItem);
 			} else {
 				String s = matchItem.getString();
 				matchItem.setString(s.startsWith("{")
-					? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1)
-					: matchexpr + " AAND " + s);
+					? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AAND " + s);
 			}
 			val = xsToString(sectionList);
 		} else {
@@ -323,15 +305,13 @@ public final class CompileXonXdef extends XScriptParser {
 			} else {
 				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
 				if ((sbocc = parsedScript[0]) != null) { // occurrence
-					if (!ANY_NAME.equals(name)
-						&& !X_ARRAY.equals(parent.getLocalName())) {
+					if (!ANY_NAME.equals(name) && !X_ARRAY.equals(parent.getLocalName())) {
 						setSourceBuffer(sbocc); // read occurrence
 						nextSymbol();
 						XOccurrence xocc = new XOccurrence();
 						isOccurrence(xocc);
 						if (xocc.maxOccurs() != 1) {
-							//Maximum occurrence of item "&{0}" can not be
-							// higher then 1
+							//Maximum occurrence of item "&{0}" can not be higher then 1
 							error(XDEF.XDEF535, XonTools.xmlToJName(name));
 						}
 					}
@@ -347,8 +327,7 @@ public final class CompileXonXdef extends XScriptParser {
 			setAttr(pn, X_VALATTR, sbf);
 		}
 		if (name != null) {
-			if (pn._nsPrefixes.containsKey(_xdPrefix)
-				&& "choice".equals(pn.getLocalName())) {
+			if (pn._nsPrefixes.containsKey(_xdPrefix) && "choice".equals(pn.getLocalName())) {
 				for (PNode p: pn.getChildNodes()) {
 					setName(p, name);
 				}
@@ -382,8 +361,7 @@ public final class CompileXonXdef extends XScriptParser {
 				pn1.addChildNode(pn2);
 				skipSemiconsBlanksAndComments();
 				if (!eos()) {
-					setXDAttr(pn2, "script",
-						new SBuffer(getUnparsedBufferPart(), getPosition()));
+					setXDAttr(pn2, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 					List<Object> sectionList = parseXscript();
 					SBuffer item = removeSection("occurs", sectionList);
 					if (item != null) {
@@ -393,8 +371,7 @@ public final class CompileXonXdef extends XScriptParser {
 						nextSymbol();
 						isOccurrence(occ);
 						if (occ.maxOccurs() > 1) {
-							//Specification of occurence of &{0} group
-							// can not be higher then 1
+							//Specification of occurence of &{0} group can not be higher then 1
 							error(XDEF.XDEF252, ONEOF_DIRECTIVE);
 						}
 					}
@@ -404,15 +381,13 @@ public final class CompileXonXdef extends XScriptParser {
 				pn2 = genXDElement(pn1, "mixed", map.getPosition());
 				pn1.addChildNode(pn2);
 				if (!eos()) {
-					setXDAttr(pn1, "script",
-						new SBuffer(getUnparsedBufferPart(), getPosition()));
+					setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
 			} else {
 				pn1 = genJElement(parent, X_MAP, map.getPosition());
 				pn2 = pn1;
 				if (!eos()) {
-					setXDAttr(pn1, "script",
-						new SBuffer(getUnparsedBufferPart(), getPosition()));
+					setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
 			}
 		} else if (map.size() > 1) {
@@ -435,22 +410,19 @@ public final class CompileXonXdef extends XScriptParser {
 					PNode pn3 = genXonModel(o, pn2);
 					PAttr xscr = getXDAttr(pn3, "script");
 					if (xscr != null) {
-						SBuffer sbf =
-							removeSection("occurs", parseXscript(xscr._value));
+						SBuffer sbf = removeSection("occurs", parseXscript(xscr._value));
 						if (sbf != null) {
 							XOccurrence occ = new XOccurrence();
 							setSourceBuffer(sbf);
 							nextSymbol();
 							isOccurrence(occ);
 							if (occ.maxOccurs() > 1) {
-								//Maximum occurrence of item "&{0}" can not be
-								// higher then 1
+								//Maximum occurrence of item "&{0}" can not be higher then 1
 								error(XDEF.XDEF535, key);
 							}
 						}
 					}
-					if (_xdNamespace.equals(pn3._nsURI)
-						&& "choice".equals(pn3._localName)) {
+					if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
 						for (PNode pn : pn3.getChildNodes()) {
 							updateKeyInfo(pn, keyXmlName);
 						}
@@ -465,8 +437,7 @@ public final class CompileXonXdef extends XScriptParser {
 		if (anyItem != null) {
 			if (anyItem instanceof Map || anyItem instanceof List) {
 				PNode pn3 = genXonModel(anyItem, pn2);
-				if (_xdNamespace.equals(pn3._nsURI)
-					&& "choice".equals(pn3._localName)) {
+				if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
 					for (PNode pn : pn3.getChildNodes()) {
 						updateKeyInfo(pn, ANY_NAME);
 					}
@@ -479,8 +450,7 @@ public final class CompileXonXdef extends XScriptParser {
 					genXonAny((JAny) anyItem, pn2);
 				} else  {
 					PNode pn3 = genXonValue(ANY_NAME, (JValue) anyItem,pn2);
-					setAttr(pn3,
-						X_KEYATTR, new SBuffer("string()", getPosition()));
+					setAttr(pn3, X_KEYATTR, new SBuffer("string()", getPosition()));
 					pn2.addChildNode(pn3);
 				}
 			}
@@ -507,15 +477,13 @@ public final class CompileXonXdef extends XScriptParser {
 		int len = array.size();
 		if (len > 0) {
 			Object jo = array.get(0);
-			Object o = jo == null
-				? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
+			Object o = jo == null ? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				skipSpacesAndComments();
 				if (isToken(ONEOF_DIRECTIVE)) {
 					String s = getUnparsedBufferPart().trim();
-					pn = genXDElement(parent,
-						"choice", ((JValue) jo).getPosition());
+					pn = genXDElement(parent, "choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
 					if (!s.isEmpty()) {
 						int ndx = s.indexOf("ref ");
@@ -536,22 +504,18 @@ public final class CompileXonXdef extends XScriptParser {
 							setSourceBuffer(item);
 							nextSymbol();
 							isOccurrence(occ);
-							if (occ.minOccurs() == 0
-								&& X_MAP.equals(parent.getLocalName())) {
-								setXDAttr(pn,
-									"script",new SBuffer("?", spos));
+							if (occ.minOccurs() == 0 && X_MAP.equals(parent.getLocalName())) {
+								setXDAttr(pn, "script",new SBuffer("?", spos));
 							}
 						}
 						if (!s.isEmpty()) {
-							setXDAttr(parent,
-								"script", new SBuffer(s, spos));
+							setXDAttr(parent, "script", new SBuffer(s, spos));
 						}
 					}
 				} else {
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
-						setXDAttr(pn, "script",
-							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+						setXDAttr(pn, "script", new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
 					}
 				}
 				index = 1;
@@ -559,11 +523,9 @@ public final class CompileXonXdef extends XScriptParser {
 			for(; index < len; index++) {
 				PNode pn1 = genXonModel(array.get(index), pn);
 				PAttr val;
-				// if it is not the last and it has xd:script attribute where
-				// the min occurrence differs from max occurrence
-				// and it has the attribute with a value description
-				if (X_VALUE.equals(pn1._localName)
-					&& XDConstants.XON_NS_URI_W.equals(pn1._nsURI)
+				// if it is not the last and it has xd:script attribute where the min occurrence differs from
+				// max occurrence and it has the attribute with a value description
+				if (X_VALUE.equals(pn1._localName) && XDConstants.XON_NS_URI_W.equals(pn1._nsURI)
 					&& (val = pn1.getAttrNS(X_VALATTR, -1)) != null) {
 					PAttr script = getXDAttr(pn1, "script");
 					XOccurrence occ = null;
@@ -582,8 +544,7 @@ public final class CompileXonXdef extends XScriptParser {
 						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
 						String s = sbs[1].getString();
 						int i;
-						// remove comments!
-						while ((i = s.indexOf("/*")) >= 0) {
+						while ((i = s.indexOf("/*")) >= 0) { // remove comments!
 							int j = s.indexOf("*/", i);
 							if (j > i) {
 								s = s.substring(0, i) + s.substring(j+2) + ' ';
@@ -598,8 +559,7 @@ public final class CompileXonXdef extends XScriptParser {
 						} else if (!s.endsWith(")")) {
 							s += "()"; // add brackets
 						}
-						addMatchExpression(pn1,
-							s + ".parse((String)@" + X_VALATTR + ").matches()");
+						addMatchExpression(pn1, s + ".parse((String)@" + X_VALATTR + ").matches()");
 					}
 				}
 			}
@@ -631,8 +591,7 @@ public final class CompileXonXdef extends XScriptParser {
 			pn = genXonMap((JMap) xon, parent);
 		} else if (xon instanceof JArray) {
 			pn = genXonArray((JArray) xon, parent);
-		} else if (xon instanceof JValue
-			&& ((JValue) xon).getValue() instanceof String) {
+		} else if (xon instanceof JValue && ((JValue) xon).getValue() instanceof String) {
 			pn = genXonValue(null, (JValue) xon, parent);
 		} else if (xon instanceof JAny) {
 			genXonAny((JAny) xon, parent);
@@ -651,15 +610,13 @@ public final class CompileXonXdef extends XScriptParser {
 	 */
 	private void genXonAny(final JAny jo, final PNode parent) {
 		if (_anyXPos == null) {
-			_anyXPos = _xonModel._parent._xdef.getName()
-				+ "#" + XConstants.JSON_ANYOBJECT;
+			_anyXPos = _xonModel._parent._xdef.getName() + "#" + XConstants.JSON_ANYOBJECT;
 		}
 		PNode pn, pn1, pn2;
 		pn = genXDElement(parent, "choice", parent.getName());
 		pn._xonMode = XConstants.XON_MODE_W;
 		parent.addChildNode(pn);
-		SBuffer val = jo != null && jo.getSBuffer() != null
-			? jo.getSBuffer() : new SBuffer("", parent._name);
+		SBuffer val = jo != null && jo.getSBuffer() != null ? jo.getSBuffer() : new SBuffer("", parent._name);
 		String s = val.getString().trim();
 		val = s.isEmpty() ? null : new SBuffer(s, parent.getName());
 		if (val != null) {
@@ -668,8 +625,7 @@ public final class CompileXonXdef extends XScriptParser {
 		SPosition spos = parent._name;
 		pn1 = genJElement(pn, X_VALUE, spos);
 		pn1._xonMode = XConstants.XON_MODE_W;
-		boolean isMap = X_MAP.equals(parent._localName)
-			&& XDConstants.XON_NS_URI_W.equals(parent._nsURI);
+		boolean isMap = X_MAP.equals(parent._localName) && XDConstants.XON_NS_URI_W.equals(parent._nsURI);
 		if (isMap) {
 			setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
 		}
@@ -739,13 +695,12 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @param pn model to be displayed
 	 *#/
 	private void displayModel(final PNode pn) {
-		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)){
+		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)) {
 			System.out.flush();
 			System.err.flush();
 			System.out.println("*** xdef: \"" + (pn._parent._xdef != null
 				? pn._parent._xdef.getName() : "???") +'"');
-			System.out.println(
-				"* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
+			System.out.println("* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
 			System.out.flush();
 		}
 	}
@@ -757,10 +712,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @param name name of XON/JSON model in X-definition.
 	 * @param reporter report writer
 	 */
-	final String genXdef(final PNode pn,
-		final String format,
-		final SBuffer name,
-		final ReportWriter reporter) {
+	final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
 		XonModelParser jp = new XonModelParser(this);
 		XonParsers xp = format.equals("xon")
 			? new XonReader(pn._value, jp) : new IniReader(pn._value, jp);
@@ -783,12 +735,10 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @return true if it is a section name.
 	 */
 	private static boolean isSectionCommand(final char sym) {
-		return sym==VAR_SYM||sym==FINALLY_SYM||sym==CREATE_SYM
-			|| sym==ON_TRUE_SYM||sym==ON_FALSE_SYM||sym==ON_ABSENCE_SYM
-			|| sym==ON_ILLEGAL_ATTR_SYM||sym==CREATE_SYM||sym==MATCH_SYM
-			|| sym==ON_START_ELEMENT_SYM||sym==FINALLY_SYM||sym==FORGET_SYM
-			|| sym==INIT_SYM||sym==DEFAULT_SYM||sym==FIXED_SYM||sym==REF_SYM
-			|| sym==ON_EXCESS_SYM||sym==OPTION_SYM||sym==OPTIONS_SYM;
+		return sym==VAR_SYM||sym==FINALLY_SYM||sym==CREATE_SYM||sym==ON_TRUE_SYM||sym==ON_FALSE_SYM
+			||sym==ON_ABSENCE_SYM||sym==ON_ILLEGAL_ATTR_SYM||sym==CREATE_SYM||sym==MATCH_SYM
+			||sym==ON_START_ELEMENT_SYM||sym==FINALLY_SYM||sym==FORGET_SYM||sym==INIT_SYM||sym==DEFAULT_SYM
+			||sym==FIXED_SYM||sym==REF_SYM||sym==ON_EXCESS_SYM||sym==OPTION_SYM||sym==OPTIONS_SYM;
 	}
 
 	/** Parse command which follows section.
@@ -853,17 +803,15 @@ public final class CompileXonXdef extends XScriptParser {
 	/** Add section item to the list.
 	 * @param sectionName section name,
 	 * @param sectionList where to add.
-	 * @param spos SPosition of the section.
+	 * @param pos SPosition of the section.
 	 */
-	private void addSection(final String sectionName,
-		final List<Object> sectionList,
-		final SPosition spos) {
+	private void addSection(final String sectionName, final List<Object> sectionList, final SPosition pos) {
 		sectionList.add(sectionName);
-		String s = getParsedBufferPartFrom(spos.getIndex()).trim();
+		String s = getParsedBufferPartFrom(pos.getIndex()).trim();
 		while (s.endsWith(";")) {
 			s = s.substring(0, s.length() - 1).trim();
 		}
-		sectionList.add(new SBuffer(s, spos));
+		sectionList.add(new SBuffer(s, pos));
 	}
 
 	/** Parse X-script and return the section list.
@@ -945,8 +893,7 @@ public final class CompileXonXdef extends XScriptParser {
 				}
 				o = sectionList.get(i);
 				if ("occurs".equals(sectionName)) {
-					if (!result.isEmpty() && !result.endsWith(";")
-						&& !result.endsWith("}")) {
+					if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
 						result += ';';
 					}
 					result += ((SBuffer) o).getString();
@@ -958,16 +905,14 @@ public final class CompileXonXdef extends XScriptParser {
 						}
 						result += ((SBuffer) o).getString();
 					} else {
-						if (!result.isEmpty() && !result.endsWith(";")
-							&& !result.endsWith("}")) {
+						if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
 							result += ';';
 						}
 						result += ((SBuffer) o).getString();
 					}
 					wasOccurs = false;
 				} else {
-					if (!result.isEmpty() && !result.endsWith(";")
-						&& !result.endsWith("}")) {
+					if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
 						result += ';';
 					}
 					String s = ((SBuffer) o).getString();
@@ -990,12 +935,11 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 	/** Find given section in section list.
-	 * @param name name of section or emptyString if it is velidation method.
+	 * @param name name of section or emptyString if it is validation method.
 	 * @param list list of section.
 	 * @return SBuffer with the section or null.
 	 */
-	private static SBuffer findSection(final String name,
-		final List<Object> list) {
+	private static SBuffer findSection(final String name, final List<Object> list) {
 		for (int i = 0; i < list.size(); i+=2) {
 			if (name.equals(list.get(i))) {
 				return (SBuffer) list.get(i + 1);
@@ -1009,8 +953,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @param list list of section.
 	 * @return removed section.
 	 */
-	private static SBuffer removeSection(final String name,
-		final List<Object> list) {
+	private static SBuffer removeSection(final String name, final List<Object> list) {
 		for (int i = 0; i < list.size(); i+=2) {
 			if (name.equals(list.get(i))) {
 				list.remove(i);
@@ -1030,12 +973,12 @@ public final class CompileXonXdef extends XScriptParser {
 	 * structure composed from JObjets used for compilation of XON/JSON model
 	 * in X-definition.
 	 */
-	private static class XonModelParser implements XonParser {
-		/** kind value */
+	private final static class XonModelParser implements XonParser {
+		/** kind = value */
 		private final int VALUE = 0;
-		/** kind array */
+		/** kind = array */
 		private final int ARRAY = 1;
-		/** kind map */
+		/** kind = map */
 		private final int MAP = 2;
 
 		/** stack with kinds of nested items. */
@@ -1052,7 +995,7 @@ public final class CompileXonXdef extends XScriptParser {
 		private JObject _value;
 
 		/** Create new instance of XonModelParser. */
-		XonModelParser(CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
+		XonModelParser(final CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
 
 		////////////////////////////////////////////////////////////////////////
 		// Implementation of JParser interface
@@ -1062,18 +1005,16 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Put value to result.
 		 * @param value JValue to be added to result object.
 		 */
-		public void putValue(JValue value) {
+		public final void putValue(final JValue value) {
 			switch (_kind) {
-				case ARRAY:
-					_arrays.peek().add(value);
-					break;
+				case ARRAY: _arrays.peek().add(value);
+					return;
 				case MAP:
 					SBuffer name = _names.pop();
 					_maps.peek().put(name.getString(), value);
-					break;
-				default: // must be VALUE
-					_value = value;
+					return;
 			}
+			_value = value; // it is VALUE
 		}
 
 		@Override
@@ -1081,7 +1022,7 @@ public final class CompileXonXdef extends XScriptParser {
 		 * @param name value name.
 		 * @return true if the name of pair already exists.
 		 */
-		public boolean namedValue(SBuffer name) {
+		public final boolean namedValue(final SBuffer name) {
 			String s = name.getString();
 			boolean result = false;
 			for (SBuffer x: _names) {
@@ -1098,7 +1039,7 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Array started.
 		 * @param pos source position.
 		 */
-		public void arrayStart(SPosition pos) {
+		public final void arrayStart(final SPosition pos) {
 			 //add ARRAY to kins stack and set it to kind
 			_kinds.push(_kind = ARRAY);
 			_arrays.push(new JArray(pos));  // new item to array stack
@@ -1107,7 +1048,7 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Array ended.
 		 * @param pos source position.
 		 */
-		public void arrayEnd(SPosition pos) {
+		public final void arrayEnd(final SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
 			_value = _arrays.peek();
@@ -1122,7 +1063,7 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Map started.
 		 * @param pos source position.
 		 */
-		public void mapStart(SPosition pos) {
+		public final void mapStart(final SPosition pos) {
 			//add MAP to kins stack and set it to kind
 			_kinds.push(_kind = MAP);
 			_maps.push(new JMap(pos)); // new item to map stack
@@ -1131,7 +1072,7 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Map ended.
 		 * @param pos source position.
 		 */
-		public void mapEnd(SPosition pos) {
+		public final void mapEnd(final SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
 			_value = (JObject)_maps.peek();
@@ -1146,14 +1087,14 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Processed comment.
 		 * @param value SBuffer with the value of comment.
 		 */
-		public void comment(SBuffer value){/*we ingore it here*/}
+		public final void comment(final SBuffer value){/*we ingore it here*/}
 		@Override
 		/** X-script item parsed, not used methods for JSON/XON parsing
 		 * (used in X-definition compiler).
 		 * @param name name of item.
 		 * @param value value of item.
 		 */
-		public void xdScript(SBuffer name, SBuffer value) {
+		public final void xdScript(final SBuffer name, final SBuffer value) {
 			SPosition spos = value == null ? name : value;
 			JValue jv;
 			switch (name.getString()) {
@@ -1164,12 +1105,11 @@ public final class CompileXonXdef extends XScriptParser {
 					putValue(new JAny((SPosition)name, value));
 					return;
 				case ONEOF_DIRECTIVE:
-					jv =  new JValue(name, new JValue(spos,
-						ONEOF_DIRECTIVE+(value==null? "" : value.getString())));
+					jv =  new JValue(
+						name, new JValue(spos, ONEOF_DIRECTIVE + (value == null? "" : value.getString())));
 					break;
 				default:
-					jv = new JValue(name, new JValue(spos,
-						value == null ? "" : value.getString()));
+					jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
 			}
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);

@@ -37,26 +37,21 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XonTools {
-
 	/** Value of null in XON/JSON objects. */
 	public static final JNull JNULL = new JNull();
 
 ////////////////////////////////////////////////////////////////////////////////
 // methods used in this package
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Convert character to representation used in XML names.
 	 * @param c character to be converted.
 	 * @return string with converted character.
 	 */
-	final static String genXmlHexChar(final char c) {
-		return "_x" + Integer.toHexString(c) + '_';
-	}
+	final static String genXmlHexChar(final char c) {return "_x" + Integer.toHexString(c) + '_';}
 
 	/** Check and get hexadecimal digit as integer.
 	 * @param ch character with hexadecimal digit.
-	 * @return hexadecimal digit as an integer number 0..15
-	 * or return -1 if the argument is not hexadecimal digit.
+	 * @return hexadecimal digit as an integer number 0..15 or return -1 if argument is not hexadecimal digit.
 	 */
 	final static int hexDigit(final char ch) {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
@@ -71,8 +66,7 @@ public class XonTools {
 		return s;
 	}
 
-	/** Check if on the position given by index in a string it is the
-	 * form of hexadecimal character representation.
+	/** Check if on the position given by index in a string it is hexadecimal character representation.
 	 * @param s inspected string.
 	 * @param index index where to start inspection.
 	 * @return true if index position represents hexadecimal form of character.
@@ -83,11 +77,9 @@ public class XonTools {
 			hexDigit(s.charAt(index+2)) < 0) {
 			return false;
 		}
-		// parse hexdigits
-		for (int i = index + 3; i < index + 7 && i < s.length(); i++) {
+		for (int i = index + 3; i < index + 7 && i < s.length(); i++) { // parse hexdigits
 			char ch = s.charAt(i);
-			if (hexDigit(ch) < 0) {
-				// not hexadecimal digit.
+			if (hexDigit(ch) < 0) {// not hexadecimal digit.
 				return ch == '_'; //if '_' return true otherwise return false
 			}
 		}
@@ -106,7 +98,6 @@ public class XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // public methods (used also in X-definition compilation and X-components)
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create string from XON/JSON source string data.
 	 * @param s XON/JSON string.
 	 * @return string created from XON/JSON string data.
@@ -117,27 +108,13 @@ public class XonTools {
 		for (int i = 0; i < chars.length; i++) {
 			char ch = chars[i];
 			switch (ch) {
-				case '\\':
-					sb.append("\\\\");
-					continue;
-				case '"':
-					sb.append("\\\"");
-					continue;
-				case '\b':
-					sb.append("\\b");
-					continue;
-				case '\f':
-					sb.append("\\f");
-					continue;
-				case '\n':
-					sb.append("\\n");
-					continue;
-				case '\r':
-					sb.append("\\r");
-					continue;
-				case '\t':
-					sb.append("\\t");
-					continue;
+				case '\\': sb.append("\\\\"); continue;
+				case '"': sb.append("\\\""); continue;
+				case '\b': sb.append("\\b"); continue;
+				case '\f': sb.append("\\f"); continue;
+				case '\n': sb.append("\\n"); continue;
+				case '\r': sb.append("\\r"); continue;
+				case '\t': sb.append("\\t"); continue;
 				default:
 					if (ch >= ' ' && Character.isDefined(ch)) {
 						sb.append(ch);
@@ -180,8 +157,7 @@ public class XonTools {
 			} else {
 				char typCh; // character with type specification after a number
 				if (p.isSignedInteger() && (typCh=p.isOneOfChars("bsilND"))>=0
-					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
-					|| ch == ']' || ch == ',')) {
+					&& (p.eos() || (ch = p.getCurrentChar()) <= ' ' || ch == ']' || ch == ',')) {
 					String s = p.getBufferPart(pos, p.getIndex());
 					switch(typCh) {
 						case 'b': ar.add(Byte.valueOf(s)); break;
@@ -196,9 +172,8 @@ public class XonTools {
 								ar.add(new BigInteger(s));
 							}
 					}
-				} else if (p.isSignedFloat() && (typCh=p.isOneOfChars("fdD"))>=0
-					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
-					|| ch == ']' || ch == ',')) {
+				} else if (p.isSignedFloat() && (typCh=p.isOneOfChars("fdD"))>=0 && (p.eos()
+					|| (ch = p.getCurrentChar()) <= ' ' || ch == ']' || ch == ',')) {
 					String s = p.getBufferPart(pos, p.getIndex());
 					switch(typCh) {
 						case 'f': ar.add(Float.valueOf(s)); break;
@@ -213,14 +188,11 @@ public class XonTools {
 						for(;;) {
 							if (p.isChar('\\')) {
 								if (p.eos()) {
-									throw new RuntimeException(
-										"JList error");
+									throw new RuntimeException("JList error");
 								}
 								p.nextChar();
-							} else if ((ch = p.getCurrentChar()) == ' '
-								|| ch == ',' || ch == ']' || ch == '[') {
-								String s =
-									p.getBufferPart(pos, p.getIndex());
+							} else if ((ch=p.getCurrentChar()) == ' ' || ch == ',' || ch == ']' || ch == '['){
+								String s = p.getBufferPart(pos, p.getIndex());
 								ar.add(xmlToJValue(s));
 								break;
 							}
@@ -291,8 +263,7 @@ public class XonTools {
 			ch = s.charAt(1);
 			i = 1;
 		}
-		if (ch == '0' && i + 1 < len && s.charAt(i+1) >= '0'
-			&& s.charAt(i+1) <= '9') {
+		if (ch == '0' && i + 1 < len && s.charAt(i+1) >= '0' && s.charAt(i+1) <= '9') {
 			return s; //redundant leading zero, => XON/JSON string
 		}
 		if (ch >= '0' && ch <= '9') { // not redundant leading zero
@@ -307,12 +278,9 @@ public class XonTools {
 		if (endChar == '"') {
 			try {
 				switch (ch) {
-					case 'T':
-						return new DefTelephone(s);
-					case 'e':
-						return new DefEmailAddr(s);
-					case 'u':
-						return new DefURI(s);
+					case 'T': return new DefTelephone(s);
+					case 'e': return new DefEmailAddr(s);
+					case 'u': return new DefURI(s);
 					case 'C':
 						if ((r = chkValue(s, new XDParseCurrency())).matches()){
 							return r.getParsedValue().getObject();
@@ -341,8 +309,7 @@ public class XonTools {
 		StringBuilder sb = new StringBuilder();
 		char ch = s.charAt(0);
 		sb.append(ch == ':' || isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
-			 != StringParser.XML_CHAR_NAME_START
+			|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0) != StringParser.XML_CHAR_NAME_START
 			? genXmlHexChar(ch) : ch);
 		byte firstcolon = 0;
 		for (int i = 1; i < s.length(); i++) {
@@ -355,16 +322,15 @@ public class XonTools {
 				if (i + 1 < s.length()) {
 					ch=s.charAt(++i);
 					sb.append(isJChar(s,i)
-						|| StringParser.getXmlCharType(ch,
-							StringParser.XMLVER1_0)<StringParser.XML_CHAR_COLON
-					? genXmlHexChar(ch) : ch);
+						|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)<StringParser.XML_CHAR_COLON
+						? genXmlHexChar(ch) : ch);
 				} else {
 					i--;
 				}
 			} else {
 				sb.append(isJChar(s,i)
-					|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
-					< StringParser.XML_CHAR_COLON ? genXmlHexChar(ch) : ch);
+					|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0) < StringParser.XML_CHAR_COLON
+					? genXmlHexChar(ch) : ch);
 			}
 		}
 		return sb.toString();
@@ -420,8 +386,7 @@ public class XonTools {
 			} else if (i > 0) { // escaped characters
 				return (int) "u\"\\/\b\f\n\r\t".charAt(i);
 			} else {
-				 // Incorrect escape character in string
-				p.error(JSON.JSON006);
+				p.error(JSON.JSON006); // Incorrect escape character in string
 				return -1;
 			}
 		} else if (!p.eos()) {
@@ -453,8 +418,7 @@ public class XonTools {
 		if (i >= 0) {
 			return "\\" + "\"\\/bfnrt".charAt(i);
 		}
-		return i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0)
-			== StringParser.XML_CHAR_ILLEGAL
+		return i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0)==StringParser.XML_CHAR_ILLEGAL
 			? genCharAsUTF(c) : String.valueOf(c);
 	}
 
@@ -491,8 +455,7 @@ public class XonTools {
 		boolean addQuot = false;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			if (c <= ' ' || c == '\\' || c == '"'
-				|| !Character.isDefined(c)) {
+			if (c <= ' ' || c == '\\' || c == '"' || !Character.isDefined(c)) {
 				addQuot = true;
 				break;
 			}
@@ -561,7 +524,6 @@ public class XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // Interface and classes used when XON/JSON is parsed in X-definition compiler.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Interface of JSON/XON object. */
 	public interface JObject {
 		public SPosition getPosition();
@@ -629,9 +591,7 @@ public class XonTools {
 		@Override
 		public final int hashCode(){return 0;}
 		@Override
-		public final boolean equals(final Object o) {
-			return o==null || o instanceof JNull;
-		}
+		public final boolean equals(final Object o) {return o==null || o instanceof JNull;}
 	}
 
 	/** Check if the argument is a simple value. Simple value is null,
@@ -644,8 +604,7 @@ public class XonTools {
 		return val == null || val instanceof Number || val instanceof Boolean
 			|| val instanceof String || val instanceof XonTools.JValue
 			&& ((o=((XonTools.JValue) val).getValue()) == null
-				|| o instanceof Number || o instanceof Boolean
-				|| o instanceof String);
+				|| o instanceof Number || o instanceof Boolean || o instanceof String);
 	}
 
 	/** Generate XML form from XON/JSON string value.
@@ -726,7 +685,7 @@ public class XonTools {
 					case '\f':
 						if (!addQuot) { // force quote
 							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
+							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
 							addQuot = true;
 						}
 						sb.append("\\f");
@@ -765,8 +724,7 @@ public class XonTools {
 						break;
 					default:
 						if (ch < ' '|| StringParser.getXmlCharType(ch,
-							StringParser.XMLVER1_0) ==
-							StringParser.XML_CHAR_ILLEGAL) {
+							StringParser.XMLVER1_0) == StringParser.XML_CHAR_ILLEGAL) {
 							if (!addQuot) { // force quote
 								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
 								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
@@ -783,78 +741,65 @@ public class XonTools {
 			}
 			return '"' + sb.toString() + '"';
 		} else {
-			return val instanceof XDBytes
-				? (((XDBytes) val).isBase64() ? "b(" : "x(") + val + ')'
-				: val instanceof InetAddress ? val.toString().substring(1)
-				: val.toString();
+			return val instanceof XDBytes ? (((XDBytes) val).isBase64() ? "b(" : "x(") + val + ')'
+				: val instanceof InetAddress ? val.toString().substring(1) : val.toString();
 		}
 	}
 
 	/** Get InputStream or Reader from object.
-	 * @param source if it is string check file name, URL or input data
-	 * otherwise it can be a File, InputStream or Reader.
+	 * @param source if it is string check file name, URL or input data otherwise it can be a File,
+	 * InputStream or Reader.
 1	 * @param sysId System ID or null.
 	 * @param charset name or null.
 	 * @return InputData object.
 	 */
-	final static InputData getInputFromObject(final Object source,
-		final String sysId) {
+	final static InputData getInputFromObject(final Object source, final String sysId) {
 		if (source instanceof String) {
 			File f = new File((String) source);
 			try { // try if it is URL
 				return (f.exists() && f.isFile()) ? getInputFromObject(f, sysId)
-					: getInputFromObject(
-						SUtils.getExtendedURL((String)source), sysId);
+					: getInputFromObject(SUtils.getExtendedURL((String)source), sysId);
 			} catch (RuntimeException | MalformedURLException ex) {
 				//not URL, file name, so create from string a reader
-				return new InputData(new StringReader((String) source),
-					sysId==null ? "STRING" : sysId);
+				return new InputData(new StringReader((String) source), sysId==null ? "STRING" : sysId);
 			}
 		} else if (source instanceof URL) {
 			try {
 				return new InputData(((URL) source).openStream(),
 					sysId==null ? ((URL) source).toString() : sysId);
 			} catch (Exception ex) {
-				//Can't read input stream&{0}{; }
-				throw new SRuntimeException(SYS.SYS029, source.toString());
+				throw new SRuntimeException(SYS.SYS029, source.toString());//Can't read input stream&{0}{; }
 			}
 		} else if (source instanceof File) {
 			try {
 				return new InputData(new FileInputStream((File) source),
 					sysId==null ? ((File) source).getAbsolutePath() : sysId);
 			} catch (Exception ex) {
-				//Can't read file: &{0}
-				throw new SRuntimeException(SYS.SYS028);
+				throw new SRuntimeException(SYS.SYS028);//Can't read file: &{0}
 			}
 		} else if (source instanceof InputStream) {
 			try {
-				return new InputData((InputStream) source,
-					sysId==null ? "INPUTSTREAM" : sysId);
+				return new InputData((InputStream) source, sysId==null ? "INPUTSTREAM" : sysId);
 			} catch (Exception ex) {
-				//Can't read input stream&{0}{; }
-				throw new SRuntimeException(SYS.SYS029);
+				throw new SRuntimeException(SYS.SYS029); //Can't read input stream&{0}{; }
 			}
 		} else if (source instanceof Reader) {
 			return new InputData((Reader) source,sysId==null? "READER" : sysId);
 		}
 		//Unsupported type of argument &{0}: &{1}
-		throw new SRuntimeException(SYS.SYS037,"source",
-			source == null ? "null" : source.getClass().getName());
+		throw new SRuntimeException(SYS.SYS037,"source", source==null ? "null" : source.getClass().getName());
 	}
 
 	protected static final class InputData {
 		final Reader _reader;
 		final InputStream _in;
 		final String _sysId;
-
 		protected InputData(final Reader reader, final String sysId) {
 			_reader = reader;
 			_in = null;
 			_sysId=sysId;
 		}
-
-		protected InputData(final InputStream in, final String sysId)
-			throws Exception{
+		protected InputData(final InputStream in, final String sysId) throws Exception{
 			_sysId = sysId;
 			_reader = null;
 			_in = in;

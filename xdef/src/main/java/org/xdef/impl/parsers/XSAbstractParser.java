@@ -42,18 +42,15 @@ import org.xdef.xon.XonTools;
 /** Abstract class as the base for all test value parsers.
  * @author Vaclav Trojan
  */
-public abstract class XSAbstractParser extends XDParserAbstract
-	implements XDParser, XDValue {
+public abstract class XSAbstractParser extends XDParserAbstract implements XDParser, XDValue {
 
 	/** WhiteSpace handling mode. Capital letter means fixed value.
-	 * <br>'p' (preserve)<p> No normalization is done, the value is not
-	 * changed (this is the behavior required by [XML 1.0 (Second Edition)]
-	 * for element content)
-	 * <br>'r' (replace)<p>All occurrences of #x9 (tab), #xA (line feed) and
-	 * #xD (carriage return) are replaced with #x20 (space)
-	 * <br>'c' (collapse)<p> After the processing implied by replace, contiguous
-	 * sequences of #x20's are collapsed to a single #x20, and leading and
-	 * trailing #x20's are removed.
+	 * <br>'p' (preserve)<p> No normalization is done, the value is not changed (this is the behavior required
+	 * by [XML 1.0 (Second Edition)]* for element content)
+	 * <br>'r' (replace)<p>All occurrences of #x9 (tab), #xA (line feed) and #xD (carriage return)
+	 * are replaced with #x20 (space)
+	 * <br>'c' (collapse)<p> After the processing implied by replace, contiguous sequences of #x20's
+	 * are collapsed to a single #x20, and leading and trailing #x20's are removed.
 	 */
 	protected byte _whiteSpace; //r replace, c collapse, 0 preserve
 	protected XDRegex[] _patterns;
@@ -69,14 +66,12 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public XDValue iObject(final XXNode xnode, final Object x) {
 		if (x == null) {
-			//Value of &{0} can't be null
-			throw new SRuntimeException(XDEF.XDEF819, parserName());
+			throw new SRuntimeException(XDEF.XDEF819, parserName()); //Value of &{0} can't be null
 		}
 		if (x instanceof XDValue) {
 			XDValue y = (XDValue) x;
 			if (y.isNull()) {
-				//Value of &{0} can't be null
-				throw new SRuntimeException(XDEF.XDEF819, parserName());
+				throw new SRuntimeException(XDEF.XDEF819, parserName()); //Value of &{0} can't be null
 			}
 			if (y.getItemId() == parsedType()) {
 				return y;
@@ -148,8 +143,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public void setFractionDigits(final long x) {
 		if (x != 0) {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
-			throw new SRuntimeException(XDEF.XDEF812,
-				"fractionDigits", "0", parserName());
+			throw new SRuntimeException(XDEF.XDEF812, "fractionDigits", "0", parserName());
 		}
 	} //default: not specified
 	public void setLength(final long x) {} //default: not specified
@@ -162,17 +156,15 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			case "collapse": _whiteSpace = 'c'; break;
 			case "replace": _whiteSpace = 'r'; break;
 			case "preserve": _whiteSpace = 0; break;
-			default:
-				//Parameter '&{0}' can be only '&{1}' for '&{2}'
+			default: //Parameter '&{0}' can be only '&{1}' for '&{2}'
 				throw new SRuntimeException(XDEF.XDEF812,
 					"whiteSpace","collapse, replace, preserve", parserName());
 		}
 		if (old == 'c' && _whiteSpace != 'c' ||
 			old == 'p' && _whiteSpace == 0) {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
-			throw new SRuntimeException(XDEF.XDEF812, "whiteSpace&",
-				(old == 'c' ? "collapse" : "collapse, replace"),
-				parserName());
+			throw new SRuntimeException(XDEF.XDEF812,
+				"whiteSpace&", (old == 'c' ? "collapse" : "collapse, replace"), parserName());
 		}
 	}
 
@@ -212,20 +204,17 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			return;
 		}
 		if ((len & 1) != 0) {
-			//Number of parameters must be multile of 2
-			throw new SException(XDEF.XDEF571);
+			throw new SException(XDEF.XDEF571); //Number of parameters must be multile of 2
 		}
 		int ids = 0;
 		for (int i = 0; i < params.length; i+=2) {
 			String key = params[i].toString();
 			int id = getKeyId(key);
 			if (id < 0) {
-				//Illegal parameter name '&{0}'
-				throw new SException(XDEF.XDEF801, key);
+				throw new SException(XDEF.XDEF801, key); //Illegal parameter name '&{0}'
 			}
 			if ((ids & id) != 0) {
-				//Parameter '&{0}' respecified
-				throw new SException(XDEF.XDEF802, key);
+				throw new SException(XDEF.XDEF802, key); //Parameter '&{0}' respecified
 			}
 			ids += id;
 		}
@@ -253,8 +242,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			if (maxIncl != null) {
 				if (maxExcl != null) {
 					//Both parameters can't be specified: '&{0}', '&{1}
-					throw new SException(XDEF.XDEF807,
-						"maxInclusive","maxExcelusive");
+					throw new SException(XDEF.XDEF807, "maxInclusive", "maxExcelusive");
 				}
 				setMaxInclusive(maxIncl);
 			} else if (maxExcl != null) {
@@ -263,8 +251,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			if (minIncl != null) {
 				if (minExcl != null) {
 					//Both parameters can't be specified: '&{0}', '&{1}'
-					throw new SException(XDEF.XDEF807,
-						"&{p1}minEnclusive", "minExcelusive");
+					throw new SException(XDEF.XDEF807, "&{p1}minEnclusive", "minExcelusive");
 				}
 				setMinInclusive(minIncl);
 				XDValue minIn = getMinInclusive();
@@ -272,8 +259,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				XDValue maxIn = getMaxInclusive();
 				if (maxIn != null && maxIn.compareTo(minIn) < 0 ||
 					maxEx != null && maxEx.compareTo(minIn) <= 0) {
-					//Incorrect combination of maximum and minimum
-					throw new SException(XDEF.XDEF808);
+					throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 				}
 			} else if (minExcl !=null){
 				setMinExclusive(minExcl);
@@ -282,16 +268,14 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				XDValue minEx = getMinExclusive();
 				if (maxIn != null && maxIn.compareTo(minEx) < 0 ||
 					maxEx != null && maxEx.compareTo(minEx) <= 0) {
-					//Incorrect combination of maximum and minimum
-					throw new SException(XDEF.XDEF808);
+					throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 				}
 			}
 		} catch (RuntimeException ex) {
 			if (ex instanceof SThrowable) {
 				throw new SException(((SThrowable) ex).getReport());
 			}
-			//Incorrect combination of maximum and minimum
-			throw new SException(XDEF.XDEF808);
+			throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 		}
 		if ((item = getParam(params, TOTALDIGITS)) != null && !item.isNull()) {
 			setTotalDigits(Long.parseLong(item.toString()));
@@ -305,16 +289,14 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if ((item = getParam(params, MINLENGTH)) != null && !item.isNull()) {
 			long i = Long.parseLong(item.toString());
 			if (getLength() > 0 || i < 0) {
-				//Incorrect combination of maximum and minimum
-				throw new SException(XDEF.XDEF808);
+				throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 			}
 			setMinLength(i);
 		}
 		if ((item = getParam(params, MAXLENGTH)) != null && !item.isNull()) {
 			long i = Long.parseLong(item.toString());
 			if (getLength() > 0 || getMinLength() > i || i < 0) {
-				//Incorrect combination of maximum and minimum
-				throw new SException(XDEF.XDEF808);
+				throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 			}
 			setMaxLength(i);
 		}
@@ -380,8 +362,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				return; // found pattern; OK
 			}
 		}
-		//Doesn't fit any pattern from list for '&{0}'
-		p.errorWithString(XDEF.XDEF811, parserName());
+		p.errorWithString(XDEF.XDEF811, parserName()); //Doesn't fit any pattern from list for '&{0}'
 	}
 	@Override
 	public XDContainer getNamedParams() {
@@ -473,8 +454,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 						return;
 					}
 				}
-				//Doesn't fit enumeration list of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF810, parserName());
+				p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of '&{0}'&{1}{: }
 			}
 		}
 	}

@@ -14,10 +14,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-/** Implements the ReportWriter interface for output streams
- * and/or files. The format of file can be composed from either Report objects
- * transformed to XML format or from Reports objects transformed to string
- * messages.
+/** Implements the ReportWriter interface for output streams and/or files. The format of file can be composed
+ * from either Report objects transformed to XML format or from Reports objects transformed to strings.
  * @see org.xdef.sys.Report
  * @author Vaclav Trojan
  */
@@ -45,14 +43,10 @@ public class FileReportWriter implements ReportWriter {
 	private String _language;
 
 	/** Create new empty instance of FileReportWriter. */
-	private FileReportWriter() {
-		this(true);
-	}
+	private FileReportWriter() {this(true);}
 
 	/** Create new empty instance of FileReportWriter. */
-	private FileReportWriter(boolean xmlFormat) {
-		_xmlFormat = xmlFormat;
-	}
+	private FileReportWriter(boolean xmlFormat) {_xmlFormat = xmlFormat;}
 
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param out The PrintStream where reports are printed.
@@ -64,8 +58,7 @@ public class FileReportWriter implements ReportWriter {
 
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param out The PrintStream where reports are printed.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 */
 	public FileReportWriter(final PrintStream out, final boolean xmlFormat) {
 		this(xmlFormat);
@@ -74,8 +67,7 @@ public class FileReportWriter implements ReportWriter {
 
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param out The PrintWriter where reports are printed.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 */
 	public FileReportWriter(final PrintWriter out, final boolean xmlFormat) {
 		this(xmlFormat);
@@ -92,8 +84,7 @@ public class FileReportWriter implements ReportWriter {
 
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param out The Output stream.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 */
 	public FileReportWriter(final OutputStream out, final boolean xmlFormat) {
 		this(xmlFormat);
@@ -110,8 +101,7 @@ public class FileReportWriter implements ReportWriter {
 
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param out The Output stream.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 */
 	public FileReportWriter(final OutputStreamWriter out,
 		final boolean xmlFormat) {
@@ -128,8 +118,7 @@ public class FileReportWriter implements ReportWriter {
 
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param fileName The file for reports.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 */
 	public FileReportWriter(final String fileName, final boolean xmlFormat) {
 		this(new File(fileName), xmlFormat);
@@ -138,8 +127,7 @@ public class FileReportWriter implements ReportWriter {
 	/** Create new FileReportWriter with the output file for reports.
 	 * @param fileName The file for reports.
 	 * @param encoding The character set name;
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 * @throws SRuntimeException
 	 * <ul>
 	 * <li>SYS023 Can't write to file
@@ -147,9 +135,7 @@ public class FileReportWriter implements ReportWriter {
 	 * <li>SYS077 Security violation
 	 * </ul>
 	 */
-	public FileReportWriter(final String fileName,
-		final String encoding,
-		final boolean xmlFormat) {
+	public FileReportWriter(final String fileName, final String encoding, final boolean xmlFormat) {
 		this(new File(fileName), encoding, xmlFormat);
 	}
 
@@ -162,8 +148,7 @@ public class FileReportWriter implements ReportWriter {
 
 	/** Create new KFileReportWriter with the output file for reports.
 	 * @param file The file for reports.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
-	 * the output be in the string format of reports.
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 * @throws SRuntimeException SYS023 Can't write to file.
 	 * @throws SError SYS077 Security violation {0}
 	 */
@@ -191,13 +176,11 @@ public class FileReportWriter implements ReportWriter {
 	 * <li>SYS077 Security violation
 	 * </ul>
 	 */
-	public FileReportWriter(final File file, final String encoding) {
-		this(file, encoding, true);
-	}
+	public FileReportWriter(final File file, final String encoding) {this(file, encoding, true);}
 
 	/** Create new KFileReportWriter with the output file for reports.
 	 * @param file The file for reports.
-	 * @param xmlFormat If true the output will be in XML format, otherwise
+	 * @param xmlFormat If true the output will be XML format, otherwise the output is the string.
 	 * @param encoding The character set name;
 	 * the output be in the string format of reports.
 	 * @throws SRuntimeException
@@ -207,9 +190,7 @@ public class FileReportWriter implements ReportWriter {
 	 * <li>SYS077 Security violation
 	 * </ul>
 	 */
-	public FileReportWriter(final File file,
-		final String encoding,
-		final boolean xmlFormat) {
+	public FileReportWriter(final File file, final String encoding, final boolean xmlFormat) {
 		this(xmlFormat);
 		try {
 			_file = file;
@@ -233,13 +214,11 @@ public class FileReportWriter implements ReportWriter {
 	}
 
 	@Override
-	/** Set language (ISO-639 or ISO-639-2). This method takes an effect only if
-	 * the reporter output is printed as a text to the output stream.
+	/** Set language (ISO-639 or ISO-639-2). This method takes an effect only if the reporter output
+	 * is printed as a text to the output stream.
 	 * @param language language id (ISO-639).
 	 */
-	public final void setLanguage(final String language) {
-		_language = SUtils.getISO3Language(language);
-	}
+	public final void setLanguage(final String language) {_language = SUtils.getISO3Language(language);}
 
 	@Override
 	/** Put the report to the list.
@@ -250,8 +229,7 @@ public class FileReportWriter implements ReportWriter {
 		if (_xmlFormat) {
 			_out.write(report.toXmlString());
 		} else {
-			_out.write(_language == null ?
-				report.toString() : report.toString(_language));
+			_out.write(_language == null ? report.toString() : report.toString(_language));
 			if (report.getType() == Report.STRING) {
 				_out.flush();
 				return;
@@ -260,20 +238,10 @@ public class FileReportWriter implements ReportWriter {
 		_out.write('\n');
 		_out.flush();
 		switch (report.getType()) {
-			case Report.ERROR:
-				_errors++;
-				_lastErrorReport = report;
-				return;
-			case Report.LIGHTERROR:
-				_lightErrors++;
-				_lastErrorReport = report;
-				return;
-			case Report.FATAL:
-				_fatals++;
-				_lastErrorReport = report;
-				return;
-			case Report.WARNING:
-				_warnings++;
+			case Report.ERROR: _errors++; _lastErrorReport = report; return;
+			case Report.LIGHTERROR: _lightErrors++; _lastErrorReport = report; return;
+			case Report.FATAL: _fatals++; _lastErrorReport = report; return;
+			case Report.WARNING: _warnings++;
 		}
 	}
 
@@ -281,9 +249,7 @@ public class FileReportWriter implements ReportWriter {
 	/** Write string to reporter.
 	 * @param str String to be written.
 	 */
-	public final void writeString(final String str) {
-		putReport(Report.string(null, str));
-	}
+	public final void writeString(final String str) {putReport(Report.string(null, str));}
 
 	@Override
 	/** Get last error report.
@@ -293,15 +259,13 @@ public class FileReportWriter implements ReportWriter {
 	public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
-	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of getLastReport() will be null. However,
-	 * the report has already been written to the report file.
+	/** Clear last error report. If last report has been available it will be erased (i.e. result
+	 * of getLastReport() will be null. However, the report has already been written to the report file.
 	 */
 	public void clearLastErrorReport() {_lastErrorReport = null;}
 
 	@Override
-	/** Clear counters of fatal errors, errors and warnings.
-	 */
+	/** Clear counters of fatal errors, errors and warnings. */
 	public final void clearCounters() {
 		_errors = 0;
 		_lightErrors = 0;
@@ -310,21 +274,18 @@ public class FileReportWriter implements ReportWriter {
 	}
 
 	@Override
-	/** Clear the report file. All report items will be errased from the file.
-	 * Also last error report is cleared.
+	/** Clear the report file. All report items will be errased from the file. Also cleare last error report.
 	 * throws SRuntimeException if it is not possible to clear reports.
 	 */
 	public final void clear() {
 		if (_file == null) {
-			//Report writer: report file can't be cleared.
-			throw new SRuntimeException(SYS.SYS046);
+			throw new SRuntimeException(SYS.SYS046); //Report writer: report file can't be cleared.
 		}
 		_out.close();
 		try {
 			_out = new PrintWriter(new FileOutputStream(_file), true);
 		} catch (IOException ex) {
-			//Report writer: report file can't be cleared.
-			throw new SRuntimeException(SYS.SYS046);
+			throw new SRuntimeException(SYS.SYS046); //Report writer: report file can't be cleared.
 		}
 		clearCounters();
 		_size = 0;
@@ -340,24 +301,19 @@ public class FileReportWriter implements ReportWriter {
 	@Override
 	/** Put fatal item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final long registeredID, final Object... mod) {
-		putReport(Report.fatal(registeredID, mod));
-	}
+	public final void fatal(final long ID, final Object... mod) {putReport(Report.fatal(ID, mod));}
 
 	@Override
 	/** Put error item.
@@ -366,174 +322,135 @@ public class FileReportWriter implements ReportWriter {
 	 * this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
 	@Override
 	/** Put error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final long registeredID, final Object... mod) {
-		putReport(Report.error(registeredID, mod));
-	}
+	public final void error(final long ID, final Object... mod) {putReport(Report.error(ID, mod));}
 
 	@Override
 	/** Put light error item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lighterror(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void lighterror(final String id, final String msg, final Object... mod) {
 		putReport(Report.lightError(id, msg, mod));
 	}
 
 	@Override
 	/** Put light error item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void lightError(final long registeredID, final Object... mod) {
-		putReport(Report.lightError(registeredID, mod));
-	}
+	public final void lightError(final long ID, final Object... mod) {putReport(Report.lightError(ID, mod));}
 
 	@Override
 	/** Put warning item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final String id,
-		final String msg,
-		final Object... mod){
+	public final void warning(final String id, final String msg, final Object... mod){
 		putReport(Report.warning(id, msg, mod));
 	}
 
 	@Override
 	/** Put warning item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final long registeredID, final Object... mod) {
-		putReport(Report.warning(registeredID, mod));
-	}
+	public final void warning(final long ID, final Object... mod) {putReport(Report.warning(ID, mod));}
 
 	@Override
 	/** Put audit item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void audit(final String id, final String msg, final Object... mod) {
 		putReport(Report.audit(id, msg, mod));
 	}
 
 	@Override
 	/** Put audit item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void audit(final long registeredID, final Object... mod) {
-		putReport(Report.audit(registeredID, mod));
-	}
+	public final void audit(final long ID, final Object... mod) {putReport(Report.audit(ID, mod));}
 
 	@Override
 	/** Put message item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void message(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void message(final String id, final String msg, final Object... mod) {
 		putReport(Report.message(id, msg, mod));
 	}
 
 	@Override
 	/** Put message item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void mesage(final long registeredID, final Object... mod) {
-		putReport(Report.message(registeredID, mod));
-	}
+	public final void mesage(final long ID, final Object... mod) {putReport(Report.message(ID, mod));}
 
 	@Override
 	/** Put info item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void info(final String id, final String msg, final Object... mod) {
 		putReport(Report.info(id, msg, mod));
 	}
 
 	@Override
 	/** Put info item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void info(final long registeredID, final Object... mod) {
-		putReport(Report.info(registeredID, mod));
-	}
+	public final void info(final long ID, final Object... mod) {putReport(Report.info(ID, mod));}
 
 	@Override
 	/** Put text item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void text(final String id, final String msg, final Object... mod) {
 		putReport(Report.text(id, msg, mod));
 	}
 
 	@Override
 	/** Put text item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void text(final long registeredID, final Object... mod) {
-		putReport(Report.text(registeredID, mod));
-	}
+	public final void text(final long ID, final Object... mod) {putReport(Report.text(ID, mod));}
 
 	@Override
 	/** Put string item.
 	 * @param id The report id. If id is null the default text is used.
-	 * @param msg Default text of report. If id is not found in report files
-	 * this text is used.
+	 * @param msg Default text of report. If id is not found in report files this text is used.
 	 * @param mod Message modification parameters.
 	 */
-	public final void string(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void string(final String id, final String msg, final Object... mod) {
 		putReport(Report.string(id, msg, mod));
 	}
 
 	@Override
 	/** Put string item.
-	 * @param registeredID registered report id.
+	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void string(final long registeredID, final Object... mod) {
-		putReport(Report.string(registeredID, mod));
-	}
+	public final void string(final long ID, final Object... mod) {putReport(Report.string(ID, mod));}
 
 	@Override
 	/** Get number of fatal items.
@@ -575,16 +492,13 @@ public class FileReportWriter implements ReportWriter {
 	/** Check if warnings and/or errors and/or fatal errors were generated.
 	 * @return <i>true</i> if fatal or error or warning items are present.
 	 */
-	public final boolean errorWarnings() {
-		return _fatals + _errors + _lightErrors + _warnings != 0;
-	}
+	public final boolean errorWarnings() {return _fatals + _errors + _lightErrors + _warnings != 0;}
 
 	@Override
-	/** Closes the reportWriter and creates report reader for reading created
-	 * report data. If reader can't be created the SRuntimeException is thrown.
+	/** Closes the reportWriter and creates report reader for reading createdreport data. If reader can't
+	 * be created the SRuntimeException is thrown.
 	 * @return report reader created from report writer.
-	 * @throws SRuntimeException SYS045 Can't get report reader from this
-	 * report writer.
+	 * @throws SRuntimeException SYS045 Can't get report reader from this report writer.
 	 */
 	public final ReportReader getReportReader() {
 		close();
@@ -592,11 +506,9 @@ public class FileReportWriter implements ReportWriter {
 			return null;
 		}
 		try {
-			return new FileReportReader(
-				new InputStreamReader(new FileInputStream(_file)), true);
+			return new FileReportReader(new InputStreamReader(new FileInputStream(_file)), true);
 		} catch (FileNotFoundException ex) {
-			//Can't get report reader from this report writer
-			throw new SRuntimeException(SYS.SYS045);
+			throw new SRuntimeException(SYS.SYS045); //Can't get report reader from this report writer
 		}
 	}
 
@@ -614,21 +526,15 @@ public class FileReportWriter implements ReportWriter {
 	public final void flush() {_out.flush();}
 
 	@Override
-	/** Check error reports are present in the report writer. Return normally if
-	 * in no errors are found, otherwise throw exception with list of
-	 * error messages (max. MAX_REPORTS messages).
+	/** Check error reports are present in the report writer. Return normally if no errors are found,
+	 * otherwise throw exception with list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if errors has been generated.
 	 */
-	public final void checkAndThrowErrors() throws SRuntimeException {
-		if (errors()) {
-			throwReports(false);
-		}
-	}
+	public final void checkAndThrowErrors() throws SRuntimeException {if (errors()) throwReports(false);}
 
 	@Override
-	/** Check if error and/or warning reports  are present in the report writer.
-	 * Return normally if in no errors or warnings are found, otherwise throw
-	 * exception with the  list of error messages (max. MAX_REPORTS messages).
+	/** Check if error and/or warning reports  are present in the report writer. Return normally if no errors
+	 * or warnings are found, otherwise throw exception with the list of max. MAX_REPORTS messages.
 	 * @throws SRuntimeException if errors or warnings has been generated.
 	 */
 	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
@@ -637,10 +543,8 @@ public class FileReportWriter implements ReportWriter {
 		}
 	}
 
-	/** Throw runtime exception if reports with errors and (or even warnings)
-	 * are present in the report writer.
-	 * @param warnings display all warnings messages if this argument is true,
-	 * otherwise display only errors.
+	/** Throw runtime exception if reports with errors and (or even warnings) are present in report writer.
+	 * @param warnings display all warnings messages if this argument is true, otherwise display only errors.
 	 * @throws SRuntimeException with reports.
 	 */
 	private void throwReports(final boolean warnings) throws SRuntimeException {
@@ -651,8 +555,7 @@ public class FileReportWriter implements ReportWriter {
 		if (reader == null) {
 			ArrayReporter r = new ArrayReporter();
 			r.putReport(getLastErrorReport());
-			//Can't get report reader from this report writer
-			r.putReport(Report.error(SYS.SYS045));
+			r.putReport(Report.error(SYS.SYS045)); //Can't get report reader from this report writer
 			reader = r.getReportReader();
 		}
 		StringBuilder sb = new StringBuilder();
@@ -664,13 +567,11 @@ public class FileReportWriter implements ReportWriter {
 					Report.text(null, "...").toXmlString(),'"',true));
 				sb.append("&}");
 				sb.append("\n&{&&");
-				sb.append(KXmlUtils.toXmlText(
-					//Too many errors
-					Report.error(SYS.SYS013).toXmlString(),'"',true));
+				sb.append(KXmlUtils.toXmlText(Report.error(SYS.SYS013).toXmlString(), //Too many errors
+					'"',true));
 				sb.append("&}");
 				break;
-			} else if (warnings || rep.getType() == Report.ERROR
-				|| rep.getType() == Report.LIGHTERROR
+			} else if (warnings || rep.getType() == Report.ERROR || rep.getType() == Report.LIGHTERROR
 				|| rep.getType() == Report.FATAL) {
 				i++;
 				sb.append("\n&{&&");
@@ -678,8 +579,7 @@ public class FileReportWriter implements ReportWriter {
 				sb.append("&}");
 			}
 		}
-		//Errors detected: &{0}
-		throw new SRuntimeException(SYS.SYS012, sb.toString());
+		throw new SRuntimeException(SYS.SYS012, sb.toString()); //Errors detected: &{0}
 	}
 
 	@Override
@@ -695,5 +595,4 @@ public class FileReportWriter implements ReportWriter {
 			putReport(rep);
 		}
 	}
-
 }

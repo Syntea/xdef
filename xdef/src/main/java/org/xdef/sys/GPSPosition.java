@@ -8,7 +8,6 @@ import org.xdef.msg.XDEF;
 public class GPSPosition {
 	/** Earth radius (meters average; see e.g. https://imagine.gsfc.nasa.gov).*/
 	public static final double EARTH_RADIUS = 6367500.0D;
-
 	/** This constant is used for conversion of degrees to radians. */
 	private static final double DEG_TO_RAD = Math.PI / 180.0D;
 	/** Latitude of the location; range from -90.0 to 90.0. */
@@ -24,8 +23,8 @@ public class GPSPosition {
 	/** Create new instance of GPosition with latitude, longitude and altitude.
 	 * @param latitude latitude of the location; range from -90.0 to 90.0.
 	 * @param longitude longitude of the location; range from -180.0 to 180.0.
-	 * @param altitude The altitude in meters; range from -EARTH_RADIUS
-	 * in meters (6376500.0) to MAX_VALUE or Double.MIN_VALUE if it is unknown.
+	 * @param altitude The altitude in meters; range from -EARTH_RADIUSin meters (6376500.0) to MAX_VALUE
+	 * or Double.MIN_VALUE if it is unknown.
 	 * @param name the name of locality or null.
 	 * @throws SRuntimeException if position is incorrect.
 	 */
@@ -44,13 +43,11 @@ public class GPSPosition {
 	 * @throws SRuntimeException with code XDEF222 if value is not correct.
 	 */
 	private void checkValue() throws SRuntimeException {
-		if ((_latitude >= -90.0D && _latitude <= 90.0D)
-			&& (_longitude >= -180.0D && _longitude <= 180.0D)
+		if ((_latitude >= -90.0D && _latitude <= 90.0D) && (_longitude >= -180.0D && _longitude <= 180.0D)
 			&& (_altitude == Double.MIN_VALUE || _altitude > - EARTH_RADIUS)) {
 			return;
 		}
-		 // Incorrect GPosition &{0}{: }
-		throw new SRuntimeException(XDEF.XDEF222, toString());
+		throw new SRuntimeException(XDEF.XDEF222, toString());// Incorrect GPosition &{0}{: }
 	}
 
 	/** Get latitude of this position.
@@ -60,14 +57,13 @@ public class GPSPosition {
 	public final double latitude() {return _latitude;}
 
 	/** Get longitude of this position.
-	 * @return longitude of the location; range from -180.0 to 180.0
-	 * or MIN_VALUE if unknown.
+	 * @return longitude of the location; range from -180.0 to 180.0 or MIN_VALUE if unknown.
 	 */
 	public final double longitude() {return _longitude;}
 
 	/** Get altitude of this position.
-	 * @return altitude value is in meters in the range from -EARTH_RADIUS
-	 * in meters (-6376500) to MAX_VALUE or MIN_VALUE if unknown.
+	 * @return altitude value is in meters in the range from -EARTH_RADIUS in meters (-6376500) to MAX_VALUE
+	 * or MIN_VALUE if unknown.
 	 */
 	public final double altitude() {return _altitude;}
 
@@ -76,11 +72,10 @@ public class GPSPosition {
 	 */
 	public final String name() {return _name;}
 
-	/** Get distance in meters from this position to position from the argument
-	 * (altitude is ignored).
+	/** Get distance in meters from this position to position from the argument (altitude is ignored).
 	 * @param x position to which the distance is computed.
-	 * @return distance from this position to given position. Note the
-	 * Earth radius used in Haversine formula is 6376500.0 m.
+	 * @return distance from this position to given position. Note the Earth radius used in Haversine formula
+	 * is 6376500.0 m.
 	 */
 	public final double distanceTo(final GPSPosition x) {
 		if (_latitude == x._latitude && _longitude == x._longitude) {
@@ -90,52 +85,44 @@ public class GPSPosition {
 		double lat2rad = x.latitude() * DEG_TO_RAD;
 		double deltaLong = (longitude() - x.longitude()) * DEG_TO_RAD;
 		double deltaLat = Math.pow(Math.sin((lat2rad - lat1rad) / 2.0D), 2.0D)
-			+ Math.cos(lat1rad) * Math.cos(lat2rad)
-			* Math.pow(Math.sin(deltaLong / 2.0D), 2.0D);
-		return EARTH_RADIUS
-			* (2.0D*Math.atan2(Math.sqrt(deltaLat),Math.sqrt(1.0D-deltaLat)));
+			+ Math.cos(lat1rad) * Math.cos(lat2rad) * Math.pow(Math.sin(deltaLong / 2.0D), 2.0D);
+		return EARTH_RADIUS * (2.0D*Math.atan2(Math.sqrt(deltaLat),Math.sqrt(1.0D-deltaLat)));
 	}
 
 	@Override
 	public int hashCode() {
-		return (int) Double.doubleToLongBits(101*_latitude +
-			97*(_longitude+19*(_altitude == Double.MIN_VALUE ? 1 : _altitude)));
+		return (int) Double.doubleToLongBits(101*_latitude
+			+ 97 * (_longitude+19*(_altitude == Double.MIN_VALUE ? 1 : _altitude)));
 	}
 
 	@Override
-	/** Check if the value of this object and of the object from argument are
-	 * are equal.
-	 * @return true if value of this object is equal to the value of the object
-	 * from argument
+	/** Check if the value of this object and of the object from argument are are equal.
+	 * @return true if value of this object is equal to the value of the object from argument
 	 */
 	public boolean equals(Object x) {
 		if (x == null && !(x instanceof GPSPosition)) {
 			return false;
 		}
 		GPSPosition y = (GPSPosition) x;
-		return _latitude == y._latitude
-			&& _longitude == y._longitude && _altitude == y._altitude;
+		return _latitude == y._latitude && _longitude == y._longitude && _altitude == y._altitude;
 	}
 
 	@Override
 	public String toString() {
-		String result = _latitude + ", " + _longitude
-			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "");
+		String result = _latitude +", "+ _longitude + (_altitude != Double.MIN_VALUE ? ", "+ _altitude : "");
 		if (_name != null) {
 			boolean notNeadDelimiter = false;
 			if (Character.isLetter(_name.charAt(0))) {
 				notNeadDelimiter = true;
 				for (int i = 1; i < _name.length(); i++) {
 					char ch;
-					if (!(Character.isLetterOrDigit(ch =_name.charAt(i))
-						|| ch == '_' || ch == '-')) {
+					if (!(Character.isLetterOrDigit(ch =_name.charAt(i)) || ch == '_' || ch == '-')) {
 						notNeadDelimiter = false;
 						break;
 					}
 				}
 			}
-			result += ", " + (notNeadDelimiter ? _name
-				: ('"' + SUtils.modifyString(_name, "\"", "\"\"") + '"'));
+			result += ", " + (notNeadDelimiter ? _name : ('"' + SUtils.modifyString(_name,"\"","\"\"")+'"'));
 		}
 		return result;
 	}

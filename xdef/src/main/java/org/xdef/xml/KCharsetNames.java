@@ -60,7 +60,6 @@ public final class KCharsetNames {
 		IANA_TO_JAVA.put("IBM-924","CP924");
 		IANA_TO_JAVA.put("X-ISO-10646-UCS-4-2143", "X-ISO-10646-UCS-4-2143");
 		IANA_TO_JAVA.put("X-ISO-10646-UCS-4-3412", "X-ISO-10646-UCS-4-3412");
-
 		JAVA_TO_IANA.put("UTF8", "UTF-8");
 		JAVA_TO_IANA.put("UTF16", "UTF-16");
 		JAVA_TO_IANA.put("UTF16LE", "UTF-16LE");

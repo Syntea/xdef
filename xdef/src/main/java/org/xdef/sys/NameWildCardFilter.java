@@ -12,15 +12,13 @@ public class NameWildCardFilter implements java.io.FileFilter {
 	/** switch if test is case insensitive. */
 	private final boolean _caseInsensitive;
 
-	/** Creates new instance of FNameWildCardFilter. Supported wildcards are
-	 * Microsoft style: '*' (skip zero or more characters)
-	 * and '?' (any character).
+	/** Creates new instance of FNameWildCardFilter. Supported wildcards are Microsoft style: '*' (skip zero
+	 * or more characters) and '?' (any character).
 	 * @param wildName The string with (possible) wildcards.
 	 * @param caseInsensitive if true then name comparing is case insensitive.
 	 */
 	public NameWildCardFilter(final String wildName, boolean caseInsensitive) {
-		_wildName = (_caseInsensitive = caseInsensitive) ?
-			wildName.toLowerCase() : wildName;
+		_wildName = (_caseInsensitive = caseInsensitive) ? wildName.toLowerCase() : wildName;
 	}
 
 	@Override
@@ -35,8 +33,7 @@ public class NameWildCardFilter implements java.io.FileFilter {
 		if (_wildName.isEmpty()) {
 			return true;
 		}
-		return chkWildcard(_wildName,
-			_caseInsensitive ? file.getName().toLowerCase() : file.getName());
+		return chkWildcard(_wildName, _caseInsensitive ? file.getName().toLowerCase() : file.getName());
 	}
 
 	/** Check if the file name represents the with name with wildcard.

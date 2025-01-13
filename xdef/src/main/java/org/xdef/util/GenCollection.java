@@ -20,9 +20,8 @@ public class GenCollection {
 	 * @param sources array of source paths, wildcards are permitted.
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all irrelevant actions are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefinig type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 * @return element with collection of X-definitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -30,17 +29,15 @@ public class GenCollection {
 		final boolean resolvemacros,
 		final boolean removeActions,
 		final boolean genModelVariants) throws Exception {
-		return XDGenCollection.genCollection(sources,
-			resolvemacros, removeActions, genModelVariants);
+		return XDGenCollection.genCollection(sources, resolvemacros, removeActions, genModelVariants);
 	}
 
 	/** Create collection element from sources.
 	 * @param files array of source files.
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all irrelevant actions are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefining type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 * @return element with collection of X-definitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -48,17 +45,15 @@ public class GenCollection {
 		final boolean resolvemacros,
 		final boolean removeActions,
 		final boolean genModelVariants) throws Exception {
-		return XDGenCollection.genCollection(files,
-			resolvemacros, removeActions, genModelVariants);
+		return XDGenCollection.genCollection(files, resolvemacros, removeActions, genModelVariants);
 	}
 
 	/** Create collection element from sources.
 	 * @param urls array of source urls.
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all irrelevant actions are removed.
-	 * @param genModelVariants if true generate alternate models if in the
-	 * reference there exists an attribute redefinig type or occurrence
-	 * (important for XML schema generation).
+	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
+	 * redefining type or occurrence (important for XML schema generation).
 	 * @return element with collection of X-definitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -66,22 +61,11 @@ public class GenCollection {
 		boolean resolvemacros,
 		final boolean removeActions,
 		final boolean genModelVariants) throws Exception {
-		return XDGenCollection.genCollection(urls,
-			resolvemacros, removeActions, genModelVariants);
+		return XDGenCollection.genCollection(urls, resolvemacros, removeActions, genModelVariants);
 	}
 
-	/** Call generation of a collection of X-definitions from a command line.
-	 * @param args array with command line arguments:
-	 * <ul>
-	 * <li><i>-o file .......... </i>output file
-	 * <li><i>[-m .............. </i>switch macros will be expanded]
-	 * <li><i>-e encoding ...... </i>name of character set
-	 * <li><i>-i file [file1 ... [filen] ]</i> list of input files (wildcards
-	 * are supported)
-	 * </ul>
-	 */
-	public static void main(String... args) {
-		final String info =
+	/** String with command line information. */
+	private static final String INFO =
 "Generate collection from X-definitions and/or collections.\n"+
 "Command line arguments:\n"+
 " [-m] [-s] [-g] [-e encoding] -o output file -i input_file [input_file1...]\n"+
@@ -92,16 +76,27 @@ public class GenCollection {
 "    redefininig type or occurrence (important for XML schema generation)\n" +
 " -o output file\n" +
 " -i file [file1 ... [filen] ] list of intput files (wildcards supported)";
+
+	/** Call generation of a collection of X-definitions from a command line.
+	 * @param args array with command line arguments:
+	 * <ul>
+	 * <li><i>-o file .......... </i>output file
+	 * <li><i>[-m .............. </i>switch macros will be expanded]
+	 * <li><i>-e encoding ...... </i>name of character set
+	 * <li><i>-i file [file1 ... [filen] ]</i> list of input files (wildcards are supported)
+	 * </ul>
+	 */
+	public static void main(String... args) {
 		if (args == null || args.length == 0) {
-			throw new RuntimeException("Missing parameters\n" + info);
+			throw new RuntimeException("Missing parameters\n" + INFO);
 		}
 		if (args.length < 4) {
 			if (args.length == 1 &&
 				("-h".equals(args[0]) || "-?".equals(args[0]))) {
-				System.out.println(info);
+				System.out.println(INFO);
 				return;
 			} else {
-				throw new RuntimeException("Incorrect parameters\n" + info);
+				throw new RuntimeException("Incorrect parameters\n" + INFO);
 			}
 		}
 		List<String> sources = new ArrayList<>();
@@ -114,13 +109,11 @@ public class GenCollection {
 		while (i < args.length) {
 			String arg = args[i];
 			if (arg == null || arg.isEmpty()) {
-				throw new RuntimeException(
-					"Incorrect parameter: " + arg + "\n" + info);
+				throw new RuntimeException("Incorrect parameter: " + arg + "\n" + INFO);
 			}
 			if ("-m".equals(arg)) {
 				if (resolveMacros) {
-					throw new RuntimeException(
-						"Redefinition of switch \"-m\"\n" + info);
+					throw new RuntimeException("Redefinition of switch \"-m\"\n" + INFO);
 				}
 				resolveMacros = true;
 				i++;
@@ -128,8 +121,7 @@ public class GenCollection {
 			}
 			if ("-g".equals(arg)) {
 				if (genModelVariants) {
-					throw new RuntimeException(
-						"Redefinition of switch \"-g\"\n" + info);
+					throw new RuntimeException("Redefinition of switch \"-g\"\n" + INFO);
 				}
 				genModelVariants = true;
 				i++;
@@ -137,8 +129,7 @@ public class GenCollection {
 			}
 			if ("-s".equals(arg)) {
 				if (removeActions) {
-					throw new RuntimeException(
-						"Redefinition of switch \"-s\"\n" + info);
+					throw new RuntimeException("Redefinition of switch \"-s\"\n" + INFO);
 				}
 				removeActions = true;
 				i++;
@@ -153,8 +144,7 @@ public class GenCollection {
 			}
 			if ("-o".equals(arg)) {
 				if (outFile != null) {
-					throw new RuntimeException(
-						"Redefinition of switch \"-o\"\n" + info);
+					throw new RuntimeException("Redefinition of switch \"-o\"\n" + INFO);
 				}
 				if (++i < args.length && (arg = args[i]) != null &&
 					!arg.startsWith("-")) {
@@ -162,14 +152,12 @@ public class GenCollection {
 					i++;
 					continue;
 				} else {
-					throw new RuntimeException(
-					"After parameter '-o' is expected an output file\n" + info);
+					throw new RuntimeException("After parameter '-o' is expected an output file\n" + INFO);
 				}
 			}
 			if ("-e".equals(arg)) {
 				if (encoding != null) {
-					throw new RuntimeException(
-						"Redefinition of switch \"-e\"\n" + info);
+					throw new RuntimeException("Redefinition of switch \"-e\"\n" + INFO);
 				}
 				if (++i < args.length && (arg = args[i]) != null &&
 					!arg.startsWith("-")) {
@@ -177,19 +165,16 @@ public class GenCollection {
 					i++;
 					continue;
 				} else {
-					throw new RuntimeException(
-						"After parameter '-e' is expected an encoding name\n"
-							+ info);
+					throw new RuntimeException("After parameter '-e' is expected an encoding name\n" + INFO);
 				}
 			}
-			throw new RuntimeException(
-				"Incorrect parameter on position " + (i+1) + "\n" + info);
+			throw new RuntimeException("Incorrect parameter on position " + (i+1) + "\n" + INFO);
 		}
 		if (sources.isEmpty()) {
-			throw new RuntimeException("No source specified\n" + info);
+			throw new RuntimeException("No source specified\n" + INFO);
 		}
 		if (outFile == null) {
-			throw new RuntimeException("No output file specified\n" + info);
+			throw new RuntimeException("No output file specified\n" + INFO);
 		}
 		if (encoding == null) {
 			encoding = "UTF-8";
@@ -200,7 +185,7 @@ public class GenCollection {
 			Element collection = genCollection(srcs,
 				resolveMacros, removeActions, genModelVariants);
 			if (collection == null) {
-				throw new RuntimeException("No collection generated\n" + info);
+				throw new RuntimeException("No collection generated\n" + INFO);
 			}
 			KXmlUtils.writeXml(outFile, encoding, collection, true, true);
 		} catch (Exception ex) {

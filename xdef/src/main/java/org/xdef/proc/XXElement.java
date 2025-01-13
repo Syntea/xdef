@@ -22,8 +22,7 @@ public interface XXElement extends XXNode {
 	 */
 	public XXElement prepareXXElementNS(String ns, String qname);
 
-	/** Prepare construction of the new element (without namespace) according
-	 * to X-definition.
+	/** Prepare construction of the new element (without namespace) according to X-definition.
 	 * @param name Tag name of the element.
 	 * @return created check element object.
 	 */
@@ -35,29 +34,28 @@ public interface XXElement extends XXNode {
 	 */
 	public XXElement createChildXXElement(XMElement model);
 
-	/** Add constructed element as a child to the XXElement.
-	 * Checks all attributes and child nodes for occurrence.
-	 * @return <i>true</i> if element was added and complies to X-definition.
+	/** Add constructed element as a child to the XXElement. Check all attributes and child nodes
+	 * for occurrence.
+	 * @return true if element was added and complies to X-definition.
 	 */
 	public boolean addElement();
 
-	/** This method is called when the end of the current element attribute list
-	 * was parsed. The implementation may check the list of attributes and
-	 * may invoke appropriate actions.
-	 * @return <i>true</i> if element is compliant with definition.
+	/** This method is called when the end of the current element attribute list was parsed.
+	 * The implementation may check the list of attributes and may invoke appropriate actions.
+	 * @return true if element is compliant with definition.
 	 */
 	public boolean checkElement();
 
 	/** Add new Text node to current element.
 	 * @param textValue The value of text node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <i>true</i> if text node is compliant with definition.
+	 * @return true if text node is compliant with definition.
 	 */
 	public boolean addText(String textValue);
 
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
-	 * @return <i>true</i> if Comment node is compliant with definition.
+	 * @return true if Comment node is compliant with definition.
 	 */
 	public boolean addComment(String data);
 
@@ -65,7 +63,7 @@ public interface XXElement extends XXNode {
 	 * @param name The name of the PI node.
 	 * @param data The value of instruction part of the PI node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <i>true</i> if PI node is compliant with definition.
+	 * @return true if PI node is compliant with definition.
 	 */
 	public boolean addPI(String name, String data);
 
@@ -73,28 +71,26 @@ public interface XXElement extends XXNode {
 	 * @param qname The qualified name of attribute (including prefix).
 	 * @param value The value of attribute.
 	 * @param nsURI The value of namespace URI.
-	 * @return <i>true</i> if attribute was created according to definition.
+	 * @return true if attribute was created according to definition.
 	 */
 	public boolean addAttributeNS(String nsURI, String qname, String value);
 
 	/** Add the new attribute to the current XXElement.
 	 * @param name The name of attribute.
 	 * @param value The value of attribute.
-	 * @return <i>true</i> if attribute was created according to definition.
+	 * @return true if attribute was created according to definition.
 	 */
 	public boolean addAttribute(String name, String value);
 
 	/** Check if attribute is legal in the XXElement.
 	 * @param name The name of attribute.
-	 * @return <i>true</i> if and only if the attribute is legal in the
-	 * XXElement, otherwise return <i>false</i>.
+	 * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
 	 */
 	public boolean checkAttributeLegal(String name);
 
 	/** Get attribute from XXElement.
 	 * @param name The name of attribute.
-	 * @return value of attribute or the empty string if the attribute is legal
-	 * otherwise throws the SRuntimeException.
+	 * @return value of attribute or empty string if attribute is legal, otherwise throw SRuntimeException.
 	 * @throws SRuntimeException if the attribute is not legal in actual model.
 	 */
 	public String getAttribute(String name) throws SRuntimeException;
@@ -102,20 +98,17 @@ public interface XXElement extends XXNode {
 	/** Check if attribute with given namespace is legal in the XXElement.
 	 * @param uri The namespace of attribute.
 	 * @param name name of attribute (optionally with prefix).
-	 * @return <i>true</i> if and only if the attribute is legal in the
-	 * XXElement, otherwise return <i>false</i>.
+	 * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
 	 */
 	public boolean checkAttributeNSLegal(String uri, final String name);
 
 	/** Get attribute with namespace from XXElement.
 	 * @param uri The namespace of attribute.
 	 * @param name The name of attribute.
-	 * @return value of attribute or the empty string if the attribute is legal
-	 * otherwise throws the SRuntimeException.
+	 * @return value of attribute or the empty string if attribute is legal otherwise throw SRuntimeException.
 	 * @throws SRuntimeException if the attribute is not legal in actual model.
 	 */
-	public String getAttributeNS(String uri, String name)
-		throws SRuntimeException;
+	public String getAttributeNS(String uri, String name) throws SRuntimeException;
 
 	/** Get XON result of processed Element model.
 	 * @return result of XON parsing.

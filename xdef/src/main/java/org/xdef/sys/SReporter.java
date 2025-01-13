@@ -10,36 +10,24 @@ public class SReporter extends SPosition {
 	/** Assigned reporter.*/
 	private ReportWriter _reportWriter;
 
-	/** Creates a new instance of SReporter. Connected reporter
-	 * will be ArrayReporter.
-	 */
-	public SReporter() {
-		this (new ArrayReporter());
-	}
+	/** Creates a new instance of SReporter. Connected reporter will be ArrayReporter. */
+	public SReporter() {this (new ArrayReporter());}
 
 	/** Creates a new instance of SReporter.
 	 * @param reportWriter Report writer connected to report generator.
 	 */
-	public SReporter(final ReportWriter reportWriter) {
-		_reportWriter = reportWriter;
-	}
+	public SReporter(final ReportWriter reportWriter) {_reportWriter = reportWriter;}
 
-	/** Creates a new instance of SReporter with reporter
-	 * and given parameters taken from another report generator.
+	/** Creates a new instance of SReporter with reporter and given parameters taken from another reporter.
 	 * @param reporter The reporter.
 	 */
-	public SReporter(final SReporter reporter) {
-		super(reporter);
-		_reportWriter = reporter._reportWriter;
-	}
+	public SReporter(final SReporter reporter) {super(reporter); _reportWriter = reporter._reportWriter;}
 
-	/** Creates a new instance of SReporter with reporter
-	 * and given parameters.
+	/** Creates a new instance of SReporter with reporter and given parameters.
 	 * @param reportWriter Report Writer.
 	 * @param position The source position.
 	 */
-	public SReporter(final ReportWriter reportWriter,
-		final SPosition position) {
+	public SReporter(final ReportWriter reportWriter, final SPosition position) {
 		super(position);
 		_reportWriter = reportWriter;
 	}
@@ -47,120 +35,103 @@ public class SReporter extends SPosition {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get report writer.
-	 * @return Report writer associated with this reporter or <i>null</i>.
+	 * @return Report writer associated with this reporter or null.
 	 */
 	public final ReportWriter getReportWriter() {return _reportWriter;}
 
 	/** Set report writer.
 	 * @param reporter SReporter to be associated with this generator.
 	 */
-	public final void setReportWriter(final ReportWriter reporter) {
-		_reportWriter = reporter;
-	}
+	public final void setReportWriter(final ReportWriter reporter) {_reportWriter = reporter;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods for reporting
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Put fatal error message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod), _reportWriter);
 	}
 
 	/** Put error message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
-	 * @throws SRuntimeException if reporter is <i>null</i> .
+	 * @param id Message id (may be null).
 	 */
-	public void error(final String id) {
-		putReport(Report.error(id, null), _reportWriter);
-	}
+	public void error(final String id) {putReport(Report.error(id, null), _reportWriter);}
 
 	/** Put error message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod), _reportWriter);
 	}
 
 	/** Put light error message with modification parameters.
-	 * @param id The message id (may be <i>null</i>).
+	 * @param id The message id (may be null).
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void lightError(final String id,
-		final String msg,
-		final Object... mod) {
+	public void lightError(final String id, final String msg, final Object... mod) {
 		putReport(Report.lightError(id, msg, mod), _reportWriter);
 	}
 
 	/** Put warning message with modification parameters.
-	 * @param id Message id (may be <i>null</i>).
+	 * @param id Message id (may be null).
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final String id, final String msg, final Object... mod){
+	public void warning(final String id, final String msg, final Object... mod) {
 		putReport(Report.warning(id, msg, mod), _reportWriter);
 	}
 
 	/** Put fatal error message with modification parameters.
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void fatal(final long registeredID, final Object... mod) {
 		putReport(Report.fatal(registeredID, mod), _reportWriter);
 	}
 
 	/** Put error message with modification parameters.
-	 * @param registeredID registered message ID.
+	 * @param ID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
-	public void error(final long registeredID, final Object... mod) {
-		putReport(Report.error(registeredID, mod), _reportWriter);
+	public void error(final long ID, final Object... mod) {
+		putReport(Report.error(ID, mod), _reportWriter);
 	}
 
 	/** Put light error message with modification parameters.
-	 * @param registeredID registered message ID.
+	 * @param ID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <i>null</i> .
+	 * @throws SRuntimeException if reporter is null.
 	 */
-	public void lightError(final long registeredID, final Object... mod) {
-		putReport(Report.lightError(registeredID, mod), _reportWriter);
+	public void lightError(final long ID, final Object... mod) {
+		putReport(Report.lightError(ID, mod), _reportWriter);
 	}
 
 	/** Put warning message with modification parameters.
-	 * @param registeredID registered message ID.
+	 * @param ID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final long registeredID, final Object... mod) {
-		putReport(Report.warning(registeredID, mod), _reportWriter);
+	public void warning(final long ID, final Object... mod) {
+		putReport(Report.warning(ID,mod),_reportWriter);
 	}
 
-	/** Put report. Type of report may be WARNING, ERROR or FATAL
-	 * (see {@link org.xdef.sys.Report#getMsgID()}).
+	/** Put report. Type of report may be WARNING, ERROR or FATAL; see {@link org.xdef.sys.Report#getMsgID()}.
 	 * @param report The report.
-	 * @throws SRuntimeException if reporter is <i>null</i> and if report
-	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i> .
+	 * @throws SRuntimeException if reporter is null and if report type is FATAL, ERROR or LIGHTERROR .
 	 */
-	public void putReport(final Report report) {
-		putReport(report, _reportWriter);
-	}
+	public void putReport(final Report report) {putReport(report, _reportWriter);}
 
 	/** Put report at position.
 	 * @param pos Source position.
 	 * @param report The report.
-	 * @throws SRuntimeException if reporter is <i>null</i> and if report
-	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i> .
+	 * @throws SRuntimeException if reporter is null and if report type is FATAL, ERROR or LIGHTERROR .
 	 */
 	public void putReport(final SPosition pos, final Report report) {
 		pos.putReport(report, _reportWriter);
@@ -169,49 +140,41 @@ public class SReporter extends SPosition {
 	/** Get number of errors.
 	 * @return Number of errors.
 	 */
-	public int getErrorCount() {
-		return _reportWriter == null ? 0 : _reportWriter.getErrorCount();
-	}
+	public final int getErrorCount() {return _reportWriter == null ? 0 : _reportWriter.getErrorCount();}
 
 	/** Get number of warnings.
 	 * @return Number of warnings.
 	 */
-	public int getWarningCount() {
-		return _reportWriter == null ? 0 : _reportWriter.getWarningCount();
-	}
+	public final int getWarningCount() {return _reportWriter == null ? 0 : _reportWriter.getWarningCount();}
 
-	/** Return <i>true</i> if and only if errors or fatal errors or light
+	/** Return true if and only if errors or fatal errors or light
 	 * errors were generated.
-	 * @return <i>true</i> if an error occurred.
+	 * @return true if an error occurred.
 	 */
-	public boolean errors() {
-		return _reportWriter == null ? false : _reportWriter.errors();
-	}
+	public final boolean errors() {return _reportWriter == null ? false : _reportWriter.errors();}
 
 	/** Check if errors, light errors or warnings were generated.
 	 * @return true if errors or warnings occurred.
 	 */
-	public boolean errorWarnings() {
+	public final boolean errorWarnings() {
 		return _reportWriter == null ? false : _reportWriter.errorWarnings();
 	}
 
-	/** Check error reports in the reporter. Return normally if no error was
-	 * reported, otherwise throws the exception with the list of error messages
-	 * (max. MAX_REPORTS messages).
+	/** Check error reports in the reporter. Return normally if no error was reported, otherwise throws
+	 * the exception with the list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if an error was reported.
 	 */
-	public void checkAndThrowErrors() throws SRuntimeException {
+	public final void checkAndThrowErrors() throws SRuntimeException {
 		if (_reportWriter != null) {
 			_reportWriter.checkAndThrowErrors();
 		}
 	}
 
-	/** Check error or warning reports in the reporter. Return normally if
-	 * no error or warning was reported, otherwise throws the exception with
-	 * the list of error messages (max. MAX_REPORTS messages).
+	/** Check error or warning reports in the reporter. Return normally if no error or warning was reported,
+	 * otherwise throws the exception with the list of error messages (max. MAX_REPORTS messages).
 	 * @throws SRuntimeException if an error or warning was reported.
 	 */
-	public void checkAndThrowErrorWarnings() throws SRuntimeException {
+	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
 		if (_reportWriter != null) {
 			_reportWriter.checkAndThrowErrorWarnings();
 		}
@@ -221,15 +184,10 @@ public class SReporter extends SPosition {
 	 * Please use getReportReader().printReports(...).
 	 * @param out The output stream.
 	 */
-	public void printReports(final PrintStream out) {
-		_reportWriter.getReportReader().printReports(out);
-	}
+	public final void printReports(final PrintStream out) {_reportWriter.getReportReader().printReports(out);}
 
 	/** Write reports to String.
 	 * @return the String with reports.
 	 */
-	public String printToString() {
-		return _reportWriter.getReportReader().printToString();
-	}
-
+	public final String printToString() {return _reportWriter.getReportReader().printToString();}
 }

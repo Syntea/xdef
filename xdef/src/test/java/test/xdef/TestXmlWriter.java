@@ -113,7 +113,7 @@ public final class TestXmlWriter extends XDTester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			bos = new ByteArrayOutputStream();
-			xd.setVariable("x", XDTools.createXDXmlOutStream(bos,"UTF-8",true));
+			xd.setVariable("x", XDFactory.createXDXmlOutStream(bos,"UTF-8",true));
 			xml =
 "<a x='_'>" +
 "<b x='a'><c>x</c><c>y</c></b>" +

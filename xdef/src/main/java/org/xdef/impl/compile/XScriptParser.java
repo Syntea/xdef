@@ -52,12 +52,10 @@ import static org.xdef.XDValueID.XM_MODEL;
 import org.xdef.impl.code.DefBigInteger;
 import static org.xdef.sys.SParser.NOCHAR;
 
-/** XScriptParser - lexical parser for the symbols of XD script. Before parsing
- * all macros are expanded.
+/** XScriptParser - lexical parser for the symbols of XD script. Before parsing all macros are expanded.
  * @author  Vaclav Trojan
  */
-public class XScriptParser extends StringParser
-	implements org.xdef.XDValueID {
+public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 	/** Hexadecimal digits and "_" (used in readNumber method). */
 	private final static String HEX_DIGITS = "0123456789abcdefABCDEF_";
 	/** Decimal digits and "_" (used in readNumber method). */
@@ -66,7 +64,6 @@ public class XScriptParser extends StringParser
 	private final static String ESC_CHARS = "nrt'\"\\u";
 	/** Converted escape characters. */
 	private final static String ESC_CHAR_RESULTS = "\n\r\t'\"\\";
-
 	// Basic alphabet
 	public static final char UNDEF_SYM = 1000;
 	public static final char ASSGN_SYM = '=';
@@ -391,8 +388,7 @@ public class XScriptParser extends StringParser
 		XQUERY_EXPR_ID_SYM + ";$XQUERY;" +
 		XMLWRITER_ID_SYM + ";$XMLWRITER;";
 	/** Table to convert base symbols to the source form. */
-	private static final Map<Character, String> BASESYMBOLTABLE =
-		new LinkedHashMap<>();
+	private static final Map<Character, String> BASESYMBOLTABLE = new LinkedHashMap<>();
 
 	static {
 		BASESYMBOLTABLE.put(CONSTANT_SYM, "constant");
@@ -429,13 +425,11 @@ public class XScriptParser extends StringParser
 		_xmlVersion = xmlVersion;
 		_actDefName = "";
 		_importLocals = new String[0];
-//		_lastPos=0;idName=null;_parsedValue=null;_unaryMinus=false;// Java makes
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Script parsing methods.
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Set source buffer to parser and expand macros.
 	 * @param source buffer with source code.
 	 * @param actDefName name of actually processed X-definition.
@@ -451,10 +445,9 @@ public class XScriptParser extends StringParser
 		_actDefName = actDefName;
 		_xpath = xpath;
 		_importLocals = importLocal != null ? importLocal
-			: actDefName == null ? new String[] {actDefName + '#'}
-			: new String[0];
+			: actDefName == null ? new String[] {actDefName + '#'} : new String[0];
 		_xdVersion = xdVersion;
-		if(source != null) {
+		if (source != null) {
 			setSourceBuffer(source);
 		} else {
 			setSourceBuffer("");
@@ -481,9 +474,7 @@ public class XScriptParser extends StringParser
 				if (ch == '\n') {
 					setNewLine();
 				}
-				while (incBufIndex() >= 0 && ((ch = getCurrentChar())==' '
-					|| ch=='\t' || ch=='\n' || ch=='\r')) {
-				}
+				while (incBufIndex()>=0 && ((ch=getCurrentChar())==' ' || ch=='\t' || ch=='\n' || ch=='\r')){}
 			}
 			if (ch != '/' || getIndex() + 1 >= getEndBufferIndex()) {
 				return;
@@ -517,8 +508,8 @@ public class XScriptParser extends StringParser
 		}
 	}
 
-	/** If follows "(" then after last dot should follow a method name. So, set
-	 * as the actual character the dot and remove is from the identifier.
+	/** If follows "(" then after last dot should follow a method name. So, set as the actual character
+	 * the dot and remove is from the identifier.
 	 */
 	final void separateMethodNameFromIdentifier() {
 		int i = _idName.lastIndexOf('.');
@@ -526,8 +517,7 @@ public class XScriptParser extends StringParser
 			int pos = getIndex();
 			skipBlanksAndComments();
 			if (getCurrentChar() == '(') { //follows "(" => method name
-				//we remove last part of the identifier and
-				//we set position to '.'
+				//we remove last part of the identifier and we set position to '.'
 				pos -= _idName.length() - i;
 				_idName = _idName.substring(0, i);
 				setIndex(pos);//set position to dot
@@ -536,9 +526,8 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Read next lexical symbol.
-	 * @return id of parsed symbol and save it to _sym. If the symbol was
-	 * an identifier, then the identifier is stored to _idName. If it is
-	 * a keyword the corresponding id is returned. If it was a constant
+	 * @return id of parsed symbol and save it to _sym. If the symbol was an identifier, then the identifier
+	 * is stored to _idName. If it is a keyword the corresponding id is returned. If it was a constant
 	 * the parsed constant to _parsedValue.
 	 */
 	public final char nextSymbol() {
@@ -653,8 +642,7 @@ public class XScriptParser extends StringParser
 				if (!isXMLName(_xmlVersion)) {
 					return _sym = UNDEF_SYM;
 				}
-				String s =
-					wasDollar ? '$' + getParsedString() : getParsedString();
+				String s = wasDollar ? '$' + getParsedString() : getParsedString();
 				if (s.endsWith("--")) {
 					setIndex(getIndex() - 2);//set position before "--"
 					s = s.substring(0, s.length() - 2);
@@ -669,36 +657,20 @@ public class XScriptParser extends StringParser
 					return _sym = IDENTIFIER_SYM;
 				}
 				switch (keyindex = KEYWORDS.charAt(keyindex - 1)) {
-					case TRUE_SYM:
-						_parsedValue = new DefBoolean(true);
-						return _sym = CONSTANT_SYM;
-					case FALSE_SYM:
-						_parsedValue = new DefBoolean(false);
-						return _sym = CONSTANT_SYM;
-					case PI_SYM: //3.141592653589793
-						_parsedValue = new DefDouble(Math.PI);
-						return _sym = CONSTANT_SYM;
-					case E_SYM: //2.718281828459045
-						_parsedValue = new DefDouble(Math.E);
-						return _sym = CONSTANT_SYM;
-					case MAXFLOAT_SYM: //1.7976931348623157E308
-						_parsedValue = new DefDouble(Double.MAX_VALUE);
-						return _sym = CONSTANT_SYM;
+					case TRUE_SYM: _parsedValue = new DefBoolean(true); return _sym = CONSTANT_SYM;
+					case FALSE_SYM: _parsedValue = new DefBoolean(false); return _sym = CONSTANT_SYM;
+					case PI_SYM: _parsedValue = new DefDouble(Math.PI); return _sym = CONSTANT_SYM; //3.14159
+					case E_SYM: _parsedValue = new DefDouble(Math.E); return _sym = CONSTANT_SYM; //2.7182818
+					case MAXFLOAT_SYM:
+						_parsedValue = new DefDouble(Double.MAX_VALUE); return _sym=CONSTANT_SYM;
 					case MINFLOAT_SYM:
-						_parsedValue = new DefDouble(Double.MIN_VALUE);
-						return _sym = CONSTANT_SYM;
+						_parsedValue = new DefDouble(Double.MIN_VALUE); return _sym = CONSTANT_SYM;
 					case NEGATIVE_INFINITY_SYM:
-						_parsedValue = new DefDouble(Double.NEGATIVE_INFINITY);
-						return _sym = CONSTANT_SYM;
+						_parsedValue = new DefDouble(Double.NEGATIVE_INFINITY); return _sym = CONSTANT_SYM;
 					case POSITIVE_INFINITY_SYM:
-						_parsedValue = new DefDouble(Double.POSITIVE_INFINITY);
-						return _sym = CONSTANT_SYM;
-					case MAXINT_SYM:
-						_parsedValue = new DefLong(Long.MAX_VALUE);
-						return _sym = CONSTANT_SYM;
-					case MININT_SYM:
-						_parsedValue = new DefLong(Long.MIN_VALUE);
-						return _sym = CONSTANT_SYM;
+						_parsedValue = new DefDouble(Double.POSITIVE_INFINITY); return _sym = CONSTANT_SYM;
+					case MAXINT_SYM: _parsedValue = new DefLong(Long.MAX_VALUE); return _sym = CONSTANT_SYM;
+					case MININT_SYM: _parsedValue = new DefLong(Long.MIN_VALUE); return _sym = CONSTANT_SYM;
 					case LSH_SYM:
 					case RSH_SYM:
 					case RRSH_SYM:
@@ -720,8 +692,7 @@ public class XScriptParser extends StringParser
 						}
 						return _sym = (char) keyindex;
 					default:
-						if (keyindex < BASE_ID
-							|| keyindex > BASE_ID+CompileBase.XD_UNDEF) {
+						if (keyindex < BASE_ID || keyindex > BASE_ID+CompileBase.XD_UNDEF) {
 							return _sym = (char) keyindex;//parser ID(see above)
 						}
 						_parsedValue = new DefLong(keyindex - BASE_ID);//type ID
@@ -748,8 +719,7 @@ public class XScriptParser extends StringParser
 
 	/** Parse XDPosition (may be also position of a text or of an attribute).
 	 * XDPosition ::= modelPosition ("/$text" ("["number"]")? | "/@"name)) ?
-	 *   ClassName (("extends" ClassName) ?
-	 *   ("implements" ClassName ("," ClassName)* )*
+	 *   ClassName (("extends" ClassName) ? ("implements" ClassName ("," ClassName)* )*
 	 * @return true if XDPositione was parsed and set parseResult.
 	 */
 	final boolean isXDPosition() {
@@ -778,14 +748,13 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Parse XDPosition (of model).
-	 * modelPosition ::= (xdefName? "#")?
-	 *   (modelName ("/" modelName ("["number"]")?)* )?
+	 * modelPosition ::= (xdefName? "#")? (modelName ("/" modelName ("["number"]")?)* )?
 	 * @return true if XDPositione was parsed and set parseResult.
 	 */
 	public final boolean isXModelPosition() {
 		String xdName = _actDefName;
-		String modelName = isChar('*') && !isChar('#')
-			? "*" : isXMLName(_xmlVersion) ? getParsedString() : "";
+		String modelName = isChar('*') && !isChar('#') ? "*"
+			: isXMLName(_xmlVersion) ? getParsedString() : "";
 		if (isChar('#')) {
 			xdName = modelName;
 			if (isChar('*') && !isChar('/')) {
@@ -857,8 +826,7 @@ public class XScriptParser extends StringParser
 	private void readNumber(char ch) {
 		int startNumber = getIndex();
 		char c = ch;
-		if (ch == '0' && ((c = getCurrentChar()) == 'x' || c == 'X'
-			|| c == 'd' || c == 'D' || c == 'i' || c == 'I') ) {
+		if (ch=='0' && ((c = getCurrentChar())=='x' || c=='X' || c=='d' || c=='D' || c=='i' || c=='I') ) {
 			// hexadecimal number, decimal or big integer
 			incBufIndex();
 			if (c == 'd' || c == 'D') { // Decimal
@@ -873,8 +841,7 @@ public class XScriptParser extends StringParser
 						}
 					}
 					if ((c == 'e' || c == 'E')) {
-						if (incBufIndex() > 0 &&
-							((c = getCurrentChar()) == '-' || c == '+')) {
+						if (incBufIndex() > 0 && ((c = getCurrentChar()) == '-' || c == '+')) {
 							incBufIndex(); //sign
 						}
 						if ((c = getCurrentChar()) >= '0' && c <= '9') {
@@ -954,8 +921,7 @@ public class XScriptParser extends StringParser
 			int pos = getIndex();
 			boolean wasDecPoint;
 			if (wasDecPoint = c == '.') {
-				if (incBufIndex() > 0 &&
-					DEC_DIGITS.indexOf(c = getCurrentChar()) >= 0) {
+				if (incBufIndex() > 0 && DEC_DIGITS.indexOf(c = getCurrentChar()) >= 0) {
 					while (incBufIndex() > 0 &&
 						DEC_DIGITS.indexOf(c = getCurrentChar()) >= 0) {
 					}
@@ -970,8 +936,7 @@ public class XScriptParser extends StringParser
 			}
 			if ((c == 'e' || c == 'E')) {
 				//exponent
-				if (incBufIndex() > 0 &&
-					((c = getCurrentChar()) == '-' || c == '+')) {
+				if (incBufIndex() > 0 && ((c = getCurrentChar()) == '-' || c == '+')) {
 					incBufIndex(); //sign
 				}
 				if ((c = getCurrentChar()) < '0' || c > '9') {
@@ -1003,8 +968,7 @@ public class XScriptParser extends StringParser
 						return;
 					}
 				}
-				while (incBufIndex() > 0 &&
-					DEC_DIGITS.indexOf(getCurrentChar()) >= 0){}
+				while (incBufIndex() > 0 && DEC_DIGITS.indexOf(getCurrentChar()) >= 0){}
 				try {
 					String s = getParsedBufferPartFrom(startNumber - 1);
 					s = SUtils.modifyString(s, "_", "");
@@ -1095,10 +1059,8 @@ public class XScriptParser extends StringParser
 				} else if (i == 6) { // 'u'
 					int j, k = 0;
 					for (int n = 0; n < 4; n++) {
-						if ((j=HEX_DIGITS.indexOf(getCurrentChar())) < 0
-							|| j == 22) { // "_" not allowed here
-							//Incorrect UNICODE declared character
-							error(XDEF.XDEF404);
+						if ((j=HEX_DIGITS.indexOf(getCurrentChar())) < 0 || j == 22) { // "_" not allowed here
+							error(XDEF.XDEF404); //Incorrect UNICODE declared character
 							break;
 						}
 						incBufIndex();
@@ -1141,8 +1103,7 @@ public class XScriptParser extends StringParser
 
 	/** Parse occurrence interval.
 	 * OccurrenceInterval ::= "?" | "*" | "+" | "required"
-	 *    | "unlimited" | "illegal" | "ignore"
-	 *    | IntegerLiteral [ ".." [IntegerLiteral]]
+	 *    | "unlimited" | "illegal" | "ignore" | IntegerLiteral [ ".." [IntegerLiteral]]
 	 * @param occ Container of occurrence.
 	 * @return true if occurrence interval was parsed
 	 */
@@ -1188,18 +1149,15 @@ public class XScriptParser extends StringParser
 				if (nextSymbol() == DDOT_SYM) {
 					if (nextSymbol() == CONSTANT_SYM) {
 						if (_parsedValue.getItemId() != XD_LONG) {
-							//Value of type '&{0}' expected
-							error(XDEF.XDEF423, "int");
+							error(XDEF.XDEF423, "int"); //Value of type '&{0}' expected
 						} else {
 							occ.setMaxOccur(_parsedValue.intValue());
 							if (occ.minOccurs() > occ.maxOccurs()) {
-								//Maximum must be greater or equal to minimum
-								error(XDEF.XDEF427);
+								error(XDEF.XDEF427); //Maximum must be greater or equal to minimum
 							}
 						}
 						if (occ.minOccurs() == 0 && occ.maxOccurs() == 0) {
-							//'occurs 0' is not allowed - use 'illegal'
-							lightError(XDEF.XDEF428);
+							lightError(XDEF.XDEF428); //'occurs 0' is not allowed - use 'illegal'
 						}
 						nextSymbol();
 					} else {
@@ -1223,11 +1181,9 @@ public class XScriptParser extends StringParser
 		return true;
 	}
 
-	/** Check the semicolon and if it is not at the actual position then put
-	 * the error message and skip to specified symbols. If it is found
-	 * then read next symbol and return true.
-	 * @param expected The string with symbols to which will be skipped
-	 * the input source.
+	/** Check the semicolon and if it is not at the actual position then put the error message and skip to
+	 * specified symbols. If it is found then read next symbol and return true.
+	 * @param expected The string with symbols to which will be skipped the input source.
 	 * @return true if the symbol was at the actual position.
 	 */
 	public final boolean checkSemicolon(final String expected) {
@@ -1245,8 +1201,8 @@ public class XScriptParser extends StringParser
 		return false;
 	}
 
-	/** Read the symbol at the next position. If it is expected symbol then
-	 * return true, otherwise put the error message and return false.
+	/** Read the symbol at the next position. If it is expected symbol then return true, otherwise put
+	 * the error message and return false.
 	 * @param sym the symbol to be checked.
 	 * @return true if the symbol was the expected one.
 	 */
@@ -1260,8 +1216,8 @@ public class XScriptParser extends StringParser
 		}
 	}
 
-	/** Check the symbol and if it is not at the actual position then put
-	 * the error message. If it is found then read next symbol and return true.
+	/** Check the symbol and if it is not at the actual position then put the error message.
+	 * If it is found then read next symbol and return true.
 	 * @param sym the symbol to be checked.
 	 * @return true if the symbol was at the actual position.
 	 */
@@ -1275,8 +1231,8 @@ public class XScriptParser extends StringParser
 		}
 	}
 
-	/** Check the symbol and if it is not at the actual position then put
-	 * the error message. If it is found then read next symbol and return true.
+	/** Check the symbol and if it is not at the actual position then put the error message. If it is found
+	 * then read next symbol and return true.
 	 * @param sym the symbol to be checked.
 	 * @param expected message what is expected.
 	 * @return true if the symbol was at the actual position.
@@ -1288,8 +1244,7 @@ public class XScriptParser extends StringParser
 		} else if (_sym == NOCHAR) {
 			return false;
 		}
-		//'&{0}' expected
-		errorAndSkip(XDEF.XDEF410, expected + sym, symToName(sym));
+		errorAndSkip(XDEF.XDEF410, expected + sym, symToName(sym)); //'&{0}' expected
 		if (_sym == sym) {
 			nextSymbol();
 			return true;
@@ -1297,16 +1252,14 @@ public class XScriptParser extends StringParser
 		return false;
 	}
 
-	/** Check the symbol and if it is not at the actual position then put
-	 * the error message. If it is found then read next symbol and return true.
+	/** Check the symbol and if it is not at the actual position then put the error message. If it is found
+	 * then read next symbol and return true.
 	 * @param sym the symbol to be checked.
 	 * @param registeredID The registered message ID.
 	 * @param mod The modification string of error message.
 	 * @return true if the symbol was at the actual position.
 	 */
-	public final boolean checkSymbol(final char sym,
-		final long registeredID,
-		final String mod) {
+	public final boolean checkSymbol(final char sym, final long registeredID, final String mod) {
 		if (_sym == sym) {
 			nextSymbol();
 			return true;
@@ -1328,8 +1281,8 @@ public class XScriptParser extends StringParser
 		return true;
 	}
 
-	/** Parse Java fully qualified Java identifier with template type and save
-	 * result to _parsedString.TemplateType declaration.
+	/** Parse Java fully qualified Java identifier with template type and save result to_parsed
+	 * templateType declaration.
 	 * @return true if identifier with template type was recognized.
 	 */
 	public final boolean isJavaTypedQName() {
@@ -1369,8 +1322,7 @@ public class XScriptParser extends StringParser
 
 	/** Parse component declaration.
 	 * component ::= ("%interface" | "%ref" | "%class"?) JavaTypedQName |
-	 *   JavaTypedQName (("extends" JavaTypedQName) ?
-	 *   ("implements" JavaTypedQName ("," JavaTypedQName)* )*
+	 *   JavaTypedQName (("extends" JavaTypedQName) ? ("implements" JavaTypedQName ("," JavaTypedQName)* )*
 	 * @param fromRequired if link reference is required.
 	 * @return string with component declaration or null.
 	 */
@@ -1468,13 +1420,11 @@ public class XScriptParser extends StringParser
 									result += " %with " + getParsedString();
 									skipBlanksAndComments();
 								} else {
-									//Specification of class expected
-									error(XDEF.XDEF361);
+									error(XDEF.XDEF361); //Specification of class expected
 									return null;
 								}
 							} else {
-								//Specification of class expected
-								error(XDEF.XDEF361);
+								error(XDEF.XDEF361); //Specification of class expected
 								return null;
 							}
 						}
@@ -1541,8 +1491,7 @@ public class XScriptParser extends StringParser
 				return null;
 			}
 			if (isJavaTypedQName()) {
-				result += " " + (isRef
-					? "%ref" : isImplements ? "implements" : "%interface")
+				result += " " + (isRef ? "%ref" : isImplements ? "implements" : "%interface")
 					+ " " + getParsedString();
 				skipBlanksAndComments();
 				setLastPosition();
@@ -1615,9 +1564,7 @@ public class XScriptParser extends StringParser
 	 * @param mod The modification string of error message.
 	 * @return true if the symbol to be skipped was found.
 	 */
-	public final boolean errorAndSkip(final long registeredID,
-		final char expected,
-		final String mod) {
+	public final boolean errorAndSkip(final long registeredID, final char expected, final String mod) {
 		error(registeredID, mod);
 		while (_sym != NOCHAR && _sym != expected) {
 			nextSymbol();
@@ -1627,12 +1574,10 @@ public class XScriptParser extends StringParser
 
 	/** Put error message and skip to one of specified symbols.
 	 * @param registeredID The registered message ID.
-	 * @param skipTo The string with symbols to which will be skipped
-	 * the input source.
+	 * @param skipTo The string with symbols to which will be skipped the input source.
 	 * @return true if the symbol to be skipped was found.
 	 */
-	public final boolean errorAndSkip(final long registeredID,
-		final String skipTo) {
+	public final boolean errorAndSkip(final long registeredID, final String skipTo) {
 		return errorAndSkip(registeredID, skipTo, null);
 	}
 
@@ -1643,9 +1588,7 @@ public class XScriptParser extends StringParser
 	 * @param mod The modification string of error message.
 	 * @return true if the symbol to be skipped was found.
 	 */
-	public final boolean errorAndSkip(final long registeredID,
-		final String skipTo,
-		final String mod) {
+	public final boolean errorAndSkip(final long registeredID, final String skipTo, final String mod) {
 		error(registeredID, mod);
 		while (_sym != NOCHAR && skipTo.indexOf(_sym) < 0) {
 			if (nextSymbol() == UNDEF_SYM) {//???
@@ -1677,8 +1620,7 @@ public class XScriptParser extends StringParser
 	 * @param sym The symbol id.
 	 */
 	public final void errToken(final char sym) {
-		//The token '&{0}' is not allowed here
-		error(XDEF.XDEF411, symToName(sym));
+		error(XDEF.XDEF411, symToName(sym)); //The token '&{0}' is not allowed here
 	}
 
 	/** Put error message the actual symbol is not allowed here.
@@ -1686,31 +1628,24 @@ public class XScriptParser extends StringParser
 	 * @param symbols string with symbols to find.
 	 */
 	public final void errToken(final char sym, String symbols) {
-		//The token '&{0}' is not allowed here
-		error(XDEF.XDEF411, symToName(sym));
+		error(XDEF.XDEF411, symToName(sym)); //The token '&{0}' is not allowed here
 		while (_sym != NOCHAR && symbols.indexOf(_sym) < 0) {
 			nextSymbol();
 		}
 	}
 
 	@Override
-	public void warning(final String id,
-		final String msg,
-		final Object... mod) {
+	public void warning(final String id, final String msg, final Object... mod) {
 		putReportOnLastPos(Report.warning(id, msg, mod));
 	}
 
 	@Override
-	public void lightError(final String id,
-		final String msg,
-		final Object... mod) {
+	public void lightError(final String id, final String msg, final Object... mod) {
 		putReportOnLastPos(Report.lightError(id, msg, mod));
 	}
 
 	@Override
-	public void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public void error(final String id, final String msg, final Object... mod) {
 		putReportOnLastPos(Report.error(id, msg, mod));
 	}
 
@@ -1719,7 +1654,7 @@ public class XScriptParser extends StringParser
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final long registeredID, final Object... mod){
+	public void warning(final long registeredID, final Object... mod) {
 		putReportOnLastPos(Report.warning(registeredID, mod));
 	}
 
@@ -1728,7 +1663,7 @@ public class XScriptParser extends StringParser
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public void lightError(final long registeredID, final Object... mod){
+	public void lightError(final long registeredID, final Object... mod) {
 		putReportOnLastPos(Report.lightError(registeredID, mod));
 	}
 
@@ -1742,10 +1677,7 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Put report with saved last position.
-	 * @param typ type of message.
-	 * @param id Message id.
-	 * @param msg Message text.
-	 * @param modif Modification string.
+	 * @param report report to be saved.
 	 */
 	private void putReportOnLastPos(final Report report) {
 		putReport(getLastPosition(), report);
@@ -1757,10 +1689,7 @@ public class XScriptParser extends StringParser
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final SPosition pos,
-		final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final SPosition pos, final String id, final String msg, final Object... mod) {
 		putReport(pos, Report.error(id, msg, mod));
 	}
 
@@ -1769,9 +1698,7 @@ public class XScriptParser extends StringParser
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	public final void error(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.error(registeredID, mod));
 	}
 
@@ -1780,9 +1707,7 @@ public class XScriptParser extends StringParser
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
+	public final void warning(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.warning(registeredID, mod));
 	}
 

@@ -39,9 +39,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (s == null || !s.contains("XDEF289") ||
-				!s.contains("XDEF285") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !(s.contains("XDEF289") || s.contains("XDEF282"))) {
 				fail(ex);
 			}
 		}
@@ -54,7 +52,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			if (!ex.getMessage().contains("XDEF229")) { // comparing skipped
+			if ((s = ex.getMessage()) == null || !ex.getMessage().contains("XDEF229")) { // comparing skipped
 				fail(ex);
 			}
 		}
@@ -71,8 +69,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF286") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF286") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -95,8 +92,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -137,8 +133,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -158,8 +153,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -176,8 +170,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF283") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF283") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -212,8 +205,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -230,8 +222,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF286") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF286") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}
@@ -252,8 +243,7 @@ public final class TestImplementsAndUses extends XDTester {
 			compile(xdef);
 			fail("error not reported");
 		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
 				fail(ex);
 			}
 		}

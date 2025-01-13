@@ -28,8 +28,7 @@ public interface XDUniqueSetKey extends XDValue {
 	public XDValue getValue(final String name);
 
 	/** Reset actual key of the table from this position.
-	 * @return true if the key was reset to the value from this object
-	 * or return false if item not exists in the set.
+	 * @return true if key was reset to the value from this object or return false if item is not in the set.
 	 */
 	public boolean resetKey();
 }

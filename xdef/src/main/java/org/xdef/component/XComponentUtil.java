@@ -64,9 +64,8 @@ public class XComponentUtil {
 	 * @param value value of variable.
 	 * @throws Exception if variable not exists.
 	 */
-	public static final void setVariable(final XComponent xc,
-		final String name,
-		final Object value) throws Exception {
+	public static final void setVariable(final XComponent xc, final String name, final Object value)
+		throws Exception {
 		final Class<?> clazz = xc.getClass();
 		Method method = clazz.getDeclaredMethod("get" + name);
 		method.setAccessible(true);
@@ -82,9 +81,7 @@ public class XComponentUtil {
 	 * @param xdPosition the XDPosition of model in XDPool.
 	 * @return created XComponent.
 	 */
-	public static final XComponent toXComponent(final XComponent xc,
-		final XDPool xp,
-		final String xdPosition) {
+	public static final XComponent toXComponent(final XComponent xc, final XDPool xp,final String xdPosition){
 		XMNode xm = xp.findModel(xdPosition);
 		if (xm.getKind() != XMELEMENT) {
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition()); //Argument is not model of element: &{0}
@@ -111,7 +108,7 @@ public class XComponentUtil {
 	 * @param model name of model to be created.
 	 * @return new Element.
 	 */
-	public static final Element toXml(final XComponent xc, final XDDocument xd, final String model){
+	public static final Element toXml(final XComponent xc, final XDDocument xd, final String model) {
 		xd.setXDContext(xc.toXml());
 		return xd.xcreate(model, null);
 	}
@@ -125,8 +122,8 @@ public class XComponentUtil {
 	public static final Element toXml(final XComponent xc, final XDPool xp, final String xdPos) {
 		XMNode xm = xp.findModel(xdPos);
 		if (xm.getKind() != XMELEMENT) {
-			throw new SRuntimeException(XDEF.XDEF372, //Argument is not model of element: &{0}
-				xm.getXDPosition());
+			//Argument is not model of element: &{0}
+			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
 		}
 		return toXml(xc, (XMElement) xm);
 	}
@@ -392,10 +389,9 @@ public class XComponentUtil {
 				sb.append(listToString((List) o, true));
 			} else if (o instanceof String) {
 				String s = (String) o;
-				if ("false".equals(s) || "true".equals(s) || "null".equals(s)
-				|| s.isEmpty() || s.indexOf('\\') >= 0 || s.indexOf(' ') >= 0
-				|| s.indexOf('\t') >= 0 || s.indexOf('\n') >=0 || s.indexOf('"') >= 0
-				|| new StringParser(s).isSignedInteger()) {
+				if ("false".equals(s) || "true".equals(s) || "null".equals(s) || s.isEmpty()
+					|| s.indexOf('\\') >= 0 || s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
+					|| s.indexOf('\n') >=0 || s.indexOf('"') >= 0 || new StringParser(s).isSignedInteger()) {
 					s = '"' + XonTools.jstringToSource(s) + '"';
 				}
 				sb.append(s);
@@ -448,8 +444,8 @@ public class XComponentUtil {
 	 * @return Java name created from XML name,
 	 */
 	public static final String xmlToJavaName(final String xmlName) {
-		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
-			: xmlName.replace(':', '$').replace('-', '_').replace('.', '_');
+		// Java 9 not allows indentifiers "_" ???
+		return "_".equals(xmlName) ? "$_" : xmlName.replace(':', '$').replace('-', '_').replace('.', '_');
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -470,8 +466,8 @@ public class XComponentUtil {
 			Method m = cls.getDeclaredMethod("get" + X_VALATTR);
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
-		} catch (IllegalAccessException | IllegalArgumentException
-			| NoSuchMethodException | SecurityException | InvocationTargetException ex) {
+		} catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException
+			| InvocationTargetException ex) {
 			throw new RuntimeException("Can't access value", ex);
 		}
 	}
@@ -553,7 +549,8 @@ public class XComponentUtil {
 					break;
 				} catch (IllegalAccessException | IllegalArgumentException
 					| SecurityException | InvocationTargetException ex) {}
-			} else if (x.getParameterTypes().length == 0 && methodName.startsWith("listOf" + XON_NS_PREFIX + "$")) {
+			} else if (x.getParameterTypes().length == 0
+				&& methodName.startsWith("listOf" + XON_NS_PREFIX + "$")) {
 				String key;
 				try {
 					x.setAccessible(true);

@@ -27,26 +27,22 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	 * @param tel String representation of InternetAddress.
 	 * @throws SRuntimeException in telephone number is incorrect.
 	 */
-	public DefTelephone(final String tel) {
+	public DefTelephone(final String tel) throws SRuntimeException {
 		_value = tel != null ? parseTelephone(new StringParser(tel)) : null;
 		if (_value == null) {
 			throw new SRuntimeException(XDEF.XDEF809, "telehone");
 		}
 	}
 
-	/** Check local part of telephone number and return string with telephone
-	 * number.
+	/** Check local part of telephone number and return string with telephone number.
 	 * @param p parser (position is after area code).
 	 * @param wasQuote true if number is in quotation marks.
 	 * @return string with telephone number.
 	 */
-	private static String localPart(final SParser p,
-		final int pos1,
-		final boolean wasQuote) {
+	private static String localPart(final SParser p, final int pos1, final boolean wasQuote) {
 		while (p.isInteger()) {
 			if (p.eos() || wasQuote && p.isChar('"')) {
-				return p.getBufferPart(pos1,
-					wasQuote ? p.getIndex() - 1 : p.getIndex());
+				return p.getBufferPart(pos1, wasQuote ? p.getIndex() - 1 : p.getIndex());
 			} else if (!p.isSpace()) {
 				break;
 			}
@@ -68,11 +64,9 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		return localPart(p, pos1, wasQuote);
 	}
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDTelephone interface
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/**	Get the area code from telephone number.
 	 * @return area code part from telephone number.
@@ -89,7 +83,6 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		}
 		return (_value.length()>6) ? -1 : Integer.parseInt(_value.substring(1));
 	}
-
 	@Override
 	/**	Get the local telephone number.
 	 * @return local part from telephone number.
@@ -125,9 +118,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
-	public boolean equals(final Object arg) {
-		return arg instanceof XDValue ? equals((XDValue) arg) : false;
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefTelephone) {

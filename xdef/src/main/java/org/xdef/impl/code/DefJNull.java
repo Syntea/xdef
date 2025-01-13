@@ -12,7 +12,6 @@ import org.xdef.xon.XonTools;
  * @author Vaclav Trojan
  */
 public final class DefJNull extends XDValueAbstract {
-
 	/** The value of item. */
 	private final XonTools.JNull _value;
 
@@ -22,9 +21,7 @@ public final class DefJNull extends XDValueAbstract {
 	/** Creates a new instance of DefBoolean
 	 * @param value The initial value of object.
 	 */
-	public DefJNull(final XonTools.JNull value) {
-		_value = value!=null ? XonTools.JNULL : null;
-	}
+	public DefJNull(final XonTools.JNull value) {_value = value!=null ? XonTools.JNULL : null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -64,18 +61,15 @@ public final class DefJNull extends XDValueAbstract {
 	public int hashCode() {return _value==null ? 0 : _value.hashCode();}
 	@Override
 	public boolean equals(final Object arg) {
-		return arg==null ||
-			arg instanceof XDValue ? ((XDValue) arg).isNull() : false;
+		return arg==null || arg instanceof XDValue ? ((XDValue) arg).isNull() : false;
 	}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
 	 */
-	public boolean equals(final XDValue arg) {
-		return arg == null || arg.getItemId() == XD_NULL;
-	}
+	public boolean equals(final XDValue arg) {return arg == null || arg.getItemId() == XD_NULL;}
 	@Override
 	/** Compares this object with the other DefBoolean object.
 	 * @param arg other DefBoolean object to which is to be compared.
@@ -89,9 +83,8 @@ public final class DefJNull extends XDValueAbstract {
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
 	 */
 	public boolean isNull() {return true;}
 }

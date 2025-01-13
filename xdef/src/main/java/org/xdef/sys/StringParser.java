@@ -28,7 +28,6 @@ import static org.xdef.sys.SParser.NOCHAR;
  * @author  Vaclav Trojan
  */
 public class StringParser extends SReporter implements SParser {
-
 	/** XML version 1.0. */
 	public static final byte XMLVER1_0 = 10;
 	/** XML version 1.1. */
@@ -45,12 +44,28 @@ public class StringParser extends SReporter implements SParser {
 	public static final byte XML_CHAR_NAME_START = 8;
 	/** XML name character (not the first one). */
 	public static final byte XML_CHAR_NAME_EXT = 16;
-
 	/** Table of XML version 1.0 characters. */
 	private static final byte[] XML_CHARTAB0 = new byte[65536];
 	/** Table of XML version 1.1 characters. */
 	private static final byte[] XML_CHARTAB1 = new byte[65536];
 
+	/** Actual character */
+	private char _ch;
+	/** Source buffer. */
+	private String _source;
+	/** Buffer position of end of buffer. */
+	private int _endPos;
+	/** Value of parsed string. */
+	private String _parsedString;
+	/** If true the parser will create detailed line position. By default the
+	 * value of this is set to false. */
+	private boolean _lineInfo;
+	/** Parsed date and time. */
+	private MyDate _parsedDatetime;
+	/** Parsed date and time. */
+	private SDuration _parsedDuration;
+	/** Switch to close or not close reader. */
+	boolean _closeReader = true;
 // <editor-fold defaultstate="collapsed" desc="XML UNICODE CHARACTER TABLES">
 	static {
 
@@ -798,24 +813,6 @@ public class StringParser extends SReporter implements SParser {
 	}
 // </editor-fold>
 
-	/** Actual character */
-	private char _ch;
-	/** Source buffer. */
-	private String _source;
-	/** Buffer position of end of buffer. */
-	private int _endPos;
-	/** Value of parsed string. */
-	private String _parsedString;
-	/** If true the parser will create detailed line position. By default the
-	 * value of this is set to false. */
-	private boolean _lineInfo;
-	/** Parsed date and time. */
-	private MyDate _parsedDatetime;
-	/** Parsed date and time. */
-	private SDuration _parsedDuration;
-	/** Switch to close or not close reader. */
-	boolean _closeReader = true;
-
 	/** Create new instance of StringParser */
 	public StringParser() {}// all fields are set to null by Java VM
 
@@ -877,7 +874,6 @@ public class StringParser extends SReporter implements SParser {
 ////////////////////////////////////////////////////////////////////////////////
 	/** Max. size of source buffer for stream parser. */
 	private static final int SOURCE_BUFFER_SIZE = 2048;
-
 	/** Counter of nested keepBuffer methods. */
 	private int _keepBufferCounter;
 	/** Source reader. */
@@ -903,9 +899,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param filePos RBA position of the start.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public StringParser(final URL url,
-		final ReportWriter reporter,
-		final long filePos) {
+	public StringParser(final URL url, final ReportWriter reporter, final long filePos) {
 		super(reporter);
 		try {
 			URLConnection con = url.openConnection();
@@ -970,9 +964,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param reader Input reader.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	private void setSourceReader(final Reader reader) {
-		setSourceReader(reader, 0L, null);
-	}
+	private void setSourceReader(final Reader reader) {setSourceReader(reader, 0L, null);}
 
 	/** Set source reader.
 	 * @param reader Input reader.
@@ -1766,8 +1758,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Skip to first occurrence of one of specified character set. The position is set to the
-	 * found character.Return the character from the list of characters if the character was found, otherwise
+	/** Skip to first occurrence of one of specified character set. The position is set to the found
+	 * character. Return the character from the list of characters if the character was found, otherwise
 	 * return NOCHAR and set the position to the end of source.
 	 * @param chars String with set of characters.
 	 * @return found character or NOCHAR.
@@ -1788,7 +1780,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Skip to next character after the first occurrence of one of specified character set. Return the
 	 * character from the list of characters if the character was found, otherwise return NOCHAR
-	 * and set position* to the end of source.
+	 * and set position to the end of source.
 	 * @param chars String with set of characters.
 	 * @return found character or NOCHAR.
 	 */
@@ -2169,10 +2161,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to letter or digit. Set the source
-	 *  position to the next character if letter was recognized and return
-	 * the character otherwise return NOCHAR and source position remains
-	 * unchanged.
+	/** Check if actual position points to letter or digit. Set the source position to the next character
+	 * if letter was recognized and return the character otherwise return NOCHAR and source position
+	 * remains unchanged.
 	 * @return character or NOCHAR.
 	 */
 	public final char isLetterOrDigit() {
@@ -2185,11 +2176,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to given token. Set the actual
-	 * position to the next character after the token if given token was
-	 * recognized.
+	/** Check if actual position points to given token. Set the actual position to the next character after
+	 * the token if given token was recognized.
 	 * @param token The token.
-	 * @return <i>true</i> if token was present at actual position.
+	 * @return true if token was present at actual position.
 	 */
 	public final boolean isToken(final String token) {
 		if (_ch == token.charAt(0)) {
@@ -2208,8 +2198,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Parse integer number (ASCII digits '0' .. '9'). Set the actual position
-	 * to the next character after the number.
+	/** Parse integer number (ASCII digits '0' .. '9'). Set the actual position to the next character after
+	 * the number.
 	 * @return true if and only if integer was parsed.
 	 */
 	public final boolean isInteger() {
@@ -2229,9 +2219,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Parse unsigned float number. Set actual position to the next character
-	 * after the number if number was recognized.
-	 * @return <i>true</i> if and only if float number was parsed.
+	/** Parse unsigned float number. Set actual position to the next character after the number if number
+	 * was recognized.
+	 * @return true if and only if float number was parsed.
 	 */
 	public final boolean isFloat() {
 		if (getIndex() + 2 >= _endPos && !readNextBuffer()) {
@@ -2258,8 +2248,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check if actual position points to part of float number. Set the actual
-	 * position to the next character after the number if number part
-	 * was recognized.
+	 * position to the next character after the number if number part was recognized.
 	 * @return true if number was parsed, otherwise return false.
 	 */
 	private boolean isFloatPart() {
@@ -2293,28 +2282,23 @@ public class StringParser extends SReporter implements SParser {
 // parsing of date and time
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse date in ISO8601 format (see
-	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
+	/** Parse date in ISO8601 format (see <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return true if date on current position suits to ISO8601
-	 * date format.
+	 * @return true if date on current position suits to ISO8601 date format.
 	 */
 	public final boolean isISO8601Date() {
 		return isDatetime("yyyy-MM-dd[Z]|yyyy-DDD[Z]|yyyy-'W'w-e[Z]|yyyy'W'wwe[Z]");
 	}
 
-	/** Parse time in ISO8601 format (see
-	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
+	/** Parse time in ISO8601 format (see <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return true if date on current position suits to ISO8601
-	 * time format.
+	 * @return true if date on current position suits to ISO8601 time format.
 	 */
 	public final boolean isISO8601Time() {return isDatetime("HH:mm[:ss[.S]][Z]");}
 
 	/** Parse date according to RFC822 (email format). (see
 	 * <a href = "http://www.w3.org/Protocols/rfc822/">rfc822</a>).
-	 * @return true if date on current position suits to RFC822 date
-	 * and time format.
+	 * @return true if date on current position suits to RFC822 date and time format.
 	 */
 	public final boolean isRFC822Datetime() {
 		return isDatetime(
@@ -2328,11 +2312,9 @@ public class StringParser extends SReporter implements SParser {
 		return isDatetime("[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y|{L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
 	}
 
-	/** Parse date in ISO8601 date or date and time (see
-	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
+	/** Parse date in ISO8601 date or date and time (see <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return true if date on current position suits to ISO8601
-	 * date and time format.
+	 * @return true if date on current position suits to ISO8601 date and time format.
 	 */
 	public final boolean isISO8601Datetime() {
 		return isDatetime("yyyy-MM-dd['T'HH:mm[:ss[.S]][Z]]" +
@@ -2345,8 +2327,7 @@ public class StringParser extends SReporter implements SParser {
 			"|HH:mm[:ss[.S]][Z]]"); //time
 	}
 
-	/** Parse ISO8601 date and time format (see
-	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
+	/** Parse ISO8601 date and time format (see <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
 	 * @return true if date on current position suits to ISO8601 date format.
 	 */
@@ -2743,8 +2724,7 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				case 'R': {//year - two digits (database)
 /*
-  Two digits year (see Oracle format). Century is generated according
-  to following rules:
+  Two digits year (see Oracle format). Century is generated according to following rules:
   If RR is from the interval  00 .. 49 then
   a) if last two digits of the actual year are 00..49 then the century is taken
 	 from the actual year.
@@ -2769,8 +2749,7 @@ public class StringParser extends SReporter implements SParser {
 					y = y % 100; //last two digits of the actual year
 					//actual years in the actual century < 50
 					myDate._year = i < 50 ? y < 50 ? c * 100 + i : ((c + 1) * 100 + i)
-						: y < 50 ? (c - 1) * 100 + i
-						: (c * 100 + i);
+						: y < 50 ? (c - 1) * 100 + i : (c * 100 + i);
 					continue;
 				}
 				case 'Z': //ISO
@@ -3148,8 +3127,7 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Check if source buffer contains at actual position correct format of
-	 * ISO 8061 duration.
+	/** Check if source buffer contains at actual position correct format of ISO 8061 duration.
 	 * @param xmlSchema if true the interval is according to XML schema format.
 	 * @return true if correct format of duration was parsed.
 	 * @throw SRuntimeException if an error occurs.
@@ -3348,8 +3326,8 @@ public class StringParser extends SReporter implements SParser {
 						if (ch == 'z') {// zone
 							_parsedDatetime._tz = TimeZone.getDefault();
 						} else {// L language
-							_parsedDatetime.setLocaleFormatSymbols(
-								new DateFormatSymbols(Locale.getDefault()));
+							_parsedDatetime.setLocaleFormatSymbols(new DateFormatSymbols(
+								Locale.getDefault()));
 						}
 						continue;
 					}
@@ -3412,7 +3390,8 @@ public class StringParser extends SReporter implements SParser {
 									//Datetime mask error: unsupported language code
 									//&{0}{: '}{'}&{1}{, position: }
 									return Report.error(SYS.SYS060,
-										"" + p1, "" + (i == 2 ? start - p3.length() - p2.length()
+										"" + p1,
+										"" + (i == 2 ? start - p3.length() - p2.length()
 											: i == 1 ? start - p2.length() : start));
 								}
 								if ( i > 0 && !SUtils.isCountryCode(p2)) {
@@ -3689,8 +3668,8 @@ public class StringParser extends SReporter implements SParser {
 		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
 	}
 
-	/** Parse Nmtoken.
-	 * [7] Nmtoken::= (NameChar)+
+	/** Parse NMToken.
+	 * [7] NMToken::= (NameChar)+
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':' | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if rule passed.
@@ -4272,8 +4251,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Read string enclosed in delimiters (' or ").
 	 * <p>string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")</p>
-	 * @return string or null if on the source position is not a valid
-	 * string declaration.
+	 * @return string or null if on the source position is not a valid string declaration.
 	 */
 	public final String readString() {
 		isSpaces();
@@ -4417,8 +4395,7 @@ public class StringParser extends SReporter implements SParser {
 			if (_yearDay >= 0 && getCalendar().get(Calendar.DAY_OF_YEAR) != _yearDay) {
 				return false;
 			}
-			if (_dayOfWeekInMonth >= 0
-				&& getCalendar().get(Calendar.DAY_OF_WEEK_IN_MONTH) != _dayOfWeekInMonth) {
+			if (_dayOfWeekInMonth>=0 && getCalendar().get(Calendar.DAY_OF_WEEK_IN_MONTH)!=_dayOfWeekInMonth) {
 				return false;
 			}
 			if (_weekInYear >= 0 && getCalendar().get(Calendar.WEEK_OF_YEAR) != _weekInYear) {

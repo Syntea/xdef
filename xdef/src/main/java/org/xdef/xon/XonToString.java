@@ -55,8 +55,8 @@ class XonToString extends XonTools {
 				if (x instanceof Long) {
 					return num;
 				} else if (x instanceof Double) {
-					return num.indexOf('.') < 0 && num.indexOf('e') < 0
-							&& num.indexOf('E') < 0 ?  num + 'd' : num;
+					return num.indexOf('.') < 0 && num.indexOf('e') < 0 && num.indexOf('E') < 0
+						? num + 'd' : num;
 				} else if (x instanceof Float) {
 					return num + 'f';
 				} else if (x instanceof Byte) {
@@ -75,8 +75,7 @@ class XonToString extends XonTools {
 			} else if (x instanceof URI) {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
 			} else if (x instanceof XDEmailAddr) {
-				return "e\""
-					+ jstringToSource(((XDEmailAddr) x).getEmailAddr()) + '"';
+				return "e\"" + jstringToSource(((XDEmailAddr) x).getEmailAddr()) + '"';
 			} else if (x instanceof SDatetime) {
 				return "d" + x;
 			} else if (x instanceof GPSPosition) {
@@ -101,8 +100,8 @@ class XonToString extends XonTools {
 		} else {
 			result = x.toString();
 			if (x instanceof Number) {
-				return result.equals("NaN") || result.equals("Infinity")
-					|| result.equals("-Infinity") ? '"' + result + '"' : result;
+				return result.equals("NaN") || result.equals("Infinity") || result.equals("-Infinity")
+					? '"' + result + '"' : result;
 			}
 		}
 		return '"' + jstringToSource(result) + '"';
@@ -152,8 +151,7 @@ class XonToString extends XonTools {
 		for (Object o: array) {
 			StringBuilder sb1 = new StringBuilder();
 			objectToString(o, ind, sb1, xon);
-			if (items != null && ind != null
-				&& (sb1.indexOf("\n") >= 0
+			if (items != null && ind != null && (sb1.indexOf("\n") >= 0
 				|| (itemsLen += sb1.length() + 1) + lineLen > 74)) {
 				items.add(sb1);
 				for (StringBuilder x : items) {
@@ -193,11 +191,9 @@ class XonToString extends XonTools {
 		final StringBuilder sb,
 		final boolean xon) {
 		if (obj instanceof List) {
-			List x = (List) obj;
-			arrayToString(x, indent, sb, xon);
+			arrayToString((List) obj, indent, sb, xon);
 		} else if (obj instanceof Map) {
-			Map x = (Map) obj;
-			mapToString(x, indent, sb, xon);
+			mapToString((Map) obj, indent, sb, xon);
 		} else {
 			sb.append(valueToString(obj, xon));
 		}
@@ -209,9 +205,7 @@ class XonToString extends XonTools {
 	 * @param xon if true then XON else if false JSON source is generated.
 	 * @return StringBuilder with created item.
 	 */
-	private static StringBuilder createNamedItem(final Map.Entry en,
-		final String ind,
-		final boolean xon) {
+	private static StringBuilder createNamedItem(final Map.Entry en, final String ind, final boolean xon) {
 		Object y = en.getKey();
 		String key;
 		if (y instanceof String) {
@@ -253,8 +247,7 @@ class XonToString extends XonTools {
 		List<StringBuilder> items = new ArrayList<>();
 		for (Object o: map.entrySet()) {
 			StringBuilder sb1 = createNamedItem((Map.Entry) o, ind, xon);
-			if (items != null && ind != null &&
-				(sb1.indexOf("\n") >= 0
+			if (items != null && ind != null && (sb1.indexOf("\n") >= 0
 				|| (itemsLen += sb1.length() + 1) + lineLen >= 74)) {
 				items.add(sb1);
 				sb.append(' ');
@@ -287,7 +280,6 @@ class XonToString extends XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // XON to JSON contertor
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Convert XON array to JSON.
 	 * @param xlist XON array.
 	 * @return XON array converted to JSON.
@@ -300,8 +292,7 @@ class XonToString extends XonTools {
 		return result;
 	}
 
-	/** Convert XON map to JSON (all values except of Number, String, Boolean
-	 * or null are converted to strings).
+	/** Convert XON map to JSON (all values except of Number, String, Boolean or null converted to strings).
 	 * @param xmap XON map object
 	 * @return XON map converted to JSON.
 	 */
@@ -310,8 +301,7 @@ class XonToString extends XonTools {
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
 			Object o = en.getKey();
-			String key = o instanceof byte[] // this is because of YAML???
-				? new String((byte[]) o) : (String) o;
+			String key = o instanceof byte[] ? new String((byte[]) o) : (String) o; // because of YAML???
 			result.put(key, xonToJson(en.getValue()));
 		}
 		return result;
@@ -322,8 +312,8 @@ class XonToString extends XonTools {
 	 * @return XON object converted to JSON.
 	 */
 	final static Object xonToJson(final Object x) {
-		if (x == null || x instanceof String || x instanceof Boolean
-			|| x instanceof Number || x instanceof XonTools.JNull) {
+		if (x == null || x instanceof String || x instanceof Boolean || x instanceof Number
+			|| x instanceof XonTools.JNull) {
 			return x;
 		} else if (x instanceof Map) {
 			return xonMapToJson((Map) x);

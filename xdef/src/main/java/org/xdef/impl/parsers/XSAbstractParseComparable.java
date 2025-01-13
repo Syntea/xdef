@@ -118,7 +118,6 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of final methods from XSAbstractParser
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	public final byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override

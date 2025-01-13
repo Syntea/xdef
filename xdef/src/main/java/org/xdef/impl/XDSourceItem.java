@@ -85,5 +85,4 @@ public final class XDSourceItem {
 		result._source = xr.readString();
 		return result;
 	}
-
 }

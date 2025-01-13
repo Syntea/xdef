@@ -13,11 +13,8 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 	protected long _totalDigits;
 	protected long _fractionDigits;
 
-	public XSParseDecimal() {
-		super();
-		_whiteSpace = WS_COLLAPSE;
-		_totalDigits = _fractionDigits = -1;
-	}
+	public XSParseDecimal() {super(); _whiteSpace = WS_COLLAPSE; _totalDigits = _fractionDigits = -1;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -69,8 +66,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		if (p.isChar('.')) {
 			if (p.isDigit() < 0) {
 				if (!wasNumber) {
-					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809, parserName());
+					p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 					return;
 				}
 			} else {
@@ -87,8 +83,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 			}
 		}
 		if (!wasNumber) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);

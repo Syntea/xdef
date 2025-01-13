@@ -14,7 +14,6 @@ import static org.xdef.XDValueID.XD_STRING;
  * @author Vaclav Trojan
  */
 public class XDParseUrlList extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "urlList";
 
 	@Override
@@ -22,8 +21,7 @@ public class XDParseUrlList extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
 		if (!st.hasMoreTokens()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
+			p.errorWithString(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		XDContainer val = new DefContainer();
@@ -43,7 +41,6 @@ public class XDParseUrlList extends XDParserAbstract {
 		p.setParsedValue(val);
 		p.setEos();
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

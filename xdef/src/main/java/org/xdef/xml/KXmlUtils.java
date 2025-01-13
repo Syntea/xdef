@@ -9,6 +9,7 @@ import org.xdef.sys.SRuntimeException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -32,48 +33,38 @@ import java.util.LinkedHashMap;
 public final class KXmlUtils extends KDOMUtils {
 	/** Recommended default length of source line.*/
 	private final static int LINELENGTH = 80;
-
 	/** Root map of prefixes.*/
-	private final static Map<String, String> ROOT_NSPREFIXMAP =
-		new LinkedHashMap<>();
-	static {
-		ROOT_NSPREFIXMAP.put("xmlns", "");
-	}
+	private final static Map<String, String> ROOT_NSPREFIXMAP = new LinkedHashMap<>();
+	/** Default DomBuilder.*/
+	private final static KDOMBuilder BUILDER;
 
-	/** Creates an XML <code>Document</code> object with created document
-	 * builder (see SetDOMImplementation).
-	 * @return new <code>Document</code> object.
+	static {ROOT_NSPREFIXMAP.put("xmlns", ""); BUILDER = new KDOMBuilder();}
+
+	/** Creates an XML org.w3c.Document object with created document builder (see SetDOMImplementation).
+	 * @return new org.w3c.Document object.
 	 */
-	public static final Document newDocument() {
-		return new KDOMBuilder().newDocument();
-	}
+	public static final Document newDocument() {return BUILDER.newDocument();}
 
-	/** Creates an XML <code>Document</code> object with empty root element
-	 * created by document builder (see SetDOMImplementation).
+	/** Creates an XML org.w3c.dom.Document object with empty root element created by document builder
+	 * (see SetDOMImplementation).
 	 * @param nsURI namespace of created root element (or null).
 	 * @param qname qualified name of root element.
-	 * @param docType DocumentType object or null.
-	 * @return new <code>Document</code> object with empty root element.
+	 * @param type DocumentType object or null.
+	 * @return new org.w3c.dom.Document object with empty root element.
 	 */
-	public static final Document newDocument(final String nsURI,
-		final String qname,
-		final DocumentType docType) {
-		return new KDOMBuilder().newDocument(nsURI, qname, docType);
+	public static final Document newDocument(final String nsURI, final String qname, final DocumentType type){
+		return BUILDER.newDocument(nsURI, qname, type);
 	}
 
-	/** The <code>DOMImplementation</code> object that handles this document.
-	 * A DOM application may use objects from multiple implementations.
-	 * @return  The <code>DOMImplementation</code> object.
+	/** The org.w3c.DOMImplementation object that handles this document. A DOM application may use
+	 * objects from multiple implementations.
+	 * @return  The org.w3c.DOMImplementation object.
 	 */
-	public static final DOMImplementation getDOMImplementation() {
-		return new KDOMBuilder().getDOMImplementation();
-	}
+	public static final DOMImplementation getDOMImplementation() {return BUILDER.getDOMImplementation();}
 
-	/** Removes all namespaces and namespace prefixes from document and its
-	 * attributes and all child nodes. If an attribute with the local name
-	 * already exists the it is not replaced.
-	 * @param doc document where all prefixes and namespaces of child child
-	 * nodes are removed.
+	/** Removes all namespaces and namespace prefixes from document and its attributes and all child nodes.
+	 * If an attribute with the local name already exists the it is not replaced.
+	 * @param doc document where all prefixes and namespaces of child child  nodes are removed.
 	 */
 	public static final void setAllNSToNull(final Document doc) {
 		Element el = doc.getDocumentElement();
@@ -85,14 +76,10 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 	}
 
-	/** Removes all namespaces and namespace prefixes from element and its
-	 * attributes and all child nodes. If an attribute with the local name
-	 * already exists then it is left unchanged. All <code>xmlns</code>
-	 * attributes are removed.
-	 * @param elem element if scope of which all prefixes and namespaces
-	 * are removed.
-	 * @return element without namespaces and namespace prefixes. If
-	 * nothing was changed then the original element is returned.
+	/** Removes xmlns attributes, all namespaces and namespace prefixes from the element, its attributes, and
+	 * child nodes (if an attribute with a local name already exists, it remains unchanged).
+	 * @param elem element if scope of which all prefixes and namespaces are removed.
+	 * @return element without namespaces and namespace prefixes or the original element if nothing changed.
 	 */
 	public static final Element setAllNSToNull(final Element elem) {
 		NamedNodeMap nm = elem.getAttributes();
@@ -120,8 +107,7 @@ public final class KXmlUtils extends KDOMUtils {
 		if ((ndx = qname.indexOf(':')) < 0 && elem.getNamespaceURI() == null) {
 			result = elem;
 		} else {
-			result =
-				elem.getOwnerDocument().createElement(qname.substring(ndx + 1));
+			result = elem.getOwnerDocument().createElement(qname.substring(ndx + 1));
 			nm = elem.getAttributes();
 			for (int i = 0; i < nm.getLength(); i++) {
 				Node n = nm.item(i);
@@ -149,23 +135,18 @@ public final class KXmlUtils extends KDOMUtils {
 		return result;
 	}
 
-	/** Return a string in the XML format. All occurrences
-	 * of special characters (<code>&lt;,&gt;,&amp;,",'</code>) are replaced
-	 * with entity references. If the argument "ignoreWhiteSpaces"
-	 * is true all ignorable white spaces are removed.
-	 * If the argument delimiter is "&lt;" the result string is created for
-	 * a text node, otherwise it will be created as a value of attribute and
-	 * delimiter occurrence will be transformed to the appropriate predefined
-	 * entity. Note that the argument shouldn't contain an entity reference
-	 * or character reference.
+	/** Returns a string in XML format. All occurrences of special characters (&lt;,&gt;,&amp;, ',') are
+	 * replaced by entity references. If the "ignoreSpaces" argument is true, all ignorable whitespace is
+	 * removed. If the delimiter argument is "&lt;", the resulting string for the text node is created,
+	 * otherwise the attribute value is created and the occurrence of the delimiter is converted to the
+	 * appropriate predefined entity. Note that the argument should not contain a reference to an entity or
+	 * a reference to a character.
 	 * @param delimiter attributes: '"' or "'", text nodes: '&lt;'.
-	 * @param ignoreWhiteSpaces If true all ignorable white spaces are removed.
+	 * @param ignoreSpaces If true all ignorable white spaces are removed.
 	 * @param value The original string.
 	 * @return The string in canonical form.
 	 */
-	public static final String toXmlText(final String value,
-		final char delimiter,
-		final boolean ignoreWhiteSpaces) {
+	public static final String toXmlText(final String value, final char delimiter,final boolean ignoreSpaces){
 		int len = value.length();
 		int ndx = 0;
 		int specialChar;
@@ -180,7 +161,7 @@ public final class KXmlUtils extends KDOMUtils {
 				specials += c;
 			}
 		}
-		if (ignoreWhiteSpaces) {
+		if (ignoreSpaces) {
 			specials += ' ';
 			if (delimiter == '<') {
 				specials += '\n';
@@ -197,8 +178,7 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 		int lastndx;
 		if (ndx == 1 && specials.charAt(specialChar) <= ' ') {
-			while (ndx < len &&
-				(specialChar = " \n".indexOf(value.charAt(ndx))) >= 0) {
+			while (ndx < len && (specialChar = " \n".indexOf(value.charAt(ndx))) >= 0) {
 				ndx++;
 			}
 			lastndx = ndx;
@@ -213,18 +193,10 @@ public final class KXmlUtils extends KDOMUtils {
 				}
 				char c;
 				switch (c = specials.charAt(specialChar)) {
-					case '<':
-						sb.append("&lt;");
-						break;
-					case '&':
-						sb.append("&amp;");
-						break;
-					case '\'':
-						sb.append("&apos;");
-						break;
-					case '"':
-						sb.append("&quot;");
-						break;
+					case '<': sb.append("&lt;"); break;
+					case '&': sb.append("&amp;"); break;
+					case '\'': sb.append("&apos;"); break;
+					case '"': sb.append("&quot;"); break;
 					case '>':  //in the text value can't be "]]>"
 						if (delimiter == '<' &&
 							ndx > 2 && value.charAt(ndx - 2) == ']' &&
@@ -278,8 +250,7 @@ public final class KXmlUtils extends KDOMUtils {
 		final String xmlVersion,
 		final String xmlEncoding,
 		final String indentStep) throws IOException {
-		if ("1.0".equals(xmlVersion) &&
-			(xmlEncoding == null || xmlEncoding.equalsIgnoreCase("UTF-8"))) {
+		if ("1.0".equals(xmlVersion) && (xmlEncoding == null || xmlEncoding.equalsIgnoreCase("UTF-8"))) {
 			return false;
 		}
 		out.write("<?xml version=\"");
@@ -298,8 +269,8 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param text text value.
 	 * @param isCdata true if CDATA section.
 	 * @param indent indentation prefix or null.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space and value is trimmed.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space and value
+	 * is trimmed.
 	 * @param lineLen length of source line.
 	 * @throws IOException if an error occurs.
 	 */
@@ -350,16 +321,14 @@ public final class KXmlUtils extends KDOMUtils {
 				case '\n':
 				case ' ':
 					if (removeIgnorableWhiteSpaces) {
-						if (indent != null && pos >= lineLen-1 && j + 1 < len) {
-							//wrap line
+						if (indent != null && pos >= lineLen-1 && j + 1 < len) { //wrap line
 							out.write(indent);
 							pos = indent.length();
 						} else {
 							out.write(' ');
 							pos ++;
 						}
-						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' '
-							|| c == '\n' || c == '\t')) {
+						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' ' || c == '\n' || c == '\t')) {
 							j++;
 						}
 					} else {
@@ -387,11 +356,9 @@ public final class KXmlUtils extends KDOMUtils {
 	 * and then all white space sequences are replaced by one space.
 	 * @return quoted string with the created attribute value.
 	 */
-	private static String createAttrValue(String value,
-		final boolean removeIgnorableWhiteSpaces) {
+	private static String createAttrValue(String value, final boolean removeIgnorableWhiteSpaces) {
 		String s = value;
-		char delimiter = s.indexOf('"') < 0
-			? '"' : s.indexOf('\'') < 0 ? '\'' : '"';
+		char delimiter = s.indexOf('"') < 0 ? '"' : s.indexOf('\'') < 0 ? '\'' : '"';
 		if (removeIgnorableWhiteSpaces) {
 			s = s.trim();
 		}
@@ -433,8 +400,8 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Create string with the attribute.
 	 * @param attr The attribute.
-	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
-	 * and then all white space sequences are replaced by one space.
+	 * @param removeIgnorableWhiteSpaces if true the value is trimmed and then all white space sequences are
+	 * replaced by one space.
 	 * @return string with source value of the attribute.
 	 */
 	private static String createAttr(final Node attr,
@@ -445,32 +412,26 @@ public final class KXmlUtils extends KDOMUtils {
 		String uri = attr.getNamespaceURI();
 		int ndx;
 		String prefix;
-		if (uri != null && (ndx = name.indexOf(':')) >= 0
-			&& !(prefix = name.substring(0, ndx)).startsWith("xml")) {
+		if (uri!=null && (ndx = name.indexOf(':'))>=0 && !(prefix=name.substring(0, ndx)).startsWith("xml")) {
 			String xmlnsName = "xmlns:" + prefix;
 			if (!uri.equals(namespaceMap.get(xmlnsName))) {
 				unresolved.put(xmlnsName, uri);
 			}
 		}
-		return name + "="
-			+ createAttrValue(attr.getNodeValue(), removeIgnorableWhiteSpaces);
+		return name + "=" + createAttrValue(attr.getNodeValue(), removeIgnorableWhiteSpaces);
 	}
 
-	/** Write node as XML to output stream. Format of result will be
-	 * indented if the argument <code>indentStep</code> is string with
-	 * indenting spaces. If argument <code>indentStep</code> is null
-	 * the output is not indented. If argument <code>canonical</code> is
-	 * true the output is in canonical form (i.e. without
-	 *  document type, entity references, CDATA  sections are converted to
-	 * text values). If argument <code>comments</code> is false
-	 * all <code>Comment</code> nodes are ignored.
+	/** Write node as XML to output stream. Format of result will be indented if the argument
+	 * <code>indentStep</code> is string with indenting spaces. If argument <code>indentStep</code> is null
+	 * the output is not indented. If argument <code>canonical</code> is true the output is in canonical form
+	 * (i.e. without  document type, entity references, CDATA  sections are converted to* text values).
+	 * If argument <code>comments</code> is false all <code>Comment</code> nodes are ignored.
 	 * @param out output writer for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param lineStart null or the line prefix.
 	 * @param indentStep null or the indenting string.
 	 * @param canonical if true the output is canonical form.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
 	 * @param comments if true comments are generated.
 	 * @param namespaceMap map of prefixes.
 	 * @param lineLen length of source line.
@@ -515,8 +476,7 @@ public final class KXmlUtils extends KDOMUtils {
 		switch (type) {
 			case Node.ATTRIBUTE_NODE:
 				out.write(node.getNodeName() + "=");
-				out.write(createAttrValue(
-					node.getNodeValue(), removeIgnorableWhiteSpaces));
+				out.write(createAttrValue(node.getNodeValue(), removeIgnorableWhiteSpaces));
 				break;
 			case Node.COMMENT_NODE:
 				if (comments) {
@@ -527,8 +487,7 @@ public final class KXmlUtils extends KDOMUtils {
 				break;
 			case Node.DOCUMENT_NODE: {
 				Document document = (Document)node;
-				if (!writeXmlHdr(out,
-					document.getXmlVersion(), encoding, indentStep)) {
+				if (!writeXmlHdr(out, document.getXmlVersion(), encoding, indentStep)) {
 					startLine = null; // header was not written.
 				}
 				Node docType = document.getDoctype();
@@ -599,18 +558,15 @@ public final class KXmlUtils extends KDOMUtils {
 			case Node.ELEMENT_NODE: {
 				Map<String, String> unresolved = new LinkedHashMap<>();
 				if (encoding != null) {
-					writeXmlHdr(out, node.getOwnerDocument().getXmlVersion(),
-						encoding, indentStep);
+					writeXmlHdr(out, node.getOwnerDocument().getXmlVersion(), encoding, indentStep);
 				}
 				out.write('<');
 				String tagName = node.getNodeName();
 				out.write(tagName);
 				NodeList nl = node.getChildNodes();
 				int numItems = nl.getLength();
-				// if indented mode the alen is indenting of attributes
-				// otherwise, it is 0
-				int alen = startLine != null
-					? tagName.length()+startLine.length()+(numItems==0?3:2) : 0;
+				// if indented mode the alen is indenting of attributes otherwise, it is 0
+				int alen = startLine != null ? tagName.length()+startLine.length()+(numItems==0?3:2) : 0;
 				NamedNodeMap nm = node.getAttributes();
 				int numAttrs;
 				if (nm == null) {
@@ -624,8 +580,7 @@ public final class KXmlUtils extends KDOMUtils {
 						}
 					}
 					out.write(' ');
-					String s = createAttr(nm.item(0),
-						removeIgnorableWhiteSpaces, newPrefixMap, unresolved);
+					String s = createAttr(nm.item(0), removeIgnorableWhiteSpaces, newPrefixMap, unresolved);
 					if (numAttrs > 1) {
 						String aindent;
 						if (startLine!=null) {
@@ -640,8 +595,7 @@ public final class KXmlUtils extends KDOMUtils {
 						String t = s;
 						for (; i < numAttrs; i++) {
 							t += ' ' + createAttr(nm.item(i),
-								removeIgnorableWhiteSpaces,
-								newPrefixMap,unresolved);
+								removeIgnorableWhiteSpaces, newPrefixMap,unresolved);
 							if (alen>0 && alen + t.length() >= lineLen) {
 								i = 1;
 								t = s;
@@ -652,9 +606,7 @@ public final class KXmlUtils extends KDOMUtils {
 						for (; i < numAttrs; i++) {
 							out.write(aindent);
 							out.write(createAttr(nm.item(i),
-								removeIgnorableWhiteSpaces,
-								newPrefixMap,
-								unresolved));
+								removeIgnorableWhiteSpaces, newPrefixMap, unresolved));
 						}
 					} else {
 						out.write(s);
@@ -697,14 +649,12 @@ public final class KXmlUtils extends KDOMUtils {
 						if (s.isEmpty()) {
 							out.write("/>");
 							return;
-						} else if (s.length() + alen+tagName.length() + 2
-								< lineLen && s.indexOf('<') < 0
+						} else if (s.length() + alen+tagName.length() + 2 < lineLen && s.indexOf('<') < 0
 							&& s.indexOf('&') < 0 && s.indexOf('>') < 0
 							&& s.indexOf('\n') < 0 && s.indexOf('\t') < 0) {
 							//write text on the same line as element start
 							out.write('>');
-							writeText(out, s, false,
-								null, removeIgnorableWhiteSpaces, lineLen);
+							writeText(out, s, false, null, removeIgnorableWhiteSpaces, lineLen);
 							out.write("</");
 							out.write(tagName);
 							out.write('>');
@@ -719,18 +669,16 @@ public final class KXmlUtils extends KDOMUtils {
 							int len;
 							String s = item.getNodeValue();
 							if (s == null || (len=(s=removeIgnorableWhiteSpaces
-								|| indent!=null ? s.trim() : s).length()) == 0){
+								|| indent!=null ? s.trim() : s).length()) == 0) {
 								continue;
 							}
 							if (numItems == 1 && indent != null
-								&& (len+tagName.length() * 2
-									+ startLine.length()) + 4 < lineLen
+								&& (len+tagName.length() * 2 + startLine.length()) + 4 < lineLen
 								&& s.indexOf('<') < 0 && s.indexOf('&') < 0) {
 								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
 								}
-								writeText(out, s, false, newIndent,
-									removeIgnorableWhiteSpaces, lineLen);
+								writeText(out, s, false, newIndent, removeIgnorableWhiteSpaces, lineLen);
 								if (removeIgnorableWhiteSpaces) {
 									out.write(startLine);
 								}
@@ -796,14 +744,13 @@ public final class KXmlUtils extends KDOMUtils {
 					// the value of a CDATA node a string containing with "]]>"
 					while ((ndx = s.indexOf("]]>", oldx)) >= 0) {
 						out.write("<![CDATA[");
-						writeText(out, s.substring(oldx, ndx + 2), true,
-							startLine, removeIgnorableWhiteSpaces, lineLen);
+						writeText(out,
+							s.substring(oldx, ndx + 2), true, startLine, removeIgnorableWhiteSpaces, lineLen);
 						out.write("]]>");
 						oldx = ndx + 2;
 					}
 					out.write("<![CDATA[");
-					writeText(out, s.substring(oldx),
-						true, startLine, removeIgnorableWhiteSpaces, lineLen);
+					writeText(out, s.substring(oldx), true, startLine, removeIgnorableWhiteSpaces, lineLen);
 					out.write("]]>");
 					break;
 				}
@@ -815,8 +762,7 @@ public final class KXmlUtils extends KDOMUtils {
 						break;
 					}
 				}
-				writeText(out,
-					s, false, startLine, removeIgnorableWhiteSpaces, lineLen);
+				writeText(out, s, false, startLine, removeIgnorableWhiteSpaces, lineLen);
 				break;
 			}
 			case Node.PROCESSING_INSTRUCTION_NODE:
@@ -833,21 +779,16 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 	}
 
-	/** Write node to output stream. Result will be indented
-	 * if the argument <code>indentStep</code> is a string with indenting
-	 * spaces. If argument <code>indentStep</code> is null then output
-	 * is not indented. If argument <code>canonical</code> is true
-	 * the output is in canonical form (i.e. without entity references,
-	 * CDATA sections are converted to text values). If argument
-	 * <code>comments</code> is false all <code>Comment</code> nodes
-	 * are ignored.
+	/** Write node to output stream. Result will be indented if the argument "indentStep" is a string with
+	 * indenting spaces. If argument "indentStep" is null then output is not indented. If argument "canonical"
+	 * is true the output is in canonical form (i.e. without entity references, CDATA sections are converted
+	 * to text values). If argument "comments" is false all "Comment" nodes are ignored.
 	 * @param out output writer used for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param encoding name of output code table.
 	 * @param indentStep null or the indenting string.
 	 * @param canonical if true the output is canonical form.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
 	 * @param comments if true comments are generated.
 	 * @throws IOException if an error occurs.
 	 */
@@ -871,14 +812,12 @@ public final class KXmlUtils extends KDOMUtils {
 		out.flush();
 	}
 
-	/** Write node as XML to output stream. The character set encoding is set
-	 * from the outputStreamWriter.
+	/** Write node as XML to output stream. The character set encoding is set from the outputStreamWriter.
 	 * @param out output writer used for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final void writeXml(final OutputStreamWriter out,
-		final Node node) throws IOException {
+	public static final void writeXml(final OutputStreamWriter out, final Node node) throws IOException {
 		String encoding = KCharsetNames.getXmlEncodingName(out.getEncoding());
 		if (encoding == null) {
 			//Incorrect name of data encoding&{0}{: '}{'}
@@ -890,10 +829,9 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write node in XML format.
 	 * @param out output writer used for result.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if on I/O error occurs.
 	 */
@@ -920,7 +858,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param fname output file name.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs.
@@ -932,19 +870,19 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean comments) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(fname);
 			OutputStreamWriter out = new OutputStreamWriter(fos,encoding)) {
-			writeXml(out,
-				encoding,
-				node,
-				(indenting ? "  " : null), //indentStep
-				true, //canonical
-				indenting, //removeIgnorableWhiteSpaces
-				comments);
+				writeXml(out,
+					encoding,
+					node,
+					(indenting ? "  " : null), //indentStep
+					true, //canonical
+					indenting, //removeIgnorableWhiteSpaces
+					comments);
 		}
 	}
 
 	/** Write element in XML format in UTF-8.
 	 * @param fname output file name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs
@@ -959,29 +897,27 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write element in XML format in given character set.
 	 * @param fname output file name.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static final void writeXml(final String fname,
-		final String encoding,
-		final Node node) throws IOException {
+	public static final void writeXml(final String fname, final String encoding, final Node node)
+		throws IOException {
 		writeXml(fname, encoding, node, false, true);
 	}
 
 	/** Write element in XML format in UTF-8 character set.
 	 * @param fname output file name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static final void writeXml(final String fname,
-		final Node node) throws IOException {
+	public static final void writeXml(final String fname, final Node node) throws IOException {
 		writeXml(fname, "UTF-8", node, false, true);
 	}
 
 	/** Write node in XML format.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs
@@ -997,7 +933,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node org.w3c.dom.Node to be converted.
 	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @param lineLen length of source line.
@@ -1011,49 +947,44 @@ public final class KXmlUtils extends KDOMUtils {
 		final int lineLen) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(file);
 			OutputStreamWriter out = new OutputStreamWriter(fos, encoding)) {
-			writeXml(out,
-				encoding,
-				node,
-				null, //line indent
-				(indenting ? "  " : null),//indentStep
-				true, //canonical
-				indenting, //removeIgnorableWhiteSpaces
-				comments,
-				ROOT_NSPREFIXMAP,
-				lineLen);
-			out.flush();
+				writeXml(out,
+					encoding,
+					node,
+					null, //line indent
+					(indenting ? "  " : null),//indentStep
+					true, //canonical
+					indenting, //removeIgnorableWhiteSpaces
+					comments,
+					ROOT_NSPREFIXMAP,
+					lineLen);
+				out.flush();
 		}
 	}
 
 	/** Write element in XML format in UTF-8 character set.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param n org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs.
 	 */
-	public static final void writeXml(final File file,
-		final String encoding,
-		final Node node) throws IOException {
-		writeXml(file, encoding, node, false, true);
+	public static final void writeXml(final File file, final String encoding,final Node n) throws IOException{
+		writeXml(file, encoding, n, false, true);
 	}
 
 	/** Write element in XML format and UTF-8 character set.
 	 * @param file The output file.
-	 * @param node The <code>org.w3c.dom.Node</code> to be converted.
+	 * @param node The org.w3c.dom.Node to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static final void writeXml(final File file,
-		final Node node) throws IOException {
+	public static final void writeXml(final File file, final Node node) throws IOException {
 		writeXml(file, "UTF-8", node, false, true);
 	}
-	/** Create string in XML format from given argument.
-	 * Output format may be either unindented (and without inserted
-	 * new lines) or in the intended form.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
-	 * @param indent If this parameter is set to true the output string is
-	 * in indented format, otherwise in no indentation is generated.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space.
+	/** Create string in XML format from given argument. Output format may be either unindented (and without
+	 * inserted new lines) or in the intended form.
+	 * @param node org.w3c.dom.Node to be converted.
+	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
+	 * no indentation is generated.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
 	 * @param comments if true comment nodes are written to output.
 	 * @return string with the XML representation of the parameter element.
 	 */
@@ -1061,18 +992,15 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean comments,
 		final boolean removeIgnorableWhiteSpaces,
 		final boolean indent) {
-		return nodeToString(
-			node, comments, removeIgnorableWhiteSpaces, indent, LINELENGTH);
+		return nodeToString( node, comments, removeIgnorableWhiteSpaces, indent, LINELENGTH);
 	}
 
-	/** Create string in XML format from given argument.
-	 * Output format may be either unindented (and without inserted
-	 * new lines) or in the intended form.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted.
-	 * @param indent If this parameter is set to true the output string is
-	 * in indented format, otherwise in no indentation is generated.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space.
+	/** Create string in XML format from given argument. Output format may be either not indented (and without
+	 * inserted new lines) or in the intended form.
+	 * @param node org.w3c.dom.Node to be converted.
+	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
+	 * no indentation is generated.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences are replaced by one space.
 	 * @param comments if true comment nodes are written to output.
 	 * @param lineLen length of source line.
 	 * @return string with the XML representation of the parameter element.
@@ -1098,12 +1026,11 @@ public final class KXmlUtils extends KDOMUtils {
 		} catch (IOException ex) {return null;} //never happens
 	}
 
-	/** Create string in XML format from given argument.
-	 * The output format may be either unindented (without inserted new lines)
-	 * or in the intended form.
-	 * @param node <code>org.w3c.dom.Node</code> to be converted to the string.
-	 * @param indent If this parameter is set to true the output string is
-	 * in indented format, otherwise in no indentation is generated.
+	/** Create string in XML format from given argument. The output format may be either unindented
+	 * (without inserted new lines) or in the intended form.
+	 * @param node org.w3c.dom.Node to be converted to the string.
+	 * @param indent If this parameter is set to true the output string is in indented format, otherwise in
+	 * no indentation is generated.
 	 * @return string with the XML representation of the parameter element.
 	 */
 	public static final String nodeToString(final Node node,
@@ -1124,8 +1051,7 @@ public final class KXmlUtils extends KDOMUtils {
 		} catch (IOException ex) {return null;} //never happens
 	}
 
-	/** Create string in XML format from given node.
-	 * The output format is not indented.
+	/** Create string in XML format from given node. The output format is not indented.
 	 * @param node node to be converted to the string.
 	 * @return string with the XML representation of the parameter element.
 	 */
@@ -1146,135 +1072,111 @@ public final class KXmlUtils extends KDOMUtils {
 		} catch (IOException ex) {return null;} //never happens
 	}
 
-	/** Parse source file or a string with XMLke format and create
-	 * <code>org.w3c.dom.Document</code> (i.e. it starts with &lt;).
+	/** Parse source file or a string with XML format and create org.w3c.dom.Document
+	 * (i.e. starts with &lt;).
 	 * @param source can be the path to a file or a string in XML format.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final String source) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(source);
-	}
+	public static final Document parseXml(final String source) {return BUILDER.parse(source);}
 
-	/** Parse source file or a string with XMLke format and create
-	 * <code>org.w3c.dom.Document</code> (i.e. it starts with &lt;).
+	/** Parse source file or a string with XML format and create org.w3c.dom.Document
+	 * (i.e. starts with &lt;).
 	 * @param source can be the path to a file or a string in XML format.
 	 * @param comments if true comment nodes are written to result document.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final String source,
-		final boolean comments) {
+	public static final Document parseXml(final String source, final boolean comments) {
 		KDOMBuilder b = new KDOMBuilder();
 		b.setIgnoringComments(comments);
 		b.setNamespaceAware(true);
 		return b.parse(source);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document
 	 * @param in file with the source XML.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.File in) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(in);
-	}
+	public static final Document parseXml(final java.io.File in) {return BUILDER.parse(in);}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in The file with the source XML.
 	 * @param comments if true comment nodes are written to result document.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.File in,
-		final boolean comments) {
+	public static final Document parseXml(final java.io.File in, final boolean comments) {
 		KDOMBuilder b = new KDOMBuilder();
 		b.setNamespaceAware(true);
 		b.setIgnoringComments(comments);
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in URL pointing to the source XML data.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final URL in) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(in);
-	}
+	public static final Document parseXml(final URL in) {return BUILDER.parse(in);}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in URL pointing to the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final URL in, final boolean comments){
+	public static final Document parseXml(final URL in, final boolean comments) {
 		KDOMBuilder b = new KDOMBuilder();
 		b.setNamespaceAware(true);
 		b.setIgnoringComments(comments);
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.InputStream in) {
-		KDOMBuilder b = new KDOMBuilder();
-		b.setNamespaceAware(true);
-		return b.parse(in);
-	}
+	public static final Document parseXml(final java.io.InputStream in) {return BUILDER.parse(in);}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.InputStream in,
-		final boolean comments) {
+	public static final Document parseXml(final java.io.InputStream in, final boolean comments) {
 		KDOMBuilder b = new KDOMBuilder();
 		b.setNamespaceAware(true);
 		b.setIgnoringComments(comments);
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
+	/** Parse source file with XML and return org.w3c.dom.Document.
 	 * @param in input stream with the source XML.
 	 * @param comments if true comment nodes are written to result.
-	 * @param closeStream if true the input stream is closed after parsing.
+	 * @param close if true the input stream is closed after parsing.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Document parseXml(final java.io.InputStream in,
-		final boolean comments,
-		final boolean closeStream) {
+	public static final Document parseXml(final InputStream in, final boolean comments, final boolean close) {
 		KDOMBuilder b = new KDOMBuilder();
 		b.setNamespaceAware(true);
 		b.setIgnoringComments(comments);
-		return b.parse(in, closeStream);
+		return b.parse(in, close);
 	}
 
-	/** Append an element from the argument <code>what</code> at the child list of
-	 * the element from argument <code>where</code>. If the owner of both
-	 * elements are different create new copy of the element <code>what</code> in
-	 * the document owner of the element <code>where</code>.
+	/** Append an element from the argument <code>what</code> at the child list of the element from argument
+	 * <code>where</code>. If the owner of both elements are different create new copy of the element
+	 * <code>what</code> in the document owner of the element <code>where</code>.
 	 * @param what element to be appended.
 	 * @param where element where the element will be appended.
 	 */
-	public static final void appendChild(final Element what,
-		final Element where) {
+	public static final void appendChild(final Element what, final Element where) {
 		Document doc = where.getOwnerDocument();
-		where.appendChild(what.getOwnerDocument() == doc
-			? what : doc.importNode(what, true));
+		where.appendChild(what.getOwnerDocument() == doc ? what : doc.importNode(what, true));
 	}
 
 	/** Write message about exception in parsing of source XML.
@@ -1282,9 +1184,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param ex exception.
 	 * @param p letter 'A' or 'B'.
 	 */
-	private static void reportException(final ReportWriter reporter,
-		final Exception ex,
-		final char p) {
+	private static void reportException(final ReportWriter reporter, final Exception ex, final char p) {
 		if (ex instanceof SRuntimeException) {
 			reporter.putReport(((SRuntimeException)ex).getReport());
 		} else if (ex instanceof SException) {
@@ -1295,67 +1195,57 @@ public final class KXmlUtils extends KDOMUtils {
 		reporter.error(XML.XML075, p); //Can't parse &{0}
 	}
 
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareElements(final File xml_A,
-		final File xml_B) {
+	public static final ReportWriter compareElements(final File xml_A, final File xml_B) {
 		return compareElements(xml_A, xml_B, null);
 	}
 
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * @param xml_A file with the first document.
-	 * @param xml_B file with the second document.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * @param x_A file with the first document.
+	 * @param x_B file with the second document.
 	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
-	public static ReportWriter compareElements(final File xml_A,
-		final File xml_B,
-		final ReportWriter reporter) {
-		return compareElements(xml_A, xml_B, false, reporter);
+	public static ReportWriter compareElements(final File x_A, final File x_B, final ReportWriter reporter) {
+		return compareElements(x_A, x_B, false, reporter);
 	}
 
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * @param xml_A file with the first document.
-	 * @param xml_B file with the second document.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * @param x_A file with the first document.
+	 * @param x_B file with the second document.
 	 * @param trimText if true then text values are trimmed before comparing
 	 * and empty text nodes are removed.
 	 * @return report writer with results of comparing.
 	 */
-	public static ReportWriter compareElements(final File xml_A,
-		final File xml_B,
-		final boolean trimText) {
-		return compareElements(xml_A, xml_B, trimText, null);
+	public static ReportWriter compareElements(final File x_A, final File x_B,final boolean trimText) {
+		return compareElements(x_A, x_B, trimText, null);
 	}
 
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * @param xml_A file with the first document.
-	 * @param xml_B file with the second document.
-	 * @param trimText if true then text values are trimmed before comparing
-	 * and empty text nodes are removed.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * @param x_A file with the first document.
+	 * @param x_B file with the second document.
+	 * @param trimText if true then text values are trimmed before comparing and empty text nodes are removed.
 	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
-	public static ReportWriter compareElements(final File xml_A,
-		final File xml_B,
+	public static ReportWriter compareElements(final File x_A,
+		final File x_B,
 		final boolean trimText,
 		final ReportWriter reporter) {
 		ReportWriter r = reporter == null ? new ArrayReporter() : reporter;
 		Element elem_A = null;
 		Element elem_B = null;
 		try {
-			elem_A = parseXml(xml_A, false).getDocumentElement();
+			elem_A = parseXml(x_A, false).getDocumentElement();
 		} catch (Exception ex) {
 			reportException(r, ex, 'A');
 		}
 		try {
-			elem_B = parseXml(xml_B, false).getDocumentElement();
+			elem_B = parseXml(x_B, false).getDocumentElement();
 		} catch (Exception ex) {
 			reportException(r, ex, 'B');
 		}
@@ -1367,26 +1257,23 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Compare XML documents. The result is reporter which contains error
 	 * messages with differences.
-	 * @param xml_A the first document (or element).
-	 * @param xml_B the second document (or element).
+	 * @param x_A the first document (or element).
+	 * @param x_B the second document (or element).
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareElements(final String xml_A,
-		final String xml_B) {
-		return compareElements(xml_A, xml_B, false, null);
+	public static final ReportWriter compareElements(final String x_A, final String x_B) {
+		return compareElements(x_A, x_B, false, null);
 	}
 
 	/** Compare XML documents. The result is reporter which contains error
 	 * messages with differences.
-	 * @param xml_A the first document (or element).
-	 * @param xml_B the second document (or element).
-	 * @param trimText if true then all text values are rimmed before comparing.
+	 * @param x_A the first document (or element).
+	 * @param x_B the second document (or element).
+	 * @param trim if true then all text values are rimmed before comparing.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareElements(final String xml_A,
-		final String xml_B,
-		final boolean trimText) {
-		return compareElements(xml_A, xml_B, trimText, null);
+	public static final ReportWriter compareElements(final String x_A, final String x_B, final boolean trim) {
+		return compareElements(x_A, x_B, trim, null);
 	}
 
 	/** Compare XML documents. The result is reporter which contains error
@@ -1421,37 +1308,29 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, trimText, r);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
-	 * @param elem_A the first element.
-	 * @param elem_B the second element.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
+	 * @param e_A the first element.
+	 * @param e_B the second element.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareElements(final Element elem_A,
-		final Element elem_B) {
-		return compareElements(elem_A, elem_B, null);
+	public static final ReportWriter compareElements(final Element e_A, final Element e_B) {
+		return compareElements(e_A, e_B, null);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
-	 * @param elem_A the first element.
-	 * @param elem_B the second element.
-	 * @param trimText if true then text values are trimmed before comparing
-	 * and empty text nodes are removed.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
+	 * @param e_A the first element.
+	 * @param e_B the second element.
+	 * @param trim if true then text values are trimmed before comparing and empty text nodes are removed.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareElements(final Element elem_A,
-		final Element elem_B,
-		final boolean trimText) {
-		return compareElements(elem_A, elem_B, trimText, null);
+	public static final ReportWriter compareElements(final Element e_A, final Element e_B,final boolean trim){
+		return compareElements(e_A, e_B, trim, null);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
-	 * @param trimText if true then text values are trimmed before comparing
-	 * and empty text nodes are removed.
+	 * @param trimText if true then text values are trimmed before comparing and empty text nodes are removed.
 	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
@@ -1487,8 +1366,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(a, b, reporter);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer or null and ArrayReporter is created.
@@ -1514,16 +1392,13 @@ public final class KXmlUtils extends KDOMUtils {
 		return r;
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareElements(final String A,
-		final Element elem_B) {
-		return compareElements(parseXml(A).getDocumentElement(),
-			elem_B, false, null);
+	public static final ReportWriter compareElements(final String A, final Element elem_B) {
+		return compareElements(parseXml(A).getDocumentElement(), elem_B, false, null);
 	}
 
 	/** Compare XML elements. The result is reporter which contains error
@@ -1540,8 +1415,7 @@ public final class KXmlUtils extends KDOMUtils {
 			elem_B, trimText, null);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
@@ -1552,12 +1426,10 @@ public final class KXmlUtils extends KDOMUtils {
 		final Element elem_B,
 		final boolean trimText,
 		ReportWriter reporter) {
-		return compareElements(parseXml(A).getDocumentElement(),
-			elem_B, trimText, reporter);
+		return compareElements(parseXml(A).getDocumentElement(), elem_B, trimText, reporter);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer or null and ArrayReporter is created.
@@ -1566,12 +1438,10 @@ public final class KXmlUtils extends KDOMUtils {
 	public static final ReportWriter compareElements(final String A,
 		final Element elem_B,
 		ReportWriter reporter) {
-		return compareElements(parseXml(A).getDocumentElement(),
-			elem_B, reporter);
+		return compareElements(parseXml(A).getDocumentElement(), elem_B, reporter);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
@@ -1582,8 +1452,7 @@ public final class KXmlUtils extends KDOMUtils {
 		final String B,
 		final boolean trimText,
 		ReportWriter reporter) {
-		return compareElements(elem_A,
-			parseXml(B).getDocumentElement(), trimText, reporter);
+		return compareElements(elem_A, parseXml(B).getDocumentElement(), trimText, reporter);
 	}
 
 	/** Compare XML elements. The result is reporter which contains error
@@ -1600,8 +1469,7 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement(), trimText, null);
 	}
 
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
+	/** Compare XML elements. The result is reporter which contains error messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param reporter report writer or null and ArrayReporter is created.
@@ -1610,20 +1478,17 @@ public final class KXmlUtils extends KDOMUtils {
 	public static final ReportWriter compareElements(final Element elem_A,
 		final String B,
 		ReportWriter reporter) {
-		return compareElements(elem_A,
-			parseXml(B).getDocumentElement(),reporter);
+		return compareElements(elem_A, parseXml(B).getDocumentElement(),reporter);
 	}
 
-	/** Compare XML elements. The result with reporter contains error messages
-	 * with differences.
+	/** Compare XML elements. The result with reporter contains error messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @return report writer with results of comparing.
 	 */
 	public static final ReportWriter compareElements(final Element elem_A,
 		final String B) {
-		return compareElements(elem_A,
-			parseXml(B).getDocumentElement());
+		return compareElements(elem_A, parseXml(B).getDocumentElement());
 	}
 
 	/** Compare two elements. Write error messages with differences to the
@@ -1633,42 +1498,35 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param reporter report writer.
 	 * @return true if elements are equal, otherwise false.
 	 */
-	public static boolean cmpElements(final Element elem_A,
-		final Element elem_B,
-		final ReportWriter reporter) {
+	public static boolean cmpElements(final Element elem_A, final Element elem_B,final ReportWriter reporter){
 		try {
 			if (!elem_A.getNodeName().equals(elem_B.getNodeName())) {
-				reporter.error(null, "A: " + elem_A.getNodeName()
-					+ ", B: " + elem_B.getNodeName());
+				reporter.error(null, "A: " + elem_A.getNodeName() + ", B: " + elem_B.getNodeName());
 				return false;
 			} else {
 				String ua = elem_A.getNamespaceURI();
 				String ub = elem_B.getNamespaceURI();
 				if (ua != null && !ua.equals(ub) || ua == null && ub != null) {
-					reporter.error("", "<" + elem_A.getNodeName() +
-						"> A: ns=" + ua + ", B: ns=" + ub);
+					reporter.error("", "<" + elem_A.getNodeName() + "> A: ns=" + ua + ", B: ns=" + ub);
 					return false;
 				}
 			}
-			return cmpAttrLists(elem_A, elem_B, reporter)
-				& cmpChildNodes(elem_A, elem_B, reporter);
+			return cmpAttrLists(elem_A, elem_B, reporter) & cmpChildNodes(elem_A, elem_B, reporter);
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex);
 		}
 	}
 
-	/** Compare list of attributes of two elements. Write differences to the
-	 * reporter. Return true if and only if no differences were found.
-	 * @param elem_A the first element.
-	 * @param elem_B the second element.
+	/** Compare list of attributes of two elements. Write differences to the reporter. Return true
+	 * if and only if no differences were found.
+	 * @param e_A the first element.
+	 * @param e_B the second element.
 	 * @param reporter The report writer.
 	 * @return true if lists are equal, otherwise false.
 	 */
-	private static boolean cmpAttrLists(final Element elem_A,
-		final Element elem_B,
-		final ReportWriter reporter) {
-		NamedNodeMap nlA = elem_A.getAttributes();
-		NamedNodeMap nlB = elem_B.getAttributes();
+	private static boolean cmpAttrLists(final Element e_A, final Element e_B, final ReportWriter reporter) {
+		NamedNodeMap nlA = e_A.getAttributes();
+		NamedNodeMap nlB = e_B.getAttributes();
 		int lenA = nlA.getLength();
 		int lenB = nlB.getLength();
 		for (int i = lenB - 1; i >= 0; i--) {//ignore xmlns attributes
@@ -1683,25 +1541,22 @@ public final class KXmlUtils extends KDOMUtils {
 				lenA--;
 				continue;
 			}
-			Attr b = elem_B.getAttributeNode(name);
+			Attr b = e_B.getAttributeNode(name);
 			if (b == null) {
-				reporter.error(null,
-					"<" + elem_A.getNodeName() + "> B: attr missing: " + name);
+				reporter.error(null, "<" + e_A.getNodeName() + "> B: attr missing: " + name);
 				return false;
 			}
-			if (!(elem_A.getAttribute(name)).equals(
-				elem_B.getAttribute(name))) {
-				reporter.error(null, "<" + elem_A.getNodeName() +
-					"> attr " + name + " A:'" + elem_A.getAttribute(name) +
-					"', B:'" + elem_B.getAttribute(name)+ "'");
+			if (!(e_A.getAttribute(name)).equals(
+				e_B.getAttribute(name))) {
+				reporter.error(null, "<" + e_A.getNodeName() + "> attr " + name + " A:'"
+					+ e_A.getAttribute(name) + "', B:'" + e_B.getAttribute(name) + "'");
 				return false;
 			} else {
 				String ua = a.getNamespaceURI();
 				String ub = b.getNamespaceURI();
 				if (ua != null && !ua.equals(ub) || ua == null && ub != null) {
 					reporter.error(null,
-						"<" + elem_A.getNodeName() + "> attr " +
-						name + ", ns A:='" + ua + "' B:'" + ub + "'");
+						"<" + e_A.getNodeName() + "> attr " + name + ", ns A:='" + ua + "' B:'" + ub + "'");
 					return false;
 				}
 			}
@@ -1713,36 +1568,31 @@ public final class KXmlUtils extends KDOMUtils {
 				if (name.startsWith("xmlns")) {//ignore xmlns attributes
 					continue;
 				}
-				Attr a = elem_A.getAttributeNode(name);
+				Attr a = e_A.getAttributeNode(name);
 				if (a == null) {
-					reporter.error(null, "<" + elem_A.getNodeName()
-						+ "> A: attr missing: " +
-						name + "=\"" + b.getNodeValue() + '"');
+					reporter.error(null,
+						"<"+ e_A.getNodeName()+"> A: attr missing: "+ name +"=\"" + b.getNodeValue() + '"');
 					return false;
 				}
 			}
-			reporter.error(null, "<" + elem_A.getNodeName() + "> A: attr len = "
-				+ lenA + ", B: attr len = " + lenB);
+			reporter.error(null, "<"+ e_A.getNodeName() +"> A: attr len = "+ lenA +", B: attr len = "+ lenB);
 			return false;
 		}
 		return true;
 	}
 
-	/** Compare list of child nodes of two elements. Write differences to the
-	 * reporter. Return true if and only if no differences were found.
-	 * @param elem_A the first element.
-	 * @param elem_B the second element.
+	/** Compare list of child nodes of two elements. Write differences to the reporter. Return true if and
+	 * only if no differences were found.
+	 * @param e_A the first element.
+	 * @param e_B the second element.
 	 * @param reporter report writer.
 	 * @return true if lists are equal, otherwise false.
 	 */
-	private static boolean cmpChildNodes(final Element elem_A,
-		final Element elem_B,
-		final ReportWriter reporter) {
-		NodeList nlA = elem_A.getChildNodes();
-		NodeList nlB = elem_B.getChildNodes();
+	private static boolean cmpChildNodes(final Element e_A, final Element e_B, final ReportWriter reporter) {
+		NodeList nlA = e_A.getChildNodes();
+		NodeList nlB = e_B.getChildNodes();
 		if (nlA.getLength() != nlB.getLength()) {
-			reporter.error(null, "<" + elem_A.getNodeName() +
-				"> A: nodes len = " + nlA.getLength() +
+			reporter.error(null, "<" + e_A.getNodeName() + "> A: nodes len = " + nlA.getLength() +
 				", B: nodes len = " + nlB.getLength());
 			return false;
 		}
@@ -1750,8 +1600,7 @@ public final class KXmlUtils extends KDOMUtils {
 			Node nodeA = nlA.item(i);
 			Node nodeB = nlB.item(i);
 			if (nodeA.getNodeType() != nodeB.getNodeType()) {
-				reporter.error(null, elem_A.getNodeName() +
-					" A node type: " + nodeA.getNodeName() +
+				reporter.error(null, e_A.getNodeName() + " A node type: " + nodeA.getNodeName() +
 					", /B: " + nodeB.getNodeName());
 				return false;
 			}
@@ -1765,13 +1614,12 @@ public final class KXmlUtils extends KDOMUtils {
 				String sa = nodeA.getNodeValue();
 				String sb = nodeB.getNodeValue();
 				if (sa == null || sb == null) {
-					if (sa == null && sb != null && sb.length() > 0 ||
-						sb == null && sa != null && sa.length() > 0) {
+					if (sa == null && sb != null && sb.length() > 0 || sb == null
+						&& sa != null && sa.length() > 0) {
 						return false;
 					}
 				} else if (!(sa.trim()).equals(sb.trim())) {
-					reporter.error(null, "<" + elem_A.getNodeName()
-						+ "> A text: '" + sa + "', B: '" + sb + "'");
+					reporter.error(null, "<" + e_A.getNodeName() + "> A text: '" + sa + "', B: '" + sb + "'");
 					return false;
 				}
 			}
@@ -1784,69 +1632,57 @@ public final class KXmlUtils extends KDOMUtils {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Deprecated
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final File xml_A,
-		final File xml_B) {
+	public static final ReportWriter compareXML(final File xml_A, final File xml_B) {
 		return compareElements(xml_A, xml_B);
 	}
 
 	@Deprecated
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
-	private static ReportWriter compareXML(final File xml_A,
-		final File xml_B,
-		final ReportWriter reporter) {
+	private static ReportWriter compareXML(final File xml_A, final File xml_B, final ReportWriter reporter) {
 		return compareElements(xml_A, xml_B, reporter);
 	}
 
 	@Deprecated
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final String xml_A,
-		final String xml_B) {
+	public static final ReportWriter compareXML(final String xml_A, final String xml_B) {
 		return compareElements(xml_A, xml_B);
 	}
 
 	@Deprecated
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then all text values are rimmed before comparing.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final String xml_A,
-		final String xml_B,
-		final boolean trimText) {
-		return compareElements(xml_A, xml_B, trimText);
+	public static final ReportWriter compareXML(final String xml_A, final String xml_B, final boolean trim) {
+		return compareElements(xml_A, xml_B, trim);
 	}
 
 	@Deprecated
-	/** Compare XML documents. The result is reporter which contains error
-	 * messages with differences.
-	 * This method is deprecated. Use the method compareElements(...) instad.
+	/** Compare XML documents. The result is reporter which contains error messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instead.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
-	 * @param trimText if true then text values are trimmed before comparing
-	 * and empty text nodes are removed.
+	 * @param trimText if true then text values are trimmed before comparing and empty text nodes are removed.
 	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */

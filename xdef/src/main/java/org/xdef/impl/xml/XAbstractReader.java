@@ -69,13 +69,10 @@ public abstract class XAbstractReader extends Reader {
 
 	@Override
 	abstract public int read() throws IOException;
-
 	@Override
 	abstract public int read(char[] cbuf) throws IOException;
-
 	@Override
 	abstract public int read(char[] cbuf, int off, int len) throws IOException;
-
 	@Override
 	abstract public void close() throws IOException;
 
@@ -85,9 +82,7 @@ public abstract class XAbstractReader extends Reader {
 
 	public final int getPos() {return _pos;}
 
-	public final String getBufPart(final int start, final int end) {
-		return _bf.substring(start, end);
-	}
+	public final String getBufPart(final int start, final int end) {return _bf.substring(start, end);}
 
 	public final boolean wasEndTag() {return _wasEndTag;}
 
@@ -121,14 +116,14 @@ public abstract class XAbstractReader extends Reader {
 		return start == _pos ? -1 : start;
 	}
 
-	final void addBuf(char c) {
+	final void addBuf(final char c) {
 		if (_genPositions) {
 			_bf.append(c);
 			_len++;
 		}
 	}
 
-	final void addBuf(char[] buf) {
+	final void addBuf(final char[] buf) {
 		if (_genPositions) {
 			_bf.append(buf);
 			_len += buf.length;
@@ -169,7 +164,7 @@ public abstract class XAbstractReader extends Reader {
 		return 0;
 	}
 
-	public boolean isToken(final String s) {
+	public final boolean isToken(final String s) {
 		int len = s.length();
 		if (_pos + len < _len + 1 && s.equals(_bf.substring(_pos, _pos+len))) {
 			_pos += len;
@@ -190,7 +185,7 @@ public abstract class XAbstractReader extends Reader {
 		return _pos < _len && c == _bf.charAt(_pos);
 	}
 
-	public int scanSpaces() {
+	public final int scanSpaces() {
 		int start = _pos;
 		while (_pos < _len) {
 			switch (_bf.charAt(_pos)) {
@@ -472,9 +467,7 @@ public abstract class XAbstractReader extends Reader {
 		return -1;
 	}
 
-	public final SPosition getSPosition() {
-		return new SPosition(0, _line, _startLine, _filePos + _pos, _sysId);
-	}
+	public final SPosition getSPosition() {return new SPosition(0, _line, _startLine, _filePos+_pos, _sysId);}
 
 	public final void setSPosition(SPosition p) {
 		_pos = p.getIndex();
@@ -484,16 +477,11 @@ public abstract class XAbstractReader extends Reader {
 		_sysId = p.getSysId();
 	}
 
-/*
- markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-				 | NotationDecl | PI | Comment
-*/
+/* markupdecl ::= elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment */
 	private int scanMarkupDecl() {
 		int result;
-		if ((result = scanPEReference()) >= 0
-			|| (result = scanElementdecl()) >= 0
-			|| (result = scanAttlistDecl()) >= 0
-			|| (result = scanEntityDecl()) >= 0
+		if ((result = scanPEReference()) >= 0 || (result = scanElementdecl()) >= 0
+			|| (result = scanAttlistDecl()) >= 0 || (result = scanEntityDecl()) >= 0
 			|| (result = scanNotationDecl()) >= 0
 			|| (result = scanPI()) >= 0 || (result = scanComment()) >= 0) {
 			return result;
@@ -596,7 +584,7 @@ public abstract class XAbstractReader extends Reader {
    NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
    PublicID ::= 'PUBLIC' S PubidLiteral
  */
-	public int scanDoctype() {
+	public final int scanDoctype() {
 		scanSpaces();
 		if (!isToken("<!DOCTYPE")) {
 			return -1;

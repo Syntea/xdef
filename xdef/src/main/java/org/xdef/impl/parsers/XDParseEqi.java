@@ -14,12 +14,12 @@ public class XDParseEqi extends XDParseEq {
 	private static final String ROOTBASENAME = "eqi";
 
 	public XDParseEqi() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		if (!_param.equalsIgnoreCase(s)) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			p.setEos();
 		}
@@ -38,8 +38,7 @@ public class XDParseEqi extends XDParseEq {
 		if (p.isTokenIgnoreCase(_param)) {
 			p.setParsedValue(_param);
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
 	@Override

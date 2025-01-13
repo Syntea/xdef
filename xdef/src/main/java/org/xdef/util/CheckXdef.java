@@ -27,8 +27,7 @@ public class CheckXdef {
 		ReportWriter reporter = new ArrayReporter();
 		try {
 			Properties props = new Properties();
-			XDFactory.getXDBuilder(reporter, props)
-				.setSource(sources).compileXD();
+			XDFactory.getXDBuilder(reporter, props).setSource(sources).compileXD();
 			if (reporter.errorWarnings()) {
 				reporter.getReportReader().printReports(System.err);
 				return false;
@@ -43,32 +42,32 @@ public class CheckXdef {
 		}
 	}
 
+	/** String with command line information. */
+	private static final String INFO =
+"Check if X-definition is correct.\n" +
+"Command line arguments:\n"+
+"   FileName [FileName1] [ ... ]\n" +
+"Note: wildcard chars '*' or '?' in the file specification are accepted.";
+
 	/** Check file with X-definition.
 	 * @param args The array of arguments:
 	 * <p>FileName [FileName ... ]
 	 * <p>where:
 	 * <ul>
 	 * <li>FileName the path and name of the source X-definition.
-	 * <i>Note the file names may contain the "wildcards" as '*' or '?' to
-	 * specify the group of source files.</i>
+	 * Note the file names may contain the "wildcards" as '*' or '?' to specify the group of source files.
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		final String info =
-"Check if X-definition is correct.\n" +
-"Command line arguments:\n"+
-"   FileName [FileName1] [ ... ]\n" +
-"Note: wildcard chars '*' or '?' in the file specification are accepted.";
 		if (args == null || args.length == 0) {
-			throw new RuntimeException("Parameters missing\n" + info);
+			throw new RuntimeException("Parameters missing\n" + INFO);
 		}
 		final StringBuilder err = new StringBuilder();
 		List<String> ar = new ArrayList<>();
 		for (String arg : args) {
 			java.io.File[] files = SUtils.getFileGroup(arg);
 			if (files == null || files.length == 0) {
-				throw new RuntimeException("\"No available file: "
-					+ arg + "\n" + info);
+				throw new RuntimeException("\"No available file: " + arg + "\n" + INFO);
 			} else {
 				for (File file : files) {
 					if (file.exists() && file.canRead()) {
@@ -86,7 +85,7 @@ public class CheckXdef {
 			err.append("No available input files\n");
 		}
 		if (err.length() > 0) {
-			throw new RuntimeException(err + info);
+			throw new RuntimeException(err + INFO);
 		}
 		try {
 			if (checkXdef(ar.toArray(new String[0]))) {

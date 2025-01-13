@@ -33,13 +33,11 @@ public interface XDService extends XDValue {
 	/** Execute query and return the specified items.
 	 * @param statement source statement.
 	 * @param itemName name of items to be returned.
-	 * @param params parameters of statement or null.
+	 * @param pars parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDResultSet queryItems(String statement,
-		String itemName,
-		XDValue params) throws SRuntimeException;
+	public XDResultSet queryItems(String statement, String itemName, XDValue pars) throws SRuntimeException;
 
    /** Close this service all allocated resources.*/
 	public void close();

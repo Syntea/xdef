@@ -26,8 +26,7 @@ public interface BNFRule {
 	public int getParsedPosition();
 
 	/** Parse string assigned to SParser by this rule.
-	 * @param parser SParser containing string and position from which parsing
-	 * will be started.
+	 * @param parser SParser containing string and position from which parsing will be started.
 	 * @return true if parsing was successful.
 	 */
 	public boolean parse(StringParser parser);

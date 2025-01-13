@@ -62,7 +62,6 @@ import static org.xdef.XDValueType.NULL;
 public final class DefNull extends XDValueAbstract {
 	/** NULL Value. */
 	public static final XDValue NULL_VALUE = new DefNull();
-
 	private final short _type;
 
 	/** Creates a new instance of DefNull. */
@@ -87,9 +86,8 @@ public final class DefNull extends XDValueAbstract {
 	 */
 	public final XDValueType getItemType() {return NULL;}
 	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise returns false.
 	 */
 	public final boolean isNull() {return true;}
 	@Override
@@ -117,18 +115,13 @@ public final class DefNull extends XDValueAbstract {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
+	 * equals to this one.
 	 */
-	public final boolean equals(final XDValue arg) {
-		return arg==null || arg.isNull();
-	}
+	public final boolean equals(final XDValue arg) {return arg==null || arg.isNull();}
 	@Override
 	public final boolean equals(final Object arg) {
-		if (arg instanceof XDValue) {
-			return ((XDValue) arg).isNull();
-		}
-		return arg == null;
+		return arg instanceof XDValue ? ((XDValue) arg).isNull() : arg == null;
 	}
 	@Override
 	public final int intValue() {return 0;}
@@ -146,37 +139,37 @@ public final class DefNull extends XDValueAbstract {
 	public final Element getElement() {return null;}
 	@Override
 	/** Get SDatetime value.
-	 * @return SDatetime value of this object or return <i>null</i>.
+	 * @return SDatetime value of this object or return null.
 	 */
 	public final SDatetime datetimeValue() {return null;}
 	@Override
 	/** Get SDuration value.
-	 * @return SDuration value of this object or return <i>null</i>.
+	 * @return SDuration value of this object or return null.
 	 */
 	public final SDuration durationValue() {return null;}
 	@Override
 	/** Get XDContainer value.
-	 * @return XDContext value of this object or return <i>null</i>.
+	 * @return XDContext value of this object or return null.
 	 */
 	public final XDContainer containerValue() {return null;}
 	@Override
 	/** Get XDService value.
-	 * @return XDService value of this object or return <i>null</i>.
+	 * @return XDService value of this object or return null.
 	 */
 	public final XDService serviceValue() {return null;}
 	@Override
 	/** Get XDStatement value.
-	 * @return XDStatement value of this object or return <i>null</i>.
+	 * @return XDStatement value of this object or return null.
 	 */
 	public final XDStatement statementValue() {return null;}
 	@Override
 	/** Get XDResultSet value.
-	 * @return XDResultSet value of this object or return <i>null</i>.
+	 * @return XDResultSet value of this object or return null.
 	 */
 	public final XDResultSet resultSetValue() {return null;}
 	@Override
 	/** Get XDParseResult value.
-	 * @return XDParseResult value of this object or return <i>null</i>.
+	 * @return XDParseResult value of this object or return null.
 	 */
 	public final XDParseResult parseResultValue() {return null;}
 	/** Create "null" XD object of given type.
@@ -188,7 +181,6 @@ public final class DefNull extends XDValueAbstract {
 			case X_PARSEITEM: return new ParseItem();
 			case X_UNIQUESET:
 			case X_UNIQUESET_M: return new CodeUniqueset(new ParseItem[0], null, "");
-
 			case XD_ATTR: return new DefAttr();
 			case XD_BOOLEAN: return new DefBoolean();
 			case XD_BIGINTEGER: return new DefBigInteger();

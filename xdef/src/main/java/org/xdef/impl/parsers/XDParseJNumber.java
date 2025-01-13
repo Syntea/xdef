@@ -14,13 +14,13 @@ public class XDParseJNumber extends XSParseDouble {
 	private static final String ROOTBASENAME = "jnumber";
 
 	public XDParseJNumber() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		if (p.getCurrentChar() == '+') {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		int pos = p.getIndex();
@@ -28,15 +28,12 @@ public class XDParseJNumber extends XSParseDouble {
 			p.setParsedValue(new DefDecimal(p.getBufferPart(pos,p.getIndex())));
 		} else if (p.isSignedInteger()) {
 			try {
-				p.setParsedValue(
-					new DefLong(p.getBufferPart(pos,p.getIndex())));
+				p.setParsedValue(new DefLong(p.getBufferPart(pos,p.getIndex())));
 			} catch (Exception ex) {
-				p.setParsedValue(
-					new DefBigInteger(p.getBufferPart(pos,p.getIndex())));
+				p.setParsedValue(new DefBigInteger(p.getBufferPart(pos,p.getIndex())));
 			}
 		} else {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);

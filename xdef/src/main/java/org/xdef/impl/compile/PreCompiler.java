@@ -24,28 +24,23 @@ public interface PreCompiler {
 	 */
 	public void parseString(final String source, final String srcName);
 
-	/** Parse file with source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param file The file with with X-definitions.
 	 */
 	public void parseFile(final File file);
 
-	/** Parse InputStream source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
 	 * @param in input stream with the X-definition.
-	 * @param srcName name of source data used in reporting (SysId) or
-	 * <i>null</i>.
+	 * @param srcName name of source data used in reporting (SysId) or null.
 	 */
 	public void parseStream(final InputStream in, final String srcName);
 
-	/** Parse data with source X-definition given by URL and addAttr it
-	 * to the set of X-definitions.
+	/** Parse data with source X-definition given by URL and addAttr it to the set of X-definitions.
 	 * @param url URL of the file with the X-definition.
 	 */
 	public void parseURL(final URL url);
 
-	/** Parse file with source X-definition and addAttr it to the set
-	 * of definitions.
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param fileName pathname of file with with X-definitions.
 	 */
 	public void parseFile(final String fileName);
@@ -125,16 +120,14 @@ public interface PreCompiler {
 	 */
 	public int setNSURI(final String uri);
 
-	/** Report not legal attributes. All allowed attributes should be
-	 * processed and removed. Not legal attributes generates an error message.
+	/** Report not legal attributes. All allowed attributes should be processed and removed. Not legal
+	 * attribute generates an error message.
 	 * @param pnode node to be checked.
 	 */
 	public void reportNotAllowedAttrs(final PNode pnode);
 
-	/** Get attribute of given name with or without name space prefix from
-	 * node. The attribute is removed from the list. If the argument
-	 * required is set to true put error message that required attribute
-	 * is missing.
+	/** Get attribute of given name with or without namespace prefix from node. The attribute is removed from
+	 * the list. If the argument required is set to true put error message that required attribute is missing.
 	 * @param pnode where to find attribute.
 	 * @param localName The local name of attribute.
 	 * @param required if true the attribute is required.
@@ -169,32 +162,28 @@ public interface PreCompiler {
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void fatal(final SPosition pos,
-		final long registeredID, final Object... mod);
+	public void fatal(final SPosition pos, final long registeredID, final Object... mod);
 
 	/** Put error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(final SPosition pos,
-		final long registeredID, final Object... mod);
+	public void error(final SPosition pos, final long registeredID, final Object... mod);
 
 	/** Put ligthError message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void lightError(final SPosition pos,
-		final long registeredID, final Object... mod);
+	public void lightError(final SPosition pos, final long registeredID, final Object... mod);
 
 	/** Put error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final SPosition pos,
-		final long registeredID, final Object... mod);
+	public void warning(final SPosition pos, final long registeredID, final Object... mod);
 
 	/** Put report to reporter.
 	 * @param pos SPosition

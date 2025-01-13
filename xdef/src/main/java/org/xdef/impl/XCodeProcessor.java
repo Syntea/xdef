@@ -532,8 +532,7 @@ public final class XCodeProcessor {
 	/** X-definition from which processor was created. */
 	private XDefinition _xd;
 	/** Global variables:<p>
-	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn.
-	 * 3 $IDParser$, 4 $IDuniqueSet$
+	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn, 3 $IDParser$, 4 $IDuniqueSet$</p>
 	 * Follows global variables from DefPool.
 	 */
 	private XDValue[] _globalVariables;
@@ -552,32 +551,22 @@ public final class XCodeProcessor {
 	/** List of items to be managed at the end of process. */
 	private List<XDValue> _finalList;
 	/** Map of named user objects. */
-	private final Map<String, Object> _userObjects;
+	private final Map<String, Object> _userObjects = new LinkedHashMap<>();
 	/** XPath function resolver. */
-	final XPathFunctionResolver _functionResolver;
+	final XPathFunctionResolver _functionResolver = new XDFunctionResolver();
 	/** XPath variable resolver. */
-	final XPathVariableResolver _variableResolver;
-
-	private XCodeProcessor() {
-		_userObjects = new LinkedHashMap<>();
-		_functionResolver = new XDFunctionResolver();
-		_variableResolver = new XDVariableResolver();
-	}
+	final XPathVariableResolver _variableResolver = new XDVariableResolver();
 
 	/** Creates a new instance of ScriptCodeProcessor
 	 * @param xd XDefinition.
-	 * @param reporter container for error messages.
+	 * @param r reporter for error messages.
 	 * @param stdOut standard output stream (if null then java.lang.System.out).
 	 * @param stdIn standard input stream (if null then java.lang.System.in).
 	 * @param userObj Assigned user's object.
 	 */
-	XCodeProcessor(final XDefinition xd,
-		final SReporter reporter,
-		final XDOutput stdOut,
-		final XDInput stdIn) {
-		this();
+	XCodeProcessor(final XDefinition xd, final SReporter r, final XDOutput stdOut, final XDInput stdIn) {
 		init(xd, null);
-		init1(xd, reporter.getReportWriter(), stdOut, stdIn);
+		init1(xd, r.getReportWriter(), stdOut, stdIn);
 	}
 
 	/** Creates new instance of ScriptCodeProcessor. This constructor is called
@@ -586,7 +575,6 @@ public final class XCodeProcessor {
 	 * @param ce ChkElement from which the object is created.
 	 */
 	XCodeProcessor(final XDefinition xd, final ChkElement ce) {
-		this();
 		init(xd, ce._scp._props);
 		_globalVariables = ce._scp._globalVariables;
 		_debugger = ce._scp.getDebugger();
@@ -616,11 +604,9 @@ public final class XCodeProcessor {
 		}
 	}
 
-	/** Set X-definition property to SManager. If properties are null
-	 * the new properties  will be created.
+	/** Set X-definition property to SManager. If properties are null the new properties  will be created.
 	 * @param key name of X-definition property.
-	 * @param value value of property or null. If the value is null the property
-	 * is removed from properties.
+	 * @param value value of property or null. If the value is null the property is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
 		String newKey = key.startsWith("xdef.") ? key.replace('.', '_') : key;
@@ -773,7 +759,7 @@ public final class XCodeProcessor {
 	/** Add the object to final list.
 	 * @param x the object to be added.
 	 */
-	void addToFinalList(final ChkNode chkNode, final XDValue x) {
+	private void addToFinalList(final ChkNode chkNode, final XDValue x) {
 		if (chkNode != null && chkNode._parent != null) {
 			//probably in initialization of XDDocument
 			chkNode._parent.addToFinalList(x);
@@ -811,8 +797,7 @@ public final class XCodeProcessor {
 	 * @param finalList array of items in final list or null.
 	 */
 	final void closeFinalList(final List<XDValue> finalList) {
-		// if final list not exists, do nothing
-		if (finalList == null) {
+		if (finalList == null) { // if final list not exists, do nothing
 			return;
 		}
 		// 1) close all ResultSet objects.
@@ -866,15 +851,9 @@ public final class XCodeProcessor {
 							// close all not external database objects
 							if (xvar != null && !xvar.isExternal()) {
 								switch (itemId) {
-									case XD_SERVICE:
-										((XDService) val).close();
-										break;
-									case XD_STATEMENT:
-										((XDStatement) val).close();
-										break;
-									default:
-										((XDResultSet) val).close();
-										break;
+									case XD_SERVICE: ((XDService) val).close(); break;
+									case XD_STATEMENT: ((XDStatement) val).close(); break;
+									default: ((XDResultSet) val).close();
 								}
 							}
 							break;
@@ -996,16 +975,12 @@ public final class XCodeProcessor {
 			}
 		}
 	}
-	final void throwInfo(final ChkNode chkNode,
-		final long errCode,
-		final String inf) {
+	final void throwInfo(final ChkNode chkNode, final long errCode, final String inf) {
 		Report r = Report.error(errCode, inf);
 		throw new SRuntimeException(updateReport(r, chkNode));
 	}
-	final void putError(final ChkNode chkNode, final long id) {
-		putReport(chkNode, Report.error(id));
-	}
-	final void putError(final ChkNode chkNode,final long id,final String mod){
+	final void putError(final ChkNode chkNode, final long id) {putReport(chkNode, Report.error(id));}
+	final void putError(final ChkNode chkNode, final long id, final String mod) {
 		putReport(chkNode, Report.error(id, mod));
 	}
 	final void putReport(final ChkNode chkNode, final Report rep) {
@@ -1028,8 +1003,8 @@ public final class XCodeProcessor {
 		for (;;)
 			try {
 			if (_debug && (_debugger.hasStopAddr(pc) || step!=XDDebug.NOSTEP)) {
-				step = _debugger.debug(chkEl, _code, pc, sp, _stack,
-					_localVariables, _debugInfo, _callList, step);
+				step = _debugger.debug(
+					chkEl, _code, pc, sp, _stack, _localVariables, _debugInfo, _callList, step);
 				if (step == XDDebug.KILL) {
 					throw new SError(XDEF.XDEF906); //X-definition canceled
 				}
@@ -1057,8 +1032,8 @@ public final class XCodeProcessor {
 						XVariable xv = ((XVariableTable)_xd.getXDPool().getVariableTable()).getXVariable(
 							item.getParam());
 						if (xv != null && xv.isExternal()) {
-							putError(chkEl, XDEF.XDEF573, //Null value of &{0}
-								"external " + getTypeName(xv.getType()) + " " + xv.getName());
+							putError(chkEl, //Null value of &{0}
+								XDEF.XDEF573, "external " + getTypeName(xv.getType()) + " " + xv.getName());
 						}
 						_stack[++sp] = DefNull.genNullValue(xv.getType());
 					} else {
@@ -1107,9 +1082,7 @@ public final class XCodeProcessor {
 					_stack[sp - i] = new DefBigInteger(_stack[sp - i].integerValue());
 					continue;
 				}
-				case TO_FLOAT:
-					_stack[sp] = new DefDouble(_stack[sp].doubleValue());
-					continue;
+				case TO_FLOAT: _stack[sp] = new DefDouble(_stack[sp].doubleValue()); continue;
 				case TO_FLOAT_X: {
 					int i = item.getParam();
 					_stack[sp - i] = new DefDouble(_stack[sp-i].doubleValue());
@@ -1137,23 +1110,18 @@ public final class XCodeProcessor {
 						_stack[sp] = new DefString(_stack[sp].toString());
 					}
 					continue;
-				case EQUALS_OP:
-					_stack[--sp] = new DefBoolean(_stack[sp].equals(_stack[sp+1]));
-					continue;
+				case EQUALS_OP: _stack[--sp] = new DefBoolean(_stack[sp].equals(_stack[sp+1])); continue;
 				case TO_STRING_X:
 					_stack[sp - item.getParam()] = new DefString(_stack[sp - item.getParam()].toString());
 					continue;
 				case TO_MILLIS:
 					_stack[sp] = new DefLong(_stack[sp].datetimeValue().getTimeInMillis());
 					continue;
-				case TO_MILLIS_X: {
-					long millis = _stack[sp - item.getParam()].datetimeValue().getTimeInMillis();
-					_stack[sp - item.getParam()] = new DefLong(millis);
+				case TO_MILLIS_X:
+					_stack[sp - item.getParam()] =
+						new DefLong( _stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
 					continue;
-				}
-				case TO_BOOLEAN:
-					_stack[sp] = new DefBoolean(_stack[sp].booleanValue());
-					continue;
+				case TO_BOOLEAN: _stack[sp] = new DefBoolean(_stack[sp].booleanValue()); continue;
 				case STACK_TO_CONTAINER: { // create container from stack values
 					int n = item.getParam(); // number of stack items
 					sp = sp - n + 1;
@@ -1316,14 +1284,11 @@ public final class XCodeProcessor {
 					_callList = _callList._parent;
 					continue;
 				case SWITCH_I: // switch(int)
-					pc = ((CodeSWTableInt) item).getTabAddr(_stack[sp--].longValue());
-					continue;
+					pc = ((CodeSWTableInt) item).getTabAddr(_stack[sp--].longValue()); continue;
 				case SWITCH_S: // switch(String)
-					pc = ((CodeSWTableStr) item).getTabAddr(_stack[sp--].stringValue());
-					continue;
+					pc = ((CodeSWTableStr) item).getTabAddr(_stack[sp--].stringValue()); continue;
 				case INIT_NOPARAMS_OP: //init method - no parameters
-					_localVariables = _callList.init(item.getParam(), _localVariables);
-					continue;
+					_localVariables = _callList.init(item.getParam(), _localVariables); continue;
 				case INIT_PARAMS_OP: {//init method - parameters
 					_localVariables = _callList.init(item.getParam(), _localVariables);
 					int numpars = item.intValue();// number of parameters
@@ -1356,8 +1321,8 @@ public final class XCodeProcessor {
 ////////////////////////////////////////////////////////////////////////////////
 				case GET_TEXTVALUE: _stack[++sp] = new DefString(chkEl.getTextValue()); continue;
 				case ELEMENT_GETTEXT: {
-					Element el = (item.getParam() == 1) ? _stack[sp--].getElement()
-						: chkEl != null ? chkEl.getElement() : null;
+					Element el = (item.getParam() == 1)
+						? _stack[sp--].getElement() : chkEl != null ? chkEl.getElement() : null;
 					String s = el == null ? null : KXmlUtils.getTextValue(el);
 					_stack[++sp] = new DefString(s);
 					continue;
@@ -1373,45 +1338,38 @@ public final class XCodeProcessor {
 				}
 				case GPS_LATITUDE:
 					if (_stack[sp].isNull()) {
-						//Null value of &{0}
-						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
+						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition"); //Null value of &{0}
 					}
-					_stack[sp] =
-						new DefDouble(((XDGPSPosition) _stack[sp]).latitude());
+					_stack[sp] = new DefDouble(((XDGPSPosition) _stack[sp]).latitude());
 					continue;
 				case GPS_LONGITUDE:
 					if (_stack[sp].isNull()) {
-						//Null value of &{0}
-						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
+						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition"); //Null value of &{0}
 					}
 					_stack[sp] = new DefDouble(((XDGPSPosition)_stack[sp]).longitude());
 					continue;
 				case GPS_ALTITUDE:
 					if (_stack[sp].isNull()) {
-						//Null value of &{0}
-						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
+						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition"); //Null value of &{0}
 					}
 					_stack[sp] = new DefDouble(((XDGPSPosition) _stack[sp]).altitude());
 					continue;
 				case GPS_NAME:
 					if (_stack[sp].isNull()) {
-						//Null value of &{0}
-						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
+						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition"); //Null value of &{0}
 					}
 					_stack[sp] = new DefString(((XDGPSPosition) _stack[sp]).name());
 					continue;
 				case GPS_DISTANCETO:
 					if (_stack[sp - 1].isNull() || _stack[sp].isNull()) {
-						//Null value of &{0}
-						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
+						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition"); //Null value of &{0}
 					}
-					_stack[--sp] = new DefDouble(((XDGPSPosition) _stack[sp]).distanceTo(
-							((XDGPSPosition) _stack[sp+1])));
+					_stack[--sp] =
+						new DefDouble(((XDGPSPosition) _stack[sp]).distanceTo(((XDGPSPosition)_stack[sp+1])));
 					continue;
 				case PRICE_AMOUNT:
 					if (_stack[sp].isNull()) {
-						//Null value of &{0}
-						throwInfo(chkEl, XDEF.XDEF573, "Price");
+						throwInfo(chkEl, XDEF.XDEF573, "Price"); //Null value of &{0}
 					}
 					_stack[sp] = new DefDecimal(((XDPrice)_stack[sp]).amount());
 					continue;
@@ -1442,8 +1400,8 @@ public final class XCodeProcessor {
 					int extndx = x.getParam(); //extension
 					String source = x.stringValue();
 					try {
-						x = new DefBNFGrammar(extndx == -1 ? null : (DefBNFGrammar) _globalVariables[extndx],
-							extndx, new SBuffer(source), null);
+						x = new DefBNFGrammar(extndx == -1 ? null
+							: (DefBNFGrammar) _globalVariables[extndx], extndx, new SBuffer(source), null);
 					} catch (SRuntimeException ex) {
 						putReport(chkEl, ex.getReport());
 					}
@@ -1503,17 +1461,17 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case GET_XPATH_FROM_SOURCE: { // optimized XPath expression
-					Element e;
+					Element el;
 					if (item.getParam() == 2) {
-						e = _stack[--sp].getElement();
+						el = _stack[--sp].getElement();
 						_stack[sp] = _stack[sp + 1];
 						_stack[sp + 1] = null;
 					} else {
 						Object obj = chkEl.getCreateContext();
-						e = (obj != null && (obj instanceof Element)) ? (Element) obj : chkEl.getElemValue();
+						el = (obj != null && (obj instanceof Element)) ? (Element) obj : chkEl.getElemValue();
 					}
 					if (item.getParam() == 0) {
-						if (e == null) {
+						if (el == null) {
 							_stack[sp++] = new DefContainer();
 							continue;
 						}
@@ -1522,23 +1480,22 @@ public final class XCodeProcessor {
 								int ndx = chkEl._xPos.lastIndexOf("/@");
 								String s = null;
 								if (ndx > 0) {
-									Node n = e.getAttributeNode(chkEl._xPos.substring(ndx + 1));
+									Node n = el.getAttributeNode(chkEl._xPos.substring(ndx + 1));
 									s = n == null ? null : n.getNodeValue();
 								}
 								_stack[++sp] = new DefString(s);
 								continue;
 							}
 							case XX_TEXT:
-								_stack[++sp] = new DefString(KXmlUtils.getTextValue(e));
-								continue;
+								_stack[++sp] = new DefString(KXmlUtils.getTextValue(el)); continue;
 							default: {
 								NodeList nl =
-									KXmlUtils.getChildElementsNS(e, null, chkEl.getXXElement().getXXName());
+									KXmlUtils.getChildElementsNS(el, null, chkEl.getXXElement().getXXName());
 								DefContainer c = new DefContainer(nl);
 								if (nl.getLength() == 0) {
-									nl = KXmlUtils.getChildElements(e);
+									nl = KXmlUtils.getChildElements(el);
 									if (nl.getLength() != 0) {
-										c.addXDItem(KXmlUtils.firstElementChild(e));
+										c.addXDItem(KXmlUtils.firstElementChild(el));
 									}
 								}
 								_stack[++sp] =  c;
@@ -1561,7 +1518,7 @@ public final class XCodeProcessor {
 									_code[pc-2] = x;
 								}
 							}
-							_stack[sp] = x.exec(e);
+							_stack[sp] = x.exec(el);
 						} catch (SRuntimeException ex) {
 							putReport(chkEl, ex.getReport());
 							_stack[sp] = new DefContainer();
@@ -1588,9 +1545,7 @@ public final class XCodeProcessor {
 						}
 					} else { // params == 2
 						switch (_stack[sp].getItemId()) {
-							case XD_ELEMENT:
-								node = _stack[sp--].getElement();
-								break;
+							case XD_ELEMENT: node = _stack[sp--].getElement(); break;
 							case XD_CONTAINER:
 								XDContainer dc = ((XDContainer) _stack[sp--]);
 								if (dc.getXDItemsNumber() > 0 && dc.getXDItem(0).getItemId() == XD_ELEMENT) {
@@ -1598,7 +1553,8 @@ public final class XCodeProcessor {
 								} else {
 									_stack[sp]= new DefContainer();
 									continue;
-								}	break;
+								}
+								break;
 							default:
 								DefXQueryExpr x = _stack[sp].getItemId()==XD_XQUERY
 									? (DefXQueryExpr) _stack[sp] : new DefXQueryExpr(_stack[sp].toString());
@@ -1631,8 +1587,7 @@ public final class XCodeProcessor {
 					Node node;
 					if ((node = el) != null) {
 						String s;
-						if ((s = item.stringValue()).charAt(0) == '{') {
-							// namespace
+						if ((s = item.stringValue()).charAt(0) == '{') { // namespace
 							int ndx = s.lastIndexOf('}');
 							node = el.getAttributeNodeNS(s.substring(1, ndx), s.substring(ndx+1));
 						} else { // no namespace
@@ -1677,7 +1632,7 @@ public final class XCodeProcessor {
 					} else {
 						String s;
 						int ndx = (s = item.stringValue()).lastIndexOf('}');
-						NodeList nl = ndx < 0 ? KXmlUtils.getChildElementsNS(el, "", s)
+						NodeList nl = ndx < 0 ? KXmlUtils.getChildElements(el, s)
 							: KXmlUtils.getChildElementsNS(el, s.substring(1, ndx), s.substring(ndx + 1));
 						_stack[++sp] = new DefContainer(nl);
 					}
@@ -1822,9 +1777,7 @@ public final class XCodeProcessor {
 					_stack[sp] = new DefBoolean(t == null ? s != null : !s.equalsIgnoreCase(t));
 					continue;
 				}
-				case GET_USEROBJECT:
-					_stack[++sp] = new DefObject(chkEl.getUserObject());
-					continue;
+				case GET_USEROBJECT: _stack[++sp] = new DefObject(chkEl.getUserObject()); continue;
 				case SET_USEROBJECT:
 					chkEl.setUserObject(_stack[sp].getObject());
 					_stack[sp--] = null;
@@ -1842,9 +1795,7 @@ public final class XCodeProcessor {
 					}
 					continue;
 				}
-				case UNIQUESET_KEY_LOAD:
-					((CodeUniqueset) _stack[sp]).setKeyIndex(item.getParam());
-					continue;
+				case UNIQUESET_KEY_LOAD: ((CodeUniqueset) _stack[sp]).setKeyIndex(item.getParam()); continue;
 				case UNIQUESET_ID:
 				case UNIQUESET_SET:
 				case UNIQUESET_IDREF:
@@ -1859,12 +1810,12 @@ public final class XCodeProcessor {
 				case UNIQUESET_KEY_CHKID:
 				case UNIQUESET_KEY_SETKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
-					if (code != UNIQUESET_ID && code != UNIQUESET_IDREF
-						&& code != UNIQUESET_CHKID && code != UNIQUESET_SET) {
+					if (code != UNIQUESET_ID && code != UNIQUESET_IDREF && code != UNIQUESET_CHKID
+						&& code != UNIQUESET_SET) {
 						dt.setKeyIndex(item.getParam());
 					}
-					if (code != UNIQUESET_M_CHKID && code != UNIQUESET_M_IDREF
-						&& code != UNIQUESET_M_SET && code != UNIQUESET_M_ID) {
+					if (code != UNIQUESET_M_CHKID && code != UNIQUESET_M_IDREF && code != UNIQUESET_M_SET
+						&& code != UNIQUESET_M_ID) {
 						CodeUniqueset assumed = execUniqueParser(dt,sp,chkEl);
 						_stack[sp] = chkEl._parseResult;
 						if (code == UNIQUESET_KEY_SETKEY || chkEl._parseResult.errors()) {
@@ -1877,17 +1828,14 @@ public final class XCodeProcessor {
 					execUniqueOperation(dt, chkEl, code);
 					continue;
 				}
-				case UNIQUESET_M_SIZE:
-					_stack[sp] = new DefLong(((CodeUniqueset) _stack[sp]).size());
-					continue;
+				case UNIQUESET_M_SIZE: _stack[sp] = new DefLong(((CodeUniqueset) _stack[sp]).size());continue;
 				case UNIQUESET_M_TOCONTAINER:
-					_stack[sp]=((CodeUniqueset) _stack[sp]).getUniqueSetItems();
-					continue;
+					_stack[sp]=((CodeUniqueset) _stack[sp]).getUniqueSetItems(); continue;
 				case UNIQUESET_GET_ACTUAL_KEY:
 					_stack[sp]=((CodeUniqueset)_stack[sp]).getActualKey();
 					if (_stack[sp] == null || _stack[sp].isNull()) {
-						Report rep = Report.error(XDEF.XDEF538, //The key is not in the uniqueSet
-							pc - 1, ((XDException) _stack[sp--]).toString());
+						//The key is not in the uniqueSet
+						Report rep = Report.error(XDEF.XDEF538, pc-1, ((XDException)_stack[sp--]).toString());
 						updateReport(rep, chkEl);
 						_stack[sp] = DefNull.NULL_VALUE;
 					}
@@ -1895,8 +1843,8 @@ public final class XCodeProcessor {
 				case UNIQUESET_KEY_RESET: {
 					XDUniqueSetKey usk = (XDUniqueSetKey)_stack[sp--];
 					if (usk == null || usk.isNull() || !usk.resetKey()) {
-						Report rep = Report.error(XDEF.XDEF540, //Can't reset uniqueSetKey or it is null
-							pc - 1, ((XDException) _stack[sp--]).toString());
+						//Can't reset uniqueSetKey or it is null
+						Report rep = Report.error(XDEF.XDEF540, pc-1, ((XDException)_stack[sp--]).toString());
 						updateReport(rep, chkEl);
 					}
 					continue;
@@ -1990,8 +1938,8 @@ public final class XCodeProcessor {
 						String s = item.stringValue();
 						if (s.charAt(0) == '{'){
 							int i = s.lastIndexOf('}');
-							_stack[++sp] = new DefBoolean(chkEl.getElemValue().hasAttributeNS(
-								s.substring(1, i), s.substring(i + 1)));
+							_stack[++sp] = new DefBoolean(
+								chkEl.getElemValue().hasAttributeNS(s.substring(1, i), s.substring(i + 1)));
 						} else {
 							_stack[++sp] = new DefBoolean(chkEl.getElemValue().hasAttribute(s));
 						}
@@ -2069,14 +2017,10 @@ public final class XCodeProcessor {
 							pars[i] = null;
 						} else {
 							switch (v.getItemId()) {
-								case XD_LONG:
-									pars[i] = v.longValue(); break;
-								case XD_DOUBLE:
-									pars[i] = v.doubleValue(); break;
-								case XD_DATETIME:
-									pars[i] = v.datetimeValue().getCalendar(); break;
-								default:
-									pars[i] = v.stringValue();
+								case XD_LONG: pars[i] = v.longValue(); break;
+								case XD_DOUBLE: pars[i] = v.doubleValue(); break;
+								case XD_DATETIME: pars[i] = v.datetimeValue().getCalendar(); break;
+								default: pars[i] = v.stringValue();
 							}
 						}
 					}
@@ -2110,14 +2054,10 @@ public final class XCodeProcessor {
 							pars[i] = null;
 						} else {
 							switch (v.getItemId()) {
-								case XD_LONG:
-									pars[i] = v.longValue(); break;
-								case XD_DOUBLE:
-									pars[i] = v.doubleValue(); break;
-								case XD_DATETIME:
-									pars[i] = v.datetimeValue().getCalendar(); break;
-								default:
-									pars[i] = v.stringValue();
+								case XD_LONG: pars[i] = v.longValue(); break;
+								case XD_DOUBLE: pars[i] = v.doubleValue(); break;
+								case XD_DATETIME: pars[i] = v.datetimeValue().getCalendar(); break;
+								default: pars[i] = v.stringValue();
 							}
 						}
 					}
@@ -2207,8 +2147,14 @@ public final class XCodeProcessor {
 				case DEBUG_TRACE:
 				case DEBUG_PAUSE: {
 					if (_debug && _debugger != null) {
-						step = _debugger.debug(chkEl, _code, pc - 1, // pc is already increased
-							sp, _stack, _localVariables, _debugInfo, _callList, step);
+						step = _debugger.debug(chkEl,
+							_code,
+							pc - 1, // pc is already increased
+							sp,
+							_stack,
+							_localVariables,
+							_debugInfo, _callList,
+							step);
 					}
 					sp -= item.getParam();
 					continue;
@@ -2218,20 +2164,19 @@ public final class XCodeProcessor {
 						case 1:
 							if (_stack[sp].getItemId() == XD_REPORT) {
 								Report r = ((XDReport)_stack[sp]).reportValue(); // report is in argument
-								_reporter.putReport(
-									Report.error(r.getMsgID(), r.getText(), r.getModification()));
+								_reporter.putReport(Report.error(r.getMsgID(),
+									r.getText(), r.getModification()));
 							} else { // text of report
 								_reporter.putReport(Report.error(null, _stack[sp].stringValue())); // txt
 							}
 							break;
 						case 2:  // error(id, txt)
-							putReport(chkEl, Report.error(_stack[--sp].stringValue(), //id
-								_stack[sp+1].stringValue())); // txt
+							putReport(chkEl,
+								Report.error(_stack[--sp].stringValue(), _stack[sp+1].stringValue()));
 							break;
 						default: // // error(id, txt, modif)
 							putReport(chkEl, Report.error(_stack[sp-=2].stringValue(), //id
-								_stack[sp+1].stringValue(), // txt
-								_stack[sp+2].stringValue())); // modif
+								_stack[sp+1].stringValue(), _stack[sp+2].stringValue()));
 					}
 					_stack[sp] = new DefBoolean(false);
 					continue;
@@ -2241,19 +2186,18 @@ public final class XCodeProcessor {
 							((XDOutput)_stack[--sp]).putReport(Report.error(null,_stack[sp+1].stringValue()));
 							break;
 						case 3: // error(id, txt);
-							((XDOutput) _stack[sp-=2]).putReport(
-								Report.error(_stack[sp+1].stringValue(), _stack[sp+2].stringValue()));
+							((XDOutput) _stack[sp-=2]).putReport(Report.error(_stack[sp+1].stringValue(),
+								_stack[sp+2].stringValue()));
 							break;
 						default:  // error(id, txt, modif);
-							((XDOutput)_stack[sp-=3]).putReport(
-								Report.error(_stack[sp+1].stringValue(),
-									_stack[sp+2].stringValue(), _stack[sp+3].stringValue()));
+							((XDOutput)_stack[sp-=3]).putReport(Report.error(_stack[sp+1].stringValue(),
+								_stack[sp+2].stringValue(), _stack[sp+3].stringValue()));
 					}
 					_stack[sp] = new DefBoolean(false);
 					continue;
 				case GET_NUMOFERRORS: //Get number of errors.
-					_stack[++sp] = new DefLong(
-						chkEl.getReporter().getErrorCount() + _reporter.getErrorCount() - chkEl._errCount);
+					_stack[++sp] = new DefLong(chkEl.getReporter().getErrorCount()
+						+ _reporter.getErrorCount() - chkEl._errCount);
 					continue;
 				case GET_NUMOFERRORWARNINGS:
 					_stack[++sp] = new DefLong(chkEl.getReporter().getErrorCount()
@@ -2353,19 +2297,15 @@ public final class XCodeProcessor {
 					}
 					continue;
 				case CONTEXT_GETLENGTH: //getLength(container)
-					_stack[sp] = new DefLong(((XDContainer) _stack[sp]).getXDItemsNumber());
-					continue;
+					_stack[sp] = new DefLong(((XDContainer) _stack[sp]).getXDItemsNumber()); continue;
 				case CONTEXT_SORT: //container.sort()
 					switch (item.getParam()) {
-						case 2:
-							((XDContainer) _stack[--sp]).sortXD(_stack[sp+1].toString(), true);
-							continue;
+						case 2: ((XDContainer) _stack[--sp]).sortXD(_stack[sp+1].toString(), true); continue;
 						case 3:
-							((XDContainer) _stack[sp -= 2]).sortXD(
-								_stack[sp+1].toString(), _stack[sp+2].booleanValue());
+							((XDContainer) _stack[sp -= 2]).sortXD(_stack[sp+1].toString(),
+								_stack[sp+2].booleanValue());
 							continue;
-						default:
-							((XDContainer) _stack[sp]).sortXD(null, true);
+						default: ((XDContainer) _stack[sp]).sortXD(null, true);
 					}
 					continue;
 				case CONTEXT_ADDITEM: //container.add(obj);
@@ -2445,7 +2385,7 @@ public final class XCodeProcessor {
 					XDValue dv = _stack[sp];
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Service"); //Null value of &{0}
-						continue;
+						continue; //never execute
 					}
 					_stack[sp] = ((XDService) dv).prepareStatement(query);
 					addToFinalList(chkEl, _stack[sp]);
@@ -2457,7 +2397,7 @@ public final class XCodeProcessor {
 					XDValue dv = _stack[sp - (npar - 1)];
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Service"); //Null value of &{0}
-						continue;
+						continue; //never execute
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2488,8 +2428,7 @@ public final class XCodeProcessor {
 							_stack[sp] = ds.query(params);
 							break;
 						}
-						default:
-							throwInfo(chkEl, XDEF.XDEF561, null); //XQuery expression error
+						default: throwInfo(chkEl, XDEF.XDEF561, null); //XQuery expression error
 					}
 					addToFinalList(chkEl, _stack[sp]);
 					continue;
@@ -2529,8 +2468,7 @@ public final class XCodeProcessor {
 							_stack[sp] = ds.queryItems(itemName, params);
 							break;
 						}
-						default:
-							throwInfo(chkEl, XDEF.XDEF561, null); //XQuery expression error
+						default: throwInfo(chkEl, XDEF.XDEF561, null); //XQuery expression error
 					}
 					addToFinalList(chkEl, _stack[sp]);
 					continue;
@@ -2542,7 +2480,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, //Null value of &{0}
 							dv == null || dv.getItemId() != XD_STATEMENT ? "Service" : "Statement");
-						continue;
+						continue;  //never execute
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2573,7 +2511,7 @@ public final class XCodeProcessor {
 						}
 						default: //???? this happens
 							throwInfo(chkEl, XDEF.XDEF561, null); //XQuery expression error
-							di = null; //never executed
+							di = null; //never execute
 					}
 					_stack[sp] = new DefBoolean(di.nextXDItem(chkEl) != null);
 					di.close();
@@ -2586,7 +2524,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, //Null value of &{0}
 							dv == null || dv.getItemId()!=XD_STATEMENT ? "Service" : "Statement");
-						continue;
+						continue;  // never execute
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2622,12 +2560,9 @@ public final class XCodeProcessor {
 					XDValue dv =_stack[sp--];
 					if (dv != null && !dv.isNull()) {
 						switch (dv.getItemId()) {
-							case XD_SERVICE:
-								((XDService) dv).close(); continue;
-							case XD_STATEMENT:
-								((XDStatement) dv).close(); continue;
-							case XD_RESULTSET:
-								((XDResultSet) dv).close(); continue;
+							case XD_SERVICE: ((XDService) dv).close(); continue;
+							case XD_STATEMENT: ((XDStatement) dv).close(); continue;
+							case XD_RESULTSET: ((XDResultSet) dv).close(); continue;
 						}
 					}
 					continue;
@@ -2637,12 +2572,9 @@ public final class XCodeProcessor {
 					boolean b = true;
 					if (dv != null && !dv.isNull()) {
 						switch (dv.getItemId()) {
-							case XD_SERVICE:
-								b = ((XDService) dv).isClosed(); break;
-							case XD_STATEMENT:
-								b = ((XDStatement) dv).isClosed(); break;
-							case XD_RESULTSET:
-								b = ((XDResultSet) dv).isClosed(); break;
+							case XD_SERVICE: b = ((XDService) dv).isClosed(); break;
+							case XD_STATEMENT: b = ((XDStatement) dv).isClosed(); break;
+							case XD_RESULTSET: b = ((XDResultSet) dv).isClosed(); break;
 						}
 					}
 					_stack[sp] = new DefBoolean(b);
@@ -2653,7 +2585,7 @@ public final class XCodeProcessor {
 					XDValue dv = _stack[sp--];
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Service"); //Null value of &{0}
-						continue;
+						continue; //never execute
 					}
 					((XDService) dv).commit();
 					continue;
@@ -2662,7 +2594,7 @@ public final class XCodeProcessor {
 					XDValue dv = _stack[sp--];
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Service"); //Null value of &{0}
-						continue;
+						continue; //never execute
 					}
 					((XDService) dv).rollback();
 					continue;
@@ -2673,7 +2605,7 @@ public final class XCodeProcessor {
 					XDValue dv = _stack[sp];
 					if (dv == null || dv.isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Service"); //Null value of &{0}
-						continue;
+						continue; //never execute
 					}
 					try {
 						((XDService) dv).setProperty(name, value);
@@ -2731,8 +2663,7 @@ public final class XCodeProcessor {
 					}
 					if (elem == null) {
 						chkEl.error(XDEF.XDEF529); //Required element is missing in setElement method
-						//we create dumy element
-						elem = chkEl.getDocument().createElementNS(null, UNDEF_ID);
+						elem = chkEl.getDocument().createElementNS(null, UNDEF_ID); //create dumy element
 					} else if (elem.getOwnerDocument() != chkEl.getDocument()) {
 						elem = (Element) chkEl.getDocument().importNode(elem, true);
 					}
@@ -2874,8 +2805,7 @@ public final class XCodeProcessor {
 					_stack[++sp] = new DefString(chkEl.getItemId() == XX_ATTR ? chkEl.getNodeName() : null);
 					continue;
 				case CURRENCYCODE: //get currency code
-					_stack[sp] = new DefString(((XDCurrency) _stack[sp]).getCurrencyCode());
-					continue;
+					_stack[sp] = new DefString(((XDCurrency) _stack[sp]).getCurrencyCode()); continue;
 				case GET_REGEX_RESULT:
 					_stack[sp - 1] = ((XDRegex) _stack[sp - 1]).getRegexResult(_stack[sp].stringValue());
 					sp -= 1;
@@ -2893,15 +2823,13 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case GET_REGEX_GROUP:
-					_stack[--sp] =
-						new DefString(((XDRegexResult) _stack[sp]).group(_stack[sp + 1].intValue()));
+					_stack[--sp] = new DefString(((XDRegexResult) _stack[sp]).group(_stack[sp+1].intValue()));
 					continue;
 				case GET_REGEX_GROUP_NUM:
-					_stack[sp] = new DefLong(((XDRegexResult) _stack[sp]).groupCount());
-					continue;
+					_stack[sp] = new DefLong(((XDRegexResult) _stack[sp]).groupCount()); continue;
 				case GET_REGEX_GROUP_START:
-					_stack[--sp] = new DefLong(((XDRegexResult) _stack[sp]).groupStart(
-						_stack[sp + 1].intValue()));
+					_stack[--sp] =
+						new DefLong(((XDRegexResult) _stack[sp]).groupStart(_stack[sp + 1].intValue()));
 					continue;
 				case GET_REGEX_GROUP_END:
 					_stack[--sp] = new DefLong(((XDRegexResult)_stack[sp]).groupEnd(_stack[sp+1].intValue()));
@@ -3021,8 +2949,8 @@ public final class XCodeProcessor {
 				}
 				case GET_PARSED_ERROR: {//result.getError()
 					XDParseResult x = (XDParseResult) _stack[sp];
-					_stack[sp] = x.matches()
-						? new XDReport() : new XDReport(x.getReporter().getLastErrorReport());
+					_stack[sp] =
+						x.matches() ? new XDReport() : new XDReport(x.getReporter().getLastErrorReport());
 					continue;
 				}
 				case SET_PARSED_STRING: {//result.setSourceString
@@ -3112,10 +3040,8 @@ public final class XCodeProcessor {
 					XDValue v = _stack[sp];
 					if (_stack[sp] != null && !_stack[sp].isNull()) {
 						switch (v.getItemId()) {
-							case XD_STRING:
-								_stack[sp] = new DefBoolean(v.stringValue().isEmpty()); continue;
-							case XD_ELEMENT:
-								_stack[sp] = new DefBoolean(((XDElement)v).isEmpty()); continue;
+							case XD_STRING: _stack[sp] = new DefBoolean(v.stringValue().isEmpty()); continue;
+							case XD_ELEMENT: _stack[sp] = new DefBoolean(((XDElement)v).isEmpty()); continue;
 							case XD_CONTAINER:
 								_stack[sp] = new DefBoolean(((DefContainer)v).isEmpty()); continue;
 						}
@@ -3300,12 +3226,11 @@ public final class XCodeProcessor {
 				case NEW_TELEPHONE:
 				case NEW_XMLWRITER:
 				case NEW_REPORT:
-				case NEW_LOCALE:
-					sp = XCodeProcessorExt.perform(this, item, sp, _stack); continue;
-				//Other codes (implemented in XCodeProcessorExt)
-				default:
-					sp = XCodeProcessorExt.performX(this, item, chkEl, sp, _stack, pc);
+				case NEW_LOCALE: sp = XCodeProcessorExt.perform(this, item, sp, _stack); continue;
+
 				}//switch
+				//Other codes (implemented in XCodeProcessorExt)
+				sp = XCodeProcessorExt.performX(this, item, chkEl, sp, _stack, pc);
 			} catch (SRuntimeException ex) {
 				if (_catchItem != null) {
 					pc = genDefException(pc, ex, chkEl);
@@ -3389,8 +3314,7 @@ public final class XCodeProcessor {
 					y.putDefaultParseError(); //XDEF515 value error&{0}{ :}
 				}
 				break;
-			case XD_PARSERESULT:
-				y = (XDParseResult) x; break;
+			case XD_PARSERESULT: y = (XDParseResult) x; break;
 			case X_UNIQUESET:
 			case X_UNIQUESET_M:
 				result = (CodeUniqueset) x;
@@ -3405,8 +3329,7 @@ public final class XCodeProcessor {
 				}
 		}
 		chkElem._parseResult = y;
-		dt.getParseKeyItem(
-			dt.getKeyItemIndex()).setParsedObject(y.getParsedValue());
+		dt.getParseKeyItem(dt.getKeyItemIndex()).setParsedObject(y.getParsedValue());
 		System.arraycopy(stack, 0, _stack, 0, sp);
 		return result;
 	}
@@ -3542,11 +3465,10 @@ public final class XCodeProcessor {
 		} else if (getStdErr() != null) {
 			getStdErr().putReport(Report.error(XDEF.XDEF569, s));//Fatal error&{0}{: }
 		}
-		//throw fatal error.
 		//Fatal error&{0}{: }
 		SError err = new SError(Report.fatal(XDEF.XDEF569, s), ex);
 		err.setStackTrace(ex.getStackTrace());
-		throw err;
+		throw err; //throw fatal error.
 	}
 
 	public class XDFunctionResolver implements XPathFunctionResolver {
@@ -3569,8 +3491,7 @@ public final class XCodeProcessor {
 				}
 				if (xv != null) {
 					XDValue value = _globalVariables[xv.getOffset()];
-					if (XPATH2 && convertToString) {
-						//Xpath2 ???? bind??? this is a nasted trick!!
+					if (XPATH2 && convertToString) { //Xpath2 ???? bind??? this is a nasted trick!!
 						convertToString = false;
 						return  value.stringValue();
 					}
@@ -3600,9 +3521,7 @@ public final class XCodeProcessor {
 		 * @param variables local variables.
 		 * @param prevCatchItem link to previous catch item.
 		 */
-		CatchItem(final int catchAddr,
-			final XDValue[] variables,
-			CatchItem prevCatchItem) {
+		CatchItem(final int catchAddr, final XDValue[] variables, CatchItem prevCatchItem) {
 			_variables = variables;
 			_catchAddr = catchAddr;
 			_prevItem = prevCatchItem;
@@ -3658,8 +3577,7 @@ public final class XCodeProcessor {
 		 * @param localVariables local variables o f parent.
 		 * @return new local variables.
 		 */
-		private XDValue[] init(final int localVariablesSize,
-			final XDValue[] localVariables) {
+		private XDValue[] init(final int localVariablesSize, final XDValue[] localVariables) {
 			_parentLocalVariables = localVariables;
 			return localVariablesSize > 0 ? new XDValue[localVariablesSize] : null;
 		}

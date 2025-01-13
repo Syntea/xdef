@@ -117,7 +117,7 @@ public interface XComponent {
 	/** Update parameters of XComponent.
 	 * @param p parent XComponent.q
 	 * @param name name of element.
-	 * @param ns name space.
+	 * @param ns namespace.
 	 * @param xPos XDPosition.
 	 */
 	public void xInit(XComponent p, String name, String ns, String xPos);

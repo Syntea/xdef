@@ -60,7 +60,6 @@ final class ChkXONParser implements XParser, XonParser {
 	public SPosition _elemLocator;
 	/** System id. */
 	public String _sysId;
-
 	/** Stack with kind types of item. */
 	private final Stack<Integer> _kinds;
 	/** Type of item: 0..value, 1..array, 2..map */
@@ -76,19 +75,14 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param reporter The reporter.
 	 * @param source The string with source XML data.
 	 */
-	ChkXONParser(final ReportWriter reporter, final Object source) {
-		this(reporter, source, null);
-	}
+	ChkXONParser(final ReportWriter reporter, final Object source) {this(reporter, source, null);}
 
 	/** Creates a new instance of ChkParser and parses given data.
 	 * @param reporter The reporter.
-	 * @param source Object with source data (may be File, URL, string,
-	 * InputStream, or Reader).
+	 * @param source Object with source data (may be File, URL, string, InputStream, or Reader).
 	 * @param sourceName the name of source data
 	 */
-	ChkXONParser(final ReportWriter reporter,
-		final Object source,
-		final String sourceName) {
+	ChkXONParser(final ReportWriter reporter, final Object source, final String sourceName) {
 		_kinds = new Stack<>();
 		_mapNames = new Stack<>();
 		_sReporter =
@@ -115,8 +109,7 @@ final class ChkXONParser implements XParser, XonParser {
 				_in = XonReader.getXonReader(new FileInputStream(f));
 				_sysId = sourceName == null ? f.getCanonicalPath() : sourceName;
 			} catch (IOException ex) {
-				//File doesn't exist:&{0}
-				throw new SRuntimeException(SYS.SYS024,f.getAbsoluteFile());
+				throw new SRuntimeException(SYS.SYS024,f.getAbsoluteFile()); //File doesn't exist:&{0}
 			}
 		} else if (source instanceof URL) {
 			URL u = (URL) source;
@@ -124,8 +117,7 @@ final class ChkXONParser implements XParser, XonParser {
 				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
 			} catch (IOException ex) {
-				//Can't read file: &{0}
-				throw new SRuntimeException(SYS.SYS028, u.toString());
+				throw new SRuntimeException(SYS.SYS028, u.toString()); //Can't read file: &{0}
 			}
 		} else if (source instanceof InputStream) {
 			_in = XonReader.getXonReader((InputStream) source);
@@ -135,8 +127,7 @@ final class ChkXONParser implements XParser, XonParser {
 			_sysId = sourceName == null ? "INPUTSTREAM" : sourceName;
 		} else {
 			//Unsupported type of argument &{0}: &{1}
-			throw new SRuntimeException(SYS.SYS037,"source",
-				source != null ? source.getClass() : null);
+			throw new SRuntimeException(SYS.SYS037, "source", source != null ? source.getClass() : null);
 		}
 	}
 
@@ -150,8 +141,7 @@ final class ChkXONParser implements XParser, XonParser {
 		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
 			KParsedAttr ka = parsedElem.getAttr(i);
 			if (ka.getValue() != null) {
-				_element.setAttributeNS(ka.getNamespaceURI(),
-					ka.getName(), ka.getValue());
+				_element.setAttributeNS(ka.getNamespaceURI(), ka.getName(), ka.getValue());
 			}
 		}
 	}
@@ -163,25 +153,21 @@ final class ChkXONParser implements XParser, XonParser {
 	private void elementStart(final KParsedElement parsedElem) {
 		if (++_level == 0) {
 			if (_chkDoc == null) {
-				//X-definition is not specified
-				throw new SRuntimeException(XDEF.XDEF550);
+				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
 			}
-			_chkDoc._doc=KXmlUtils.newDocument(parsedElem.getParsedNSURI(),
-				parsedElem.getParsedName(), null);
+			_chkDoc._doc=KXmlUtils.newDocument(parsedElem.getParsedNSURI(), parsedElem.getParsedName(), null);
 			_element = _chkDoc._doc.getDocumentElement();
 			addAttrs(parsedElem);
 			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {
-			Element el = _chkDoc._doc.createElementNS(
-				parsedElem.getParsedNSURI(), parsedElem.getParsedName());
+			Element el = _chkDoc._doc.createElementNS(parsedElem.getParsedNSURI(),parsedElem.getParsedName());
 			_element.appendChild(el);
 			_element = el;
 			addAttrs(parsedElem);
 			_chkEl = _chkEl.createChkElement(_element);
 		}
 		if (_level >= _chkElemStack.length) { //increase nodelist
-			ChkElement[] newList =
-				new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
+			ChkElement[] newList = new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
 			System.arraycopy(_chkElemStack, 0, newList, 0,_chkElemStack.length);
 			_chkElemStack = newList;
 		}
@@ -190,8 +176,7 @@ final class ChkXONParser implements XParser, XonParser {
 			KParsedAttr ka = parsedElem.getAttrNS(x.getNSUri(),x.getName());
 			if (ka != null) {
 				_sReporter.setPosition(ka.getPosition());
-				Attr att = _chkDoc._doc.createAttributeNS(ka.getNamespaceURI(),
-					ka.getName());
+				Attr att = _chkDoc._doc.createAttributeNS(ka.getNamespaceURI(), ka.getName());
 				att.setValue(ka.getValue());
 				_chkEl.newAttribute(att);
 				parsedElem.remove(ka); // processed, remove from attr list
@@ -220,9 +205,7 @@ final class ChkXONParser implements XParser, XonParser {
 			}
 		}
 	}
-	private KParsedElement genKElem(final String qname,
-		final String nsuri,
-		final SPosition spos) {
+	private KParsedElement genKElem(final String qname, final String nsuri, final SPosition spos) {
 		KParsedElement kelem = new KParsedElement();
 		kelem.setParsedNameParams(nsuri, qname, spos);
 		if (!_nsGenerated && nsuri != null) {
@@ -234,11 +217,9 @@ final class ChkXONParser implements XParser, XonParser {
 	}
 	private void genItem(final XonTools.JValue value, final SBuffer name) {
 		KParsedElement kelem = genKElem(XonNames.X_VALUE,
-			XDConstants.XON_NS_URI_W,
-			name == null ? value.getPosition() : name);
+			XDConstants.XON_NS_URI_W, name == null ? value.getPosition() : name);
 		if (name != null) {
-			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
-				XonTools.toXmlName(name.getString()), name));
+			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR, XonTools.toXmlName(name.getString()), name));
 		}
 		kelem.addAttr(new KParsedAttr(XonNames.X_VALATTR,
 			XonTools.genXMLValue(value.getValue()), value.getPosition()));
@@ -362,12 +343,10 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param pos source position.
 	 */
 	public final void arrayStart(final SPosition pos) {
-		KParsedElement kelem = genKElem(XonNames.X_ARRAY,
-			XDConstants.XON_NS_URI_W, pos);
+		KParsedElement kelem = genKElem(XonNames.X_ARRAY, XDConstants.XON_NS_URI_W, pos);
 		if (_kind == 2) { // map
 			SBuffer name = _names.peek();
-			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
-				XonTools.toXmlName(name.getString()), name));
+			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR, XonTools.toXmlName(name.getString()), name));
 		}
 		elementStart(kelem);
 		_kinds.push(_kind = 1);
@@ -386,12 +365,10 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param pos source position.
 	 */
 	public final void mapStart(final SPosition pos) {
-		KParsedElement kelem = genKElem(XonNames.X_MAP,
-			XDConstants.XON_NS_URI_W, pos);
+		KParsedElement kelem = genKElem(XonNames.X_MAP, XDConstants.XON_NS_URI_W, pos);
 		if (_kind == 2) { // map
 			SBuffer name = _names.peek();
-			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
-				XonTools.toXmlName(name.getString()), name));
+			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR, XonTools.toXmlName(name.getString()), name));
 		}
 		elementStart(kelem);
 		_mapNames.push(_names = new Stack<>());
@@ -413,8 +390,7 @@ final class ChkXONParser implements XParser, XonParser {
 	 */
 	public final void comment(final SBuffer value){} // we ingore it here
 	@Override
-	/** X-script item parsed (not used methods for XON/JSON parsing,
-	 * used in X-definition compiler).
+	/** X-script item parsed (not used methods for XON/JSON parsing, used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value of item.
 	 */

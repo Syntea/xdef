@@ -6,8 +6,7 @@ import java.util.Arrays;
 /** Container for attribute names, values and source positions of values.
  * @author Vaclav Trojan
  */
-public class KParsedElement {
-
+public final class KParsedElement {
 	private static final int STEP = 16;
 	private static final int STEP2 = 32;
 	private KParsedAttr[] _attrs;
@@ -21,10 +20,10 @@ public class KParsedElement {
 	/** Get size of the list.
 	 * @return number of attributes.
 	 */
-	public int getLength() {return _size;}
+	public final int getLength() {return _size;}
 
 	/** Clear list of attributes. */
-	public void clear() {
+	public final void clear() {
 		if (_size > 0) {
 			if (_size > STEP2) {
 				_attrs = null;
@@ -38,23 +37,21 @@ public class KParsedElement {
 		_pos = null;
 	}
 
-	public void setParsedNameParams(final String nsURI,
-		final String name,
-		final SPosition spos) {
+	public final void setParsedNameParams(final String nsURI, final String name, final SPosition spos) {
 		_tagname = name;
 		_nsURI = nsURI;
 		_pos = spos;
 	}
 
-	public String getParsedName() {return _tagname;}
-	public SPosition getParsedNameSourcePosition() {return _pos;}
-	public String getParsedNSURI() {return _nsURI;}
+	public final String getParsedName() {return _tagname;}
+	public final SPosition getParsedNameSourcePosition() {return _pos;}
+	public final String getParsedNSURI() {return _nsURI;}
 
 	/** Add attribute to the list.
 	 * @param item parsed attribute.
 	 * @return true if attribute was added.
 	 */
-	public boolean addAttr(KParsedAttr item) {
+	public final boolean addAttr(final KParsedAttr item) {
 		if (_attrs == null) {
 			_attrs = new KParsedAttr[STEP];
 			_attrs[_size++] = item;
@@ -76,11 +73,11 @@ public class KParsedElement {
 	}
 
 	/** Get attribute at given position from the list.
-	 * @param index position of attribute. If value of this argument
-	 * is out of range of the list the method returns <i>null</i>.
-	 * @return attribute from given position or <i>null</i>.
+	 * @param index position of attribute. If value of this argument is out of range of the list the method
+	 * return null.
+	 * @return attribute from given position or null.
 	 */
-	public KParsedAttr getAttr(int index) {
+	public final KParsedAttr getAttr(final int index) {
 		if (_attrs == null || index < 0 || index > _size) {
 			return null;
 		}
@@ -89,9 +86,9 @@ public class KParsedElement {
 
 	/** Get attribute with given raw name from the list.
 	 * @param name name of required attribute (may be qualified).
-	 * @return attribute with given name or <i>null</i>.
+	 * @return attribute with given name or null.
 	 */
-	public KParsedAttr getAttr(final String name) {
+	public final KParsedAttr getAttr(final String name) {
 		int i;
 		if ((i = indexOf(name)) >= 0) {
 			return _attrs[i];
@@ -100,11 +97,11 @@ public class KParsedElement {
 	}
 
 	/** Get attribute with given raw name from the list.
-	 * @param nsURI name space URI.
+	 * @param nsURI namespace URI.
 	 * @param name local name or qualified name.
-	 * @return attribute with given name or <i>null</i>.
+	 * @return attribute with given name or null.
 	 */
-	public KParsedAttr getAttrNS(final String nsURI, final String name) {
+	public final KParsedAttr getAttrNS(final String nsURI, final String name) {
 		int i;
 		if (nsURI == null) {
 			i = indexOf(name);
@@ -118,9 +115,9 @@ public class KParsedElement {
 
 	/** Get index of attribute with given raw name in the list.
 	 * @param name name of required attribute (may be qualified).
-	 * @return index of attribute in the list or <i>-1</i>.
+	 * @return index of attribute in the list or -1.
 	 */
-	public int indexOf(final String name) {
+	public final int indexOf(final String name) {
 		for (int i = _size - 1; i >= 0; i--) {
 			if (name.equals(_attrs[i].getName())) {
 				return i;
@@ -132,9 +129,9 @@ public class KParsedElement {
 	/** Get index of an attribute with namespace URI and local name in the list.
 	 * @param nsURI namespace URI.
 	 * @param localname local name.
-	 * @return index of an attribute in the list or <i>-1</i>.
+	 * @return index of an attribute in the list or -1.
 	 */
-	public int indexOfNS(final String nsURI, final String localname) {
+	public final int indexOfNS(final String nsURI, final String localname) {
 		if (nsURI == null) {
 			return -1;
 		}
@@ -158,27 +155,23 @@ public class KParsedElement {
 
 	/** Remove attribute with given name in the list.
 	 * @param name name of attribute.
-	 * @return removed object or <i>null</i>.
+	 * @return removed object or null.
 	 */
-	public KParsedAttr remove(String name) {
-		return remove(indexOf(name));
-	}
+	public final KParsedAttr remove(final String name) {return remove(indexOf(name));}
 
 	/** Remove attribute with given name in the list.
 	 * @param ka KParsedAttr object to be removed.
-	 * @return removed object or <i>null</i>.
+	 * @return removed object or null.
 	 */
-	public KParsedAttr remove(final KParsedAttr ka) {
-		return remove(indexOf(ka.getName()));
-	}
+	public final KParsedAttr remove(final KParsedAttr ka) {return remove(indexOf(ka.getName()));}
 
 	/** Remove attribute from given position in the list.
 	 * @param index position of attribute. If value of this argument
-	 * is out of range of the list the method returns <i>null</i> and no
+	 * is out of range of the list the method returns null and no
 	 * attribute is deleted.
-	 * @return removed object or <i>null</i>.
+	 * @return removed object or null.
 	 */
-	public KParsedAttr remove(int index) {
+	public final KParsedAttr remove(int index) {
 		if (index < 0 || index >= _size) {
 			return null;
 		}
@@ -210,7 +203,5 @@ public class KParsedElement {
 	}
 
 	@Override
-	public String toString() {
-		return _tagname + "; uri: " + _nsURI + "; numAttrs: " + _size;
-	}
+	public final String toString() {return _tagname + "; uri: " + _nsURI + "; numAttrs: " + _size;}
 }

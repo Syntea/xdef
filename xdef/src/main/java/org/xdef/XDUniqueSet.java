@@ -1,7 +1,6 @@
 package org.xdef;
 
-/** Unique set (table of unique items - rows). It is used for validation methods
- * ID, IDREF, CHECKID etc.
+/** Unique set (table of unique items - rows). It is used for validation methods ID, IDREF, CHECKID etc.
  * @author Vaclav Trojan
  */
 public interface XDUniqueSet extends XDValue {
@@ -26,8 +25,7 @@ public interface XDUniqueSet extends XDValue {
 	 */
 	public String printActualKey();
 
-	/** Get actual actual value of the uniqueSet key or null if uniqueSet
-	 * item not exists.
+	/** Get actual actual value of the uniqueSet key or null if uniqueSet item not exists.
 	 * @return actual actual value of the uniqueSet key or null.
 	 */
 	public XDUniqueSetKey getActualKey();

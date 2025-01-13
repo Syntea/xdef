@@ -12,6 +12,7 @@ import org.xdef.xml.KXmlUtils;
 public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 
 	public KNamedNodeMap() {super();}
+
 	public KNamedNodeMap(Node x) {
 		super();
 		if (x != null){
@@ -39,9 +40,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	}
 
 	@Override
-	public final Node setNamedItem(final Node arg) throws DOMException {
-		return setNamedItemNS(arg);
-	}
+	public final Node setNamedItem(final Node arg) throws DOMException {return setNamedItemNS(arg);}
 
 	@Override
 	public final Node removeNamedItem(final String name) throws DOMException {
@@ -53,8 +52,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	}
 
 	@Override
-	public final Node getNamedItemNS(final String ns, final String localName)
-		throws DOMException {
+	public final Node getNamedItemNS(final String ns, final String localName) throws DOMException {
 		QName qname = new QName(ns, localName);
 		for (Node n: this) {
 			if (qname.equals(KXmlUtils.getQName(n))) {
@@ -67,9 +65,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	@Override
 	public final Node setNamedItemNS(final Node arg) throws DOMException {
 		String ns = arg.getNamespaceURI();
-		Node n = ns != null
-			? getNamedItemNS(ns, arg.getLocalName())
-			: getNamedItem(arg.getNodeName());
+		Node n = ns != null ? getNamedItemNS(ns, arg.getLocalName()) : getNamedItem(arg.getNodeName());
 		if (n != null) {
 			remove(n);
 		}
@@ -78,8 +74,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	}
 
 	@Override
-	public final Node removeNamedItemNS(final String ns, final String localName)
-		throws DOMException {
+	public final Node removeNamedItemNS(final String ns, final String localName) throws DOMException {
 		Node n;
 		if ((n = getNamedItemNS(ns, localName)) != null) {
 			remove(n);

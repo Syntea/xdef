@@ -46,19 +46,16 @@ public interface KXquery {
 	 */
 	public Object evaluate(final Node node) throws SRuntimeException;
 
-	/** Execute XQuery expression and return result.
-	/* If result type is null then result types are checked in
+	/** Execute XQuery expression and return result. If result type is null then result types are checked in
 	 * following sequence:
 	 * @return object with result of XQuery expression.
 	 */
 	public Object evaluate() throws SRuntimeException;
 
-	/** Creates a new instance of KXQueryExpr from other expression with
-	 * compiled new expression. The name space context, functions and variables
-	 * are retrieved  from the argument.
+	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
+	 * The namespace context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */
 	public KXquery newExpression(final String source);
-
 }

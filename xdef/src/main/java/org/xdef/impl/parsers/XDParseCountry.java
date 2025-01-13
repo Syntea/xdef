@@ -12,6 +12,7 @@ public class XDParseCountry extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "country";
 
 	public XDParseCountry() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -22,8 +23,7 @@ public class XDParseCountry extends XSAbstractParseToken {
 		try {
 			SUtils.getISO3Country(s);
 		} catch (Exception ex) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.setParsedValue(s);

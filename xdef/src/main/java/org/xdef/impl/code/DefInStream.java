@@ -20,7 +20,6 @@ import static org.xdef.XDValueType.INPUT;
  * @author Vaclav Trojan
  */
 public final class DefInStream extends XDValueAbstract implements XDInput {
-
 	/** Reader. */
 	private ReportReader _in;
 	/** The file name. */
@@ -38,25 +37,17 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	/** Creates a new instance of DefStream
 	 * @param in the ReportReader.
 	 */
-	public DefInStream(ReportReader in) {
-		_fname = null;
-		_encoding = null;
-		_xmlFormat = false;
-		_opened = true;
-		_in = in;
-	}
+	public DefInStream(ReportReader in) {_in = in;}
 
 	/** Creates a new instance of DefStream
 	 * @param fname the name of the file with the input data.
-	 * @param encoding the name of encoding table (<i>null</i> =&gt; default
-	 * encoding).
-	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param encoding the name of encoding table (null =&gt; default encoding).
+	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefInStream(final String fname,
-		final String encoding,
-		final boolean xmlFormat) throws SRuntimeException {
+	public DefInStream(final String fname, final String encoding, final boolean xmlFormat)
+		throws SRuntimeException {
 		_fname = fname;
 		_encoding = encoding;
 		_xmlFormat = xmlFormat;
@@ -65,12 +56,11 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param reader the input stream.
-	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefInStream(final InputStreamReader reader,
-		final boolean xmlFormat) throws SRuntimeException {
+	public DefInStream(final InputStreamReader reader, final boolean xmlFormat) throws SRuntimeException {
 		_in = new FileReportReader(reader, xmlFormat);
 		_encoding = reader.getEncoding();
 		_fname = "#";
@@ -81,12 +71,11 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param stream the input stream.
-	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
-	 * otherwise the input data strem is processed as a stream of source lines.
+	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data strem is processed
+	 * as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefInStream(final InputStream stream, final boolean xmlFormat)
-	throws SRuntimeException{
+	public DefInStream(final InputStream stream, final boolean xmlFormat) throws SRuntimeException{
 		_xmlFormat = xmlFormat;
 		InputStreamReader isr = new InputStreamReader(stream);
 		_in = new FileReportReader(isr, xmlFormat);
@@ -98,12 +87,11 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param name file pathname or "in" (System.in).
-	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
-	 * otherwise the input data stream is processed as a stream of source lines.
+	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data stream is processed
+	 * as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefInStream(final String name, final boolean xmlFormat)
-	throws SRuntimeException {
+	public DefInStream(final String name, final boolean xmlFormat) throws SRuntimeException {
 		InputStreamReader isr;
 		_xmlFormat = xmlFormat;
 		if (name == null || name.length() == 0 || name.equalsIgnoreCase("in")) {
@@ -135,11 +123,9 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 			canonizeEncoding();
 			_opened = true;
 		} catch (FileNotFoundException ex) {
-			//Can't read file: &{0}
-			throw new SRuntimeException(SYS.SYS028, ex, _fname+" ("+ex+")");
+			throw new SRuntimeException(SYS.SYS028, ex, _fname+" ("+ex+")"); //Can't read file: &{0}
 		} catch (UnsupportedEncodingException ex) {
-			//Unsupported encoding table: &{0}
-			throw new SRuntimeException(SYS.SYS035, ex, _encoding);
+			throw new SRuntimeException(SYS.SYS035, ex, _encoding); //Unsupported encoding table: &{0}
 		}
 	}
 
@@ -164,9 +150,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 		open();
 	}
 
-	public String getEncoding() {
-		return _encoding;
-	}
+	public String getEncoding() {return _encoding;}
 
 	@Override
 	public String readString() {
@@ -191,9 +175,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	}
 
 	@Override
-	public Report getReport() {
-		return _in.getReport();
-	}
+	public Report getReport() {return _in.getReport();}
 
 	@Override
 	public void close() {
@@ -231,14 +213,11 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {
-		return "org.xdef.impl.code.DefInStream(" + _fname + ")";
-	}
+	public String toString() {return "org.xdef.impl.code.DefInStream(" + _fname + ")";}
 
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public String stringValue() {return _fname;}
 

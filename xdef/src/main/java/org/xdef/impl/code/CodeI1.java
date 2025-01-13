@@ -6,7 +6,6 @@ import org.xdef.XDValue;
  * @author Vaclav Trojan
  */
 public class CodeI1 extends CodeOp {
-
 	/** Parameter (usually number of method parameters). */
 	int _param;
 
@@ -76,9 +75,7 @@ public class CodeI1 extends CodeOp {
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
-	public XDValue cloneItem() {
-		return new CodeI1(_resultType, _code, _param);
-	}
+	public XDValue cloneItem() {return new CodeI1(_resultType, _code, _param);}
 
 	@Override
 	/** Compare this object with other CodeItem.
@@ -90,8 +87,7 @@ public class CodeI1 extends CodeOp {
 			return false;
 		}
 		CodeI1 x = (CodeI1) o;
-		return getCode() == x.getCode() &&
-			_resultType == x.getItemId() && _param == x.getParam();
+		return getCode() == x.getCode() && _resultType == x.getItemId() && _param == x.getParam();
 	}
 
 	@Override

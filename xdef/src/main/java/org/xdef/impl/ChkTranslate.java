@@ -48,7 +48,6 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 final class ChkTranslate extends SReporter {
-
 	/** Root check element. */
 	private ChkElement _rootChkElement;
 	/** Lexicon of tag names in different languages.*/
@@ -71,8 +70,7 @@ final class ChkTranslate extends SReporter {
 		if (value == null) {
 			return null;
 		}
-		String qname = "$any".equals(chkEl._xElement.getName())
-			? "_ANY_" : chkEl._xElement.getName();
+		String qname = "$any".equals(chkEl._xElement.getName()) ? "_ANY_" : chkEl._xElement.getName();
 		Document doc = chkEl._element.getOwnerDocument();
 		Element e = doc.createElementNS(chkEl._xElement.getNSUri(), qname);
 		if (!value.isEmpty()) {
@@ -98,10 +96,8 @@ final class ChkTranslate extends SReporter {
 								XDContainer xv = (XDContainer) v;
 								if (xv.getXDNamedItemsNumber() > 0) {
 									for (XDNamedValue x: xv.getXDNamedItems()){
-										if (x.getValue() != null
-											&& !x.getValue().isNull()) {
-											e.setAttribute(x.getName(),
-												x.getValue().stringValue());
+										if (x.getValue() != null && !x.getValue().isNull()) {
+											e.setAttribute(x.getName(), x.getValue().stringValue());
 										}
 									}
 								}
@@ -123,12 +119,9 @@ final class ChkTranslate extends SReporter {
 	 * @param isRoot true if called from root.
 	 * @return XDValue to be used for construction.
 	 */
-	private XDValue setCreateResult(final ChkElement chkel,
-		final XDContainer xdc,
-		final int ndx) {
+	private XDValue setCreateResult(final ChkElement chkel, final XDContainer xdc, final int ndx) {
 		XDValue item = xdc.getXDItem(ndx);
-		if (item != null && !item.isNull()
-			&& item.getItemId() == XD_PARSERESULT) {
+		if (item != null && !item.isNull() && item.getItemId() == XD_PARSERESULT) {
 			XDParseResult xdp = (XDParseResult) item;
 			item = xdp.matches() ? xdp.getParsedValue() : null;
 		}
@@ -144,12 +137,10 @@ final class ChkTranslate extends SReporter {
 				return item;
 			case XD_CONTAINER: {
 				Element el;
-				if (xdc.getXDNamedItemsNumber() == 0
-					&& xdc.getXDItemsNumber() > 1) {
+				if (xdc.getXDNamedItemsNumber() == 0 && xdc.getXDItemsNumber() > 1) {
 					el = xdc.toElement(chkel.getXXNSURI(), chkel.getXXName());
 				} else {
-					el = ((XDContainer) item).toElement(
-						chkel.getXXNSURI(), chkel.getXXName());
+					el = ((XDContainer) item).toElement(chkel.getXXNSURI(), chkel.getXXName());
 				}
 				XDContainer x = (XDContainer) item;
 				return new DefElement(attrsToElement(el, x));
@@ -160,8 +151,7 @@ final class ChkTranslate extends SReporter {
 				XDValue v = x.getValue();
 				if (v.getItemId() == XD_CONTAINER) {
 					XDContainer xv = (XDContainer) v;
-					if (xv.getXDItemsNumber() == 0
-						&& xv.getXDNamedItemsNumber() > 0) {
+					if (xv.getXDItemsNumber() == 0 && xv.getXDNamedItemsNumber() > 0) {
 						// Only named items, create element with attributes
 						DefElement el = new DefElement(null,s);
 						for (XDNamedValue att : xv.getXDNamedItems()) {
@@ -176,9 +166,7 @@ final class ChkTranslate extends SReporter {
 										el.addXDItem(c.toElement(null, s));
 										break;
 									default:
-										el.getElement().setAttribute(
-											att.getName(),
-											att.getValue().toString());
+										el.getElement().setAttribute(att.getName(),att.getValue().toString());
 								}
 							}
 						}
@@ -213,8 +201,7 @@ final class ChkTranslate extends SReporter {
 		int oldDestLanguageID = chkDoc._destLanguageID;
 		_lexicon = ((XPool) chkDoc.getXDPool())._lexicon;
 		if (_lexicon == null) {
-			//Lexicon is not available in the XDPool object
-			throw new SRuntimeException(XDEF.XDEF143);
+			throw new SRuntimeException(XDEF.XDEF143); //Lexicon is not available in the XDPool object
 		}
 		chkDoc.setCreateMode(true);
 		chkDoc._xElement = null;
@@ -225,21 +212,15 @@ final class ChkTranslate extends SReporter {
 			chkDoc.setDestLexiconLanguage(destLanguage);
 			_destLanguageID = chkDoc._destLanguageID;
 			String nsuri = inElem.getNamespaceURI();
-			XElement xel = chkDoc.getXElement(inElem.getTagName(),
-				nsuri, _sourceLanguageID);
-			String name = ((XPool) chkDoc.getXDPool())._lexicon.findText(
-				xel.getXDPosition(), _destLanguageID);
+			XElement xel = chkDoc.getXElement(inElem.getTagName(), nsuri, _sourceLanguageID);
+			String name = ((XPool) chkDoc.getXDPool())._lexicon.findText(xel.getXDPosition(),_destLanguageID);
 			chkDoc.setXDContext(inElem);
-			_rootChkElement = (ChkElement) chkDoc.prepareRootXXElementNS(
-				nsuri, name, false);
+			_rootChkElement = (ChkElement) chkDoc.prepareRootXXElementNS(nsuri, name, false);
 			Object obj = chkDoc.getCreateContext();
-			Element elem = (obj != null && (obj instanceof Element))
-				? (Element) obj : null;
-			if (_rootChkElement._scp.isDebugMode()
-				&& _rootChkElement._scp.getDebugger() != null) {
+			Element elem = (obj != null && (obj instanceof Element)) ? (Element) obj : null;
+			if (_rootChkElement._scp.isDebugMode() && _rootChkElement._scp.getDebugger() != null) {
 				// open debugger
-				_rootChkElement._scp.getDebugger().openDebugger(
-					_rootChkElement._scp.getProperties(),
+				_rootChkElement._scp.getDebugger().openDebugger(_rootChkElement._scp.getProperties(),
 					_rootChkElement._rootChkDocument.getXDPool());
 			}
 			chkDoc._scp.initscript(); //Initialize variables and methods
@@ -272,7 +253,7 @@ final class ChkTranslate extends SReporter {
 		} catch (SError e) {
 			Report rep = e.getReport();
 			//X-definition canceled
-			if (rep != null && "XDEF906".equals(rep.getMsgID())) {
+			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //X-definition canceled&{0}{
 				error(rep.getMsgID(), rep.getText(), rep.getModification());
 				_rootChkElement._rootChkDocument.endDocument();
 			} else {
@@ -314,8 +295,7 @@ final class ChkTranslate extends SReporter {
 					for (; item != null; item = it.nextXDItem(chkElement)) {
 						if (n > 0) {
 							if (parentChkElem == null) { //root
-								//Required element &{0} is missing
-								chkElem.error(XDEF.XDEF539, xElem.getName());
+								chkElem.error(XDEF.XDEF539,xElem.getName());//Required element &{0} is missing
 								return; //root
 							}
 							chkElem = genChkElement(parentChkElem, null, xElem);
@@ -441,39 +421,34 @@ final class ChkTranslate extends SReporter {
 		}
 	}
 
-	/** Find elements with given name in child nodes. If the argument "elem" has
-	 * the name and namespace URI as required then add this element to result
-	 * and return true. Otherwise try to find direct child nodes with such name
-	 * and namespace URI, add them to result and return true. If nothing was
-	 * found then return false. Note this is very NASTY trick!
+	/** Find elements with given name in child nodes. If the argument "elem" has the name and namespace URI
+	 * as required then add this element to result and return true. Otherwise try to find direct child nodes
+	 * with such name and namespace URI, add them to result and return true. If nothing was found then
+	 * return false. Note this is very NASTY trick!
 	 * @param result Context where found elements are added.
 	 * @param chkEl actual object ChkElement.
-	 * @param elem where ti search.
-	 * @return true if an element was found and all found elements are added
-	 * to the context.
+	 * @param el where ti search.
+	 * @return true if an element was found and all found elements are added to the context.
 	 */
-	private boolean getChildElementsByName(final DefContainer result,
-		final ChkElement chkEl,
-		final Element elem) {
+	private boolean getChildElementsByName(final DefContainer result,final ChkElement chkEl,final Element el){
 		String uri = chkEl.getXMElement().getNSUri();
-		String qname = _lexicon.findText(chkEl.getXMElement().getXDPosition(),
-			_sourceLanguageID);
+		String qname = _lexicon.findText(chkEl.getXMElement().getXDPosition(), _sourceLanguageID);
 		if (qname == null) {
 			qname = chkEl.getXMElement().getName();
 		}
 		int n = qname.indexOf(':');
 		String localName = n < 0 ? qname : qname.substring(n + 1);
-		String lName = elem.getLocalName();
+		String lName = el.getLocalName();
 		if (lName == null) {
-			lName = elem.getNodeName();
+			lName = el.getNodeName();
 		}
 		if (localName.equals(lName)) {
-			if (uri == null || uri.equals(elem.getNamespaceURI())) {
-				result.addXDItem(new DefElement(elem));
+			if (uri == null || uri.equals(el.getNamespaceURI())) {
+				result.addXDItem(new DefElement(el));
 				return true; //element is the element itself
 			}
 		}
-		NodeList nl = elem.getChildNodes();
+		NodeList nl = el.getChildNodes();
 		if ((n = nl.getLength()) == 0) {
 			return false; //nothing found
 		}
@@ -485,8 +460,7 @@ final class ChkTranslate extends SReporter {
 			if (lName == null) {
 				lName = node.getNodeName();
 			}
-			if ("_".equals(lName) && node.getNamespaceURI() == null
-				|| (localName.equals(lName)
+			if ("_".equals(lName) && node.getNamespaceURI() == null || (localName.equals(lName)
 				&& ((uri == null || uri.equals(node.getNamespaceURI()))))) {
 				result.addXDItem(new DefElement((Element) node));
 				if (++m >= max) {//the element added
@@ -500,20 +474,18 @@ final class ChkTranslate extends SReporter {
 	/** Execute "compose" action.
 	 * @param chkEl The actual check element.
 	 * @param sourceElem The source element from which the result is composed.
-	 * @return The XDValue object or <i>null</i>.
+	 * @return The XDValue object or null.
 	 */
-	private XDValue execComposeElement(final ChkElement chkEl,
-		final Element sourceElem) {
+	private XDValue execComposeElement(final ChkElement chkEl, final Element sourceElem) {
 		chkEl.debugXPos(XDDebug.CREATE);
 		if (sourceElem == null) {
 			if (chkEl._xElement.minOccurs() <= 0) {
 				return null;
 			}
-			String qname = "$any".equals(chkEl._xElement.getName()) ? "_ANY_" :
-				chkEl._xElement.getName();
+			String qname = "$any".equals(chkEl._xElement.getName()) ? "_ANY_" : chkEl._xElement.getName();
 			DefElement result = new DefElement(
-				chkEl._sourceElem = KXmlUtils.newDocument(
-				chkEl._xElement.getNSUri(), qname, null).getDocumentElement());
+				chkEl._sourceElem =
+					KXmlUtils.newDocument(chkEl._xElement.getNSUri(), qname, null).getDocumentElement());
 			return result;
 		}
 		//default contex (no script specified)
@@ -530,18 +502,16 @@ final class ChkTranslate extends SReporter {
 			getChildElementsByName(result, chkEl, sourceElem);
 		}
 		Element el = result.getXDElement(0);
-		//if somethig found, let's set first element as source context,
-		//otherwise set source from the argument.
+		//if somethig found, let's set first element as source context, otherwise set source from argument.
 		chkEl._sourceElem = el != null ? el : sourceElem;
 		if (el == null ||
 			result.getXDItemsNumber() < chkEl._xElement.minOccurs()) {
-			if (chkEl._parent != null
-				&& chkEl._parent.getItemId() != XX_DOCUMENT
+			if (chkEl._parent != null && chkEl._parent.getItemId() != XX_DOCUMENT
 				&& ((ChkElement) chkEl._parent)._selector != null
 				&& ((ChkElement) chkEl._parent)._selector._kind != XMSEQUENCE) {
 				return result; //if choice or mixed we do not create dummy items
 			}
-			//we create necessary number of items
+			//create necessary number of items
 			for (int i=result.getXDItemsNumber();
 				i<chkEl._xElement.minOccurs(); i++) {
 				result.addXDItem(new DefElement(sourceElem));
@@ -551,8 +521,7 @@ final class ChkTranslate extends SReporter {
 	}
 
 
-	private void createElement(final ChkElement chkElem,
-		final Element sourceElem) {
+	private void createElement(final ChkElement chkElem, final Element sourceElem) {
 		XElement xel = chkElem._xElement;
 		Element savedSource =  chkElem._sourceElem; //save source element
 		chkElem._sourceElem = sourceElem;
@@ -569,8 +538,7 @@ final class ChkTranslate extends SReporter {
 			if (attrName.charAt(0) == '$') { //special XDEF attribute
 				continue; // skip xd:text etc
 			}
-			String attrName1 = _lexicon.findText(xatr.getXDPosition(),
-				_sourceLanguageID);
+			String attrName1 = _lexicon.findText(xatr.getXDPosition(), _sourceLanguageID);
 			if (attrName1 != null) {
 				attrName = attrName1;
 			}
@@ -584,22 +552,18 @@ final class ChkTranslate extends SReporter {
 			}
 			String s = chkElem.getTextValue();
 			if (s != null) {
-				if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 // set attr
-					|| xatr._ignoreEmptyAttributes == 0
-					&& xel._ignoreEmptyAttributes != 0
-					||  xel._ignoreEmptyAttributes == 0
+				if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 || xatr._ignoreEmptyAttributes == 0
+					&& xel._ignoreEmptyAttributes != 0 ||  xel._ignoreEmptyAttributes == 0
 					&& chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
 					// set attribute
-					String newName = _lexicon.findText(xatr.getXDPosition(),
-						_destLanguageID);
+					String newName = _lexicon.findText(xatr.getXDPosition(), _destLanguageID);
 					if (newName != null) {
 						attrName = newName;
 					}
 					if (xatr.getNSUri() == null) {
 						chkElem._element.setAttribute(attrName, s);
 					} else {
-						chkElem._element.setAttributeNS(xatr.getNSUri(),
-							attrName, s);
+						chkElem._element.setAttributeNS(xatr.getNSUri(), attrName, s);
 					}
 				}
 			}
@@ -708,21 +672,15 @@ final class ChkTranslate extends SReporter {
 			return null;
 		}
 		chkElem.setTextValue(null);
-		Node n = lastNode == null ?
-			sourceElem.getFirstChild() : lastNode.getNextSibling();
+		Node n = lastNode == null ? sourceElem.getFirstChild() : lastNode.getNextSibling();
 		if (n != null || !(sourceElem instanceof DefSQLConstructor.MyElement)
 			|| !"$text".equals(chkElem.getXMNode().getName())
 			|| chkElem.getParent().getChildXXNodes().length != 1) {
-//		if (n == null && sourceElem instanceof DefSQLConstructor.MyElement
-//			&& "$text".equals(chkElem.getXMNode().getName())
-//			&& chkElem.getParent().getChildXXNodes().length == 1) {
-//		} else {
 			StringBuilder sb = new StringBuilder();
 			while (n != null) {
 				short type = n.getNodeType();
-				if (type == Node.TEXT_NODE ||
-					type == Node.CDATA_SECTION_NODE ||
-					type == Node.ENTITY_REFERENCE_NODE) {
+				if (type == Node.TEXT_NODE || type == Node.CDATA_SECTION_NODE
+					|| type == Node.ENTITY_REFERENCE_NODE) {
 					result = n;
 					sb.append(n.getNodeValue());
 					for (;;) {
@@ -747,7 +705,7 @@ final class ChkTranslate extends SReporter {
 				}
 			}
 			String s = sb.toString();
-			if (!(s = chkElem.textWhitespaces(xtxt, s)).isEmpty()){
+			if (!(s = chkElem.textWhitespaces(xtxt, s)).isEmpty()) {
 				chkElem.setTextValue(s);
 			}
 		}
@@ -765,8 +723,7 @@ final class ChkTranslate extends SReporter {
 		int i = chkEl._nextDefIndex = xsel._endIndex + 1;
 		chkEl._actDefIndex = -1;
 		if (xsel.minOccurs() > 0) { //ignore, illegal
-			//Minimum occurrence not reached for &{0}
-			chkEl.error(XDEF.XDEF555, xsel.getName().substring(1));
+			chkEl.error(XDEF.XDEF555, xsel.getName().substring(1));//Minimum occurrence not reached for &{0}
 		}
 		return i;
 	}
@@ -796,14 +753,13 @@ final class ChkTranslate extends SReporter {
 		return name1.equals(name);
 	}
 
-	/** Create child nodes. This is very nasty code, should be written better!
-	 * However, it works somehow.
+	/** Create child nodes. This is very nasty code, should be written better! However, it works somehow.
 	 * @param chkElem actual ChkElement object.
 	 * @param sourceEl actual source element.
 	 * @param savedSource saved source element.
 	 * @param index index to defList.
 	 * @param xtxt xd:text item.
-	 * @param lastNode last processed text from source item or <i>null</i>.
+	 * @param lastNode last processed text from source item or null.
 	 */
 	private int createChildNodes(final ChkElement chkEl,
 		final Element sourceEl,
@@ -822,29 +778,24 @@ final class ChkTranslate extends SReporter {
 						Node n = chkEl._element.getLastChild();
 						if (n == null || n.getNodeType() != Node.TEXT_NODE
 							&& n.getNodeType() != Node.CDATA_SECTION_NODE) {
-							lastNode = createTextNode(
-								chkEl,sourceEl,savedSource,xtxt,lastNode);
+							lastNode = createTextNode(chkEl,sourceEl,savedSource,xtxt,lastNode);
 						}
 					}
 					XElement childDef = (XElement) xNode;
 					chkEl._sourceElem = savedSource;
 					count = chkEl.getRefNum(i);
-					ChkElement childChkEl =
-						prepareChkElement(chkEl, null, childDef, i);
+					ChkElement childChkEl = prepareChkElement(chkEl, null, childDef, i);
 					XDValue result;
 					result = execComposeElement(childChkEl, sourceEl);
-					if (childChkEl._xElement._compose < 0 &&
-						chkEl._sourceElem != null) {
+					if (childChkEl._xElement._compose < 0 && chkEl._sourceElem != null) {
 						//propagate explicit source context
 						if (!equalNames(childChkEl._xElement,
 							childChkEl._sourceElem)) {
 							childChkEl._sourceElem = chkEl._sourceElem;
 						}
 					}
-					if (result == null || result.isNull()
-						|| (result.getItemId() == XD_LONG
-						&& result.intValue() <= 0)
-						|| (result.getItemId() == XD_BOOLEAN
+					if (result == null || result.isNull() || (result.getItemId() == XD_LONG
+						&& result.intValue() <= 0) || (result.getItemId() == XD_BOOLEAN
 						&& !result.booleanValue())) { //nothing generate
 						childChkEl.updateElement(null);
 						chkEl._nextDefIndex = ++i; //next child definition
@@ -857,8 +808,7 @@ final class ChkTranslate extends SReporter {
 						Element el = childChkEl._element;
 						switch (result.getItemId()) {
 							case XD_ELEMENT:
-								chkEl._element.replaceChild(
-									result.getElement(), el);
+								chkEl._element.replaceChild(result.getElement(), el);
 								childChkEl._sourceElem = chkEl._sourceElem;
 								childChkEl.initElem();
 								childChkEl.addElement();
@@ -868,12 +818,9 @@ final class ChkTranslate extends SReporter {
 								try {
 									XDValue item = it.nextXDItem(chkEl);
 									Document doc = chkEl.getDocument();
-									for(int j = 0,
-										xmax = childChkEl._xElement.maxOccurs();
-										j <= xmax && item != null; j++,
-										item = it.nextXDItem(childChkEl)) {
-										Node node = doc.importNode(
-											item.getElement(), true);
+									for(int j = 0, xmax = childChkEl._xElement.maxOccurs();
+										j <= xmax && item != null; j++, item = it.nextXDItem(childChkEl)) {
+										Node node = doc.importNode(item.getElement(), true);
 										if (item.getItemId() == XD_RESULTSET) {
 											chkEl._iterator=(XDResultSet)result;
 										}
@@ -884,8 +831,7 @@ final class ChkTranslate extends SReporter {
 									chkEl._element.removeChild(el);
 								} catch (SRuntimeException ex) {
 									Report r = ex.getReport();
-									chkEl.error(r.getMsgID(), r.getText(),
-										r.getModification());
+									chkEl.error(r.getMsgID(), r.getText(), r.getModification());
 								}	chkEl._scp.closeResultSet(it);
 								break;
 							default:
@@ -896,25 +842,20 @@ final class ChkTranslate extends SReporter {
 									j<len; j++){
 									if (ymax++ < xmax) {
 										int a; // code address
-										Node node = doc.importNode(
-											dc.getXDItem(j).getElement(),
-											true);
+										Node node = doc.importNode(dc.getXDItem(j).getElement(), true);
 										childChkEl.initElem();
 										chkEl._element.insertBefore(node, el);
-										a =childChkEl._xElement._onStartElement;
-										childChkEl.debugXPos(
-											XDDebug.ONSTARTELEMENT);
+										a = childChkEl._xElement._onStartElement;
+										childChkEl.debugXPos(XDDebug.ONSTARTELEMENT);
 										if (a >= 0) {
-											childChkEl.setElemValue(
-												childChkEl._element);
+											childChkEl.setElemValue(childChkEl._element);
 											childChkEl.exec(a, (byte) 'E');
 											childChkEl.copyTemporaryReports();
 										}
 										childChkEl.debugXPos(XDDebug.FINALLY);
 										a = childChkEl._xElement._finaly;
 										if (a >= 0) {
-											childChkEl.setElemValue(
-												childChkEl._element);
+											childChkEl.setElemValue(childChkEl._element);
 											childChkEl.exec(a, (byte) 'E');
 											childChkEl.copyTemporaryReports();
 										}
@@ -938,8 +879,7 @@ final class ChkTranslate extends SReporter {
 								//we create a dummy element with the text child
 								String text = result.stringValue();
 								if (text != null && !text.isEmpty()) {
-									Element el =
-										stringToElement(childChkEl, text);
+									Element el = stringToElement(childChkEl, text);
 									childChkEl.setElemValue(el);
 									createElement(childChkEl, el);
 								} else {//empty string is no value!
@@ -947,19 +887,15 @@ final class ChkTranslate extends SReporter {
 								}	break;
 							case XD_BOOLEAN:
 								for (int j = 0;;) {
-									if (j < childChkEl._xElement.maxOccurs()
-										&& result != null
-										&& result.booleanValue()){
+									if (j < childChkEl._xElement.maxOccurs() && result != null
+										&& result.booleanValue()) {
 										createElement(childChkEl ,null);
-										if (childChkEl._xElement == null ||
-											++j >= childChkEl._xElement
-												.maxOccurs()) {
+										if (childChkEl._xElement == null
+											|| ++j >= childChkEl._xElement.maxOccurs()) {
 											break; // do not continue
 										}
-										childChkEl = prepareChkElement(chkEl,
-											sourceEl, childDef, i);
-										result = execComposeElement(childChkEl,
-											sourceEl);
+										childChkEl = prepareChkElement(chkEl, sourceEl, childDef, i);
+										result = execComposeElement(childChkEl, sourceEl);
 									} else { //delete this element
 										childChkEl.updateElement(null);
 										break; // do not continue
@@ -978,8 +914,7 @@ final class ChkTranslate extends SReporter {
 						&& chkEl._selector._kind == XMCHOICE
 						&& count < chkEl.getRefNum(i)
 						&& i < chkEl._selector._endIndex) {
-						//something created in xd:choice, so we skip the
-						//other variants
+						//something created in xd:choice, so we skip the other variants
 						i = chkEl._selector._endIndex;
 						continue;
 					}
@@ -987,14 +922,10 @@ final class ChkTranslate extends SReporter {
 				}
 				case XMTEXT: {
 					count = chkEl.getRefNum(index);
-					createTextNode(chkEl,
-						sourceEl, savedSource, (XData) xNode, lastNode);
-					if (chkEl._selector != null
-						&& chkEl._selector._kind == XMCHOICE
-						&& count < chkEl.getRefNum(i)
-						&& i < chkEl._selector._endIndex) {
-						//something created in xd:choice, so we skip the
-						//other variants
+					createTextNode(chkEl,sourceEl, savedSource, (XData) xNode, lastNode);
+					if (chkEl._selector != null && chkEl._selector._kind == XMCHOICE
+						&& count < chkEl.getRefNum(i) && i < chkEl._selector._endIndex) {
+						//something created in xd:choice, so we skip the other variants
 						i = chkEl._selector._endIndex;
 						continue;
 					}
@@ -1012,40 +943,32 @@ final class ChkTranslate extends SReporter {
 					if ((addr = xsel._compose) >= 0) {
 						chkEl.debugXPos(XDDebug.CREATE);
 						result = chkEl.exec(addr, (byte) 'E');
-					} else {//default
-						 // we force to create an optional model
-						result = new DefLong(xsel.minOccurs() == 0
-							? 1 : xsel.minOccurs());
+					} else {//default; we force to create an optional model
+						result = new DefLong(xsel.minOccurs() == 0 ? 1 : xsel.minOccurs());
 					}
 					if (!chkEl.createGroup(xsel)) {
 						i = chkEl._nextDefIndex;
 						continue;
 					}
-					if (result == null || result.isNull()
-						|| (result.getItemId() == XD_LONG
-						&& result.intValue() <= 0)
-						|| (result.getItemId() == XD_BOOLEAN
+					if (result == null || result.isNull() || (result.getItemId() == XD_LONG
+						&& result.intValue() <= 0) || (result.getItemId() == XD_BOOLEAN
 						&& !result.booleanValue())) { //skip the group
 						i = groupNotGenerated(chkEl, xsel);
 						continue;
 					} else if (result.getItemId() == XD_LONG) {
 						int xnum = (int) ((DefLong) result).intValue();
 						for(int j = 0; j < xsel.maxOccurs() && j < xnum; j++) {
-							createGroup(chkEl,xtxt, sourceEl,
-								savedSource, i, lastNode, savedUserObj);
-							if (chkEl._selector != null
-								&& xsel.getKind() != XMMIXED
+							createGroup(chkEl,xtxt, sourceEl, savedSource, i, lastNode, savedUserObj);
+							if (chkEl._selector != null && xsel.getKind() != XMMIXED
 								&& chkEl._selector._count > xsel.maxOccurs()) {
 								//Maximum occurrence of &{0} exceeded
-								chkEl.error(XDEF.XDEF558,
-									xsel.getName().substring(1));
+								chkEl.error(XDEF.XDEF558, xsel.getName().substring(1));
 								break;
 							}
 						}
 					} else if (result.getItemId() == XD_BOOLEAN) {
 						for(int j = 0; j < xsel.maxOccurs(); j++) {
-							createGroup(chkEl,xtxt, sourceEl,
-								savedSource, i, lastNode, savedUserObj);
+							createGroup(chkEl,xtxt, sourceEl, savedSource, i, lastNode, savedUserObj);
 							result = chkEl.exec(addr, (byte) 'E');
 							chkEl.copyTemporaryReports();
 							if (!result.booleanValue()) {
@@ -1060,35 +983,27 @@ final class ChkTranslate extends SReporter {
 								i = groupNotGenerated(chkEl, xsel);
 								continue;
 							}
-							for(int j = 0; j <= xsel.maxOccurs() && item!=null;
-								item = it.nextXDItem(chkEl), j++) {
+							for(int j=0; j<=xsel.maxOccurs() && item!=null;	item=it.nextXDItem(chkEl), j++) {
 								Element el = item.getElement();
 								if (el == null) {
-									el = prepareElement(chkEl,
-										null, chkEl._xElement);
+									el = prepareElement(chkEl, null, chkEl._xElement);
 								}
-								createGroup(chkEl, xtxt, el,
-									null, i, lastNode, savedUserObj);
-								if (xsel.getKind() != XMMIXED &&
-									j + 1 >= xsel.maxOccurs()) {
+								createGroup(chkEl, xtxt, el, null, i, lastNode, savedUserObj);
+								if (xsel.getKind() != XMMIXED && j + 1 >= xsel.maxOccurs()) {
 									//Maximum occurrence of &{0} exceeded
-									chkEl.error(XDEF.XDEF558,
-										xsel.getName().substring(1));
+									chkEl.error(XDEF.XDEF558, xsel.getName().substring(1));
 								}
 							}
 						} catch (SRuntimeException ex) {
 							Report r = ex.getReport();
-							chkEl.error(r.getMsgID(),
-								r.getText(), r.getModification());
+							chkEl.error(r.getMsgID(), r.getText(), r.getModification());
 						}
 						chkEl._scp.closeResultSet(it);
 					} else {
 						DefContainer dc;
 						int len;
-						dc = result.getItemId()== XD_CONTAINER
-							? (DefContainer) result
-							: result.getItemId() == XD_ELEMENT
-							? new DefContainer(result) : null;
+						dc = result.getItemId()== XD_CONTAINER ? (DefContainer) result
+							: result.getItemId() == XD_ELEMENT ? new DefContainer(result) : null;
 						if (dc == null || (len = dc.getXDItemsNumber()) <= 0
 							|| dc.getXDItem(0).getItemId() != XD_ELEMENT) {
 							i = groupNotGenerated(chkEl, xsel);
@@ -1098,18 +1013,15 @@ final class ChkTranslate extends SReporter {
 						int max = xsel.getKind() == XMMIXED ?
 							len : xsel.maxOccurs();
 						for(int j = 0; j <= max && j < len; j++) {
-							createGroup(chkEl,xtxt,
-								el, null, i, lastNode, savedUserObj);
+							createGroup(chkEl,xtxt, el, null, i, lastNode, savedUserObj);
 							if (j + 1 >= dc.getXDItemsNumber()) {
 								break;
 							}
 							el = dc.getXDElement(j + 1);
 							if (el != null) {
-								if (xsel.getKind() != XMMIXED
-									&& j + 1 >= xsel.maxOccurs()) {
+								if (xsel.getKind() != XMMIXED && j + 1 >= xsel.maxOccurs()) {
 									//Maximum occurrence of &{0} exceeded
-									chkEl.error(XDEF.XDEF558,
-										xsel.getName().substring(1));
+									chkEl.error(XDEF.XDEF558, xsel.getName().substring(1));
 								}
 							} else {
 								break;
@@ -1140,8 +1052,7 @@ final class ChkTranslate extends SReporter {
 			if (chkEl._selector != null) {
 				if (chkEl._selector._kind == XMCHOICE) {
 					if (count < chkEl.getRefNum(i)) { //node was created?
-						if (chkEl._selector._count >
-							chkEl._selector.maxOccurs()) {
+						if (chkEl._selector._count > chkEl._selector.maxOccurs()) {
 							i = chkEl._selector._endIndex;
 						}
 					}
@@ -1157,8 +1068,7 @@ final class ChkTranslate extends SReporter {
 	 * @param chkEl where to generate.
 	 * @param xtxt x-data.
 	 * @param sourceEl source element.
-	 * @param savedSource saved default source element - MUST be null if
-	 * we set the new element as context.
+	 * @param savedSource saved default source element - MUST be null if we set the new element as context.
 	 * @param defIndex index to group start, will continue after that.
 	 * @param lastNode last processed text from source item or <i>null</i>.
 	 * @param nextDefIndex next index.
@@ -1174,8 +1084,7 @@ final class ChkTranslate extends SReporter {
 		final Object savedUserObj) {
 		chkEl._actDefIndex = -1;
 		int oldnextDefIndex = chkEl._nextDefIndex;
-		createChildNodes(chkEl,
-			sourceEl, savedSource, defIndex + 1, xtxt, lastNode);
+		createChildNodes(chkEl, sourceEl, savedSource, defIndex + 1, xtxt, lastNode);
 		chkEl._nextDefIndex = oldnextDefIndex;
 		chkEl.setUserObject(savedUserObj); //reset
 		chkEl._actDefIndex = -1;
@@ -1198,16 +1107,13 @@ final class ChkTranslate extends SReporter {
 			return null;
 		}
 		if (sourceEl == null) {
-			return new DefElement(
-				KXmlUtils.newDocument().createElementNS(xElem.getNSUri(),
+			return new DefElement(KXmlUtils.newDocument().createElementNS(xElem.getNSUri(),
 				"$any".equals(xElem.getName()) ? "_ANY_" : xElem.getName()));
 		}
 		return new DefElement(sourceEl);
 	}
 
-	private Element prepareElement(final ChkElement chkElem,
-		final Element sourceElem,
-		final XElement xel) {
+	private Element prepareElement(final ChkElement chkElem, final Element sourceElem, final XElement xel) {
 		String n = xel.getName();
 		String u = xel.getNSUri();
 		if ("$any".equals(n)) {
@@ -1226,12 +1132,10 @@ final class ChkTranslate extends SReporter {
 		return chkElem._element.getOwnerDocument().createElementNS(u, n);
 	}
 
-	private ChkElement genChkElement(final ChkElement parentChkElem,
-		final Element sourceElem,
-		final XElement xElem) {
-		Element el = prepareElement(parentChkElem, sourceElem, xElem);
-		ChkElement chkElem =  new ChkElement(parentChkElem, el, xElem, false);
-		chkElem._userObject = parentChkElem._userObject;
+	private ChkElement genChkElement(final ChkElement parent, final Element sourceElem, final XElement xElem){
+		Element el = prepareElement(parent, sourceElem, xElem);
+		ChkElement chkElem =  new ChkElement(parent, el, xElem, false);
+		chkElem._userObject = parent._userObject;
 		return chkElem;
 	}
 
@@ -1240,8 +1144,7 @@ final class ChkTranslate extends SReporter {
 		final XElement xElem,
 		final int defIndex) {
 		ChkElement childChkEl = genChkElement(parentChkElem, sourceElem, xElem);
-		childChkEl._sourceElem = sourceElem == null ?
-			parentChkElem._sourceElem : sourceElem;
+		childChkEl._sourceElem = sourceElem == null ? parentChkElem._sourceElem : sourceElem;
 		parentChkElem._actDefIndex = defIndex;
 		if (parentChkElem._selector != null) {
 			if (parentChkElem._selector._kind == XMCHOICE) {

@@ -15,7 +15,7 @@ public class TestAllFull {
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String... args) {
+	public static final int runTests(final String... args) {
 		XDTester.setFulltestMode(true);
 		PrintStream log;
 		FileOutputStream fis = null;
@@ -33,7 +33,6 @@ public class TestAllFull {
 		XDTester[] tests = TestAll.getTests();
 		String xdNS = XDTester._xdNS;
 		int result = 0;
-
 		XDTester._xdNS = XDConstants.XDEF42_NS_URI;
 		System.out.println("[INFO] Testing X-definition version 4.2");
 		result += XDTester.runTests(System.out, System.err, log,
@@ -64,7 +63,7 @@ public class TestAllFull {
 	/** Run test
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public static final void main(final String... args) {
 		XDTester.setFulltestMode(true);
 		if (runTests(args) > 0) {System.exit(1);}
 	}

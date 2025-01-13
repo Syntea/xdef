@@ -9,14 +9,12 @@ import org.xdef.XDContainer;
 public interface XMData extends XMNode {
 
 	/** Get value specified as default.
-	 * @return value specified as default or return <i>null</i>
-	 * if there was not specified a default value.
+	 * @return value specified as default or return null if there was not specified a default value.
 	 */
 	public XDValue getDefaultValue();
 
 	/** Get value specified as fixed.
-	 * @return value specified as fixed or return <i>null</i>
-	 * if there was not specified a default value.
+	 * @return value specified as fixed or return null if there was not specified a default value.
 	 */
 	public XDValue getFixedValue();
 
@@ -31,8 +29,7 @@ public interface XMData extends XMNode {
 	public String getRefTypeName();
 
 	/** Check if the value type is declared as local within the X-definition.
-	 * @return true if the value type is declared as local within
-	 * the X-definition.
+	 * @return true if the value type is declared as local within the X-definition.
 	 */
 	public boolean isLocalType();
 
@@ -57,7 +54,7 @@ public interface XMData extends XMNode {
 	public short getAlltemsType();
 
 	/** Get datetime mask from the model parser.
-	 * @return mask of datetime type or <i>null</i>.
+	 * @return mask of datetime type or null.
 	 */
 	public String getDateMask();
 
@@ -65,5 +62,4 @@ public interface XMData extends XMNode {
 	 * @return name of parser or empty string.
 	 */
 	public String getParserName();
-
 }

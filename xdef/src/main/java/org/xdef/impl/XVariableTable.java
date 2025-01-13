@@ -8,7 +8,6 @@ import org.xdef.model.XMVariableTable;
  * @author Vaclav Trojan
  */
 public final class XVariableTable implements XMVariableTable {
-
 	/** Increase step of size of the table of variables. */
 	private final int STEP = 4;
 	/** Table of variables. */
@@ -29,7 +28,6 @@ public final class XVariableTable implements XMVariableTable {
 		_variables = new XVariable[0];
 		_lastOffset = -1;
 		_sqId = sqId;
-//		_size = 0; _parent = null; // java makes it
 	}
 
 	/** Create new instance of the variable table.
@@ -121,10 +119,7 @@ public final class XVariableTable implements XMVariableTable {
 	public final int size() {return _size;}
 
 	/** Clear variable table. */
-	public final void clear() {
-		_variables = new XVariable[0];
-		_size = 0;
-	}
+	public final void clear() {_variables = new XVariable[0]; _size = 0;}
 
 	/** Clone variable table.
 	 * @return clone of this variable table.
@@ -182,7 +177,7 @@ public final class XVariableTable implements XMVariableTable {
 	 * @param xw the XDWriter.
 	 * @throws IOException if an error occurs.
 	 */
-	final void writeXD(final XDWriter xw) throws IOException {
+	public final void writeXD(final XDWriter xw) throws IOException {
 		XVariable[] variables = (XVariable[]) toArray();
 		xw.writeInt(_sqId);
 		xw.writeLength(variables.length);
@@ -196,7 +191,7 @@ public final class XVariableTable implements XMVariableTable {
 	 * @return variable table.
 	 * @throws IOException if an error occurs.
 	 */
-	final static XVariableTable readXD(final XDReader xr) throws IOException {
+	public final static XVariableTable readXD(final XDReader xr) throws IOException {
 		XVariableTable result = new XVariableTable(xr.readInt());
 		int len = xr.readLength();
 		for (int i = 0; i < len; i++) {

@@ -18,9 +18,7 @@ public final class XDReport extends XDValueAbstract {
 	/** Creates a new instance of XDReport with text message.
 	 * @param text text of message of report.
 	 */
-	public XDReport(final String text) {
-		_value = Report.text("", text);
-	}
+	public XDReport(final String text) {_value = Report.text("", text);}
 
 	/** Creates a new instance of XDReport with text message.
 	 * @param report the value of report.
@@ -48,9 +46,9 @@ public final class XDReport extends XDValueAbstract {
 
 	/** Set modification parameter.
 	 * @param name name of the parameter.
-	 * @param value value of the parameter. If the parameter exists, then
-	 *  if this argument is null, the original value of message modification
-	 * is removed or if the argument is not null the original value is replaced.
+	 * @param value value of the parameter. If the parameter exists, then  if this argument is null, the
+	 * original value of message modification is removed or if the argument is not null the original value
+	 * is replaced.
 	 * @return new report with modified parameters.
 	 */
 	public final XDReport setParameter(final String name, final String value) {
@@ -58,7 +56,7 @@ public final class XDReport extends XDValueAbstract {
 			return new XDReport();
 		}
 		Report result = new Report(_value.getType(),
-				_value.getMsgID(), _value.getText(), _value.getModification());
+			_value.getMsgID(), _value.getText(), _value.getModification());
 		result.setParameter(name, value);
 		return new XDReport(result);
 	}
@@ -92,8 +90,7 @@ public final class XDReport extends XDValueAbstract {
 	/** Get type of the report.
 	 * @return type of the report :
 	 * 'E' - Error, 'L' light error, 'F' - Fatal, 'W' - Warning, 'T' - text,
-	 * 'S' - string, 'A' - audit, 'M' - message, 'I' - info 'X' exception,
-	 * 'D' trace, 'K' kill.
+	 * 'S' - string, 'A' - audit, 'M' - message, 'I' - info 'X' exception, 'D' trace, 'K' kill.
 	 */
 	public final byte getType() {return _value == null ? 0 : _value.getType();}
 
@@ -101,8 +98,7 @@ public final class XDReport extends XDValueAbstract {
 	 * @param type of the report:
 	 * 'E' - Error, 'L' light error, 'F' - Fatal, 'W' - Warning, 'T' - text,
 	 * 'S' - string, 'A' - audit, 'M' - message, 'I' - info 'X' exception,
-	 * 'D' trace, 'K' kill. If the value of this argument has other value than
-	 * the type is set to 'U'.
+	 * 'D' trace, 'K' kill. If the value of this argument has other value than the type is set to 'U'.
 	 * @return new report with given type.
 	 */
 	public final XDReport setType(final byte type) {
@@ -131,17 +127,13 @@ public final class XDReport extends XDValueAbstract {
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
 	public final String stringValue() {return toString();}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
-	public final String toString() {
-		return _value == null ? "null" : _value.toString();
-	}
+	public final String toString() {return _value == null ? "null" : _value.toString();}
 	@Override
 	public final int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
@@ -154,8 +146,8 @@ public final class XDReport extends XDValueAbstract {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
+	 * equals to this one.
 	 */
 	public final boolean equals(final XDValue arg) {
 		if (isNull()) {

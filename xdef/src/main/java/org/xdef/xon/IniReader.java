@@ -32,41 +32,40 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public IniReader(final SBuffer source, final XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
+	public IniReader(final SBuffer source, final XonParser jp) {super(source); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public IniReader(final String source, final XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
+	public IniReader(final String source, final XonParser jp) {super(source); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source Reader with source data.
 	 */
-	public IniReader(final Reader source, final XonParser jp) {
-		super(source, new ArrayReporter());
-		_jp = jp;
-	}
+	public IniReader(final Reader source, final XonParser jp) {super(source, new ArrayReporter()); _jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source URL with source data.
 	 */
-	public IniReader(final URL source, final XonParser jp) {
-		super(source, new ArrayReporter(), 0);
-		_jp = jp;
-	}
+	public IniReader(final URL source, final XonParser jp) {super(source, new ArrayReporter(), 0); _jp = jp;}
 
-	public Object getValue() {return _jp.getResult();}
-
+	/** Read source line, skip comment lines.
+	 * @return SBuffer with a line or return null.
+	 */
 	private SBuffer readLine() {
+		for (;;) {
+			isSpaces();
+			if (!isChar('#')) {
+				break;
+			}
+			// skip comment lins
+			while (!eos() && !isNewLine()) {
+				nextChar();
+			}
+		}
 		if (eos()) {
 			return null;
 		}
@@ -78,6 +77,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return new SBuffer(sb.toString(), spos);
 	}
 
+	/** Check if the line ends with backslash character.
+	 * @param s string with a line.
+	 * @return true if the line ends with backslash character.
+	 */
 	private static boolean endsWithBackslash(String s) {
 		int i = s.length() - 1;
 		for (; i <= 0; i--) {
@@ -92,28 +95,20 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return ((j - i) & 1) > 0;
 	}
 
+	/** Read text of proerty.
+	 * @return SBuffer with property or return null;
+	 */
 	private SBuffer readPropText() {
-		SBuffer sbuf;
-		StringParser p;
-		for(;;) {
-			sbuf = readLine();
-			if (sbuf == null) {
-				return null;
-			}
-			p = new StringParser(sbuf);
-			p.isSpaces();
-			if (!p.eos()
-				&& !(p.isChar('#') || p.isChar('!') || p.isChar(';'))) {
-				break;
-			}
+		SBuffer sbuf = readLine();
+		if (sbuf == null) {
+			return null;
 		}
+		StringParser p = new StringParser(sbuf);
+		p.isSpaces();
 		if (p.getCurrentChar() == '[') {
 			return new SBuffer(p.getUnparsedBufferPart(), p.getPosition());
 		}
-		while (!p.eos() && p.getCurrentChar() != '=') {
-			p.peekChar();
-		}
-		if (p.isChar('=')) {
+		if (p.findChar('=')) {
 			p.isSpaces();
 			SPosition spos = p.getPosition();
 			String s = p.getSourceBuffer();
@@ -148,9 +143,14 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 			}
 			return new SBuffer(s, spos);
 		}
+		error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 		return null;
 	}
 
+	/** Put property to ini object.
+	 * @param s String with property.
+	 * @return true if a proprty was added to ini object.
+	 */
 	private boolean putProperty(SBuffer s) {
 		if (s == null || s.getString().charAt(0) == '[') {
 			return false;
@@ -161,13 +161,13 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		if (p.findChar('=')) {
 			String key = p.getParsedBufferPartFrom(spos.getIndex());
 			p.nextChar();
-			_jp.namedValue(
-				new SBuffer(key.substring(0, key.length()).trim(), spos));
+			_jp.namedValue(new SBuffer(key.substring(0, key.length()).trim(), spos));
 			p.isSpaces();
 			spos = p.getPosition();
 			String val = "";
+			char c;
 			while (!p.eos()) {
-				char c = p.peekChar();
+				c = p.peekChar();
 				if (c == '\\') {
 					c = p.peekChar();
 					int i = "u\"\\/bfnrt01234567:".indexOf(c);
@@ -187,16 +187,23 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 					} else if (i > 0) { // escaped characters
 						val += "u\"\\/\b\f\n\r\t\0\1\2\3\4\5\6\7:".charAt(i);
 					} else {
-						// Incorrect escape character in string
-						error(JSON.JSON006);
+						error(JSON.JSON006); // Incorrect escape character in string
 						val += '?';
 					}
 				} else {
 					val += c;
 				}
 			}
-			if (val.isEmpty()) {
-				val = "null";
+			// remove spaces at the end of line
+			int len = val.length();
+			int i = len;
+			while (i > 0 && ((c=val.charAt(i-1)) == ' ' || c == '\n' || c == '\r' || c == '\t')) {
+				i--;
+			}
+			if (i == 0) {
+				val = null;
+			} else if (i < len) {
+				val = val.substring(0, i);
 			}
 			_jp.putValue(new XonTools.JValue(spos, val));
 			return true;
@@ -228,7 +235,6 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	/** Read INI file from source. */
 	private void readINI() {
-		isSpaces();
 		_jp.mapStart(this);
 		SBuffer prop;
 		while (putProperty(prop = readPropText())) {}
@@ -255,15 +261,13 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 							int ndx = s.lastIndexOf(']');
 							if (ndx > 0 ) {
 								p1 = new SBuffer(SCRIPT_DIRECTIVE, spos1);
-								p2 = new SBuffer(s.substring(0, s.length()-1),
-									p.getPosition());
+								p2 = new SBuffer(s.substring(0, s.length()-1), p.getPosition());
 							}
 						}
 					}
 				}
 				if (p1 == null) {
-					//Value of x:script must be string with X-script
-					error(JSON.JSON018);
+					error(JSON.JSON018); //Value of x:script must be string with X-script
 				}
 				p.findChar(']');
 			} else {
@@ -282,8 +286,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 					if (p.isChar('=')) {
 						p.isSpaces();
 						_jp.xdScript(new SBuffer(SCRIPT_DIRECTIVE, spos1),
-							new SBuffer(p.getUnparsedBufferPart().trim(),
-								p.getPosition()));
+							new SBuffer(p.getUnparsedBufferPart().trim(), p.getPosition()));
 						p.setEos();
 					}
 				}
@@ -334,8 +337,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @param s the string to be converted.
 	 * @return INI/Properties source format of a string.
 	 */
-	private static void toPropertyString(final StringBuilder sb,
-		final String s) {
+	private static void toPropertyString(final StringBuilder sb, final String s) {
 		for (int i = 0; i < s.length(); i++) {
 			char ch = s.charAt(i);
 			switch(ch) {
@@ -355,14 +357,17 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
+	/** Convert value object to string;
+	 * @param val object to be converted.
+	 * @return object converted to string
+	 */
 	private static String valueToString(final Object val) {
 		if (val == null) {
 			return "";
 		} else if (val instanceof InetAddress) {
 			return ((InetAddress) val).toString().substring(1);
 		} else if (val instanceof byte[]) {
-			return new String(SUtils.encodeHex((byte[]) val),
-				Charset.forName("ISO8859-2"));
+			return new String(SUtils.encodeHex((byte[]) val), Charset.forName("ISO8859-2"));
 		} else {
 			return val.toString();
 		}
@@ -374,9 +379,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @param val string with value of INI/Property item.
 	 * @return string with line with INI/Property item.
 	 */
-	private static void toPropertyLine(final StringBuilder sb,
-		final String name,
-		final Object val) {
+	private static void toPropertyLine(final StringBuilder sb, final String name, final Object val) {
 		toPropertyString(sb, name);
 		sb.append('=');
 		toPropertyString(sb, valueToString(val));
@@ -400,8 +403,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 			Object val = x.getValue();
 			if (val != null && (val instanceof Map)) {
 				sb.append('[').append(x.getKey()).append("]\n");
-				for (Map.Entry<String, Object> y
-					: ((Map<String, Object>) val).entrySet()) {
+				for (Map.Entry<String, Object> y : ((Map<String, Object>) val).entrySet()) {
 					toPropertyLine(sb, y.getKey(), y.getValue());
 				}
 			}
@@ -410,31 +412,23 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static final Element iniToXml(final Object ini) {
-		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX+ ":"+XonNames.X_MAP, null);
-		Element el = doc.getDocumentElement();
-		iniToXml((Map<String,Object>) ini, el);
-		return el;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void iniToXml(final Map<String,Object> ini,final Element el){
+	/** Add ini object to XML element element.
+	 * @param ini ini object.
+	 * @param el XML element where to add items.
+	 */
+	private static void iniToXml(final Map<String,Object> ini, final Element el){
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			if (!((o = x.getValue()) instanceof Map)) {
 				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_VALUE);
-				item.setAttribute(XonNames.X_KEYATTR,
-					XonTools.toXmlName(x.getKey()));
+					XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_VALUE);
+				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(x.getKey()));
 				String s;
 				if (o == null) {
 					s = "null";
 				} else if (o instanceof byte[]) {
 					byte[] b = (byte[]) o;
-					s = genXMLString(new String(b.length <= 32
-						? SUtils.encodeHex(b) : SUtils.encodeBase64(b)));
+					s = genXMLString(new String(b.length<=32 ? SUtils.encodeHex(b) : SUtils.encodeBase64(b)));
 				} else {
 					s = o.toString();
 				}
@@ -445,10 +439,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			if ((o = x.getValue()) instanceof Map) {
 				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
-				item.setAttribute(XonNames.X_KEYATTR,
-					XonTools.toXmlName(x.getKey()));
+					XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
+				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(x.getKey()));
 				iniToXml((Map<String, Object>) o, item);
 				el.appendChild(item);
 			}
@@ -456,10 +448,13 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static final Element iniToXmlW(final Object ini) {
-		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX + ":"+XonNames.X_MAP, null)
-			.getDocumentElement();
+	/** Create XML Element from object.
+	 * @param ini object wioth Windows ini data.
+	 */
+	public static final Element iniToXml(final Object ini) {
+		Document doc = KXmlUtils.newDocument(
+			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
+		Element el = doc.getDocumentElement();
 		iniToXml((Map<String,Object>) ini, el);
 		return el;
 	}

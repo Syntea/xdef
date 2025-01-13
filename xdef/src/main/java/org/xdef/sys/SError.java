@@ -19,9 +19,7 @@ public class SError extends Error implements SThrowable {
 	 * @param msg The text of message.
 	 * @param ex cause object.
 	 */
-	public SError(final String msg, final Throwable ex) {
-		this(Report.fatal(null, msg), ex);
-	}
+	public SError(final String msg, final Throwable ex) {this(Report.fatal(null, msg), ex);}
 
 	/** Creates a new instance of SException with modified registered message.
 	 * @param id The message ID
@@ -29,10 +27,7 @@ public class SError extends Error implements SThrowable {
 	 * @param mod Message modification parameters.
 	 * @param ex cause object.
 	 */
-	public SError(final String id,
-		final String msg,
-		final Throwable ex,
-		final Object... mod) {
+	public SError(final String id, final String msg, final Throwable ex, final Object... mod) {
 		this(Report.fatal(id, msg, mod), ex);
 	}
 
@@ -41,11 +36,7 @@ public class SError extends Error implements SThrowable {
 	 * @param mod Message modification parameters.
 	 * @param ex The object which caused the error.
 	 */
-	public SError(final long id,
-		final Throwable ex,
-		final Object... mod) {
-		this(Report.error(id, mod), ex);
-	}
+	public SError(final long id, final Throwable ex, final Object... mod) {this(Report.error(id, mod), ex);}
 
 	/** Creates a new instance of SException with report.
 	 * @param report The Report object.
@@ -68,18 +59,14 @@ public class SError extends Error implements SThrowable {
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
-	public SError(final long registeredID, final Object... mod) {
-		this(Report.fatal(registeredID, mod));
-	}
+	public SError(final long registeredID, final Object... mod) {this(Report.fatal(registeredID, mod));}
 
 	/** Creates a new instance of SException with modified registered message.
 	 * @param id The message ID
 	 * @param msg The text of message.
 	 * @param mod Message modification parameters.
 	 */
-	public SError(final String id, final String msg, final Object... mod) {
-		this(Report.fatal(id, msg, mod));
-	}
+	public SError(final String id, final String msg, final Object... mod) {this(Report.fatal(id, msg, mod));}
 
 	/** Creates a new instance of SException with report.
 	 * @param report The Report object.
@@ -117,9 +104,7 @@ public class SError extends Error implements SThrowable {
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public final Report getReport() {
-		return Report.fatal(_msgID, _text, _modification);
-	}
+	public final Report getReport() {return Report.fatal(_msgID, _text, _modification);}
 
 	@Override
 	/** Get id of message.
@@ -132,9 +117,7 @@ public class SError extends Error implements SThrowable {
 	 * @return The text of message.
 	 */
 	public String getMessage() {
-		return _msgID == null
-			? Report.text(null, _text, _modification).toString()
-			: getReport().toString();
+		return _msgID == null ? Report.text(null, _text, _modification).toString() : getReport().toString();
 	}
 
 	@Override

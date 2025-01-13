@@ -29,9 +29,7 @@ public class SParseException extends ParseException implements SThrowable {
 	 * @param ex the cause.
 	 * @param errorOffset the position where the error is found while parsing.
 	 */
-	public SParseException(final String msg,
-		final Throwable ex,
-		final int errorOffset) {
+	public SParseException(final String msg, final Throwable ex, final int errorOffset) {
 		this(null, msg, ex, errorOffset);
 	}
 
@@ -41,10 +39,7 @@ public class SParseException extends ParseException implements SThrowable {
 	 * @param errorOffset the position where the error is found while parsing.
 	 * @param mod Message modification parameters.
 	 */
-	public SParseException(final long id,
-		final Throwable ex,
-		final int errorOffset,
-		final Object... mod) {
+	public SParseException(final long id, final Throwable ex, final int errorOffset, final Object... mod) {
 		this(Report.error(id, mod), ex, errorOffset);
 	}
 
@@ -69,9 +64,7 @@ public class SParseException extends ParseException implements SThrowable {
 	 * @param ex the cause.
 	 * @param errorOffset the position where the error is found while parsing.
 	 */
-	public SParseException(final Report report,
-		final Throwable ex,
-		final int errorOffset) {
+	public SParseException(final Report report, final Throwable ex, final int errorOffset) {
 		this(report, errorOffset);
 		_cause = ex;
 	}
@@ -80,16 +73,14 @@ public class SParseException extends ParseException implements SThrowable {
 	 * @param msg The text of message.
 	 * @param errorOffset the position where the error is found while parsing.
 	 */
-	public SParseException(final String msg, final int errorOffset) {
-		this(null, msg, errorOffset);
-	}
+	public SParseException(final String msg, final int errorOffset) {this(null, msg, errorOffset);}
 
-	/** Creates a new instance of SParseException with registred message.
+	/** Creates a new instance of SParseException with registered message.
 	 * @param id registered message ID.
 	 * @param offset the position where the error is found while parsing.
 	 * @param mod Message modification parameters.
 	 */
-	public SParseException(final long id, final int offset,final Object... mod){
+	public SParseException(final long id, final int offset, final Object... mod) {
 		this(Report.error(id, mod), offset);
 	}
 
@@ -99,10 +90,7 @@ public class SParseException extends ParseException implements SThrowable {
 	 * @param offset the position where the error is found while parsing.
 	 * @param mod Message modification parameters.
 	 */
-	public SParseException(final String id,
-		final String msg,
-		final int offset,
-		final Object... mod) {
+	public SParseException(final String id, final String msg, final int offset, final Object... mod) {
 		this(Report.error(id, msg, mod), offset);
 	}
 
@@ -144,9 +132,7 @@ public class SParseException extends ParseException implements SThrowable {
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public final Report getReport() {
-		return Report.error(_msgID, _text, _modification);
-	}
+	public final Report getReport() { return Report.error(_msgID, _text, _modification);}
 
 	@Override
 	/** Get id of message.
@@ -159,9 +145,7 @@ public class SParseException extends ParseException implements SThrowable {
 	 * @return The text of message.
 	 */
 	public final String getMessage() {
-		return _msgID == null
-			? Report.text(null,_text,_modification).toString()
-			: getReport().toString();
+		return _msgID == null ? Report.text(null,_text,_modification).toString() : getReport().toString();
 	}
 
 	@Override

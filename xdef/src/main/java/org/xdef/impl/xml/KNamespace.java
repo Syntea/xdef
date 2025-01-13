@@ -9,9 +9,8 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
 /** Implementation of interface javax.xml.namespace.NamespaceContext.
- * There are implemented more methods pushContext(), popContext(),
- * getRecentPrefixes(), setPrefix(String), getAllNamespaceURIs(),
- * getAllPrefixes() and clearContext().
+ * There are implemented more methods pushContext(), popContext(), getRecentPrefixes(), setPrefix(String),
+ * getAllNamespaceURIs(), getAllPrefixes() and clearContext().
  * @author Vaclav Trojan
  */
 public class KNamespace implements NamespaceContext {
@@ -30,8 +29,7 @@ public class KNamespace implements NamespaceContext {
 	/** Table of namespace URIs. */
 	private String[] _uris;
 
-	/** Creates a new instance of KNamespaceImpl with default items
-	 * for prefixes "xml" and "xmlns".
+	/** Creates a new instance of KNamespaceImpl with default items for prefixes "xml" and "xmlns".
 	 */
 	public KNamespace() {}
 
@@ -42,7 +40,7 @@ public class KNamespace implements NamespaceContext {
 	@Override
 	/** Find namespace URI assigned to prefix from argument.
 	 * @param prefix namespace prefix to be searched.
-	 * @return namespace URI or <i>null</i> if no URI was found.
+	 * @return namespace URI or null if no URI was found.
 	 */
 	public final String getNamespaceURI(final String prefix) {
 		if (prefix != null && _size > 0) {
@@ -58,7 +56,7 @@ public class KNamespace implements NamespaceContext {
 	@Override
 	/** Find most recent prefix assigned to given namespace URI.
 	 * @param uri namespace URI to be searched.
-	 * @return namespace prefix or <i>null</i>.
+	 * @return namespace prefix or null.
 	 */
 	public final String getPrefix(final String uri) {
 		if (uri != null && _size > 0) {
@@ -95,7 +93,6 @@ public class KNamespace implements NamespaceContext {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods of KNamespace.
 ////////////////////////////////////////////////////////////////////////////////
-
 	private void init() {
 		//allocate arrays
 		_stack = new int[STEP];
@@ -158,9 +155,8 @@ public class KNamespace implements NamespaceContext {
 		}
 	}
 
-	/** Get array with prefixes from the top of context stack. If no new
-	 * prefixes are on the top this method returns empty array. Also prefixes
-	 * defining the empty namespace are returned in the array.
+	/** Get array with prefixes from the top of context stack. If no new prefixes are on the top this method
+	 * returns empty array. Also prefixes defining the empty namespace are returned in the array.
 	 * @return array with prefixes from the top of context stack.
 	 */
 	public String[] getRecentPrefixes() {
@@ -179,17 +175,15 @@ public class KNamespace implements NamespaceContext {
 	 * @param uri namespace URI.
 	 * @throws SRuntimeException or NullpointerException if an error occurs.
 	 */
-	public final void setPrefix(final String prefix, final String uri) {
+	public final void setPrefix(final String prefix, final String uri) throws SRuntimeException {
 		if (_size == 0) {
 			init();
 		}
-		String s = prefix == null
-			? XMLConstants.DEFAULT_NS_PREFIX : prefix.trim();
+		String s = prefix == null ? XMLConstants.DEFAULT_NS_PREFIX : prefix.trim();
 		if (s.startsWith("xml")) {
 			throw new SRuntimeException(XML.XML802, s); //Cant set prefix &{0}
 		}
-		String myUri = uri==null || uri.trim().equals(XMLConstants.NULL_NS_URI)
-			? null : uri.trim();
+		String myUri = uri==null || uri.trim().equals(XMLConstants.NULL_NS_URI) ? null : uri.trim();
 		int ndx = _size;
 		for (int i = 0; i < _size; i++) {
 			if (_prefixes[i].equals(prefix)) {
@@ -239,8 +233,7 @@ public class KNamespace implements NamespaceContext {
 		return a.toArray(new String[0]);
 	}
 
-	/** Clear the context stack (except of predefined namespaces for prefixes
-	 * "xml" and "xmlns"). */
+	/** Clear the context stack (except of predefined namespaces for prefixes "xml" and "xmlns"). */
 	public final void clearContext() {
 		if (_size > 0) {
 			init();
@@ -251,8 +244,7 @@ public class KNamespace implements NamespaceContext {
 	public final String toString() {
 		StringBuilder result = new StringBuilder();
 		for(String prefix: getAllPrefixes()) {
-			result.append("\n\"").append(prefix).append("\": \"")
-				.append(getNamespaceURI(prefix)).append('"');
+			result.append("\n\"").append(prefix).append("\": \"").append(getNamespaceURI(prefix)).append('"');
 		}
 		return "Level=" + _stackTop + result;
 	}

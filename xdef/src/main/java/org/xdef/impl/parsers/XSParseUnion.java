@@ -26,6 +26,7 @@ public class XSParseUnion extends XSAbstractParser {
 	XDValue[] _enumeration;
 
 	public XSParseUnion() {super();}
+
 	@Override
 	public  void initParams() {
 		_patterns = null;
@@ -116,8 +117,7 @@ public class XSParseUnion extends XSAbstractParser {
 		final XDParseResult p,
 		final boolean isFinal) {
 		if ( _itemTypes == null) {
-			//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
-			p.error(XDEF.XDEF809, "union - parse methods missing");
+			p.error(XDEF.XDEF809, "union - parse methods missing");//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
 			p.setSourceBuffer(p.getSourceBuffer());
 			p.setEos();
 			return;
@@ -207,12 +207,10 @@ public class XSParseUnion extends XSAbstractParser {
 	}
 	@Override
 	public short getAlltemsType() {return getItemsType(_itemTypes);}
-
 	/** Get list of parsers of this union.
 	 * @return array of union parsers.
 	 */
 	public XDParser[] getParsers() {return _itemTypes;}
-
 	/** Set list of parsers to this union.
 	 * @param p array of parsers to set to this union.
 	 */

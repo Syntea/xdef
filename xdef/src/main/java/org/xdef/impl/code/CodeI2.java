@@ -6,7 +6,6 @@ import org.xdef.XDValue;
  * @author  Vaclav Trojan
  */
 public class CodeI2 extends CodeI1 {
-
 	private int _p2;
 
 	/** Creates a new instance of CodeI2.
@@ -15,10 +14,7 @@ public class CodeI2 extends CodeI1 {
 	 * @param param The code parameter 1.
 	 * @param param2 The code parameter 2.
 	 */
-	public CodeI2(final short resultType,
-		final short code,
-		final int param,
-		final int param2) {
+	public CodeI2(final short resultType, final short code, final int param, final int param2) {
 		super(resultType, code, param);
 		_p2 = param2;
 	}
@@ -53,8 +49,8 @@ public class CodeI2 extends CodeI1 {
 			return false;
 		}
 		CodeI2 x = (CodeI2) o;
-		return getCode() == x.getCode() && _resultType == x.getItemId() &&
-			getParam() == x.getParam() && _p2 == x._p2;
+		return getCode() == x.getCode() && _resultType == x.getItemId()
+			&& getParam() == x.getParam() && _p2 == x._p2;
 	}
 
 	@Override

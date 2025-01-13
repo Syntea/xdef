@@ -20,16 +20,12 @@ public interface XonNames {
 	public static final String X_VALUE = "item";
 	/** XML attribute name of XON/JSON value (in the X_VALUE element). */
 	public static final String X_VALATTR = "val";
-
 	/** QName of of XON/JSON map. */
-	public static final QName Q_MAP =
-		new QName(XDConstants.XON_NS_URI_W, X_MAP);
+	public static final QName Q_MAP = new QName(XDConstants.XON_NS_URI_W, X_MAP);
 	/** QName of of XON/JSON array. */
-	public static final QName Q_ARRAY =
-		new QName(XDConstants.XON_NS_URI_W, X_ARRAY);
+	public static final QName Q_ARRAY = new QName(XDConstants.XON_NS_URI_W, X_ARRAY);
 	/** QName of of XON/JSON value. */
-	public static final QName Q_VALUE =
-		new QName(XDConstants.XON_NS_URI_W, X_VALUE);
+	public static final QName Q_VALUE = new QName(XDConstants.XON_NS_URI_W, X_VALUE);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Names of XON directives

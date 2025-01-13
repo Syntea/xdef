@@ -1,6 +1,6 @@
 package org.xdef.component;
 
-/** Information about XComponent class.
+/** Contains information about XComponent class.
  * @author Trojan
  */
 final class XComponentInfo {

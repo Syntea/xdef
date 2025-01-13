@@ -25,10 +25,9 @@ public interface XMDefinition extends XMNode {
 	public XMElement[] getRootModels();
 
 	/** Get the Element model with given NameSpace and name.
-	 * @param nsURI NameSpace URI of element or <i>null</i>.
+	 * @param nsURI NameSpace URI of element or null.
 	 * @param name name of element (may be qualified).
-	 * @return Element model with given NameSpace and name or return
-	 * <i>null</i> if such model not exists.
+	 * @return Element model with given NameSpace and name or return null if such model not exists.
 	 */
 	public XMElement getModel(String nsURI, String name);
 
@@ -49,15 +48,12 @@ public interface XMDefinition extends XMNode {
 	public String getImplProperty(final String name);
 
 	/** Get version of X-definition.
-	 * @return version of X-definition:
-	 * version 2.0, 3.1, 3.2 or 4.0.
-	 * (see org.xdef.impl.XConstants#XDxx).
+	 * @return version of X-definition: version 2.0, 3.1, 3.2 or 4.0. (see org.xdef.impl.XConstants#XDxx).
 	 */
 	public byte getXDVersion();
 
 	/** Get XML version of X-definition source.
-	 * @return XML version of X-definition source (1.0 or 1.1);
-	 * see org.xdef.impl.XConstants#XML10 or .XML11).
+	 * @return XML version of X-definition source (1.0 or 1.1); see org.xdef.impl.XConstants#XML10 or .XML11).
 	 */
 	public byte getXmlVersion();
 

@@ -13,6 +13,7 @@ public class XSParseLanguage extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "language";
 
 	public XSParseLanguage() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -23,30 +24,26 @@ public class XSParseLanguage extends XSAbstractParseToken {
 		while (p.isInInterval('a', 'z') != SParser.NOCHAR ||
 			p.isInInterval('A', 'Z') != SParser.NOCHAR) {
 			if (++count > 8) {
-				//Incorrect value of '&{0}'&{1}{: }
-				p.errorWithString(XDEF.XDEF809, parserName());
+				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 				return;
 			}
 		}
 		if (count == 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		} else {
 			while (fits && p.isChar('-')) {
 				count = 0;
-				while (p.isInInterval('a', 'z') != SParser.NOCHAR ||
-					p.isInInterval('A', 'Z') != SParser.NOCHAR ||
-					p.isInInterval('0', '9') != SParser.NOCHAR) {
+				while (p.isInInterval('a', 'z') != SParser.NOCHAR
+					|| p.isInInterval('A', 'Z') != SParser.NOCHAR
+					|| p.isInInterval('0', '9') != SParser.NOCHAR){
 					if (++count > 8) {
-						//Incorrect value of '&{0}'&{1}{: }
-						p.errorWithString(XDEF.XDEF809, parserName());
+						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 				}
 				if (count == 0) {
-					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809, parserName());
+					p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 					return;
 				}
 			}
@@ -65,8 +62,7 @@ public class XSParseLanguage extends XSAbstractParseToken {
 			t = null;
 		}
 		if (t == null || t.isEmpty()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.setParsedValue(t);

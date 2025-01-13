@@ -12,10 +12,8 @@ import org.xdef.xon.XonTools;
 public class XDParseJNull  extends XSAbstractParser {
 	private static final String ROOTBASENAME = "jnull";
 
-	public XDParseJNull() {
-		super();
-		_whiteSpace = WS_PRESERVE;
-	}
+	public XDParseJNull() {super(); _whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public int getLegalKeys() {return WHITESPACE;}
 	@Override
@@ -28,8 +26,7 @@ public class XDParseJNull  extends XSAbstractParser {
 		p.isSpaces();
 		int pos = p.getIndex();
 		if (!p.isToken("null")) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();

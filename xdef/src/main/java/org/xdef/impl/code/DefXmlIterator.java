@@ -24,7 +24,6 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
-
 	private String _xpath;
 	private NodeList _list;
 	private Node _item;
@@ -45,7 +44,6 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 			KXpathExpr expr = new KXpathExpr(xpath, _nc, _fr, _vr);
 			_list = (NodeList) expr.evaluate(node, XPathConstants.NODESET);
 			_index = -1;
-//			_item = null;
 		} catch (Exception ex) {
 			throw new RuntimeException("XPath error");
 		}
@@ -54,7 +52,6 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 	public DefXmlIterator(NodeList nl) {
 		_list = nl;
 		_index = -1;
-//		_item = null;
 	}
 
 	public DefXmlIterator(Element el) {
@@ -70,14 +67,12 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 		}
 		_list = new MyNodeList(el);
 		_index = -1;
-//		_item = null;
 	}
 
 	public DefXmlIterator(KXpathExpr expr, Node node) {
 		try {
 			_list = (NodeList) expr.evaluate(node, XPathConstants.NODESET);
 			_index = -1;
-//			_item = null;
 			_xpath = expr.toString();
 		} catch (Exception ex) {
 			throw new RuntimeException("XPath error");
@@ -114,13 +109,10 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 	@Override
 	public int getCount() {return _index;}
 	@Override
-	public String itemAsString() {
-		return KXmlUtils.getTextValue(_item);
-	}
+	public String itemAsString() {return KXmlUtils.getTextValue(_item);}
 	@Override
 	public String itemAsString(int index) {
-		return index < _list.getLength() ?
-			KXmlUtils.getTextValue(_list.item(index)) : null;
+		return index < _list.getLength() ?KXmlUtils.getTextValue(_list.item(index)) : null;
 	}
 	@Override
 	public String itemAsString(String name) {
@@ -152,38 +144,29 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 		KXpathExpr expr = new KXpathExpr(name, _nc, _fr, _vr);
 		return (String) expr.evaluate(_item, XPathConstants.STRING);
 	}
-
 	@Override
-	/** If the iterated object contains the specified item then return
-	 * <i>true</i>.
+	/** If the iterated object contains the specified item then return true.
 	 * @param name name item.
-	 * @return <i>true</i> if and only if the specified item exists.
+	 * @return true if and only if the specified item exists.
 	 */
 	public boolean hasItem(String name) {return itemAsString(name) != null;}
-
 	@Override
 	public int getSize() {return _list == null ? -1 : _list.getLength();}
-
 	@Override
 	/** Get statement from which ResultSet was created.
 	 * @return null here.
 	 */
 	public XDStatement getStatement() {return null;}
-
 	@Override
 	/** Get constructor for creation of item.
 	 * @return constructor for creation of item.
 	 */
 	public XDConstructor getXDConstructor() {return _constructor;}
-
 	@Override
 	/** Set constructor for creation of item.
 	 * @param constructor constructor for creation of item.
 	 */
-	public void setXDConstructor(XDConstructor constructor){
-		_constructor = constructor;
-	}
-
+	public void setXDConstructor(XDConstructor constructor) {_constructor = constructor;}
 	@Override
 	public void close() {
 		_list = null;
@@ -192,28 +175,21 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 		_fr = null;
 		_vr = null;
 	}
-
 	@Override
-	/** Closes both this iterator and the underlying Statement from which
-	 * this ResultSet was created. */
+	/** Closes both this iterator and the underlying Statement from which this ResultSet was created. */
 	public void closeStatement() {}
-
    @Override
    /** Check if this object is closed.
 	* @return true if and only if this object is closed.
 	*/
 	public boolean isClosed() {return _list == null;}
-
 	@Override
 	public String stringValue() {return _xpath == null ? "XmlIterator":_xpath;}
-
 	@Override
 	public short getItemId() {return XD_RESULTSET;}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public XDValueType getItemType() {return RESULTSET;}
-
 }

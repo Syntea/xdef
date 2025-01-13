@@ -45,47 +45,14 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 
 	/** SAXParserFactory used for parsing. */
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
-	static {
-		try {
-			SPF.setNamespaceAware(true);
-			SPF.setXIncludeAware(true);
-			SPF.setValidating(false);
-			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
-			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes",
-				false);
-			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings",
-				true);
-			SPF.setFeature("http://xml.org/sax/features/string-interning",
-				true);
-			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
-			SPF.setFeature(
-				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false); // do not create xml:base attributes
-			SPF.setSchema(null);
-		} catch (ParserConfigurationException | SAXNotRecognizedException
-			| SAXNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
 	/** Maximum number of references to a model. */
 	private static final int MAFREF = 128;
 	/** Maximum number of recursive call of setRefNumbers method. */
 	private static final int MAXRECURSE = 15;
-
-////////////////////////////////////////////////////////////////////////////////
-// Generate X-definition
-////////////////////////////////////////////////////////////////////////////////
-
 	/** Internal reporter for messages. */
 	private ReportWriter _reporter;
 	/** Root element of generated X-definition. */
 	private Element _xdef;
-	/** Result X-definition */
-	private Document _doc;
-
-////////////////////////////////////////////////////////////////////////////////
-//	private InputStream _in;
-	private XReader _xReader;
 	private byte[] _sourceBytes;
 	/** Map with element declarations. */
 	private final Map<String, ElemDecl> _elemDeclMap = new LinkedHashMap<>();
@@ -93,23 +60,39 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	private List<AttrDecl> _attrDeclList = new ArrayList<>();
 	/** true if xml parsing failed. */
 	private boolean _xmlFailed;
+	private Document _doc;
+	private XReader _xReader;
+
+	static {
+		try {
+			SPF.setNamespaceAware(true);
+			SPF.setXIncludeAware(true);
+			SPF.setValidating(false);
+			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
+			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
+			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings", true);
+			SPF.setFeature("http://xml.org/sax/features/string-interning", true);
+			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
+			// do not create xml:base attributes
+			SPF.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
+			SPF.setSchema(null);
+		} catch (ParserConfigurationException | SAXNotRecognizedException | SAXNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 	/** Creates new instance of XDGenerator. */
 	public GenDTD2XDEF() {super(); _reporter = new ArrayReporter();}
 
 	/** Creates a new instance of XDGenerator with reporter.
 	 * @param rw reporter.
 	 */
-	public GenDTD2XDEF(final ReportWriter rw){
-		super();
-		_reporter = rw == null ? new ArrayReporter() : rw;
-	}
+	public GenDTD2XDEF(final ReportWriter rw){super();_reporter = rw == null ? new ArrayReporter() : rw;}
 
 	/** Creates a new instance of XDGenerator with source.
 	 * @param s string with XML source or URL or file name.
 	 */
-	public GenDTD2XDEF(final String s) {
-		this(s, null);
-	}
+	public GenDTD2XDEF(final String s) {this(s, null);}
 
 	/** Creates a new instance of XDGenerator with source and reporter.
 	 * @param s string with XML source or URL or file name.
@@ -138,7 +121,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					prepareSourceBytes(new FileInputStream(s));
 					prepareXReader();
 				} catch (Exception exx) {
-					_reporter.fatal(SYS.SYS024, s);
+					_reporter.fatal(SYS.SYS024, s); //File does not exist: &{0}
 					_reporter.checkAndThrowErrors();
 				}
 			}
@@ -156,7 +139,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			prepareSourceBytes(new FileInputStream(file));
 			prepareXReader();
 		} catch (Exception exx) {
-			_reporter.fatal(SYS.SYS024, _sysId);
+			_reporter.fatal(SYS.SYS024, _sysId); //File does not exist: &{0}
 			_reporter.checkAndThrowErrors();
 		}
 	}
@@ -172,7 +155,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			prepareSourceBytes(url.openStream());
 			prepareXReader();
 		} catch (Exception ex) {
-			_reporter.fatal(SYS.SYS024, _sysId);
+			_reporter.fatal(SYS.SYS024, _sysId); //File does not exist: &{0}
 			_reporter.checkAndThrowErrors();
 		}
 	}
@@ -192,10 +175,9 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					try {
 						_xmlFailed = true;
 						_isDTD = true;
-						String s = "<!DOCTYPE root SYSTEM 'x'>\n"+
-							"<" + rootName + "/>";
-						ByteArrayInputStream in = new ByteArrayInputStream(
-							s.getBytes(StandardCharsets.UTF_8));
+						String s = "<!DOCTYPE root SYSTEM 'x'>\n" + "<" + rootName + "/>";
+						ByteArrayInputStream in =
+							new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
 						doParse(in, "x.xxx");
 					} catch (Exception exx) {
 						throw new RuntimeException(ex);
@@ -218,8 +200,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	}
 
 	private void prepareXReader() throws Exception {
-		XInputStream myInputStream =
-			new XInputStream(new ByteArrayInputStream(_sourceBytes));
+		XInputStream myInputStream = new XInputStream(new ByteArrayInputStream(_sourceBytes));
 		_xReader = new XReader(myInputStream);
 		_xReader.setHandler(this);
 		_xReader.setSysId(_sysId);
@@ -241,12 +222,10 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			throw new RuntimeException(ex);
 		}
 		setIgnoringComments(false);
-		xr.setProperty(
-			"http://xml.org/sax/properties/lexical-handler", this);
-		xr.setProperty(
-			"http://xml.org/sax/properties/declaration-handler", this);
-		xr.setFeature( // continue after fatal error
-			"http://apache.org/xml/features/continue-after-fatal-error", true);
+		xr.setProperty("http://xml.org/sax/properties/lexical-handler", this);
+		xr.setProperty("http://xml.org/sax/properties/declaration-handler", this);
+		// continue after fatal error
+		xr.setFeature("http://apache.org/xml/features/continue-after-fatal-error", true);
 		xr.setContentHandler(this);
 		xr.setErrorHandler(this);
 		xr.setEntityResolver(this);
@@ -277,32 +256,25 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		final Attributes atts) {}
 
 	@Override
-	public final void endElement(final String uri,
-		final String localName,
-		final String qName) {}
+	public final void endElement(final String uri, final String localName, final String qName) {}
 
 	@Override
 	public final void characters(final char[] ch,final int off,final int len){}
 
 	@Override
-	public final void ignorableWhitespace(final char[] ch,
-		final int beg, final int len) {}
+	public final void ignorableWhitespace(final char[] ch, final int beg, final int len) {}
 
 	@Override
-	public final void processingInstruction(final String target,
-		final String data) {}
+	public final void processingInstruction(final String target, final String data) {}
 
 	////////////////////////////////////////////////////////////////////////////
 	// EntityResolver
 	////////////////////////////////////////////////////////////////////////////
-
 	@Override
-	public InputSource resolveEntity(final String pubID, final String sysID)
-		throws IOException {
+	public InputSource resolveEntity(final String pubID, final String sysID) throws IOException {
 		if (_xmlFailed) {
 			_xmlFailed = false;
-			XInputStream xi =
-				new XInputStream(new ByteArrayInputStream(_sourceBytes));
+			XInputStream xi = new XInputStream(new ByteArrayInputStream(_sourceBytes));
 			XReader xReader = new XReader(xi);
 			xReader.setHandler(this);
 			xReader.setSysId(_sysId);
@@ -316,26 +288,18 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 	// ErrorHandler
 	////////////////////////////////////////////////////////////////////////////
+	@Override
+	public void warning(SAXParseException x) {_reporter.warning("", x.getMessage());}
 
 	@Override
-	public void warning(SAXParseException x) {
-		_reporter.warning("", x.getMessage());
-	}
+	public void error(SAXParseException x) {_reporter.error("", x.getMessage());}
 
 	@Override
-	public void error(SAXParseException x) {
-		_reporter.error("", x.getMessage());
-	}
-
-	@Override
-	public void fatalError(SAXParseException x) {
-		_reporter.fatal("", x.getMessage());
-	}
+	public void fatalError(SAXParseException x) {_reporter.fatal("", x.getMessage());}
 
 	////////////////////////////////////////////////////////////////////////////
 	//XHandler
 	////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	public final void popReader() {}
 
@@ -354,27 +318,21 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	@Override
 	public final void endCDATA() {}
 	@Override
-	public final void startDTD(final String name,
-		final String publicId,
-		final String systemId) {_isDTD = true;}
+	public final void startDTD(final String name, final String publicId, final String systemId) {_isDTD=true;}
 	@Override
 	public final void endDTD() {_isDTD = false;}
-
 	@Override
-	public final void comment(final char[] ch,
-		final int start, final int length) {}
+	public final void comment(final char[] ch, final int start, final int length) {}
 
 	////////////////////////////////////////////////////////////////////////////
 	// DeclHandler
 	////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	public final void elementDecl(final String name, final String model) {
 		if (_isDTD) {
 			_elemDeclMap.put(name, new ElemDecl(name, model));
 		}
 	}
-
 	@Override
 	public final void attributeDecl(final String eName,
 		final String aName,
@@ -385,14 +343,10 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			_attrDeclList.add(new AttrDecl(eName, aName, type, mode, value));
 		}
 	}
-
 	@Override
 	public final void internalEntityDecl(final String name,final String value){}
-
 	@Override
-	public final void externalEntityDecl(final String name,
-		final String pubId,
-		final String sysId) {}
+	public final void externalEntityDecl(final String name, final String pubId, final String sysId) {}
 
 	////////////////////////////////////////////////////////////////////////////
 
@@ -404,26 +358,16 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		char _type;
 		char _occurs; // '*' | '+' | '?'
 	}
-
 	private static class SeqItemList extends SeqItem {
 		final List<SeqItem> _list = new ArrayList<>();
 		final int size() {return _list.size();}
-		final void add(final SeqItem item) {
-			_list.add(item);
-		}
-		final SeqItem get(final int index) {
-			return _list.get(index);
-		}
+		final void add(final SeqItem item) {_list.add(item);}
+		final SeqItem get(final int index) {return _list.get(index);}
 	}
-
 	private static class SeqItemRef extends SeqItem {
 		final String _name;
-		SeqItemRef(final String name, final char rep) {
-			_type = REF;
-			_name = name;
-			_occurs = rep;}
+		SeqItemRef(final String name, final char rep) {_type = REF; _name = name; _occurs = rep;}
 	}
-
 	/** [69] PEReference::= '%' Name ';'  (Parameter entity reference). */
 	private static boolean isPEReference(final StringParser p) {
 		if (!p.isChar('%')) {
@@ -433,7 +377,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		p.isChar(';');
 		return true;
 	}
-
 	/** [28a] DeclSep::= PEReference | S */
 	private static boolean isDeclSep(StringParser p) {
 		if (p.isSpaces()) {
@@ -486,7 +429,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		}
 		return true;
 	}
-
 	private static void skipDeclSep(StringParser p) {
 		p.isSpaces();
 		if (isPEReference(p)) {
@@ -501,7 +443,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		int _references;
 		List<AttrDecl> _attList = new ArrayList<>();
 		SeqItemList _childList;
-
 		ElemDecl(final String name, final String model) {
 			_name = name;
 			StringParser p = new StringParser(model);
@@ -530,8 +471,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					while (p.isChar('|')) {
 						isDeclSep(p);
 						if (p.isXMLName((byte) 10)) {
-							childList.add(
-								new SeqItemRef(p.getParsedString(),'*'));
+							childList.add(new SeqItemRef(p.getParsedString(),'*'));
 							skipDeclSep(p);
 						}
 					}
@@ -606,15 +546,13 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			if (type != null && !(s = type.trim()).isEmpty()) {
 				if ("CDATA".equals(s)) {
 					_type = "string";
-				} else if ("ID".equals(s) || "IDREF".equals(s)
-					|| "IDREFS".equals(s) || "ENTITY".equals(s)
+				} else if ("ID".equals(s) || "IDREF".equals(s) || "IDREFS".equals(s) || "ENTITY".equals(s)
 					|| "NMTOKEN".equals(s) || "NMTOKENS".equals(s)) {
 					_type = s;
 				} else if (s.startsWith("NOTATION")) {
 				} else if (s.charAt(0) == '(') {
 					_type = "enum(";
-					StringTokenizer st = new StringTokenizer(
-						s.substring(1, s.length() - 1), "| \t\n");
+					StringTokenizer st = new StringTokenizer(s.substring(1, s.length() - 1), "| \t\n");
 					if (st.hasMoreTokens()) {
 						_type += '\'' +  st.nextToken() + '\'';
 						while(st.hasMoreTokens()) {
@@ -626,7 +564,6 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			}
 		}
 	}
-
 	private void prepareGen() {
 		for (AttrDecl x : _attrDeclList) {
 			ElemDecl y = _elemDeclMap.get(x._eName);
@@ -636,10 +573,8 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		}
 		_doc = KXmlUtils.newDocument(XDConstants.XDEF42_NS_URI,"xd:def",null);
 		_xdef = _doc.getDocumentElement();
-		_xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-			"xmlns:xd", XDConstants.XDEF42_NS_URI);
+		_xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:xd", XDConstants.XDEF42_NS_URI);
 	}
-
 	private void genAttributes(Element model, ElemDecl elem) {
 		if (elem._attList != null && !elem._attList.isEmpty()) {
 			for (int i = 0, maxi = elem._attList.size(); i < maxi; i++) {
@@ -649,50 +584,38 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 				}
 				StringBuilder sb = new StringBuilder();
 				switch (att._requirement) {
-					case AttrDecl.REQUIRED:
-						sb.append("required ");
-						break;
-					case AttrDecl.IMPLIED:
-						sb.append("optional ");
-						break;
+					case AttrDecl.REQUIRED: sb.append("required "); break;
+					case AttrDecl.IMPLIED: sb.append("optional "); break;
 					case AttrDecl.FIXED:
-						sb.append("required eq('")
-							.append(att._attValue).append("')");
+						sb.append("required eq('").append(att._attValue).append("')");
 						model.setAttribute(att._name, sb.toString());
 						continue;
-					default:
-						sb.append("required ");
-						break;
+					default: sb.append("required "); break;
 				}
 				sb.append(att._type);
 				if (att._attValue != null) {
-					sb.append("; onAbsence setText('")
-						.append(att._attValue).append("')");
+					sb.append("; onAbsence setText('").append(att._attValue).append("')");
 				}
 				model.setAttribute(att._name, sb.toString());
 			}
 		}
 	}
-
 	private void genModel(Element xd, ElemDecl elem) {
 		Element model = xd.getOwnerDocument().createElement(elem._name);
 		xd.appendChild(model);
 		genAttributes(model, elem);
 		if (elem._any) {
-			Element any = xd.getOwnerDocument().createElementNS(
-				XDConstants.XDEF42_NS_URI, "xd:any");
+			Element any = xd.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI, "xd:any");
 			any.setAttributeNS(XDConstants.XDEF42_NS_URI,
 				"xd:script", "*; options moreAttributes, moreElements");
 			model.appendChild(any);
 		} else if (elem._childList == null || elem._childList.size() == 0) {
 			if (elem._numText > 0) {
-				model.appendChild(xd.getOwnerDocument().createTextNode(
-					"? string();"));
+				model.appendChild(xd.getOwnerDocument().createTextNode("? string();"));
 			}
 		} else {
 			if (elem._numText > 0) {
-				model.setAttributeNS(XDConstants.XDEF42_NS_URI,
-					"xd:text", "* string()");
+				model.setAttributeNS(XDConstants.XDEF42_NS_URI, "xd:text", "* string()");
 			}
 			char seqType;
 			char seqOccurs;
@@ -706,10 +629,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			genSequence(model, elem._childList, seqType, seqOccurs);
 		}
 	}
-
-	private void genRefItem(Element p,
-		SeqItemRef refItem,
-		char seqOccurs) {
+	private void genRefItem(Element p, SeqItemRef refItem, char seqOccurs) {
 		ElemDecl elem = _elemDeclMap.get(refItem._name);
 		Element x = p.getOwnerDocument().createElement(refItem._name);
 		String ref = elem._references > 1 ? "ref " + refItem._name : "";
@@ -737,8 +657,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		if ("".equals(ref)) {
 			if (elem._childList != null && elem._childList.size() > 0) {
 				if (elem._numText > 0) {
-					x.setAttributeNS(XDConstants.XDEF42_NS_URI,
-						"xd:text", "* string()");
+					x.setAttributeNS(XDConstants.XDEF42_NS_URI, "xd:text", "* string()");
 				}
 				genAttributes(x, elem);
 				char sqType;
@@ -754,18 +673,13 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			} else {
 				genAttributes(x, elem);
 				if (elem._numText > 0) {
-					x.appendChild(x.getOwnerDocument()
-						.createTextNode("* string()"));
+					x.appendChild(x.getOwnerDocument().createTextNode("* string()"));
 				}
 			}
 		}
 		p.appendChild(x);
 	}
-
-	private void genItem(Element p,
-		SeqItem item,
-		char seqType,
-		char seqOccurs) {
+	private void genItem(Element p, SeqItem item, char seqType, char seqOccurs) {
 		if (item == null) {
 			return;
 		}
@@ -795,11 +709,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			genSequence(p, (SeqItemList) item, seqType, seqOccurs);
 		}
 	}
-
-	private void genSequence(final Element p,
-		final SeqItemList seq,
-		final char seqType,
-		final char occurs) {
+	private void genSequence(final Element p, final SeqItemList seq, final char seqType, final char occurs) {
 		char seqOccurs = occurs;
 		if (seq == null) {
 			return;
@@ -814,9 +724,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 				genItem(p, item, seq._type, seq._occurs);
 			} else {
 				switch (seq._occurs) {
-					case '*':
-						seqOccurs = '*';
-						break;
+					case '*': seqOccurs = '*'; break;
 					case '+':
 						if (item._occurs == '?' || item._occurs == '*') {
 							seqOccurs = '*';
@@ -837,15 +745,13 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		}
 		Element x;
 		if (seq._type == SeqItem.CHOICE) {
-			x = p.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI,
-				"xd:choice");
+			x = p.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI, "xd:choice");
 			if (seq._occurs != 0) {
 				x.setAttribute("script", String.valueOf(seq._occurs));
 			}
 			p.appendChild(x);
 		} else if (seq._type == SeqItem.MIXED) {
-			x = p.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI,
-				"xd:mixed");
+			x = p.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI, "xd:mixed");
 			if (seq._occurs == '?') {
 				x.setAttribute("script", "?");
 			} else if (seq._occurs == '+') {//????????
@@ -854,8 +760,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			p.appendChild(x);
 		} else if (seq._occurs != 0 || (seqType != SeqItem.SEQUENCE
 			&& seqType != '\0')) {
-			x = p.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI,
-				"xd:sequence");
+			x = p.getOwnerDocument().createElementNS(XDConstants.XDEF42_NS_URI, "xd:sequence");
 			p.appendChild(x);
 			if (seq._occurs != 0) {
 				x.setAttribute("script", String.valueOf(seq._occurs));
@@ -867,7 +772,6 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			genItem(x, seq.get(i), seq._type, seqOccurs);
 		}
 	}
-
 	private void genXDef(final String rootName) {
 		prepareGen();
 		ElemDecl root = _elemDeclMap.get(rootName);
@@ -888,7 +792,6 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			}
 		}
 	}
-
 	private void setRefNumbers(final SeqItem item, final int recurse) {
 		if (item == null || recurse > MAXRECURSE) {
 			return;

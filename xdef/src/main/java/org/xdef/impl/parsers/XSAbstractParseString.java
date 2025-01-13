@@ -25,20 +25,11 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 	protected long _minLength;
 	protected long _maxLength;
 	protected DefString[] _enumeration;
-//	boolean _trimTo = false;
 
-	public XSAbstractParseString() {
-		super();
-		_minLength = _maxLength = -1;
-	}
+	public XSAbstractParseString() {super(); _minLength = _maxLength = -1;}
 
 	@Override
-	public  void initParams() {
-		_patterns = null;
-		_enumeration = null;
-		_minLength = _maxLength = -1;
-//		_trimTo = false;
-	}
+	public  void initParams() {_patterns = null; _enumeration = null; _minLength = _maxLength = -1;}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -80,9 +71,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			_minLength = Integer.parseInt(par1.toString());
 			switch(params.length) {
 				case 1: _maxLength = _minLength; break;
-				case 2:
-					_maxLength = Integer.parseInt(params[1].toString());
-					break;
+				case 2: _maxLength = Integer.parseInt(params[1].toString()); break;
 				default: //Too many parameters for method &{0}
 					throw new SRuntimeException(XDEF.XDEF461, parserName());
 			}
@@ -182,8 +171,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				//Length of value of '&{0}' is too short"&{0}'&{1}
 				p.errorWithString(XDEF.XDEF814, parserName());
 			} else if (_maxLength != -1 && len > _maxLength) {
-				//Length of value of '&{0}' is too long&{0}'{: }
-				p.errorWithString(XDEF.XDEF815, parserName());
+				p.errorWithString(XDEF.XDEF815, parserName());//Length of value of '&{0}' is too long&{0}'{: }
 			}
 		}
 	}
@@ -195,8 +183,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				int start = p.getIndex();
 				loop:
 				for (; i < _enumeration.length; i++) {
-					StringTokenizer t = new StringTokenizer(
-						_enumeration[i].toString(), " \t\n\r");
+					StringTokenizer t = new StringTokenizer(_enumeration[i].toString(), " \t\n\r");
 					if (t.hasMoreTokens()) {
 						String s = t.nextToken();
 						while (p.isToken(s)) {
@@ -222,8 +209,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				}
 			}
 			if (!found) {
-				//Doesn't fit enumeration list of &{0}&{1}{: }
-				p.errorWithString(XDEF.XDEF810, parserName());
+				p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of &{0}&{1}{: }
 			} else {
 				p.setParsedValue(_enumeration[i]);
 			}

@@ -53,25 +53,21 @@ public class GenDTD {
 	private GenDTD(final OutputStreamWriter out) {_out = out;}
 
 	/** Generate DTD from list of input definitions
-	 * @param inputFileNames The array of source file names.
+	 * @param inputNames The array of source file names.
 	 * @param elemName The name of root element.
 	 * @param out The output stream.
 	 * @throws IOException if IOError occurs on output.
 	 */
-	public static void genDTD(final String[] inputFileNames,
-		final String elemName,
-		final OutputStreamWriter out) throws IOException {
-		genDTD(getInputStreamsFromFiles(SUtils.getFileGroup(inputFileNames)),
-			elemName,
-			out);
+	public static void genDTD(final String[] inputNames, final String elemName, final OutputStreamWriter out)
+		throws IOException {
+		genDTD(getInputStreamsFromFiles(SUtils.getFileGroup(inputNames)), elemName, out);
 	}
 
 	/** Create array of input streams created from array of files.
 	 * @param files The array of files.
 	 * @return The array of of input streams.
 	 */
-	private static InputStream[] getInputStreamsFromFiles(final File[] files)
-	throws IOException {
+	private static InputStream[] getInputStreamsFromFiles(final File[] files) throws IOException {
 		InputStream[] result = new InputStream[files.length];
 		for (int i = 0; i < files.length; i++) {
 			result[i] = new FileInputStream(files[i]);
@@ -95,8 +91,7 @@ public class GenDTD {
 		genDTD(xb.compileXD(), elemName, out);
 	}
 
-	/** Returns the available element model represented by given name or
-	 * <i>null</i> if definition item is not available.
+	/** Returns the element model represented by given name or null if definition item isn't available.
 	 * @param xdef XMdefinition.
 	 * @param key The name of definition item used for search.
 	 * @return The required XElement or null.
@@ -131,9 +126,8 @@ public class GenDTD {
 	 * @param out The output stream.
 	 * @throws IOException if IOError occurs on output.
 	 */
-	public static void genDTD(final XDPool xp,
-		final String name,
-		final OutputStreamWriter out) throws IOException {
+	public static void genDTD(final XDPool xp, final String name, final OutputStreamWriter out)
+		throws IOException {
 		String defName, elemName;
 		defName = elemName = name;
 		int ndx = defName.indexOf('#');
@@ -161,8 +155,8 @@ public class GenDTD {
 	}
 
 	/** Get values of enumeration type (list, tokens, eq, string).
-	 * @return string array with values specified as enumeration or return
-	 * <i>null</i> if specified type is not enumeration of string values.
+	 * @return string array with values specified as enumeration or return null if specified type is not
+	 * enumeration of string values.
 	 */
 	private static String[] getEnumerationValues(XDValue code) {
 		if (code == null) {
@@ -176,11 +170,8 @@ public class GenDTD {
 			}
 			XDNamedValue n;
 			String name = p.parserName();
-			n = "list".equals(name) || "tokens".equals(name) ?
-				pars.getXDNamedItem("argument") :
-				"string".equals(name) ?
-				pars.getXDNamedItem("enumeration") :
-				null;
+			n = "list".equals(name) || "tokens".equals(name) ? pars.getXDNamedItem("argument")
+				: "string".equals(name) ? pars.getXDNamedItem("enumeration") : null;
 			if (n == null) {
 				return null;
 			}
@@ -244,14 +235,12 @@ public class GenDTD {
 						_out.write("CDATA #IMPLIED");
 					} else {
 						XDValue xv;
-						if (xAttr.isFixed() &&
-							(xv = xAttr.getFixedValue()) != null) {
+						if (xAttr.isFixed() && (xv = xAttr.getFixedValue()) != null) {
 							_out.write("CDATA #FIXED \"");
 							_out.write(xv.toString());
 							_out.write("\"");
 						} else {
-							String[] en =
-								getEnumerationValues(xAttr.getParseMethod());
+							String[] en = getEnumerationValues(xAttr.getParseMethod());
 							if (en != null && en.length > 0) {
 								_out.write("(");
 								_out.write(en[0]);
@@ -269,11 +258,7 @@ public class GenDTD {
 								_out.write(xv.toString());
 								_out.write('"');
 							} else {
-								if (xAttr.isOptional()) {
-									_out.write("#IMPLIED");
-								} else {
-									_out.write("#REQUIRED");
-								}
+								_out.write(xAttr.isOptional() ? "#IMPLIED" : "#REQUIRED");
 							}
 						}
 					}
@@ -335,8 +320,7 @@ public class GenDTD {
 				wasFirst = true;
 			} else if (kind == XMELEMENT) {
 				if (elements.contains(name)) {
-					System.out.println("WARNING: duplicate name $" +
-						def.getName() + "/" + name);
+					System.out.println("WARNING: duplicate name $" + def.getName() + "/" + name);
 				}
 			}
 		}
@@ -347,9 +331,8 @@ public class GenDTD {
 					XMElement de = (XMElement)dn;
 					name = de.getName();
 					if (name.indexOf(":any") > 0) {
-						System.out.println("WARNING: '" + name +
-							"' referred in '" + def.getName() +
-							"', will be ignored.");
+						System.out.println("WARNING: '" + name + "' referred in '" + def.getName()
+							+ "', will be ignored.");
 						continue;
 					}
 					if (isMixed) {
@@ -359,8 +342,7 @@ public class GenDTD {
 						elements.add(name);
 					}
 					if (wasFirst) {
-						sb.append(separator);
-						sb.append("\n          ");
+						sb.append(separator).append("\n          ");
 					}
 					sb.append(name);
 					if (de.minOccurs() == 0 && de.maxOccurs() == 1) {
@@ -381,8 +363,7 @@ public class GenDTD {
 				}
 				case XMMIXED: {
 					if (wasFirst) {
-						sb.append(separator);
-						sb.append("\n          ");
+						sb.append(separator).append("\n          ");
 					}
 					for (int j = 0; true; j++) {
 						short kind = childNodes[++i].getKind();
@@ -394,8 +375,7 @@ public class GenDTD {
 						}
 						XMElement de = (XMElement)childNodes[i];
 						if (j > 0) {
-							sb.append(selSeparator);
-							sb.append("\n          ");
+							sb.append(selSeparator).append("\n          ");
 						}
 						sb.append(de.getName());
 						if (de.minOccurs() == 0 && de.maxOccurs() == 1) {
@@ -405,8 +385,7 @@ public class GenDTD {
 							sb.append('+');
 						}
 					}
-					if (seqSeparator.equals(separator) &&
-						(wasFirst || i + 1 < childNodes.length)) {
+					if (seqSeparator.equals(separator) && (wasFirst || i + 1 < childNodes.length)) {
 						sb.insert(0,'(');
 						sb.append(")*\n");
 					} else {
@@ -417,8 +396,7 @@ public class GenDTD {
 				}
 				case XMSEQUENCE: {
 					if (wasFirst) {
-						sb.append(separator);
-						sb.append("\n          ");
+						sb.append(separator).append("\n          ");
 					}
 					String occ = getOccurrenceChar(dn) + "\n";
 					sb.append('(');
@@ -429,21 +407,18 @@ public class GenDTD {
 							break;
 						}
 						if (j > 0) {
-							sb.append(seqSeparator);
-							sb.append("\n          ");
+							sb.append(seqSeparator).append("\n          ");
 						}
 						sb.append(dn.getName());
 
 					}
-					sb.append(')');
-					sb.append(occ);
+					sb.append(')').append(occ);
 					wasFirst = true;
 					break;
 				}
 				case XMCHOICE: {
 					if (wasFirst) {
-						sb.append(separator);
-						sb.append("\n          ");
+						sb.append(separator).append("\n          ");
 					}
 					String occ = getOccurrenceChar(dn);
 					sb.append('(');
@@ -454,15 +429,12 @@ public class GenDTD {
 							break;
 						}
 						if (j > 0) {
-							sb.append(selSeparator);
-							sb.append("\n          ");
+							sb.append(selSeparator).append("\n          ");
 						}
 						sb.append(dn.getName());
 
 					}
-					sb.append(')');
-					sb.append(occ);
-					sb.append('\n');
+					sb.append(')').append(occ).append('\n');
 					wasFirst = true;
 				}
 			}
@@ -489,22 +461,8 @@ public class GenDTD {
 		}
 	}
 
-	/** Calling the program from command line.
-	 * @param args The array of arguments.
-		 * <code>definition_name#root_element_name output_file_name [-e encoding]
-		 * file_xdef1 [file_xdef2] [...]</code>
-		 *  <ul>
-		 *  <li><i>definition_name#root_element_name</i> - name
-		 * of X-definition and name of root element
-		 *  <li><i>output_file_name</i> - name of output file
-		 *  <li><i>[-e encoding]</i> - output file encoding
-		 * (default is "UTF-8")
-		 *  <li><code>file_xdef1 [file_xdef2] [...]
-		 * </code> - X-definition file(s)
-		 * </ul>
-	 */
-	public static void main(final String... args) {
-		final String info =
+	/** String with command line information. */
+	private static final String INFO =
 "Generate DTD from X-definition.\n"+
 "Command line arguments:\n"+
 "  definition_name#root_element_name\n" +
@@ -512,8 +470,22 @@ public class GenDTD {
 "  [-e encoding]   (default is \"UTF-8\")\n" +
 "  file_xdef1 [file_xdef2] [...]\n" +
 "NOTE: wildcard chars '*' or '?' are possible for xdef files.";
+
+	/** Calling the program from command line.
+	 * @param args The array of arguments.
+		 * <code>definition_name#root_element_name output_file_name [-e encoding]
+		 * file_xdef1 [file_xdef2] [...]</code>
+		 *  <ul>
+		 *  <li>definition_name#root_element_name - name of X-definition and name of root element
+		 *  <li>output_file_name - name of output file
+		 *  <li>[-e encoding] - output file encoding (default is "UTF-8")
+		 *  <li><code>file_xdef1 [file_xdef2] [...]
+		 * </code> - X-definition file(s)
+		 * </ul>
+	 */
+	public static void main(final String... args) {
 		if (args.length < 3) {
-			throw new RuntimeException("Missing parameters\n" + info);
+			throw new RuntimeException("Missing parameters\n" + INFO);
 		}
 		Map<File, FileInputStream> fileTab = new LinkedHashMap<>();
 		String encoding = "UTF-8";
@@ -521,7 +493,7 @@ public class GenDTD {
 			if (args[i].startsWith("-e")) {
 				if (args[i].length() == 2) {
 					if (++i == args.length) {
-						throw new RuntimeException("Missing encoding\n" + info);
+						throw new RuntimeException("Missing encoding\n" + INFO);
 					}
 					encoding = args[i];
 				} else {
@@ -531,35 +503,29 @@ public class GenDTD {
 			}
 			File f = new File(args[i]);
 			if (!f.exists() || !f.canRead()) {
-				throw new RuntimeException(
-					"Can't read file: " + args[i] +"\n" + info);
+				throw new RuntimeException("Can't read file: " + args[i] + "\n" + INFO);
 			} else {
 				try {
 					File[] files = SUtils.getFileGroup(args[i]);
 					for (File file : files) {
-						fileTab.put(file.getCanonicalFile(),
-							new FileInputStream(file));
+						fileTab.put(file.getCanonicalFile(), new FileInputStream(file));
 					}
 				} catch (IOException ex) {
-					throw new RuntimeException(
-						"Can't open file: " + args[i] +"\n" + info);
+					throw new RuntimeException("Can't open file: " + args[i] + "\n" + INFO);
 				}
 			}
 		}
 		if (fileTab.isEmpty()) {
-			throw new RuntimeException("No valid input file\n" + info);
+			throw new RuntimeException("No valid input file\n" + INFO);
 		}
 		OutputStreamWriter out = null;
 		try {
-			out = new java.io.OutputStreamWriter(
-				new java.io.FileOutputStream(args[1]), encoding);
+			out = new java.io.OutputStreamWriter(new java.io.FileOutputStream(args[1]), encoding);
 		} catch (FileNotFoundException | UnsupportedEncodingException ex) {
-			throw new RuntimeException(
-				"Invalid output file: " + args[1] + "\n" + info);
+			throw new RuntimeException("Invalid output file: " + args[1] + "\n" + INFO);
 		}
 		try {
-			out.write("<?xml version=\"1.0\" encoding=\"" +
-				encoding + "\"?>\n");
+			out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>\n");
 			InputStream[] streams = new InputStream[fileTab.values().size()];
 			fileTab.values().toArray(streams);
 			genDTD(streams, args[0], out);

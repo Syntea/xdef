@@ -29,56 +29,40 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public CsvReader(final SBuffer source, final XonParser jp) {
-		super(source);
-		_xp = jp;
-	}
+	public CsvReader(final SBuffer source, final XonParser jp) {super(source); _xp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
-	public CsvReader(final String source, final XonParser jp) {
-		super(source);
-		_xp = jp;
-	}
+	public CsvReader(final String source, final XonParser jp) {super(source); _xp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source Reader with source data.
 	 */
-	public CsvReader(final Reader source, final XonParser jp) {
-		super(source, new ArrayReporter());
-		_xp = jp;
-	}
+	public CsvReader(final Reader source, final XonParser jp) {super(source, new ArrayReporter()); _xp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
 	 * @param source URL with source data.
 	 */
-	public CsvReader(final URL source, final XonParser jp) {
-		super(source, new ArrayReporter(), 0);
-		_xp = jp;
-	}
-
-////////////////////////////////////////////////////////////////////////////////
+	public CsvReader(final URL source, final XonParser jp) {super(source, new ArrayReporter(), 0); _xp = jp;}
 
 	/** Parse CSV from reader
 	 * @param source string with CSV data, filename, URL, File
 	 * @param separator value separator character.
-	 * @param skipHeader if true the header line is skipped.
+	 * @param skipHdr if true the header line is skipped.
 	 * @return list with parsed CSV data.
 	 */
-	public static final List<Object> parseCSV(final Object source,
-		final char separator,
-		final boolean skipHeader) {
-		return parseCSV(source, separator, skipHeader, null);
+	public static final List<Object> parseCSV(final Object source,final char separator,final boolean skipHdr){
+		return parseCSV(source, separator, skipHdr, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
-	 * @param source if it is string check file name, URL or input data
-	 * otherwise it can be a File, InputStream or Reader.
+	 * @param source if it is string check file name, URL or input data otherwise it can be a File,
+	 * InputStream or Reader.
 	 * @param separator value separator character.
 	 * @param skipHeader if true the header line is skipped.
 	 * @param sysId System ID (or null).
@@ -88,8 +72,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		final char separator,
 		final boolean skipHeader,
 		final String sysId) {
-		XonTools.InputData indata =
-			XonTools.getInputFromObject(source, sysId);
+		XonTools.InputData indata = XonTools.getInputFromObject(source, sysId);
 		XonParser jp = new XonObjParser(true);
 		CsvReader xr = new CsvReader(indata._reader, jp);
 		xr._separator = separator;
@@ -150,15 +133,13 @@ public class CsvReader extends StringParser implements XonParsers {
 					if (c == _separator || c == '"') {
 						sb.append(c);
 					} else {
-						throw new RuntimeException(
-							"CSV Escape character error");
+						throw new RuntimeException(	"CSV Escape character error");
 					}
 					c = getCurrentChar();
 				} else if (c == '\"') {
 					peekChar();
 					if (eos()) {
-						throw new RuntimeException(
-							"CSV Quote character missing");
+						throw new RuntimeException("CSV Quote character missing");
 					}
 					for(;;) {
 						if (isChar('\"')) {
@@ -208,15 +189,12 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // CVS to String
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create line with CSV data.
 	 * @param csvLine the array with CSV data from a row.
 	 * @param sb StringBuilder to which line is added.
 	 * @param separator separator character.
 	 */
-	private static void addCsvLine(final List csvLine,
-		final StringBuilder sb,
-		final char separator) {
+	private static void addCsvLine(final List csvLine, final StringBuilder sb, final char separator) {
 		boolean first = true;
 		for (Object o: csvLine) {
 			if (!first) {
@@ -256,8 +234,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param separator separator character.
 	 * @return CSV string created from CSV object.
 	 */
-	public static final String toCsvString(final List<Object> csv,
-		final char separator) {
+	public static final String toCsvString(final List<Object> csv, final char separator) {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : csv) {
 			if (o instanceof List) {
@@ -272,7 +249,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // CSV to XML
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XML element with CSV data.
 	 * @param csv object with CSV data.
 	 * @return Element created from CSV data.
@@ -297,7 +273,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // XML to CSV
 ////////////////////////////////////////////////////////////////////////////////
-
 	@SuppressWarnings("unchecked")
 	/** Create CSV object from XML element.
 	 * @param el element from which the CSV object is created.
@@ -311,7 +286,6 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Parse INI/Properties source data.
 	 * @throws SRuntimeException if an error occurs,

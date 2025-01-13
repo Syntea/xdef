@@ -27,6 +27,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 	private String _separator;
 
 	public XDParseNCNameList() {super();}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -63,8 +64,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 				checkPatterns(p);
 				return;
 			}
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.addReports((ArrayReporter) parser.getReportWriter());

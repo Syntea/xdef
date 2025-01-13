@@ -11,7 +11,6 @@ import static org.xdef.XDValueType.XPARSEITEM;
  * @author Vaclav Trojan
  */
 public final class ParseItem extends XDValueAbstract {
-
 	/** Address of check method. */
 	private final int _parseMethodAddr;
 	/** Type of parsed object. */
@@ -37,8 +36,7 @@ public final class ParseItem extends XDValueAbstract {
 	 * @param refName name of type;
 	 * @param keyIndex index of this key part
 	 * @param parsedType type of id.
-	 * @param optional if true this key value is required or return
-	 * false if it is optional
+	 * @param optional if true this key value is required or if false it is optional
 	 */
 	public ParseItem(final String name,
 		final String refName,
@@ -52,13 +50,11 @@ public final class ParseItem extends XDValueAbstract {
 		_keyIndex = keyIndex;
 		_itemType = parsedType;
 		_optional = optional;
-		// _itemValue = null; // java mekes it
 	}
 
 	////////////////////////////////////////////////////////////////////////
 	// Implementation of XDUniquesetParseItem interface
 	////////////////////////////////////////////////////////////////////////
-
 	/** Get address of parsing method.
 	 * @return the address of code.
 	 */
@@ -68,22 +64,18 @@ public final class ParseItem extends XDValueAbstract {
 	 * @return the type id.
 	 */
 	public final short getParsedType() {return _itemType;}
-
 	/** Get parsed type.
 	 * @return the type id.
 	 */
 	public final String getParseName() {return _name;}
-
 	/** Get reference name to declared type.
 	 * @return reference name to declared type or null.
 	 */
 	public final String getDeclaredTypeName() {return _refName;}
-
 	/** Set parsed object (used in XDCodeProcessor).
 	 * @param val the value of parsed object.
 	 */
 	public final void setParsedObject(XDValue val) {_itemValue = val;}
-
 	/** Check if this item is optional or required.
 	 * @return true if this item is required.
 	 */
@@ -92,42 +84,32 @@ public final class ParseItem extends XDValueAbstract {
 	////////////////////////////////////////////////////////////////////////
 	// Implementation of XDValue interface
 	////////////////////////////////////////////////////////////////////////
-
 	@Override
 	public final short getItemId() {return X_PARSEITEM;}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public XDValueType getItemType() {return XPARSEITEM;}
-
 	@Override
 	public String toString() {
 		return ("[" + _keyIndex + "]" + (_name == null ? "null"
 			: ((!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue)))
 			+ "; method addr: " + _parseMethodAddr + "; refName: " + _refName;
 	}
-
 	@Override
 	public final String stringValue() {return _itemValue.stringValue();}
-
 	@Override
 	public final XDValue cloneItem() {
-		return new ParseItem(_name,
-			_refName, _parseMethodAddr, _keyIndex, _itemType, _optional);
+		return new ParseItem(_name, _refName, _parseMethodAddr, _keyIndex, _itemType, _optional);
 	}
-
 	@Override
 	public final boolean isNull() {return _parseMethodAddr == -1;}
-
 	@Override
 	public int hashCode() {return _name.hashCode();}
-
 	@Override
 	public boolean equals(final Object arg) {
-		 return arg != null && arg instanceof XDValue
-			 ? equals((XDValue) arg) : false;
+		 return arg != null && arg instanceof XDValue ? equals((XDValue) arg) : false;
 	}
 
 	@Override

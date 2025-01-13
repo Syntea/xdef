@@ -20,7 +20,6 @@ import org.xdef.proc.XXNode;
  * @author Vaclav Trojan
  */
 public class XDParseXDType extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "xdType";
 
 	@Override
@@ -35,15 +34,12 @@ public class XDParseXDType extends XDParserAbstract {
 "</xd:def>";
 			Properties props = new Properties();
 			if (xnode.getXDPool().isChkWarnings()) {
-				props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
-					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+				props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 			}
 			XDPool xp = XDFactory.compileXD(props, xdef);
 			XDValue[] code  =((XPool) xp).getCode();
-			if (code.length == 3 && code[0].getCode() == LD_CONST
-				&& code[0].getItemId() == XD_PARSER
-				&& code[1].getCode() == ST_GLOBAL
-				&& code[2].getCode() == STOP_OP) {
+			if (code.length == 3 && code[0].getCode() == LD_CONST && code[0].getItemId() == XD_PARSER
+				&& code[1].getCode() == ST_GLOBAL && code[2].getCode() == STOP_OP) {
 				p.setParsedValue(code[0]);
 			} else {
 				XDDocument xd = xp.createXDDocument();

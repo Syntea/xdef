@@ -19,29 +19,10 @@ import org.xml.sax.ext.LexicalHandler;
 /** Reader used in SAX parser.
  * @author Vaclav Trojan
  */
-public abstract class DomBaseHandler
-	implements ContentHandler, EntityResolver, ErrorHandler,
-	LexicalHandler, XHandler{
-	private static final DocumentBuilderFactory DBF =
-		DocumentBuilderFactory.newInstance();
+public abstract class DomBaseHandler implements ContentHandler, EntityResolver, ErrorHandler,
+	LexicalHandler, XHandler {
+	private static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
 	public final DocumentBuilder _docBuilder;
-	static {
-		try {
-			DBF.setNamespaceAware(true);
-			DBF.setCoalescing(true);
-//			DBF.setExpandEntityReferences(false);
-			DBF.setExpandEntityReferences(true);
-			DBF.setValidating(false);
-			DBF.setXIncludeAware(true);
-			DBF.setIgnoringElementContentWhitespace(false);
-			DBF.setIgnoringComments(false);
-			DBF.setFeature( // no xml:base attributes
-			  "http://apache.org/xml/features/xinclude/fixup-base-uris", false);
-		} catch (ParserConfigurationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
 	public InputSource _is;
 	private XMLReader _xr;
 	public boolean _isDTD;
@@ -53,6 +34,22 @@ public abstract class DomBaseHandler
 	private String _pubId;
 	private String _xmlVersion;
 	private String _xmlEncoding;
+
+	static {
+		try {
+			DBF.setNamespaceAware(true);
+			DBF.setCoalescing(true);
+			DBF.setExpandEntityReferences(true);
+			DBF.setValidating(false);
+			DBF.setXIncludeAware(true);
+			DBF.setIgnoringElementContentWhitespace(false);
+			DBF.setIgnoringComments(false);
+			// no xml:base attributes
+			DBF.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
+		} catch (ParserConfigurationException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
 	public DomBaseHandler() {
 		try {
@@ -66,8 +63,7 @@ public abstract class DomBaseHandler
 	// DomBaseHandler
 	/////////////////////////////////////////////////////////////
 
-	public final void doParse(final InputStream in, final String sysId)
-		throws Exception {
+	public final void doParse(final InputStream in, final String sysId) throws Exception {
 		XInputStream myInputStream = new XInputStream(in);
 		try (XReader myReader = new XReader(myInputStream)) {
 			myReader.setHandler(this);
@@ -84,8 +80,7 @@ public abstract class DomBaseHandler
 		prepareParse(is);
 	}
 
-	public abstract void prepareParse(final InputSource is)
-		throws IOException, SAXException;
+	public abstract void prepareParse(final InputSource is) throws IOException, SAXException;
 	public final XMLReader getXMLReader() {return _xr;}
 	public final void setXMLReader(final XMLReader x) {_xr = x;}
 	public final void setXmlEncoding(final String x) {_xmlEncoding = x;}
@@ -98,7 +93,6 @@ public abstract class DomBaseHandler
 	public final void setPubId(final String x) {_sysId = x;}
 	public String getXmlEncoding() {return _xmlEncoding;}
 	public String getXmlVersion() {return _xmlVersion;}
-
 	public final XAbstractReader getReader() {return _mr;}
 	public final void setReader(final XAbstractReader x) {_mr = x;}
 	public final boolean isIgnoringComments() {return _ignoreComments;}
@@ -110,9 +104,7 @@ public abstract class DomBaseHandler
 	@Override
 	public void setDocumentLocator(final Locator locator) {_locator = locator;}
 	@Override
-	public void startPrefixMapping(final String prefix, final String uri) {
-		_prefixes.put(prefix, uri);
-	}
+	public void startPrefixMapping(final String prefix, final String uri) {_prefixes.put(prefix, uri);}
 	@Override
 	public void endPrefixMapping(final String prefix){}
 	@Override
@@ -130,11 +122,7 @@ public abstract class DomBaseHandler
 	@Override
 	public void endCDATA() {}
 	@Override
-	public void startDTD(final String name,
-		final String publicId,
-		final String systemId) {
-		_isDTD=true;
-	}
+	public void startDTD(final String name, final String publicId, final String systemId) {_isDTD=true;}
 	@Override
 	public void endDTD() {_isDTD = false;}
 	@Override

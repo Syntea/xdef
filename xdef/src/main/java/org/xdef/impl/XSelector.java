@@ -44,10 +44,7 @@ public class XSelector extends XNode implements XMSelector {
 	 * @param kind The type of selector.
 	 */
 	public XSelector(final short kind) {
-		super(null,
-			kind==XMMIXED ? "$mixed" : kind==XMCHOICE ? "$choice" : "$sequence",
-			null,
-			kind);
+		super(null, kind==XMMIXED ? "$mixed" : kind==XMCHOICE ? "$choice" : "$sequence", null, kind);
 		_empty = false;
 		_ignorable = true;
 		_selective = false;
@@ -76,10 +73,7 @@ public class XSelector extends XNode implements XMSelector {
 	/** Set flag if selector may be empty sequence.
 	 * @param empty the value of empty flag.
 	 */
-	public final void setEmptyDeclared(final boolean empty) {
-		_emptyDeclared = true;
-		_empty = empty;
-	}
+	public final void setEmptyDeclared(final boolean empty) {_emptyDeclared = true; _empty = empty;}
 
 	/** Get emptyDeclared flag.
 	 * @return the value of emptyDeclared flag.
@@ -101,9 +95,7 @@ public class XSelector extends XNode implements XMSelector {
 	/** Set ignorable flag.
 	 * @param ignorable the ignorable flag.
 	 */
-	public final void setIgnorable(final boolean ignorable) {
-		_ignorable = ignorable;
-	}
+	public final void setIgnorable(final boolean ignorable) {_ignorable = ignorable;}
 
 	/** Returns value of ignorable flag.
 	 * @return the ignorable flag.
@@ -118,9 +110,7 @@ public class XSelector extends XNode implements XMSelector {
 	/** Set selective flag.
 	 * @param selective  value of _selective flag
 	 */
-	public final void setSelective(final boolean selective) {
-		_selective = selective;
-	}
+	public final void setSelective(final boolean selective) {_selective = selective;}
 
 	/** Set index where selector begins.
 	 * @param begIndex the index of beginning of the group.
@@ -168,8 +158,7 @@ public class XSelector extends XNode implements XMSelector {
 	final void setGroupAll(final boolean x) {_isAll = x;}
 
 	/** read selector from reader.*/
-	static final XSelector readXSelector(
-		final XDReader xr, final short kind) throws IOException {
+	static final XSelector readXSelector(final XDReader xr, final short kind) throws IOException {
 		XSelector x;
 		if (kind == XMMIXED) {
 			x = new XMixed();
@@ -198,13 +187,9 @@ public class XSelector extends XNode implements XMSelector {
 	@Override
 	public final int getCheckCode(){throw new SUnsupportedOperationException();}
 	@Override
-	public final int getOnTrueCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getOnTrueCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public final int getOnFalseCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getOnFalseCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public final int getDefltCode(){throw new SUnsupportedOperationException();}
 	@Override
@@ -216,29 +201,19 @@ public class XSelector extends XNode implements XMSelector {
 	@Override
 	public final int getOnAbsenceCode() {return _onAbsence;}
 	@Override
-	public final int getOnStartElementCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getOnStartElementCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public final int getComposeCode() {return _compose;}
 	@Override
-	public final int getOnIllegalAttrCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getOnIllegalAttrCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public final int getOnIllegalTextCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getOnIllegalTextCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public final int getOnIllegalElementCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getOnIllegalElementCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public final int getOnExcessCode() {return _onExcess;}
 	@Override
-	public final int getVarinitCode() {
-		throw new SUnsupportedOperationException();
-	}
+	public final int getVarinitCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public final XMDefinition getXMDefinition() {return null;}
 ////////////////////////////////////////////////////////////////////////////////
@@ -253,8 +228,7 @@ public class XSelector extends XNode implements XMSelector {
 	 */
 	public final int getEndIndex() {return _endIndex;}
 	@Override
-	public final void writeXNode(final XDWriter xw,
-		final List<XNode> list) throws IOException {
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 		xw.writeInt(minOccurs());
 		xw.writeInt(maxOccurs());

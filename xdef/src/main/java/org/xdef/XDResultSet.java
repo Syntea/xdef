@@ -9,8 +9,8 @@ import org.xdef.sys.SRuntimeException;
  */
 public interface XDResultSet extends XDValue {
 
-	/** Get next item of this iterator or null. If the object has to be closed
-	 * then if no more values are available the close() method must be invoked.
+	/** Get next item of this iterator or null. If the object has to be closed then if no more values are
+	 * available the close() method must be invoked.
 	 * @param xnode XXnode from which this method was called (may be null).
 	 * @return the next value of this iterator or return null.
 	 * @throws SRuntimeException id an error occurs.
@@ -48,15 +48,13 @@ public interface XDResultSet extends XDValue {
 	 */
 	public String itemAsString();
 
-	/** If the iterated object is a Container then return relevant item value as string,
-	 * otherwise return null.
+	/** If the iterated object is Container then return relevant item value as string, otherwise return null.
 	 * @param index the index of item.
 	 * @return value of the specified item as a string or return null.
 	 */
 	public String itemAsString(int index);
 
-	/** If the iterated object has named items then return relevant item value as string,
-	 * otherwise return null.
+	/** If iterated object has named items then return relevant item value as string, otherwise return null.
 	 * @param name name of map item.
 	 * @return value of map item as a string or return null.
 	 */
@@ -68,8 +66,7 @@ public interface XDResultSet extends XDValue {
 	 */
 	public boolean hasItem(String name);
 
-	/** If this iterator is created from an array then return the size of array,
-	 * otherwise otherwise return -1.
+	/** If iterator is created from an array then return the size of array, otherwise otherwise return -1.
 	 * @return size of array or -1.
 	 */
 	public int getSize();

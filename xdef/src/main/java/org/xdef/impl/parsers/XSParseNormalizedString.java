@@ -11,11 +11,8 @@ import org.xdef.impl.code.DefString;
 public class XSParseNormalizedString extends XSAbstractParseString {
 	private static final String ROOTBASENAME = "normalizedString";
 
-	public XSParseNormalizedString() {
-		super();
-		_whiteSpace = WS_REPLACE;
-		_minLength = _maxLength = -1;
-	}
+	public XSParseNormalizedString() {super(); _whiteSpace = WS_REPLACE; _minLength = _maxLength = -1;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +

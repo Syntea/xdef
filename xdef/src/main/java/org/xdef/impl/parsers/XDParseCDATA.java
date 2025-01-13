@@ -17,22 +17,18 @@ import org.xdef.sys.SRuntimeException;
 public class XDParseCDATA extends XDParserAbstract {
 	int _minLength, _maxLength;
 
-	public XDParseCDATA() {
-		super();
-		_minLength = 1; _maxLength = -1;
-	}
+	public XDParseCDATA() {super(); _minLength = 1; _maxLength = -1;}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		String s = p.getUnparsedBufferPart();
 		int len = s.length();
 		p.setParsedValue(s);
 		if (_maxLength >= 0 && len > _maxLength) {
-			//Length of value of '&{0}' is too long&{0}'{: }
-			p.errorWithString(XDEF.XDEF815, "string");
+			p.errorWithString(XDEF.XDEF815, "string"); //Length of value of '&{0}' is too long&{0}'{: }
 		} else if (_minLength == -1 && len == 0 ||
 			_minLength >= 0 && len < _minLength) {
-			//Length of value of '&{0}' is too short&{0}'{: }
-			p.errorWithString(XDEF.XDEF814, "string");
+			p.errorWithString(XDEF.XDEF814, "string"); //Length of value of '&{0}' is too short&{0}'{: }
 		} else {
 			p.setEos();
 		}
@@ -42,8 +38,7 @@ public class XDParseCDATA extends XDParserAbstract {
 	@Override
 	public String parserName() {return "string";}
 	@Override
-	public final void setNamedParams(final XXNode xnode,
-		final XDContainer params) throws SException {
+	public final void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
 		_minLength = _maxLength = -1;
 		XDNamedValue[] pars;
 		if (params == null || (pars = params.getXDNamedItems()) == null) {
@@ -60,8 +55,7 @@ public class XDParseCDATA extends XDParserAbstract {
 			}
 		}
 		if (_minLength >= 0 && _maxLength >= 0 && _minLength > _maxLength) {
-			//Incorrect combination of maximum and minimum
-			throw new SException(XDEF.XDEF808);
+			throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 		}
 	}
 	@Override

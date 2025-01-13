@@ -17,15 +17,12 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 
-/** Provides unique set (table) of items (rows) which used for validation
- * methods ID, IDREF, CHECKID etc.
- * The item (row) of the table contains the key (unique value). To key may
- * be assigned an object (value). The item may also contain a list of not
- * yet resolved references and the information if an item was referred.
+/** Provides unique set (table) of items (rows) which used for validation methods ID, IDREF, CHECKID etc.
+ * The item (row) of the table contains the key (unique value). To key may be assigned an object (value).
+ * The item may also contain a list of not yet resolved references and an information if item was referred.
  * @author Vaclav Trojan
  */
 public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
-
 	/** Name of this uniqueSet. */
 	private final String _name;
 	/** Map of unique items ("table"). */
@@ -40,14 +37,11 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	private int _keyIndex;
 
 	/** Creates a new instance of CodeUniqueSet.
-	 * @param parseItems CodeUniquesetKey array from which the new instance
-	 * will be created.
+	 * @param parseItems CodeUniquesetKey array from which the new instance will be created.
 	 * @param valueNames array with names of assigned variables
 	 * @param name name of unique set object.
 	 */
-	public CodeUniqueset(final ParseItem[] parseItems,
-		final String[] valueNames,
-		final String name) {
+	public CodeUniqueset(final ParseItem[] parseItems, final String[] valueNames, final String name) {
 		_name = name;
 		_map = new LinkedHashMap<>();
 		_parseItems = new ParseItem[parseItems.length];
@@ -75,8 +69,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	}
 
 	/** Check if key already exists in the map.
-	 * @return null if id exists, otherwise return ArrayReporter with pending
-	 * reports.
+	 * @return null if id exists, otherwise return ArrayReporter with pending reports.
 	 */
 	public final ArrayReporter chkId() {
 		UniquesetKey key = new UniquesetKey(_parseItems);
@@ -91,9 +84,8 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return usv._references.isEmpty() ? null : usv._references;
 	}
 
-	/** Sets value of parsed value to the map of objects.
-	 * If value already exists in the map return report. Otherwise
-	 * clear the list of pending unresolved references and return null.
+	/** Sets value of parsed value to the map of objects. If value already exists in the map return report.
+	 * Otherwise clear the list of pending unresolved references and return null.
 	 * @return error report or null.
 	 */
 	public final Report setId() {
@@ -188,9 +180,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	 * @param marker Object which is used for markers.
 	 * @return true if the marker is new in the set of makers.
 	 */
-	public final boolean setMarker(final Object marker) {
-		return _markers.add(marker);
-	}
+	public final boolean setMarker(final Object marker) {return _markers.add(marker);}
 
 	/** Check if all item are marked with given object in this unique set.
 	 * @param marker Object used as marker.
@@ -212,9 +202,8 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return s;
 	}
 
-	/** Set named named value assigned to to the actual unique set item.
-	 * If the key not exists this method returns false, otherwise it returns
-	 * true.
+	/** Set named named value assigned to to the actual unique set item. If the key not exists this method
+	 * return false, otherwise it return true.
 	 * @param name name of value.
 	 * @param val value to be set.
 	 * @return true if value was assigned to the item of unique set.
@@ -228,8 +217,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return true;
 	}
 
-	/** Get named named value assigned to the actual unique set item.
-	 * If the key not exists this method returns null.
+	/** Get named named value assigned to actual unique set item. If key not exists this method return null.
 	 * @param name name of value.
 	 * @return saved value.
 	 */
@@ -272,9 +260,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	/** Get printable form of actual value of the key.
 	 * @return printable form of actual value of the key.
 	 */
-	public final String printActualKey() {
-		return new UniquesetKey(_parseItems).toString();
-	}
+	public final String printActualKey() {return new UniquesetKey(_parseItems).toString();}
 
 	@Override
 	/** Get actual actual value of the uniqueSet key or null if uniqueSet
@@ -304,8 +290,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			UniquesetValue val = _map.get(usi._key);
 			if (val._assignedValues != null) {
 				DefContainer values = new DefContainer();
-				for (Map.Entry<String,XDValue> y :
-					val._assignedValues.entrySet()){
+				for (Map.Entry<String,XDValue> y : val._assignedValues.entrySet()) {
 					values.setXDNamedItem(y.getKey(), y.getValue());
 				}
 				if (!values.isEmpty()) {
@@ -359,8 +344,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		} else {
 			result += "key" + _parseItems[0];
 		}
-		if (usv != null && usv._assignedValues != null
-			&& !usv._assignedValues.isEmpty()) {
+		if (usv != null && usv._assignedValues != null && !usv._assignedValues.isEmpty()) {
 			result += " (values: ";
 			for (String x: usv._assignedValues.keySet()) {
 				result += x + "=" + usv._assignedValues.get(key) + ";";
@@ -376,7 +360,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 
 	/** This class is used for multiple keys in map of key values. */
 	private static final class UniquesetKey {
-
 		/** Values of parse items. */
 		private final XDValue[] _items;
 		/** List of indexes of incomplete items. */
@@ -395,8 +378,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			for (int i = 0; i < items.length; i++) {
 				XDValue x = keys[i].getParsedObject();
 				if (x != null) {
-					items[i] = (x instanceof DefParseResult)
-						 ? ((DefParseResult) x).getParsedValue() : x;
+					items[i] = (x instanceof DefParseResult) ? ((DefParseResult) x).getParsedValue() : x;
 				} else {
 					if (keys[i].isOptional()) {
 						items[i] = DefNull.NULL_VALUE;
@@ -416,7 +398,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			_items = items;
 		}
-
 		@Override
 		/** Get printable form of value of this key.
 		 * @return printable form of actual value of this key.
@@ -428,12 +409,10 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			return result;
 		}
-
 		////////////////////////////////////////////////////////////////////////
 		// Methods hasCode and equals MUST be implemented here to be able
 		// to use these items in HashMap.
 		////////////////////////////////////////////////////////////////////////
-
 		@Override
 		public int hashCode() {
 			int result = _items.length;
@@ -511,8 +490,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	}
 
 	/** Implements item of unique set (row of table). */
-	public static final class UniquesetKeyItem
-		extends XDValueAbstract implements XDUniqueSetKey {
+	public static final class UniquesetKeyItem extends XDValueAbstract implements XDUniqueSetKey {
 		/** uniqueSet object. */
 		private final CodeUniqueset _uSet;
 		/** value of uniqueSet key. */
@@ -522,48 +500,39 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		 * @param uniqueSet the uniqueSet table.
 		 * @param key unique set key.
 		 */
-		private UniquesetKeyItem(final CodeUniqueset uniqueSet,
-			final UniquesetKey key) {
+		private UniquesetKeyItem(final CodeUniqueset uniqueSet, final UniquesetKey key) {
 			_uSet = uniqueSet;
 			_key = new UniquesetKey(key);
 		}
 
 		@Override
 		public String toString() {return _key.toString();}
-
 		@Override
 		public int hashCode() {return _key.hashCode();}
-
 		@Override
 		public boolean equals(final Object o) {
 			return (o instanceof UniquesetKeyItem)
-				? ((UniquesetKeyItem) o)._uSet == _uSet
-					&& ((UniquesetKeyItem) o)._key.equals(_key)
-				: (o instanceof UniquesetKey)
-				? ((UniquesetKey) o).equals(new UniquesetKey(_uSet._parseItems))
+				? ((UniquesetKeyItem) o)._uSet == _uSet && ((UniquesetKeyItem) o)._key.equals(_key)
+				: (o instanceof UniquesetKey) ? ((UniquesetKey) o).equals(new UniquesetKey(_uSet._parseItems))
 				: false;
 		}
 
 		////////////////////////////////////////////////////////////////////////
 		// Implementation of XDValue
 		////////////////////////////////////////////////////////////////////////
-
 		@Override
 		public short getItemId() {return XD_UNIQUESET_KEY;}
-
 		@Override
 		public XDValueType getItemType() {return UNIQUESET_KEY;}
 
 		////////////////////////////////////////////////////////////////////////
 		// Implementation of XDUniqueSetItem
 		////////////////////////////////////////////////////////////////////////
-
 		@Override
 		/** Get name of uniqueSet table.
 		 * @return name of uniqueSet table.
 		 */
 		public final String getTableName() {return _uSet._name;}
-
 		@Override
 		/** Get values of key parts.
 		 * @return array with values of key parts.
@@ -576,7 +545,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			return result;
 		}
-
 		@Override
 		/** Get value of a key part.
 		 * @param name the name of key part.
@@ -590,7 +558,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			throw new RuntimeException("Kye part " + name + " not exists");
 		}
-
 		@Override
 		/** Get value of an assigned value.
 		 * @param name the name of assigned value.
@@ -600,7 +567,6 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			 UniquesetValue val = _uSet._map.get(_key);
 			 return val.getValue(name);
 		}
-
 		@Override
 		/** Reset actual key of the table from this position.
 		 * @return true if the key was reset to the value from this object

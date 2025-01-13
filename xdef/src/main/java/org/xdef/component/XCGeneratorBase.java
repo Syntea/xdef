@@ -187,13 +187,12 @@ class XCGeneratorBase {
 
 	/** Replace all occurrences of the key in the source by the value.
 	 * @param source string source.
-	 * @param replacements array of tuples of key an replacement.
-	 * in the source.
+	 * @param replacements array of tuples of key an replacement. in the source.
 	 * @return modified string.
 	 */
 	final static String modify(final String origin, final String... replace) {
 		if (replace.length % 2 != 0) {
-			throw new SIllegalArgumentException(SYS.SYS066, //Internal error&{0}{: }
+			throw new SIllegalArgumentException(SYS.SYS066,  //Internal error&{0}{: }
 				"Length of array of keys and replacemetns differs");
 		}
 		String result = origin;
@@ -225,8 +224,7 @@ class XCGeneratorBase {
 				enumName = enumName.substring(0, ndx);
 			}
 			// now we remove leading "%" (i.e. recerence flag)
-			return enumName.indexOf('%') == 0
-				? /* is reference */ enumName.substring(1) : enumName;
+			return enumName.indexOf('%') == 0 ? /* is reference */ enumName.substring(1) : enumName;
 		}
 		return null;
 	}
@@ -338,9 +336,7 @@ class XCGeneratorBase {
 	 * @param xdata XData model of data.
 	 * @param sb String builder where the code is generated.
 	 */
-	final void genAttrNameVariable(final String name,
-		final XData xdata,
-		final StringBuilder sb) {
+	final void genAttrNameVariable(final String name, final XData xdata, final StringBuilder sb) {
 		String modelName = XComponentUtil.xmlToJavaName(xdata.getName());
 		sb.append(modify(
 (_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+LN : "") +
@@ -425,8 +421,7 @@ class XCGeneratorBase {
 	 * @param xel node from which to generate methods.
 	 * @param className name of class representing the child element.
 	 * @param name name of variable.
-	 * @param max maximal occurrence number of items .
-	 * set name of this model, otherwise this argument is null.
+	 * @param max maximal occurrence number of items.
 	 * @param descr Description text.
 	 * @param getters String builder where generate getters.
 	 * @param setters String builder where generate setters.
@@ -462,7 +457,6 @@ class XCGeneratorBase {
 	 * @param typeName name of class representing the child element.
 	 * @param name name of variable.
 	 * @param max maximal number of items .
-	 * set name of this model, otherwise this argument is null.
 	 * @param descr Description text.
 	 * @param sb String builder where to generate code.
 	 * @param sbi String builder where the code is generated for interface.
@@ -475,9 +469,6 @@ class XCGeneratorBase {
 		final String descr,
 		final StringBuilder sb,
 		final StringBuilder sbi) {
-//		byte xon = xn instanceof XElement
-//			? ((XElement) xn)._xon : ((XData) xn)._xon;
-//		String publ = xon == 0 ? "public" : "private";
 		String publ = "public";
 		final int ndx = typeName.lastIndexOf('.');
 		if (ndx == 0) {
@@ -591,8 +582,7 @@ class XCGeneratorBase {
 	 * @param descr Description text.
 	 * @param sb String builder where to generate code.
 	 * @param sbi String builder where the code is generated for interface.
-	 * @param nullchoice the command to set all variables of choice to null or
-	 * the empty string.
+	 * @param nullchoice the command to set all variables of choice to null or the empty string.
 	 */
 	private void genSetterMethodOfChildElement(
 		final String className,
@@ -626,8 +616,7 @@ class XCGeneratorBase {
 "\t\tif (x!=null) {"+LN +
 "\t\t\t\tif (x.xGetXPos()==null)"+LN +
 "\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? '"' + modelURI + '"' : "null")
-				+ ", \"" + modelXDPos + "\");"+LN
+				+ (modelURI != null ? '"' + modelURI + '"' : "null") + ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+'\t';
 			} else {
 				x = LN+"\t\tif (x!=null) _&{name}.add(x);"+LN+'\t';
@@ -636,8 +625,7 @@ class XCGeneratorBase {
 			if (modelName != null) {
 				x = LN + (clearChoice.isEmpty() ? "" : clearChoice + LN) +
 "\t\tif (x!=null && x.xGetXPos() == null)"+LN +
-"\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? '"' + modelURI + '"' : "null")
+"\t\t\tx.xInit(this, \""+modelName+"\", " + (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t_&{name}=x;"+LN+"\t";
 			} else {
@@ -719,24 +707,21 @@ class XCGeneratorBase {
 			if ("org.xdef.sys.SDatetime".equals(className)) {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
-					"&{x}", modify(x, "_&{name}.add(x)",
-						"_&{name}.add(new org.xdef.sys.SDatetime(x))"),
+					"&{x}", modify(x, "_&{name}.add(x)", "_&{name}.add(new org.xdef.sys.SDatetime(x))"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName1));
 				typeName1 = "java.sql.Timestamp";
 				sb.append(modify(template,
-					"&{x}", modify(x,"_&{name}.add(x)",
-						"_&{name}.add(new org.xdef.sys.SDatetime(x))"),
+					"&{x}", modify(x,"_&{name}.add(x)", "_&{name}.add(new org.xdef.sys.SDatetime(x))"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName1));
 				typeName1 = "java.util.Calendar";
 				sb.append(modify(template,
-					"&{x}", modify(x,
-						"_&{name}.add(x)", "_&{name}.add(new SDatetime(x))"),
+					"&{x}", modify(x, "_&{name}.add(x)", "_&{name}.add(new SDatetime(x))"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
@@ -757,24 +742,21 @@ class XCGeneratorBase {
 			if ("org.xdef.sys.SDatetime".equals(className)) {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
-					"&{x}", modify(x, "_&{name}=x;",
-						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
+					"&{x}", modify(x, "_&{name}=x;", "_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName1));
 				typeName1 = "java.sql.Timestamp";
 				sb.append(modify(template,
-					"&{x}", modify(x, "_&{name}=x;",
-						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
+					"&{x}", modify(x, "_&{name}=x;", "_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName1));
 				typeName1 = "java.util.Calendar";
 				sb.append(modify(template,
-					"&{x}", modify(x, "_&{name}=x;",
-						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
+					"&{x}", modify(x, "_&{name}=x;", "_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
@@ -792,23 +774,20 @@ class XCGeneratorBase {
 		final String name,
 		final StringBuilder sb) {
 		final String uri = xdata.getNSUri();
-		final String fn = uri != null
-			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
+		final String fn = uri != null ? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
 		if ((checkEnumType(xdata)) != null) {
 			x = "get&{name}().name())";
 		} else {
 			XDParser xp  = (XDParser) xdata.getParseMethod();
 			String parseName = xp.parserName();
-			switch ("union".equals(parseName)
-				? xp.getAlltemsType() : xdata.getParserType()) {
+			switch ("union".equals(parseName) ? xp.getAlltemsType() : xdata.getParserType()) {
 				case XD_CHAR:
 					x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))";
 					break;
 				case XD_DATETIME: {
 					String s = xdata.getDateMask();
-					x = s == null
-						? "org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))"
+					x = s == null ? "org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))"
 						: "get&{name}().formatDate("+s+"))";
 					break;
 				}
@@ -827,8 +806,7 @@ class XCGeneratorBase {
 					break;
 				case XD_CONTAINER: {
 					x = "org.xdef.component.XComponentUtil.listToString(get&{name}(), "
-						+ (parseName.equals("jlist") ? "true" : "false")
-						+ "))";
+						+ (parseName.equals("jlist") ? "true" : "false") + "))";
 					break;
 				}
 
@@ -853,15 +831,11 @@ class XCGeneratorBase {
 		final StringBuilder sb,
 		final boolean isList) {
 		if (sb.length() == 0) {
-			sb.append("\t\t")
-				.append("java.util.List<org.xdef.component.XComponent> a=")
-				.append("new java.util.ArrayList<>();")
-				.append(LN);
+			sb.append("\t\t").append("java.util.List<org.xdef.component.XComponent> a=")
+				.append("new java.util.ArrayList<>();").append(LN);
 		}
-		sb.append("\t\torg.xdef.component.XComponentUtil.addXC(a, ")
-			.append(isList ? "listOf" : "get")
-			.append(name).append("());")
-			.append(LN);
+		sb.append("\t\torg.xdef.component.XComponentUtil.addXC(a, ").append(isList ? "listOf" : "get")
+			.append(name).append("());").append(LN);
 	}
 
 	/** Generation Java code for creating child element with text node.
@@ -883,8 +857,7 @@ class XCGeneratorBase {
 		final String z = (max > 1 ? "listOf" : "get") + "&{name}()";
 		XDParser xp  = (XDParser) xdata.getParseMethod();
 		String parseName = xp.parserName();
-		switch ("union".equals(parseName)
-				? xp.getAlltemsType() : xdata.getParserType()) {
+		switch ("union".equals(parseName) ? xp.getAlltemsType() : xdata.getParserType()) {
 			case XD_BOOLEAN:
 			case XD_BYTE:
 			case XD_SHORT:
@@ -905,8 +878,7 @@ class XCGeneratorBase {
 				break;
 			case XD_DATETIME: {
 				String s = xdata.getDateMask();
-				x = s == null
-					? "org.xdef.component.XComponentUtil.dateToJstring(" + z+y + ")"
+				x = s == null ? "org.xdef.component.XComponentUtil.dateToJstring(" + z+y + ")"
 					: z+y+"." +	"formatDate(" + s + ")";
 				break;
 			}
@@ -924,8 +896,7 @@ class XCGeneratorBase {
 				}
 			case XD_CONTAINER: {
 				x = "org.xdef.component.XComponentUtil.listToString(" + z + ","
-					+ (parseName.equals("jlist") ? "true" : "false")
-					+ ")";
+					+ (parseName.equals("jlist") ? "true" : "false") + ")";
 				break;
 			}
 			default:
@@ -974,8 +945,8 @@ class XCGeneratorBase {
 	final String getXDPosition(final XElement xe,
 		final boolean genInterface) {
 		if (genInterface) {
-			return ((xe.isReference()) ?	_components.get(xe.getReferencePos())
-				: _components.get(xe.getXDPosition())).getName();
+			return ((xe.isReference())
+				? _components.get(xe.getReferencePos()) : _components.get(xe.getXDPosition())).getName();
 		} else {
 			String s = xe.getXDPosition();
 			if (s == null) {// model still may be a reference
@@ -989,8 +960,8 @@ class XCGeneratorBase {
 					XNode n = (XNode) xe.getXDPool().findModel(s);
 					if (n != null && n.getKind() == XMELEMENT) {
 						XComponentInfo x = _components.get(s);
-						QName u2 = x == null ? ((XElement) n).getQName()
-							: new QName(x.getNS(),((XElement)n).getLocalName());
+						QName u2 = x == null
+							? ((XElement) n).getQName() : new QName(x.getNS(),((XElement)n).getLocalName());
 						if (u1 == null ? u2 == null : u1.equals(u2)) {
 							t = x != null ? x.getName() : null;
 							return t;
@@ -1015,19 +986,15 @@ class XCGeneratorBase {
 					// if the reference class is not declarted
 					return u.getName(); // we return class of model
 				}
-				// Now we know there are declarations both of model and of ref.
-				// We check if the model inplements a class and if the reference
-				// implements an interface.
-				// If the model implements the same interface as
-				// the refernced model then we return the model declaration
-				// otherwise we return the reference declaration
+				// Now we know there are declarations both of model and of ref. Check if the model inplements
+				// a class and if the reference implements an interface. If the model implements the same
+				// interface as the refernced model then return the model declaration otherwise return
+				// the reference declaration
 				final int ndxu, ndxv;
 				String uu = u.getName();
 				String vv = v.getName();
-				return (ndxu = uu.indexOf(" implements ")) > 0
-					&& (ndxv = vv.indexOf(" interface ")) > 0
-					&& uu.substring(ndxu+12).equals(vv.substring(ndxv+11))
-					? vv : uu;
+				return (ndxu = uu.indexOf(" implements ")) > 0 && (ndxv = vv.indexOf(" interface ")) > 0
+					&& uu.substring(ndxu+12).equals(vv.substring(ndxv+11)) ? vv : uu;
 			}
 		}
 	}
@@ -1055,8 +1022,7 @@ class XCGeneratorBase {
 	/** Create new name if the name from argument already exists in the set.
 	 * @param name the name to be checked.
 	 * @param set set with names.
-	 * @return new name if the the name from argument exists in the set or
-	 * return the original name;
+	 * @return new name if the the name from argument exists in the set or return the original name;
 	 */
 	final static String getUniqueName(final String name,
 		final Set<String> set) {
@@ -1113,13 +1079,11 @@ class XCGeneratorBase {
 			return name;
 		}
 		if (ext) {
-			//Getter/setter name &{0} in &{1} can't be used.
-			//Please change name by command %bind
+			//Getter/setter name &{0} in &{1} can't be used. Please change name by command %bind
 			_reporter.error(XDEF.XDEF371, name, xdPosition);
 			return name;
 		} else {
-			//Getter/setter name &{0} in &{1} was changed to
-			//&{2}. You can define other name by command %bind
+			//Getter/setter name &{0} in &{1} was changed to &{2}. You can define other name by command %bind
 			_reporter.warning(XDEF.XDEF360, name, xdPosition,iname);
 		}
 		return iname;

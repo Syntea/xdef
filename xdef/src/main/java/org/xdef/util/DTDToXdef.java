@@ -24,8 +24,7 @@ public class DTDToXdef {
 
 	/** Sets log file for logging.
 	 * @param logFile log file.
-	 * @throws IllegalArgumentException if log file is empty or log file name
-	 * is illegal.
+	 * @throws IllegalArgumentException if log file is empty or log file name is illegal.
 	 */
 	private void setLogFile(String logFile) {
 		if (logFile == null || "".equals(logFile)) {
@@ -37,8 +36,7 @@ public class DTDToXdef {
 			if (!log.exists()) {
 				log.createNewFile();
 			}
-			_reporter = new SReporter(new FileReportWriter(
-				new PrintWriter(new FileWriter(log, true)), false));
+			_reporter = new SReporter(new FileReportWriter(new PrintWriter(new FileWriter(log, true)),false));
 		} catch (IOException ex) {
 			throw new IllegalArgumentException("Log file name is illegal", ex);
 		}
@@ -53,13 +51,11 @@ public class DTDToXdef {
 		KXmlUtils.writeXml(file, doc);
 	}
 
-	/** Generates X-definition file with given name from given DTD file with
-	 * given root element.
+	/** Generates X-definition file with given name from given DTD file with given root element.
 	 * @param dtd DTD string or URL as string.
 	 * @param root root element.
 	 * @param outXdef output X-definition file.
-	 * @throws IllegalArgumentException if root element is empty of output file
-	 * is illegal.
+	 * @throws IllegalArgumentException if root element is empty of output file is illegal.
 	 * @throws RuntimeException if error occurred during writing files.
 	 */
 	public void genXdef(String dtd, String root, String outXdef) {
@@ -88,8 +84,17 @@ public class DTDToXdef {
 		}
 	}
 
+	/** String with command line information. */
+	private static final String INFO =
+"Convertor of DTD to X-definition.\n"+
+"Command line arguments:\n"+
+"  -in, --input <PATH> input schema file location\n" +
+"  -out, --output <PATH> output file or directory name\n" +
+"  -r, --root <ROOT> name of root element \n" +
+"  -l, --logFile <PATH> log file name \n" +
+"  -?, -h, --help help";
+
 	/** Calling the program from command line.
-	 *
 	 * @param args array of parameters.
 	 * <p><i>[-in | --input] file [-out | --output] file [-r | --root] element
 	 * [-l | --logFile] file</i>
@@ -101,14 +106,6 @@ public class DTDToXdef {
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		final String info =
-"Convertor of DTD to X-definition.\n"+
-"Command line arguments:\n"+
-"  -in, --input <PATH> input schema file location\n" +
-"  -out, --output <PATH> output file or directory name\n" +
-"  -r, --root <ROOT> name of root element \n" +
-"  -l, --logFile <PATH> log file name \n" +
-"  -?, -h, --help help";
 		final StringBuilder err = new StringBuilder();
 
 		String INPUT = "--input";
@@ -151,7 +148,7 @@ public class DTDToXdef {
 			} else {
 				if ("-h".equals(parameter) || "-?".equals(parameter)
 					|| "--help".equals(parameter)) {
-					System.out.println(info);
+					System.out.println(INFO);
 					return;
 				} else if ("-in".equals(parameter) || INPUT.equals(parameter)) {
 					if (input != null) {
@@ -198,7 +195,7 @@ public class DTDToXdef {
 			err.append("Root element name is missing\n");
 		}
 		if (err.length() > 0) {
-			throw new RuntimeException(err + info);
+			throw new RuntimeException(err + INFO);
 		}
 		//creating convertor
 		DTDToXdef dtd2xdef = new DTDToXdef();

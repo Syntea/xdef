@@ -31,9 +31,8 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	/** Open GUI.
 	 * @param xp the XDPool object.
 	 * @param err error reporter or null.
-	 * @return true if the GUI was finished ane not continue. If false
-	 * is returned then the compilation will be executed and the editor
-	 * will be opened again.
+	 * @return true if the GUI was finished ane not continue. If false is returned then the compilation will
+	 * be executed and the editor will be opened again.
 	 */
 	public final boolean setXEditor(final XDPool xp, final ArrayReporter err) {
 		_windowName = "Edit X-definition: ";
@@ -83,18 +82,15 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	private void initMenuBar() {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
 		JMenuItem ji;
-
 		// Select Source menu item
 		_selectSource = new JMenu("Select Source...");
 		fileMenu.add(_selectSource);
 		fileMenu.addSeparator();
-
 		// Remove Source menu item
 		_removeSource = new JMenu("Remove Source...");
 		fileMenu.add(_removeSource);
 		fileMenu.addSeparator();
 		prepareSourceMenuItems();
-
 		// Add source menu item
 		ji = new JMenuItem("Add Source...");
 		ji.setMnemonic((int) 'A');
@@ -109,8 +105,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 				if (f != null && f.exists()) {
 					for (XDSourceItem src: _sources.values()) {
 						try {
-							if (src._url != null
-								&& src._url.equals(f.toURI().toURL())) {
+							if (src._url != null && src._url.equals(f.toURI().toURL())) {
 								_actionFinished = false;
 								notifyFrame();
 								break;
@@ -125,8 +120,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 						_sources.put(key, src);
 						initSourceItem(key, src);
 						if (_sourceItem != null) {
-							_sourceItem._pos =
-								_sourceArea.getCaret().getDot();
+							_sourceItem._pos = _sourceArea.getCaret().getDot();
 							_sourceItem._active = false;
 						}
 						src._pos = 0;
@@ -143,14 +137,12 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		});
 		fileMenu.add(ji);
 		fileMenu.addSeparator();
-
 		// Save as menu item
 		ji = new JMenuItem("Save as...");
 		ji.setAccelerator(KeyStroke.getKeyStroke("control S"));
 		ji.addActionListener((ActionEvent e) -> {
 			updateSourceItem();
-			if (_sourceItem!=null
-				&& _sourceItem._changed&&_sourceItem._url == null) {
+			if (_sourceItem!=null && _sourceItem._changed&&_sourceItem._url == null) {
 				_sourceItem._source = _sourceArea.getText();
 				_sourceItem._saved = true;
 			}
@@ -158,7 +150,6 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		});
 		fileMenu.add(ji);
 		fileMenu.addSeparator();
-
 		// Compile menu item
 		ji = new JMenuItem("Compile");
 		ji.setAccelerator(KeyStroke.getKeyStroke("F9"));
@@ -171,15 +162,13 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		});
 		fileMenu.add(ji);
 		fileMenu.addSeparator();
-
 		// Exit menu item
 		ji = new JMenuItem("Exit");
 		ji.setMnemonic((int) 'X');
 		ji.addActionListener((ActionEvent e) -> {
 			if ( _sourceItem != null && _sourceItem._changed) {
 				String s;
-				if (_sourceArea == null || (s=_sourceArea.getText()) == null
-					|| s.equals(_sourceItem._source)){
+				if (_sourceArea==null || (s=_sourceArea.getText())==null || s.equals(_sourceItem._source)) {
 					_sourceItem._changed = false;
 				}
 			}
@@ -197,7 +186,6 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 			_frame.dispose();
 		});
 		fileMenu.add(ji);
-
 		// Source position info
 		_menuBar.add(_sourcePositionInfo, BorderLayout.EAST);
 		_frame.setJMenuBar(_menuBar);
@@ -206,8 +194,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 
 	/** Prepare menu items connected with more sources. */
 	private void prepareSourceMenuItems() {
-		if (_sources != null && _sources.size() > 1) {
-			// Select source item
+		if (_sources != null && _sources.size() > 1) { // Select source item
 			_selectSource.setMnemonic((int) 'S');
 			ActionListener alistener = (ActionEvent e) -> {
 				JMenuItem jc = (JMenuItem) e.getSource();

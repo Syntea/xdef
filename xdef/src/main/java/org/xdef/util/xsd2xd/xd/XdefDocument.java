@@ -41,10 +41,10 @@ public class XdefDocument implements Convertor {
 	 * to schema elements table.
 	 * @param schemaElements all schema elements.
 	 * @param xdefPrefix prefix for X-definition nodes.
-	 * @param xdefNamespaceURI name space URI for X-definition nodes.
+	 * @param xdefNamespaceURI namespace URI for X-definition nodes.
 	 * @param separately every X-definition as file.
 	 * @throws RuntimeException cant add def element to document
-	 * or cant add X-definition name space declaration.
+	 * or cant add X-definition namespace declaration.
 	 */
 	public XdefDocument(Map<URL, Element> schemaElements, String xdefPrefix,
 		String xdefNamespaceURI, boolean separately) throws RuntimeException {
@@ -55,14 +55,12 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Initialize X-definition elements and names tables. Creates X-definition
-	 * def element and adds name. X-definition name space declaration
+	 * def element and adds name. X-definition namespace declaration
 	 * is also added.
 	 * @param schemaElements all schema elements.
 	 * @param separately every X-definition as file.
-	 * @throws RuntimeException cant add def element to document
-	 * or can't add
-	 * X-definiton name space declaration or can't add target name space
-	 * declaration.
+	 * @throws RuntimeException cant add def element to document or can't add
+	 * X-definiton namespace declaration or can't add target namespace declaration.
 	 */
 	private void init(Map<URL, Element> schemaElements, boolean separately)
 		throws RuntimeException {
@@ -98,7 +96,7 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Adds target name space to given X-definition def element
+	/** Adds target namespace to given X-definition def element
 	 * according to given XML schema schema element settings.
 	 * @param schemaElement XML schema schema element.
 	 * @param xdefElement X-definition def element.
@@ -116,10 +114,10 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Adds X-definition name space declaration to given element with set
-	 * prefix and set name space URI.
-	 * @param element element to add name space declaration.
-	 * @throws RuntimeException cant add name space declaration.
+	/** Adds X-definition namespace declaration to given element with set
+	 * prefix and set namespace URI.
+	 * @param element element to add namespace declaration.
+	 * @throws RuntimeException cant add namespace declaration.
 	 */
 	private void addXdefNamespaceDeclaration(Element element)
 		throws RuntimeException {
@@ -213,10 +211,10 @@ public class XdefDocument implements Convertor {
 	public Map<URL, Element> getXdefElements() {return _xdefElements;}
 
 	/**
-	 * Adds element with given name space URI and local name to given parent
-	 * node and returns added element. Prefix is resolved according name space.
+	 * Adds element with given namespace URI and local name to given parent
+	 * node and returns added element. Prefix is resolved according namespace.
 	 * @param parent parent node.
-	 * @param namespaceURI name space URI of element.
+	 * @param namespaceURI namespace URI of element.
 	 * @param localName local name of element.
 	 * @return created element node.
 	 * @throws RuntimeException cant get prefix.
@@ -236,7 +234,7 @@ public class XdefDocument implements Convertor {
 		return element;
 	}
 
-	/** Adds element without name space and with local name to given parent node
+	/** Adds element without namespace and with local name to given parent node
 	 * and returns added element.
 	 * @param parent parent node.
 	 * @param localName local name of element.
@@ -276,7 +274,7 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Creates collection element with X-definition name space
+	/** Creates collection element with X-definition namespace
 	 * declaration and adds it to given document node.
 	 * @param doc owner document node.
 	 * @return created and added collection element.
@@ -289,11 +287,11 @@ public class XdefDocument implements Convertor {
 		return collection;
 	}
 
-	/** Adds element with X-definition name space URI and local name to given
+	/** Adds element with X-definition namespace URI and local name to given
 	 * parent node and returns added element. Prefix will be resolved according
-	 * given name space.
+	 * given namespace.
 	 * @param parent parent node.
-	 * @param localName X-definition name space element local name.
+	 * @param localName X-definition namespace element local name.
 	 * @return created X-definition element.
 	 * @throws RuntimeException cant get prefix.
 	 */
@@ -302,11 +300,11 @@ public class XdefDocument implements Convertor {
 		return addElement(parent, _xdefNamespaceURI, localName);
 	}
 
-	/** Adds attribute node with given name space URI and local name to given
-	 * parent element node. If attribute with such name space and name exists
+	/** Adds attribute node with given namespace URI and local name to given
+	 * parent element node. If attribute with such namespace and name exists
 	 * it will throw exception.
 	 * @param parent parent element node.
-	 * @param namespaceURI attribute name space URI.
+	 * @param namespaceURI attribute namespace URI.
 	 * @param localName attribute local name.
 	 * @return created attribute node.
 	 * @throws RuntimeException attribute already exists.
@@ -333,11 +331,11 @@ public class XdefDocument implements Convertor {
 		return attr;
 	}
 
-	/** Adds attribute node with given name space URI, local name and value
-	 * to given parent element node. If attribute with such name space name
+	/** Adds attribute node with given namespace URI, local name and value
+	 * to given parent element node. If attribute with such namespace name
 	 * exists it will throw exception.
 	 * @param parent parent element node.
-	 * @param namespaceURI attribute name space URI.
+	 * @param namespaceURI attribute namespace URI.
 	 * @param localName attribute local name.
 	 * @param value attribute value.
 	 * @return created attribute node.
@@ -352,9 +350,9 @@ public class XdefDocument implements Convertor {
 		return attr;
 	}
 
-	/** Adds attribute node with X-definition name space URI, given local name
+	/** Adds attribute node with X-definition namespace URI, given local name
 	 * and given value to given parent element node. If attribute with such
-	 * name space name exists it will throw exception.
+	 * namespace name exists it will throw exception.
 	 * @param parent parent element node.
 	 * @param localName X-definition attribute local name.
 	 * @param value attribute value.
@@ -366,11 +364,11 @@ public class XdefDocument implements Convertor {
 		return addAttr(parent, _xdefNamespaceURI, localName, value);
 	}
 
-	/** Adds attribute node with X-definition name space URI and given local name
-	 * to given parent element node. If attribute with such name space name
+	/** Adds attribute node with X-definition namespace URI and given local name
+	 * to given parent element node. If attribute with such namespace name
 	 * exists, will throw exception.
 	 * @param parent parent element node.
-	 * @param localName X-definition name space attribute local name.
+	 * @param localName X-definition namespace attribute local name.
 	 * @return created X-definition attribute node.
 	 * @throws RuntimeException attribute already exists.
 	 */
@@ -379,13 +377,13 @@ public class XdefDocument implements Convertor {
 		return addAttr(parent, _xdefNamespaceURI, localName);
 	}
 
-	/** Gets prefix of given name space URI in given node context. If prefix
+	/** Gets prefix of given namespace URI in given node context. If prefix
 	 * does not exists, it will create one in def element and
 	 * return prefix.
 	 * @param node context node.
-	 * @param namespaceURI name space URI.
-	 * @return given name space prefix.
-	 * @throws RuntimeException cant add name space declaration.
+	 * @param namespaceURI namespace URI.
+	 * @return given namespace prefix.
+	 * @throws RuntimeException cant add namespace declaration.
 	 */
 	public String getPrefix(Node node, String namespaceURI)
 		throws RuntimeException {
@@ -408,10 +406,10 @@ public class XdefDocument implements Convertor {
 		return DOMUtils.addNamespaceDeclaration(xdef, namespaceURI);
 	}
 
-	/** Generates qualified node name from given name space URI and given node
+	/** Generates qualified node name from given namespace URI and given node
 	 * local name in given node context.
 	 * @param node context node.
-	 * @param namespaceURI name space URI of qualified name.
+	 * @param namespaceURI namespace URI of qualified name.
 	 * @param localName local part of qualified name.
 	 * @return qualified name.
 	 * @throws RuntimeException cant get prefix.
@@ -425,7 +423,7 @@ public class XdefDocument implements Convertor {
 	 * If element node does not contain script attribute it will create one.
 	 * @param element element to add script expression.
 	 * @param xdefName name of X-definiton that contains referred model.
-	 * @param namespaceURI name space URI of referred model.
+	 * @param namespaceURI namespace URI of referred model.
 	 * @param modelName local name of referred model.
 	 */
 	public void addRefExpression(Element element, String xdefName,
@@ -513,10 +511,10 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Generates reference expression to given X-definition by name, given
-	 * name space URI and local name of model in given node context.
+	 * namespace URI and local name of model in given node context.
 	 * @param node context node.
 	 * @param xdefName name of X-definiiton or null.
-	 * @param namespaceURI name space URI of model or null.
+	 * @param namespaceURI namespace URI of model or null.
 	 * @param modelName name of model.
 	 * @return reference script expression.
 	 * @throws RuntimeException cant get prefix.
@@ -779,7 +777,7 @@ public class XdefDocument implements Convertor {
 
 	/** Adds root element declaration to given def element.
 	 * @param xdefElement X-definition def element.
-	 * @param namespaceURI name space URI of root element.
+	 * @param namespaceURI namespace URI of root element.
 	 * @param localName local name of root element.
 	 */
 	public void addRootElement(Element xdefElement,
