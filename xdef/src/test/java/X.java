@@ -18,8 +18,12 @@ public class X {
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void x(String s) {\n" +
-"    Currency c = new Currency(s);\n" +
-"    outln(c.currencyCode());\n" +
+"    try {\n" +
+"      Currency c = new Currency(s);\n" +
+"      outln(c.currencyCode());\n" +
+"    } catch (Exception e) {\n" +
+"      outln('Incorrect currency: ' + s);\n" +
+"    }\n" +
 "  }\n" +
 "</xd:declaration>\n"+
 "  <A xd:script='finally x((String) @a);' a='currency();' />\n" +
@@ -28,13 +32,10 @@ public class X {
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(swr);
-			xml = "<A a='CZK'/>";
+			xml = "<A a='CZKx'/>";
 			xd.xparse(xml, reporter);
-			if (!"CZK\n".equals(s = swr.toString()) || reporter.errorWarnings()) {
-				System.out.println("Error: " + s + reporter);
-			} else {
-				System.out.println("OK");
-			}
+			System.out.println((!"CZK\n".equals(s = swr.toString()) || reporter.errorWarnings())
+				? "Error: " + s + reporter + ";\n" + swr : "OK");
 		} catch (Exception ex) {ex.printStackTrace(System.out);}
 	}
 }
