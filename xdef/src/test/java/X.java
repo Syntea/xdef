@@ -16,16 +16,16 @@ public class X {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
-"<xd:declaration>\n" +
-"  void x(String s) {\n" +
-"    try {\n" +
-"      Currency c = new Currency(s);\n" +
-"      outln(c.currencyCode());\n" +
-"    } catch (Exception e) {\n" +
-"      outln('Exception: ' + e);\n" +
+"  <xd:declaration>\n" +
+"    void x(String s) {\n" +
+"      try {\n" +
+"        Currency c = new Currency(s);\n" +
+"        outln(c.currencyCode());\n" +
+"      } catch (Exception e) {\n" +
+"        outln('Exception: ' + e);\n" +
+"      }\n" +
 "    }\n" +
-"  }\n" +
-"</xd:declaration>\n"+
+"  </xd:declaration>\n"+
 "  <A xd:script='finally x((String) @a);' a='currency();' />\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
