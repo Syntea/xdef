@@ -8,7 +8,7 @@ import org.xdef.sys.ArrayReporter;
 public class X {
 	public static void main(String[] args) {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
-		String s, xdef, xml;
+		String xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		StringWriter swr;
@@ -22,7 +22,7 @@ public class X {
 "      Currency c = new Currency(s);\n" +
 "      outln(c.currencyCode());\n" +
 "    } catch (Exception e) {\n" +
-"      outln('Incorrect currency: ' + s);\n" +
+"      outln('Exception: ' + e);\n" +
 "    }\n" +
 "  }\n" +
 "</xd:declaration>\n"+
@@ -32,10 +32,10 @@ public class X {
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(swr);
-			xml = "<A a='CZKx'/>";
+			xml = "<A a='CZK'/>";
 			xd.xparse(xml, reporter);
-			System.out.println((!"CZK\n".equals(s = swr.toString()) || reporter.errorWarnings())
-				? "Error: " + s + reporter + ";\n" + swr : "OK");
-		} catch (Exception ex) {ex.printStackTrace(System.out);}
+			System.out.println((!"CZK\n".equals(swr.toString()) || reporter.errorWarnings())
+				? "Error: " + reporter + ";\n" + swr : "OK");
+		} catch (RuntimeException ex) {ex.printStackTrace(System.out);}
 	}
 }
