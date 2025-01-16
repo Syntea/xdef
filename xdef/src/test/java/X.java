@@ -25,16 +25,18 @@ public class X {
 "        outln('Exception: ' + e);\n" +
 "      }\n" +
 "    }\n" +
-"  </xd:declaration>\n"+
-"  <A xd:script='finally x((String) @a);' a='currency();' />\n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
+"    <B xd:script='*; finally x((String) @a);' a='currency();'/>\n" +
+"  </A>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(swr);
-			xml = "<A a='CZK'/>";
+			xml = "<A><B a='USD'/><B a='CZK'/></A>";
 			xd.xparse(xml, reporter);
-			System.out.println((!"CZK\n".equals(swr.toString()) || reporter.errorWarnings())
+			System.out.println((!"USD\nCZK\n".equals(swr.toString()) || reporter.errorWarnings())
 				? "Error: " + reporter + ";\n" + swr : "OK");
 		} catch (RuntimeException ex) {ex.printStackTrace(System.out);}
 	}
