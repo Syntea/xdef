@@ -127,9 +127,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 							}
 							break;
 						}
-					case "base" :
-						nv.setValue(valueToParser(val));
-						break;
+					case "base" : nv.setValue(valueToParser(val)); break;
 					case "argument":
 						if (val.getItemId() != XD_STRING) {
 							nv.setValue(new DefString(val.toString()));
@@ -144,9 +142,6 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 * @param param "sequential" parameters.
 	 */
 	public void setParseSQParams(Object... params) {}
-
-	@Override
-	public final XDValueType getItemType() {return PARSER;}
 
 	@Override
 	public String toString() {return parserName();}
@@ -187,6 +182,9 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 
 	@Override
 	public final short getCode() {return LD_CONST;}
+
+	@Override
+	public final XDValueType getItemType() {return PARSER;}
 
 	@Override
 	/** Set declared type name of parser.
