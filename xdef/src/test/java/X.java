@@ -2,19 +2,13 @@ import java.io.StringWriter;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
-import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 
 public class X {
 	public static void main(String[] args) {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
-		String xdef, xml;
-		XDDocument xd;
-		XDPool xp;
-		StringWriter swr;
-		ArrayReporter reporter = new ArrayReporter();
 		try {
-			xdef =
+			XDDocument xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <xd:declaration>\n" +
 "    void x(String s) {\n" +
@@ -29,13 +23,11 @@ public class X {
 "  <A>\n" +
 "    <B xd:script='*; finally x((String) @a);' a='currency();'/>\n" +
 "  </A>\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			xd = xp.createXDDocument();
-			swr = new StringWriter();
+"</xd:def>").createXDDocument();
+			StringWriter swr = new StringWriter();
 			xd.setStdOut(swr);
-			xml = "<A><B a='USD'/><B a='CZK'/></A>";
-			xd.xparse(xml, reporter);
+			ArrayReporter reporter = new ArrayReporter();
+			xd.xparse("<A>\n  <B a='USD'/>\n  <B a='CZKx'/>\n</A>", reporter);
 			System.out.println((!"USD\nCZK\n".equals(swr.toString()) || reporter.errorWarnings())
 				? "Error: " + reporter + ";\n" + swr : "OK");
 		} catch (RuntimeException ex) {ex.printStackTrace(System.out);}
