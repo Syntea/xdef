@@ -103,7 +103,6 @@ import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
  * @author Vaclav Trojan
  */
 final class CompileXScript extends CompileStatement {
-
 	/** flag if options was specified in the script. */
 	private boolean _options;
 
@@ -170,12 +169,9 @@ final class CompileXScript extends CompileStatement {
 			char sym = _sym;
 			nextSymbol();
 			switch (sym) {
-				case SEMICOLON_SYM:
-					continue;
+				case SEMICOLON_SYM: continue;
 				case OPTION_SYM:
-				case OPTIONS_SYM:
-					readOptions(def);
-					continue;
+				case OPTIONS_SYM: readOptions(def); continue;
 				case INIT_SYM:
 					if (def._init != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
@@ -307,8 +303,7 @@ final class CompileXScript extends CompileStatement {
 				continue;
 			}
 			if (isOccurrence(occ)) {
-				if (!occ.isIgnore() && occ.maxOccurs() > 1
-					&& !sc.getName().startsWith("$")) {
+				if (!occ.isIgnore() && occ.maxOccurs() > 1 && !sc.getName().startsWith("$")) {
 					error (XDEF.XDEF262);//Occurrence of attribute or text value can't be more then 1
 				}
 				compileTypeCheck(sc);
@@ -325,9 +320,7 @@ final class CompileXScript extends CompileStatement {
 			nextSymbol();
 			switch (sym) {
 				case OPTION_SYM:
-				case OPTIONS_SYM:
-					readOptions(sc);
-					continue;
+				case OPTIONS_SYM: readOptions(sc); continue;
 				case FIXED_SYM: {
 					if (sc._check < 0 && occ.isSpecified()) {
 						error(XDEF.XDEF422); //Duplicated script section
@@ -337,14 +330,13 @@ final class CompileXScript extends CompileStatement {
 					_g._sp  = -1;
 					if (addr >= 0) {
 						int check = sc._check;
-						if (check >= 0
-							&&_g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
+						if (check >= 0 && _g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
 							&& (_g._code.get(check).getCode() == LD_CONST
 							&&_g._code.get(check).getItemId() == XD_PARSER
 							|| _g._code.get(check).getCode()==PARSEANDSTOP)) {
-							if (addr + 3 == _g._lastCodeIndex &&_g._code.get(addr).getCode()==INIT_NOPARAMS_OP
+							if (addr+3 == _g._lastCodeIndex &&_g._code.get(addr).getCode() == INIT_NOPARAMS_OP
 								&& _g._code.get(addr).getParam() == 0
-								&& _g._code.get(addr + 1).getCode() == LD_CONST
+								&& _g._code.get(addr+1).getCode() == LD_CONST
 								&& _g._code.get(addr+1).getItemId() == XD_STRING
 								&& _g._code.get(addr + 2).getCode() == RETV_OP
 								&& _g._code.get(addr + 3).getCode() == STOP_OP) {
@@ -466,8 +458,6 @@ final class CompileXScript extends CompileStatement {
 						continue;
 					}
 					errToken(sym);
-					break;
-				default:
 			}
 			if (sym == NOCHAR) {
 				break;
@@ -537,9 +527,9 @@ final class CompileXScript extends CompileStatement {
 								}
 								p = (XDParser) y;
 							} else if (i + 4 < _g._code.size() && j == STACK_DUP // try CHECK expression
-								&&_g._code.get(i+3).getCode()==PARSERESULT_MATCH
+								&&_g._code.get(i+3).getCode() == PARSERESULT_MATCH
 								&& _g._code.get(i+4).getCode() == JMPF_OP
-								&& _g._code.get(_g._code.get(i+4).getParam()).getCode()== STOP_OP) {
+								&& _g._code.get(_g._code.get(i+4).getParam()).getCode() == STOP_OP) {
 								sc._check = i;
 								p = (XDParser) y; // parser with CHECK operand
 							}
@@ -591,9 +581,7 @@ final class CompileXScript extends CompileStatement {
 		_g._sp  = -1;
 	}
 
-	final void initElementScript(final XElement sc) {
-		sc.clearActions();
-	}
+	final void initElementScript(final XElement sc) {sc.clearActions();}
 
 	private void compileModelVariable() {
 		boolean isFinal;
@@ -621,15 +609,9 @@ final class CompileXScript extends CompileStatement {
 				}
 				break;
 			}
-			case TYPE_SYM:
-				compileType((byte) 'X', false);
-				break;
-			case UNIQUE_SET_SYM: {
-				compileUniqueset((byte) 'X', false);
-				break;
-			}
-			default:
-				errorAndSkip(XDEF.XDEF121, String.valueOf(END_SYM)); //Error in variable declaration
+			case TYPE_SYM: compileType((byte) 'X', false); break;
+			case UNIQUE_SET_SYM: compileUniqueset((byte) 'X', false); break;
+			default: errorAndSkip(XDEF.XDEF121, String.valueOf(END_SYM)); //Error in variable declaration
 		}
 		while (_sym == SEMICOLON_SYM) {
 			nextSymbol();
@@ -657,24 +639,13 @@ final class CompileXScript extends CompileStatement {
 			if (!v.isInitialized()) {
 				short vtype = v.getType();
 				switch (vtype) {
-					case XD_BOOLEAN:
-						_g.genLDC(new DefBoolean(false));
-						break;
-					case XD_DOUBLE:
-						_g.genLDC(new DefDouble(0));
-						break;
-					case XD_LONG:
-						_g.genLDC(new DefLong(0));
-						break;
-					case XD_DECIMAL:
-						_g.genLDC(new DefDecimal(0));
-						break;
-					case XD_BIGINTEGER:
-						_g.genLDC(new DefBigInteger(0));
-						break;
+					case XD_BOOLEAN: _g.genLDC(new DefBoolean(false)); break;
+					case XD_DOUBLE: _g.genLDC(new DefDouble(0)); break;
+					case XD_LONG: _g.genLDC(new DefLong(0)); break;
+					case XD_DECIMAL: _g.genLDC(new DefDecimal(0)); break;
+					case XD_BIGINTEGER: _g.genLDC(new DefBigInteger(0)); break;
 					case CompileBase.X_PARSEITEM:
-					default:
-						_g.genLDC(DefNull.genNullValue(vtype));
+					default: _g.genLDC(DefNull.genNullValue(vtype));
 				}
 				_g.genST(xvar);
 			}
@@ -758,12 +729,9 @@ final class CompileXScript extends CompileStatement {
 			switch (sym) {
 				case VAR_SYM:
 					//"var" section must be declared before a varialbe is refered
-					elementVarDeclaration(xel);
-					continue;
+					elementVarDeclaration(xel); continue;
 				case OPTION_SYM:
-				case OPTIONS_SYM:
-					readOptions(xel);
-					continue;
+				case OPTIONS_SYM: readOptions(xel); continue;
 				case ON_ABSENCE_SYM:
 					if (xel._onAbsence != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
@@ -869,7 +837,6 @@ final class CompileXScript extends CompileStatement {
 				case ON_FALSE_SYM:
 					error(XDEF.XDEF411, "onFalse"); //The token '&{0}' is not allowed here
 					break;
-				default:
 			}
 			if (sym == NOCHAR) {
 				break;
@@ -888,9 +855,7 @@ final class CompileXScript extends CompileStatement {
 	 * @param section the symbol ID of the section.
 	 * @return address of generated code or -2 if an error occurred.
 	 */
-	final int compileSection(final byte mode,
-		final short returnType,
-		final char section) {
+	final int compileSection(final byte mode, final short returnType, final char section) {
 		if (_sym == NOCHAR) {
 			return -2;
 		}
@@ -918,15 +883,15 @@ final class CompileXScript extends CompileStatement {
 			} else {
 				int dx = addDebugInfo(false);
 				if (!expression()) {//expression
-					errorAndSkip(XDEF.XDEF426,//Action &{0} expected
-						SCRIPT_SEPARATORS+';', symToName(section));
+					//Action &{0} expected
+					errorAndSkip(XDEF.XDEF426, SCRIPT_SEPARATORS + ';', symToName(section));
 					result = -2; //error
 				} else {
 					setDebugEndPosition(dx);
 					if (returnType != XD_VOID) {
 						if (sp == _g._sp) {//we expect value
-							error(XDEF.XDEF423,//Value of type '&{0}' expected
-								CompileBase.getTypeName(returnType));
+							//Value of type '&{0}' expected
+							error(XDEF.XDEF423, CompileBase.getTypeName(returnType));
 							result = -2; //error
 						} else {
 							short xType = _g._tstack[_g._sp];
@@ -1040,7 +1005,6 @@ final class CompileXScript extends CompileStatement {
 					}
 					sc.setFinallyCode(compileSection(CompileBase.ELEM_MODE, XD_VOID, sym));
 					continue;
-				default:
 			}
 			if (sym == NOCHAR) {
 				break;
@@ -1055,12 +1019,10 @@ final class CompileXScript extends CompileStatement {
 	}
 
 	/** Report deprecated symbol.
-	 * @param symbol deprecated symbol.
-	 * @param recommended what should be done.
+	 * @param sym deprecated symbol.
+	 * @param advise what should be done.
 	 */
-	private void reportDeprecated(final String symbol,final String recommended){
-		_g.reportDeprecated(symbol, recommended);
-	}
+	private void reportDeprecated(final String sym,final String advise) {_g.reportDeprecated(sym, advise);}
 
 	/** Read list of options.
 	 * @param result The object with script code.
@@ -1126,8 +1088,7 @@ final class CompileXScript extends CompileStatement {
 					((XElement)result)._clearAdoptedForgets = 'T';
 				}
 				clearAdoptedForgets = true;
-			} else if ("copyAttrWhiteSpaces".equals(_idName)
-				|| "preserveAttrWhiteSpaces".equals(_idName)
+			} else if ("copyAttrWhiteSpaces".equals(_idName) || "preserveAttrWhiteSpaces".equals(_idName)
 				|| "ignoreAttrWhiteSpaces".equals(_idName)) {
 				if("copyAttrWhiteSpaces".equals(_idName)) {
 					reportDeprecated(_idName, "preserveAttrWhiteSpaces");
@@ -1268,18 +1229,15 @@ final class CompileXScript extends CompileStatement {
 				} else {
 					error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
 				}
-			} else if ("clearReports".equals(_idName)
-				|| "preserveReports".equals(_idName)) {
+			} else if ("clearReports".equals(_idName) || "preserveReports".equals(_idName)) {
 				if (kind != XMELEMENT) {
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, _idName);
+					error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
 				} else {
 					XElement xel = (XElement) result;
 					if (xel._clearReports != 0) {
 						error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 					} else {
-						xel._clearReports =
-							"clearReports".equals(_idName) ?(byte)'T':(byte)'F';
+						xel._clearReports = "clearReports".equals(_idName) ? (byte) 'T' : (byte) 'F';
 					}
 				}
 			} else {
