@@ -1002,10 +1002,12 @@ public final class XCodeProcessor {
 		XDValue item; //actual instruction
 		for (;;)
 			try {
-			if (_debug && (_debugger.hasStopAddr(pc) || step!=XDDebug.NOSTEP)) {
-				step = _debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
-				if (step == XDDebug.KILL) {
-					throw new SError(XDEF.XDEF906); //X-definition canceled
+			if (_debug) {
+				if (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP) {
+					step= _debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
+					if (step == XDDebug.KILL) {
+						throw new SError(XDEF.XDEF906); //X-definition canceled
+					}
 				}
 			}
 			int code;
