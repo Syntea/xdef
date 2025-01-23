@@ -772,7 +772,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XSParseHexBinary.class, "hexBinary", "?xs:hexBinary");
 		parser(im, org.xdef.impl.parsers.XDParseHex.class, "hex");
 ////////////////////////////////////////////////////////////////////////////////
-// X-Script parsers
+// Xscript parsers
 ////////////////////////////////////////////////////////////////////////////////
 		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
 			keyParam("pattern", XD_ANY, true,  -1, false),
@@ -1628,7 +1628,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 */
 	static short getClassTypeID(final String className, final ClassLoader classLoader) {
 		int ndx = TYPEIDS.indexOf(';' + className + ';');
-		if (ndx > 0) { //names of X-script types
+		if (ndx > 0) { //names of Xscript types
 			return (short) TYPEIDS.charAt(ndx - 1);
 		}
 		ndx = EXT_TYPEIDS.indexOf(';' + className + ';');

@@ -10,7 +10,7 @@ import org.xdef.impl.ext.XExtUtils;
 import org.w3c.dom.Element;
 import org.xdef.XDContainer;
 
-/** Parser of X-Script "QNameURIList" type.
+/** Parser of Xscript "QNameURIList" type.
  * @author Vaclav Trojan
  */
 public class XDParseQNameURIList extends XDParseNCNameList {

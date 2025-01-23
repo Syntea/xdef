@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Set;
 import org.w3c.dom.Document;
 
-/** Describes interface for getting and writing generated X-definitions.
+/** Describes interface for getting and writing generated Xdefinitions.
  * @author Ilia Alexandrov
  */
 public interface Convertor {
@@ -19,7 +19,7 @@ public interface Convertor {
 	/** Creates collection and prints it to standart output. */
 	void printCollection();
 
-	/** Creates directory with given name containing X-definition files.
+	/** Creates directory with given name containing Xdefinition files.
 	 * @param directoryName name of directory.
 	 * @throws IOException exception during creating file.
 	 * @throws IllegalStateException if current state does not support this method.
@@ -32,8 +32,8 @@ public interface Convertor {
 	 */
 	Document getCollectionDocument() throws IllegalStateException;
 
-	/** Returns set of X-definitions Document objects.
-	 * @return set of X-definitions Document objects.
+	/** Returns set of Xdefinitions Document objects.
+	 * @return set of Xdefinitions Document objects.
 	 * @throws IllegalStateException if current state does not support this method.
 	 */
 	Set getXdefDocuments() throws IllegalStateException;

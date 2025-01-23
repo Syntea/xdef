@@ -6,7 +6,7 @@ import org.xdef.impl.code.DefJNull;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "jnull" type.
+/** Parser of Xscript "jnull" type.
  * @author Vaclav Trojan
  */
 public class XDParseJNull  extends XSAbstractParser {

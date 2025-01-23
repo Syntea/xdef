@@ -18,33 +18,33 @@ import java.util.Set;
 import org.w3c.dom.*;
 import org.xdef.XDConstants;
 
-/** Represents X-definition document and provides methods for manipulating with
- * X-definition document. Contains table with X-definition elements and table
- * with X-definition names mapped to schema URLs.
+/** Represents Xdefinition document and provides methods for manipulating with
+ * Xdefinition document. Contains table with Xdefinition elements and table
+ * with Xdefinition names mapped to schema URLs.
  * @author Ilia Alexandrov
  */
 public class XdefDocument implements Convertor {
 
-	/** Prefix of X-definition nodes. */
+	/** Prefix of Xdefinition nodes. */
 	private final String _xdefPrefix;
-	/** Every X-definition as file. */
+	/** Every Xdefinition as file. */
 	private final boolean _separately;
-	/** Name space URI of X-definition nodes. */
+	/** Name space URI of Xdefinition nodes. */
 	private final String _xdefNamespaceURI;
-	/** Table of all X-definition elements (URL, Element). */
+	/** Table of all Xdefinition elements (URL, Element). */
 	private final Map<URL, Element> _xdefElements = new HashMap<URL, Element>();
-	/** Table of all X-definition elements names (URL, String). */
+	/** Table of all Xdefinition elements names (URL, String). */
 	private final Map<URL, String> _xdefNames = new HashMap<URL, String>();
 
-	/** Creates instance of X-definition document representation with given
-	 * X-definition nodes prefix, X-definition nodes namespaceURI according
+	/** Creates instance of Xdefinition document representation with given
+	 * Xdefinition nodes prefix, Xdefinition nodes namespaceURI according
 	 * to schema elements table.
 	 * @param schemaElements all schema elements.
-	 * @param xdefPrefix prefix for X-definition nodes.
-	 * @param xdefNamespaceURI namespace URI for X-definition nodes.
-	 * @param separately every X-definition as file.
+	 * @param xdefPrefix prefix for Xdefinition nodes.
+	 * @param xdefNamespaceURI namespace URI for Xdefinition nodes.
+	 * @param separately every Xdefinition as file.
 	 * @throws RuntimeException cant add def element to document
-	 * or cant add X-definition namespace declaration.
+	 * or cant add Xdefinition namespace declaration.
 	 */
 	public XdefDocument(Map<URL, Element> schemaElements, String xdefPrefix,
 		String xdefNamespaceURI, boolean separately) throws RuntimeException {
@@ -54,13 +54,13 @@ public class XdefDocument implements Convertor {
 		init(schemaElements, _separately);
 	}
 
-	/** Initialize X-definition elements and names tables. Creates X-definition
-	 * def element and adds name. X-definition namespace declaration
+	/** Initialize Xdefinition elements and names tables. Creates Xdefinition
+	 * def element and adds name. Xdefinition namespace declaration
 	 * is also added.
 	 * @param schemaElements all schema elements.
-	 * @param separately every X-definition as file.
+	 * @param separately every Xdefinition as file.
 	 * @throws RuntimeException cant add def element to document or can't add
-	 * X-definiton namespace declaration or can't add target namespace declaration.
+	 * Xdefiniton namespace declaration or can't add target namespace declaration.
 	 */
 	private void init(Map<URL, Element> schemaElements, boolean separately)
 		throws RuntimeException {
@@ -96,10 +96,10 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Adds target namespace to given X-definition def element
+	/** Adds target namespace to given Xdefinition def element
 	 * according to given XML schema schema element settings.
 	 * @param schemaElement XML schema schema element.
-	 * @param xdefElement X-definition def element.
+	 * @param xdefElement Xdefinition def element.
 	 */
 	private void addTargetNamespaceDeclaration(Element schemaElement,
 			Element xdefElement) throws IllegalArgumentException {
@@ -114,7 +114,7 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Adds X-definition namespace declaration to given element with set
+	/** Adds Xdefinition namespace declaration to given element with set
 	 * prefix and set namespace URI.
 	 * @param element element to add namespace declaration.
 	 * @throws RuntimeException cant add namespace declaration.
@@ -124,13 +124,13 @@ public class XdefDocument implements Convertor {
 		//cant add xdefiniton namespace declaration
 		if (!DOMUtils.addNamespaceDeclaration(element,
 			_xdefPrefix, _xdefNamespaceURI)) {
-			throw new RuntimeException("Cannot add X-definition namespace "
+			throw new RuntimeException("Cannot add Xdefinition namespace "
 				+ "declaration to the given element node");
 		}
 	}
 
-	/** Creates file or files from X-definition elements with given location.
-	 * @param location file name of X-definition or directory name.
+	/** Creates file or files from Xdefinition elements with given location.
+	 * @param location file name of Xdefinition or directory name.
 	 * @throws IOException if file cannot be created.
 	 */
 	public void createFiles(String location) throws IOException {
@@ -164,17 +164,17 @@ public class XdefDocument implements Convertor {
 	/** Recursive method that gets ancestor def element of given
 	 * node or throws exception.
 	 * @param node context node.
-	 * @return X-definition def element.
+	 * @return Xdefinition def element.
 	 * @throws IllegalArgumentException node is not def descendant.
 	 */
 	public Element getXdefElement(Node node) throws IllegalArgumentException {
 		return DOMUtils.getElement(node, _xdefNamespaceURI, XdNames.DEF);
 	}
 
-	/** Generates unique X-definition name from given URL. Compares names against
-	 * X-definition names table as attribute.
+	/** Generates unique Xdefinition name from given URL. Compares names against
+	 * Xdefinition names table as attribute.
 	 * @param schemaURL url of schema.
-	 * @return unique X-definition name.
+	 * @return unique Xdefinition name.
 	 */
 	public String getNameFromURL(URL schemaURL) {
 		String name = schemaURL.toExternalForm().replace('\\', '/');
@@ -191,22 +191,22 @@ public class XdefDocument implements Convertor {
 		return name;
 	}
 
-	/** Gets X-definition name from X-definition names table according to
+	/** Gets Xdefinition name from Xdefinition names table according to
 	 * given URL as key (identification).
 	 * @param url URL of schema.
-	 * @return X-definition name created from schema at given URL.
+	 * @return Xdefinition name created from schema at given URL.
 	 */
 	public String getXdefName(URL url) {return _xdefNames.get(url);}
 
-	/** Gets X-definition element from X-definition elements table according
+	/** Gets Xdefinition element from Xdefinition elements table according
 	 * to given URL as key (identification).
 	 * @param url URL of schema.
-	 * @return X-definition element that is created from schema at given URL.
+	 * @return Xdefinition element that is created from schema at given URL.
 	 */
 	public Element getXdefElement(URL url) {return _xdefElements.get(url);}
 
-	/** Gets X-definition elements table.
-	 * @return X-definition elements table.
+	/** Gets Xdefinition elements table.
+	 * @return Xdefinition elements table.
 	 */
 	public Map<URL, Element> getXdefElements() {return _xdefElements;}
 
@@ -274,7 +274,7 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Creates collection element with X-definition namespace
+	/** Creates collection element with Xdefinition namespace
 	 * declaration and adds it to given document node.
 	 * @param doc owner document node.
 	 * @return created and added collection element.
@@ -287,12 +287,12 @@ public class XdefDocument implements Convertor {
 		return collection;
 	}
 
-	/** Adds element with X-definition namespace URI and local name to given
+	/** Adds element with Xdefinition namespace URI and local name to given
 	 * parent node and returns added element. Prefix will be resolved according
 	 * given namespace.
 	 * @param parent parent node.
-	 * @param localName X-definition namespace element local name.
-	 * @return created X-definition element.
+	 * @param localName Xdefinition namespace element local name.
+	 * @return created Xdefinition element.
 	 * @throws RuntimeException cant get prefix.
 	 */
 	public Element addXdefElement(Element parent, String localName)
@@ -350,13 +350,13 @@ public class XdefDocument implements Convertor {
 		return attr;
 	}
 
-	/** Adds attribute node with X-definition namespace URI, given local name
+	/** Adds attribute node with Xdefinition namespace URI, given local name
 	 * and given value to given parent element node. If attribute with such
 	 * namespace name exists it will throw exception.
 	 * @param parent parent element node.
-	 * @param localName X-definition attribute local name.
+	 * @param localName Xdefinition attribute local name.
 	 * @param value attribute value.
-	 * @return created X-definition attribute node.
+	 * @return created Xdefinition attribute node.
 	 * @throws RuntimeException attribute already exists.
 	 */
 	public Attr addXdefAttr(Element parent, String localName, String value)
@@ -364,12 +364,12 @@ public class XdefDocument implements Convertor {
 		return addAttr(parent, _xdefNamespaceURI, localName, value);
 	}
 
-	/** Adds attribute node with X-definition namespace URI and given local name
+	/** Adds attribute node with Xdefinition namespace URI and given local name
 	 * to given parent element node. If attribute with such namespace name
 	 * exists, will throw exception.
 	 * @param parent parent element node.
-	 * @param localName X-definition namespace attribute local name.
-	 * @return created X-definition attribute node.
+	 * @param localName Xdefinition namespace attribute local name.
+	 * @return created Xdefinition attribute node.
 	 * @throws RuntimeException attribute already exists.
 	 */
 	public Attr addXdefAttr(Element parent, String localName)
@@ -422,7 +422,7 @@ public class XdefDocument implements Convertor {
 	/** Adds reference expression to script attribute of given element node.
 	 * If element node does not contain script attribute it will create one.
 	 * @param element element to add script expression.
-	 * @param xdefName name of X-definiton that contains referred model.
+	 * @param xdefName name of Xdefiniton that contains referred model.
 	 * @param namespaceURI namespace URI of referred model.
 	 * @param modelName local name of referred model.
 	 */
@@ -433,7 +433,7 @@ public class XdefDocument implements Convertor {
 		addXdefScriptExpression(element, refPref);
 	}
 
-	/** Adds X-definition script expression to given element. If element does
+	/** Adds Xdefinition script expression to given element. If element does
 	 * not have script attribute it will make one. If element does have
 	 * script attribute it will add expression to the end of script.
 	 * @param element element to add script attribute with expression.
@@ -456,7 +456,7 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Adds type declaration with given name and given declaration to given
-	 * X-definition def element.
+	 * Xdefinition def element.
 	 * @param defElement def element.
 	 * @param name name of type.
 	 * @param declaration declaration string.
@@ -510,10 +510,10 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Generates reference expression to given X-definition by name, given
+	/** Generates reference expression to given Xdefinition by name, given
 	 * namespace URI and local name of model in given node context.
 	 * @param node context node.
-	 * @param xdefName name of X-definiiton or null.
+	 * @param xdefName name of Xdefiniiton or null.
 	 * @param namespaceURI namespace URI of model or null.
 	 * @param modelName name of model.
 	 * @return reference script expression.
@@ -540,7 +540,7 @@ public class XdefDocument implements Convertor {
 	/** Creates ref string according to given parameters.
 	 * @param schemaURL URL of schema containing reference.
 	 * @param declaration declaration of element.
-	 * @param xdefContextElement context of X-definition.
+	 * @param xdefContextElement context of Xdefinition.
 	 * @return ref string.
 	 */
 	public String getRefString(URL schemaURL,
@@ -748,20 +748,20 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Sets element to be as any type in schema.
-	 * @param element X-definition element.
+	 * @param element Xdefinition element.
 	 */
 	public void setAnyType(Element element) {
 		addXdefScriptExpression(element,
 			"options moreAttributes, moreElements, moreText");
 	}
 
-	/** Adds declaration of included X-definition with given name to given
-	 * X-definition def element.
-	 * @param xdefElement X-definition def element.
-	 * @param schemaURL URL of schema that is X-definition element created from.
+	/** Adds declaration of included Xdefinition with given name to given
+	 * Xdefinition def element.
+	 * @param xdefElement Xdefinition def element.
+	 * @param schemaURL URL of schema that is Xdefinition element created from.
 	 */
 	public void addIncludeXdef(Element xdefElement, URL schemaURL) {
-		//included X-definition file name
+		//included Xdefinition file name
 		String xdefFileName = _xdefNames.get(schemaURL) + ".xdef";
 		//include attribute
 		Attr include;
@@ -776,7 +776,7 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Adds root element declaration to given def element.
-	 * @param xdefElement X-definition def element.
+	 * @param xdefElement Xdefinition def element.
 	 * @param namespaceURI namespace URI of root element.
 	 * @param localName local name of root element.
 	 */

@@ -322,8 +322,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Set source buffer with code to be compiled.
 	 * @param source buffer wit source code.
-	 * @param actDefName name of actually processed X-definition.
-	 * @param xdVersion version of X-definition.
+	 * @param actDefName name of actually processed Xdefinition.
+	 * @param xdVersion version of Xdefinition.
 	 * @param nsPrefixes table with prefixes and namespaces.
 	 */
 	final void setSource(final SBuffer source,
@@ -3522,7 +3522,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Compile declaration part - methods, types, variables and init sections.
-	 * @param local true if it is a declaration with the local scope within a X-definition.
+	 * @param local true if it is a declaration with the local scope within a Xdefinition.
 	 */
 	final void compileDeclaration(final boolean local) {
 		nextSymbol();

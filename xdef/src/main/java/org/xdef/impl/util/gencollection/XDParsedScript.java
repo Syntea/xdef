@@ -10,7 +10,7 @@ import org.w3c.dom.Node;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.StringParser;
 
-/** Parse script of X-definition.
+/** Parse script of Xdefinition.
  * @author Trojan
  */
 public class XDParsedScript {
@@ -548,7 +548,7 @@ public class XDParsedScript {
 
 	/** Create XdParsedScript object from the script.
 	 * @param s string with script.
-	 * @param defName name of X-definition.
+	 * @param defName name of Xdefinition.
 	 * @param isVal if true then script describes text value.
 	 * @return XdParsedScript object created from the script.
 	 */

@@ -9,7 +9,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "empty" value type.
+/** Parser of Xscript "empty" value type.
  * @author Vaclav Trojan
  */
 public class XDParseEmpty extends XSAbstractParser {

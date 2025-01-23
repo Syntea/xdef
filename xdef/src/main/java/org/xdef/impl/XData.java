@@ -184,9 +184,9 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 	public final String getRefTypeName() {return _refTypeName;}
 
 	@Override
-	/** Check if the value type is declared as local within the X-definition.
+	/** Check if the value type is declared as local within the Xdefinition.
 	 * @return true if the value type is declared as local within
-	 * the X-definition.
+	 * the Xdefinition.
 	 */
 	public final boolean isLocalType() {return getXMDefinition().isLocalName(_refTypeName);}
 

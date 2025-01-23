@@ -6,7 +6,7 @@ import org.xdef.xon.XonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-Script "char" type.
+/** Parser of Xscript "char" type.
  * @author Vaclav Trojan
  */
 public class XDParseChar extends XSAbstractParseToken {

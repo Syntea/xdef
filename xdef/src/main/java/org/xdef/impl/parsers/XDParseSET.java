@@ -6,7 +6,7 @@ import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-script "SET" type (Unique key).
+/** Parser of Xscript "SET" type (Unique key).
  * @author Vaclav Trojan
  */
 public class XDParseSET extends XSParseQName {
@@ -17,7 +17,7 @@ public class XDParseSET extends XSParseQName {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script of attribute or text node
+			//The validation method &{0} can be called only from the Xscript of attribute or text node
 			result.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}

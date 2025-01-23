@@ -7,7 +7,7 @@ import org.xdef.impl.code.DefTelephone;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-Script "telephone" type.
+/** Parser of Xscript "telephone" type.
  * @author Vaclav Trojan
  */
 public class XDParseTelephone extends XDParserAbstract {

@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.xdef.sys.SDuration;
 
-/** Duration in X-script.
+/** Duration in Xscript.
  * @author Vaclav Trojan
  */
 public interface XDDuration extends XDValue {

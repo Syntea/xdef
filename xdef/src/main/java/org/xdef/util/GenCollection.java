@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Element;
 
-/** Generates a xml document with collection of all given X-definitions.
+/** Generates a xml document with collection of all given Xdefinitions.
  * @author  Vaclav Trojan
  */
 public class GenCollection {
@@ -22,7 +22,7 @@ public class GenCollection {
 	 * @param removeActions if true all irrelevant actions are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
 	 * redefining type or occurrence (important for XML schema generation).
-	 * @return element with collection of X-definitions.
+	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
 	public static Element genCollection(final String[] sources,
@@ -38,7 +38,7 @@ public class GenCollection {
 	 * @param removeActions if true all irrelevant actions are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
 	 * redefining type or occurrence (important for XML schema generation).
-	 * @return element with collection of X-definitions.
+	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
 	public static Element genCollection(final File[] files,
@@ -54,7 +54,7 @@ public class GenCollection {
 	 * @param removeActions if true all irrelevant actions are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
 	 * redefining type or occurrence (important for XML schema generation).
-	 * @return element with collection of X-definitions.
+	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
 	public static Element genCollection(URL[] urls,
@@ -66,7 +66,7 @@ public class GenCollection {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Generate collection from X-definitions and/or collections.\n"+
+"Generate collection from Xdefinitions and/or collections.\n"+
 "Command line arguments:\n"+
 " [-m] [-s] [-g] [-e encoding] -o output file -i input_file [input_file1...]\n"+
 " -e encoding ...... name of charset\n" +
@@ -77,7 +77,7 @@ public class GenCollection {
 " -o output file\n" +
 " -i file [file1 ... [filen] ] list of intput files (wildcards supported)";
 
-	/** Call generation of a collection of X-definitions from a command line.
+	/** Call generation of a collection of Xdefinitions from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
 	 * <li><i>-o file .......... </i>output file

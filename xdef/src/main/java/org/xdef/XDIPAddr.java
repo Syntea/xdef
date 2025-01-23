@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Internet IP address in X-script. The internally used object is java.netInetAddress.
+/** Internet IP address in Xscript. The internally used object is java.netInetAddress.
  * @author Vaclav Trojan
  */
 public interface XDIPAddr extends XDValue {

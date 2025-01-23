@@ -4,7 +4,7 @@ import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
 
-/** XD output stream/report writer in X-script.
+/** XD output stream/report writer in Xscript.
  * @author Vaclav Trojan
  */
 public interface XDOutput extends XDValue {

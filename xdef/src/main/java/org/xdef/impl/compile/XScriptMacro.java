@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** Provides model of macro definition used in X-definitions script.
+/** Provides model of macro definition used in Xdefinitions script.
  * @author Vaclav Trojan
  */
 public final class XScriptMacro {
@@ -22,7 +22,7 @@ public final class XScriptMacro {
 
 	/** Create the new object ScriptMacro.
 	 * @param name name of macro.
-	 * @param defName name of X-definition.
+	 * @param defName name of Xdefinition.
 	 * @param params table with macro parameters.
 	 * @param body source of macro body.
 	 * @param reporter reporter where errors are recorded (if this parameter

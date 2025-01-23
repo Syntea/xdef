@@ -132,7 +132,7 @@ public final class GenXComponent {
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param xdpool XDPool object with X-components.
+	 * @param xdpool XDPool object with Xcomponents.
 	 * @param fdir path to directory where write the source code. The file name* will be constructed from
 	 * %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used the system character set name).
@@ -150,7 +150,7 @@ public final class GenXComponent {
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param xdpool XDPool object with X-components.
+	 * @param xdpool XDPool object with Xcomponents.
 	 * @param fdir directory where write the source code. The file names will be constructed from %class
 	 * statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used the system character set name).
@@ -185,10 +185,10 @@ public final class GenXComponent {
 				int ndx = s.indexOf(" ");
 				classNames.add(ndx > 0 ? s.substring(0, ndx): s);
 			}
-			// create array of all X-components so that first are the items
-			// which are extensions of an other X-component and then follows
-			// those not extendsd. This ensures that X-components which extends
-			// other X-component are compiled first.
+			// create array of all Xcomponents so that first are the items
+			// which are extensions of an other Xcomponent and then follows
+			// those not extendsd. This ensures that Xcomponents which extends
+			// other Xcomponent are compiled first.
 			List<Entry<String, String>> xcarray = new ArrayList<>();
 			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 				int ndx;
@@ -321,7 +321,7 @@ public final class GenXComponent {
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param xdpool XDPool object with declared X-components.
+	 * @param xdpool XDPool object with declared Xcomponents.
 	 * @param dir path to directory where write the source code. The file names will be constructed from
 	 * %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used the system character set name).

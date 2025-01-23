@@ -220,7 +220,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 	public static final char NAMED_ID_SYM = (char) (BASE_ID + XD_NAMEDVALUE);
 	public static final char XMLWRITER_ID_SYM = (char) (BASE_ID + XD_XMLWRITER);
 	public static final char OBJECT_ID_SYM = (char) (BASE_ID + XD_OBJECT);
-	/** Symbols which separates sections in the X-script. */
+	/** Symbols which separates sections in the Xscript. */
 	public static final String SCRIPT_SEPARATORS = new String(new char[] {
 		OPTIONS_SYM,
 		REQUIRED_SYM,
@@ -241,11 +241,11 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 		INIT_SYM,
 		FINALLY_SYM,
 		FORGET_SYM});
-	/** Name of actual X-definition. */
+	/** Name of actual Xdefinition. */
 	public String _actDefName;
-	/** Array of X-definitions names from where to accept local declarations. */
+	/** Array of Xdefinitions names from where to accept local declarations. */
 	public String[] _importLocals;
-	/** Version of X-definition (see XD2_0, XD3_1, XD3_2, XD4_0). */
+	/** Version of Xdefinition (see XD2_0, XD3_1, XD3_2, XD4_0). */
 	public byte _xdVersion;
 	/** Last parsed identifier */
 	public String _idName;
@@ -432,8 +432,8 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 	/** Set source buffer to parser and expand macros.
 	 * @param source buffer with source code.
-	 * @param actDefName name of actually processed X-definition.
-	 * @param importLocal array of X-definition names to accept locals.
+	 * @param actDefName name of actually processed Xdefinition.
+	 * @param importLocal array of Xdefinition names to accept locals.
 	 * @param xdVersion version ID of XDefinition.
 	 * @param xpath XPath to source.
 	 */

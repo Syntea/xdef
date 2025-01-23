@@ -92,9 +92,9 @@ public final class XonYaml {
 		}
 	}
 
-	/** Convert YAML source format of data X-definition model to JSON format.
-	 * @param yaml string with YAML format of data X-definition model.
-	 * @return JSON format of data X-definition model.
+	/** Convert YAML source format of data Xdefinition model to JSON format.
+	 * @param yaml string with YAML format of data Xdefinition model.
+	 * @return JSON format of data Xdefinition model.
 	 */
 	public static final String yamlToJsonXScript(final String yaml) {
 		Object x = XonUtils.parseYAML(yaml);

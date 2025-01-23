@@ -11,7 +11,7 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.XDContainer;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of X-Script "CDATA" type.
+/** Parser of Xscript "CDATA" type.
  * @author Vaclav Trojan
  */
 public class XDParseCDATA extends XDParserAbstract {

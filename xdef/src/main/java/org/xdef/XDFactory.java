@@ -18,10 +18,10 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXpathExpr;
 import org.xdef.xml.KXqueryExpr;
 
-/** Provides generation of {@link org.xdef.XDPool} from source X-definitions. You can modify properties of
+/** Provides generation of {@link org.xdef.XDPool} from sources of Xdefinition. You can modify properties of
  * compilation by parameters from properties (see {@link org.xdef.XDConstants}). In most of cases you can get
  * {@link org.xdef.XDPool} directly by using of static methods of {@link org.xdef.XDFactory} class. You can
- * also create a XDBuilder when you have to compile XDPool from different sources of X-definitions.
+ * also create a XDBuilder when you have to compile XDPool from different sources of Xdefinition.
  * <p>The external methods must be static. The list of external classes with the external methods can be
  * passed as a parameter containing array of classes. If relevant method is not found in the list of classes
  * then the generator of XDPool is searching the the method in the system class path.
@@ -154,22 +154,21 @@ public final class XDFactory extends XDTools {
 			b.setSource((InputStream) param, null);
 		} else if ((param instanceof Object[])) {
 			Object[] x = (Object[]) param;
-			if (x.length == 2 && (x[0] instanceof InputStream)
-				&& x[1] instanceof String) {
+			if (x.length == 2 && (x[0] instanceof InputStream) && x[1] instanceof String) {
 				b.setSource((InputStream) x[0], (String) x[1]);
 			} else {
-				//Incorrect parameter of compiler of X-definitions&{0}{: }
+				//Incorrect parameter of compiler of Xdefinitions&{0}{: }
 				throw new SRuntimeException(XDEF.XDEF904, param.getClass());
 			}
 		} else {
-			//Incorrect parameter of compiler of X-definitions&{0}{: }
+			//Incorrect parameter of compiler of Xdefinitions&{0}{: }
 			throw new SRuntimeException(XDEF.XDEF904, param.getClass());
 		}
 	}
 
 	/** Compile XDPool from sources.
 	 * @param props Properties or null.
-	 * @param params list of strings with X-definition file names.
+	 * @param params list of strings with Xdefinition file names.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -182,7 +181,7 @@ public final class XDFactory extends XDTools {
 
 	/** Compile XDPool from URLs.
 	 * @param props Properties or null.
-	 * @param pars list of URLs with X-definition sources.
+	 * @param pars list of URLs with Xdefinition sources.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -194,7 +193,7 @@ public final class XDFactory extends XDTools {
 
 	/** Compile XDPool from files.
 	 * @param props Properties or null.
-	 * @param pars list of files with X-definition sources.
+	 * @param pars list of files with Xdefinition sources.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -206,7 +205,7 @@ public final class XDFactory extends XDTools {
 
 	/** Compile XDPool from InputStreams.
 	 * @param props Properties or null.
-	 * @param pars list of files with X-definition sources.
+	 * @param pars list of files with Xdefinition sources.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -219,7 +218,7 @@ public final class XDFactory extends XDTools {
 
 	/** Compile XDPool from sources and assign the sourceId to each source.
 	 * @param props Properties or null.
-	 * @param sources array with source data with X-definitions source data. (The type of items can only be
+	 * @param sources array with source data with Xdefinition sources. (The type of items can only be
 	 * either the InputStreams or the String containing an XML document).
 	 * @param srcIds array with sourceIds (corresponding to the items in the argument sources).
 	 * @return generated XDPool.
@@ -250,27 +249,28 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDPool compileXD(final ReportWriter r, final Properties props, final Object... pars)	throws SRuntimeException {
+	public static final XDPool compileXD(final ReportWriter r, final Properties props, final Object... pars)
+		throws SRuntimeException {
 		if (pars == null || pars.length == 0) {
-			throw new SRuntimeException(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
+			throw new SRuntimeException(XDEF.XDEF903); //Xdefinition source is missing or incorrect&{0}{: }
 		}
 		XDBuilder builder = getXDBuilder(r, props);
 		setParam(builder, pars);
 		return builder.compileXD();
 	}
 
-	/** Parse XML with X-definition declared in source input stream.
+	/** Parse XML with Xdefinition declared in source input stream.
 	 * @param source where to read XML.
 	 * @param r used for error messages or null.
 	 * @return created XDDocument object.
-	 * @throws SRuntimeException if an error occurs.
+	 * @throws RuntimeException if an error occurs.
 	 */
 	public static final XDDocument xparse(final InputStream source, final ReportWriter r)
 		throws SRuntimeException {
 		return XBuilder.xparse(source, r);
 	}
 
-	/** Parse XML with X-definition declared in source.
+	/** Parse XML with Xdefinition declared in source.
 	 * @param source URL, pathname direct to XML or direct XML.
 	 * @param r used for error messages or null.
 	 * @return created XDDocument object.
@@ -312,7 +312,7 @@ public final class XDFactory extends XDTools {
 	}
 
 	/** Read the XDPool from the input stream.
-	 * @param in input stream with X-definition.
+	 * @param in input stream with Xdefinition.
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
@@ -328,7 +328,7 @@ public final class XDFactory extends XDTools {
 	}
 
 	/** Read the XDPool from the input stream.
-	 * @param file file with X-definition.
+	 * @param file file with Xdefinition.
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
@@ -337,7 +337,7 @@ public final class XDFactory extends XDTools {
 	}
 
 	/** Read the XDPool from the input stream.
-	 * @param fname pathname of file or string with URL with X-definition (it may be also "classpath://.....").
+	 * @param fname pathname of file or string with URL with Xdefinition (it may be also "classpath://.....").
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
@@ -350,12 +350,11 @@ public final class XDFactory extends XDTools {
 	}
 
 	/** Read the XDPool from the input stream.
-	 * @param url URL where is data with XDPool.
+	 * @param u URL where is data with XDPool.
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final XDPool readXDPool(final URL url) throws IOException {
-		return readXDPool(url.openStream());
+	public static final XDPool readXDPool(final URL u) throws IOException {return readXDPool(u.openStream());
 	}
 
 	/** Check if XQuery implementation is available.

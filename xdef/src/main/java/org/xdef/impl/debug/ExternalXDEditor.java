@@ -17,12 +17,12 @@ import org.xdef.sys.FileReportReader;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.SRuntimeException;
 
-/** Provides tools for connection of an external editor of X-definitions.
+/** Provides tools for connection of an external editor of Xdefinitions.
  * @author Vaclav Trojan
  */
 public abstract class ExternalXDEditor implements XEditor {
 
-	/** Execute the external editor of X-definitions (must be implemented). The external editor MUST return
+	/** Execute the external editor of Xdefinitions (must be implemented). The external editor MUST return
 	 * the file with the result information.
 	 * @param defPool filename of the file with XDPool.
 	 * @param reports filename of the file with reports written by compiler.
@@ -151,7 +151,7 @@ public abstract class ExternalXDEditor implements XEditor {
 		return ar;
 	}
 
-	/** Create file with results of editor. This file is used by the X-definition engine when the
+	/** Create file with results of editor. This file is used by the Xdefinition engine when the
 	 * external editor finished.
 	 * @param fileName the filename of the file to be created.
 	 * @param editingFinished true if editing was finished, otherwise recompile XDPool with the files

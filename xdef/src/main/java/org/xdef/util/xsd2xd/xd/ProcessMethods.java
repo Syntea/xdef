@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /** Provides static methods for processing schema items and adding declaration
- * to X-definition items.
+ * to Xdefinition items.
  * @author Ilia Alexandrov
  */
 public class ProcessMethods {
@@ -25,11 +25,11 @@ public class ProcessMethods {
 	private ProcessMethods() {}
 
 	/** Processes schema object group item and adds declaration to the given
-	 * parent X-definition item. Returns added X-definition element.
+	 * parent Xdefinition item. Returns added Xdefinition element.
 	 * @param objectGroupElement schema object group element.
-	 * @param xdefContextElement parent X-definition element.
-	 * @param xdef implementation of X-definition document.
-	 * @return added X-definition element.
+	 * @param xdefContextElement parent Xdefinition element.
+	 * @param xdef implementation of Xdefinition document.
+	 * @return added Xdefinition element.
 	 */
 	public static Element processObjectGroup(Element objectGroupElement,
 		Element xdefContextElement,
@@ -71,10 +71,10 @@ public class ProcessMethods {
 		return element;
 	}
 
-	/** Returns X-definition object group name according to given XML schema
+	/** Returns Xdefinition object group name according to given XML schema
 	 * object group.
 	 * @param objectGroupElement XML schema object group.
-	 * @return X-definition object group name.
+	 * @return Xdefinition object group name.
 	 * @throws IllegalArgumentException not a schema object group item.
 	 */
 	private static String getObjectGroupType(Element objectGroupElement)
@@ -99,7 +99,7 @@ public class ProcessMethods {
 	 * to given parent XDefnition element.
 	 * @param anyElement schema any element to process.
 	 * @param xdefContextElement XDefnition context element.
-	 * @param xdef X-definition document representation.
+	 * @param xdef Xdefinition document representation.
 	 * @return added element.
 	 */
 	public static Element processAny(Element anyElement,
@@ -113,11 +113,11 @@ public class ProcessMethods {
 	}
 
 	/** Processes schema anyAttribute element and adds declaration
-	 * to given parent X-definition element.
+	 * to given parent Xdefinition element.
 	 * @param anyAttributeElement schema anyAttribute element to
 	 * process.
 	 * @param xdefContextElement XDefnition context element.
-	 * @param xdef the X-definition.
+	 * @param xdef the Xdefinition.
 	 */
 	public static void processAnyAttribute(Element anyAttributeElement,
 		Element xdefContextElement, XdefDocument xdef) {
@@ -127,8 +127,8 @@ public class ProcessMethods {
 	/** Processes given complexType element and adds declaration
 	 * to given XDefnition context element. Returns created element.
 	 * @param complexTypeElement complexType element to process.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef representation of X-definition document.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef representation of Xdefinition document.
 	 * @return created element.
 	 */
 	public static Element processComplexType(Element complexTypeElement,
@@ -140,10 +140,10 @@ public class ProcessMethods {
 	}
 
 	/** Processes given simpleType element and adds declaration
-	 * to the given X-definition document context element.
+	 * to the given Xdefinition document context element.
 	 * @param simpleTypeElement simpleType element.
-	 * @param xdefContextElement X-definition document context element.
-	 * @param xdef X-definition document representation.
+	 * @param xdefContextElement Xdefinition document context element.
+	 * @param xdef Xdefinition document representation.
 	 * @param schemaURLStack stack of processing schema URLs.
 	 * @param schemaElements table of all schema elements.
 	 * @param reporter reporter for reporting warnings and errors.
@@ -173,10 +173,10 @@ public class ProcessMethods {
 	}
 
 	/** Processes element declaration in schema and adds declaration to
-	 * X-definition context element.
+	 * Xdefinition context element.
 	 * @param elementElement schema element declaration element.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef X-definition document object.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef Xdefinition document object.
 	 * @param schemaURLStack stack of processing schema URLs.
 	 * @param schemaElements all schema elements.
 	 * @return created and added element.
@@ -330,10 +330,10 @@ public class ProcessMethods {
 	}
 
 	/** Processing attribute declaration and adds proper declaration to given
-	 * X-definition document representation.
+	 * Xdefinition document representation.
 	 * @param attributeElement attribute declaration.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef representation of X-definition document.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef representation of Xdefinition document.
 	 * @param refElementStack stack of referencing elements.
 	 * @param schemaURLStack stack of processing schema URLs.
 	 * @param schemaElements table of all schema elements.
@@ -352,11 +352,11 @@ public class ProcessMethods {
 		SReporter reporter,
 		Processor proc) {
 		XsdUtils.AttrProps attr = new XsdUtils.AttrProps();
-		//X-definition context element is def element
+		//Xdefinition context element is def element
 		if (xdef.isXdefElement(xdefContextElement)) {
 			if (Utils.isSchemaChild(attributeElement)) {
 				//AttrProps declaration with name "&{0}" in schema at URL "&{1}"
-				// cannot be declared in X-definition 2.0. Refference will be
+				// cannot be declared in Xdefinition 2.0. Refference will be
 				//replaced with attribute declaration.
 //				reporter.warning(XDUTIL101,
 //					attributeElement.getAttribute("name"),
@@ -433,7 +433,7 @@ public class ProcessMethods {
 				//ref element stack is empty - global declaration of attribute
 			} else {
 				//AttrProps declaration with name "&{0}" in schema at URL "&{1}"
-				// cannot be declared in X-definition 2.0. Refference will be
+				// cannot be declared in Xdefinition 2.0. Refference will be
 				//replaced with attribute declaration.
 				reporter.warning(XDCONV.XDCONV101,
 					attributeElement.getAttribute("name"),
@@ -551,10 +551,10 @@ public class ProcessMethods {
 	}
 
 	/** Processes attribute group and adds proper declaration to given
-	 * X-definition context node.
+	 * Xdefinition context node.
 	 * @param attributeGroupElement attribute group declaration element.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef representation of X-definition document.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef representation of Xdefinition document.
 	 * @param refElementStack stack of referencing elements.
 	 * @param schemaURLStack stack of processing URLs.
 	 * @param namespaceStack stack of namespaces during importing.
@@ -567,7 +567,7 @@ public class ProcessMethods {
 			Stack<Element> refElementStack, Stack<URL> schemaURLStack,
 			Stack<String> namespaceStack, Map<URL, Element> schemaElements,
 			SReporter reporter, Processor proc) {
-		//context of X-definition element is not a def element.
+		//context of Xdefinition element is not a def element.
 		if (!xdef.isXdefElement(xdefContextElement)) {
 			String ref = attributeGroupElement.getAttribute("ref");
 			//attribute group declaration has a reference to another attribute
@@ -603,7 +603,7 @@ public class ProcessMethods {
 			}
 		} else {
 			//AttrProps group declaration with name="&amp;{1}" in schema
-			//at "&amp;{2}" cannot be converted to X-definition 2.0! reference
+			//at "&amp;{2}" cannot be converted to Xdefinition 2.0! reference
 			//to this attribute group will replaced with attribute declarations
 			//in group.
 			reporter.warning(XDCONV.XDCONV103,
@@ -613,13 +613,13 @@ public class ProcessMethods {
 	}
 
 	/** Processes schema group element and adds declaration to given
-	 * X-definition context element.
+	 * Xdefinition context element.
 	 * @param groupElement group element.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef X-definition document object.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef Xdefinition document object.
 	 * @param schemaURL URL of processing schema.
 	 * @param schemaElements all schema elements.
-	 * @return created and added element or previous X-definition
+	 * @return created and added element or previous Xdefinition
 	 * context element.
 	 */
 	public static Element processGroup(Element groupElement,
@@ -651,16 +651,16 @@ public class ProcessMethods {
 			//returning created element
 			return element;
 		} else {
-			//return X-definition document context element to process children
+			//return Xdefinition document context element to process children
 			return xdefContextElement;
 		}
 	}
 
-	/** Processing schema extension element and adds declaration to X-definition
+	/** Processing schema extension element and adds declaration to Xdefinition
 	 * context element.
 	 * @param extensionElement schema extension element.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef X-definition document object.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef Xdefinition document object.
 	 * @param schemaURLStack stack of processing schema URLs.
 	 * @param schemaElements all schema elements.
 	 */
@@ -749,10 +749,10 @@ public class ProcessMethods {
 	}
 
 	/** Processes include import and redefine schema elements and adds
-	 * declaration to X-definition context element.
+	 * declaration to Xdefinition context element.
 	 * @param externalElement schema include, import or redefine element.
-	 * @param xdefContextElement X-definition context element
-	 * @param xdef X-definition document object.
+	 * @param xdefContextElement Xdefinition context element
+	 * @param xdef Xdefinition document object.
 	 * @param schemaURL URL of current schema.
 	 */
 	public static void processExternal(Element externalElement,
@@ -771,10 +771,10 @@ public class ProcessMethods {
 	}
 
 	/** Processes restriction element and if it contains restrictions on simple
-	 * type it adds declaration to X-definition context element.
+	 * type it adds declaration to Xdefinition context element.
 	 * @param restrictionElement restriction element.
-	 * @param xdefContextElement X-definition context element.
-	 * @param xdef implementation of X-definition document.
+	 * @param xdefContextElement Xdefinition context element.
+	 * @param xdef implementation of Xdefinition document.
 	 * @param schemaURL current schema URL.
 	 * @param schemaElements table of all schema elements.
 	 */

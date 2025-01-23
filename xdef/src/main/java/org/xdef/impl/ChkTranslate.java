@@ -237,7 +237,7 @@ final class ChkTranslate extends SReporter {
 
 	/** Compose the XML element from the source XML element. The name
 	 * of root element of result is given by parameter. For construction is used
-	 * the X-definition specified by ChkTranslate constructor.
+	 * the Xdefinition specified by ChkTranslate constructor.
 	 * @param sourceElem The element with source data.
 	 */
 	private void composeRoot(final Element sourceElem) {
@@ -252,8 +252,8 @@ final class ChkTranslate extends SReporter {
 			}
 		} catch (SError e) {
 			Report rep = e.getReport();
-			//X-definition canceled
-			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //X-definition canceled&{0}{
+			//Xdefinition canceled
+			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //Xdefinition canceled&{0}{
 				error(rep.getMsgID(), rep.getText(), rep.getModification());
 				_rootChkElement._rootChkDocument.endDocument();
 			} else {

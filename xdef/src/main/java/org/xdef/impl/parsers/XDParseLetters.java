@@ -4,7 +4,7 @@ import org.xdef.XDParseResult;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-Script "letters" type.
+/** Parser of Xscript "letters" type.
  * @author Vaclav Trojan
  */
 public class XDParseLetters extends XDParseAn {

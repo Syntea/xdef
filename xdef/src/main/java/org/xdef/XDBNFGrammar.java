@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.xdef.sys.BNFGrammar;
 
-/** BNF grammar in X-script.
+/** BNF grammar in Xscript.
  * @author Vaclav Trojan
  */
 public interface XDBNFGrammar extends XDValue {

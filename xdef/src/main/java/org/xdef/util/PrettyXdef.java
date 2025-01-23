@@ -18,7 +18,7 @@ import java.util.Map;
 import org.xdef.impl.xml.XInputStream;
 import org.xdef.impl.xml.XReader;
 
-/** Generate formatted source of the X-definitions. Also provides main method for calling the program
+/** Generate formatted source of the Xdefinitions. Also provides main method for calling the program
  * from command line. (see {@link org.xdef.util.PrettyXdef#main(String[])})
  * @author Vaclav Trojan
  */
@@ -201,7 +201,7 @@ public class PrettyXdef extends XReader {
 		return _result.toString();
 	}
 
-	/** Write pretty formatted file with source X-definition to given directory.
+	/** Write pretty formatted file with source Xdefinition to given directory.
 	 * @param source The input file or the string with XML data.
 	 * @param indentStep number of indent spaces.
 	 * @param out OutputStream where to write formatted XML.
@@ -221,7 +221,7 @@ public class PrettyXdef extends XReader {
 		return prettyWrite(in, indentStep, out, encoding);
 	}
 
-	/** Write pretty formatted file with source X-definition to given directory.
+	/** Write pretty formatted file with source Xdefinition to given directory.
 	 * @param in The input stream with XML data.
 	 * @param indentStep number of indent spaces.
 	 * @param out OutputStream where to write formatted XML.
@@ -246,7 +246,7 @@ public class PrettyXdef extends XReader {
 		return enc;
 	}
 
-	/** Write pretty formatted file with source X-definition to given directory.
+	/** Write pretty formatted file with source Xdefinition to given directory.
 	 * @param file The input file.
 	 * @param outDir directory where to put result files.
 	 * @param indentStep number of indent spaces.
@@ -276,7 +276,7 @@ public class PrettyXdef extends XReader {
 		return prettyWrite(in, indentStep, out, encoding);
 	}
 
-	/** Write pretty formatted files with source X-definitions.
+	/** Write pretty formatted files with source Xdefinitions.
 	 * @param files Array of files.
 	 * @param outDir directory where to put result files.
 	 * @param indentStep number of indent spaces.
@@ -292,7 +292,7 @@ public class PrettyXdef extends XReader {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Formating of source files with X-definitions.\n"+
+"Formating of source files with Xdefinitions.\n"+
 "Command line arguments:\n"+
 "    [-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file\n"+
 "Where:\n"+
@@ -305,7 +305,7 @@ public class PrettyXdef extends XReader {
 "            If n is equal to 0 no indentation is provided.\n"+
 "-e encoding Name of character set. If this parameter is not specified\n"+
 "            it will be used the original character set.\n"+
-"file        The file with source X-definition.";
+"file        The file with source Xdefinition.";
 
 	/** Calling the program from command line.
 	 * @param args The array of strings with arguments.
@@ -319,7 +319,7 @@ public class PrettyXdef extends XReader {
 	 * parameter is set to 2. If n is equal to 0 no indentation is provided.
 	 *  <li><i>-e encoding</i> - name of character set. If this parameter is not specified it will be used
 	 * the original character set.
-	 *  <li><i>file</i> - the file with source X-definition.
+	 *  <li><i>file</i> - the file with source Xdefinition.
 	 * </ul>
 	 * @throws IOException if an error occurs.
 	 */

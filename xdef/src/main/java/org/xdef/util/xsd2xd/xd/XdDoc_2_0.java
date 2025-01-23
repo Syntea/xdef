@@ -10,33 +10,33 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-/** Represents implementation of X-definition document version 2.0.
+/** Represents implementation of Xdefinition document version 2.0.
  * @author Ilia Alexandrov
  */
 public final class XdDoc_2_0 extends XdDoc {
 
-	/** X-definition model (XdModel) representation to model element mapping. */
+	/** Xdefinition model (XdModel) representation to model element mapping. */
 	private final Map<XdModel, Element> _xdModels =
 		new HashMap<XdModel, Element>();
-	/** X-definition (XdDef) representation to X-definition element mapping.*/
+	/** Xdefinition (XdDef) representation to Xdefinition element mapping.*/
 	private final Map<XdDef, Element> _xdDefs = new HashMap<XdDef, Element>();
 
-	/** Creates instance of X-definition version 2.0 document.
-	 * @param xdef X-definition document.
-	 * @param xdNS namespace of X-definition.
+	/** Creates instance of Xdefinition version 2.0 document.
+	 * @param xdef Xdefinition document.
+	 * @param xdNS namespace of Xdefinition.
 	 */
 	public XdDoc_2_0(Document xdef, String xdNS) {
 		if (xdef == null) {
 			throw new NullPointerException(
-				"Given X-definition document is null");
+				"Given Xdefinition document is null");
 		}
 		validate(xdef);
 		init(xdef);
 	}
 
-	/** Validates given X-definition document.
-	 * @param xdef X-definition document to validate.
-	 * @throws RuntimeException if given X-definition document is not valid or
+	/** Validates given Xdefinition document.
+	 * @param xdef Xdefinition document to validate.
+	 * @throws RuntimeException if given Xdefinition document is not valid or
 	 * an error occurred during validation.
 	 */
 	private void validate(Document xdef) {
@@ -44,14 +44,14 @@ public final class XdDoc_2_0 extends XdDoc {
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(xdef, true));
 		} catch (SRuntimeException ex) {
 			throw new RuntimeException(
-				"Error during validation of X-definition", ex);
+				"Error during validation of Xdefinition", ex);
 		}
 	}
 
-	/** Initiates given X-definition document.
-	 * @param xdef X-definition document to initiate.
+	/** Initiates given Xdefinition document.
+	 * @param xdef Xdefinition document to initiate.
 	 * @throws IllegalArgumentException if given document is not a valid
-	 * X-definition document.
+	 * Xdefinition document.
 	 */
 	private void init(Document xdef) {
 		Element root = xdef.getDocumentElement();
@@ -61,12 +61,12 @@ public final class XdDoc_2_0 extends XdDoc {
 			initDef(root);
 		} else {
 			throw new IllegalArgumentException(
-				"Given document is not a valid X-definition document");
+				"Given document is not a valid Xdefinition document");
 		}
 	}
 
-	/** Initiates given X-definition collection element.
-	 * @param collection X-definition collection element.
+	/** Initiates given Xdefinition collection element.
+	 * @param collection Xdefinition collection element.
 	 */
 	private void initCollection(Element collection) {
 		NodeList defs = Utils.getChildElementsNS(collection,
@@ -96,9 +96,9 @@ public final class XdDoc_2_0 extends XdDoc {
 		}
 	}
 
-	/** Initiates given X-definition def element.
-	 * @param def X-definition def element.
-	 * @throws RuntimeException if error occurs during creating X-definition
+	/** Initiates given Xdefinition def element.
+	 * @param def Xdefinition def element.
+	 * @throws RuntimeException if error occurs during creating Xdefinition
 	 * or model representation.
 	 */
 	private void initDef(Element def) {
@@ -108,7 +108,7 @@ public final class XdDoc_2_0 extends XdDoc {
 			_xdDefs.put(xdDef, def);
 		} catch (Exception ex) {
 			throw new RuntimeException(
-				"Error during creating X-definition def representation", ex);
+				"Error during creating Xdefinition def representation", ex);
 		}
 		NodeList models = Utils.getChildElements(def);
 		for (int i = 0; i < models.getLength(); i++) {
@@ -144,24 +144,24 @@ public final class XdDoc_2_0 extends XdDoc {
 		return XdUtils.getElemTypeUnion(elemType, refElemType);
 	}
 
-	/** X-definition model representation to element map getter.
-	 * @return X-definition model representation (XdModel) to element map.
+	/** Xdefinition model representation to element map getter.
+	 * @return Xdefinition model representation (XdModel) to element map.
 	 */
 	public Map<XdModel, Element> getXdModels() {return _xdModels;}
 
-	/** Returns instance of X-definition declaration representation if this
-	 * X-definition document contains declaration with given name or null.
-	 * @param xdDeclName name of X-definition declaration.
-	 * @return instance of X-definition declaration representation or null.
+	/** Returns instance of Xdefinition declaration representation if this
+	 * Xdefinition document contains declaration with given name or null.
+	 * @param xdDeclName name of Xdefinition declaration.
+	 * @return instance of Xdefinition declaration representation or null.
 	 */
 	public XdDecl getXdDecl(String xdDeclName) {
 		if (xdDeclName == null) {
 			throw new NullPointerException(
-				"Given X-definition declaration name is null");
+				"Given Xdefinition declaration name is null");
 		}
 		if (xdDeclName.length() == 0) {
 			throw new IllegalArgumentException(
-				"Given X-definition declaration name is empty");
+				"Given Xdefinition declaration name is empty");
 		}
 		for (XdModel xdModel : _xdModels.keySet()) {
 			if (XdModel.Type.DECLARATION == xdModel.getType()) {
@@ -174,8 +174,8 @@ public final class XdDoc_2_0 extends XdDoc {
 		return null;
 	}
 
-	/** X-definition def representation to element map getter.
-	 * @return X-definition def (XdDef) representation to element (Element) map.
+	/** Xdefinition def representation to element map getter.
+	 * @return Xdefinition def (XdDef) representation to element (Element) map.
 	 */
 	public Map getXdDefs() {return _xdDefs;}
 }

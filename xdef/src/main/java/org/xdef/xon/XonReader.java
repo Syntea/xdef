@@ -50,7 +50,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
 	private boolean _xonMode;
-	/** Flag if the parsed data are in X-definition (default false). */
+	/** Flag if the parsed data are in Xdefinition (default false). */
 	private boolean _jdef;
 	/** Parser of XON source. */
 	private final XonParser _jp;
@@ -111,7 +111,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @return true if a directive was read.
 	 */
 	private boolean readDirective() {
-		if (!_jdef) { // no X-definition model
+		if (!_jdef) { // no Xdefinition model
 			return false;
 		}
 		SPosition spos = getPosition();
@@ -128,7 +128,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			XonTools.JValue jv = readSimpleValue();
 			value = jv.getSBuffer();
 			if (!(jv.getValue() instanceof String)) {
-				error(JSON.JSON018); //Value must be string with X-script
+				error(JSON.JSON018); //Value must be string with Xscript
 			}
 		} else if (i == 0) { // $script
 			error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
@@ -628,7 +628,7 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else {
 			XonTools.JValue jv = readSimpleValue();
 			if (_jdef && (jv == null || jv.getValue() == null || !(jv.getValue() instanceof String))) {
-				error(JSON.JSON018); //Value in X-definition must be a string with X-script
+				error(JSON.JSON018); //Value in Xdefinition must be a string with Xscript
 				if (jv != null) {
 					Object val = jv.getValue();
 					jv = new XonTools.JValue(jv.getPosition(), val == null ? "null" : val.toString());
@@ -786,7 +786,7 @@ public final class XonReader extends StringParser implements XonParsers {
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	/** Set mode that XON/JSON is parsed in X-definition compiler. */
+	/** Set mode that XON/JSON is parsed in Xdefinition compiler. */
 	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
 	@Override
 	/** Set mode that XON is parsed. */

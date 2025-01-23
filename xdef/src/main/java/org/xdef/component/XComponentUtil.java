@@ -226,7 +226,7 @@ public class XComponentUtil {
 	}
 
 	/** Update XPostitions.
-	 * @param xc X-component.
+	 * @param xc Xcomponent.
 	 * @param xpos Xposition.
 	 * @param index index of the referred item of Xposition.
 	 */
@@ -449,7 +449,7 @@ public class XComponentUtil {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create XON object from X-component.
+// Create XON object from Xcomponent.
 ////////////////////////////////////////////////////////////////////////////////
 	private final static Object toXonObject(final Object o) {
 		return o instanceof String
@@ -813,8 +813,8 @@ public class XComponentUtil {
 		return result;
 	}
 
-	/** Create XON object from X-component.
-	 * @param xc X-component.
+	/** Create XON object from Xcomponent.
+	 * @param xc Xcomponent.
 	 * @return XON object.
 	 */
 	public static final Object toXon(final XComponent xc) {

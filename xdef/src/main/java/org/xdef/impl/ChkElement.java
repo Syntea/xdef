@@ -61,7 +61,7 @@ import static org.xdef.xon.XonNames.X_VALATTR;
 import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Provides validation of input data or it can be used as base for construction of XML objects according to
- * X-definition.  This code is nasty code in some parts, should be written better!
+ * Xdefinition.  This code is nasty code in some parts, should be written better!
  * @author Vaclav Trojan
  */
 public final class ChkElement extends ChkNode implements XXElement, XXData {
@@ -81,21 +81,21 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	String _xonKey;
 	/** XON item value. */
 	Object _xonValue;
-	/** Index to actual X-definition. */
+	/** Index to actual Xdefinition. */
 	int _actDefIndex;
-	/** Index to next X-definition. */
+	/** Index to next Xdefinition. */
 	int _nextDefIndex;
-	/** Text value of actual text node or attribute. It is used for communication with X-Script interpreter.
+	/** Text value of actual text node or attribute. It is used for communication with Xscript interpreter.
 	 * Important note: it should be cleared after invocation of external methods - to allow gc to do the job!
 	 */
 	private String _data;
-	/** Element value used for X-Script code. Important note: it should be cleared after invocation of
+	/** Element value used for Xscript code. Important note: it should be cleared after invocation of
 	 * external methods - to allow garbage collector to do the job!
 	 */
 	private Element _elemValue;
-	/** Name of actually processed attribute for communication with the X-Script interpreter. */
+	/** Name of actually processed attribute for communication with the Xscript interpreter. */
 	private String _attName;
-	/** Namespace URI of actually processed attribute for communication with  the X-Script interpreter. */
+	/** Namespace URI of actually processed attribute for communication with  the Xscript interpreter. */
 	private String _attURI;
 	/** List of names of attributes. */
 	private Set<String> _attNames;
@@ -126,7 +126,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private XComponent _xComponent;
 
 	/** Create a new empty instance of ChkElement - just for internal use.
-	 * @param xelem XElement from X-definition.
+	 * @param xelem XElement from Xdefinition.
 	 * @param parent ChkNode parent.
 	 * @param element element with attributes.
 	 * @param ignoreAll if true ignore this and all child nodes.
@@ -152,7 +152,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		_errCount=getReporter().getErrorCount()+_scp._reporter.getErrorCount();
 		_childList = _xElement._childNodes;
-		_actDefIndex = -1; //index of actual X-definition
+		_actDefIndex = -1; //index of actual Xdefinition
 		_counters = new int[_childList.length + 1]; //one more for '*'
 		_chkChildNodes = new ArrayList<>();
 		_attNames = new HashSet<>();
@@ -186,13 +186,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_xonArray = new ArrayList<>();
 				}
 			}
-			if ((_xComponent = _parent.getXComponent()) != null) {// X-component
+			if ((_xComponent = _parent.getXComponent()) != null) {// Xcomponent
 				_xComponent = _xComponent.xCreateXChild(this);
 			}
 		}
 	}
 
-	/** Execute X-script from given address (with given type).
+	/** Execute Xscript from given address (with given type).
 	 * @param addr address of script.
 	 * @param type type of model ('E' - element, 'A' - attribute, 'T' text, otherwise 'U').
 	 */
@@ -1102,7 +1102,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				// repeated nodes
 				if (xn.maxOccurs() != 1 || xn.minOccurs() != 1) {//???template
 					if (_counters[_actDefIndex] < xn.maxOccurs() || _actDefIndex+1 >= defLength) {
-						// max occurrence not reached or if the X-definition not follows a XElement node
+						// max occurrence not reached or if the Xdefinition not follows a XElement node
 						return result;
 					}
 					// maxOccurrence exceeded, so check if the next node is an element with the same name.
@@ -1384,7 +1384,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return chkEl;
 	}
 
-	/** Prepare variables and execute the init section of X-script. */
+	/** Prepare variables and execute the init section of Xscript. */
 	final void initElem() {
 		// prepare variables declared in the script (do not make it twice)
 		if (_xElement._varinit >= 0 && _variables == null) {
@@ -1401,22 +1401,22 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 	}
 
-	/** Get actual X-definition assigned to node.
-	 * @param index The index of X-definition.
+	/** Get actual Xdefinition assigned to node.
+	 * @param index The index of Xdefinition.
 	 * @return The actual definition or null.
 	 */
 	public final XNode getDefElement(final int index) {
 		return index < _childList.length ? _childList[index] : null;
 	}
 
-	/** Get maximal index of X-definition in the list.
+	/** Get maximal index of Xdefinition in the list.
 	 * @return Max index of definition list.
 	 */
 	final int getDefinitionMaxIndex() {return _childList.length;}
 
 	/** Add the new attribute to the current element.
 	 * @param att The object with attribute.
-	 * @return true if attribute was created according to X-definition.
+	 * @return true if attribute was created according to Xdefinition.
 	 */
 	final boolean newAttribute(final Attr att) {
 		_node = att;
@@ -1621,7 +1621,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * about attribute redefinition.
 	 * @param name The name of attribute.
 	 * @param value The value of attribute.
-	 * @return true if attribute was created according to X-definition.
+	 * @return true if attribute was created according to Xdefinition.
 	 */
 	public final boolean setAttribute(final String name, final String value) {
 		_element.setAttribute(name, value);
@@ -1633,7 +1633,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name The name of attribute.
 	 * @param data The value of attribute.
 	 * @param nsURI The value of namespace URI.
-	 * @return true if attribute was created according to X-definition.
+	 * @return true if attribute was created according to Xdefinition.
 	 */
 	public final boolean setAttribute(final String name, final String data, final String nsURI) {
 		if (nsURI == null) {
@@ -2063,7 +2063,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 // Methods to retrieve values from checked tree.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Look up for the X-Position (XPos) of the element set by xPath. For look up is used the hash table with
+	/** Look up for the Xposition (XPos) of the element set by xPath. For look up is used the hash table with
 	 * the XPaths and their occurrences.
 	 * @param xPath the XPath to the current ChkElement (Element	from the source XML document that is
 	 * actually processed).
@@ -2124,7 +2124,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param qname The qualified name of attribute (including prefix).
 	 * @param data The value of attribute.
 	 * @param nsURI The value of namespace URI.
-	 * @return true if attribute was created according to X-definition.
+	 * @return true if attribute was created according to Xdefinition.
 	 */
 	@Override
 	public final boolean addAttributeNS(final String nsURI,
@@ -2345,7 +2345,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if ((_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I')
 			&& (xatt == null || !xatt.isIllegal())) {
-			//more attributes allowed, add attribute as it is no X-definition for this attribute
+			//more attributes allowed, add attribute as it is no Xdefinition for this attribute
 			_parseResult = new DefParseResult(data);
 			if (nsURI != null) {
 				if (_xElement._moreAttributes=='I') {
@@ -2491,7 +2491,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	final ChkElement getChkElement() {return this;}
 	@Override
-	/** Prepare construction of the new element according to X-definition.
+	/** Prepare construction of the new element according to Xdefinition.
 	 * @param qname qualified name of the element (prefixed).
 	 * @param ns NameSpace URI of the element.
 	 * @return created check element object.
@@ -2501,14 +2501,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			: _rootChkDocument._doc.createElementNS(ns,qname));
 	}
 	@Override
-	/** Prepare construction of the new element according to X-definition.
+	/** Prepare construction of the new element according to Xdefinition.
 	 * @param name Tag name of the element.
 	 * @return created check element object.
 	 */
 	public final XXElement prepareXXElement(final String name) {return prepareXXElementNS(null, name);
 	}
 	@Override
-	/** Prepare construction of the new child according to X-definition.
+	/** Prepare construction of the new child according to Xdefinition.
 	 * @param model child model.
 	 * @return created XXElemnt element object.
 	 */
@@ -2523,7 +2523,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Add the new attribute to the current XXElement.
 	 * @param name name of attribute.
 	 * @param data value of attribute.
-	 * @return true if attribute was created according to X-definition.
+	 * @return true if attribute was created according to Xdefinition.
 	 */
 	public final boolean addAttribute(final String name, final String data) {
 		return addAttributeNS(null, name, data);
@@ -2531,7 +2531,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** This method is called when the end of the current element attribute list was parsed. The
 	 * implementation may check the list of attributes and may invoke appropriate actions.
-	 * @return true if element is compliant with X-definition.
+	 * @return true if element is compliant with Xdefinition.
 	 */
 	public final boolean checkElement() {
 		_parseResult = null;
@@ -2672,7 +2672,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Add new element as a child of the current element.
 	 * Checks all attributes and child elements for occurrence.
-	 * @return true if element was added and complies to X-definition.
+	 * @return true if element was added and complies to Xdefinition.
 	 */
 	public final boolean addElement() {
 		if (_nil) {
@@ -2958,7 +2958,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Add new Text node to current element.
 	 * @param data The value of text node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return true if text node is compliant with X-definition.
+	 * @return true if text node is compliant with Xdefinition.
 	 */
 	public final boolean addText(final String data) {
 		if (_ignoreAll || _element  == null) {
@@ -3250,7 +3250,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
-	 * @return true if Comment node is compliant with X-definition.
+	 * @return true if Comment node is compliant with Xdefinition.
 	 */
 	//TODO
 	public final boolean addComment(final String data) {return true;}
@@ -3259,7 +3259,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name The name of the PI node.
 	 * @param X The value of instruction part of the PI node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return true if PI node is compliant with X-definition.
+	 * @return true if PI node is compliant with Xdefinition.
 	 */
 	//TODO
 	public final boolean addPI(final String name, final String x) {return true;}
@@ -3311,7 +3311,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			return null; //attribute is defined but not exists
 		} else if (xel.hasOtherAttrs()) {
-			return null; //If X-definition has a VARIABLE_PART it makes no sense to check it more.
+			return null; //If Xdefinition has a VARIABLE_PART it makes no sense to check it more.
 		}
 		//Attempt to get undeclared item
 		throw new SRuntimeException(XDEF.XDEF581, getXPos() + "/@" + name);
@@ -3322,7 +3322,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return The value of attribute or the empty string if the value
 	 * doesn't exist or return null if required attribute is defined in the XXElement, however it does not
 	 * exist in the actual element.
-	 * @throws SRuntimeException if required attribute is not defined in the X-definition.
+	 * @throws SRuntimeException if required attribute is not defined in the Xdefinition.
 	 */
 	public final String getAttribute(final String name) {return getAttributeNS(null, name);}
 	@Override

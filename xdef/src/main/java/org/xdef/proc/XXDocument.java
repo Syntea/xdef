@@ -2,12 +2,12 @@ package org.xdef.proc;
 
 import org.w3c.dom.Element;
 
-/** Model of document in X-definition.
+/** Model of document in Xdefinition.
  * @author Vaclav Trojan
  */
 public interface XXDocument extends XXNode {
 
-	/** Prepare construction of the new document according to X-definition.
+	/** Prepare construction of the new document according to Xdefinition.
 	 * @return created check document object.
 	 */
 	public XXDocument prepareXXDocument();
@@ -15,7 +15,7 @@ public interface XXDocument extends XXNode {
 	/** Add constructed element as a child to the XXElement. Check all attributes and child nodes
 	 * for occurrence.
 	 * @param el element to be added.
-	 * @return true if element was added and complies to X-definition.
+	 * @return true if element was added and complies to Xdefinition.
 	 */
 	public boolean addElement(Element el);
 

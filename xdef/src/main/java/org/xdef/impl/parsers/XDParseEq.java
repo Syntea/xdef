@@ -14,7 +14,7 @@ import org.xdef.XDContainer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "eq" type.
+/** Parser of Xscript "eq" type.
  * @author Vaclav Trojan
  */
 public class XDParseEq extends XDParserAbstract {

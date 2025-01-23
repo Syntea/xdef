@@ -8,7 +8,7 @@ import org.xdef.sys.StringParser;
 import java.util.Map;
 import static org.xdef.sys.SParser.NOCHAR;
 
-/** Provides resolving of X-script macro calls.
+/** Provides resolving of Xscript macro calls.
  * @author Trojan
  */
 public class XScriptMacroResolver extends StringParser {
@@ -272,7 +272,7 @@ public class XScriptMacroResolver extends StringParser {
 
 	/**	Expands all macro references in the source buffer.
 	 * @param sb source buffer.
-	 * @param actDefName name of the actual X-definition where macro call is specified
+	 * @param actDefName name of the actual Xdefinition where macro call is specified
 	 * @param reporter reporter where to write errors.
 	 * @param macros map with macro definitions
 	 * @param xmlVersion version of XML (10 .. "1.0", 11 .. "1.0"; see org.xdef.impl.XConstants.XMLxx).

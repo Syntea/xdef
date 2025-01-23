@@ -22,7 +22,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
 
-/** Abstract XNode (part of X-definition implementation.
+/** Abstract XNode (part of Xdefinition implementation.
  * @author Vaclav Trojan
  */
 public abstract class XNode implements XMNode {
@@ -126,14 +126,14 @@ public abstract class XNode implements XMNode {
 		return new QName(_nsURI, _name);
 	}
 
-	/** Set position to source X-definition.
-	 * @param spos position to source X-definition.
+	/** Set position to source Xdefinition.
+	 * @param spos position to source Xdefinition.
 	 */
 	public final void setSPosition(final SPosition spos) {_spos = spos;}
 
 	@Override
-	/** Get position to source X-definition.
-	 * @return position to source X-definition or <i>null</i>.
+	/** Get position to source Xdefinition.
+	 * @return position to source Xdefinition or <i>null</i>.
 	 */
 	public final SPosition getSPosition() {return _spos == null ? new SPosition() : _spos;}
 

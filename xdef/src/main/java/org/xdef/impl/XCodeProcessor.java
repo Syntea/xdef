@@ -529,7 +529,7 @@ public final class XCodeProcessor {
 	private Properties _props;
 	/** Switch to debug mode. */
 	private boolean _debug = false; //debug switch
-	/** X-definition from which processor was created. */
+	/** Xdefinition from which processor was created. */
 	private XDefinition _xd;
 	/** Global variables:<p>
 	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn, 3 $IDParser$, 4 $IDuniqueSet$</p>
@@ -604,8 +604,8 @@ public final class XCodeProcessor {
 		}
 	}
 
-	/** Set X-definition property to SManager. If properties are null the new properties  will be created.
-	 * @param key name of X-definition property.
+	/** Set Xdefinition property to SManager. If properties are null the new properties  will be created.
+	 * @param key name of Xdefinition property.
 	 * @param value value of property or null. If the value is null the property is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
@@ -1006,7 +1006,7 @@ public final class XCodeProcessor {
 				if (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP) {
 					step= _debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
 					if (step == XDDebug.KILL) {
-						throw new SError(XDEF.XDEF906); //X-definition canceled
+						throw new SError(XDEF.XDEF906); //Xdefinition canceled
 					}
 				}
 			}
@@ -1294,7 +1294,7 @@ public final class XCodeProcessor {
 						_catchItem = _catchItem.getPrevItem();
 						continue;
 					}
-					//X-definition script exception, PC=&{0}&{1}{; }
+					//Xdefinition script exception, PC=&{0}&{1}{; }
 					Report rep = Report.error(XDEF.XDEF905, pc - 1, ((XDException) _stack[sp--]).toString());
 					updateReport(rep, chkEl);
 					throw new XXException(rep);
@@ -2587,7 +2587,7 @@ public final class XCodeProcessor {
 						if (i > 0) {
 							xdef = _xd.getXDPool().getXMDefinition(rootName.substring(0,i));
 							if (xdef == null) {
-								chkEl.fatal(XDEF.XDEF530, rootName); //Missing X-definition &{0}
+								chkEl.fatal(XDEF.XDEF530, rootName); //Missing Xdefinition &{0}
 								_stack[sp] = new DefElement(chkEl.getElemValue());
 								chkEl._sourceElem = oldContext;
 								continue;
@@ -2705,7 +2705,7 @@ public final class XCodeProcessor {
 						if (ndx > 0) {
 							xdef = _xd.getXDPool().getXMDefinition(s.substring(0,ndx));
 							if (xdef == null) {
-								chkEl.fatal(XDEF.XDEF530, s); //Missing X-definition &{0}
+								chkEl.fatal(XDEF.XDEF530, s); //Missing Xdefinition &{0}
 								_stack[sp] = new DefElement(chkEl.getElemValue());
 								continue;
 							}
@@ -2716,7 +2716,7 @@ public final class XCodeProcessor {
 					} else {
 						xdef = _xd;
 					}
-					//parse element with X-definition
+					//parse element with Xdefinition
 					ChkDocument x = (ChkDocument) ("*".equals(s)
 						? xdef.getXDPool().createXDDocument() : xdef.getXDPool().createXDDocument(s));
 					//set our global variables to parser!!!
@@ -3359,8 +3359,8 @@ public final class XCodeProcessor {
 	 */
 	public final Object getUserObject(final String id) {return _userObjects.get(id);}
 
-	/** This method is revoked if an exception is thrown when X-script
-	 * is processed and process X-definition is to be finished with fatal error.
+	/** This method is revoked if an exception is thrown when Xscript
+	 * is processed and process Xdefinition is to be finished with fatal error.
 	 * @param pc program counter.
 	 * @param sp stack pointer.
 	 * @param ex exception.

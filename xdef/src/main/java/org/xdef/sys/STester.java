@@ -916,7 +916,7 @@ public abstract class STester {
 	 * @return string with path to compiled classes.
 	 */
 	public final String compileSources(final String classpath, final String classDir, final String... src) {
-		// where are compiled classes of X-definitions prepare parameters
+		// where are compiled classes of Xdefinitions prepare parameters
 		List<String> ar = new ArrayList<>();
 		ar.add("-encoding");
 		ar.add(getEncoding());

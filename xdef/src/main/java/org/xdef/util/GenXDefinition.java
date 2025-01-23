@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import org.w3c.dom.Element;
 
-/** Generate X-definition from XML, JSON/XON, or YAML data.
+/** Generate Xdefinition from XML, JSON/XON, or YAML data.
  * @author Vaclav Trojan
  */
 public class GenXDefinition {
@@ -14,22 +14,22 @@ public class GenXDefinition {
 	/** Prevent create an instance of this class.*/
 	private GenXDefinition() {}
 
-	/** Generate X-definition from XML data to X-definition.
+	/** Generate Xdefinition from XML data to Xdefinition.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data)
-	 * @return org.w3c.dom.Element object with X-definition.
+	 * @return org.w3c.dom.Element object with Xdefinition.
 	 */
 	public static final Element genXdef(final Object obj) {return genXdef(obj, null);}
 
-	/** Generate X-definition from XML data to X-definition.
+	/** Generate Xdefinition from XML data to Xdefinition.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data)
 	 * @param xdName name of XDefinition or null.
-	 * @return org.w3c.dom.Element object with X-definition.
+	 * @return org.w3c.dom.Element object with Xdefinition.
 	 */
 	public static final Element genXdef(final Object obj, final String xdName) {
 		return GenXDef.genXdef(obj, xdName);
 	}
 
-	/** Generate X-definition from a document to given output stream writer.
+	/** Generate Xdefinition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
 	 * @param outFile output file or pathname.
 	 * @param encoding name of character encoding.
@@ -40,7 +40,7 @@ public class GenXDefinition {
 		genXdef(obj, outFile, encoding, null);
 	}
 
-	/** Generate X-definition from a document to given output stream writer.
+	/** Generate Xdefinition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
 	 * @param outFile output file or pathname.
 	 * @param encoding name of character encoding.
@@ -71,7 +71,7 @@ public class GenXDefinition {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Generate X-definition from XML.\n" +
+"Generate Xdefinition from XML.\n" +
 "\n"+
 "Command line arguments:\n"+
 "   -i input_file -o output file [-e encoding]\n"+
@@ -79,13 +79,13 @@ public class GenXDefinition {
 "  -i input    file intput file (XML, JSON/XON, YAML)\n" +
 "  -o output   file\n" +
 "  -e encoding name of character set encoding\n" +
-"  -x name of X-definition";
+"  -x name of Xdefinition";
 
-	/** Generate X-definition from XML (command line parameters).
+	/** Generate Xdefinition from XML (command line parameters).
 	 * @param args array with command line arguments:
 	 * <ul>
 	 * <li><i><b>-i file</b> ....... </i>XML, JSON/XON, or YAML file  pathname.
-	 * <li><i><b>-o file</b> ....... </i>X-definition output file pathname.
+	 * <li><i><b>-o file</b> ....... </i>Xdefinition output file pathname.
 	 * <li><i><b>-e encoding</b> ... </i>character set name of output.
 	 * </ul>
 	 */
@@ -149,7 +149,7 @@ public class GenXDefinition {
 			}
 			if ("-x".equals(arg)) {
 				if (xdName != null) {
-					throw new RuntimeException(INFO + "Redefinition X-definition name '-x'");
+					throw new RuntimeException(INFO + "Redefinition Xdefinition name '-x'");
 				}
 				if (++i < args.length && (arg = args[i]) != null &&
 					!arg.startsWith("-")) {

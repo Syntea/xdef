@@ -534,7 +534,7 @@ public class XonUtils {
 	 */
 	public static final Element iniToXml(final InputStream ini) {return IniReader.iniToXml(parseINI(ini));}
 
-	/** Create XML from INI/Properties object in X-Definition mode.
+	/** Create XML from INI/Properties object in Xdefinition mode.
 	 * @param ini INI/Properties object.
 	 * @return XML element created from INI/Properties object.
 	 */
@@ -590,7 +590,7 @@ public class XonUtils {
 	 */
 	public static final Element xonToXmlW(final Object xon) {return XonToXml.toXmlW(xon);}
 
-	/** Create XML from XON object in X-Definition mode.
+	/** Create XML from XON object in Xdefinition mode.
 	 * @param xon path to XON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
@@ -601,7 +601,7 @@ public class XonUtils {
 		return XonToXml.toXmlXD(x);
 	}
 
-	/** Create XML from XON/JSON object in X-Definition mode.
+	/** Create XML from XON/JSON object in Xdefinition mode.
 	 * @param xon File with XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
@@ -612,7 +612,7 @@ public class XonUtils {
 		return XonToXml.toXmlXD(x);
 	}
 
-	/** Create XML from XON/JSON object in X-Definition mode.
+	/** Create XML from XON/JSON object in Xdefinition mode.
 	 * @param xon URL with XON/JSON source data.
 	 * @return XML element created from JSON XON/data.
 	 */
@@ -623,7 +623,7 @@ public class XonUtils {
 		return XonToXml.toXmlXD(x);
 	}
 
-	/** Create XML from XON/JSON object in X-Definition mode.
+	/** Create XML from XON/JSON object in Xdefinition mode.
 	 * @param xon InputStream with XON/JSON source data.
 	 * @return XML element created from JSON XON/data.
 	 */
@@ -634,7 +634,7 @@ public class XonUtils {
 		return XonToXml.toXmlXD(x);
 	}
 
-	/** Create XML from XON/JSON object in X-Definition mode.
+	/** Create XML from XON/JSON object in Xdefinition mode.
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */

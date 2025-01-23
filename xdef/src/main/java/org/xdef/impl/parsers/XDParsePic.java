@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
 
-/** Parser of X-Script "pic" type.
+/** Parser of Xcript "pic" type.
  * @author Vaclav Trojan
  */
 public class XDParsePic extends XDParseEq {

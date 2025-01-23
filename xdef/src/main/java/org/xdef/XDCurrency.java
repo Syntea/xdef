@@ -8,7 +8,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
 
-/** X-script Currency (see ISO 4217).
+/** Xscript Currency (see ISO 4217).
  * @author Vaclav Trojan
  */
 public final class XDCurrency extends XDValueAbstract {

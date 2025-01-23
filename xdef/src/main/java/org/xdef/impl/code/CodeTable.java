@@ -314,11 +314,11 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	/** Get occurrence number of the actual element. */
 	static final short GET_OCCURRENCE = DEL_ATTR + 1;
-	/** Get value of X-definition implementation property. */
+	/** Get value of Xdefinition implementation property. */
 	static final short GET_IMPLROPERTY = GET_OCCURRENCE + 1;
-	/** Trace script of X-definition. */
+	/** Trace script of Xdefinition. */
 	static final short DEBUG_TRACE = GET_IMPLROPERTY + 1;
-	/** Break script of X-definition. */
+	/** Break script of Xdefinition. */
 	static final short DEBUG_PAUSE = DEBUG_TRACE + 1;
 	/** Format integer to string. */
 	static final short INTEGER_FORMAT = DEBUG_PAUSE + 1;
@@ -899,7 +899,7 @@ public interface CodeTable {
 	static final short GETELEM_FROM_CONTEXT = GETATTR_FROM_CONTEXT + 1;
 	static final short GETELEMS_FROM_CONTEXT = GETELEM_FROM_CONTEXT + 1;
 
-	/** This code keeps information about X-definition source. */
+	/** This code keeps information about Xdefinition source. */
 	static final short SRCINFO_CODE = GETELEMS_FROM_CONTEXT + 1;
 
 	////////////////////////////////////////////////////////////////////////////

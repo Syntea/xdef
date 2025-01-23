@@ -4,7 +4,7 @@ import org.xdef.XDParseResult;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-Script "num" type.
+/** Parser of Xscript "num" type.
  * @author Vaclav Trojan
  */
 public class XDParseNum extends XSAbstractParseToken {

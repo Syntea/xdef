@@ -4,7 +4,7 @@ import static org.xdef.XDValueID.XD_REPORT;
 import static org.xdef.XDValueType.REPORT;
 import org.xdef.sys.Report;
 
-/** Implementation of X-script value of org.xdef.sys.Report value of the object.
+/** Implementation of Xscript value of org.xdef.sys.Report value of the object.
  * @author  Vaclav Trojan
  */
 public final class XDReport extends XDValueAbstract {

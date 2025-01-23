@@ -138,7 +138,7 @@ public class XSParseENTITIES extends XSAbstractParseString {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script
+			//The validation method &{0} can be called only from the Xscript
 			//of attribute or text node
 			p.error(XDEF.XDEF574, ROOTBASENAME);
 			return;

@@ -76,7 +76,7 @@ import static org.xdef.xon.XonNames.Q_MAP;
 import static org.xdef.xon.XonNames.Q_VALUE;
 import org.xdef.xon.XonUtils;
 
-/** Provides root check object for generation of check tree and processing of the X-definition.
+/** Provides root check object for generation of check tree and processing of the Xdefinition.
  * @author Vaclav Trojan
  */
 final class ChkDocument extends ChkNode	implements XDDocument {
@@ -151,7 +151,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	/** Create new instance of ChkDocument with ArrayReporter {this constructor is designed to parse source
-	 * data containing reference to X-definition by attribute xdi:location).
+	 * data containing reference to Xdefinition by attribute xdi:location).
 	 * @param extObjects array of objects used to create DefPool.
 	 * @param props Properties used to create DefPool.
 	 */
@@ -163,7 +163,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		XDefinition xd = new XDefinition("#", xp, XDConstants.XDEF42_NS_URI, null, XConstants.XD41);
 		xp._xdefs.put("#", xd);
 		setDateRestrictions(xd.getXDPool());
-		//create dummy X-definition - will be assigned from attribute
+		//create dummy Xdefinition - will be assigned from attribute
 		init(xd, null, new SReporter(), props, null);
 		_scp = new XCodeProcessor(xd, new SReporter(), null, null);
 	}
@@ -201,7 +201,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final Object userObj) {
 		setXPos("");
 		if ((_xdef = xd) == null) {
-			throw new SRuntimeException(XDEF.XDEF602); //The X-definition&{0}{ '}{'} is missing
+			throw new SRuntimeException(XDEF.XDEF602); //The Xdefinition&{0}{ '}{'} is missing
 		}
 		_doc = doc == null ? KXmlUtils.newDocument() : doc;
 		_reporter = reporter;
@@ -447,14 +447,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			String s = uri!=null && !uri.isEmpty()? " (xmlns=\""+uri+"\")" : "";
 			_xPos = "/" + element.getNodeName();
 			if (_xdef._onIllegalRoot >= 0) {
-				//Element &{0} is not defined as root&{1}{ in X-definition }
+				//Element &{0} is not defined as root&{1}{ in Xdefinition }
 				putTemporaryReport(Report.error(XDEF.XDEF502, element.getNodeName() + s, _xdef.getName()));
 				_chkRoot.setXXType((byte) 'D');
 				_scp.exec(_xdef._onIllegalRoot, _chkRoot);
 				copyTemporaryReports();
 			} else {
 				debugXPos(XDDebug.ONILLEGALROOT);
-				//Element &{0} is not defined as root&{1}{ in X-definition }
+				//Element &{0} is not defined as root&{1}{ in Xdefinition }
 				error(XDEF.XDEF502, element.getNodeName() + s, _xdef.getName());
 				_chkRoot.setElemValue(null);
 				return _chkRoot;
@@ -607,7 +607,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					throw new SRuntimeException(XDEF.XDEF506, ex, element.getNodeName(), className);
 				}
 			} else {
-				//Java XComponent class for element &{0} is not defined for root &{1}{ in X-definition }
+				//Java XComponent class for element &{0} is not defined for root &{1}{ in Xdefinition }
 				throw new SRuntimeException(XDEF.XDEF505, _element.getNodeName(), _xdef.getName());
 			}
 		}
@@ -880,14 +880,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Node getXMLNode() {return _doc;}
 	@Override
-	/** Get implementation properties of X-definition.
-	 * @return the implementation properties of X-definition.
+	/** Get implementation properties of Xdefinition.
+	 * @return the implementation properties of Xdefinition.
 	 */
 	public final Properties getImplProperties() {return _xdef._properties;}
 	@Override
-	/** Get implementation property of X-definition.
+	/** Get implementation property of Xdefinition.
 	 * @param name name of property.
-	 * @return value implementation property of X-definition.
+	 * @return value implementation property of Xdefinition.
 	 */
 	public final String getImplProperty(final String name) {return _xdef._properties.getProperty(name);}
 	@Override
@@ -1122,8 +1122,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_destLanguageID = language == null ? -1 : xp._lexicon.getLanguageID(language);
 	}
 	@Override
-	/** Parse a string with a type declared in X-definition.
-	 * @param typeName name of type in X-definition.
+	/** Parse a string with a type declared in Xdefinition.
+	 * @param typeName name of type in Xdefinition.
 	 * @param data string with data to be parsed.
 	 * @return XDParseResult object with parsed data.
 	 */
@@ -1347,11 +1347,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			xparse(e, reporter);
 			return (Map<String, Object>) (_xon=_chkRoot.getXon());//prepare XON;
 		}
-		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		//Text with &{0} model&{1}{ of "}{" } is missing in Xdefinition
 		throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
 	}
 
-	/** Find in current X-definition the model to be created.
+	/** Find in current Xdefinition the model to be created.
 	 * @param name name of XON/JSON/CSV model.
 	 * @param typ name of type of model ("JSON, INI, CSV etc").
 	 * @return the XElemnt with model or throw SRuntimeException
@@ -1367,11 +1367,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				break;
 			}
 		}
-		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		//Text with &{0} model&{1}{ of "}{" } is missing in Xdefinition
 		throw new SRuntimeException(XDEF.XDEF315, typ, name);
 	}
 	@Override
-	/** Run create XON/JSON according to the X-definition XON/JSON model.
+	/** Run create XON/JSON according to the Xdefinition XON/JSON model.
 	 * @param name name of XON/JSON model.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -1384,7 +1384,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return (_xon = _chkRoot.getXon()); //prepare XON
 	}
 	@Override
-	/** Create XComponent from XON/JSON according to the X-definition model.
+	/** Create XComponent from XON/JSON according to the Xdefinition model.
 	 * NOTE this method is experimental.
 	 * @param name the name of required model.
 	 * @param xClass XComponent class (if null, then XComponent class
@@ -1556,14 +1556,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			xparse(e, reporter);
 			return (_xon = _chkRoot.getXon());//prepare XON
 		}
-		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		//Text with &{0} model&{1}{ of "}{" } is missing in Xdefinition
 		throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	/** Run create mode - create element according to the X-definition model. If the parameter nsUri is not
+	/** Run create mode - create element according to the Xdefinition model. If the parameter nsUri is not
 	 * null then its assigned the model with given namespaceURI; in this case the parameter qname may be
 	 * qualified with a prefix.
 	 * @param nsUri namespace URI of result element (may be null).
@@ -1585,7 +1585,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return result;
 	}
 	@Override
-	/** Run create mode - create element according to the X-definition model.
+	/** Run create mode - create element according to the Xdefinition model.
 	 * @param qname the QName of model of required element.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -1598,7 +1598,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return xcreate(qname.getNamespaceURI(), s, reporter);
 	}
 	@Override
-	/** Run create mode - create element according to the X-definition model.
+	/** Run create mode - create element according to the Xdefinition model.
 	 * @param name the name of model of required element.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -1614,7 +1614,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return xcreate(null, name, reporter);
 	}
 	@Override
-	/** Run create mode - create element according to the X-definition model. If the parameter nsUri is not
+	/** Run create mode - create element according to the Xdefinition model. If the parameter nsUri is not
 	 * null then its assigned the model with given namespaceURI; in this case the parameter qname may be
 	 * qualified with a prefix.
 	 * @param nsUri the namespace URI of result element (may be null).
@@ -1639,7 +1639,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return getParsedComponent();
 	}
 	@Override
-	/** Run create mode - create XComponent according to the X-definition model.
+	/** Run create mode - create XComponent according to the Xdefinition model.
 	 * @param qname the QName of model of required element.
 	 * @param cls XComponent class (if null, then XComponent class
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
@@ -1654,7 +1654,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return xcreateXComponent(qname.getNamespaceURI(), s, cls, reporter);
 	}
 	@Override
-	/** Run create mode - create XComponent according to the X-definition model.
+	/** Run create mode - create XComponent according to the Xdefinition model.
 	 * @param name the name of model of required element.
 	 * @param xClass XComponent class (if null, then XComponent class
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
@@ -1712,7 +1712,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		} catch (SError e) {
 			Report rep = e.getReport();
-			if (rep == null || !"XDEF906".equals(rep.getMsgID())) { //X-definition canceled
+			if (rep == null || !"XDEF906".equals(rep.getMsgID())) { //Xdefinition canceled
 				throw e;
 			}
 			if (parser != null) {
@@ -1820,7 +1820,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return getParsedComponent();
 	}
 	@Override
-	/** Run create XAML according to the X-definition XON/JSON model.
+	/** Run create XAML according to the Xdefinition XON/JSON model.
 	 * @param name name of XON/JSON model.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -1938,7 +1938,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				e = xonVer == XConstants.XON_MODE_W ? XonUtils.xonToXmlW(source) : XonUtils.xonToXml(source);
 			} catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException
 				| SecurityException ex) {
-				e = XonUtils.xonToXmlW(source); // X-definition transormation
+				e = XonUtils.xonToXmlW(source); // Xdefinition transormation
 			}
 			return xparseXComponent(e, yClass, reporter);
 		} else if (source instanceof String) {
