@@ -80,7 +80,7 @@ public final class GenXComponent {
 					}
 					if (genJavadoc) {
 						out.write(LN+"/** This enumeration represents the type "
-							+ e.getKey() + " from X-definition.*/"+LN);
+							+ e.getKey() + " from Xdefinition.*/"+LN);
 					}
 					out.write("public enum "
 						+ enumName + " implements org.xdef.component.XCEnumeration{"+LN);
@@ -335,7 +335,7 @@ public final class GenXComponent {
 	/** Call generation of Java source code of XComponents from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
-	 * <li>-i X-definitions list of files, required. Wildcards are
+	 * <li>-i Xdefinitions list of files, required. Wildcards are
 	 * supported, required.
 	 * <li>-x Qualified name of class with XDPool which source will
 	 *  be generated, optional (if not specified, source is not generated)
@@ -349,9 +349,9 @@ public final class GenXComponent {
 	 */
 	public static void main(String... args) {
 		final String info =
-"GenXComponent - generate XComponent Java source code from X-definition.\n"+
+"GenXComponent - generate XComponent Java source code from Xdefinition.\n"+
 "Parameters:\n"+
-" -i X-definitions list of files, required. Wildcards may be used. Required.\n"+
+" -i Xdefinitions list of files, required. Wildcards may be used. Required.\n"+
 " -o Output directory where XComponents are generated, required\n"+
 " -p Output directory where the compiled XDPool will be stored,\n"+
 "    optional (if not specified the XDPool object is not stored)\n"+
@@ -399,7 +399,7 @@ public final class GenXComponent {
 					} else {
 						throw new RuntimeException("Parameter '-e' is not encoding name.\n" + info);
 					}
-				case 'i': // X-definitions list of files
+				case 'i': // Xdefinitions list of files
 					while (++i < args.length && (arg = args[i]) != null && !arg.startsWith("-")) {
 						sources.add(arg);
 					}

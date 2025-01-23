@@ -6,7 +6,7 @@ import org.xdef.sys.ArrayReporter;
 
 public class X {
 	public static void main(String[] args) {
-		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 		try {
 			XDDocument xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +

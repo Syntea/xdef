@@ -162,7 +162,7 @@ class XCGeneratorBase {
 		RESERVED_NAMES.add("org.w3c.dom.Document");
 		RESERVED_NAMES.add("org.w3c.dom.Element");
 		RESERVED_NAMES.add("org.w3c.dom.Node");
-		// X-definition names
+		// Xdefinition names
 		RESERVED_NAMES.add("org.xdef.msg.XDEF");
 		RESERVED_NAMES.add("org.xdef.sys.SDatetime");
 		RESERVED_NAMES.add("org.xdef.sys.SDuration");

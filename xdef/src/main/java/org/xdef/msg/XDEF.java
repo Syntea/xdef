@@ -60,15 +60,15 @@ public interface XDEF {
 	public static final long XDEF149 = 31159025690L;
 	/** Invalid reference of lexicon item "&amp;{0}" for language &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF150 = 31159025691L;
-	/** Error of X-definitions integrity */
+	/** Error of Xdefinitions integrity */
 	public static final long XDEF201 = 31159025692L;
 	/** Internal error: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF202 = 31159025693L;
-	/** Attempt to recompile compiled collection of X-definitions&amp;&amp;{#SYS000} */
+	/** Attempt to recompile compiled collection of Xdefinitions&amp;&amp;{#SYS000} */
 	public static final long XDEF203 = 31159025694L;
 	/** Overflow of compiler internal stack&amp;{#SYS000} */
 	public static final long XDEF204 = 31159025695L;
-	/** Only one X-definition in the XDPool may be without name&amp;{#SYS000} */
+	/** Only one Xdefinition in the XDPool may be without name&amp;{#SYS000} */
 	public static final long XDEF212 = 31159025696L;
 	/** Reference to element model expected&amp;{#SYS000} */
 	public static final long XDEF213 = 31159025697L;
@@ -110,17 +110,17 @@ public interface XDEF {
 	public static final long XDEF232 = 31159025715L;
 	/** Statement error&amp;{#SYS000} */
 	public static final long XDEF233 = 31159025716L;
-	/** Ambiguous group '&amp;{0}' (equal items) in X-definition '&amp;{1}'&amp;{#SYS000} */
+	/** Ambiguous group '&amp;{0}' (equal items) in Xdefinition '&amp;{1}'&amp;{#SYS000} */
 	public static final long XDEF234 = 31159025717L;
-	/** Ambiguous X-definition: minimum occurrence must be zero (or optional)&amp;{#SYS000} */
+	/** Ambiguous Xdefinition: minimum occurrence must be zero (or optional)&amp;{#SYS000} */
 	public static final long XDEF235 = 31159025718L;
 	/** Repeated name of element model '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF236 = 31159025719L;
 	/** In model with reference can't be variable declaration&amp;{#SYS000} */
 	public static final long XDEF237 = 31159025720L;
-	/** Ambiguous X-definition: previous element with same name has unlimited occurrence&amp;{#SYS000} */
+	/** Ambiguous Xdefinition: previous element with same name has unlimited occurrence&amp;{#SYS000} */
 	public static final long XDEF238 = 31159025721L;
-	/** Ambiguous X-definition: text node can´t follow previous text node&amp;{#SYS000} */
+	/** Ambiguous Xdefinition: text node can´t follow previous text node&amp;{#SYS000} */
 	public static final long XDEF239 = 31159025722L;
 	/** Specification of occurence of &amp;{0} group can not be higher then 1&amp;{#SYS000} */
 	public static final long XDEF252 = 31159025723L;
@@ -130,13 +130,13 @@ public interface XDEF {
 	public static final long XDEF254 = 31159025725L;
 	/** Here expected xd:def, xd:collection, xd:lexicon, xd:declaration, xd:json or xd:BNFGrammar&amp;{#SYS000} */
 	public static final long XDEF255 = 31159025726L;
-	/** Namespace of X-definitions is required for this element&amp;{#SYS000} */
+	/** Namespace of Xdefinitions is required for this element&amp;{#SYS000} */
 	public static final long XDEF256 = 31159025727L;
 	/** Namespace for prefix '&amp;{0}' is undefined&amp;{#SYS000} */
 	public static final long XDEF257 = 31159025728L;
 	/** Incorrect name&amp;{#SYS000} */
 	public static final long XDEF258 = 31159025729L;
-	/** Unknown element from X-definotion namespace: '&amp;{0}'&amp;{#SYS000} */
+	/** Unknown element from Xdefinotion namespace: '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF259 = 31159025730L;
 	/** Text value is not allowed here&amp;{#SYS000} */
 	public static final long XDEF260 = 31159025731L;
@@ -146,13 +146,13 @@ public interface XDEF {
 	public static final long XDEF263 = 31159025733L;
 	/** If occurrence is specified it can't be changed by specification of 'empty'&amp;{#SYS000} */
 	public static final long XDEF264 = 31159025734L;
-	/** Node '&amp;{0}' from the namespace of X-definition is not allowed here&amp;{#SYS000} */
+	/** Node '&amp;{0}' from the namespace of Xdefinition is not allowed here&amp;{#SYS000} */
 	public static final long XDEF265 = 31159025735L;
 	/** Class &amp;{0} is not available&amp;{#SYS000} */
 	public static final long XDEF267 = 31159025736L;
-	/** X-definition '&amp;{0}' already exists&amp;{#SYS000} */
+	/** Xdefinition '&amp;{0}' already exists&amp;{#SYS000} */
 	public static final long XDEF268 = 31159025737L;
-	/** X-definition &amp;{0}{'}{' }does not exist */
+	/** Xdefinition &amp;{0}{'}{' }does not exist */
 	public static final long XDEF269 = 31159025738L;
 	/** Can't compare different XDPool objects: &amp;{0} and &amp;{1} */
 	public static final long XDEF281 = 31159025739L;
@@ -174,11 +174,11 @@ public interface XDEF {
 	public static final long XDEF289 = 31159025747L;
 	/** Options differs: &amp;{0} and &amp;{1} */
 	public static final long XDEF290 = 31159025748L;
-	/** JSON model can be declared only as a child of X-definition&amp;{#SYS000} */
+	/** JSON model can be declared only as a child of Xdefinition&amp;{#SYS000} */
 	public static final long XDEF310 = 31159025749L;
 	/** Illegal JSON XML mode &amp;{0}{#SYS000} */
 	public static final long XDEF313 = 31159025750L;
-	/** Text with &amp;{0} model&amp;{1}{ of "}{" } is missing in X-definition&amp;{#SYS000} */
+	/** Text with &amp;{0} model&amp;{1}{ of "}{" } is missing in Xdefinition&amp;{#SYS000} */
 	public static final long XDEF315 = 31159025751L;
 	/** The name of &amp;{0} model "&amp;{1}" can't contain ":"{#SYS000} */
 	public static final long XDEF316 = 31159025752L;
@@ -190,13 +190,13 @@ public interface XDEF {
 	public static final long XDEF320 = 31159025755L;
 	/** Self reference is not allowed&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF321 = 31159025756L;
-	/** Element from Namespace of X-definitions is not allowed here&amp;{#SYS000} */
+	/** Element from Namespace of Xdefinitions is not allowed here&amp;{#SYS000} */
 	public static final long XDEF322 = 31159025757L;
 	/** Required attribute '&amp;{0}' is missing&amp;{#SYS000} */
 	public static final long XDEF323 = 31159025758L;
 	/** Redefinition of uniqueSet key &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF324 = 31159025759L;
-	/** Empty group '&amp;{0}' in X-definition '&amp;{1}'&amp;{#SYS000} */
+	/** Empty group '&amp;{0}' in Xdefinition '&amp;{1}'&amp;{#SYS000} */
 	public static final long XDEF325 = 31159025760L;
 	/** Reference specification expected&amp;{#SYS000} */
 	public static final long XDEF328 = 31159025761L;
@@ -242,7 +242,7 @@ public interface XDEF {
 	public static final long XDEF375 = 31159025781L;
 	/** Class &amp;{0} is not root. It can't be extension of &amp;{1} according to command %bind &amp;{2} */
 	public static final long XDEF376 = 31159025782L;
-	/** The name of the inner class of the X-component &amp;{0} has been changed to &amp;{1} */
+	/** The name of the inner class of the Xcomponent &amp;{0} has been changed to &amp;{1} */
 	public static final long XDEF377 = 31159025783L;
 	/** Name of enumeration type is expected&amp;{#SYS000} */
 	public static final long XDEF378 = 31159025784L;
@@ -260,7 +260,7 @@ public interface XDEF {
 	public static final long XDEF384 = 31159025790L;
 	/** The type name must not match the name of the referenced type&amp;{#SYS000} */
 	public static final long XDEF385 = 31159025791L;
-	/** '//' comment is not allowed in the X-script&amp;{#SYS000} */
+	/** '//' comment is not allowed in the Xscript&amp;{#SYS000} */
 	public static final long XDEF400 = 31159025792L;
 	/** Unclosed comment in the script&amp;{#SYS000} */
 	public static final long XDEF401 = 31159025793L;
@@ -286,7 +286,7 @@ public interface XDEF {
 	public static final long XDEF411 = 31159025803L;
 	/** Type identifier expected&amp;{#SYS000} */
 	public static final long XDEF412 = 31159025804L;
-	/** The item "&amp;{0}" in the attribute "xd:importLocal" is not a name of X-definition&amp;{#SYS000} */
+	/** The item "&amp;{0}" in the attribute "xd:importLocal" is not a name of Xdefinition&amp;{#SYS000} */
 	public static final long XDEF413 = 31159025805L;
 	/** Assignment statement expected&amp;{#SYS000} */
 	public static final long XDEF414 = 31159025806L;
@@ -463,13 +463,13 @@ public interface XDEF {
 	public static final long XDEF499 = 31159025890L;
 	/** Not allowed element '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF501 = 31159025891L;
-	/** Element &amp;{0} is not defined as root&amp;{1}{ in X-definition }&amp;{#SYS000} */
+	/** Element &amp;{0} is not defined as root&amp;{1}{ in Xdefinition }&amp;{#SYS000} */
 	public static final long XDEF502 = 31159025892L;
 	/** Element does not fit to match condition&amp;{#SYS000} */
 	public static final long XDEF503 = 31159025893L;
 	/** Quoted string declaration expected&amp;{#SYS000} */
 	public static final long XDEF504 = 31159025894L;
-	/** Java XComponent class for element &amp;{0} is not defined for root&amp;{1}{ in X-definition }&amp;{#SYS000} */
+	/** Java XComponent class for element &amp;{0} is not defined for root&amp;{1}{ in Xdefinition }&amp;{#SYS000} */
 	public static final long XDEF505 = 31159025895L;
 	/** Error in Java XComponent class for element &amp;{0}: &amp;{1}&amp;{#SYS000} */
 	public static final long XDEF506 = 31159025896L;
@@ -497,7 +497,7 @@ public interface XDEF {
 	public static final long XDEF528 = 31159025907L;
 	/** Required element is missing in setElement method&amp;{#SYS000} */
 	public static final long XDEF529 = 31159025908L;
-	/** Missing X-definition &amp;{0}{: '}{'}&amp;{#SYS000} */
+	/** Missing Xdefinition &amp;{0}{: '}{'}&amp;{#SYS000} */
 	public static final long XDEF530 = 31159025909L;
 	/** Minimum number of attributes declared as "xd:attr" was not reached&amp;{#SYS000} */
 	public static final long XDEF531 = 31159025910L;
@@ -523,13 +523,13 @@ public interface XDEF {
 	public static final long XDEF541 = 31159025920L;
 	/** Can't convert the object of type&amp;{0}{ '}{'} to XDValue&amp;{#SYS000} */
 	public static final long XDEF542 = 31159025921L;
-	/** In X-definition are errors&amp;{0}{: }&amp;{#SYS000} */
+	/** In Xdefinition are errors&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF543 = 31159025922L;
 	/** Missing required parameter: '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF545 = 31159025923L;
 	/** QName expected&amp;{#SYS000} */
 	public static final long XDEF546 = 31159025924L;
-	/** X-definition is not specified&amp;{#SYS000} */
+	/** Xdefinition is not specified&amp;{#SYS000} */
 	public static final long XDEF550 = 31159025925L;
 	/** Too many of recursive call: '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF553 = 31159025926L;
@@ -571,7 +571,7 @@ public interface XDEF {
 	public static final long XDEF572 = 31159025944L;
 	/** Null value of &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF573 = 31159025945L;
-	/** The validation method &amp;{0} can be called only from the X-script of attribute or text node&amp;{#SYS000} */
+	/** The validation method &amp;{0} can be called only from the Xscript of attribute or text node&amp;{#SYS000} */
 	public static final long XDEF574 = 31159025946L;
 	/** "Invalid currency code: "&amp;{0}"&amp;{#SYS000} */
 	public static final long XDEF575 = 31159025947L;
@@ -581,9 +581,9 @@ public interface XDEF {
 	public static final long XDEF581 = 31159025949L;
 	/** Attempt to access illegal item&amp;{#SYS000} */
 	public static final long XDEF582 = 31159025950L;
-	/** Model of element '&amp;{0}' is missing in X-definition&amp;{1}{ }&amp;{#SYS000} */
+	/** Model of element '&amp;{0}' is missing in Xdefinition&amp;{1}{ }&amp;{#SYS000} */
 	public static final long XDEF601 = 31159025951L;
-	/** The X-definition&amp;{0}{ '}{'} is missing */
+	/** The Xdefinition&amp;{0}{ '}{'} is missing */
 	public static final long XDEF602 = 31159025952L;
 	/** '&amp;{0}' does not point to the model of element */
 	public static final long XDEF603 = 31159025953L;
@@ -601,23 +601,23 @@ public interface XDEF {
 	public static final long XDEF658 = 31159025959L;
 	/** Regex: error in expression near position &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF659 = 31159025960L;
-	/** AttrProps declaration with name "&amp;{0}" in schema at URL "&amp;{1}" cannot be declared in X-definition 2.0. Reference will be replaced with attribute declaration. */
+	/** AttrProps declaration with name "&amp;{0}" in schema at URL "&amp;{1}" cannot be declared in Xdefinition 2.0. Reference will be replaced with attribute declaration. */
 	public static final long XDEF701 = 31159025961L;
 	/** Redefined simple types can not be declared because of names collision. */
 	public static final long XDEF702 = 31159025962L;
-	/** AttrProps group declaration with name="&amp;{0}" in schema at "&amp;{1}" cannot be converted to X-definition 2.0! reference to this attribute group will replaced with attribute declarations in group. */
+	/** AttrProps group declaration with name="&amp;{0}" in schema at "&amp;{1}" cannot be converted to Xdefinition 2.0! reference to this attribute group will replaced with attribute declarations in group. */
 	public static final long XDEF703 = 31159025963L;
-	/** Not valid X-definition document */
+	/** Not valid Xdefinition document */
 	public static final long XDEF704 = 31159025964L;
-	/** X-definition is null */
+	/** Xdefinition is null */
 	public static final long XDEF705 = 31159025965L;
-	/** X-definition is empty string */
+	/** Xdefinition is empty string */
 	public static final long XDEF706 = 31159025966L;
 	/** Reporter is null */
 	public static final long XDEF707 = 31159025967L;
 	/** Error occurred when creating collection element: &amp;{0} */
 	public static final long XDEF708 = 31159025968L;
-	/** Can't create X-definition document&amp;{0}{ } */
+	/** Can't create Xdefinition document&amp;{0}{ } */
 	public static final long XDEF713 = 31159025969L;
 	/** Can't create convertor&amp;{0}{ } */
 	public static final long XDEF714 = 31159025970L;
@@ -675,25 +675,25 @@ public interface XDEF {
 	public static final long XDEF861 = 31159025996L;
 	/** Prefix "xd" is not allowed in XML input data */
 	public static final long XDEF881 = 31159025997L;
-	/** Namespace of X-definition is not allowed in XML input data */
+	/** Namespace of Xdefinition is not allowed in XML input data */
 	public static final long XDEF882 = 31159025998L;
 	/** Incorrect type of input data */
 	public static final long XDEF883 = 31159025999L;
 	/** XDPool object was already built */
 	public static final long XDEF901 = 31159026000L;
-	/** Can't read X-definition&amp;{0}{: } */
+	/** Can't read Xdefinition&amp;{0}{: } */
 	public static final long XDEF902 = 31159026001L;
-	/** X-definition source is missing or incorrect&amp;{0}{: } */
+	/** Xdefinition source is missing or incorrect&amp;{0}{: } */
 	public static final long XDEF903 = 31159026002L;
-	/** Incorrect parameter of compiler of X-definitions&amp;{0}{: } */
+	/** Incorrect parameter of compiler of Xdefinitions&amp;{0}{: } */
 	public static final long XDEF904 = 31159026003L;
-	/** X-definition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
+	/** Xdefinition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
 	public static final long XDEF905 = 31159026004L;
-	/** X-definition canceled&amp;{0}{; }&amp;{#SYS000} */
+	/** Xdefinition canceled&amp;{0}{; }&amp;{#SYS000} */
 	public static final long XDEF906 = 31159026005L;
 	/** &amp;{0} is deprecated.&amp;{1}{ Please use }{ instead.}&amp;{#SYS000} */
 	public static final long XDEF998 = 31159026006L;
-	/** Error messages of X-definitions */
+	/** Error messages of Xdefinitions */
 	public static final long XDEF_DESCRIPTION = 31159026007L;
 	/** English */
 	public static final long XDEF_LANGUAGE = 31159026008L;

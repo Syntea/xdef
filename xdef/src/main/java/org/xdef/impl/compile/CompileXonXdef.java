@@ -79,7 +79,7 @@ public final class CompileXonXdef extends XScriptParser {
 	private final String _basePos;
 	/** PNode with generated model.*/
 	private final PNode _xonModel;
-	/** X-position of generated %any model.*/
+	/** Xposition of generated %any model.*/
 	private String _anyXPos;
 /*#if DEBUG*#/
 	/** debugging switches; from properties. *#/

@@ -227,8 +227,8 @@ public class XComponentUtil {
 
 	/** Update XPostitions.
 	 * @param xc X-component.
-	 * @param xpos X-position.
-	 * @param index index of the referred item of X-position.
+	 * @param xpos Xposition.
+	 * @param index index of the referred item of Xposition.
 	 */
 	private static void updateXPos(final XComponent xc, final String xpos, final int index) {
 		String myXPos = xc.xGetNodeName();

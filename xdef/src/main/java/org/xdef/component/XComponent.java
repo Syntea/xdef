@@ -7,7 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Interface of XComponent (Java class generated from X-definitions according to model of Element).
+/** Interface of XComponent (Java class generated from Xdefinition according to model of Element).
  * Java source of XComponent is possible to generate by {@link org.xdef.component.GenXComponent}.
  * @author Vaclav Trojan
  */
