@@ -13,21 +13,18 @@ public class X {
 "  <xd:declaration>\n" +
 "    void x(String s) {\n" +
 "      try {\n" +
-"        Currency c = new Currency(s);\n" +
-"        outln(c.currencyCode());\n" +
+"        outln(new Currency(s).currencyCode());\n" +
 "      } catch (Exception e) {\n" +
 "        outln('Exception: ' + e);\n" +
 "      }\n" +
 "    }\n" +
 "  </xd:declaration>\n" +
-"  <A>\n" +
-"    <B xd:script='*; finally x((String) @a);' a='currency();'/>\n" +
-"  </A>\n" +
+"  <A><B xd:script='*; finally x((String) @a);' a='currency();'/></A>\n" +
 "</xd:def>").createXDDocument();
 			StringWriter swr = new StringWriter();
 			xd.setStdOut(swr);
 			ArrayReporter reporter = new ArrayReporter();
-			xd.xparse("<A>\n  <B a='USD'/>\n  <B a='CZKx'/>\n</A>", reporter);
+			xd.xparse("<A><B a='USD'/><B a='CZK'/></A>", reporter);
 			System.out.println((!"USD\nCZK\n".equals(swr.toString()) || reporter.errorWarnings())
 				? "Error: " + reporter + ";\n" + swr : "OK");
 		} catch (RuntimeException ex) {ex.printStackTrace(System.out);}
