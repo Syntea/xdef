@@ -1,5 +1,5 @@
 /**
- * Prepares building of X-definition project.
+ * Prepares building of Xdefinition project.
  * <UL>
  *
  * <li>
