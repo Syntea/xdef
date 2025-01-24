@@ -43,7 +43,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import static test.XDTester._xdNS;
 
-/** All sorts of tests of X-definition.
+/** All sorts of tests of Xdefinition.
  * @author Vaclav Trojan
  */
 public final class TestXdef extends XDTester {
@@ -2195,7 +2195,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			out.close();
 			assertEq("5", swr.toString());
-			xp = compile( //X-definition ver 3.1 //////////////////////////////////////
+			xp = compile( //Xdefinition ver 3.1 //////////////////////////////////////
 "<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method XDParser test.xdef.TestXdef.licheCislo();\n"+
@@ -2874,7 +2874,7 @@ public final class TestXdef extends XDTester {
 			XDFactory.compileXD(null, //collection with wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
-			XDFactory.compileXD(null, //X-definition with imports with wildcards
+			XDFactory.compileXD(null, //Xdefinition with imports with wildcards
 "<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
 		} catch (RuntimeException ex) {fail(ex);}
@@ -3166,7 +3166,7 @@ public final class TestXdef extends XDTester {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// methods and objects used in X-definitions as external.
+// methods and objects used in Xdefinitions as external.
 ////////////////////////////////////////////////////////////////////////////////
 	public static final long getInt5() {return 5;}
 	public static final void testOldx(final XXNode xnode, final XDValue[] params) {

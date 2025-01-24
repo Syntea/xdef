@@ -10,7 +10,7 @@ import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 import static test.XDTester.getFulltestMode;
 
-/** Test of X-definitions by X-definition.
+/** Test of Xdefinitions by Xdefinition.
  * @author Vaclav Trojan
  */
 public final class TestXdefOfXdef extends XDTester {

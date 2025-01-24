@@ -33,7 +33,7 @@ public class MyTest_2 extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = false; // if false, all tests are invoked
 //		T = true; // if true, only the first one test is invoked

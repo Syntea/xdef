@@ -1,2 +1,2 @@
-/** Provides tests of X-definitions. */
+/** Provides tests of Xdefinitions. */
 package test.xdef;

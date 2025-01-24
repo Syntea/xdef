@@ -33,7 +33,7 @@ import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 
-/** Test processing JSON objects with X-definitions and X-components.
+/** Test processing JSON objects with Xdefinitions and X-components.
  * @author Vaclav Trojan
  */
 public class TestJsonXdef extends XDTester {
@@ -53,10 +53,10 @@ public class TestJsonXdef extends XDTester {
 		return s.substring(4, s.lastIndexOf('.'));
 	}
 
-	/** Generate XML files from JSON data in W3C mode and X-definition mode,
-	 * create X-definitions in both modes and generate X-components. Then
-	 * compile X-definitions and X-components.
-	 * @return XDPool compiled from X-definitions.
+	/** Generate XML files from JSON data in W3C mode and Xdefinition mode,
+	 * create Xdefinitions in both modes and generate X-components. Then
+	 * compile Xdefinitions and X-components.
+	 * @return XDPool compiled from Xdefinitions.
 	 * @throws RuntimeException if an error occurs.
 	 */
 	private XDPool genAll(final String filter) {
@@ -74,7 +74,7 @@ public class TestJsonXdef extends XDTester {
 		// Initialize fields, test files and directories
 		_dataDir = getDataDir() + "json/";
 		_jfiles = SUtils.getFileGroup(_dataDir + filter + ".xdef");
-		// Generate files and compile X-definitions and X-components.
+		// Generate files and compile Xdefinitions and X-components.
 		try {
 			boolean rebuild = false;
 			String xdir = _tempDir + "x/";
@@ -121,7 +121,7 @@ public class TestJsonXdef extends XDTester {
 			// write X-component declaration to the file
 			File componentFile = new File(_tempDir + "Components.xdef");
 			SUtils.writeString(componentFile, components, "UTF-8");
-			// compile all X-definitions to XDPool
+			// compile all Xdefinitions to XDPool
 			XDPool xp;
 			try {
 				File[] files = new File[_jfiles.length + 1];
@@ -193,14 +193,14 @@ public class TestJsonXdef extends XDTester {
 				classDir = classDir.substring(0, classDir.indexOf(className));
 				compileSources(classpath, classDir, sources);
 			}
-			return xp; // return XDPool with compiled X-definitions
+			return xp; // return XDPool with compiled Xdefinitions
 		} catch (RuntimeException | SException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 
 	/** Provides different tests on files with given ID.
-	 * @param xp compiled XDPool from generated X-definitions.
+	 * @param xp compiled XDPool from generated Xdefinitions.
 	 * @param id identifier test.
 	 * @return the empty string if tests are OK, otherwise return the string
 	 * with error messages.
@@ -223,10 +223,10 @@ public class TestJsonXdef extends XDTester {
 				result += (result.isEmpty() ? "" : "\n") + "Incorrect JSON data Test"+id+".json";
 				continue;
 			}
-			// create XDDocument with W3C from X-definition
+			// create XDDocument with W3C from Xdefinition
 			try {
 				reporter.clear(); // clear reporter
-				// parseJSON data with X-definition
+				// parseJSON data with Xdefinition
 				e = xp.createXDDocument("Test"+id).xparse(f, reporter);
 				if (reporter.errorWarnings()) { // check errors
 					result += (result.isEmpty() ? "" : "\n") + "ERRORS in " + name
@@ -328,7 +328,7 @@ public class TestJsonXdef extends XDTester {
 	}
 
 	/** Get XComponent with parsed data.
-	 * @param xp compiled XDPool from generated X-definitions.
+	 * @param xp compiled XDPool from generated Xdefinitions.
 	 * @param test identifier test file.
 	 * @param x file number.
 	 * @return XComponent with parsed data.
@@ -412,7 +412,7 @@ public class TestJsonXdef extends XDTester {
 		XDDocument xd;
 		XDPool xp;
 		try {
-			xp = genAll("Test*");// Generate X-definitons, X-components, sources
+			xp = genAll("Test*");// Generate Xdefinitons, X-components, sources
 //			xp = genAll("Test064");
 			for (File f: _jfiles) { // run all tests
 				String s = testJdef(xp, getId(f));

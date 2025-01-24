@@ -20,7 +20,7 @@ import static org.xdef.sys.STester.runTest;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
-/** Test conversion of XML schema to X-definition. */
+/** Test conversion of XML schema to Xdefinition. */
 public class TestXsd2XdConv extends XDTester {
 
 	private XDDocument _chkDoc;

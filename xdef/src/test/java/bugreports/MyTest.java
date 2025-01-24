@@ -71,7 +71,7 @@ public class MyTest extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
 			XConstants.XDPROPERTYVALUE_DBG_SHOWXON);

@@ -1312,7 +1312,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[[],[],[]]"));//error more then two
 			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
 			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
-			xdef =  // test %anyObj in different X-definitions
+			xdef =  // test %anyObj in different Xdefinitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [ %anyObj=\"?;\" ] </xd:json>\n" +
@@ -1345,7 +1345,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"b", s, "[]")); // must be error!
 			assertNotNull(testX(xp,"b", s, "true")); // must be error!
 			assertNotNull(testX(xp,"b", s, "{a:1, b:null}")); // must be error!
-			xdef = // test XON models in different X-definitions
+			xdef = // test XON models in different Xdefinitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array

@@ -32,7 +32,7 @@ import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
-/** Test construction mode of x-definition .
+/** Test construction mode of Xdefinition .
  * @author Vaclav Trojan
  */
 final public class TestCompose extends XDTester {
@@ -561,7 +561,7 @@ final public class TestCompose extends XDTester {
 "</Old1>\n"+
 "</Old>";
 			xp = compile(xdef);
-			//a) Result created according to X-definition
+			//a) Result created according to Xdefinition
 			assertEq(create(xp, "", "New", reporter, xml),
 "<New VER='2.0' myOutput='null'><New1 P1='Q1' X='Q1' P2='Q2'/><inside2 Q2='Q2' Q1='Q1' X='Q1'/></New>");
 			assertNoErrorwarnings(reporter);
