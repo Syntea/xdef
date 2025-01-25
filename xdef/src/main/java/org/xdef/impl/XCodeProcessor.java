@@ -833,23 +833,21 @@ public final class XCodeProcessor {
 		if (_globalVariables != null) {
 			XVariableTable vartab = (XVariableTable) _xd.getXDPool().getVariableTable();
 			for (int i = 0; i < _globalVariables.length; i++) {
-				XDValue val = _globalVariables[i];
-				XVariable xvar = vartab.getXVariable(i);
-				if (val != null && !val.isNull()) {
-					short itemId = val.getItemId();
-					switch (itemId) {
+				XVariable var = vartab.getXVariable(i);
+				XDValue val;
+				if ((val = _globalVariables[i]) != null && !val.isNull()) {
+					short itemId;
+					switch (itemId = val.getItemId()) {
 						case X_UNIQUESET:
 						case X_UNIQUESET_M: {
-							// pending references
-							CodeUniqueset pt = (CodeUniqueset) val;
-							result &= pt.checkAndClear(_reporter);
+							result &= ((CodeUniqueset) val).checkAndClear(_reporter); // pending references
 							break;
 						}
 						case XD_SERVICE:
 						case XD_STATEMENT:
 						case XD_RESULTSET:
 							// close all not external database objects
-							if (xvar != null && !xvar.isExternal()) {
+							if (var != null && !var.isExternal()) {
 								switch (itemId) {
 									case XD_SERVICE: ((XDService) val).close(); break;
 									case XD_STATEMENT: ((XDStatement) val).close(); break;
@@ -858,23 +856,21 @@ public final class XCodeProcessor {
 							}
 							break;
 						case XD_INPUT: //close input streams
-							if (xvar != null && !xvar.isExternal() && !xvar.getName().equals("$stdIn")) {
+							if (var != null && !var.isExternal() && !var.getName().equals("$stdIn")) {
 								// close if not $stdIn and not external
 								((DefInStream) val).close();
 							}
 							break;
 						case XD_OUTPUT: //close out streams
-							if (xvar != null) {
+							if (var != null) {
 								DefOutStream out = (DefOutStream) val;
-								if (xvar.isExternal() || xvar.getName().equals("$stdOut")
-									|| xvar.getName().equals("$stdErr")) {
-									// external, stdOut and stdErr just flush
-									out.flush();
+								if (var.isExternal() || var.getName().equals("$stdOut")
+									|| var.getName().equals("$stdErr")) {
+									out.flush(); // external, stdOut and stdErr just flush
 								} else {
 									out.close(); // other streams close
 								}
 							}
-							break;
 					}
 				}
 			}
@@ -900,12 +896,10 @@ public final class XCodeProcessor {
 	}
 
 	/** Set global value of variable from variables.
-	 * @param value XDValue object to be set.
-	 * @param xvar global XVariable.
+	 * @param val XDValue object to be set.
+	 * @param var global XVariable.
 	 */
-	final void setVariable(final XVariable xvar, final XDValue value) {
-		_globalVariables[xvar.getOffset()] = value;
-	}
+	final void setVariable(final XVariable var, final XDValue val) {_globalVariables[var.getOffset()] = val;}
 
 	/** Get temporary reporter.
 	 * @return ArrayReporter used as temporary reporter.
