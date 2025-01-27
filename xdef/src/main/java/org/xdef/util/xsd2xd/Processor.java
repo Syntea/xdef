@@ -19,13 +19,14 @@ public abstract class Processor implements Convertor {
 	/** All XML Schema schema elements table (URL, Element). */
 	protected final Map<URL, Element> _schemaElements;
 	/** Stack of URLs of currently processing schema elements (URL). */
-	protected final Stack<URL> _schemaURLStack = new Stack();
+	protected final Stack<URL> _schemaURLStack;
 
 	/** Creates instance with root schema at given URL. Initializes all schema elements.
 	 * @param rootSchemaURL URL of root schema.
 	 */
 	public Processor(URL rootSchemaURL) {
 		try {
+			_schemaURLStack = new Stack<URL>();
 			String urlString = rootSchemaURL.toExternalForm();
 			String replaced = URLDecoder.decode(urlString.replace('\\', '/'), "UTF-8");
 			URL newURL = new URL(replaced);
@@ -158,8 +159,7 @@ public abstract class Processor implements Convertor {
 			}
 			_schemaURLStack.push(entry.getKey());
 			resolveDebugURL((URL) entry.getKey());
-			processSchema((Element) entry.getValue(),
-				(Element) xdefElements.get(entry.getKey()));
+			processSchema((Element) entry.getValue(), (Element) xdefElements.get(entry.getKey()));
 			resolveDebugEnd();
 			if (_schemaURLStack.size() != 1) {
 				throw new RuntimeException( "Illegal state of currently processing schema URLs stack!");
