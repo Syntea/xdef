@@ -1,6 +1,6 @@
 package org.xdef.impl.parsers;
 
-/** Parser of Schema "string" type.
+/** Parser of XML Schema (XSD) "string" type.
  * @author Vaclav Trojan
  */
 public class XSParseString extends XSAbstractParseString {

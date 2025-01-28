@@ -9,7 +9,7 @@ import org.xdef.sys.SRuntimeException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-/** Parser of Schema "unsignedLong" type.
+/** Parser of XML Schema (XSD) "unsignedLong" type.
  * @author Vaclav Trojan
  */
 public class XSParseUnsignedLong extends XSParseInteger {

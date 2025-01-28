@@ -3071,7 +3071,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse duration in format format ISO 8061.
-	 * @param xmlSchema if true the interval is according to XML schema format.
+	 * @param xmlSchema if true the interval is according to XML schema (XSD) format.
 	 * @return true if correct format of duration was parsed.
 	 */
 	final boolean chkDuration(final boolean xmlSchema) {
@@ -3128,7 +3128,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check if source buffer contains at actual position correct format of ISO 8061 duration.
-	 * @param xmlSchema if true the interval is according to XML schema format.
+	 * @param xmlSchema if true the interval is according to XML schema (XSD) format.
 	 * @return true if correct format of duration was parsed.
 	 * @throw SRuntimeException if an error occurs.
 	 */

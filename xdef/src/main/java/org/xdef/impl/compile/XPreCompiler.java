@@ -42,7 +42,7 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_XLINK_INDEX = NS_XMLNS_INDEX + 1;			//3
 	/** index of NameSpace of XInclude. */
 	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1;		//4
-	/** index of NameSpace of XML Schema. */
+	/** index of NameSpace of XML Schema (XSD). */
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
 	/** index of NameSpace of XON/JSON (W3C). */
 	static final int NS_XON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6

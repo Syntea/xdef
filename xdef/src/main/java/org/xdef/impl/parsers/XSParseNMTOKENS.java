@@ -10,7 +10,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
 
-/** Parser of Schema "NMTOKENS" type.
+/** Parser of XML Schema (XSD) "NMTOKENS" type.
  * @author Vaclav Trojan
  */
 public class XSParseNMTOKENS extends XSAbstractParseToken {

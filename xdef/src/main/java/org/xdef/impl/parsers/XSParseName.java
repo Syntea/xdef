@@ -5,7 +5,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 
-/** Parser of Schema "Name" type.
+/** Parser of XML Schema (XSD) "Name" type.
  * @author Vaclav Trojan
  */
 public class XSParseName extends XSAbstractParseToken {

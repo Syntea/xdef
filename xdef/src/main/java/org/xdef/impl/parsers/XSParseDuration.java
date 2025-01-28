@@ -6,7 +6,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDuration;
 
-/** Parser of Schema "duration" type.
+/** Parser of XML Schema (XSD) "duration" type.
  * @author Vaclav Trojan
  */
 public class XSParseDuration extends XSAbstractParseComparable {

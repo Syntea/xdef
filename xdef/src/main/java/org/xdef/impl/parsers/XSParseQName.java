@@ -1,6 +1,6 @@
 package org.xdef.impl.parsers;
 
-/** Parser of Schema "QName" type.
+/** Parser of XML Schema (XSD) "QName" type.
  * @author Vaclav Trojan
  */
 public class XSParseQName extends XSParseName {

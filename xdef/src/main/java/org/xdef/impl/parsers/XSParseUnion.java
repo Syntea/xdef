@@ -17,7 +17,7 @@ import static org.xdef.XDParserAbstract.getItemsType;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
 
-/** Parser of Schema "union" type.
+/** Parser of XML Schema (XSD) "union" type.
  * @author Vaclav Trojan
  */
 public class XSParseUnion extends XSAbstractParser {

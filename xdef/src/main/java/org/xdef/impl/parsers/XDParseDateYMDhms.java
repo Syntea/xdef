@@ -2,7 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.sys.StringParser;
 
-/** Parser of Schema "date" type.
+/** Parser of XML Schema (XSD) "date" type.
  * @author Vaclav Trojan
  */
 public class XDParseDateYMDhms extends XSParseDatetime {

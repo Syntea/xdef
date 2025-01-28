@@ -14,7 +14,7 @@ import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.util.xsd2xd.xd.Schema_1_0_Processor;
 import org.xml.sax.SAXException;
 
-/** Represents XML Schema to Xdefinition convertor (see {@link org.xdef.util.XsdToXdef#main(String[])}).
+/** Represents XML Schema (XSD) to Xdefinition convertor (see {@link org.xdef.util.XsdToXdef#main(String[])}).
  * @author Ilia Alexandrov
  */
 public class XsdToXdef {

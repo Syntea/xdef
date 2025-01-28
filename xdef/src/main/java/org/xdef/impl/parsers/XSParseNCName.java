@@ -5,7 +5,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 
-/** Parser of Schema "NCName" type.
+/** Parser of XML Schema (XSD) "NCName" type.
  * @author Vaclav Trojan
  */
 public class XSParseNCName extends XSAbstractParseToken {

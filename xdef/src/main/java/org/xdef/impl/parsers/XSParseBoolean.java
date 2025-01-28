@@ -5,7 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBoolean;
 
-/** Parser of Schema "boolean" type.
+/** Parser of XLM Schema (XSD) "boolean" type.
  * @author Vaclav Trojan
  */
 public class XSParseBoolean extends XSAbstractParser {

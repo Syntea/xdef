@@ -7,7 +7,7 @@ import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.proc.XXNode;
 
-/** Parser of Schema "IDREF" type.
+/** Parser of XML Schema (XSD) "IDREF" type.
  * @author Vaclav Trojan
  */
 public class XSParseIDREF extends XSParseQName {

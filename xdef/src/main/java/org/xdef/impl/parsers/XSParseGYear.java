@@ -2,7 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.sys.StringParser;
 
-/** Parser of Schema "gYear" type.
+/** Parser of XML Schema (XSD) "gYear" type.
  * @author Vaclav Trojan
  */
 public class XSParseGYear extends XSParseDate {

@@ -14,24 +14,24 @@ import org.xdef.sys.SUtils;
 import org.xdef.util.xd2xsd.Xd2Xsd;
 import org.xdef.xml.KXmlUtils;
 
-/** Convertor of Xdefinition to XML schema (see {@link org.xdef.util.XdefToXsd#main(String[])}).
+/** Convertor of Xdefinition to XML schema (XSD) (see {@link org.xdef.util.XdefToXsd#main(String[])}).
  * @author Vaclav Trojan
  */
 public class XdefToXsd {
 
-	/** Generates XML Schema from given Xdefinition files and saves schema files to given output directory.
+	/** Generate XML Schema (XSD) from given Xdefinition files and save XSD files to given output directory.
 	 * @param xdefs Xdefinition file.
-	 * @param outDir output schema files directory.
-	 * @param xdName name of Xdefinition. May be null, then the nameless
-	 * Xdefinition or the first one Xdefinition is used.
-	 * @param modelName name of the root model. May be null, then all values
-	 * from "xs:root" parameter are used to create models.
-	 * @param outName name of base XML schema file.
-	 * @param outType name of XML schema file with type declarations (may be
-	 * null, then declared simple types are generated to the file with model).
+	 * @param outDir output XSD schema files directory.
+	 * @param xdName name of Xdefinition. May be null, then the nameless Xdefinition or the first one
+	 * Xdefinition is used.
+	 * @param modelName name of the root model. May be null, then all values from "xs:root" parameter are
+	 * used to create models.
+	 * @param outName name of base XML schema (XSD) file.
+	 * @param outType name of XML schema (XSD) file with type declarations (may be null, then declared simple
+	 * types are generated to the file with model).
 	 * @param genInfo if true documentation information is generated.
-	 * @param genXdateOutFormat if true, use as mask to validate XML data the
-	 * parameter describing output format from the "xdatetime" method.
+	 * @param genXdateOutFormat if true, use as mask to validate XML data the parameter describing output
+	 * format from the "xdatetime" method.
 	 */
 	public static void genSchema(final File[] xdefs,
 		final File outDir,
@@ -56,7 +56,7 @@ public class XdefToXsd {
 		writeSchema(outDir, schemaMap);
 	}
 
-	/** Write created schema files to the directory.
+	/** Write created XML schema (XSD) files to the directory.
 	 * @param outDir directory where to write.
 	 * @param schemaMap map with file names and create XML schema elements.
 	 */
@@ -76,18 +76,18 @@ public class XdefToXsd {
 		}
 	}
 
-	/** Run XML schema generator.
+	/** Run XML schema (XSD) generator.
 	 * @param xp compiled XDPool.
 	 * @param xdName name of root Xdefinition.
 	 * @param modelName name of the root model. May be null, then all values
 	 * from "xs:root" parameter are used to create models.
-	 * @param outName name of root XML schema file.
-	 * @param outType name of XML schema file with type declarations (may be
+	 * @param outName name of root XML schema (XSD) file.
+	 * @param outType name of XML schema (XSD) file with type declarations (may be
 	 * null, then declared simple types are generated to the file with model).
 	 * @param genAnnotation switch if generate annotation with documentation.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mas to validate datetime.
-	 * @return map with names of XML schema files and corresponding Elements.
+	 * @return map with names of XML schema (XSD) files and corresponding Elements.
 	 */
 	public static Map<String, Element> genSchema(final XDPool xp,
 		final String xdName,
@@ -101,7 +101,7 @@ public class XdefToXsd {
 
 	/** String with command line information. */
 	private static final String INFO =
-"XdefToXsd - convertor of Xdefinition to XML Schema.\n" +
+"XdefToXsd - convertor of Xdefinition to XML Schema (XSD).\n" +
 "Parameters:\n"+
 " -h or --help:     display help information\n" +
 " -i or --xdef:     list of input source pathnames with Xdefinitions\n" +
@@ -116,7 +116,7 @@ public class XdefToXsd {
 " -xx:              use output format of xdatetime method to create XML schema\n"+
 "                   type";
 
-	/** Run XML schema generator from command line.
+	/** Run XML schema (XSD) generator from command line.
 	 * @param args array of string with command line arguments:
 	 * <ul>
 	 * <li>-h or --help: display help information.</li>

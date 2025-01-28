@@ -19,7 +19,7 @@ import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SReader;
 
-/** Parser of XML Schema "base64Binary" type.
+/** Parser of XML Schema (XSD) "base64Binary" type.
  * @author Vaclav Trojan
  */
 public class XSParseBase64Binary extends XSAbstractParser {

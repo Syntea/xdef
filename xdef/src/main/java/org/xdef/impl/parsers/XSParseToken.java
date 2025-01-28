@@ -4,7 +4,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 
-/** Parser of Schema "token" type.
+/** Parser of XML Schema (XSD) "token" type.
  * @author Vaclav Trojan
  */
 public class XSParseToken extends XSAbstractParseToken {

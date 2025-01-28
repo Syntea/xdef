@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
 
-/** Parser of Schema "ENTITIES" type.
+/** Parser of XML Schema (XSD) "ENTITIES" type.
  * @author Vaclav Trojan
  */
 public class XSParseENTITIES extends XSAbstractParseString {

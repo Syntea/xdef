@@ -5,7 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefLong;
 
-/** Parser of Schema "long" type.
+/** Parser of XML Schema (XSD) "long" type.
  * @author Vaclav Trojan
  */
 public class XSParseLong extends XSAbstractParseComparable {

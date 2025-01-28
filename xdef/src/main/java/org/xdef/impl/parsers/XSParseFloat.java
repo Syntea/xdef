@@ -1,6 +1,6 @@
 package org.xdef.impl.parsers;
 
-/** Parser of Schema "float" type.
+/** Parser of XML Schema (XSD) "float" type.
  * @author Vaclav Trojan
  */
 public class XSParseFloat extends XSParseDouble {

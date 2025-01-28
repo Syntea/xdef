@@ -6,7 +6,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBytes;
 import java.io.ByteArrayOutputStream;
 
-/** Parser of XML Schema "hexBinary" type.
+/** Parser of XML Schema (XSD) "hexBinary" type.
  * @author Vaclav Trojan
  */
 public class XSParseHexBinary extends XSParseBase64Binary {

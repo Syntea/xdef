@@ -7,7 +7,7 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 
-/** Parser of Schema "ID" type.
+/** Parser of XML Schema (XSD) "ID" type.
  * @author Vaclav Trojan
  */
 public class XSParseID extends XSParseQName {

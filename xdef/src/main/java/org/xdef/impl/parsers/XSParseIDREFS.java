@@ -8,7 +8,7 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 
-/** Parser of Schema "IDREFS" type.
+/** Parser of XML Schema (XSD) "IDREFS" type.
  * @author Vaclav Trojan
  */
 public class XSParseIDREFS extends XSParseENTITIES {

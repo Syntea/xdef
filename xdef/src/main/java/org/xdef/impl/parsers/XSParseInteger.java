@@ -6,7 +6,7 @@ import org.xdef.proc.XXNode;
 import java.math.BigInteger;
 import org.xdef.impl.code.DefBigInteger;
 
-/** Parser of Schema "integer" type.
+/** Parser of XML Schema (XSD) "integer" type.
  * @author Vaclav Trojan
  */
 public class XSParseInteger extends XSAbstractParseComparable {

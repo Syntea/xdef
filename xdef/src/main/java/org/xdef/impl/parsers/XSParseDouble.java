@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDouble;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of XML Schema "double" type.
+/** Parser of XML Schema (XSD) "double" type.
  * @author Vaclav Trojan
  */
 public class XSParseDouble extends XSAbstractParseComparable {

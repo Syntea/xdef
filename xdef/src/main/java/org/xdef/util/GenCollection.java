@@ -21,7 +21,7 @@ public class GenCollection {
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all irrelevant actions are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -37,7 +37,7 @@ public class GenCollection {
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all irrelevant actions are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -53,7 +53,7 @@ public class GenCollection {
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all irrelevant actions are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */

@@ -10,7 +10,7 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
-/** Parser of Schema "NOTATION" type.
+/** Parser of XML Schema (XSD) "NOTATION" type.
  * @author Vaclav Trojan
  */
 public class XSParseNOTATION extends XSAbstractParseString {

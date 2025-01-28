@@ -703,7 +703,7 @@ public class XDGenCollection {
 	 * @param xdef element with a Xdefinition.
 	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 */
 	public static void canonizeXDefinition(final Element xdef,
 		final boolean removeActions,
@@ -721,7 +721,7 @@ public class XDGenCollection {
 	 * @param collection Collection of Xdefinitions.
 	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 */
 	public static void canonizeCollection(final Element collection,
 		final boolean removeActions,
@@ -850,7 +850,7 @@ public class XDGenCollection {
 	 * @param xdef "actual" Xdefinition.
 	 * @param xel inspected model.
 	 * @param genVars if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 */
 	private static void preprocXModel(Element collection, Element xdef, Element xel, final boolean genVars) {
 		String xdURI = getXDNodeNS(xdef);
@@ -926,7 +926,7 @@ public class XDGenCollection {
 	 * @param collection root of collection of Xdefinitions.
 	 * @param xdef "actual" Xdefinition.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * re defining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 */
 	public static void preprocXdef(Element collection, Element xdef, final boolean genModelVariants) {
 		NodeList nl = xdef.getChildNodes();
@@ -1126,7 +1126,7 @@ public class XDGenCollection {
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * to redefine type or occurrence (important for XML schema generation).
+	 * to redefine type or occurrence (important for XML schema (XSD) generation).
 	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -1181,7 +1181,7 @@ public class XDGenCollection {
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
@@ -1227,7 +1227,7 @@ public class XDGenCollection {
 	 * @param resolvemacros if true then macros are resolved.
 	 * @param removeActions if true all actions except validation are removed.
 	 * @param genModelVariants if true generate alternate models if in the reference there exists an attribute
-	 * redefining type or occurrence (important for XML schema generation).
+	 * redefining type or occurrence (important for XML schema (XSD) generation).
 	 * @return element with collection of Xdefinitions.
 	 * @throws java.lang.Exception if an error occurs.
 	 */
