@@ -117,7 +117,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
 //"atom ::= ([-0-9a-zA-Z_])+\n"+
-"atom ::= S? ($letter | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+
+"atom ::= S? ($letter | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+ // extension of RFC 5322
 "emailAddr ::= localPart domain $rule\n"+
 "emailAddr1 ::= '<' emailAddr '>' \n"+
 "localPart ::= atom ('.' atom)*\n"+
@@ -183,6 +183,10 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Remove white spaces from argument.
+	 * @param s string where remove white spaces.
+	 * @return string with removed white spaces.
+	 */
 	private static String removeWS(final String s) {
 		String result = s;
 		int i;
