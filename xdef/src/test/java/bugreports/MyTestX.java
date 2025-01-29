@@ -327,7 +327,6 @@ clearSources();
 		try {
 			String type;
 			type = "date";
-//			type = "emailAddr";
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 //"  <xd:json name='A'> [\"* " + type + "()\"] </xd:json>\n"+
@@ -346,8 +345,7 @@ clearSources();
 			x = xd.jparse(xon, reporter);
 			assertNoErrors(reporter);
 			if (!XonUtils.xonEqual(o, x)) {
-				fail("** 2\n" + XonUtils.toXonString(o, true) + "\n"
-					+ XonUtils.toXonString(x, true));
+				fail("** 2\n" + XonUtils.toXonString(o, true) + "\n" + XonUtils.toXonString(x, true));
 			}
 
 			assertNull(testA("jnull", "[ null, null ]"));
@@ -364,17 +362,13 @@ clearSources();
 			assertNull(testA("float", "[null, 1.0f, 1f ]"));
 			assertNull(testA("double", "[ null, 1.0, 1d ]"));
 			assertNull(testA("decimal", "[ null,0D,1D,-1D,1.5D,3.33e-5D ]"));
-			assertNull(testA("date",
-				"[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
+			assertNull(testA("date", "[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
 			assertNull(testA("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
-			assertNull(testA("gps",
-				"[null,g(20.2,19.9),g(20.21,19.99,0.1),g(51.52,-0.09,0,xxx)]"));
+			assertNull(testA("gps", "[null,g(20.2,19.9),g(20.21,19.99,0.1),g(51.52,-0.09,0,xxx)]"));
 			assertNull(testA("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
-			assertNull(testA("char",
-				"[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
+			assertNull(testA("char", "[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
 			assertNull(testA("anyURI", "[null, u\"http://a.b\" ]"));
-			assertNull(testA("emailAddr",
-				"[ null, e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
+			assertNull(testA("emailAddr", "[ null, e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
 			assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
 			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
 			assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
@@ -383,7 +377,6 @@ clearSources();
 			assertNull(testM("int", "{a:1}"));
 			assertNull(testM("int", "{ }"));
 			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
-
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;

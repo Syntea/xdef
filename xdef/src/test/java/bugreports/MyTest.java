@@ -96,6 +96,21 @@ public class MyTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a='emailAddr();' />\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			parse(xp, "", "<A a='jiří . Kamen@ a . b'/>", reporter, swr=new StringWriter(), null, null);
+			assertNoErrors(reporter);
+			parse(xp, "", "<A a='skybík@esto.cz'/>", reporter, swr=new StringWriter(), null, null);
+			assertNoErrors(reporter);
+			parse(xp, "", "<A a='rkhbvs+rixo@gmail.com'/>", reporter, swr=new StringWriter(), null, null);
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void x() {\n" +
 "    Currency c = new Currency('USD');\n" +
