@@ -31,10 +31,15 @@ public class TestEmailAddr extends STester {
 		assertTrue(parse("=?UTF-8?Q?P. B=C3=BDk?= <p@s>"));
 		assertTrue(parse("(V. T.)<tr@vo.xz>(u)"));
 		assertTrue(parse("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)"));
+		//RFC 5322
+		assertTrue(parse("skybík@esto.cz"));
+		assertTrue(parse(" jiří . Kamenický@ abc . čž "));
+		assertTrue(parse("rkhbvs+rixo@gmail.com"));
 		//invalid
 		assertTrue(!parse("1.2"));
 		assertTrue(!parse("<1E.-J-s-e_.z.cz>"));
 		assertTrue(!parse("(ab)ab"));
+		assertTrue(!parse("(a b) \"V. T.\" (c d) <tr.vo.xz> (u v)"));
 		assertTrue(!parse("(a b) \"V. T.\" (c d) <tr.vo.xz> (u v)"));
 	}
 

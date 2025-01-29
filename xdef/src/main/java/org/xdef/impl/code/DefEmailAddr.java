@@ -116,7 +116,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "comment ::=  S? ( commentList $rule) S?\n"+
 "commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
-"atom ::= ([-0-9a-zA-Z_])+\n"+
+//"atom ::= ([-0-9a-zA-Z_])+\n"+
+"atom ::= S? ($letter | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+
 "emailAddr ::= localPart domain $rule\n"+
 "emailAddr1 ::= '<' emailAddr '>' \n"+
 "localPart ::= atom ('.' atom)*\n"+
@@ -169,8 +170,9 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 				}
 				p.isSpaces();
 				if (localPart != null && domain != null) {
-					return new String[] {
-						g.getParsedString(), localPart, domain, userName};
+					localPart = removeWS(localPart);
+					domain = removeWS(domain);
+					return new String[] {g.getParsedString(), localPart, domain, userName};
 				}
 			}
 		}
@@ -180,6 +182,15 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
+	private static String removeWS(final String s) {
+		String result = s;
+		int i;
+		while ((i = result.indexOf(' ')) >= 0 || (i = result.indexOf('\t')) >=0) {
+			result = result.substring(0,i) + result.substring(i + 1);
+		}
+		return result;
+	}
 
 	@Override
 	/** Get associated object.
