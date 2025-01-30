@@ -117,9 +117,12 @@ public class MyTest extends XDTester {
 			test(xp,"<A a='\"very.(),:;&lt;>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.e.com'/>");
 			test(xp,"<A a=\"&quot;()&lt;>[]:,;@\\&quot;!#$%&amp;'-/=?^_`{}| ~.a&quot;@e.o\"/>");
 			test(xp, "<A a=\" Joe.\\\\Blow@example.com\"/>");
+			test(xp, "<A a=\" Joe.\\@Blow@example.com\"/>");
+			test(xp, "<A a=\" Joe.\\ Blow@example.com\"/>");
+
 			test(xp, "<A a=\"jsmith@[192.168.2.1]\"/>");
 			test(xp,"<A a=\"user@[IPv6:2001:db8::1]\"/>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(true)return;
 /**/
 		try {
