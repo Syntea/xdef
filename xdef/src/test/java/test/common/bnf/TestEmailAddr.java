@@ -36,6 +36,7 @@ public class TestEmailAddr extends STester {
 		assertTrue(parse(" jiří . Kamenický@ abc . cz "));
 		assertTrue(parse("rkhbvs+rixo@gmail.com"));
 		assertTrue(parse("#!$%&'*+-/=?^_`{}|~@example.org"));
+		assertTrue(parse("\" \"@strange.ex.com"));
 		assertTrue(parse("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.ex.com"));
 		assertTrue(parse("\"()<>[]:,;@\\\\\\\"!#$%&'-/=?^_`{}| ~.a\"@example.org"));
 		//invalid

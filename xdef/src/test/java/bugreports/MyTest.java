@@ -110,6 +110,7 @@ public class MyTest extends XDTester {
 			parse(xp, "", "<A a='\"a \\\" b\"@gmail.com'/>", reporter);
 			assertNoErrors(reporter);
 			parse(xp, "", "<A a=\"#!$%&amp;'*+-/=?^_`{}|~@example.org\"/>", reporter);
+			parse(xp, "", "<A a='\" \"@example.org'/>", reporter);
 			parse(xp, "",
 				"<A a='\"very.(),:;&lt;>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.e.com'/>",
 				reporter);
