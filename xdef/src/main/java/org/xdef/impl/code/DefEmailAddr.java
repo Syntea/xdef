@@ -2,6 +2,8 @@ package org.xdef.impl.code;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
@@ -117,10 +119,11 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
 "d_atom ::= S? ([-0-9a-zA-Z_])+ S?\n"+
-"l_atom ::= S? ($letter | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+ // extension of RFC 5322
+"l_atom ::= S? ($letter | '\\\\' | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+ // extension of RFC 5322
 "q_string ::= '\"' ('\\\"' | '\\\\' | '\\ ' | ($anyChar - [\"\\]))* '\"'\n"+
 "localPart ::= l_atom ('.' l_atom)*  | q_string\n"+
-"domain ::= '@' d_atom ('.' d_atom)*\n"+
+"ipaddr ::= S? '[' ($anyChar - ']')+ ']' S?\n"+
+"domain ::= '@' (d_atom ('.' d_atom)* | ipaddr)\n"+
 "emailAddr ::= localPart domain $rule\n"+
 "emailAddr1 ::= '<' emailAddr '>' \n"+
 "text ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
@@ -173,6 +176,15 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 				if (localPart != null && domain != null) {
 					localPart = removeWS(localPart);
 					domain = removeWS(domain);
+					if (domain.charAt(0) == '[') {
+						try {
+							int i = domain.startsWith("[IPv6:") ? 6 : 1;
+							InetAddress.getByName(domain.substring(i, domain.length()-1));
+						} catch (UnknownHostException ex) {
+							//Incorrect value of &{0}&{1}&{: }
+							throw new SRuntimeException(XDEF.XDEF809,"email", p.getBufferPartFrom(0));
+						}
+					}
 					return new String[] {g.getParsedString(), localPart, domain, userName};
 				}
 			}

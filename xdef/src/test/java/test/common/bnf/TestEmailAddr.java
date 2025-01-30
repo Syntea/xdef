@@ -18,6 +18,7 @@ public class TestEmailAddr extends STester {
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void test() {
+		assertTrue(parse("jsmith@[192.168.2.1]"));
 		//valid
 		assertTrue(parse("1@2"));
 		assertTrue(parse("<1E.-J@s-e_.z.cz>"));
@@ -31,12 +32,17 @@ public class TestEmailAddr extends STester {
 		assertTrue(parse("=?UTF-8?Q?P. B=C3=BDk?= <p@s>"));
 		assertTrue(parse("(V. T.)<tr@vo.xz>(u)"));
 		assertTrue(parse("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)"));
+		assertTrue(parse("xample-indeed@strange-example.com"));
+		assertTrue(parse("jsmith@[192.168.2.1]"));
+		assertTrue(parse("user@[IPv6:2001:db8::1]"));
 		//RFC 5322
 		assertTrue(parse("skybík@esto.cz"));
-		assertTrue(parse(" jiří . Kamenický@ abc . cz "));
+		assertTrue(parse(" jiří . Kamenický@abcd"));
 		assertTrue(parse("rkhbvs+rixo@gmail.com"));
 		assertTrue(parse("#!$%&'*+-/=?^_`{}|~@example.org"));
 		assertTrue(parse("\" \"@strange.ex.com"));
+		assertTrue(parse("\"much.more unusual\"@example.com"));
+		assertTrue(parse("\"very.unusual.@.unusual.com\"@example.com"));
 		assertTrue(parse("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.ex.com"));
 		assertTrue(parse("\"()<>[]:,;@\\\\\\\"!#$%&'-/=?^_`{}| ~.a\"@example.org"));
 		//invalid

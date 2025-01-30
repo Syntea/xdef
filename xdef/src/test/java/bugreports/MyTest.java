@@ -68,6 +68,14 @@ public class MyTest extends XDTester {
 		return result;
 	}
 
+	private void test(final XDPool xp, String s) {
+		ArrayReporter reporter = new ArrayReporter();
+		parse(xp, "", s, reporter);
+		if (reporter.errorWarnings()) {
+			fail(reporter);
+		}
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -99,22 +107,18 @@ public class MyTest extends XDTester {
 "  <A a='emailAddr();' />\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			parse(xp, "", "<A a='jiří . Kamen@ a . b'/>", reporter);
-			assertNoErrors(reporter);
-			parse(xp, "", "<A a='skybík@esto.cz'/>", reporter);
-			assertNoErrors(reporter);
-			parse(xp, "", "<A a='rkhbvs+rixo@gmail.com'/>", reporter);
-			assertNoErrors(reporter);
-			parse(xp, "", "<A a='\"a ? b\"@gmail.com'/>", reporter);
-			assertNoErrors(reporter);
-			parse(xp, "", "<A a='\"a \\\" b\"@gmail.com'/>", reporter);
-			assertNoErrors(reporter);
-			parse(xp, "", "<A a=\"#!$%&amp;'*+-/=?^_`{}|~@example.org\"/>", reporter);
-			parse(xp, "", "<A a='\" \"@example.org'/>", reporter);
-			parse(xp, "",
-				"<A a='\"very.(),:;&lt;>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.e.com'/>",
-				reporter);
-			parse(xp,"","<A a=\"&quot;()&lt;>[]:,;@\\&quot;!#$%&amp;'-/=?^_`{}| ~.a&quot;@e.o\"/>",reporter);
+			test(xp,"<A a='jiří . Kamen@ a . b'/>");
+			test(xp,"<A a='skybík@esto.cz'/>");
+			test(xp,"<A a='rkhbvs+rixo@gmail.com'/>");
+			test(xp,"<A a='\"a ? b\"@gmail.com'/>");
+			test(xp,"<A a='\"a \\\" b\"@gmail.com'/>");
+			test(xp,"<A a=\"#!$%&amp;'*+-/=?^_`{}|~@example.org\"/>");
+			test(xp,"<A a='\" \"@example.org'/>");
+			test(xp,"<A a='\"very.(),:;&lt;>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.e.com'/>");
+			test(xp,"<A a=\"&quot;()&lt;>[]:,;@\\&quot;!#$%&amp;'-/=?^_`{}| ~.a&quot;@e.o\"/>");
+			test(xp, "<A a=\" Joe.\\\\Blow@example.com\"/>");
+			test(xp, "<A a=\"jsmith@[192.168.2.1]\"/>");
+			test(xp,"<A a=\"user@[IPv6:2001:db8::1]\"/>");
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 /**/
