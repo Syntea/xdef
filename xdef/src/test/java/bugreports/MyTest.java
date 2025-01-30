@@ -99,12 +99,21 @@ public class MyTest extends XDTester {
 "  <A a='emailAddr();' />\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			parse(xp, "", "<A a='jiří . Kamen@ a . b'/>", reporter, swr=new StringWriter(), null, null);
+			parse(xp, "", "<A a='jiří . Kamen@ a . b'/>", reporter);
 			assertNoErrors(reporter);
-			parse(xp, "", "<A a='skybík@esto.cz'/>", reporter, swr=new StringWriter(), null, null);
+			parse(xp, "", "<A a='skybík@esto.cz'/>", reporter);
 			assertNoErrors(reporter);
-			parse(xp, "", "<A a='rkhbvs+rixo@gmail.com'/>", reporter, swr=new StringWriter(), null, null);
+			parse(xp, "", "<A a='rkhbvs+rixo@gmail.com'/>", reporter);
 			assertNoErrors(reporter);
+			parse(xp, "", "<A a='\"a ? b\"@gmail.com'/>", reporter);
+			assertNoErrors(reporter);
+			parse(xp, "", "<A a='\"a \\\" b\"@gmail.com'/>", reporter);
+			assertNoErrors(reporter);
+			parse(xp, "", "<A a=\"#!$%&amp;'*+-/=?^_`{}|~@example.org\"/>", reporter);
+			parse(xp, "",
+				"<A a='\"very.(),:;&lt;>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.e.com'/>",
+				reporter);
+			parse(xp,"","<A a=\"&quot;()&lt;>[]:,;@\\&quot;!#$%&amp;'-/=?^_`{}| ~.a&quot;@e.o\"/>",reporter);
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 /**/

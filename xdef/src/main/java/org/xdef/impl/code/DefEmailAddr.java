@@ -116,12 +116,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "comment ::=  S? ( commentList $rule) S?\n"+
 "commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
-//"atom ::= ([-0-9a-zA-Z_])+\n"+
-"atom ::= S? ($letter | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+ // extension of RFC 5322
+"d_atom ::= S? ([-0-9a-zA-Z_])+ S?\n"+
+"l_atom ::= S? ($letter | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+ // extension of RFC 5322
+"q_string ::= '\"' ('\\\"' | '\\\\' | '\\ ' | ($anyChar - [\"\\]))* '\"'\n"+
+"localPart ::= l_atom ('.' l_atom)*  | q_string\n"+
+"domain ::= '@' d_atom ('.' d_atom)*\n"+
 "emailAddr ::= localPart domain $rule\n"+
 "emailAddr1 ::= '<' emailAddr '>' \n"+
-"localPart ::= atom ('.' atom)*\n"+
-"domain ::= '@' atom ('.' atom)*\n"+
 "text ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
 "textItem ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
 "charsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
