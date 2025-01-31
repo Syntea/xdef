@@ -67,15 +67,6 @@ public class MyTest extends XDTester {
 		}
 		return result;
 	}
-
-	private void test(final XDPool xp, String s) {
-		ArrayReporter reporter = new ArrayReporter();
-		parse(xp, "", s, reporter);
-		if (reporter.errorWarnings()) {
-			fail(reporter);
-		}
-	}
-
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -104,30 +95,6 @@ public class MyTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <A a='emailAddr();' />\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			test(xp,"<A a='jiří . Kamen@ a . b'/>");
-			test(xp,"<A a='skybík@esto.cz'/>");
-			test(xp,"<A a='rkhbvs+rixo@gmail.com'/>");
-			test(xp,"<A a='\"a ? b\"@gmail.com'/>");
-			test(xp,"<A a='\"a \\\" b\"@gmail.com'/>");
-			test(xp,"<A a=\"#!$%&amp;'*+-/=?^_`{}|~@example.org\"/>");
-			test(xp,"<A a='\" \"@example.org'/>");
-			test(xp,"<A a='\"very.(),:;&lt;>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.e.com'/>");
-			test(xp,"<A a=\"&quot;()&lt;>[]:,;@\\&quot;!#$%&amp;'-/=?^_`{}| ~.a&quot;@e.o\"/>");
-			test(xp, "<A a=\" Joe.\\\\Blow@example.com\"/>");
-			test(xp, "<A a=\" Joe.\\@Blow@example.com\"/>");
-			test(xp, "<A a=\" Joe.\\ Blow@example.com\"/>");
-
-			test(xp, "<A a=\"jsmith@[192.168.2.1]\"/>");
-			test(xp,"<A a=\"user@[IPv6:2001:db8::1]\"/>");
-		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
-/**/
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void x() {\n" +
 "    Currency c = new Currency('USD');\n" +
@@ -141,10 +108,10 @@ if(true)return;
 			assertNoErrors(reporter);
 			assertEq("USD", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 /**/
 		try {
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void testLoop() {\n"+
@@ -195,13 +162,12 @@ if(true)return;
 "  }\n"+
 "</xd:declaration>\n"+
 "  <A xd:script='finally testLoop();' />\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			parse(xp, "", "<A/>", reporter, swr=new StringWriter(), null, null);
+"</xd:def>");
+			parse(xp, "", "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertNoErrors(reporter);
 			assertEq("123456", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 /**/
 		try {
 			xdef = // sequence with separator
@@ -704,9 +670,9 @@ if(true)return;
 			// \.     dot
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"<a a='string(%pattern=\n" +
-"      [\"\\\\p{Lu}(\\\\.|\\\\p{Ll}+)( \\\\p{Lu}(\\\\p{Ll}*|\\\\.))*\"]\n" +
-");'/>\n" +
+//"  <a a='string(%pattern=[\"\\\\p{Lu}(\\\\.|\\\\p{Ll}+)( \\\\p{Lu}(\\\\p{Ll}*|\\\\.))*\"]);'/>\n" +
+"  <a a='string(%pattern=[\"[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ](\\\\.|[a-záčďéěíňóřšťúůýž]+)"+
+	"( [A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]([a-záčďéěíňóřšťúůýž]*|\\\\.))*\"]);'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='Novák'/>";
@@ -725,6 +691,7 @@ if(true)return;
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
+//if(true)return;
 
 		clearTempDir(); // delete temporary files.
 	}

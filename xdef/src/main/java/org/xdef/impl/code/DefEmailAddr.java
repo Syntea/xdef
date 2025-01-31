@@ -119,7 +119,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
 "d_atom ::= S? ([-0-9a-zA-Z_])+ S?\n"+
-"l_atom ::= S? ($letter | ('\\' ('[' | ']' | [\\\"@ ()])) | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+ // RFC 5322
+"l_atom ::= S? ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+//RFC5322
 "q_string ::= '\"' ('\\\"' | '\\\\' | '\\ ' | ($anyChar - [\"\\]))* '\"'\n"+
 "localPart ::= l_atom ('.' l_atom)*  | q_string\n"+
 "ipaddr ::= S? '[' ($anyChar - ']')+ ']' S?\n"+

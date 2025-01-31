@@ -46,16 +46,20 @@ public class TestEmailAddr extends STester {
 		assertTrue(parse("\"much.more unusual\"@example.com"));
 		assertTrue(parse("\"very.unusual.@.unusual.com\"@example.com"));
 		assertTrue(parse("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.ex.com"));
-		assertTrue(parse("\"()<>[]:,;@\\\\\\\"!#$%&'-/=?^_`{}| ~.a\"@example.org"));
+		assertTrue(parse("\"()<>[]:,;@\\\\\\\"!#$%&'-/=?^_`{}| ~.ÁŽúů\"@example.org"));
 		assertTrue(parse("Joe.\\\\Blow@example.com"));
 		assertTrue(parse("Joe.\\@Blow@example.com"));
 		assertTrue(parse("Joe.\\ Blow@example.com"));
+		assertTrue(parse("Áá!#$%&'-=?^_`{}|~\\ \\.\\\".-.\\[\\]\\<\\>\\(\\)\\,\\:\\/\\/Ü@example.com"));
+
 		//invalid
 		assertTrue(!parse("1.2"));
 		assertTrue(!parse("<1E.-J-s-e_.z.cz>"));
 		assertTrue(!parse("(ab)ab"));
 		assertTrue(!parse("(a b) \"V. T.\" (c d) <tr.vo.xz> (u v)"));
 		assertTrue(!parse("(a b) \"V. T.\" (c d) <tr.vo.xz> (u v)"));
+		assertTrue(!parse(".john.doe@example.com/>"));
+		assertTrue(!parse("john..doe@example.com"));
 	}
 
 	/** Run test
