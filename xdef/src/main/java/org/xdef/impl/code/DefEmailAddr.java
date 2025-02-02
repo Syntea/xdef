@@ -15,6 +15,8 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.XDEmailAddr;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_EMAIL;
 import static org.xdef.XDValueType.EMAIL;
 import org.xdef.sys.SException;
 
@@ -22,6 +24,65 @@ import org.xdef.sys.SException;
  * @author Vaclav Trojan
  */
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
+	/** BNF rules of email address according to RFC 5321. */
+	private static final BNFGrammar G = BNFGrammar.compile(
+"/**** Syntax according to RFC 5321 ****/\n"+
+"S ::= [ #9]+ /* linear white space */\n"+
+"ASCIICHAR     ::= [ -~]\n"+
+"ALPHA         ::= $letter | '_'\n"+
+"DIGIT         ::= [0-9]\n"+
+"HEXDIG        ::= [0-9a-fA-F]\n"+
+"DQUOTE        ::= '\"'\n"+
+"IPv4          ::= Snum ('.'  Snum){3}\n"+
+"Snum          ::= ('2' ([0-4] DIGIT | '5' [0..5])) | [0-1] [0-9]{2} | DIGIT{1,2}\n"+
+"IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
+"IPv6_hex      ::= HEXDIG{1,4}\n" +
+"IPv6_full     ::= IPv6_hex (\":\" IPv6_hex){7}\n" +
+"IPv6_comp     ::= (IPv6_hex (\":\" IPv6_hex){0,5})? \"::\" (IPv6_hex (\":\" IPv6_hex){0,5})?\n" +
+"                  /* The \"::\" represents at least 2 16-bit groups of\n" +
+"                    zeros. No more than 6 groups in addition to the \"::\" may be present. */\n" +
+"IPv6v4_full   ::= IPv6_hex (\":\" IPv6_hex){5} \":\" IPv4_addr\n" +
+"IPv6v4_comp   ::= (IPv6_hex (\":\" IPv6_hex){0,3})? \"::\"\n" +
+"                  (IPv6_hex (\":\" IPv6_hex){0,3} \":\")? IPv4_addr\n" +
+"                  /* The \"::\" represents at least 2 16-bit groups of\n" +
+"                     zeros.  No more than 4 groups in addition to the\n" +
+"                     \"::\" and IPv4-address-literal may be present.*/\n"+
+"IPv4_addr     ::= IPv4\n"+
+"IPv6_addr     ::= \"IPv6:\" IPv6\n"+
+"Domain        ::= sub_domain (\".\" sub_domain)*\n"+
+"sub_domain    ::= Let_dig+ Ldh_str?\n" +
+"Let_dig       ::= ALPHA | DIGIT\n" +
+"Ldh_str       ::= (\"-\" Let_dig+)+\n"+
+"General_addr  ::= Std_tag \":\" (dcontent)+\n" +
+"Std_tag       ::= Ldh_str\n" +
+"                  /* Std-tag MUST be specified in a Standards-Track RFC and registered with IANA*/\n" +
+"dcontent      ::= [!-Z] | [^-~] /* %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ] */\n" +
+"address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\" /* See Section 4.1.3*/\n" +
+"Mailbox       ::= Local_part \"@\" ( address | Domain )  $rule\n"+
+"Local_part    ::= Dot_string | Quoted_string\n" + /* MAY be case-sensitive*/
+"Dot_string    ::= Atom (\".\"  Atom)*\n" +
+"atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
+"Atom          ::= atext (\"-\" atext)*\n" +
+"Quoted_string ::= DQUOTE QcontentSMTP* DQUOTE\n" +
+"QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
+"quoted_pair   ::= '\\' [ -~] /*%d92 %d32-126*/\n" +
+"                  /* i.e., backslash followed by any ASCII graphic (including itself) or SPace*/\n" +
+"qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
+"                  /* i.e., within a quoted string, any ASCII graphic or space is permitted\n" +
+"                     without blackslash-quoting except double-quote and the backslash itself.*/\n" +
+"String        ::= Atom | Quoted_string\n"+
+"comment       ::=  S? ( commentList $rule ) S?\n"+
+"commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
+"commentPart   ::= ([ -~] - [()])+ (S? commentList)?\n"+
+"text          ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
+"textItem      ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
+"charsetName   ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
+"ptext         ::= ((ASCIICHAR - [@><()=])+) $rule\n"+
+"qtext         ::= ((hexOctet | ASCIICHAR - [=?])+) $rule /*quoted*/\n"+
+"hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
+"btext         ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */\n"+
+"emailAddr     ::= (text? S? '<' S? Mailbox S? '>' | (comment* Mailbox)) (S? comment)*\n" +
+"");
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
@@ -112,81 +173,65 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 * [3] .. string with personal information.
 	 */
 	public static final String[] parseEmail(final StringParser p) {
-		BNFGrammar g = BNFGrammar.compile(
-"S ::= [ #9]+ /* linear white space */\n"+
-"asciiChar ::= [ -~]\n"+
-"comment ::=  S? ( commentList $rule) S?\n"+
-"commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
-"commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
-"d_atom ::= S? ([-0-9a-zA-Z_])+ S?\n"+
-"l_atom ::= S? ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [-0-9_!#$%&'*+/=?^`{|}~])+ S?\n"+//RFC5322
-"q_string ::= '\"' ('\\\"' | '\\\\' | '\\ ' | ($anyChar - [\"\\]))* '\"'\n"+
-"localPart ::= l_atom ('.' l_atom)*  | q_string\n"+
-"ipaddr ::= S? '[' ($anyChar - ']')+ ']' S?\n"+
-"domain ::= '@' (d_atom ('.' d_atom)* | ipaddr)\n"+
-"emailAddr ::= localPart domain $rule\n"+
-"emailAddr1 ::= '<' emailAddr '>' \n"+
-"text ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
-"textItem ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
-"charsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
-"ptext ::= ((asciiChar - [@><()=])+) $rule\n"+
-"qtext ::= ((hexOctet | asciiChar - [=?])+) $rule /*quoted*/\n"+
-"hexOctet ::= '=' [0-9A-F] [0-9A-F]\n"+
-"btext ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */\n"+
-"email ::= (text? S? emailAddr1 | (comment* emailAddr)) (S? comment)*");
 		p.isSpaces();
-		if (g.parse(p, "email")) {
-			String domain; // Email domain
-			String localPart; // Email user
-			String charsetName; // name of text charset name
-			domain = localPart = charsetName = null;
-			String userName = ""; // Email user name
-			Object[] code = g.getParsedObjects();
-			String s = p.getParsedBufferPart();
-			if (code != null) {
-				for (Object code1 : code) {
-					StringParser q = new StringParser((String) code1);
-					String t;
-					if ((t = readStackItem(q, "emailAddr", s)) != null) {
-						int ndx = t.indexOf('@');
-						localPart = t.substring(0, ndx);
-						domain = t.substring(ndx + 1);
-					} else if ((t = readStackItem(q, "comment", s)) != null) {
-						t = (t = t.trim()).substring(1, t.length() -1).trim();
-						if (!t.isEmpty()) {
-							if (localPart == null) {
-								userName += t;
-							} else {
-								userName = t;
-							}
-						}
-					} else if ((t = readStackItem(q, "ptext", s)) != null) {
-						userName += t.trim();
-					} else if ((t = readStackItem(q, "charsetName", s)) != null) {
-						charsetName = t;
-					} else if ((t = readStackItem(q, "qtext", s)) != null) {
-						t = readQtext(t, charsetName);
-						userName += t;
-					} else if ((t = readStackItem(q, "btext", s)) != null) {
-						t = readBtext(t, charsetName);
-						userName += t;
-					}
-				}
-				p.isSpaces();
-				if (localPart != null && domain != null) {
-					localPart = removeWS(localPart);
-					domain = removeWS(domain);
-					if (domain.charAt(0) == '[') {
-						try {
-							int i = domain.startsWith("[IPv6:") ? 6 : 1;
-							InetAddress.getByName(domain.substring(i, domain.length()-1));
-						} catch (UnknownHostException ex) {
-							//Incorrect value of &{0}&{1}&{: }
-							throw new SRuntimeException(XDEF.XDEF809,"email", p.getBufferPartFrom(0));
+		Object[] code;
+		String parsedString;
+		synchronized (G) {
+			if (!G.parse(p, "emailAddr")) {
+				return null;
+			}
+			parsedString = G.getParsedString();
+			code = G.getParsedObjects();
+		}
+		String domain; // Email domain
+		String localPart; // Email user
+		String charsetName; // name of text charset name
+		domain = localPart = charsetName = null;
+		String userName = ""; // Email user name
+		String s = p.getParsedBufferPart();
+		if (code != null) {
+			for (Object code1 : code) {
+				StringParser q = new StringParser((String) code1);
+				String t;
+				if ((t = readStackItem(q, "Mailbox", s)) != null) {
+					int ndx = t.indexOf('@');
+					localPart = t.substring(0, ndx);
+					domain = t.substring(ndx + 1);
+				} else if ((t = readStackItem(q, "comment", s)) != null) {
+					t = (t = t.trim()).substring(1, t.length() -1).trim();
+					if (!t.isEmpty()) {
+						if (localPart == null) {
+							userName += t;
+						} else {
+							userName = t;
 						}
 					}
-					return new String[] {g.getParsedString(), localPart, domain, userName};
+				} else if ((t = readStackItem(q, "ptext", s)) != null) {
+					userName += t.trim();
+				} else if ((t = readStackItem(q, "charsetName", s)) != null) {
+					charsetName = t;
+				} else if ((t = readStackItem(q, "qtext", s)) != null) {
+					t = readQtext(t, charsetName);
+					userName += t;
+				} else if ((t = readStackItem(q, "btext", s)) != null) {
+					t = readBtext(t, charsetName);
+					userName += t;
 				}
+			}
+			p.isSpaces();
+			if (localPart != null && domain != null) {
+				localPart = removeWS(localPart);
+				domain = removeWS(domain);
+				if (domain.charAt(0) == '[') {
+					try {
+						int i = domain.startsWith("[IPv6:") ? 6 : 1;
+						InetAddress.getByName(domain.substring(i, domain.length()-1));
+					} catch (UnknownHostException ex) {
+						//Incorrect value of &{0}&{1}&{: }
+						throw new SRuntimeException(XDEF.XDEF809,"email", p.getBufferPartFrom(0));
+					}
+				}
+				return new String[] {parsedString, localPart, domain, userName};
 			}
 		}
 		return null;
