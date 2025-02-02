@@ -113,6 +113,9 @@ public class TestEmailAddr extends STester {
 		p = parse("=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>");
 		assertEq("želová", p.getUserName());
 		assertEq("ep@e.c", p.getLocalPart() + "@" + p.getDomain());
+		p = parse("=?UTF-8?B?SmnFmcOtLks=?= <a@example.com>");
+		assertEq("Jiří.K", p.getUserName());
+		assertEq("a@example.com", p.getLocalPart() + "@" + p.getDomain());
 		p = parse("=?UTF-8?Q?P. B=C3=BDk?= <p@s>");
 		assertEq("P. Býk", p.getUserName());
 		assertEq("p@s", p.getLocalPart() + "@" + p.getDomain());
