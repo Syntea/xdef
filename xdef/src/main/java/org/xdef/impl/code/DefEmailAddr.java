@@ -195,9 +195,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 					localPart = t.substring(0, ndx);
 					domain = t.substring(ndx + 1);
 				} else if ((t = readStackItem(q, "commentPart", s)) != null) {
-					userName += t.trim();
-				} else if ((t = readStackItem(q, "ptext", s)) != null) {
-					userName += t.trim();
+					userName += t;
 				} else if ((t = readStackItem(q, "charsetName", s)) != null) {
 					charsetName = t;
 				} else if ((t = readStackItem(q, "qtext", s)) != null) {
@@ -206,6 +204,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 				} else if ((t = readStackItem(q, "btext", s)) != null) {
 					t = readBtext(t, charsetName);
 					userName += t;
+				} else if ((t = readStackItem(q, "ptext", s)) != null) {
+					userName += t.trim();
 				}
 			}
 			p.isSpaces();
