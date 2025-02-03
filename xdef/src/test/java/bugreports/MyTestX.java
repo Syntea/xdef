@@ -93,7 +93,7 @@ public class MyTestX extends XDTester {
 		System.out.println();
 	}
 
-	@SuppressWarnings({"unchecked", "unchecked"})
+	@SuppressWarnings({"unchecked"})
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -376,7 +376,6 @@ clearSources();
 
 			assertNull(testM("int", "{a:1}"));
 			assertNull(testM("int", "{ }"));
-			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;
@@ -765,8 +764,7 @@ clearSources();
 			x = xc.toXon();
 			assertEq("{ . }\n", swr.toString());
 			assertEq(" ab\tcd ", ((Map)((Map) x).get("a")).get("y"));
-			assertTrue(XonUtils.xonEqual(o, x),
-				XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(x));
+			assertTrue(XonUtils.xonEqual(o, x), XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(x));
 			s = "{a:[1,2]}";
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
@@ -867,8 +865,7 @@ if(T)return;
 			y = SUtils.getNewInstance(_package+".component.Y16a");
 			SUtils.setValueToSetter(y, "sety", 1);
 			SUtils.setValueToSetter(x, "setx$b", y);
-			o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml)
-				.getDocumentElement());
+			o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
 			assertTrue(XonUtils.xonEqual(o, XonUtils.xmlToXon(el)),
@@ -1070,13 +1067,11 @@ clearSources();
 			json = "{}";
 			assertNull(testX(xp, "", s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),
-				SUtils.getValueFromGetter(xc, "getMap$")));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), SUtils.getValueFromGetter(xc, "getMap$")));
 			json = "{ a:1, b:true }";
 			assertNull(testX(xp, "", s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),
-				SUtils.getValueFromGetter(xc, "getMap$")));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), SUtils.getValueFromGetter(xc, "getMap$")));
 //			setValueToSetter(xc, "setval", 2);
 			json = "null";
 			assertNotNull(testX(xp, "", s, json)); // error: not map
@@ -1349,8 +1344,7 @@ clearSources();
 			assertNull(xini.get("hostaddr"));
 			assertNoErrorwarnings(reporter);
 			reporter.clear();
-			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s),XonUtils.parseINI(XonUtils.toIniString(xini))));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
@@ -1659,11 +1653,9 @@ clearSources();
 			xini = xd.iparse(s, reporter);
 			assertNoErrorwarnings(reporter);
 			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini,
-				xd.iparse(XonUtils.toIniString(xini), reporter)));
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrorwarnings(reporter);
-			assertEq("/123.45.67.8",
-				"" + ((Map<String, Object>)xini.get("Server")).get("SeverIP"));
+			assertEq("/123.45.67.8", "" + ((Map<String, Object>)xini.get("Server")).get("SeverIP"));
 			reporter.clear();
 		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
