@@ -102,13 +102,13 @@ public class TestEmailAddr extends STester {
 		assertEq("John Doe", p.getUserName());
 		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
 		p = parse("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)");
-		assertEq("u v", p.getUserName());
+		assertEq("a b\"V. T.\"c du v", p.getUserName());
 		assertEq("tr@vo.xz", p.getLocalPart() + "@" + p.getDomain());
 		p = parse("(ab) (cd) a@b");
-		assertEq("ab) (cd", p.getUserName());
+		assertEq("abcd", p.getUserName());
 		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
 		p = parse("a@b(ab) (cd)");
-		assertEq("ab) (cd", p.getUserName());
+		assertEq("abcd", p.getUserName());
 		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
 		p = parse("=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>");
 		assertEq("želová", p.getUserName());
@@ -131,6 +131,12 @@ public class TestEmailAddr extends STester {
 		p = parse("Joe.\\@Blow@example.com");
 		assertEq("", p.getUserName());
 		assertEq("Joe.\\@Blow@example.com", p.getLocalPart() + "@" + p.getDomain());
+		p = parse("user@[200.1.99.0]");
+		assertEq("", p.getUserName());
+		assertEq("user@[200.1.99.0]", p.getLocalPart() + "@" + p.getDomain());
+		p = parse("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]");
+		assertEq("", p.getUserName());
+		assertEq("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]", p.getLocalPart() + "@" + p.getDomain());
 	}
 
 	/** Run test

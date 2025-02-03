@@ -71,7 +71,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "String        ::= Atom | Quoted_string\n"+
 "comment       ::=  S? ( commentList $rule ) S?\n"+
 "commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
-"commentPart   ::= ([ -~] - [()])+ (S? commentList)?\n"+
+"commentPart   ::= ([ -~] - [()])+ (S? commentList)? $rule\n"+
 "text          ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
 "textItem      ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
 "charsetName   ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
@@ -194,15 +194,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 					int ndx = t.indexOf('@');
 					localPart = t.substring(0, ndx);
 					domain = t.substring(ndx + 1);
-				} else if ((t = readStackItem(q, "comment", s)) != null) {
-					t = (t = t.trim()).substring(1, t.length() -1).trim();
-					if (!t.isEmpty()) {
-						if (localPart == null) {
-							userName += t;
-						} else {
-							userName = t;
-						}
-					}
+				} else if ((t = readStackItem(q, "commentPart", s)) != null) {
+					userName += t.trim();
 				} else if ((t = readStackItem(q, "ptext", s)) != null) {
 					userName += t.trim();
 				} else if ((t = readStackItem(q, "charsetName", s)) != null) {
