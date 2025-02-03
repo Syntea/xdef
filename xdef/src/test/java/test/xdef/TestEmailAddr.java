@@ -1,26 +1,39 @@
-package test.common.bnf;
+package test.xdef;
 
+import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
-import org.xdef.XDParseResult;
-import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.parsers.XDParseEmailAddr;
-import org.xdef.sys.STester;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
+import test.XDTester;
 
 /** Test of email address.
  * @author Vaclav Trojan
  */
-public class TestEmailAddr extends STester {
+public class TestEmailAddr extends XDTester {
 
 	public TestEmailAddr() {super();}
 
+	final private XDPool xp = compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:declaration> external EmailAddr e;</xd:declaration>\n"+
+"<A>\n" +
+" emailAddr(); finally e = getParsedValue();\n"+
+"</A>\n" +
+"</xd:def>");
+
 	private XDEmailAddr parse(final String s) {
-		XDParseResult q = new DefParseResult(s);
-		new XDParseEmailAddr().check(null, q);
-		if (q.errors() || !q.eos()) {
+		XDDocument xd = xp.createXDDocument();
+		String t = SUtils.modifyString(s, "&", "&amp;");
+		t = SUtils.modifyString(t, "<", "&lt;");
+		String xml = "<A>"+t+"</A>";
+		ArrayReporter reporter = new ArrayReporter();
+		parse(xd, xml, reporter);
+		if (reporter.errors()) {
 			return null;
 		}
-		return (XDEmailAddr) q.getParsedValue();
+		return (XDEmailAddr) xd.getVariable("e");
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +43,7 @@ public class TestEmailAddr extends STester {
 		assertNotNull(parse("1@2"));
 		assertNotNull(parse("a.b@a.b-c1.cz"));
 		assertNotNull(parse("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]"));
-		assertNotNull(parse("ěščřžýáůú.ĚŠČŘ?ÝÁ?ŹĹ@a.b-c1.cz"));
+		assertNotNull(parse("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.cz"));
 		assertNotNull(parse("\"a b\"@[1.255.0.99]"));
 		assertNotNull(parse("s-e_.z.cz@s-e_.z.cz"));
 		assertNotNull(parse("\\\"\\\\!#$%&'*+/=?^`{|}~@a.b-c1.cz"));
@@ -145,6 +158,7 @@ public class TestEmailAddr extends STester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

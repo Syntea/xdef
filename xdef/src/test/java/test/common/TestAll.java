@@ -21,7 +21,6 @@ import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
 import test.XDTester;
-import test.common.bnf.TestEmailAddr;
 import test.common.xon.TestIni;
 
 /** Run all available basic tests for package org.xdef.sys.
@@ -48,7 +47,6 @@ public class TestAll {
 			// BNF
 			new TestBNF(),
 			new TestBNFJSON(),
-			new TestEmailAddr(),
 			new TestExpr(),
 			new TestSQL(),
 			new TestXML(),

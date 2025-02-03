@@ -25,6 +25,7 @@ public class TestAll {
 			new TestDebug(),
 			new TestDOMParse(),
 			new TestDTDTypes(),
+			new TestEmailAddr(),
 			new TestErrors(),
 			new TestExtenalMethods(),
 			new TestExternalVariables(),
