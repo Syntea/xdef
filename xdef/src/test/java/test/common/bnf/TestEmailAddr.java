@@ -17,7 +17,7 @@ public class TestEmailAddr extends STester {
 	private XDEmailAddr parse(final String s) {
 		XDParseResult q = new DefParseResult(s);
 		new XDParseEmailAddr().check(null, q);
-		if (q.errors()) {
+		if (q.errors() || !q.eos()) {
 			return null;
 		}
 		return (XDEmailAddr) q.getParsedValue();
@@ -89,6 +89,8 @@ public class TestEmailAddr extends STester {
 		assertNull(parse("john@example..com"));
 		assertNull(parse("john@example.com."));
 		assertNull(parse("john@.example.com"));
+		assertNull(parse("=?UTF-9?B?xb5lbG92w6E=?= <ep@e.c>"));
+		assertNull(parse("=?UTF-9?Q?P. B=C3=BDk?= <p@s>"));
 
 		// test parsed result
 		XDEmailAddr p;

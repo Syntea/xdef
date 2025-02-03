@@ -2,8 +2,6 @@ package org.xdef.impl.code;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
@@ -24,8 +22,8 @@ import org.xdef.sys.SException;
  * @author Vaclav Trojan
  */
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
-	/** BNF rules of email address according to RFC 5321. */
-	private static final BNFGrammar G = BNFGrammar.compile(
+	/** BNF grammar rules of email address according to RFC 5321. */
+	private static final BNFGrammar BNF = BNFGrammar.compile(
 "S ::= [ #9]+\n"+ /* linear white space */
 "ASCIICHAR     ::= [ -~]\n"+
 "ALPHA         ::= $letter | '_'\n"+
@@ -67,7 +65,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			   /* i.e., backslash followed by any ASCII graphic (including itself) or SPace*/
 "qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
 			   /* i.e., within a quoted string, any ASCII graphic or space is permitted without
-"                 blackslash-quoting except double-quote and the backslash itself.*/
+				 blackslash-quoting except double-quote and the backslash itself.*/
 "String        ::= Atom | Quoted_string\n"+
 "comment       ::=  S? ( commentList $rule ) S?\n"+
 "commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
@@ -80,6 +78,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
 "btext         ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */\n"+
 "emailAddr     ::= (text? S? '<' S? Mailbox S? '>' | (comment* Mailbox)) (S? comment)*");
+
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
@@ -91,45 +90,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 
 	/** Creates a new instance of DefEmail as null.*/
 	public DefEmailAddr() {this((String) null);}
-
-	private static String readStackItem(final StringParser q, final String s, final String src) {
-		if (q.isToken(s) && q.isSpaces()) {
-			if (q.isInteger()) {
-				int i = q.getParsedInt();
-				q.isSpaces();
-				if (q.isInteger()) {
-					return src.substring(i, q.getParsedInt());
-				}
-			}
-		}
-		return null;
-	}
-
-	private static String readBtext(final String s, final String charsetName) {
-		try {
-			return new String(SUtils.decodeBase64(s), charsetName);
-		} catch (UnsupportedEncodingException | SException ex) {
-			return "?";
-		}
-	}
-
-	private static String readQtext(final String s, final String charsetName) {
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		for (int i = 0; i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (ch == '=' && i + 2 < s.length()) {
-				String hexMask = "0123456789ABCDEF";
-				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4)
-					+ hexMask.indexOf(s.charAt(++i)));
-			}
-			b.write((byte) ch);
-		}
-		try {
-			return new String(b.toByteArray(), charsetName);
-		} catch (UnsupportedEncodingException ex) {
-			return "?";
-		}
-	}
 
 	/** Creates a new instance of DefEmail.
 	 * @param value string with email address.
@@ -161,7 +121,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		_userName = result[3];
 	}
 
-	/** Creates a new instance of DefEmailAddr
+	/** Parse source data with email address.
 	 * @param p parser with source data.
 	 * @return null if not correct or array of strings where the items are:<p>
 	 * [0] .. text of parsed email source.<p>
@@ -173,12 +133,12 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		p.isSpaces();
 		Object[] code;
 		String parsedString;
-		synchronized (G) {
-			if (!G.parse(p, "emailAddr")) {
+		synchronized (BNF) {
+			if (!BNF.parse(p, "emailAddr")) {
 				return null;
 			}
-			parsedString = G.getParsedString();
-			code = G.getParsedObjects();
+			parsedString = BNF.getParsedString();
+			code = BNF.getParsedObjects();
 		}
 		String domain; // Email domain
 		String localPart; // Email user
@@ -212,19 +172,69 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			if (localPart != null && domain != null) {
 				localPart = removeWS(localPart);
 				domain = removeWS(domain);
-				if (domain.charAt(0) == '[') {
-					try {
-						int i = domain.startsWith("[IPv6:") ? 6 : 1;
-						InetAddress.getByName(domain.substring(i, domain.length()-1));
-					} catch (UnknownHostException ex) {
-						//Incorrect value of &{0}&{1}&{: }
-						throw new SRuntimeException(XDEF.XDEF809,"email", p.getBufferPartFrom(0));
-					}
-				}
 				return new String[] {parsedString, localPart, domain, userName};
 			}
 		}
 		return null;
+	}
+
+	/** Read string from stack item.
+	 * @param q StringParser starting with name of item.
+	 * @param rule name of rule
+	 * @param src parsed source data.
+	 * @return part of parsed source data.
+	 */
+	private static String readStackItem(final StringParser q, final String s, final String src) {
+		if (q.isToken(s) && q.isSpaces()) {
+			if (q.isInteger()) {
+				int i = q.getParsedInt();
+				q.isSpaces();
+				if (q.isInteger()) {
+					return src.substring(i, q.getParsedInt());
+				}
+			}
+		}
+		return null;
+	}
+
+	/** Get decoded base64 text.
+	 * @param s base64 text.
+	 * @param charsetName name of charset.
+	 * @return decoded base64 text.
+	 */
+	private static String readBtext(final String s, final String charsetName) {
+		try {
+			return new String(SUtils.decodeBase64(s), charsetName);
+		} catch (SException ex) {
+			throw new SRuntimeException(ex.getReport());
+		} catch (UnsupportedEncodingException ex) {
+			//Incorrect value of &{0}&{1}&{: }
+			throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
+		}
+	}
+
+	/** Get quoted part of source data with given charset.
+	 * @param s extracted quoted part
+	 * @param charsetName name of charset.
+	 * @return quoted part of source data (decode given charset).
+	 */
+	private static String readQtext(final String s, final String charsetName) {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == '=' && i + 2 < s.length()) {
+				String hexMask = "0123456789ABCDEF";
+				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4)
+					+ hexMask.indexOf(s.charAt(++i)));
+			}
+			b.write((byte) ch);
+		}
+		try {
+			return new String(b.toByteArray(), charsetName);
+		} catch (UnsupportedEncodingException ex) {
+			//Incorrect value of &{0}&{1}&{: }
+			throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
