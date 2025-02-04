@@ -9,9 +9,8 @@
  *
  * <li>
  * <h2><tt>CanonizeSource</tt></h2>
- * provides canonization of sources (in the Java source files it replaces the
- * leading spaces with tabs - 4 spaces are replaced by one tab)
- * and it removes all trailing white spaces.
+ * provides canonization of sources (in the Java source files. It replaces the leading 4 spaces with one tab
+ * and removes all trailing white spaces.
  * </li>
  *
  * <li>
@@ -27,12 +26,11 @@
  * <li>
  * <h2><tt>GenConstants</tt></h2>
  * defines constants used in canonizing.
- *  </li>
+ * </li>
  *
  * <li>
  * <h2><tt>GenPluginInfo</tt></h2>
- * generates XML document with the information about implemented
- * methods used in GUI plugins.
+ * generates XML document with the information about implemented methods used in GUI plugins.
  *  </li>
  *
  * </UL>

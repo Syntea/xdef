@@ -12,8 +12,7 @@ public class SetDebugPreprocessorSwitches {
 	 * @param args path to base directory or null.
 	 */
 	public static void main(String... args) {
-		File baseDir = args == null || args.length == 0
-			? new File("../xdef") : new File(args[0]);
+		File baseDir = args == null || args.length == 0 ? new File("../xdef") : new File(args[0]);
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
 			throw new RuntimeException("Incorect project base directory");
 		}

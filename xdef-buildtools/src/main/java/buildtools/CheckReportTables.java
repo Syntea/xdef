@@ -26,13 +26,11 @@ public class CheckReportTables {
 		return false;
 	}
 
-	static boolean hasField(String dir, String name)
-		throws Exception {
+	static boolean hasField(String dir, String name) throws Exception {
 		File[] files = new File(dir).listFiles();
 		if (files != null) {
 			for (File f: new File(dir).listFiles()) {
-				if (f.getName().endsWith(".java") &&
-					!f.getName().endsWith("ScriptCodeTable.java")) {
+				if (f.getName().endsWith(".java") && !f.getName().endsWith("ScriptCodeTable.java")) {
 					if (hasField(f, name)) {
 						return true;
 					}
@@ -43,9 +41,8 @@ public class CheckReportTables {
 	}
 
 	/** Check unused messages. */
-	private static void chkUnusedMesssges(final String msgdir,
-		final String prefix,
-		final String[] dirs) throws Exception {
+	private static void chkUnusedMesssges(final String msgdir, final String prefix, final String[] dirs)
+		throws Exception {
 		System.out.println("Checking " + prefix);
 		String fname = msgdir + prefix + ".java";
 		ArrayList<String> names = new ArrayList<>(), unused = new ArrayList<>();
@@ -55,8 +52,7 @@ public class CheckReportTables {
 			String language = prefix + "_LANGUAGE";
 			while((line = br.readLine()) != null) {
 				int i,j;
-				if ((i = line.indexOf("long")) > 0 &&
-					(j = line.indexOf('=')) > 0) {
+				if ((i = line.indexOf("long")) > 0 && (j = line.indexOf('=')) > 0) {
 					String name = line.substring(i + 5, j).trim();
 					if (!description.equals(name) && !language.equals(name)) {
 						names.add(name);
@@ -84,9 +80,7 @@ public class CheckReportTables {
 	}
 
 	/** Find directories with Java source files. */
-	private static void addDirs(final File f,
-		final ArrayList<String> srcDirs,
-		final String[] exclude) {
+	private static void addDirs(final File f, final ArrayList<String> srcDirs, final String[] exclude) {
 		if (!f.isDirectory()) {
 			return;
 		}
@@ -111,8 +105,7 @@ public class CheckReportTables {
 	}
 
 	/** Find directories with Java source files. */
-	private static String[] getJavaDirectiories(final String[] sourceBases,
-		final String[] exclude) {
+	private static String[] getJavaDirectiories(final String[] sourceBases, final String[] exclude) {
 		ArrayList<String> srcDirs = new ArrayList<>();
 		for (String directory: sourceBases) {
 			File f = new File(directory);
@@ -129,8 +122,7 @@ public class CheckReportTables {
 	public static void main(String... args) throws Exception {
 		String dir;
 		try {
-			File baseDir = args == null || args.length == 0
-				? new File("../xdef") : new File(args[0]);
+			File baseDir = args == null || args.length == 0 ? new File("../xdef") : new File(args[0]);
 			if (!baseDir.exists() || !baseDir.isDirectory()) {
 				throw new IOException("Base is not directory.");
 			}
@@ -144,8 +136,7 @@ public class CheckReportTables {
 		
 		dir += "src/main/java/";
 		System.out.println("  Directory: " + dir);
-		String[] dirs = getJavaDirectiories(
-			new String[] {dir + "org"},	new String[] {"org/xdef/msg"});
+		String[] dirs = getJavaDirectiories(new String[] {dir + "org"},	new String[] {"org/xdef/msg"});
 		String msgdir = dir+"org/xdef/msg/";
 		chkUnusedMesssges(msgdir, "BNF", dirs);
 		chkUnusedMesssges(msgdir,"JSON", dirs);
@@ -153,5 +144,4 @@ public class CheckReportTables {
 		chkUnusedMesssges(msgdir,"XDEF", dirs);
 		chkUnusedMesssges(msgdir,"XML", dirs);
 	}
-
 }

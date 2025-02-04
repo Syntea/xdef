@@ -62,7 +62,7 @@ public class CanonizeSource {
 	private boolean _headerKeep;
 	private String _tail;
 	private boolean _tailKeep;
-	private String _charset;
+	private Charset _charset;
 
 	//result information:
 	private int _processedCount;
@@ -129,11 +129,9 @@ public class CanonizeSource {
 		_firstCommentEnd = -1;
 		_linePos = -1;
         boolean modified;
-        try (BufferedReader in = _charset == null
-            ? new BufferedReader(new InputStreamReader(
-                new FileInputStream(file)))
-            : new BufferedReader(new InputStreamReader(
-                new FileInputStream(file), _charset))) {
+        try (BufferedReader in = _charset == null 
+			? new BufferedReader(new InputStreamReader(new FileInputStream(file)))
+            : new BufferedReader(new InputStreamReader(new FileInputStream(file), _charset))) {
             String line;
             modified = false;
             while ((line = in.readLine()) != null) {
@@ -644,7 +642,7 @@ public class CanonizeSource {
 		final boolean tailKeep,
 		final String charset) {
 		CanonizeSource cs = new CanonizeSource();
-		cs._charset = charset;
+		cs._charset = Charset.forName(charset);
 		File f;
 		String s = outDir;
 		if (s == null || (s = s.trim()).length() == 0) {

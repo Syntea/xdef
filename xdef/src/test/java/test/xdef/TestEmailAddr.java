@@ -46,11 +46,6 @@ public class TestEmailAddr extends XDTester {
 			return false;
 		}
 		return !(email != null && !(xe.getLocalPart()+"@"+xe.getDomain()).equals(email));
-//		if ((mail != null && !(xe.getLocalPart()+"@"+xe.getDomain()).equals(mail))) {
-//			System.err.println(xe.getLocalPart()+"@"+xe.getDomain());
-//			return false;
-//		}
-//		return true;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
