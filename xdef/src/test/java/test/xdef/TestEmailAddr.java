@@ -2,11 +2,13 @@ package test.xdef;
 
 import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import test.XDTester;
+import static test.XDTester._xdNS;
 
 /** Test of email address.
  * @author Vaclav Trojan
@@ -15,143 +17,116 @@ public class TestEmailAddr extends XDTester {
 
 	public TestEmailAddr() {super();}
 
-	final private XDPool xp = compile(
+	private final XDPool _xp = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration> external EmailAddr e;</xd:declaration>\n"+
-"<A>\n" +
-" emailAddr(); finally e = getParsedValue();\n"+
-"</A>\n" +
+"  <xd:declaration> external EmailAddr e;</xd:declaration>\n"+
+"  <A> emailAddr(); finally e = getParsedValue(); </A>\n" +
 "</xd:def>");
 
-	private XDEmailAddr parse(final String s) {
-		XDDocument xd = xp.createXDDocument();
-		String t = SUtils.modifyString(s, "&", "&amp;");
-		t = SUtils.modifyString(t, "<", "&lt;");
-		String xml = "<A>"+t+"</A>";
+	/** Parse and check email address in XML data.
+	 * @param s source format of email address.
+	 * @param user expected name or null (then it is not checked).
+	 * @param email expected mailbox or null (then it is not checked).
+	 * @return true if no error was found.
+	 */
+	private boolean parseEmail(final String s, final String user, final String email) {
+		String xml = "<A>"+SUtils.modifyString(SUtils.modifyString(s, "&", "&amp;"), "<", "&lt;")+"</A>";
 		ArrayReporter reporter = new ArrayReporter();
+		XDDocument xd = _xp.createXDDocument();
 		parse(xd, xml, reporter);
 		if (reporter.errors()) {
-			return null;
+			return false;
 		}
-		return (XDEmailAddr) xd.getVariable("e");
+		XDEmailAddr xe = (XDEmailAddr) xd.getVariable("e");
+		if (xe == null) {
+			return false;
+		}
+		if (user != null && !user.equals(xe.getUserName())) {
+			System.err.println("" + xe.getUserName());
+			return false;
+		}
+		return !(email != null && !(xe.getLocalPart()+"@"+xe.getDomain()).equals(email));
+//		if ((mail != null && !(xe.getLocalPart()+"@"+xe.getDomain()).equals(mail))) {
+//			System.err.println(xe.getLocalPart()+"@"+xe.getDomain());
+//			return false;
+//		}
+//		return true;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void test() {
 		//valid
-		assertNotNull(parse("1@2"));
-		assertNotNull(parse("a.b@a.b-c1.cz"));
-		assertNotNull(parse("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]"));
-		assertNotNull(parse("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.cz"));
-		assertNotNull(parse("\"a b\"@[1.255.0.99]"));
-		assertNotNull(parse("s-e_.z.cz@s-e_.z.cz"));
-		assertNotNull(parse("\\\"\\\\!#$%&'*+/=?^`{|}~@a.b-c1.cz"));
-		assertNotNull(parse("<1E.a-J@s-e_.z.cz>"));
-		assertNotNull(parse("jiří.Kamenický@abcd"));
-		assertNotNull(parse("jiří+Kamenický@abcd"));
-		assertNotNull(parse("#!$%&'*+-/=?^_`{}|~@example.org"));
-		assertNotNull(parse("1@[0.00.000.9]"));
-		assertNotNull(parse("1@[IPv6:2001:db8::1]"));
-		assertNotNull(parse("(ab) (cd) a@b"));
-		assertNotNull(parse("a@b(ab) (cd)"));
-		assertNotNull(parse("a b <a@b>"));
-		assertNotNull(parse("(a (c d) b)a@b (ef) (gh)"));
-		assertNotNull(parse("#!$%&'*+-/=?^_`{}|~@example.org"));
-		assertNotNull(parse("El-,Ji. <EJ@sez.cz>"));
-		assertNotNull(parse("=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>"));
-		assertNotNull(parse("=?UTF-8?Q?P. B=C3=BDk?= <p@s>"));
-		assertNotNull(parse("(V. T.)<tr@vo.xz>(u)"));
-		assertNotNull(parse("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)"));
-		assertNotNull(parse("xample-indeed@strange-example.com"));
-		assertNotNull(parse("jsmith@[192.168.2.1]"));
-		assertNotNull(parse("user@[IPv6:2001:db8::1]"));
-		assertNotNull(parse("skybík@xesto.cz"));
-		assertNotNull(parse("rkhbvs+rixo@xgmail.com"));
-		assertNotNull(parse("#!$%&'*+-/=?^_`{}|~@example.org"));
-		assertNotNull(parse("\" \"@strange.ex.com"));
-		assertNotNull(parse("\"a ? b\"@gmail.com"));
-		assertNotNull(parse("\"a \\\" b\"@gmail.com"));
-		assertNotNull(parse("\"much.more unusual\"@example.com"));
-		assertNotNull(parse("\"very.unusual.@.unusual.com\"@example.com"));
-		assertNotNull(parse("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.ex.com"));
-		assertNotNull(parse("#!$%&'*+-/=?^_`{}|~.ÁŽúů@example.org"));
-		assertNotNull(parse("Joe.\\\\Blow@example.com"));
-		assertNotNull(parse("Joe.\\@Blow@example.com"));
-		assertNotNull(parse("Joe.\\ Blow@example.com"));
+		XDEmailAddr xe;
+		assertTrue(parseEmail("1@2", "", "1@2"));
+		assertTrue(parseEmail("a.b@a.b-c1.cz", "", "a.b@a.b-c1.cz"));
+		assertTrue(parseEmail("a@b(John Doe)", "John Doe", "a@b"));
+		assertTrue(parseEmail("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]", "",
+			"\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]"));
+		assertTrue(parseEmail("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.cz", "", "ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.cz"));
+		assertTrue(parseEmail("\"a b\"@[1.255.0.99]", "", "\"ab\"@[1.255.0.99]"));
+		assertTrue(parseEmail("s-e_.z.cz@s-e_.z.cz", "", "s-e_.z.cz@s-e_.z.cz"));
+		assertTrue(parseEmail("\\\"\\\\!#$%&'*+/=?^`{|}~@a.b-c1.cz",
+			"", "\\\"\\\\!#$%&'*+/=?^`{|}~@a.b-c1.cz"));
+		assertTrue(parseEmail("<1E.a-J@s-e_.z.cz>", "", "1E.a-J@s-e_.z.cz"));
+		assertTrue(parseEmail("jiří.Kamenický@abcd", "", "jiří.Kamenický@abcd"));
+		assertTrue(parseEmail("jiří+Kamenický@abcd", "", "jiří+Kamenický@abcd"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~@e", "", "#!$%&'*+-/=?^_`{}|~@e"));
+		assertTrue(parseEmail("1@[0.00.000.9]", "", "1@[0.00.000.9]"));
+		assertTrue(parseEmail("1@[IPv6:2001:db8::1]", "", "1@[IPv6:2001:db8::1]"));
+		assertTrue(parseEmail("(ab) (cd) a@b", "abcd", "a@b"));
+		assertTrue(parseEmail("a@b(ab) (cd)", "abcd", "a@b"));
+		assertTrue(parseEmail("(ab) a@b (cd)", "abcd", "a@b"));
+		assertTrue(parseEmail("a b <a@b>", "a b", "a@b"));
+		assertTrue(parseEmail("(a (c d) b)a@b (ef) (gh)", "c da (c d) befgh", "a@b"));
+		assertTrue(parseEmail("(a (c d) b)a@b (ef) (gh)", "c da (c d) befgh", "a@b"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~@e", "", "#!$%&'*+-/=?^_`{}|~@e"));
+		assertTrue(parseEmail("El-,Ji. <EJ@sez.cz>", "El-,Ji.", "EJ@sez.cz"));
+		assertTrue(parseEmail("=?UTF-8?B?xb5lbG92w6E=?= <e@e.c>", "želová", "e@e.c"));
+		assertTrue(parseEmail("=?UTF-8?Q?P. B=C3=BDk?= <p@s>", "P. Býk", "p@s"));
+		assertTrue(parseEmail("(V. T.)<tr@vo.xz>(u)", "V. T.u", "tr@vo.xz"));
+		assertTrue(parseEmail("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)", "a b\"V. T.\"c du v", "tr@vo.xz"));
+		assertTrue(parseEmail("xample-indeed@strange-example.com", "", "xample-indeed@strange-example.com"));
+		assertTrue(parseEmail("jsmith@[192.168.2.1]", "", "jsmith@[192.168.2.1]"));
+		assertTrue(parseEmail("user@[IPv6:2001:db8::1]", "", "user@[IPv6:2001:db8::1]"));
+		assertTrue(parseEmail("skybík@xesto.cz", "", "skybík@xesto.cz"));
+		assertTrue(parseEmail("rkhbvs+rixo@xgmail.com", "", "rkhbvs+rixo@xgmail.com"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~@example", "", "#!$%&'*+-/=?^_`{}|~@example"));
+		assertTrue(parseEmail("\" \"@strange.ex.com", "", "\"\"@strange.ex.com"));
+		assertTrue(parseEmail("\"a ? b\"@gmail.com", "", "\"a?b\"@gmail.com"));
+		assertTrue(parseEmail("\"a \\\" b\"@gmail.com", "", "\"a\\\"b\"@gmail.com"));
+		assertTrue(parseEmail("\"much.more unusual\"@example.com", "", "\"much.moreunusual\"@example.com"));
+		assertTrue(parseEmail("\"very.unusual.@.unusual.com\"@e", "", "\"very.unusual.@.unusual.com\"@e"));
+		assertTrue(parseEmail("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.com",
+			"", "\"very.(),:;<>[]\\\".VERY.\\\"very@\\\\\"very\\\".unusual\"@strange.com"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org"));
+		assertTrue(parseEmail("Joe.\\\\Blow@example.com", "", "Joe.\\\\Blow@example.com"));
+		assertTrue(parseEmail("Joe.\\@Blow@example.com", "", "Joe.\\@Blow@example.com"));
+		assertTrue(parseEmail("Joe.\\ Blow@example.com", "", "Joe.\\Blow@example.com"));
 
 		//invalid
-		assertNull(parse("1.2"));
-		assertNull(parse(".john.doe@example.com/>"));
-		assertNull(parse("(ab)ab"));
-		assertNull(parse("<1E.-J-s-e_.z.cz>"));
-		assertNull(parse("E.F@z.cz>"));
-		assertNull(parse("<E.F@z.cz"));
-		assertNull(parse("E..F@z.cz"));
-		assertNull(parse("-E.F@z.cz"));
-		assertNull(parse("E.F-@z.cz"));
-		assertNull(parse("E.F@-z.cz"));
-		assertNull(parse("E.F@z.cz-"));
-		assertNull(parse("E.F@z..cz"));
-		assertNull(parse("(a b) \"V. T.\" (c d) <tr.vo.xz> (u v)"));
-		assertNull(parse("john.@example.com"));
-		assertNull(parse(".john@example.com"));
-		assertNull(parse("jo..hn@example.com"));
-		assertNull(parse("john@example.com-"));
-		assertNull(parse("john@-example.com"));
-		assertNull(parse("john@example..com"));
-		assertNull(parse("john@example.com."));
-		assertNull(parse("john@.example.com"));
-		assertNull(parse("=?UTF-9?B?xb5lbG92w6E=?= <ep@e.c>"));
-		assertNull(parse("=?UTF-9?Q?P. B=C3=BDk?= <p@s>"));
-
-		// test parsed result
-		XDEmailAddr p;
-		p = parse("a@b(John Doe)");
-		assertEq("John Doe", p.getUserName());
-		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("(John Doe)a@b");
-		assertEq("John Doe", p.getUserName());
-		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("John Doe<a@b>");
-		assertEq("John Doe", p.getUserName());
-		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)");
-		assertEq("a b\"V. T.\"c du v", p.getUserName());
-		assertEq("tr@vo.xz", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("(ab) (cd) a@b");
-		assertEq("abcd", p.getUserName());
-		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("a@b(ab) (cd)");
-		assertEq("abcd", p.getUserName());
-		assertEq("a@b", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>");
-		assertEq("želová", p.getUserName());
-		assertEq("ep@e.c", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("=?UTF-8?B?SmnFmcOtLks=?= <a@example.com>");
-		assertEq("Jiří.K", p.getUserName());
-		assertEq("a@example.com", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("=?UTF-8?Q?P. B=C3=BDk?= <p@s>");
-		assertEq("P. Býk", p.getUserName());
-		assertEq("p@s", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("\"a \\\" b\"@gmail.com");
-		assertEq("", p.getUserName());
-		assertEq("\"a\\\"b\"@gmail.com", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("#!$%&'*+-/=?^_`{}|~@example.org");
-		assertEq("", p.getUserName());
-		assertEq("#!$%&'*+-/=?^_`{}|~@example.org", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("\"v.(),:;<>[]\\\".V.\\\"v@\\ \\\"v\\\".u\"@strange");
-		assertEq("", p.getUserName());
-		assertEq("\"v.(),:;<>[]\\\".V.\\\"v@\\\\\"v\\\".u\"@strange", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("Joe.\\@Blow@example.com");
-		assertEq("", p.getUserName());
-		assertEq("Joe.\\@Blow@example.com", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("user@[200.1.99.0]");
-		assertEq("", p.getUserName());
-		assertEq("user@[200.1.99.0]", p.getLocalPart() + "@" + p.getDomain());
-		p = parse("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]");
-		assertEq("", p.getUserName());
-		assertEq("\\\"\\\\!#$%&'*+/=?^`{|}~@[IPv6:2001:db8::1]", p.getLocalPart() + "@" + p.getDomain());
+		assertFalse(parseEmail("1.2", null, null)); //missing '@'
+		assertFalse(parseEmail("(ab)ab", null, null)); //missing '@'
+		assertFalse(parseEmail("(a b) \"V. T.\" (c d) <tr.vo.xz> (u v)", null, null)); //missing '@'
+		assertFalse(parseEmail("(a b (c d) <tr@vo.xz>", null, null)); //missing ')'
+		assertFalse(parseEmail("a b) (c d) <tr@vo.xz>", null, null)); //missing '{'
+		assertFalse(parseEmail("E.F@z.cz>", null, null)); // '>' without '<'
+		assertFalse(parseEmail("<E.F@z.cz", null, null)); // '>' without '>'
+		assertFalse(parseEmail(".Joe.Blow@example.com", null, null)); // local part starts witn '.'
+		assertFalse(parseEmail("Joe.Blow.@example.com", null, null)); // local part ends witn '.'
+		assertFalse(parseEmail("-Joe.Blow@example.com", null, null)); // local part starts witn '-'
+		assertFalse(parseEmail("Joe.Blow-@example.com", null, null)); // local part ends witn '-'
+		assertFalse(parseEmail("Joe..Blow@example.com", null, null)); // '..' in local part
+		assertFalse(parseEmail("Joe--Blow@example.com", null, null)); // '--' in local part
+		assertFalse(parseEmail("Joe.-Blow@example.com", null, null)); // '.-' in local part
+		assertFalse(parseEmail("E.F@z--cz", null, null)); // '--' in domain
+		assertFalse(parseEmail("E.F@-z.cz", null, null)); // domain starts witn '-'
+		assertFalse(parseEmail("E.F@z.cz-", null, null)); // domain ends witn '-'
+		assertFalse(parseEmail("E.F@.z.cz", null, null)); // domain starts witn '.'
+		assertFalse(parseEmail("E.F@z.cz.", null, null)); // domain ends witn '.'
+		assertFalse(parseEmail("E.F@z..cz", null, null)); // '..' in domain
+		assertFalse(parseEmail("E.F@z.-cz", null, null)); // '.-' in domain
+		assertFalse(parseEmail("E.F@z-.cz", null, null)); // '-.' in domain
 	}
 
 	/** Run test

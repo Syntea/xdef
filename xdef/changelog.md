@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.18, release-date 2025-02-03
+# Version 42.2.18, release-date 2025-02-04
 * Corrected few bugs in parsing of unusual email address (containing special characters in local part etc.).
 
 # Version 42.2.17, release-date 2025-01-29
