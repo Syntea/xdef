@@ -19,8 +19,8 @@ public class TestEmailAddr extends XDTester {
 
 	private final XDPool _xp = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"  <xd:declaration> external EmailAddr e;</xd:declaration>\n"+
-"  <A> emailAddr(); finally e = getParsedValue(); </A>\n" +
+"  <xd:declaration> external EmailAddr email; </xd:declaration>\n"+
+"  <A> emailAddr(); finally email = getParsedValue(); </A>\n" +
 "</xd:def>");
 
 	/** Parse and check email address in XML data.
@@ -37,7 +37,7 @@ public class TestEmailAddr extends XDTester {
 		if (reporter.errors()) {
 			return false;
 		}
-		XDEmailAddr xe = (XDEmailAddr) xd.getVariable("e");
+		XDEmailAddr xe = (XDEmailAddr) xd.getVariable("email");
 		if (xe == null) {
 			return false;
 		}
@@ -52,7 +52,6 @@ public class TestEmailAddr extends XDTester {
 	@Override
 	public void test() {
 		//valid
-		XDEmailAddr xe;
 		assertTrue(parseEmail("1@2", "", "1@2"));
 		assertTrue(parseEmail("a.b@a.b-c1.cz", "", "a.b@a.b-c1.cz"));
 		assertTrue(parseEmail("a@b(John Doe)", "John Doe", "a@b"));
