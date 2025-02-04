@@ -26,14 +26,11 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	private static final BNFGrammar BNF = BNFGrammar.compile(
 "S ::= [ #9]+\n"+ /* linear white space */
 "ASCIICHAR     ::= [ -~]\n"+
-"ALPHA         ::= $letter | '_'\n"+
-"DIGIT         ::= [0-9]\n"+
-"HEXDIG        ::= [0-9a-fA-F]\n"+
 "DQUOTE        ::= '\"'\n"+
 "IPv4          ::= Snum ('.'  Snum){3}\n"+
-"Snum          ::= ('2' ([0-4] DIGIT | '5' [0..5])) | [0-1] [0-9]{2} | DIGIT{1,2}\n"+
+"Snum          ::= ('2' ([0-4] [0-9] | '5' [0..5])) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
 "IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
-"IPv6_hex      ::= HEXDIG{1,4}\n" +
+"IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
 "IPv6_full     ::= IPv6_hex (\":\" IPv6_hex){7}\n" +
 "IPv6_comp     ::= (IPv6_hex (\":\" IPv6_hex){0,5})? \"::\" (IPv6_hex (\":\" IPv6_hex){0,5})?\n" +
 			   /* The \"::\" represents at least 2 16-bit groups of
@@ -47,8 +44,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "IPv6_addr     ::= \"IPv6:\" IPv6\n"+
 "Domain        ::= sub_domain (\".\" sub_domain)*\n"+
 "sub_domain    ::= Let_dig+ Ldh_str?\n" +
-"Let_dig       ::= ALPHA | DIGIT\n" +
-"Ldh_str       ::= (\"-\" Let_dig+)+\n"+
+"Let_dig       ::= [0-9a-zA-Z]\n" + /* in domain can be only ASCII letters and digits, '-', and '.' */
+"Ldh_str       ::= \"-\" Let_dig+\n"+
 "General_addr  ::= Std_tag \":\" (dcontent)+\n" +
 "Std_tag       ::= Ldh_str\n"+
 			   /* Std-tag MUST be specified in a Standards-Track RFC and registered with IANA */
@@ -172,7 +169,9 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			if (localPart != null && domain != null) {
 				localPart = removeWS(localPart);
 				domain = removeWS(domain);
-				return new String[] {parsedString, localPart, domain, userName};
+				if (localPart.length() <= 64 && domain.length() <= 256) {
+					return new String[] {parsedString, localPart, domain, userName};
+				}
 			}
 		}
 		return null;
@@ -224,8 +223,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			char ch = s.charAt(i);
 			if (ch == '=' && i + 2 < s.length()) {
 				String hexMask = "0123456789ABCDEF";
-				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4)
-					+ hexMask.indexOf(s.charAt(++i)));
+				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4) + hexMask.indexOf(s.charAt(++i)));
 			}
 			b.write((byte) ch);
 		}
