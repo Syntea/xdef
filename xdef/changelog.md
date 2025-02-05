@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.18, release-date 2025-02-05
-* Corrected few bugs in parsing of unusual email address (containing special characters in local part etc.).
+* Corrected bugs in parsing of unusual email addresses (containing special characters in mailbox source).
 
 # Version 42.2.17, release-date 2025-01-29
 * Parser of email address now supports also RFC 5322 (UTF letters and some special characters in local name
