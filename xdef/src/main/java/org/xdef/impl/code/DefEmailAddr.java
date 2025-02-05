@@ -26,7 +26,16 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	private static final BNFGrammar BNF = BNFGrammar.compile(
 "S ::= [ #9]+\n"+ // linear white space
 "ASCIICHAR     ::= [ -~]\n"+
-"DQUOTE        ::= '\"'\n"+
+"Domain        ::= sub_domain (\".\" sub_domain)*\n"+
+"sub_domain    ::= Let_dig+ Ldh_str?\n" +
+"Let_dig       ::= [0-9] | $letter\n" +
+"Ldh_str       ::= \"-\" Let_dig+\n"+
+"General_addr  ::= Std_tag \":\" (dcontent)+\n" +
+"Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
+"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ]
+
+/*#if FULLEMAIL*#/
+// START FULLEMAIL
 "IPv4          ::= Snum ('.'  Snum){3}\n"+
 "Snum          ::= ('2' ([0-4] [0-9] | '5' [0..5])) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
 "IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
@@ -42,18 +51,9 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			   // addition to the \"::\" and IPv4-address-literal may be present.
 "IPv4_addr     ::= IPv4\n"+
 "IPv6_addr     ::= \"IPv6:\" IPv6\n"+
-"Domain        ::= sub_domain (\".\" sub_domain)*\n"+
-"sub_domain    ::= Let_dig+ Ldh_str?\n" +
-"Let_dig       ::= [0-9] | $letter\n" +
-"Ldh_str       ::= \"-\" Let_dig+\n"+
-"General_addr  ::= Std_tag \":\" (dcontent)+\n" +
-"Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
-"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ]
-"address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\" /* See Section 4.1.3*/\n" +
-
-/*#if FULLEMAIL*#/
-// BEG //
-"Quoted_string ::= DQUOTE QcontentSMTP* DQUOTE\n" +
+"address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\"\n" +  // See Section 4.1.3
+"Dquote        ::= '\"'\n"+
+"Quoted_string ::= Dquote QcontentSMTP* Dquote\n" +
 "quoted_pair   ::= '\\' [ -~]\n" + // %d92 %d32-126
 			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
 "qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
@@ -62,17 +62,18 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
 "atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-// END //
+"Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
+// END FULLEMAIL
 /*#else*/
-// BEG //
+// START not FULLEMAIL
 "atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
-// END //
+"Mailbox       ::= Local_part \"@\" Domain $rule\n"+
+// END not FULLEMAIL
 /*#end*/
 
 "Atom          ::= atext (\"-\" atext)*\n" +
 "Dot_string    ::= Atom (\".\"  Atom)*\n" +
-"Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
 "comment       ::=  S? ( commentList $rule ) S?\n"+
 "commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart   ::= ([ -~] - [()])+ (S? commentList)? $rule\n"+
