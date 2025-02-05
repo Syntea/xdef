@@ -50,22 +50,29 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
 "dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ]
 "address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\" /* See Section 4.1.3*/\n" +
-"Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
-"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
-"Atom          ::= atext (\"-\" atext)*\n" +
-"Dot_string    ::= Atom (\".\"  Atom)*\n" +
+
 /*#if FULLEMAIL*#/
+// BEG //
 "Quoted_string ::= DQUOTE QcontentSMTP* DQUOTE\n" +
 "quoted_pair   ::= '\\' [ -~]\n" + // %d92 %d32-126
 			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
-"QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
-"Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-/*#else*/
-"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
-/*#end*/
 "qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
 			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
 			   // blackslash-quoting except double-quote and the backslash itself.
+"QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
+"atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
+"Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
+// END //
+/*#else*/
+// BEG //
+"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
+"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
+// END //
+/*#end*/
+
+"Atom          ::= atext (\"-\" atext)*\n" +
+"Dot_string    ::= Atom (\".\"  Atom)*\n" +
+"Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
 "comment       ::=  S? ( commentList $rule ) S?\n"+
 "commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart   ::= ([ -~] - [()])+ (S? commentList)? $rule\n"+

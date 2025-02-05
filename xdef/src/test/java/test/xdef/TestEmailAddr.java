@@ -98,6 +98,10 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("\"very.unusual.@.unusual.com\"@e", "", "\"very.unusual.@.unusual.com\"@e"));
 		assertTrue(parseEmail("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.com",
 			"", "\"very.(),:;<>[]\\\".VERY.\\\"very@\\\\\"very\\\".unusual\"@strange.com"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org"));
+		assertTrue(parseEmail("Joe.\\\\Blow@example.com", "", "Joe.\\\\Blow@example.com"));
+		assertTrue(parseEmail("Joe.\\@Blow@example.com", "", "Joe.\\@Blow@example.com"));
+		assertTrue(parseEmail("Joe.\\ Blow@example.com", "", "Joe.\\Blow@example.com"));
 /*#end*/
 
 		//invalid
@@ -130,7 +134,8 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("E.F@z!cz", null, null)); // '!' in domain
 
 /*#if !FULLEMAIL*/
-		assertFalse(parseEmail("\" \"@strange.ex.com", null, null)); //Quoted_string is illegal
+		assertFalse(parseEmail("\" \"@strange.ex.com", null, null)); // Quoted_string is illegal
+		assertFalse(parseEmail("Joe.\\@Blow@example.com", null, null)); // Escape character not allowed
 /*#end*/
 
 	}
