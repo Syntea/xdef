@@ -24,7 +24,7 @@ import org.xdef.sys.SException;
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** BNF grammar rules of email address according to RFC 5321. */
 	private static final BNFGrammar BNF = BNFGrammar.compile(
-"S ::= [ #9]+\n"+ /* linear white space */
+"S ::= [ #9]+\n"+ // linear white space
 "ASCIICHAR     ::= [ -~]\n"+
 "DQUOTE        ::= '\"'\n"+
 "IPv4          ::= Snum ('.'  Snum){3}\n"+
@@ -33,13 +33,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
 "IPv6_full     ::= IPv6_hex (\":\" IPv6_hex){7}\n" +
 "IPv6_comp     ::= (IPv6_hex (\":\" IPv6_hex){0,5})? \"::\" (IPv6_hex (\":\" IPv6_hex){0,5})?\n" +
-			   /* The \"::\" represents at least 2 16-bit groups of
-				  zeros. No more than 6 groups in addition to the \"::\" may be present. */
+			   // The \"::\" represents at least 2 16-bit groups of
+			   // zeros. No more than 6 groups in addition to the \"::\" may be present.
 "IPv6v4_full   ::= IPv6_hex (\":\" IPv6_hex){5} \":\" IPv4_addr\n" +
 "IPv6v4_comp   ::= (IPv6_hex (\":\" IPv6_hex){0,3})? \"::\"\n" +
 "                  (IPv6_hex (\":\" IPv6_hex){0,3} \":\")? IPv4_addr\n" +
-			   /* The \"::\" represents at least 2 16-bit groups of zeros.  No more than 4 groups in
-"                 addition to the \"::\" and IPv4-address-literal may be present. */
+			   // The \"::\" represents at least 2 16-bit groups of zeros.  No more than 4 groups in
+			   // addition to the \"::\" and IPv4-address-literal may be present.
 "IPv4_addr     ::= IPv4\n"+
 "IPv6_addr     ::= \"IPv6:\" IPv6\n"+
 "Domain        ::= sub_domain (\".\" sub_domain)*\n"+
@@ -47,23 +47,25 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Let_dig       ::= [0-9] | $letter\n" +
 "Ldh_str       ::= \"-\" Let_dig+\n"+
 "General_addr  ::= Std_tag \":\" (dcontent)+\n" +
-"Std_tag       ::= Ldh_str\n"+
-			   /* Std-tag MUST be specified in a Standards-Track RFC and registered with IANA */
-"dcontent      ::= [!-Z] | [^-~] /* %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ] */\n" +
+"Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
+"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ]
 "address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\" /* See Section 4.1.3*/\n" +
 "Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
-"Local_part    ::= Dot_string | Quoted_string\n" + /* MAY be case-sensitive */
-"Dot_string    ::= Atom (\".\"  Atom)*\n" +
 "atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Atom          ::= atext (\"-\" atext)*\n" +
+"Dot_string    ::= Atom (\".\"  Atom)*\n" +
+/*#if FULLEMAIL*#/
 "Quoted_string ::= DQUOTE QcontentSMTP* DQUOTE\n" +
+"quoted_pair   ::= '\\' [ -~]\n" + // %d92 %d32-126
+			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
 "QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
-"quoted_pair   ::= '\\' [ -~] /*%d92 %d32-126*/\n" +
-			   /* i.e., backslash followed by any ASCII graphic (including itself) or SPace*/
+"Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
+/*#else*/
+"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
+/*#end*/
 "qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
-			   /* i.e., within a quoted string, any ASCII graphic or space is permitted without
-				 blackslash-quoting except double-quote and the backslash itself.*/
-"String        ::= Atom | Quoted_string\n"+
+			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
+			   // blackslash-quoting except double-quote and the backslash itself.
 "comment       ::=  S? ( commentList $rule ) S?\n"+
 "commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart   ::= ([ -~] - [()])+ (S? commentList)? $rule\n"+
@@ -71,9 +73,9 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "textItem      ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
 "charsetName   ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
 "ptext         ::= ((ASCIICHAR - [@><()=])+) $rule\n"+
-"qtext         ::= ((hexOctet | ASCIICHAR - [=?])+) $rule /*quoted*/\n"+
+"qtext         ::= ((hexOctet | ASCIICHAR - [=?])+) $rule \n"+ // quoted
 "hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
-"btext         ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */\n"+
+"btext         ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule\n"+ // base64
 "emailAddr     ::= (text? S? '<' S? Mailbox S? '>' | (comment* Mailbox)) (S? comment)*");
 
 	/** Email source value. */

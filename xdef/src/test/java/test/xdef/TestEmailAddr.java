@@ -61,7 +61,6 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("!a%+/=^b?@b", "", "!a%+/=^b?@b"));
 		assertTrue(parseEmail("!#$%&'*+/=?^`{|}~@a", "", "!#$%&'*+/=?^`{|}~@a"));
 		assertTrue(parseEmail("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.cz", "", "ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.cz"));
-		assertTrue(parseEmail("\"a b\"@[1.255.0.99]", "", "\"ab\"@[1.255.0.99]"));
 		assertTrue(parseEmail("s-e_.z.cz@a.s-e.z.cz", "", "s-e_.z.cz@a.s-e.z.cz"));
 		assertTrue(parseEmail("<1E.a-J@s-e.z.cz>", "", "1E.a-J@s-e.z.cz"));
 		assertTrue(parseEmail("!#$%&'*+/=?^`{|}~@b-c1.cz", "", "!#$%&'*+/=?^`{|}~@b-c1.cz"));
@@ -89,14 +88,17 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("skybík@xesto.cz", "", "skybík@xesto.cz"));
 		assertTrue(parseEmail("rkhbvs+rixo@xgmail.com", "", "rkhbvs+rixo@xgmail.com"));
 		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~@example", "", "#!$%&'*+-/=?^_`{}|~@example"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org"));
+
+/*#if FULLEMAIL*#/
 		assertTrue(parseEmail("\" \"@strange.ex.com", "", "\"\"@strange.ex.com"));
 		assertTrue(parseEmail("\"a ? b\"@gmail.com", "", "\"a?b\"@gmail.com"));
 		assertTrue(parseEmail("\"a \\\" b\"@gmail.com", "", "\"a\\\"b\"@gmail.com"));
 		assertTrue(parseEmail("\"much.more unusual\"@example.com", "", "\"much.moreunusual\"@example.com"));
 		assertTrue(parseEmail("\"very.unusual.@.unusual.com\"@e", "", "\"very.unusual.@.unusual.com\"@e"));
-		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org"));
 		assertTrue(parseEmail("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@strange.com",
 			"", "\"very.(),:;<>[]\\\".VERY.\\\"very@\\\\\"very\\\".unusual\"@strange.com"));
+/*#end*/
 
 		//invalid
 		assertFalse(parseEmail("1.2", null, null)); //missing '@'
@@ -126,6 +128,11 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("E.F@z-.cz", null, null)); // '-.' in domain
 		assertFalse(parseEmail("E.F@z_cz", null, null)); // '_' in domain
 		assertFalse(parseEmail("E.F@z!cz", null, null)); // '!' in domain
+
+/*#if !FULLEMAIL*/
+		assertFalse(parseEmail("\" \"@strange.ex.com", null, null)); //Quoted_string is illegal
+/*#end*/
+
 	}
 
 	/** Run test
