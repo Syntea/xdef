@@ -52,14 +52,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "IPv4_addr     ::= IPv4\n"+
 "IPv6_addr     ::= \"IPv6:\" IPv6\n"+
 "address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\"\n" +  // See Section 4.1.3
-"Dquote        ::= '\"'\n"+
-"Quoted_string ::= Dquote QcontentSMTP* Dquote\n" +
 "quoted_pair   ::= '\\' [ -~]\n" + // %d92 %d32-126
 			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
 "qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
 			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
 			   // blackslash-quoting except double-quote and the backslash itself.
 "QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
+"Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
 "atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
 "Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+

@@ -129,7 +129,6 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("\" \"@strange.ex.com", null, null)); // Quoted_string is illegal
 		assertFalse(parseEmail("Joe.\\@Blow@example.com", null, null)); // Escape character not allowed
 /*#end*/
-
 	}
 
 	/** Run test
