@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.19, release-date 2025-02-05
+* .
+
 # Version 42.2.18, release-date 2025-02-05
 * Corrected bugs in parsing of unusual email addresses (containing special characters in mailbox source).
 
