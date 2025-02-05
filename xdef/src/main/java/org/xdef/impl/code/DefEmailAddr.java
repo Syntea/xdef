@@ -44,7 +44,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "IPv6_addr     ::= \"IPv6:\" IPv6\n"+
 "Domain        ::= sub_domain (\".\" sub_domain)*\n"+
 "sub_domain    ::= Let_dig+ Ldh_str?\n" +
-"Let_dig       ::= [0-9a-zA-Z]\n" + /* in domain can be only ASCII letters and digits, '-', and '.' */
+"Let_dig       ::= [0-9] | $letter\n" +
 "Ldh_str       ::= \"-\" Let_dig+\n"+
 "General_addr  ::= Std_tag \":\" (dcontent)+\n" +
 "Std_tag       ::= Ldh_str\n"+
@@ -54,7 +54,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + /* MAY be case-sensitive */
 "Dot_string    ::= Atom (\".\"  Atom)*\n" +
-"atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
+"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Atom          ::= atext (\"-\" atext)*\n" +
 "Quoted_string ::= DQUOTE QcontentSMTP* DQUOTE\n" +
 "QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
