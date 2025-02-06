@@ -28,13 +28,13 @@ public class SetDebugPreprocessorSwitches {
 			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
 			"-t", // remove trailibg white sapces
-			"-s", "DEBUG"); //set DEBUG switch
+			"-s", "DEBUG", "RFC5321"); //set DEBUG switch
 		JavaPreprocessor.main(
 			"-i", new File(projectBase, "src/test/java").getAbsolutePath(),
 			"-r", // recursive process of directories
 			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
 			"-t", // remove trailibg white sapces
-			"-s", "DEBUG"); //set DEBUG switch
+			"-s", "DEBUG", "RFC5321"); //set DEBUG switch
 	}
 }

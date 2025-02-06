@@ -34,8 +34,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
 "dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ]
 
-/*#if FULLEMAIL*#/
-// START FULLEMAIL
+/*#if RFC5321*#/
+// START RFC5321
 "IPv4          ::= Snum ('.'  Snum){3}\n"+
 "Snum          ::= ('2' ([0-4] [0-9] | '5' [0..5])) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
 "IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
@@ -62,13 +62,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
 "Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
-// END FULLEMAIL
+// END RFC5321
 /*#else*/
-// START not FULLEMAIL
-"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
+// START not RFC5321
+"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
 "Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
 "Mailbox       ::= Local_part \"@\" Domain $rule\n"+
-// END not FULLEMAIL
+// END not RFC5321
 /*#end*/
 
 "Atom          ::= atext (\"-\" atext)*\n" +

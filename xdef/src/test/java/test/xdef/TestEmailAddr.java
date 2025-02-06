@@ -56,10 +56,10 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("a.b@a.b.t", "", "a.b@a.b.t"));
 		assertTrue(parseEmail("a_b@a.b.t", "", "a_b@a.b.t"));
 		assertTrue(parseEmail("a.b@a.b-c1.c-z", "", "a.b@a.b-c1.c-z"));
-		assertTrue(parseEmail("a.b-c1.č-z@a.b-c1.č-z", "", "a.b-c1.č-z@a.b-c1.č-z"));
+		assertTrue(parseEmail("a.b-c1.č-z@a.b-c1.č-z.t", "", "a.b-c1.č-z@a.b-c1.č-z.t"));
 		assertTrue(parseEmail("a@b.t(Jo Do)", "Jo Do", "a@b.t"));
 		assertTrue(parseEmail("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.c.t", "", "ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.c.t"));
-		assertTrue(parseEmail("s-e_.z.cz@a.s-e.z.cz", "", "s-e_.z.cz@a.s-e.z.cz"));
+		assertTrue(parseEmail("s-e_.z.cz@a.s-e.z.cz.t", "", "s-e_.z.cz@a.s-e.z.cz.t"));
 		assertTrue(parseEmail("<1E.a-J@s-e.z.cz>", "", "1E.a-J@s-e.z.cz"));
 		assertTrue(parseEmail("jíř.Ký@abc", "", "jíř.Ký@abc"));
 		assertTrue(parseEmail("jíř+Ký@abc.t", "", "jíř+Ký@abc.t"));
@@ -69,29 +69,31 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("(ab) a@b.t (cd)", "abcd", "a@b.t"));
 		assertTrue(parseEmail("a b <a@b.t>", "a b", "a@b.t"));
 		assertTrue(parseEmail("(a (c d) b)<a@b.t> (ef) (gh)", "c da (c d) befgh", "a@b.t"));
-		assertTrue(parseEmail("El-, Ji. <EJ@sez.cz>", "El-, Ji.", "EJ@sez.cz"));
+		assertTrue(parseEmail("El-, Ji. <EJ@sez.cz.t>", "El-, Ji.", "EJ@sez.cz.t"));
 		assertTrue(parseEmail("=?UTF-8?B?xb5lbG92w6E=?= <e@e.t>", "želová", "e@e.t"));
 		assertTrue(parseEmail("=?UTF-8?Q?P. B=C3=BDk?= <p@s.t>", "P. Býk", "p@s.t"));
-		assertTrue(parseEmail("(V. T. )<tr@vo.xz>(u)", "V. T. u", "tr@vo.xz"));
-		assertTrue(parseEmail("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)", "a b\"V. T.\"c du v", "tr@vo.xz"));
-		assertTrue(parseEmail("skybík@x.Xz", "", "skybík@x.Xz"));
+		assertTrue(parseEmail("(V. T. )<tr@vo.xz.t>(u)", "V. T. u", "tr@vo.xz.t"));
+		assertTrue(parseEmail("(a b) \"V. T.\" (c d) <tr@vo.x.t> (u v)", "a b\"V. T.\"c du v", "tr@vo.x.t"));
+		assertTrue(parseEmail("skybík@x.Xz.t", "", "skybík@x.Xz.t"));
 		assertTrue(parseEmail("rkhbvs+rixo@xg.t", "", "rkhbvs+rixo@xg.t"));
-		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@e-x.t", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@e-x.t"));
+		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t"));
+		assertTrue(parseEmail("Joe.\\\\Blow@example.com.t", "", "Joe.\\\\Blow@example.com.t"));
 
-/*#if FULLEMAIL*#/
-		assertTrue(parseEmail("\" \"@strange.ex.com", "", "\"\"@strange.ex.com"));
+/*#if RFC5321*#/
+		assertTrue(parseEmail("\" \"@strange.ex.com.t", "", "\"\"@strange.ex.com.t"));
 		assertTrue(parseEmail("js@[192.168.2.1]", "", "js@[192.168.2.1]"));
 		assertTrue(parseEmail("u@[IPv6:2001:db8::1]", "", "u@[IPv6:2001:db8::1]"));
-		assertTrue(parseEmail("\"a ? b\"@gz.com", "", "\"a?b\"@gz.com"));
-		assertTrue(parseEmail("\"a \\\" b\"@gz.com", "", "\"a\\\"b\"@gz.com"));
+		assertTrue(parseEmail("\"a ? b\"@gz.com.t", "", "\"a?b\"@gz.com.t"));
+		assertTrue(parseEmail("\"a \\\" b\"@gz.com.t", "", "\"a\\\"b\"@gz.com.t"));
 		assertTrue(parseEmail("\"much.more unusual\"@example.c.t", "", "\"much.moreunusual\"@example.c.t"));
 		assertTrue(parseEmail("\"very.unusual.@.unusual.com\"@e.t", "","\"very.unusual.@.unusual.com\"@e.t"));
 		assertTrue(parseEmail("\"very.(),:;<>[]\\\".VERY.\\\"very@\\ \\\"very\\\".unusual\"@s.com.t",
 			"", "\"very.(),:;<>[]\\\".VERY.\\\"very@\\\\\"very\\\".unusual\"@s.com.t"));
 		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org.t", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.org.t"));
-		assertTrue(parseEmail("Joe.\\\\Blow@example.com.t", "", "Joe.\\\\Blow@example.com.t"));
 		assertTrue(parseEmail("Joe.\\@Blow@example.com.t", "", "Joe.\\@Blow@example.com.t"));
 		assertTrue(parseEmail("Joe.\\ Blow@example.com.t", "", "Joe.\\Blow@example.com.t"));
+		assertFalse(parseEmail("!\\\\@@example.com.t", null, null));
+		assertTrue(parseEmail("!\\@+@example.com.t", "", "!\\@+@example.com.t"));
 /*#end*/
 
 		//invalid
@@ -123,11 +125,13 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("E.F@z_cz", null, null)); // '_' in domain
 		assertFalse(parseEmail("E.F@z!cz", null, null)); // '!' in domain
 
-/*#if !FULLEMAIL*/
-		assertFalse(parseEmail("js@[192.168.2.1]", "", "js@[192.168.2.1]")); // IP address not allowed
-		assertFalse(parseEmail("u@[IPv6:2001:db8::1]", "", "u@[IPv6:2001:db8::1]")); // IP address not allowed
+/*#if !RFC5321*/
+		assertFalse(parseEmail("js@[192.168.2.1]", null, null)); // IP address not allowed
+		assertFalse(parseEmail("u@[IPv6:2001:db8::1]", null, null)); // IP address not allowed
 		assertFalse(parseEmail("\" \"@strange.ex.com.t", null, null)); // Quoted_string is illegal
 		assertFalse(parseEmail("Joe.\\@Blow@example.com.t", null, null)); // Escape character not allowed
+		assertFalse(parseEmail("!\\@+@example.com.t", null, null)); // more then one '@'
+		assertFalse(parseEmail("!\\\\@@example.com.t", null, null)); // more then one '@'
 /*#end*/
 	}
 
