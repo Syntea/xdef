@@ -26,13 +26,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	private static final BNFGrammar BNF = BNFGrammar.compile(
 "S ::= [ #9]+\n"+ // linear white space
 "ASCIICHAR     ::= [ -~]\n"+
-"Domain        ::= sub_domain (\".\" sub_domain)*\n"+
+"Domain        ::= sub_domain ('.' sub_domain)*\n"+
 "sub_domain    ::= Let_dig+ Ldh_str?\n" +
 "Let_dig       ::= [0-9] | $letter\n" +
-"Ldh_str       ::= \"-\" Let_dig+\n"+
-"General_addr  ::= Std_tag \":\" (dcontent)+\n" +
+"Ldh_str       ::= '-' Let_dig+\n"+
+"General_addr  ::= Std_tag ':' (dcontent)+\n" +
 "Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
-"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, \", ]
+"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
 
 /*#if RFC5321*#/
 // START RFC5321
@@ -40,39 +40,39 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Snum          ::= ('2' ([0-4] [0-9] | '5' [0..5])) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
 "IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
 "IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
-"IPv6_full     ::= IPv6_hex (\":\" IPv6_hex){7}\n" +
-"IPv6_comp     ::= (IPv6_hex (\":\" IPv6_hex){0,5})? \"::\" (IPv6_hex (\":\" IPv6_hex){0,5})?\n" +
-			   // The \"::\" represents at least 2 16-bit groups of
-			   // zeros. No more than 6 groups in addition to the \"::\" may be present.
-"IPv6v4_full   ::= IPv6_hex (\":\" IPv6_hex){5} \":\" IPv4_addr\n" +
-"IPv6v4_comp   ::= (IPv6_hex (\":\" IPv6_hex){0,3})? \"::\"\n" +
-"                  (IPv6_hex (\":\" IPv6_hex){0,3} \":\")? IPv4_addr\n" +
-			   // The \"::\" represents at least 2 16-bit groups of zeros.  No more than 4 groups in
-			   // addition to the \"::\" and IPv4-address-literal may be present.
+"IPv6_full     ::= IPv6_hex (':' IPv6_hex){7}\n" +
+"IPv6_comp     ::= (IPv6_hex (':' IPv6_hex){0,5})? '::' (IPv6_hex (':' IPv6_hex){0,5})?\n" +
+			   // The '::' represents at least 2 16-bit groups of
+			   // zeros. No more than 6 groups in addition to the '::' may be present.
+"IPv6v4_full   ::= IPv6_hex (':' IPv6_hex){5} ':' IPv4_addr\n" +
+"IPv6v4_comp   ::= (IPv6_hex (':' IPv6_hex){0,3})? '::'\n" +
+"                  (IPv6_hex (':' IPv6_hex){0,3} ':')? IPv4_addr\n" +
+			   // The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
+			   // addition to the '::' and IPv4-address-literal may be present.
 "IPv4_addr     ::= IPv4\n"+
-"IPv6_addr     ::= \"IPv6:\" IPv6\n"+
-"address       ::= \"[\" ( IPv4_addr | IPv6_addr | General_addr ) \"]\"\n" +  // See Section 4.1.3
+"IPv6_addr     ::= 'IPv6:' IPv6\n"+
+"address       ::= '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
 "quoted_pair   ::= '\\' [ -~]\n" + // %d92 %d32-126
 			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
 "qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
 			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
 			   // blackslash-quoting except double-quote and the backslash itself.
-"QcontentSMTP  ::= qtextSMTP | quoted_pair\n" +
+"QcontentSMTP  ::= quoted_pair | qtextSMTP\n" +
 "Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
 "atext         ::= ($letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~])+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-"Mailbox       ::= Local_part \"@\" ( address | Domain ) $rule\n"+
+"Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
 // END RFC5321
 /*#else*/
 // START not RFC5321
 "atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
 "Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
-"Mailbox       ::= Local_part \"@\" Domain $rule\n"+
+"Mailbox       ::= Local_part '@' Domain $rule\n"+
 // END not RFC5321
 /*#end*/
 
-"Atom          ::= atext (\"-\" atext)*\n" +
-"Dot_string    ::= Atom (\".\"  Atom)*\n" +
+"Atom          ::= atext ('-' atext)*\n" +
+"Dot_string    ::= Atom ('.'  Atom)*\n" +
 "comment       ::=  S? ( commentList $rule ) S?\n"+
 "commentList   ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart   ::= ([ -~] - [()])+ (S? commentList)? $rule\n"+
