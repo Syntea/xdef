@@ -126,6 +126,7 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("E.F@z!cz", null, null)); // '!' in domain
 
 /*#if !RFC5321*/
+		// RFC 2822?
 		assertFalse(parseEmail("js@[192.168.2.1]", null, null)); // IP address not allowed
 		assertFalse(parseEmail("u@[IPv6:2001:db8::1]", null, null)); // IP address not allowed
 		assertFalse(parseEmail("\" \"@strange.ex.com.t", null, null)); // Quoted_string is illegal
