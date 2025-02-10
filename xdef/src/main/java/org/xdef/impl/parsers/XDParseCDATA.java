@@ -1,5 +1,6 @@
 package org.xdef.impl.parsers;
 
+import java.nio.charset.Charset;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
 import org.xdef.XDNamedValue;
@@ -31,6 +32,18 @@ public class XDParseCDATA extends XDParserAbstract {
 			p.errorWithString(XDEF.XDEF814, "string"); //Length of value of '&{0}' is too short&{0}'{: }
 		} else {
 			p.setEos();
+		}
+		Charset chset = xnode != null ? xnode.getXDPool().getLegalStringCharset() : null;
+		if (chset != null) {
+			byte[] bytes = s.getBytes(chset);
+			if (bytes.length != s.length()) {
+				p.errorWithString(XDEF.XDEF823, chset.name());
+			} else {
+				String t = new String(bytes, chset);
+				if (!s.equals(t)) {
+					p.errorWithString(XDEF.XDEF823, chset.name());
+				}
+			}
 		}
 	}
 	@Override

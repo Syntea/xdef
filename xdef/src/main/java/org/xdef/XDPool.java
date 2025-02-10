@@ -10,6 +10,7 @@ import org.xdef.model.XMNode;
 import org.xdef.model.XMVariableTable;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -197,6 +198,11 @@ public interface XDPool extends Serializable {
 	 * @return array with special values of valid dates.
 	 */
 	public SDatetime[] getSpecialDates();
+
+	/** Charset of legal values of parsed strings.
+	 * @return Charset object or null.
+	 */
+	public Charset getLegalStringCharset();
 
 	/** Get the object with the map of source items of compiled Xdefinitions and with editing information.
 	 * @return object with the map of source items of compiled Xdefinitions and with editing information.

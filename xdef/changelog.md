@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.19, release-date 2025-02-09
-* .
+# Version 42.2.19, release-date 2025-02-10
+* Added new property used for setting code table name for parsed string value. If string value contains
+  a character which is not defined in given charset the parser reports an arror. The property name is
+  `xdef_string_code` (see org.xdef.XDConstants).
 
 # Version 42.2.18, release-date 2025-02-05
 * Corrected bugs in parsing of unusual email addresses (containing special characters in mailbox source).

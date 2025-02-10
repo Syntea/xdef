@@ -665,36 +665,38 @@ public interface XDEF {
 	public static final long XDEF821 = 31159025991L;
 	/** Parsed result does not fit to CHECK argument&amp;{#SYS000} */
 	public static final long XDEF822 = 31159025992L;
+	/** Parsed string contains illegal character in code table &amp;{0} &amp;{#SYS000} */
+	public static final long XDEF823 = 31159025993L;
 	/** Class with the external debug editor &amp;{0}{"}{"} is not available. */
-	public static final long XDEF850 = 31159025993L;
+	public static final long XDEF850 = 31159025994L;
 	/** GUIEditor can't write XML data to file &amp;{0}. */
-	public static final long XDEF851 = 31159025994L;
+	public static final long XDEF851 = 31159025995L;
 	/** No response from the external editor */
-	public static final long XDEF860 = 31159025995L;
+	public static final long XDEF860 = 31159025996L;
 	/** In the external editor is already opened the other project */
-	public static final long XDEF861 = 31159025996L;
+	public static final long XDEF861 = 31159025997L;
 	/** Prefix "xd" is not allowed in XML input data */
-	public static final long XDEF881 = 31159025997L;
+	public static final long XDEF881 = 31159025998L;
 	/** Namespace of Xdefinition is not allowed in XML input data */
-	public static final long XDEF882 = 31159025998L;
+	public static final long XDEF882 = 31159025999L;
 	/** Incorrect type of input data */
-	public static final long XDEF883 = 31159025999L;
+	public static final long XDEF883 = 31159026000L;
 	/** XDPool object was already built */
-	public static final long XDEF901 = 31159026000L;
+	public static final long XDEF901 = 31159026001L;
 	/** Can't read Xdefinition&amp;{0}{: } */
-	public static final long XDEF902 = 31159026001L;
+	public static final long XDEF902 = 31159026002L;
 	/** Xdefinition source is missing or incorrect&amp;{0}{: } */
-	public static final long XDEF903 = 31159026002L;
+	public static final long XDEF903 = 31159026003L;
 	/** Incorrect parameter of compiler of Xdefinitions&amp;{0}{: } */
-	public static final long XDEF904 = 31159026003L;
+	public static final long XDEF904 = 31159026004L;
 	/** Xdefinition script exception, PC=&amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long XDEF905 = 31159026004L;
+	public static final long XDEF905 = 31159026005L;
 	/** Xdefinition canceled&amp;{0}{; }&amp;{#SYS000} */
-	public static final long XDEF906 = 31159026005L;
+	public static final long XDEF906 = 31159026006L;
 	/** &amp;{0} is deprecated.&amp;{1}{ Please use }{ instead.}&amp;{#SYS000} */
-	public static final long XDEF998 = 31159026006L;
+	public static final long XDEF998 = 31159026007L;
 	/** Error messages of Xdefinitions */
-	public static final long XDEF_DESCRIPTION = 31159026007L;
+	public static final long XDEF_DESCRIPTION = 31159026008L;
 	/** English */
-	public static final long XDEF_LANGUAGE = 31159026008L;
+	public static final long XDEF_LANGUAGE = 31159026009L;
 }

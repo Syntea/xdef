@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -56,7 +57,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool (e.g. 4.0.001.005). */
-	private static final String XD_MIN_VERSION = "4.2.002.010";
+	private static final String XD_MIN_VERSION = "4.2.002.019";
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
@@ -126,7 +127,8 @@ public final class XPool implements XDPool, Serializable {
 	private int _minYear;
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
 	private SDatetime _specialDates[];
-
+	/** Array with charsets of legal values of parsed strings.*/
+	private Charset _charset;
 ////////////////////////////////////////////////////////////////////////////////
 // Constructors
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,6 +192,7 @@ public final class XPool implements XDPool, Serializable {
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
+		_charset = readPropertyStringCode(_props);
 		_compiler = new CompileXDPool(this,
 			_reporter != null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
 	}
@@ -247,6 +250,23 @@ public final class XPool implements XDPool, Serializable {
 				}
 			}
 			return result;
+		}
+	}
+	/** Read list of code table names of values of string type legal parsed string values.
+	 * @param props Properties where to read.
+	 * @return array with code tables or null.
+	 */
+	private static Charset readPropertyStringCode(final Properties props) {
+		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_STRING_CODE);
+		if (val == null) {
+			return null;
+		} else {
+			try {
+				return Charset.forName(val);
+			} catch (SRuntimeException ex) {
+				throw new SRuntimeException(XDEF.XDEF214, //Error of property &{0} = &{1} (it must be &{2}
+					XDConstants.XDPROPERTY_STRING_CODE, val, "charset name");
+			}
 		}
 	}
 
@@ -1010,6 +1030,11 @@ public final class XPool implements XDPool, Serializable {
 	 * and with editing information.
 	 */
 	@Override
+	/** Charset of legal values of parsed strings.
+	 * @return Charset object or null.
+	 */
+	public final Charset getLegalStringCharset() {return _charset;}
+	@Override
 	public XDSourceInfo getXDSourceInfo() {return _sourceInfo;}
 	/** Get debug editor class name.
 	 * @return debug editor class name (if null. the default debug editor will be used).
@@ -1067,6 +1092,7 @@ public final class XPool implements XDPool, Serializable {
 		for (int i = 0; i < len; i++) {
 			xw.writeSDatetime(_specialDates[i]);
 		}
+		xw.writeString(_charset==null ? null : _charset.name());
 		len = _extClasses == null ? 0 : _extClasses.length;
 		xw.writeLength(len);
 		for (int i = 0; i < len; i++) {
@@ -1212,6 +1238,8 @@ public final class XPool implements XDPool, Serializable {
 		for (int i = 0; i < len; i++) {
 			_specialDates[i] = xr.readSDatetime();
 		}
+		String s = xr.readString();
+		_charset = s != null ? Charset.forName(s) : null;
 		len = xr.readLength();
 		_extClasses = new Class<?>[len];
 		for (int i = 0; i < len; i++) {
@@ -1241,19 +1269,19 @@ public final class XPool implements XDPool, Serializable {
 		len = xr.readLength();
 		_components = new LinkedHashMap<>();
 		for (int i = 0; i < len; i++) {
-			String s = xr.readString();
+			s = xr.readString();
 			_components.put(s, xr.readString());
 		}
 		len = xr.readLength();
 		_binds = new LinkedHashMap<>();
 		for (int i = 0; i < len; i++) {
-			String s = xr.readString();
+			s = xr.readString();
 			_binds.put(s, xr.readString());
 		}
 		len = xr.readLength();
 		_enums = new LinkedHashMap<>();
 		for (int i = 0; i < len; i++) {
-			String s = xr.readString();
+			s = xr.readString();
 			_enums.put(s, xr.readString());
 		}
 		List<XNode> list = new ArrayList<>();
@@ -1275,7 +1303,6 @@ public final class XPool implements XDPool, Serializable {
 		_stringItem = xr.readInt();
 		_streamItem = xr.readInt();
 		_sqId = xr.readInt();
-		String s;
 		while((s = xr.readString()) != null) {
 			if (_props == null) {
 				_props = new Properties();
