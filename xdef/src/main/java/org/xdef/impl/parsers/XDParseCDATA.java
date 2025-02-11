@@ -48,9 +48,8 @@ public class XDParseCDATA extends XDParserAbstract {
 						return;
 					}
 				}
-				p.error(XDEF.XDEF823, err.trim());
 			}
-
+			p.error(XDEF.XDEF823, err.trim());
 		}
 	}
 	@Override

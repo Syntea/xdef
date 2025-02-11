@@ -253,9 +253,9 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Read code table name for string type string values.
+	/** Read code table names for checking the parsed string values.
 	 * @param props Properties where to read.
-	 * @return Charset or null.
+	 * @return array with Charset objects or null.
 	 */
 	private static Charset[] readPropertyStringCodes(final Properties props) {
 		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_STRING_CODES);

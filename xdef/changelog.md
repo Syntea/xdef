@@ -3,7 +3,7 @@
 # Version 42.2.19, release-date 2025-02-11
 * Added a new property to set the names of the code table for the string value being parsed. If the string
   value contains a character that is not defined in one of given character sets, the parser will report
-  an error. The name of the property is `xdef_string_codes` (see org.xdef.XDConstants).
+  an error. The name of the property is `xdef_string_codes` (see org.xdef.XDConstants.XDPROPERTY_STRING_CODES).
 
 # Version 42.2.18, release-date 2025-02-05
 * Corrected bugs in parsing of unusual email addresses (containing special characters in mailbox source).
