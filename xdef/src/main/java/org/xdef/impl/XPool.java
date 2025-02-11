@@ -258,7 +258,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @return Charset or null.
 	 */
 	private static Charset[] readPropertyStringCodes(final Properties props) {
-		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_STRING_CODE);
+		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_STRING_CODES);
 		if (val == null || val.isEmpty()) {
 			return null;
 		} else {
@@ -272,7 +272,7 @@ public final class XPool implements XDPool, Serializable {
 					result[i] = Charset.forName(st.nextToken());
 				} catch (SRuntimeException ex) {
 					throw new SRuntimeException(XDEF.XDEF214, //Error of property &{0} = &{1} (it must be &{2}
-					XDConstants.XDPROPERTY_STRING_CODE, val, "charset name");
+					XDConstants.XDPROPERTY_STRING_CODES, val, "charset name");
 				}
 			}
 			return result;

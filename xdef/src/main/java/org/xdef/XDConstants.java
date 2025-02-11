@@ -81,7 +81,7 @@ public interface XDConstants {
 	/** Property defines legal values of dates if year is out of range.*/
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
 	/** Property defines code table name for parsed string values (default is do not check).*/
-	public static final String XDPROPERTY_STRING_CODE = "xdef_string_code";
+	public static final String XDPROPERTY_STRING_CODES = "xdef_string_code";
 	/** Property defines default time zone.*/
 	public static final String XDPROPERTY_DEFAULTZONE = "xdef_defaultZone";
 

@@ -30,7 +30,7 @@ public class X {
 			? "Error: " + reporter + ";\n" + swr : "OK");
 
 		Properties props = new Properties();
-		props.setProperty(XDConstants.XDPROPERTY_STRING_CODE, "Windows-1250");
+		props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
 		XDPool xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
