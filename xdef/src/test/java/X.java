@@ -1,4 +1,5 @@
 import java.io.StringWriter;
+import java.util.Properties;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -6,7 +7,8 @@ import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 
 public class X {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 		XDDocument xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <xd:declaration>\n" +
@@ -27,17 +29,17 @@ public class X {
 		System.out.println((!"USD\nCZK\n".equals(swr.toString()) || reporter.errorWarnings())
 			? "Error: " + reporter + ";\n" + swr : "OK");
 
-		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
-		System.setProperty(XDConstants.XDPROPERTY_STRING_CODE, "Windows-1250");
-		XDPool xp = XDFactory.compileXD(null,
+		Properties props = new Properties();
+		props.setProperty(XDConstants.XDPROPERTY_STRING_CODE, "Windows-1250");
+		XDPool xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
 "</xd:def>");
 		reporter.clear();
-		xp.createXDDocument().xparse("<A><B a='ěščřžýáíéúů'/><B a='ÁÚŘ'/></A>", null);
-		System.out.println((reporter.errors() ? reporter.printToString() : "OK"));
+		xp.createXDDocument().xparse("<A><B a='áé'/><B a='ÁÉ'/></A>",reporter);
+		System.out.println((reporter.errors() ? reporter.toString() : "OK"));
 		reporter.clear();
-		xp.createXDDocument().xparse("<A><B a='والنشر مزيد منت'/><B a='Таблица аски'/></A>",reporter);
-		System.out.println((reporter.errors() ? reporter.printToString() : "OK"));
+		xp.createXDDocument().xparse("<A><B a='والنشر6ت'/><B a='Таблица аски'/></A>",reporter);
+		System.out.println((reporter.errors() ? reporter.toString() : "OK"));
 	}
 }

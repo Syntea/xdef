@@ -199,7 +199,7 @@ public interface XDPool extends Serializable {
 	 */
 	public SDatetime[] getSpecialDates();
 
-	/** Charset of legal values of parsed strings.
+	/** Charset used for values of parsed strings.
 	 * @return Charset object or null.
 	 */
 	public Charset getLegalStringCharset();

@@ -80,7 +80,7 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MAXYEAR = "xdef_maxyear";
 	/** Property defines legal values of dates if year is out of range.*/
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
-	/** Property defines legal code table name for parsed string value (default is any UTF character).*/
+	/** Property defines code table name for parsed string values (default is do not check).*/
 	public static final String XDPROPERTY_STRING_CODE = "xdef_string_code";
 	/** Property defines default time zone.*/
 	public static final String XDPROPERTY_DEFAULTZONE = "xdef_defaultZone";

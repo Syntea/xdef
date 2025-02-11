@@ -252,13 +252,14 @@ public final class XPool implements XDPool, Serializable {
 			return result;
 		}
 	}
-	/** Read list of code table names of values of string type legal parsed string values.
+
+	/** Read code table name for string type string values.
 	 * @param props Properties where to read.
-	 * @return array with code tables or null.
+	 * @return Charset or null.
 	 */
 	private static Charset readPropertyStringCode(final Properties props) {
 		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_STRING_CODE);
-		if (val == null) {
+		if (val == null || val.isEmpty()) {
 			return null;
 		} else {
 			try {
@@ -1030,7 +1031,7 @@ public final class XPool implements XDPool, Serializable {
 	 * and with editing information.
 	 */
 	@Override
-	/** Charset of legal values of parsed strings.
+	/** Charset used for values of parsed strings.
 	 * @return Charset object or null.
 	 */
 	public final Charset getLegalStringCharset() {return _charset;}

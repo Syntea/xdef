@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.19, release-date 2025-02-10
+# Version 42.2.19, release-date 2025-02-11
 * Added a new property to set the name of the code table for the string value being parsed. If the string
   value contains a character that is not defined in the given character set, the parser will report an error.
   The name of the property is `xdef_string_code` (see org.xdef.XDConstants).
