@@ -35,21 +35,25 @@ public class XDParseCDATA extends XDParserAbstract {
 		}
 		Charset[] chsets = xnode != null ? xnode.getXDPool().getLegalStringCharsets() : null;
 		if (chsets != null && chsets.length > 0) {
-			String err = "";
 			for (Charset chset : chsets) {
 				byte[] bytes = s.getBytes(chset);
 				if (bytes.length != s.length()) {
-					err += ' ' + chset.name();
 				} else {
 					String t = new String(bytes, chset);
 					if (!s.equals(t)) {
-						err += ' ' + chset.name();
 					} else {
 						return;
 					}
 				}
 			}
-			p.error(XDEF.XDEF823, err.trim());
+			s = "";
+			for (int i = 0; i < chsets.length; i++) {
+				if (i > 0) {
+					s += ", ";
+				}
+				s += chsets[i].name();
+			}
+			p.error(XDEF.XDEF823, s);
 		}
 	}
 	@Override

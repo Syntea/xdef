@@ -3136,7 +3136,8 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
 			props.clear();
-			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
+			// test string with code restrictions
+			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250,ISO8859-5");
 			xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
@@ -3145,7 +3146,7 @@ public final class TestXdef extends XDTester {
 			xp.createXDDocument().xparse("<A><B a='áé'/><B a='ÁÉ'/></A>",reporter);
 			assertNoErrorsAndClear(reporter);
 			xp.createXDDocument().xparse("<A><B a='والنشر6ت'/><B a='Таблица аски'/></A>",reporter);
-			assertErrorsAndClear(reporter);
+			assertTrue(reporter.getErrorCount() == 1);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
