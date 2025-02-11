@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.20, release-date 2025-02-11
+* .
+
 # Version 42.2.19, release-date 2025-02-11
 * Added a new property to set the names of the code table for the string value being parsed. If the string
   value contains a character that is not defined in one of given character sets, the parser will report
