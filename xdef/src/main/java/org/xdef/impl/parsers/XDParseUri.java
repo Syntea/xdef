@@ -18,6 +18,7 @@ public class XDParseUri extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		if (chkUri(p, s, ROOTBASENAME)) {
 			p.setParsedValue(s);
+			checkCharset(xnode, p);
 			p.setEos();
 		}
 	}

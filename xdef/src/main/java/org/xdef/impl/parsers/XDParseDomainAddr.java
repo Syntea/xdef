@@ -22,6 +22,7 @@ public class XDParseDomainAddr extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		if (G.parse(s,"domain")) {
 			p.setIndex(pos1 + s.length());
+			checkCharset(xnode, p);
 			return;
 		}
 		p.setIndex(pos);

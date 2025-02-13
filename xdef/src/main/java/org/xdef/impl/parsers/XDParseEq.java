@@ -41,6 +41,7 @@ public class XDParseEq extends XDParserAbstract {
 		if (!p.isToken(_param)) {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
+		checkCharset(xn, p);
 	}
 	@Override
 	public void setParseSQParams(final Object... param) {

@@ -40,6 +40,7 @@ public class XDParseEqi extends XDParseEq {
 		} else {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
+		checkCharset(xnode, p);
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

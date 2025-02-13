@@ -29,6 +29,7 @@ public class XDParseRegex extends XDParserAbstract {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
 			p.setParsedValue(s);
+			checkCharset(xnode, p);
 			p.setEos();
 		}
 	}

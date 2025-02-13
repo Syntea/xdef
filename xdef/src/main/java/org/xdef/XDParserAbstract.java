@@ -1,5 +1,6 @@
 package org.xdef;
 
+import java.nio.charset.Charset;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BOOLEAN;
@@ -316,5 +317,27 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 			}
 		}
 		return result;
+	}
+
+	public static final boolean checkCharset(final XXNode xnode, final XDParseResult p) {
+		Charset[] chsets = xnode != null ? xnode.getXDPool().getLegalStringCharsets() : null;
+		if (chsets != null && chsets.length > 0) {
+			String s = p.getParsedString();
+			for (Charset chset : chsets) {
+				if (s.equals(new String(s.getBytes(chset), chset))) {
+					return true;
+				}
+			}
+			s = "";
+			for (int i = 0; i < chsets.length; i++) {
+				if (i > 0) {
+					s += ", ";
+				}
+				s += chsets[i].name();
+			}
+			p.error(XDEF.XDEF823, s);
+			return false;
+		}
+		return true;
 	}
 }
