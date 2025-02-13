@@ -44,6 +44,7 @@ public class XDParseBNF extends XDParserAbstract {
 		p.addReports(p.getReporter());
 		p.setIndex(parser.getIndex());
 		p.isSpaces();
+		checkCharset(xn, p);
 	}
 
 	@Override

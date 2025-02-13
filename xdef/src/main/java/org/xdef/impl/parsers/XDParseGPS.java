@@ -29,8 +29,7 @@ public class XDParseGPS extends XDParserAbstract {
 		try {
 			int pos1 = p.getIndex();
 			if ((p.isSignedFloat() || p.isSignedInteger())) {
-				double latitude =
-					Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
+				double latitude = Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
 				String name = null;
 				if (p.isChar(',') && (p.isChar(' ') || true)) {
 					pos1 = p.getIndex();
@@ -53,6 +52,7 @@ public class XDParseGPS extends XDParserAbstract {
 						if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
 							GPSPosition gpos = new GPSPosition(latitude, longitude, altitude, name);
 							p.setParsedValue(new XDGPSPosition(gpos));
+							checkCharset(xnode, p);
 							return;
 						}
 					}

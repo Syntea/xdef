@@ -17,6 +17,7 @@ public class XDParseEmailAddr extends XDParserAbstract {
 		p.isSpaces();
 		String s = p.getUnparsedBufferPart();
 		if (chkEmail(p, s, ROOTBASENAME)) {
+			checkCharset(xnode, p);
 			p.setEos();
 		}
 	}

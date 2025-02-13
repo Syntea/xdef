@@ -30,8 +30,8 @@ public class XDParseCHKID extends XSParseQName {
 		if (a != null) {
 			SReporter reporter = xnode.getReporter();
 			//Unique value "&{0}" was not set
-			result.error(XDEF.XDEF522, result.getParsedString() +"&{xpath}"+xnode.getXPos()
-				+ "&{xdpos}" + xnode.getXDPosition());
+			result.error(XDEF.XDEF522,
+				result.getParsedString() + "&{xpath}" + xnode.getXPos() + "&{xdpos}" + xnode.getXDPosition());
 			Report rep;
 			while((rep = a.getReport()) != null) {
 				reporter.putReport(rep);
