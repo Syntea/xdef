@@ -151,8 +151,7 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE, XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
 			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
 		//showErrors display mode
-		_displayMode = (byte) readProperty(_props,
-			XDConstants.XDPROPERTY_DISPLAY,
+		_displayMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DISPLAY,
 			new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE,
 				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS, XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
@@ -168,14 +167,12 @@ public final class XPool implements XDPool, Serializable {
 				XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0; //default is true
 		//ignore undefined external objects
-		_ignoreUnresolvedExternals = readProperty(_props,
-			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+		_ignoreUnresolvedExternals = readProperty(_props, XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			new String[] {XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE,
 				XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE},
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE) == 0;
 		// generate detailed location information in XML parser
-		_locationdetails =  readProperty(_props,
-			XDConstants.XDPROPERTY_LOCATIONDETAILS,
+		_locationdetails =  readProperty(_props, XDConstants.XDPROPERTY_LOCATIONDETAILS,
 			new String[] {XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE,
 				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE},
 			XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE) == 0;
