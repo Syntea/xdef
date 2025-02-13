@@ -674,7 +674,9 @@ public final class TestKeyAndRef extends XDTester {
 			setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
 			setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 			setProperty(XDConstants.XDPROPERTY_SPECDATES, null);
-			setProperty(XDConstants.XDPROPERTY_STRING_CODES, "");
+//			setProperty(XDConstants.XDPROPERTY_STRING_CODES,
+//				"ISO8859-1,ISO8859-2,ISO8859-4,ISO8859-5,ISO8859-7");
+			setProperty(XDConstants.XDPROPERTY_STRING_CODES, "UTF-8");
 			xp = compile(dataDir + "TestKeyAndRef7.xdef");
 			assertEq(dataDir + "TestKeyAndRef7.xml",
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
