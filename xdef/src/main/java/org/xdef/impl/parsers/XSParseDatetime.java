@@ -18,7 +18,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.StringParser;
 
-/** Parser of XML Schema "dateTime" type.
+/** Parser of XML Schema (XSD) "dateTime" type.
  * @author Vaclav Trojan
  */
 public class XSParseDatetime extends XSAbstractParseComparable {

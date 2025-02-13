@@ -834,8 +834,8 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<A a='' b='' c='' d=''></A>";
 			assertEq("<A a=''></A>", parse(xp, "NA", xml, reporter));
-			// attribute "c" inherits options from the NA X-Def header
-			// attribute "d" inherits options from the NA X-Def header
+			// attribute "c" inherits options from the NA Xdef header
+			// attribute "d" inherits options from the NA Xdef header
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A' script='options ignoreEmptyAttributes'>\n"+
@@ -897,9 +897,9 @@ public final class TestOptions extends XDTester {
 			xml = "<A a='' b='' c='' d=''></A>";
 			assertEq("<A b='' c='' d=''></A>",
 				parse(xp, "NA", xml, reporter));
-			// attribute "b" inherits options from the NB X-Def header
-			// attribute "c" inherits options from the NB X-Def header
-			// attribute "d" inherits options from the NB X-Def header
+			// attribute "b" inherits options from the NB Xdef header
+			// attribute "c" inherits options from the NB Xdef header
+			// attribute "d" inherits options from the NB Xdef header
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' xd:root='A'>\n"+
@@ -937,12 +937,10 @@ public final class TestOptions extends XDTester {
 "</xd:collection>";
 			xp = compile(xdef);
 			xml = "<A a=' ab\t\n' b=' ab ' d='ab'></A>";
-			assertEq("<A a=' ab  ' b='ab' d='ab'></A>",
-				parse(xp, "NA", xml, reporter));
+			assertEq("<A a=' ab  ' b='ab' d='ab'></A>", parse(xp, "NA", xml, reporter));
 			xml = "<A a='' b='' c='' d=''></A>";
 			assertEq("<A></A>", parse(xp, "NA", xml, reporter));
-			// attributes "b", "c" and "d" inherits their options from the
-			// NB X-Def header
+			// attributes "b", "c" and "d" inherits their options from the NB Xdef header
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'>\n"+
@@ -1129,8 +1127,8 @@ public final class TestOptions extends XDTester {
 			xml = "<A><A> aA\t\n</A><B> bB </B><C><C>cC</C><D>dD</D></C></A>";
 			assertEq("<A><A>AA</A><B>bb</B><C><C>CC</C><D>dd</D></C></A>",
 				parse(xp, "NA", xml, reporter));
-			// attribute "c" inherits options from the NA X-Def header
-			// attribute "d" inherits options from the NA X-Def header
+			// attribute "c" inherits options from the NA Xdef header
+			// attribute "d" inherits options from the NA Xdef header
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A' script='options setTextLowerCase'>\n"+
@@ -1202,9 +1200,9 @@ public final class TestOptions extends XDTester {
 			xml = "<A><A> aA\t\n</A><B> bB </B><C><C>cC</C><D>dD</D></C></A>";
 			assertEq("<A><A>aa</A><B>bB</B><C><C>cC</C><D>dd</D></C></A>",
 				parse(xp, "NA", xml, reporter));
-			// attribute "b" inherits options from the NB X-Def header
-			// attribute "c" inherits options from the NB X-Def header
-			// attribute "d" inherits options from the NB X-Def header
+			// attribute "b" inherits options from the NB Xdef header
+			// attribute "c" inherits options from the NB Xdef header
+			// attribute "d" inherits options from the NB Xdef header
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'\n>\n"+
@@ -1605,7 +1603,7 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 
 			////////////////////////////////////////////////////////////////////
-			//////////////  test references in one X-Definition  ///////////////
+			//////////////  test references in one Xdefinition  ///////////////
 			////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+

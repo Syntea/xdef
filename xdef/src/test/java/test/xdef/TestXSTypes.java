@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import static test.XDTester._xdNS;
 
-/** Test XML schema and X-definition types.
+/** Test XML schema and Xdefinition types.
  * @author Vaclav Trojan
  */
 public final class TestXSTypes extends XDTester {

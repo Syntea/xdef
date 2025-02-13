@@ -5,7 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDecimal;
 
-/** Parse decimal number with decimal point in X-Script. Decimal point may be either '.' or ','
+/** Parse decimal number with decimal point in Xscript. Decimal point may be either '.' or ','
  * @author Vaclav Trojan
  */
 //public class XDParseDec extends XSAbstractParseComparable {

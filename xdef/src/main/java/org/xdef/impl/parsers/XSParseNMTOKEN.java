@@ -5,7 +5,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 
-/** Parser of Schema "NMTOKEN" type.
+/** Parser of XML Schema (XSD) "NMTOKEN" type.
  * @author Vaclav Trojan
  */
 public class XSParseNMTOKEN extends XSAbstractParseToken {

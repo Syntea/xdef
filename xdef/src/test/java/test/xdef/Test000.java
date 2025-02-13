@@ -260,7 +260,7 @@ public final class Test000 extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("true", swr.toString());
-			xdef = //test of recursion in X-definition
+			xdef = //test of recursion in Xdefinition
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a x='optional int();' y='optional string()'>\n"+
 "    <b xd:script='occurs 0..'/>\n"+

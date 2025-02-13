@@ -21,7 +21,7 @@ public final class PNode {
 	SBuffer _name; //qualified name of node
 	String _localName;  //local name of node
 	String _nsURI;  //namespace URI
-	byte _xdVersion;  //version of X-definion
+	byte _xdVersion;  //version of Xdefinion
 	byte _xmlVersion;  //version of xml
 	XDefinition _xdef;  //XDefinition associated with this node
 	SBuffer _value; //value of this node
@@ -131,8 +131,8 @@ public final class PNode {
 	 */
 	public final SBuffer getValue() {return _value;}
 
-	/** Get version of the X-Definition.
-	 * @return version of the X-Definition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
+	/** Get version of the Xdefinition.
+	 * @return version of the Xdefinition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
 	 */
 	public final byte getXdefVersion() {return _xdVersion;}
 
@@ -191,7 +191,7 @@ public final class PNode {
 
 	/** Expand macros.
 	 * @param reporter error reporter.
-	 * @param actDefName actual X-definition name.
+	 * @param actDefName actual Xdefinition name.
 	 * @param macros map with macros.
 	 */
 	public void expandMacros(final ReportWriter reporter,

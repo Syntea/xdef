@@ -36,7 +36,7 @@ import org.xdef.xon.XonParser;
 import org.xdef.xon.XonReader;
 import org.xdef.xon.XonTools;
 
-/** Parsing of the XML source with the X-definition.
+/** Parsing of the XML source with the Xdefinition.
  * @author Vaclav Trojan
  */
 final class ChkXONParser implements XParser, XonParser {
@@ -153,7 +153,7 @@ final class ChkXONParser implements XParser, XonParser {
 	private void elementStart(final KParsedElement parsedElem) {
 		if (++_level == 0) {
 			if (_chkDoc == null) {
-				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
+				throw new SRuntimeException(XDEF.XDEF550); //Xdefinition is not specified
 			}
 			_chkDoc._doc=KXmlUtils.newDocument(parsedElem.getParsedNSURI(), parsedElem.getParsedName(), null);
 			_element = _chkDoc._doc.getDocumentElement();
@@ -286,7 +286,7 @@ final class ChkXONParser implements XParser, XonParser {
 			_chkElemStack = null;
 		} catch (SError e) {
 			if ("XDEF906".equals(e.getMsgID())) {
-				throw e; //X-definition canceled
+				throw e; //Xdefinition canceled
 			}
 			throw new SRuntimeException(e.getReport(), e.getCause());
 		}
@@ -390,7 +390,7 @@ final class ChkXONParser implements XParser, XonParser {
 	 */
 	public final void comment(final SBuffer value){} // we ingore it here
 	@Override
-	/** X-script item parsed (not used methods for XON/JSON parsing, used in X-definition compiler).
+	/** Xscript item parsed (not used methods for XON/JSON parsing, used in Xdefinition compiler).
 	 * @param name name of item.
 	 * @param value value of item.
 	 */

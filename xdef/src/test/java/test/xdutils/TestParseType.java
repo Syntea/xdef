@@ -14,7 +14,7 @@ public class TestParseType extends XDTester {
 
 	// Test declared type with valid data.
 	private static String testValid(XDPool xp, // compiled XDPool
-		String xdName, // name of X-definition
+		String xdName, // name of Xdefinition
 		String type, // name of declared type
 		String dataOK) {// valid data
 		XDDocument xd = xp.createXDDocument(xdName);
@@ -24,7 +24,7 @@ public class TestParseType extends XDTester {
 
 	// Test declared type with invalid data.
 	private static String testInvalid(XDPool xp, // compiled XDPool
-		String xdName, // name of X-definition
+		String xdName, // name of Xdefinition
 		String type, // name of declared type
 		String dataOK) {// invalid data
 		XDDocument xd = xp.createXDDocument(xdName);

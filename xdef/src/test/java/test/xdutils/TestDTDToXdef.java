@@ -4,7 +4,7 @@ import java.io.File;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
-/** Test of conversion of DTD to X-definition.
+/** Test of conversion of DTD to Xdefinition.
  * @author Vaclav Trojan
  */
 public class TestDTDToXdef extends XDTester {
@@ -596,7 +596,7 @@ public class TestDTDToXdef extends XDTester {
 //"<html>\n" +
 //"  <head>\n" +
 //"    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n" +
-//"    <title>Kapitola 1. X-definice step-by-step: model XML elementu</title>\n" +
+//"    <title>Kapitola 1. Xdefinice step-by-step: model XML elementu</title>\n" +
 //"  </head>\n" +
 //"  <body>\n" +
 //"   <b>Obsah</b>\n" +

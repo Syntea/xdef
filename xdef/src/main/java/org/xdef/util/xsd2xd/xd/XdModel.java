@@ -1,27 +1,27 @@
 package org.xdef.util.xsd2xd.xd;
 
-/** Represents any X-definition model.
+/** Represents any Xdefinition model.
  * @author Ilia Alexandrov
  */
 public abstract class XdModel {
 
-	/** Model X-definition. */
+	/** Model Xdefinition. */
 	protected final XdDef _def;
 	/** Model name. */
 	protected final String _name;
 	/** Processed model switch. */
 	private boolean _processed = false;
 
-	/** Creates instance of X-definition model.
-	 * @param def model X-definition.
-	 * @param name X-definition model name.
-	 * @throws NullPointerException if given model X-definition or name is
+	/** Creates instance of Xdefinition model.
+	 * @param def model Xdefinition.
+	 * @param name Xdefinition model name.
+	 * @throws NullPointerException if given model Xdefinition or name is
 	 * null.
 	 * @throws IllegalArgumentException if given model name is empty.
 	 */
 	public XdModel(XdDef def, String name) {
 		if (def == null) {
-			throw new NullPointerException("Given model X-definition is null!");
+			throw new NullPointerException("Given model Xdefinition is null!");
 		}
 		if (name == null) {
 			throw new NullPointerException("Given model name is null!");
@@ -33,8 +33,8 @@ public abstract class XdModel {
 		_name = name;
 	}
 
-	/** Model X-definition getter.
-	 * @return model X-definition.
+	/** Model Xdefinition getter.
+	 * @return model Xdefinition.
 	 */
 	public final XdDef getDef() {return _def;}
 
@@ -51,18 +51,18 @@ public abstract class XdModel {
 	/** Sets processed model switch to true. */
 	public final void setProcessed() {_processed = true;}
 
-	/** Returns type constant of current X-definition model implementation.
-	 * @return X-definition model type constant.
+	/** Returns type constant of current Xdefinition model implementation.
+	 * @return Xdefinition model type constant.
 	 */
 	public abstract int getType();
 
 	/** Model type enumeration type. */
 	public static interface Type {
-		/** X-definition declaration model type. */
+		/** Xdefinition declaration model type. */
 		public static final int DECLARATION = 1;
-		/** X-definition group model type. */
+		/** Xdefinition group model type. */
 		public static final int GROUP = DECLARATION + 1;
-		/** X-definition element model type. */
+		/** Xdefinition element model type. */
 		public static final int ELEMENT = GROUP + 1;
 	}
 }

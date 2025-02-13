@@ -22,8 +22,8 @@ import org.w3c.dom.Element;
 import org.xdef.sys.ReportWriter;
 import javax.xml.namespace.QName;
 
-/** Provides processing of given X-definition. For processing of X-definition you must create and instance
- * of XDDocument created from XDPool with given X-definition in which is defined root (starting point)
+/** Provides processing of given Xdefinition. For processing of Xdefinition you must create and instance
+ * of XDDocument created from XDPool with given Xdefinition in which is defined root (starting point)
  * for next processing. Before starting of process you can set parameters of processing (variables,
  * properties, standard input and output streams, user objects). The document can be used for validation and
  * processing of the input XML data ("xparse" methods) or for construction of a XML object (methods
@@ -39,7 +39,7 @@ import javax.xml.namespace.QName;
  * {@link org.xdef.proc.XXNode#getXDContext()}.
  * <p>Typical example of validation:
  * <pre><code>
- * //get instance of XDDocument with X-definition given by name
+ * //get instance of XDDocument with Xdefinition given by name
  * XDDocument xDoc = xp.createXDDocument(name);
  * ArrayReporter reporter = new ArrayReporter(); // here will be written errors
  * ... set variables if necessary - see {@link org.xdef.proc.XXNode}
@@ -55,13 +55,13 @@ import javax.xml.namespace.QName;
  * }</code></pre>
  * <p>Typical example of construction:
  * <pre><code>
- * //get instance of XDDocument with X-definition given by name
+ * //get instance of XDDocument with Xdefinition given by name
  * XDDocument xDoc = xp.createXDDocument(name);
  * ArrayReporter reporter = new ArrayReporter(); // here will be written errors
  * ... set data source see {@link org.xdef.proc.XXNode}
  * //construct required element.
  * Element el = xd.xcreate(nsuri, //namespace of required model or null
- *   name, // name of required model (in given X-definition)
+ *   name, // name of required model (in given Xdefinition)
  *   reporter);
  * </code></pre>
  * @author Vaclav Trojan
@@ -200,14 +200,14 @@ public interface XDDocument extends XXNode {
 	 */
 	public XXElement prepareRootXXElement(String name, boolean checkRoot);
 
-	/** Get implementation properties of X-definition.
-	 * @return the implementation properties of X-definition.
+	/** Get implementation properties of Xdefinition.
+	 * @return the implementation properties of Xdefinition.
 	 */
 	public Properties getImplProperties();
 
-	/** Get implementation property of X-definition.
+	/** Get implementation property of Xdefinition.
 	 * @param name The name of property.
-	 * @return the value of implementation property from root X-definition.
+	 * @return the value of implementation property from root Xdefinition.
 	 */
 	public String getImplProperty(String name);
 
@@ -296,8 +296,8 @@ public interface XDDocument extends XXNode {
 		String destLanguage,
 		ReportWriter reporter) throws SRuntimeException;
 
-	/** Parse a string with a type declared in X-definition.
-	 * @param typeName name of type in X-definition.
+	/** Parse a string with a type declared in Xdefinition.
+	 * @param typeName name of type in Xdefinition.
 	 * @param data string with data to be parsed.
 	 * @return XDParseResult object with parsed data.
 	 */
@@ -407,7 +407,7 @@ public interface XDDocument extends XXNode {
 	 */
 	public Map<String, Object> ivalidate(Object data, ReportWriter reporter) throws SRuntimeException;
 
-	/** Run create XON/JSON according to the X-definition JSON model.
+	/** Run create XON/JSON according to the Xdefinition JSON model.
 	 * @param name name of XON/JSON model.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -416,7 +416,7 @@ public interface XDDocument extends XXNode {
 	 */
 	public Object jcreate(String name, ReportWriter reporter) throws SRuntimeException;
 
-	/** Create XComponent from XON/JSON according to the X-definition model. NOTE this method is experimental.
+	/** Create XComponent from XON/JSON according to the Xdefinition model. NOTE this method is experimental.
 	 * @param name the name of required model.
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
@@ -495,7 +495,7 @@ public interface XDDocument extends XXNode {
 	 */
 	public Object jvalidate(Object data, ReportWriter reporter) throws SRuntimeException;
 
-	/** Run create mode - create element according to the X-definition model.
+	/** Run create mode - create element according to the Xdefinition model.
 	 * @param name the name of model of required element.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -504,7 +504,7 @@ public interface XDDocument extends XXNode {
 	 */
 	public Element xcreate(String name, ReportWriter reporter) throws SRuntimeException;
 
-	/** Run create mode - create element according to the X-definition model. If the parameter nsUri is not
+	/** Run create mode - create element according to the Xdefinition model. If the parameter nsUri is not
 	 * null then its assigned the model with given namespaceURI; in this case the parameter name may be
 	 * qualified with a prefix.
 	 * @param nsUri the namespace URI of result element (may be null).
@@ -516,7 +516,7 @@ public interface XDDocument extends XXNode {
 	 */
 	public Element xcreate(String nsUri, String name, ReportWriter reporter) throws SRuntimeException;
 
-	/** Run create mode - create element according to the X-definition model.
+	/** Run create mode - create element according to the Xdefinition model.
 	 * @param qname the QName of model of required element.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.
@@ -567,7 +567,7 @@ public interface XDDocument extends XXNode {
 	public XComponent xparseXComponent(Object data, Class<?> xClass, String sourceId, ReportWriter reporter)
 		throws SRuntimeException;
 
-	/** Run create mode - create element according to the X-definition model. If the parameter nsUri is not
+	/** Run create mode - create element according to the Xdefinition model. If the parameter nsUri is not
 	 * null then its assigned the model* with given namespaceURI (in this case the parameter qname may be
 	 * qualified with a prefix).
 	 * @param nsUri the namespace URI of result element (may be <i>null</i>).
@@ -581,7 +581,7 @@ public interface XDDocument extends XXNode {
 	public XComponent xcreateXComponent(String nsUri, String name, Class xClass, ReportWriter reporter)
 		throws SRuntimeException;
 
-	/** Run create mode - create XComponent according to the X-definition model.
+	/** Run create mode - create XComponent according to the Xdefinition model.
 	 * @param name the name of model of required element.
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
@@ -592,7 +592,7 @@ public interface XDDocument extends XXNode {
 	public XComponent xcreateXComponent(String name, Class xClass, ReportWriter reporter)
 		throws SRuntimeException;
 
-	/** Run create mode - create XComponent according to the X-definition model.
+	/** Run create mode - create XComponent according to the Xdefinition model.
 	 * @param qname the QName of model of required element.
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
@@ -603,7 +603,7 @@ public interface XDDocument extends XXNode {
 	public XComponent xcreateXComponent(QName qname, Class xClass, ReportWriter reporter)
 		throws SRuntimeException;
 
-	/** Run create XAML according to the X-definition XON model.
+	/** Run create XAML according to the Xdefinition XON model.
 	 * @param name name of XON model.
 	 * @param reporter report writer or null. If this argument is null and error reports occurs then
 	 * SRuntimeException is thrown.

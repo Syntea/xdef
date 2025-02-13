@@ -50,12 +50,12 @@ import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
-/** External utilities called from X-definition processor.
+/** External utilities called from Xdefinition processor.
  * @author Vaclav Trojan
  */
 public final class XExtUtils {
 
-	/** Get information about actual version of X-definition.
+	/** Get information about actual version of Xdefinition.
 	 * @return build version and datetime.
 	 */
 	public static final String getVersionInfo() {
@@ -250,15 +250,15 @@ public final class XExtUtils {
 		return el != null ? el.getTextContent() : null;
 	}
 
-	/** Get X-position of XXNode.
+	/** Get Xposition of XXNode.
 	 * @param x node with position.
-	 * @return X-position of node.
+	 * @return Xposition of node.
 	 */
 	public static final String getXPos(final XXNode x) {return x.getXPos();}
 
-	/** Get X-position of model in X-definition.
+	/** Get Xposition of model in Xdefinition.
 	 * @param x node with position.
-	 * @return X-position of model of XXNode..
+	 * @return Xposition of model of XXNode..
 	 */
 	public static final String getXDPosition(final XXNode x) {return x.getXMNode().getXDPosition();}
 
@@ -426,14 +426,14 @@ public final class XExtUtils {
 // Implementation of script methods.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Cancel running X-definition process. */
-	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //X-definition canceled
+	/** Cancel running Xdefinition process. */
+	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //Xdefinition canceled
 
-	/** Cancel running X-definition process and throw message.
+	/** Cancel running Xdefinition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
 	public static final void cancel(final String msg) {
-		throw new SError(Report.error(XDEF.XDEF906, msg)); //X-definition canceled&{0}{; }
+		throw new SError(Report.error(XDEF.XDEF906, msg)); //Xdefinition canceled&{0}{; }
 	}
 
 	/** Parse base64 data.
@@ -550,7 +550,7 @@ public final class XExtUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of predefined X-Script Math methods (ensure conversion
+// Implementation of predefined Xscript Math methods (ensure conversion
 // of arguments long -> double). Other math methods are available in Math.
 ////////////////////////////////////////////////////////////////////////////////
 	public static final double acos(final long a) {return Math.acos(a);}

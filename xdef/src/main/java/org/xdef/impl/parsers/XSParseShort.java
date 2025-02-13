@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of Schema "short" type.
+/** Parser of XML Schema (XSD) "short" type.
  * @author Vaclav Trojan
  */
 public class XSParseShort extends XSParseLong {

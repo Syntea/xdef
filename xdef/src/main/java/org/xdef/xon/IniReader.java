@@ -23,7 +23,7 @@ import static org.xdef.xon.XonTools.genXMLString;
  * @author Vaclav Trojan
  */
 public class IniReader extends StringParser implements XonParsers, XonNames {
-	/** Flag if the parsed data are in X-definition (default false). */
+	/** Flag if the parsed data are in Xdefinition (default false). */
 	private boolean _jdef;
 	/** Parser of XON source. */
 	private final XonParser _jp;
@@ -267,7 +267,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 					}
 				}
 				if (p1 == null) {
-					error(JSON.JSON018); //Value of x:script must be string with X-script
+					error(JSON.JSON018); //Value of x:script must be string with Xscript
 				}
 				p.findChar(']');
 			} else {
@@ -321,7 +321,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 	@Override
-	/** Set mode that INI file is parsed in X-definition compiler. */
+	/** Set mode that INI file is parsed in Xdefinition compiler. */
 	public final void setXdefMode() { _jdef = true;}
 	@Override
 	public void setXonMode() {} // not used here

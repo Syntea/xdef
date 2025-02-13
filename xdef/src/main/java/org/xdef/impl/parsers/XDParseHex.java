@@ -5,7 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBytes;
 
-/** Parser of X-Script "hex" type.
+/** Parser of Xscript "hex" type.
  * @author Vaclav Trojan
  */
 public class XDParseHex extends XSParseBase64Binary {

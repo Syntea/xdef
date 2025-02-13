@@ -18,7 +18,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of Schema "anyURI" type.
+/** Parser of XML Schema (XSD) "anyURI" type.
  * @author Vaclav Trojan
  */
 public class XSParseAnyURI extends XSAbstractParser {

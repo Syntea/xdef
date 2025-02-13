@@ -27,12 +27,12 @@ import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
 import org.xdef.sys.STester;
 
-/** Reads source X-definitions and prepares the list of PNodes created
+/** Reads source Xdefinitions and prepares the list of PNodes created
  * from source data.
  * @author Trojan
  */
 public class XPreCompiler implements PreCompiler {
-	/** index of NameSpace of X-definitions. */
+	/** index of NameSpace of Xdefinitions. */
 	static final int NS_XDEF_INDEX = 0;								//0
 	/** index of NameSpace of XML. */
 	static final int NS_XML_INDEX = NS_XDEF_INDEX + 1;				//1
@@ -42,7 +42,7 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_XLINK_INDEX = NS_XMLNS_INDEX + 1;			//3
 	/** index of NameSpace of XInclude. */
 	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1;		//4
-	/** index of NameSpace of XML Schema. */
+	/** index of NameSpace of XML Schema (XSD). */
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
 	/** index of NameSpace of XON/JSON (W3C). */
 	static final int NS_XON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
@@ -73,7 +73,7 @@ public class XPreCompiler implements PreCompiler {
 	private final List<Object> _includeList = new ArrayList<>();
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros = new LinkedHashMap<>();
-	/** Reader of X-definitions in the form of XML. */
+	/** Reader of Xdefinitions in the form of XML. */
 	private final PreReaderXML _xmlReader;
 	/** Reporter used for error messages. */
 	private ReportWriter _reporter;
@@ -135,11 +135,11 @@ public class XPreCompiler implements PreCompiler {
 		return name;
 	}
 
-	/** Process include list from header of X-definition. */
+	/** Process include list from header of Xdefinition. */
 	void processIncludeList(PNode pnode) {
 		PAttr pa = getXdefAttr(pnode, "include", false, true);
 		if (pa == null) {
-			return; // Attribute "include" is not declared in X-definition
+			return; // Attribute "include" is not declared in Xdefinition
 		}
 		/* Process list of file specifications and/or URLs. Result of list is added to the includeList
 		 * (if the includeList already contains an item the item it is skipped. If reporter is null then
@@ -210,9 +210,9 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	/** Check if the name of X-definition is OK.
-	 * @param name name of X-definition
-	 * @return true if the name of X-definition is OK.
+	/** Check if the name of Xdefinition is OK.
+	 * @param name name of Xdefinition
+	 * @return true if the name of Xdefinition is OK.
 	 */
 	final static boolean chkDefName(final String name, byte xmlVersion) {
 		if (name.length() == 0) {
@@ -381,8 +381,8 @@ public class XPreCompiler implements PreCompiler {
 	public final void parseString(final String source) {parseString(source, null);}
 
 	@Override
-	/** Parse string and addAttr it to the set of X-definitions.
-	 * @param source source string with X-definitions.
+	/** Parse string and addAttr it to the set of Xdefinitions.
+	 * @param source source string with Xdefinitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
 	 * @throws RutimeException if an error occurs.
 	 */
@@ -398,15 +398,15 @@ public class XPreCompiler implements PreCompiler {
 	}
 
 	@Override
-	/** Parse file with source X-definition and addAttr it to the set of definitions.
-	 * @param fileName pathname of file with with X-definitions.
+	/** Parse file with source Xdefinition and addAttr it to the set of definitions.
+	 * @param fileName pathname of file with with Xdefinitions.
 	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseFile(final String fileName) {parseFile(new File(fileName));}
 
 	@Override
-	/** Parse file with source X-definition and addAttr it to the set of definitions.
-	 * @param file The file with with X-definitions.
+	/** Parse file with source Xdefinition and addAttr it to the set of definitions.
+	 * @param file The file with with Xdefinitions.
 	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseFile(final File file) {
@@ -429,8 +429,8 @@ public class XPreCompiler implements PreCompiler {
 	}
 
 	@Override
-	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
-	 * @param in input stream with the X-definition.
+	/** Parse InputStream source Xdefinition and addAttr it to the set of definitions.
+	 * @param in input stream with the Xdefinition.
 	 * @param srcName name of source data used in reporting (SysId) or null.
 	 * @throws RutimeException if an error occurs.
 	 */
@@ -456,9 +456,9 @@ public class XPreCompiler implements PreCompiler {
 	}
 
 	@Override
-	/** Parse data with source X-definition given by URL and addAttr it
-	 * to the set of X-definitions.
-	 * @param url URL of the file with the X-definition.
+	/** Parse data with source Xdefinition given by URL and addAttr it
+	 * to the set of Xdefinitions.
+	 * @param url URL of the file with the Xdefinition.
 	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseURL(final URL url) {
@@ -581,20 +581,20 @@ public class XPreCompiler implements PreCompiler {
 	public CompileCode getCodeGenerator() {return _g;}
 
 	@Override
-	/** Get sources of X-definitions.
-	 * @return array with sources of X-definitions.
+	/** Get sources of Xdefinitions.
+	 * @return array with sources of Xdefinitions.
 	 */
 	public List<Object> getSources() {return _sources;}
 
 	@Override
-	/** Get list with included sources of X-definitions (URL or File).
-	 * @return list with included sources of X-definitions (URL or File).
+	/** Get list with included sources of Xdefinitions (URL or File).
+	 * @return list with included sources of Xdefinitions (URL or File).
 	 */
 	public List<Object> getIncluded() {return _includeList;}
 
 	@Override
-	/** Get prepared sources (PNodes) of X-definition items.
-	 * @return array with PNodes with X-definitions.
+	/** Get prepared sources (PNodes) of Xdefinition items.
+	 * @return array with PNodes with Xdefinitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 

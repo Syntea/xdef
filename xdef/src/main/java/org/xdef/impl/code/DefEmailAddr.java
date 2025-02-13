@@ -13,6 +13,8 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.XDEmailAddr;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_EMAIL;
 import static org.xdef.XDValueType.EMAIL;
 import org.xdef.sys.SException;
 
@@ -20,6 +22,69 @@ import org.xdef.sys.SException;
  * @author Vaclav Trojan
  */
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
+	/** BNF grammar rules of email address according to RFC 5321. */
+	private static final BNFGrammar BNF = BNFGrammar.compile(
+"FWS           ::= [ #9]+\n"+ // Folding white space
+"ASCIICHAR     ::= [ -~]\n"+ // Printable ASCII character
+"Domain        ::= sub_domain ( '.' sub_domain )*\n"+
+"sub_domain    ::= Let_dig+ Ldh_str?\n" +
+"Let_dig       ::= [0-9] | $letter\n" +
+"Ldh_str       ::= '-' Let_dig+\n"+
+"General_addr  ::= Std_tag ':' ( dcontent )+\n" +
+"Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
+"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
+
+/*#if RFC5321*#/
+// START RFC5321
+"IPv4          ::= Snum ('.'  Snum){3}\n"+
+"Snum          ::= ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
+"IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
+"IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
+"IPv6_full     ::= IPv6_hex ( ':' IPv6_hex ){7}\n" +
+"IPv6_comp     ::= ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
+			   // The '::' represents at least 2 16-bit groups of
+			   // zeros. No more than 6 groups in addition to the '::' may be present.
+"IPv6v4_full   ::= IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
+"IPv6v4_comp   ::= ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
+"                  ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
+			   // The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
+			   // addition to the '::' and IPv4-address-literal may be present.
+"IPv4_addr     ::= IPv4\n"+
+"IPv6_addr     ::= 'IPv6:' IPv6\n"+
+"address       ::= '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
+"quoted_pair   ::= '\\' ASCIICHAR\n" + // %d92 %d32-126
+			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
+"qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
+			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
+			   // blackslash-quoting except double-quote and the backslash itself.
+"QcontentSMTP  ::= quoted_pair | qtextSMTP\n" +
+"Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
+"atext         ::= ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
+"Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
+"Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
+// END RFC5321
+/*#else*/
+// START not RFC5321 (i.e. RFC2822?)
+"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
+"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
+"Mailbox       ::= Local_part '@' Domain $rule\n"+
+// END not RFC5321 (i.e. RFC2822?)
+/*#end*/
+
+"Atom          ::= atext ('-' atext)*\n" +
+"Dot_string    ::= Atom ('.'  Atom)*\n" +
+"comment       ::= ( commentList $rule ) FWS?\n"+
+"commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
+"commentPart   ::= ( ASCIICHAR - [()] )+ ( commentList)? $rule\n"+
+"text          ::= ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
+"textItem      ::= FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
+"charsetName   ::= ( [a-zA-Z] ('-'? [a-zA-Z0-9]+)* ) $rule '?' \n"+
+"ptext         ::= FWS? ( ASCIICHAR - [@><()=] )+ $rule\n"+ // Printable ASCII character without @><()=
+"qtext         ::= FWS? ( hexOctet | ASCIICHAR - [=?] )+ $rule \n"+ // Quoted text
+"hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
+"btext         ::= [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
+"emailAddr     ::= ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
+
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
@@ -31,45 +96,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 
 	/** Creates a new instance of DefEmail as null.*/
 	public DefEmailAddr() {this((String) null);}
-
-	private static String readStackItem(final StringParser q, final String s, final String src) {
-		if (q.isToken(s) && q.isSpaces()) {
-			if (q.isInteger()) {
-				int i = q.getParsedInt();
-				q.isSpaces();
-				if (q.isInteger()) {
-					return src.substring(i, q.getParsedInt());
-				}
-			}
-		}
-		return null;
-	}
-
-	private static String readBtext(final String s, final String charsetName) {
-		try {
-			return new String(SUtils.decodeBase64(s), charsetName);
-		} catch (UnsupportedEncodingException | SException ex) {
-			return "?";
-		}
-	}
-
-	private static String readQtext(final String s, final String charsetName) {
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		for (int i = 0; i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (ch == '=' && i + 2 < s.length()) {
-				String hexMask = "0123456789ABCDEF";
-				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4)
-					+ hexMask.indexOf(s.charAt(++i)));
-			}
-			b.write((byte) ch);
-		}
-		try {
-			return new String(b.toByteArray(), charsetName);
-		} catch (UnsupportedEncodingException ex) {
-			return "?";
-		}
-	}
 
 	/** Creates a new instance of DefEmail.
 	 * @param value string with email address.
@@ -101,7 +127,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		_userName = result[3];
 	}
 
-	/** Creates a new instance of DefEmailAddr
+	/** Parse source data with email address.
 	 * @param p parser with source data.
 	 * @return null if not correct or array of strings where the items are:<p>
 	 * [0] .. text of parsed email source.<p>
@@ -110,76 +136,130 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 * [3] .. string with personal information.
 	 */
 	public static final String[] parseEmail(final StringParser p) {
-		BNFGrammar g = BNFGrammar.compile(
-"S ::= [ #9]+ /* linear white space */\n"+
-"asciiChar ::= [ -~]\n"+
-"comment ::=  S? ( commentList $rule) S?\n"+
-"commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
-"commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
-"atom ::= ([-0-9a-zA-Z_])+\n"+
-"emailAddr ::= localPart domain $rule\n"+
-"emailAddr1 ::= '<' emailAddr '>' \n"+
-"localPart ::= atom ('.' atom)*\n"+
-"domain ::= '@' atom ('.' atom)*\n"+
-"text ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
-"textItem ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
-"charsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
-"ptext ::= ((asciiChar - [@><()=])+) $rule\n"+
-"qtext ::= ((hexOctet | asciiChar - [=?])+) $rule /*quoted*/\n"+
-"hexOctet ::= '=' [0-9A-F] [0-9A-F]\n"+
-"btext ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */\n"+
-"email ::= (text? S? emailAddr1 | (comment* emailAddr)) (S? comment)*");
 		p.isSpaces();
-		if (g.parse(p, "email")) {
-			String domain; // Email domain
-			String localPart; // Email user
-			String charsetName; // name of text charset name
-			domain = localPart = charsetName = null;
-			String userName = ""; // Email user name
-			Object[] code = g.getParsedObjects();
-			String s = p.getParsedBufferPart();
-			if (code != null) {
-				for (Object code1 : code) {
-					StringParser q = new StringParser((String) code1);
-					String t;
-					if ((t = readStackItem(q, "emailAddr", s)) != null) {
-						int ndx = t.indexOf('@');
-						localPart = t.substring(0, ndx);
-						domain = t.substring(ndx + 1);
-					} else if ((t = readStackItem(q, "comment", s)) != null) {
-						t = (t = t.trim()).substring(1, t.length() -1).trim();
-						if (!t.isEmpty()) {
-							if (localPart == null) {
-								userName += t;
-							} else {
-								userName = t;
-							}
-						}
-					} else if ((t = readStackItem(q, "ptext", s)) != null) {
-						userName += t.trim();
-					} else if ((t = readStackItem(q, "charsetName", s)) != null) {
-						charsetName = t;
-					} else if ((t = readStackItem(q, "qtext", s)) != null) {
-						t = readQtext(t, charsetName);
-						userName += t;
-					} else if ((t = readStackItem(q, "btext", s)) != null) {
-						t = readBtext(t, charsetName);
-						userName += t;
-					}
+		Object[] code;
+		String parsedString;
+		synchronized (BNF) {
+			if (!BNF.parse(p, "emailAddr")) {
+				return null;
+			}
+			parsedString = BNF.getParsedString();
+			code = BNF.getParsedObjects();
+		}
+		String domain; // Email domain
+		String localPart; // Email user
+		String charsetName; // name of text charset name
+		domain = localPart = charsetName = null;
+		String userName = ""; // Email user name
+		String s = p.getParsedBufferPart();
+		if (code != null) {
+			for (Object code1 : code) {
+				StringParser q = new StringParser((String) code1);
+				String t;
+				if ((t = readStackItem(q, "Mailbox", s)) != null) {
+					int ndx = t.indexOf('@');
+					localPart = t.substring(0, ndx);
+					domain = t.substring(ndx + 1);
+				} else if ((t = readStackItem(q, "commentPart", s)) != null) {
+					userName += t;
+				} else if ((t = readStackItem(q, "charsetName", s)) != null) {
+					charsetName = t;
+				} else if ((t = readStackItem(q, "qtext", s)) != null) {
+					t = readQtext(t, charsetName);
+					userName += t;
+				} else if ((t = readStackItem(q, "btext", s)) != null) {
+					t = readBtext(t, charsetName);
+					userName += t;
+				} else if ((t = readStackItem(q, "ptext", s)) != null) {
+					userName += t.trim();
 				}
-				p.isSpaces();
-				if (localPart != null && domain != null) {
-					return new String[] {
-						g.getParsedString(), localPart, domain, userName};
+			}
+			p.isSpaces();
+			if (localPart != null && domain != null) {
+				localPart = removeWS(localPart);
+				domain = removeWS(domain);
+				if (localPart.length() <= 64 && domain.length() <= 256) {
+					return new String[] {parsedString, localPart, domain, userName};
 				}
 			}
 		}
 		return null;
 	}
 
+	/** Read string from stack item.
+	 * @param q StringParser starting with name of item.
+	 * @param rule name of rule
+	 * @param src parsed source data.
+	 * @return part of parsed source data.
+	 */
+	private static String readStackItem(final StringParser q, final String s, final String src) {
+		if (q.isToken(s) && q.isSpaces()) {
+			if (q.isInteger()) {
+				int i = q.getParsedInt();
+				q.isSpaces();
+				if (q.isInteger()) {
+					return src.substring(i, q.getParsedInt());
+				}
+			}
+		}
+		return null;
+	}
+
+	/** Get decoded base64 text.
+	 * @param s base64 text.
+	 * @param charsetName name of charset.
+	 * @return decoded base64 text.
+	 */
+	private static String readBtext(final String s, final String charsetName) {
+		try {
+			return new String(SUtils.decodeBase64(s), charsetName);
+		} catch (SException ex) {
+			throw new SRuntimeException(ex.getReport());
+		} catch (UnsupportedEncodingException ex) {
+			//Incorrect value of &{0}&{1}&{: }
+			throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
+		}
+	}
+
+	/** Get quoted part of source data with given charset.
+	 * @param s extracted quoted part
+	 * @param charsetName name of charset.
+	 * @return quoted part of source data (decode given charset).
+	 */
+	private static String readQtext(final String s, final String charsetName) {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == '=' && i + 2 < s.length()) {
+				String hexMask = "0123456789ABCDEF";
+				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4) + hexMask.indexOf(s.charAt(++i)));
+			}
+			b.write((byte) ch);
+		}
+		try {
+			return new String(b.toByteArray(), charsetName);
+		} catch (UnsupportedEncodingException ex) {
+			//Incorrect value of &{0}&{1}&{: }
+			throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
+		}
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Remove white spaces from argument.
+	 * @param s string where remove white spaces.
+	 * @return string with removed white spaces.
+	 */
+	private static String removeWS(final String s) {
+		String result = s;
+		int i;
+		while ((i = result.indexOf(' ')) >= 0 || (i = result.indexOf('\t')) >=0) {
+			result = result.substring(0,i) + result.substring(i + 1);
+		}
+		return result;
+	}
 
 	@Override
 	/** Get associated object.

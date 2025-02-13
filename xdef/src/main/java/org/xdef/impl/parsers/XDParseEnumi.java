@@ -8,7 +8,7 @@ import org.xdef.proc.XXNode;
 import java.util.Arrays;
 import org.xdef.XDContainer;
 
-/** Parser of X-Script "enumi" type.
+/** Parser of Xscript "enumi" type.
  * @author Vaclav Trojan
  */
 public class XDParseEnumi extends XDParseEnum {

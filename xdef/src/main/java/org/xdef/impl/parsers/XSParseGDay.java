@@ -2,7 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.sys.StringParser;
 
-/** Parser of Schema "gDay" type.
+/** Parser of XML Schema (XSD) "gDay" type.
  * @author Vaclav Trojan
  */
 public class XSParseGDay extends XSParseDate {

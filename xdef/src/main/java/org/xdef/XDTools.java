@@ -29,13 +29,13 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
-/** Collection of methods supporting X-definition programming.
+/** Collection of methods supporting Xdefinition programming.
  * @author Vaclav Trojan
  */
 public class XDTools {
 
-	/** Get version of this implementation of X-definition.
-	 * @return version of this implementation of X-definition.
+	/** Get version of this implementation of Xdefinition.
+	 * @return version of this implementation of Xdefinition.
 	 */
 	public static final String getXDVersion() {	return BUILD_VERSION + " (" + BUILD_DATETIME + ")";}
 

@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Values of types of values in the Script of X-definition.
+/** Values of types of values in the Script of Xdefinition.
  * @author Vaclav Trojan
  */
 public enum XDValueType {

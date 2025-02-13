@@ -147,7 +147,7 @@ class ChkDOMParser extends SReporter {
 						try {
 							xdp = new XBuilder(null).setSource(u).compileXD();
 						} catch (Exception ex) {
-							fatal(XDEF.XDEF543, ex); //In X-definition are errors&{0}{: }
+							fatal(XDEF.XDEF543, ex); //In Xdefinition are errors&{0}{: }
 							return;
 						}
 						key = xdefInstancePrefix+":xdefName"; // xdi:definition
@@ -196,7 +196,7 @@ class ChkDOMParser extends SReporter {
 									_chkDoc.setStdOut(stdOut);
 								}
 							} else {
-								fatal(XDEF.XDEF530, value); //Missing X-definition &{0}{: }
+								fatal(XDEF.XDEF530, value); //Missing Xdefinition &{0}{: }
 								return;
 							}
 						}

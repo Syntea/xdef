@@ -25,7 +25,7 @@ import org.xdef.util.XdefToXsd;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
-/** Test conversion of X-definition to XML schema. */
+/** Test conversion of Xdefinition to XML schema. */
 public class TestXd2XsdConv extends XDTester {
 
 	private static final SchemaFactory XSDFACTORY =

@@ -56,7 +56,7 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-/** Parsing of the XML source with the X-definition.
+/** Parsing of the XML source with the Xdefinition.
  * @author Vaclav Trojan
  */
 final class ChkParser extends DomBaseHandler implements XParser {
@@ -747,7 +747,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_chkElemStack = null;
 		} catch (SError e) {
 			if ("XDEF906".equals(e.getMsgID())) {
-				throw e; //X-definition canceled
+				throw e; //Xdefinition canceled
 			}
 			throw new SRuntimeException(e.getReport(), e.getCause());
 		}
@@ -825,7 +825,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 					try {
 						xdp =(XPool)new XBuilder(null).setSource(u).compileXD();
 					} catch (Exception ex) {
-						//In X-definition are errors&{0}{: }
+						//In Xdefinition are errors&{0}{: }
 						_sReporter.putReport(Report.fatal(XDEF.XDEF543, ex));
 						return;
 					}
@@ -883,12 +883,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 								_chkDoc._xdef = cd._xdef;
 							}
 						} else {
-							_sReporter.fatal(XDEF.XDEF530, value); //Missing X-definition &{0}{:}
+							_sReporter.fatal(XDEF.XDEF530, value); //Missing Xdefinition &{0}{:}
 							return;
 						}
 					}
 				}
-				//remove attributes with X-definition instance namespace
+				//remove attributes with Xdefinition instance namespace
 				parsedElem.remove(xPrefix + "xdefName");
 				parsedElem.remove(xPrefix + "stdOut");
 				parsedElem.remove(xPrefix + "stdErr");
@@ -899,7 +899,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				_element.removeAttribute(xPrefix + "stdIn");
 			}
 			if (_chkDoc == null) {
-				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
+				throw new SRuntimeException(XDEF.XDEF550); //Xdefinition is not specified
 			}
 			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {

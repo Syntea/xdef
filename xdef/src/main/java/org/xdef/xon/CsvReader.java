@@ -297,7 +297,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		}
 	}
 	@Override
-	/** Set mode that INI file is parsed in X-definition compiler. */
+	/** Set mode that INI file is parsed in Xdefinition compiler. */
 	public final void setXdefMode() {}
 	@Override
 	public final void setXonMode() {}

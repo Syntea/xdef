@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/** Contains information about X-definition source items about
+/** Contains information about Xdefinition source items about
  * the position of the screen if some item was displayed (window rectangle).
  * @author Vaclav Trojan
  */
@@ -18,11 +18,11 @@ public final class XDSourceInfo {
 	public int _width;
 	/** Screen height. */
 	public int _height;
-	/** Map with X-definition source items. */
+	/** Map with Xdefinition source items. */
 	private final Map<String, XDSourceItem> _sourcesMap;
 
-	/** Get map with the description of X-definition sources.
-	 * @return map with the description of X-definition sources.
+	/** Get map with the description of Xdefinition sources.
+	 * @return map with the description of Xdefinition sources.
 	 */
 	public final Map<String, XDSourceItem> getMap() {return _sourcesMap;}
 

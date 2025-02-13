@@ -6,7 +6,7 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "an" type.
+/** Parser of Xscript "an" type.
  * @author Vaclav Trojan
  */
 public class XDParseAn extends XSAbstractParseToken {

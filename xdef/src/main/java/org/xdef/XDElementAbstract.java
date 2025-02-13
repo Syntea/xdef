@@ -27,7 +27,7 @@ import org.xdef.impl.code.DefString;
 import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.xml.KXmlUtils;
 
-/** Abstract class for implementation of "pseudo" elements  in X-script.
+/** Abstract class for implementation of "pseudo" elements  in Xscript.
  * @author Vaclav Trojan
  */
 public abstract class XDElementAbstract extends XDValueAbstract

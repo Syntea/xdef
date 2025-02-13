@@ -127,9 +127,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 							}
 							break;
 						}
-					case "base" :
-						nv.setValue(valueToParser(val));
-						break;
+					case "base" : nv.setValue(valueToParser(val)); break;
 					case "argument":
 						if (val.getItemId() != XD_STRING) {
 							nv.setValue(new DefString(val.toString()));
@@ -144,18 +142,6 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 * @param param "sequential" parameters.
 	 */
 	public void setParseSQParams(Object... params) {}
-
-	@Override
-	public final short getItemId() {return XD_PARSER;} // do not override
-
-	@Override
-	public XDValueType getItemType() {return PARSER;}
-
-	@Override
-	public short parsedType() {return XD_STRING;}  // may be overrided
-
-	@Override
-	public final short getCode() {return LD_CONST;}
 
 	@Override
 	public String toString() {return parserName();}
@@ -174,6 +160,33 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	}
 
 	@Override
+	public short parsedType() {return XD_STRING;}
+
+	@Override
+	/** Get integer with bits representing the allowed keyword parameters.
+	 * @return integer with bits representing the allowed keyword parameters.
+	 */
+	public int getLegalKeys() {return 0;}
+
+	@Override
+	public short getAlltemsType() {return parsedType();} // default parsedType
+
+	@Override
+	public String getSeparator() {return null;} // default null (not set)
+
+	////////////////////////////////////////////////////////////////////////////
+	//Do not overwrite following methods
+	////////////////////////////////////////////////////////////////////////////
+	@Override
+	public final short getItemId() {return XD_PARSER;} // do not override
+
+	@Override
+	public final short getCode() {return LD_CONST;}
+
+	@Override
+	public final XDValueType getItemType() {return PARSER;}
+
+	@Override
 	/** Set declared type name of parser.
 	 * @param name the declared type name.
 	 */
@@ -184,12 +197,6 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 * @return declared type name of parser
 	 */
 	public final String getDeclaredName() {return _declaredName;}
-
-	@Override
-	/** Get integer with bits representing the allowed keyword parameters.
-	 * @return integer with bits representing the allowed keyword parameters.
-	 */
-	public int getLegalKeys() {return 0;}
 
 	/** Check if value is parser and return it as a Parser or convert it to Parser (if it is possible).
 	 * @param x value to be checked.
@@ -238,10 +245,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'} must be Parser
 		throw new SRuntimeException(XDEF.XDEF474, "%item", parserName());
 	}
-	@Override
-	public short getAlltemsType() {return parsedType();} // default parsedType
-	@Override
-	public String getSeparator() {return null;} // default null (not set)
+
 	/** Check if separator follows.
 	 * @param p parser used for parsing.
 	 * @param separator string with separator characters.
@@ -254,7 +258,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 			result = p.isSpaces();
 		} else {
 			if (!(result = (p.isOneOfChars(separator) != NOCHAR))) {
-				p.isSpaces();//if space charaters not in separator try it againn
+				p.isSpaces(); //if space charaters are not in separator parameter try it againn
 				result = (p.isOneOfChars(separator) != NOCHAR);
 			}
 		}

@@ -10,7 +10,7 @@ import org.xdef.impl.code.DefString;
 import org.xdef.impl.ext.XExtUtils;
 import org.w3c.dom.Element;
 
-/** Parser of X-Script "NCNameURI" type.
+/** Parser of Xscript "NCNameURI" type.
  * @author Vaclav Trojan
  */
 public class XDParseQNameURI extends XSAbstractParseToken {

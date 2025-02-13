@@ -1,7 +1,7 @@
 <!--
- Description of XML document which must fit X-definition 4.1 specification.
- Meta namespace of X-definition is "METAXD".
- Prefix of objects describing X-definition 4.1 is XD4.1.
+ Description of XML document which must fit Xdefinition 4.1 specification.
+ Meta namespace of Xdefinition is "METAXD".
+ Prefix of objects describing Xdefinition 4.1 is XD4.1.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -16,19 +16,18 @@
   w:metaNamespace = "METAXD" >
 
 /******************************************************************************/
-/*X-definition of X-definitions ver 4.1, metanamespace: METAXD, prefix: XD4.1 */
+/* Xdefinition of Xdefinition ver 4.1, metanamespace: METAXD, prefix: XD4.1 */
 /******************************************************************************/
 
-    <XD4.1:collection xd:script = "init NS = @metaNamespace
-      ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.1';
-      options moreAttributes"
+    <XD4.1:collection xd:script = "options moreAttributes;
+      init NS = @metaNamespace ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.1'"
     include       = "optional uriList; options acceptQualifiedAttr"
     metaNamespace = "optional uri; options acceptQualifiedAttr"
-    xd:attr        = "occurs * xdHeaderAttr;" >
+    xd:attr       = "occurs * xdHeaderAttr;" >
     <!-- Other attribute names (xd:attr) must begin with the prefix "impl-" -->
 
     <xd:mixed>
-      <!-- Here may be objects from all versions of X-definition -->
+      <!-- Here may be objects from all versions of Xdefinition -->
       <XD3.1:def xd:script = "occurs *; ref Ver3.1#XD3.1:def" />
       <XD3.2:def xd:script = "occurs *; ref Ver3.2#XD3.2:def" />
       <XD4.0:def xd:script = "occurs *; ref Ver4.0#XD4.0:def" />
@@ -52,9 +51,8 @@
     </xd:mixed>
   </XD4.1:collection>
 
-  <XD4.1:def xd:script = "init NS = @metaNamespace
-      ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.1';
-      options moreAttributes"
+  <XD4.1:def xd:script = "options moreAttributes;
+      init NS = @metaNamespace ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.1'"
     name          = "optional QName; options acceptQualifiedAttr"
     metaNamespace = "optional uri; options acceptQualifiedAttr"
     root          = "optional rootList; options acceptQualifiedAttr"
@@ -72,17 +70,13 @@
       <XD4.1:BNFGrammar xd:script = "occurs *; ref XD4.1:BNFGrammar"/>
       <XD4.1:component xd:script = "occurs *; ref XD4.1:component"/>
       <xd:choice occurs = "*">
-          <XD4.1:choice xd:script = "occurs *;
-                            match @name || @XD4.1:name; ref XD4.1:choiceDef"
+          <XD4.1:choice xd:script = "occurs *; match @name || @XD4.1:name; ref XD4.1:choiceDef"
               name = "required QName; options acceptQualifiedAttr" />
-          <XD4.1:mixed xd:script = "occurs *;
-                            match @name || @XD4.1:name; ref XD4.1:mixedDef"
+          <XD4.1:mixed xd:script = "occurs *; match @name || @XD4.1:name; ref XD4.1:mixedDef"
               name = "required QName; options acceptQualifiedAttr" />
-          <XD4.1:sequence xd:script = "occurs *;
-                            match @name || @XD4.1:name; ref XD4.1:sequenceDef"
+          <XD4.1:sequence xd:script = "occurs *; match @name || @XD4.1:name; ref XD4.1:sequenceDef"
               name = "required QName; options acceptQualifiedAttr" />
-          <XD4.1:list xd:script = "occurs *;
-                            match @name || @XD4.1:name; ref XD4.1:listDef"
+          <XD4.1:list xd:script = "occurs *; match @name || @XD4.1:name; ref XD4.1:listDef"
               name = "required QName; options acceptQualifiedAttr" />
           <XD4.1:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
@@ -122,7 +116,7 @@
   <XD4.1:BNFGrammar extends="optional xdIdentifier; options acceptQualifiedAttr"
      name = "xdIdentifier; options acceptQualifiedAttr"
      scope = "optional enum('global','local'); options acceptQualifiedAttr">
-       optional bnfGrammar; /* may be nothing */
+     optional bnfGrammar; /* may be nothing */
   </XD4.1:BNFGrammar>
 
   <XD4.1:component>
@@ -142,17 +136,13 @@
   </xelement>
 
   <xd:choice name = "xcontent">
-    <XD4.1:choice xd:script = "occurs *;
-                      match @ref || @XD4.1:ref; ref XD4.1:choiceRef" />
+    <XD4.1:choice xd:script = "occurs *; match @ref || @XD4.1:ref; ref XD4.1:choiceRef" />
     <XD4.1:choice xd:script = "occurs *; ref XD4.1:choiceDef" />
-    <XD4.1:mixed xd:script  = "occurs *;
-                      match @ref || @XD4.1:ref; ref XD4.1:mixedRef" />
+    <XD4.1:mixed xd:script  = "occurs *; match @ref || @XD4.1:ref; ref XD4.1:mixedRef" />
     <XD4.1:mixed xd:script  = "occurs *; ref XD4.1:mixedDef" />
-    <XD4.1:sequence xd:script = "occurs *;
-                      match @ref || @XD4.1:ref; ref XD4.1:sequenceRef" />
+    <XD4.1:sequence xd:script = "occurs *; match @ref || @XD4.1:ref; ref XD4.1:sequenceRef" />
     <XD4.1:sequence xd:script = "occurs *; ref XD4.1:sequenceDef" />
-    <XD4.1:list xd:script = "occurs *;
-                      match @ref || @XD4.1:ref; ref XD4.1:listRef"/>
+    <XD4.1:list xd:script = "occurs *; match @ref || @XD4.1:ref; ref XD4.1:listRef"/>
     <XD4.1:any xd:script = "occurs *; match @XD4.1:ref; ref XD4.1:anyRef"/>
     <XD4.1:any xd:script = "occurs *; match !@XD4.1:ref; ref xelement"/>
     <xd:any xd:script = "occurs *; ref xelement" />
@@ -203,9 +193,7 @@
   </XD4.1:listDef>
 
   <XD4.1:anyDef XD4.1:name = "required QName"
-    XD4.1:script = "optional groupScript;
-                    options moreAttributes, moreElements" />
+    XD4.1:script = "optional groupScript; options moreAttributes, moreElements" />
 
-  <XD4.1:anyRef XD4.1:script = "optional groupScript;
-                    options moreAttributes, moreElements" />
+  <XD4.1:anyRef XD4.1:script = "optional groupScript; options moreAttributes, moreElements" />
 </xd:def>

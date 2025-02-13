@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "containsi" type.
+/** Parser of Xscript "containsi" type.
  * @author Vaclav Trojan
  */
 public class XDParseContainsi extends XDParseEqi {

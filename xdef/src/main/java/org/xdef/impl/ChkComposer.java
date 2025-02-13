@@ -54,7 +54,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_VALUE;
 
-/** Constructs XML object according to X-definition.
+/** Constructs XML object according to Xdefinition.
  * @author Vaclav Trojan
  */
 final class ChkComposer extends SReporter {
@@ -228,7 +228,7 @@ final class ChkComposer extends SReporter {
 
 	/** Compose the XML element from the source XML element. The name
 	 * of root element of result is given by parameter. For construction is used
-	 * the X-definition specified by ChkComposer constructor.
+	 * the Xdefinition specified by ChkComposer constructor.
 	 * @param sourceElem The element with source data.
 	 */
 	private void composeRoot(final Element sourceElem) {
@@ -307,7 +307,7 @@ final class ChkComposer extends SReporter {
 			}
 		} catch (SError e) {
 			Report rep = e.getReport();
-			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //X-definition canceled
+			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //Xdefinition canceled
 				error(rep.getMsgID(), rep.getText(), rep.getModification());
 				_rootChkElement._rootChkDocument.endDocument();
 			} else {
@@ -1523,7 +1523,7 @@ final class ChkComposer extends SReporter {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// methods called ONLY internally from X-script processor!
+// methods called ONLY internally from Xscript processor!
 ///////////////////////////////////////////////////////////////////////////////
 
 	/** Returns available element model represented by given name or null if definition item is not available.
@@ -1585,7 +1585,7 @@ final class ChkComposer extends SReporter {
 				qname = rootName;
 				nsURI = xe.getNSUri();
 			} else {
-				//Model of element &{0} is missing in X-definition &{1}
+				//Model of element &{0} is missing in Xdefinition &{1}
 				chkEl.error(XDEF.XDEF601, rootName, xdef.getName());
 				return null;
 			}

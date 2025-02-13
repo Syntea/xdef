@@ -22,7 +22,7 @@ import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_STRING;
 
-/** Parser of Schema "list" type.
+/** Parser of XML Schema (XSD) "list" type.
  * @author Vaclav Trojan
  */
 public class XSParseList extends XSAbstractParser {

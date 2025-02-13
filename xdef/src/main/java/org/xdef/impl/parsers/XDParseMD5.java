@@ -1,6 +1,6 @@
 package org.xdef.impl.parsers;
 
-/** Parser of Schema "MD5" type.
+/** Parser of XML Schema (XSD) "MD5" type.
  * @author Vaclav Trojan
  */
 public class XDParseMD5 extends XSParseHexBinary {

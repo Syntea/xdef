@@ -29,30 +29,30 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final Map<String, String> _namespaces;
 	/** root selection. */
 	public Map<String,XNode> _rootSelection;
-	/** Array of X-definitions names from where to accept local declarations. */
+	/** Array of Xdefinitions names from where to accept local declarations. */
 	public String[] _importLocal;
 
-	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
+	/** Version of Xdefinition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
-	/** Version of XML from which the X-definition was created (see org.xdef.impl.XConstants.XDxx). */
+	/** Version of XML from which the Xdefinition was created (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Actions on Document
 	////////////////////////////////////////////////////////////////////////////
-	/** Action if the root was not found in X-definition. */
+	/** Action if the root was not found in Xdefinition. */
 	public int _onIllegalRoot;
 	/** Action if an XML error occurs. */
 	public int _onXmlError;
-	/** Source ID of this X-definition. */
+	/** Source ID of this Xdefinition. */
 	private final SPosition _sourcePosition;
 
 	/** Creates a new instance of Definition
 	 * @param name name of definition.
 	 * @param xp XPool object.
-	 * @param uri Namespace URI of X-definition.
-	 * @param pos source position of X-definition.
-	 * @param ver XML version of X-definition source.
+	 * @param uri Namespace URI of Xdefinition.
+	 * @param pos source position of Xdefinition.
+	 * @param ver XML version of Xdefinition source.
 	 */
 	public XDefinition(final String name,final XDPool xp,final String uri,final SPosition pos,final byte ver){
 		super(name, uri, (XPool) xp, XMDEFINITION);
@@ -74,13 +74,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	@Override
-	/** Get source position of this X-definition.
-	 * @return source ID of this X-definition..
+	/** Get source position of this Xdefinition.
+	 * @return source ID of this Xdefinition..
 	 */
 	public final SPosition getSourcePosition() {return _sourcePosition;}
 
 	@Override
-	/** Get all Element models from this X-definition.
+	/** Get all Element models from this Xdefinition.
 	 * @return The array of element models.
 	 */
 	public final XMElement[] getModels() {
@@ -90,7 +90,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	@Override
-	/** Get all Element models defined as root from this X-definition.
+	/** Get all Element models defined as root from this Xdefinition.
 	 * @return The array of root element models.
 	 */
 	public final XMElement[] getRootModels() {
@@ -153,22 +153,22 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final XDDocument createXDDocument() {return new ChkDocument(this);}
 
 	@Override
-	/** Get version of X-definition.
-	 * @return version of X-definition (see {@link org.xdef.XDConstants#XD2_0}
+	/** Get version of Xdefinition.
+	 * @return version of Xdefinition (see {@link org.xdef.XDConstants#XD2_0}
 	 * or {@link org.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 
 	@Override
-	/** Get XML version of X-definition source.
-	 * @return XML version of X-definition source ("1.0" -> 10, "1.1" -> 11).
+	/** Get XML version of Xdefinition source.
+	 * @return XML version of Xdefinition source ("1.0" -> 10, "1.1" -> 11).
 	 */
 	public final byte getXmlVersion() {return _xmlVersion;}
 
 	@Override
-	/** Check if given name is declared as local in this X-definition.
+	/** Check if given name is declared as local in this Xdefinition.
 	 * @param name the name to be checked.
-	 * @return true if given name is declared as local in this X-definition.
+	 * @return true if given name is declared as local in this Xdefinition.
 	 */
 	public final boolean isLocalName(final String name) {
 		if (name != null) {
@@ -192,20 +192,20 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	@Override
-	/** Get implementation properties of X-definition.
-	 * @return the implementation properties of X-definition.
+	/** Get implementation properties of Xdefinition.
+	 * @return the implementation properties of Xdefinition.
 	 */
 	public final Properties getImplProperties() {return _properties;}
 
 	@Override
-	/** Get implementation property of X-definition.
+	/** Get implementation property of Xdefinition.
 	 * @param name The name of property.
-	 * @return the value implementation property of X-definition.
+	 * @return the value implementation property of Xdefinition.
 	 */
 	public final String getImplProperty(final String name) {return _properties.getProperty(name);}
 
 	@Override
-	/** Write this X-definition to XDWriter.
+	/** Write this Xdefinition to XDWriter.
 	 * @param wr where to write.
 	 * @param list list of nodes..
 	 * @throws IOException if an error occurs.
@@ -242,9 +242,9 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	}
 
 	@Override
-	/** Compare X-definition with an object.
+	/** Compare Xdefinition with an object.
 	 * @param o object to be compared.
-	 * @return true if and only if the compared object is an X-definition and if it's name equals to this.
+	 * @return true if and only if the compared object is an Xdefinition and if it's name equals to this.
 	 */
 	public final boolean equals(final Object o) {
 		if (o instanceof String) {
@@ -259,7 +259,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Add new XElement as model.
 	 * @param newModel XElement
 	 * @return <i>true</i> if and only if the new model was added
-	 * to X-definition.
+	 * to Xdefinition.
 	 */
 	public final boolean addModel(final XElement newModel) {
 		String name = newModel.getName();
@@ -308,7 +308,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final static XDefinition readXDefinition(final XDReader xr, final XPool xp, final List<XNode> list)
 		throws IOException {
 		SPosition sourcePos = xr.readSPosition();
-		if (xr.readShort() != XMDEFINITION) {//must be X-definition
+		if (xr.readShort() != XMDEFINITION) {//must be Xdefinition
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "XMDefinition expected");
 		}

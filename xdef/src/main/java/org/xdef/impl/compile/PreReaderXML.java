@@ -22,7 +22,7 @@ import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
-/** Reads source X-definitions and prepares list of PNodes with X-definitions
+/** Reads source Xdefinitions and prepares list of PNodes with Xdefinitions
  * from XML source data.
  * @author Trojan
  */
@@ -121,7 +121,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 							? XConstants.XD41 : XConstants.XD42;
 						projectNS = uri;
 					} else {
-						error(_actPNode._name, XDEF.XDEF256); //Namespace of X-definitions is required
+						error(_actPNode._name, XDEF.XDEF256); //Namespace of Xdefinitions is required
 						projectNS = XDConstants.XDEF42_NS_URI;
 						ver = XConstants.XD42;
 					}
@@ -134,7 +134,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_pcomp.setURIOnIndex(0, projectNS);
 			} else {
 				_pcomp.setURIOnIndex(0, uri);
-				error(_actPNode._name, XDEF.XDEF255); //X-definition or X-collection expected
+				error(_actPNode._name, XDEF.XDEF255); //Xdefinition or Xcollection expected
 			}
 		} else {
 			_actPNode._parent.addChildNode(_actPNode);
@@ -241,12 +241,12 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				if (defName == null) {
 					defName = "";
 				}
-				// Because there is not yet connected an X-definition to the PNode we create a dumy one
-				// in fact just to store the X-definition name (we nead it to be able to compile internal
+				// Because there is not yet connected an Xdefinition to the PNode we create a dumy one
+				// in fact just to store the Xdefinition name (we nead it to be able to compile internal
 				// declarations, BNGGrammars, components and lexicon items).
 				_actPNode._xdef = new XDefinition(defName, null,_actPNode._nsURI,null,_actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
-				// check duplicate of X-definition
+				// check duplicate of Xdefinition
 				for (PNode pn: _pcomp.getPXDefs()) {
 					if (defName.equals(pn._xdef.getName())) {
 						XScriptParser xp = new XScriptParser(_actPNode._xmlVersion);
@@ -256,10 +256,10 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 							_actPNode._xmlVersion,
 							_actPNode._xpathPos);
 						if (defName.length() == 0) {
-							//Only one X-definition in the compiled XDPool may be without name
+							//Only one Xdefinition in the compiled XDPool may be without name
 							xp.error(_actPNode._name, XDEF.XDEF212);
 						} else {
-							//X-definition '&{0}' already exists
+							//Xdefinition '&{0}' already exists
 							xp.error(_actPNode._name,XDEF.XDEF268, defName);
 						}
 						defName = null;
@@ -420,7 +420,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			if ("xon".equals(_actPNode._localName) || "json".equals(_actPNode._localName) //json
 				|| "ini".equals(_actPNode._localName)) { // ini
 				if (_level != 1) {
-					//JSON model can be declared only as a child of X-definition
+					//JSON model can be declared only as a child of Xdefinition
 					error(_actPNode._value, XDEF.XDEF310, _actPNode._localName);
 					_actPNode._value = null;
 					return;
@@ -486,7 +486,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 //				&& !"document".equals(_actPNode._localName) && !"value".equals(_actPNode._localName) //TODO
 //				&&!"attlist".equals(_actPNode._localName) //TODO
 				&& !"sequence".equals(_actPNode._localName) && !"any".equals(_actPNode._localName)) {
-				//Unknown element from X-definotion namespace: '&{0}'
+				//Unknown element from Xdefinotion namespace: '&{0}'
 				lightError(_actPNode._value, XDEF.XDEF259,_actPNode._localName);
 				_actPNode._value = null; //prevent repeated message
 				return;
@@ -501,8 +501,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 	}
 
-	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
-	 * @param in input stream with the X-definition.
+	/** Parse InputStream source Xdefinition and addAttr it to the set of definitions.
+	 * @param in input stream with the Xdefinition.
 	 * @param srcName name of source data used in reporting (SysId) or null.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
@@ -537,9 +537,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		_actPNode = null; //just let gc to do the job
 	}
 
-	/** Check if the name of X-definition is OK.
-	 * @param name name of X-definition
-	 * @return true if the name of X-definition is OK.
+	/** Check if the name of Xdefinition is OK.
+	 * @param name name of Xdefinition
+	 * @return true if the name of Xdefinition is OK.
 	 */
 	private static boolean chkDefName(final String name, byte xmlVersion) {
 		if (name.length() == 0) {

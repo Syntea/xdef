@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.xdef.sys.SRuntimeException;
 
-/** External service statements (database etc) in X-script.
+/** External service statements (database etc) in Xscript.
  * @author Vaclav Trojan
  */
 public interface XDStatement extends XDValue {

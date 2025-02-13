@@ -17,7 +17,7 @@ import static org.xdef.XDValueID.XD_DATETIME;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDate;
 
-/** Parser of Schema "date" type.
+/** Parser of XML Schema (XSD) "date" type.
  * @author Vaclav Trojan
  */
 public class XSParseDate extends XSAbstractParseComparable {

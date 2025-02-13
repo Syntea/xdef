@@ -25,7 +25,7 @@ public class XDebugInfo implements XMDebugInfo {
 
 	/** Add debug info item and return index.
 	 * @param pos Source position.
-	 * @param defName name of X-definition.
+	 * @param defName name of Xdefinition.
 	 * @param adr code address.
 	 * @param tab local variables table.
 	 * @return index of debug info item or -1.
@@ -94,9 +94,9 @@ public class XDebugInfo implements XMDebugInfo {
 	}
 
 	@Override
-	/** Get array of statement information objects assigned to given X-definition and source line.
+	/** Get array of statement information objects assigned to given Xdefinition and source line.
 	 * @param line source line.
-	 * @param xdName name of X-definition.
+	 * @param xdName name of Xdefinition.
 	 * @return array XMStatementInfo objects (if no statement information is found the array is empty).
 	 */
 	public final XMStatementInfo[] getStatementInfo(final long line, final String xdName) {
@@ -127,7 +127,7 @@ public class XDebugInfo implements XMDebugInfo {
 	 * @param line source line.
 	 * @param column source column.
 	 * @param sysId source ID (pathname, URL).
-	 * @param xdName name of X-definition (may be null).
+	 * @param xdName name of Xdefinition (may be null).
 	 * @return XMStatementInfo object or null.
 	 */
 	public final XMStatementInfo getStatementInfo(final long line,
@@ -352,8 +352,8 @@ public class XDebugInfo implements XMDebugInfo {
 		@Override
 		public final int getAddr() {return _codeAdr;}
 		@Override
-		/** Get name of X-definition.
-		 * @return name of X-definition.
+		/** Get name of Xdefinition.
+		 * @return name of Xdefinition.
 		 */
 		public final String getXDName() {return _xdName;}
 		@Override

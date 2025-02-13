@@ -60,7 +60,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
-/** Provides debugging tool for X-definition.
+/** Provides debugging tool for Xdefinition.
  * @author Vaclav Trojan
  */
 public class ChkGUIDebug extends GUIBase implements XDDebug {
@@ -92,7 +92,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		"go/Continue/F5",						// DBG_CONTINUE
 		"step/Step over/F8",					// DBG_STEP
 		"stepInto/Step into/F7",				// DBG_STEPINTO
-		"cancel/Cancel X-definition",			// DBG_CANCEL
+		"cancel/Cancel Xdefinition",			// DBG_CANCEL
 		"disable/Disable this stop address",	// DBG_DISABLE
 		"ps/Show stack/F2",						// SHOWSTACK
 		"pl/Show local variables/F3",			// DBG_SHOWLOCALVARS
@@ -117,7 +117,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_si = new XDSourceInfo();
 		_si.copyFrom(xp.getXDSourceInfo());
 		_sources = _si.getMap();
-		_windowName = "Debug X-definition:";
+		_windowName = "Debug Xdefinition:";
 		init(props);
 	}
 
@@ -206,7 +206,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	private PrintStream _out; // output in command line mode
 
 	/** Initialize this debug GUI object.
-	 * @param xp XDPool of running X-definition process.
+	 * @param xp XDPool of running Xdefinition process.
 	 */
 	private void initGUI(final XDPool xp) {
 		// Initialize SWING objects
@@ -379,7 +379,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		} catch (BadLocationException ex) {}
 	}
 
-	/** Initialize window for source code of X-definitions. */
+	/** Initialize window for source code of Xdefinitions. */
 	private void initSourceWindow() {
 		_sourceArea.addMouseListener(new MouseListener() {
 			@Override
@@ -723,7 +723,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** This method is called from X-script on break point or
+	/** This method is called from Xscript on break point or
 	 * from methods pause and trace.
 	 * @param xnode actual XXNode object.
 	 * @param code executive code.
@@ -735,7 +735,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @param callList call list.
 	 * @param stepMode step mode (NOSTEP, STEPINTO, STEPOVER).
 	 * @return step mode.
-	 * @throws Error if the X-definition is canceled.
+	 * @throws Error if the Xdefinition is canceled.
 	 */
 	public int debug(final XXNode xnode,
 		final XDValue[] code,

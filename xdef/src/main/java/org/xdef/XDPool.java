@@ -10,17 +10,17 @@ import org.xdef.model.XMNode;
 import org.xdef.model.XMVariableTable;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 import org.xdef.sys.ArrayReporter;
 
-/** Provides the interface to object containing compiled code of set of X-definitions.
+/** Provides the interface to object containing compiled code of set of Xdefinitions.
  * You can create from XDPool the XDDocument.
  * @author Vaclav Trojan
  */
 public interface XDPool extends Serializable {
-
 	/** Display mode true (i.e. display always). */
 	public static final byte DISPLAY_TRUE = 2;
 	/** Display mode on errors (i.e. of an error occurs). */
@@ -44,20 +44,20 @@ public interface XDPool extends Serializable {
 	public boolean chkCompatibility(final String version);
 
 	/** Create new XDDocument.
-	 * @param name name of X-definition (or null) or path to model.
+	 * @param name name of Xdefinition (or null) or path to model.
 	 * @return Created XDDocument.
 	 */
 	public XDDocument createXDDocument(String name);
 
-	/** Create new XDDocument with default X-definition.
+	/** Create new XDDocument with default Xdefinition.
 	 * @return Created XDDocument.
 	 */
 	public XDDocument createXDDocument();
 
-	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or either null or empty string if X-definition without name
+	/** Check if exists the Xdefinition of given name.
+	 * @param name the name of Xdefinition (or either null or empty string if Xdefinition without name
 	 * is checked).
-	 * @return true if and only if the X-definition of given name exists in the XDPool.
+	 * @return true if and only if the Xdefinition of given name exists in the XDPool.
 	 */
 	boolean exists(String name);
 
@@ -199,8 +199,13 @@ public interface XDPool extends Serializable {
 	 */
 	public SDatetime[] getSpecialDates();
 
-	/** Get the object with the map of source items of compiled X-definitions and with editing information.
-	 * @return object with the map of source items of compiled X-definitions and with editing information.
+	/** Array wioth charsets used for values of parsed strings.
+	 * @return Array wioth Charset objects or null.
+	 */
+	public Charset[] getLegalStringCharsets();
+
+	/** Get the object with the map of source items of compiled Xdefinitions and with editing information.
+	 * @return object with the map of source items of compiled Xdefinitions and with editing information.
 	 */
 	public XDSourceInfo getXDSourceInfo();
 
@@ -214,8 +219,8 @@ public interface XDPool extends Serializable {
 	 */
 	public String getDebugEditor();
 
-	/** Get class name of the editor of X-definition.
-	 * @return class name of the editor of X-definition which will be used).
+	/** Get class name of the editor of Xdefinition.
+	 * @return class name of the editor of Xdefinition which will be used).
 	 */
 	public String getXdefEditor();
 

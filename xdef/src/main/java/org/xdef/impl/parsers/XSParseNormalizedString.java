@@ -5,7 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefString;
 
-/** Parser of Schema "normalizedString" type.
+/** Parser of XML Schema (XSD) "normalizedString" type.
  * @author Vaclav Trojan
  */
 public class XSParseNormalizedString extends XSAbstractParseString {

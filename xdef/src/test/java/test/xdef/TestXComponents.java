@@ -1598,20 +1598,20 @@ public final class TestXComponents extends XDTester {
 		try {
 			xml =
 "<A Creator='DK'\n" +
-"   NumBlocks='Not in X-definition'>\n" +
-"  Not in X-definition: <a x='y'>x<y/></a>xxx<b/>\n" +
-"  <Transfer Date='Not in X-definition'\n" +
+"   NumBlocks='Not in Xdefinition'>\n" +
+"  Not in Xdefinition: <a x='y'>x<y/></a>xxx<b/>\n" +
+"  <Transfer Date='Not in Xdefinition'\n" +
 "    Sender='0012'\n" +
-"    Recipient='Not in X-definition'>\n" +
-"    Not in X-definition: <a x='y'>x<y/></a>xxx<b/>\n" +
+"    Recipient='Not in Xdefinition'>\n" +
+"    Not in Xdefinition: <a x='y'>x<y/></a>xxx<b/>\n" +
 "    <DataFiles>\n" +
 "      <Directory Path='q:/Ckp-2.6/VstupTest_SK/KOOP_P1_163/'>\n" +
 "        <File Name='7P19998163.ctl'/><File Name='7P19998163A.xml'/>\n" +
 "      </Directory>\n" +
 "    </DataFiles>\n" +
-"    Not in X-definition: <a x='y'>x<y/></a>xxx<b/>\n" +
+"    Not in Xdefinition: <a x='y'>x<y/></a>xxx<b/>\n" +
 "  </Transfer>\n" +
-" Not in X-definition: <a x='y'>x<y/></a>xxx<b/>\n" +
+" Not in Xdefinition: <a x='y'>x<y/></a>xxx<b/>\n" +
 "</A>";
 			el = parse(xp, "Y22", xml , reporter);
 			assertNoErrorwarningsAndClear(reporter);

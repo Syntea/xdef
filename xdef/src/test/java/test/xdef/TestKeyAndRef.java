@@ -858,7 +858,7 @@ public final class TestKeyAndRef extends XDTester {
 				&&  s.contains("XDEF820"), reporter);
 			setProperty(XDConstants.XDPROPERTY_WARNINGS, propwarning);
 // test uniqueSet setValue, getValoue
-// and order of attribute processing in X-definition
+// and order of attribute processing in Xdefinition
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:declaration>uniqueSet u {a: string(); var Parser x}</xd:declaration>\n" +

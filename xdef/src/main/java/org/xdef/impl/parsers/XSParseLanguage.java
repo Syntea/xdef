@@ -6,7 +6,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SParser;
 
-/** Parser of Schema "language" type (RFC 3066 or IETF BCP 47).
+/** Parser of XML Schema (XSD) "language" type (RFC 3066 or IETF BCP 47).
  * @author Vaclav Trojan
  */
 public class XSParseLanguage extends XSAbstractParseToken {

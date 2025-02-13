@@ -25,6 +25,7 @@ public class TestAll {
 			new TestDebug(),
 			new TestDOMParse(),
 			new TestDTDTypes(),
+			new TestEmailAddr(),
 			new TestErrors(),
 			new TestExtenalMethods(),
 			new TestExternalVariables(),
@@ -74,7 +75,7 @@ public class TestAll {
 		STester[] tests = getTests();
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF42_NS_URI;
-		System.out.println("[INFO] Testing X-definition version " + XDConstants.BUILD_VERSION);
+		System.out.println("[INFO] Testing Xdefinition version " + XDConstants.BUILD_VERSION);
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {

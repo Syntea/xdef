@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of X-Script "eqi" type.
+/** Parser of Xscript "eqi" type.
  * @author Vaclav Trojan
  */
 public class XDParseEqi extends XDParseEq {

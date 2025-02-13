@@ -14,22 +14,22 @@ import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.util.xsd2xd.xd.Schema_1_0_Processor;
 import org.xml.sax.SAXException;
 
-/** Represents XML Schema to X-definition convertor (see {@link org.xdef.util.XsdToXdef#main(String[])}).
+/** Represents XML Schema (XSD) to Xdefinition convertor (see {@link org.xdef.util.XsdToXdef#main(String[])}).
  * @author Ilia Alexandrov
  */
 public class XsdToXdef {
 
 	/** Constant that represents XML Schema version 1.0. */
 	private static final byte SCHEMA1_0 = 1;
-	/** Prefix of X-definition nodes in output documents. */
+	/** Prefix of Xdefinition nodes in output documents. */
 	private final String _xdefPrefix;
 	/** Input XML Schema version. */
 	private final byte _schemaVersion;
 	/** Reporter for reporting warnings and errors. */
 	private final SReporter _reporter;
 
-	/** Creates instance of Convertor with default settings. X-definition nodes prefix as "xd", input
-	 * XML Schema version as XML Schema 1.0, output X-definition version as X-definition 2.0, debug mode
+	/** Creates instance of Convertor with default settings. Xdefinition nodes prefix as "xd", input
+	 * XML Schema version as XML Schema 1.0, output Xdefinition version as Xdefinition 2.0, debug mode
 	 * is set to off and reporter is set to print reports to System.err print stream.
 	 */
 	private XsdToXdef(String xdefPrefix,
@@ -39,11 +39,11 @@ public class XsdToXdef {
 		_reporter = new SReporter(new FileReportWriter(out == null ? System.out : out, false));
 	}
 
-	/** Generates collection with X-definitions from root schema at given URL and saves file with given
+	/** Generates collection with Xdefinitions from root schema at given URL and saves file with given
 	 * file name.
 	 * @param schemaFile File with root schema.
-	 * @param collectionFileName name of collection of X-definitions file.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param collectionFileName name of collection of Xdefinitions file.
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if cannot create collection file.
 	 */
@@ -54,11 +54,11 @@ public class XsdToXdef {
 		genCollection(schemaFile.toURI().toURL(), collectionFileName, xdefPrefix, out);
 	}
 
-	/** Generates collection with X-definitions from root schema at given URL
+	/** Generates collection with Xdefinitions from root schema at given URL
 	 * and saves file with given file name.
 	 * @param schemaURL URL of root schema.
-	 * @param collectionFileName name of collection of X-definitions file.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param collectionFileName name of collection of Xdefinitions file.
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if cannot create collection file.
 	 */
@@ -75,11 +75,11 @@ public class XsdToXdef {
 		c.getXdefGenerator(schemaURL,false).writeCollection(collectionFileName);
 	}
 
-	/** Generates collection with X-definitions from root schema at given path and saves file with given
+	/** Generates collection with Xdefinitions from root schema at given path and saves file with given
 	 * file name.
 	 * @param schemaFilePath path to root schema file.
-	 * @param collectionFileName name of collection of X-definitions file.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param collectionFileName name of collection of Xdefinitions file.
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if cannot create collection file.
 	 */
@@ -96,7 +96,7 @@ public class XsdToXdef {
 
 	/** Generates collection from a schema at given path and prints it to standard output.
 	 * @param schemaFilePath path to schema file.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if an error occurs.
 	 */
@@ -108,7 +108,7 @@ public class XsdToXdef {
 
 	/** Generates collection from a schema at given URL and prints it to standard output.
 	 * @param schemaFile File with schema schema.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 * @throws IOException if an error occurs.
 	 */
@@ -121,7 +121,7 @@ public class XsdToXdef {
 
 	/** Generates collection from a schema at given URL and prints it to standard output.
 	 * @param schemaURL url of schema.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
 	 */
 	public static void genCollection(URL schemaURL, String xdefPrefix, PrintStream out) {
@@ -131,13 +131,13 @@ public class XsdToXdef {
 	}
 
 
-	/** Generates X-definition file per XML schema file from root schema
+	/** Generates Xdefinition file per XML schema file from root schema
 	 * at given URL and saves created file to directory with given name.
 	 * @param schemaFile File with schema schema.
-	 * @param directoryName name of directory with created X-definition files.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param directoryName name of directory with created Xdefinition files.
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
-	 * @throws IOException if cannot create X-definition files.
+	 * @throws IOException if cannot create Xdefinition files.
 	 */
 	public static void genXdefFiles(File schemaFile,
 		String directoryName,
@@ -146,13 +146,13 @@ public class XsdToXdef {
 		genXdefFiles(schemaFile.toURI().toURL(), directoryName, xdefPrefix, out);
 	}
 
-	/** Generates X-definition file per XML schema file from root schema
+	/** Generates Xdefinition file per XML schema file from root schema
 	 * at given URL and saves created file to directory with given name.
 	 * @param schemaURL URL of root schema.
-	 * @param directoryName name of directory with created X-definition files.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param directoryName name of directory with created Xdefinition files.
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
-	 * @throws IOException if cannot create X-definition files.
+	 * @throws IOException if cannot create Xdefinition files.
 	 */
 	public static void genXdefFiles(URL schemaURL,
 		String directoryName,
@@ -167,13 +167,13 @@ public class XsdToXdef {
 		c.getXdefGenerator(schemaURL, true).writeXdefFiles(directoryName);
 	}
 
-	/** Generates X-definition file per XML schema file from root schema
+	/** Generates Xdefinition file per XML schema file from root schema
 	 * at given path and saves created file to directory with given name.
 	 * @param schemaFilePath path to root schema file.
-	 * @param directoryName name of directory with created X-definition files.
-	 * @param xdefPrefix namespace prefix of X-definitions (if null then "xd").
+	 * @param directoryName name of directory with created Xdefinition files.
+	 * @param xdefPrefix namespace prefix of Xdefinitions (if null then "xd").
 	 * @param out PrintStream where to print messages (if null then System.out).
-	 * @throws IOException if cannot create X-definition files.
+	 * @throws IOException if cannot create Xdefinition files.
 	 */
 	public static void genXdefFiles(String schemaFilePath,
 		String directoryName,
@@ -186,16 +186,16 @@ public class XsdToXdef {
 		genXdefFiles(url, directoryName, xdefPrefix, out);
 	}
 
-	/** Creates and returns proper X-definition generator implementation
+	/** Creates and returns proper Xdefinition generator implementation
 	 * according to set parameters.
-	 * @param separetely XML Schema file as X-definition file.
+	 * @param separetely XML Schema file as Xdefinition file.
 	 */
 	private Convertor getXdefGenerator(URL schemaURL, boolean separately) {
 		if (_schemaVersion == SCHEMA1_0) {
 			return new Schema_1_0_Processor(_xdefPrefix, _reporter, schemaURL, separately);
 		}
 		throw new RuntimeException("Could not find implementation of "
-			+ "X-definition generator according to set parameters");
+			+ "Xdefinition generator according to set parameters");
 	}
 
 	/** Checks directory path.
@@ -254,9 +254,9 @@ public class XsdToXdef {
 	 * <li>-o, --output
 	 * <p> &lt;PATH&gt; output file or directory.
 	 * <li>-s, --output
-	 * <p> each schema generate to the separate X-definition file.
+	 * <p> each schema generate to the separate Xdefinition file.
 	 * <li>-p
-	 * <p> namespace prefix of X-definitions
+	 * <p> namespace prefix of Xdefinitions
 	 * <li>-?, -h, --help help
 	 * </ul>
 	 */
@@ -332,7 +332,7 @@ public class XsdToXdef {
 					case "-p":
 					case "--xdefPrefix":
 						if (prefix != null) {
-							err.append("Prefix for X-definition elements already set\n");
+							err.append("Prefix for Xdefinition elements already set\n");
 							return;
 						}
 						valueGetMode = true;

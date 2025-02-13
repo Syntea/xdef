@@ -16,8 +16,7 @@ public class GenReportTables {
 	public static void main(String... args) {
 		String projectBase;
 		try {
-			File baseDir = args == null || args.length == 0
-				? new File("../xdef") : new File(args[0]);
+			File baseDir = args == null || args.length == 0 ? new File("../xdef") : new File(args[0]);
 			if (!baseDir.exists() || !baseDir.isDirectory()) {
 				throw new IOException("Base is not directory.");
 			}
@@ -26,16 +25,14 @@ public class GenReportTables {
 			throw new RuntimeException("Can't find project base directory");
 		}		
 		String packageName = "org.xdef.msg";
-		File resourceDir = 
-			new File(projectBase, "src/main/resources/org/xdef/msg/");
+		File resourceDir = new File(projectBase, "src/main/resources/org/xdef/msg/");
 		if (!resourceDir.exists() || !resourceDir.isDirectory()) {
 			throw new RuntimeException("Resources directory is not available: "
 				+ resourceDir.getAbsolutePath());
 		}
 		File srcDir = new File(projectBase, "src/main/java/org/xdef/msg/");
 		if (!srcDir.exists() || !srcDir.isDirectory()) {
-			throw new RuntimeException("Java msg directory is not available: "
-				+ srcDir.getAbsolutePath());
+			throw new RuntimeException("Java msg directory is not available: " + srcDir.getAbsolutePath());
 		}
 		try {
 			resourceDir = resourceDir.getCanonicalFile();
@@ -55,10 +52,8 @@ public class GenReportTables {
 				"-c", "UTF-8",
 				"-l",
 				"-o", temp.getAbsolutePath().replace('\\', '/')});
-			String msg =
-				FUtils.updateDirectories(temp, srcDir, "java", true, false);
-			System.out.println(
-				(msg.isEmpty() ? "Nothing changed in report files" : msg));
+			String msg = FUtils.updateDirectories(temp, srcDir, "java", true, false);
+			System.out.println((msg.isEmpty() ? "Nothing changed in report files" : msg));
 			FUtils.deleteAll(temp, true); // delete temp directory
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

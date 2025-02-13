@@ -5,7 +5,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefString;
 
-/** Parser of X-Script "QNNameList" type.
+/** Parser of Xscript "QNNameList" type.
  * @author Vaclav Trojan
  */
 public class XDParseQNameList extends XDParseNCNameList {

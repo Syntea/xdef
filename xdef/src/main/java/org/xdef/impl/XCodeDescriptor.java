@@ -91,7 +91,7 @@ public abstract class XCodeDescriptor extends XNode {
 
 	/** Creates a new instance of ScriptCode.
 	 * @param name Name of item.
-	 * @param nsUri NameSpace of X-definition.
+	 * @param nsUri NameSpace of Xdefinition.
 	 * @param xp Refers to the XDefPool object.
 	 * @param kind The kind of object.
 	 */

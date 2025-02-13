@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of Schema "negativeInteger" type.
+/** Parser of XML Schema (XSD) "negativeInteger" type.
  * @author Vaclav Trojan
  */
 public class XSParseNegativeInteger extends XSParseInteger {

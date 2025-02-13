@@ -529,7 +529,7 @@ public final class XCodeProcessor {
 	private Properties _props;
 	/** Switch to debug mode. */
 	private boolean _debug = false; //debug switch
-	/** X-definition from which processor was created. */
+	/** Xdefinition from which processor was created. */
 	private XDefinition _xd;
 	/** Global variables:<p>
 	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn, 3 $IDParser$, 4 $IDuniqueSet$</p>
@@ -604,8 +604,8 @@ public final class XCodeProcessor {
 		}
 	}
 
-	/** Set X-definition property to SManager. If properties are null the new properties  will be created.
-	 * @param key name of X-definition property.
+	/** Set Xdefinition property to SManager. If properties are null the new properties  will be created.
+	 * @param key name of Xdefinition property.
 	 * @param value value of property or null. If the value is null the property is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
@@ -833,23 +833,21 @@ public final class XCodeProcessor {
 		if (_globalVariables != null) {
 			XVariableTable vartab = (XVariableTable) _xd.getXDPool().getVariableTable();
 			for (int i = 0; i < _globalVariables.length; i++) {
-				XDValue val = _globalVariables[i];
-				XVariable xvar = vartab.getXVariable(i);
-				if (val != null && !val.isNull()) {
-					short itemId = val.getItemId();
-					switch (itemId) {
+				XVariable var = vartab.getXVariable(i);
+				XDValue val;
+				if ((val = _globalVariables[i]) != null && !val.isNull()) {
+					short itemId;
+					switch (itemId = val.getItemId()) {
 						case X_UNIQUESET:
 						case X_UNIQUESET_M: {
-							// pending references
-							CodeUniqueset pt = (CodeUniqueset) val;
-							result &= pt.checkAndClear(_reporter);
+							result &= ((CodeUniqueset) val).checkAndClear(_reporter); // pending references
 							break;
 						}
 						case XD_SERVICE:
 						case XD_STATEMENT:
 						case XD_RESULTSET:
 							// close all not external database objects
-							if (xvar != null && !xvar.isExternal()) {
+							if (var != null && !var.isExternal()) {
 								switch (itemId) {
 									case XD_SERVICE: ((XDService) val).close(); break;
 									case XD_STATEMENT: ((XDStatement) val).close(); break;
@@ -858,23 +856,21 @@ public final class XCodeProcessor {
 							}
 							break;
 						case XD_INPUT: //close input streams
-							if (xvar != null && !xvar.isExternal() && !xvar.getName().equals("$stdIn")) {
+							if (var != null && !var.isExternal() && !var.getName().equals("$stdIn")) {
 								// close if not $stdIn and not external
 								((DefInStream) val).close();
 							}
 							break;
 						case XD_OUTPUT: //close out streams
-							if (xvar != null) {
+							if (var != null) {
 								DefOutStream out = (DefOutStream) val;
-								if (xvar.isExternal() || xvar.getName().equals("$stdOut")
-									|| xvar.getName().equals("$stdErr")) {
-									// external, stdOut and stdErr just flush
-									out.flush();
+								if (var.isExternal() || var.getName().equals("$stdOut")
+									|| var.getName().equals("$stdErr")) {
+									out.flush(); // external, stdOut and stdErr just flush
 								} else {
 									out.close(); // other streams close
 								}
 							}
-							break;
 					}
 				}
 			}
@@ -900,12 +896,10 @@ public final class XCodeProcessor {
 	}
 
 	/** Set global value of variable from variables.
-	 * @param value XDValue object to be set.
-	 * @param xvar global XVariable.
+	 * @param val XDValue object to be set.
+	 * @param var global XVariable.
 	 */
-	final void setVariable(final XVariable xvar, final XDValue value) {
-		_globalVariables[xvar.getOffset()] = value;
-	}
+	final void setVariable(final XVariable var, final XDValue val) {_globalVariables[var.getOffset()] = val;}
 
 	/** Get temporary reporter.
 	 * @return ArrayReporter used as temporary reporter.
@@ -1002,11 +996,12 @@ public final class XCodeProcessor {
 		XDValue item; //actual instruction
 		for (;;)
 			try {
-			if (_debug && (_debugger.hasStopAddr(pc) || step!=XDDebug.NOSTEP)) {
-				step = _debugger.debug(
-					chkEl, _code, pc, sp, _stack, _localVariables, _debugInfo, _callList, step);
-				if (step == XDDebug.KILL) {
-					throw new SError(XDEF.XDEF906); //X-definition canceled
+			if (_debug) {
+				if (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP) {
+					step= _debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
+					if (step == XDDebug.KILL) {
+						throw new SError(XDEF.XDEF906); //Xdefinition canceled
+					}
 				}
 			}
 			int code;
@@ -1042,10 +1037,7 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case ST_LOCAL: _localVariables[item.getParam()] = _stack[sp--];continue;//store local variable
-				case ST_XMODEL: {//store xmodel variable
-					chkEl.storeModelVariable(item.stringValue(),_stack[sp--]);
-					continue;
-				}
+				case ST_XMODEL: chkEl.storeModelVariable(item.stringValue(), _stack[sp--]); continue;
 				case ST_GLOBAL: _globalVariables[item.getParam()] = _stack[sp--];continue;//store global var
 ////////////////////////////////////////////////////////////////////////////////
 //stack operations
@@ -1114,12 +1106,10 @@ public final class XCodeProcessor {
 				case TO_STRING_X:
 					_stack[sp - item.getParam()] = new DefString(_stack[sp - item.getParam()].toString());
 					continue;
-				case TO_MILLIS:
-					_stack[sp] = new DefLong(_stack[sp].datetimeValue().getTimeInMillis());
-					continue;
+				case TO_MILLIS:_stack[sp]= new DefLong(_stack[sp].datetimeValue().getTimeInMillis());continue;
 				case TO_MILLIS_X:
 					_stack[sp - item.getParam()] =
-						new DefLong( _stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
+						new DefLong(_stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
 					continue;
 				case TO_BOOLEAN: _stack[sp] = new DefBoolean(_stack[sp].booleanValue()); continue;
 				case STACK_TO_CONTAINER: { // create container from stack values
@@ -1131,9 +1121,7 @@ public final class XCodeProcessor {
 					}
 					continue;
 				}
-				case CREATE_NAMEDVALUE: // create named value
-					_stack[sp] = new DefNamedValue(((CodeS1)item).stringValue(), _stack[sp]);
-					continue;
+				case CREATE_NAMEDVALUE:_stack[sp]= new DefNamedValue(item.stringValue(), _stack[sp]);continue;
 ////////////////////////////////////////////////////////////////////////////////
 //binary operators
 ////////////////////////////////////////////////////////////////////////////////
@@ -1141,29 +1129,24 @@ public final class XCodeProcessor {
 					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() & _stack[sp + 1].booleanValue());
 					continue;
 				case MUL_I:
-					_stack[--sp] = new DefLong(_stack[sp].longValue() * _stack[sp + 1].longValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() * _stack[sp + 1].longValue()); continue;
 				case MUL_R:
 					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() * _stack[sp + 1].doubleValue());
 					continue;
 				case DIV_I:
-					_stack[--sp] = new DefLong(_stack[sp].longValue() / _stack[sp + 1].longValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() / _stack[sp + 1].longValue()); continue;
 				case DIV_R:
 					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() / _stack[sp + 1].doubleValue());
 					continue;
 				case ADD_I:
-					_stack[--sp] = new DefLong(_stack[sp].longValue() + _stack[sp + 1].longValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() + _stack[sp + 1].longValue()); continue;
 				case ADD_R:
 					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() + _stack[sp + 1].doubleValue());
 					continue;
 				case ADD_S: //string concatenation
-					_stack[--sp] = new DefString(_stack[sp].toString() + _stack[sp + 1].toString());
-					continue;
+					_stack[--sp] = new DefString(_stack[sp].toString() + _stack[sp + 1].toString()); continue;
 				case SUB_I:
-					_stack[--sp] = new DefLong(_stack[sp].longValue() - _stack[sp + 1].longValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() - _stack[sp + 1].longValue()); continue;
 				case SUB_R:
 					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() - _stack[sp + 1].doubleValue());
 					continue;
@@ -1174,20 +1157,16 @@ public final class XCodeProcessor {
 					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() ^ _stack[sp + 1].booleanValue());
 					continue;
 				case MOD_I:
-					_stack[--sp] = new DefLong(_stack[sp].longValue() % _stack[sp + 1].longValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() % _stack[sp + 1].longValue()); continue;
 				case MOD_R:
 					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() % _stack[sp + 1].doubleValue());
 					continue;
 				case LSHIFT_I:/** Left bit shift. */
-					_stack[--sp] = new DefLong(_stack[sp].longValue() << _stack[sp + 1].intValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() << _stack[sp + 1].intValue()); continue;
 				case RSHIFT_I:/** Right bit shift. */
-					_stack[--sp] = new DefLong(_stack[sp].longValue() >> _stack[sp + 1].intValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() >> _stack[sp + 1].intValue()); continue;
 				case RRSHIFT_I:/** Right bit shift unsigned.*/
-					_stack[--sp] = new DefLong(_stack[sp].longValue() >>> _stack[sp + 1].intValue());
-					continue;
+					_stack[--sp] = new DefLong(_stack[sp].longValue() >>> _stack[sp + 1].intValue()); continue;
 ////////////////////////////////////////////////////////////////////////////////
 //comparings
 ////////////////////////////////////////////////////////////////////////////////
@@ -1283,11 +1262,9 @@ public final class XCodeProcessor {
 					step = _callList._step;
 					_callList = _callList._parent;
 					continue;
-				case SWITCH_I: // switch(int)
-					pc = ((CodeSWTableInt) item).getTabAddr(_stack[sp--].longValue()); continue;
-				case SWITCH_S: // switch(String)
-					pc = ((CodeSWTableStr) item).getTabAddr(_stack[sp--].stringValue()); continue;
-				case INIT_NOPARAMS_OP: //init method - no parameters
+				case SWITCH_I: pc = ((CodeSWTableInt) item).getTabAddr(_stack[sp--].longValue()); continue;
+				case SWITCH_S: pc = ((CodeSWTableStr) item).getTabAddr(_stack[sp--].stringValue()); continue;
+				case INIT_NOPARAMS_OP:
 					_localVariables = _callList.init(item.getParam(), _localVariables); continue;
 				case INIT_PARAMS_OP: {//init method - parameters
 					_localVariables = _callList.init(item.getParam(), _localVariables);
@@ -1311,7 +1288,7 @@ public final class XCodeProcessor {
 						_catchItem = _catchItem.getPrevItem();
 						continue;
 					}
-					//X-definition script exception, PC=&{0}&{1}{; }
+					//Xdefinition script exception, PC=&{0}&{1}{; }
 					Report rep = Report.error(XDEF.XDEF905, pc - 1, ((XDException) _stack[sp--]).toString());
 					updateReport(rep, chkEl);
 					throw new XXException(rep);
@@ -1391,10 +1368,6 @@ public final class XCodeProcessor {
 					}
 					_stack[sp] = new DefString(((XDPrice) _stack[sp]).display());
 					continue;
-
-////////////////////////////////////////////////////////////////////////////////
-// compile
-////////////////////////////////////////////////////////////////////////////////
 				case COMPILE_BNF: { //Compile BNF grammar
 					DefBNFGrammar x = (DefBNFGrammar) item;
 					int extndx = x.getParam(); //extension
@@ -1409,7 +1382,7 @@ public final class XCodeProcessor {
 					_stack[++sp] = _code[pc - 1] = x;
 					continue;
 				}
-				case COMPILE_XPATH: { //load value (constant)
+				case COMPILE_XPATH: { //compile XPath
 					DefXPathExpr xp = (DefXPathExpr) item;
 					//we MUST recompile this with actual resolvers!!!
 					xp = new DefXPathExpr(xp.sourceValue(),
@@ -1486,8 +1459,7 @@ public final class XCodeProcessor {
 								_stack[++sp] = new DefString(s);
 								continue;
 							}
-							case XX_TEXT:
-								_stack[++sp] = new DefString(KXmlUtils.getTextValue(el)); continue;
+							case XX_TEXT: _stack[++sp] = new DefString(KXmlUtils.getTextValue(el)); continue;
 							default: {
 								NodeList nl =
 									KXmlUtils.getChildElementsNS(el, null, chkEl.getXXElement().getXXName());
@@ -1539,8 +1511,7 @@ public final class XCodeProcessor {
 										node = chkEl.getElemValue();
 									}
 									break;
-								default:
-									node = chkEl.getElemValue();
+								default: node = chkEl.getElemValue();
 							}
 						}
 					} else { // params == 2
@@ -1638,9 +1609,7 @@ public final class XCodeProcessor {
 					}
 					continue;
 				}
-				case COMPILE_REGEX: //string to regex
-					_stack[sp] = new XDRegex(_stack[sp].toString(), false);
-					continue;
+				case COMPILE_REGEX: _stack[sp] = new XDRegex(_stack[sp].toString(), false); continue;
 				case CHAR_AT: { // charAt
 					int i = _stack[sp--].intValue();
 					String s = _stack[sp].stringValue();
@@ -1830,9 +1799,9 @@ public final class XCodeProcessor {
 				}
 				case UNIQUESET_M_SIZE: _stack[sp] = new DefLong(((CodeUniqueset) _stack[sp]).size());continue;
 				case UNIQUESET_M_TOCONTAINER:
-					_stack[sp]=((CodeUniqueset) _stack[sp]).getUniqueSetItems(); continue;
+					_stack[sp] = ((CodeUniqueset) _stack[sp]).getUniqueSetItems(); continue;
 				case UNIQUESET_GET_ACTUAL_KEY:
-					_stack[sp]=((CodeUniqueset)_stack[sp]).getActualKey();
+					_stack[sp] = ((CodeUniqueset)_stack[sp]).getActualKey();
 					if (_stack[sp] == null || _stack[sp].isNull()) {
 						//The key is not in the uniqueSet
 						Report rep = Report.error(XDEF.XDEF538, pc-1, ((XDException)_stack[sp--]).toString());
@@ -1903,8 +1872,7 @@ public final class XCodeProcessor {
 					sp -= npar;
 					continue;
 				}
-				case UNIQUESET_CLOSE:
-					/** Report unresolved Id references and clear list. */
+				case UNIQUESET_CLOSE: // Report unresolved Id references and clear list.
 					_stack[sp] = new DefBoolean(((CodeUniqueset) _stack[sp]).checkAndClear(_reporter));
 					continue;
 				case UNIQUESET_CHEKUNREF: {
@@ -1927,8 +1895,8 @@ public final class XCodeProcessor {
 					_stack[sp] = u.getNamedValue(((CodeS1)item).stringValue());
 					continue;
 				}
-				case DEFAULT_ERROR: //DEFAULT_ERROR_CODE puts message
-					putError(chkEl, XDEF.XDEF515); //Value error
+				case DEFAULT_ERROR: // put default error
+					putError(chkEl, XDEF.XDEF515); //Incorrect value&{0}{: }
 					_stack[++sp] = new DefBoolean(false); //returns always false
 					continue;
 				case ATTR_EXIST:
@@ -1957,8 +1925,8 @@ public final class XCodeProcessor {
 						} else {
 							n = chkEl.getElemValue().getAttributeNode(s);
 						}
-						_stack[++sp] = n == null
-							? DefNull.genNullValue(XD_STRING) : new DefString(n.getNodeValue());
+						_stack[++sp] =
+							n == null ? DefNull.genNullValue(XD_STRING) : new DefString(n.getNodeValue());
 					}
 					continue;
 ////////////////////////////////////////////////////////////////////////////////
@@ -2074,7 +2042,7 @@ public final class XCodeProcessor {
 					} else {
 						String name = _stack[sp--].toString();
 						if (ns == null) {
-							if (chkEl._node != null && chkEl._node.getNodeType()== Node.ATTRIBUTE_NODE
+							if (chkEl._node != null && chkEl._node.getNodeType() == Node.ATTRIBUTE_NODE
 								&& name.equals(chkEl._node.getNodeName())) {
 								chkEl.setTextValue(s);
 							} else {
@@ -2085,7 +2053,7 @@ public final class XCodeProcessor {
 								}
 							}
 						} else {
-							if (chkEl._node != null && chkEl._node.getNodeType()== Node.ATTRIBUTE_NODE
+							if (chkEl._node != null && chkEl._node.getNodeType() == Node.ATTRIBUTE_NODE
 								&& name.equals(chkEl._node.getLocalName()) &&
 								ns.equals(chkEl._node.getNamespaceURI())) {
 								chkEl.setTextValue(s);
@@ -2113,14 +2081,14 @@ public final class XCodeProcessor {
 					} else {
 						String name = _stack[sp--].toString();
 						if (ns == null) {
-							if (chkEl._node != null && chkEl._node.getNodeType()== Node.ATTRIBUTE_NODE
+							if (chkEl._node != null && chkEl._node.getNodeType() ==  Node.ATTRIBUTE_NODE
 								&& name.equals(chkEl._node.getNodeName())) {
 								chkEl.setTextValue(null);
 							} else {
 								e.removeAttribute(name);
 							}
 						} else {
-							if (chkEl._node != null && chkEl._node.getNodeType()==Node.ATTRIBUTE_NODE
+							if (chkEl._node != null && chkEl._node.getNodeType() == Node.ATTRIBUTE_NODE
 								&& name.equals(chkEl._node.getLocalName()) &&
 								ns.equals(chkEl._node.getNamespaceURI())) {
 								chkEl.setTextValue(null);
@@ -2260,13 +2228,13 @@ public final class XCodeProcessor {
 					_stack[++sp] = new DefString(tz == null ? null : tz.getID());
 					continue;
 				}
-				case GET_QNPREFIX:{ //getQnamePrefix()
+				case GET_QNPREFIX: { //getQnamePrefix()
 					String s = _stack[sp].toString();
 					int ndx = s.indexOf(':');
 					_stack[sp] = new DefString(ndx > 0 ? s.substring(0, ndx) : "");
 					continue;
 				}
-				case GET_QNLOCALPART:{//getQnameLocalpart
+				case GET_QNLOCALPART: {//getQnameLocalpart
 					String s = _stack[sp].toString();
 					int ndx = s.indexOf(':');
 					_stack[sp] = new DefString(ndx > 0 ? s.substring(ndx + 1) : s);
@@ -2313,8 +2281,7 @@ public final class XCodeProcessor {
 					((XDContainer) _stack[sp + 1]).addXDItem(_stack[sp + 2]);
 					continue;
 				case CONTEXT_REMOVEITEM: //container.remove(index);
-					_stack[--sp] = ((XDContainer) _stack[sp]).removeXDItem(_stack[sp + 1].intValue());
-					continue;
+					_stack[--sp] = ((XDContainer) _stack[sp]).removeXDItem(_stack[sp+1].intValue()); continue;
 				case CONTEXT_ITEM: { //container.getXDItem(index)
 					XDValue x = ((XDContainer) _stack[--sp]).getXDItem(_stack[sp + 1].intValue());
 					_stack[sp] = (x == null) ?  new DefNull() : x;
@@ -2322,8 +2289,7 @@ public final class XCodeProcessor {
 				}
 				case CONTEXT_REPLACEITEM: //container.rreplace(index, value)
 					sp -= 2;
-					_stack[sp] = ((XDContainer) _stack[sp]).replaceXDItem(
-						_stack[sp + 1].intValue(), _stack[sp + 2]);
+					_stack[sp]= ((XDContainer)_stack[sp]).replaceXDItem(_stack[sp+1].intValue(),_stack[sp+2]);
 					continue;
 				case CONTEXT_TO_ELEMENT: {
 					String uri = null;
@@ -2496,19 +2462,9 @@ public final class XCodeProcessor {
 					}
 					XDResultSet di;
 					switch (xtype) {
-						case XD_SERVICE: {
-							String query = _stack[sp--].stringValue();
-							XDService conn = (XDService) dv;
-							di = conn.query(query, params);
-							break;
-						}
-						case XD_STATEMENT:
-							di = ((XDStatement) dv).query(params);
-							break;
-						case XD_RESULTSET: {
-							di = (XDResultSet) dv;
-							break;
-						}
+						case XD_SERVICE: di=((XDService) dv).query(_stack[sp--].stringValue(), params); break;
+						case XD_STATEMENT: di = ((XDStatement) dv).query(params); break;
+						case XD_RESULTSET: di = (XDResultSet) dv; break;
 						default: //???? this happens
 							throwInfo(chkEl, XDEF.XDEF561, null); //XQuery expression error
 							di = null; //never execute
@@ -2540,14 +2496,9 @@ public final class XCodeProcessor {
 					}
 					XDStatement ds;
 					switch (xtype) {
-						case XD_SERVICE: {
-							String query = _stack[sp--].stringValue();
-							ds = ((XDService) dv).prepareStatement(query);
-							break;
-						}
-						case XD_STATEMENT:
-							ds = (XDStatement) dv;
-							break;
+						case XD_SERVICE:
+							ds = ((XDService) dv).prepareStatement(_stack[sp--].stringValue()); break;
+						case XD_STATEMENT: ds = (XDStatement) dv; break;
 						default:
 							throwInfo(chkEl, XDEF.XDEF573, "not Statement"); //Null value of &{0}
 							ds = null; // never execute
@@ -2630,7 +2581,7 @@ public final class XCodeProcessor {
 						if (i > 0) {
 							xdef = _xd.getXDPool().getXMDefinition(rootName.substring(0,i));
 							if (xdef == null) {
-								chkEl.fatal(XDEF.XDEF530, rootName); //Missing X-definition &{0}
+								chkEl.fatal(XDEF.XDEF530, rootName); //Missing Xdefinition &{0}
 								_stack[sp] = new DefElement(chkEl.getElemValue());
 								chkEl._sourceElem = oldContext;
 								continue;
@@ -2737,8 +2688,7 @@ public final class XCodeProcessor {
 				}
 				case PARSE_XML: {
 					String s; //name of xdef
-					if (item.getParam() == 1 || (s = _stack[sp--].stringValue()) == null) {
-						//no xdef, just parse
+					if (item.getParam() == 1 || (s=_stack[sp--].stringValue()) == null) {//no xdef,just parse
 						Document d = KXmlUtils.parseXml(_stack[sp].toString());
 						_stack[sp] = new DefElement(d.getDocumentElement());
 						continue;
@@ -2749,7 +2699,7 @@ public final class XCodeProcessor {
 						if (ndx > 0) {
 							xdef = _xd.getXDPool().getXMDefinition(s.substring(0,ndx));
 							if (xdef == null) {
-								chkEl.fatal(XDEF.XDEF530, s); //Missing X-definition &{0}
+								chkEl.fatal(XDEF.XDEF530, s); //Missing Xdefinition &{0}
 								_stack[sp] = new DefElement(chkEl.getElemValue());
 								continue;
 							}
@@ -2760,9 +2710,9 @@ public final class XCodeProcessor {
 					} else {
 						xdef = _xd;
 					}
-					//parse element with X-definition
-					ChkDocument x = (ChkDocument) ("*".equals(s) ? xdef.getXDPool().createXDDocument()
-						: xdef.getXDPool().createXDDocument(s));
+					//parse element with Xdefinition
+					ChkDocument x = (ChkDocument) ("*".equals(s)
+						? xdef.getXDPool().createXDDocument() : xdef.getXDPool().createXDDocument(s));
 					//set our global variables to parser!!!
 					x._rootChkDocument._scp._initialized1 = true;
 					x._rootChkDocument._scp._initialized2 = true;
@@ -2829,7 +2779,7 @@ public final class XCodeProcessor {
 					_stack[sp] = new DefLong(((XDRegexResult) _stack[sp]).groupCount()); continue;
 				case GET_REGEX_GROUP_START:
 					_stack[--sp] =
-						new DefLong(((XDRegexResult) _stack[sp]).groupStart(_stack[sp + 1].intValue()));
+						new DefLong(((XDRegexResult) _stack[sp]).groupStart(_stack[sp+1].intValue()));
 					continue;
 				case GET_REGEX_GROUP_END:
 					_stack[--sp] = new DefLong(((XDRegexResult)_stack[sp]).groupEnd(_stack[sp+1].intValue()));
@@ -2974,7 +2924,7 @@ public final class XCodeProcessor {
 					_stack[++sp] = pr;
 					continue;
 				}
-				case SET_NAMEDVALUE: {
+				case SET_NAMEDVALUE:
 					if (item.getParam() == 2) {
 						XDValue v = _stack[sp--];
 						XDNamedValue x;
@@ -2992,7 +2942,6 @@ public final class XCodeProcessor {
 						((XDContainer)_stack[sp--]).setXDNamedItem(key, val);
 					}
 					continue;
-				}
 				case GET_NAMEDITEMS: {//get list of named items from Container
 					XDContainer c = (XDContainer) _stack[sp];
 					XDContainer d = new DefContainer();
@@ -3026,8 +2975,8 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case NAMEDVALUE_GET: _stack[sp] = ((XDNamedValue) _stack[sp]).getValue(); continue;
-				case NAMEDVALUE_SET:_stack[--sp] = ((XDNamedValue)_stack[sp]).setValue(_stack[sp+1]);continue;
-				case NAMEDVALUE_NAME:_stack[sp] =new DefString(((XDNamedValue)_stack[sp]).getName());continue;
+				case NAMEDVALUE_SET:_stack[--sp]= ((XDNamedValue)_stack[sp]).setValue(_stack[sp+1]);continue;
+				case NAMEDVALUE_NAME:_stack[sp]= new DefString(((XDNamedValue)_stack[sp]).getName());continue;
 				case EQ_NULL:
 					 _stack[--sp] = new DefBoolean((_stack[sp] == null || _stack[sp].isNull())
 						 && (_stack[sp+1] == null || _stack[sp+1].isNull()));
@@ -3042,8 +2991,7 @@ public final class XCodeProcessor {
 						switch (v.getItemId()) {
 							case XD_STRING: _stack[sp] = new DefBoolean(v.stringValue().isEmpty()); continue;
 							case XD_ELEMENT: _stack[sp] = new DefBoolean(((XDElement)v).isEmpty()); continue;
-							case XD_CONTAINER:
-								_stack[sp] = new DefBoolean(((DefContainer)v).isEmpty()); continue;
+							case XD_CONTAINER:_stack[sp]=new DefBoolean(((DefContainer)v).isEmpty());continue;
 						}
 					}
 					_stack[sp] = new DefBoolean(true);
@@ -3145,9 +3093,7 @@ public final class XCodeProcessor {
 				case GET_STRING_LENGTH: //s.length()
 				case WHITESPACES_S:
 			//Report
-				case GET_REPORT:
-					_stack[sp] = XCodeProcessorExt.perform1v(item, _stack[sp]);
-					continue;
+				case GET_REPORT: _stack[sp] = XCodeProcessorExt.perform1v(item, _stack[sp]); continue;
 			//Element
 				case ELEMENT_ADDELEMENT:
 				case ELEMENT_ADDTEXT:
@@ -3157,7 +3103,7 @@ public final class XCodeProcessor {
 				case PUT_REPORT:
 			//XmlWriter
 				case SET_XMLWRITER_INDENTING: // Set writer indenting.
-				case WRITE_TEXTNODE: // Write text node.
+				case WRITE_TEXTNODE:
 					XCodeProcessorExt.perform2(item, _stack[sp-1], _stack[sp]); sp-=2; continue;
 			//formating to string
 				case INTEGER_FORMAT:
@@ -3227,7 +3173,6 @@ public final class XCodeProcessor {
 				case NEW_XMLWRITER:
 				case NEW_REPORT:
 				case NEW_LOCALE: sp = XCodeProcessorExt.perform(this, item, sp, _stack); continue;
-
 				}//switch
 				//Other codes (implemented in XCodeProcessorExt)
 				sp = XCodeProcessorExt.performX(this, item, chkEl, sp, _stack, pc);
@@ -3323,8 +3268,7 @@ public final class XCodeProcessor {
 				if (x instanceof CodeUniqueset) {
 					CodeUniqueset z = (CodeUniqueset) x;
 					if (z != dt) {
-						z.getParsedItems()[z.getKeyItemIndex()].setParsedObject(
-							y.getParsedValue());
+						z.getParsedItems()[z.getKeyItemIndex()].setParsedObject(y.getParsedValue());
 					}
 				}
 		}
@@ -3409,8 +3353,8 @@ public final class XCodeProcessor {
 	 */
 	public final Object getUserObject(final String id) {return _userObjects.get(id);}
 
-	/** This method is revoked if an exception is thrown when X-script
-	 * is processed and process X-definition is to be finished with fatal error.
+	/** This method is revoked if an exception is thrown when Xscript
+	 * is processed and process Xdefinition is to be finished with fatal error.
 	 * @param pc program counter.
 	 * @param sp stack pointer.
 	 * @param ex exception.
@@ -3521,7 +3465,7 @@ public final class XCodeProcessor {
 		 * @param variables local variables.
 		 * @param prevCatchItem link to previous catch item.
 		 */
-		CatchItem(final int catchAddr, final XDValue[] variables, CatchItem prevCatchItem) {
+		CatchItem(final int catchAddr, final XDValue[] variables, final CatchItem prevCatchItem) {
 			_variables = variables;
 			_catchAddr = catchAddr;
 			_prevItem = prevCatchItem;

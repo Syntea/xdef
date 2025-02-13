@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.w3c.dom.Element;
 
-/** Map of named items and sequence items in X-script. Contains both, the table of named items and
+/** Map of named items and sequence items in Xscript. Contains both, the table of named items and
  * sequence of items.
  * @author Vaclav Trojan
  */

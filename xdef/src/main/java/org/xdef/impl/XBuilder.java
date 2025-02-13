@@ -74,10 +74,10 @@ public final class XBuilder implements XDBuilder {
 	}
 
 	@Override
-	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then
-	 * it is interpreted as source X-definition data, otherwise it can be the pathname of the file or URL.
+	/** Add source data of Xdefinition or collection. If the argument starts with "&lt;" character then
+	 * it is interpreted as source Xdefinition data, otherwise it can be the pathname of the file or URL.
 	 * If it is a pathname format then it may contain also wildcard characters representing a group of files.
-	 * @param source The string with source X-definition.
+	 * @param source The string with source Xdefinition.
 	 * @param sourceId name of source source data corresponding to the argument source (may be null).
 	 * @return this XDBuilde object.
 	 */
@@ -87,7 +87,7 @@ public final class XBuilder implements XDBuilder {
 	}
 
 	@Override
-	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then
+	/** Add source data of Xdefinitions or collections. If an item starts with "&lt;" character then
 	 * it is interpreted as source data, otherwise it can be the pathname of the file or URL. If it is
 	 * a pathname format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
@@ -96,7 +96,7 @@ public final class XBuilder implements XDBuilder {
 	public final XDBuilder setSource(final String... sources) {_xp.setSource(sources, null); return this;}
 
 	@Override
-	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then it is
+	/** Add source data of Xdefinitions or collections. If an item starts with "&lt;" character then it is
 	 * interpreted as source data, otherwise it can be the pathname of the file or URL. If it is a pathname
 	 * format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
@@ -110,21 +110,21 @@ public final class XBuilder implements XDBuilder {
 	}
 
 	@Override
-	/** Add files with source data of  X-definitions or collections.
+	/** Add files with source data of  Xdefinitions or collections.
 	 * @param sources array of files with sources.
 	 * @return this XDBuilde object.
 	 */
 	public final XDBuilder setSource(final File... sources) {_xp.setSource(sources); return this;}
 
 	@Override
-	/** Add URLs with source data of X-definitions or collections.
+	/** Add URLs with source data of Xdefinitions or collections.
 	 * @param sources array of URLs with sources.
 	 * @return this XDBuilde object.
 	 */
 	public final XDBuilder setSource(final URL... sources) {_xp.setSource(sources); return this;}
 
 	@Override
-	/** Add input stream with source data of a X-definition or collection.
+	/** Add input stream with source data of a Xdefinition or collection.
 	 * @param source The input stream with source.
 	 * @param srcId name of source source data corresponding to stream from the argument sources (any item
 	 * or even this argument may be null).
@@ -136,7 +136,7 @@ public final class XBuilder implements XDBuilder {
 	}
 
 	@Override
-	/** Add input streams with sources data of X-definitions or collections.
+	/** Add input streams with sources data of Xdefinitions or collections.
 	 * @param sources array of input streams with sources.
 	 * @param sourceIds array of names of source source data corresponding to the sources argument
 	 * (any item may be null).
@@ -164,7 +164,7 @@ public final class XBuilder implements XDBuilder {
 
 	/** Finish compilation and return compiled XDPool.
 	 * @param result compiled XDPool.
-	 * @param p compiler of X-definitions.
+	 * @param p compiler of Xdefinitions.
 	 * @param userReporter the reporter which was set by user.
 	 * @param reporter actual reporter.
 	 * @return compiled XDPool.
@@ -297,7 +297,7 @@ public final class XBuilder implements XDBuilder {
 		return finishCompilation(result, p, userReporter, reporter);
 	}
 
-	/** Parse XML with X-definition declared in source input stream.
+	/** Parse XML with Xdefinition declared in source input stream.
 	 * @param source where to read XML.
 	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.
@@ -310,7 +310,7 @@ public final class XBuilder implements XDBuilder {
 		return chkdoc;
 	}
 
-	/** Parse XML with X-definition declared in source.
+	/** Parse XML with Xdefinition declared in source.
 	 * @param source URL, pathname direct to XML or direct XML.
 	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.

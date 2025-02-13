@@ -4,11 +4,11 @@ import org.xdef.sys.SPosition;
 import org.xdef.XDPool;
 import javax.xml.namespace.QName;
 
-/** General interface of models of objects of X-definitions.
+/** General interface of models of objects of Xdefinitions.
  * @author Vaclav Trojan
  */
 public interface XMNode extends XMOccurrence {
-	/** X-definition ID. */
+	/** Xdefinition ID. */
 	public static final short XMDEFINITION = 1;
 //	/** Model of XML element ID - reserved. */
 //	public static final short XMDOCUMENT = 2;

@@ -6,7 +6,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Parser of X-Script "countries" type.
+/** Parser of Xscript "countries" type.
  * @author Vaclav Trojan
  */
 public class XDParseCountries  extends XDParseNCNameList {

@@ -3,7 +3,7 @@ package org.xdef.impl.debug;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 
-/** Interface for X-definition editor.
+/** Interface for Xdefinition editor.
  * @author Vaclav Trojan
  */
 public interface XEditor {

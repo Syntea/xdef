@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of Schema "int" type.
+/** Parser of XML Schema (XSD) "int" type.
  * @author Vaclav Trojan
  */
 public class XSParseInt extends XSParseLong {

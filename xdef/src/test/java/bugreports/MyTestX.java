@@ -93,7 +93,7 @@ public class MyTestX extends XDTester {
 		System.out.println();
 	}
 
-	@SuppressWarnings({"unchecked", "unchecked"})
+	@SuppressWarnings({"unchecked"})
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -327,7 +327,6 @@ clearSources();
 		try {
 			String type;
 			type = "date";
-//			type = "emailAddr";
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 //"  <xd:json name='A'> [\"* " + type + "()\"] </xd:json>\n"+
@@ -346,8 +345,7 @@ clearSources();
 			x = xd.jparse(xon, reporter);
 			assertNoErrors(reporter);
 			if (!XonUtils.xonEqual(o, x)) {
-				fail("** 2\n" + XonUtils.toXonString(o, true) + "\n"
-					+ XonUtils.toXonString(x, true));
+				fail("** 2\n" + XonUtils.toXonString(o, true) + "\n" + XonUtils.toXonString(x, true));
 			}
 
 			assertNull(testA("jnull", "[ null, null ]"));
@@ -364,17 +362,13 @@ clearSources();
 			assertNull(testA("float", "[null, 1.0f, 1f ]"));
 			assertNull(testA("double", "[ null, 1.0, 1d ]"));
 			assertNull(testA("decimal", "[ null,0D,1D,-1D,1.5D,3.33e-5D ]"));
-			assertNull(testA("date",
-				"[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
+			assertNull(testA("date", "[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
 			assertNull(testA("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
-			assertNull(testA("gps",
-				"[null,g(20.2,19.9),g(20.21,19.99,0.1),g(51.52,-0.09,0,xxx)]"));
+			assertNull(testA("gps", "[null,g(20.2,19.9),g(20.21,19.99,0.1),g(51.52,-0.09,0,xxx)]"));
 			assertNull(testA("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
-			assertNull(testA("char",
-				"[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
+			assertNull(testA("char", "[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
 			assertNull(testA("anyURI", "[null, u\"http://a.b\" ]"));
-			assertNull(testA("emailAddr",
-				"[ null, e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
+			assertNull(testA("emailAddr", "[ null, e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
 			assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
 			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
 			assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
@@ -382,8 +376,6 @@ clearSources();
 
 			assertNull(testM("int", "{a:1}"));
 			assertNull(testM("int", "{ }"));
-			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
-
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;
@@ -519,7 +511,7 @@ if(T)return;
 clearSources();
 /**/
 		try {
-			xdef = // test XON models in different X-definitions
+			xdef = // test XON models in different Xdefinitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
@@ -602,7 +594,7 @@ if(T)return;
 clearSources();
 /**/
 		try {
-			xdef = // test XON models in different X-definitions
+			xdef = // test XON models in different Xdefinitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "<xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
@@ -772,8 +764,7 @@ clearSources();
 			x = xc.toXon();
 			assertEq("{ . }\n", swr.toString());
 			assertEq(" ab\tcd ", ((Map)((Map) x).get("a")).get("y"));
-			assertTrue(XonUtils.xonEqual(o, x),
-				XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(x));
+			assertTrue(XonUtils.xonEqual(o, x), XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(x));
 			s = "{a:[1,2]}";
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
@@ -874,8 +865,7 @@ if(T)return;
 			y = SUtils.getNewInstance(_package+".component.Y16a");
 			SUtils.setValueToSetter(y, "sety", 1);
 			SUtils.setValueToSetter(x, "setx$b", y);
-			o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml)
-				.getDocumentElement());
+			o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
 			assertTrue(XonUtils.xonEqual(o, XonUtils.xmlToXon(el)),
@@ -1077,13 +1067,11 @@ clearSources();
 			json = "{}";
 			assertNull(testX(xp, "", s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),
-				SUtils.getValueFromGetter(xc, "getMap$")));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), SUtils.getValueFromGetter(xc, "getMap$")));
 			json = "{ a:1, b:true }";
 			assertNull(testX(xp, "", s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),
-				SUtils.getValueFromGetter(xc, "getMap$")));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), SUtils.getValueFromGetter(xc, "getMap$")));
 //			setValueToSetter(xc, "setval", 2);
 			json = "null";
 			assertNotNull(testX(xp, "", s, json)); // error: not map
@@ -1356,8 +1344,7 @@ clearSources();
 			assertNull(xini.get("hostaddr"));
 			assertNoErrorwarnings(reporter);
 			reporter.clear();
-			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s),XonUtils.parseINI(XonUtils.toIniString(xini))));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
@@ -1666,11 +1653,9 @@ clearSources();
 			xini = xd.iparse(s, reporter);
 			assertNoErrorwarnings(reporter);
 			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini,
-				xd.iparse(XonUtils.toIniString(xini), reporter)));
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrorwarnings(reporter);
-			assertEq("/123.45.67.8",
-				"" + ((Map<String, Object>)xini.get("Server")).get("SeverIP"));
+			assertEq("/123.45.67.8", "" + ((Map<String, Object>)xini.get("Server")).get("SeverIP"));
 			reporter.clear();
 		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;

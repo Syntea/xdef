@@ -55,7 +55,7 @@ public final class Test003 extends XDTester {
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
 			assertNoErrorwarnings(reporter);
 		} catch(RuntimeException ex) {fail(ex);}
-		try {// X-definition referred from XML
+		try {// Xdefinition referred from XML
 			reporter.clear();
 			XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
 			assertNoErrorwarnings(reporter);

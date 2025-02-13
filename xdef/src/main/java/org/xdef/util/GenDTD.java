@@ -37,7 +37,7 @@ import static org.xdef.model.XMNode.XMSELECTOR_END;
 import static org.xdef.model.XMNode.XMSEQUENCE;
 import static org.xdef.model.XMNode.XMTEXT;
 
-/** Generation of DTD from X-definitions.
+/** Generation of DTD from Xdefinitions.
  * Also provides main method for calling the program from command line.
  * (see {@link org.xdef.util.GenDTD#main(String[])})
  * @author Vaclav Trojan
@@ -463,7 +463,7 @@ public class GenDTD {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Generate DTD from X-definition.\n"+
+"Generate DTD from Xdefinition.\n"+
 "Command line arguments:\n"+
 "  definition_name#root_element_name\n" +
 "  output_file_name\n" +
@@ -476,11 +476,11 @@ public class GenDTD {
 		 * <code>definition_name#root_element_name output_file_name [-e encoding]
 		 * file_xdef1 [file_xdef2] [...]</code>
 		 *  <ul>
-		 *  <li>definition_name#root_element_name - name of X-definition and name of root element
+		 *  <li>definition_name#root_element_name - name of Xdefinition and name of root element
 		 *  <li>output_file_name - name of output file
 		 *  <li>[-e encoding] - output file encoding (default is "UTF-8")
 		 *  <li><code>file_xdef1 [file_xdef2] [...]
-		 * </code> - X-definition file(s)
+		 * </code> - Xdefinition file(s)
 		 * </ul>
 	 */
 	public static void main(final String... args) {

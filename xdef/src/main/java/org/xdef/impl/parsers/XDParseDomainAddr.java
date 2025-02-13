@@ -2,7 +2,6 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
-import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
@@ -27,7 +26,7 @@ public class XDParseDomainAddr extends XDParserAbstract {
 		}
 		p.setIndex(pos);
 		p.setParsedValue(new DefIPAddr()); //null IPAddr
-		p.errorWithString(XDEF.XDEF809,parserName(),s); //Incorrect value of '&{0}'&{1}{: }
+		p.errorWithString(XDEF.XDEF809, parserName(), s); //Incorrect value of '&{0}'&{1}{: }
 	}
 	@Override
 	public short parsedType() {return XD_EMAIL;}

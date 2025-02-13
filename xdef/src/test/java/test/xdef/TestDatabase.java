@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
-/** Test of X-Definition relational database processing.
+/** Test of Xdefinition relational database processing.
  * @author Vaclav Trojan
  */
 public final class TestDatabase extends XDTester {
@@ -213,7 +213,7 @@ public final class TestDatabase extends XDTester {
 		}
 
 		////////////////////////////////////////////////////////////////////////
-		// Tests in the X-Definitions
+		// Tests in the Xdefinitions
 		////////////////////////////////////////////////////////////////////////
 
 		// Use non-external connection
@@ -253,7 +253,7 @@ public final class TestDatabase extends XDTester {
 
 			// check implicit closing of the Service
 			if(!_con.isClosed()) {
-				fail("X-Definition hasn't closed the Service object.");
+				fail("Xdefinition hasn't closed the Service object.");
 			} else {
 				_con.close();
 			}
@@ -293,7 +293,7 @@ public final class TestDatabase extends XDTester {
 
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {
-				fail("X-Definition has closed the Service object.");
+				fail("Xdefinition has closed the Service object.");
 			} else {
 				_con.close();
 			}
@@ -325,7 +325,7 @@ public final class TestDatabase extends XDTester {
 			}
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {
-				fail("X-Definition has closed the Service object.");
+				fail("Xdefinition has closed the Service object.");
 			} else {
 				_con.close();
 			}
@@ -365,7 +365,7 @@ public final class TestDatabase extends XDTester {
 
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {
-				fail("X-Definition has closed the Service object.");
+				fail("Xdefinition has closed the Service object.");
 			} else {
 				_con.close();
 			}
@@ -410,7 +410,7 @@ public final class TestDatabase extends XDTester {
 
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {
-				fail("X-Definition has closed the Service object.");
+				fail("Xdefinition has closed the Service object.");
 			} else {
 				_con.close();
 			}
@@ -754,7 +754,7 @@ public final class TestDatabase extends XDTester {
 			assertNoErrorwarnings(reporter);
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {
-				fail("X-Definition has closed the Service object.");
+				fail("Xdefinition has closed the Service object.");
 			} else {
 				_con.close();
 			}
@@ -799,7 +799,7 @@ public final class TestDatabase extends XDTester {
 			assertNoErrorwarnings(reporter);
 			// check that external Service wasn't closed
 			if(!_con.isClosed()) {
-				fail("X-Definition has't closed the Service object by close() "
+				fail("Xdefinition has't closed the Service object by close() "
 						+ "script method.");
 			}
 		} catch (Exception ex) {fail(ex);}

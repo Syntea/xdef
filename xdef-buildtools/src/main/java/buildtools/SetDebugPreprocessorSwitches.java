@@ -12,8 +12,7 @@ public class SetDebugPreprocessorSwitches {
 	 * @param args path to base directory or null.
 	 */
 	public static void main(String... args) {
-		File baseDir = args == null || args.length == 0
-			? new File("../xdef") : new File(args[0]);
+		File baseDir = args == null || args.length == 0 ? new File("../xdef") : new File(args[0]);
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
 			throw new RuntimeException("Incorect project base directory");
 		}
@@ -29,13 +28,13 @@ public class SetDebugPreprocessorSwitches {
 			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
 			"-t", // remove trailibg white sapces
-			"-s", "DEBUG"); //set DEBUG switch
+			"-s", "DEBUG", "RFC5321"); //set DEBUG switch
 		JavaPreprocessor.main(
 			"-i", new File(projectBase, "src/test/java").getAbsolutePath(),
 			"-r", // recursive process of directories
 			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
 			"-t", // remove trailibg white sapces
-			"-s", "DEBUG"); //set DEBUG switch
+			"-s", "DEBUG", "RFC5321"); //set DEBUG switch
 	}
 }

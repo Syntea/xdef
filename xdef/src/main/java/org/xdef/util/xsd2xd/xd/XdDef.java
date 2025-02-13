@@ -1,32 +1,32 @@
 package org.xdef.util.xsd2xd.xd;
 
-/** Represents X-definition.
+/** Represents Xdefinition.
  * @author Ilia Alexandrov
  */
 public final class XdDef {
 
 	/** Hashcode. */
 	private int _hashCode = 0;
-	/** X-definition name as is in X-definitionname attribute.*/
+	/** Xdefinition name as is in Xdefinitionname attribute.*/
 	private final String _name;
 
-	/** Creates instance of X-definition representation with given name.
+	/** Creates instance of Xdefinition representation with given name.
 	 *
-	 * @param name name of X-definition.
-	 * @throws NullPointerException if given X-definition name is null.
-	 * @throws IllegalArgumentException ig given X-definition name is empty.
+	 * @param name name of Xdefinition.
+	 * @throws NullPointerException if given Xdefinition name is null.
+	 * @throws IllegalArgumentException ig given Xdefinition name is empty.
 	 */
 	public XdDef(String name) {
 		if (name == null) {
-			throw new NullPointerException("Given X-definition name is null!");
+			throw new NullPointerException("Given Xdefinition name is null!");
 		}
 		if (name.length() == 0) {
-			throw new IllegalArgumentException("Given X-definition name is empty!");
+			throw new IllegalArgumentException("Given Xdefinition name is empty!");
 		}
 		_name = name;
 	}
-	/** X-definition name getter.
-	 * @return name of X-definition.
+	/** Xdefinition name getter.
+	 * @return name of Xdefinition.
 	 */
 	public String getName() {
 		return _name;

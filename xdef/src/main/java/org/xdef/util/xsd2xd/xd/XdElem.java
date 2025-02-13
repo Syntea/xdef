@@ -12,10 +12,10 @@ public final class XdElem extends XdModel {
 
 	/** Creates instance of element model.
 	 *
-	 * @param def model X-definition.
+	 * @param def model Xdefinition.
 	 * @param namespace element namespace.
 	 * @param name element name.
-	 * @throws NullPointerException if given model X-definition or element name
+	 * @throws NullPointerException if given model Xdefinition or element name
 	 * is null.
 	 * @throws IllegalArgumentException if given element name is empty.
 	 */

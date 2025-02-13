@@ -10,7 +10,7 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
-/** Parser of Schema "NOTATION" type.
+/** Parser of XML Schema (XSD) "NOTATION" type.
  * @author Vaclav Trojan
  */
 public class XSParseNOTATION extends XSAbstractParseString {
@@ -74,7 +74,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script of attribute or text node
+			//The validation method &{0} can be called only from the Xscript of attribute or text node
 			p.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}

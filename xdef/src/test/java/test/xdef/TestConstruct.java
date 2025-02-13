@@ -7,7 +7,7 @@ import org.xdef.proc.XXElement;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
-/** Test of construction of element from X-definition.
+/** Test of construction of element from Xdefinition.
  * @author Vaclav Trojan
  */
 public final class TestConstruct extends XDTester {

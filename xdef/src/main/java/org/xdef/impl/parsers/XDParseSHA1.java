@@ -1,6 +1,6 @@
 package org.xdef.impl.parsers;
 
-/** Parser of Schema "SHA1" type.
+/** Parser of SML Schema (XSD) "SHA1" type.
  * @author Vaclav Trojan
  */
 public class XDParseSHA1 extends XSParseHexBinary {

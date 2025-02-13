@@ -19,19 +19,19 @@ import org.xdef.msg.XDCONV;
 import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 
-/** Creates from the X-definition parser a parser compatible with XML schema.
+/** Creates from the Xdefinition parser a parser compatible with XML schema.
  * @author Vaclav Trojan, Anna Kchmascheva
  */
 class GenParser {
 	private final XDParser _xdp;// XDParser object with parameters (schema type)
-	private final String _declaredName;// name of X-definition parser
+	private final String _declaredName;// name of Xdefinition parser
 	private final String _info; // text of information about type conversion
 	private String _defaultValue; // default value
 	private String _fixedValue; // fixed value
 
-	/** Create new instance of ParserInfo with X-definition parser, declared type name and information text.
-	 * @param xdp X-definition parser,
-	 * @param declaredName declared type name in X-definition.
+	/** Create new instance of ParserInfo with Xdefinition parser, declared type name and information text.
+	 * @param xdp Xdefinition parser,
+	 * @param declaredName declared type name in Xdefinition.
 	 * @param info information text.
 	 */
 	private GenParser(final XDParser xdp, final String declaredName, final String info) {
@@ -44,8 +44,8 @@ class GenParser {
 		_info = info != null && info.isEmpty() ? null : info;
 	}
 
-	/** Get X-definition parser.
-	 * @return X-definition parser.
+	/** Get Xdefinition parser.
+	 * @return Xdefinition parser.
 	 */
 	protected XDParser getParser() {return _xdp;}
 
@@ -54,8 +54,8 @@ class GenParser {
 	 */
 	protected String getInfo() {return _info;}
 
-	/** Get name of declared type in X-definition.
-	 * @return name of declared type in X-definition (or null).
+	/** Get name of declared type in Xdefinition.
+	 * @return name of declared type in Xdefinition (or null).
 	 */
 	protected String getDeclaredName() {return _declaredName;}
 
@@ -70,10 +70,10 @@ class GenParser {
 	protected String getFixed() {return _fixedValue;}
 
 	/** Create ParserInfo and set to the parser the declared name.
-	 * @param xdp the X-definition parser.
+	 * @param xdp the Xdefinition parser.
 	 * @param info information (i.e. original parser name).
 	 * @param declaredName name of declared type (or null);.
-	 * @param xdc X-container with parser parameters.
+	 * @param xdc Xcontainer with parser parameters.
 	 * @return ParserInfo object.
 	 */
 	private static GenParser genParserInfo(final XDParser xdp,
@@ -124,8 +124,8 @@ class GenParser {
 	}
 
 	/** Create ParserInfo object with XML schema compatible parser from
-	 * X-definition parser.
-	 * @param xdp X-definition parser.
+	 * Xdefinition parser.
+	 * @param xdp Xdefinition parser.
 	 * @param generator instance of Xd2Xsd.
 	 * @param genXdateOutFormat if true, use as mask to validate XML data the parameter describing output
 	 * format from the "xdatetime" method.
@@ -135,12 +135,12 @@ class GenParser {
 		String name = xdp.parserName();
 		String declName = xdp.getDeclaredName();
 		XDContainer xdc = xdp.getNamedParams();
-		String info = "Created from X-definition " + name;
+		String info = "Created from Xdefinition " + name;
 		String s, mask;
 		XDValue x;
 		switch(name) {
 ////////////////////////////////////////////////////////////////////////////////
-// XML schema types which are implemented in X-definition
+// XML schema types which are implemented in Xdefinition
 ////////////////////////////////////////////////////////////////////////////////
 			case "anyURI":
 			case "base64Binary":
@@ -192,7 +192,7 @@ class GenParser {
 				return new GenParser(xdp, declName, null);
 			}
 ////////////////////////////////////////////////////////////////////////////////
-// X-definition types converted to XML schema type
+// Xdefinition types converted to XML schema type
 ////////////////////////////////////////////////////////////////////////////////
 			case "an":
 				info += displayParams(xdc);
@@ -401,7 +401,7 @@ class GenParser {
 						return genParserInfo(new XSParseString(), info, declName, xdc);
 				} // switch mask
 ////////////////////////////////////////////////////////////////////////////////
-// other X-definition types are converted to xs:string
+// other Xdefinition types are converted to xs:string
 ////////////////////////////////////////////////////////////////////////////////
 			default:
 				// remove xdef parameters

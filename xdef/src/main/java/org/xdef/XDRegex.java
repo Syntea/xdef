@@ -14,7 +14,7 @@ import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 
-/** Implementation of X-script value of regular expression.
+/** Implementation of Xscript value of regular expression.
  * @author Vaclav Trojan
  */
 public final class XDRegex extends XDValueAbstract {
@@ -33,8 +33,8 @@ public final class XDRegex extends XDValueAbstract {
 
 	/** Creates new instance of XDRegex.
 	 * @param s The string with regular expression source.
-	 * @param mode if true, then it is a regular expression in XML Schema format, otherwise it is a regular
-	 * expression in Java format.
+	 * @param mode if true, then it is a regular expression in XML Schema (XSD) format, otherwise it is
+	 * a regular expression in Java format.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public XDRegex(final String s, final boolean mode) {
@@ -74,7 +74,7 @@ public final class XDRegex extends XDValueAbstract {
 	public final String sourceValue() {return _source;}
 
 	/** Get mode of regular expression source format.
-	 * @return true if it is XML schema format.
+	 * @return true if it is XML schema (XSD) format.
 	 */
 	public final boolean isXMLSchema() {return _mode;}
 
@@ -124,8 +124,8 @@ public final class XDRegex extends XDValueAbstract {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Translates a source of XML Schema regular expression into Java format. (This code ia the modified
-	 * version of the source code originally written by James Clark and modified by Michael Kay.)
+	/** Translates a source of XML Schema (XSD) regular expression into Java format. (This code ia
+	 * the modified version of the source code originally written by James Clark and modified by Michael Kay.)
 	 * @see java.util.regex.Pattern
 	 * @see <a href="http://www.w3.org/TR/xmlschema-2/#regexs">  XML Schema Part 2</a>
 	 * ***********************************************
@@ -170,7 +170,7 @@ public final class XDRegex extends XDValueAbstract {
 	*/
 	private static final class Translator extends StringParser {
 
-		/** Charset block names which differs in XML schema and Java. */
+		/** Charset block names which differs in XML schema (XSD) and Java. */
 		static private final String[] BLOCKNAMESDIFFERENT = {
 			"OldItalic", "[\ud800\udf00-\ud800\udf2f]", "^",
 			"Gothic", "[\ud800\udf30-\ud800\udf4f]", "^",
@@ -184,8 +184,8 @@ public final class XDRegex extends XDValueAbstract {
 			"PrivateUse", "[\ue000-\uf8ff\udb80\udc00-\udbbf\udffd\udbc0\udc00-\udbff\udffd]","^",
 		};
 
-		/** Charset block names which differs in XML schema and Java. Each block name is represented by three
-		 * items:
+		/** Charset block names which differs in XML schema (XSD) and Java. Each block name is represented
+		 * by three items:
 		 * <p>1) block name
 		 * <p>2) string with charGroups for this block name or null
 		 * <p>3) string with charGroups for the complement of this this block name.
@@ -223,7 +223,7 @@ public final class XDRegex extends XDValueAbstract {
 			"Specials",
 		};
 
-		/** Charset categories which not differs in XML schema and Java. */
+		/** Charset categories which not differs in XML schema (XSD) and Java. */
 		static private final String[] CATEGORIESNOTDIFFERENT = {
 			"Lm", "Lo", "Lt",
 			"M", "Mc", "Me", "Mn",
@@ -234,8 +234,8 @@ public final class XDRegex extends XDValueAbstract {
 			"Cc", "Cf", "Co",
 		};
 
-		/** Charset categories which differs in XML schema and Java. Each block name is represented by three
-		 * items:
+		/** Charset categories which differs in XML schema (XSD) and Java. Each block name is represented
+		 * by three items:
 		 * <p>1) block name</p>
 		 * <p>2) string with charGroups for this block name or null</p>
 		 * <p>3) string with charGroups for the complement of this this block name.
@@ -274,14 +274,14 @@ public final class XDRegex extends XDValueAbstract {
 		private final StringBuilder _result;
 
 		/** Create instance of Translator.
-		 * @param source regular expression (XML schema format).
+		 * @param source regular expression (XML schema - XSD format).
 		 */
 		private Translator(String source) {
 			super(source);
 			_result = new StringBuilder();
 		}
 
-		/** Translate XML Schema regular expression to Java format.
+		/** Translate XML Schema (XSD) regular expression to Java format.
 		 * @return string with Java regular expression.
 		 * @throws SRuntimeException if an error occurs.
 		 */

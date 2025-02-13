@@ -13,7 +13,7 @@ import static org.xdef.XDValueID.XD_ANY;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-Script "jvalue" type.
+/** Parser of Xscript "jvalue" type.
  * @author Vaclav Trojan
  */
 public class XDParseJValue extends XSAbstractParser {

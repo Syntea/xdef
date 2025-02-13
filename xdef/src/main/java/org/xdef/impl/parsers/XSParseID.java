@@ -7,7 +7,7 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 
-/** Parser of Schema "ID" type.
+/** Parser of XML Schema (XSD) "ID" type.
  * @author Vaclav Trojan
  */
 public class XSParseID extends XSParseQName {
@@ -18,7 +18,7 @@ public class XSParseID extends XSParseQName {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script of attribute or text node
+			//The validation method &{0} can be called only from the Xscript of attribute or text node
 			result.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}

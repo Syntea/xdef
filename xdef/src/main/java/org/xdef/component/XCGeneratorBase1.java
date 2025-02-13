@@ -8,7 +8,7 @@ import static org.xdef.component.XCGeneratorBase.genSeparator;
 import org.xdef.impl.XElement;
 import org.xdef.sys.ArrayReporter;
 
-/** Methods for generation Java source code of getters/setters.
+/** Methods for generation Java source code of getter/setter.
  * @author Vaclav Trojan
  */
 class XCGeneratorBase1 extends XCGeneratorBase {
@@ -68,8 +68,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 )+
 "\t\t}"+LN+ creators;
 			if (listNodes.length() > 0) { // not empty list of nodes
-				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
-					" xGetNodeList())"+LN+
+				toXml += "\t\tfor (org.xdef.component.XComponent x:" + " xGetNodeList())"+LN+
 "\t\t\tel.appendChild(x.toXml(doc));"+LN;
 			}
 			toXml += "\t\treturn el;"+LN+"\t}"+LN;
@@ -99,7 +98,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		final Map<String, String> xctab) {
 		String result =
 (_genJavadoc ?
-"/** Object of XModel \""+model+"\" from X-definition \""+xdname+"\".*/"+LN
+"/** Object of XModel \""+model+"\" from Xdefinition \""+xdname+"\".*/"+LN
 : "") +
 "@SuppressWarnings(\"unchecked\")"+LN+
 "public "+(isRoot?"":"static ")+"class "+
@@ -346,8 +345,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			ndx = val.indexOf(';');
 			String name = val.substring(ndx + 1);
 			String getter = val.substring(2, ndx);
-			String s = val.startsWith("1") ?
-				"\t\tset" + name +"("+getter+")"
+			String s = val.startsWith("1") ? "\t\tset" + name +"("+getter+")"
 				: "\t\tlistOf" + name + "().add("+getter+")";
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN+
@@ -360,8 +358,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			String s = "";
 			for(Map.Entry<String, String> e: txttab.entrySet()) {
 				s += (s.isEmpty() ? "\t\t" : "\t\t} else ")
-					+ "if (\"" + e.getKey()
-					+ "\".equals(x.getXMNode().getXDPosition())){"+LN;
+					+ "if (\"" + e.getKey() + "\".equals(x.getXMNode().getXDPosition())){"+LN;
 				String val = e.getValue();
 				ndx = val.indexOf(';');
 				String name = val.substring(ndx + 1);
@@ -440,12 +437,9 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 					dflt = true;
 				} else {
 					result += ((it.hasNext() || dflt)
-						? "\t\tif (\""+e.getKey()
-							+ "\".equals(s))"+LN+"\t\t\treturn new "
+						? "\t\tif (\""+e.getKey() + "\".equals(s))"+LN+"\t\t\treturn new "
 							+ s.substring(s.indexOf(";") + 1)+"(this, x);"
-						: ("\t\treturn new "
-							+ s.substring(s.indexOf(";") + 1)+"(this, x); // "
-							+ e.getKey()))
+						: ("\t\treturn new " + s.substring(s.indexOf(";") + 1)+"(this, x); // " + e.getKey()))
 						+ LN;
 				}
 			}
@@ -457,8 +451,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @param x XComponent to be added."+LN+
 "\t */"+LN : "");
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
-			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
+			result += "\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
 		} else if (xctab.isEmpty()) {
 			result +=
 "\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;

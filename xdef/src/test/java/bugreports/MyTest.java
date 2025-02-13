@@ -67,11 +67,10 @@ public class MyTest extends XDTester {
 		}
 		return result;
 	}
-
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
 			XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -109,10 +108,10 @@ public class MyTest extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("USD", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 /**/
 		try {
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void testLoop() {\n"+
@@ -163,13 +162,12 @@ if(true)return;
 "  }\n"+
 "</xd:declaration>\n"+
 "  <A xd:script='finally testLoop();' />\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			parse(xp, "", "<A/>", reporter, swr=new StringWriter(), null, null);
+"</xd:def>");
+			parse(xp, "", "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertNoErrors(reporter);
 			assertEq("123456", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 /**/
 		try {
 			xdef = // sequence with separator
@@ -672,9 +670,9 @@ if(true)return;
 			// \.     dot
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"<a a='string(%pattern=\n" +
-"      [\"\\\\p{Lu}(\\\\.|\\\\p{Ll}+)( \\\\p{Lu}(\\\\p{Ll}*|\\\\.))*\"]\n" +
-");'/>\n" +
+//"  <a a='string(%pattern=[\"\\\\p{Lu}(\\\\.|\\\\p{Ll}+)( \\\\p{Lu}(\\\\p{Ll}*|\\\\.))*\"]);'/>\n" +
+"  <a a='string(%pattern=[\"[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ](\\\\.|[a-záčďéěíňóřšťúůýž]+)"+
+	"( [A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]([a-záčďéěíňóřšťúůýž]*|\\\\.))*\"]);'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='Novák'/>";
@@ -693,6 +691,7 @@ if(true)return;
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
+//if(true)return;
 
 		clearTempDir(); // delete temporary files.
 	}

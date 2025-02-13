@@ -1,6 +1,6 @@
 package org.xdef.util.xsd2xd.xd;
 
-/** Represents X-definition declaration.
+/** Represents Xdefinition declaration.
  * @author Ilia Alexandrov
  */
 public final class XdDecl extends XdModel {
@@ -8,9 +8,9 @@ public final class XdDecl extends XdModel {
 	private int _hashCode = 0;
 
 	/** Creates instance of declaration model.
-	 * @param def declaration X-definition.
+	 * @param def declaration Xdefinition.
 	 * @param name name of delcaration.
-	 * @throws NullPointerException if given model X-definition or declaration
+	 * @throws NullPointerException if given model Xdefinition or declaration
 	 * name is null.
 	 * @throws IllegalArgumentException if given declaration name is empty.
 	 */

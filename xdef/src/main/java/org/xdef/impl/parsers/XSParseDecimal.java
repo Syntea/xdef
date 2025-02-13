@@ -5,7 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDecimal;
 
-/** Parser of Schema "decimal" type.
+/** Parser of XML Schema (XSD) "decimal" type.
  * @author Vaclav Trojan
  */
 public class XSParseDecimal extends XSAbstractParseComparable {

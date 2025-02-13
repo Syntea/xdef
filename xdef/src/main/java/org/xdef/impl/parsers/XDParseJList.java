@@ -22,7 +22,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of X-Script "jlist" type.
+/** Parser of Xscript "jlist" type.
  * @author Vaclav Trojan
  */
 public class XDParseJList extends XSAbstractParser {

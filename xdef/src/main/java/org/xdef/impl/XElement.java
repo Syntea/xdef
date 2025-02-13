@@ -62,7 +62,7 @@ public final class XElement extends XCodeDescriptor
 	/** Creates a new instance of XElement.
 	 * @param name name of XElement.
 	 * @param nsURI namespace URI.
-	 * @param xdef X-definition object.
+	 * @param xdef Xdefinition object.
 	 */
 	public XElement(final String name, final String nsURI, final XDefinition xdef) {
 		super(name, nsURI, xdef.getXDPool(), XMELEMENT);
@@ -236,8 +236,8 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public final boolean isMoreAttributes() {return _moreAttributes == 'T' | getDefAttr("$any", - 1) != null;}
 
-	/** Get X-definition object.
-	 * @return X-definition object.
+	/** Get Xdefinition object.
+	 * @return Xdefinition object.
 	 */
 	public final XDefinition getDefinition() {return _definition;}
 
@@ -582,7 +582,7 @@ public final class XElement extends XCodeDescriptor
 
 	@Override
 	/** Create XDDocument.
-	 * @return XDDocument created from associated X-definition.
+	 * @return XDDocument created from associated Xdefinition.
 	 */
 	public final XDDocument createXDDocument() {
 		ChkDocument xdoc = new ChkDocument(_definition);
