@@ -71,6 +71,7 @@ public abstract class XDTester extends STester {
 	/** Reset tester properties */
 	public final void resetProperties() {
 		Report.setLanguage("en"); //localize
+//		setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250, ISO8859-5");
 		setProperty(XDConstants.XDPROPERTY_DOCTYPE, XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE);
 		if (_fulltestMode) {
 			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
