@@ -319,13 +319,18 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		return result;
 	}
 
-	public static final boolean checkCharset(final XXNode xnode, final XDParseResult p) {
+	/** Check if parsed data contains only specified characters and set error occurs an illegal character.
+	 * The test is skipped if legal codes is missing.
+	 * @param p Parsed result to be checked.
+	 * @param xnode actual XXNode object or null.
+	 */
+	public static final void checkCharset(final XXNode xnode, final XDParseResult p) {
 		Charset[] chsets = xnode != null ? xnode.getXDPool().getLegalStringCharsets() : null;
 		if (chsets != null && chsets.length > 0) {
 			String s = p.getParsedString();
 			for (Charset chset : chsets) {
 				if (s.equals(new String(s.getBytes(chset), chset))) {
-					return true;
+					return;
 				}
 			}
 			s = "";
@@ -336,8 +341,6 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 				s += chsets[i].name();
 			}
 			p.error(XDEF.XDEF823, s);
-			return false;
 		}
-		return true;
 	}
 }
