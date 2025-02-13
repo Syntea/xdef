@@ -3139,8 +3139,8 @@ public final class TestXdef extends XDTester {
 			props.clear();
 			reporter.clear();
 			// test string with code restrictions
-			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250,ISO8859-5");
-			xp = XDFactory.compileXD(props,
+			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250, ISO8859-5");
+			xp = XDFactory.compileXD(props, //string_codes
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
 "</xd:def>");
@@ -3184,6 +3184,9 @@ public final class TestXdef extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 // methods and objects used in Xdefinitions as external.
 ////////////////////////////////////////////////////////////////////////////////
+	/** This method is used for test fully qualified method call from Xdefinition.
+	 * @return long value of 5.
+	 */
 	public static final long getInt5() {return 5;}
 	public static final void testOldx(final XXNode xnode, final XDValue[] params) {
 		Element el = xnode.getElement();
