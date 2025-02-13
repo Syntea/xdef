@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
+import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDFactory;
@@ -44,6 +45,8 @@ public class TestXon extends XDTester {
 		XComponent xc;
 		StringWriter swr;
 		Map<String, Object> xi;
+		String oldCodes = getProperty(XDConstants.XDPROPERTY_STRING_CODES);
+		setProperty(XDConstants.XDPROPERTY_STRING_CODES, "");
 		try {
 			// Array
 			assertNull(testA("byte", "[null, 1b ]"));
@@ -1702,6 +1705,9 @@ public class TestXon extends XDTester {
 //			assertTrue(XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
 //			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
 		} catch (RuntimeException ex) {fail(ex);}
+		if (oldCodes != null) {
+			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
+		}
 
 		clearTempDir(); // clear temporary directory
 	}

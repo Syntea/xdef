@@ -53,7 +53,6 @@ public final class TestXdef extends XDTester {
 	@Override
 	public final void test() {
 		final String dataDir = getDataDir() + "test/";
-		System.out.println(dataDir);
 		String xdef, xml, s;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
@@ -3151,6 +3150,9 @@ public final class TestXdef extends XDTester {
 			reporter.clear();
 			xp.createXDDocument().xparse(dataDir+"TestXdef_X3.xml",reporter);
 			assertTrue(reporter.getErrorCount() == 2);
+			reporter.clear();
+			xp.createXDDocument().xparse("<A><B a='�����������������'/></A>",reporter);
+			assertTrue(reporter.getErrorCount() == 1);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {

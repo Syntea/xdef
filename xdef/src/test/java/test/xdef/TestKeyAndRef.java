@@ -63,8 +63,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 1
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount() == 1 && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -77,13 +76,11 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b z='x'>a c</b><c x='a' y='b'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 1
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount() == 1 && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xml = "<a><b z='x'>a c</b><c x='b' y='d'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 2
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -96,8 +93,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			// uniqueSet declared as variable of model.
 			xdef =
@@ -119,15 +115,13 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 1
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount() == 1 && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='3'/><c z='2 3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertEq(2, reporter.getErrorCount());
-			assertTrue(reporter.getErrorCount() == 2
-				&& "XDEF522".equals(reporter.getReport().getMsgID())
+			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
@@ -147,8 +141,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml ="<A><b a='3.1'/><c a='4.1'/></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& "XDEF522".equals(reporter.getReport().getMsgID())
+			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
@@ -168,8 +161,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><a a='2'/><b a='1'/><c a='2'/><d a='3'/><e a='4'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 2
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter);
 			xdef = // test ID in onStartElement
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -206,7 +198,6 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<A><b a='3.1'/><b a='3.1'/><c a='4.1'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 3, reporter.printToString());
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A><a xd:script='occurs *; ref a;'/></A>\n"+
@@ -225,8 +216,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c x='1'>1 3</c></a></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -251,8 +241,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <a><b x='1' y='a'/><c x='1' y='a'/></a>\n"+ //must be unique
 "</A>";
 			parse(xp, "", xml, reporter); // NULOVAT??? XDPool ????
-			assertTrue(reporter.getErrorCount()==1
-				&& "XDEF523".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount()==1 && "XDEF523".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -273,15 +262,13 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount()==1
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount()==1 && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='4'/><c z='2 4'/></a></A>";
 			parse(xp, "", xml, reporter);
 			assertEq(4, reporter.getErrorCount());
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID())
+			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID())
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
@@ -304,15 +291,13 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='4'/><c z='2 4'/></a></A>";
 			parse(xp, "", xml, reporter);
 			assertEq(4, reporter.getErrorCount());
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID())
+			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID())
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
@@ -340,8 +325,7 @@ public final class TestKeyAndRef extends XDTester {
 "<a><b x='1' y='a'/><c x='1' y='a'/></a>"+ //must be unique
 "</A>";
 			parse(xp, "", xml, reporter); // NULOVAT??? XDPool ????
-			assertTrue(reporter.getErrorCount()==1
-				&& "XDEF523".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount()==1 && "XDEF523".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -366,8 +350,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <a><b x='1' y='a'/><c x='1' y='a'/></a>\n"+ //must be unique
 "</A>";
 			parse(xp, "", xml, reporter); // NULOVAT??? XDPool ????
-			assertTrue(reporter.getErrorCount()==1
-				&& "XDEF523".equals(reporter.getReport().getMsgID()),
+			assertTrue(reporter.getErrorCount()==1 && "XDEF523".equals(reporter.getReport().getMsgID()),
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -459,8 +442,7 @@ public final class TestKeyAndRef extends XDTester {
 "</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
-			assertTrue(reporter.getErrorCount() == 1
-				&& s.indexOf("/Country/Address[3]") > 1, s);
+			assertTrue(reporter.getErrorCount() == 1 && s.indexOf("/Country/Address[3]") > 1, s);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
 "  <xd:declaration scope='local'>\n"+
@@ -520,8 +502,7 @@ public final class TestKeyAndRef extends XDTester {
 "</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
-			assertTrue(reporter.getErrorCount() == 1
-				&& s.indexOf("/Country/Locality[1]") > 1, s);
+			assertTrue(reporter.getErrorCount() == 1 && s.indexOf("/Country/Locality[1]") > 1, s);
 			xml =
 "<Country name=\"CS\">\n"+
 "  <Town name=\"Praha\">\n"+
@@ -600,7 +581,6 @@ public final class TestKeyAndRef extends XDTester {
 			parse(xp, "", xml, reporter);
 			s = reporter.printToString();
 			assertTrue(s.indexOf("XDEF522") > 0);
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
@@ -664,44 +644,37 @@ public final class TestKeyAndRef extends XDTester {
 "</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
-			assertTrue(reporter.getErrorCount() == 1 &&
-				s.indexOf("path=/a/Address[2]") > 0, s);
+			assertTrue(reporter.getErrorCount() == 1 && s.indexOf("path=/a/Address[2]") > 0, s);
 		} catch (Exception ex) {fail(ex);}
+		String oldCodes = getProperty(XDConstants.XDPROPERTY_STRING_CODES);
 		try {
 			xp = compile(dataDir + "TestKeyAndRef2.xdef");
-			assertEq(dataDir + "TestKeyAndRef2.xml",
-				parse(xp, "", dataDir + "TestKeyAndRef2.xml",reporter));
+			assertEq(dataDir + "TestKeyAndRef2.xml", parse(xp, "", dataDir + "TestKeyAndRef2.xml",reporter));
 			assertNoErrorwarnings(reporter);
 			xp = compile(dataDir + "TestKeyAndRef3.xdef");
-			assertEq(dataDir + "TestKeyAndRef3.xml",
-				parse(xp, "", dataDir + "TestKeyAndRef3.xml", reporter));
+			assertEq(dataDir + "TestKeyAndRef3.xml", parse(xp, "", dataDir + "TestKeyAndRef3.xml", reporter));
 			assertNoErrorwarnings(reporter);
-			assertEq(dataDir + "TestKeyAndRef3_1.xml",
-				parse(xp, "", dataDir + "TestKeyAndRef3_1.xml", reporter));
+			assertEq(dataDir+"TestKeyAndRef3_1.xml",parse(xp, "", dataDir+"TestKeyAndRef3_1.xml", reporter));
 			assertNoErrorwarnings(reporter);
 			xp = compile(dataDir + "TestKeyAndRef4.xdef");
-			assertEq(dataDir + "TestKeyAndRef4.xml",
-				parse(xp, "",dataDir + "TestKeyAndRef4.xml", reporter));
+			assertEq(dataDir+"TestKeyAndRef4.xml", parse(xp, "",dataDir + "TestKeyAndRef4.xml", reporter));
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", dataDir + "TestKeyAndRef4_1.xml" , reporter);
-			assertTrue(reporter.getErrorCount()==1
-				&& reporter.printToString().indexOf("XDEF522")>0,
+			assertTrue(reporter.getErrorCount()==1 && reporter.printToString().indexOf("XDEF522")>0,
 				"Error Not recognized; " + reporter.printToString());
 			parse(xp, "", dataDir + "TestKeyAndRef4_2.xml", reporter);
-			assertTrue(reporter.getErrorCount()==1
-				&& reporter.printToString().indexOf("XDEF522")>0,
+			assertTrue(reporter.getErrorCount()==1 && reporter.printToString().indexOf("XDEF522")>0,
 				"Error Not recognized; " + reporter.printToString());
 			xp = compile(dataDir + "TestKeyAndRef5.xdef");
-			assertEq(dataDir + "TestKeyAndRef5.xml",
-				parse(xp, "", dataDir + "TestKeyAndRef5.xml",reporter));
+			assertEq(dataDir+"TestKeyAndRef5.xml", parse(xp, "", dataDir + "TestKeyAndRef5.xml",reporter));
 			assertNoErrorwarnings(reporter);
 			xp = compile(dataDir + "TestKeyAndRef6.xdef");
-			assertEq(dataDir + "TestKeyAndRef6.xml",
-				parse(xp, "" , dataDir + "TestKeyAndRef6.xml", reporter));
+			assertEq(dataDir+"TestKeyAndRef6.xml", parse(xp, "" , dataDir + "TestKeyAndRef6.xml", reporter));
 			assertNoErrorwarnings(reporter);
 			setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
 			setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 			setProperty(XDConstants.XDPROPERTY_SPECDATES, null);
+			setProperty(XDConstants.XDPROPERTY_STRING_CODES, "");
 			xp = compile(dataDir + "TestKeyAndRef7.xdef");
 			assertEq(dataDir + "TestKeyAndRef7.xml",
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
@@ -759,8 +732,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <b b='2'/>\n" + // must be error
 "</A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("/A/b[2]/@b")
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("/A/b[2]/@b")
 				&& s.contains("/A/b[3]/@b"), reporter);
 			xdef = //test CHIID-
 "<xd:def xmlns:xd='" + _xdNS + "' root='Test'>\n" +
@@ -796,10 +768,12 @@ public final class TestKeyAndRef extends XDTester {
 "   </uA>\n" +
 " </Test>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF522")
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF522")
 				&& s.contains("/Test/uA[1]/uB[2]"), reporter);
 		} catch (Exception ex) {fail(ex);}
+		if (oldCodes != null) {
+			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
+		}
 		try { // check xdType
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
@@ -832,8 +806,7 @@ public final class TestKeyAndRef extends XDTester {
 				&& reporter.printToString().contains("XDEF813"), reporter);
 			xml ="<A><B b='ynt(1,2)'/><C c='3'/></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF817")
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF817")
 				&&  s.contains("XDEF820"), reporter);
 			xml ="<A><B b='xdatetime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
 			parse(xp, "", xml, reporter);
@@ -844,17 +817,13 @@ public final class TestKeyAndRef extends XDTester {
 				&& reporter.printToString().contains("XDEF809"), reporter);
 			xml = "<A><B b='xdattime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF817")
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF817")
 				&&  s.contains("XDEF820"), reporter);
-			String propwarning = getProperties().getProperty(
-				XDConstants.XDPROPERTY_WARNINGS);
-			setProperty(XDConstants.XDPROPERTY_WARNINGS,
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+			String propwarning = getProperties().getProperty(XDConstants.XDPROPERTY_WARNINGS);
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xml ="<A><B b='datetime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
 			parse(xp, "", xml, reporter); // datetime must be xdatetime
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF817")
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF817")
 				&&  s.contains("XDEF820"), reporter);
 			setProperty(XDConstants.XDPROPERTY_WARNINGS, propwarning);
 // test uniqueSet setValue, getValoue
@@ -891,10 +860,8 @@ public final class TestKeyAndRef extends XDTester {
 "  </Params>\n" +
 "</A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF804")
-				&& s.contains("XDEF524")
-				&& s.contains("birthday") && s.contains("name"),reporter);
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF804")
+				&& s.contains("XDEF524") && s.contains("birthday") && s.contains("name"),reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "  <xd:declaration>\n" +
@@ -938,10 +905,8 @@ public final class TestKeyAndRef extends XDTester {
 			parse(xd, xml, reporter);
 			assertEq("true,x,false,x,false,x,string,decimal,xdatetime,",
 				swr.toString());
-			assertTrue(reporter.getErrorCount() == 2
-				&& (s = reporter.printToString()).contains("XDEF804")
-				&& s.contains("XDEF524")
-				&& s.contains("DatumNarozeni") && s.contains("Jmeno"),
+			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF804")
+				&& s.contains("XDEF524") && s.contains("DatumNarozeni") && s.contains("Jmeno"),
 				reporter);
 			xdef = // run parse twice
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
@@ -1164,7 +1129,6 @@ public final class TestKeyAndRef extends XDTester {
 "    type xdate        xdatetime('yyyy-MM-dd');\n" +
 "    uniqueSet nodes   {Node: name(); var int AttrCount};\n" +
 "    uniqueSet atts    {Node: name(); Attr: name()};\n" +
-"\n" +
 "    boolean idNode()  {return nodes.Node.ID() AAND atts.Node();}\n"+
 "    boolean chkNode() {return nodes.Node.CHKID() AAND atts.Node();}\n"+
 "  </xd:declaration>\n" +
