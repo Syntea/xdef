@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -736,7 +735,7 @@ public abstract class STester {
 		_resultInfo = "";
 		_errors = 0;
 		_className = clazz.getName();
-		_package = clazz.getPackage().getName();
+		_package = clazz.getPackage() == null ? "" : clazz.getPackage().getName();
 		_name = clazz.getName();
 		int ndx = _name.lastIndexOf('.');
 		if (ndx >= 0) {
