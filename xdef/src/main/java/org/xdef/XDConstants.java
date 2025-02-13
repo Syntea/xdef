@@ -2,11 +2,10 @@ package org.xdef;
 
 import org.xdef.sys.config.PomInfo;
 
-/** Important constants used by Xdefinition.
- * Note that constants with a name starting with the prefix "XDPROPERTY" are property names.  There are also
- * constants defined for each constant with a name starting with the prefix "XDPROPERTYVALUE", and there are
- * constants with a name starting with the prefix "XDPROPERTYVALUE" to which the corresponding property value
- * options are defined.
+/** Important constants used by Xdefinition. Note that constants with a name starting with the prefix
+ * "XDPROPERTY" are property names.  There are also constants defined for each constant with a name starting
+ * with the prefix "XDPROPERTYVALUE", and there are constants with a name starting with the prefix
+ * "XDPROPERTYVALUE" to which the corresponding property value options are defined.
   @author Vaclav Trojan
  */
 public interface XDConstants {
