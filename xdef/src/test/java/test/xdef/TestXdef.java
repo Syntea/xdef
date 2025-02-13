@@ -53,6 +53,7 @@ public final class TestXdef extends XDTester {
 	@Override
 	public final void test() {
 		final String dataDir = getDataDir() + "test/";
+		System.out.println(dataDir);
 		String xdef, xml, s;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
@@ -3136,17 +3137,20 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
 			props.clear();
+			reporter.clear();
 			// test string with code restrictions
 			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250,ISO8859-5");
 			xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
 "</xd:def>");
-			reporter.clear();
-			xp.createXDDocument().xparse("<A><B a='áé'/><B a='ÁÉ'/></A>",reporter);
+			xp.createXDDocument().xparse(dataDir+"TestXdef_X1.xml",reporter);
 			assertNoErrorsAndClear(reporter);
-			xp.createXDDocument().xparse("<A><B a='والنشر6ت'/><B a='Таблица аски'/></A>",reporter);
+			xp.createXDDocument().xparse(dataDir+"TestXdef_X2.xml",reporter);
 			assertTrue(reporter.getErrorCount() == 1);
+			reporter.clear();
+			xp.createXDDocument().xparse(dataDir+"TestXdef_X3.xml",reporter);
+			assertTrue(reporter.getErrorCount() == 2);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
