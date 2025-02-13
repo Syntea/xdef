@@ -3138,7 +3138,7 @@ public final class TestXdef extends XDTester {
 			props.clear();
 			reporter.clear();
 			// test string with code restrictions
-			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250, ISO8859-5");
+			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "ISO8859-2, ISO8859-5");
 			xp = XDFactory.compileXD(props, //string_codes
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
