@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.20, release-date 2025-02-13
-* .
+# Version 42.2.20, release-date 2025-02-14
+* Corrected bug in create mode when it is missing create section and the model is nonrecursive reference.
 
 # Version 42.2.19, release-date 2025-02-11
 * Added a new property to set the names of the code table for the string value being parsed. If the string
