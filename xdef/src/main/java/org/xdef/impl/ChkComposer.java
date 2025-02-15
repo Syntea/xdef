@@ -29,6 +29,7 @@ import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XX_DOCUMENT;
+import static org.xdef.XDValueID.XX_ELEMENT;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefElement;
@@ -698,6 +699,33 @@ final class ChkComposer extends SReporter {
 		}
 	}
 
+	/** Find XElement reference in childNodes array.
+	 * @param xel to be found.
+	 * @param childNodes where to find.
+	 * @return true if reference was found.
+	 */
+	private boolean findReferenceRecurse(final XElement xel, final XNode[] childNodes) {
+		for (XNode x: childNodes) {
+			if (x == xel) {
+				return true;
+			}
+			if (x.getKind() == XX_ELEMENT) {
+				if (findReferenceRecurse(xel, ((XElement) x)._childNodes)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/** Check if given XElement contains a recursion reference.
+	 * @param xel to be checked,
+	 * @return true if it contains a recursion reference.
+	 */
+	private boolean isReferenceRecurse(final XElement xel) {
+		return xel.isReference() && findReferenceRecurse(xel, xel._childNodes);
+	}
+
 	/** Execute "compose" action.
 	 * @param chkEl The actual check element.
 	 * @param sourceEl The source element from which the result is composed.
@@ -720,7 +748,13 @@ final class ChkComposer extends SReporter {
 					KXmlUtils.newDocument(chkEl._xElement.getNSUri(), qname,null).getDocumentElement();
 				return new DefElement(chkEl._sourceElem);
 			}
-			if (!chkEl._xElement.isReference()) { //not reference
+			if (isReferenceRecurse(chkEl._xElement)) {// refeference recurse
+				//model is a refenece to another model; in actual context find elements with same name and URI
+				String u = chkEl._xElement.getNSUri();
+				result = new DefContainer(u != null && !u.isEmpty() // is namespace URI
+					? KXmlUtils.getChildElementsNS(sourceEl, u, chkEl._xElement.getLocalName())
+					: KXmlUtils.getChildElements(sourceEl, chkEl._xElement.getName()));
+			} else {
 				DefContainer xdc = new DefContainer(); //create default contex
 				getChildElementsByName(xdc, chkEl, sourceEl, lastEl);
 				Element el = xdc.getXDElement(0);
@@ -739,11 +773,6 @@ final class ChkComposer extends SReporter {
 				}
 				return xdc;
 			}
-			//model is a refenece to another model; in the actual context find elements with same name and URI
-			String u = chkEl._xElement.getNSUri();
-			result = new DefContainer(u != null && !u.isEmpty() // is namespace URI
-				? KXmlUtils.getChildElementsNS(sourceEl, u, chkEl._xElement.getLocalName())
-				: KXmlUtils.getChildElements(sourceEl, chkEl._xElement.getName()));
 		}
 		chkEl.copyTemporaryReports();
 		if (result != null && !result.isNull()) {
