@@ -2584,25 +2584,25 @@ final public class TestCompose extends XDTester {
 		}
 		try { //Test create mode with recursive reference.
 			xd =  compile( // create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X a=\"string()\">\n" +
 "      <X xd:script=\"0..; create from('X'); ref X\"/>\n" +
 "   </X>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd =  compile( // no create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X a=\"string()\">\n" +
 "      <X xd:script=\"0..; ref X\"/>\n" +
 "   </X>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd = compile( // create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X xd:script=\"ref Y\"/>\n" +
 "   <Y a=\"string()\">\n" +
 "      <X xd:script=\"0..; create from('X'); ref Y\"/>\n" +
@@ -2610,9 +2610,34 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
+			xd = compile( // create section
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
+"   <X xd:script=\"ref Y\"/>\n" +
+"   <Y a=\"string()\">\n" +
+"      <Z xd:script=\"?\"/>\n" +
+"      <X xd:script=\"0..; create from('X'); ref Y\"/>\n" +
+"   </Y>\n" +
+"</xd:def>").createXDDocument();
+			xml = "<X a=\"a1\"><Z/><X a=\"a2\"><Z/></X><X a=\"a3\"/></X>";
+			xd.setXDContext(xml);
+			assertEq(xml, xd.xcreate("X", reporter));
+			xd = compile( // non recursion model reference
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:def root=\"A\" name=\"def1\">\n" +
+"   <A a=\"string(); default 'A'\">\n" +
+"       <B xd:script=\"occurs 2..*;ref def2#B;\" />\n" + // creates minimum occurrences (i.e. 2)
+"   </A>\n" +
+"</xd:def>\n" +
+"<xd:def name=\"def2\">\n" +
+"   <B a=\"string(); default 'B'\" />\n" +
+"</xd:def>\n" +
+"</xd:collection>").createXDDocument("def1");
+			reporter.clear();
+			assertEq("<A a='A'><B a='B'/><B a='B'/></A>", xd.xcreate("A", reporter)); //2 occurences of B
+			assertNoErrorsAndClear(reporter);
 			xd = compile( // no create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X xd:script=\"ref Y\"/>\n" +
 "   <Y a=\"string()\">\n" +
 "      <X xd:script=\"0..; ref Y\"/>\n" +
@@ -2620,9 +2645,9 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd = compile( // create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
 "   </Vehicle>\n" +
@@ -2632,9 +2657,9 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("Vehicle", null));
+			assertEq(xml, xd.xcreate("Vehicle", reporter));
 			xd = compile( // no create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
 "   </Vehicle>\n" +
@@ -2644,7 +2669,7 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("Vehicle", null));
+			assertEq(xml, xd.xcreate("Vehicle", reporter));
 		} catch (RuntimeException ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.
 		resetTester();

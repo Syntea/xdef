@@ -660,8 +660,7 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		Element el = KXmlUtils.parseXml(xml).getDocumentElement();
 		xd.setXDContext(el);
-		return xd.xcreate(new QName(el.getNamespaceURI(),
-			el.getNodeName()), reporter);
+		return xd.xcreate(new QName(el.getNamespaceURI(), el.getNodeName()), reporter);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
