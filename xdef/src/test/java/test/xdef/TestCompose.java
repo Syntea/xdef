@@ -2622,20 +2622,6 @@ final public class TestCompose extends XDTester {
 			xml = "<X a=\"a1\"><Z/><X a=\"a2\"><Z/></X><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("X", reporter));
-			xd = compile( // non recursion model reference
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
-"<xd:def root=\"A\" name=\"def1\">\n" +
-"   <A a=\"string(); default 'A'\">\n" +
-"       <B xd:script=\"occurs 2..*;ref def2#B;\" />\n" + // creates minimum occurrences (i.e. 2)
-"   </A>\n" +
-"</xd:def>\n" +
-"<xd:def name=\"def2\">\n" +
-"   <B a=\"string(); default 'B'\" />\n" +
-"</xd:def>\n" +
-"</xd:collection>").createXDDocument("def1");
-			reporter.clear();
-			assertEq("<A a='A'><B a='B'/><B a='B'/></A>", xd.xcreate("A", reporter)); //2 occurences of B
-			assertNoErrorsAndClear(reporter);
 			xd = compile( // no create section
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X xd:script=\"ref Y\"/>\n" +
@@ -2658,7 +2644,7 @@ final public class TestCompose extends XDTester {
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("Vehicle", reporter));
-			xd = compile( // no create section
+			xd = compile( // no create section, default contruction, reference recursive
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
@@ -2670,6 +2656,18 @@ final public class TestCompose extends XDTester {
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("Vehicle", reporter));
+			xd = compile( // non-recursion reference, no context. no create section
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a=\"string(); default 'A'\">\n" +
+"    <B xd:script='occurs 2..*; ref B;'/>\n" + // creates minimum occurrences of B (=> 2)
+"  </A>\n" +
+"  <B a=\"string(); default 'x'\" >\n" + // creates attribute a='x'
+"    <C/>\n" +
+"  </B>\n" +
+"</xd:def>").createXDDocument();
+			reporter.clear();
+			assertEq("<A a='A'><B a='x'><C/></B><B a='x'><C/></B></A>", xd.xcreate("A", reporter)); //two B
+			assertNoErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.
 		resetTester();
