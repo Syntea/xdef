@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.20, release-date 2025-02-16
+# Version 42.2.20, release-date 2025-02-17
 * Fixed bug in create mode when create section is missing and model is non-recursive link.
 
 # Version 42.2.19, release-date 2025-02-11
