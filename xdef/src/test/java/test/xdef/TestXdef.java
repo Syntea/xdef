@@ -3139,28 +3139,28 @@ public final class TestXdef extends XDTester {
 			reporter.clear();
 			// test string with code restrictions
 			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "ISO8859-2, ISO8859-5");
-			xp = XDFactory.compileXD(props, //string_codes
+			xd = XDFactory.compileXD(props, //string_codes
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='string();'/></A>\n" +
-"</xd:def>");
-			xp.createXDDocument().xparse(dataDir+"TestXdef_X1.xml",reporter);
+"</xd:def>").createXDDocument();
+			xd.xparse(dataDir+"TestXdef_X1.xml",reporter);
 			assertNoErrorsAndClear(reporter);
-			xp.createXDDocument().xparse(dataDir+"TestXdef_X2.xml",reporter);
-			assertTrue(reporter.getErrorCount() == 1);
+			xd.xparse(dataDir+"TestXdef_X2.xml",reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
 			reporter.clear();
-			xp.createXDDocument().xparse(dataDir+"TestXdef_X3.xml",reporter);
-			assertTrue(reporter.getErrorCount() == 2);
+			xd.xparse(dataDir+"TestXdef_X3.xml",reporter);
+			assertTrue(reporter.getErrorCount() == 2 && reporter.toString().contains("XDEF823"));
 			reporter.clear();
-			xp.createXDDocument().xparse("<A><B a='�����������������'/></A>",reporter);
-			assertTrue(reporter.getErrorCount() == 1);
+			xd.xparse("<A><B a='�����������������'/></A>",reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:name=\"Types\">\n" +
 "    <xd:declaration scope=\"global\">\n" +
-"        type  cisloSmlouvy  string(1,35);\n" +
-"        type  id            long(-1,999_999_999_999); /* Gam_Type */\n" +
-"        type  poradiVozidla string(1,10);\n" +
+"        type  cisloSmlouvy  string(1, 35);\n" +
+"        type  id            long(-1, 999_999_999_999); /* Gam_Type */\n" +
+"        type  poradiVozidla string(1, 10);\n" +
 "    </xd:declaration>\n" +
 "</xd:def>\n",
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Common\">\n" +
@@ -3168,7 +3168,7 @@ public final class TestXdef extends XDTester {
 "</xd:def>\n",
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Example\">\n" +
 "    <IdentSmlouvy IdPojistitel=\"id()\" CisloSmlouvy=\"cisloSmlouvy()\" PoradiVozidla=\"poradiVozidla()\"\n"+
-"                  xd:script = \"implements Common#IdentSmlouvy\"/>\n" +
+"                  xd:script   =\"implements Common#IdentSmlouvy\"/>\n" +
 "</xd:def>\n"});
 			xml = "<IdentSmlouvy CisloSmlouvy=\"c\" IdPojistitel=\"1\" PoradiVozidla=\"p\"/>";
 			xd = xp.createXDDocument("Common");
