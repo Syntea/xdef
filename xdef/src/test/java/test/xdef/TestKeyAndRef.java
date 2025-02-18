@@ -120,7 +120,7 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='3'/><c z='2 3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertEq(2, reporter.getErrorCount());
-			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID()) 
+			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()), reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -662,7 +662,7 @@ public final class TestKeyAndRef extends XDTester {
 //				"ISO8859-1,ISO8859-2,ISO8859-4,ISO8859-5,ISO8859-7");
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, "UTF-8");
 			xp = compile(dataDir + "TestKeyAndRef7.xdef");
-			assertEq(dataDir + "TestKeyAndRef7.xml", 
+			assertEq(dataDir + "TestKeyAndRef7.xml",
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // test CHIID
