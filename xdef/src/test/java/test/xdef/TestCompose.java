@@ -2671,9 +2671,9 @@ final public class TestCompose extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			xd = compile( // recursion reference, no context. no create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <A xd:script='ref B'/>\n" + // creates attribute a='x'
-"  <B>\n" + // creates attribute a='x'
-"    <C> <D xd:script='*; ref B'/> </C>\n" +
+"  <A xd:script='ref B'/>\n" +
+"  <B>\n" +
+"    <C> <D xd:script='?; ref B'/> </C>\n" +
 "  </B>\n" +
 "</xd:def>").createXDDocument();
 			xd.xparse("<A><C/></A>", reporter);
