@@ -2657,17 +2657,30 @@ final public class TestCompose extends XDTester {
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("Vehicle", reporter));
-			xd = compile( // recursion reference, no context. no create section
+			xd = compile( // no recursion reference, no context. no create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A a=\"string(); default 'A'\">\n" +
-"    <B a=\"string(); default 'y'\" xd:script='occurs 2..*; ref B;'/>\n" + // creates minimum occurrences of B
+"    <B a=\"string(); default 'y'\" xd:script='occurs 2..*; ref X;'/>\n" + // minimum 2 occurrences of B
 "  </A>\n" +
-"  <B a=\"string(); default 'x'\">\n" + // creates attribute a='x'
+"  <X a=\"string(); default 'x'\">\n" + // creates attribute a='x'
 "    <C> <D xd:script='occurs 2..*;'/> </C>\n" +
+"  </X>\n" +
+"</xd:def>").createXDDocument();
+			assertEq("<A a='A'><B a='y'><C><D/><D/></C></B><B a='y'><C><D/><D/></C></B></A>", //two B
+				xd.xcreate("A", reporter));
+			assertNoErrorsAndClear(reporter);
+			xd = compile( // recursion reference, no context. no create section
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A xd:script='ref B'/>\n" + // creates attribute a='x'
+"  <B>\n" + // creates attribute a='x'
+"    <C> <D xd:script='*; ref B'/> </C>\n" +
 "  </B>\n" +
 "</xd:def>").createXDDocument();
-			assertEq("<A a='A'><B a='y'><C><D/><D/></C></B><B a='y'><C><D/><D/></C></B></A>",
-				xd.xcreate("A", reporter)); //two B
+			xd.xparse("<A><C/></A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			xd.xparse("<A><C><D><C/></D></C></A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq("<A><C/></A>", xd.xcreate("A", reporter));
 			assertNoErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.
