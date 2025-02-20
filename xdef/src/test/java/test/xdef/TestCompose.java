@@ -2582,6 +2582,7 @@ final public class TestCompose extends XDTester {
 				}
 			}
 		}
+		reporter.clear();
 		try { //Test create mode with recursive reference.
 			xd =  compile( // create section
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
@@ -2656,17 +2657,17 @@ final public class TestCompose extends XDTester {
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
 			assertEq(xml, xd.xcreate("Vehicle", reporter));
-			xd = compile( // non-recursion reference, no context. no create section
+			xd = compile( // recursion reference, no context. no create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A a=\"string(); default 'A'\">\n" +
-"    <B xd:script='occurs 2..*; ref B;'/>\n" + // creates minimum occurrences of B (=> 2)
+"    <B a=\"string(); default 'y'\" xd:script='occurs 2..*; ref B;'/>\n" + // creates minimum occurrences of B
 "  </A>\n" +
-"  <B a=\"string(); default 'x'\" >\n" + // creates attribute a='x'
-"    <C/>\n" +
+"  <B a=\"string(); default 'x'\">\n" + // creates attribute a='x'
+"    <C> <D xd:script='occurs 2..*;'/> </C>\n" +
 "  </B>\n" +
 "</xd:def>").createXDDocument();
-			reporter.clear();
-			assertEq("<A a='A'><B a='x'><C/></B><B a='x'><C/></B></A>", xd.xcreate("A", reporter)); //two B
+			assertEq("<A a='A'><B a='y'><C><D/><D/></C></B><B a='y'><C><D/><D/></C></B></A>",
+				xd.xcreate("A", reporter)); //two B
 			assertNoErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.
