@@ -1,5 +1,7 @@
 package org.xdef.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -702,15 +704,17 @@ final class ChkComposer extends SReporter {
 	/** Find XElement reference in childNodes array.
 	 * @param xel to be found.
 	 * @param childNodes where to find.
+	 * @param hs HashSet with processed nodes (revent unlimited recursive call).
 	 * @return true if reference was found.
 	 */
-	private boolean findReferenceRecurse(final XElement xel, final XNode[] childNodes) {
+	private boolean findReferenceRecurse(final XElement xel, final XNode[] childNodes, final Set<XNode> hs) {
 		for (XNode x: childNodes) {
 			if (x == xel) {
 				return true;
 			}
-			if (x.getKind() == XX_ELEMENT) {
-				if (findReferenceRecurse(xel, ((XElement) x)._childNodes)) {
+			if (x.getKind() == XMELEMENT) {
+				if (hs.add(x) && childNodes != ((XElement) x)._childNodes
+					&& findReferenceRecurse(xel, ((XElement) x)._childNodes, hs)) {
 					return true;
 				}
 			}
@@ -723,7 +727,7 @@ final class ChkComposer extends SReporter {
 	 * @return true if it contains a recursion reference.
 	 */
 	private boolean isReferenceRecurse(final XElement xel) {
-		return xel.isReference() && findReferenceRecurse(xel, xel._childNodes);
+		return xel.isReference() && findReferenceRecurse(xel, xel._childNodes, new HashSet<>());
 	}
 
 	/** Execute "compose" action.

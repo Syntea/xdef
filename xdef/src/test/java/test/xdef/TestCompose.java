@@ -24,6 +24,7 @@ import org.xdef.proc.XXNode;
 import javax.xml.namespace.QName;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.xdef.XDConstants;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
 import org.xdef.sys.SDatetime;
@@ -2682,6 +2683,20 @@ final public class TestCompose extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq("<A><C/></A>", xd.xcreate("A", reporter));
 			assertNoErrorsAndClear(reporter);
+			xd = compile(
+"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
+"  <A>\n" +
+"    <B xd:script='+; ref X'/>\n" +
+"  </A>\n" +
+"  <X a='default \"b\"; string();'>\n" +
+"    <C>\n" +
+"      <D>\n" +
+"        <E xd:script='*; ref X'/>\n" +
+"      </D>\n" +
+"    </C>\n" +
+"  </X>\n" +
+"</xd:def>").createXDDocument();
+			assertEq("<A><B a='b'><C><D/></C></B></A>", xd.xcreate("A", reporter));
 		} catch (RuntimeException ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.
 		resetTester();

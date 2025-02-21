@@ -1,9 +1,11 @@
 import java.io.StringWriter;
+import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
 public class X extends XDTester {
@@ -12,8 +14,12 @@ public class X extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
+		XDDocument xd;
+		ArrayReporter reporter = new ArrayReporter();
+
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
-		XDDocument xd = XDFactory.compileXD(null,
+
+		xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <xd:declaration>\n" +
 "    void x(String s) {\n" +
@@ -28,7 +34,6 @@ public class X extends XDTester {
 "</xd:def>").createXDDocument();
 		StringWriter swr = new StringWriter();
 		xd.setStdOut(swr);
-		ArrayReporter reporter = new ArrayReporter();
 		xd.xparse("<A><B a='USD'/><B a='CZK'/></A>", reporter);
 		System.out.println((!"USD\nCZK\n".equals(swr.toString()) || reporter.errorWarnings())
 			? "Error: " + reporter + ";\n" + swr : "OK");
