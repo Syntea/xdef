@@ -2423,7 +2423,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							}
 						}
 						groupItems.put(s, i);
-					} else if (selectorKind==XMSEQUENCE && i>0 && xel._childNodes[i-1].getKind()==XMELEMENT
+					} else if (selectorKind==XMSEQUENCE && i > 0 && xel._childNodes[i-1].getKind()==XMELEMENT
 						&& x.getName().equals(xel._childNodes[i-1].getName())) {
 						// get previous node (we know it is XElement)
 						XElement y = (XElement) xel._childNodes[i-1];
@@ -2449,12 +2449,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						xs.setBegIndex(i);
 						selective = kind==XMCHOICE||selective&&kind==XMSEQUENCE;
 						xs.setSelective(selective);
-						i = updateSelectors(xel,
-							i + 1,
-							xs,
-							kind == XMCHOICE || ignorable,
-							selective,
-							hs);
+						i = updateSelectors(xel, i + 1, xs, kind == XMCHOICE || ignorable, selective, hs);
 						xs.setEndIndex(i);
 						if (i - xs.getBegIndex() <= 1) {
 							error(xs.getSPosition(), XDEF.XDEF325, //Empty group '&{0}' in XDefinition '&{1}'
@@ -2486,7 +2481,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 					}
 					return i;
-				default:
 			}
 		}
 		return xel._childNodes.length;
