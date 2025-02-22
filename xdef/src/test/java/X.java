@@ -1,11 +1,9 @@
 import java.io.StringWriter;
-import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
 public class X extends XDTester {
