@@ -12,10 +12,10 @@ public class X extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		XDDocument xd;
-		ArrayReporter reporter = new ArrayReporter();
-
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
+		XDDocument xd;
+		StringWriter swr;
+		ArrayReporter reporter = new ArrayReporter();
 
 		xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
@@ -30,8 +30,7 @@ public class X extends XDTester {
 "  </xd:declaration>\n" +
 "  <A><B xd:script='*; finally x((String) @a);' a='currency();'/></A>\n" +
 "</xd:def>").createXDDocument();
-		StringWriter swr = new StringWriter();
-		xd.setStdOut(swr);
+		xd.setStdOut(swr = new StringWriter());
 		xd.xparse("<A><B a='USD'/><B a='CZK'/></A>", reporter);
 		System.out.println((!"USD\nCZK\n".equals(swr.toString()) || reporter.errorWarnings())
 			? "Error: " + reporter + ";\n" + swr : "OK");
