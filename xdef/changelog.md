@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.21, release-date 2025-02-23
-* .
+# Version 42.2.21, release-date 2025-02-25
+* Fixed bug in conversion of emailAddr from Xdefinition to XML schema.
 
 # Version 42.2.20, release-date 2025-02-17
 * Fixed bug in create mode when create section is missing and model is non-recursive link.

@@ -99,7 +99,7 @@ class GenParser {
 			if (result.length() > 1) {
 				result += ",";
 			}
-			 result += '%' + x.getName() + '=' + x.getValue();
+			result += '%' + x.getName() + '=' + x.getValue();
 		}
 		return result + ')';
 	}
@@ -219,7 +219,7 @@ class GenParser {
 				return genParserInfo(new XSParseString(), info + "()", declName, xdc);
 			case "dec":
 				info += "(";
-				mask = "-?\\d+[.,]\\d+";
+					mask = "-?\\d+[.,]\\d+";
 				if (xdc.getXDNamedItem("totalDigits") != null) {
 					s = xdc.getXDNamedItemAsString("totalDigits");
 					xdc.removeXDNamedItem("totalDigits");
@@ -239,16 +239,16 @@ class GenParser {
 				xdc.setXDNamedItem("pattern", new DefString(mask));
 				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "domainAddr":
-				xdc.setXDNamedItem("pattern", new DefString("[-0-9a-zA-Z_](\\.[-0-9a-zA-Z_]){0,99}"));
+				xdc.setXDNamedItem("pattern", new DefString("[-0-9\\P{Lo}_](\\.[-0-9\\P{Lo}_]){0,99}"));
 				return genParserInfo(new XSParseString(), info + "()", declName, xdc);
 			case "emailAddr":
-				xdc.setXDNamedItem("pattern",
-					new DefString("([ ]*\\([0-9a-zA-Z_ .-]*\\)[ ]*)*"
-						+"(([0-9a-zA-Z_ .-]*<([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*)"
-						+ "@([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*>))"
-						+ "|(([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*)"
-						+ "@([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*)))"
-						+ "([ ]*\\([0-9a-zA-Z_ .-]*\\))?"));
+				xdc.setXDNamedItem("pattern", new DefString("([ ]*\\([!#$%&'*+/=?0-9\\P{Lo}_ .-]*\\)[ ]*)*"
+					+"(([!#$%&'*+/=?0-9a-zA-Z_ .-]*"
+					+ "<([!#$%&'*+/=?0-9\\P{Lo}-]+(\\.[!#$%&'*+/=?0-9\\P{Lo}_-]*)*)"
+					+ "@([0-9\\P{Lo}_-]+(\\.[0-9\\P{Lo}_-]*)*>))"
+					+ "|(([!#$%&'*+/=?0-9\\P{Lo}_-]+(\\.[!#$%&'*+/=?0-9\\P{Lo}_-]*)*)"
+					+ "@([0-9\\P{Lo}_-]+(\\.[0-9\\P{Lo}_-]*)*)))"
+					+ "([ ]*\\([0-9\\P{Lo}_ .-]*\\))?"));
 				return genParserInfo(new XSParseString(), info + "()", declName, xdc);
 			case "emailDate":
 				xdc.setXDNamedItem("pattern", new DefContainer(GenRegex.getRegexes(
