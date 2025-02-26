@@ -319,7 +319,9 @@ public class KDOMBuilder extends DocumentBuilder {
 		}
 		checkBuilder();
 		try {
-			doc = _xBuilder.parse(file);
+			synchronized(_xBuilder) {
+				doc = _xBuilder.parse(file);
+			}
 		} catch (IOException | SAXException ex) {
 			putReport(Report.fatal(XML.XML403, ex)); //Error while reading XML document: &{0}
 		}
@@ -335,20 +337,17 @@ public class KDOMBuilder extends DocumentBuilder {
 	 * @throws SRuntimeException if reporter was not specified and when an error occurs.
 	 */
 	public final Document parse(final URL url) {
-		Document doc = null;
-		if (_reporter != null) {
-			_reporter.clear();
-		}
-		checkBuilder();
+		InputStream in;
 		try {
-			doc = _xBuilder.parse(url.openStream());
-		} catch (IOException | SAXException ex) {
-			putReport(Report.fatal(XML.XML403, ex));//Error while reading XML document: &{0}
+			in = url.openStream();
+		} catch (IOException ex) {
+			if (_reporter != null) {
+				_reporter.clear();
+			}
+			putReport(Report.fatal(XML.XML403, ex)); //Error while reading XML document: &{0}
+			return null;
 		}
-		if (_reporter != null) {
-			_reporter.checkAndThrowErrors();
-		}
-		return doc;
+		return parse(in, true);
 	}
 
 	@Override
@@ -372,7 +371,9 @@ public class KDOMBuilder extends DocumentBuilder {
 		}
 		checkBuilder();
 		try {
-			doc = _xBuilder.parse(stream);
+			synchronized(_xBuilder) {
+				doc = _xBuilder.parse(stream);
+			}
 			if (closeStream) {
 				stream.close();
 			}
@@ -402,7 +403,10 @@ public class KDOMBuilder extends DocumentBuilder {
 		if (source.charAt(0) == '<') {
 			checkBuilder();
 			try {
-				doc =_xBuilder.parse(new InputSource(new StringReader(source)));
+				InputSource in = new InputSource(new StringReader(source));
+				synchronized(_xBuilder) {
+					doc = _xBuilder.parse(in);
+				}
 			} catch (IOException | SAXException ex) {
 				putReport(Report.fatal(XML.XML403, ex));//Error while reading XML document: &{0}
 			}
