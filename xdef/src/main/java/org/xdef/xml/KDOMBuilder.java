@@ -56,6 +56,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		_resolveIncludes = true;
 	}
 
+	/** Create report XML404 from SAXParseException and put it to trporter. */
 	private void throwMsg(final SAXParseException ex, final byte type) {
 		if (ex instanceof SThrowable) {
 			putReport(((SThrowable) ex).getReport());
@@ -86,6 +87,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		putReport(new Report(type, XML.XML404,	modification)); //DomBuilder report&{0}{: }&{#SYS000}
 	}
 
+	/** Put report to reporter. */
 	private void putReport(final Report report) {
 		if (_reporter == null) {
 			_reporter = new ArrayReporter();
@@ -197,7 +199,7 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final Document newDocument() {checkBuilder(); return _xBuilder.newDocument();}
 
-	/** Creates an XML Document object with empty root element created by document builder
+	/** Creates XML Document object with empty root element created by document builder
 	 * (see SetDOMImplementation).
 	 * @param nsURI namespace of created root element (or null).
 	 * @param qname qualified name of root element.
@@ -250,14 +252,11 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final boolean isIgnoringElementContentWhitespace() {return _ignoreElementContentWhitespace;}
 
-	/** Set the XML parser will expand entity reference nodes. By default the
-	 * value of this is set to true.
+	/** Set the XML parser will expand entity reference nodes. By default the value of this is set to true.
 	 * @param expandEntityReferences set the expandEntityReferences switch.
 	 */
 	public final void setExpandEntityReferences(final boolean expandEntityReferences)
-	{
-		_expandEntityReferences = expandEntityReferences;
-	}
+	{_expandEntityReferences = expandEntityReferences;}
 
 	/** Get the expand Entity references switch.
 	 * @return the expand Entity references switch.
@@ -428,9 +427,9 @@ public class KDOMBuilder extends DocumentBuilder {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	/** Specify the {@link ErrorHandler} to be used by the parser. Setting this to <code>null</code> will
+	/** Specify the {@link ErrorHandler} to be used by the parser. Setting this to null will
 	 * result in the underlying implementation using it's own default implementation and behavior.
-	 * @param errHandler The <code>ErrorHandler</code> to be used by the parser.
+	 * @param errHandler The ErrorHandler to be used by the parser.
 	 */
 	 public final void setErrorHandler(final ErrorHandler errHandler) {
 		 if (_xBuilder != null) {
@@ -441,11 +440,10 @@ public class KDOMBuilder extends DocumentBuilder {
 	 }
 
 	@Override
-	/** Specify the {@link EntityResolver} to be used to resolve entities present in the XML document to be
-	 * parsed. Setting this to <code>null</code> will result in the underlying implementation using it's own
-	 * default implementation and behavior.
-	 * @param entResolver The <code>EntityResolver</code> to be used to resolve entities present in the
-	 * XML document to be parsed.
+	/** Specify the {@link EntityResolver} to be used to resolve entities from the XML document to be parsed.
+	 * Setting this to null will result in the underlying implementation using it's own default implementation
+	 * and behavior.
+	 * @param entResolver The EntityResolver to be used to resolve entities present in document to be parsed.
 	 */
 	public final void setEntityResolver(final EntityResolver entResolver) {
 		 if (_xBuilder != null) {
@@ -456,9 +454,7 @@ public class KDOMBuilder extends DocumentBuilder {
 	}
 
 	@Override
-	/** Parse the content of the given input source as an XML document and return a new DOM {@link Document}
-	 * object. An <code>IllegalArgumentException</code> is thrown if the <code>InputSource</code>
-	 * is <code>null</code>.
+	/** Parse the content of given input source as an XML document and return new DOM {@link Document} object.
 	 * @param is InputSource containing the content to be parsed.
 	 * @exception IOException If any IO errors occur.
 	 * @exception SAXException If any parse errors occur.
@@ -466,21 +462,18 @@ public class KDOMBuilder extends DocumentBuilder {
 	 * @return A new DOM Document object.
 	 */
 	public final Document parse(final InputSource is) throws  SAXException, IOException {
-		return parse(is.getByteStream(), false);
+		return parse(is.getByteStream(), true);
 	}
 
-	/** Parse the content of the given input source as an XML document and return a new DOM {@link Document}
-	 * object. An <code>IllegalArgumentException</code> is thrown if the <code>InputSource</code>
-	 * is <code>null</code>.
+	/** Parse the content of given input source as an XML document and return new DOM {@link Document} object.
 	 * @param is InputSource containing the content to be parsed.
-	 * @param closeStream if true the input stream is closed after parsing.
+	 * @param cls if true the input stream is closed after parsing.
 	 * @exception IOException If any IO errors occur.
 	 * @exception SAXException If any parse errors occur.
 	 * @see org.xml.sax.DocumentHandler
 	 * @return A new DOM Document object.
 	 */
-	public final Document parse(final InputSource is, final boolean closeStream)
-		throws  SAXException, IOException {
-		return parse(is.getByteStream(), closeStream);
+	public final Document parse(final InputSource is, final boolean cls) throws  SAXException, IOException {
+		return parse(is.getByteStream(), cls);
 	}
 }
