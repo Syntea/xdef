@@ -45,15 +45,13 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Creates an XML Document object with empty root element created by document builder
 	 * (see SetDOMImplementation).
-	 * @param nsURI namespace of created root element (or null).
+	 * @param ns namespace of created root element (or null).
 	 * @param qname qualified name of root element.
 	 * @param docType DocumentType object or null.
 	 * @return new Document object with empty root element.
 	 */
-	public static final Document newDocument(final String nsURI,
-		final String qname,
-		final DocumentType docType) {
-		return new KDOMBuilder().newDocument(nsURI, qname, docType);
+	public static final Document newDocument(final String ns, final String qname, final DocumentType docType){
+		return new KDOMBuilder().newDocument(ns, qname, docType);
 	}
 
 	/** The DOMImplementation object that handles this document.
@@ -119,12 +117,8 @@ public final class KXmlUtils extends KDOMUtils {
 		Node actnode = elem.getFirstChild();
 		while (actnode != null) {
 			Node nxtnode = actnode.getNextSibling();
-			Node newnode;
-			if (actnode.getNodeType() == Node.ELEMENT_NODE) {
-				newnode = setAllNSToNull((Element) actnode);
-			} else {
-				newnode = actnode;
-			}
+			Node newnode =
+				actnode.getNodeType() == Node.ELEMENT_NODE ? setAllNSToNull((Element) actnode) : actnode;
 			if (result == elem) {
 				if (newnode != actnode) {
 					result.replaceChild(newnode, actnode);
@@ -144,13 +138,11 @@ public final class KXmlUtils extends KDOMUtils {
 	 * be transformed to the appropriate predefined entity. Note that the argument shouldn't contain
 	 * an entity reference or character reference.
 	 * @param delimiter attributes: '"' or "'", text nodes: '&lt;'.
-	 * @param ignoreWhiteSpaces If true all ignorable white spaces are removed.
+	 * @param ignoreSpaces If true all ignorable white spaces are removed.
 	 * @param value The original string.
 	 * @return The string in canonical form.
 	 */
-	public static final String toXmlText(final String value,
-		final char delimiter,
-		final boolean ignoreWhiteSpaces) {
+	public static final String toXmlText(final String value, final char delimiter,final boolean ignoreSpaces){
 		int len = value.length();
 		int ndx = 0;
 		int specialChar;
@@ -165,7 +157,7 @@ public final class KXmlUtils extends KDOMUtils {
 				specials += c;
 			}
 		}
-		if (ignoreWhiteSpaces) {
+		if (ignoreSpaces) {
 			specials += ' ';
 			if (delimiter == '<') {
 				specials += '\n';
@@ -358,8 +350,8 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Create value of an attribute.
 	 * @param value attribute value.
-	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
-	 * and then all white space sequences are replaced by one space.
+	 * @param removeIgnorableWhiteSpaces if true the value is trimmed and then all white space sequences
+	 * are replaced by one space.
 	 * @return quoted string with the created attribute value.
 	 */
 	private static String createAttrValue(String value, final boolean removeIgnorableWhiteSpaces) {
