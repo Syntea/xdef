@@ -75,7 +75,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Dot_string    ::= Atom ('.'  Atom)*\n" +
 "comment       ::= ( commentList $rule ) FWS?\n"+
 "commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
-"commentPart   ::= ( ASCIICHAR - [()] )+ ( commentList)? $rule\n"+
+"commentPart   ::= ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+
 "text          ::= ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
 "textItem      ::= FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
 "charsetName   ::= ( [a-zA-Z] ('-'? [a-zA-Z0-9]+)* ) $rule '?' \n"+

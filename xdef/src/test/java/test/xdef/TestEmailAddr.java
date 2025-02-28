@@ -64,8 +64,8 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("jíř.Ký@abc", "", "jíř.Ký@abc"));
 		assertTrue(parseEmail("jíř+Ký@abc.t", "", "jíř+Ký@abc.t"));
 		assertTrue(parseEmail("!jíř^^+??Ký=@abc.t", "", "!jíř^^+??Ký=@abc.t"));
-		assertTrue(parseEmail("(ab) (cd) a@b.t", "abcd", "a@b.t"));
-		assertTrue(parseEmail("a@b.t(ab) (cd)", "abcd", "a@b.t"));
+		assertTrue(parseEmail("(áb) (cd) a@b.t", "ábcd", "a@b.t"));
+		assertTrue(parseEmail("a@b.t(ab) ()", "ab", "a@b.t"));
 		assertTrue(parseEmail("(ab) a@b.t (cd)", "abcd", "a@b.t"));
 		assertTrue(parseEmail("a b <a@b.t>", "a b", "a@b.t"));
 		assertTrue(parseEmail("(a (c d) b)<a@b.t> (ef) (gh)", "c da (c d) befgh", "a@b.t"));

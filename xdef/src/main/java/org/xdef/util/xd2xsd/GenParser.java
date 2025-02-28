@@ -243,7 +243,7 @@ class GenParser {
 				return genParserInfo(new XSParseString(), info + "()", declName, xdc);
 			case "emailAddr":
 				xdc.setXDNamedItem("pattern", new DefString("([ ]*\\([!#$%&'*+/=?0-9\\P{Lo}_ .-]*\\)[ ]*)*"
-					+"(([!#$%&'*+/=?0-9a-zA-Z_ .-]*"
+					+"(([!#$%&'*+/=?0-9\\P{Lo}_ .-]*"
 					+ "<([!#$%&'*+/=?0-9\\P{Lo}-]+(\\.[!#$%&'*+/=?0-9\\P{Lo}_-]*)*)"
 					+ "@([0-9\\P{Lo}_-]+(\\.[0-9\\P{Lo}_-]*)*>))"
 					+ "|(([!#$%&'*+/=?0-9\\P{Lo}_-]+(\\.[!#$%&'*+/=?0-9\\P{Lo}_-]*)*)"
