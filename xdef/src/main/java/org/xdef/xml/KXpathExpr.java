@@ -332,10 +332,10 @@ public class KXpathExpr {
 		return new KXpathExpr(expr, nc).evaluate(node, (QName) null);
 	}
 
-	@Override
 	/** Get string with XPath source,
 	 * @return string with XPath source.
 	 */
+	@Override
 	public String toString() {return _source;}
 
 	/** Check if XPath2 implementation is available.

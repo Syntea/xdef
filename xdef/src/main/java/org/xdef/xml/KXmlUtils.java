@@ -325,8 +325,7 @@ public final class KXmlUtils extends KDOMUtils {
 							out.write(' ');
 							pos ++;
 						}
-						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' '
-							|| c == '\n' || c == '\t')) {
+						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' ' || c == '\n' || c == '\t')) {
 							j++;
 						}
 					} else {
@@ -635,8 +634,7 @@ public final class KXmlUtils extends KDOMUtils {
 				if (numItems == 0) {
 					out.write("/>");
 				} else {
-					if (numItems == 1 && indent != null
-						&& nl.item(0).getNodeType() == Node.TEXT_NODE) {
+					if (numItems == 1 && indent != null && nl.item(0).getNodeType() == Node.TEXT_NODE) {
 						String s = nl.item(0).getNodeValue();
 						s = removeIgnorableWhiteSpaces ? s.trim(): s;
 						if (s.isEmpty()) {
@@ -661,8 +659,8 @@ public final class KXmlUtils extends KDOMUtils {
 						if (item.getNodeType() == Node.TEXT_NODE) {
 							int len;
 							String s = item.getNodeValue();
-							if (s == null || (len=(s=removeIgnorableWhiteSpaces
-								|| indent!=null ? s.trim() : s).length()) == 0) {
+							if (s == null || (len=(s=removeIgnorableWhiteSpaces || indent!=null
+												? s.trim() : s).length()) == 0) {
 								continue;
 							}
 							if (numItems == 1 && indent != null && startLine != null

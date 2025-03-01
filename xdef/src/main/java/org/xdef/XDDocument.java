@@ -682,6 +682,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
+	@Deprecated
 	public XComponent parseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
 		throws SRuntimeException;
 
@@ -695,6 +696,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
+	@Deprecated
 	public XComponent parseXComponent(Object data, Class<?> xClass, String sourceId, ReportWriter reporter)
 		throws SRuntimeException;
 }

@@ -4515,6 +4515,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param s the string to be checked.
 	 * @return true if argument is Java identifier.
 	 */
+	@Deprecated
 	public static final boolean isJavaName(final String s) {return chkJavaName(s);}
 
 	/** Check if the string in argument is Java qualified identifier.
@@ -4522,6 +4523,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param s the string to be checked.
 	 * @return true if argument is Java qualified identifier.
 	 */
+	@Deprecated
 	public static final boolean isJavaQName(final String s) {
 		StringParser p = new StringParser(s);
 		return p.isJavaQName() && p.eos();

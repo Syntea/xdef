@@ -186,19 +186,19 @@ public class KDOMBuilder extends DocumentBuilder {
 		}
 	}
 
-	@Override
 	/** Get DomImplementation from this builder.
 	 * @return DomImplementation from this builder.
 	 */
+	@Override
 	public final DOMImplementation getDOMImplementation() {
 		checkBuilder();
 		return _xBuilder.getDOMImplementation();
 	}
 
-	@Override
 	/** Create new empty document.
 	 * @return new empty document.
 	 */
+	@Override
 	public final Document newDocument() {
 		checkBuilder();
 		return _xBuilder.newDocument();
@@ -235,10 +235,10 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final void setNamespaceAware(final boolean namespaceAware) {_namespaceAware = namespaceAware;}
 
-	@Override
 	/** Get switch if the DOM parser will provide support for XML namespaces.
 	 * @return true if the DOM parser will provide support for XML namespaces.
 	 */
+	@Override
 	public final boolean isNamespaceAware() {return _namespaceAware;}
 
 	/** Specifies that the DOM parser must eliminate whitespace in element content (sometimes known loosely
@@ -287,10 +287,10 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final void setXIncludeAware(final boolean resolveIncludes) {_resolveIncludes = resolveIncludes;}
 
-	@Override
 	/** Get the resolveIncludes switch.
 	 * @return the resolveIncludes switch.
 	 */
+	@Override
 	public final boolean isXIncludeAware() {return _resolveIncludes;}
 
 	/** Set the parser to provide DTD validating. By default the value of this is set to false.
@@ -298,10 +298,10 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final void setValidating(final boolean validate) {_validate = validate;}
 
-	@Override
 	/** Get DTD validating switch.
 	 * @return the validate switch.
 	 */
+	@Override
 	public final boolean isValidating() {return _validate;}
 
 	/** Set the parser to ignore unresolved entities. By default the value of this is set to false.
@@ -314,12 +314,12 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final boolean isIgnoreUnresolvedEntities() {return _ignoreUnresolvedEntities;}
 
-	@Override
 	/** Parse XML file.
 	 * @param file the file with XML document
 	 * @return object org.w3c.dom.Document with parsed XML document.
 	 * @throws SRuntimeException if reporter was not specified and when an error occurs.
 	 */
+	@Override
 	public final Document parse(final File file) {
 		Document doc = null;
 		if (_reporter != null) {
@@ -359,12 +359,12 @@ public class KDOMBuilder extends DocumentBuilder {
 		return doc;
 	}
 
-	@Override
 	/** Parse XML from InputStream.
 	 * @param stream the InputStream with XML document
 	 * @return object org.w3c.dom.Document with parsed XML document.
 	 * @throws SRuntimeException if reporter was not specified and when an error occurs.
 	 */
+	@Override
 	public final Document parse(final InputStream stream) {return parse(stream, true);}
 
 	/** Parse XML from InputStream.
