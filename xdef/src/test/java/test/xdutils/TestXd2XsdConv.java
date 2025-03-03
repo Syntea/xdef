@@ -369,6 +369,7 @@ public class TestXd2XsdConv extends XDTester {
 
 			assertTrue(prepare("emailTest"), popMessage());
 			assertTrue(parse("emailTest_valid"), popMessage());
+			assertTrue(parseFail("emailTest_invalid"), popMessage());
 
 			/* AK */
 			assertTrue(prepare("recursionTest"), popMessage());
