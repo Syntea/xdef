@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.22, release-date 2025-03-06
-* Fixed error when used in `xdef_specdates` when the date list has a date without time specification and
-  the parsed dateTime has the time specified as 00:00:00..
+* Fixed an error when using the `xdef_specdates` property (see `org.xdef.XDConstants.XDPROPERTY_SPECDATES`)
+  when the date list contains a date without a time specification and the parsed dateTime has a time
+  specified as 00:00:00.
 
 # Version 42.2.21, release-date 2025-02-28
 * Fixed bug in conversion of emailAddr from Xdefinition to XML schema.
