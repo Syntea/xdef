@@ -1,6 +1,5 @@
 package test.xdef;
 
-import java.util.Properties;
 import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
@@ -1214,7 +1213,6 @@ public final class TestScript extends XDTester {
 "</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
-			System.out.println(s + ";" + reporter.getErrorCount());
 			assertTrue(reporter.getErrorCount() == 2 && s.contains("/A/C[1]/@d") && s.contains("/A/C[3]/@d"));
 			reporter.clear();
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}

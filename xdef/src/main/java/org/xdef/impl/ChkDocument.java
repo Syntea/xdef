@@ -973,7 +973,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		if (_specialDates != null) { // check special dates
 			if (date.getHour() == Integer.MIN_VALUE) { // time is not specified
 				for (SDatetime x: _specialDates) {
-					if (date.getHour() == Integer.MIN_VALUE && x.equals(date)) {
+					if (x.getHour() == Integer.MIN_VALUE && x.equals(date)) {
 						return true;
 					}
 				}
