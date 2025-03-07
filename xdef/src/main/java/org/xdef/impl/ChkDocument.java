@@ -971,17 +971,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			return true; // not illlegal value or year not defined
 		}
 		if (_specialDates != null) { // check special dates
-			if (date.getHour() == Integer.MIN_VALUE) { // time is not specified
-				for (SDatetime x: _specialDates) {
-					if (x.getHour() == Integer.MIN_VALUE && x.equals(date)) {
-						return true;
-					}
-				}
-			} else { // time is specified
-				for (SDatetime x: _specialDates) {
-					if (x.getHour() != Integer.MIN_VALUE && x.equals(date)) {
-						return true;
-					}
+			for (SDatetime x: _specialDates) {
+				if (x.equals(date) && x.getHour() == date.getHour() && x.getMinute() == date.getMinute()
+					&& x.getSecond() == date.getSecond() && x.getFraction() == date.getFraction()) {
+					return true; // time have both specified or not specified
 				}
 			}
 		}
