@@ -1,6 +1,0 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace=""
-           attributeFormDefault="qualified"
-           elementFormDefault="qualified">
-    <xs:element name="X" type="xs:int"/>
-</xs:schema>

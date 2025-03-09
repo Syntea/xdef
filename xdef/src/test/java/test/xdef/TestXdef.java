@@ -3141,18 +3141,20 @@ public final class TestXdef extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "ISO8859-2, ISO8859-5");
 			xd = XDFactory.compileXD(props, //string_codes
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
-"  <A><B xd:script='*;' a='string();'/></A>\n" +
+"  <A><B xd:script='*;' a='? string();' b='? string() CHECK string(1);'/></A>\n" +
 "</xd:def>").createXDDocument();
-			xd.xparse(dataDir+"TestXdef_X1.xml",reporter);
+			parse(xd, "<A><B b='б'/></A>", reporter);
 			assertNoErrorsAndClear(reporter);
-			xd.xparse(dataDir+"TestXdef_X2.xml",reporter);
+			parse(xd, "<A><B b='النشر6ت'/></A>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
-			reporter.clear();
-			xd.xparse(dataDir+"TestXdef_X3.xml",reporter);
+			parse(xd, "<A><B b='abc'/></A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF822"));
+			parse(xd, dataDir+"TestXdef_X1.xml", reporter);
+			assertNoErrorsAndClear(reporter);
+			parse(xd, dataDir+"TestXdef_X2.xml", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
+			parse(xd, dataDir+"TestXdef_X3.xml", reporter);
 			assertTrue(reporter.getErrorCount() == 2 && reporter.toString().contains("XDEF823"));
-			reporter.clear();
-			xd.xparse("<A><B a='�����������������'/></A>",reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {

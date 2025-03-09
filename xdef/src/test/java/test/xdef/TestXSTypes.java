@@ -85,8 +85,7 @@ public final class TestXSTypes extends XDTester {
 						if (_msg.length() > 0) {
 							_msg += "\n";
 						}
-						_msg += "SCHEMA: attr result differs: '" + s +
-							"'; expected: '" + result +  "'";
+						_msg += "SCHEMA: attr result differs: '" + s + "'; expected: '" + result +  "'";
 					}
 					Node n = doc.getDocumentElement().getChildNodes().item(0);
 					s = (n == null) ? null : n.getNodeValue();
@@ -95,8 +94,7 @@ public final class TestXSTypes extends XDTester {
 							if (_msg.length() > 0) {
 								_msg += "\n";
 							}
-							_msg += "SCHEMA: text result differs: '" + s +
-								"'; expected: '" + result +  "'";
+							_msg += "SCHEMA: text result differs: '" + s + "'; expected: '" + result +  "'";
 						}
 					}
 					if (_msg.length() != 0) {
@@ -135,8 +133,7 @@ public final class TestXSTypes extends XDTester {
 		if (XDTester.getFulltestMode()) {
 			_builderFactory = DocumentBuilderFactory.newInstance();
 			_builderFactory.setAttribute(
-				"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-				XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				"http://java.sun.com/xml/jaxp/properties/schemaLanguage", XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			_builderFactory.setCoalescing(true);
 			_builderFactory.setNamespaceAware(true);
 			_builderFactory.setExpandEntityReferences(true);
@@ -196,8 +193,6 @@ public final class TestXSTypes extends XDTester {
 
 	private static String readTypeName(final XScriptParser p) {
 		if (p._sym != XScriptParser.IDENTIFIER_SYM) {
-//		if (p._sym != XScriptParser.IDENTIFIER_SYM ||
-//			p._idName.indexOf(':') != 2 && p._idName.indexOf('_') != 2) {
 			throw new RuntimeException("type name expected");
 		}
 		String result = p._idName.replace('_',':');
@@ -275,8 +270,7 @@ public final class TestXSTypes extends XDTester {
 						break;
 					}
 					if (!isSymbol(p, XScriptParser.COMMA_SYM)) {
-						throw new RuntimeException(
-							"Error in key parameter sequence");
+						throw new RuntimeException("Error in key parameter sequence");
 					}
 				}
 			}
@@ -291,8 +285,7 @@ public final class TestXSTypes extends XDTester {
 		final String indent,
 		final StringBuffer sb) {
 		if (!"item".equals(parseKeyParam(p))) {
-			throw new RuntimeException(
-				"'%item' expexted as first parameter of union");
+			throw new RuntimeException("'%item' expexted as first parameter of union");
 		}
 		if (!isSymbol(p, XScriptParser.LSQ_SYM)) {
 			throw new RuntimeException("'[' expected after %item of union");
@@ -308,8 +301,7 @@ public final class TestXSTypes extends XDTester {
 						genListItem(p, indent + "        ", sb);
 						sb.append(indent).append("      </xs:simpleType>\n");
 						if (!isSymbol(p, XScriptParser.RPAR_SYM)) {
-							throw new RuntimeException("')' missing:" +
-								p.getParsedBufferPartFrom(0));
+							throw new RuntimeException("')' missing:" + p.getParsedBufferPartFrom(0));
 						}
 					}
 				} else {
@@ -369,16 +361,19 @@ public final class TestXSTypes extends XDTester {
 			case "xs:union":
 				if (!wasLpar) {
 					throw new RuntimeException("'(' expected");
-				}	sb.append(indent).append("<xs:restriction>\n");
+				}
+				sb.append(indent).append("<xs:restriction>\n");
 				genUnionItem(p, indent + "  ", sb);
 				while(isSymbol(p, XScriptParser.COMMA_SYM)) {
 					parseRestriction(p, "  ", sb);
-				}	sb.append(indent).append("</xs:restriction>\n");
+				}
+				sb.append(indent).append("</xs:restriction>\n");
 				break;
 			case "xs:list":
 				if (!wasLpar) {
 					throw new RuntimeException("'(' expected");
-				}	genListItem(p, indent, sb);
+				}
+				genListItem(p, indent, sb);
 				break;
 			default:
 				sb.append(indent).append("<xs:restriction base=\"");
@@ -387,8 +382,7 @@ public final class TestXSTypes extends XDTester {
 					if (parseRestriction(p, indent + "  ", sb)) {
 						while(isSymbol(p, XScriptParser.COMMA_SYM)) {
 							if (!parseRestriction(p, indent + "  ", sb)) {
-								throw new RuntimeException(
-									"Restriction expected");
+								throw new RuntimeException("Restriction expected");
 							}
 						}
 					}
@@ -412,7 +406,7 @@ public final class TestXSTypes extends XDTester {
 		p.setSource(new SBuffer(params), null, null, XConstants.XD32, null);
 		p.nextSymbol();
 		genSchemaType(p, "  ", sb);
-		sb.append(
+		return sb.append(
 "</xs:simpleType>\n"+
 "<xs:element name='a'>\n"+
 "  <xs:complexType>\n"+
@@ -423,8 +417,7 @@ public final class TestXSTypes extends XDTester {
 "    </xs:simpleContent>\n"+
 "  </xs:complexType>\n"+
 "</xs:element>\n"+
-"</xs:schema>");
-		return sb.toString();
+"</xs:schema>").toString();
 	}
 
 	void genXDef() {
@@ -461,8 +454,7 @@ public final class TestXSTypes extends XDTester {
 						if (_msg.length() > 0) {
 							_msg += "\n";
 						}
-						_msg += "XDEF: attr result differs: '" + s +
-							"'; expected: '" + result + "'";
+						_msg += "XDEF: attr result differs: '" + s + "'; expected: '" + result + "'";
 						fits = false;
 					}
 					Node n = el.getChildNodes().item(0);
@@ -476,8 +468,7 @@ public final class TestXSTypes extends XDTester {
 							if (_msg.length() > 0) {
 								_msg += "\n";
 							}
-							_msg += "XDEF: text result differs: '" + s +
-								"'; expexted: '" + result + "'";
+							_msg += "XDEF: text result differs: '" + s + "'; expexted: '" + result + "'";
 							fits = false;
 						}
 					}
@@ -535,10 +526,8 @@ public final class TestXSTypes extends XDTester {
 		if (XDTester.getFulltestMode()) {
 			try {
 				_schema = genSchema(_params);
-				SchemaFactory factory = SchemaFactory.newInstance(
-					XMLConstants.W3C_XML_SCHEMA_NS_URI);
-				Schema schema = factory.newSchema(
-					new StreamSource(new StringReader(_schema)));
+				SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				Schema schema = factory.newSchema(new StreamSource(new StringReader(_schema)));
 				factory.setErrorHandler(_errHandler);
 				_validator = schema.newValidator();
 				_validator.setErrorHandler(_errHandler);
@@ -574,8 +563,7 @@ public final class TestXSTypes extends XDTester {
 		_xml = data == null ? null :
 ("<a xmlns:xsi=\""+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI+"\""+
 " xsi:noNamespaceSchemaLocation=\"dummy\" a=\""+data+"\"\n>"+data+"</a>");
-		return XDTester.getFulltestMode()
-			? chkSchema(result) & chkXDef(result) : chkXDef(result);
+		return XDTester.getFulltestMode() ? chkSchema(result) & chkXDef(result) : chkXDef(result);
 	}
 
 	private boolean parse(final String data) {
@@ -602,9 +590,7 @@ public final class TestXSTypes extends XDTester {
 		return parse(data, s);
 	}
 
-	private boolean parseFail(final String data) {
-		return parse(data, null);
-	}
+	private boolean parseFail(final String data) {return parse(data, null);}
 
 	@Override
 	public void test() {
@@ -654,8 +640,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail(" Hello   world"), _msg);
 		assertTrue(parseFail("Hello world"), _msg);
 
-		assertTrue(prepare("string(%enumeration=['Hello world'],"
-			+ "%whiteSpace='collapse')"), _msg);
+		assertTrue(prepare("string(%enumeration=['Hello world']," + "%whiteSpace='collapse')"), _msg);
 		assertTrue(parse("  \nHello \n  world \n ", "Hello world"), _msg);
 		assertTrue(parseFail("Helloworld"), _msg);
 
@@ -698,13 +683,11 @@ public final class TestXSTypes extends XDTester {
 			assertTrue(parse("     ", ""), _msg);
 		}
 
-		assertTrue(prepare(
-			"string(%whiteSpace='collapse',%minLength='1')"), _msg);
+		assertTrue(prepare("string(%whiteSpace='collapse',%minLength='1')"), _msg);
 		assertTrue(parse("  a  "), _msg);
 		assertTrue(parseFail("    "), _msg);
 
-		assertTrue(prepare(
-			"string(%whiteSpace='collapse',%length='0')"), _msg);
+		assertTrue(prepare("string(%whiteSpace='collapse',%length='0')"), _msg);
 		if (XDTester.getFulltestMode()) {
 			assertTrue(parse(""), _msg);
 			assertTrue(parse("    "), _msg);//should return empty string
@@ -756,24 +739,20 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("world"), _msg);
 		assertTrue(parseFail("hello"), _msg);
 		assertTrue(parseFail("World"), _msg);
-		assertTrue(prepare(
-			"normalizedString(%enumeration=['Hello world'])"), _msg);
+		assertTrue(prepare("normalizedString(%enumeration=['Hello world'])"), _msg);
 		assertTrue(parse("Hello world"), _msg);
 		assertTrue(parseFail("Hello   world"), _msg);
-		assertTrue(prepare(
-			"normalizedString(%enumeration=['Hello   world'])"), _msg);
+		assertTrue(prepare("normalizedString(%enumeration=['Hello   world'])"), _msg);
 		assertTrue(parse("Hello   world", "Hello   world"), _msg);
 		assertTrue(parseFail(" Hello   world"), _msg);
 		assertTrue(parseFail("Hello world"), _msg);
 
-		assertTrue(prepare("normalizedString(%enumeration=['Hello world'],"
-			+ "%whiteSpace='collapse')"), _msg);
+		assertTrue(prepare("normalizedString(%enumeration=['Hello world'],%whiteSpace='collapse')"), _msg);
 		assertTrue(parse("  \nHello \n  world \n ", "Hello world"), _msg);
 		assertTrue(parseFail("Helloworld"), _msg);
 
 		assertTrue(prepare("normalizedString(%whiteSpace='replace')"), _msg);
-		assertTrue(parse("  \nHello \n  world \t ", "   Hello    world   "),
-			_msg);
+		assertTrue(parse("  \nHello \n  world \t ", "   Hello    world   "), _msg);
 
 		assertTrue(prepare("normalizedString(%whiteSpace='replace',"
 			+ "%enumeration=['\n Being a Dog Is \n a Full-Time Job\n',"
@@ -782,8 +761,7 @@ public final class TestXSTypes extends XDTester {
 			"  Being a Dog Is   a Full-Time Job "), _msg);
 		assertTrue(parse("\nBla\n", " Bla "), _msg);
 
-		assertTrue(prepare("normalizedString(%pattern=['[A-Z][a-z]{3}'])"),
-			_msg);
+		assertTrue(prepare("normalizedString(%pattern=['[A-Z][a-z]{3}'])"), _msg);
 		assertTrue(parse("Fork"), _msg);
 		assertTrue(parse("Enum"), _msg);
 		assertTrue(parseFail("dark"), _msg);
@@ -837,9 +815,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("    "), _msg);
 
 		if (XDTester.getFulltestMode()) {
-			assertTrue(prepare(
-				"normalizedString(%whiteSpace='collapse',%minLength='0')"),
-				_msg);
+			assertTrue(prepare("normalizedString(%whiteSpace='collapse',%minLength='0')"), _msg);
 			assertTrue(parse("    ", ""), _msg); //should return text value null
 		}
 
@@ -885,8 +861,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse(" \n www.a.c\t ", "www.a.c"), _msg);
 		assertTrue(parseFail("www.c.c"), _msg);
 
-		assertTrue(prepare(
-			"anyURI(%pattern=['ffff','www\\\\.[a-z]+\\\\.cz'])"), _msg);
+		assertTrue(prepare("anyURI(%pattern=['ffff','www\\\\.[a-z]+\\\\.cz'])"), _msg);
 		assertTrue(parse("ffff"), _msg);
 		assertTrue(parse("www.b.cz"), _msg);
 		assertTrue(parseFail("www.a.cz www.b.cz"), _msg);
@@ -949,10 +924,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("decimal(%maxLength='1')"), _msg);
 		assertTrue(checkFail("decimal(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("decimal(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"decimal(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"decimal(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail("decimal(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail("decimal(%minInclusive='1',%maxInclusive='0')"), _msg);
 
 		// testing fixed facets
 		assertTrue(prepare("decimal(%whiteSpace='collapse')"), _msg);
@@ -997,15 +970,13 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("1"), _msg);
 
-		assertTrue(prepare("decimal(%minInclusive='1',%maxInclusive='2')"),
-			_msg);
+		assertTrue(prepare("decimal(%minInclusive='1',%maxInclusive='2')"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("3"), _msg);
 
-		assertTrue(prepare("decimal(%minExclusive='0',%maxExclusive='3')"),
-			_msg);
+		assertTrue(prepare("decimal(%minExclusive='0',%maxExclusive='3')"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
@@ -1055,10 +1026,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("integer(%maxLength='1')"), _msg);
 		assertTrue(checkFail("integer(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("integer(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"integer(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"integer(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail("integer(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail("integer(%minInclusive='1',%maxInclusive='0')"), _msg);
 // This is not recognized by SCHEMA
 //		assertTrue(checkFail("integer(%fractionDigits='2')"), _msg);
 
@@ -1090,15 +1059,13 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("1"), _msg);
 
-		assertTrue(prepare("integer(%minInclusive='1',%maxInclusive='2')"),
-			_msg);
+		assertTrue(prepare("integer(%minInclusive='1',%maxInclusive='2')"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("3"), _msg);
 
-		assertTrue(prepare("integer(%minExclusive='0',%maxExclusive='3')"),
-			_msg);
+		assertTrue(prepare("integer(%minExclusive='0',%maxExclusive='3')"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
@@ -1135,10 +1102,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("negativeInteger(%maxLength='1')"), _msg);
 		assertTrue(checkFail("negativeInteger(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("negativeInteger(%whiteSpace='replace')"),_msg);
-		assertTrue(checkFail(
-			"negativeInteger(%minInclusive='-1',%minExclusive='-1')"), _msg);
-		assertTrue(checkFail(
-			"negativeInteger(%minInclusive='-1',%maxInclusive='-2')"), _msg);
+		assertTrue(checkFail("negativeInteger(%minInclusive='-1',%minExclusive='-1')"), _msg);
+		assertTrue(checkFail("negativeInteger(%minInclusive='-1',%maxInclusive='-2')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("negativeInteger(%fractionDigits='2')"), _msg);
 
@@ -1170,21 +1135,18 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(prepare("negativeInteger(%minExclusive='-1')"), _msg);
 		assertTrue(parseFail("-1"), _msg);
 
-		assertTrue(prepare(
-			"negativeInteger(%minInclusive='-2',%maxInclusive='-1')"),_msg);
+		assertTrue(prepare("negativeInteger(%minInclusive='-2',%maxInclusive='-1')"), _msg);
 		assertTrue(parse("-1"), _msg);
 		assertTrue(parse("-2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("-3"), _msg);
 
-		assertTrue(prepare(
-			"negativeInteger(%minExclusive='-3',%maxExclusive='-1')"),_msg);
+		assertTrue(prepare("negativeInteger(%minExclusive='-3',%maxExclusive='-1')"), _msg);
 		assertTrue(parse("-2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("-3"), _msg);
 
-		assertTrue(prepare("negativeInteger(%enumeration=['-1','-3'])"),
-			_msg);
+		assertTrue(prepare("negativeInteger(%enumeration=['-1','-3'])"), _msg);
 		assertTrue(parse("-1"), _msg);
 		assertTrue(parse("-3"), _msg);
 		assertTrue(parseFail("2"), _msg);
@@ -1209,10 +1171,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("byte(%maxLength='1')"), _msg);
 		assertTrue(checkFail("byte(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("byte(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"byte(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"byte(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail("byte(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail("byte(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("byte(%fractionDigits='0')"), _msg);
 
@@ -1298,10 +1258,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("short(%maxLength='1')"), _msg);
 		assertTrue(checkFail("short(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("short(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"short(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"short(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail("short(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail("short(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("short(%fractionDigits='0')"), _msg);
 
@@ -1334,8 +1292,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("1"), _msg);
 
-		assertTrue(prepare("short(%minInclusive='1',%maxInclusive='2')"),
-			_msg);
+		assertTrue(prepare("short(%minInclusive='1',%maxInclusive='2')"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
@@ -1373,10 +1330,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("int(%maxLength='1')"), _msg);
 		assertTrue(checkFail("int(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("int(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"int(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"int(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail( "int(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail( "int(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("int(%fractionDigits='0')"), _msg);
 
@@ -1449,10 +1404,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("unsignedInt(%maxLength='1')"), _msg);
 		assertTrue(checkFail("unsignedInt(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("unsignedInt(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"unsignedInt(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"unsignedInt(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail("unsignedInt(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail("unsignedInt(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("unsignedInt(%fractionDigits='0')"), _msg);
 
@@ -1485,15 +1438,13 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("1"), _msg);
 
-		assertTrue(prepare(
-			"unsignedInt(%minInclusive='1',%maxInclusive='2')"),_msg);
+		assertTrue(prepare("unsignedInt(%minInclusive='1',%maxInclusive='2')"),_msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
 		assertTrue(parseFail("3"), _msg);
 
-		assertTrue(prepare(
-			"unsignedInt(%minExclusive='0',%maxExclusive='3')"),_msg);
+		assertTrue(prepare("unsignedInt(%minExclusive='0',%maxExclusive='3')"),_msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("2"), _msg);
 		assertTrue(parseFail("0"), _msg);
@@ -1525,10 +1476,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(checkFail("long(%maxLength='1')"), _msg);
 		assertTrue(checkFail("long(%whiteSpace='preserve')"), _msg);
 		assertTrue(checkFail("long(%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"long(%minInclusive='1',%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"long(%minInclusive='1',%maxInclusive='0')"), _msg);
+		assertTrue(checkFail("long(%minInclusive='1',%minExclusive='1')"), _msg);
+		assertTrue(checkFail("long(%minInclusive='1',%maxInclusive='0')"), _msg);
 // not recognized by SCHEMA
 //		assertTrue(checkFail("long(%fractionDigits='0')"), _msg);
 
@@ -1697,8 +1646,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("NaN"), _msg);
 		assertTrue(parseFail("INF"), _msg);
 
-		assertTrue(prepare(
-			"float(%pattern=['\\\\d{2}.\\\\d{2}', '\\\\d{1}E\\\\d'])"),_msg);
+		assertTrue(prepare("float(%pattern=['\\\\d{2}.\\\\d{2}', '\\\\d{1}E\\\\d'])"),_msg);
 		assertTrue(parse("11.15"), _msg);
 		assertTrue(parse("5E3"), _msg);
 		assertTrue(parseFail("0012.12"), _msg);
@@ -1814,8 +1762,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("-INF"), _msg);
 		assertTrue(parseFail("0.123"), _msg);
 
-		assertTrue(prepare("double(%enumeration=['001.1500E0', '0'])"),
-			_msg);
+		assertTrue(prepare("double(%enumeration=['001.1500E0', '0'])"), _msg);
 		assertTrue(parse("1.15"), _msg);
 		assertTrue(parse("0"), _msg);
 		assertTrue(parse("0.0"), _msg);
@@ -1826,8 +1773,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("INF"), _msg);
 
 		//testing pattern
-		assertTrue(prepare(
-			"double(%pattern=['\\\\d{2}.\\\\d{2}', '\\\\d{1}E\\\\d'])"), _msg);
+		assertTrue(prepare("double(%pattern=['\\\\d{2}.\\\\d{2}', '\\\\d{1}E\\\\d'])"), _msg);
 		assertTrue(parse("11.15"), _msg);
 		assertTrue(parse("5E3"), _msg);
 		assertTrue(parseFail("0012.12"), _msg);
@@ -1943,8 +1889,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("2015-11-15-05"), _msg);
 
 		// testing facets
-		assertTrue(prepare(
-			"date(%enumeration=['1999-12-01', '2015-11-15-05:00'])"), _msg);
+		assertTrue(prepare("date(%enumeration=['1999-12-01', '2015-11-15-05:00'])"), _msg);
 		assertTrue(parse("1999-12-01"), _msg);
 		assertTrue(parse("2015-11-15-05:00"), _msg);
 		assertTrue(parseFail("2015-11-15"), _msg);
@@ -1952,16 +1897,14 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("1999-12-01+00:00"), _msg);
 		assertTrue(parseFail("2015-11-15Z"), _msg);
 
-		assertTrue(prepare(
-			"date(%enumeration=['1999-12-01', '2015-11-15-13:59'])"), _msg);
+		assertTrue(prepare("date(%enumeration=['1999-12-01', '2015-11-15-13:59'])"), _msg);
 		assertTrue(parse("1999-12-01"), _msg);
 		assertTrue(parse("2015-11-15-13:59"), _msg);
 		assertTrue(parse("2015-11-16+10:01"), _msg);
 		assertTrue(parseFail("1999-12-01Z"), _msg);
 		assertTrue(parseFail("2015-11-15"), _msg);
 
-		assertTrue(prepare(
-			"date(%pattern=['199\\\\d-\\\\d{2}-\\\\d{2}'])"), _msg);
+		assertTrue(prepare("date(%pattern=['199\\\\d-\\\\d{2}-\\\\d{2}'])"), _msg);
 		assertTrue(parse("1999-12-01"), _msg);
 		assertTrue(parse("1999-11-15"), _msg);
 		assertTrue(parseFail("2015-11-15"), _msg);
@@ -2092,8 +2035,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("07:08+08:16"), _msg);
 
 		// testing facets
-		assertTrue(prepare(
-			"time(%enumeration=['02:10:35-04:00', '15:24:57+08:16'])"),_msg);
+		assertTrue(prepare("time(%enumeration=['02:10:35-04:00', '15:24:57+08:16'])"),_msg);
 		assertTrue(parse("02:10:35-04:00"), _msg);
 		assertTrue(parse("06:10:35Z"), _msg);
 		assertTrue(parse("15:24:57+08:16"), _msg);
@@ -2240,23 +2182,19 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("2000-01-01T00:00:00 +14:00"), _msg);
 
 		// testing facets
-		assertTrue(prepare(
-			"dateTime(%pattern=['\\\\d{4}-\\\\d{2}-\\\\d{2}T00:00:00'])"),_msg);
+		assertTrue(prepare("dateTime(%pattern=['\\\\d{4}-\\\\d{2}-\\\\d{2}T00:00:00'])"),_msg);
 		assertTrue(parse("1999-01-01T00:00:00"), _msg);
 		assertTrue(parse("2010-08-02T00:00:00"), _msg);
 		assertTrue(parseFail("1999-01-01T00:00:00Z"), _msg);
 		assertTrue(parseFail("-0001-01-01T00:00:00"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%enumeration=['2002-10-10T12:00:00+05:00'])"), _msg);
+		assertTrue(prepare("dateTime(%enumeration=['2002-10-10T12:00:00+05:00'])"), _msg);
 		assertTrue(parse("2002-10-10T07:00:00Z"), _msg);
-		assertTrue(prepare(
-			"dateTime(%enumeration=['2002-10-10T00:00:00+05:00'])"), _msg);
+		assertTrue(prepare("dateTime(%enumeration=['2002-10-10T00:00:00+05:00'])"), _msg);
 		assertTrue(parse("2002-10-09T19:00:00Z"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%enumeration=['2010-01-01T05:00:00.123+01:00'," +
-			" '2010-12-31T24:00:00Z'])"), _msg);
+		assertTrue(prepare("dateTime(%enumeration=['2010-01-01T05:00:00.123+01:00','2010-12-31T24:00:00Z'])"),
+			_msg);
 		assertTrue(parse("2010-01-01T05:00:00.123+01:00"), _msg);
 		assertTrue(parse("2010-01-01T04:00:00.123Z"), _msg);
 		assertTrue(parse("2010-12-31T24:00:00Z"), _msg);
@@ -2264,23 +2202,20 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("2010-12-31T24:00:00"), _msg);
 		assertTrue(parseFail("2010-01-01T05:00:00.123"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%maxInclusive='2000-01-01T12:00:00+01:00')"), _msg);
+		assertTrue(prepare("dateTime(%maxInclusive='2000-01-01T12:00:00+01:00')"), _msg);
 		assertTrue(parse("1999-12-31T12:00:00"), _msg);
 		assertTrue(parse("1999-12-31T24:00:00-11:00"), _msg);
 		assertTrue(parseFail("1999-12-31T24:00:00-11:01"), _msg);
 		assertTrue(parseFail("2000-01-01T12:00:00+00:59"), _msg);
 		assertTrue(parseFail("2000-01-01T12:00:00"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%maxInclusive='2000-01-01T00:00:00')"), _msg);
+		assertTrue(prepare("dateTime(%maxInclusive='2000-01-01T00:00:00')"), _msg);
 		assertTrue(parse("1999-12-31T09:59:59.999Z"), _msg);
 		assertTrue(parse("2000-01-01T00:00:00"), _msg);
 		assertTrue(parseFail("1999-12-31T10:00:00Z"), _msg);
 		assertTrue(parseFail("2000-01-01T00:00:00Z"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%maxInclusive='2000-01-01T12:00:00+01:30')"), _msg);
+		assertTrue(prepare("dateTime(%maxInclusive='2000-01-01T12:00:00+01:30')"), _msg);
 		assertTrue(parse("2000-01-01T12:00:00+01:30"), _msg);
 		assertTrue(parse("2000-01-01T10:30:00Z"), _msg);
 		assertTrue(parse("1999-12-31T20:29:59.999"), _msg);
@@ -2288,24 +2223,21 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("2000-01-01T11:30:00.001Z"), _msg);
 		assertTrue(parseFail("1999-12-31T20:30:00"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%maxInclusive='2000-01-01T00:00:00-04:00')"), _msg);
+		assertTrue(prepare("dateTime(%maxInclusive='2000-01-01T00:00:00-04:00')"), _msg);
 		assertTrue(parse("2000-01-01T00:00:00-04:00"), _msg);
 		assertTrue(parse("1999-12-31T13:59:59.999"), _msg);
 		assertTrue(parse("1999-12-31T13:59:59.99999"), _msg);
 		assertTrue(parse("2000-01-01T00:00:00-03:59"), _msg);
 		assertTrue(parseFail("2000-01-01T00:00:00"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%maxInclusive='2000-01-01T12:00:00')"), _msg);
+		assertTrue(prepare("dateTime(%maxInclusive='2000-01-01T12:00:00')"), _msg);
 		assertTrue(parse("2000-01-01T11:59:59.9999"), _msg);
 		assertTrue(parse("2000-01-01T12:00:00"), _msg);
 		assertTrue(parse("1999-12-31T21:59:59.99999Z"), _msg);
 		assertTrue(parse("1999-12-31T21:59:59.999Z"), _msg);
 		assertTrue(parseFail("1999-12-31T22:00:00Z"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%minInclusive='2000-01-01T00:00:00-01:00')"), _msg);
+		assertTrue(prepare("dateTime(%minInclusive='2000-01-01T00:00:00-01:00')"), _msg);
 		assertTrue(parse("2000-01-01T00:00:00-01:00"), _msg);
 		assertTrue(parse("2000-01-01T01:00:00Z"), _msg);
 		assertTrue(parse("2000-01-01T15:00:00.00001"), _msg);
@@ -2315,24 +2247,21 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("2000-01-01T15:00:00.001"), _msg);
 		assertTrue(parseFail("2000-01-01T15:00:00"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%minInclusive='2000-01-01T10:00:00')"), _msg);
+		assertTrue(prepare("dateTime(%minInclusive='2000-01-01T10:00:00')"), _msg);
 		assertTrue(parse("2000-01-01T10:00:00"), _msg);
 		assertTrue(parse("2000-01-02T00:00:00.001Z"), _msg);
 		assertTrue(parse("2000-01-02T00:00:00.00001Z"), _msg);
 		assertTrue(parseFail("2000-01-01T09:59:59.999"), _msg);
 		assertTrue(parseFail("2000-01-01T24:00:00Z"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%minExclusive='2000-01-01T15:00:00+05:00')"), _msg);
+		assertTrue(prepare("dateTime(%minExclusive='2000-01-01T15:00:00+05:00')"), _msg);
 		assertTrue(parse("2000-01-01T10:00:00.001Z"), _msg);
 		assertTrue(parse("2000-01-01T10:00:00.00001Z"), _msg);
 		assertTrue(parse("2000-01-02T00:00:00.001"), _msg);
 		assertTrue(parseFail("2000-01-01T10:00:00Z"), _msg);
 		assertTrue(parseFail("2000-01-01T24:00:00"), _msg);
 
-		assertTrue(prepare(
-			"dateTime(%minExclusive='2000-01-01T02:00:00')"), _msg);
+		assertTrue(prepare("dateTime(%minExclusive='2000-01-01T02:00:00')"), _msg);
 		assertTrue(parse("2000-01-01T02:00:00.001"), _msg);
 		assertTrue(parse("2000-01-01T02:00:00.00001"), _msg);
 		assertTrue(parse("2000-01-01T16:00:00.001Z"), _msg);
@@ -2391,8 +2320,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("---01"), _msg);
 		assertTrue(parseFail("---27Z"), _msg);
 
-		assertTrue(prepare(
-			"gDay(%enumeration=['---24', '---10+10:00'])"), _msg);
+		assertTrue(prepare("gDay(%enumeration=['---24', '---10+10:00'])"), _msg);
 		assertTrue(parse("---24"), _msg);
 		assertTrue(parse("---10+10:00"), _msg);
 		assertTrue(parseFail("---24Z"), _msg);
@@ -2606,8 +2534,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("--01-10"), _msg);
 		assertTrue(parseFail("--10-10Z"), _msg);
 
-		assertTrue(prepare(
-			"gMonthDay(%enumeration=['--01-01Z','--12-31'])"), _msg);
+		assertTrue(prepare("gMonthDay(%enumeration=['--01-01Z','--12-31'])"), _msg);
 		assertTrue(parse("--01-01Z"), _msg);
 		assertTrue(parse("--12-31"), _msg);
 		assertTrue(parseFail("--12-31Z"), _msg);
@@ -2810,8 +2737,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("2000-12"), _msg);
 		assertTrue(parseFail("2000-01+14:00"), _msg);
 
-		assertTrue(prepare(
-			"gYearMonth(%enumeration=['2000-01Z','0001-12'])"), _msg);
+		assertTrue(prepare("gYearMonth(%enumeration=['2000-01Z','0001-12'])"), _msg);
 		assertTrue(parse("2000-01Z"), _msg);
 		assertTrue(parse("0001-12"), _msg);
 		assertTrue(parseFail("-0001-01"), _msg);
@@ -3509,8 +3435,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("ab cd"), _msg);
 		assertTrue(parseFail("HbRBHw=="), _msg);
 
-		assertTrue(prepare(
-			"base64Binary(%pattern=['HQ==','[a-d]*'])"), _msg);
+		assertTrue(prepare("base64Binary(%pattern=['HQ==','[a-d]*'])"), _msg);
 		assertTrue(parse("HQ=="), _msg);
 		assertTrue(parse("abcd"), _msg);
 		assertTrue(parseFail("ab cd"), _msg);
@@ -3578,24 +3503,15 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING union
 //------------------------------------------------------------------------------
 		// testing illegal facets
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%minInclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%maxInclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%minExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%maxExclusive='1')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%whiteSpace='preserve')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%whiteSpace='collapse')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%whiteSpace='replace')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean, short],%totalDigits='2')"), _msg);
-		assertTrue(checkFail(
-			"union(%item=[boolean,short],%fractionDigits='2')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%minInclusive='1')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%maxInclusive='1')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%minExclusive='1')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%maxExclusive='1')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%whiteSpace='preserve')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%whiteSpace='collapse')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%whiteSpace='replace')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean, short],%totalDigits='2')"), _msg);
+		assertTrue(checkFail("union(%item=[boolean,short],%fractionDigits='2')"), _msg);
 
 		// testing correct values
 		assertTrue(prepare("union(%item=[boolean, short])"), _msg);
@@ -3613,9 +3529,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("1 true"), _msg);
 
 		// testing facets
-		assertTrue(prepare("union(%item=[boolean, short]," +
-			"%pattern=['true|1'],"+
-			"%enumeration=[true,1])"), _msg);
+		assertTrue(prepare("union(%item=[boolean, short],%pattern=['true|1'],%enumeration=[true,1])"), _msg);
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("true"), _msg);
 		assertTrue(parseFail("x"), _msg);
@@ -3624,30 +3538,26 @@ public final class TestXSTypes extends XDTester {
 //		assertTrue(parseFail("false"), _msg);
 //		assertTrue(parseFail("0"), _msg);
 
-		assertTrue(prepare("union("+
-			"%item=[decimal(%maxInclusive=5), boolean])"), _msg);
+		assertTrue(prepare("union(%item=[decimal(%maxInclusive=5), boolean])"), _msg);
 		assertTrue(parse("true"), _msg);
 		assertTrue(parse("5 "), _msg);
 		assertTrue(parseFail("6"), _msg);
 		assertTrue(parseFail("5 6"), _msg);
 		assertTrue(parseFail("x"), _msg);
 
-		assertTrue(prepare("union(%item=[decimal(%maxInclusive=5),"
-			+ "boolean(%pattern=['false'])])"), _msg);
+		assertTrue(prepare("union(%item=[decimal(%maxInclusive=5), boolean(%pattern=['false'])])"), _msg);
 		assertTrue(parse("false"), _msg);
 		assertTrue(parse("5 "), _msg);
 		assertTrue(parseFail("6"), _msg);
 		assertTrue(parseFail("true"), _msg);
 
-		assertTrue(prepare(
-			"union(%item=[int,date,dateTime,string(%length=1)])"), _msg);
+		assertTrue(prepare("union(%item=[int,date,dateTime,string(%length=1)])"), _msg);
 		assertTrue(parse("x"), _msg);
 		assertTrue(parse("1999"), _msg);
 		assertTrue(parse("1999-10-11"), _msg);
 		assertTrue(parse("1999-10-11T10:11:12"), _msg);
 
-		assertTrue(prepare(
-			"union(%item=[string(%length=1),dateTime,date,int])"), _msg);
+		assertTrue(prepare("union(%item=[string(%length=1),dateTime,date,int])"), _msg);
 		assertTrue(parse("x"), _msg);
 		assertTrue(parse("1999"), _msg);
 		assertTrue(parse("1999-10-11"), _msg);
@@ -3682,14 +3592,13 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("   123 456  -99999  "), _msg);
 
 		// testing facets
-		assertTrue(prepare("list(%item=short,%enumeration=['123   -4560 0'])"),
-			_msg);
+		assertTrue(prepare("list(%item=short,%enumeration=['123   -4560 0'])"), _msg);
 		assertTrue(parse("123 -4560 0"), _msg);
 		assertTrue(parse(" 123   -4560  0  "), _msg);
 		assertTrue(parseFail("123 4560  0"), _msg);
 
-		assertTrue(prepare("list(%item=short," +
-			"%pattern=['\\\\s*\\\\d*\\\\s+-\\\\d*\\\\s+\\\\d*\\\\s*'])"), _msg);
+		assertTrue(prepare("list(%item=short,%pattern=['\\\\s*\\\\d*\\\\s+-\\\\d*\\\\s+\\\\d*\\\\s*'])"),
+			_msg);
 		assertTrue(parse("123 -456 0"), _msg);
 		assertTrue(parse(" 123   -456  0  "), _msg);
 		assertTrue(parseFail("123 456  0"), _msg);
@@ -3713,8 +3622,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail(" bac\n\t"), _msg);
 		assertTrue(parseFail("1 2 3"), _msg);
 
-		assertTrue(prepare("list(%item=short("+
-			"%minInclusive=-9,%maxExclusive=10),%length=3)"), _msg);
+		assertTrue(prepare("list(%item=short(%minInclusive=-9,%maxExclusive=10),%length=3)"), _msg);
 		assertTrue(parse("-9 0 9"), _msg);
 		assertTrue(parse("1 2 3"), _msg);
 		assertTrue(parseFail("-9 0 9 1"), _msg);
@@ -3729,30 +3637,22 @@ public final class TestXSTypes extends XDTester {
 //                          TESTING list and union
 //------------------------------------------------------------------------------
 		//list contains union
-		assertTrue(prepare("list("+
-			"%item=union(%item=[short(%minInclusive=-9),boolean]),"+
-			"%length=3)"), _msg);
+		assertTrue(prepare("list(%item=union(%item=[short(%minInclusive=-9),boolean]),%length=3)"), _msg);
 		assertTrue(parse("-9 0 9"), _msg);
 		assertTrue(parse("-9 true 9"), _msg);
 		assertTrue(parse("false 2 3"), _msg);
 		assertTrue(parseFail("1 2"), _msg);
 
 		// union contains list
-		assertTrue(prepare("union("+
-			"%item=[list(%item=short(%minInclusive=-9),%length=3),"+
-			"boolean])"), _msg);
+		assertTrue(prepare("union(%item=[list(%item=short(%minInclusive=-9),%length=3),boolean])"), _msg);
 		assertTrue(parse("-9 0 9"), _msg);
 		assertTrue(parse("true"), _msg);
 		assertTrue(parseFail("false 2 3"), _msg);
 		assertTrue(parseFail("1 2"), _msg);
 
-		assertTrue(prepare(
-			"list(%item=union(%item=[int,date,dateTime,string(%length=1)]))"),
-			_msg);
+		assertTrue(prepare("list(%item=union(%item=[int,date,dateTime,string(%length=1)]))"), _msg);
 		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
-		assertTrue(prepare(
-			"list(%item=union(%item=[string(%length=1),dateTime,date,int]))"),
-			_msg);
+		assertTrue(prepare("list(%item=union(%item=[string(%length=1),dateTime,date,int]))"), _msg);
 		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
 
 ////////////////////////////////////////////////////////////////////////////////
