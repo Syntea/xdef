@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.23, release-date 2025-03-09
+* .
+
 # Version 42.2.22, release-date 2025-03-07
 * Fixed an error when using the `xdef_specdates` property (see `org.xdef.XDConstants.XDPROPERTY_SPECDATES`)
   when the date list contains a date without a time specification and the parsed dateTime has a time
