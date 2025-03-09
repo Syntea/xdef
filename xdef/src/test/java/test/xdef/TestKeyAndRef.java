@@ -12,6 +12,7 @@ import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of external utilities for key, keyRef and also sequence in choice.
  * @author Vaclav Trojan
@@ -23,8 +24,7 @@ public final class TestKeyAndRef extends XDTester {
 	public static String boundQName(final XXData data) {
 		String s = data.getTextValue();
 		byte xmlVersion =
-			"1.1".equals(data.getElement().getOwnerDocument().getXmlVersion())
-			? (byte) 11 : (byte) 10;
+			"1.1".equals(data.getElement().getOwnerDocument().getXmlVersion()) ? (byte) 11 : (byte) 10;
 		if (!StringParser.chkNCName(s, xmlVersion)) {
 			return null;
 		}
@@ -65,10 +65,10 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 1 && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration> type p QName(); uniqueSet u p;</xd:declaration>\n"+
+"  <xd:declaration>type p QName(); uniqueSet u p;</xd:declaration>\n"+
 "  <a><b z='SET'> u.IDREFS </b><c x='u.ID' y='u.ID'/></a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -78,11 +78,11 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<a><b z='x'>a c</b><c x='a' y='b'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 1 && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xml = "<a><b z='x'>a c</b><c x='b' y='d'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='local'>uniqueSet u {x: int()}</xd:declaration>\n"+
@@ -95,7 +95,7 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			// uniqueSet declared as variable of model.
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -116,12 +116,12 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 1 && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='3'/><c z='2 3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertEq(2, reporter.getErrorCount());
 			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID())
-				&& "XDEF522".equals(reporter.getReport().getMsgID()), reporter.printToString());
+				&& "XDEF522".equals(reporter.getReport().getMsgID()), reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:declaration scope='local'>\n"+
@@ -140,10 +140,10 @@ public final class TestKeyAndRef extends XDTester {
 			xml ="<A><b a='3.1'/><c a='4.1'/></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 2 && "XDEF522".equals(reporter.getReport().getMsgID())
-				&& "XDEF522".equals(reporter.getReport().getMsgID()), reporter.printToString());
+				&& "XDEF522".equals(reporter.getReport().getMsgID()), reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"  <xd:declaration> uniqueSet u int(); </xd:declaration>\n"+
+"  <xd:declaration>uniqueSet u int();</xd:declaration>\n"+
 "  <A>\n"+
 "    <a xd:script='?' a='u()'/>\n"+
 "    <b xd:script='+' a='u.ID()'/>\n"+
@@ -192,7 +192,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><b a='3.1'/><b a='3.1'/><c a='4.1'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 3, reporter.printToString());
+			assertTrue(reporter.getErrorCount() == 3, reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A><a xd:script='occurs *; ref a;'/></A>\n"+
@@ -211,7 +211,7 @@ public final class TestKeyAndRef extends XDTester {
 			xml = "<A><a><b x='1' y='2'/><c x='1'>1 3</c></a></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings() && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A xd:script='var {uniqueSet v {p: int(1,3); q: optional string};}'>\n"+
@@ -236,7 +236,7 @@ public final class TestKeyAndRef extends XDTester {
 "</A>";
 			parse(xp, "", xml, reporter); // NULOVAT??? XDPool ????
 			assertTrue(reporter.getErrorCount()==1 && "XDEF523".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:declaration scope='local'>uniqueSet v {x: int(1,3)}</xd:declaration>\n"+
@@ -255,7 +255,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>", reporter);
 			assertTrue(reporter.getErrorCount()==1 && "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			parse(xp,
 				"", "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='4'/><c z='2 4'/></a></A>",reporter);
 			assertEq(4, reporter.getErrorCount());
@@ -263,7 +263,7 @@ public final class TestKeyAndRef extends XDTester {
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A><a xd:script='occurs *; ref a;'/></A>\n"+
@@ -281,8 +281,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID()), reporter.printToString());
+			assertTrue(reporter.errorWarnings()&&"XDEF522".equals(reporter.getReport().getMsgID()),reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='4'/><c z='2 4'/></a></A>";
 			parse(xp, "", xml, reporter);
 			assertEq(4, reporter.getErrorCount());
@@ -290,7 +289,7 @@ public final class TestKeyAndRef extends XDTester {
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF813".equals(reporter.getReport().getMsgID())
 				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A xd:script='var {type i int(1,3);uniqueSet v {p:i;q:? string(1,9)};}'>\n"+
@@ -315,7 +314,7 @@ public final class TestKeyAndRef extends XDTester {
 "</A>";
 			parse(xp, "", xml, reporter); // NULOVAT??? XDPool ????
 			assertTrue(reporter.getErrorCount()==1 && "XDEF523".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A xd:script='var{type i int(1,3);uniqueSet v{p:i;q:? string(1,9)};}'>\n"+
@@ -336,7 +335,7 @@ public final class TestKeyAndRef extends XDTester {
 "</A>";
 			parse(xp, "", xml, reporter); // NULOVAT??? XDPool ????
 			assertTrue(reporter.getErrorCount()==1 && "XDEF523".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
+				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:declaration scope='local'>\n"+
@@ -547,7 +546,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <a xd:script='finally a.ID()' a='a.d(); finally a.d.NEWKEY()' >\n"+
 "    <b b='a.d.IDREF();' />\n"+
 "  </a>\n"+
-"  <xd:declaration> uniqueSet a {d: int()} </xd:declaration>\n"+
+"  <xd:declaration>uniqueSet a {d: int()}</xd:declaration>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='5'><b b='5'/></a>";
@@ -650,7 +649,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' >\n" +
-"  <xd:declaration> uniqueSet s int(); </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet s int();</xd:declaration>\n" +
 "  <A><a xd:script='*' a='s.ID()'/><b xd:script='*' a='s.CHKID()'/></A>\n" +
 "</xd:def>";
 			xml =
@@ -664,7 +663,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' >\n" +
-"  <xd:declaration> type a int(); type b string(); uniqueSet s2 {a: a(); b: b()}; </xd:declaration>\n" +
+"  <xd:declaration>type a int(); type b string(); uniqueSet s2 {a: a(); b: b()};</xd:declaration>\n" +
 "  <A>\n" +
 "    <a xd:script='*' a='s2.a()'>\n" +
 "      <b xd:script='*; finally s2.ID();' b='s2.b()' /> \n" +
@@ -687,7 +686,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = //test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <xd:declaration> uniqueSet u {a: string();} </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet u {a: string();}</xd:declaration>\n" +
 "  <A><a xd:script='*' b='u.a.ID()'/><b xd:script='*' b='u.a.CHKID()'/></A>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -743,9 +742,7 @@ public final class TestKeyAndRef extends XDTester {
 		try { // check xdType
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <xd:declaration>\n" +
-"    uniqueSet u {a: string();}\n" +
-"  </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet u {a: string();}</xd:declaration>\n" +
 "  <A xd:script='var Parser x = null;'>\n" +
 "    <B b='xdType(); onTrue x = getParsedValue();'/>\n" +
 "    <C c='x()'/>\n" + // parser is x
@@ -770,17 +767,18 @@ public final class TestKeyAndRef extends XDTester {
 			parse(xp, "", "<A><B b='xdatetime(\"dd.MM.yyyy\")'/><C c='01.02'/></A>", reporter);
 			assertTrue(reporter.getErrorCount()==1 && reporter.printToString().contains("XDEF809"), reporter);
 			parse(xp, "", "<A><B b='xdattime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>", reporter);
-			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF817")
-				&&  s.contains("XDEF820"), reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF817") &&  s.contains("XDEF820"),
+				reporter);
 			String propwarning = getProperties().getProperty(XDConstants.XDPROPERTY_WARNINGS);
 			setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			 // datetime must be xdatetime
 			parse(xp, "", "<A><B b='datetime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>", reporter);
-			assertTrue(reporter.getErrorCount() == 2 && (s = reporter.printToString()).contains("XDEF817")
-				&&  s.contains("XDEF820"), reporter);
+			assertTrue(reporter.getErrorCount() == 2
+				&& (s = reporter.printToString()).contains("XDEF817") &&  s.contains("XDEF820"),
+				reporter);
 			setProperty(XDConstants.XDPROPERTY_WARNINGS, propwarning);
-// test uniqueSet setValue, getValoue
-// and order of attribute processing in Xdefinition
+			// test uniqueSet setValue, getValoue and order of attribute processing in Xdefinition
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:declaration>uniqueSet u {a: string(); var Parser x}</xd:declaration>\n" +
@@ -818,7 +816,7 @@ public final class TestKeyAndRef extends XDTester {
 				reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
-"  <xd:declaration> uniqueSet u {var Parser x, int y; a: string(); var String z} </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet u {var Parser x, int y; a: string(); var String z}</xd:declaration>\n" +
 "  <a>\n" +
 "    <DefParams>\n" +
 "       <Param xd:script=\"init out(u.z==null);*;finally out(','+u.z+',')\"\n" +
@@ -910,7 +908,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // toContainer() - variant with container as context
 "<xd:def xmlns:xd='" + _xdNS + "' root='List' >\n" +
-"  <xd:declaration> uniqueSet members {room: string()}; </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet members {room: string()};</xd:declaration>\n" +
 "  <List xd:script='finally {returnElement(xcreate(\"School\"))}'>\n" +
 "     <Member xd:script='occurs +' Name='string()' Room='members.room.SET()'/>\n" +
 "  </List>\n" +
@@ -925,7 +923,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // test reporting iof incomplete key items,
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='T'>\n" +
-"  <xd:declaration> uniqueSet r {a: string(1,2); b: string(1,2)}; </xd:declaration>\n" +
+"  <xd:declaration>uniqueSet r {a: string(1,2); b: string(1,2)};</xd:declaration>\n" +
 "  <T> <R xd:script='*; finally r.ID()' A='r.a' B='r.b'/> </T>\n" +
 "</xd:def>";
 			xp = compile(xdef);

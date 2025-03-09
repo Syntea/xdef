@@ -47,7 +47,6 @@ import static test.XDTester._xdNS;
  * @author Vaclav Trojan
  */
 public final class TestXdef extends XDTester {
-
 	private static int _myX;
 
 	@Override
@@ -3076,7 +3075,8 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
 			xp = XDFactory.compileXD(props, //datetime
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"dateTime();\" /></xd:def>");
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\">"+
+"<root datum=\"dateTime();\" /></xd:def>");
 			xml = "<root datum=\"2024-11-04T10:00:00\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -3096,7 +3096,9 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
 			xp = XDFactory.compileXD(props, //date
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"date();\"/></xd:def>");
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\">\n"+
+"  <root datum=\"date();\"/>\n"+
+"</xd:def>");
 			xml = "<root datum=\"2024-11-04\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -3116,7 +3118,8 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
 			xp = XDFactory.compileXD(props, //dateYMDhms
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"dateYMDhms();\" /></xd:def>");
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\">"+
+"<root datum=\"dateYMDhms();\" /></xd:def>");
 			xml = "<root datum=\"20241104100000\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -3169,8 +3172,8 @@ public final class TestXdef extends XDTester {
 "  <IdentSmlouvy CisloSmlouvy=\"cisloSmlouvy()\" IdPojistitel=\"id()\" PoradiVozidla=\"poradiVozidla()\"/>\n"+
 "</xd:def>\n",
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Example\">\n" +
-"    <IdentSmlouvy IdPojistitel=\"id()\" CisloSmlouvy=\"cisloSmlouvy()\" PoradiVozidla=\"poradiVozidla()\"\n"+
-"                  xd:script   =\"implements Common#IdentSmlouvy\"/>\n" +
+"  <IdentSmlouvy xd:script=\"implements Common#IdentSmlouvy\"\n" +
+"                IdPojistitel=\"id()\" CisloSmlouvy=\"cisloSmlouvy()\" PoradiVozidla=\"poradiVozidla()\"/>\n"+
 "</xd:def>\n"});
 			xml = "<IdentSmlouvy CisloSmlouvy=\"c\" IdPojistitel=\"1\" PoradiVozidla=\"p\"/>";
 			xd = xp.createXDDocument("Common");
@@ -3238,8 +3241,8 @@ public final class TestXdef extends XDTester {
 	}
 	public final static long myError() {throw new RuntimeException("MyError");}
 	public final static void testPos(final XXNode xnode) {}
-	/** Check datetime according to mask1. If parsed value has time zone UTC,
-	 * then convert date to the local time. Format of result is given by mask2.
+	/** Check datetime according to mask1. If parsed value has time zone UTC convert date to the local time.
+	 * Format of result is in mask2.
 	 * @param xdata actual XXData object.
 	 * @param args array of parameters.
 	 * @return true if format is OK.
@@ -3255,7 +3258,7 @@ public final class TestXdef extends XDTester {
 		}
 		if (!p.testParsedDatetime()) {
 			DefParseResult result = new DefParseResult(s);
-			result.error("E02", "Chybna hodnota");
+			result.error("E02", "Incorrect value");
 			return result;
 		}
 		SDatetime sd = p.getParsedSDatetime();
