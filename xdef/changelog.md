@@ -1,6 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
+<<<<<<< HEAD
 # Version 42.2.23, release-date 2025-03-09
+=======
+# Version 42.2.23, release-date 2025-03-07
+>>>>>>> 775d1dd23d018b763f65f963054145fe09b8fe17
 * .
 
 # Version 42.2.22, release-date 2025-03-07
