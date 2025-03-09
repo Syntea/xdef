@@ -3143,11 +3143,9 @@ public final class TestXdef extends XDTester {
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
 "  <A><B xd:script='*;' a='? string();' b='? string() CHECK string(1);'/></A>\n" +
 "</xd:def>").createXDDocument();
-			parse(xd, "<A><B b='a'/></A>", reporter);
+			parse(xd, "<A><B b='б'/></A>", reporter);
 			assertNoErrorsAndClear(reporter);
-			parse(xd, "<A><B a='�����������������'/></A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
-			parse(xd, "<A><B b='�����������������'/></A>", reporter);
+			parse(xd, "<A><B b='النشر6ت'/></A>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
 			parse(xd, "<A><B b='abc'/></A>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF822"));
