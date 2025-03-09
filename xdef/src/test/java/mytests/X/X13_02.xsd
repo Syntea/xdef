@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+  targetNamespace="b.b" xmlns:xs="http://www.w3.org/2001/XMLSchema">    
+  <xs:element name="Position">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Name" type="x" xmlns="b.b" />
+      </xs:sequence>
+      <xs:attribute form="qualified" name="place" use="optional" type="y" xmlns="b.b" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Salary">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="z" xmlns="b.b">
+          <xs:attribute form="qualified" name="currency" use="required" type="a" xmlns="b.b" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="a">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="x">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="y">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="z" >
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0"/>
+      <xs:maxExclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

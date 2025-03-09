@@ -1,0 +1,16 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!--Element Body structures-->
+  <!--=====================================================-->
+  <xs:element name="A" type="A_Type"/>
+  <!--Partial substantive structures-->
+  <!--=====================================================-->
+  <xs:complexType name="A_Type">
+    <xs:choice>
+      <xs:element maxOccurs="1" minOccurs="0" name="B"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="C"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="A_choice_B_Type"/>
+  <xs:complexType name="A_choice_C_Type"/>
+</xs:schema>

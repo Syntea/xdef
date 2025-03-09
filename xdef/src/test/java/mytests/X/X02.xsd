@@ -1,0 +1,10 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace=""
+           attributeFormDefault="qualified"
+           elementFormDefault="qualified">
+    <xs:element name="X">
+      <xs:complexType>
+        <xs:attribute name="a" type="xs:int" use="optional"/>           
+      </xs:complexType>
+    </xs:element>
+</xs:schema>

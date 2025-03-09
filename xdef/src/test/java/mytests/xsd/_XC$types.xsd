@@ -1,0 +1,43 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="$_types_$" xmlns="$_types_$"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="a">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(abc,123)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="abc"/>
+      <xs:enumeration value="123"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="v">
+    <xs:restriction base="a"/>
+  </xs:simpleType>
+  <xs:simpleType name="x">
+    <xs:restriction base="a"/>
+  </xs:simpleType>
+  <xs:simpleType name="w">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="4"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="z">
+    <xs:restriction base="w"/>
+  </xs:simpleType>
+  <xs:simpleType name="_C">
+    <xs:union>
+      <xs:simpleType>
+        <xs:annotation>
+          <xs:documentation>Created from X-definition xdatetime(d.M.yyyy)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="([1-9]|[0-2]\d|3[0-1])\.([1-9]|0[1-9]|1[0-2])\.(-)?\d{4}"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="\s*"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

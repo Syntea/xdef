@@ -1,0 +1,5 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Ab" root="A" >
+  <A><B xd:script='*; ref C'/></A>
+  <C c='? string()'>? string</C>
+</xd:def>
+

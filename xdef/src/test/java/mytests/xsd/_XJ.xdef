@@ -1,0 +1,27 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Ab" root="A" >
+  <xd:declaration>
+  final BNFGrammar rr = new BNFGrammar('
+    WS     ::= [#9#10#13 ]*   /*skip white spaces*/
+    SEP    ::= WS "," WS    /*separator of values*/
+    LnPrd  ::= [1-9] | [1-4] [0-9]
+    Month  ::= [1-9] | [1] [0-2]
+    Months ::= Month ( SEP Month )*
+    YPrd   ::= LnPrd? "Y" "(" Months ")"
+    MDay   ::= [1-9] | [1-2][0-9] | [3][0-1] | "-1"
+    MDays  ::= MDay (SEP MDay)*
+    MPrd   ::= LnPrd? "M" "(" MDays ")"
+    WDay   ::= [0-7] | "-1"
+    WDays  ::= WDay (SEP WDay)*
+    WPrd   ::= LnPrd? WS "W" "(" WDays ")"
+    TimeH  ::= [0-1][0-9] | [2][0-3]
+    TimeM  ::= [0-5] [0-9]
+    Time   ::= TimeH ":" TimeM
+    Times  ::= Time (SEP Time)*
+    DPrd   ::= LnPrd? WS "D" "(" Times ")"
+    HPrd   ::= LnPrd "H"
+    MinPrd ::= LnPrd "Min"
+    reccur ::= MinPrd? HPrd? DPrd? WPrd? MPrd? YPrd?'
+);
+  </xd:declaration>
+  <A>BNF(rr, 'reccur');</A>
+</xd:def>

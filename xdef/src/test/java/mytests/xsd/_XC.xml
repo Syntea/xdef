@@ -1,0 +1,6 @@
+<A xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="_XC.xsd"
+   a='123' b='abcde' c='1'>
+  <B/>
+  <C>29.1.2020</C>
+</A>

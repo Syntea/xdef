@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:def xmlns:xd      ="http://www.xdef.org/xdef/4.2"  
+        xmlns         ="http://ws.ckp.cz/pis/PX1/2024/05"
+        impl-version  ="2024/05.0" impl-date="2024-05-09" 
+        xd:importLocal="GAM_type, PIS_type" 
+        xd:name       ="PX1_common"
+        xd:root       ="PojistnaSmlouva|PojistnaUdalost|OperacePS|OperacePU|
+                        Fault|PingStatus|PojistnaSmlouvaIdent|PojistnaUdalostIdent|
+                        ObjektPS|ObjektP1|ObjektPU|ObjektL1"
+ >
+
+ <xd:declaration scope="global">
+   type  gamDateTime2xsDate      xdatetime('yyyyMMddHHmmss','yyyy-MM-dd');
+ </xd:declaration>
+
+ <!-- Zakladni struktura pojistne smlouvy pojisteni vozidla a odpovedi -->
+ <!-- ================================================================ -->
+ <PojistnaSmlouva               xd:script="1;    ref PojistnaSmlouvaAttr">
+    <PojistnaSmlouvaIdent       xd:script="0..;  ref PojistnaSmlouvaIdent"/>
+    <Pojistnik                  xd:script="1;    ref SubjektPoradi"/>
+    <PojisteneVozidlo           xd:script="1;    ref VozidloPojistenePoradi">
+       <Vlastnik                xd:script="1;    ref SubjektPoradi"/>
+       <Provozovatel            xd:script="1;    ref SubjektPoradi"/>
+       <StavTachometru          xd:script="0..;  ref StavTachometru"/>
+       <ZelenaKarta             xd:script="0..;  ref ZelenaKarta"/>
+       <PojisteneRiziko         xd:script="1..;  ref PojisteneRiziko">
+          <PojistnaCastka       xd:script="0..;  ref PojistnaCastka"/>
+          <Pojistne             xd:script="0..;  ref Pojistne"/>
+          <PojistnaDoba         xd:script="1..;  ref PojistnaDoba"/>
+        </PojisteneRiziko>
+    </PojisteneVozidlo>
+ </PojistnaSmlouva>
+
+ <PojistnaSmlouvaOut            xd:script="1;    ref PojistnaSmlouvaAttr">
+    <PojistnaSmlouvaIdent       xd:script="0..;  ref PojistnaSmlouvaIdent"/>
+    <Pojistnik                  xd:script="1;    ref SubjektPoradi"/>
+    <PojisteneVozidlo           xd:script="1;    ref VozidloPojistenePoradiOut">
+       <Vlastnik                xd:script="1;    ref SubjektPoradi"/>
+       <Provozovatel            xd:script="1;    ref SubjektPoradi"/>
+       <StavTachometru          xd:script="0..;  ref StavTachometru"/>
+       <ZelenaKarta             xd:script="0..;  ref ZelenaKarta"/>
+       <PojisteneRiziko         xd:script="1..;  ref PojisteneRiziko">
+          <PojistnaCastka       xd:script="0..;  ref PojistnaCastka"/>
+          <Pojistne             xd:script="0..;  ref Pojistne"/>
+          <PojistnaDoba         xd:script="1..;  ref PojistnaDoba"/>
+        </PojisteneRiziko>
+    </PojisteneVozidlo>
+ </PojistnaSmlouvaOut>
+
+ <PojistnaSmlouvaIdent          xd:script="ref PojistnaSmlouvaID"
+         Prijato                  ="  xsTimeStamp()"
+         Verze                    ="? verzeSeq()"
+ />
+
+ <OperacePS                     xd:script="ref PojistnaSmlouvaID"
+         CisloORV                 ="? cisloDokladu()"
+         CisloTP                  ="? cisloDokladu()"
+         DatumUkonceni            ="? xsDate()"
+         DatumUzavreni            ="? xsDate()"
+         Operace                  ="  operationName()"
+         PojisteniDo              ="? xsDateTimeDo()"
+         PojisteniOd              ="? xsDateTime()"
+         SPZ                      ="? spz()"
+         StavSmlouvy              ="? kodStavuSmlouvy()"
+         VIN                      ="? vin()"
+         VozidloPlatnostOd        ="? xsDateTime()"  >
+   <Chyby                       xd:script="0..1; ref Chyby" />
+ </OperacePS>
+
+
+ <!-- Zakladni struktura pojistne udalosti s odpovedi                  -->
+ <!-- ================================================================ -->
+ <PojistnaUdalost               xd:script="1;    ref PojistnaUdalostAttr">
+    <PojistnaUdalostIdent       xd:script="0..;  ref PojistnaUdalostIdent"/>
+    <PojistnaSmlouva            xd:script="1;    ref PojistnaSmlouvaID"
+         Prijato                  ="? xsTimeStamp()"
+         Verze                    ="? verzeSeq()"
+    />
+    <MistoPU                    xd:script="1;    ref MistoPU"/>
+
+    <xd:mixed>
+      <SkodiciVozidlo           xd:script="1;   ref VozidloPUPoradi; onAbsence setErr(1111)"
+        TypVozidlaSkodiciho       ="  kodTypuSkodicihoVozidla()">
+        <Vlastnik               xd:script="0..1; ref SubjektPoradi"/>  <!-- 0 pouze u nezjisteneho vozidla --> 
+        <Provozovatel           xd:script="0..1; ref SubjektPoradi"/>  <!-- 0 pouze u nezjisteneho vozidla --> 
+        <Ridic                  xd:script="0..1; ref OsobaPoradi"/>
+        <SkodaVozidla           xd:script="0..1; ref SkodaVozidla"/>
+      </SkodiciVozidlo>
+
+      <NarokPU                   xd:script="0..;  ref Narok"/>
+    
+      <Poskozeny               xd:script="0..1; ref SubjektPoradi">
+         <Narok                xd:script="0..;  ref Narok">
+            <Ucet              xd:script="0..1; ref Ucet"/>
+         </Narok>
+      </Poskozeny>
+
+      <PoskozeneVozidlo        xd:script="0.. ; ref VozidloPUPoradi"   
+        KodKategorieFlotily      =" illegal"
+        KodTypuUziti             =" illegal"
+        Leasing                  =" illegal"
+        TarifniSkupina           =" illegal"
+        >                                                  <!-- větší než 1 pouze u odpovědi z dat historie --> 
+        <Vlastnik              xd:script="0..1; ref SubjektPoradi"/> 
+        <Provozovatel          xd:script="0..1; ref SubjektPoradi"/> 
+        <Ridic                 xd:script="0..1; ref OsobaPoradi"/>
+        <SkodaVozidla          xd:script="0..1; ref SkodaVozidla"/>
+        <Narok                 xd:script="0..;  ref Narok">
+          <Ucet                xd:script="0..1; ref Ucet"/>
+        </Narok>
+      </PoskozeneVozidlo>
+
+      <PoskozenyMajetek        xd:script="0..1; ref PoskozenyMajetekAttr">
+        <AdresaMajetku         xd:script="0..1; ref AdresaObrazPoradi"
+         TypAdresy               ="  illegal"
+        />
+        <VlastnikMajetku       xd:script="0..1; ref SubjektPoradi"/>
+        <Narok                 xd:script="0..;  ref Narok">
+          <Ucet                xd:script="0..1; ref Ucet"/>
+        </Narok>
+      </PoskozenyMajetek>
+    </xd:mixed>
+
+    <xd:mixed>
+      <Svedek                  xd:script="0..;  ref OsobaPoradi"/>
+      <Znalec                  xd:script="0..;  ref SubjektPoradi"/>
+      <Likvidator              xd:script="0..;  ref SubjektPoradi"/>
+    </xd:mixed>
+ </PojistnaUdalost>
+
+ <PojistnaUdalostOut            xd:script="1;    ref PojistnaUdalostAttr">
+    <PojistnaUdalostIdent       xd:script="0..;  ref PojistnaUdalostIdent"/>
+    <PojistnaSmlouva            xd:script="1;    ref PojistnaSmlouvaID"
+         Prijato                  ="? xsTimeStamp()"
+         Verze                    ="? verzeSeq()"
+    />
+    <MistoPU                    xd:script="1;    ref MistoPU"/>
+
+    <xd:mixed>
+      <SkodiciVozidlo           xd:script="1;   ref VozidloPUPoradiOut; onAbsence setErr(1111)"
+        TypVozidlaSkodiciho       ="  kodTypuSkodicihoVozidla()">
+        <Vlastnik               xd:script="0..1; ref SubjektPoradi"/>  <!-- 0 pouze u nezjisteneho vozidla --> 
+        <Provozovatel           xd:script="0..1; ref SubjektPoradi"/>  <!-- 0 pouze u nezjisteneho vozidla --> 
+        <Ridic                  xd:script="0..1; ref OsobaPoradi"/>
+        <SkodaVozidla           xd:script="0..1; ref SkodaVozidla"/>
+      </SkodiciVozidlo>
+
+      <NarokPU                   xd:script="0..;  ref Narok"/>
+    
+      <Poskozeny               xd:script="0..1; ref SubjektPoradi">
+         <Narok                xd:script="0..;  ref Narok">
+            <Ucet              xd:script="0..1; ref Ucet"/>
+         </Narok>
+      </Poskozeny>
+
+      <PoskozeneVozidlo        xd:script="0.. ; ref VozidloPUPoradiOut"   
+        KodKategorieFlotily      =" illegal"
+        KodTypuUziti             =" illegal"
+        Leasing                  =" illegal"
+        TarifniSkupina           =" illegal"
+        >                                                  <!-- větší než 1 pouze u odpovědi z dat historie --> 
+        <Vlastnik              xd:script="0..1; ref SubjektPoradi"/> 
+        <Provozovatel          xd:script="0..1; ref SubjektPoradi"/> 
+        <Ridic                 xd:script="0..1; ref OsobaPoradi"/>
+        <SkodaVozidla          xd:script="0..1; ref SkodaVozidla"/>
+        <Narok                 xd:script="0..;  ref Narok">
+          <Ucet                xd:script="0..1; ref Ucet"/>
+        </Narok>
+      </PoskozeneVozidlo>
+
+      <PoskozenyMajetek        xd:script="0..1; ref PoskozenyMajetekAttr">
+        <AdresaMajetku         xd:script="0..1; ref AdresaObrazPoradi"
+         TypAdresy               ="  illegal"
+        />
+        <VlastnikMajetku       xd:script="0..1; ref SubjektPoradi"/>
+        <Narok                 xd:script="0..;  ref Narok">
+          <Ucet                xd:script="0..1; ref Ucet"/>
+        </Narok>
+      </PoskozenyMajetek>
+    </xd:mixed>
+
+    <xd:mixed>
+      <Svedek                  xd:script="0..;  ref OsobaPoradi"/>
+      <Znalec                  xd:script="0..;  ref SubjektPoradi"/>
+      <Likvidator              xd:script="0..;  ref SubjektPoradi"/>
+    </xd:mixed>
+ </PojistnaUdalostOut>
+
+ <PojistnaUdalostIdent         xd:script="ref PojistnaUdalostID"
+         Prijato                 ="  xsTimeStamp()"
+         Verze                   ="? verzeSeq()"
+ />
+
+ <OperacePU                    xd:script="ref PojistnaUdalostID"
+         CisloSU                 ="  cisloSU()"
+         DatumUzavreniPU         ="? xsDateTime()"
+         DatumVzniku             ="  xsDateTime()"
+         Operace                 ="  operationName()"
+         StavPU                  ="  kodStavuSUPU()"
+         StavSU                  ="  kodStavuSUPU()">
+   <SkodiciVozidlo             xd:script="0..1; ref VozidloX"/>
+   <PoskozeneVozidlo           xd:script="0..;  ref VozidloX"/>
+   <PoskozenySubjekt           xd:script="0..;  ref Subjekt"/>
+   <PoskozenyMajetek           xd:script="0..;  ref PoskozenyMajetekAttr"/>
+   <Narok                      xd:script="0..;  ref Narok"
+         Poradi                  ="  illegal"
+   />
+   <Chyby                      xd:script="0..1; ref Chyby" />
+ </OperacePU>
+
+
+ <!-- Zakladni struktury pro potvrzeni funkcnosti a chybove odpovedi  -->
+ <!-- =============================================================== -->
+ <PingStatus>
+    <Program                   xd:script="0..; ref InfoProgram"/>
+    <Db                        xd:script="0..; ref InfoDb"/>
+    <InfoValue                 xd:script="0..; ref InfoValue"/>
+ </PingStatus>
+
+ <Fault>
+    <Chyby                     xd:script="ref Chyby"/>
+ </Fault>
+
+
+ <!-- Dilci struktury v abecednim poradi                              -->
+ <!-- =============================================================== -->
+ <Adresa
+         CisloDomu             ="? cisloDomu()"
+         Obec                  ="? obec()"
+         Okres                 ="? okres()"
+         PSC                   ="? psc()"
+         Stat                  ="? kodStatu()"
+         Ulice                 ="? ulice()"
+ />
+
+ <AdresaObraz                xd:script="ref Adresa"
+         PlatnostOd            ="  xsDate()"
+ />
+
+ <AdresaObrazPoradi          xd:script="ref Adresa"
+         PlatnostDo            ="? xsDateDo()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+         TypAdresy             ="? kodTypuAdresy()"
+ />
+
+ <AdresaPoradi               xd:script="ref Adresa"
+         Poradi                ="  poradi()"
+ />
+
+ <Chyba
+         KodChyby              ="  errorCode()"
+         Typ                   ="  errorType()"
+         Xpath                 ="? errorXpath()"
+         Hodnota               ="? errorValue()"
+         Popis                 ="? errorDescription()" 
+ />
+
+ <Chyby>
+   <Chyba                    xd:script="1..;  ref Chyba" />
+ </Chyby>
+
+ <EmailObrazPoradi           
+         EmailAdresa           ="  emailAdresa()"
+         PlatnostDo            ="? xsDateDo()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+ />
+
+ <InfoProgram
+         InstallationDate      ="? xsDateTime()"
+         Name                  ="  programName()"
+         Version               ="  version()"
+ />
+
+ <InfoDb
+         InstallationDate      ="? xsDateTime()"
+         Part                  ="  dbName()"
+         Version               ="  version()"
+ />
+
+ <InfoValue
+         Name                  ="  paramName()"
+         Value                 ="  paramValue()"
+ />
+
+ <MistoHist                  xd:script="ref MistoPU"
+         PlatnostOd            ="  xsDate()"
+ />
+
+ <MistoPU
+         MistoText             ="? mistoText()"
+         StatNehody            ="? kodStatu()">
+
+    <GPS                     xd:script="0..1"
+         SSyst                 ="  gpsSystem()"
+         Sirka                 ="  gpsCoordinate()"
+         Delka                 ="  gpsCoordinate()"
+    />
+
+    <Adresa                  xd:script="0..1; ref AdresaObrazPoradi"
+         Stat                  ="  kodStatu()"
+         TypAdresy             ="  illegal">
+       <HistorieAdresy       xd:script="0..; ref AdresaObraz"/>
+    </Adresa>
+
+    <Vozovka                 xd:script="0..1"
+         CisloSilnice          ="? cisloSilnice()"
+         DoObce                ="? obec()"
+         Km                    ="? kilometrovnik()"
+         Okres                 ="? okres()"
+         Stat                  ="  kodStatu()"
+         ZObce                 ="? obec()"
+    />
+ </MistoPU>
+
+ <Narok
+         Castka                ="  castka()"
+         KodRizika             ="  kodRizika()"
+         Poradi                ="  poradi()"
+         TypNaroku             ="  kodTypuNaroku()"
+         TypRegresu            ="? kodTypuRegresu()"
+         TypSkody              ="  kodPodtypuSkody()"
+ />
+
+ <NarokPlatnostOd
+         CisloPU               ="? cisloPU()"
+         Mena                  ="  kodMeny()"
+         TypSkody              ="  kodPodtypuSkody()"
+         PlatnostOd            ="  xsDateTime()"
+         Poradi                ="? poradiNaroku()"
+ />
+
+ <ObjektL1                   xd:script="ref ObjektL1Attr">
+   <ZmenaSU                  xd:script="1..;  ref ZmenaSUAttr"/>
+   <Misto                    xd:script="0..;  ref MistoHist"/>
+   <xd:choice>
+    <VozidloPojistnika       xd:script="1"
+         PoradiVozidlaSU       ="  poradiVozidlaSU()">
+      <Smlouva               xd:script="1;    ref PojistnaSmlouvaIDP1"
+         DruhPojisteni         ="  kodDruhuPojisteni()">
+        <Pojistnik           xd:script="0..;  ref SubjektAdresaHist" />
+        <VozidloPS           xd:script="0..1; ref VozidloHist"/>
+      </Smlouva>
+      <Ridic                 xd:script="0..;  ref OsobaAdresaHist" />
+      <SkodaVozidla          xd:script="0..;  ref SkodaVozidlaHist" />
+    </VozidloPojistnika>
+    <VozidloNepojistene
+         PoradiVozidlaSU       ="  poradiVozidlaSU()">
+      <VozidloPS             xd:script="1;    ref VozidloHist"/>
+      <Ridic                 xd:script="0..;  ref OsobaAdresaHist"/>
+      <SkodaVozidla          xd:script="0..;  ref SkodaVozidlaHist"/>
+    </VozidloNepojistene>
+    <VozidloNezjistene       xd:script="1;    ref VozidloNezjistene"/>
+   </xd:choice>
+   <VozidloUcastnika         xd:script="0.."
+         PoradiVozidlaSU       ="  poradiVozidlaSU()">
+     <VozidloPS              xd:script="1;    ref VozidloHist"/>
+     <Ridic                  xd:script="0..;  ref OsobaAdresaHist" />
+     <SkodaVozidla           xd:script="0..;  ref SkodaVozidlaHist" />
+   </VozidloUcastnika>
+   <Svedek                   xd:script="0..;  ref OsobaAdresaHist" />
+   <Znalec                   xd:script="0..;  ref SubjektAdresaHist" />
+   <RezervaSU                xd:script="0..;  ref RezervaHist"/>
+   <PlneniSU                 xd:script="0..;  ref PlneniHist"/>
+   <RegresSU                 xd:script="0..;  ref RegresHist"/>
+
+   <PU                       xd:script="1;    ref PojistnaUdalostID"
+         DatumUzavreniPU       ="? xsDateTime()"
+         StavPU                ="  kodStavuSUPU()">
+      <Poskozeny             xd:script="1..;  ref SubjektAdresaHist" />
+      <RezervaPU             xd:script="0..;  ref RezervaHist"
+         PoradiVozidlaSU       ="? poradiVozidlaSU()"
+      />
+      <PlneniPU              xd:script="0..;  ref PlneniHist"
+         PoradiVozidlaSU       ="? poradiVozidlaSU()"
+      />
+      <RegresPU              xd:script="0..;  ref RegresHist"
+         PoradiVozidlaSU       ="? poradiVozidlaSU()"
+      />
+   </PU>
+   <Likvidator               xd:script="0..;  ref OsobaAdresaHist"/>
+ </ObjektL1>
+
+ <ObjektL1Attr
+         CisloSU               ="  cisloSU()"
+         DatumUzavreniSU       ="? xsDateTime()"
+         KodDuvoduUzavreni     ="? kodDuvoduUzavreniSU()"
+         KodPojistitele        ="  kodPojistitele()"
+         LikvidacniTitul       ="  likvidacniTitul()"
+         StavSU                ="  kodStavuSUPU()"
+ />
+
+ <ObjektP1                   xd:script="ref PojistnaSmlouvaIDP1"
+         CisloDokladuPojisteni ="? cisloDokladuPojisteni()"
+         DatumUkonceni         ="? xsDateTime()"
+         DatumUzavreni         ="  xsDateTime()"
+         DuvodZanikuSmlouvy    ="? kodDuvoduZanikuSmlouvy()"
+         NositelPSP            ="  nositelPSP()"
+         StavSmlouvy           ="  kodStavuSmlouvy()"
+         Verze                 ="? verzeSeq()">
+   <PojistnaSmlouvaIdent     xd:script="0..; ref PojistnaSmlouvaIDP1"
+         PlatnostOd            ="  xsDateTime()"
+         Verze                 ="? verzeSeq()"
+   />
+   <Pojistnik                xd:script="1;   ref Role"/>
+   <Provozovatel             xd:script="1;   ref Role"/>
+   <Vlastnik                 xd:script="1;   ref Role"/>
+   <VozidloSmlouvy           xd:script="1.."
+         DruhPojisteni         ="  kodDruhuPojisteni()"
+         Leasing               ="? booleanYAN()"
+         LimitPlneniMajetek    ="  castka()"
+         LimitPlneniZdravi     ="  castka()"
+         PlatnostOd            ="  xsDateTime()"
+         Pojistne              ="  castka()"
+         PojistneBM            ="  castka()"
+         TarifniSkupina        ="  kodTarifniSkupiny()">
+      <Flotila               xd:script="0..1"
+         KodKategorieFlotily   ="  kodKategorieFlotily()"
+         KodTypuUziti          ="? kodTypuUziti()"
+      />
+      <Vozidlo               xd:script="ref Vozidlo"
+         CisloORV              ="? cisloDokladu()"
+         CisloTP               ="? cisloDokladu()"
+         RokDoProvozu          ="? xsYear()"
+      />
+   </VozidloSmlouvy>
+   <DobaPojisteni            xd:script="1..; ref PojistnaDoba"
+         DuvodZanikuPojisteni  ="  illegal"
+   />
+   <StavTachometru           xd:script="0..; ref StavTachometru"/>
+   <ZelenaKarta              xd:script="0..; ref ZelenaKarta"/>
+ </ObjektP1>
+
+ <ObjektPS                   xd:script="ref PojistnaSmlouvaOut"
+         DatumPocatkuPlatnosti ="? xsDateTime()"
+         Verze                 ="? verzeSeq()"
+ />
+
+ <ObjektPU                   xd:script="ref PojistnaUdalostOut"
+         Verze                 ="? verzeSeq()"
+ />
+
+ <Osoba
+         DatumNarozeni         ="? xsDate()"
+         Jmeno                 ="? jmeno()"
+         Prijmeni              ="? prijmeni()"
+         RC                    ="? rc()"
+         StatPrislusnost       ="? kodStatu()"
+ />
+
+ <OsobaAdresaHist            xd:script="ref Osoba"
+         PlatnostOd            ="  xsDateTime()">
+    <Adresa                  xd:script="0..1; ref Adresa"/>
+ </OsobaAdresaHist>
+
+ <OsobaObraz                 xd:script="ref Osoba"
+         PlatnostOd            ="  xsDate()"
+ />
+
+ <OsobaObrazPoradi           xd:script="ref Osoba"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+ />
+
+ <OsobaPoradi                xd:script="ref OsobaObrazPoradi">
+    <HistorieSubjektu        xd:script="0..;  ref OsobaObraz"/>
+    <Adresa                  xd:script="0..;  ref AdresaObrazPoradi">
+       <HistorieAdresy       xd:script="0..;  ref AdresaObraz"/>
+    </Adresa>
+ </OsobaPoradi>
+
+ <PlneniHist                 xd:script="ref NarokPlatnostOd"
+         KodTypMinusPlneni     ="? kodTypuMinusPlneni()"
+         Platba                ="  castkaDec()"
+         Ucet                  ="? ucetText()"
+         Vyplaceno             ="  castkaDec()"
+ />
+
+ <PojisteneRiziko
+         KodRizika             ="  kodRizika()"
+ />
+
+ <PojistnaCastka
+         Castka                ="  castka()"
+         PlatnostDo            ="? xsDateDo()"
+         PlatnostOd            ="  xsDate()"
+         TypCastky             ="  kodTypuPojistneCastky()"
+ />
+
+ <PojistnaDoba
+         DuvodZanikuPojisteni  ="? kodDuvoduZanikuPojisteni()"
+         PojisteniDo           ="? xsDateTimeDo()"
+         PojisteniOd           ="  xsDateTime()"
+ />
+
+ <PojistnaSmlouvaAttr        xd:script="ref PojistnaSmlouvaIdent"
+         CisloDokladuPojisteni ="? cisloDokladuPojisteni()"
+         DatumOdstoupeni       ="? xsDateTime()"
+         DatumPocatkuPlatnosti ="  xsDateTime()"
+         DatumSjednani         ="  xsDateTime()"
+         DuvodOdstoupeni       ="? kodDuvoduOdstoupeni()"
+         NositelPSP            ="  nositelPSP()"
+         StavSmlouvy           ="  kodStavuSmlouvy()"
+         Verze                 ="  verzeSeq()"
+ />
+
+ <PojistnaSmlouvaID
+         CisloSmlouvy          ="  cisloSmlouvy()"
+         IdentPodsmlouvy       ="  poradiVozidla()"
+         KodPojistitele        ="  kodPojistitele()"
+ />
+
+ <PojistnaSmlouvaIDP1
+         CisloSmlouvy          ="  cisloSmlouvy()"
+         KodPojistitele        ="  kodPojistitele()"
+         PoradiVozidla         ="  poradiVozidla()"
+ />
+
+ <PojistnaUdalostAttr        xd:script="ref PojistnaUdalostIdent"
+         CisloSU               ="  cisloSU()"
+         CJRelacePolicie       ="? cjRelacePolicie()"
+         DatumCasSUDo          ="? xsDateTimeDo()"
+         DatumHlaseni          ="? xsDateTime()"
+         DatumHlaseniSU        ="? xsDateTime()"
+         DatumUzavreni         ="? xsDateTime()"
+         DatumUzavreniSU       ="? xsDateTime()"
+         DatumVzniku           ="  xsDateTime()"
+         LikvidacniTitul       ="  likvidacniTitul()"
+         MistoStatSU           ="? kodStatu()"
+         RozhodnaUdalost       ="  booleanYAN()"
+         StavPU                ="  kodStavuSUPU()"
+         StavSU                ="  kodStavuSUPU()"
+         StavSetreniPolicie    ="? kodStavuSetreniPolicie()"
+         Verze                 ="  verzeSeq()"
+         ZpusobUzavreni        ="? kodZpusobuUzavreniPU()"
+ />
+
+ <PojistnaUdalostID
+         CisloPU               ="  cisloPU()"
+         KodPojistitele        ="  kodPojistitele()"
+ />
+
+ <Pojistne
+         Castka                ="  castka()"
+         FrekvenceUhrady       ="? kodFrekvenceUhrady()"
+         PlatnostDo            ="? xsDateDo()"
+         PlatnostOd            ="  xsDate()"
+         TypPojistneho         ="  kodTypuPojistneho()"
+ />
+
+ <PoskozenyMajetekAttr
+         PopisMajetku          ="? popisMajetku()"
+         Poradi                ="  poradi()"
+         TypMajetku            ="? kodTypuMajetku(); onAbsence setText('3')" 
+ />
+
+ <RegresHist                 xd:script="ref NarokPlatnostOd"
+         KodTypRegresu         ="? kodTypuRegresu()"
+         Castka                ="  castkaDec()"
+         Regres                ="  castkaDec()"
+ />
+
+ <RezervaHist                xd:script="ref NarokPlatnostOd"
+         Rezerva               ="  castkaDec()"
+         Zmena                 ="  castkaDec()"
+ />
+
+ <Role>                  
+   <Subjekt                  xd:script="1..;  ref SubjektObrazPoradi"/>
+   <Adresa                   xd:script="0..;  ref AdresaObrazPoradi"/>
+   <Email                    xd:script="0..;  ref EmailObrazPoradi"/> 
+   <Telefon                  xd:script="0..;  ref TelefonObrazPoradi"/> 
+ </Role>
+
+ <SkodaVozidlaHist           xd:script="ref SkodaVozidla"
+         PlatnostOd            ="  xsDateTime()"
+ />
+
+ <SkodaVozidla
+         KodOpravny            ="? kodOpravny()"
+         Kvadrant              ="? kvadrant()"
+         PlatnostDoTK          ="? xsDate()"
+         PocetKm               ="? pocetKm()"
+         Skoda                 ="? castka()"
+ />
+
+ <StavTachometru
+         DatumPocetKm          ="  xsDate()"
+         PocetKm               ="  pocetKm()"
+ />
+
+ <Subjekt
+         DatumNarozeni         ="? xsDate()"
+         IC                    ="? ic()"
+         Jmeno                 ="? jmeno()"
+         NazevFirmy            ="? nazevFirmy()"
+         Prijmeni              ="? prijmeni()"
+         RC                    ="? rc()"
+         StatPrislusnost       ="? kodStatu()"
+ />
+
+ <SubjektAdresaHist          xd:script="ref Subjekt"
+         PlatnostOd            ="  xsDateTime()">
+    <Adresa                  xd:script="0..1; ref Adresa"/>
+ </SubjektAdresaHist>
+
+ <SubjektObraz               xd:script="ref Subjekt"
+         PlatnostOd            ="  xsDate()"
+ />
+
+ <SubjektObrazPoradi         xd:script="ref Subjekt"
+         PlatnostDo            ="? xsDateDo()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+ />
+
+ <SubjektPoradi              xd:script="ref SubjektObrazPoradi">
+    <HistorieSubjektu        xd:script="0..;  ref SubjektObraz"/>
+    <Adresa                  xd:script="0..;  ref AdresaObrazPoradi">
+       <HistorieAdresy       xd:script="0..;  ref AdresaObraz"/>
+    </Adresa>
+    <Email                   xd:script="0..;  ref EmailObrazPoradi"/>
+    <Telefon                 xd:script="0..;  ref TelefonObrazPoradi"/>
+ </SubjektPoradi>
+
+ <TelefonObrazPoradi         
+         PlatnostDo            ="? xsDateDo()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+         TelCisloCZSK          ="? telefonCZSK()" 
+         TelCisloText          ="? telefonText()" 
+ />
+
+ <Ucet
+         BankaCR               ="? kodBankyCR()"
+         BankaZahr             ="? bankaZahr()"
+         CisloCR               ="? ucetCisloCR()"
+         CisloZahr             ="? ucetCisloZahr()"
+         IBAN                  ="? ucetIBAN()"
+         Poradi                ="? poradi()"
+         PredcisliCR           ="? ucetPredcisliCR()"
+         Text                  ="? ucetText()"
+ />
+
+ <Vozidlo
+         BarvaText             ="? barvaText()"
+         CelkovaHmotnost       ="? celkovaHmotnost()"
+         CisloMotoru           ="? cisloMotoru()"
+         CisloORV              ="? cisloORV()"
+         CisloTP               ="? cisloTP() OR cisloORV()"
+         DruhVozidla           ="  kodDruhuVozidla()"
+         KodKategorieFlotily   ="? kodKategorieFlotily()"
+         KodModeluVozidla      ="? kodModeluVozidla()"
+         KodTypuUziti          ="? kodTypuUziti()"
+         Leasing               ="? booleanYAN()"
+         ModelText             ="? modelText()"
+         MPZ                   ="? kodStatu()"
+         PocetMistCelkem       ="? pocetMistCelkem()"
+         SPZ                   ="? spz()"
+         TarifniSkupina        ="? kodTarifniSkupiny()"
+         UvedeniDoProvozu      ="? xsDate()"
+         VIN                   ="? vin()"
+         VykonMotoru           ="? vykonMotoru()"
+         ZdvihovyObjem         ="? zdvihovyObjem()"
+         ZnackaText            ="? znackaText()"
+ />
+
+ <VozidloHist>
+    <Vozidlo                 xd:script="1..;  ref VozidloObraz"
+         RokDoProvozu          ="? xsYear()"
+         UvedeniDoProvozu      ="  illegal"
+    />
+    <Vlastnik                xd:script="0..;  ref SubjektAdresaHist" />
+    <Provozovatel            xd:script="0..;  ref SubjektAdresaHist" />
+ </VozidloHist>
+
+ <VozidloNezjistene
+         PoradiVozidlaSU       ="  poradiVozidlaSU()"
+ />
+
+ <VozidloObraz               xd:script="ref Vozidlo"
+         PlatnostOd            ="  xsDate()"
+ />
+
+ <VozidloPojistenePoradi     xd:script="ref Vozidlo"
+         KodModeluVozidla      ="  kodModeluVozidla()"
+         Leasing               ="? booleanYAN()"
+         MPZ                   ="  kodStatu()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+         TarifniSkupina        ="  kodTarifniSkupiny()">
+    <HistorieVozidla         xd:script="0..; ref VozidloObraz"
+         KodTypuUziti          =" illegal"
+         KodKategorieFlotily   =" illegal"
+      />
+ </VozidloPojistenePoradi>
+
+ <VozidloPojistenePoradiOut  xd:script="ref Vozidlo"
+         CisloORV              ="? cisloDokladu()"
+         CisloTP               ="? cisloDokladu()"
+         KodModeluVozidla      ="  kodModeluVozidla()"
+         Leasing               ="? booleanYAN()"
+         MPZ                   ="  kodStatu()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()"
+         TarifniSkupina        ="  kodTarifniSkupiny()">
+    <HistorieVozidla         xd:script="0..; ref VozidloObraz"
+         KodTypuUziti          =" illegal"
+         KodKategorieFlotily   =" illegal"
+      />
+ </VozidloPojistenePoradiOut>
+
+ <VozidloPUPoradi            xd:script="ref Vozidlo"
+         MPZ                   ="  kodStatu()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()">
+    <HistorieVozidla         xd:script="0..; ref VozidloObraz"/>
+ </VozidloPUPoradi>
+
+ <VozidloPUPoradiOut         xd:script="ref Vozidlo"
+         CisloORV              ="? cisloDokladu()"
+         CisloTP               ="? cisloDokladu()"
+         MPZ                   ="  kodStatu()"
+         PlatnostOd            ="? xsDate()"
+         Poradi                ="  poradi()">
+    <HistorieVozidla         xd:script="0..; ref VozidloObraz"/>
+ </VozidloPUPoradiOut>
+
+ <VozidloX
+         CisloORV              ="? cisloDokladu()"
+         CisloTP               ="? cisloDokladu()"
+         DruhVozidla           ="  kodDruhuVozidla()"
+         SPZ                   ="? spz()"
+         VIN                   ="? vin()"
+ />
+
+ <ZelenaKarta
+         CisloZK               ="  cisloZK()"
+         DatumVystaveni        ="? xsDate()"
+         DatumZneplatneni      ="? xsDate()"
+         PlatnostZKDo          ="  xsDate()"
+         PlatnostZKOd          ="  xsDate()"
+ />
+
+ <ZmenaSUAttr
+         CJRelacePolicie       ="? cjRelacePolicie()"
+         DatumCasDoSU          ="? xsDateTime()"
+         DatumCasOznameniSU    ="? xsDateTime()"
+         DatumCasSU            ="  xsDateTime()"
+         PlatnostOd            ="  xsDateTime()"
+         RozhodnaUdalost       ="  booleanYAN()"
+         StavSetreniPolicie    ="? kodStavuSetreniPolicie()"
+ />
+</xd:def>

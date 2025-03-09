@@ -1,0 +1,5 @@
+<A xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="_XA.xsd"
+  a='A-a.b' v='A-v.b' x='A-x.b' w='wzyz' >
+  A-z.b
+</A>

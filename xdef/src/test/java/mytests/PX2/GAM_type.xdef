@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xd:def xmlns:xd       ="http://www.xdef.org/xdef/4.0"
+        impl-version   ="4.5.0_0" impl-date="2024-05-13"
+        xd:name        ="GAM_type">
+
+ <xd:declaration scope="global">
+   type  batchSeq                long(1,99_999_999);
+   type  batchSeqOut             regex('[0-9]{1,8}/[0-9]{1,4}');
+   type  batchStatus             enum('C','N','O','P');
+   type  booleanY                enum('Y');
+   type  booleanYN               enum('Y','N');
+   type  channelTypeCode         string(2,5);
+   type  channelTypeVersion      string(7,8);
+   type  checkSumType            enum('MD5');
+   type  checkSumValue           string(32);
+   type  clientIdent             string(1,30);
+   type  codeBook                string(1,30)    /*AAND tab('CC_DefCiselnik','Ciselnik')*/;
+   type  columnName              string(1,30);
+   type  contentText             string();
+   type  contentType             enum('application/pdf','image/jpeg');
+   type  count                   long(0,9_999_999);
+   type  dbName                  string(1,10);
+   type  distingValues           string(1,100);        
+   type  elementName             string(1,30);           
+   type  errorCode               num(4)          /*AAND tab('CC_Error','ErrorCode')*/;           
+   type  errorDescription        string(1,255);           
+   type  errorItem               string(1,30);           
+   type  errorType               enum('D','V','W','F');           
+   type  errorValue              string(1,255);           
+   type  errorXpath              string(1,255);           
+   type  eventColumn             string(1,30);           
+   type  eventName               string(1,30);           
+   type  fileClass               regex('[A-Z]\\d[A-Z]{1,2}');
+   type  fileFormat              enum('JPEG','JPG','PDF','PIPE','TXT','XML',
+                                      'jpeg','jpg','pdf','pipe','txt','xml');
+   type  fileLength              long(1,99_999_999);
+   type  fileName                string(1,100);
+   type  fileSeq                 long(1,9_999);
+   type  flowName                string(1,30);
+   type  gamDate                 xdatetime('yyyyMMdd');           
+   type  gamDateTime             xdatetime('yyyyMMddHHmmss');           
+   type  gamDateTimeTo           xdatetime('yyyyMMddHHmmss');           
+   type  gamTimeStamp            xdatetime('yyyyMMddHHmmssSSS');           
+   type  gamYear                 long(1800,2200);           
+   type  href                    string(1,255);
+   type  id                      long(-1,999_999_999_999);
+   type  idTrans                 long(-9_999_999_999,9_999_999_999);
+   type  ip                      string(7,15);
+   type  iud                     enum ('I','U','D','IU','UD','ID','IUD'); /* Ntf deklarace */
+   type  jobName                 string(1,30); 
+   type  keyList                 string(1,100);
+   type  keyName                 string(1,30);                            /* Ntf deklarace */
+   type  md5                     string(32);
+   type  mode                    enum('STD','TST','DEV');
+   type  msgIdent                string(1,19);
+   type  msgIdentSIO             long(1,9_999_999_999);
+   type  nabidkaID               string(1,30);
+   type  nextMsgID               string(1,30);
+   type  nextMsgIDSIO            long(1,9_999_999_999);
+   type  objectName              string(1,30); 	
+   type  operationForm           enum('DIR','TRY','STD');
+   type  operationName           string(1,40);
+   type  paramList               string(1,255);
+   type  paramName               string(1,30);
+   type  paramValue              string(1,255);
+   type  partnerCode             string(4)    /*AAND tab('VR_DefPartner','PartnerCode')*/;
+   type  partnerName             string(1,20);
+   type  placeName               string(1,30);
+   type  programName             string(1,50);
+   type  queueName               string(1,30);
+   type  recordSeq               long(1,9_999_999_999);
+   type  refMsgID                string(1,30);
+   type  registrationName        string(1,30);
+   type  segmentNum              long(1,9_999_999);
+   type  segmentSize             long(1,999_999);
+   type  sjednatelIC             long(1,99_999_999);
+   type  systemMode              enum('DEV','TST','STD');
+   type  tableName               string(1,30);   
+   type  transID                 long(-1,999_999_999_999_999_999);   
+   type  userField               string(1,255);
+   type  userID                  string(1,30);
+   type  value                   string(1,511);
+   type  version                 string(1,100);
+   type  xPath                   string(1,128);
+   type  xsDateVR                xdatetime('yyyy-MM-dd[Z]|'+
+                                           'yyyyMMdd|'+
+                                           'd.M.yyyy', 'yyyy-MM-dd');
+   type  xsDateTimeVR            xdatetime('yyyy-MM-ddTHH:mm:ss[Z]|'+
+                                           'yyyyMMddHHmm[ss]|'+
+                                           'd.M.yyyy HH:mm[:ss]', 'yyyy-MM-ddTHH:mm:ss');
+   type  xsYear                  xdatetime('yyyy');
+ </xd:declaration>
+</xd:def>

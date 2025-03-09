@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<A xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="X14.xsd"
+   xmlns:car = "http://example.com/carInfo"
+   xmlns:shop = "http://example.com/eshopInfo" >
+   <car:Car shop:from = "12.05.2008">
+        <car:VIN>156AM587L5H1DF598Q</car:VIN>
+        <car:Built>2000/05</car:Built>
+        <car:Mark>BMW</car:Mark>
+        <shop:Info>Very good, but a little old car.</shop:Info>
+   </car:Car>
+   <car:Car shop:from = "02.12.2010">
+        <car:VIN>8GR5BD268P5E120BVZ</car:VIN>
+        <car:Built>2009/01</car:Built>
+        <car:Mark>Škoda</car:Mark>
+   </car:Car>
+</A>

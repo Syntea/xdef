@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="A.A" schemaLocation="X13_01.xsd"/>
+  <xs:import namespace="b.b" schemaLocation="X13_02.xsd"/>
+  <xs:element name="FirmWorkers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="1" name="Worker">
+          <xs:complexType>
+           <xs:sequence>
+            <xs:sequence>
+             <xs:sequence>
+              <xs:sequence>
+                <xs:element ref="Name" xmlns="A.A"/>
+                <xs:element ref="Surname" xmlns="A.A"/>
+                <xs:element ref="DateOfBirth" xmlns="A.A"/>
+                <xs:element maxOccurs="unbounded" minOccurs="1" ref="Position" xmlns="b.b"/>
+                <xs:element ref="Salary" xmlns="b.b"/>
+              </xs:sequence>
+             </xs:sequence>
+            </xs:sequence>
+           </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

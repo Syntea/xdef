@@ -1,0 +1,14 @@
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
+        xmlns:c  = "http://example.com/carInfo"
+        xmlns:e  = "http://example.com/eshopInfo"
+        xd:name  =  "Ab"
+        xd:root  =  "A" >
+<A>
+  <c:Car xd:script='occurs +' e:from="required xdatetime('dd.MM.yyyy')">
+    <c:VIN>required an()</c:VIN>
+    <c:Built>xdatetime("yyyy/MM")</c:Built>
+    <c:Mark>required enum('Škoda','Audi','Mercedes-Benz','BMW')</c:Mark>
+    <e:Info xd:script="optional">required string(1, 500)</e:Info>
+  </c:Car>
+</A>
+</xd:def>

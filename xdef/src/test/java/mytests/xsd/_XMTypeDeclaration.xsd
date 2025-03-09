@@ -1,0 +1,1624 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="$_types_$" xmlns="$_types_$"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!--Definition of simple types-->
+  <!--=====================================================-->
+  <xs:simpleType name="addInfo">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(0,1)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="bankaZahr">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="11"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="barvaText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="batchSeq">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="batchSeqOut">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex([0-9]{1,8}/[0-9]{1,4})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{1,8}/[0-9]{1,4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="batchStatus">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(C,N,O,P)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="C"/>
+      <xs:enumeration value="N"/>
+      <xs:enumeration value="O"/>
+      <xs:enumeration value="P"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="booleanA">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(A)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="booleanAN">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(A,N)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="booleanY">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(Y)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Y"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="booleanYAN">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(Y,A,N)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Y"/>
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="booleanYN">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(Y,N)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Y"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="castka">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-99999999999"/>
+      <xs:maxInclusive value="99999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="castkaDec">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition dec(13,2)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="-?(\d{0,11})([.,]\d{1,2})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="celkovaHmotnost">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="celkovaHmotnostOut">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="channelTypeCode">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="2"/>
+      <xs:maxLength value="5"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="channelTypeVersion">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="7"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="checkSumType">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(MD5)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MD5"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="checkSumValue">
+    <xs:restriction base="xs:string">
+      <xs:length value="32"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ciselnikKod">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ciselnikName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ciselnikPopis">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloDokladu">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloDokladuPojisteni">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloDomu">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloMotoru">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="26"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloORV">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex([A-Z]{3}[0-9]{6})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{3}[0-9]{6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloOrientacni">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloPU">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloPopisne">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloSU">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloSilnice">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="15"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloSmlouvy">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloTP">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex([A-Z]{2}[0-9]{6})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{2}[0-9]{6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloTPAll">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cisloZK">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="11"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="cjRelacePolicie">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="clientIdent">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="codeBook">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="columnName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="contentText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="contentType">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(application/pdf,image/jpeg)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="application/pdf"/>
+      <xs:enumeration value="image/jpeg"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="count">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="countSU">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dateSTK">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(MM/yyyy)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(0[1-9]|1[0-2])/(-)?\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dbName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="detailBM">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(A,DVA,DV)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DVA"/>
+      <xs:enumeration value="DV"/>
+      <xs:enumeration value="A"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="distingValues">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dobaPojisteni">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dobaPojisteniBP">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dobaPojisteniBP12">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dobaPojisteniBP48">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="druhPojisteni">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="druhPojisteniText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="druhSouboru">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex([A-Z]\d[A-Z]{1,2})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]\d[A-Z]{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="druhVozidlaText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="duvodZanikuSmlouvyText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="elementName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="emailAdresa">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition emailAddr()</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([ ]*\([0-9a-zA-Z_ .-]*\)[ ]*)*(([0-9a-zA-Z_ .-]*&lt;([0-9a-zA-Z_-]+(\.[0-9a-zA-Z_-]*)*)@([0-9a-zA-Z_-]+(\.[0-9a-zA-Z_-]*)*>))|(([0-9a-zA-Z_-]+(\.[0-9a-zA-Z_-]*)*)@([0-9a-zA-Z_-]+(\.[0-9a-zA-Z_-]*)*)))([ ]*\([0-9a-zA-Z_ .-]*\))?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="errorCode">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(4)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="errorDescription">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="errorItem">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="errorType">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(D,V,W,F)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="D"/>
+      <xs:enumeration value="V"/>
+      <xs:enumeration value="W"/>
+      <xs:enumeration value="F"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="errorValue">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="errorXpath">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="eventColumn">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="eventName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fileClass">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex([A-Z]\d[A-Z]{1,2})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]\d[A-Z]{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fileFormat">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(JPEG,JPG,PDF,PIPE,TXT,XML,jpeg,jpg,pdf,pipe,txt,xml)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="JPEG"/>
+      <xs:enumeration value="PIPE"/>
+      <xs:enumeration value="jpeg"/>
+      <xs:enumeration value="pipe"/>
+      <xs:enumeration value="JPG"/>
+      <xs:enumeration value="PDF"/>
+      <xs:enumeration value="TXT"/>
+      <xs:enumeration value="XML"/>
+      <xs:enumeration value="jpg"/>
+      <xs:enumeration value="pdf"/>
+      <xs:enumeration value="txt"/>
+      <xs:enumeration value="xml"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fileLength">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fileName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="fileSeq">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="flowName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gamDate">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyyMMdd)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gamDateTime">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyyMMddHHmmss)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])([0-1]\d|2[0-3])[0-5]\d[0-5]\d"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gamDateTime2xsDate">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-dd)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:date"/>
+  </xs:simpleType>
+  <xs:simpleType name="gamDateTimeTo">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyyMMddHHmmss)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])([0-1]\d|2[0-3])[0-5]\d[0-5]\d"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gamTimeStamp">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyyMMddHHmmssSSS)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])([0-1]\d|2[0-3])[0-5]\d[0-5]\d\d+"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gamYear">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1800"/>
+      <xs:maxInclusive value="2200"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gpsCoordinate">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition dec(9,5)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="-?(\d{0,4})([.,]\d{1,5})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gpsSystem">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(WGS84,S-JTSK)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="S-JTSK"/>
+      <xs:enumeration value="WGS84"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="href">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ic">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="id">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="999999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="idTrans">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-9999999999"/>
+      <xs:maxInclusive value="9999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="identPodsmlouvy">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="identSouboru">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="indikator">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ip">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="7"/>
+      <xs:maxLength value="15"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="iud">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(IUD,IU,ID,I,UD,U,D)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IUD"/>
+      <xs:enumeration value="IU"/>
+      <xs:enumeration value="ID"/>
+      <xs:enumeration value="UD"/>
+      <xs:enumeration value="I"/>
+      <xs:enumeration value="U"/>
+      <xs:enumeration value="D"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="jmeno">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="jobName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kategorieBM">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kategorieFlotily">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="keyList">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="keyName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kilometrovnik">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition dec(5,1)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="-?(\d{0,4})([.,]\d{1,1})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodBankyCR">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(4)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodDruhuPojisteni">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodDruhuVozidla">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(2)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodDuvoduOdstoupeni">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1,2)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodDuvoduUzavreniSU">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodDuvoduZanikuPojisteni">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1,2)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodDuvoduZanikuSmlouvy">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1,2)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodFrekvenceUhrady">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodKategorieFlotily">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodMeny">
+    <xs:restriction base="xs:string">
+      <xs:length value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodModeluVozidla">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodOpravny">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="16"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodPodtypuSkody">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodPojistitele">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(4)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodRizika">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1,2)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodStatu">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodStavuSUPU">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(O,U,N)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="O"/>
+      <xs:enumeration value="U"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodStavuSetreniPolicie">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodStavuSmlouvy">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(T,U,N)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="T"/>
+      <xs:enumeration value="U"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodStavuSmlouvyOut">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(T,U,N,Z)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="T"/>
+      <xs:enumeration value="U"/>
+      <xs:enumeration value="N"/>
+      <xs:enumeration value="Z"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTarifniSkupiny">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1,3)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuAdresy">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuMajetku">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuMinusPlneni">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuNaroku">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(E,P,R)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E"/>
+      <xs:enumeration value="P"/>
+      <xs:enumeration value="R"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuPojisteni">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(S,O)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="S"/>
+      <xs:enumeration value="O"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuPojistneCastky">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuPojistneho">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(Z,BM,B)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BM"/>
+      <xs:enumeration value="Z"/>
+      <xs:enumeration value="B"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuPredmetu">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(MA,PS,PU,SU,VN,VP,VS,VZ)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MA"/>
+      <xs:enumeration value="PS"/>
+      <xs:enumeration value="PU"/>
+      <xs:enumeration value="SU"/>
+      <xs:enumeration value="VN"/>
+      <xs:enumeration value="VP"/>
+      <xs:enumeration value="VS"/>
+      <xs:enumeration value="VZ"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuRegresu">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuSkodicihoVozidla">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(POJI,NEPOJI,NEZJI)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NEPOJI"/>
+      <xs:enumeration value="NEZJI"/>
+      <xs:enumeration value="POJI"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodTypuUziti">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodZnackyVozidla">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kodZpusobuUzavreniPU">
+    <xs:restriction base="xs:string">
+      <xs:length value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="kvadrant">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex(X|Z|O|[LRFBTUN]{1,7})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="X|Z|O|[LRFBTUN]{1,7}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="likvidacniTitul">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(POV,HAV)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="POV"/>
+      <xs:enumeration value="HAV"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="limitPlneni">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="md5">
+    <xs:restriction base="xs:string">
+      <xs:length value="32"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mistoText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="512"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mistoUhradyHP">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="mode">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(STD,TST,DEV)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="STD"/>
+      <xs:enumeration value="TST"/>
+      <xs:enumeration value="DEV"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="modelText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="40"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="modelVozidla">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="40"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="msgIdent">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="19"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="msgIdentSIO">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nabidkaID">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nazevFirmy">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nextMsgID">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nextMsgIDSIO">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nositelPSP">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(S,V)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="S"/>
+      <xs:enumeration value="V"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="obec">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="objectName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="okres">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="operationForm">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(DIR,TRY,STD)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DIR"/>
+      <xs:enumeration value="TRY"/>
+      <xs:enumeration value="STD"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="operationName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="40"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ord">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-999999999"/>
+      <xs:maxInclusive value="999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="paramList">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="paramName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="paramValue">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="partnerCode">
+    <xs:restriction base="xs:string">
+      <xs:length value="4"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="partnerName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="period">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="4"/>
+      <xs:maxLength value="7"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="placeName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pocetKm">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pocetMistCelkem">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pocetPS">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pocetSU">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pocetZaznamu">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pojistne">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-999999999999"/>
+      <xs:maxInclusive value="999999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="popis">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="popisMajetku">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="512"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="popisMisto">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="512"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="poradi">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="poradiNaroku">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="poradiVozidla">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="poradiVozidlaSU">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="poradiVozidlaXX">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="prijmeni">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="programName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="psc">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="queueName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="rc">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="14"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="recordSeq">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="refMsgID">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="registrationName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="rok365">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(0,-1,-2,-3)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="-1"/>
+      <xs:enumeration value="-2"/>
+      <xs:enumeration value="-3"/>
+      <xs:enumeration value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="rokDoProvozu">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="roleSubjektuBM">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(NOSITEL,POJISTNIK,PROVOZOVATEL)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PROVOZOVATEL"/>
+      <xs:enumeration value="POJISTNIK"/>
+      <xs:enumeration value="NOSITEL"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="roleSubjektuDS">
+    <xs:annotation>
+      <xs:documentation>
+        Created from X-definition enum(LIKVIDATOR,POJISTNIK,POSKOZENY,PROVOZOVATEL,RIDIC,SVEDEK,VLASTNIK,ZNALEC)
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PROVOZOVATEL"/>
+      <xs:enumeration value="LIKVIDATOR"/>
+      <xs:enumeration value="POJISTNIK"/>
+      <xs:enumeration value="POSKOZENY"/>
+      <xs:enumeration value="VLASTNIK"/>
+      <xs:enumeration value="SVEDEK"/>
+      <xs:enumeration value="ZNALEC"/>
+      <xs:enumeration value="RIDIC"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="roleSubjektuPS">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(POJISTNIK,VLASTNIK,PROVOZOVATEL)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PROVOZOVATEL"/>
+      <xs:enumeration value="POJISTNIK"/>
+      <xs:enumeration value="VLASTNIK"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="roleSubjektuPSBM">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(NOSITEL,N,POJISTNIK,P)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="POJISTNIK"/>
+      <xs:enumeration value="NOSITEL"/>
+      <xs:enumeration value="N"/>
+      <xs:enumeration value="P"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="roleVozidlaDS">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(SKODICI,POSKOZENE,NEZJISTENE)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NEZJISTENE"/>
+      <xs:enumeration value="POSKOZENE"/>
+      <xs:enumeration value="SKODICI"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="segmentNum">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="segmentSize">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="sjednatelIC">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="99999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="spz">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="2"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="spzOut">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="statKod">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="statNazev">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="statisticsNames">
+    <xs:restriction base="xs:string">
+      <xs:length value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="statisticsPeriod">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="4"/>
+      <xs:maxLength value="7"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="stavSmlouvy">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="7"/>
+      <xs:maxLength value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="subjektText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="systemMode">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(DEV,TST,STD)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DEV"/>
+      <xs:enumeration value="TST"/>
+      <xs:enumeration value="STD"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="tableName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="telCisloCZSK">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition regex((\+42[01])?\s?\d{3}\s?\d{3}\s?\d{3})</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\+42[01])?\s?\d{3}\s?\d{3}\s?\d{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="telCisloText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="transID">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="999999999999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="typUziti">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ucetCisloCR">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(2,10)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{2,10}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ucetCisloZahr">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="31"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ucetIBAN">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="34"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ucetPredcisliCR">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition num(1,6)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ucetText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ulice">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="userField">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="userID">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="value">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="511"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="valueType">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition enum(NUMBER,VARCHAR2,CHAR,DATETIME)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VARCHAR2"/>
+      <xs:enumeration value="DATETIME"/>
+      <xs:enumeration value="NUMBER"/>
+      <xs:enumeration value="CHAR"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="version">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="verzeSeq">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vin">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="26"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vin8">
+    <xs:restriction base="xs:string">
+      <xs:length value="8"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vykonMotoru">
+    <xs:restriction base="xs:decimal">
+      <xs:totalDigits value="6"/>
+      <xs:fractionDigits value="2"/>
+      <xs:minInclusive value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="vykonMotoruOut">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="9999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="xPath">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="128"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="xsDate">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-dd)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:date"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateDo">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-dd)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:date"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateOutOLD">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyyMMdd)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateTime">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-ddTHH:mm:ss)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:dateTime"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateTimeDo">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-ddTHH:mm:ss)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:dateTime"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateTimeOd">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-ddTHH:mm:ss)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:dateTime"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateTimeVR">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-ddTHH:mm:ss)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:dateTime"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsDateVR">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-dd)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:date"/>
+  </xs:simpleType>
+  <xs:simpleType name="xsTimeStamp">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy-MM-ddTHH:mm:ss.SSS)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[1-2]\d|3[0-1])T([0-1]\d|2[0-3]):[0-5]\d:[0-5]\d\.\d+"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="xsYear">
+    <xs:annotation>
+      <xs:documentation>Created from X-definition xdatetime(yyyy)</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(-)?\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="zdvihovyObjem">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="znackaText">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="znackaVozidla">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

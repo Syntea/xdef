@@ -1,0 +1,15 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Ab' root='A'>
+<xd:declaration scope = 'global'>
+  type a enum('abc','123');
+</xd:declaration>
+<xd:declaration scope = 'global'>
+  type v a;
+  type x v;
+  type w string(4,*);
+  type z w;
+</xd:declaration>
+<A a='x()' b='? z()' c='int(1,2)' d='? date()'>
+  <B/>
+  <C>?xdatetime('d.M.yyyy')</C>
+</A>
+</xd:def>

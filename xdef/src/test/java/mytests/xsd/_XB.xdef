@@ -1,0 +1,14 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Ab' root='A'>
+<xd:declaration scope = 'global'>
+  type a NCName();
+</xd:declaration>
+<xd:declaration scope = 'local'>
+  type v a;
+  type x v;
+  type w string(4);
+  type z w;
+</xd:declaration>
+<A a='x()' b='? z()' c='int(1,2)' d='? date()'>
+  <B>? xdatetime('d.M.yyyy')</B>
+</A>
+</xd:def>

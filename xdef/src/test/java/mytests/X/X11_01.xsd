@@ -1,0 +1,15 @@
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="a.b"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="B">
+    <xs:complexType>
+      <xs:simpleContent >
+        <xs:extension base="xs:string">
+          <xs:attribute form="qualified" type="xs:byte" name="b"/>
+          <xs:attribute form="unqualified" type="xs:string" name="c"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

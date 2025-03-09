@@ -1,0 +1,37 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="$_types_$" xmlns="$_types_$"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="a">
+    <xs:restriction base="xs:NCName"/>
+  </xs:simpleType>
+  <xs:simpleType name="Ab_v">
+    <xs:restriction base="a"/>
+  </xs:simpleType>
+  <xs:simpleType name="Ab_x">
+    <xs:restriction base="a"/>
+  </xs:simpleType>
+  <xs:simpleType name="Ab_w">
+    <xs:restriction base="xs:string">
+      <xs:length value="4"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Ab_z">
+    <xs:restriction base="Ab_w"/>
+  </xs:simpleType>
+  <xs:simpleType name="_B">
+    <xs:union>
+      <xs:simpleType>
+        <xs:annotation>
+          <xs:documentation>Created from X-definition xdatetime(d.M.yyyy)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="([1-9]|[0-2]\d|3[0-1])\.([1-9]|0[1-9]|1[0-2])\.(-)?\d{4}"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="\s*"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

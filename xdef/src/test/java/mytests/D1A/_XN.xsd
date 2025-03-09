@@ -1,0 +1,597 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+  xmlns="$_types_$"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="$_types_$" schemaLocation="_XN_1.xsd"/>
+  <xs:element name="SouborD1A">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="ZaznamPDN">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:choice maxOccurs="unbounded" minOccurs="3">
+                <xs:element name="Protokol">
+                  <xs:complexType>
+                    <xs:attribute name="CisloDN" type="cisloDN_1" use="required"/>
+                    <xs:attribute name="CJ" type="cjRelacePolicieDN" use="required"/>
+                    <xs:attribute name="DatumCasOznameni" type="datumCasDN" use="required"/>
+                    <xs:attribute name="KodUtvaruPolicie" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="NazevDN" type="nazevDN" use="required"/>
+                    <xs:attribute name="RokDN" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="Zpracovatel" type="zpracovatelDN" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="1" minOccurs="0" name="Rozhodnuti">
+                  <xs:complexType>
+                    <xs:simpleContent>
+                      <xs:extension base="rozhodnutiDN">
+                        <xs:attribute name="DatumRozhodnuti" type="datumCasDN" use="optional"/>
+                      </xs:extension>
+                    </xs:simpleContent>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Vyliceni" type="vyliceniTextDN"/>
+                <xs:element name="ObjStranka">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="Misto" type="mistoTextDN"/>
+                      <xs:element maxOccurs="2" minOccurs="0" name="GPS">
+                        <xs:complexType>
+                          <xs:attribute name="Delka" type="gpsCoordinateDN" use="required"/>
+                          <xs:attribute name="Sirka" type="gpsCoordinateDN" use="required"/>
+                          <xs:attribute name="System" type="gpsSystemDN" use="required"/>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="unbounded" minOccurs="0" name="RizikovyFaktor">
+                        <xs:complexType>
+                          <xs:attribute name="KodFaktoru" use="required">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:attribute>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="CelkovaSkodaKc" type="castkaKcDN" use="optional"/>
+                    <xs:attribute name="CisloPopisne" type="cisloDomuDN" use="optional"/>
+                    <xs:attribute name="DatumCasDN" type="datumCasDN" use="required"/>
+                    <xs:attribute name="DatumCasDoDN" type="datumCasDN" use="optional"/>
+                    <xs:attribute name="HlavniPricina" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="KodOkresu" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="Obec" type="obecDN" use="optional"/>
+                    <xs:attribute name="Pricina" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="Ulice" type="uliceDN" use="optional"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Vozidlo">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="skodaTextDN_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="JinaSkoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_JinaSkoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Drzitel" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="CisloDokladuPojisteni" type="cisloDokladuPojisteniDN" use="optional"/>
+                    <xs:attribute name="CisloZK" type="cisloZKDN" use="optional"/>
+                    <xs:attribute name="DatumUhradyHP" type="datumCasDN" use="optional"/>
+                    <xs:attribute name="DruhVozidla" type="druhVozidlaDN" use="required"/>
+                    <xs:attribute name="KodPojistitele" type="kodPojistiteleDN" use="optional"/>
+                    <xs:attribute name="MesicSTKDo" type="platnostSTKDoDN" use="optional"/>
+                    <xs:attribute name="MistoUhradyHP" type="mistoTextDN" use="optional"/>
+                    <xs:attribute name="MPZ" type="mpzDN" use="optional"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                    <xs:attribute name="PlatnostSTK" type="platnostSTKDN" use="optional"/>
+                    <xs:attribute name="PlatnostZKDo" type="datumCasDN" use="optional"/>
+                    <xs:attribute name="PlatnostZKOd" type="datumCasDN" use="optional"/>
+                    <xs:attribute name="PojisteniText" type="pojisteniTextDN" use="optional"/>
+                    <xs:attribute name="PojistneHPKc" type="pojistneHPDN" use="optional"/>
+                    <xs:attribute name="RokVyroby" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="SPZ" type="spzDN" use="optional"/>
+                    <xs:attribute name="StavBrzd" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="TypBrzd" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="TypVozidla" type="typVozidlaDN" use="optional"/>
+                    <xs:attribute name="VIN" type="vinDN" use="optional"/>
+                    <xs:attribute name="VydalZK" type="vydalZKDN" use="optional"/>
+                    <xs:attribute name="ZnackaVozidla" type="znackaVozidlaDN" use="optional"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Tramvaj">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="JinaSkoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_JinaSkoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vlastnik" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="CisloDokladuPojisteni" type="cisloDokladuPojisteniDN" use="optional"/>
+                    <xs:attribute name="DruhVozidla" type="druhVozidlaDN" use="required"/>
+                    <xs:attribute name="EvidCislo" type="evidCisloDN" use="optional"/>
+                    <xs:attribute name="KodPojistitele" type="kodPojistiteleDN" use="optional"/>
+                    <xs:attribute name="Linka" type="linkaDN" use="required"/>
+                    <xs:attribute name="LinkaPoradi" type="linkaPoradiDN" use="optional"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                    <xs:attribute name="PojisteniText" type="pojisteniTextDN" use="optional"/>
+                    <xs:attribute name="StavBrzd" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="TypBrzd" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="TypVozidla" type="typVozidlaDN" use="optional"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Trolejbus">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="JinaSkoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_JinaSkoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vlastnik" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="CisloDokladuPojisteni" type="cisloDokladuPojisteniDN" use="optional"/>
+                    <xs:attribute name="DruhVozidla" type="druhVozidlaDN" use="required"/>
+                    <xs:attribute name="EvidCislo" type="evidCisloDN" use="optional"/>
+                    <xs:attribute name="KodPojistitele" type="kodPojistiteleDN" use="optional"/>
+                    <xs:attribute name="Linka" type="linkaDN" use="required"/>
+                    <xs:attribute name="LinkaPoradi" type="linkaPoradiDN" use="optional"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                    <xs:attribute name="PojisteniText" type="pojisteniTextDN" use="optional"/>
+                    <xs:attribute name="StavBrzd" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="TypBrzd" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="TypVozidla" type="typVozidlaDN" use="optional"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Vlak">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="JinaSkoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_JinaSkoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vlastnik" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="DruhSoupravy" type="druhSoupravyDN" use="required"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                    <xs:attribute name="Spoj" type="spojDN" use="optional"/>
+                    <xs:attribute name="TypSoupravy" type="typSoupravyDN" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Povoz">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="JinaSkoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_JinaSkoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vlastnik" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="DruhPovozu" type="druhPovozuDN" use="required"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Predmet">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vlastnik" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="DruhPredmetu" type="druhPredmetuDN" use="required"/>
+                    <xs:attribute name="NazevPredmetu" type="nazevPredmetuDN" use="required"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Zvire">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Skoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_Skoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vlastnik" type="subjektTextDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="DruhZvirete" type="druhZvireteDN" use="required"/>
+                    <xs:attribute name="NazevZvirete" type="nazevZvireteDN" use="required"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="Ucastnik">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element maxOccurs="1" minOccurs="0" name="JinaSkoda">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:annotation>
+                              <xs:documentation>
+                                In the X-definition is declared optional text item (type: 'skodaTextDN') as string(%minLength=1,%maxLength=4000)
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:extension base="_JinaSkoda">
+                              <xs:attribute name="Kc" type="castkaKcDN" use="optional"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Osoba">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="0" name="Pobyt">
+                              <xs:complexType>
+                                <xs:attribute name="CisloOrientacni" type="cisloDomuDN" use="optional"/>
+                                <xs:attribute name="CisloPopisne" type="cisloDomuDN" use="optional"/>
+                                <xs:attribute name="Obec" type="obecDN" use="optional"/>
+                                <xs:attribute name="Okres" type="okresDN" use="optional"/>
+                                <xs:attribute name="PSC" type="pscDN" use="optional"/>
+                                <xs:attribute name="Stat" use="optional">
+                                  <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value="1"/>
+                                    </xs:restriction>
+                                  </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="Telefon1" type="telefonDN" use="optional"/>
+                                <xs:attribute name="Telefon2" type="telefonDN" use="optional"/>
+                                <xs:attribute name="Ulice" type="uliceDN" use="optional"/>
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element maxOccurs="1" minOccurs="0" name="JinyPobyt">
+                              <xs:complexType>
+                                <xs:attribute name="CisloOrientacni" type="cisloDomuDN" use="optional"/>
+                                <xs:attribute name="CisloPopisne" type="cisloDomuDN" use="optional"/>
+                                <xs:attribute name="Obec" type="obecDN" use="optional"/>
+                                <xs:attribute name="Okres" type="okresDN" use="optional"/>
+                                <xs:attribute name="PSC" type="pscDN" use="optional"/>
+                                <xs:attribute name="Stat" use="optional">
+                                  <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value="1"/>
+                                    </xs:restriction>
+                                  </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="Telefon1" type="telefonDN" use="optional"/>
+                                <xs:attribute name="Telefon2" type="telefonDN" use="optional"/>
+                                <xs:attribute name="Ulice" type="uliceDN" use="optional"/>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="DatumNarozeni" type="datumCasDN" use="optional"/>
+                          <xs:attribute name="Jmeno" type="jmenoDN" use="optional"/>
+                          <xs:attribute name="MistoNarozeni" type="mistoNarozeniDN" use="optional"/>
+                          <xs:attribute name="OsobniStav" type="osobniStavDN" use="optional"/>
+                          <xs:attribute name="Pohlavi" type="pohlaviDN" use="optional"/>
+                          <xs:attribute name="Prijmeni" type="prijmeniDN" use="required"/>
+                          <xs:attribute name="Profese" type="profeseDN" use="optional"/>
+                          <xs:attribute name="RC" type="rcDN" use="optional"/>
+                          <xs:attribute name="RodnePrijmeni" type="prijmeniDN" use="optional"/>
+                          <xs:attribute name="StatNarozeni" use="optional">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:attribute>
+                          <xs:attribute name="StatniPrislusnost" use="optional">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:attribute>
+                          <xs:attribute name="TitulPred" type="osobaTitulDN" use="optional"/>
+                          <xs:attribute name="TitulZa" type="osobaTitulDN" use="optional"/>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Firma">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="0" name="Sidlo">
+                              <xs:complexType>
+                                <xs:attribute name="CisloOrientacni" type="cisloDomuDN" use="optional"/>
+                                <xs:attribute name="CisloPopisne" type="cisloDomuDN" use="optional"/>
+                                <xs:attribute name="Obec" type="obecDN" use="optional"/>
+                                <xs:attribute name="Okres" type="okresDN" use="optional"/>
+                                <xs:attribute name="PSC" type="pscDN" use="optional"/>
+                                <xs:attribute name="Stat" use="optional">
+                                  <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value="1"/>
+                                    </xs:restriction>
+                                  </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="Telefon1" type="telefonDN" use="optional"/>
+                                <xs:attribute name="Telefon2" type="telefonDN" use="optional"/>
+                                <xs:attribute name="Ulice" type="uliceDN" use="optional"/>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="IC" type="icDN" use="optional"/>
+                          <xs:attribute name="NazevFirmy" type="nazevFirmyDN" use="required"/>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="unbounded" minOccurs="0" name="Doklad">
+                        <xs:complexType>
+                          <xs:attribute name="CisloDokladu" type="cisloDokladuDN" use="optional"/>
+                          <xs:attribute name="DatumVydani" type="datumCasDN" use="optional"/>
+                          <xs:attribute name="MistoVydani" type="mistoVydaniDN" use="optional"/>
+                          <xs:attribute name="Opravneni" type="opravneniDN" use="optional"/>
+                          <xs:attribute name="StatVydani" use="optional">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:minLength value="1"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:attribute>
+                          <xs:attribute name="TypDokladu" type="typDokladuDN" use="required"/>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element maxOccurs="1" minOccurs="0" name="PoruseniZakProvoz" type="poruseniTextDN"/>
+                      <xs:element maxOccurs="1" minOccurs="0" name="PoruseniZakPrest" type="poruseniTextDN"/>
+                      <xs:element maxOccurs="1" minOccurs="0" name="PoruseniZakTrest" type="poruseniTrestDN"/>
+                      <xs:element maxOccurs="1" minOccurs="0" name="PoruseniZakOst" type="poruseniTextDN"/>
+                      <xs:element maxOccurs="1" minOccurs="0" name="Vazba" type="vazbaDN"/>
+                    </xs:sequence>
+                    <xs:attribute name="AlkoholDech" type="alkoholDechDN" use="optional"/>
+                    <xs:attribute name="AlkoholKrev" type="alkoholKrevDN" use="optional"/>
+                    <xs:attribute name="OznSegmentu" type="oznSegmentuDN" use="required"/>
+                    <xs:attribute name="PokutaKc" type="pokutaDN" use="optional"/>
+                    <xs:attribute name="PokutaZapl" type="pokutaZaplDN" use="optional"/>
+                    <xs:attribute name="Pachatel" type="pachatelDN" use="optional"/>
+                    <xs:attribute name="Poskozeny" type="poskozenyDN" use="optional"/>
+                    <xs:attribute name="PraxeRizeni" type="praxeRizeniDN" use="optional"/>
+                    <xs:attribute name="TypUcastnika" type="typUcastnikaDN" use="required"/>
+                    <xs:attribute name="ZdravPojistovna" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="Zraneni" use="optional">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value="1"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="IdentZaznamu" type="msgIdent" use="required"/>
+            <xs:attribute name="KrajPolicie" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:minLength value="1"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="PlatnostOd" type="datumCasDN"  use="required"/>
+            <xs:attribute name="Verze" type="channelTypeVersion" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Davka" type="batchSeq" use="required"/>
+      <xs:attribute name="ZeDne" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,16 @@
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="a.b"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="X12_01.xsd"/>
+  <xs:element name="X">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element ref="A"/>
+        <xs:element type="xs:string" name="B"/>
+      </xs:choice>
+      <xs:attribute type="xs:byte" name="x"/>
+      <xs:attribute type="xs:byte" form="qualified" name="y"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

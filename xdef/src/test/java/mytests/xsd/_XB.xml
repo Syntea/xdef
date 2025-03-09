@@ -1,0 +1,5 @@
+<A xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="_XB.xsd"
+   a='ab' b='abcd' c='2' d='2000-12-31'>
+  <B>31.12.2000</B>
+</A>

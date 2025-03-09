@@ -1,0 +1,14 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:carInfo="http://example.com/carInfo"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://example.com/carInfo" schemaLocation="_XG_01.xsd"/>
+  <!--Element Body structures-->
+  <!--=====================================================-->
+  <xs:element name="A" type="A_Type"/>
+  <!--Partial substantive structures-->
+  <!--=====================================================-->
+  <xs:complexType name="A_Type">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="carInfo:Car" xmlns:carInfo="http://example.com/carInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
