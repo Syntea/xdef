@@ -498,8 +498,7 @@ public abstract class XDTester extends STester {
 				if (myreporter.errors()) {
 					StringWriter sw = new StringWriter();
 					xml.reset();
-					ArrayReporter rri = (ArrayReporter) myreporter.getReportReader();
-					ReportPrinter.printListing(sw, new java.io.InputStreamReader(xml), rri, true);
+					ReportPrinter.printListing(sw, new java.io.InputStreamReader(xml), myreporter, true);
 					fail(sw.toString());
 				}
 				if (result == null) {
@@ -577,10 +576,10 @@ public abstract class XDTester extends STester {
 					System.err.println("Fails! Expected:\n" + result + "\n got null");
 				} else {
 					Element expected = KXmlUtils.parseXml(result).getDocumentElement();
-					ArrayReporter rw = (ArrayReporter) KXmlUtils.compareElements(el, expected);
-					if (rw.errorWarnings()) {
+					ArrayReporter ar = (ArrayReporter) KXmlUtils.compareElements(el, expected);
+					if (ar.errorWarnings()) {
 						error = true;
-						rw.printReports(System.err);
+						ar.printReports(System.err);
 						System.err.println("Fails! Expected:\n" + result + "\n got:\n"
 							+ KXmlUtils.nodeToString(el, false));
 					}
