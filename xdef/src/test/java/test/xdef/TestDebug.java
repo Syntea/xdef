@@ -36,19 +36,15 @@ public final class TestDebug extends XDTester {
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
-		ByteArrayOutputStream baos, bos1;
+		ByteArrayOutputStream baos, baos1;
 		XDOutput out;
 		String s;
 		PrintStream ps;
 		Element el;
-		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, // debug editor
-			"org.xdef.impl.debug.ChkGUIDebug"); // class name
-		setProperty(XDConstants.XDPROPERTY_DEBUG_EDITOR, // debug editor
-			"org.xdef.impl.debug.ChkGUIDebug"); // class name
-//		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef.display
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef.debug
-			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
+
+		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR, "org.xdef.impl.debug.ChkGUIDebug"); // debug editor
+//		setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true
+		setProperty(XDConstants.XDPROPERTY_DEBUG, XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // xdef.debug
 		try {
 			// Xscript breakpoints
 			xdef =
@@ -85,8 +81,7 @@ public final class TestDebug extends XDTester {
 			for (XMStatementInfo si1 : si) {
 				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
-			xd.getDebugger().setInDebug(
-				new ByteArrayInputStream("context\ngo".getBytes()));
+			xd.getDebugger().setInDebug(new ByteArrayInputStream("context\ngo".getBytes()));
 			baos = new ByteArrayOutputStream();
 			ps = new PrintStream(baos);
 			xd.getDebugger().setOutDebug(ps);
@@ -112,8 +107,8 @@ public final class TestDebug extends XDTester {
 			for (XMStatementInfo si1 : si) {
 				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
-			xd.getDebugger().setInDebug(new ByteArrayInputStream(
-				"pl\ngo\npl\ngo\npl\ngo\npl\ngo".getBytes()));
+			ByteArrayInputStream bais = new ByteArrayInputStream("pl\ngo\npl\ngo\npl\ngo\npl\ngo".getBytes());
+			xd.getDebugger().setInDebug(bais);
 			baos = new ByteArrayOutputStream();
 			ps = new PrintStream(baos);
 			xd.getDebugger().setOutDebug(ps);
@@ -121,8 +116,7 @@ public final class TestDebug extends XDTester {
 			assertNoErrorwarnings(reporter);
 			ps.close();
 			s = baos.toString();
-			assertTrue(s.indexOf("a/@a;") > 0 &&
-				s.indexOf("No local variables") > 0, s);
+			assertTrue(s.indexOf("a/@a;") > 0 && s.indexOf("No local variables") > 0, s);
 			// XPos breakpoints
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
@@ -150,8 +144,7 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			assertNoErrorwarnings(reporter);
 			s = baos.toString();
-			assertTrue(s.contains("PAUSE /a") && s.contains("PAUSE /a/@a")
-				&& s.contains("PAUSE /a/b[2]"), s);
+			assertTrue(s.contains("PAUSE /a") && s.contains("PAUSE /a/@a") && s.contains("PAUSE /a/b[2]"), s);
 			xd.getDebugger().setInDebug(new ByteArrayInputStream(dbgInput));
 			baos = new ByteArrayOutputStream();
 			ps = new PrintStream(baos);
@@ -161,8 +154,7 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			assertNoErrorwarnings(reporter);
 			s = baos.toString();
-			assertTrue(s.contains("PAUSE /a") && s.contains("PAUSE /a/@a")
-				&& s.contains("PAUSE /a/b[2]"), s);
+			assertTrue(s.contains("PAUSE /a") && s.contains("PAUSE /a/@a") && s.contains("PAUSE /a/b[2]"), s);
 //			// processing mode
 			xd.getDebugger().setInDebug(new ByteArrayInputStream(dbgInput));
 			baos = new ByteArrayOutputStream();
@@ -195,13 +187,12 @@ public final class TestDebug extends XDTester {
 			baos = new ByteArrayOutputStream();
 			out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);
 			xd.setStdOut(out);
-			bos1 = new ByteArrayOutputStream();
-			ps = new PrintStream(bos1);
+			baos1 = new ByteArrayOutputStream();
+			ps = new PrintStream(baos1);
 			xd.getDebugger().setOutDebug(ps);
 			xd.xparse(xml, null);
 			ps.close();
-			assertTrue(bos1.toString().startsWith("TRACE /a/b[1];"),
-				bos1.toString());
+			assertTrue(baos1.toString().startsWith("TRACE /a/b[1];"), baos1.toString());
 			out.close();
 			assertEq("", baos.toString());
 			xdef =
@@ -233,24 +224,20 @@ public final class TestDebug extends XDTester {
 			baos = new ByteArrayOutputStream();
 			out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);
 			xd.setStdOut(out);
-			bos1 = new ByteArrayOutputStream();
-			ps = new PrintStream(bos1);
+			baos1 = new ByteArrayOutputStream();
+			ps = new PrintStream(baos1);
 			xd.getDebugger().setOutDebug(ps);
 			xd.xparse(xml, null);
 			ps.close();
-			s = bos1.toString();
+			s = baos1.toString();
 			assertTrue(s.startsWith("TRACE /SouborY1A/a[1];"), s);
 			out.close();
 			s = baos.toString();
-			assertTrue(("len=1, typ=" + XDValueID.XD_ATTR +
-				", value=davka\n").equals(s), s);
+			assertTrue(("len=1, typ=" + XDValueID.XD_ATTR + ", value=davka\n").equals(s), s);
 			xdef =
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+
-"<x:def name         = \"a\"\n"+
-"       root         = \"a|*\"\n"+
-"       impl-version = \"1.0.0\"\n"+
-"       impl-date    = \"1.11.2000\"\n"+
-"       script=\"options ignoreEmptyAttributes\" >\n"+
+"<x:def name='a' root='a|*' impl-version='1.0.0' impl-date='1.11.2000'\n"+
+"       script='options ignoreEmptyAttributes'>\n"+
 "  <x:declaration>\n"+
 "    String $verze = '1.23';\n"+
 "    String $x = '???';\n"+
@@ -260,23 +247,19 @@ public final class TestDebug extends XDTester {
 "  </x:declaration>\n"+
 "  <a>\n"+
 "    <b x:script = \"occurs 1..\"\n"+
-"       a = \"required eq('b'); onFalse" +
-			" pause('Error setText to b!');\n"+
-"       finally {\n"+
-"           String s = getImplProperty('version');\n"+
-"           trace('getImplProperty(\\'version\\'): ' + s);\n"+
-"       }\" />\n"+
+"       a = \"required eq('b'); onFalse pause('Error setText to b!');\n"+
+"           finally {\n"+
+"             String s = getImplProperty('version');\n"+
+"             trace('getImplProperty(\\'version\\'): ' + s);\n"+
+"           }\" />\n"+
   "</a>\n"+
 "</x:def>\n"+
-"<x:def name         = \"b\"\n"+
-"       impl-version = \"2.0.0\"\n"+
-"       impl-date    = \"2.11.2000\" />\n"+
+"<x:def name=\"b\" impl-version=\"2.0.0\" impl-date=\"2.11.2000\" />\n"+
 "</x:collection>";
 			xp = compile(xdef);
 			xml = "<a><b a = 'b' /><b a = 'c' /></a>";
 			xd = xp.createXDDocument("a");
-			xd.getDebugger().setInDebug(
-				new ByteArrayInputStream("go".getBytes()));
+			xd.getDebugger().setInDebug(new ByteArrayInputStream("go".getBytes()));
 			baos = new ByteArrayOutputStream();
 			ps = new PrintStream(baos);
 			xd.getDebugger().setOutDebug(ps);
@@ -286,18 +269,14 @@ public final class TestDebug extends XDTester {
 			s = SUtils.modifyString(s, "\r", "");
 			assertTrue(s.startsWith("TRACE /a/b[1]/@a; pc=")
 				&& s.indexOf("; \"getImplProperty('version'): 1.0.0\"; \n") > 0
-				&& s.indexOf("PAUSE /a/b[2]/@a; pc=") > 0
-				&& s.indexOf("; \"Error setText to b!\"; \n") > 0
-				&& s.indexOf("command ('?' for help): \n") > 0
-				&& s.indexOf("TRACE /a/b[2]/@a; pc=") > 0
+				&& s.indexOf("PAUSE /a/b[2]/@a; pc=") > 0 && s.indexOf("; \"Error setText to b!\"; \n") > 0
+				&& s.indexOf("command ('?' for help): \n") > 0 && s.indexOf("TRACE /a/b[2]/@a; pc=") > 0
 				&& s.indexOf("; \"getImplProperty('version'): 1.0.0\"; \n") > 0,
 				s);
 			if (reporter.errors()) {
-				printReports(reporter.getReportReader(), xml);
+				printReports(reporter, xml);
 			}
-			if (KXmlUtils.compareElements(
-				"<a><b a=\"b\"/><b a=\"c\"/></a>",xd.getElement())
-				.errorWarnings()) {
+			if (KXmlUtils.compareElements("<a><b a=\"b\"/><b a=\"c\"/></a>",xd.getElement()).errorWarnings()){
 				fail(KXmlUtils.nodeToString(xd.getElement()));
 			}
 			// check impl properties and "*" in the root selection
@@ -357,10 +336,8 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			s = baos.toString();
 			s = SUtils.modifyString(s, "\r", "");
-			assertTrue(s.indexOf("TRACE /a/@a;") == 0
-				&& s.indexOf("TRACE /a/@a;", 1) > 0
-				&& s.indexOf("; \"1.0.0\";") > 0
-				&& s.indexOf("; \"2.0.0\";") > 0, s);
+			assertTrue(s.indexOf("TRACE /a/@a;") == 0 && s.indexOf("TRACE /a/@a;", 1) > 0
+				&& s.indexOf("; \"1.0.0\";") > 0 && s.indexOf("; \"2.0.0\";") > 0, s);
 			if (reporter.errors()) {
 				s = reporter.getReport().getMsgID();
 				assertTrue("XDEF515".equals(s) || "XDEF809".equals(s), s);
@@ -380,8 +357,7 @@ public final class TestDebug extends XDTester {
 			} else {
 				el = xd.getDocument().getDocumentElement();
 				if (KXmlUtils.compareElements(xml,el).errorWarnings()) {
-					fail(KXmlUtils.nodeToString(
-						xd.getDocument().getDocumentElement()));
+					fail(KXmlUtils.nodeToString(xd.getDocument().getDocumentElement()));
 				}
 			}
 		} catch (RuntimeException ex) {fail(ex);}

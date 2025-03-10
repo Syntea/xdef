@@ -38,8 +38,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
-import org.xdef.sys.ReportReader;
-import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
@@ -73,13 +71,9 @@ public abstract class XDTester extends STester {
 		Report.setLanguage("en"); //localize
 		setProperty(XDConstants.XDPROPERTY_STRING_CODES, "");
 		setProperty(XDConstants.XDPROPERTY_DOCTYPE, XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE);
-		if (_fulltestMode) {
-			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
-				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
-		} else {
-			setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
-				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE);
-		}
+		setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
+			_fulltestMode ? XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE
+				: XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE);
 		setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		setProperty(XDConstants.XDPROPERTY_DEBUG, XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
@@ -145,9 +139,7 @@ public abstract class XDTester extends STester {
 	 * @param key name of property.
 	 * @return value of property.
 	 */
-	public final String getProperty(final String key) {
-		return _props.getProperty(key.replace('.', '_'));
-	}
+	public final String getProperty(final String key) {return _props.getProperty(key.replace('.', '_'));}
 	/** Set mode get compiled XDPool form converted binary data.
 	 * @param genObj if true compiled XDPool read form converted binary data.
 	 */
@@ -260,7 +252,7 @@ public abstract class XDTester extends STester {
 		}
 		return reporter;
 	}
-	/** Returns the available model represented by given name or null if model is not available.
+	/** Return the available model represented by given name or null if model is not available.
 	 * @param xdef XDefinition.
 	 * @param key The name of model.
 	 * @return The required model or null.
@@ -288,18 +280,18 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct XML element from Xdefinition.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName name of Xdefinition or null.
-	 * @param reporter ArrayReporter or null.
+	 * @param dname name of Xdefinition or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param el XML element used as context or null.
 	 * @param stdout output stream used as stdout.
 	 * @return constructed XML element.
 	 */
 	private Element createElement(final XDPool xp,
-		final String defName,
-		final ReportWriter reporter,
+		final String dname,
+		final ArrayReporter reporter,
 		final Element el,
 		final DefOutStream stdout) {
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		xd.setStdOut(stdout);
 		String qname;
@@ -310,7 +302,7 @@ public abstract class XDTester extends STester {
 			qname = el.getTagName();
 		} else {
 			XMElement xe;
-			XMDefinition xdf = xp.getXMDefinition(defName);
+			XMDefinition xdf = xp.getXMDefinition(dname);
 			if ((xe = getXElement(xdf, (qname = xdf.getName()))) == null) {
 				//Model of element '&{0}' is missing in XDefinition&{1}{ }
 				throw new SRuntimeException(XDEF.XDEF601, qname,xdf.getName());
@@ -320,7 +312,7 @@ public abstract class XDTester extends STester {
 		xd.xcreate(new QName(nsURI, qname), reporter);
 		return xd.getElement();
 	}
-	/** Check XDPool conversion to and return XDPool created from converted stream (if _genObj
+	/** Check XDPool conversion to OutputStream and return XDPool created from the stream (if _genObj
 	 * is false the conversion is skipped).
 	 * @param xp XDPool to be checked
 	 * @return XDPool read from converted stream.
@@ -336,8 +328,7 @@ public abstract class XDTester extends STester {
 			baos = new ByteArrayOutputStream();
 			XDFactory.writeXDPool(baos, xp1);
 			bais = new ByteArrayInputStream(baos.toByteArray());
-			xp1 =  XDFactory.readXDPool(bais);
-			return xp1;
+			return XDFactory.readXDPool(bais);
 		} catch(IOException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		} catch(Error e) {
@@ -348,21 +339,24 @@ public abstract class XDTester extends STester {
 	/** Process XML data with Xdefinition.
 	 * @param xdefs Xdefinition sources.
 	 * @param xml XML data (in create mode it may be null).
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param out stream used as stdout (may be null).
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param mode 'P' => parse, 'C' => create
 	 * @return xml element from processed Xdefinition.
 	 */
 	final public Element test(final String[] xdefs,
 		final String xml,
-		final String defName,
+		final String dname,
 		final OutputStream out,
-		final ReportWriter reporter,
+		final ArrayReporter reporter,
 		final char mode) {
 		System.out.flush();
 		System.err.flush();
 		try {
+			if (xdefs == null || xdefs.length == 0) {
+				throw new Exception("XDefinitions not avaiklable");
+			}
 			if (reporter != null) {
 				reporter.clear();
 			}
@@ -374,23 +368,15 @@ public abstract class XDTester extends STester {
 			if (out != null) {
 				out.flush();
 			}
-			if (xdefs == null) {
-				throw new Exception("XDefinition " + defName + " doesn't exist");
-			}
-			DefOutStream stdout;
-			if (out == null) {
-				stdout = null;
-			} else {
-				stdout =new DefOutStream(new OutputStreamWriter(out), false);
-			}
+			DefOutStream stdout = out == null ? null : new DefOutStream(new OutputStreamWriter(out), false);
 			if (mode == 'C') {
 				Element el = null;
 				if (xml != null) {
 					el = KXmlUtils.parseXml(xml, true).getDocumentElement();
 				}
-				return createElement(xp, defName, reporter, el, stdout);
+				return createElement(xp, dname, reporter, el, stdout);
 			} else {
-				XDDocument xd = xp.createXDDocument(defName);
+				XDDocument xd = xp.createXDDocument(dname);
 				xd.setProperties(_props);
 				if (stdout != null) {
 					xd.setStdOut(stdout);
@@ -407,37 +393,40 @@ public abstract class XDTester extends STester {
 	/** Process XML data with Xdefinition.
 	 * @param xdef Xdefinition source.
 	 * @param xml XML data (in create mode it may be null).
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param out stream used as stdout (may be null).
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param mode if 'C' then run construction mode.
 	 * @return xml element from processed Xdefinition.
 	 */
 	final public Element test(final String xdef,
 		final String xml,
-		final String defName,
+		final String dname,
 		final OutputStream out,
-		final ReportWriter reporter,
+		final ArrayReporter reporter,
 		final char mode) {
-		return test(new String[] {xdef}, xml, defName, out, reporter, mode);
+		return test(new String[] {xdef}, xml, dname, out, reporter, mode);
 	}
 	/** Process XML data with Xdefinition.
 	 * @param xdefs Xdefinition sources.
 	 * @param xml stream with XML data (in create mode it may be null).
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param out stream used as stdout (may be null).
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param mode 'P' => parse, 'C' => create.
 	 * @return xml element from processed Xdefinition.
 	 */
 	@SuppressWarnings("deprecation")
 	public final Element test(final File[] xdefs,
 		final InputStream xml,
-		final String defName,
+		final String dname,
 		final OutputStream out,
-		final ReportWriter reporter,
+		final ArrayReporter reporter,
 		final char mode) {
 		try {
+			if (xdefs == null || xdefs.length == 0) {
+				throw new Exception("XDefinitions not avaiklable");
+			}
 			chkSyntax(xdefs).checkAndThrowErrors();
 			if (reporter != null) {
 				reporter.clear();
@@ -449,23 +438,15 @@ public abstract class XDTester extends STester {
 			if (out != null) {
 				out.flush();
 			}
-			if (xdefs == null) {
-				throw new Exception("XDefinition " + defName + " doesn't exist");
-			}
-			DefOutStream stdout;
-			if (out == null) {
-				stdout = null;
-			} else {
-				stdout = new DefOutStream(new OutputStreamWriter(out), false);
-			}
+			DefOutStream stdout = out == null ? null : new DefOutStream(new OutputStreamWriter(out), false);
 			if (mode == 'C') {
 				Element el = null;
 				if (xml != null) {
 					el = KXmlUtils.parseXml(xml, true).getDocumentElement();
 				}
-				return createElement(xp, defName , reporter, el, stdout);
+				return createElement(xp, dname , reporter, el, stdout);
 			} else {
-				XDDocument xd = xp.createXDDocument(defName);
+				XDDocument xd = xp.createXDDocument(dname);
 				xd.setProperties(_props);
 				if (stdout != null) {
 					xd.setStdOut(stdout);
@@ -481,43 +462,43 @@ public abstract class XDTester extends STester {
 	/** Process XML data with Xdefinition.
 	 * @param xdef Xdefinition source.
 	 * @param xml stream with XML data (in create mode it may be null).
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param out stream used as stdout (may be null).
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return xml element from processed Xdefinition.
 	 */
 	final public Element test(final File xdef,
 		final InputStream xml,
-		final String defName,
+		final String dname,
 		final OutputStream out,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		// if reporter is not null skipp checking of result of data processing*/
-		return test(new File[]{xdef}, xml, defName, out, reporter);
+		return test(new File[]{xdef}, xml, dname, out, reporter);
 	}
 	/** Process XML data with Xdefinition.
 	 * @param xdefs Xdefinition sources.
 	 * @param xml stream with XML data (in create mode it may be null).
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param out stream used as stdout (may be null).
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return xml element from processed Xdefinition.
 	 */
 	final public Element test(final File[] xdefs,
 		final InputStream xml,
-		final String defName,
+		final String dname,
 		final OutputStream out,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		try {
-			ReportWriter myreporter = reporter;
+			ArrayReporter myreporter = reporter;
 			if (reporter == null) {
 				myreporter = new ArrayReporter();
 			}
-			Element result = test(xdefs, xml, defName, out, reporter, 'P');
+			Element result = test(xdefs, xml, dname, out, reporter, 'P');
 			if (reporter == null) {
 				if (myreporter.errors()) {
 					StringWriter sw = new StringWriter();
 					xml.reset();
-					ReportReader rri = myreporter.getReportReader();
+					ArrayReporter rri = (ArrayReporter) myreporter.getReportReader();
 					ReportPrinter.printListing(sw, new java.io.InputStreamReader(xml), rri, true);
 					fail(sw.toString());
 				}
@@ -596,10 +577,10 @@ public abstract class XDTester extends STester {
 					System.err.println("Fails! Expected:\n" + result + "\n got null");
 				} else {
 					Element expected = KXmlUtils.parseXml(result).getDocumentElement();
-					ReportWriter rw = KXmlUtils.compareElements(el, expected);
+					ArrayReporter rw = (ArrayReporter) KXmlUtils.compareElements(el, expected);
 					if (rw.errorWarnings()) {
 						error = true;
-						rw.getReportReader().printReports(System.err);
+						rw.printReports(System.err);
 						System.err.println("Fails! Expected:\n" + result + "\n got:\n"
 							+ KXmlUtils.nodeToString(el, false));
 					}
@@ -638,25 +619,25 @@ public abstract class XDTester extends STester {
 		chkSyntax(xdef).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
 	}
-	final public XDPool compile(String[] xdefs, final Class<?>... obj) {
+	final public XDPool compile(final String[] xdefs, final Class<?>... obj) {
 		chkSyntax(xdefs).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null if it is not specified.
-	 * @param reporter ArrayReporter or null.
+	 * @param dname Xdefinition name, or null if it is not specified.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName,
-		final ReportWriter reporter,
+		final String dname,
+		final ArrayReporter reporter,
 		final String xml) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		Element el = KXmlUtils.parseXml(xml).getDocumentElement();
 		xd.setXDContext(el);
@@ -664,113 +645,110 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null if it is not specified.
+	 * @param dname Xdefinition name, or null if it is not specified.
 	 * @param name element name of the constructed XML.
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String name,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.xcreate(name, reporter);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null if it is not specified.
+	 * @param dname Xdefinition name, or null if it is not specified.
 	 * @param qname QName of model to be created.
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName,
+		final String dname,
 		final QName qname,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.xcreate(qname, reporter);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null if it is not specified.
+	 * @param dname Xdefinition name, or null if it is not specified.
 	 * @param qname QName of model to be created.
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final String xdef,
-		final String defName,
+		final String dname,
 		final QName qname,
-		final ReportWriter reporter) {
-		return create(compile(xdef), defName, qname, reporter);
+		final ArrayReporter reporter) {
+		return create(compile(xdef), dname, qname, reporter);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null if it is not specified.
+	 * @param dname Xdefinition name, or null if it is not specified.
 	 * @param el Element as XDocument context or null.
-	 * @param name element name of the constructed XML.
+	 * @param ename element ename of the constructed XML.
 	 * @return root element of the created XML document.
 	 */
-	final public Element create(final XDPool xp,
-		final String defName,
-		final Element el,
-		final String name) {
-		XDDocument xd = xp.createXDDocument(defName);
+	final public Element create(final XDPool xp, final String dname, final Element el, final String ename) {
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		if (el != null) {
 			xd.setXDContext(el);
 		}
-		return (el != null && (name == null || name.length() == 0))
-			? xd.xcreate(new QName(el.getNamespaceURI(), el.getTagName()), null) : xd.xcreate(name, null);
+		return (el != null && (ename == null || ename.length() == 0))
+			? xd.xcreate(new QName(el.getNamespaceURI(), el.getTagName()), null) : xd.xcreate(ename, null);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null if it is not specified.
+	 * @param dname Xdefinition name, or null if it is not specified.
 	 * @param el Element as XDocument context or null.
 	 * @param name element name of the constructed XML.
 	 * @return root element of the created XML document.
 	 */
-	final public Element create(final String xdef, final String defName, final Element el, final String name){
-		return create(compile(xdef), defName, el, name);
+	final public Element create(final String xdef, final String dname, final Element el, final String name) {
+		return create(compile(xdef), dname, el, name);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xdef the Xdefinition as source for data construction.
-	 * @param defName Xdefinition name, or null if it is not specified.
+	 * @param dname Xdefinition name, or null if it is not specified.
 	 * @param el Element as XDocument context or null.
 	 * @param name element name of the constructed XML.
 	 * @param param global parameter in X-Script or null.
 	 * @param obj the value of the global parameter or null.
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final String xdef,
-		final String defName,
+		final String dname,
 		final Element el,
 		final String name,
 		final String param,
 		final Object obj,
 		final ArrayReporter reporter) {
-		return create(compile(xdef), defName, el, name, param, obj, reporter);
+		return create(compile(xdef), dname, el, name, param, obj, reporter);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param el Element as XDocument context or null.
 	 * @param name element name of the constructed XML.
 	 * @param param global parameter in X-Script or null.
 	 * @param obj the value of the global parameter or null.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName, // xdefinition name
+		final String dname, // xdefinition name
 		final Element el, // context
 		final String name, // name of model
 		final String param, // name of vatiable
@@ -779,7 +757,7 @@ public abstract class XDTester extends STester {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		if (el != null) {
 			xd.setXDContext(el);
@@ -792,29 +770,29 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param qname QName of model to be created.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName,
+		final String dname,
 		final QName qname,
 		final ArrayReporter reporter,
 		final String xml,
 		final StringWriter swr,
 		final Object userObj) {
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return create(xd, qname, reporter, xml, swr, userObj);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xd XDocument created from XDefinitions.
 	 * @param name name of model.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
@@ -849,7 +827,7 @@ public abstract class XDTester extends STester {
 	/** Construct a new XML document from the specified data.
 	 * @param xd XDocument created from XDefinitions.
 	 * @param qname QName of model.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
@@ -883,103 +861,99 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xdef XDefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param qname QName of model to be created.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final String xdef,
-		final String defName,
+		final String dname,
 		final QName qname,
 		final ArrayReporter reporter,
 		final String xml,
 		final StringWriter swr,
 		final Object userObj) {
-		return create(compile(xdef), defName, qname, reporter, xml,swr,userObj);
+		return create(compile(xdef), dname, qname, reporter, xml,swr,userObj);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param name element name of the constructed XML.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final String xml,
 		final StringWriter swr,
 		final Object userObj) {
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		return create(xd, name, reporter, xml, swr, userObj);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xdef source with XDefinition.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param name element name of the constructed XML.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final String xdef,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final String xml, // contest
 		final StringWriter swr,
 		final Object userObj) {
-		return create(compile(xdef), defName, name, reporter, xml, swr, userObj);
+		return create(compile(xdef), dname, name, reporter, xml, swr, userObj);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param name element name of the constructed XML.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final String xml) {
-		return create(xp, defName, name, reporter, xml, null, null);
+		return create(xp, dname, name, reporter, xml, null, null);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xd XDocument created from XDefinitions.
-	 * @param name element name of the constructed XML.
-	 * @param reporter ArrayReporter or null.
+	 * @param ename element name of the constructed XML.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
-	final public Element create(final XDDocument xd,
-		final String name,
-		final ArrayReporter reporter) {
-		return create(xd, name, reporter, null, null, null);
+	final public Element create(final XDDocument xd, final String ename, final ArrayReporter reporter) {
+		return create(xd, ename, reporter, null, null, null);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xd XDocument created from XDefinitions.
 	 * @param qname QName of element to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return root element of the created XML document.
 	 */
-	final public Element create(final XDDocument xd,
-		final QName qname,
-		final ArrayReporter reporter) {
+	final public Element create(final XDDocument xd, final QName qname, final ArrayReporter reporter) {
 		return create(xd, qname, reporter, null, null, null);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xd XDocument created from XDefinitions.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @return root element of the created XML document.
 	 */
@@ -991,23 +965,23 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xdef source with Xdefinition.
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final String xdef,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final String xml) {
-		return create(xdef, defName, name, reporter, xml, null, null);
+		return create(xdef, dname, name, reporter, xml, null, null);
 	}
 	/** Construct a new XML document from the specified data.
 	 * @param xd XDocument created from XDefinitions.
 	 * @param qname QName of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
 	 * @return root element of the created XML document.
 	 */
@@ -1020,7 +994,7 @@ public abstract class XDTester extends STester {
 	/** Construct a new XON/JSON object from the specified data.
 	 * @param xd XDocument created from XDefinitions.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj context (object) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
@@ -1054,61 +1028,61 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct a new XON/JSON object from the specified data.
 	 * @param xdef source with Xdefinition.
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj context (object) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
 	 * @return created XON/JSON object.
 	 */
 	final public Object jcreate(final String xdef,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final Object obj,
 		final StringWriter swr,
 		final Object userObj) {
-		return jcreate(compile(xdef), defName, name, reporter, obj, swr,userObj);
+		return jcreate(compile(xdef), dname, name, reporter, obj, swr,userObj);
 	}
 	/** Construct a new XON/JSON object from the specified data.
 	 * @param xp XDPool containing Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj context (object) or null.
 	 * @param swr writer used as stdout or null.
 	 * @param userObj user object or null.
 	 * @return created XON/JSON object.
 	 */
 	final public Object jcreate(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final Object obj,
 		final StringWriter swr,
 		final Object userObj) {
-		return jcreate(xp.createXDDocument(defName), name, reporter, obj, swr, userObj);
+		return jcreate(xp.createXDDocument(dname), name, reporter, obj, swr, userObj);
 	}
 	/** Construct a new XON/JSON object from the specified data.
 	 * @param xp XDPool containing Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj context (object) or null.
 	 * @return created XON/JSON object.
 	 */
 	final public Object jcreate(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final Object obj) {
-		return jcreate(xp, defName, name, reporter, obj, null, null);
+		return jcreate(xp, dname, name, reporter, obj, null, null);
 	}
 	/** Construct a new XON/JSON object from the specified data.
 	 * @param xd XDocument created from Xdefinitions.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return created XON/JSON object.
 	 */
 	final public Object jcreate(final XDDocument xd, final String name, final ArrayReporter reporter) {
@@ -1129,144 +1103,142 @@ public abstract class XDTester extends STester {
 	}
 	/** Construct a new XON/JSON object from the specified data.
 	 * @param xdef source with Xdefinitions.
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param name name of model to be constructed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj context (object) or null.
 	 * @return created XON/JSON object.
 	 */
 	final public Object jcreate(final String xdef,
-		final String defName,
+		final String dname,
 		final String name,
 		final ArrayReporter reporter,
 		final Object obj) {
-		return jcreate(xdef, defName, name, reporter, obj, null, null);
+		return jcreate(xdef, dname, name, reporter, obj, null, null);
 	}
 	/** Validate and process XML data.
 	 * @param xp XDPool containing XDefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String xml,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.xparse(xml, reporter);
 	}
 	/** Validate and process XML data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final String xdef,
-		final String defName,
+		final String dname,
 		final String xml,
-		final ReportWriter reporter) {
-		return parse(compile(xdef), defName, xml, reporter);
+		final ArrayReporter reporter) {
+		return parse(compile(xdef), dname, xml, reporter);
 	}
 	/** Validate and process XML data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param el XML element to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final Element el,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.xparse(el, reporter);
 	}
 	/** Validate and process XML data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param el XML element to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final String xdef,
-		final String defName,
+		final String dname,
 		final Element el,
-		final ReportWriter reporter) {
-		return parse(compile(xdef), defName, el, reporter);
+		final ArrayReporter reporter) {
+		return parse(compile(xdef), dname, el, reporter);
 	}
 	/** Validate and process XML data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param el XML element to be processed.
 	 * @return XML element with processed data.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	final public Element parse(final XDPool xp,
-		final String defName,
-		final Element el) {
-		XDDocument xd = xp.createXDDocument(defName);
+	final public Element parse(final XDPool xp, final String dname, final Element el) {
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.xparse(el, null);
 	}
 	/** Validate and process XML data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param el XML element to be processed.
 	 * @return XML element with processed data.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	final public Element parse(final String xdef, final String defName, final Element el) {
-		return parse(compile(xdef), defName, el);
+	final public Element parse(final String xdef, final String dname, final Element el) {
+		return parse(compile(xdef), dname, el);
 	}
 	/** Validate and process XML data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
 	 * @return XML element with processed data.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	final public Element parse(final XDPool xp, final String defName, final String xml) {
-		XDDocument xd = xp.createXDDocument(defName);
+	final public Element parse(final XDPool xp, final String dname, final String xml) {
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.xparse(xml, null);
 	}
 	/** Validate and process XML data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
 	 * @return XML element with processed data.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	final public Element parse(final String xdef, final String defName, final String xml) {
-		return parse(compile(xdef), defName, xml);
+	final public Element parse(final String xdef, final String dname, final String xml) {
+		return parse(compile(xdef), dname, xml);
 	}
 	/** Validate and process XML data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj user object or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String xml,
 		final ArrayReporter reporter,
 		final Object obj) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		if (obj != null) {
 			xd.setUserObject(obj);
@@ -1275,53 +1247,53 @@ public abstract class XDTester extends STester {
 	}
 	/** Validate and process XML data.
 	 * @param xdef XDefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj user object or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final String xdef,
-		final String defName,
+		final String dname,
 		final ArrayReporter reporter,
 		final String xml,
 		final Object obj) {
-		return parse(compile(xdef), defName, xml, reporter, obj);
+		return parse(compile(xdef), dname, xml, reporter, obj);
 	}
 	/** Validate and process XML data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param input stream used as stdin or null.
 	 * @param obj user object or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String xml,
 		final ArrayReporter reporter,
 		final StringWriter swr,
 		final Object input,
 		final Object obj) {
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return parse(xd, xml, reporter, swr, input, obj);
 	}
 	/** Validate and process XML data.
 	 * @param xd XDocument created from an Xdefinition.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return XML element with processed data.
 	 */
-	final public Element parse(final XDDocument xd, final String xml, final ArrayReporter reporter){
+	final public Element parse(final XDDocument xd, final String xml, final ArrayReporter reporter) {
 		return parse(xd, xml, reporter, null, null, null);
 	}
 	/** Validate and process XML data.
 	 * @param xd XDocument created from an Xdefinition.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @return XML element with processed data.
 	 */
@@ -1349,7 +1321,7 @@ public abstract class XDTester extends STester {
 	/** Validate and process XML data.
 	 * @param xd XDocument created from an Xdefinition.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param input stream used as stdin or null.
 	 * @param obj user object or null.
@@ -1392,90 +1364,90 @@ public abstract class XDTester extends STester {
 	}
 	/** Validate and process XML data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param xml XML data to be processed.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param input stream used as stdin or null.
 	 * @param obj user object or null.
 	 * @return XML element with processed data.
 	 */
 	final public Element parse(final String xdef,
-		final String defName,
+		final String dname,
 		final String xml,
 		final ArrayReporter reporter,
 		final StringWriter swr,
 		final Object input,
 		final Object obj) {
-		return parse(compile(xdef), defName, xml, reporter, swr, input, obj);
+		return parse(compile(xdef), dname, xml, reporter, swr, input, obj);
 	}
 
 	/** Validate and process JSON/XON data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param json input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String json,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.jparse(json, reporter);
 	}
 	/** Validate and process JSON/XON data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param json input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final Object json,
-		final ReportWriter reporter) {
+		final ArrayReporter reporter) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		return xd.jvalidate(json, reporter);
 	}
 	/** Validate and process JSON/XON data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dame Xdefinition name, or null.
 	 * @param json object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final String xdef,
-		final String defName,
+		final String dame,
 		final Object json,
-		final ReportWriter reporter) {
-		return jparse(compile(xdef), defName, json, reporter);
+		final ArrayReporter reporter) {
+		return jparse(compile(xdef), dame, json, reporter);
 	}
 	/** Validate and process JSON/XON data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param json object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj user object or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final Object json,
 		final ArrayReporter reporter,
 		final Object obj) {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		if (obj != null) {
 			xd.setUserObject(obj);
@@ -1484,37 +1456,37 @@ public abstract class XDTester extends STester {
 	}
 	/** Validate and process JSON/XON data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param json input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param obj user object or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final String xdef,
-		final String defName,
+		final String dname,
 		final ArrayReporter reporter,
 		final Object json,
 		final Object obj) {
-		return jparse(compile(xdef), defName, json, reporter, obj);
+		return jparse(compile(xdef), dname, json, reporter, obj);
 	}
 	/** Validate and process JSON/XON data.
 	 * @param xp XDPool with compiled Xdefinitions.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param json Object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param input stream used as stdin or null.
 	 * @param obj user object or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final XDPool xp,
-		final String defName,
+		final String dname,
 		final Object json,
 		final ArrayReporter reporter,
 		final StringWriter swr,
 		final Object input,
 		final Object obj) {
-		XDDocument xd = xp.createXDDocument(defName);
+		XDDocument xd = xp.createXDDocument(dname);
 		xd.setProperties(_props);
 		if (swr != null) {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
@@ -1533,7 +1505,7 @@ public abstract class XDTester extends STester {
 	/** Validate and process JSON/XON data.
 	 * @param xd XDocument created from an Xdefinition.
 	 * @param json Object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @return processed JSON/XON data.
 	 */
@@ -1546,7 +1518,7 @@ public abstract class XDTester extends STester {
 	/** Validate and process JSON/XON data.
 	 * @param xd XDocument created from an Xdefinition.
 	 * @param json Object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param obj user object or null.
 	 * @return processed JSON/XON data.
@@ -1561,7 +1533,7 @@ public abstract class XDTester extends STester {
 	/** Validate and process JSON/XON data.
 	 * @param xd XDocument created from an Xdefinition.
 	 * @param json Object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param input stream used as stdin or null.
 	 * @param obj user object or null.
@@ -1603,30 +1575,30 @@ public abstract class XDTester extends STester {
 	}
 	/** Validate and process JSON/XON data.
 	 * @param xdef Xdefinition source.
-	 * @param defName Xdefinition name, or null.
+	 * @param dname Xdefinition name, or null.
 	 * @param json Object with input JSON data.
-	 * @param reporter ArrayReporter or null.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param swr writer used as stdout or null.
 	 * @param input stream used as stdin or null.
 	 * @param obj user object or null.
 	 * @return processed JSON/XON data.
 	 */
 	final public Object jparse(final String xdef,
-		final String defName,
+		final String dname,
 		final Object json,
 		final ArrayReporter reporter,
 		final StringWriter swr,
 		final Object input,
 		final Object obj) {
-		return jparse(compile(xdef), defName, json, reporter, swr, input, obj);
+		return jparse(compile(xdef), dname, json, reporter, swr, input, obj);
 	}
 
 	/** Create listing with reports from reporter.
-	 * @param r reporter with reports.
+	 * @param r ArrayReporter with reports.
 	 * @param data source data.
 	 * @return listing of source data and reports.
 	 */
-	final public String getListing(final ReportReader r, final String data) {
+	final public String getListing(final ArrayReporter r, final String data) {
 		if (data.charAt(0) == '<') {
 			return ReportPrinter.printListing(data, r);
 		} else {
@@ -1639,7 +1611,7 @@ public abstract class XDTester extends STester {
 	}
 	/** Create listing with reports from reporter.
 	 * @param data String with source data.
-	 * @param reporter reporter with reports.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return string with created listing.
 	 */
 	final public String createListnig(final String data, final ArrayReporter reporter) {
@@ -1653,16 +1625,16 @@ public abstract class XDTester extends STester {
 		return sw.toString();
 	}
 	/** Print listing with reports from reporter.
-	 * @param reporter reporter with reports.
+	 * @param ArrayReporter reporter with reports.
 	 * @param data String with source data.
 	 */
-	final public void printReports(final ReportReader reporter, final String data) {
+	final public void printReports(final ArrayReporter reportReader, final String data) {
 		System.out.flush();
 		if (data.charAt(0) == '<') {
-			ReportPrinter.printListing(System.err, data, reporter, true);
+			ReportPrinter.printListing(System.err, data, reportReader, true);
 		} else {
 			try {
-				ReportPrinter.printListing(System.err, new FileReader(data), reporter, true);
+				ReportPrinter.printListing(System.err, new FileReader(data), reportReader, true);
 			} catch (FileNotFoundException ex) {
 				throw new RuntimeException(ex);
 			}
@@ -1674,39 +1646,39 @@ public abstract class XDTester extends STester {
 
 	/** Parse data and return created X-component.
 	 * @param xp XDPool with Xdefinitions
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param xml input XML data.
 	 * @param clazz XComponent class (if null, class is searched in XDPool).
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return created X-component.
 	 */
 	public final XComponent parseXC(final XDPool xp,
-		final String defName,
+		final String dname,
 		final String xml,
 		final Class clazz,
 		final ArrayReporter reporter) {
-		return parseXC(xp.createXDDocument(defName), xml, clazz, reporter);
+		return parseXC(xp.createXDDocument(dname), xml, clazz, reporter);
 	}
 	/** Parse data and return created X-component.
 	 * @param xp XDPool with Xdefinitions
-	 * @param defName name of Xdefinition or null.
+	 * @param dname name of Xdefinition or null.
 	 * @param el input XML element.
 	 * @param clazz XComponent class (if null, class is searched in XDPool).
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return created X-component.
 	 */
 	public final XComponent parseXC(final XDPool xp,
-		final String defName,
+		final String dname,
 		final Element el,
 		final Class clazz,
 		final ArrayReporter reporter) {
-		return parseXC(xp.createXDDocument(defName), el, clazz, reporter);
+		return parseXC(xp.createXDDocument(dname), el, clazz, reporter);
 	}
 	/** Parse data and return created X-component.
 	 * @param xd XDDocument created from Xdefinitions.
 	 * @param xml input XML data.
 	 * @param clazz XComponent class (if null, class is searched in XDPool).
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return created X-component.
 	 */
 	public final XComponent parseXC(final XDDocument xd,
@@ -1723,7 +1695,7 @@ public abstract class XDTester extends STester {
 	 * @param xd XDDocument created from Xdefinitions.
 	 * @param el input XML element.
 	 * @param clazz XComponent class (if null, class is searched in XDPool).
-	 * @param reporter ArrayReporter.
+	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @return created X-component.
 	 */
 	public final static XComponent parseXC(final XDDocument xd,
