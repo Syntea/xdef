@@ -518,7 +518,7 @@ public abstract class XDTester extends STester {
 	 * @param mode 'P' => parse, 'C' => create.
 	 * @return xml element from processed Xdefinition.
 	 */
-	final public boolean test(final String xdef,final String xml,final String name,final char mode){
+	final public boolean test(final String xdef,final String xml,final String name,final char mode) {
 		return test(xdef, xml, name, mode, xml, "");
 	}
 	/** Process XML data with Xdefinition.
@@ -1832,7 +1832,7 @@ public abstract class XDTester extends STester {
 		final String xname,
 		final String cls,
 		final String src,
-		final String outResult){
+		final String outResult) {
 		String result = "";
 		try {
 			ArrayReporter reporter = new ArrayReporter();
