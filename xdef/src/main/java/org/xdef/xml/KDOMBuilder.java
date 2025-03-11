@@ -114,8 +114,7 @@ public class KDOMBuilder extends DocumentBuilder {
 				_xBuilder = null;
 			}
 			if (BUILDER_FACTORY.isExpandEntityReferences() != _expandEntityReferences) {
-				BUILDER_FACTORY.setExpandEntityReferences(
-					_expandEntityReferences);
+				BUILDER_FACTORY.setExpandEntityReferences(_expandEntityReferences);
 				_xBuilder = null;
 			}
 			if (BUILDER_FACTORY.isIgnoringComments() != _ignoreComments) {
@@ -144,13 +143,14 @@ public class KDOMBuilder extends DocumentBuilder {
 					//Unsupported feature of DomBuilder&{0}{: }&{#SYS000}
 					throw new SUnsupportedOperationException(XML.XML405, "setXIncludeAware");
 				}
+				_xBuilder = null;
 			}
 			if (_xBuilder == null) {
 				_xBuilder = BUILDER_FACTORY.newDocumentBuilder();
 			} else {
 				_xBuilder.reset();
 			}
-			_xBuilder.setErrorHandler(new ErrorHandler(){
+			_xBuilder.setErrorHandler(new ErrorHandler() {
 				@Override
 				public void warning(SAXParseException ex) {
 					throwMsg(ex, Report.WARNING);
@@ -170,8 +170,7 @@ public class KDOMBuilder extends DocumentBuilder {
 						InputStream in;
 						try {
 							in = SUtils.getExtendedURL(systemId).openStream();
-						} catch (IOException ex) {
-							// if error occurs set the empty InputStream
+						} catch (IOException ex) {// if error occurs set the empty InputStream
 							in = new ByteArrayInputStream(new byte[0]);
 						}
 						InputSource is = new InputSource(in);
@@ -249,7 +248,7 @@ public class KDOMBuilder extends DocumentBuilder {
 	 * @param ignore true if the DOM parser must eliminate whitespace in the element content when parsing
 	 * XML documents; false otherwise.
 	 */
-	public final void setIgnoringElementContentWhitespace(final boolean ignore){
+	public final void setIgnoringElementContentWhitespace(final boolean ignore) {
 		_ignoreElementContentWhitespace = ignore;
 	}
 
@@ -259,11 +258,9 @@ public class KDOMBuilder extends DocumentBuilder {
 	public final boolean isIgnoringElementContentWhitespace() {return _ignoreElementContentWhitespace;}
 
 	/** Set the XML parser will expand entity reference nodes. By default the value of this is set to true.
-	 * @param expandEntityReferences set the expandEntityReferences switch.
+	 * @param x to be set to expandEntityReferences switch.
 	 */
-	public final void setExpandEntityReferences(final boolean expandEntityReferences){
-		_expandEntityReferences = expandEntityReferences;
-	}
+	public final void setExpandEntityReferences(final boolean x) {_expandEntityReferences = x;}
 
 	/** Get the expand Entity references switch.
 	 * @return the expand Entity references switch.
@@ -373,8 +370,7 @@ public class KDOMBuilder extends DocumentBuilder {
 	 * @return object org.w3c.dom.Document with parsed XML document.
 	 * @throws SRuntimeException if reporter was not specified and when an error occurs.
 	 */
-	public final Document parse(final InputStream stream,
-		final boolean closeStream) {
+	public final Document parse(final InputStream stream, final boolean closeStream) {
 		Document doc = null;
 		if (_reporter != null) {
 			_reporter.clear();
@@ -456,7 +452,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		 if (_xBuilder != null) {
 			 _xBuilder.setEntityResolver(entResolver);
 		 } else {
-			throw new UnsupportedClassVersionError();
+			throw new SRuntimeException(XML.XML404, "DomBuilder is null"); //DomBuilder report&{0}{: }
 		 }
 	}
 
