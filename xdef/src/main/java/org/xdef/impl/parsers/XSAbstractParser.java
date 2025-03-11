@@ -99,8 +99,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 	 * @param xnode actual XXNode object.
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
-		if (xnode != null && xnode.getXMElement().getXonMode() != 0
-			&& "null".equals(p.getSourceBuffer())) {
+		if (xnode != null && xnode.getXMElement().getXonMode() != 0 && "null".equals(p.getSourceBuffer())) {
 			p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
 			p.setEos();
 			return;
@@ -187,8 +186,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 				for (int j = 0; j < params.length; j+=2) {
 					if (name.equals(params[j].toString())) {
 						XDValue result = params[j+1];
-						return result != null
-							? result.isNull() ? null : result : null;
+						return result != null ? result.isNull() ? null : result : null;
 					}
 				}
 				break;
@@ -407,14 +405,11 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		if (getDefaultWhiteSpace() != getWhiteSpace()) {
 			switch (getWhiteSpace()) {
 				case 'c':
-					map.setXDNamedItem("whiteSpace", new DefString("collapse"));
-					break;
+					map.setXDNamedItem("whiteSpace", new DefString("collapse")); break;
 				case 'r':
-					map.setXDNamedItem("whiteSpace", new DefString("replace"));
-					break;
+					map.setXDNamedItem("whiteSpace", new DefString("replace")); break;
 				case 0:
-					map.setXDNamedItem("whiteSpace", new DefString("preserve"));
-					break;
+					map.setXDNamedItem("whiteSpace", new DefString("preserve")); break;
 			}
 		}
 		XDValue[] en = getEnumeration();
@@ -571,7 +566,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		if (getFractionDigits() != x.getFractionDigits()) {
 			return false;
 		}
-		if (getMinLength()!=x.getMinLength()||getMaxLength()!=getMaxLength()) {
+		if (getMinLength() != x.getMinLength() || getMaxLength() != getMaxLength()) {
 			return false;
 		}
 		if (getMinInclusive() == null) {

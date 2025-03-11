@@ -76,6 +76,7 @@ public class XDParseJString extends XSAbstractParseToken {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
+		checkCharset(xn, p);
 	}
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
