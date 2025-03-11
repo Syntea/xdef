@@ -3177,15 +3177,15 @@ public final class TestXdef extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			xd = compile( // xd:any
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <xd:any xd:name='A' xd:script='options moreAttributes, moreElements, moreText' />\n"+
+"  <xd:any xd:name='A' xd:script='options moreElements, moreAttributes, moreText' />\n"+
 "</xd:def>").createXDDocument();
-			parse(xd, "<A a='Таблица' />", reporter);
+			parse(xd, "<X><Y a='Таблица' /></X>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
-			parse(xd, "<A a='Table' />", reporter);
+			parse(xd, "<X><Y a='Table' /></X>", reporter);
 			assertNoErrorsAndClear(reporter);
-			parse(xd, "<A>Таблица</A>", reporter);
+			parse(xd, "<X><Y>Таблица</Y></X>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
-			parse(xd, "<A>Table</A>", reporter);
+			parse(xd, "<X><Y>Table</Y></X>", reporter);
 			assertNoErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
