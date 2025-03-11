@@ -23,6 +23,7 @@ public class XDParsePic extends XDParseEq {
 				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			}
 		}
+		checkCharset(xnode, p);
 		return p;
 	}
 	@Override

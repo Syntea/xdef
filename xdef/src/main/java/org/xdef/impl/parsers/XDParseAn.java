@@ -6,7 +6,7 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of Xscript "an" type.
+/** Parser of "an" type.
  * @author Vaclav Trojan
  */
 public class XDParseAn extends XSAbstractParseToken {
@@ -30,6 +30,7 @@ public class XDParseAn extends XSAbstractParseToken {
 		p.setParsedValue(s);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
+		checkCharset(xn, p);
 		checkItem(p);
 	}
 	@Override

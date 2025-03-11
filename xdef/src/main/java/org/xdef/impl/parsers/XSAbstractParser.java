@@ -127,7 +127,6 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 				//After the item '&{0}' follows an illegal character&{1}{: }
 				p.errorWithString(XDEF.XDEF804, parserName());
 			}
-			checkCharset(xnode, p);
 			finalCheck(xnode, p);
 		}
 	}

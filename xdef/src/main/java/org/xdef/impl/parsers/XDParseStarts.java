@@ -31,6 +31,7 @@ public class XDParseStarts extends XDParseEq {
 		if (p.isToken(_param)) {
 			p.setParsedValue(p.getSourceBuffer().substring(i));
 			p.setEos();
+			checkCharset(xnode, p);
 		} else {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}

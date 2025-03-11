@@ -27,6 +27,7 @@ public class XDParseEq extends XDParserAbstract {
 	public XDParseResult check(final XXNode xn, final String s) {
 		XDParseResult p = new DefParseResult(s);
 		parseObject(xn, p);
+		checkCharset(xn, p);
 		return p;
 	}
 	@Override

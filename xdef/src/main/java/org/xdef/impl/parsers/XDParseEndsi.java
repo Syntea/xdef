@@ -28,6 +28,7 @@ public class XDParseEndsi extends XDParseEqi {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 		} else {
 			p.setEos();
+			checkCharset(xnode, p);
 		}
 	}
 	@Override

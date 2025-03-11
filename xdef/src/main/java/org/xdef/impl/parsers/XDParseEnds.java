@@ -21,6 +21,7 @@ public class XDParseEnds extends XDParseEq {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 		} else {
 			p.setEos();
+			checkCharset(xnode, p);
 		}
 		return p;
 	}
@@ -30,6 +31,7 @@ public class XDParseEnds extends XDParseEq {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 		}
 		p.setEos();
+		checkCharset(xnode, p);
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

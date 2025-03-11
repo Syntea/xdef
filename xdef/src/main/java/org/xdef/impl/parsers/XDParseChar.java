@@ -30,6 +30,7 @@ public class XDParseChar extends XSAbstractParseToken {
 		String s = p.getBufferPart(pos, p.getIndex());
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
+		checkCharset(xnode, p);
 		checkItem(p);
 	}
 	boolean parse(final XDParseResult p) {

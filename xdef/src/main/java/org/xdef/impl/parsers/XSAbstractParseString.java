@@ -162,6 +162,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		p.setParsedValue(s);
 		checkPatterns(p);
 		checkLength(p);
+		checkCharset(xnode, p);
 	}
 	void checkLength(XDParseResult p) {
 		if (p.matches()) {

@@ -67,9 +67,7 @@ public class XDParseJList extends XSAbstractParser {
 			BASE +
 			0;
 	}
-	private void parse(final XXNode xnode,
-		final XDParseResult p,
-		boolean isFinal) {
+	private void parse(final XXNode xnode, final XDParseResult p, boolean isFinal) {
 		XDParser itemParser = _itemType != null ? _itemType : new XDParseJValue(); // default parser jvalue
 		DefContainer results = new DefContainer();
 		String source = p.getSourceBuffer();

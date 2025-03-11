@@ -21,6 +21,7 @@ public class XDParseContains extends XDParseEq {
 		if (s.contains(_param)) {
 			p.setParsedValue(s);
 			p.setEos();
+			checkCharset(xnode, p);
 		} else {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
@@ -33,6 +34,7 @@ public class XDParseContains extends XDParseEq {
 		if (s.contains(_param)) {
 			p.setParsedValue(s);
 			p.setEos();
+			checkCharset(xn, p);
 		} else {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}

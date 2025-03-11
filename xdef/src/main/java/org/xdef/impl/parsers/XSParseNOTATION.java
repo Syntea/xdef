@@ -70,6 +70,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 		p.setEos();
 		checkPatterns(p);
 		checkLength(p);
+		checkCharset(xnode, p);
 	}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult p) {

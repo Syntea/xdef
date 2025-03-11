@@ -21,6 +21,7 @@ public class XDParseContainsi extends XDParseEqi {
 		if (s.toLowerCase().contains(_param.toLowerCase())) {
 			p.setParsedValue(s);
 			p.setEos();
+			checkCharset(xnode, p);
 		} else {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
@@ -35,6 +36,7 @@ public class XDParseContainsi extends XDParseEqi {
 		} else {
 			p.setParsedValue(s);
 			p.setEos();
+			checkCharset(xn, p);
 		}
 	}
 	@Override
