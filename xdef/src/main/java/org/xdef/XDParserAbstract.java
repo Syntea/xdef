@@ -330,7 +330,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 			String s = p.getParsedString();
 			for (Charset chset : chsets) {
 				if (s.equals(new String(s.getBytes(chset), chset))) {
-					return;
+					return; // OK, charset found
 				}
 			}
 			s = "";
@@ -340,6 +340,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 				}
 				s += chsets[i].name();
 			}
+			//The parsed string contains a character that is not allowed in any of the code tables: &{0}
 			p.error(XDEF.XDEF823, s);
 		}
 	}

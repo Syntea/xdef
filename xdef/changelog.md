@@ -1,11 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-<<<<<<< HEAD
 # Version 42.2.23, release-date 2025-03-11
-=======
-# Version 42.2.23, release-date 2025-03-07
->>>>>>> 775d1dd23d018b763f65f963054145fe09b8fe17
-* .
+* If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), then
+  XDEF823 error is reported also for the values of `moreAttributes`, `moreTest` (also in xd:any items). 
 
 # Version 42.2.22, release-date 2025-03-07
 * Fixed an error when using the `xdef_specdates` property (see `org.xdef.XDConstants.XDPROPERTY_SPECDATES`)

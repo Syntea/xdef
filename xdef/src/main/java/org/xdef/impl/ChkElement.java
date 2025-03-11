@@ -1,5 +1,6 @@
 package org.xdef.impl;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -2361,6 +2362,28 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_element.removeAttribute(qname);
 				} else {
 					_element.setAttribute(qname, adata);
+					Charset[] chsets = getXDPool().getLegalStringCharsets();
+					if (chsets != null && chsets.length > 0) {
+						boolean chsetsOK = false;
+						for (Charset chset : chsets) {
+							if (adata.equals(new String(adata.getBytes(chset), chset))) {
+								chsetsOK = true;
+								break;
+							}
+						}
+						if (!chsetsOK) {
+							String s = "";
+							for (int i = 0; i < chsets.length; i++) {
+								if (i > 0) {
+									s += ", ";
+								}
+								s += chsets[i].name();
+							}
+							//The parsed string contains a character that is not allowed in any of the code
+							// tables: &{0}
+							error(XDEF.XDEF823, s);
+						}
+					}
 					if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
 						_xComponent.xSetAttr(this, _parseResult);
 					}
@@ -3072,6 +3095,29 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					return true;
 				}
 				xtxt = xtxt1 = new XData("$text", null, _xElement.getXDPool(), XMTEXT); // dummy text
+				Charset[] chsets = getXDPool().getLegalStringCharsets();
+				if (chsets != null && chsets.length > 0) {
+					boolean chsetsOK = false;
+					for (Charset chset : chsets) {
+						if (value.equals(new String(value.getBytes(chset), chset))) {
+							chsetsOK = true;
+							break;
+						}
+					}
+					if (!chsetsOK) {
+						String s = "";
+						for (int i = 0; i < chsets.length; i++) {
+							if (i > 0) {
+								s += ", ";
+							}
+							s += chsets[i].name();
+						}
+						//The parsed string contains a character that is not allowed in any of the code
+						// tables: &{0}
+						error(XDEF.XDEF823, s);
+						return false;
+					}
+				}
 				if (_xElement.hasDefAttr("$textcontent")) { //copy option cdata!
 					xtxt1._cdata = _xElement.getDefAttr("$textcontent", -1)._cdata;
 				}
