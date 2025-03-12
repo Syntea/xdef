@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.23, release-date 2025-03-11
-* If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), then
-  XDEF823 error is reported also for the values of `moreAttributes`, `moreTest` (also in xd:any items). 
+# Version 42.2.23, release-date 2025-03-12
+* If the `xdef_string_codes` (org.xdef.XDConstants.XDPROPERTY_STRING_CODES) property is set, then the XDEF823
+  error message is also reported for `moreAttributes`, `moreTest` and values in xd:any or values from items
+  where no validation method is specified. 
 
 # Version 42.2.22, release-date 2025-03-07
 * Fixed an error when using the `xdef_specdates` property (see `org.xdef.XDConstants.XDPROPERTY_SPECDATES`)

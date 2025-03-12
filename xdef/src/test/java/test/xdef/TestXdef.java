@@ -3159,7 +3159,35 @@ public final class TestXdef extends XDTester {
 			parse(xd, dataDir+"TestXdef_X3.xml", reporter);
 			assertTrue(reporter.getErrorCount() == 2 && reporter.toString().contains("XDEF823"));
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
-			xd = compile( // option moreAttributes
+			xd = compile( // CHECK operator
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a='string() CHECK string(1)'/>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<A a='xyz' />", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF822"), reporter);
+			parse(xd, "<A a='x' />", reporter);
+			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A a='б' />", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			xd = compile( // missing validation method
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a='required;'/>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<A a='Table' />", reporter);
+			assertNoErrorsAndClear(reporter);
+			xd = compile( // missing validation method
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A>required;</A>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A>Таблица</A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<A>Table</A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			xd = compile( //moreAttributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A xd:script='option moreAttributes'/>\n" +
 "</xd:def>").createXDDocument();
@@ -3167,7 +3195,7 @@ public final class TestXdef extends XDTester {
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A a='Table' />", reporter);
 			assertNoErrorsAndClear(reporter);
-			xd = compile( // option moreText
+			xd = compile(// moreText
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A xd:script='option moreText'/>\n" +
 "</xd:def>").createXDDocument();
@@ -3175,17 +3203,13 @@ public final class TestXdef extends XDTester {
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
-			xd = compile( // xd:any
+			xd = compile(// xd:any
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <xd:any xd:name='A' xd:script='options moreElements, moreAttributes, moreText' />\n"+
+"  <xd:any xd:name='A' xd:script='occurs 0..; options moreAttributes, moreElements, moreText' />\n"+
 "</xd:def>").createXDDocument();
-			parse(xd, "<X><Y a='Таблица' /></X>", reporter);
+			parse(xd, "<A>Таблица</A>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
-			parse(xd, "<X><Y a='Table' /></X>", reporter);
-			assertNoErrorsAndClear(reporter);
-			parse(xd, "<X><Y>Таблица</Y></X>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
-			parse(xd, "<X><Y>Table</Y></X>", reporter);
+			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
