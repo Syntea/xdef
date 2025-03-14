@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.24, release-date 2025-03-14
+* .
+
 # Version 42.2.23, release-date 2025-03-14
 * If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), then an XDEF823
   error is reported for `moreAttributes`, `moreTest` and values in `xd:any` or for values from items where
