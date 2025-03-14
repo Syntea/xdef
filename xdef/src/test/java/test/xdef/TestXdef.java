@@ -3163,54 +3163,68 @@ public final class TestXdef extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A a='string() CHECK string(1)'/>\n" +
 "</xd:def>").createXDDocument();
+			parse(xd, "<A a='x' />", reporter);
+			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A a='Таблица' />", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A a='xyz' />", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF822"), reporter);
-			parse(xd, "<A a='x' />", reporter);
-			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A a='б' />", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			xd = compile( // missing validation method
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A a='required;'/>\n" +
 "</xd:def>").createXDDocument();
-			parse(xd, "<A a='Таблица' />", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A a='Table' />", reporter);
 			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			xd = compile( // missing validation method
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A>required;</A>\n" +
 "</xd:def>").createXDDocument();
-			parse(xd, "<A>Таблица</A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A>Таблица</A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			xd = compile( //moreAttributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A xd:script='option moreAttributes'/>\n" +
 "</xd:def>").createXDDocument();
-			parse(xd, "<A a='Таблица' />", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A a='Table' />", reporter);
 			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			xd = compile(// moreText
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A xd:script='option moreText'/>\n" +
 "</xd:def>").createXDDocument();
-			parse(xd, "<A>Таблица</A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A>Таблица</A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			xd = compile(// xd:any
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:any xd:name='A' xd:script='occurs 0..; options moreAttributes, moreElements, moreText' />\n"+
 "</xd:def>").createXDDocument();
-			parse(xd, "<A>Таблица</A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<A a='Žluťoučký kůň'/>", reporter);
+			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A><B b='Žluťoučký kůň'/></A>", reporter);
+			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
+			parse(xd, "<A>Таблица</A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<A><B>Таблица</B></A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<A><B b='Таблица'/></A>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<X><Y><Z z='Таблица'/></Y></X>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<X><Y><Z>πίνακας</Z></Y></X>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			parse(xd, "<X><Y><Z>לוּחַ</Z></Y></X>", reporter);
+			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
