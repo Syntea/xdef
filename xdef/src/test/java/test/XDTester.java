@@ -51,9 +51,10 @@ import org.xdef.xon.XonUtils;
  * @author Vaclav Trojan
  */
 public abstract class XDTester extends STester {
-	public static String _xdNS = XDConstants.XDEF42_NS_URI;
-	public static XDPool _xdOfxd;
-	public static boolean _fulltestMode;
+	public static String _xdNS = XDConstants.XDEF42_NS_URI; //namespace of the last version of Xdefinition
+	public static XDPool _xdOfXd = null; //compiled Xdefinition of Xdefinitions
+	public static boolean _fulltestMode = false;//switch check syntax of Xdefinition and concersion to stream.
+
 	private final Properties _props = new Properties();
 	private boolean _convertXD;
 	private boolean _chkSyntax;
@@ -114,14 +115,6 @@ public abstract class XDTester extends STester {
 	 * @param x full test mode.
 	 */
 	public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
-	/** Compile Xdefinition od Xdefinitions.
-	 * @throws RuntimeException if compilation fails.
-	 */
-	private void genXdOfXd() {
-		if (_xdOfxd == null) {// if _xdOfxd is null create it
-			_xdOfxd= XDFactory.compileXD(null,"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-		}
-	}
 	/** Set tester property value.
 	 * @param key name of property.
 	 * @param value value of property.
@@ -177,7 +170,6 @@ public abstract class XDTester extends STester {
 		if (!_chkSyntax) {
 			return reporter;
 		}
-		genXdOfXd();
 		XPreCompiler xpc = new XPreCompiler(reporter, null, (byte) 0, false, false, true);
 		for (int i = 0; i < xdefs.length; i++) {
 			Object x = xdefs[i];
@@ -228,27 +220,30 @@ public abstract class XDTester extends STester {
 			}
 		}
 		xpc.prepareMacros();
+		if (_xdOfXd == null) {
+			_xdOfXd = XDFactory.compileXD(null,"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+		}
 		List<PNode> x;
 		x = xpc.getPDeclarations();
 		for (PNode y: x) {
 			Element el = y.toXML();
 			removeMacros(el);
 			String s = KXmlUtils.nodeToString(el, true);
-			_xdOfxd.createXDDocument("").xparse(s, reporter);
+			_xdOfXd.createXDDocument("").xparse(s, reporter);
 		}
 		x = xpc.getPCollections();
 		for (PNode y: x) {
 			Element el = y.toXML();
 			removeMacros(el);
 			String s = KXmlUtils.nodeToString(el, true);
-			_xdOfxd.createXDDocument("").xparse(s, reporter);
+			_xdOfXd.createXDDocument("").xparse(s, reporter);
 		}
 		x = xpc.getPXDefs();
 		for (PNode y: x) {
 			Element el = y.toXML();
 			removeMacros(el);
 			String s = KXmlUtils.nodeToString(el, true);
-			_xdOfxd.createXDDocument("").xparse(s, reporter);
+			_xdOfXd.createXDDocument("").xparse(s, reporter);
 		}
 		return reporter;
 	}
