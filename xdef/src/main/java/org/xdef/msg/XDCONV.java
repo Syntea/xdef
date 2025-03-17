@@ -4,27 +4,27 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix XDCONV.
  * Default language ISO639-2 id: eng. */
 public interface XDCONV {
-	/** AttrProps declaration with name "&amp;{0}" in schema at URL "&amp;{1}" cannot be declared in Xdefinition 2.0. Reference will be replaced with attribute declaration. */
+	/** AttrProps declaration with name "&amp;{0}" in schema at URL "&amp;{1}" cannot be declared in X-definition 2.0. Reference will be replaced with attribute declaration. */
 	public static final long XDCONV101 = 22712806014976L;
 	/** Redefined simple types can not be declared because of names collision. */
 	public static final long XDCONV102 = 22712806014977L;
-	/** AttrProps group declaration with name="&amp;{0}" in schema at "&amp;{1}" cannot be converted to Xdefinition 2.0! reference to this attribute group will replaced with attribute declarations in group. */
+	/** AttrProps group declaration with name="&amp;{0}" in schema at "&amp;{1}" cannot be converted to X-definition 2.0! reference to this attribute group will replaced with attribute declarations in group. */
 	public static final long XDCONV103 = 22712806014978L;
-	/** Not valid Xdefinition document */
+	/** Not valid X-definition document */
 	public static final long XDCONV104 = 22712806014979L;
-	/** Xdefinition is null */
+	/** X-definition is null */
 	public static final long XDCONV105 = 22712806014980L;
-	/** Xdefinition is empty string */
+	/** X-definition is empty string */
 	public static final long XDCONV106 = 22712806014981L;
 	/** Reporter is null */
 	public static final long XDCONV107 = 22712806014982L;
 	/** Error occured when creating collection element: &amp;{0} */
 	public static final long XDCONV108 = 22712806014983L;
-	/** Can't create Xdefinition document&amp;{0}{ } */
+	/** Can't create X-definition document&amp;{0}{ } */
 	public static final long XDCONV113 = 22712806014984L;
 	/** Can't create convertor&amp;{0}{ } */
 	public static final long XDCONV114 = 22712806014985L;
-	/** Can't find an Xdefinition&amp;{0}{ "}{"} */
+	/** Can't find an X-definition&amp;{0}{ "}{"} */
 	public static final long XDCONV201 = 22712806014986L;
 	/** XML model not specified */
 	public static final long XDCONV202 = 22712806014987L;

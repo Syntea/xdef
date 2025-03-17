@@ -1,7 +1,7 @@
 <!--
- Description of XML document which must fit Xdefinition 3.1 specification.
- Meta namespace of Xdefinition is "METAXD".
- Prefix of objects describing Xdefinition 3.2 is XD3.1.
+ Description of XML document which must fit X-definition 3.1 specification.
+ Meta namespace of X-definition is "METAXD".
+ Prefix of objects describing X-definition 3.2 is XD3.1.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -20,7 +20,7 @@
     <!-- Other attribute names (xd:attr) must begin with the prefix "impl-" -->
 
     <xd:mixed>
-      <!-- Here may be objects from all versions of Xdefinition -->
+      <!-- Here may be objects from all versions of X-definition -->
       <XD3.1:def xd:script = "occurs *; ref XD3.1:def" />
       <XD3.1:declaration xd:script = "occurs *; ref XD3.1:declaration" />
       <XD3.1:BNFGrammar xd:script = "occurs *; ref XD3.1:BNFGrammar" />

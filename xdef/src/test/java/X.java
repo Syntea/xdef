@@ -12,7 +12,7 @@ public class X extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDDocument xd;
 		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();

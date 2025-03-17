@@ -39,7 +39,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	/** Create instance of the class XCGeneratorXON.
 	 * @param xp XDPool from which to generate X-components.
 	 * @param reporter Reporter where to write error and warning messages.
-	 * @param genJavadoc if true generate Javadoc to Xdefinition source.
+	 * @param genJavadoc if true generate Javadoc to X-definition source.
 	 */
 	XCGeneratorXON(final XDPool xp, final ArrayReporter reporter, final boolean genJavadoc) {
 		super(xp, reporter, genJavadoc);

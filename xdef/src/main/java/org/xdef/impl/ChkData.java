@@ -27,8 +27,8 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 
-/** Contains data from Xdefinition or it can be used as a base for construction of XML objects according to
- * Xdefinition.
+/** Contains data from X-definition or it can be used as a base for construction of XML objects according to
+ * X-definition.
  * @author Vaclav Trojan
  */
 abstract class ChkData extends XDValueAbstract implements XXData {

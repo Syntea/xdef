@@ -16,9 +16,9 @@ import java.net.URL;
  * XDBuilder buider = XDFactory.getXDBuilder(props);
  * builder.setClassLoader(classloader); // set class loader for externals
  * ...
- * builder.setSource(source 1); //compile source with Xdefinition
+ * builder.setSource(source 1); //compile source with X-definition
  * ...
- * builder.setSource(source n); //compile source with Xdefinition
+ * builder.setSource(source n); //compile source with X-definition
  * ...
  * XDPool xd = builder.compileXD(); //build XDPool
  * ...
@@ -27,16 +27,16 @@ import java.net.URL;
  */
 public interface XDBuilder {
 
-	/** Add source data of Xdefinition or collection. If the argument starts with "&lt;" character then
-	 * it is interpreted as source Xdefinition data, otherwise it can be the pathname of the file or URL.
+	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then
+	 * it is interpreted as source X-definition data, otherwise it can be the pathname of the file or URL.
 	 * If it is a pathname format then it may contain also wildcard characters representing a group of files.
-	 * @param source The string with source Xdefinition.
+	 * @param source The string with source X-definition.
 	 * @param sourceId name of source source data corresponding to the argument source (may be null).
 	 * @return this XDBuilde object.
 	 */
 	public XDBuilder setSource(String source, String sourceId);
 
-	/** Add source data of Xdefinitions or collections. If an item starts with "&lt;" character then it is
+	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then it is
 	 * interpreted as source data, otherwise it can be the pathname of the file or URL. If it is a pathname
 	 * format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
@@ -44,7 +44,7 @@ public interface XDBuilder {
 	 */
 	public XDBuilder setSource(String... sources);
 
-	/** Add source data of Xdefinitions or collections. If an item starts with "&lt;" character then it is
+	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then it is
 	 * interpreted as source data, otherwise it can be the pathname of the file or URL. If it is a pathname
 	 * format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
@@ -54,19 +54,19 @@ public interface XDBuilder {
 	 */
 	public XDBuilder setSource(String[] sources, String[] sourceIds);
 
-	/** Add files with source data of  Xdefinitions or collections.
+	/** Add files with source data of  X-definitions or collections.
 	 * @param sources array of files with sources.
 	 * @return this XDBuilde object.
 	 */
 	public XDBuilder setSource(File... sources);
 
-	/** Add URLs with source data of Xdefinitions or collections.
+	/** Add URLs with source data of X-definitions or collections.
 	 * @param sources array of URLs with sources.
 	 * @return this XDBuilde object.
 	 */
 	public XDBuilder setSource(URL... sources);
 
-	/** Add input stream with source data of a Xdefinition or collection.
+	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
 	 * @param sourceId name of source source data corresponding to
 	 * stream (may be null).
@@ -74,7 +74,7 @@ public interface XDBuilder {
 	 */
 	public XDBuilder setSource(InputStream source, String sourceId);
 
-	/** Add input streams with sources data of Xdefinitions or collections.
+	/** Add input streams with sources data of X-definitions or collections.
 	 * @param sources array of input streams with sources.
 	 * @param sourceIds array of names of source source data corresponding to streams from the argument
 	 * sources (any item or even this argument may be null).

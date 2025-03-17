@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import org.w3c.dom.Document;
 
-/** Convertor of DTD to Xdefinition.
+/** Convertor of DTD to X-definition.
  * @author Alexandrov Ilia
  */
 public class DTDToXdef {
@@ -19,7 +19,7 @@ public class DTDToXdef {
 	/** Reporter for reporting warnings and errors. */
 	private SReporter _reporter = new SReporter(new ArrayReporter());
 
-	/** Creates the instance of DTD to Xdefinition convertor. */
+	/** Creates the instance of DTD to X-definition convertor. */
 	private DTDToXdef() {}
 
 	/** Sets log file for logging.
@@ -51,10 +51,10 @@ public class DTDToXdef {
 		KXmlUtils.writeXml(file, doc);
 	}
 
-	/** Generates Xdefinition file with given name from given DTD file with given root element.
+	/** Generates X-definition file with given name from given DTD file with given root element.
 	 * @param dtd DTD string or URL as string.
 	 * @param root root element.
-	 * @param outXdef output Xdefinition file.
+	 * @param outXdef output X-definition file.
 	 * @throws IllegalArgumentException if root element is empty of output file is illegal.
 	 * @throws RuntimeException if error occurred during writing files.
 	 */
@@ -69,7 +69,7 @@ public class DTDToXdef {
 			writeFile(doc, outXdef);
 		} catch (IOException ex) {
 			throw new RuntimeException(
-				"Error when writing Xdefinition file");
+				"Error when writing X-definition file");
 		}
 	}
 
@@ -86,7 +86,7 @@ public class DTDToXdef {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Convertor of DTD to Xdefinition.\n"+
+"Convertor of DTD to X-definition.\n"+
 "Command line arguments:\n"+
 "  -in, --input <PATH> input schema file location\n" +
 "  -out, --output <PATH> output file or directory name\n" +
@@ -100,7 +100,7 @@ public class DTDToXdef {
 	 * [-l | --logFile] file</i>
 	 * <ul>
 	 *  <li><i>[-in | --input] file</i> - input dtd file
-	 *  <li><i>[-out | --output] file</i> - output Xdefinition file
+	 *  <li><i>[-out | --output] file</i> - output X-definition file
 	 *  <li><i>[-r | --root] element</i> - root element name
 	 *  <li><i>[-l | --logFile] file</i> - log file
 	 * </ul>

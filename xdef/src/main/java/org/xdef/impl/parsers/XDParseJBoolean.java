@@ -5,7 +5,7 @@ import org.xdef.impl.code.DefBoolean;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of Xscript "jboolean" type.
+/** Parser of X-script "jboolean" type.
  * @author Vaclav Trojan
  */
 public class XDParseJBoolean extends XSParseBoolean {

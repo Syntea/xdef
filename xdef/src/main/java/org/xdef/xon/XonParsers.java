@@ -11,7 +11,7 @@ public interface XonParsers {
 	public void parse();
 	/** close the reader. */
 	public void closeReader();
-	/** Set mode the parser is called from Xdefinition compiler. */
+	/** Set mode the parser is called from X-definition compiler. */
 	public void setXdefMode();
 	/** Set parser accepts XON format and not Xdef mode). */
 	public void setXonMode();

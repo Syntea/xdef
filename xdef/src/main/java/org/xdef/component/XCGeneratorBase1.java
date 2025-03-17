@@ -98,8 +98,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		final Map<String, String> xctab) {
 		String result =
 (_genJavadoc ?
-"/** Object of XModel \""+model+"\" from Xdefinition \""+xdname+"\".*/"+LN
-: "") +
+"/** Object of XModel \""+model+"\" from X-definition \""+xdname+"\".*/"+LN : "") +
 "@SuppressWarnings(\"unchecked\")"+LN+
 "public "+(isRoot?"":"static ")+"class "+
 			clazz + extClazz + (interfcName.length() > 0 ?

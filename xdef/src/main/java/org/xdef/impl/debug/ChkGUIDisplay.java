@@ -17,12 +17,12 @@ import org.xdef.impl.XDSourceItem;
 import static org.xdef.impl.debug.GUIScreen.UNDO_LIMIT;
 import org.xdef.sys.ArrayReporter;
 
-/** Provides GUI for editing of sources of Xdefinitions.
+/** Provides GUI for editing of sources of X-definitions.
  * @author Vaclav Trojan
  */
 public class ChkGUIDisplay extends GUIScreen implements XEditor {
 
-	/** Create the instance of GUI to display sources of Xdefinitions.
+	/** Create the instance of GUI to display sources of X-definitions.
 	 * @param si source info.
 	 */
 	public ChkGUIDisplay(final XDSourceInfo si) {super(si);}
@@ -35,7 +35,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	 * be executed and the editor will be opened again.
 	 */
 	public final boolean setXEditor(final XDPool xp, final ArrayReporter err) {
-		_windowName = "Edit Xdefinition: ";
+		_windowName = "Edit X-definition: ";
 		_frame.setVisible(false);
 		_xdpool = xp;
 		_sources = xp.getXDSourceInfo().getMap();

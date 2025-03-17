@@ -150,6 +150,16 @@ public abstract class XDTester extends STester {
 			n.getParentNode().removeChild(n); // remove macros
 		}
 	}
+	/** Get XDPool with XdOfXd.
+	 * @return XDPool with XdOfXd.
+	 */
+	public final XDPool getXdOfXd() {
+		if (_xdOfXd == null) {
+			_xdOfXd = XDFactory.compileXD(null,"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+		}
+		return _xdOfXd;
+	}
+
 	/** Check Xdefinitions.
 	 * @param xdefs array with strins with sources of Xdefinitions.
 	 * @return reporter with error/warnings.
@@ -219,30 +229,28 @@ public abstract class XDTester extends STester {
 			}
 		}
 		xpc.prepareMacros();
-		if (_xdOfXd == null) {
-			_xdOfXd = XDFactory.compileXD(null,"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-		}
+		XDPool xdOfXd = getXdOfXd(); //XDPool with XdOfXd.
 		List<PNode> x;
 		x = xpc.getPDeclarations();
 		for (PNode y: x) {
 			Element el = y.toXML();
 			removeMacros(el);
 			String s = KXmlUtils.nodeToString(el, true);
-			_xdOfXd.createXDDocument("").xparse(s, reporter);
+			xdOfXd.createXDDocument("").xparse(s, reporter);
 		}
 		x = xpc.getPCollections();
 		for (PNode y: x) {
 			Element el = y.toXML();
 			removeMacros(el);
 			String s = KXmlUtils.nodeToString(el, true);
-			_xdOfXd.createXDDocument("").xparse(s, reporter);
+			xdOfXd.createXDDocument("").xparse(s, reporter);
 		}
 		x = xpc.getPXDefs();
 		for (PNode y: x) {
 			Element el = y.toXML();
 			removeMacros(el);
 			String s = KXmlUtils.nodeToString(el, true);
-			_xdOfXd.createXDDocument("").xparse(s, reporter);
+			xdOfXd.createXDDocument("").xparse(s, reporter);
 		}
 		return reporter;
 	}
@@ -337,7 +345,7 @@ public abstract class XDTester extends STester {
 	 * @param out stream used as stdout (may be null).
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param mode 'P' => parse, 'C' => create
-	 * @return xml element from processed Xdefinition.
+	 * @return XML element from processed Xdefinition.
 	 */
 	final public Element test(final String[] xdefs,
 		final String xml,

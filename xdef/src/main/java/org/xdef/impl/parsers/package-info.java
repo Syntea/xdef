@@ -1,4 +1,4 @@
-/**	The source code in this package is in implementation of Xdefinition
+/**	The source code in this package is in implementation of X-definition
  * data type parsers.
  * It is NOT designed for common user.
  */

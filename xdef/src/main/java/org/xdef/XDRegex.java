@@ -14,7 +14,7 @@ import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 
-/** Implementation of Xscript value of regular expression.
+/** Implementation of X-script value of regular expression.
  * @author Vaclav Trojan
  */
 public final class XDRegex extends XDValueAbstract {

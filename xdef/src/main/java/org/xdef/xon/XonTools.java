@@ -96,7 +96,7 @@ public class XonTools {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// public methods (used also in Xdefinition compilation and Xcomponents)
+// public methods (used also in X-definition compilation and X-components)
 ////////////////////////////////////////////////////////////////////////////////
 	/** Create string from XON/JSON source string data.
 	 * @param s XON/JSON string.
@@ -522,7 +522,7 @@ public class XonTools {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Interface and classes used when XON/JSON is parsed in Xdefinition compiler.
+// Interface and classes used when XON/JSON is parsed in X-definition compiler.
 ////////////////////////////////////////////////////////////////////////////////
 	/** Interface of JSON/XON object. */
 	public interface JObject {

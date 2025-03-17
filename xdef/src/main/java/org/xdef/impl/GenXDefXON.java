@@ -22,7 +22,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonTools.jstringToSource;
 
-/** Generate Xdefinition from JSON/XON.
+/** Generate X-definition from JSON/XON.
  * @author Vaclav Trojan
  */
 public final class GenXDefXON {
@@ -295,10 +295,10 @@ public final class GenXDefXON {
 		return keys;
 	}
 
-	/** Generate Xdefinition from input data to given output stream writer.
+	/** Generate X-definition from input data to given output stream writer.
 	 * @param xon JSON/XON data.
 	 * @param xdName name XDefinition or null.
-	 * @return org.w3c.dom.Document object with Xdefinition.
+	 * @return org.w3c.dom.Document object with X-definition.
 	 */
 	public static final Element genXdef(final Object xon, final String xdName) {
 		Document doc = KXmlUtils.newDocument(XDEF42_NS_URI, "xd:def", null);

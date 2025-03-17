@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Elements in Xscript
+/** Elements in X-script
  * @author Vaclav Trojan
  */
 public interface XDElement extends XDContainer {

@@ -1,7 +1,7 @@
 <!--
- Description of XML document which must fit Xdefinition 4.2 specification.
- Meta namespace of Xdefinition is "METAXD".
- Prefix of objects describing Xdefinition 4.2 is XD4.2.
+ Description of XML document which must fit X-definition 4.2 specification.
+ Meta namespace of X-definition is "METAXD".
+ Prefix of objects describing X-definition 4.2 is XD4.2.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -17,7 +17,7 @@
   w:metaNamespace = "METAXD" >
 
 /******************************************************************************/
-/* Xdefinition of Xdefinition ver 4.2, metanamespace: METAXD, prefix: XD4.2 */
+/* X-definition of X-definition ver 4.2, metanamespace: METAXD, prefix: XD4.2 */
 /******************************************************************************/
 
 <!-- *******************
@@ -31,7 +31,7 @@
     <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
 
     <xd:mixed>
-      <!-- Here may be objects from all versions of Xdefinition -->
+      <!-- Here may be objects from all versions of X-definition -->
       <XD3.1:def xd:script = "occurs *; ref Ver3.1#XD3.1:def" />
       <XD3.2:def xd:script = "occurs *; ref Ver3.2#XD3.2:def" />
       <XD4.0:def xd:script = "occurs *; ref Ver4.0#XD4.0:def" />

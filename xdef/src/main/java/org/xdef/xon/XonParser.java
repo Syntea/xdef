@@ -36,7 +36,7 @@ public interface XonParser {
 	 * @param value SBuffer with the value of comment.
 	 */
 	public void comment(SBuffer value);
-	/** Xscript item parsed.
+	/** X-script item parsed.
 	 * @param name name of item.
 	 * @param value value of item.
 	 */

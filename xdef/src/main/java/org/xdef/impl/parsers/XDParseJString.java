@@ -13,7 +13,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of Xscript "jstring" (XON/JSON string) type.
+/** Parser of X-script "jstring" (XON/JSON string) type.
  * @author Vaclav Trojan
  */
 public class XDParseJString extends XSAbstractParseToken {

@@ -14,16 +14,16 @@ import org.xdef.sys.SUtils;
 import org.xdef.util.xd2xsd.Xd2Xsd;
 import org.xdef.xml.KXmlUtils;
 
-/** Convertor of Xdefinition to XML schema (XSD) (see {@link org.xdef.util.XdefToXsd#main(String[])}).
+/** Convertor of X-definition to XML schema (XSD) (see {@link org.xdef.util.XdefToXsd#main(String[])}).
  * @author Vaclav Trojan
  */
 public class XdefToXsd {
 
-	/** Generate XML Schema (XSD) from given Xdefinition files and save XSD files to given output directory.
-	 * @param xdefs Xdefinition file.
+	/** Generate XML Schema (XSD) from given X-definition files and save XSD files to given output directory.
+	 * @param xdefs X-definition file.
 	 * @param outDir output XSD schema files directory.
-	 * @param xdName name of Xdefinition. May be null, then the nameless Xdefinition or the first one
-	 * Xdefinition is used.
+	 * @param xdName name of X-definition. May be null, then the nameless X-definition or the first one
+	 * X-definition is used.
 	 * @param modelName name of the root model. May be null, then all values from "xs:root" parameter are
 	 * used to create models.
 	 * @param outName name of base XML schema (XSD) file.
@@ -42,7 +42,7 @@ public class XdefToXsd {
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
 		if (xdefs == null || xdefs.length == 0) {
-			throw new RuntimeException("Missing Xdefinition source files");
+			throw new RuntimeException("Missing X-definition source files");
 		}
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
@@ -78,7 +78,7 @@ public class XdefToXsd {
 
 	/** Run XML schema (XSD) generator.
 	 * @param xp compiled XDPool.
-	 * @param xdName name of root Xdefinition.
+	 * @param xdName name of root X-definition.
 	 * @param modelName name of the root model. May be null, then all values
 	 * from "xs:root" parameter are used to create models.
 	 * @param outName name of root XML schema (XSD) file.
@@ -101,17 +101,17 @@ public class XdefToXsd {
 
 	/** String with command line information. */
 	private static final String INFO =
-"XdefToXsd - convertor of Xdefinition to XML Schema (XSD).\n" +
+"XdefToXsd - convertor of X-definition to XML Schema (XSD).\n" +
 "Parameters:\n"+
 " -h or --help:     display help information\n" +
-" -i or --xdef:     list of input source pathnames with Xdefinitions\n" +
+" -i or --xdef:     list of input source pathnames with X-definitions\n" +
 " -o or --outDir:   pathname of output directory \n" +
 " -s or --outName:  name of main XML schema file (optional)\n" +
 " -t or --outType:  name of file with XML schema type declarations (optional)\n"+
 " -r or --root:     name of root model (optional). If this argument is missing\n"+
 "                   then from all values of \"xs:root\" parameter are created\n"+
 "                   models.\n" +
-" -x or --xdName:   name of Xdefinition (optional)\n" +
+" -x or --xdName:   name of X-definition (optional)\n" +
 " -v or --genInfo:  generate documentation information.\n" +
 " -xx:              use output format of xdatetime method to create XML schema\n"+
 "                   type";
@@ -120,7 +120,7 @@ public class XdefToXsd {
 	 * @param args array of string with command line arguments:
 	 * <ul>
 	 * <li>-h or --help: display help information.</li>
-	 * <li>-i or --xdef: list of input source path names with Xdefinitions.</li>
+	 * <li>-i or --xdef: list of input source path names with X-definitions.</li>
 	 * <li>-o or --outDir:  pathname of output directory.</li>
 	 * <li>-s or --outName: name of main XML schema file (optional).</li>
 	 * <li>-t or --outType: name of file with XML schema type declarations
@@ -128,20 +128,20 @@ public class XdefToXsd {
 	 * <li>-r or --root: name of root model (optional). If this argument is
 	 * missing then from all values from "xs:root" parameter are created
 	 * models. </li>
-	 * <li>-x or --xdName: name of Xdefinition (optional).</li>
+	 * <li>-x or --xdName: name of X-definition (optional).</li>
 	 * <li>-v or --genInfo: generate documentation information.</li>
 	 * <li>-xx:  use output format of xdatetime method to create data type.</li>
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		String xdName = null; // name of Xdefinition
+		String xdName = null; // name of X-definition
 		String modelName = null; // name of model
 		File outDir = null; // output directory
 		String outName = null; //name of output file
 		String outType = null; //name of file with declared types
 		boolean genDecInfo = false; //switch to generate documentation info
 		boolean genXdateOutFormat = false; //switch generate xdatatime outFormat
-		List<String> xdSources = new ArrayList<>(); //Xdefinition source
+		List<String> xdSources = new ArrayList<>(); //X-definition source
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Error: parameters missing.\n" + INFO);
 		}
@@ -221,7 +221,7 @@ public class XdefToXsd {
 			}
 		}
 		if (xdSources.isEmpty()) {
-			throw new RuntimeException("Missing Xdefinition sources.\n"+INFO);
+			throw new RuntimeException("Missing X-definition sources.\n"+INFO);
 		}
 		if (outDir == null) {
 			throw new RuntimeException("Missing output directory.\n" + INFO);

@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefString;
 
-/** Parser of Xscript "languages" type items (RFC 3066 or IETF BCP 47).
+/** Parser of X-script "languages" type items (RFC 3066 or IETF BCP 47).
  * @author Vaclav Trojan
  */
 public class XDParseLanguages extends XDParseNCNameList {

@@ -20,7 +20,7 @@ public final class DefString extends XDValueAbstract {
 	 */
 	public DefString(final String value) {_value = value;}
 
-	/** Get value of item as String representation of value in the form of Xdefinition script.
+	/** Get value of item as String representation of value in the form of X-definition script.
 	 * @return The string representation of value of the object.
 	 */
 	public String sourceValue() {

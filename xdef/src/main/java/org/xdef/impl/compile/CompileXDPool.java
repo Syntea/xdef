@@ -69,7 +69,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Compile Xdefinitions from source data.
+/** Compile X-definitions from source data.
  * @author Vaclav Trojan
  */
 public final class CompileXDPool implements CodeTable, XDValueID {
@@ -104,7 +104,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * @param xp The XDefPool object.
 	 * @param reporter The reporter.
 	 * @param extClasses The external classes.
-	 * @param xdefs Table of Xdefinitions.
+	 * @param xdefs Table of X-definitions.
 	 */
 	public CompileXDPool(final XDPool xp,
 		final ReportWriter reporter,
@@ -131,7 +131,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
-	/** Get external classes used in Xdefinition methods.
+	/** Get external classes used in X-definition methods.
 	 * @return array of objects.
 	 */
 	public Class<?>[] getExternals() {return _codeGenerator._extClasses;}
@@ -155,30 +155,30 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	public final void setReportWriter(ReportWriter reporter) {_precomp.setReportWriter(reporter);}
 
-	/** Parse string and addAttr it to the set of Xdefinitions.
-	 * @param src source string with Xdefinitions.
+	/** Parse string and addAttr it to the set of X-definitions.
+	 * @param src source string with X-definitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
 	 */
 	public final void parseString(final String src, final String srcName) {_precomp.parseString(src,srcName);}
 
-	/** Parse file with source Xdefinition and addAttr it to the set of definitions.
-	 * @param file The file with with Xdefinitions.
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
+	 * @param file The file with with X-definitions.
 	 */
 	public final void parseFile(final File file) {_precomp.parseFile(file);}
 
-	/** Parse InputStream source Xdefinition and addAttr it to the set of definitions.
-	 * @param in input stream with the Xdefinition.
+	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
+	 * @param in input stream with the X-definition.
 	 * @param name name of source data used in reporting (SysId) or null.
 	 */
 	public final void parseStream(final InputStream in, final String name) {_precomp.parseStream(in, name);}
 
-	/** Parse data with source Xdefinition given by URL and addAttr it to the set of Xdefinitions.
-	 * @param url URL of the file with the Xdefinition.
+	/** Parse data with source X-definition given by URL and addAttr it to the set of X-definitions.
+	 * @param url URL of the file with the X-definition.
 	 */
 	public final void parseURL(final URL url) {_precomp.parseURL(url);}
 
-	/** Get prepared sources (PNodes) of Xdefinition items.
-	 * @return array with PNodes with Xdefinitions.
+	/** Get prepared sources (PNodes) of X-definition items.
+	 * @return array with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
@@ -566,7 +566,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					// undefined variable referrence. We put this item to the end of list and we try it again.
 					for (int i = 0; i < len; i++) {
 						PNode nodei = list.get(i);
-						// name of Xdefinition
+						// name of X-definition
 						if (list == _listBNF) { //BNFs
 							compileBNFGrammar(nodei, false);
 						} else { //declarations
@@ -760,12 +760,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setReportWriter(reporter); // set reporter to the compiler of script
 		_scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
 		compileMethodsAndClassesAttrs();
-		// Move all declarations of BNF grammars and variables from the list of Xdefinitions to the separated
+		// Move all declarations of BNF grammars and variables from the list of X-definitions to the separated
 		// lists of variable declarations and of BNF grammar declarations.
 		for (PNode def : _xdefPNodes) {
-			// since we are removing childnodes from Xdefinition we must process the childnodes list
+			// since we are removing childnodes from X-definition we must process the childnodes list
 			// downwards! However, we insert the item to the first position of the created
-			// list to assure the original sequence of items in the Xdefinition
+			// list to assure the original sequence of items in the X-definition
 			for (int j = def.getChildNodes().size() - 1;  j >= 0; j--) {
 				PNode nodei = def.getChildNodes().get(j);
 				if (nodei._nsindex != XPreCompiler.NS_XDEF_INDEX) {
@@ -792,7 +792,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					default: continue;
 				}
 				nodei._xdef = def._xdef;
-				def.getChildNodes().remove(j); // remove this node from the Xdefinition PNode
+				def.getChildNodes().remove(j); // remove this node from the X-definition PNode
 			}
 		}
 
@@ -817,7 +817,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_codeGenerator.clearPostdefines();
 	}
 
-	/** Add the name of Xdefinition if it is not yet there. */
+	/** Add the name of X-definition if it is not yet there. */
 	private String canonizeReferenceName(final String refName,
 		final XDefinition xdef) {
 		String name = refName;
@@ -957,7 +957,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Create reference node.
 	 * @param pn source PNode.
 	 * @param refName Local name of PNode.
-	 * @param xdef Xdefinition.
+	 * @param xdef X-definition.
 	 * @return generated ParsedReference object.
 	 */
 	private XNode createReference(final PNode pn, final String refName, final XDefinition xdef) {
@@ -1404,7 +1404,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				case "list":
 					_precomp.chkNestedElements(pnode);
 					if (level == 1) {
-						//Node '&{0}' from the namespace of Xdefinition is not allowed here
+						//Node '&{0}' from the namespace of X-definition is not allowed here
 						error(pnode._name, XDEF.XDEF265, pnode._localName);
 						return;
 					}
@@ -1422,7 +1422,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						new XVariableTable(_scriptCompiler._g._varBlock, ((XElement)newNode).getSqId());
 					((XElement) newNode).setSPosition(copySPosition(pnode._name));
 					if (level == 1) {
-						//Node '&{0}' from the namespace of Xdefinition is not allowed here
+						//Node '&{0}' from the namespace of X-definition is not allowed here
 						error(pnode._name, XDEF.XDEF265, pnode._localName);
 						return;
 					}
@@ -1444,7 +1444,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					break;
 				default:
 					if (level > 1 || !"macro".equals(pnode._localName)) {
-						//Node '&{0}' from the namespace of Xdefinition is not allowed here
+						//Node '&{0}' from the namespace of X-definition is not allowed here
 						error(pnode. _name, XDEF.XDEF265, xchildName);
 					}
 					return;
@@ -1688,7 +1688,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		if (_precomp.getSources().isEmpty()) {
 			getReportWriter().checkAndThrowErrorWarnings();
-			throw new SRuntimeException(XDEF.XDEF903);//Xdefinition source is missing or incorrect&{0}{: }
+			throw new SRuntimeException(XDEF.XDEF903);//X-definition source is missing or incorrect&{0}{: }
 		}
 		_precomp.prepareMacros(); //find macro definitions and resolve macros
 		precompile(); //compile definitions and groups.
@@ -1727,7 +1727,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			for (int i = 1; i < p._xdef._importLocal.length; i++) {
 				String s = p._xdef._importLocal[i];
 				if (xdp.getXMDefinition(s.substring(0,s.length()-1)) == null) {
-					//Item "&{0}" in the attribute "xd:importLocal" is not name of Xdefinition
+					//Item "&{0}" in the attribute "xd:importLocal" is not name of X-definition
 					_scriptCompiler.error(p._name, XDEF.XDEF413, s.substring(0,s.length()-1));
 				}
 			}
@@ -1762,7 +1762,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (_codeGenerator._debugInfo != null) {
 					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
 				}
-				// set Xcomponents to xdp
+				// set X-components to xdp
 				Set<String> classNames = new HashSet<>();
 				// create map of components
 				Map<String, String> x = new LinkedHashMap<>();
@@ -2389,7 +2389,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						groupItems.put(s, i);
 					} else if (selectorKind==XMSEQUENCE && i > 0 && xel._childNodes[i-1].getKind() == XMTEXT
 						&& ((XData) xel._childNodes[i-1])._match < 0) {
-						//Ambiguous Xdefinition: text node can´t follow previous text node
+						//Ambiguous X-definition: text node can´t follow previous text node
 						error(x.getSPosition(), XDEF.XDEF239);
 						notReported = false;
 					}
@@ -2429,11 +2429,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						XElement y = (XElement) xel._childNodes[i-1];
 						if (y.isSpecified() && y.maxOccurs() != y.minOccurs() && y._match==-1) {
 							if (y.maxOccurs() == Integer.MAX_VALUE) {
-								//Ambiguous Xdefinition: previous element with same name has unlimited
+								//Ambiguous X-definition: previous element with same name has unlimited
 								// occurrence
 								error(x.getSPosition(), XDEF.XDEF238);
 							} else if (!x.isSpecified() || x.minOccurs() > 0) {
-								//Ambiguous Xdefinition: minimum occurrence must be zero
+								//Ambiguous X-definition: minimum occurrence must be zero
 								error(x.getSPosition(),XDEF.XDEF235);
 								notReported = false;
 							}

@@ -12,20 +12,20 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.msg.XDCONV;
 
-/** Represents any Xdefinition document.
+/** Represents any X-definition document.
  * @author Ilia Alexandrov
  */
 public abstract class XdDoc {
 
-	/** Returns proper implementation of Xdefinition document representation
+	/** Returns proper implementation of X-definition document representation
 	 * according to given document.
-	 * @param xdef Xdefinition document.
+	 * @param xdef X-definition document.
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
-	 * @return proper implementation of Xdefinition representation.
+	 * @return proper implementation of X-definition representation.
 	 * @throws NullPointerException if given reporter is null.
 	 * @throws IllegalArgumentException if given document is not a valid
-	 * Xdefinition document.
+	 * X-definition document.
 	 */
 	public static XdDoc getXdDoc(Document xdef,
 		final SReporter reporter,
@@ -41,29 +41,29 @@ public abstract class XdDoc {
 			|| XDConstants.XDEF42_NS_URI.equals(namespace)) {
 			return new XdDoc_2_0(xdef, namespace);
 		} else {
-			//Not valid Xdefinition document
+			//Not valid X-definition document
 			throw new SRuntimeException(XDCONV.XDCONV104);
 		}
 	}
 
-	/** Returns proper implementation of Xdefinition document.
-	 * @param xdef Xdefinition as string or path to Xdefinition file as string.
+	/** Returns proper implementation of X-definition document.
+	 * @param xdef X-definition as string or path to X-definition file as string.
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
-	 * @return proper implementation of Xdefinition document.
-	 * @throws NullPointerException if given Xdefinition as string
+	 * @return proper implementation of X-definition document.
+	 * @throws NullPointerException if given X-definition as string
 	 * is null.
-	 * @throws IllegalArgumentException if given Xdefinition as string is empty.
+	 * @throws IllegalArgumentException if given X-definition as string is empty.
 	 * @throws RuntimeException if error occurs during creating
 	 * collection element.
 	 */
 	public static XdDoc getXdDoc(String xdef, final SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XDCONV.XDCONV105);//Xdefinition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		if (xdef.length() == 0) {
-			//Xdefinition is empty string
+			//X-definition is empty string
 			throw new SRuntimeException(XDCONV.XDCONV106);
 		}
 		try {
@@ -77,12 +77,12 @@ public abstract class XdDoc {
 		}
 	}
 
-	/** Returns proper implementation of Xdefinition document.
-	 * @param xdef Xdefinition URL.
+	/** Returns proper implementation of X-definition document.
+	 * @param xdef X-definition URL.
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
-	 * @return proper implementation of Xdefinition document.
-	 * @throws NullPointerException if given Xdefinition URL is null.
+	 * @return proper implementation of X-definition document.
+	 * @throws NullPointerException if given X-definition URL is null.
 	 * @throws RuntimeException if error occurs during creating collection
 	 * element.
 	 */
@@ -90,7 +90,7 @@ public abstract class XdDoc {
 		final SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XDCONV.XDCONV105);//Xdefinition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		try {
 			Element collection =
@@ -103,12 +103,12 @@ public abstract class XdDoc {
 		}
 	}
 
-	/** Returns proper implementation of Xdefinition document.
-	 * @param xdef Xdefinition file.
+	/** Returns proper implementation of X-definition document.
+	 * @param xdef X-definition file.
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
-	 * @return proper implementation of Xdefinition document.
-	 * @throws NullPointerException if given Xdefinition file is null.
+	 * @return proper implementation of X-definition document.
+	 * @throws NullPointerException if given X-definition file is null.
 	 * @throws RuntimeException if error occurs during creating
 	 * collection element.
 	 */
@@ -116,7 +116,7 @@ public abstract class XdDoc {
 		final SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XDCONV.XDCONV105);//Xdefinition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		try {
 			Element collection =
@@ -129,21 +129,21 @@ public abstract class XdDoc {
 		}
 	}
 
-	/** Returns proper implementation of Xdefinition document.
-	 * @param xdef Xdefinition input stream.
+	/** Returns proper implementation of X-definition document.
+	 * @param xdef X-definition input stream.
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
-	 * @return proper implementation of Xdefinition document.
-	 * @throws NullPointerException if given Xdefinition input stream
+	 * @return proper implementation of X-definition document.
+	 * @throws NullPointerException if given X-definition input stream
 	 * is null.
-	 * @throws RuntimeException if error occurs during parsing Xdefinition from
+	 * @throws RuntimeException if error occurs during parsing X-definition from
 	 * input stream.
 	 */
 	public static XdDoc getXdDoc(InputStream xdef,
 		SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XDCONV.XDCONV105);//Xdefinition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		KDOMBuilder builder = new KDOMBuilder();
 		try {

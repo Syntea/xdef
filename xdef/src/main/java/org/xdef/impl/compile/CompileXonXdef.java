@@ -64,22 +64,22 @@ import org.xdef.xon.XonTools.JMap;
 import org.xdef.xon.XonTools.JObject;
 import org.xdef.xon.XonTools.JValue;
 
-/** Create Xdefinition model from xd:json/xon element.
+/** Create X-definition model from xd:json/xon element.
  * @author Vaclav Trojan
  */
 public final class CompileXonXdef extends XScriptParser {
 
-	/** Prefix of Xdefinition namespace. */
+	/** Prefix of X-definition namespace. */
 	private final String _xdPrefix;
-	/** Index of Xdefinition namespace. */
+	/** Index of X-definition namespace. */
 	private final int _xdIndex;
-	/** Namespace of Xdefinition.*/
+	/** Namespace of X-definition.*/
 	private final String _xdNamespace;
 	/** XPath position of XON/JSON description.*/
 	private final String _basePos;
 	/** PNode with generated model.*/
 	private final PNode _xonModel;
-	/** Xposition of generated %any model.*/
+	/** X-position of generated %any model.*/
 	private String _anyXPos;
 /*#if DEBUG*#/
 	/** debugging switches; from properties. *#/
@@ -149,7 +149,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 	/** Skip white space separators and comments. Note: line comments are not
-	 * allowed in Xscript.
+	 * allowed in X-script.
 	 */
 	private void skipSpacesAndComments() {
 		isSpaces();
@@ -173,11 +173,11 @@ public final class CompileXonXdef extends XScriptParser {
 		}
 	}
 
-	/** Parse Xscript and return occurrence and executive part
+	/** Parse X-script and return occurrence and executive part
 	 * (type declaration) in separate fields.
-	 * @param sbuf source text with Xscript
+	 * @param sbuf source text with X-script
 	 * @return array with SBuffer items (item 0 is occurrence specification)
-	 * and item 1 is composed form remaining Xscript parts).
+	 * and item 1 is composed form remaining X-script parts).
 	 */
 	private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
 		SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
@@ -247,7 +247,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create Xdefinition model from xd:json/xon (use W3C format)
+// Create X-definition model from xd:json/xon (use W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Add match section to xd:script attribute. If match section already
@@ -706,10 +706,10 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 /*#end*/
 
-	/** Create Xdefinition model from PNode with XON/JSON description.
+	/** Create X-definition model from PNode with XON/JSON description.
 	 * @param pn PNode with XON/JSON script.
 	 * @param format "xon" or "ini".
-	 * @param name name of XON/JSON model in Xdefinition.
+	 * @param name name of XON/JSON model in X-definition.
 	 * @param reporter report writer
 	 */
 	final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
@@ -728,7 +728,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Xscript parser
+// X-script parser
 ////////////////////////////////////////////////////////////////////////////////
 	/** Check if id of parsed section name is a section name.
 	 * @param sym ID of parsed section name.
@@ -814,8 +814,8 @@ public final class CompileXonXdef extends XScriptParser {
 		sectionList.add(new SBuffer(s, pos));
 	}
 
-	/** Parse Xscript and return the section list.
-	 * @param source Source text with Xscript.
+	/** Parse X-script and return the section list.
+	 * @param source Source text with X-script.
 	 * @return section list. Each section is composed of two items: the first
 	 * item is id of section (a character) and the following item is a SBuffer
 	 * with the source of the section command.
@@ -825,7 +825,7 @@ public final class CompileXonXdef extends XScriptParser {
 		return parseXscript();
 	}
 
-	/** Parse Xscript and return the section list.
+	/** Parse X-script and return the section list.
 	 * @return section list. Each section is composed of two items: the first
 	 * item is id of section (a character) and the following item is a SBuffer
 	 * with the source of the section command.
@@ -876,9 +876,9 @@ public final class CompileXonXdef extends XScriptParser {
 		return sectionList;
 	}
 
-	/** Create Xscript string from the list of sections.
+	/** Create X-script string from the list of sections.
 	 * @param sectionList list of sections.
-	 * @return string with Xscript source.
+	 * @return string with X-script source.
 	 */
 	private static SBuffer xsToString(final List<Object> sectionList) {
 		String result = "";
@@ -971,7 +971,7 @@ public final class CompileXonXdef extends XScriptParser {
 
 	/** This class provides parsing of XON/JSON source and creates the XON
 	 * structure composed from JObjets used for compilation of XON/JSON model
-	 * in Xdefinition.
+	 * in X-definition.
 	 */
 	private final static class XonModelParser implements XonParser {
 		/** kind = value */
@@ -1089,8 +1089,8 @@ public final class CompileXonXdef extends XScriptParser {
 		 */
 		public final void comment(final SBuffer value){/*we ingore it here*/}
 		@Override
-		/** Xscript item parsed, not used methods for JSON/XON parsing
-		 * (used in Xdefinition compiler).
+		/** X-script item parsed, not used methods for JSON/XON parsing
+		 * (used in X-definition compiler).
 		 * @param name name of item.
 		 * @param value value of item.
 		 */

@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.xdef.proc.XXNode;
 
-/** Construct Xscript objects from XDResultSet.
+/** Construct X-script objects from XDResultSet.
  * @author Vaclav Trojan
  */
 public interface XDConstructor {

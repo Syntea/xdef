@@ -13,7 +13,7 @@ import org.xdef.XDContainer;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.msg.XDEF;
 
-/** Parser of Xscript "regex" type.
+/** Parser of X-script "regex" type.
  * @author Vaclav Trojan
  */
 public class XDParseRegex extends XDParserAbstract {

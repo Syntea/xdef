@@ -22,7 +22,7 @@ import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDValueID.XD_DATETIME;
 
-/** Parser of Xscript "xdatetime" type.
+/** Parser of X-script "xdatetime" type.
  * @author Vaclav Trojan
  */
 public class XDParseYDatetime extends XSAbstractParseComparable {

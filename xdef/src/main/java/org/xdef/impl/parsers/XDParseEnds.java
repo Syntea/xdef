@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
 
-/** Parser of Xscript "ends" type.
+/** Parser of X-script "ends" type.
  * @author Vaclav Trojan
  */
 public class XDParseEnds extends XDParseEq {

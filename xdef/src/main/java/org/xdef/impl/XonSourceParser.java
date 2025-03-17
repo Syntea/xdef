@@ -133,7 +133,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			QName qName = KXmlUtils.getQName(e);
 			_chkDoc._xElement = _chkDoc.findXElement(qName);
 			if (_chkDoc._xElement == null) {
-				//Text with &{0} model&{1}{ of "}{" } is missing in Xdefinition
+				//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
 				throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
 			}
 			_chkEl = _chkDoc.createRootChkElement(_el, true);
@@ -236,7 +236,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void comment(SBuffer value){/*we ingore it here*/}
 	@Override
-	/** Xscript item parsed, not used methods for XON/JSON parsing (used in Xdefinition compiler).
+	/** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value value of item.
 	 */

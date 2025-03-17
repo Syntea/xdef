@@ -180,7 +180,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		}
 	}
 	@Override
-	/** Parse Xdefinition source.
+	/** Parse X-definition source.
 	 * @param is InputSource with XML data.
 	 */
 	public void prepareParse(final InputSource is) {

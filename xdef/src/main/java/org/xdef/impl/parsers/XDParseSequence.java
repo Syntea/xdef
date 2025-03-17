@@ -21,7 +21,7 @@ import static org.xdef.XDValueID.XD_CONTAINER;
 import org.xdef.impl.code.DefString;
 import org.xdef.msg.XDEF;
 
-/** Parser of Xscript "sequence" type.
+/** Parser of X-script "sequence" type.
  * @author Vaclav Trojan
  */
 public class XDParseSequence extends XSAbstractParser {

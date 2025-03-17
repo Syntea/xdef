@@ -33,7 +33,7 @@ class XonToXml extends XonTools {
 	private String _xNamespace;
 	/** Stack of namespace URI. */
 	KNamespace _ns;
-	/** Document used to create Xdefinition. */
+	/** Document used to create X-definition. */
 	Document _doc;
 
 	private XonToXml() {super();}
@@ -563,7 +563,7 @@ class XonToXml extends XonTools {
 		_ns.popContext();
 	}
 
-	/** Create element created from XON/JSON (Xdefinition mode).
+	/** Create element created from XON/JSON (X-definition mode).
 	 * @param xon XON/JSON object.
 	 * @return created element.
 	 */

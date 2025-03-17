@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Named value (pair of name and value) in Xscript.
+/** Named value (pair of name and value) in X-script.
  * @author Vaclav Trojan
  */
 public interface XDNamedValue extends XDValue {

@@ -13,7 +13,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
-/** Provides checking of Xdefinition types and values.
+/** Provides checking of X-definition types and values.
  * @author Vaclav Trojan
  */
 public class XDChecker {
@@ -34,7 +34,7 @@ public class XDChecker {
 	/** Constructor of XDChecker.
 	 * @param classes array with external classes or <i>null</i>.
 	 * @param methods string with methods or <i>null</i>.
-	 * (see "methods attribute in Xdefinitions").
+	 * (see "methods attribute in X-definitions").
 	 * @param declarations string with declaration of variables,
 	 * types and methods or <i>null</i>.
 	 * @param options string with options list <i>null</i>.

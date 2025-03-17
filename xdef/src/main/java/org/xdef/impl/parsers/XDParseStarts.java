@@ -6,7 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
 
-/** Parser of Xscript "starts" type.
+/** Parser of X-script "starts" type.
  * @author Vaclav Trojan
  */
 public class XDParseStarts extends XDParseEq {

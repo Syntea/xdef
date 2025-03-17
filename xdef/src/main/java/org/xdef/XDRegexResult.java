@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import static org.xdef.XDValueID.XD_REGEXRESULT;
 import static org.xdef.XDValueType.REGEXRESULT;
 
-/** Implementation of Xscript value of regular expression result.
+/** Implementation of X-script value of regular expression result.
  * @author Vaclav Trojan
  */
 public final class XDRegexResult extends XDValueAbstract {

@@ -3,7 +3,7 @@ package org.xdef;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
-/** Iterator/Map used as context in create mode of Xdefinition in Xscript.
+/** Iterator/Map used as context in create mode of X-definition in X-script.
  * This interface can be either an iterator or a map.
  * @author Vaclav Trojan
  */

@@ -49,7 +49,7 @@ import org.xdef.xon.XonUtils;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 
-/** Provides interactive editing and debugging of Xdefinition.
+/** Provides interactive editing and debugging of X-definition.
  * @author Vaclav Trojan
  */
 public class GUIEditor extends GUIScreen {
@@ -58,16 +58,16 @@ public class GUIEditor extends GUIScreen {
 
 	private static final XDPool PROJECTXDPOOL;
 	static {
-		String xdef = // Xdefinition of project description
+		String xdef = // X-definition of project description
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"Project\" name=\"GUI\">\n" +
 "  <Project\n" +
 "    Show=\"? enum('true','false'); /*if true file with project is displayed"
 			+ " and editable.*/\">\n" +
 "\n" +
 "    <xd:mixed>\n" +
-"<!-- \"XDefinition\" - items with the sources of Xdefinition -->\n" +
+"<!-- \"XDefinition\" - items with the sources of X-definition -->\n" +
 "      <XDefinition xd:script=\"+\">\n" +
-"        string(); /*this can be a file, url or XML with Xdefinition source*/\n"+
+"        string(); /*this can be a file, url or XML with X-definition source*/\n"+
 "      </XDefinition>\n" +
 "\n" +
 "<!-- \"External\" - items to be added to the classpath -->\n" +
@@ -84,7 +84,7 @@ public class GUIEditor extends GUIScreen {
 "<!-- \"Execute\" items are used to specify the compiled XDPool is executed\n" +
 "     according to the specified parameters -->\n" +
 "      <Execute xd:script=\"*;\"\n" +
-"        XDName=\"? string(1, 1000); /*name of root Xdefinition (may be"
+"        XDName=\"? string(1, 1000); /*name of root X-definition (may be"
 			+ " missing)*/\"\n" +
 "        DataType=\"? enum('XML', 'JSON', 'INI'); /*type of processed data*/\"\n" +
 "        Mode=\"? enum('construct', 'validate'); /*mode of process*/\"\n" +
@@ -92,7 +92,7 @@ public class GUIEditor extends GUIScreen {
 			+ " process is displayed*/\" >\n" +
 "\n" +
 "        <xd:mixed>\n" +
-"<!-- \"Var\" items are used to set variables to the Xdefinition"
+"<!-- \"Var\" items are used to set variables to the X-definition"
 			+ " processor -->\n" +
 "          <Var xd:script=\"*\" Name=\"string(); /*name of variable*/\">\n" +
 "            string(); /*value of variable*/\n" +
@@ -584,7 +584,7 @@ public class GUIEditor extends GUIScreen {
 		final String src) {
 		try {
 			Element e;
-			// Create element with project according to Xdefinition
+			// Create element with project according to X-definition
 			XDDocument pxd = PROJECTXDPOOL.createXDDocument();
 			Element project = pxd.xparse(src, null);
 			if ("true".equals(project.getAttribute("Show"))) {
@@ -626,7 +626,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 
-			// compile Xdefinitions
+			// compile X-definitions
 			XDPool xp = compileProject(project, props);
 			// execute project
 			executeProject(project, xp, props);
@@ -677,7 +677,7 @@ public class GUIEditor extends GUIScreen {
 	 */
 	private static XDPool compileProject(final Element project,
 		final Properties props) throws Exception {
-		// get Xdefinition sources
+		// get X-definition sources
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		try {
 			String missingDefs = "";
@@ -730,7 +730,7 @@ public class GUIEditor extends GUIScreen {
 					XDSourceItem xsi = si.getMap().get(x);
 					changed |= xsi._changed | xsi._saved;
 				}
-				if (changed) { //Update Xdefinitions elements
+				if (changed) { //Update X-definitions elements
 					updateXdefList(project, si);
 				}
 				if (reporter.errors()) {
@@ -769,7 +769,7 @@ public class GUIEditor extends GUIScreen {
 					}
 					GUIEditor ge = new GUIEditor(si);
 					ge.display(reporter,
-						"Error in Xdefinition", xsi._url, si, true, null);
+						"Error in X-definition", xsi._url, si, true, null);
 					ge.closeEdit();
 					reporter.clear();
 					if (!changed) {
@@ -812,7 +812,7 @@ public class GUIEditor extends GUIScreen {
 		XDSourceInfo si = xp.getXDSourceInfo();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element exe = (Element) nl.item(i);
-			// get name of Xdefinition
+			// get name of X-definition
 			String xdName = exe.getAttribute("XDName").trim();
 			// get data type
 			String t = exe.getAttribute("DataType");
@@ -1030,40 +1030,40 @@ public class GUIEditor extends GUIScreen {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Edit and run Xdefinition in graphical user interface.\n\n"+
+"Edit and run X-definition in graphical user interface.\n\n"+
 "Command line arguments:\n"+
 " -p project_file | -v [switches] |\n"+
 " -c [switches] | -g [xml source] [-workDir dird]\n"+
 "\n"+
 " -p run a project file\n"+
-" -v compile Xdefinition and runs validation mode\n"+
-" -c compile Xdefinition and runs construction mode\n"+
-" -g generate Xdefinition and project from input data (see switch -data).\n\n"+
+" -v compile X-definition and runs validation mode\n"+
+" -c compile X-definition and runs construction mode\n"+
+" -g generate X-definition and project from input data (see switch -data).\n\n"+
 "Switches:\n"+
-" -xdef source with Xdefinition (input file or data; it may be\n"+
+" -xdef source with X-definition (input file or data; it may be\n"+
 "    specified more times)\n"+
 " -external list of classpath items with external resources (may be filenames\n"+
 "  or urls).\n"+
 " -format format of processed data (XML or JSON; default is XML)\n"+
 " -data source (input file or data used for validation mode and as\n"+
-"    the context for construction mode or for generation of Xdefinition).\n"+
+"    the context for construction mode or for generation of X-definition).\n"+
 " -debug sets debugging mode when project is executed\n"+
 " -editInput enables to edit input data before execution\n"+
 " -displayResult displays result data\n"+
 " -workDir directory where to store created data. This switch is optional;\n"+
 "    if not specified the work directory is created and deleted on exit.";
 
-	/** Call generation of a collection of Xdefinitions from a command line.
+	/** Call generation of a collection of X-definitions from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
 	 * <li><i>-p </i>file with the project
 	 * <li><i>-v [switches]</i>run validation mode
 	 * <li><i>-c [switches]</i>run construction mode
-	 * <li><i>-g [XML source]</i>Generate Xdefinition form XML data
+	 * <li><i>-g [XML source]</i>Generate X-definition form XML data
 	 * </ul>
 	 * Switches:
 	 * <ul>
-	 * <li><i>-xdef file </i>specifies the source with the Xdefinition
+	 * <li><i>-xdef file </i>specifies the source with the X-definition
 	 * <li><i>-data file</i>specifies input data or context
 	 * <li><i>-debug </i>sets the debug mode
 	 * <li><i>-editInput </i>enables to runEditor input data before execution
@@ -1117,7 +1117,7 @@ public class GUIEditor extends GUIScreen {
 				param = 'v';
 				break;
 			case "-g":
-				// generate Xdefinition
+				// generate X-definition
 				param = 'g';
 				if (args.length >= 2) {
 					String x = args[1].trim();
@@ -1272,7 +1272,7 @@ public class GUIEditor extends GUIScreen {
 				src += "  </Execute>\n";
 				break;
 			}
-			case 'g':  // generate Xdefinition
+			case 'g':  // generate X-definition
 				try {
 					if (!wasDataPath) {
 						dataPath = genTemporaryFile(

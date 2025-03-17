@@ -38,7 +38,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DeclHandler;
 
-/** Generation of Xdefinition from DTD.
+/** Generation of X-definition from DTD.
  * @author Vaclav Trojan
  */
 public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
@@ -51,7 +51,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	private static final int MAXRECURSE = 15;
 	/** Internal reporter for messages. */
 	private ReportWriter _reporter;
-	/** Root element of generated Xdefinition. */
+	/** Root element of generated X-definition. */
 	private Element _xdef;
 	private byte[] _sourceBytes;
 	/** Map with element declarations. */
@@ -160,7 +160,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		}
 	}
 
-	/** Create Xdefinition.
+	/** Create X-definition.
 	 * @param rootName name of root XML.
 	 * @return created document.
 	 */

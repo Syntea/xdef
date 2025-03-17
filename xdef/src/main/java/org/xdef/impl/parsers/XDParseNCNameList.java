@@ -19,7 +19,7 @@ import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
 
-/** Parser of Xscript "NCNameList" type.
+/** Parser of X-script "NCNameList" type.
  * @author Vaclav Trojan
  */
 public class XDParseNCNameList extends XSAbstractParseToken {

@@ -161,7 +161,7 @@ final class CompileXScript extends CompileStatement {
 		}
 	}
 
-	/** Compile script from Xdefinition header.*/
+	/** Compile script from X-definition header.*/
 	final void compileXDHeader(final XDefinition def) {
 		_options = false;
 		nextSymbol();

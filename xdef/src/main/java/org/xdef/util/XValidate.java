@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 
-/** Validation of XML document with Xdefinition.
+/** Validation of XML document with X-definition.
  * <p>Also provides main method for calling the program from command line.
  * (see {@link org.xdef.util.XValidate#main(String[])})
  * @author  Vaclav Trojan
@@ -32,7 +32,7 @@ public class XValidate {
 	private XValidate() {}
 
 	/** Validate xml file with given definition.
-	 * @param props properties to be set to Xdefinitions.
+	 * @param props properties to be set to X-definitions.
 	 * @param xmlFile The file with XML.
 	 * @param repw Report writer.
 	 * @return The XDDocument object or <i>null</i> if the XDDocument was not created.
@@ -47,7 +47,7 @@ public class XValidate {
 	}
 
 	/** Validate xml file with given definition.
-	 * @param props properties to be set to Xdefinitions.
+	 * @param props properties to be set to X-definitions.
 	 * @param xmlFile The file with XML.
 	 * @param xdefFiles Array of files with definitions.
 	 * @param rootDefName Name of root definition.
@@ -72,7 +72,7 @@ public class XValidate {
 	}
 
 	/** Validate XML file with given definition.
-	 * @param props properties to be set to Xdefinitions.
+	 * @param props properties to be set to X-definitions.
 	 * @param xmlFile The file with XML.
 	 * @param poolFile The file with XDPool or null.
 	 * @param xdefFiles Array of files with definitions.
@@ -99,7 +99,7 @@ public class XValidate {
 	}
 
 	/** Validate XML file with given definition.
-	 * @param props properties to be set to Xdefinitions.
+	 * @param props properties to be set to X-definitions.
 	 * @param out The DefOutStream used as standard output or <i>null</i>.
 	 * @param in The DefInStream used as standard input or <i>null</i>.
 	 * @param userObj The user object or <i>null</i>.
@@ -132,7 +132,7 @@ public class XValidate {
 	}
 
 	/** Validate XML file with given definition.
-	 * @param props properties to be set to Xdefinitions.
+	 * @param props properties to be set to X-definitions.
 	 * @param out The DefOutStream used as standard output or <i>null</i>.
 	 * @param in The DefInStream used as standard input or <i>null</i>.
 	 * @param userObj The user object or <i>null</i>.
@@ -166,7 +166,7 @@ public class XValidate {
 		if (xp != null) {
 			try {
 				if (rootDefName!=null && rootDefName.length() > 0 && xp.getXMDefinition(rootDefName) == null){
-					repw.fatal(XDEF.XDEF269, rootDefName); //Xdefinition '&{0}' doesn't exist
+					repw.fatal(XDEF.XDEF269, rootDefName); //X-definition '&{0}' doesn't exist
 				} else {
 					XDDocument xd = xp.createXDDocument(rootDefName);
 					xd.setProperties(props);
@@ -206,7 +206,7 @@ public class XValidate {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Validation of XML document with Xdefinition.\n"+
+"Validation of XML document with X-definition.\n"+
 "\n"+
 "Command line arguments:\n"+
 "  [-d defList | -p XDPool ] [-x xDefName] [-l logFile] -i xmlFile\n"+
@@ -215,15 +215,15 @@ public class XValidate {
 "  contain wildcard charaters in file names.\n"+
 "  Both -d and -p parameters can't be specified.";
 
-	/** Validation of pool ox Xdefinitions. This method is possible to invoke from command line.
+	/** Validation of pool ox X-definitions. This method is possible to invoke from command line.
 	 * @param args Array of strings containing command line arguments.
 		 * <p>Arguments:
 		 * <ul>
 		 *  <li><i>-i file</i> - input XML file to validate
-		 *  <li><i>-d file</i> - input Xdefinition file(s)
+		 *  <li><i>-d file</i> - input X-definition file(s)
 		 *  <li><i>-p file</i> - input XDPool file
 		 *  <li><i>-l file</i> - log file
-		 *  <li><i>-x name</i> - name of Xdefinition
+		 *  <li><i>-x name</i> - name of X-definition
 		 *  <li><i>-h | -?</i> - print help
 		 * </ul>
 	 */

@@ -7,7 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Interface of XComponent (Java class generated from Xdefinition according to model of Element).
+/** Interface of XComponent (Java class generated from X-definition according to model of Element).
  * Java source of XComponent is possible to generate by {@link org.xdef.component.GenXComponent}.
  * @author Vaclav Trojan
  */
@@ -122,8 +122,8 @@ public interface XComponent {
 	 */
 	public void xInit(XComponent p, String name, String ns, String xPos);
 
-	/** Get XON object from this Xcomponent (if it is possible).
-	 * @return XON object if this Xcomponent is created from JSON/XON/INI/CSV.
+	/** Get XON object from this X-component (if it is possible).
+	 * @return XON object if this X-component is created from JSON/XON/INI/CSV.
 	 * Otherwise return null.
 	 */
 	public Object toXon();

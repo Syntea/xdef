@@ -131,8 +131,8 @@ public final class PNode {
 	 */
 	public final SBuffer getValue() {return _value;}
 
-	/** Get version of the Xdefinition.
-	 * @return version of the Xdefinition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
+	/** Get version of the X-definition.
+	 * @return version of the X-definition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
 	 */
 	public final byte getXdefVersion() {return _xdVersion;}
 
@@ -191,7 +191,7 @@ public final class PNode {
 
 	/** Expand macros.
 	 * @param reporter error reporter.
-	 * @param actDefName actual Xdefinition name.
+	 * @param actDefName actual X-definition name.
 	 * @param macros map with macros.
 	 */
 	public void expandMacros(final ReportWriter reporter,

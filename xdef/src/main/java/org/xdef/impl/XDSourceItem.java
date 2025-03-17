@@ -10,7 +10,7 @@ import java.net.URLDecoder;
 import org.xdef.impl.xml.XInputStream;
 import org.xdef.sys.SUtils;
 
-/** Contains information about Xdefinition source item.
+/** Contains information about X-definition source item.
  * @author Vaclav Trojan
  */
 public final class XDSourceItem {

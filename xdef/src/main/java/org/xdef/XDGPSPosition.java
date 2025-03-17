@@ -6,7 +6,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SIllegalArgumentException;
 
-/** Value of GPS position in Xscript.
+/** Value of GPS position in X-script.
  * @author Vaclav Trojan
  */
 public final class XDGPSPosition extends XDValueAbstract {

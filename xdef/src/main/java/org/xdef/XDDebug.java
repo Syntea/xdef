@@ -16,7 +16,7 @@ public interface XDDebug {
 	public static final int STEPINTO = 1;
 	/** Debug action step over. */
 	public static final int STEPOVER = 2;
-	/** Debug action step kill Xdefinition processing. */
+	/** Debug action step kill X-definition processing. */
 	public static final int KILL = 3;
 
 	/** Event "onTrue". */
@@ -91,7 +91,7 @@ public interface XDDebug {
 	 */
 	public void setInDebug(InputStream inDebug);
 
-	/** This method is called from Xscript methods pause or trace.
+	/** This method is called from X-script methods pause or trace.
 	 * @param xnode actual XXNode.
 	 * @param code executive code.
 	 * @param pc program counter.

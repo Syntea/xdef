@@ -16,7 +16,7 @@ import org.xdef.XDContainer;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
 
-/** Parser of Xscript "enum" type.
+/** Parser of X-script "enum" type.
  * @author Vaclav Trojan
  */
 public class XDParseEnum extends XDParserAbstract {

@@ -226,9 +226,9 @@ public class XComponentUtil {
 	}
 
 	/** Update XPostitions.
-	 * @param xc Xcomponent.
-	 * @param xpos Xposition.
-	 * @param index index of the referred item of Xposition.
+	 * @param xc X-component.
+	 * @param xpos X-position.
+	 * @param index index of the referred item of X-position.
 	 */
 	private static void updateXPos(final XComponent xc, final String xpos, final int index) {
 		String myXPos = xc.xGetNodeName();
@@ -449,7 +449,7 @@ public class XComponentUtil {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create XON object from Xcomponent.
+// Create XON object from X-component.
 ////////////////////////////////////////////////////////////////////////////////
 	private final static Object toXonObject(final Object o) {
 		return o instanceof String
@@ -813,8 +813,8 @@ public class XComponentUtil {
 		return result;
 	}
 
-	/** Create XON object from Xcomponent.
-	 * @param xc Xcomponent.
+	/** Create XON object from X-component.
+	 * @param xc X-component.
 	 * @return XON object.
 	 */
 	public static final Object toXon(final XComponent xc) {

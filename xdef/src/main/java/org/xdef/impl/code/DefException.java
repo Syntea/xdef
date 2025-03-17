@@ -7,7 +7,7 @@ import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.EXCEPTION;
 
-/** Implementation of Exception in Xscript code.
+/** Implementation of Exception in X-script code.
  * @author  Vaclav Trojan
  */
 public final class DefException extends XDValueAbstract implements XDException {

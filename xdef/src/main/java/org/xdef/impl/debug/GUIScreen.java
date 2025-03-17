@@ -40,7 +40,7 @@ public class GUIScreen extends GUIBase {
 	/** If GUI action is finished. */
 	public boolean _actionFinished = true;
 
-	/** Create instance of the screen to display the sources of Xdefinitions.
+	/** Create instance of the screen to display the sources of X-definitions.
 	 * @param si source info.
 	 */
 	public GUIScreen(final XDSourceInfo si) {

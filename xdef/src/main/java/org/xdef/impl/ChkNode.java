@@ -909,7 +909,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Get XMDefinition.
-	 * @return Xdefinition of this document.
+	 * @return X-definition of this document.
 	 */
 	public final XMDefinition getXMDefinition() {return _rootChkDocument._xdef;}
 
@@ -1014,11 +1014,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return "";
 	}
 
-	/** Get Xposition and XPath information. If it is XON/JSON, then create
+	/** Get X-position and XPath information. If it is XON/JSON, then create
 	 * modified XON/JSON path.
-	 * @param xpos Xposition of model.
+	 * @param xpos X-position of model.
 	 * @param xpath XPath of data (may be null).
-	 * @return array with two items - the first one is Xposition and the
+	 * @return array with two items - the first one is X-position and the
 	 * second one is XPath.
 	 */
 	final String[] getPosInfo(final String xpos, final String xpath) {
@@ -1176,7 +1176,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	/** Get XPosition, XPath and source position for modification information
 	 * in message reporting.
-	 * @param xpos string with Xposition.
+	 * @param xpos string with X-position.
 	 * @param xpath XPath of data (may be null).
 	 * @return modification information (convert to XON format if XON).
 	 */

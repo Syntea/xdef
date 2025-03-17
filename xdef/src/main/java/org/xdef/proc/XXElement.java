@@ -3,7 +3,7 @@ package org.xdef.proc;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.model.XMElement;
 
-/** Model of element in Xdefinition.
+/** Model of element in X-definition.
  * @author Vaclav Trojan
  */
 public interface XXElement extends XXNode {
@@ -15,20 +15,20 @@ public interface XXElement extends XXNode {
 // Generation of XML objects
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Prepare construction of the new element according to Xdefinition.
+	/** Prepare construction of the new element according to X-definition.
 	 * @param qname qualified name of the element (prefixed).
 	 * @param ns namespace URI of the element.
 	 * @return created check element object.
 	 */
 	public XXElement prepareXXElementNS(String ns, String qname);
 
-	/** Prepare construction of the new element (without namespace) according to Xdefinition.
+	/** Prepare construction of the new element (without namespace) according to X-definition.
 	 * @param name Tag name of the element.
 	 * @return created check element object.
 	 */
 	public XXElement prepareXXElement(String name);
 
-	/** Prepare construction of the new child according to Xdefinition.
+	/** Prepare construction of the new child according to X-definition.
 	 * @param model child model.
 	 * @return created XXElemnt element object.
 	 */
@@ -36,7 +36,7 @@ public interface XXElement extends XXNode {
 
 	/** Add constructed element as a child to the XXElement. Check all attributes and child nodes
 	 * for occurrence.
-	 * @return true if element was added and complies to Xdefinition.
+	 * @return true if element was added and complies to X-definition.
 	 */
 	public boolean addElement();
 
