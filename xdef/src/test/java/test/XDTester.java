@@ -51,13 +51,12 @@ import org.xdef.xon.XonUtils;
  * @author Vaclav Trojan
  */
 public abstract class XDTester extends STester {
-	public static String _xdNS = XDConstants.XDEF42_NS_URI; //namespace of the last version of Xdefinition
-	public static XDPool _xdOfXd = null; //compiled Xdefinition of Xdefinitions
-	public static boolean _fulltestMode = false;//switch check syntax of Xdefinition and concersion to stream.
-
-	private final Properties _props = new Properties();
-	private boolean _convertXD;
-	private boolean _chkSyntax;
+	public static String _xdNS = XDConstants.XDEF42_NS_URI;//Namespace of the last version of Xdefinition
+	private static boolean _fulltestMode = false;//Switch check Xdefinition syntax and concersion to stream.
+	private static XDPool _xdOfXd = null; //Compiled XDPool with Xdefinition of Xdefinitions.
+	private final Properties _props = new Properties();//Properties with Xdefinition values.
+	private boolean _convertXD;//Switch to convert XDPool to OutputStream and return XDPool from OutputStream.
+	private boolean _chkSyntax;//Switch to check syntax of Xdefinition.
 
 	/** Creates a new instance of TestAbstract */
 	public XDTester() {
@@ -157,11 +156,11 @@ public abstract class XDTester extends STester {
 	 */
 	private ArrayReporter chkSyntax(final String... xdefs) {return chkSyntax((Object[]) xdefs);}
 	/** Check Xdefinitions.
-	 * @param xdefs array with source files Xdefinitions.
+	 * @param xdefs array with source files with Xdefinitions.
 	 * @return reporter with error/warnings.
 	 */
 	private ArrayReporter chkSyntax(final File... xdefs) {return chkSyntax((Object[]) xdefs);}
-	/** Check Xdefinitions.
+	/** Check syntax of Xdefinition.
 	 * @param xdefs array with Xdefinitions.
 	 * @return reporter with error/warnings.
 	 */
