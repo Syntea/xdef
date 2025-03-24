@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.24, release-date 2025-03-22
-* .
+# Version 42.2.24, release-date 2025-03-24
+* Fixed NullPointerException in method `org.xdef.XDDocument.getXon()` if it was option forget in X-definition.
 
 # Version 42.2.23, release-date 2025-03-14
 * If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), then an XDEF823
@@ -14,7 +14,7 @@
   specified as 00:00:00.
 
 # Version 42.2.21, release-date 2025-02-28
-* Fixed bug in conversion of emailAddr from Xdefinition to XML schema.
+* Fixed bug in conversion of emailAddr from X-definition to XML schema.
 * Corrected bug in multithread call of KXmlUtils.parse(...) method.
 
 # Version 42.2.20, release-date 2025-02-17
