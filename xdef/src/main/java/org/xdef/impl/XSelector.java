@@ -184,49 +184,74 @@ public class XSelector extends XNode implements XMSelector {
 		x.setXDPosition(xr.readString());
 		return x;
 	}
+
 	@Override
 	public final int getCheckCode(){throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getOnTrueCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getOnFalseCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getDefltCode(){throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getMatchCode() {return _match;}
+
 	@Override
 	public final int getInitCode() {return _init;}
+
 	@Override
 	public final int getFinallyCode() {return _finaly;}
+
 	@Override
 	public final int getOnAbsenceCode() {return _onAbsence;}
+
 	@Override
 	public final int getOnStartElementCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getComposeCode() {return _compose;}
+
 	@Override
 	public final int getOnIllegalAttrCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getOnIllegalTextCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getOnIllegalElementCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final int getOnExcessCode() {return _onExcess;}
+
 	@Override
 	public final int getVarinitCode() {throw new SUnsupportedOperationException();}
+
 	@Override
 	public final XMDefinition getXMDefinition() {return null;}
+
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get index where selector begins in child nodes list.
 	 * @return index of beginning of the group.
 	 */
-	public final int getBegIndex() {return _begIndex;}
 	@Override
+	public final int getBegIndex() {return _begIndex;}
+
 	/** Get index where selector ends in child nodes list.
 	 * @return the index of beginning of the group.
 	 */
+	@Override
 	public final int getEndIndex() {return _endIndex;}
+
+	/** Write this X object to XDWriter.
+	 * @param xw XDWriter used for writing.
+	 * @param list list of XNodes to be written.
+	 * @throws IOException if an error occurs.
+	 */
 	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeShort(getKind());

@@ -27,9 +27,9 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "FWS           ::= [ #9]+\n"+ // Folding white space
 "ASCIICHAR     ::= [ -~]\n"+ // Printable ASCII character
 "Domain        ::= sub_domain ( '.' sub_domain )*\n"+
-"sub_domain    ::= Let_dig+ Ldh_str?\n" +
+"sub_domain    ::= Let_dig+ Ldh_str*\n" +
 "Let_dig       ::= [0-9] | $letter\n" +
-"Ldh_str       ::= '-' Let_dig+\n"+
+"Ldh_str       ::= '-'+ Let_dig+\n"+
 "General_addr  ::= Std_tag ':' ( dcontent )+\n" +
 "Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
 "dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]

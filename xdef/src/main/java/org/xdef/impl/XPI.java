@@ -18,8 +18,8 @@ public final class XPI extends XData {
 		setOccurrence(1, Integer.MAX_VALUE); //???
 	}
 
-	@Override
 	/** Write this XPI to XDWriter. */
+	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeString(getName());
 		xw.writeString(getNSUri());

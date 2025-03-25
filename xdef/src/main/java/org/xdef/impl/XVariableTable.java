@@ -112,10 +112,10 @@ public final class XVariableTable implements XMVariableTable {
 	 */
 	public final int getSqId() {return _sqId;}
 
-	@Override
 	/** Get number of variables in the table.
 	 * @return number of variables in the table.
 	 */
+	@Override
 	public final int size() {return _size;}
 
 	/** Clear variable table. */
@@ -203,11 +203,12 @@ public final class XVariableTable implements XMVariableTable {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XMVariableTable
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get variable.
 	 * @param name the name of variable.
 	 * @return variable or null.
 	 */
+	@Override
 	public final XMVariable getVariable(final String name) {
 		for (int i = 0; i < _size; i++) {
 			if (name.equals(_variables[i].getName())) {
@@ -217,10 +218,10 @@ public final class XVariableTable implements XMVariableTable {
 		return null;
 	}
 
-	@Override
 	/** Get names of variables.
 	 * @return array of names of variables.
 	 */
+	@Override
 	public final String[] getVariableNames() {
 		String[] result = new String[_size];
 		for (int i = 0; i < _size; i++) {
@@ -229,10 +230,10 @@ public final class XVariableTable implements XMVariableTable {
 		return result;
 	}
 
-	@Override
 	/** Get all variables in the table.
 	 * @return array of variables in the table.
 	 */
+	@Override
 	public final XMVariable[] toArray() {
 		XVariable[] x = new XVariable[_size];
 		System.arraycopy(_variables, 0, x, 0, _size);

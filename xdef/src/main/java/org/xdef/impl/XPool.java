@@ -736,42 +736,46 @@ public final class XPool implements XDPool, Serializable {
 // Interface XDPool
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get version information.
 	 * @return version information.
 	 */
-	public final String getVersionInfo() {return XD_VERSION;}
 	@Override
+	public final String getVersionInfo() {return XD_VERSION;}
+
 	/** Check compatibility of this instance of XDPool with given version.
 	 * @param version the version to be checked.
 	 * @return true if this instance of XDPool is compatible with given version. Otherwise return false.
 	 */
+	@Override
 	public final boolean chkCompatibility(final String version) {
 		return getXDVersionID(version) >= getXDVersionID(XD_MIN_VERSION);
 	}
-	@Override
+
 	/** Get array with all XMDefinitions from this XDPool.
 	 * @return array with all XMDefinitions from this XDPool.
 	 */
+	@Override
 	public final XMDefinition[] getXMDefinitions() {
 		XMDefinition[] result = new XMDefinition[_xdefs.size()];
 		_xdefs.values().toArray(result);
 		return result;
 	}
-	@Override
+
 	/** Get array with all X-definitions from this XDPool.
 	 * @return array with all X-definitions from this XDPool.
 	 */
+	@Override
 	public final String[] getXMDefinitionNames() {
 		String[] result = new String[_xdefs.size()];
 		_xdefs.keySet().toArray(result);
 		return result;
 	}
-	@Override
+
 	/** Find XModel in XDPool.
 	 * @param xdpos position of XModel in XDPool.
 	 * @return XMNode representing model or null if model was nod found.
 	 */
+	@Override
 	public final XMNode findModel(final String xdpos) {
 		if (xdpos == null) {
 			return null;
@@ -863,43 +867,51 @@ public final class XPool implements XDPool, Serializable {
 	public final XMDefinition getXMDefinition() {
 		return _xdefs.size() == 1 ? _xdefs.values().iterator().next() : _xdefs.get("");
 	}
+
 	/** Get X-definition from this XDPool.
 	 * @param name the name of X-definition.
 	 * @return specified X-definition from this XDPool.
 	 */
 	@Override
 	public final XMDefinition getXMDefinition(final String name) {return _xdefs.get(name);}
+
 	/** Check if debug mode is set on.
 	 * @return value of debug mode.
 	 */
 	@Override
 	public final boolean isDebugMode() {return _debugMode > 0;}
+
 	/** Get display mode.
 	 * @return display mode.
 	 */
 	@Override
 	public final byte getDisplayMode(){return _displayMode;}
+
 	/** Check if unresolved externals will be ignored.
 	 * @return true if unresolved externals will be ignored.
 	 */
 	@Override
 	public final boolean isIgnoreUnresolvedExternals() {return _ignoreUnresolvedExternals;}
+
 	/** Check if exists the X-definition of given name.
 	 * @param name the name of X-definition (or <i>null</i>) if noname X-definition is checked.
 	 * @return true if and only if the X-definition of given name exists in the XDPool.
 	 */
 	@Override
 	public final boolean exists(final String name) {return _xdefs.containsKey(name == null ? "" : name);}
+
 	/** Get table of global variables.
 	 * @return table of global variables.
 	 */
 	@Override
 	public final XMVariableTable getVariableTable() {return _variables;}
+
 	/** Print code to PrintStream.
 	 * @param out stream where code is printed.
 	 */
 	@Override
 	public final void displayCode(final PrintStream out) {CodeDisplay.displayCode(_code, out);}
+
 	/** Print code from XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
@@ -912,30 +924,37 @@ public final class XPool implements XDPool, Serializable {
 			CodeDisplay.displayDefNode(((XDefinition) getXMDefinition(x)), out, processed);
 		}
 	}
+
 	/** Display XDPool on System.out. */
 	@Override
 	public final void display() {display(System.out);}
+
 	/** Display code of XDPool on System.out. */
 	@Override
 	public final void displayCode() {displayCode(System.out);}
+
 	/** Display debugging information of XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
 	@Override
 	public final void displayDebugInfo(final PrintStream out) {CodeDisplay.displayDebugInfo(this, out);}
+
 	/** Display debugging information of XDPool on System.out. */
 	@Override
 	public final void displayDebugInfo() {displayDebugInfo(System.out);}
+
 	/** Get properties from XDPool.
 	 * @return properties from XDPool.
 	 */
 	@Override
 	public final Properties getProperties() {return _props;}
+
 	/** Create new XDDocument with default X-definition.
 	 * @return the XDDocument object.
 	 */
 	@Override
 	public final XDDocument createXDDocument() {return new ChkDocument((XDefinition) getXMDefinition());}
+
 	/** Create new XDDocument.
 	 * @param id Identifier of X-definition (or <i>null</i>).
 	 * @return the XDDocument object.
@@ -961,97 +980,120 @@ public final class XPool implements XDPool, Serializable {
 			throw new SRuntimeException(XDEF.XDEF603, id); //'&{0' doesn't point to model of element
 		}
 	}
+
 	/** Get debug information or null.
 	 * @return debug information object.
 	 */
 	@Override
 	public final XMDebugInfo getDebugInfo() {return _debugInfo;}
+
 	/** Get switch if the parser allows XML XInclude.
 	 * @return true if the parser allows XInclude.
 	 */
 	@Override
 	public final boolean isResolveIncludes() {return _resolveIncludes;}
+
 	/** Get the switch if XML parser will generate detailed location reports.
 	 * @return the location details switch.
 	 */
 	@Override
 	public final boolean isLocationsdetails() {return _locationdetails;}
+
 	/** Get switch if the parser do not allow DOCTYPE.
 	 * @return true if the parser do not allow DOCTYPE or return false if DOCTYPE is processed.
 	 */
 	@Override
 	final public boolean isIllegalDoctype() {return _illegalDoctype;}
+
 	/** Get switch if the parser will check warnings as errors.
 	 * @return true if the parser checks warnings as errors.
 	 */
 	@Override
 	final public boolean isChkWarnings() {return _chkWarnings;}
+
 	/** Get switch if the actullal reporter is cleared in the executed code of sections
 	 * 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'. Default value is 'true'.
 	 * @return true if reporter will be cleared.
 	 */
 	@Override
 	final public boolean isClearReports() {return _clearReports;}
+
 	/** Get list of XComponents.
 	 * @return list of XComponents.
 	 */
 	@Override
 	public final Map<String, String> getXComponents() {return _components;}
+
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
 	 */
 	public final void setXComponents(Map<String, String> p) {_components = p;}
+
 	/** Get list of XComponent binds.
 	 * @return list of XComponent binds.
 	 */
 	@Override
 	public final Map<String, String> getXComponentBinds() {return _binds;}
+
 	/** Get list of XComponent enumerations.
 	 * @return list of XComponent enumerations.
 	 */
 	@Override
 	public final Map<String, String> getXComponentEnums() {return _enums;}
+
 	/** Get default TimeZone.
 	 * @return default TimeZone.
 	 */
 	@Override
 	public final TimeZone getDefaultZone() {return _defaultZone;}
+
 	/** Get minimum valid year of date.
 	 * @return minimum valid year (Integer.MIN if not set).
 	 */
 	@Override
 	public final int getMinYear() {return _minYear;}
+
 	/** Get maximum valid year of date (or Integer.MIN if not set).
 	 * @return maximum valid year (Integer.MIN if not set).
 	 */
 	@Override
 	public final int getMaxYear()  {return _maxYear;}
+
 	/** Get array of dates to be accepted out of interval minYear..maxYear.
 	 * @return array with special values of valid dates.
 	 */
 	@Override
 	public final SDatetime[] getSpecialDates() {return _specialDates;}
+
 	/** Get the object with the map of source items of compiled X-definitions and with editing information.
 	 * @return object with the map of source items of compiled X-definitions
 	 * and with editing information.
 	 */
 	@Override
+
 	/** Array wioth charsets used for values of parsed strings.
 	 * @return Array wioth Charset objects or null.
 	 */
 	public Charset[] getLegalStringCharsets() {return _charsets;}
+
+	/** Get the object with the map of source items of compiled X-definitions and with editing information.
+	 * @return object with the map of source items of compiled X-definitions and with editing information.
+	 */
 	@Override
 	public XDSourceInfo getXDSourceInfo() {return _sourceInfo;}
+
 	/** Get debug editor class name.
 	 * @return debug editor class name (if null. the default debug editor will be used).
 	 */
 	@Override
 	public final String getDebugEditor() {return _debugEditor;}
+
 	/** Get class name of the editor of X-definition.
 	 * @return class name of the editor of X-definition which will be used).
 	 */
 	@Override
 	public final String getXdefEditor() {return _xdefEditor;}
+
 	/** Generate XComponent Java source classes from XDPool.
 	 * @param fdir directory where write the source code. The file names will be constructed from
 	 * %class statements as "className.java".

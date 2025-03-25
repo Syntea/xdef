@@ -266,6 +266,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	////////////////////////////////////////////////////////////////////////////
 	// implementation of XHandler
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public InputSource pushReader(XAbstractReader mr) {
 		_stackReader.push(new HandlerInfo(this, mr));
@@ -282,6 +283,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/////////////////////////////////////////////////////////////
 	// Implementation of DomBaseHandler methods
 	/////////////////////////////////////////////////////////////
+
 	@Override
 	public final void prepareParse(final InputSource is)
 		throws IOException, SAXException {

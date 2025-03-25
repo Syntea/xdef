@@ -76,46 +76,46 @@ public abstract class XNode implements XMNode {
 // XMNode interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Return the node kind
 	 * @return kind of node.
 	 */
+	@Override
 	public final short getKind() {return _kind;}
 
-	@Override
 	/** Get namespace URI.
 	 * @return namespace URI.
 	 */
+	@Override
 	public final String getNSUri() {return _nsURI;}
 
-	@Override
 	/** Get name of node.
 	 * @return The name of node.
 	 */
+	@Override
 	public final String getName() {return _name;}
 
-	@Override
 	/** Get local name of node.
 	 * @return The local name of node.
 	 */
+	@Override
 	public final String getLocalName() {
 		int ndx = _name.indexOf(':');
 		return (ndx < 0) ? _name : _name.substring(ndx + 1);
 	}
 
-	@Override
 	/** Get prefix of name.
 	 * @return prefix of name..
 	 */
+	@Override
 	public final String getNamePrefix() {
 		int ndx = _name.indexOf(':');
 		return (ndx < 0) ? "" : _name.substring(0, ndx);
 	}
 
-	@Override
 	/** Get QName of model of the node.
 	 * @return QName of node.
 	 */
+	@Override
 	public QName getQName() {
 		int ndx = _name.indexOf(':');
 		if (ndx >= 0) {
@@ -131,10 +131,10 @@ public abstract class XNode implements XMNode {
 	 */
 	public final void setSPosition(final SPosition spos) {_spos = spos;}
 
-	@Override
 	/** Get position to source X-definition.
 	 * @return position to source X-definition or <i>null</i>.
 	 */
+	@Override
 	public final SPosition getSPosition() {return _spos == null ? new SPosition() : _spos;}
 
 	/** Set position of this node in XDPool.
@@ -142,16 +142,16 @@ public abstract class XNode implements XMNode {
 	 */
 	public final void setXDPosition(final String xpos) {_xdpos = xpos;}
 
-	@Override
 	/** Get position of this node in XDPool.
 	 * @return position of this node in XDPool.
 	 */
+	@Override
 	public final String getXDPosition() {return _xdpos;}
 
-	@Override
 	/** Return printable value for debugging.
 	 * @return  printable value
 	 */
+	@Override
 	public String toString() {
 		switch (_kind) {
 			case XMDEFINITION: return "XMDEFINITION: " + (_name.isEmpty()?"(nameless)":_name);
@@ -174,7 +174,7 @@ public abstract class XNode implements XMNode {
 	 * @param l list of XNodes to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	public abstract void writeXNode(XDWriter w,List<XNode> l)throws IOException;
+	public abstract void writeXNode(XDWriter w,List<XNode> l) throws IOException;
 
 	final static XNode readXNode(final XDReader xr, final XDefinition xd, final List<XNode> list)
 		throws IOException {
@@ -194,81 +194,80 @@ public abstract class XNode implements XMNode {
 		}
 	}
 
-	@Override
 	/** Get XDPool.
 	 * @return XDPool to which this XMDefinition belongs.
 	 */
+	@Override
 	public final XDPool getXDPool() {return _xp;}
 
 ////////////////////////////////////////////////////////////////////////////////
 //implemetation of the interface XMOccurrence
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get min occurrence.
 	 * @return min occurrence.
 	 */
+	@Override
 	public final int minOccurs() {return _occ.minOccurs();}
 
-	@Override
 	/** Get max occurrence.
 	 * @return max occurrence.
 	 */
+	@Override
 	public final int maxOccurs() {return _occ.maxOccurs();}
 
-
-	@Override
 	/** Return true if value of occurrence had been specified.
 	 * @return true if and only if occurrence is specified.
 	 */
+	@Override
 	public final boolean isSpecified() {return _occ.isSpecified();}
 
-	@Override
 	/** Return true if value of occurrence is set as illegal.
 	 * @return true if and only if occurrence is set as illegal.
 	 */
+	@Override
 	public final boolean isIllegal() {return _occ.isIllegal();}
 
-	@Override
 	/** Return true if value of occurrence is set as ignored.
 	 * @return true if and only if occurrence is set as ignored.
 	 */
+	@Override
 	public final boolean isIgnore() {return _occ.isIgnore();}
 
-	@Override
 	/** Return true if value of occurrence is set as fixed.
 	 * @return true if and only if occurrence is set as fixed.
 	 */
+	@Override
 	public final boolean isFixed() {return _occ.isFixed();}
 
-	@Override
 	/** Return true if value of occurrence is set as required.
 	 * @return true if and only if occurrence is set as required.
 	 */
+	@Override
 	public final boolean isRequired() {return _occ.isRequired();}
 
-	@Override
 	/** Return true if value of occurrence is set as optional.
 	 * @return true if and only if occurrence is set as optional.
 	 */
+	@Override
 	public final boolean isOptional() {return _occ.isOptional();}
 
-	@Override
 	/** Return true if value of occurrence is set as unbounded.
 	 * @return true if and only if occurrence is set as unbounded.
 	 */
+	@Override
 	public final boolean isUnbounded() {return _occ.isUnbounded();}
 
-	@Override
 	/** Return true if minimum is greater then 0 and maximum is unbounded.
 	 * @return true if and only if minimum is greater then 0 and maximum is unbounded.
 	 */
+	@Override
 	public final boolean isMaxUnlimited() {return _occ.isMaxUnlimited();}
 
-	@Override
 	/** Get occurrence.
 	 * @return Occurrence of this node.
 	 */
+	@Override
 	public final XMOccurrence getOccurence() {return new XOccurrence(_occ);}
 
 ////////////////////////////////////////////////////////////////////////////////

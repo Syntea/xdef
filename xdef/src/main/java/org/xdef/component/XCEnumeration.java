@@ -7,9 +7,9 @@ public interface XCEnumeration {
 	 */
 	public Object itemValue();
 
-	@Override
 	/** Get string which is used to create enumeration.
 	 * @return string which is used to create enumeration.
 	 */
+	@Override
 	public String toString();
 }

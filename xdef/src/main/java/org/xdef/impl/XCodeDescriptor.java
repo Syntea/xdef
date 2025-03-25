@@ -302,79 +302,94 @@ public abstract class XCodeDescriptor extends XNode {
 		setSPosition(xr.readSPosition());
 		setXDPosition(xr.readString());
 	}
-	@Override
+
 	/** Initialize code or -1.
 	 * @return address of initialize code.
 	 */
-	public final int getInitCode() {return _init;}
 	@Override
+	public final int getInitCode() {return _init;}
+
 	/** Finally code or -1.
 	 * @return address of finally code or -1.
 	 */
-	public final int getFinallyCode() {return _finaly;}
 	@Override
+	public final int getFinallyCode() {return _finaly;}
+
 	/** Match code or -1.
 	 * @return address of match code or -1.
 	 */
-	public final int getMatchCode() {return _match;}
 	@Override
+	public final int getMatchCode() {return _match;}
+
 	/** Compose action code or -1.
 	 * @return address of compose action code or -1.
 	 */
-	public final int getComposeCode() {return _compose;}
 	@Override
+	public final int getComposeCode() {return _compose;}
+
 	/** Check value of attribute or text node code or -1.
 	 * @return address of code of check value method or -1.
 	 */
-	public final int getCheckCode() {return _check;}
 	@Override
+	public final int getCheckCode() {return _check;}
+
 	/** Type check passed code or -1.
 	 * @return address of check passed method code or -1.
 	 */
-	public final int getOnTrueCode() {return _onTrue;}
 	@Override
+	public final int getOnTrueCode() {return _onTrue;}
+
 	/** Type check failed code or -1.
 	 * @return address of failed method code or -1.
 	 */
-	public final int getOnFalseCode() {return _onFalse;}
 	@Override
+	public final int getOnFalseCode() {return _onFalse;}
+
 	/** If text object is missing code or -1.
 	 * @return address of text object is missing code or -1.
 	 */
-	public final int getDefltCode() {return _deflt;}
 	@Override
+	public final int getDefltCode() {return _deflt;}
+
 	/** On start of element (all source attributes are accessible) code or -1.
 	 * @return address of on start of element method code or -1
 	 */
-	public final int getOnStartElementCode() {return _onStartElement;}
 	@Override
+	public final int getOnStartElementCode() {return _onStartElement;}
+
 	/** OnAbsence code or -1.
 	 * @return address of onAbsence code or -1.
 	 */
-	public final int getOnAbsenceCode() {return _onAbsence;}
 	@Override
+	public final int getOnAbsenceCode() {return _onAbsence;}
+
 	/** OnExcess  code or -1.
 	 * @return address of onExcess  code or -1.
 	 */
-	public final int getOnExcessCode() {return _onExcess;}
 	@Override
+	public final int getOnExcessCode() {return _onExcess;}
+
 	/** Occurrence of illegal attribute code or -1.
 	 * @return address of occurrence of illegal attribute code or -1.
 	 */
-	public final int getOnIllegalAttrCode() {return _onIllegalAttr;}
 	@Override
+	public final int getOnIllegalAttrCode() {return _onIllegalAttr;}
+
 	/** Occurrence of illegal text node code or -1.
 	 * @return address of occurrence of illegal text node code or -1.
 	 */
-	public final int getOnIllegalTextCode() {return _onIllegalText;}
 	@Override
+	public final int getOnIllegalTextCode() {return _onIllegalText;}
+
 	/** occurrence of illegal element code or -1.
 	 * @return address of occurrence of illegal element code or -1.
 	 */
-	public final int getOnIllegalElementCode() {return _onIllegalElement;}
 	@Override
+	public final int getOnIllegalElementCode() {return _onIllegalElement;}
+
 	/** Variables initialization code or -1.
 	 * @return address of variables initialization code or -1.
 	 */
+	@Override
 	public final int getVarinitCode() {return _varinit;}
 }

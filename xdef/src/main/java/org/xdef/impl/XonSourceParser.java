@@ -179,21 +179,22 @@ public final class XonSourceParser implements XonParser, XParser {
 ////////////////////////////////////////////////////////////////////////////////
 // Interface JParser
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Put value to result.
 	 * @param value JValue to be added to result object.
-	 * @return null or name of pair if value pair already exists in the currently processed map.
 	 */
+	@Override
 	public void putValue(final XonTools.JValue value) {
 		_value = value;
 		elementStart(new SBuffer(X_VALUE, value.getPosition()));
 		elementEnd();
 	}
-	@Override
+
 	/** Set name of value pair.
 	 * @param name value name.
 	 * @return true if the name of pair already exists otherwise return false.
 	 */
+	@Override
 	public boolean namedValue(final SBuffer name) {
 		String s = name.getString();
 		boolean result = false;
@@ -206,52 +207,61 @@ public final class XonSourceParser implements XonParser, XParser {
 		_names.push(_name = name);
 		return result;
 	}
-	@Override
+
 	/** Array started.
 	 * @param pos source position.
 	 */
-	public void arrayStart(final SPosition pos) {elementStart(new SBuffer(X_ARRAY, pos));}
 	@Override
+	public void arrayStart(final SPosition pos) {elementStart(new SBuffer(X_ARRAY, pos));}
+
 	/** Array ended.
 	 * @param pos source position.
 	 */
-	public void arrayEnd(final SPosition pos) {elementEnd();}
 	@Override
+	public void arrayEnd(final SPosition pos) {elementEnd();}
+
 	/** Map started.
 	 * @param pos source position.
 	 */
+	@Override
 	public void mapStart(final SPosition pos) {
 		elementStart(new SBuffer(X_MAP, pos));
 		_mapNames.push(_names = new Stack<>());
 	}
-	@Override
+
 	/** Map ended.
 	 * @param pos source position.
 	 */
+	@Override
 	public void mapEnd(final SPosition pos) {elementEnd();_names = _mapNames.pop();}
 
-	@Override
+
 	/** Processed comment.
 	 * @param value SBuffer with the value of comment.
 	 */
-	public void comment(SBuffer value){/*we ingore it here*/}
 	@Override
+	public void comment(SBuffer value){/*we ingore it here*/}
+
 	/** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value value of item.
 	 */
-	public void xdScript(final SBuffer name, SBuffer value) {}
 	@Override
+	public void xdScript(final SBuffer name, SBuffer value) {}
+
 	/** Get result of parser (not supported here). */
+	@Override
 	public final Object getResult(){throw new SUnsupportedOperationException();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XParser
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
+
 	/** Parse source.
 	 * @param chkDoc The ChkDocument object.
 	 */
+	@Override
 	public void xparse(final XDDocument chkDoc) {
 		_chkDoc = (ChkDocument) chkDoc;
 		_doc = _chkDoc._doc;
@@ -263,15 +273,16 @@ public final class XonSourceParser implements XonParser, XParser {
 		_doc = null;
 		_chkEl = null;
 	}
-	@Override
+
 	/** Get connected reporter.
 	 * @return connected SReporter.
 	 */
-	public SReporter getReporter() {return _chkDoc.getReporter();}
 	@Override
-	/** Close reader of parsed data. */
-	public void closeReader() {try {_p.closeReader();} catch (Exception ex) {}} // ignore exception
+	public SReporter getReporter() {return _chkDoc.getReporter();}
 
+	/** Close reader of parsed data. */
+	@Override
+	public void closeReader() {try {_p.closeReader();} catch (Exception ex) {}} // ignore exception
 
 	////////////////////////////////////////////////////////////////////////////
 	/** XML W3C parser of XON/JSON object from XON/JSON object.
@@ -310,18 +321,25 @@ public final class XonSourceParser implements XonParser, XParser {
 ////////////////////////////////////////////////////////////////////////////////
 // implementation of the interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public SPosition getPosition() {return NULPOS;} // no position here
+
 		@Override
 		public void parse() {parse(_obj);}
+
 		@Override
 		public void closeReader() {} // ignored here
+
 		@Override
 		public void setXdefMode() {} // ignored here
+
 		@Override
 		public void setReportWriter(ReportWriter reporter) {} // ignored here
+
 		@Override
 		public void setXonMode() {}
+
 		@Override
 		public void setJsonMode() {}
 	}

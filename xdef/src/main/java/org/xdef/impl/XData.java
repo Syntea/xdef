@@ -89,9 +89,9 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 // impemetation of method from interfaces.
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Write this XDATA to XDWriter. */
 	// This method can't be final, it can be overwritten!
+	@Override
 	public void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
 		xw.writeShort(_valueType);
@@ -99,10 +99,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		xw.writeString(_refTypeName);
 	}
 
-	@Override
 	/** Get value specified as default.
 	 * @return value specified as default or return null if there was not specified a default value.
 	 */
+	@Override
 	public final XDValue getDefaultValue() {
 		if (_deflt < 0) {
 			return null;
@@ -115,10 +115,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		return x;
 	}
 
-	@Override
 	/** Get value specified as fixed.
 	 * @return value specified as fixed or return null if there was not specified a default value.
 	 */
+	@Override
 	public final XDValue getFixedValue() {
 		if (_onAbsence < 0) {
 			return null;
@@ -140,10 +140,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		return code[j + 1];
 	}
 
-	@Override
 	/** Get type name of value.
 	 * @return type name of data value.
 	 */
+	@Override
 	public final String getValueTypeName() {
 		int xs = _check; //start of code of parse method.
 		if (xs >= 0) {
@@ -177,58 +177,58 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		return _valueTypeName;
 	}
 
-	@Override
 	/** Get reference name to declared type.
 	 * @return reference name to declared type or null if not reference.
 	 */
+	@Override
 	public final String getRefTypeName() {return _refTypeName;}
 
-	@Override
 	/** Check if the value type is declared as local within the X-definition.
 	 * @return true if the value type is declared as local within the X-definition.
 	 */
+	@Override
 	public final boolean isLocalType() {return getXMDefinition().isLocalName(_refTypeName);}
 
-	@Override
 	/** Get parser used for parsing of value.
 	 * @return XDParser or XDValue of executed code.
 	 */
+	@Override
 	public final XDValue getParseMethod() {return getParseMethod(_check, ((XPool) getXDPool()).getCode());}
 
-	@Override
 	/** Get parameters of parsing method.
 	 * @return XDParser or null if parser is not available.
 	 */
+	@Override
 	public final XDContainer getParseParams() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
 			? ((XDParser) p).getNamedParams() : new DefContainer();
 	}
 
-	@Override
 	/** Get type of parsed value.
 	 * @return value from org.xdef.XDValueTypes.
 	 */
+	@Override
 	public final short getParserType() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
 			? ((XDParser) p).parsedType() : XD_STRING;
 	}
 
-	@Override
 	/** Get type of parsed value or items of parsed list or union.
 	 * @return value from org.xdef.XDValueTypes.
 	 */
+	@Override
 	public short getAlltemsType() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
 			? ((XDParser) p).getAlltemsType(): XD_STRING;
 	}
 
-	@Override
 	/** Get datetime mask from the model parser.
 	 * @return mask of datetime type or <i>null</i>.
 	 */
+	@Override
 	public final String getDateMask() {
 		XDValue p = getParseMethod();
 		if (p != null && p.getItemId()==XD_PARSER && p instanceof XDParser) {
@@ -262,10 +262,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		return null;
 	}
 
-	@Override
 	/** Get name parser (i.e. "base64Binary" or "hexBinary").
 	 * @return name of parser or empty string.
 	 */
+	@Override
 	public final String getParserName() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
@@ -327,10 +327,10 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 	 */
 	public final void setRefTypeName(final String x) {_refTypeName = x;}
 
-	@Override
 	/** Get XMDefinition assigned to this node.
 	 * @return XMDefintion node.
 	 */
+	@Override
 	public final XMDefinition getXMDefinition() {
 		String s = getXDPosition();
 		int ndx = s == null ? -1 : s.indexOf("#");

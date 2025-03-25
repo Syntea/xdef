@@ -56,6 +56,8 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("a.b@a.b.t", "", "a.b@a.b.t"));
 		assertTrue(parseEmail("a_b@a.b.t", "", "a_b@a.b.t"));
 		assertTrue(parseEmail("a.b@a.b-c1.c-z", "", "a.b@a.b-c1.c-z"));
+		assertTrue(parseEmail("a-b-d@z.t", "", "a-b-d@z.t"));
+		assertTrue(parseEmail("E.F@z--c-x.cz", "", "E.F@z--c-x.cz")); // '--' in domain is OK!
 		assertTrue(parseEmail("a.b-c1.č-z@a.b-c1.č-z.t", "", "a.b-c1.č-z@a.b-c1.č-z.t"));
 		assertTrue(parseEmail("a@b.t(Jo Do)", "Jo Do", "a@b.t"));
 		assertTrue(parseEmail("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.c.t", "", "ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.c.t"));
@@ -112,10 +114,8 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("-Joe.Blow@example.com", null, null)); // local part starts with '-'
 		assertFalse(parseEmail("Joe.Blow-@example.com", null, null)); // local part ends with '-'
 		assertFalse(parseEmail("Joe..Blow@example.com", null, null)); // '..' in local part
-		assertFalse(parseEmail("Joe--Blow@example.com", null, null)); // '--' in local part
 		assertFalse(parseEmail("Joe.-Blow@example.com", null, null)); // '.-' in local part
 		assertFalse(parseEmail("E.F@z..cz", null, null)); // '..' in domain
-		assertFalse(parseEmail("E.F@z--cz", null, null)); // '--' in domain
 		assertFalse(parseEmail("E.F@-z.cz", null, null)); // domain starts with '-'
 		assertFalse(parseEmail("E.F@z.cz-", null, null)); // domain ends with '-'
 		assertFalse(parseEmail("E.F@.z.cz", null, null)); // domain starts with '.'
@@ -131,6 +131,8 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("u@[IPv6:2001:db8::1]", null, null)); // IP address not allowed
 		assertFalse(parseEmail("\" \"@strange.ex.com.t", null, null)); // Quoted_string is illegal
 		assertFalse(parseEmail("Joe.\\@Blow@example.com.t", null, null)); // Escape character not allowed
+		assertFalse(parseEmail("Joe--Blow@example.com", null, null)); // '--' in local part
+		assertFalse(parseEmail("a--b-d@z.t", null, null)); // '--' in local part
 		assertFalse(parseEmail("!\\@+@example.com.t", null, null)); // more then one '@'
 		assertFalse(parseEmail("!\\\\@@example.com.t", null, null)); // more then one '@'
 /*#end*/

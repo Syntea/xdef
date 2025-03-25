@@ -3417,13 +3417,13 @@ public final class XCodeProcessor {
 
 	public class XDFunctionResolver implements XPathFunctionResolver {
 		@Override
-		//TODO
-		public XPathFunction resolveFunction(final QName functionName, final int arity) { return null;}
+		public XPathFunction resolveFunction(final QName functionName, final int arity) { return null;} //TODO
 	}
 
 	public class XDVariableResolver implements XPathVariableResolver {
 		public final boolean XPATH2 = DefXPathExpr.isXPath2();
 		public boolean convertToString;
+
 		@Override
 		public Object resolveVariable(final QName qname) {
 			String name = qname.toString();
@@ -3529,18 +3529,23 @@ public final class XCodeProcessor {
 		////////////////////////////////////////////////////////////////////////
 		// XDValue methods
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public final short getItemId() {return XD_ANY;}
+
 		@Override
 		public final XDValueType getItemType() {return OBJECT;}
 
 		////////////////////////////////////////////////////////////////////////
 		// XDCallItem methods
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public final XDCallItem getParentCallItem() {return _parent;}
+
 		@Override
 		public final int getDebugMode() {return _step;}
+
 		@Override
 		public final int getReturnAddr() {return _returnAddr;}
 	}

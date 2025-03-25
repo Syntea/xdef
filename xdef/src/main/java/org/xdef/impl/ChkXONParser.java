@@ -239,10 +239,10 @@ final class ChkXONParser implements XParser, XonParser {
 // Implementation of XParser
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Parse XML generated from XON source.
 	 * @param chkDoc The ChkDocument object.
 	 */
+	@Override
 	public final void xparse(final XDDocument chkDoc) {
 		try {
 			_level = -1;
@@ -291,13 +291,15 @@ final class ChkXONParser implements XParser, XonParser {
 			throw new SRuntimeException(e.getReport(), e.getCause());
 		}
 	}
-	@Override
+
 	/** Get connected reporter.
 	 * @return connected SReporter.
 	 */
-	public final SReporter getReporter() {return _sReporter;}
 	@Override
+	public final SReporter getReporter() {return _sReporter;}
+
 	/** Close reader of parsed data. */
+	@Override
 	public final void closeReader() {
 		if (_in != null) {
 			try {_in.close();} catch (IOException ex) {} // ignore mexception
@@ -308,10 +310,10 @@ final class ChkXONParser implements XParser, XonParser {
 // Implementation of XonParser
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Put value to result.
 	 * @param value JValue to be added to result object.
 	 */
+	@Override
 	public void putValue(final XonTools.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
@@ -320,12 +322,13 @@ final class ChkXONParser implements XParser, XonParser {
 			genItem(value, null);
 		}
 	}
-	@Override
+
 	/** Set name of value pair.
 	 * @param name value name.
 	 * @param name value name.
 	 * @return true if the name of pair already exists otherwise return false.
 	 */
+	@Override
 	public final boolean namedValue(final SBuffer name) {
 		boolean result = false;
 		String s = name.getString();
@@ -338,10 +341,11 @@ final class ChkXONParser implements XParser, XonParser {
 		_names.push(name);
 		return result;
 	}
-	@Override
+
 	/** Array started.
 	 * @param pos source position.
 	 */
+	@Override
 	public final void arrayStart(final SPosition pos) {
 		KParsedElement kelem = genKElem(XonNames.X_ARRAY, XDConstants.XON_NS_URI_W, pos);
 		if (_kind == 2) { // map
@@ -351,19 +355,21 @@ final class ChkXONParser implements XParser, XonParser {
 		elementStart(kelem);
 		_kinds.push(_kind = 1);
 	}
-	@Override
+
 	/** Array ended.
 	 * @param pos source position.
 	 */
+	@Override
 	public final void arrayEnd(final SPosition pos) {
 		_kinds.pop();
 		_kind = _kinds.peek();
 		elementEnd();
 	}
-	@Override
+
 	/** Map started.
 	 * @param pos source position.
 	 */
+	@Override
 	public final void mapStart(final SPosition pos) {
 		KParsedElement kelem = genKElem(XonNames.X_MAP, XDConstants.XON_NS_URI_W, pos);
 		if (_kind == 2) { // map
@@ -374,28 +380,34 @@ final class ChkXONParser implements XParser, XonParser {
 		_mapNames.push(_names = new Stack<>());
 		_kinds.push(_kind = 2);
 	}
-	@Override
+
 	/** Map ended.
 	 * @param pos source position.
 	 */
+	@Override
 	public final void mapEnd(final SPosition pos) {
 		_kinds.pop();
 		_kind = _kinds.peek();
 		elementEnd();
 		_names = _mapNames.pop();
 	}
-	@Override
+
 	/** Processed comment.
 	 * @param value SBuffer with the value of comment.
 	 */
-	public final void comment(final SBuffer value){} // we ingore it here
 	@Override
-	/** Xscript item parsed (not used methods for XON/JSON parsing, used in X-definition compiler).
+	public final void comment(final SBuffer value){} // we ingore it here
+
+	/** X-script item parsed (not used methods for XON/JSON parsing, used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value of item.
 	 */
-	public final void xdScript(final SBuffer name, final SBuffer value) {}
+
 	@Override
+	public final void xdScript(final SBuffer name, final SBuffer value) {}
+
+
 	/** Get result of parser (not supported here). */
+	@Override
 	public final Object getResult(){throw new SUnsupportedOperationException();}
 }

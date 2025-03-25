@@ -81,74 +81,76 @@ public class XOccurrence implements XMOccurrence {
 // XMOccurrence interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get min occurrence.
 	 * @return min occurrence.
 	 */
+	@Override
 	public final int minOccurs() {return _min;}
 
-	@Override
 	/** Get max occurrence.
 	 * @return max occurrence.
 	 */
+	@Override
 	public final int maxOccurs() {return _max;}
 
-	@Override
 	/** Return true if value of occurrence had been specified.
 	 * @return true if and only if occurrence is specified.
 	 */
+	@Override
 	public final boolean isSpecified() {return _min != UNDEFINED;}
 
 
-	@Override
 	/** Return true if value of occurrence is set as illegal.
 	 * @return true if and only if occurrence is set as illegal.
 	 */
+	@Override
 	public final boolean isIllegal() {return _min == ILLEGAL;}
 
-	@Override
 	/** Return true if value of occurrence is set as ignored.
 	 * @return true if and only if occurrence is set as ignored.
 	 */
+	@Override
 	public final boolean isIgnore() {return _min == IGNORE;}
 
-	@Override
 	/** Return true if value of occurrence is set as fixed.
 	 * @return true if and only if occurrence is set as fixed.
 	 */
+	@Override
 	public final boolean isFixed() {return _min == XData.FIXED && _max == 1;}
 
-	@Override
 	/** Return true if value of occurrence is set as required.
 	 * @return true if and only if occurrence is set as required.
 	 */
+	@Override
 	public final boolean isRequired() {return _min == 1 && _max == 1;}
 
-	@Override
 	/** Return true if value of occurrence is set as optional.
 	 * @return true if and only if occurrence is set as optional.
 	 */
+	@Override
 	public final boolean isOptional() {return _min == 0 && _max == 1;}
 
-	@Override
 	/** Return true if value of occurrence is set as unbounded.
 	 * @return true if and only if occurrence is set as unbounded.
 	 */
+	@Override
 	public final boolean isUnbounded() {return _min == 0 && _max == Integer.MAX_VALUE;}
 
-	@Override
 	/** Return true if minimum is greater then 0 and maximum is unbounded.
 	 * @return true if and only if minimum is greater then 0 and
 	 * maximum is unbounded..
 	 */
+	@Override
 	public final boolean isMaxUnlimited() {return _min > 0 && _max == Integer.MAX_VALUE;}
 
 	////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public String toString() {return toString(true);}
+
 	@Override
 	public int hashCode() {return 31 * (_min + 217) + _max;} //217 == 7 * 31
+
 	@Override
 	public boolean equals(final Object o) {
 		return (o instanceof XMOccurrence) ? equals((XMOccurrence) o) : false;
@@ -157,6 +159,7 @@ public class XOccurrence implements XMOccurrence {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods added to XMOccurrence
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** Compare with other XMOccurrence.
 	 * @param x XMOccurrence to be compared.
 	 * @return true if and only if the occurrence value from the argument x is equal to this object.

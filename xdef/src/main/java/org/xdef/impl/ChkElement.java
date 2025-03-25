@@ -2454,10 +2454,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_xPos = xPos;
 		return false;
 	}
-	@Override
+
 	/** Get name of actual node.
 	 * @return The name of node.
 	 */
+	@Override
 	public final String getNodeName() {
 		if (getItemId() != XX_ELEMENT) {
 			return _attName;
@@ -2469,18 +2470,20 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			return null;
 		}
 	}
-	@Override
+
 	/** Get namespace URI of actual node.
 	 * @return namespace URI or null.
 	 */
+	@Override
 	public final String getNodeURI() {
 		return (getItemId() != XX_ELEMENT) ? _attURI : _element != null ? _element.getNamespaceURI() : null;
 	}
-	@Override
+
 	/** Store model variable.
 	 * @param name name of variable.
 	 * @param val value to be stored.
 	 */
+	@Override
 	final void storeModelVariable(final String name, final XDValue val) {
 		int addr = findModelVariableOffset(name);
 		if (addr < 0) {
@@ -2489,65 +2492,74 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_variables[addr] = val;
 		}
 	}
-	@Override
+
 	/** Load model variable.
 	 * @param name name of variable.
 	 * @return loaded value.
 	 */
+	@Override
 	public final XDValue loadModelVariable(final String name) {
 		int addr = findModelVariableOffset(name);
 		return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
 	}
-	@Override
+
 	/** Set this element will be forgotten after being processed.*/
-	public final void forgetElement() {_forget = true;}
 	@Override
+	public final void forgetElement() {_forget = true;}
+
 	/** Increase reference counter by one.
 	 * @return The increased reference number.
 	 */
-	final int incRefNum() {return _actDefIndex < 0 ? 0 : ++_counters[_actDefIndex];}
 	@Override
+	final int incRefNum() {return _actDefIndex < 0 ? 0 : ++_counters[_actDefIndex];}
+
 	/** Decrease reference counter by one.
 	 * @return The increased reference number.
 	 */
-	final int decRefNum() {return _actDefIndex < 0 ? 0 : --_counters[_actDefIndex];}
 	@Override
+	final int decRefNum() {return _actDefIndex < 0 ? 0 : --_counters[_actDefIndex];}
+
 	/** Get reference counter of actual node
 	 * @return The reference number.
 	 */
-	public final int getRefNum() {return _actDefIndex < 0 ? 0 : _counters[_actDefIndex];}
 	@Override
+	public final int getRefNum() {return _actDefIndex < 0 ? 0 : _counters[_actDefIndex];}
+
 	/** Get occurrence of actual element
 	 * @return The reference number.
 	 */
-	final int getOccurrence() {return _parent.getRefNum();}
 	@Override
+	final int getOccurrence() {return _parent.getRefNum();}
+
 	/** Get ChkElement assigned to this node.
 	 * @return ChkElement assigned to this node.
 	 */
-	final ChkElement getChkElement() {return this;}
 	@Override
+	final ChkElement getChkElement() {return this;}
+
 	/** Prepare construction of the new element according to X-definition.
 	 * @param qname qualified name of the element (prefixed).
 	 * @param ns NameSpace URI of the element.
 	 * @return created check element object.
 	 */
+	@Override
 	public final XXElement prepareXXElementNS(final String ns, final String qname) {
 		return createChkElement(ns == null ? _rootChkDocument._doc.createElement(qname)
 			: _rootChkDocument._doc.createElementNS(ns,qname));
 	}
-	@Override
+
 	/** Prepare construction of the new element according to X-definition.
 	 * @param name Tag name of the element.
 	 * @return created check element object.
 	 */
-	public final XXElement prepareXXElement(final String name) {return prepareXXElementNS(null, name);
-	}
 	@Override
+	public final XXElement prepareXXElement(final String name) {return prepareXXElementNS(null, name);}
+
 	/** Prepare construction of the new child according to X-definition.
 	 * @param model child model.
 	 * @return created XXElemnt element object.
 	 */
+	@Override
 	public final XXElement createChildXXElement(final XMElement model) {
 		String ns = model.getNSUri();
 		String qname = model.getName();
@@ -2555,20 +2567,22 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			: _rootChkDocument._doc.createElementNS(ns, qname);
 		return chkElem((XElement) model, el);
 	}
-	@Override
+
 	/** Add the new attribute to the current XXElement.
 	 * @param name name of attribute.
 	 * @param data value of attribute.
 	 * @return true if attribute was created according to X-definition.
 	 */
+	@Override
 	public final boolean addAttribute(final String name, final String data) {
 		return addAttributeNS(null, name, data);
 	}
-	@Override
+
 	/** This method is called when the end of the current element attribute list was parsed. The
 	 * implementation may check the list of attributes and may invoke appropriate actions.
 	 * @return true if element is compliant with X-definition.
 	 */
+	@Override
 	public final boolean checkElement() {
 		_parseResult = null;
 		if (_attsChecked) {
@@ -2705,11 +2719,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_parseResult = null;
 		return result;
 	}
-	@Override
+
 	/** Add new element as a child of the current element.
 	 * Checks all attributes and child elements for occurrence.
 	 * @return true if element was added and complies to X-definition.
 	 */
+	@Override
 	public final boolean addElement() {
 		if (_nil) {
 			debugXPos(XDDebug.FINALLY);
@@ -2990,12 +3005,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		closeChkElement();
 		return !error;
 	}
-	@Override
+
 	/** Add new Text node to current element.
 	 * @param data The value of text node.
 	 * @throws SRuntimeException if an error occurs.
 	 * @return true if text node is compliant with X-definition.
 	 */
+	@Override
 	public final boolean addText(final String data) {
 		if (_ignoreAll || _element  == null) {
 			return true; //all checks are ignored (undef element)
@@ -3312,31 +3328,33 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 	}
-	@Override
+
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
 	 * @return true if Comment node is compliant with X-definition.
 	 */
-	//TODO
-	public final boolean addComment(final String data) {return true;}
 	@Override
+	public final boolean addComment(final String data) {return true;} //TODO
+
 	/** Add new Processing instruction node to current element.
 	 * @param name The name of the PI node.
-	 * @param X The value of instruction part of the PI node.
+	 * @param x The value of instruction part of the PI node.
 	 * @throws SRuntimeException if an error occurs.
 	 * @return true if PI node is compliant with X-definition.
 	 */
-	//TODO
-	public final boolean addPI(final String name, final String x) {return true;}
 	@Override
+	public final boolean addPI(final String name, final String x) {return true;} //TODO
+
 	/** Get text value of this node.
 	 * @return The string with value of node.
 	 */
-	public final String getTextValue() {return (getItemId() != XX_ELEMENT) ? _data : null;}
 	@Override
+	public final String getTextValue() {return (getItemId() != XX_ELEMENT) ? _data : null;}
+
 	/** Set text value to this node.
 	 * @param data the text value to be set.
 	 */
+	@Override
 	public final void setTextValue(final String data) {
 		if (getItemId() != XX_ELEMENT) {
 			_data = data;
@@ -3345,14 +3363,16 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			throw new SRuntimeException(SYS.SYS083, "setText");
 		}
 	}
+
 	@Override
 	public final short getItemId() {return _mode == 'T' ? XX_TEXT : _mode == 'A'? XX_ATTR : XX_ELEMENT;}
-	@Override
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public final XDValueType getItemType() {return _mode == 'T' ? XXTEXT : _mode == 'A'? XXATTR : XXELEMENT;}
 	@Override
+	public final XDValueType getItemType() {return _mode == 'T' ? XXTEXT : _mode == 'A'? XXATTR : XXELEMENT;}
+
 	/** Get attribute with namespace from XXElement.
 	 * @param uri The namespace of attribute.
 	 * @param name The local name of attribute.
@@ -3360,6 +3380,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * SRuntimeException.
 	 * @throws SRuntimeException if the attribute is not legal in actual model.
 	 */
+	@Override
 	public final String getAttributeNS(final String uri, final String name) {
 		Attr att = (uri == null) ? _element.getAttributeNode(name) : _element.getAttributeNodeNS(uri,name);
 		if (att != null) {
@@ -3381,7 +3402,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		//Attempt to get undeclared item
 		throw new SRuntimeException(XDEF.XDEF581, getXPos() + "/@" + name);
 	}
-	@Override
+
 	/** Get attribute from the XXElement object.
 	 * @param name The name of attribute.
 	 * @return The value of attribute or the empty string if the value
@@ -3389,96 +3410,111 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * exist in the actual element.
 	 * @throws SRuntimeException if required attribute is not defined in the X-definition.
 	 */
-	public final String getAttribute(final String name) {return getAttributeNS(null, name);}
 	@Override
+	public final String getAttribute(final String name) {return getAttributeNS(null, name);}
+
 	/** Get work element value.
 	 * @return work element value.
 	 */
-	public final Element getElemValue() {return _elemValue;}
 	@Override
+	public final Element getElemValue() {return _elemValue;}
+
 	/** Set work element value.
 	 * @param e The element.
 	 */
-	final void setElemValue(final Element e) {_elemValue = e;}
 	@Override
+	final void setElemValue(final Element e) {_elemValue = e;}
+
 	/** Get root XXElement.
 	 * @return root XXElement node.
 	 */
-	public final XXElement getRootXXElement(){return _rootChkDocument._chkRoot;}
 	@Override
+	public final XXElement getRootXXElement(){return _rootChkDocument._chkRoot;}
+
 	/** Get actual associated XXElement.
 	 * @return root XXElement node.
 	 */
+	@Override
 	public final XXElement getXXElement() {return this;}
 
-	@Override
 	/** Get associated XML node.
 	 * @return the associated XML node.
 	 */
-	public final Node getXMLNode() {return _node;}
 	@Override
+	public final Node getXMLNode() {return _node;}
+
 	/** Get namespace context of corresponding XElement.
 	 * @return namespace context of the parent element.
 	 */
-	public final KNamespace getXXNamespaceContext() {return _xElement.getXDNamespaceContext();}
 	@Override
+	public final KNamespace getXXNamespaceContext() {return _xElement.getXDNamespaceContext();}
+
 	/** Check if attribute is legal in the XXElement.
 	 * @param name The name of attribute.
 	 * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
 	 */
+	@Override
 	public final boolean checkAttributeLegal(final String name) {
 		XData xatt = getXAttr(name);
 		return xatt != null && !xatt.isIllegal();
 	}
-	@Override
+
 	/** Check if attribute with given namespace is legal in the XXElement.
 	 * @param uri namespace URI.
 	 * @param name name of attribute (optionally with prefix).
 	 * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
 	 */
+	@Override
 	public final boolean checkAttributeNSLegal(final String uri, final String name) {
 		XData xatt = uri == null || uri.isEmpty() ? getXAttr(name) : getXAttr(uri, name);
 		return xatt != null && !xatt.isIllegal();
 	}
-	@Override
+
 	/** Get array of XXNodes or null.
 	 * @return array of XXNodes or null.
 	 */
+	@Override
 	public final XXNode[] getChildXXNodes() {
 		XXNode[] result = new XXNode[_chkChildNodes.size()];
 		_chkChildNodes.toArray(result);
 		return result;
 	}
+
 	@Override
 	final List<ChkElement> getChkChildNodes() {return _chkChildNodes;}
-	@Override
+
 	/** Get model of the processed data object.
 	 * @return model of the processed data object.
 	 */
-	public final XMData getXMData() {return _xdata;}
 	@Override
+	public final XMData getXMData() {return _xdata;}
+
 	/** Get actual model.
 	 * @return actual model.
 	 */
+	@Override
 	public final XMNode getXMNode() {
 		/** mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
 		* 'D' - document, 'P' - processing instruction,'U' undefined. */
 		return (_mode == (byte) 'A' || _mode == (byte) 'T') ? (XMNode) _xdata : (XMNode) _xElement;
 	}
-	@Override
+
 	/** Get XComponent.
 	 * @return The XComponent object (may be null).
 	 */
-	public final XComponent getXComponent() {return _xComponent;}
 	@Override
+	public final XComponent getXComponent() {return _xComponent;}
+
 	/** Set XComponent.
 	 * @param x XComponent object.
 	 */
-	public final void setXComponent(final XComponent x) {_xComponent = x;}
 	@Override
+	public final void setXComponent(final XComponent x) {_xComponent = x;}
+
 	/** Get XON result of processed Element model.
 	 * @return result of XON parsing.
 	 */
+	@Override
 	public Object getXon() {return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;}
 
 ////////////////////////////////////////////////////////////////////////////////

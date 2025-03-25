@@ -58,7 +58,9 @@ public final class GenXDefXML {
 	private final static class XAttr {
 		String _type;
 		boolean _required;
+
 		XAttr(String type) {_type = type; _required = true;}
+
 		@Override
 		public String toString() {return (_required ? "" : "optional ") + _type;}
 	}

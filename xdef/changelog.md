@@ -1,6 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.24, release-date 2025-03-24
+# Version 42.2.24, release-date 2025-03-25
+* Fixed error when parsing eamil address when the domain part contains several consecutive hypen characters.
 * Fixed NullPointerException in method `org.xdef.XDDocument.getXon()` if it was option forget in X-definition.
 
 # Version 42.2.23, release-date 2025-03-14
