@@ -106,7 +106,8 @@ public final class BNFGrammar {
 		"false",  				//42
 		"skipToNextLine",		//43
 		"UTFChar",				//44
-		"stop",  				//45
+		"emoji",				//45
+		"stop",  				//46
 	};
 
 	/** Inline methods code identifiers. */
@@ -155,7 +156,8 @@ public final class BNFGrammar {
 	private static final int INL_FALSE = INL_TRUE + 1;
 	private static final int INL_SKIPTONEXTLINE = INL_FALSE + 1;
 	private static final int INL_UTFCHAR = INL_SKIPTONEXTLINE + 1;
-	private static final int INL_STOP = INL_UTFCHAR + 1;
+	private static final int INL_EMOJI = INL_UTFCHAR + 1;
+	private static final int INL_STOP = INL_EMOJI + 1;
 
 	/** Parser used to parse source data. */
 	private StringParser _p;
@@ -1863,6 +1865,7 @@ public final class BNFGrammar {
 						return true;
 					}
 					return false;
+				case INL_EMOJI:	return _p.isEmoji() != SParser.NOCHAR;
 				case INL_STOP:
 					if (_param != null) {
 						pushObject("STOP " + _param);

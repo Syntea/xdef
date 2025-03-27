@@ -15,6 +15,7 @@ import static org.xdef.XDValueType.PARSERESULT;
 import org.xdef.msg.SYS;
 import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
 
 /** DefParseResult contains the source and results of parsing.
  * @author Vaclav Trojan
@@ -264,6 +265,15 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	public final char isLetterOrDigit() {
 		char c;
 		if (_pos >= _src.length() || !Character.isLetterOrDigit(c = _src.charAt(_pos))) {
+			return NOCHAR;
+		}
+		_pos++;
+		return c;
+	}
+	@Override
+	public final char isEmoji() {
+		char c;
+		if (_pos >= _src.length() || !StringParser.isEmoji(String.valueOf(c = _src.charAt(_pos)))) {
 			return NOCHAR;
 		}
 		_pos++;

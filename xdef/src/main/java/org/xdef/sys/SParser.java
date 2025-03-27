@@ -158,6 +158,11 @@ public interface SParser {
 	 */
 	public char isLetterOrDigit();
 
+	/** Check if at the current position is Emoji character.
+	 * @return digital value of digit or -1;
+	 */
+	public char isEmoji();
+
 	/** Get current character from source and set position to the next
 	 * character. If the current position is at the end of source return zero.
 	 * @return current character or zero.

@@ -2,6 +2,8 @@
 
 # Version 42.2.25, release-date 2025-03-27
 * Fixed error when parsing email address when the local part contains several consecutive hypen characters.
+* The `boolean isEmoji()` method has been added to the `org.xdef.sys.SParser` interface, which returns
+  the value of the character if it is an emoji and moves to the next character or returns the value `NOCHAR`.
 
 # Version 42.2.24, release-date 2025-03-25
 * Fixed error when parsing email address when the domain part contains several consecutive hypen characters.

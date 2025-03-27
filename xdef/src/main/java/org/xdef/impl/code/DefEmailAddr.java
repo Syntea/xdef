@@ -34,7 +34,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
 "dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
 
-/*#if RFC5321*#/
 // START RFC5321
 "IPv4          ::= Snum ('.'  Snum){3}\n"+
 "Snum          ::= ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
@@ -61,20 +60,19 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
 "atext         ::= ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-"Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
+"Mailbox       ::= Local_part brComment? '@' brComment? ( address | Domain ) $rule\n"+
 // END RFC5321
-/*#else*/
 // START not RFC5321 (i.e. RFC2822?)
-"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
-"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
-"Mailbox       ::= Local_part '@' Domain $rule\n"+
-// END not RFC5321 (i.e. RFC2822?)
-/*#end*/
+//"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
+//"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
+//"Mailbox       ::= Local_part '@' Domain $rule\n"+
+//// END not RFC5321 (i.e. RFC2822?)
 
 "Atom          ::= atext ('-'+ atext)*\n" +
 "Dot_string    ::= Atom ('.'  Atom)*\n" +
 "comment       ::= ( commentList $rule ) FWS?\n"+
-"commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
+"brComment     ::= '(' commentPart* ')'\n" +
+"commentList   ::= ( FWS? brComment )+\n"+
 "commentPart   ::= ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+
 "text          ::= ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
 "textItem      ::= FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
@@ -177,7 +175,14 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			p.isSpaces();
 			if (localPart != null && domain != null) {
 				localPart = removeWS(localPart);
+				int ndx = localPart.lastIndexOf('(');
+				if (ndx > 0 && localPart.endsWith(")")) { // remove comment from local part
+					localPart = localPart.substring(0, ndx);
+				}
 				domain = removeWS(domain);
+				if (domain.indexOf('(') == 0 && (ndx = domain.indexOf(')')) > 0 && ndx + 1 < domain.length()){
+					domain = domain.substring(ndx + 1); //remove comment from domain
+				}
 				if (localPart.length() <= 64 && domain.length() <= 256) {
 					return new String[] {parsedString, localPart, domain, userName};
 				}
