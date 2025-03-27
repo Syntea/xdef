@@ -57,6 +57,7 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("a_b@a.b.t", "", "a_b@a.b.t"));
 		assertTrue(parseEmail("a.b@a.b-c1.c-z", "", "a.b@a.b-c1.c-z"));
 		assertTrue(parseEmail("a-b-d@z.t", "", "a-b-d@z.t"));
+		assertTrue(parseEmail("a--b-d@z.t", "", "a--b-d@z.t")); // '--' in local part is OK!
 		assertTrue(parseEmail("E.F@z--c-x.cz", "", "E.F@z--c-x.cz")); // '--' in domain is OK!
 		assertTrue(parseEmail("a.b-c1.č-z@a.b-c1.č-z.t", "", "a.b-c1.č-z@a.b-c1.č-z.t"));
 		assertTrue(parseEmail("a@b.t(Jo Do)", "Jo Do", "a@b.t"));
@@ -80,6 +81,7 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("rkhbvs+rixo@xg.t", "", "rkhbvs+rixo@xg.t"));
 		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t"));
 		assertTrue(parseEmail("Joe.\\\\Blow@example.com.t", "", "Joe.\\\\Blow@example.com.t"));
+		assertFalse(parseEmail("!\\\\\\@@example.com.t", null, null));
 
 /*#if RFC5321*#/
 		assertTrue(parseEmail("\" \"@strange.ex.com.t", "", "\"\"@strange.ex.com.t"));
@@ -131,8 +133,6 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("u@[IPv6:2001:db8::1]", null, null)); // IP address not allowed
 		assertFalse(parseEmail("\" \"@strange.ex.com.t", null, null)); // Quoted_string is illegal
 		assertFalse(parseEmail("Joe.\\@Blow@example.com.t", null, null)); // Escape character not allowed
-		assertFalse(parseEmail("Joe--Blow@example.com", null, null)); // '--' in local part
-		assertFalse(parseEmail("a--b-d@z.t", null, null)); // '--' in local part
 		assertFalse(parseEmail("!\\@+@example.com.t", null, null)); // more then one '@'
 		assertFalse(parseEmail("!\\\\@@example.com.t", null, null)); // more then one '@'
 /*#end*/

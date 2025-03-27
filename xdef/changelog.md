@@ -1,11 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.25, release-date 2025-03-25
-* .
+# Version 42.2.25, release-date 2025-03-27
+* Fixed error when parsing email address when the local part contains several consecutive hypen characters.
 
 # Version 42.2.24, release-date 2025-03-25
-* Fixed error when parsing eamil address when the domain part contains several consecutive hypen characters.
-* Fixed NullPointerException in method `org.xdef.XDDocument.getXon()` if it was option forget in X-definition.
+* Fixed error when parsing email address when the domain part contains several consecutive hypen characters.
+* Fixed NullPointerException exception in the `org.xdef.XDDocument.getXon()` method if the `forget` option was
+  specified in the X-definition model.
 
 # Version 42.2.23, release-date 2025-03-14
 * If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), then an XDEF823

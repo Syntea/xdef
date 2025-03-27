@@ -71,7 +71,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 // END not RFC5321 (i.e. RFC2822?)
 /*#end*/
 
-"Atom          ::= atext ('-' atext)*\n" +
+"Atom          ::= atext ('-'+ atext)*\n" +
 "Dot_string    ::= Atom ('.'  Atom)*\n" +
 "comment       ::= ( commentList $rule ) FWS?\n"+
 "commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
