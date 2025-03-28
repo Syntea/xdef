@@ -33,7 +33,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "General_addr  ::= Std_tag ':' ( dcontent )+\n" +
 "Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
 "dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
-
 // START RFC5321
 "IPv4          ::= Snum ('.'  Snum){3}\n"+
 "Snum          ::= ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
@@ -41,8 +40,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
 "IPv6_full     ::= IPv6_hex ( ':' IPv6_hex ){7}\n" +
 "IPv6_comp     ::= ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
-			   // The '::' represents at least 2 16-bit groups of
-			   // zeros. No more than 6 groups in addition to the '::' may be present.
+			   // The '::' represents at least 2 16-bit groups of zeros.
+			   // No more than 6 groups in addition to the '::' may be present.
 "IPv6v4_full   ::= IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
 "IPv6v4_comp   ::= ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
 "                  ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
@@ -61,9 +60,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "atext         ::= ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
 "Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
-/**** comment before/after '@'	??? *
-"Mailbox       ::= Local_part commentList? '@' commentList? ( address | Domain ) $rule\n"+
-****/
 // END RFC5321
 // START not RFC5321 (i.e. RFC2822?)
 //"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
