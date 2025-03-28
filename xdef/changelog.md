@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.26, release-date 2025-03-28
+* .
+
 # Version 42.2.25, release-date 2025-03-28
 * Fixed error when parsing email address when the local part contains several consecutive hypen characters.
 * A new method `boolean isEmoji()` has been added to the `org.xdef.sys.SParser` interface. If the current
