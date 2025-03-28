@@ -60,7 +60,10 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
 "atext         ::= ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
 "Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-"Mailbox       ::= Local_part brComment? '@' brComment? ( address | Domain ) $rule\n"+
+"Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
+/**** comment before/after '@'	??? *
+"Mailbox       ::= Local_part commentList? '@' commentList? ( address | Domain ) $rule\n"+
+****/
 // END RFC5321
 // START not RFC5321 (i.e. RFC2822?)
 //"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
@@ -71,8 +74,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Atom          ::= atext ('-'+ atext)*\n" +
 "Dot_string    ::= Atom ('.'  Atom)*\n" +
 "comment       ::= ( commentList $rule ) FWS?\n"+
-"brComment     ::= '(' commentPart* ')'\n" +
-"commentList   ::= ( FWS? brComment )+\n"+
+"commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
 "commentPart   ::= ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+
 "text          ::= ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
 "textItem      ::= FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+

@@ -82,9 +82,9 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t"));
 		assertTrue(parseEmail("Joe.\\\\Blow@example.com.t", "", "Joe.\\\\Blow@example.com.t"));
 		assertTrue(parseEmail("!\\\\\\@@v.z", "", "!\\\\\\@@v.z"));
-		// comment allowed before and after '@'
-		assertTrue(parseEmail("john.smith(comment)@example.com", "comment", "john.smith@example.com"));
-		assertTrue(parseEmail("john.smith@(comment)example.com", "comment", "john.smith@example.com"));
+		// comment allowed before and after '@' ???
+//		assertTrue(parseEmail("john.smith(comment)@example.com", "comment", "john.smith@example.com"));
+//		assertTrue(parseEmail("john.smith@(comment)example.com", "comment", "john.smith@example.com"));
 
 		// RFC5321
 		assertTrue(parseEmail("\" \"@strange.ex.com.t", "", "\"\"@strange.ex.com.t"));
@@ -137,6 +137,9 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("John.Doe@.example.com", null, null)); // domain starts with '.'
 		assertFalse(parseEmail("John.Doe@example.com.", null, null)); // domain ends with '.'
 		assertFalse(parseEmail("John.Doe@example..com", null, null)); // domain contain '..'
+		// ??? comment NOT allowed before and after '@'
+		assertFalse(parseEmail("john.smith(comment)@example.com", null, null));
+		assertFalse(parseEmail("john.smith@(comment)example.com", null, null));
 
 		// !RFC5321
 		// RFC 2822?
