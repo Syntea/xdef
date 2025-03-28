@@ -1040,10 +1040,13 @@ public class CanonizeSource {
 			}
 			String errMsg = canonize(myArgs, System.out, System.err);
 			if (errMsg != null) {
-				System.err.println("[ERROR] " + errMsg);
+//				System.err.println("[ERROR] " + errMsg);
+				throw new RuntimeException("[ERROR] " + errMsg);
 			}
+		} catch (RuntimeException ex) {
+			throw ex;
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
+			throw new RuntimeException(ex);
 		}
 	}
 
