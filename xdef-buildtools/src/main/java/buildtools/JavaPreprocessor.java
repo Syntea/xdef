@@ -13,12 +13,10 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 /** Preprocessor for Java source files.
- * <p>Preprocessor commands separates source blocks by special Java comments.
- * Each preprocessor command must start with the sequence "/*#" followed by
- * the name of command and the whole command must be specified on a separated
- * line. The end of command must be either '*&#47;' or '*#/'. Each command block
- * must start with the "/*#if" command and it must be closed with the
- * "/*#end*&#47;" command. </p>
+ * <p>Preprocessor commands separates source blocks by special Java comments. Each preprocessor command must
+ * start with the sequence "/*#" followed by the name of command and the whole command must be specified
+ * on a separated line. The end of command must be either '*&#47;' or '*#/'. Each command block must start
+ * with the "/*#if" command and it must be closed with the "/*#end*&#47;" command. </p>
  * <p>There are following preprocessor commands:</p>
  * <ul>
  *  <li><code>/*#if conditional expression *&#47; .......</code> start of the conditional section.</li>
@@ -112,7 +110,6 @@ import java.nio.charset.Charset;
  * @author  Vaclav Trojan
  */
 public class JavaPreprocessor {
-
 	private final static int MAX_STACK = 256; //max. stack for expressions
 
 	private static final int END_COMMAND = 1;
@@ -171,6 +168,7 @@ public class JavaPreprocessor {
 	 * @return number of recognized errors or 0.
 	 */
 	public int getErrorCount() { return _errors; }
+
 	/** Return true if modified source was created.
 	 * @return true if and only if modified source was created.
 	 */
@@ -245,9 +243,7 @@ public class JavaPreprocessor {
 		return lines;
 	}
 
-	private int processFile(final File fi,
-		final String outDir,
-		final boolean createDirectory) {
+	private int processFile(final File fi, final String outDir, final boolean createDirectory) {
 		_errors = 0;
 		if (!fi.canRead()) {
 			error("Can't read file " + fi.getAbsolutePath(), false);
@@ -539,8 +535,8 @@ public class JavaPreprocessor {
 		}
 	}
 
-	/** Canonize command line (i.e. ends with "*#/" or with "*&#47;") and return
-	 * true if status of section had been changed.
+	/** Canonize command line (i.e. ends with "*#/" or with "*&#47;") and return true if status of section
+	 * was changed.
 	 * @param ignore if the nested status is "ignore".
 	 * @return true if status of section had been changed.
 	 */
@@ -578,8 +574,7 @@ public class JavaPreprocessor {
 	}
 
 	/** Modify section to next command.
-	 * @param ignore if true the section will be set as comment otherwise
-	 * it will be "uncommented".
+	 * @param ignore if true the section will be set as comment otherwise it will be "uncommented".
 	 * @return type ID of last (unprocessed) line.
 	 */
 	private int modifyToCommand(final boolean ignore, final boolean modify) throws IOException {
@@ -686,17 +681,16 @@ public class JavaPreprocessor {
 		if (_pos < _endPos && (c = _line.charAt(_pos)) <= ' ' &&
 			(c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f')) {
 			while (++_pos < _endPos && (c = _line.charAt(_pos)) <= ' ' &&
-				(c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == 'f')){}
+				(c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == 'f')) {}
 		}
 	}
 
 	private boolean isEndOfCommand() {skipBlanks(); return _pos >= _endPos;}
 
-	/** Check if actual position points to given character. Set the actual
-	 * position to the next character if given character was recognized.
+	/** Check if actual position points to given character. Set the actual position to the next character
+	 * if given character was recognized.
 	 * @param ch Character to be checked.
-	 * @return true if character was present at actual position,
-	 * otherwise return false.
+	 * @return true if character was present at actual position, otherwise return false.
 	 */
 	private boolean isChar(final char ch) {
 		if (_pos < _endPos && _line.charAt(_pos) == ch) {
@@ -706,9 +700,8 @@ public class JavaPreprocessor {
 		return false;
 	}
 
-	/** Check if actual position points to given token. Set the actual
-	 * position to the next character after the token if given token was
-	 * recognized.
+	/** Check if actual position points to given token. Set the actual position to the next character after
+	 * the token if given token was* recognized.
 	 * @param token The token.
 	 * @return <i>true</i> if token was present at actual position.
 	 */
@@ -947,8 +940,7 @@ public class JavaPreprocessor {
 	private void error(final String msg, final boolean position) {
 		_out.flush();
 		_err.flush();
-		_err.println("[ERROR] " + msg
-			+ (position ? "; line: " + _lineNumber + ", column: " + _pos : ""));
+		_err.println("[ERROR] " + msg + (position ? "; line: " + _lineNumber + ", column: " + _pos : ""));
 		_err.flush();
 		_errors++;
 	}
@@ -1225,8 +1217,7 @@ public class JavaPreprocessor {
 	 * @param args Array of strings with command line parameters (see {@link JavaPreprocessor}).
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
-	 * @return string with error message if the program can't work due to
-	 * parameter error or return null.
+	 * @return string with error message if the program can't work due to parameter error or return null.
 	 */
 	public static String proc(final String[] args, final PrintStream out, final PrintStream err) {
 		if (args == null || args.length == 0) {
@@ -1397,8 +1388,7 @@ public class JavaPreprocessor {
 	}
 
 	/** Call JavaPreprocessor from command line.
-	 * @param args Array of strings with command line parameters (see
-	 * {@link JavaPreprocessor}).
+	 * @param args Array of strings with command line parameters (see {@link JavaPreprocessor}).
 	 */
 	public static void main(String... args) {
 		if (args == null || args.length == 1 && "-h".equals(args[0])) {
