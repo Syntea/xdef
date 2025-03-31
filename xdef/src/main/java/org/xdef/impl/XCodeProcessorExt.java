@@ -276,9 +276,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					throw new SRuntimeException(XDEF.XDEF536); //Icorrect type conversion from AnyValue
 				}
 				return p;
-			case BYTES_CLEAR: //Clear byte array
-				((DefBytes) p).clear();
-				return p;
+			case BYTES_CLEAR: ((DefBytes) p).clear(); return p; //Clear byte array
 			case BYTES_SIZE: return new DefLong(((DefBytes) p).size()); //size of byte array
 			case BYTES_TO_BASE64: return new DefString(((DefBytes) p).getBase64());
 			case BYTES_TO_HEX: return new DefString(((DefBytes) p).getHex());
@@ -418,8 +416,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			//Element
 			case ELEMENT_ADDELEMENT: { // Add element to element as child
 				Element el1 = p1.getElement();
-				el1.appendChild(
-					el1.getOwnerDocument().importNode(p2.getElement(), true));
+				el1.appendChild(el1.getOwnerDocument().importNode(p2.getElement(), true));
 				return;
 			}
 			case ELEMENT_ADDTEXT: { // Add text to element as child
