@@ -777,9 +777,9 @@ public interface CodeTable {
 	/** create new exception. */
 	static final short NEW_CONTAINER = NEW_BYTES + 1;
 	/** Create Price. */
-	static final short NEW_CURRAMOOUNT = NEW_CONTAINER + 1;
+	static final short NEW_PRICE = NEW_CONTAINER + 1;
 	/** Create Currency. */
-	static final short NEW_CURRENCY = NEW_CONTAINER + 1;
+	static final short NEW_CURRENCY = NEW_PRICE + 1;
 	/** create new Element object. */
 	static final short NEW_ELEMENT = NEW_CURRENCY + 1;
 	/** create new Email object. */
@@ -877,8 +877,8 @@ public interface CodeTable {
 	static final short GPS_DISTANCETO = GPS_NAME + 1;
 
 	static final short PRICE_AMOUNT = GPS_DISTANCETO + 1;
-	static final short PRICE_CURRENCY_CODE = PRICE_AMOUNT + 1;
-	static final short PRICE_FRACTDIGITS = PRICE_CURRENCY_CODE + 1;
+	static final short PRICE_CURRENCY = PRICE_AMOUNT + 1;
+	static final short PRICE_FRACTDIGITS = PRICE_CURRENCY + 1;
 	static final short PRICE_DISPLAY = PRICE_FRACTDIGITS + 1;
 
 	static final short ELEMENT_CHILDNODES = PRICE_DISPLAY + 1;

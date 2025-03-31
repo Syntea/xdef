@@ -159,7 +159,7 @@ import static org.xdef.impl.code.CodeTable.LOWERCASE;
 import static org.xdef.impl.code.CodeTable.NEW_BNFGRAMAR;
 import static org.xdef.impl.code.CodeTable.NEW_BYTES;
 import static org.xdef.impl.code.CodeTable.NEW_CONTAINER;
-import static org.xdef.impl.code.CodeTable.NEW_CURRAMOOUNT;
+import static org.xdef.impl.code.CodeTable.NEW_CURRENCY;
 import static org.xdef.impl.code.CodeTable.NEW_ELEMENT;
 import static org.xdef.impl.code.CodeTable.NEW_EXCEPTION;
 import static org.xdef.impl.code.CodeTable.NEW_GPSPOSITION;
@@ -1082,17 +1082,17 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					stack[sp] = new XDGPSPosition(new GPSPosition(latitude, longitude, altitude, name));
 				} catch (Exception ex) {
 					 cp.putError(chkNode, XDEF.XDEF222, //Incorrect GPS position &amp;{0}
-						latitude+","+longitude+","+altitude+","+name);
+						latitude + "," + longitude + "," + altitude + "," + name);
 					stack[sp] = DefNull.genNullValue(XD_GPSPOSITION);
 				}
 				return sp;
 			}
-			case NEW_CURRAMOOUNT: {
+			case NEW_CURRENCY: {
 				try {
 					stack[sp-1] = new XDPrice(new Price(stack[sp-1].decimalValue(), stack[sp].stringValue()));
 				} catch (SRuntimeException ex) {
 					cp.putError(chkNode, XDEF.XDEF575, //"Invalid currency code: "{0}"
-						stack[sp-1].toString() + " " + stack[sp].stringValue());
+						stack[sp-1] + " " + stack[sp].stringValue());
 					stack[sp-1] = DefNull.genNullValue(XD_PRICE);
 				}
 				return --sp;

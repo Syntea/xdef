@@ -1,6 +1,7 @@
 package org.xdef;
 
 import java.math.BigDecimal;
+import static org.xdef.XDValueID.XD_PRICE;
 import static org.xdef.XDValueType.PRICE;
 import org.xdef.msg.SYS;
 import org.xdef.sys.Price;
@@ -29,6 +30,11 @@ public final class XDPrice extends XDValueAbstract {
 	 * @return amount of currency.
 	 */
 	public BigDecimal amount() {return _amount!=null ? _amount.amount() : null;}
+
+	/**	Get XDCurrency object.
+	 * @return XDCurrency object
+	 */
+	public XDCurrency getCurrency() {return _amount != null ? new XDCurrency(_amount.getCurrency()) : null;}
 
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..

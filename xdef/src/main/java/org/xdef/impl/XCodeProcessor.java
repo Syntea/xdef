@@ -350,7 +350,7 @@ import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.PARSE_XML;
 import static org.xdef.impl.code.CodeTable.POP_OP;
 import static org.xdef.impl.code.CodeTable.PRICE_AMOUNT;
-import static org.xdef.impl.code.CodeTable.PRICE_CURRENCY_CODE;
+import static org.xdef.impl.code.CodeTable.PRICE_CURRENCY;
 import static org.xdef.impl.code.CodeTable.PRICE_DISPLAY;
 import static org.xdef.impl.code.CodeTable.PRICE_FRACTDIGITS;
 import static org.xdef.impl.code.CodeTable.PRINTF_STREAM;
@@ -1350,11 +1350,11 @@ public final class XCodeProcessor {
 					}
 					_stack[sp] = new DefDecimal(((XDPrice)_stack[sp]).amount());
 					continue;
-				case PRICE_CURRENCY_CODE:
+				case PRICE_CURRENCY:
 					if (_stack[sp].isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Price"); //Null value of &{0}
 					}
-					_stack[sp] = new DefString(((XDPrice) _stack[sp]).currencyCode());
+					_stack[sp] = ((XDPrice) _stack[sp]).getCurrency();
 					continue;
 				case PRICE_FRACTDIGITS:
 					if (_stack[sp].isNull()) {
