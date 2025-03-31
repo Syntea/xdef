@@ -1354,7 +1354,7 @@ public final class XCodeProcessor {
 					if (_stack[sp].isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Price"); //Null value of &{0}
 					}
-					_stack[sp] = ((XDPrice) _stack[sp]).getCurrency();
+					_stack[sp] = ((XDPrice) _stack[sp]).currency();
 					continue;
 				case PRICE_FRACTDIGITS:
 					if (_stack[sp].isNull()) {

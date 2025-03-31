@@ -95,12 +95,12 @@ import static org.xdef.impl.code.CodeTable.CONTAINS;
 import static org.xdef.impl.code.CodeTable.CONTAINSI;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ADDITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENTS;
+import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENT_X;
+import static org.xdef.impl.code.CodeTable.CONTEXT_GETLENGTH;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
-import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENT_X;
-import static org.xdef.impl.code.CodeTable.CONTEXT_GETLENGTH;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETTEXT;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ITEMTYPE;
@@ -1310,7 +1310,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		ti = XD_PRICE;
 		method(ti, genInternalMethod(NEW_PRICE, XD_PRICE, ANY_MODE, 1, 2, XD_DOUBLE, XD_STRING), "#");
 		method(ti, genInternalMethod(PRICE_AMOUNT, XD_DOUBLE, ANY_MODE, 1, 1, XD_PRICE), "amount");
-		method(ti, genInternalMethod(PRICE_CURRENCY, XD_CURRENCY, ANY_MODE, 1, 1, XD_PRICE), "getCurrency");
+		method(ti, genInternalMethod(PRICE_CURRENCY, XD_CURRENCY, ANY_MODE, 1, 1, XD_PRICE), "currency");
 		method(ti, genInternalMethod(PRICE_FRACTDIGITS, XD_LONG, ANY_MODE, 1, 1, XD_PRICE), "fractionDigits");
 		method(ti, genInternalMethod(PRICE_DISPLAY, XD_STRING, ANY_MODE, 1, 1, XD_PRICE),"display");
 ////////////////////////////////////////////////////////////////////////////////

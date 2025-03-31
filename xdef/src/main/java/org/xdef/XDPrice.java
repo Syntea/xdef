@@ -34,7 +34,7 @@ public final class XDPrice extends XDValueAbstract {
 	/**	Get XDCurrency object.
 	 * @return XDCurrency object
 	 */
-	public XDCurrency getCurrency() {return _amount != null ? new XDCurrency(_amount.getCurrency()) : null;}
+	public XDCurrency currency() {return _amount != null ? new XDCurrency(_amount.getCurrency()) : null;}
 
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..

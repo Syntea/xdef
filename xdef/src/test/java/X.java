@@ -77,7 +77,7 @@ public class X extends XDTester {
 "    void x(ParseResult val) {\n" +
 "      try {\n" +
 "        Price price = (Price) val;\n" +
-"        outln(price.amount() + ';' + price.getCurrency().currencyCode());\n" +
+"        outln(price.amount() + ';' + price.currency().currencyCode());\n" +
 "      } catch (Exception e) {\n" +
 "        outln('Exception: ' + e);\n" +
 "      }\n" +
