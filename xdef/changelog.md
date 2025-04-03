@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.26, release-date 2025-04-03
-* Fixed error when assigning `null` value to variables of some types (e.g. DatetimeS).
+* Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables
+  of some types (e.g. Datetime).
 
 # Version 42.2.25, release-date 2025-03-28
 * Fixed error when parsing email address when the local part contains several consecutive hypen characters.
