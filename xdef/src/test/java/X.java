@@ -4,6 +4,7 @@ import org.xdef.XDDatetime;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDValue;
+import org.xdef.sys.SDatetime;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -16,6 +17,7 @@ public class X extends XDTester {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDDocument xd;
 		StringWriter swr;
+		XDValue val;
 		try {
 			xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y'>\n" +
@@ -98,7 +100,7 @@ public class X extends XDTester {
 "\n" +
 "  <Y>\n" +
 "    <Z xd:script = '*;'\n" +
-"      a=\"onTrue {\n" +
+"      a=\"manufactureDateType(); onTrue {\n" +
 "          if ('--'.equals(getText())) getParsedResult().setValue(null);\n" +
 "            date = getParsedResult().datetimeValue();\n" +
 "        }\"/>\n" +
@@ -111,10 +113,12 @@ public class X extends XDTester {
 			String s = swr.toString();
 			assertTrue("0.5;USD\n1.2;CZK\n".equals(s), s);
 
-			xd.xparse("<Y> <Z a='--'/><Z a='2025-04-03'/> </Y>", null);
-			XDValue val = xd.getVariable("date");
-			XDDatetime date = val == null || val.isNull() ? null : (XDDatetime) val;
-			System.out.println((date == null ? "--" : date.datetimeValue().getYear()));
+			xd.xparse("<Y> <Z a='--'/> </Y>", null);
+			val = xd.getVariable("date");
+			assertTrue(val != null && val.isNull());
+			xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
+			val = xd.getVariable("date");
+			assertEq(new SDatetime("2025-04-03"), ((XDDatetime) val).datetimeValue());
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 
