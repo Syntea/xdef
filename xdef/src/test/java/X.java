@@ -1,7 +1,9 @@
 import java.io.StringWriter;
 import org.xdef.XDConstants;
+import org.xdef.XDDatetime;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
+import org.xdef.XDValue;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -16,7 +18,7 @@ public class X extends XDTester {
 		StringWriter swr;
 		try {
 			xd = XDFactory.compileXD(null,
-"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X'>\n" +
+"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y'>\n" +
 "\n" +
 "  <xd:BNFGrammar name='EMAILADDR'>\n" +
 "/***  RFC 5321 ***/\n"+
@@ -73,6 +75,8 @@ public class X extends XDTester {
 "  </xd:BNFGrammar>\n" +
 "\n" +
 "  <xd:declaration>\n" +
+"    external Datetime date;\n" +
+"    type manufactureDateType union(%item=[date(), xdatetime('\"--\"')]); /* date or -- */\n" +
 "    type myEmail EMAILADDR.rule('emailAddr');\n" +
 "    void x(ParseResult val) {\n" +
 "      try {\n" +
@@ -92,6 +96,13 @@ public class X extends XDTester {
 "    <B xd:script = '*;' a = 'price(); onTrue x(getParsedResult())'/>\n" +
 "  </X>\n" +
 "\n" +
+"  <Y>\n" +
+"    <Z xd:script = '*;'\n" +
+"      a=\"onTrue {\n" +
+"          if ('--'.equals(getText())) getParsedResult().setValue(null);\n" +
+"            date = getParsedResult().datetimeValue();\n" +
+"        }\"/>\n" +
+"  </Y>\n" +
 "</xd:def>").createXDDocument();
 
 			xd.setStdOut(swr = new StringWriter());
@@ -99,6 +110,11 @@ public class X extends XDTester {
 			xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
 			String s = swr.toString();
 			assertTrue("0.5;USD\n1.2;CZK\n".equals(s), s);
+
+			xd.xparse("<Y> <Z a='--'/><Z a='2025-04-03'/> </Y>", null);
+			XDValue val = xd.getVariable("date");
+			XDDatetime date = val == null || val.isNull() ? null : (XDDatetime) val;
+			System.out.println((date == null ? "--" : date.datetimeValue().getYear()));
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 

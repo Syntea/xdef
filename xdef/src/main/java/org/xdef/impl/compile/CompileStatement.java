@@ -1728,7 +1728,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					_g._cstack[_g._sp] = -2; // prevent code optimizing
 				}
 				if (xType != yType) {
-					if (xType != XD_ANY && yType != XD_ANY && xType != XD_UNDEF && yType != XD_UNDEF) {
+					if (xType != XD_NULL && xType != XD_ANY && xType != XD_UNDEF
+						&& yType != XD_ANY && yType != XD_UNDEF) {
 						//Incompatible types&{0}{: }
 						error(XDEF.XDEF457, getTypeName(xType) + "," + getTypeName(yType));
 					}
