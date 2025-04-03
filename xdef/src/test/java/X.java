@@ -114,11 +114,9 @@ public class X extends XDTester {
 			assertTrue("0.5;USD\n1.2;CZK\n".equals(s), s);
 
 			xd.xparse("<Y> <Z a='--'/> </Y>", null);
-			val = xd.getVariable("date");
-			assertTrue(val != null && val.isNull());
+			assertTrue(xd.getVariable("date").isNull());
 			xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
-			val = xd.getVariable("date");
-			assertEq(new SDatetime("2025-04-03"), ((XDDatetime) val).datetimeValue());
+			assertEq("2025-04-03", xd.getVariable("date").toString());
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 
