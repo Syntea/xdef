@@ -299,8 +299,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case DURATION_GETRECURRENCE:
 				return p==null || p.isNull() ? new DefLong(-1):new DefLong(p.durationValue().getRecurrence());
 			case DURATION_GETFRACTION:
-				return p==null || p.isNull()
-					? new DefDouble(-1) : new DefDouble(p.durationValue().getFraction());
+				return p==null||p.isNull()? new DefDouble(-1): new DefDouble(p.durationValue().getFraction());
 			case DURATION_GETSTART:
 				return p==null || p.isNull() ? new DefDate() : new DefDate(p.durationValue().getStart());
 			case DURATION_GETEND:
