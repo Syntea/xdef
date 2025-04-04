@@ -119,7 +119,6 @@ import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE_XDARRAY;
 import static org.xdef.impl.code.CodeTable.FLOAT_FORMAT;
 import static org.xdef.impl.code.CodeTable.GET_DAY;
 import static org.xdef.impl.code.CodeTable.GET_DAYTIMEMILLIS;
-import static org.xdef.impl.code.CodeTable.GET_EASTERMONDAY;
 import static org.xdef.impl.code.CodeTable.GET_FRACTIONSECOND;
 import static org.xdef.impl.code.CodeTable.GET_HOUR;
 import static org.xdef.impl.code.CodeTable.GET_INDEXOFSTRING;
@@ -153,7 +152,6 @@ import static org.xdef.impl.code.CodeTable.GET_ZONEID;
 import static org.xdef.impl.code.CodeTable.GET_ZONEOFFSET;
 import static org.xdef.impl.code.CodeTable.INTEGER_FORMAT;
 import static org.xdef.impl.code.CodeTable.IS_CREATEMODE;
-import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LOWERCASE;
 import static org.xdef.impl.code.CodeTable.NEW_BNFGRAMAR;
@@ -348,9 +346,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case GET_MILLIS: return new DefLong(p.datetimeValue().getMillisecond());//Get millisecond
 			case GET_NANOS: return new DefLong(p.datetimeValue().getNanos());
 			case GET_FRACTIONSECOND: return new DefDouble(p.datetimeValue().getFraction());
-			case GET_EASTERMONDAY:
-				return new DefDate(p.getItemId() == XD_DATETIME
-					? p.datetimeValue().getEasterMonday() : SDatetime.getEasterMonday(p.intValue()));
 			case GET_LASTDAYOFMONTH: return new DefLong(SDatetime.getLastDayOfMonth(p.datetimeValue()));
 			case GET_DAYTIMEMILLIS: return new DefLong(p.datetimeValue().getDaytimeInMillis());
 			case GET_ZONEOFFSET: return new DefLong(p.datetimeValue().getTimeZoneOffset());//zone shift to GMT
@@ -359,9 +354,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				TimeZone tz;
 				return d == null || (tz = d.getTZ()) == null ? new DefString() : new DefString(tz.getID());
 			}
-			case IS_LEAPYEAR: //check leap year.
-				return new DefBoolean(SDatetime.isLeapYear(
-					p.getItemId() == XD_LONG ? p.intValue() : p.datetimeValue().getYear()));
 			case LOWERCASE: { //set to lower case
 				String s = p.stringValue();
 				return s != null ? new DefString(s.toLowerCase()) : p;

@@ -1,10 +1,8 @@
 import java.io.StringWriter;
 import org.xdef.XDConstants;
-import org.xdef.XDDatetime;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDValue;
-import org.xdef.sys.SDatetime;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -15,6 +13,7 @@ public class X extends XDTester {
 	/** Run test and display error information. */
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		String s;
 		XDDocument xd;
 		StringWriter swr;
 		XDValue val;
@@ -100,7 +99,10 @@ public class X extends XDTester {
 "\n" +
 "  <Y>\n" +
 "    <Z xd:script = '*;'\n" +
-"      a=\"manufactureDateType(); onTrue {\n" +
+"      a=\"manufactureDateType(); finally {\n" +
+"          outln(getQnamePrefix('x:y') + ', ' + getQnameLocalpart('y')\n" +
+"             + ', ' + isLeapYear() + ', ' + easterMonday()); \n" +
+"        } onTrue {\n" +
 "          if ('--'.equals(getText())) getParsedResult().setValue(null);\n" +
 "            date = getParsedResult().datetimeValue();\n" +
 "        }\"/>\n" +
@@ -110,11 +112,14 @@ public class X extends XDTester {
 			xd.setStdOut(swr = new StringWriter());
 			xd.xparse("<A><B a='a@b--c'/><B a='a--b@b'/><B a='JOS--NT@SEZN.CZ'/></A>", null);
 			xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
-			String s = swr.toString();
+			s = swr.toString();
 			assertTrue("0.5;USD\n1.2;CZK\n".equals(s), s);
 
+			xd.setStdOut(swr = new StringWriter());
 			xd.xparse("<Y> <Z a='--'/> </Y>", null);
 			assertTrue(xd.getVariable("date").isNull());
+			s = swr.toString();
+			assertTrue("x, y, false, 2025-04-21\n".equals(s), s);
 			xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
 			assertEq("2025-04-03", xd.getVariable("date").toString());
 		} catch (RuntimeException ex) {fail(ex);}

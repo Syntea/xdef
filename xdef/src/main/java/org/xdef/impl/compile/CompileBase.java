@@ -162,7 +162,6 @@ import static org.xdef.impl.code.CodeTable.GET_DAYTIMEMILLIS;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY_ITEM;
 import static org.xdef.impl.code.CodeTable.GET_DEFAULTZONE;
-import static org.xdef.impl.code.CodeTable.GET_EASTERMONDAY;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_LOCALNAME;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_NAME;
@@ -199,8 +198,6 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_QNAMEURI;
-import static org.xdef.impl.code.CodeTable.GET_QNLOCALPART;
-import static org.xdef.impl.code.CodeTable.GET_QNPREFIX;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_END;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_NUM;
@@ -239,7 +236,6 @@ import static org.xdef.impl.code.CodeTable.HAS_RESULTSET_NEXT;
 import static org.xdef.impl.code.CodeTable.IS_CREATEMODE;
 import static org.xdef.impl.code.CodeTable.IS_DATETIME;
 import static org.xdef.impl.code.CodeTable.IS_EMPTY;
-import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
 import static org.xdef.impl.code.CodeTable.IS_NUM;
 import static org.xdef.impl.code.CodeTable.LAST_CODE;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
@@ -868,8 +864,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			XD_STRING), "Regex constructor", "?compilePattern"); //remove!
 		method(ti, genInternalMethod(DEFAULT_ERROR, XD_BOOLEAN,
 			(byte)(TEXT_MODE+ELEM_MODE), 0, 0), "defaultError");
-		method(ti, genInternalMethod(GET_EASTERMONDAY, XD_DATETIME,
-			ANY_MODE, 1, 1, XD_LONG), "easterMonday");
 		method(ti, genInternalMethod(PUT_ERROR, XD_BOOLEAN, ANY_MODE, 1, 4,
 			XD_ANY, XD_STRING, XD_STRING, XD_STRING), "error");
 		method(ti, genInternalMethod(GET_NUMOFERRORS, XD_LONG, (byte)(TEXT_MODE+ELEM_MODE), 0, 0), "errors");
@@ -907,24 +901,16 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_PARSED_LONG, XD_LONG, TEXT_MODE, 0, 0), "getParsedInt");
 		method(ti, genInternalMethod(GET_PARSED_RESULT, XD_PARSERESULT, TEXT_MODE, 0, 0), "getParsedResult");
 		method(ti, genInternalMethod(GET_PARSED_VALUE, XD_ANY, TEXT_MODE, 0, 0), "getParsedValue");
-		method(ti, genInternalMethod(GET_QNLOCALPART, XD_STRING,
-			ANY_MODE, 1, 1, XD_STRING), "getQnameLocalpart");
-		method(ti, genInternalMethod(GET_QNPREFIX, XD_STRING, ANY_MODE, 1, 1, XD_STRING), "getQnamePrefix");
-		method(ti, genInternalMethod(GET_QNAMEURI, XD_STRING,
-			ANY_MODE, 1, 2, XD_ANY,XD_ELEMENT), "getQnameURI");
-		method(ti, genInternalMethod(GET_ROOTELEMENT, XD_ELEMENT,
-			ELEM_MODE, 0, 1, XD_ELEMENT), "getRootElement");
-		method(ti, genInternalMethod(CONTEXT_GETTEXT, XD_STRING,
-			(byte)(TEXT_MODE+ELEM_MODE), 0, 0), "getText");
+		method(ti, genInternalMethod(GET_QNAMEURI, XD_STRING, ANY_MODE, 1,2,XD_ANY,XD_ELEMENT),"getQnameURI");
+		method(ti, genInternalMethod(GET_ROOTELEMENT, XD_ELEMENT,ELEM_MODE, 0,1,XD_ELEMENT),"getRootElement");
+		method(ti, genInternalMethod(CONTEXT_GETTEXT, XD_STRING,(byte)(TEXT_MODE+ELEM_MODE), 0, 0),"getText");
 		method(ti, genInternalMethod(GET_USEROBJECT, XD_OBJECT, ANY_MODE, 0, 0), "getUserObject");
 		method(ti, genInternalMethod(GET_XPOS, XD_STRING, ANY_MODE, 0, 0), "getXpos");
 		method(ti, genInternalMethod(HAS_ATTR, XD_BOOLEAN,
 			(byte)(TEXT_MODE+ELEM_MODE),1,2,XD_STRING,XD_STRING), "hasAttr");
 		method(ti, genInternalMethod(IS_CREATEMODE, XD_BOOLEAN,
 			(byte)(TEXT_MODE+ELEM_MODE), 0, 0), "isCreateMode");
-		method(ti, genInternalMethod(IS_DATETIME, XD_BOOLEAN,
-			ANY_MODE, 1, 2, XD_STRING, XD_STRING), "isDatetime");
-		method(ti, genInternalMethod(IS_LEAPYEAR, XD_BOOLEAN, ANY_MODE, 1, 1, XD_LONG), "isLeapYear");
+		method(ti, genInternalMethod(IS_DATETIME, XD_BOOLEAN,ANY_MODE, 1,2,XD_STRING,XD_STRING),"isDatetime");
 		method(ti, genInternalMethod(IS_NUM, XD_BOOLEAN, ANY_MODE, 1, 1, XD_STRING), "isNumeric");
 		method(ti, genInternalMethod(CREATE_ELEMENT, XD_ELEMENT,
 			ANY_MODE, 0, 2, XD_STRING, XD_STRING), "newElement");
@@ -1097,8 +1083,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(ADD_SECOND, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "addSecond");
 		method(ti, genInternalMethod(ADD_YEAR, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "addYear");
-		method(ti, genInternalMethod(GET_EASTERMONDAY, XD_DATETIME,
-			ANY_MODE, 1, 1, XD_DATETIME), "easterMonday");
 		method(ti, genInternalMethod(GET_DAY, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getDay");
 		method(ti, genInternalMethod(GET_FRACTIONSECOND, XD_DOUBLE,
 			ANY_MODE, 1, 1, XD_DATETIME), "getFractionalSecond");
@@ -1116,7 +1100,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_DATETIME), "getDaytimeMillis");
 		method(ti, genInternalMethod(GET_ZONEID, XD_STRING, ANY_MODE, 1, 1, XD_DATETIME), "getZoneName");
 		method(ti, genInternalMethod(GET_ZONEOFFSET, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getZoneOffset");
-		method(ti, genInternalMethod(IS_LEAPYEAR, XD_BOOLEAN, ANY_MODE, 1, 1, XD_DATETIME), "isLeapYear");
 		method(ti, genInternalMethod(GET_LASTDAYOFMONTH, XD_LONG,
 			ANY_MODE, 1, 1, XD_DATETIME), "lastDayOfMonth");
 		method(ti, genInternalMethod(SET_DAY, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setDay");

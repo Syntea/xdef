@@ -537,7 +537,7 @@ public final class TestScript extends XDTester {
 		test("1999-05-01T20:43:09+01:00", "setResult(eq(toString(parseDate('1999-05-01T20:43:09+01:00'))));");
 		test("1999-05-01", "setResult(eq(parseDate(getText(), 'yyyy-MM-dd').toString()));");
 		test("1999-04-05", "setResult(eq(easterMonday(1999).toString()));");
-		test("1999-04-05", "setResult(eq(parseDate(getText()).easterMonday().toString()));");
+		test("1999-04-05", "setResult(eq(easterMonday(parseDate(getText())).toString()));");
 		test("1999-04-05", "setResult(parseDate(getText()).lastDayOfMonth() == 30);");
 		test("Mon, 23 Jan 2006 20:26:46", "setResult(emailDate());");
 		test("Mon, 23 Jan 2006 20:26:46 +0100", "setResult(emailDate());");

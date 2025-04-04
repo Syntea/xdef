@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.net.InetAddress;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -61,6 +62,58 @@ public final class XExtUtils {
 	public static final String getVersionInfo() {
 		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
+
+	/** Get the prefix part of given QName.
+	 * @param s string with QName,
+	 * @return prefix part of given QName or the empty string.
+	 */
+	public static final String getQnamePrefix(final String s) {
+		int ndx = s.indexOf(':');
+		return ndx > 0 ? s.substring(0, ndx) : "";
+	}
+
+	/** Get the local part of given QName.
+	 * @param s string with QName,
+	 * @return local part of given QName .
+	 */
+	public static final String getQnameLocalpart(final String s) {
+		int ndx = s.indexOf(':');
+		return ndx > 0 ? s.substring(ndx + 1) : s;
+	}
+
+	/** Check if the given year is a leap year.
+	 * @param n the year
+	 * @return true if the the year is a leap year.
+	 */
+	public static final boolean isLeapYear(final long n) {return SDatetime.isLeapYear((int) n);}
+
+	/** Check if the year from given date is a leap year.
+	 * @param d date to be checked.
+	 * @return true if the the year from given date is a leap year.
+	 */
+	public static final boolean isLeapYear(final SDatetime d) {return d.isLeapYear();}
+
+	/** Check if the current year is a leap year.
+	 * @return true if the current year is a leap year.
+	 */
+	public static final boolean isLeapYear() {return new SDatetime(new Date()).isLeapYear();}
+
+	/** Get the date with the Easter Monday of the current date.
+	 * @return date with the Easter Monday of the current date.
+	 */
+	public static final SDatetime easterMonday() {return new SDatetime(new Date()).getEasterMonday();}
+
+	/** Get the date with the Easter Monday of the year from given date.
+	 * @param date date with the zear to be used for computing Easter Monday date.
+	 * @return date with the Easter Monday of the year from given date.
+	 */
+	public static final SDatetime easterMonday(final SDatetime date) {return date.getEasterMonday();}
+
+	/** Get the date with the Easter Monday of given year.
+	 * @param year year to be used for computing Easter Monday date.
+	 * @return date with the Easter Monday of given year
+	 */
+	public static final SDatetime easterMonday(final long year) {return SDatetime.getEasterMonday((int)year);}
 
 	/** Check if XQuery implementation is available.
 	 * @return true if XQuery implementation is available.

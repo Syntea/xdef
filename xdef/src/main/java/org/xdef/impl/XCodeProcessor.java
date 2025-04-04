@@ -211,7 +211,6 @@ import static org.xdef.impl.code.CodeTable.GET_DAYTIMEMILLIS;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY_ITEM;
 import static org.xdef.impl.code.CodeTable.GET_DEFAULTZONE;
-import static org.xdef.impl.code.CodeTable.GET_EASTERMONDAY;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_LOCALNAME;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_NAME;
@@ -238,8 +237,6 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_ERROR;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
-import static org.xdef.impl.code.CodeTable.GET_QNLOCALPART;
-import static org.xdef.impl.code.CodeTable.GET_QNPREFIX;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_END;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_NUM;
@@ -284,7 +281,6 @@ import static org.xdef.impl.code.CodeTable.IS_DATETIME;
 import static org.xdef.impl.code.CodeTable.IS_EMPTY;
 import static org.xdef.impl.code.CodeTable.IS_FLOAT;
 import static org.xdef.impl.code.CodeTable.IS_INT;
-import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
 import static org.xdef.impl.code.CodeTable.IS_NUM;
 import static org.xdef.impl.code.CodeTable.JMPEQ;
 import static org.xdef.impl.code.CodeTable.JMPF_OP;
@@ -2228,18 +2224,6 @@ public final class XCodeProcessor {
 					_stack[++sp] = new DefString(tz == null ? null : tz.getID());
 					continue;
 				}
-				case GET_QNPREFIX: { //getQnamePrefix()
-					String s = _stack[sp].toString();
-					int ndx = s.indexOf(':');
-					_stack[sp] = new DefString(ndx > 0 ? s.substring(0, ndx) : "");
-					continue;
-				}
-				case GET_QNLOCALPART: {//getQnameLocalpart
-					String s = _stack[sp].toString();
-					int ndx = s.indexOf(':');
-					_stack[sp] = new DefString(ndx > 0 ? s.substring(ndx + 1) : s);
-					continue;
-				}
 				case CONTEXT_GETELEMENTS: //getElements(container)
 					if (item.getParam() == 2) {
 						_stack[--sp] = ((XDContainer) _stack[sp]).getXDElements(_stack[sp+1].stringValue());
@@ -3080,12 +3064,10 @@ public final class XCodeProcessor {
 				case GET_MILLIS:
 				case GET_NANOS:
 				case GET_FRACTIONSECOND:
-				case GET_EASTERMONDAY:
 				case GET_LASTDAYOFMONTH:
 				case GET_DAYTIMEMILLIS:
 				case GET_ZONEOFFSET:
 				case GET_ZONEID:
-				case IS_LEAPYEAR:
 			//String
 				case LOWERCASE:
 				case UPPERCASE:
