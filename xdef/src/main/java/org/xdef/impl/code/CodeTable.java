@@ -347,20 +347,16 @@ public interface CodeTable {
 	static final short GET_NANOS = GET_MILLIS + 1;
 	/** Get nanosecond from date. */
 	static final short GET_FRACTIONSECOND = GET_NANOS + 1;
-	/** UNUSED Get easter Monday. */
-	static final short __GET_EASTERMONDAY = GET_FRACTIONSECOND + 1;
 	/** Get last year of month. */
-	static final short GET_LASTDAYOFMONTH = __GET_EASTERMONDAY + 1;
+	static final short GET_LASTDAYOFMONTH = GET_FRACTIONSECOND + 1;
 	/** Get day time in milliseconds from date. */
 	static final short GET_DAYTIMEMILLIS = GET_LASTDAYOFMONTH + 1;
 	/** Get zone shift to GMT date in milliseconds. */
 	static final short GET_ZONEOFFSET = GET_DAYTIMEMILLIS + 1;
 	/** Get name of time zone. */
 	static final short GET_ZONEID = GET_ZONEOFFSET + 1;
-	/** UNUSED Return true if date is leap year. */
-	static final short __IS_LEAPYEAR = GET_ZONEID + 1;
 	/** Add day to date. */
-	static final short ADD_DAY = __IS_LEAPYEAR + 1;
+	static final short ADD_DAY = GET_ZONEID + 1;
 	/** Add month to date. */
 	static final short ADD_MONTH = ADD_DAY + 1;
 	/** Add year to date. */
@@ -471,12 +467,8 @@ public interface CodeTable {
 	static final short GET_NOW = SET_ELEMENT + 1;
 	/** Get ID of default zone or null if it is not defined. */
 	static final short GET_DEFAULTZONE = GET_NOW + 1;
-	/** UNUSED Get prefix from QName. */
-	static final short __GET_QNPREFIX = GET_DEFAULTZONE + 1;
-	/** UNUSED Get local part from QName. */
-	static final short __GET_QNLOCALPART = __GET_QNPREFIX + 1;
 	/** Cut string to max size. */
-	static final short CUT_STRING = __GET_QNLOCALPART + 1;
+	static final short CUT_STRING = GET_DEFAULTZONE + 1;
 	////////////////////////////////////////////////////////////////////////////
 	/** getNamespaceURI(String|node...)Get namespace associated with an prefix*/
 	static final short GET_NS = CUT_STRING + 1;
