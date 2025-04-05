@@ -510,35 +510,30 @@ public class XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 // to XML tools
 ////////////////////////////////////////////////////////////////////////////////
-	/** Create XML from INI/Properties object in "W" format.
-	 * @param ini path toINI/Properties source data.
-	 * @return XML element created from INI/Properties data.
-	 */
-	public static final Element iniToXml(final String ini) {return IniReader.iniToXml(parseINI(ini));}
 
 	/** Create XML from INI/Properties object in "W" format.
-	 * @param ini file with INI/Properties source data.
+	 * @param ini string with pathname of INI/Properties file or INI/Properties source data.
 	 * @return XML element created from INI/Properties data.
 	 */
-	public static final Element iniToXml(final File ini) {return IniReader.iniToXml(parseINI(ini));}
-
-	/** Create XML from INI/Properties object in "W" format.
-	 * @param ini URL where is INI/Properties source data.
-	 * @return XML element created from INI/Properties data.
-	 */
-	public static final Element iniToXml(final URL ini) {return IniReader.iniToXml(parseINI(ini));}
-
-	/** Create XML from INI/Properties object in "W" format.
-	 * @param ini Input stream where is INI/Properties source data.
-	 * @return XML element created from INI/Properties data.
-	 */
-	public static final Element iniToXml(final InputStream ini) {return IniReader.iniToXml(parseINI(ini));}
-
-	/** Create XML from INI/Properties object in X-definition mode.
-	 * @param ini INI/Properties object.
-	 * @return XML element created from INI/Properties object.
-	 */
-	public static final Element iniToXml(final Object ini) {return IniReader.iniToXml(ini);}
+	public static final Element iniToXml(final Object ini) {
+		if (ini instanceof String) {
+			String s = (String) ini;
+			File f = new File(s);
+			if (f.exists() && !f.isDirectory()) {
+				return IniReader.iniToXml(parseINI(f));
+			}
+			return IniReader.iniToXml(parseINI((String) ini));
+		} else if (ini instanceof File) {
+			return IniReader.iniToXml(parseINI((File) ini));
+		} else if (ini instanceof URL) {
+			return IniReader.iniToXml(parseINI((URL) ini));
+		} else if (ini instanceof InputStream) {
+			return IniReader.iniToXml(parseINI((InputStream) ini));
+		} else if (ini instanceof Reader) {
+			return IniReader.iniToXml(parseINI((Reader) ini));
+		}
+		return IniReader.iniToXml(ini);
+	}
 
 	/** Create XML from XON/JSON object in "W" format.
 	 * @param source path to XON/JSON source data.
