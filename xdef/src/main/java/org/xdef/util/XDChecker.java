@@ -67,13 +67,13 @@ public class XDChecker {
 		XDFactory.compileXD(_properties, xdef);
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Check if the value is correct type.
 	 * @param type the string with type.
 	 * @param value value to be checked.
 	 * @return XDParseResult containing value and errors. It may be checked
 	 * with method errors().
 	 */
+	@SuppressWarnings("deprecation")
 	final public XDParseResult checkType(final String type, final String value){
 		XDPool xp;
 		ArrayReporter ar = new ArrayReporter();

@@ -1972,9 +1972,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	@Override
 	@SuppressWarnings("deprecation")
 	@Deprecated
-	public final XComponent parseXComponent(final Object data, final Class<?> cls, final ReportWriter rep)
-		throws SRuntimeException {
-		return xparseXComponent(data, cls, rep);
+	public final XComponent parseXComponent(final Object data,
+		final Class<?> cls,
+		final ReportWriter reporter) throws SRuntimeException {
+		return xparseXComponent(data, cls, reporter);
 	}
 
 	/** Parse source XML and return XComponent as result.

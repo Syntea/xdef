@@ -212,12 +212,12 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Parse INI/Properties from reader
 	 * @param in reader with source data.
 	 * @param sysId system ID
 	 * @return map with parsed data.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Map<String, Object> parseINI(Reader in, String sysId) {
 		XonParser jp = new XonObjParser(true);
 		IniReader xr = new IniReader(in, jp);
@@ -386,11 +386,11 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		sb.append('\n');
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Create string with INI/Property source format.
 	 * @param map Map object with INI/Property data.
 	 * @return created string with INI/Property source.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final String toIniString(final Map<String, Object> map) {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, Object> x: map.entrySet()) {
@@ -411,11 +411,11 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return sb.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Add ini object to XML element element.
 	 * @param ini ini object.
 	 * @param el XML element where to add items.
 	 */
+	@SuppressWarnings("unchecked")
 	private static void iniToXml(final Map<String,Object> ini, final Element el){
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
@@ -447,10 +447,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Create XML Element from object.
 	 * @param ini object wioth Windows ini data.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Element iniToXml(final Object ini) {
 		Document doc = KXmlUtils.newDocument(
 			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);

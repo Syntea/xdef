@@ -59,7 +59,6 @@ public class CsvReader extends StringParser implements XonParsers {
 		return parseCSV(source, separator, skipHdr, null);
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
 	 * @param source if it is string check file name, URL or input data otherwise it can be a File,
 	 * InputStream or Reader.
@@ -68,6 +67,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param sysId System ID (or null).
 	 * @return list with parsed CSV data.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final List<Object> parseCSV(final Object source,
 		final char separator,
 		final boolean skipHeader,
@@ -273,11 +273,11 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // XML to CSV
 ////////////////////////////////////////////////////////////////////////////////
-	@SuppressWarnings("unchecked")
 	/** Create CSV object from XML element.
 	 * @param el element from which the CSV object is created.
 	 * @return created CSV object.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final List<Object> xmlToCsv(final Element el) {
 		String s = el.getTextContent();
 		return (List<Object>) XonUtils.parseXON(s);

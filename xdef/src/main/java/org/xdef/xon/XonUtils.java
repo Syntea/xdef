@@ -151,7 +151,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public static final Map<String, Object> parseINI(final URL source) throws SRuntimeException{
+	public static final Map<String, Object> parseINI(final URL source) throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseINI(indata._in, indata._sysId);
 	}
@@ -271,8 +271,7 @@ public class XonUtils {
 		return XonReader.parseXON(in, sysid == null ? "READER" : sysid, bytes);
 	}
 
-	/** Parse XON document from input source data. The source data may be either file pathname or URL
-	 * or JSON source.
+	/** Parse XON document from input source data. The source data is either file name or URL or JSON source.
 	 * @param source file pathname or URL or string with XON source.
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
@@ -342,8 +341,7 @@ public class XonUtils {
 	 */
 	public static final Object parseYAML(final Reader in, final String sysid) {return XonYaml.parseYAML(in);}
 
-	/** Parse YAML document from source data.
-	 * The source data may be either file pathname or URL or JSON source.
+	/** Parse YAML document from source data. The source data is either file pathname or URL or JSON source.
 	 * @param s file pathname or URL or string with YAML source.
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
@@ -389,10 +387,9 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final Object parseYAML(final InputStream in, final String sysId)
-		throws SRuntimeException {
-		return parseYAML(new InputStreamReader(in,
-			Charset.forName("UTF-8")), sysId == null ? "INPUTSTREAM" : sysId);
+	public static final Object parseYAML(final InputStream in, final String sysId) throws SRuntimeException {
+		return parseYAML(
+			new InputStreamReader(in, Charset.forName("UTF-8")), sysId == null ? "INPUTSTREAM" : sysId);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -523,16 +520,11 @@ public class XonUtils {
 				return IniReader.iniToXml(parseINI(f));
 			}
 			return IniReader.iniToXml(parseINI((String) ini));
-		} else if (ini instanceof File) {
-			return IniReader.iniToXml(parseINI((File) ini));
-		} else if (ini instanceof URL) {
-			return IniReader.iniToXml(parseINI((URL) ini));
-		} else if (ini instanceof InputStream) {
-			return IniReader.iniToXml(parseINI((InputStream) ini));
-		} else if (ini instanceof Reader) {
-			return IniReader.iniToXml(parseINI((Reader) ini));
 		}
-		return IniReader.iniToXml(ini);
+		return ini instanceof File ? IniReader.iniToXml(parseINI((File) ini))
+			: ini instanceof URL ? IniReader.iniToXml(parseINI((URL) ini))
+			: ini instanceof InputStream ? IniReader.iniToXml(parseINI((InputStream) ini))
+			: ini instanceof Reader ? IniReader.iniToXml(parseINI((Reader) ini)): IniReader.iniToXml(ini);
 	}
 
 	/** Create XML from XON/JSON object in "W" format.
@@ -647,8 +639,8 @@ public class XonUtils {
 		return (a == null && b == null) || (a != null && b != null && XonCompare.equalValue(a,b));
 	}
 
-	/** Compare two XON/JSON objects. Return an empty string if both objects are equal, otherwise,
-	 * return string with different items.
+	/** Compare two XON/JSON objects. Return an empty string if both objects are equal.
+	 * Otherwise, return string with different items.
 	 * @param a first object with XON/JSON data.
 	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
