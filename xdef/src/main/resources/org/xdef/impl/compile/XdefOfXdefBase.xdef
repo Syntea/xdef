@@ -415,7 +415,7 @@ OnIllegalSection ::= ("onIllegalAttr" | "onIllegalText") S? Statement?
 AttributeOnStartSection ::= "onStartElement" S? Statement?
  
 ValueValidationSection ::= ("fixed" S $rule (Expression | Block)
-  | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification)
+  | (Occurrence S? (";" S?)? CheckValueSpecification?) | CheckValueSpecification)
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
   /* ExplicitCode must return a value of boolean type or ParseResult. */

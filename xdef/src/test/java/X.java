@@ -3,6 +3,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDValue;
+import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -19,7 +20,7 @@ public class X extends XDTester {
 		XDValue val;
 		try {
 			xd = XDFactory.compileXD(null,
-"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y'>\n" +
+"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +
 "\n" +
 "  <xd:BNFGrammar name='EMAILADDR'>\n" +
 "/***  RFC 5321 ***/\n"+
@@ -90,23 +91,24 @@ public class X extends XDTester {
 "  </xd:declaration>\n" +
 "\n" +
 "  <A>\n" +
-"    <B xd:script = '*;' a = 'myEmail();'/>\n" +
+"    <B xd:script = '*;' a = 'required; myEmail();'/>\n" +
 "  </A>\n" +
 "\n" +
 "  <X>\n" +
-"    <B xd:script = '*;' a = 'price(); onTrue x(getParsedResult())'/>\n" +
+"    <B xd:script = '*;' a = 'required; price(); onTrue x(getParsedResult())'/>\n" +
 "  </X>\n" +
 "\n" +
 "  <Y>\n" +
 "    <Z xd:script = '*;'\n" +
-"      a=\"manufactureDateType(); finally {\n" +
+"      a=\"required; manufactureDateType(); finally {\n" +
 "          outln(getQnamePrefix('x:y') + ', ' + getQnameLocalpart('y')\n" +
-"             + ', ' + isLeapYear() + ', ' + easterMonday()); \n" +
+"             + ', ' + isLeapYear(now()) + ', ' + easterMonday(now())); \n" +
 "        } onTrue {\n" +
 "          if ('--'.equals(getText())) getParsedResult().setValue(null);\n" +
 "            date = getParsedResult().datetimeValue();\n" +
 "        }\"/>\n" +
 "  </Y>\n" +
+"  <Z> required; string(1); onFalse out('error: ' + getText()); </Z>\n" +
 "</xd:def>").createXDDocument();
 
 			xd.setStdOut(swr = new StringWriter());
@@ -122,6 +124,12 @@ public class X extends XDTester {
 			assertTrue("x, y, false, 2025-04-21\n".equals(s), s);
 			xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
 			assertEq("2025-04-03", xd.getVariable("date").toString());
+			xd.setStdOut(swr = new StringWriter());
+			xd.xparse("<Z>xx</Z>", null);
+			assertEq("error: xx", s = swr.toString());
+			xd.setStdOut(swr = new StringWriter());
+			xd.xparse("<Z/>", new ArrayReporter());
+			assertEq("error: null", s = swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 

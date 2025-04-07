@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.net.InetAddress;
 import java.util.Currency;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -93,18 +92,8 @@ public final class XExtUtils {
 	 */
 	public static final boolean isLeapYear(final SDatetime d) {return d.isLeapYear();}
 
-	/** Check if the current year is a leap year.
-	 * @return true if the current year is a leap year.
-	 */
-	public static final boolean isLeapYear() {return new SDatetime(new Date()).isLeapYear();}
-
-	/** Get the date with the Easter Monday of the current date.
-	 * @return date with the Easter Monday of the current date.
-	 */
-	public static final SDatetime easterMonday() {return new SDatetime(new Date()).getEasterMonday();}
-
 	/** Get the date with the Easter Monday of the year from given date.
-	 * @param date date with the zear to be used for computing Easter Monday date.
+	 * @param date date with the year to be used for computing Easter Monday date.
 	 * @return date with the Easter Monday of the year from given date.
 	 */
 	public static final SDatetime easterMonday(final SDatetime date) {return date.getEasterMonday();}
@@ -475,9 +464,9 @@ public final class XExtUtils {
 	 */
 	public static final XDValue getXDValueOfXon(final XXElement xel){return getXDValueOfObject(xel.getXon());}
 
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of script methods.
-////////////////////////////////////////////////////////////////////////////////
+/* **********************************
+* Implementation of script methods. *
+************************************/
 
 	/** Cancel running X-definition process. */
 	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //X-definition canceled
@@ -513,9 +502,9 @@ public final class XExtUtils {
 		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Methods with XXNode
-////////////////////////////////////////////////////////////////////////////////
+/* ********************
+* Methods with XXNode *
+**********************/
 
 	public static final Element getCreateContextElement(final XXNode xElem) {
 		return ((ChkNode) xElem).getElemValue();
@@ -568,14 +557,14 @@ public final class XExtUtils {
 			? new DefContainer() : fromRoot(xElem, expr, val.getElement());
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// PARSERESULT
-////////////////////////////////////////////////////////////////////////////////
+/* ************
+* PARSERESULT *
+**************/
 	public static final void clearReports(final XDParseResult x) {x.clearReports();}
 	public static final String getSource(final XDParseResult x) {return x.getSourceBuffer();}
-////////////////////////////////////////////////////////////////////////////////
-// dateTime
-////////////////////////////////////////////////////////////////////////////////
+/* *********
+* dateTime *
+***********/
 	public static final int getMaxYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
 	public static final void setMaxYear(XXNode xnode, int i) {xnode.getXDDocument().setMaxYear(i);}
 	public static final int getMinYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
@@ -602,10 +591,10 @@ public final class XExtUtils {
 		return p.isRFC822Datetime() && p.eos() && p.testParsedDatetime() ? p.getParsedSDatetime() : null;
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of predefined X-script Math methods (ensure conversion
-// of arguments long -> double). Other math methods are available in Math.
-////////////////////////////////////////////////////////////////////////////////
+/* ************************************************************************
+* Implementation of predefined X-script Math methods (ensure conversion   *
+* of arguments long -> double). Other math methods are available in Math. *
+**************************************************************************/
 	public static final double acos(final long a) {return Math.acos(a);}
 	public static final double asin(final long a) {return Math.asin(a);}
 	public static final double atan(final long a) {return Math.atan(a);}

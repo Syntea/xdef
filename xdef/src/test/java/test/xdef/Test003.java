@@ -62,8 +62,7 @@ public final class Test003 extends XDTester {
 		} catch(RuntimeException ex) {fail(ex);}
 		try {
 			String defFile = dataDir + "SouborD1A_.xdef";
-			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
-				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
+			setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(defFile);
 			File tmp1 = File.createTempFile("SouborD1A", "err");
 			tmp1.deleteOnExit();
@@ -78,13 +77,11 @@ public final class Test003 extends XDTester {
 			}
 			xd.setUserObject(this);
 			el = xd.xparse(dataDir + "SouborD1D.xml", rw);
-			if (null != xd.getDocument().getXmlEncoding()
-				&& !"UTF-8".equalsIgnoreCase(el.getOwnerDocument()
-					.getXmlEncoding())) {
+			if (null != xd.getDocument().getXmlEncoding() && !"UTF-8".equalsIgnoreCase(
+				el.getOwnerDocument().getXmlEncoding())) {
 				fail("encoding: " + xd.getDocument().getXmlEncoding());
 			}
-			isr = new InputStreamReader(
-				new FileInputStream(dataDir + "SouborD1B.xml"));
+			isr = new InputStreamReader(new FileInputStream(dataDir + "SouborD1B.xml"));
 			fw.close();
 			OutputStreamWriter lst;
 			FileReader fr;
@@ -106,8 +103,7 @@ public final class Test003 extends XDTester {
 "<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='A' ><A/></xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B' ><B/></xd:def>",
 			new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C' ><C/></xd:def>")
-				.getBytes("UTF-8"))};
+"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C' ><C/></xd:def>").getBytes("UTF-8"))};
 			String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
 			xp = XDFactory.compileXD(null, p1, p2);
 			assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));
@@ -129,8 +125,7 @@ public final class Test003 extends XDTester {
 			wr.close();
 			URL u = f.toURI().toURL();
 			XDFactory.compileXD(null, u);
-			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "' include='"+u.toExternalForm()+"' />";
+			xdef = "<xd:collection xmlns:xd='" + _xdNS + "' include='"+u.toExternalForm()+"' />";
 			xp = compile(xdef);
 
 			xml = "<test a='123'/>";
@@ -254,8 +249,7 @@ public final class Test003 extends XDTester {
 "     skákal přes louže\n " +
 "     <proč>jen tak</proč>\n " +
 " </kůň>\r\n").getBytes("UTF-8");
-				// create big XML file
-				//parse created file and get time of processing
+				// Create big XML file. Parse created file and get time of processing
 				xd = xp.createXDDocument();
 				File tempfile = File.createTempFile("bigxml", "xml");
 				tempfile.deleteOnExit();
@@ -271,12 +265,9 @@ public final class Test003 extends XDTester {
 				long datalen = tempfile.length();
 				long t = System.currentTimeMillis();
 				xd.xparse(xml, null);
-				float duration =
-					((float)((System.currentTimeMillis() - t) / 1000.0));
+				float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
 				DecimalFormat df = new DecimalFormat("0.00");
-				setResultInfo("Big XML: "
-					+ df.format(((float) datalen / 1000.0))
-					+ "KB/" + df.format(duration)
+				setResultInfo("Big XML: " + df.format(((float) datalen / 1000.0)) + "KB/" +df.format(duration)
 					+ "s (" + df.format((datalen / 1000.0)/duration)+"KB/s);");
 			} catch (IOException | RuntimeException ex) {fail(ex);}
 		}
