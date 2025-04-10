@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.26, release-date 2025-04-07
+# Version 42.2.26, release-date 2025-04-10
 * Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables
   of some types (e.g. Datetime).
 
