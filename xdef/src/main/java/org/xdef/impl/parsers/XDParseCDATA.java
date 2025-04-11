@@ -9,6 +9,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-script "CDATA" type.
@@ -20,7 +21,7 @@ public class XDParseCDATA extends XDParserAbstract {
 	public XDParseCDATA() {super(); _minLength = 1; _maxLength = -1;}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p){
 		String s = p.getUnparsedBufferPart();
 		int len = s.length();
 		p.setParsedValue(s);
@@ -30,7 +31,7 @@ public class XDParseCDATA extends XDParserAbstract {
 			_minLength >= 0 && len < _minLength) {
 			p.errorWithString(XDEF.XDEF814, "string"); //Length of value of '&{0}' is too short&{0}'{: }
 		} else {
-			checkCharset(xnode, p);
+			checkCharset(xn, p);
 			p.setEos();
 		}
 	}
@@ -45,14 +46,11 @@ public class XDParseCDATA extends XDParserAbstract {
 		if (params == null || (pars = params.getXDNamedItems()) == null) {
 			return;
 		}
-		for (int i = 0; i < pars.length; i++) {
-			String name = pars[i].getName();
-			if ("length".equals(name)) {
-				_minLength = _maxLength = pars[i].getValue().intValue();
-			} else if ("minLength".equals(name)) {
-				_minLength = pars[i].getValue().intValue();
-			} else if ("maxLength".equals(name)) {
-				_maxLength = pars[i].getValue().intValue();
+		for (XDNamedValue x: pars) {
+			switch (x.getName()) {
+				case "length": _minLength = _maxLength = x.getValue().intValue(); break;
+				case "minLength": _minLength = x.getValue().intValue(); break;
+				case "maxLength": _maxLength = x.getValue().intValue(); break;
 			}
 		}
 		if (_minLength >= 0 && _maxLength >= 0 && _minLength > _maxLength) {

@@ -15,6 +15,7 @@ import java.util.List;
 import org.xdef.XDContainer;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-script "enum" type.
  * @author Vaclav Trojan
@@ -26,14 +27,27 @@ public class XDParseEnum extends XDParserAbstract {
 	public XDParseEnum() {super();}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		int i;
-		if ((i=p.isOneOfTokens(_list)) >= 0) {
-			p.setParsedValue(_list[i]);
-			return;
+	public void parseObject(final XXNode xn, final XDParseResult p) {
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		if (quoted) {
+			int pos = p.getIndex();
+			String x = XonTools.readJString(p);
+			for (String s: _list) {
+				if (s.equals(x)) {
+					p.setParsedValue(p.getParsedString());
+					return;
+				}
+			}
+		} else {
+			int i;
+			if ((i = p.isOneOfTokens(_list)) >= 0) {
+				p.setParsedValue(_list[i]);
+				return;
+			}
 		}
 		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 	}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		int n = params.length;
@@ -42,6 +56,7 @@ public class XDParseEnum extends XDParserAbstract {
 			_list[i] = params[i].toString();
 		}
 	}
+
 	@Override
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
@@ -72,6 +87,33 @@ public class XDParseEnum extends XDParserAbstract {
 			}
 		}
 	}
+
+	/** Convert string with tokens separated by "|" to array in Container.
+	 * @param s string with tokens separated by "|".
+	 * @return array of strings in Container
+	 */
+	public static XDContainer tokensToContainer(final String s) {
+		XDContainer container = new DefContainer();
+		int j = 0;
+		int k;
+		String t = "";
+		while ((k = s.indexOf('|', j)) >= 0) {
+			if (k + 1 < s.length() && s.charAt(k+1) == '|') {
+				t += s.substring(j, k + 1);
+				j = k+2;
+				continue;
+			}
+			if (k > 0) {
+				container.addXDItem(new DefString((t+s.substring(j,k)).trim()));
+			}
+			t = "";
+			j = k + 1;
+		}
+		t += s.substring(j);
+		container.addXDItem(new DefString(t.trim()));
+		return container;
+	}
+
 	/** Create _list of strings sorted descendant according to length and equal items are ignored.
 	 * @param val argument to be converted.
 	 * @throws SException if an error occurs.
@@ -115,31 +157,7 @@ public class XDParseEnum extends XDParserAbstract {
 		_list = new String[list.size()];
 		list.toArray(_list);
 	}
-	/** Convert string with tokens separated by "|" to array in Container.
-	 * @param s string with tokens separated by "|".
-	 * @return array of strings in Container
-	 */
-	public static XDContainer tokensToContainer(final String s) {
-		XDContainer container = new DefContainer();
-		int j = 0;
-		int k;
-		String t = "";
-		while ((k = s.indexOf('|', j)) >= 0) {
-			if (k + 1 < s.length() && s.charAt(k+1) == '|') {
-				t += s.substring(j, k + 1);
-				j = k+2;
-				continue;
-			}
-			if (k > 0) {
-				container.addXDItem(new DefString((t+s.substring(j,k)).trim()));
-			}
-			t = "";
-			j = k + 1;
-		}
-		t += s.substring(j);
-		container.addXDItem(new DefString(t.trim()));
-		return container;
-	}
+
 	@Override
 	public XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
@@ -152,10 +170,13 @@ public class XDParseEnum extends XDParserAbstract {
 		}
 		return map;
 	}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseEnum) ) {

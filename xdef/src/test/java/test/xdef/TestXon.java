@@ -15,6 +15,7 @@ import org.xdef.component.XComponent;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
@@ -28,6 +29,43 @@ import static test.XDTester._xdNS;
 public class TestXon extends XDTester {
 
 	public TestXon() {super();}
+
+	/** Test validation method and correct result in quoted/unquoted values.
+	 * @param typ validation method.
+	 */
+	private ArrayReporter test(final String typ) {
+		Object o;
+		String xdef,json;
+		XDPool xp;
+		XDDocument xd;
+		xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <xd:declaration scope='local'> BNFGrammar base = new BNFGrammar('a::=[0-9a-zA-Z]+'); </xd:declaration>\n" +
+"  <xd:json name='A'>\n" +
+"   { \"a\": \"" + typ + "\" }\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+		xp = XDFactory.compileXD(null, xdef);
+		xd = xp.createXDDocument();
+		json = "{\"a\":\"unKNOWn\"}";
+		ArrayReporter reporter = new ArrayReporter();
+		String s = XonUtils.toJsonString(xd.jparse(json, reporter));
+		if (!json.equals(s) || reporter.errors()) {
+			reporter.add(Report.error("E", s));
+		}
+		json = "{\"a\":\"0\"}";
+		ArrayReporter reporter2 = new ArrayReporter();
+		s = XonUtils.toJsonString(xd.jparse(json, reporter2));
+		if (reporter2.errors()) {
+			Report r;
+			while ((r = reporter2.getReport()) != null) {
+				reporter.add(r);
+			}
+		} else if (!json.equals(s)) {
+			reporter2.add(Report.error("E", s));
+		}
+		return reporter;
+	}
 
 	/** Run all tests. */
 	@Override
@@ -1704,6 +1742,13 @@ public class TestXon extends XDTester {
 //			alist.add("ab\tc");
 //			assertTrue(XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
 //			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
+
+			assertNoErrors(test("an();"));
+			assertNoErrors(test("string();"));
+			assertNoErrors(test("enum('0', 'unKNOWn');"));
+			assertNoErrors(test("enumi('0', 'unknown');"));
+			assertNoErrors(test("base.rule('a');"));
+			assertNoErrors(test("BNF(base,'a');"));
 		} catch (RuntimeException ex) {fail(ex);}
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);

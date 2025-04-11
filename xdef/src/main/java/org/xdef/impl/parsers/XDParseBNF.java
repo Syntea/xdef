@@ -14,9 +14,11 @@ import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import static org.xdef.XDValueID.XD_BNFRULE;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import org.xdef.msg.XDEF;
 import org.xdef.xon.XonTools;
 
 /** Parse BNF
@@ -36,14 +38,21 @@ public class XDParseBNF extends XDParserAbstract {
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos0 = p.getIndex();
+		String s;
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		StringParser parser = quoted ? new StringParser(XonTools.readJString(p), pos0)
-			: new StringParser(p.getSourceBuffer(), pos0);
+		if (quoted) {
+			s = XonTools.readJString(p);
+		} else {
+			s = p.getUnparsedBufferPart();
+		}
+		StringParser parser = new StringParser(s, pos0);
 		XDParseResult r = _rule.perform(parser);
-		p.setParsedValue(r.getParsedValue());
-		p.addReports(p.getReporter());
-		p.setIndex(parser.getIndex());
-		p.isSpaces();
+		if (r.matches()) {
+			p.setParsedValue(quoted ? p.getParsedBufferPartFrom(pos0): s);
+			p.setEos();
+		} else {
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
+		}
 		checkCharset(xn, p);
 	}
 

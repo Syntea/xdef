@@ -2814,8 +2814,22 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case BNFRULE_PARSE: {
-					String s = item.getParam() == 1 ? chkEl.getTextValue() : _stack[sp--].toString();
-					_stack[sp] = ((DefBNFRule) _stack[sp]).perform(s);
+					String s;
+					boolean quoted = false;
+					if (item.getParam() == 1) {
+						s = chkEl.getTextValue();
+						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
+							&& s.startsWith("\"") && s.endsWith("\"")) {
+							s = s.substring(1, s.length()-1);
+						}
+					} else {
+						s = _stack[sp--].toString();
+					}
+					DefParseResult result = ((DefBNFRule) _stack[sp]).perform(s);
+					if (result.matches() && quoted) {
+						result.setParsedValue('\"' + s + '\"');
+					}
+					_stack[sp] = result;
 					continue;
 				}
 				case BNFRULE_VALIDATE: {

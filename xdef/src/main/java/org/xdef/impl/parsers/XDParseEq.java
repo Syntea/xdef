@@ -11,6 +11,7 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonTools;
 
