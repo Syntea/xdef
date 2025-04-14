@@ -1229,8 +1229,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return result;
 	}
 
-	/** Get XON result.
-	 * @return XON  result.
+	/** Get XON result of processed document.
+	 * @return result of JSON/XON parsing or return null.
 	 */
 	@Override
 	public final Object getXon() {

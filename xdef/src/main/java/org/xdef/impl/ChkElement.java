@@ -3511,11 +3511,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	public final void setXComponent(final XComponent x) {_xComponent = x;}
 
-	/** Get XON result of processed Element model.
-	 * @return result of XON parsing.
+	/** Get XON result of processed model of element.
+	 * @return result of JSON/XON parsing or return null.
 	 */
 	@Override
-	public Object getXon() {return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;}
+	public Object getXon() {return _xonArray != null ? _xonArray : _xonMap != null ?_xonMap : _xonValue;}
 
 ////////////////////////////////////////////////////////////////////////////////
 

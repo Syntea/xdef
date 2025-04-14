@@ -348,8 +348,8 @@ public interface XXNode extends XDValue {
 	 */
 	public TimeZone getDefaultZone();
 
-	/** Get XON result of processed Element model.
-	 * @return result of XON parsing.
+	/** Get XON result of processed model of element.
+	 * @return result of JSON/XON parsing or return null.
 	 */
 	public Object getXon();
 }
