@@ -110,7 +110,7 @@ public interface XXElement extends XXNode {
 	 */
 	public String getAttributeNS(String uri, String name) throws SRuntimeException;
 
-	/** Get XON result of processed model of element.
+	/** Get XON result of processed element.
 	 * @return result of JSON/XON parsing or return null.
 	 */
 	@Override

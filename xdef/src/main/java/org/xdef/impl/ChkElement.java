@@ -3511,7 +3511,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	public final void setXComponent(final XComponent x) {_xComponent = x;}
 
-	/** Get XON result of processed model of element.
+	/** Get XON result of processed element.
 	 * @return result of JSON/XON parsing or return null.
 	 */
 	@Override
