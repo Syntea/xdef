@@ -347,4 +347,9 @@ public interface XXNode extends XDValue {
 	 * @return actual value of default time zone.
 	 */
 	public TimeZone getDefaultZone();
+
+	/** Get XON result of processed Element model.
+	 * @return result of XON parsing.
+	 */
+	public Object getXon();
 }
