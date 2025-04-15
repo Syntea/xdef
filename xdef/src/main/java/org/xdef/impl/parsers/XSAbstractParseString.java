@@ -15,6 +15,7 @@ import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_REPLACE;
+import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.sys.SRuntimeException;
 
@@ -116,14 +117,14 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 	}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
 		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		String s;
 		if (_enumeration != null) {
-			checkEnumeration(p, xnode);
+			checkEnumeration(p, xn);
 			if (p.errors()) {
 				return;
 			}
@@ -133,22 +134,38 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		} else if (_whiteSpace == WS_COLLAPSE) {//collapse
 			StringBuilder sb = new StringBuilder();
+			boolean quotedString = false;
 			while((s = p.nextToken()) != null) {
 				sb.append(s);
-				if (p.isSpaces()) {
-					if (!p.eos()) {
-						sb.append(' ');
-					} else {
+				if (s.equals("\"") && xn != null && xn.getXonMode() > 0 && p.getIndex() - pos0 == 1) {
+					quotedString = true;
+					if (!p.isSpaces()) {
 						break;
 					}
 				} else {
-					break;
+					if (p.isSpaces()) {
+						if (quotedString) {
+							if  (p.isChar('"')) {
+								sb.append('"');
+								if (p.eos()) {
+									break;
+								}
+							} else {
+								sb.append(" \"");
+							}
+						}
+						if (!p.eos()) {
+							sb.append(' ');
+						} else {
+							break;
+						}
+					} else {
+						break;
+					}
 				}
 			}
-			s = sb.toString();
-			if (_whiteSpace == WS_COLLAPSE) {
-				p.isSpaces();
-			}
+			p.isSpaces();
+			s = sb.toString().trim();
 		} else {//preserve or replace
 			s = p.getUnparsedBufferPart();
 			if (_whiteSpace == WS_REPLACE) { //replace
@@ -162,7 +179,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		p.setParsedValue(s);
 		checkPatterns(p);
 		checkLength(p);
-		checkCharset(xnode, p);
+		checkCharset(xn, p);
 	}
 	void checkLength(XDParseResult p) {
 		if (p.matches()) {

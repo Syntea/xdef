@@ -10,6 +10,7 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SUtils;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +20,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
+import org.xdef.XDDocument;
 import org.xdef.impl.XConstants;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
@@ -640,9 +642,14 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail(" Hello   world"), _msg);
 		assertTrue(parseFail("Hello world"), _msg);
 
-		assertTrue(prepare("string(%enumeration=['Hello world']," + "%whiteSpace='collapse')"), _msg);
+		assertTrue(prepare("string(%enumeration=['Hello world'], %whiteSpace='collapse')"), _msg);
 		assertTrue(parse("  \nHello \n  world \n ", "Hello world"), _msg);
 		assertTrue(parseFail("Helloworld"), _msg);
+
+		assertTrue(prepare("string(%whiteSpace='collapse', %pattern=['\\\\d{0,9}'])"), _msg);
+		assertTrue(parse("     ", ""), _msg);
+		assertTrue(parse("     1", "1"), _msg);
+		assertTrue(parse("     123456  ", "123456"), _msg);
 
 		assertTrue(prepare("string(%whiteSpace='replace')"), _msg);
 		assertTrue(parse(" \nHello \n world \t ", "  Hello   world   "), _msg);
@@ -3655,6 +3662,24 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(prepare("list(%item=union(%item=[string(%length=1),dateTime,date,int]))"), _msg);
 		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
 
+////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
+//                          TEST whitespace collaps in JSON and XML
+//------------------------------------------------------------------------------
+		XDDocument xd = compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='A|X'>\n" +
+"  <xd:json name='A'>\n" +
+"   { \"a\": \"optional; string(%whiteSpace='collapse', %pattern='.[0-9 ]*.')\"," +
+"     \"b\": \"optional; string(%whiteSpace='collapse')\"\n" +
+"   }\n" +
+"  </xd:json>\n" +
+"  <X a = \"optional; string(%whiteSpace='collapse', %pattern='.[0-9 ]*.')\"\n" +
+"     b = \"optional; string(%whiteSpace='collapse')\" />\n" +
+"</xd:def>").createXDDocument();
+		assertEq("020004512", ((Map) xd.jparse("{ \"a\":\"       020004512    \" }", null)).get("a"));
+		assertEq("\"x\"", ((Map) xd.jparse("{ \"b\":\"       \\\"x\\\"    \" }", null)).get("b"));
+		assertEq("<X a=\"020004512\"/>", xd.xparse("<X a=\"       020004512  \" />", null));
+		assertEq("<X b='\\\"x\\\"'/>", xd.xparse("<X b='       \\\"x\\\"  ' />", null));
 ////////////////////////////////////////////////////////////////////////////////
 
 		resetTester();
