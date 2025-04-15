@@ -3,7 +3,8 @@
 # Version 42.2.26, release-date 2025-04-15
 * Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables
   of some types (e.g. Datetime).
-* Fixed bug in parsing JSON data of String type with whitespace="collapse" parameter.
+* Fixed bug in parsing JSON data of String type containing quote and the validation method has the whitespace
+  parameter `collapse`.
 
 # Version 42.2.25, release-date 2025-03-28
 * Fixed error when parsing email address when the local part contains several consecutive hypen characters.
