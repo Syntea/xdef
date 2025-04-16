@@ -50,10 +50,12 @@ public final class XDCurrency extends XDValueAbstract {
 
 	@Override
 	public final int hashCode() {return _value == null ? 0 : _value.hashCode();}
+
 	@Override
 	public final boolean equals(final Object arg) {
 		return arg instanceof XDValue ? equals((XDValue) arg) : false;
 	}
+
 	@Override
 	public final boolean equals(final XDValue arg) {
 		if (arg instanceof XDCurrency) {
@@ -62,6 +64,7 @@ public final class XDCurrency extends XDValueAbstract {
 		}
 		return false;
 	}
+
 	@Override
 	public final int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof XDCurrency) {
@@ -71,16 +74,22 @@ public final class XDCurrency extends XDValueAbstract {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 	}
+
 	@Override
 	public final short getItemId() {return XD_CURRENCY;}
+
 	@Override
 	public final XDValueType getItemType() {return CURRENCY;}
+
 	@Override
 	public final String stringValue() {return isNull()?"":_value.getCurrencyCode();}
+
 	@Override
 	public final boolean isNull() {return _value == null;}
+
 	@Override
 	public final Currency getObject() {return _value;}
+
 	@Override
 	public final String toString() {return stringValue();}
 }

@@ -64,6 +64,7 @@ public final class XDPrice extends XDValueAbstract {
 		}
 		return false;
 	}
+
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof XDPrice) {
@@ -73,16 +74,22 @@ public final class XDPrice extends XDValueAbstract {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 	}
+
 	@Override
 	public short getItemId() {return XD_PRICE;}
+
 	@Override
 	public XDValueType getItemType() {return PRICE;}
+
 	@Override
 	public String stringValue() {return isNull() ? "null" : _amount.toString();}
+
 	@Override
 	public boolean isNull() {return _amount == null;}
+
 	@Override
 	public Price getObject() {return _amount;}
+
 	@Override
 	public String toString() {return stringValue();}
 }

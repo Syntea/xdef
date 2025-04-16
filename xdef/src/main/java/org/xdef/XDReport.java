@@ -109,33 +109,40 @@ public final class XDReport extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public final short getItemId() {return XD_REPORT;}
 	@Override
+	public final short getItemId() {return XD_REPORT;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public final XDValueType getItemType() {return REPORT;}
 	@Override
+	public final XDValueType getItemType() {return REPORT;}
+
 	/** Check if the object is null.
 	 * @return <i>true</i> if the object is null otherwise returns false.
 	 */
+	@Override
 	public final boolean isNull() { return _value == null;}
-	@Override
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
+	@Override
 	public final String stringValue() {return toString();}
-	@Override
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
+	@Override
 	public final String toString() {return _value == null ? "null" : _value.toString();}
+
 	@Override
 	public final int hashCode() {return _value == null ? 0 : _value.hashCode();}
+
 	@Override
 	public final boolean equals(final Object arg) {
 		if (arg instanceof XDValue) {
@@ -143,12 +150,13 @@ public final class XDReport extends XDValueAbstract {
 		}
 		return false;
 	}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
 	 * equals to this one.
 	 */
+	@Override
 	public final boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();

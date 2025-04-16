@@ -81,11 +81,13 @@ public final class XDRegexResult extends XDValueAbstract {
 	 * @return The id of item type.
 	 */
 	public short getItemId() {return XD_REGEXRESULT;}
+
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public XDValueType getItemType() {return REGEXRESULT;}
+
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
@@ -95,12 +97,14 @@ public final class XDRegexResult extends XDValueAbstract {
 		if (_value.matches()) return _value.group();
 		return "";
 	}
+
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
 	public String stringValue() {return String.valueOf(matches());}
+
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @return true if and only if the argument is equal to this one.
@@ -115,6 +119,7 @@ public final class XDRegexResult extends XDValueAbstract {
 		return _value == null ? arg.isNull()
 			: _value.equals(((XDRegexResult) arg)._value);
 	}
+
 	@Override
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise returns false.
