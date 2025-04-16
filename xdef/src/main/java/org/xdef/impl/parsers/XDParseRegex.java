@@ -10,8 +10,10 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.msg.XDEF;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-script "regex" type.
  * @author Vaclav Trojan
@@ -23,18 +25,23 @@ public class XDParseRegex extends XDParserAbstract {
 	public XDParseRegex() {super();}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		String s = p.getUnparsedBufferPart();
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		boolean jsonString = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		String s = jsonString ? XonTools.readJString(p) : p.getUnparsedBufferPart();
 		if (!_regex.matches(s)) {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		} else {
+			if (jsonString) {
+				s = '"' + s + '"';
+			}
 			p.setParsedValue(s);
-			checkCharset(xnode, p);
+			checkCharset(xn, p);
 			p.setEos();
 		}
 	}
+
 	@Override
-	public void setNamedParams(final XXNode xnode, final XDContainer params)
+	public void setNamedParams(final XXNode xn, final XDContainer params)
 		throws SException {
 		int num;
 		if (params == null || (num = params.getXDNamedItemsNumber()) == 0) {
@@ -55,6 +62,7 @@ public class XDParseRegex extends XDParserAbstract {
 			}
 		}
 	}
+
 	@Override
 	public final XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
@@ -63,10 +71,13 @@ public class XDParseRegex extends XDParserAbstract {
 		}
 		return map;
 	}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseRegex) ) {

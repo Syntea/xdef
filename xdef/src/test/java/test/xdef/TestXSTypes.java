@@ -10,7 +10,6 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SUtils;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,7 +19,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
-import org.xdef.XDDocument;
 import org.xdef.impl.XConstants;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
@@ -112,7 +110,7 @@ public final class TestXSTypes extends XDTester {
 					_result = false;
 				}
 			}
-		} catch (Exception ex) {
+		} catch (RuntimeException | IOException | SAXException ex) {
 			if (result != null) {
 				if (_msg.length() > 0) {
 					_msg += "\n";
@@ -484,7 +482,7 @@ public final class TestXSTypes extends XDTester {
 					}
 				}
 			}
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			if (result != null) {
 				if (_msg.length() > 0) {
 					_msg += "\n";
@@ -533,7 +531,7 @@ public final class TestXSTypes extends XDTester {
 				factory.setErrorHandler(_errHandler);
 				_validator = schema.newValidator();
 				_validator.setErrorHandler(_errHandler);
-			} catch (Exception ex) {
+			} catch (RuntimeException | SAXException ex) {
 				result = false;
 				if (_msg.length() > 0) {
 					_msg += "\n";
@@ -3661,26 +3659,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
 		assertTrue(prepare("list(%item=union(%item=[string(%length=1),dateTime,date,int]))"), _msg);
 		assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
-
-////////////////////////////////////////////////////////////////////////////////
 //------------------------------------------------------------------------------
-//                          TEST whitespace collaps in JSON and XML
-//------------------------------------------------------------------------------
-		XDDocument xd = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='A|X'>\n" +
-"  <xd:json name='A'>\n" +
-"   { \"a\": \"optional; string(%whiteSpace='collapse', %pattern='.[0-9 ]*.')\"," +
-"     \"b\": \"optional; string(%whiteSpace='collapse')\"\n" +
-"   }\n" +
-"  </xd:json>\n" +
-"  <X a = \"optional; string(%whiteSpace='collapse', %pattern='.[0-9 ]*.')\"\n" +
-"     b = \"optional; string(%whiteSpace='collapse')\" />\n" +
-"</xd:def>").createXDDocument();
-		assertEq("020004512", ((Map) xd.jparse("{ \"a\":\"       020004512    \" }", null)).get("a"));
-		assertEq("\"x\"", ((Map) xd.jparse("{ \"b\":\"       \\\"x\\\"    \" }", null)).get("b"));
-		assertEq("<X a=\"020004512\"/>", xd.xparse("<X a=\"       020004512  \" />", null));
-		assertEq("<X b='\\\"x\\\"'/>", xd.xparse("<X b='       \\\"x\\\"  ' />", null));
-////////////////////////////////////////////////////////////////////////////////
 
 		resetTester();
 	}

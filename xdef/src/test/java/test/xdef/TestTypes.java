@@ -24,6 +24,8 @@ import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 import org.w3c.dom.DOMException;
 import org.xdef.XDGPSPosition;
 import org.xdef.sys.Price;
@@ -1421,6 +1423,39 @@ public final class TestTypes extends XDTester {
 			assertEq(el.getAttribute("IDREF"), "cs");
 			assertEq("cs cs1", el.getAttribute("IDREFS"));
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
+///////////// TEST JSON string and XML ////////////////////////////////////////////////
+			xd = compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='A|J'>\n" +
+"  <xd:json name='J'>\n" +
+"	[\n" +
+"	  { %script=\"occurs *;\",\n" +
+"	    \"a\": \"? regex('[ ]*[0-9]*')\",\n" +
+"	    \"b\": \"? string(%pattern='[ ]*[0-9]*')\"\n" +
+"	    \"c\": \"? string(%whiteSpace='collapse', %pattern='[0-9]*')\"\n" +
+"	  }\n" +
+"	]\n" +
+"  </xd:json>\n" +
+"  <A>\n" +
+"    <B xd:script='*'> ? regex('[ ]*[0-9]*') </B>\n" +
+"    <C xd:script='*'> ? string(%pattern='[ ]*[0-9]*') </C>\n" +
+"    <D xd:script='*'> ? string(%whiteSpace='collapse', %pattern='[ ]*[0-9]*') </D>\n" +
+"  </A>\n" +
+"</xd:def>").createXDDocument();
+			assertEq("<A><B></B><B>1</B><B> 1</B><C></C><C>1</C><C> 1</C><D></D><D>1</D><D> 1</D></A>",
+				xd.xparse("<A><B></B><B>1</B><B> 1</B><C></C><C>1</C><C> 1</C><D></D><D>1</D><D> 1</D></A>",
+					null));
+			Map m =(Map)((List) xd.jparse("[{\"a\":\"\",\"b\":\"\",\"c\":\"\"}]", null)).get(0);
+			assertEq("", m.get("a"));
+			assertEq("", m.get("b"));
+			assertEq("", m.get("c"));
+			m =(Map)((List) xd.jparse("[{\"a\":\"1\",\"b\":\"1\",\"c\":\"1\"}]", null)).get(0);
+			assertEq("1", m.get("a"));
+			assertEq("1", m.get("b"));
+			assertEq("1", m.get("c"));
+			m =(Map)((List) xd.jparse("[{\"a\":\" 1\",\"b\":\" 1\",\"c\":\" 1\"}]", null)).get(0);
+			assertEq(" 1", m.get("a"));
+			assertEq(" 1", m.get("b"));
+			assertEq(" 1", m.get("b"));
 		} catch (IOException ex) {fail(ex);}
 		resetTester();
 	}
