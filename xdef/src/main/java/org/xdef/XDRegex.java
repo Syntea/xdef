@@ -87,22 +87,26 @@ public final class XDRegex extends XDValueAbstract {
 	 * @return The id of item type.
 	 */
 	public final short getItemId() {return XD_REGEX;}
+
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public final XDValueType getItemType() {return REGEX;}
+
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
 	public final String toString() {return _source;}
+
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
 	public final String stringValue() {return _source;}
+
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @return true if and only if the argument is equal to this one.

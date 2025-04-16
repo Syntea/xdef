@@ -31,6 +31,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 
 	@Override
 	public  void initParams() {_patterns = null; _enumeration = null; _minLength = _maxLength = -1;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -51,20 +52,28 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) { _maxLength = x; }
+
 	@Override
 	public long getMaxLength() { return _maxLength; }
+
 	@Override
 	public void setMinLength(final long x) { _minLength = x; }
+
 	@Override
 	public long getMinLength() { return _minLength; }
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		if (params != null && params.length >= 1) {
@@ -78,6 +87,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		_enumeration = null;
@@ -119,6 +129,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
+		boolean quotedString = xn != null && xn.getXonMode() > 0 && p.isChar('"');
 		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
@@ -129,36 +140,29 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 				return;
 			}
 			s = p.getParsedValue().toString();
+			if (quotedString && s.endsWith("\"") &&  s.length() > 1) {
+				s = s.substring(0, s.length() - 1);
+			}
 			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 			}
 		} else if (_whiteSpace == WS_COLLAPSE) {//collapse
 			StringBuilder sb = new StringBuilder();
-			boolean quotedString = false;
 			while((s = p.nextToken()) != null) {
 				sb.append(s);
-				if (s.equals("\"") && xn != null && xn.getXonMode() > 0 && p.getIndex() - pos0 == 1) {
-					quotedString = true;
-					if (!p.isSpaces()) {
-						break;
-					}
-				} else {
-					if (p.isSpaces()) {
-						if (quotedString) {
-							if  (p.isChar('"')) {
-								sb.append('"');
-								if (p.eos()) {
-									break;
-								}
-							} else {
-								sb.append(" \"");
+				if (p.isSpaces()) {
+					if (quotedString) {
+						if  (p.isChar('"')) {
+							sb.append('"');
+							if (p.eos()) {
+								break;
 							}
-						}
-						if (!p.eos()) {
-							sb.append(' ');
 						} else {
-							break;
+							sb.append(" \"");
 						}
+					}
+					if (!p.eos()) {
+						sb.append(' ');
 					} else {
 						break;
 					}
@@ -166,8 +170,14 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 			p.isSpaces();
 			s = sb.toString();
+			if (quotedString && s.endsWith("\"")) {
+				s = s.substring(0, s.length() - 1).trim(); // remove '"' from the end of string
+			}
 		} else {//preserve or replace
 			s = p.getUnparsedBufferPart();
+			if (quotedString && s.endsWith("\"")) {
+				s = s.substring(0, s.length() - 1);
+			}
 			if (_whiteSpace == WS_REPLACE) { //replace
 				s = s.replace('\t', ' ').replace('\n', ' ').replace('\r', ' ');
 			}
@@ -179,6 +189,11 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		p.setParsedValue(s);
 		checkPatterns(p);
 		checkLength(p);
+		if (quotedString) { // JSON string
+			s = '"' + s + '"';
+			p.replaceParsedBufferFrom(pos0, s);
+			p.setParsedValue(s);
+		}
 		checkCharset(xn, p);
 	}
 	void checkLength(XDParseResult p) {
@@ -233,6 +248,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
 }

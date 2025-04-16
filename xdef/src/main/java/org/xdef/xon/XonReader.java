@@ -274,8 +274,7 @@ public final class XonReader extends StringParser implements XonParsers {
 
 	/** Returns parsed simpleValue.
 	 * @param x parsed simpleValue to be returned.
-	 * @return parsed simpleValue. If the switch _genJObjects is true, then
-	 * the parsed simpleValue contains source position.
+	 * @return parsed simpleValue. If _genJObjects is true the parsed value contains the source position.
 	 */
 	private XonTools.JValue returnValue(SPosition spos, final Object x) {return new XonTools.JValue(spos, x);}
 
@@ -284,7 +283,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param code currencyCode of error message.
 	 * @param skipChars string with characters to which source will be skipped.
 	 * @param params list od error message parameters (may be empty.)
-	 * @return parsed simpleValue. If switch _genJObjects is true, then simpleValue contains source position.
+	 * @return parsed simpleValue. If switch _genJObjects is true the simpleValue contains source position.
 	 */
 	private XonTools.JValue returnError(SPosition spos,
 		final Object x,
@@ -341,6 +340,11 @@ public final class XonReader extends StringParser implements XonParsers {
 		int pos = getIndex();
 		if (isChar('"')) { // string
 			String s = XonTools.readJString(this);
+			if (_jdef) { //JSON string in X-definition JSON model
+				s = SUtils.modifyString(s, "\\", "\\\\");
+				s = SUtils.modifyString(s, "\"", "\\\"");
+				return returnValue(spos, s);
+			}
 			if (!_xonMode) {
 				return returnValue(spos, s);
 			} else {

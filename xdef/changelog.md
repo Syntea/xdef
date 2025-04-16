@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.27, release-date 2025-04-15
-* .
+# Version 42.2.27, release-date 2025-04-16
+* Fixed bug in parsing JSON data containing quoted string of String method with `%pattern` parameter.
 
 # Version 42.2.26, release-date 2025-04-15
 * Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables
@@ -91,7 +91,7 @@
   not contain a time zone and the default time zone is set, then this default
   time zone is set to the result datetime value.
 * Implemented the new X-script method `currencyCode()` of `Currency` value which
-  returns string with ISO 4217 currency code. 
+  returns string with ISO 4217 currency code.
 * To the class `org.xdef.XDFactory` is added new static methods. The method
   `isXQuerySupported()` returns true if XQuery language is supported
   and the method `isXPath2Supported()` returns true if XPath2 expression format
@@ -166,7 +166,7 @@
 # Version 42.1.6, release-date 2024-05-28
 * Fixed bug that did not report XDEF385 error when type name in local
   declaration section was the same as the referenced type.
-* Fixed bug generated negative value to `maxOccurs` attribute in 
+* Fixed bug generated negative value to `maxOccurs` attribute in
   X-definition conversion to XML Schema.
 * To the list of parameters of method `org.xdef.util.XdefToXsd.main(...)` was
   added the parameter `--outType` with the name of the file where the types
@@ -208,7 +208,7 @@
   to X-definition.
 
 # Version 42.1.0, release-date 2024-01-15
-* Added the new binary operator `CHECK`. The result of an operation is 
+* Added the new binary operator `CHECK`. The result of an operation is
   a `ParseResult` value. The type of the first operand must be `Parser` or
   `ParseResult` (if it is Parser then the parsing method is invoked so that it
   results from a `ParseResut` value). The second operand is a `boolean`
@@ -281,7 +281,7 @@
  X-component by methods `getArray$()`, `getMap${}` and `getAnyObj$()`.
 
 # Version 42.0.2, release-date 2022-12-21
-* `%anyName` named items of XON/JSON are now available in X-components as a map 
+* `%anyName` named items of XON/JSON are now available in X-components as a map
   created by the method `anyItem$()` (instead of `entriesOf()`).
 * corrected bug in X-component in generation of names of getters of named values
   in map if the name if the name of named value is not acceptable
@@ -304,7 +304,7 @@
   created by the method `entriesOf()`.
 
 # Version 42.0.0, release-date 2022-10-14
-* Corrected bug in `uses` and `implements` in X-script when it refers 
+* Corrected bug in `uses` and `implements` in X-script when it refers
 * to a node with specified namespace URI.
 * New things:
 * This version of X-definition supports JSON, YAML, Propreties, Windows INI,
@@ -509,7 +509,7 @@
   (the Java implementation is in class `org.xdef.sys.Price`).
     * Constructor:
         * `new Price(amount, code)`
-          where `amount` is a number and `code` is a ISO 4217 currency code. 
+          where `amount` is a number and `code` is a ISO 4217 currency code.
     * Methods with this object:
         * `amount()` returns amount of currency as decimal number.
         * `currencyCode()` returns ISO 4217 currency code.
@@ -561,7 +561,7 @@
 * corrected bug illegal type in `ObjectReader` when the code contains an item
   with `uniqueSetKey`.
 * in the X-script was implemented the new type `uniqueSetKey`. This type of
-  object enables to save the actual value of the key of an `uniqueSet`. To do it 
+  object enables to save the actual value of the key of an `uniqueSet`. To do it
   you can invoke the new implemented method `getActualKey()` from `uniqueSet`
   object. With the new method `resetKey` from `uniqueSetKey` the actual key
   of given `uniqueSet` object is set to the saved value. E.g.:
@@ -674,7 +674,7 @@
   ```xml
   <xd:collection xmlns:xd = "..." xd:include = "classpath://xxx.yyy.a*.xdef"/>
   ```
-  
+
 # Version 32.5.1, release-date 2019-09-25
 * Corrected `org.xdef.sys.SDatetime` methods implemented from
   `javax.xml.datatype.XMLGregorianCalendar`.
@@ -697,10 +697,10 @@
   <xd:def xmlns:xd ="http://www.xdef.org/xdef/3.2"
     xd:include = "classpath://org.xdefimpl.compile.XdefOfXdefBase.xdef,
       classpath://org.xdefimpl.compile.XdefOfXdef20.xdef,
-      classpath://org.xdefimpl.compile.XdefOfXdef31.xdef" 
+      classpath://org.xdefimpl.compile.XdefOfXdef31.xdef"
   > ...
   ```
-  
+
 # Version 32.5.0, release-date 2019-09-16
 * Prepared the version for processing of JSON data.
   The X-component interface has now new method to Json which returns a JSON
@@ -754,5 +754,5 @@
 * corrected the bug if the missing element in the model is followed by
   optional elements which are also missing
 * corrected the bug in construction mode. It was not invoked the
-  initialization section in the section `var` in the X-script of 
+  initialization section in the section `var` in the X-script of
   an element model

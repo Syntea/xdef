@@ -42,8 +42,11 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 
 ////////////////////////////////////////////////////////////////////////////////
 // final methods
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
+	/** If the XDParseResult from the argument is comparable and put error if it does not fit the condition.
+	 * @param p XDParseResult to be che3cked.
+	 */
 	protected final void checkComparable(final XDParseResult p) {
 		if (p.matches()) {
 			XDValue val = p.getParsedValue();
@@ -118,26 +121,37 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of final methods from XSAbstractParser
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public final byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+
 	@Override
 	public final XDValue getMinExclusive() { return _minExcl; }
+
 	@Override
 	public final XDValue getMaxExclusive() { return _maxExcl; }
+
 	@Override
 	public final XDValue getMinInclusive() { return _minIncl; }
+
 	@Override
 	public final XDValue getMaxInclusive() {return _maxIncl;}
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public final void setMinExclusive(final XDValue x) {checkValue(_minExcl = iObject(null, x));}
+
 	@Override
 	public final void setMaxExclusive(final XDValue x) {checkValue(_maxExcl = iObject(null, x));}
+
 	@Override
 	public final void setMinInclusive(final XDValue x) {checkValue(_minIncl = iObject(null, x));}
+
 	@Override
 	public final void setMaxInclusive(final XDValue x) {checkValue(_maxIncl = iObject(null, x));}
+
 	@Override
 	public final void setEnumeration(final Object[] o) {
 		_enumeration = null;
