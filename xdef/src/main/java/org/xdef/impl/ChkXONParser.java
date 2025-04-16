@@ -85,8 +85,7 @@ final class ChkXONParser implements XParser, XonParser {
 	ChkXONParser(final ReportWriter reporter, final Object source, final String sourceName) {
 		_kinds = new Stack<>();
 		_mapNames = new Stack<>();
-		_sReporter =
-			new SReporter(reporter == null ?  new ArrayReporter() : reporter);
+		_sReporter = new SReporter(reporter == null ?  new ArrayReporter() : reporter);
 		if (source instanceof String) {
 			String s = (String) source;
 			try { // try if it is URL
@@ -134,6 +133,7 @@ final class ChkXONParser implements XParser, XonParser {
 ////////////////////////////////////////////////////////////////////////////////
 // private methods
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** Add attributes from parsedElem object to thew created element.
 	 * @param parsedElem object with parsed attributes.
 	 */
@@ -145,10 +145,10 @@ final class ChkXONParser implements XParser, XonParser {
 			}
 		}
 	}
-	/** This method is called after all attributes of the current element
-	 * attribute list was reached. The implementation may check the list of
-	 * attributes and to invoke appropriate actions. The method is invoked
-	 * when parser reaches the end of the attribute list.
+
+	/** This method is called after all attributes of the current element attribute list was reached.
+	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
+	 * is invoked when parser reaches the end of the attribute list.
 	 */
 	private void elementStart(final KParsedElement parsedElem) {
 		if (++_level == 0) {
@@ -193,6 +193,7 @@ final class ChkXONParser implements XParser, XonParser {
 		_sReporter.setPosition(parsedElem.getParsedNameSourcePosition());
 		_chkEl.checkElement();
 	}
+
 	/** This method is invoked when parser reached the end of element. */
 	private void elementEnd() {
 		_chkElemStack[_level--] = null; //let's gc do the job
@@ -205,6 +206,7 @@ final class ChkXONParser implements XParser, XonParser {
 			}
 		}
 	}
+
 	private KParsedElement genKElem(final String qname, final String nsuri, final SPosition spos) {
 		KParsedElement kelem = new KParsedElement();
 		kelem.setParsedNameParams(nsuri, qname, spos);
@@ -215,6 +217,7 @@ final class ChkXONParser implements XParser, XonParser {
 		}
 		return kelem;
 	}
+
 	private void genItem(final XonTools.JValue value, final SBuffer name) {
 		KParsedElement kelem = genKElem(XonNames.X_VALUE,
 			XDConstants.XON_NS_URI_W, name == null ? value.getPosition() : name);
@@ -226,6 +229,7 @@ final class ChkXONParser implements XParser, XonParser {
 		elementStart(kelem);
 		elementEnd();
 	}
+
 	private void doParse() {
 		_kinds.push(_kind = 0);
 		XonReader xr = new XonReader(_in, this);
@@ -325,7 +329,6 @@ final class ChkXONParser implements XParser, XonParser {
 
 	/** Set name of value pair.
 	 * @param name value name.
-	 * @param name value name.
 	 * @return true if the name of pair already exists otherwise return false.
 	 */
 	@Override
@@ -402,10 +405,8 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param name name of item.
 	 * @param value value of item.
 	 */
-
 	@Override
 	public final void xdScript(final SBuffer name, final SBuffer value) {}
-
 
 	/** Get result of parser (not supported here). */
 	@Override

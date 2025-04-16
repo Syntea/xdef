@@ -836,8 +836,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		}
 		readItem();
 		skipSpacesOrComments();
-//		if (!eos()) {
-//			error(JSON.JSON008);//Text after JSON not allowed
-//		}
+		if (!eos()) {
+			error(JSON.JSON008);//Text after JSON not allowed
+		}
 	}
 }
