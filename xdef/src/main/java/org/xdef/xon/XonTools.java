@@ -2,6 +2,7 @@ package org.xdef.xon;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -444,8 +445,7 @@ public class XonTools {
 			case "-":
 			case "null":
 			case "true":
-			case "false":
-			return '"' + s + '"';
+			case "false": return '"' + s + '"';
 		}
 		if (isNumber(s)) {
 			return '"' + s + '"';
@@ -533,11 +533,15 @@ public class XonTools {
 	public static class JMap extends LinkedHashMap<Object, Object>
 		implements JObject {
 		private final SPosition _position; // SPosition of parsed object
+
 		public JMap(final SPosition position) {super(); _position = position;}
+
 		@Override
 		public SPosition getPosition() {return _position;}
+
 		@Override
 		public Object getValue() {return null;}
+
 		@Override
 		public SBuffer getSBuffer() {return null;}
 	}
@@ -545,11 +549,15 @@ public class XonTools {
 	/** XON/JSON array. */
 	public static class JArray extends ArrayList<Object> implements JObject {
 		private final SPosition _position; // SPosition of parsed object
+
 		public JArray(final SPosition position) {super(); _position = position;}
+
 		@Override
 		public SPosition getPosition() {return _position;}
+
 		@Override
 		public Object getValue() {return null;}
+
 		@Override
 		public SBuffer getSBuffer() {return null;}
 	}
@@ -558,16 +566,21 @@ public class XonTools {
 	public static class JValue implements JObject {
 		private final SPosition _position; // SPosition of parsed object
 		private final Object _o; // parsed object
+
 		public JValue(final SPosition position, final Object val) {
 			_position = position;
 			_o = val;
 		}
+
 		@Override
 		public SPosition getPosition() {return _position;}
+
 		@Override
 		public Object getValue() {return _o;}
+
 		@Override
 		public SBuffer getSBuffer(){return new SBuffer(toString(),_position);}
+
 		@Override
 		public String toString() {return _o == null ? "null" : _o.toString();}
 	}
@@ -577,6 +590,7 @@ public class XonTools {
 		public JAny(final SPosition position, final SBuffer val) {
 			super(position, val);
 		}
+
 		@Override
 		public SBuffer getSBuffer() {return (SBuffer) getValue();}
 	}
@@ -584,10 +598,13 @@ public class XonTools {
 	/** Representation of XON/JSON object "null". */
 	public static final class JNull {
 		private JNull() {}
+
 		@Override
 		public final String toString() {return "null";}
+
 		@Override
 		public final int hashCode(){return 0;}
+
 		@Override
 		public final boolean equals(final Object o) {return o==null || o instanceof JNull;}
 	}
