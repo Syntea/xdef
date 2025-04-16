@@ -645,7 +645,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param in Reader with XON/JSON source data.
 	 * @param sysId System ID of source position or null.
 	 * @param xonMode if true then XON, if false JSON.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertXDBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed XON or JSON object.
 	 */
 	private static Object parseXonJson(final Reader in,
@@ -671,7 +671,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse XON source data.
 	 * @param in Reader with XON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertXDBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed XON object.
 	 */
 	public static final Object parseXON(final Reader in, final String sysId, final boolean convertXDBytes) {
@@ -681,7 +681,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertXDBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed JSON object.
 	 */
 	public static final Object parseJSON(final Reader in, final String sysId, final boolean convertXDBytes) {
@@ -691,7 +691,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse XON source data.
 	 * @param in input stream with XON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed XON object.
 	 */
 	public static final Object parseXON(final InputStream in, final String sysId, final boolean convertBytes){
@@ -701,7 +701,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed JSON object.
 	 */
 	public static final Object parseJSON(final InputStream in, final String sysId,final boolean convertBytes){
@@ -789,17 +789,21 @@ public final class XonReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Set mode that XON/JSON is parsed in X-definition compiler. */
+	@Override
 	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
-	@Override
+
 	/** Set mode that XON is parsed. */
+	@Override
 	public final void setXonMode() {_jdef = false; _acceptComments = _xonMode = true;}
-	@Override
+
 	/** Set mode for strict JSON parsing (JSON, no comments). */
-	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
 	@Override
+	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
+
 	/** Parse XON/JSON source data (depends on the flag "_xon"). */
+	@Override
 	public final void parse() {
 		if (!_jdef && isToken(XonNames.ENCODING_DIRECTIVE)) { //encoding
 			int pos1 = getIndex() - XonNames.ENCODING_DIRECTIVE.length();
@@ -832,8 +836,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		}
 		readItem();
 		skipSpacesOrComments();
-		if (!eos()) {
-			error(JSON.JSON008);//Text after JSON not allowed
-		}
+//		if (!eos()) {
+//			error(JSON.JSON008);//Text after JSON not allowed
+//		}
 	}
 }

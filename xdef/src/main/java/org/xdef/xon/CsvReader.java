@@ -286,21 +286,25 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Parse INI/Properties source data.
 	 * @throws SRuntimeException if an error occurs,
 	 */
+	@Override
 	public final void parse() throws SRuntimeException {
 		readCSV();
 		if (!eos()) {
 			error(JSON.JSON008);//Text after JSON not allowed
 		}
 	}
-	@Override
+
 	/** Set mode that INI file is parsed in X-definition compiler. */
+	@Override
 	public final void setXdefMode() {}
+
 	@Override
 	public final void setXonMode() {}
+
 	@Override
 	public void setJsonMode() {} // not used
 }

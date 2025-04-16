@@ -36,10 +36,11 @@ public class XonObjParser implements XonParser {
 ////////////////////////////////////////////////////////////////////////////////
 // XonParser interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Put value to result.
 	 * @param value X_Value to be added to result object.
 	 */
+	@Override
 	public void putValue(XonTools.JValue value) {
 		Object o = value.getValue();
 		if (_convertXDBytes && o instanceof XDBytes) {
@@ -56,26 +57,26 @@ public class XonObjParser implements XonParser {
 		}
 	}
 
-	@Override
 	/** Set name of value pair.
 	 * @param name value name.
 	 * @return true if the name of pair already exists, otherwise return false.
 	 */
+	@Override
 	public boolean namedValue(SBuffer name) {
 		_names.push(name.getString());
 		return _maps.peek().containsKey(name.getString());
 	}
 
-	@Override
 	/** Array started.
 	 * @param pos source position.
 	 */
+	@Override
 	public void arrayStart(SPosition pos) {_kinds.push(_kind = 1); _arrays.push(new ArrayList<>());}
 
-	@Override
 	/** Array ended.
 	 * @param pos source position.
 	 */
+	@Override
 	public void arrayEnd(SPosition pos) {
 		_kinds.pop();
 		_kind = _kinds.peek();
@@ -88,16 +89,16 @@ public class XonObjParser implements XonParser {
 		}
 	}
 
-	@Override
 	/** Map started.
 	 * @param pos source position.
 	 */
+	@Override
 	public void mapStart(SPosition pos) {_kinds.push(_kind = 2); _maps.push(new LinkedHashMap<>());}
 
-	@Override
 	/** Map ended.
 	 * @param pos source position.
 	 */
+	@Override
 	public void mapEnd(SPosition pos) {
 		_kinds.pop();
 		_kind = _kinds.peek();
@@ -110,22 +111,22 @@ public class XonObjParser implements XonParser {
 		}
 	}
 
-	@Override
 	/** Processed comment.
 	 * @param value SBuffer with the value of comment.
 	 */
+	@Override
 	public void comment(SBuffer value){/*we ingore it here*/}
 
-	@Override
-	/** Xscript item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
+	/** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value of item.
 	 */
+	@Override
 	public void xdScript(SBuffer name, SBuffer value) {}
 
-	@Override
 	/** Get result of parser.
 	 * @return parsed object.
 	 */
+	@Override
 	public final Object getResult() {return _value;}
 }

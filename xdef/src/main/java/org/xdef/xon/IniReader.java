@@ -95,7 +95,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return ((j - i) & 1) > 0;
 	}
 
-	/** Read text of proerty.
+	/** Read text of property.
 	 * @return SBuffer with property or return null;
 	 */
 	private SBuffer readPropText() {
@@ -149,7 +149,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	/** Put property to ini object.
 	 * @param s String with property.
-	 * @return true if a proprty was added to ini object.
+	 * @return true if a property was added to ini object.
 	 */
 	private boolean putProperty(SBuffer s) {
 		if (s == null || s.getString().charAt(0) == '[') {
@@ -310,21 +310,24 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Parse INI/Properties source data.
 	 * @throws SRuntimeException if an error occurs,
 	 */
+	@Override
 	public final void parse() throws SRuntimeException {
 		readINI();
 		if (!eos()) {
 			error(JSON.JSON008);//Text after JSON not allowed
 		}
 	}
+
 	@Override
 	/** Set mode that INI file is parsed in X-definition compiler. */
 	public final void setXdefMode() { _jdef = true;}
+
 	@Override
 	public void setXonMode() {} // not used here
+
 	@Override
 	public void setJsonMode() {} // not used here
 
@@ -448,7 +451,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	}
 
 	/** Create XML Element from object.
-	 * @param ini object wioth Windows ini data.
+	 * @param ini object with Windows ini data.
 	 */
 	@SuppressWarnings("unchecked")
 	public static final Element iniToXml(final Object ini) {

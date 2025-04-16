@@ -276,22 +276,20 @@ public class XonTools {
 		}
 		XDParseResult r;
 		if (endChar == '"') {
-			try {
-				switch (ch) {
-					case 'T': return new DefTelephone(s);
-					case 'e': return new DefEmailAddr(s);
-					case 'u': return new DefURI(s);
-					case 'C':
-						if ((r = chkValue(s, new XDParseCurrency())).matches()){
-							return r.getParsedValue().getObject();
-						}
-						break;
-					case 'c':
-						if ((r = chkValue(s, new XDParseChar())).matches()) {
-							return r.getParsedValue().getObject();
-						}
-				}
-			} catch (Exception ex) {}
+			switch (ch) {
+				case 'T': return new DefTelephone(s);
+				case 'e': return new DefEmailAddr(s);
+				case 'u': return new DefURI(s);
+				case 'C':
+					if ((r = chkValue(s, new XDParseCurrency())).matches()){
+						return r.getParsedValue().getObject();
+					}
+					break;
+				case 'c':
+					if ((r = chkValue(s, new XDParseChar())).matches()) {
+						return r.getParsedValue().getObject();
+					}
+			}
 		}
 		return s; // XON/JSON String
 	}

@@ -50,6 +50,7 @@ class XonToXml extends XonTools {
 ////////////////////////////////////////////////////////////////////////////////
 // XON/JSON to XML (Xdetinition format)
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** Create and append new element and push context.
 	 * @param n node to which new element will be appended.
 	 * @param namespace namespace URI.
