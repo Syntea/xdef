@@ -13,6 +13,7 @@ public class XDParseLanguages extends XDParseNCNameList {
 	private static final String ROOTBASENAME = "languages";
 
 	public XDParseLanguages() {super();}
+
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser p) {
 		int pos = p.getIndex();
@@ -24,6 +25,7 @@ public class XDParseLanguages extends XDParseNCNameList {
 		} catch (Exception ex) {}
 		return null;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

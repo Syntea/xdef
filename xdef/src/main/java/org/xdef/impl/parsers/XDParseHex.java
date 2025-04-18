@@ -71,6 +71,7 @@ public class XDParseHex extends XSParseBase64Binary {
 		p.setParsedValue(new DefBytes(bytes, false));
 		check(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

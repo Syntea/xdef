@@ -24,11 +24,13 @@ public class XSParsePositiveInteger extends XSParseInteger {
 			}
 		}
 	}
+
 	@Override
 	/** Get name of value.
 	 * @return The name.
 	 */
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.decimalValue().signum() <= 0) {

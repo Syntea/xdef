@@ -15,6 +15,7 @@ public class XSParseENTITY extends XSParseQName {
 	private static final String ROOTBASENAME = "ENTITY";
 
 	public XSParseENTITY() {super();}
+
 	@Override
 	public void finalCheck(final XXNode xnode, XDParseResult p) {
 		if (xnode == null) {
@@ -29,6 +30,7 @@ public class XSParseENTITY extends XSParseQName {
 			p.error(XDEF.XDEF809, parserName(), id);
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 

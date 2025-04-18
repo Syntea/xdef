@@ -38,6 +38,7 @@ public class XDParseCHKID extends XSParseQName {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

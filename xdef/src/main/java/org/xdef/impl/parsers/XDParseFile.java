@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
+import org.xdef.xon.XonTools;
 
 /** Parse filename.
  * @author Vaclav Trojan
@@ -13,11 +14,12 @@ public class XDParseFile extends XDParserAbstract {
 	private static final String ROOTBASENAME = "file";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(XXNode xn, XDParseResult p) {
 		p.isSpaces();
-		String s = p.getUnparsedBufferPart().trim();
+		String s = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? XonTools.readJString(p) :  p.getUnparsedBufferPart().trim();
 		if (chkFile(p, s, ROOTBASENAME)) {
-			checkCharset(xnode, p);
+			checkCharset(xn, p);
 			p.setEos();
 		}
 	}
@@ -37,8 +39,10 @@ public class XDParseFile extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of '&{0}'&{1}{: }
 		return false;
 	}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

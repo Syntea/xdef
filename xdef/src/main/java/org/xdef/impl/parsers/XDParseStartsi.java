@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-script "startsi" type.
  * @author Vaclav Trojan
@@ -15,34 +16,27 @@ public class XDParseStartsi extends XDParseEqi {
 	public XDParseStartsi() {super();}
 
 	@Override
-	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		parseObject(xnode, p);
-		if (!p.eos()) {
-			if (p.matches()) {
-				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-			}
-		}
-		return p;
-	}
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		int i = p.getIndex();
-		if (p.isTokenIgnoreCase(_param)) {
+	public void parseObject(final XXNode xn, final XDParseResult p) {
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		int i = q.getIndex();
+		if (q.isTokenIgnoreCase(_param)) {
 			p.setParsedValue(p.getSourceBuffer().substring(i));
 			p.setEos();
-			checkCharset(xnode, p);
+			checkCharset(xn, p);
 		} else {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseStartsi) ) {
 			return false;
 		}
-	return _param.equals(((XDParseStartsi) o)._param);
+		return _param.equals(((XDParseStartsi) o)._param);
 	}
 }

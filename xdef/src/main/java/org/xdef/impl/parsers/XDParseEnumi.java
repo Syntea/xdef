@@ -7,6 +7,7 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import java.util.Arrays;
 import org.xdef.XDContainer;
+import org.xdef.impl.code.DefParseResult;
 import org.xdef.xon.XonTools;
 
 /** Parser of X-script "enumi" type.
@@ -19,35 +20,19 @@ public class XDParseEnumi extends XDParseEnum {
 
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p) {
-		int pos = p.getIndex();
-		int len = -1;
-		if (xn != null && xn.getXonMode() > 0 && p.isChar('"')) {
-			String x = XonTools.readJString(p).toUpperCase();
-			for (String s : _list) {
-				if (s.equalsIgnoreCase(x)) {
-					p.setParsedValue(p.getParsedString());
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		for (String s : _list) {
+			if (q.isTokenIgnoreCase(s)) {
+				if (q.eos()) {
+					p.setEos();
 					return;
 				}
-			}
-		} else {
-			for (String s : _list) {
-				if (p.isTokenIgnoreCase(s)) {
-					int tlen = s.length();
-					if (tlen > len) {
-						len = tlen;
-					}
-					p.setIndex(pos);
-				}
-			}
-			if (len != -1) {
-				int i = pos + len;
-				p.setParsedValue(p.getSourceBuffer().substring(pos, i));
-				p.setIndex(i);
-				return;
 			}
 		}
 		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 	}
+
 	@Override
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
@@ -58,8 +43,10 @@ public class XDParseEnumi extends XDParseEnum {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseEnumi) ) {

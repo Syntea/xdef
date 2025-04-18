@@ -26,6 +26,7 @@ public class XDParseJValue extends XSAbstractParser {
 
 	@Override
 	public  void initParams() {_patterns = null; _enumeration = null;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -46,10 +47,13 @@ public class XDParseJValue extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {parse(xnode,p,true);}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {parse(xnode,p,false);}
+
 	private void parse(final XXNode xnode, final XDParseResult p, final boolean isFinal) {
 		int pos = p.getIndex();
 		String source = p.getSourceBuffer();
@@ -101,12 +105,16 @@ public class XDParseJValue extends XSAbstractParser {
 		p.setIndex(pos);
 		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public short parsedType() {return XD_ANY;}
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -118,10 +126,13 @@ public class XDParseJValue extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	@Override
 	public void addNamedParams(final XDContainer map) {}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof XDParseJValue)) {

@@ -42,6 +42,7 @@ public class XSParseList extends XSAbstractParser {
 		_itemType = null;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -62,22 +63,31 @@ public class XSParseList extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+
 	@Override
 	public boolean addTypeParser(final XDValue x) {_itemType = valueToParser(x); return true;}
+
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) { _maxLength = x; }
+
 	@Override
 	public long getMaxLength() { return _maxLength; }
+
 	@Override
 	public void setMinLength(final long x) { _minLength = x; }
+
 	@Override
 	public long getMinLength() { return _minLength; }
+
 	@Override
 	public void setItem(final XDValue item) {
 		if (item.getItemId() == XD_PARSER) {
@@ -86,8 +96,10 @@ public class XSParseList extends XSAbstractParser {
 			throw new SRuntimeException(XDEF.XDEF423, "Parser"); //Value of type '&amp;{0}' expected
 		}
 	}
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -99,10 +111,13 @@ public class XSParseList extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {parse(xnode,p,true);}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {parse(xnode, p, false);}
+
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		boolean isFinal){
@@ -182,16 +197,20 @@ public class XSParseList extends XSAbstractParser {
 		}
 		checkPatterns(p);
 	}
+
 	@Override
 	public void addNamedParams(XDContainer map) {
 		if (_itemType != null) {
 			map.setXDNamedItem("item", _itemType);
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XSParseList)) {
@@ -204,12 +223,15 @@ public class XSParseList extends XSAbstractParser {
 			return _itemType.equals(x._itemType);
 		}
 	}
+
 	@Override
 	public short getAlltemsType() {return _itemType == null ? XD_STRING : _itemType.parsedType();}
+
 	/** Get parser of items in this list.
 	 * @return parser of items in this list.
 	 */
 	public XDParser getItemParser() {return _itemType;}
+
 	/** Set parser of items to this list.
 	 * @param p new parser of items in this list.
 	 */

@@ -17,6 +17,7 @@ public class XSParseIDREF extends XSParseQName {
 
 	@Override
 	public int getLegalKeys() {return 0;}
+
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
@@ -31,6 +32,7 @@ public class XSParseIDREF extends XSParseQName {
 			a.error(XDEF.XDEF522, result.getParsedValue()); //Unique value "&{0}" was not set
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

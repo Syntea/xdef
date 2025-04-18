@@ -13,6 +13,7 @@ public class XSParseLong extends XSAbstractParseComparable {
 	private long _totalDigits;
 
 	public XSParseLong() {super(); _totalDigits = -1;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -33,10 +34,13 @@ public class XSParseLong extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void setTotalDigits(final long x) { _totalDigits = x; }
+
 	@Override
 	public long getTotalDigits() { return _totalDigits; }
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -76,8 +80,10 @@ public class XSParseLong extends XSAbstractParseComparable {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_LONG;}
 }

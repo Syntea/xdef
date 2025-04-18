@@ -15,6 +15,7 @@ import java.util.List;
 import org.xdef.XDContainer;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
+import org.xdef.impl.code.DefParseResult;
 import org.xdef.xon.XonTools;
 
 /** Parser of X-script "enum" type.
@@ -28,20 +29,12 @@ public class XDParseEnum extends XDParserAbstract {
 
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p) {
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		if (quoted) {
-			int pos = p.getIndex();
-			String x = XonTools.readJString(p);
-			for (String s: _list) {
-				if (s.equals(x)) {
-					p.setParsedValue(p.getParsedString());
-					return;
-				}
-			}
-		} else {
-			int i;
-			if ((i = p.isOneOfTokens(_list)) >= 0) {
-				p.setParsedValue(_list[i]);
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		String s = q.getUnparsedBufferPart();
+		for (String x: _list) {
+			if (s.equals(x)) {
+				p.setEos();
 				return;
 			}
 		}

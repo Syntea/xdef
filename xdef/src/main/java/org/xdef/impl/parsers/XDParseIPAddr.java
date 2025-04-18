@@ -17,6 +17,7 @@ public class XDParseIPAddr extends XDParserAbstract {
 	private static final String ROOTBASENAME = "ipAddr";
 
 	public XDParseIPAddr() {super();}
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos = p.getIndex();
@@ -51,8 +52,10 @@ public class XDParseIPAddr extends XDParserAbstract {
 		p.setParsedValue(new DefIPAddr()); //null IPAddr
 		p.errorWithString(XDEF.XDEF809,parserName(), s); //Incorrect value of '&{0}'&{1}{: }
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_IPADDR;}
 }

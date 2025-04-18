@@ -20,6 +20,7 @@ public class XDParseQNameList extends XDParseNCNameList {
 		}
 		return new DefString(p.getParsedString());
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

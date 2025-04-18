@@ -17,9 +17,6 @@ public class XDParseAn extends XSAbstractParseToken {
 
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		int pos = p.getIndex();
 		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
 			? new DefParseResult(XonTools.readJString(p)) : p;
 		if (q.isLetterOrDigit() == 0) {
@@ -27,13 +24,17 @@ public class XDParseAn extends XSAbstractParseToken {
 			return;
 		}
 		while(q.isLetterOrDigit() != 0){}
-		String s = p.getBufferPart(pos, p.getIndex());
-		p.setParsedValue(s);
-		p.isSpaces();
-		p.replaceParsedBufferFrom(pos0, s);
-		checkCharset(xn, p);
-		checkItem(p);
+		if (q.eos()) {
+			checkCharset(xn, p);
+			checkItem(q);
+			if (p != q) {
+				p.setEos();
+			}
+			return;
+		}
+		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

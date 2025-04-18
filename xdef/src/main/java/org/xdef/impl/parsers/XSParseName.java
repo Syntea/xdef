@@ -31,6 +31,7 @@ public class XSParseName extends XSAbstractParseToken {
 		checkItem(p);
 		checkCharset(xnode, p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

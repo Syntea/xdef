@@ -33,6 +33,7 @@ public class XSParseIDREFS extends XSParseENTITIES {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

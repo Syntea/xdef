@@ -70,6 +70,7 @@ public class XSParseLanguage extends XSAbstractParseToken {
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

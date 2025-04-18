@@ -56,8 +56,10 @@ public class XSParseAnyURI extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -75,20 +77,28 @@ public class XSParseAnyURI extends XSAbstractParser {
 		checkLength(p);
 		checkEnumeration(p);
 	}
+
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) { _maxLength = x; }
+
 	@Override
 	public long getMaxLength() { return _maxLength; }
+
 	@Override
 	public void setMinLength(final long x) { _minLength = x; }
+
 	@Override
 	public long getMinLength() { return _minLength; }
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		if (params != null && params.length >= 1) {
@@ -103,6 +113,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		_enumeration = null;
@@ -130,6 +141,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	void checkLength(final XDParseResult p) {
 		if (p.matches()) {
 			String s = p.getParsedValue().toString();
@@ -142,6 +154,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 			}
 		}
 	}
+
 	void checkEnumeration(XDParseResult p, XXNode xnode) {
 		if (p.matches()) {
 			if (_enumeration == null || _enumeration.length == 0) {
@@ -156,8 +169,10 @@ public class XSParseAnyURI extends XSAbstractParser {
 			p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of &{0}&{1}{: }
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_ANYURI;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

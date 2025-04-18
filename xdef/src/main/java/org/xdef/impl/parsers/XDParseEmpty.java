@@ -19,16 +19,13 @@ public class XDParseEmpty extends XSAbstractParser {
 
 	@Override
 	public int getLegalKeys() {return BASE;}
+
 	@Override
 	public void initParams() {_whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
-	@Override
-	public XDParseResult check(final XXNode xn, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		parseObject(xn, p);
-		return p;
-	}
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
@@ -37,9 +34,14 @@ public class XDParseEmpty extends XSAbstractParser {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
 		p.setParsedValue(s);
+		if (quoted) {
+			p.setEos();
+		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
 }

@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.xon.XonTools;
 
 /** Parser of Xcript "pic" type.
  * @author Vaclav Trojan
@@ -15,49 +16,42 @@ public class XDParsePic extends XDParseEq {
 	public XDParsePic() {super();}
 
 	@Override
-	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		parseObject(xnode, p);
-		if (!p.eos()) {
-			if (p.matches()) {
-				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-			}
-		}
-		checkCharset(xnode, p);
-		return p;
-	}
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p) {
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
 		for (int i = 0; (i < _param.length()); i++) {
-			if (p.eos()) {
+			if (q.eos()) {
 				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 				return;
 			}
 			switch (_param.charAt(i)) {
 				case '9':
-					if (p.isDigit() < 0) {
+					if (q.isDigit() < 0) {
 						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 					continue;
 				case 'A':
-					if (p.isLetter() <= 0) {
+					if (q.isLetter() <= 0) {
 						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 					continue;
 				case 'X':
-					if (p.isLetterOrDigit() <= 0) {
+					if (q.isLetterOrDigit() <= 0) {
 						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 					continue;
 				default:
-					if (!p.isChar(_param.charAt(i))) {
+					if (!q.isChar(_param.charAt(i))) {
 						p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 						return;
 					}
 			}
+		}
+		if (p != q && q.eos()) {
+			p.eos();
 		}
 	}
 	@Override

@@ -196,6 +196,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		}
 		checkCharset(xn, p);
 	}
+
 	void checkLength(XDParseResult p) {
 		if (p.matches()) {
 			String s = p.getParsedValue().toString();
@@ -208,6 +209,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
+
 	void checkEnumeration(final XDParseResult p, final XXNode xnode) {
 		if (p.matches()) {
 			boolean found = false;

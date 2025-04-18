@@ -498,6 +498,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonTools;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -2801,16 +2802,34 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case BNF_PARSE: {
-					String s = item.getParam() == 2 ? chkEl.getTextValue() : _stack[sp--].toString();
+					String s;
+					boolean quoted = false;
+					if (item.getParam() == 2) {
+						s = chkEl.getTextValue();
+						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
+							&& s.startsWith("\"") && s.endsWith("\"")) {
+							StringParser p = new StringParser(s);
+							p.setIndex(1);
+							s = XonTools.readJString(p);
+							quoted = true;
+						}
+					} else {
+						s = _stack[sp--].toString();
+					}
 					String ruleName = _stack[sp--].stringValue();
 					DefBNFRule r = ((DefBNFGrammar) _stack[sp]).getRule(ruleName);
+					DefParseResult result;
 					if (r.ruleValue() == null) {
-						DefParseResult pr = new DefParseResult(s);
-						pr.error(XDEF.XDEF567, ruleName); //Script error: BNF rule '&{0}' not exists
-						_stack[sp] = pr;
+						result = new DefParseResult(s);
+						result.error(XDEF.XDEF567, ruleName); //Script error: BNF rule '&{0}' not exists
 					} else {
-						_stack[sp] = r.perform(s);
+						result =  r.perform(s);
+						if (quoted) {
+							result.setParsedValue(chkEl.getTextValue());
+							result.setEos();
+						}
 					}
+					_stack[sp] = result;
 					continue;
 				}
 				case BNFRULE_PARSE: {
@@ -2820,20 +2839,35 @@ public final class XCodeProcessor {
 						s = chkEl.getTextValue();
 						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
 							&& s.startsWith("\"") && s.endsWith("\"")) {
-							s = s.substring(1, s.length()-1);
+							StringParser p = new StringParser(s);
+							p.setIndex(1);
+							s = XonTools.readJString(p);
+							quoted = true;
 						}
 					} else {
 						s = _stack[sp--].toString();
 					}
 					DefParseResult result = ((DefBNFRule) _stack[sp]).perform(s);
 					if (result.matches() && quoted) {
-						result.setParsedValue('\"' + s + '\"');
+						result.setParsedValue(chkEl.getTextValue());
+						result.setEos();
 					}
 					_stack[sp] = result;
 					continue;
 				}
 				case BNFRULE_VALIDATE: {
-					String s = item.getParam() == 1 ? chkEl.getTextValue() : _stack[sp--].toString();
+					String s;
+					if (item.getParam() == 1) {
+						s = chkEl.getTextValue();
+						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
+							&& s.startsWith("\"") && s.endsWith("\"")) {
+							StringParser p = new StringParser(s);
+							p.setIndex(1);
+							s = XonTools.readJString(p);
+						}
+					} else {
+						s = _stack[sp--].toString();
+					}
 					_stack[sp] = new DefBoolean(((DefBNFRule) _stack[sp]).perform(s).matches());
 					continue;
 				}

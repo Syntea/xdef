@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-script "ends" type.
  * @author Vaclav Trojan
@@ -15,26 +16,21 @@ public class XDParseEnds extends XDParseEq {
 	public XDParseEnds() {super();}
 
 	@Override
-	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		if (!s.endsWith(_param)) {
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		if (!q.getUnparsedBufferPart().endsWith(_param)) {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
-		} else {
+		}
+		if (p != q) {
 			p.setEos();
-			checkCharset(xnode, p);
 		}
-		return p;
+		checkCharset(xn, p);
 	}
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (!p.getUnparsedBufferPart().endsWith(_param)) {
-			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
-		}
-		p.setEos();
-		checkCharset(xnode, p);
-	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseEnds) ) {

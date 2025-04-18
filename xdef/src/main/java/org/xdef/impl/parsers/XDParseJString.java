@@ -28,6 +28,7 @@ public class XDParseJString extends XSAbstractParseToken {
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -48,6 +49,7 @@ public class XDParseJString extends XSAbstractParseToken {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -78,8 +80,10 @@ public class XDParseJString extends XSAbstractParseToken {
 		checkItem(p);
 		checkCharset(xn, p);
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

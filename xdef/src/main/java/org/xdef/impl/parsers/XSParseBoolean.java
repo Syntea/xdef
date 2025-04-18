@@ -15,6 +15,7 @@ public class XSParseBoolean extends XSAbstractParser {
 
 	@Override
 	public void initParams() {_whiteSpace = WS_COLLAPSE;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -35,8 +36,10 @@ public class XSParseBoolean extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -53,8 +56,10 @@ public class XSParseBoolean extends XSAbstractParser {
 			checkPatterns(p);
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_BOOLEAN;}
 }

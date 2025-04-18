@@ -29,6 +29,7 @@ public class XSParseID extends XSParseQName {
 			result.error(rep.getMsgID(), rep.getText(), rep.getModification());
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

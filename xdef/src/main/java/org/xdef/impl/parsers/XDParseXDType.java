@@ -56,6 +56,7 @@ public class XDParseXDType extends XDParserAbstract {
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_PARSER;}
 }

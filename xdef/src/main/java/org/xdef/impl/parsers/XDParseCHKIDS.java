@@ -34,6 +34,7 @@ public class XDParseCHKIDS extends XSParseENTITIES {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

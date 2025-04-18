@@ -24,8 +24,10 @@ public class XSParseNonPositiveInteger extends XSParseInteger {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.decimalValue().signum() > 0) {

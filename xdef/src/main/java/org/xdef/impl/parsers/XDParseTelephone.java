@@ -32,8 +32,10 @@ public class XDParseTelephone extends XDParserAbstract {
 			p.setParsedValue(new DefTelephone(parsedValue));
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_TELEPHONE;}
 }

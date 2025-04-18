@@ -36,8 +36,10 @@ public class XSParseString extends XSAbstractParseString {
 		_whiteSpace = 0;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

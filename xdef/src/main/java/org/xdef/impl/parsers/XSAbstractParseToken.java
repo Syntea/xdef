@@ -23,6 +23,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 	long _maxLength;
 
 	XSAbstractParseToken() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
+
 	@Override
 	public  void initParams() {
 		_whiteSpace = WS_COLLAPSE;
@@ -30,6 +31,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +

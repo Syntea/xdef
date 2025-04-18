@@ -24,8 +24,10 @@ public class XSParseInt extends XSParseLong {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.longValue() < Integer.MIN_VALUE || x.longValue() > Integer.MAX_VALUE) {
@@ -33,6 +35,7 @@ public class XSParseInt extends XSParseLong {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_INT;}
 }

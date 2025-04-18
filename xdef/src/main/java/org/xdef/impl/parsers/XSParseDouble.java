@@ -22,6 +22,7 @@ public class XSParseDouble extends XSAbstractParseComparable {
 		_enumeration = null;
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -42,6 +43,7 @@ public class XSParseDouble extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
@@ -59,10 +61,13 @@ public class XSParseDouble extends XSAbstractParseComparable {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_DOUBLE;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.doubleValue()== Double.NaN) {

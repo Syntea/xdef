@@ -66,6 +66,7 @@ public class XDParseGPS extends XDParserAbstract {
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809, parserName(), p.getBufferPart(pos, p.getIndex()));
 	}
+
 	/** Read name of position. */
 	private String readGPSName(final XDParseResult p) {
 		StringBuilder sb = new StringBuilder();
@@ -94,8 +95,10 @@ public class XDParseGPS extends XDParserAbstract {
 		}
 		throw new SRuntimeException(XDEF.XDEF222, "name error"); //Incorrect GPS position &amp;{0}{: }
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_GPSPOSITION;}
 }

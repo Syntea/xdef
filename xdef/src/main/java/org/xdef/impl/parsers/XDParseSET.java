@@ -25,6 +25,7 @@ public class XDParseSET extends XSParseQName {
 		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
 		tab.setId();
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

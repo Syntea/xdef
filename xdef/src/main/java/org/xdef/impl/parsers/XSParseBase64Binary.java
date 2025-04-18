@@ -37,8 +37,10 @@ public class XSParseBase64Binary extends XSAbstractParser {
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return 'c';}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -59,20 +61,28 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) { _maxLength = x; }
+
 	@Override
 	public long getMaxLength() { return _maxLength; }
+
 	@Override
 	public void setMinLength(final long x) { _minLength = x; }
+
 	@Override
 	public long getMinLength() { return _minLength; }
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -84,6 +94,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -109,6 +120,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			p.errorWithString(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 		}
 	}
+
 	/** Check XDParseResult on pattern, enumeration, length.
 	 * @param p object to be checked.
 	 * @return result with added errors.
@@ -126,19 +138,24 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_BYTES;}
+
 	/** This class is used as reader of parsed string in XSParseBase94Binary. */
 	static final class XSParseReader implements SReader {
 		private final int _quoted;
 		private final SParser _p;
 		private final StringBuilder _sb;
+
 		XSParseReader(final SParser p) {
 			_quoted = (_p = p).isOneOfTokens("b(", "\"");
 			_sb = new StringBuilder();
 		}
+
 		@Override
 		public final int read() {
 			if (_p.isSpaces()) {

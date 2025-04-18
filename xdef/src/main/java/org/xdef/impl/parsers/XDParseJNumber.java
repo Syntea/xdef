@@ -42,8 +42,10 @@ public class XDParseJNumber extends XSParseDouble {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public short parsedType() {return XD_NUMBER;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

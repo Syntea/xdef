@@ -34,6 +34,7 @@ public class XDParseLetters extends XDParseAn {
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

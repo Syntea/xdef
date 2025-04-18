@@ -33,6 +33,7 @@ public class XSParseUnion extends XSAbstractParser {
 		_enumeration = null;
 		_itemTypes = null;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -53,8 +54,10 @@ public class XSParseUnion extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public boolean addTypeParser(final XDValue x) {
 		if (_itemTypes == null) {
@@ -67,6 +70,7 @@ public class XSParseUnion extends XSAbstractParser {
 		_itemTypes[old.length] = valueToParser(x);
 		return true;
 	}
+
 	@Override
 	public void setItem(final XDValue item) { //%item
 		_itemTypes = null;
@@ -92,8 +96,10 @@ public class XSParseUnion extends XSAbstractParser {
 		}
 		return c;
 	}
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -105,14 +111,17 @@ public class XSParseUnion extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {
 		parse(xnode,p,true);
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		parse(xnode, p, false);
 	}
+
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		final boolean isFinal) {
@@ -174,14 +183,18 @@ public class XSParseUnion extends XSAbstractParser {
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809, parserName());
 	}
+
 	@Override
 	public void addNamedParams(final XDContainer map) {
 		map.setXDNamedItem("item", new DefContainer(_itemTypes));
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_ANY;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XSParseUnion)) {
@@ -206,12 +219,15 @@ public class XSParseUnion extends XSAbstractParser {
 		return true;
 	}
 	@Override
+
 	public short getAlltemsType() {return getItemsType(_itemTypes);}
+
 	/** Get list of parsers of this union.
 	 * @return array of union parsers.
 	 */
 	public XDParser[] getParsers() {return _itemTypes;}
 	/** Set list of parsers to this union.
+	 *
 	 * @param p array of parsers to set to this union.
 	 */
 	public void setParsers(final XDParser[] p) {_itemTypes = p;}

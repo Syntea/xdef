@@ -41,8 +41,10 @@ public class XDParseCurrency extends XDParserAbstract {
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(pos1,pos2));
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CURRENCY;}
 }

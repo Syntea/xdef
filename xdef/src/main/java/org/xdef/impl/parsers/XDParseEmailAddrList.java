@@ -40,10 +40,13 @@ public class XDParseEmailAddrList extends XDParserAbstract {
 		p.setParsedValue(DefNull.genNullValue(parsedType()));
 		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+
 	@Override
 	public short getAlltemsType() {return XD_EMAIL;}
 }

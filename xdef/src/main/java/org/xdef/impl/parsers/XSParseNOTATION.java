@@ -25,8 +25,10 @@ public class XSParseNOTATION extends XSAbstractParseString {
 		_minLength = _maxLength = -1;
 		_whiteSpace = WS_REPLACE;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_REPLACE;}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		if (_whiteSpace == WS_COLLAPSE) {
@@ -100,6 +102,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			p.error(XDEF.XDEF809, parserName(), id); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
+
 	@Override
 	/** Get name of value.
 	 * @return The name.
