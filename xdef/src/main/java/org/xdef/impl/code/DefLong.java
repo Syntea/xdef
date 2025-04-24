@@ -15,8 +15,7 @@ public final class DefLong extends XDValueAbstract {
 	private final long _value;
 	private final boolean _isNull;
 
-	/** Creates a new instance of DefInteger as null.
-	 */
+	/** Creates a new instance of DefInteger as null. */
 	public DefLong() {_isNull = true; _value = 0;}
 
 	/** Creates a new instance of DefInteger
@@ -32,46 +31,55 @@ public final class DefLong extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return isNull() ? null : _value;}
 	@Override
+	public Object getObject() {return isNull() ? null : _value;}
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_LONG;}
 	@Override
+	public short getItemId() {return XD_LONG;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return LONG;}
 	@Override
+	public XDValueType getItemType() {return LONG;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return stringValue();}
 	@Override
+	public String toString() {return stringValue();}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return isNull() ? "" : String.valueOf(_value);}
 	@Override
+	public String stringValue() {return isNull() ? "" : String.valueOf(_value);}
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefLong(_value);}
+
 	@Override
 	public int hashCode() {return (int) _value;}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) :  false;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the
 	 * value of the object is comparable and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -81,7 +89,7 @@ public final class DefLong extends XDValueAbstract {
 		}
 		return _value == arg.longValue();
 	}
-	@Override
+
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return If both objects are comparable then returns -1, 0, or a 1
@@ -89,33 +97,41 @@ public final class DefLong extends XDValueAbstract {
 	 * specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) {
 		return _value==arg.longValue() ? 0 : _value < arg.longValue() ? -1 : 1;
 	}
+
 	@Override
 	public byte byteValue() {return (byte) _value;}
+
 	@Override
 	public short shortValue() {return (short) _value;}
+
 	@Override
 	public int intValue() {return (int) _value;}
+
 	@Override
 	public long longValue() {return _value;}
+
 	@Override
 	public float floatValue() {return _value;}
+
 	@Override
 	public double doubleValue() {return _value;}
+
 	@Override
-	public BigDecimal decimalValue() {
-		return isNull() ? null : new BigDecimal(_value);}
+	public BigDecimal decimalValue() {return isNull() ? null : new BigDecimal(_value);}
+
 	@Override
-	public BigInteger integerValue() {
-		return isNull() ? null : BigInteger.valueOf(_value);
-	}
+	public BigInteger integerValue() {return isNull() ? null : BigInteger.valueOf(_value);}
+	
 	@Override
 	public boolean booleanValue() {return isNull() ? false : _value != 0;}
-	@Override
+	
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() {return _isNull;}
 }

@@ -21,7 +21,6 @@ import static org.xdef.XDValueType.BYTES;
  * @author Vaclav Trojan
  */
 public final class DefBytes extends XDValueAbstract implements XDBytes {
-
 	/** The bytes value of item. */
 	byte[] _value;
 	/** True if this object was created from base64 otherwise from hex.*/
@@ -112,6 +111,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 			_value[len] = (byte) b;
 		}
 	}
+
 	/** Insert byte before given position. If position is out of bounds of the
 	 * byte array the SRuntimeException is thrown.
 	 * @param pos position (index).
@@ -172,16 +172,16 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		}
 	}
 
-	@Override
 	/** Return true if the format is base64.
 	 * @return true if the format is base64 otherwise it is hexadecimal.
 	 */
+	@Override
 	public boolean isBase64() {return _format;}
 
-	@Override
 	/** Return the value of DefBytes as string in Base64 format.
 	 * @return string with value of this object in Base64 format.
 	 */
+	@Override
 	public String getBase64() {
 		StringWriter sw = new StringWriter();
 		try {
@@ -190,10 +190,10 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		return sw.toString();
 	}
 
-	@Override
 	/** Return the value of DefBytes as string in hexadecimal format.
 	 * @return string with value of this object in hexadecimal format.
 	 */
+	@Override
 	public String getHex() {
 		StringWriter sw = new StringWriter();
 		try {
@@ -205,47 +205,54 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return _value;}
 	@Override
+	public Object getObject() {return _value;}
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_BYTES;}
 	@Override
+	public short getItemId() {return XD_BYTES;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return BYTES;}
-	@Override
+
 	/** Get object representing value */
-	public byte[] getBytes() {return _value;}
 	@Override
+	public byte[] getBytes() {return _value;}
+
 	/** Get value as String.
 	 * @return string with hexadecimal created from value.
 	 */
-	public String toString() {
-		return _value == null ? "" : _format ? getBase64() : getHex();
-	}
 	@Override
+	public String toString() {return _value == null ? "" : _format ? getBase64() : getHex();}
+
 	/** Get string in Base64 format of value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public String stringValue() {return toString();}
+
 	@Override
 	public char charValue() {
 		return isNull() || _value.length != 1 ? 0 : (char) _value[0];
 	}
-	@Override
+
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
 	 * <i>false</i>.
 	 */
+	@Override
 	public boolean isNull() {return _value == null;}
+
 	@Override
 	public int hashCode() {
 		if (_value == null) return 0;
@@ -253,6 +260,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		for (byte b: _value) {result+= result + b;}
 		return result;
 	}
+
 	@Override
 	public boolean equals(final Object arg) {
 		if (arg instanceof XDValue) {
@@ -263,12 +271,13 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		}
 		return false;
 	}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value
 	 * of the object is comparable and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -278,12 +287,13 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		}
 		return Arrays.equals(_value, ((XDBytes) arg).getBytes());
 	}
-	@Override
+
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) {
 		if (equals(arg)) {
 			return 0;

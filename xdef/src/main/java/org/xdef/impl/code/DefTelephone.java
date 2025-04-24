@@ -67,10 +67,11 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDTelephone interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/**	Get the area code from telephone number.
 	 * @return area code part from telephone number.
 	 */
+	@Override
 	public int getAreaCode() {
 		if (_value == null || _value.length() > 2 || _value.charAt(0) != '+') {
 			return -1;
@@ -83,10 +84,11 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		}
 		return (_value.length()>6) ? -1 : Integer.parseInt(_value.substring(1));
 	}
-	@Override
+
 	/**	Get the local telephone number.
 	 * @return local part from telephone number.
 	 */
+	@Override
 	public int getLocalNumber() {
 		if (_value == null) {
 			return -1;
@@ -113,12 +115,16 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public Object getObject() {return this;}
+
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
+
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefTelephone) {
@@ -127,6 +133,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		}
 		return false;
 	}
+
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof DefTelephone) {
@@ -136,14 +143,19 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
+
 	@Override
 	public short getItemId() {return XD_TELEPHONE;}
+
 	@Override
 	public XDValueType getItemType() {return TELEPHONE;}
+
 	@Override
 	public String stringValue() {return isNull() ? "" : _value;}
+
 	@Override
 	public boolean isNull() {return _value == null;}
+
 	@Override
 	public String toString() {return stringValue();}
 }

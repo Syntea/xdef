@@ -44,29 +44,31 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_ATTR;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return ATTR;}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return stringValue();}
 	@Override
+	public String toString() {return stringValue();}
+
 	/** Get string value of this object or throw SRuntimeException.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public String stringValue() {return isNull() ? null : _value.getValue();}
+
 	@Override
 	public boolean booleanValue() {return !isNull();}
 

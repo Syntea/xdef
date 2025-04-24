@@ -32,6 +32,7 @@ import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
+import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.msg.XDEF;
@@ -56,12 +57,18 @@ import org.xdef.xon.XonTools;
 public final class XExtUtils {
 
 	/** Get information about actual version of X-definition.
+	 */
+//	public static final Object getXon(final XXNode x) {return x.getXon();}
+	public static final Object getXon(final XXNode x) {return new DefObject(x.getXon());}
+
+
+	/** Get information about actual version of X-definition.
 	 * @return build version and datetime.
 	 */
 	public static final String getVersionInfo() {
 		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
-
+	
 	/** Get the prefix part of given QName.
 	 * @param s string with QName,
 	 * @return prefix part of given QName or the empty string.

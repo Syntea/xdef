@@ -48,11 +48,11 @@ public class CodeParser extends CodeS1 {
 	 */
 	public XDParser getParser() {return _parser;}
 
-	@Override
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeParser)) {
 			return false;
@@ -61,6 +61,7 @@ public class CodeParser extends CodeS1 {
 		return getCode() == x.getCode() && getParam() == x.getParam()
 			&& (_parser == null && x._parser == null || _parser != null && _parser.equals(x._parser));
 	}
+
 	@Override
 	public String toString() {return CodeDisplay.codeToString(this);}
 }

@@ -51,6 +51,7 @@ public class DefSQLConstructor implements XDConstructor {
 		public String getAttributeNS(String url, String name)  {
 			return url != null && url.length() > 0 ? "" : getAttribute(name);
 		}
+
 		@Override
 		public boolean hasAttribute(String name) {
 			try {
@@ -59,23 +60,27 @@ public class DefSQLConstructor implements XDConstructor {
 				return false;
 			}
 		}
+
 		@Override
 		public Attr getAttributeNode(String name) {
 			String val = getAttribute(name);
 			return val == null ? null : createAttr(name, val);
 		}
+
 		@Override
 		public Attr getAttributeNodeNS(String url, String name) {
 			return url != null && url.length() > 0 ? null : getAttributeNode(name);
 		}
+
 		@Override
 		public boolean hasAttributeNS(String url, String name) {
 			return url != null && url.length() > 0 ? false : hasAttribute(name);
 		}
-		@Override
+
 		/** Get array with named items in the table.
 		 * @return array with named items or null.
 		 */
+		@Override
 		public final XDNamedValue[] getXDNamedItems() {
 			try {
 				int n = _rs.getMetaData().getColumnCount();
@@ -93,6 +98,7 @@ public class DefSQLConstructor implements XDConstructor {
 				return null;
 			}
 		}
+
 		@Override
 		public int getXDNamedItemsNumber() {
 			try {
@@ -101,6 +107,7 @@ public class DefSQLConstructor implements XDConstructor {
 				return 0;
 			}
 		}
+
 		@Override
 		public String getXDNamedItemName(int index) {
 			try {
@@ -109,10 +116,11 @@ public class DefSQLConstructor implements XDConstructor {
 				return null;
 			}
 		}
-		@Override
+
 		/** Check if the object is empty.
 		 * @return true if the object is empty; otherwise return false.
 		 */
+		@Override
 		public boolean isEmpty() {
 			try {
 				return _rs == null || _rs.isAfterLast();

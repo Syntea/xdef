@@ -36,11 +36,11 @@ public class CodeS1 extends CodeI1 {
 	 */
 	public void setParam2(String param2) {_param2 = param2;}
 
-	@Override
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeS1)) {
 			return false;
@@ -51,6 +51,7 @@ public class CodeS1 extends CodeI1 {
 		}
 		return _param2 == null ? x._param2 == null : _param2.equals(x._param2);
 	}
+
 	@Override
 	public String toString() {return CodeDisplay.codeToString(this);}
 }

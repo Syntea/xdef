@@ -231,16 +231,16 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 // Implementation of XDUniqueset interface.
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get name of this uniqueSet.
 	 * @return name of this uniqueSet.
 	 */
+	@Override
 	public final String getName() {return _name;}
 
-	@Override
 	/** Get names of key parts.
 	 * @return array with names of key parts.
 	 */
+	@Override
 	public final String[] getKeyPartNames() {
 		String[] result = new String[_parseItems.length];
 		for (int i=0; i < _parseItems.length; i++) {
@@ -250,23 +250,22 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return result;
 	}
 
-	@Override
 	/** Get names of assigned variables.
 	 * @return array with names of assigned variables.
 	 */
+	@Override
 	public final String[] getVarNames() {return _valueNames;}
 
-	@Override
 	/** Get printable form of actual value of the key.
 	 * @return printable form of actual value of the key.
 	 */
+	@Override
 	public final String printActualKey() {return new UniquesetKey(_parseItems).toString();}
 
-	@Override
-	/** Get actual actual value of the uniqueSet key or null if uniqueSet
-	 * item not exists.
+	/** Get actual actual value of the uniqueSet key or null if uniqueSet item not exists.
 	 * @return actual actual value of the uniqueSet key or null.
 	 */
+	@Override
 	public final XDUniqueSetKey getActualKey() {
 		UniquesetKey key = new UniquesetKey(_parseItems);
 		if (_map.containsKey(key)) {
@@ -275,10 +274,10 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return null;
 	}
 
-	@Override
 	/** Get items (rows) from the table.
 	 * @return Container with rows of the table.
 	 */
+	@Override
 	public final XDContainer getUniqueSetItems() {
 		DefContainer result = new DefContainer();
 		for (Map.Entry<UniquesetKey, UniquesetValue> x: _map.entrySet()) {
@@ -302,32 +301,30 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return result;
 	}
 
-	@Override
 	/** Get size of the uniqueSet table.
 	 * @return size of the table.
 	 */
+	@Override
 	public final int size() {return _map.size();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get type id of this object.
 	 * @return The type id of this object.
 	 */
+	@Override
 	public final short getItemId() {return X_UNIQUESET_M;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public final XDValueType getItemType() {return  XUNIQUESET_M;}
 
 	@Override
-	public XDValue cloneItem() {
-		return new CodeUniqueset(_parseItems, _valueNames, _name);
-	}
+	public XDValue cloneItem() {return new CodeUniqueset(_parseItems, _valueNames, _name);}
 
 	@Override
 	public String toString() {
@@ -398,10 +395,11 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			_items = items;
 		}
-		@Override
+
 		/** Get printable form of value of this key.
 		 * @return printable form of actual value of this key.
 		 */
+		@Override
 		public String toString() {
 			String result = "";
 			for (XDValue x: _items) {
@@ -409,10 +407,12 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			return result;
 		}
+
 		////////////////////////////////////////////////////////////////////////
 		// Methods hasCode and equals MUST be implemented here to be able
 		// to use these items in HashMap.
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public int hashCode() {
 			int result = _items.length;
@@ -507,8 +507,10 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 
 		@Override
 		public String toString() {return _key.toString();}
+
 		@Override
 		public int hashCode() {return _key.hashCode();}
+
 		@Override
 		public boolean equals(final Object o) {
 			return (o instanceof UniquesetKeyItem)
@@ -520,19 +522,23 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		////////////////////////////////////////////////////////////////////////
 		// Implementation of XDValue
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public short getItemId() {return XD_UNIQUESET_KEY;}
+
 		@Override
 		public XDValueType getItemType() {return UNIQUESET_KEY;}
 
 		////////////////////////////////////////////////////////////////////////
 		// Implementation of XDUniqueSetItem
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		/** Get name of uniqueSet table.
 		 * @return name of uniqueSet table.
 		 */
 		public final String getTableName() {return _uSet._name;}
+
 		@Override
 		/** Get values of key parts.
 		 * @return array with values of key parts.
@@ -545,6 +551,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			return result;
 		}
+
 		@Override
 		/** Get value of a key part.
 		 * @param name the name of key part.
@@ -558,6 +565,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			throw new RuntimeException("Kye part " + name + " not exists");
 		}
+
 		@Override
 		/** Get value of an assigned value.
 		 * @param name the name of assigned value.
@@ -567,6 +575,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			 UniquesetValue val = _uSet._map.get(_key);
 			 return val.getValue(name);
 		}
+
 		@Override
 		/** Reset actual key of the table from this position.
 		 * @return true if the key was reset to the value from this object

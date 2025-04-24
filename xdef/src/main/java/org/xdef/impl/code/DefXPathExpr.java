@@ -118,102 +118,135 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_XPATH;}
 	@Override
+	public short getItemId() {return XD_XPATH;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XPATH;}
 	@Override
+	public XDValueType getItemType() {return XPATH;}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return toString();}
 	@Override
+	public String stringValue() {return toString();}
+
 	/** Clone the item - used internally in XD processor.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return this;}
+
 	@Override
 	public Object getObject() {return this;}
-	@Override
+
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.
 	 */
-	public byte[] getBytes() {return null;}
 	@Override
+	public byte[] getBytes() {return null;}
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return always false.
 	 */
-	public boolean equals(final XDValue arg) {return arg == this;}
 	@Override
+	public boolean equals(final XDValue arg) {return arg == this;}
+
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return 0 or throws SIllegalArgumentException.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) {
 		if (arg  == this) {
 			return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() { return false;}
+
 	@Override
 	public char charValue() {return 0;}
+
 	@Override
 	public byte byteValue() {return 0;}
+
 	@Override
 	public short shortValue() {return 0;}
+
 	@Override
 	public int intValue() {return 0;}
+
 	@Override
 	public long longValue() {return 0;}
+
 	@Override
 	public float floatValue() {return 0;}
+
 	@Override
 	public double doubleValue() {return 0;}
+
 	@Override
 	public BigDecimal decimalValue() {return null;}
+
 	@Override
 	public BigInteger integerValue() {return null;}
+
 	@Override
 	public boolean booleanValue() {return false;}
+
 	@Override
 	public SDatetime datetimeValue() {return null;}
+
 	@Override
 	public SDuration durationValue() {return null;}
+
 	@Override
 	public XDContainer containerValue() {return null;}
+
 	@Override
 	public XDService serviceValue(){return null;}
+
 	@Override
 	public XDStatement statementValue(){return null;}
+
 	@Override
 	public XDResultSet resultSetValue() {return null;}
+
 	@Override
 	public XDParseResult parseResultValue() {return null;}
+
 	@Override
 	public Node getXMLNode() {return null;}
+
 	@Override
 	public Element getElement() {return null;}
+
 	@Override
 	public short getCode() {return COMPILE_XPATH;}
+
 	@Override
 	public void setCode(final short code) {}
+
 	@Override
 	public void setItemType(short resultType) {}
+
 	@Override
 	public int getParam() {return 0;}
+
 	@Override
 	public void setParam(final int param) {}
 }

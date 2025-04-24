@@ -51,39 +51,45 @@ public final class DefException extends XDValueAbstract implements XDException {
 // Implementation of methods of XDException
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Return assigned Report.
 	 * @return the value of assigned Report.
 	 */
+	@Override
 	public final Report reportValue() {return _value;}
 
-	@Override
 	/** Get script code address.
 	 * @return script code address.
 	 */
+	@Override
 	public final int getCodeAddr() {return _codeAddr;}
 
-	@Override
 	/** Get position of actual XML node.
 	 * @return position of actual XML node.
 	 */
+	@Override
 	public final String getXPos() {return _xpos;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public short getItemId() {return XD_EXCEPTION;}
+
 	@Override
 	public XDValueType getItemType() {return EXCEPTION;}
+
 	@Override
 	public String toString() {
 		return "PC:" + _codeAddr + (_xpos != null ? ", xpos:" + _xpos : "") + "; " + _value.toString();
 	}
+
 	@Override
 	public String stringValue() {return toString();}
+
 	@Override
 	public XDValue cloneItem() {return this;}
+
 	@Override
 	public boolean isNull() {return _codeAddr == -1;}
 }

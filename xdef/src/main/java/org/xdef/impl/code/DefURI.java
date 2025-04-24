@@ -39,46 +39,55 @@ public final class DefURI extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return _value;}
 	@Override
+	public Object getObject() {return _value;}
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_ANYURI;}
 	@Override
+	public short getItemId() {return XD_ANYURI;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return ANYURI;}
 	@Override
+	public XDValueType getItemType() {return ANYURI;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return stringValue();}
 	@Override
+	public String toString() {return stringValue();}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return _value==null ? "" : _value.toString();}
 	@Override
+	public String stringValue() {return _value==null ? "" : _value.toString();}
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefURI(_value);}
+
 	@Override
 	public int hashCode() {return _value == null ? 1 : _value.hashCode();}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ?  equals((XDValue) arg) : false;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
 	 * equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -88,21 +97,23 @@ public final class DefURI extends XDValueAbstract {
 		}
 		return _value.equals(arg.getObject());
 	}
-	@Override
+
 	/** Compares this object with the other DefURI object.
 	 * @param arg other DefURI object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (arg.getItemId() == XD_BOOLEAN) {
 			if (equals(arg)) return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() {return _value == null;}
 }

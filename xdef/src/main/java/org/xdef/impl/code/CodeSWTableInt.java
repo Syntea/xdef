@@ -3,8 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import static org.xdef.impl.code.CodeTable.SWITCH_I;
 
-/** Implementation of CodeI1 used for switch operation table with integer
- * values.
+/** Implementation of CodeI1 used for switch operation table with integer values.
  * @author Vaclav Trojan
  */
 public class CodeSWTableInt extends CodeI1 {
@@ -29,10 +28,10 @@ public class CodeSWTableInt extends CodeI1 {
 		return getParam();
 	}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {
 		String s = CodeDisplay.getCodeName(_code);
 		StringBuilder sb = new StringBuilder(s).append('(');
@@ -46,18 +45,18 @@ public class CodeSWTableInt extends CodeI1 {
 		}
 		return sb.append(')').toString();
 	}
-	@Override
+
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeSWTableInt)) {
 			return false;
 		}
 		CodeSWTableInt x = (CodeSWTableInt) o;
-		if (getCode() != x.getCode() ||	getParam() != x.getParam() ||
-			_resultType != x.getItemId()) {
+		if (getCode() != x.getCode() ||	getParam() != x.getParam() || _resultType != x.getItemId()) {
 			return false;
 		}
 		if (_list == null) {

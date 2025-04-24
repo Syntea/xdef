@@ -19,20 +19,22 @@ public class CodeL2 extends CodeI1 {
 		_param2 = param2;
 	}
 
-	@Override
 	/** Get parameter 2.
 	 * @return value of the parameter 2.
 	 */
+	@Override
 	public int intValue() {return (int) _param2;}
-	@Override
+
 	/** Get parameter 2.
 	 * @return value of the parameter 2.
 	 */
+	@Override
 	public long longValue() {return _param2;}
-	@Override
+
 	/** Get parameter 2.
 	 * @return value of the parameter 2.
 	 */
+	@Override
 	public String stringValue() {return "" + _param2;}
 
 	/** Set parameter 2.
@@ -40,19 +42,20 @@ public class CodeL2 extends CodeI1 {
 	 */
 	public void setParam2(long param2) {_param2 = param2;}
 
-	@Override
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeL2)) {
 			return false;
 		}
 		CodeL2 x = (CodeL2) o;
-		return getCode() == x.getCode() && _resultType == x.getItemId()
-			&& getParam() == x.getParam() && _param2 == x._param2;
+		return getCode() == x.getCode() && _resultType == x.getItemId()	&& getParam() == x.getParam()
+			&& _param2 == x._param2;
 	}
+
 	@Override
 	public String toString() {return CodeDisplay.codeToString(this);}
 }

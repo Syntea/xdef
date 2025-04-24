@@ -16,7 +16,6 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
-
 	/** Object with compiled extended BNF grammar. */
 	private final BNFGrammar _value;
 	/** Index to global variable with the grammar to be extended or -1. */
@@ -40,8 +39,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	 * @param source SBuffer with extended BNF source code.
 	 * @param reporter Report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and an error occurs then SRuntimeException is thrown.
-	 * @throws SRuntimeException if an error occurs and if reporter is
-	 * <i>null</i>.
+	 * @throws SRuntimeException if an error occurs and if reporter is <i>null</i>.
 	 */
 	public DefBNFGrammar(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
@@ -56,8 +54,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	 * @param source SBuffer with extended BNF source code.
 	 * @param reporter Report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and an error occurs then SRuntimeException is thrown.
-	 * @throws SRuntimeException if an error occurs and if reporter is
-	 * <i>null</i>.
+	 * @throws SRuntimeException if an error occurs and if reporter is <i>null</i>.
 	 */
 	public DefBNFGrammar(final DefBNFGrammar grammar,
 		final int extVar,
@@ -65,8 +62,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 		final ReportWriter reporter) throws SRuntimeException {
 		_source = source.getString();
 		_extVar = extVar;
-		_value = BNFGrammar.compile(grammar == null ? null : grammar._value,
-			source, reporter);
+		_value = BNFGrammar.compile(grammar == null ? null : grammar._value, source, reporter);
 	}
 
 	/** Creates a new instance of BNFGrammar from .
@@ -75,8 +71,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	 * @param source String with extended BNF source code.
 	 * @param reporter Report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and an error occurs then SRuntimeException is thrown.
-	 * @throws SRuntimeException if an error occurs and if reporter is
-	 * <i>null</i>.
+	 * @throws SRuntimeException if an error occurs and if reporter is <i>null</i>.
 	 */
 	public DefBNFGrammar(final DefBNFGrammar grammar,
 		final int extVar,
@@ -91,9 +86,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	/** Set source.
 	 * @param source set source form of this grammar.
 	 */
-	public void setSource(final String source) {
-		_source = source;
-	}
+	public void setSource(final String source) {_source = source;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDBNFGrammar interface
@@ -107,44 +100,44 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 		return new DefBNFRule(_value.getRule(name));
 	}
 
-	@Override
 	/** Get this object as BNFGrammar.
 	 * @return value of this item as BNFGrammar object.
 	 */
+	@Override
 	public BNFGrammar grammarValue() { return _value;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return _value;}
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_BNFGRAMMAR;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return BNFGRAMMAR;}
 
-	@Override
 	/** Get type of value.
 	 * @return id of item type.
 	 */
+	@Override
 	public int getParam() {return _extVar;}
 
-	@Override
 	/** Set type of value.
 	 * @param extVar id of item type.
 	 */
+	@Override
 	public void setParam(final int extVar) {_extVar = extVar;}
 
 	@Override
@@ -163,8 +156,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 
 	@Override
 	public String stringValue() {
-		return (_source!=null)
-			? _source : _value==null ? "null" : _value.display(false);
+		return (_source!=null) ? _source : _value==null ? "null" : _value.display(false);
 	}
 
 	@Override

@@ -102,8 +102,9 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 ////////////////////////////////////////////////////////////////////////////////
 // Methods from XDResultSet.
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Close this iterator and release all allocated resources. */
+	@Override
 	public void close() {
 		_item = null;
 		_itemName = null;
@@ -118,28 +119,29 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 			stmt.close();
 		}
 	}
+
+	/** Closes both this iterator and the underlying Statement from which this ResultSet was created. */
 	@Override
-	/** Closes both this iterator and the underlying Statement from which
-	 * this ResultSet was created. */
 	public void closeStatement() {
 		close();
 		if (stmt != null && !stmt.isClosed()) {
 			stmt.close();
 		}
 	}
-   @Override
-   /** Check if this object is closed.
+
+	/** Check if this object is closed.
 	* @return true if and only if this object is closed.
 	*/
+   @Override
 	public boolean isClosed() {return _resultSet == null;}
-	@Override
-	/** Get next item of this iterator or null. If the object
-	 * has to be closed then if no more values are available the close() method
-	 * must be invoked.
+
+	/** Get next item of this iterator or null. If the object has to be closed then if no more values
+	 * are available the close() method must be invoked.
 	 * @param xnode XXnode from which this method was called.
 	 * @return the next value of this iterator or return null.
 	 * @throws SRuntimeException id an error occurs.
 	 */
+	@Override
 	public XDValue nextXDItem(XXNode xnode) throws SRuntimeException {
 		if (_resultSet == null) {
 			return null;
@@ -169,88 +171,100 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 			throw new SRuntimeException(XDEF.XDEF568, msg);
 		}
 	}
-	@Override
+
 	/** Get the item returned by last nextItem method or return null.
 	 * @return item returned by last nextItem method or return null.
 	 */
-	public XDValue lastXDItem() {return _item;}
 	@Override
+	public XDValue lastXDItem() {return _item;}
+
 	/** Get count of iteration.
 	 * @return count of iteration.
 	 */
-	public int getCount() {return _count;}
 	@Override
+	public int getCount() {return _count;}
+
 	/** Return value of iterated object if it has value (text of element), otherwise return null.
 	 * @return value of iterated object or return null.
 	 */
-	public String itemAsString() {return _itemName == null ? null : _item.stringValue();}
 	@Override
+	public String itemAsString() {return _itemName == null ? null : _item.stringValue();}
+
 	/** If the iterated object is an array then return relevant item value, otherwise return null.
 	 * @param index the index of item.
 	 * @return value of the array item as a string or return null.
 	 */
+	@Override
 	public String itemAsString(int index) {
 		try {
 			return _resultSet.getString(index);
 		} catch (SQLException ex) {}
 		return null;
 	}
-	@Override
+
 	/** If the iterated object is a map, then return relevant item value, otherwise return null.
 	 * @param name the name of map item.
 	 * @return value of map item as a string or return null.
 	 */
+	@Override
 	public String itemAsString(String name) {
 		try {
 			return _resultSet.getString(name);
 		} catch (SQLException ex) {}
 		return null;
 	}
-	@Override
+
 	/** If the iterated object contains the specified item then return true.
 	 * @param name name item.
 	 * @return true if and only if the specified item exists.
 	 */
-	public boolean hasItem(String name) {return itemAsString(name) != null;}
 	@Override
+	public boolean hasItem(String name) {return itemAsString(name) != null;}
+
 	/** If this iterator is created from an array then return size of array, otherwise otherwise return -1.
 	 * @return size of array or -1.
 	 */
+	@Override
 	public int getSize()  {
 		try {
 			return _resultSet.getFetchSize();
 		} catch (SQLException ex) {}
 		return -1;
 	}
-	@Override
+
 	/** Get statement from which ResultSet was created.
 	 * @return statement from which ResultSet was created.
 	 */
-	public XDStatement getStatement() {return stmt;}
 	@Override
+	public XDStatement getStatement() {return stmt;}
+
 	/** Set constructor for creation of item.
 	 * @param constructor constructor for creation of item.
 	 */
-	public void setXDConstructor(XDConstructor constructor){_constructor = constructor;}
 	@Override
+	public void setXDConstructor(XDConstructor constructor){_constructor = constructor;}
+
 	/** Get constructor for creation of item.
 	 * @return constructor for creation of item.
 	 */
-	public XDConstructor getXDConstructor() {return _constructor;}
 	@Override
+	public XDConstructor getXDConstructor() {return _constructor;}
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() { return _resultSet == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public String stringValue() {
 		try {
 			if (_resultSet != null &&
@@ -260,6 +274,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 		} catch (SQLException ex) {}
 		return null;
 	}
+
 	@Override
 	public Element getElement() {
 		if (_item != null) {
@@ -272,15 +287,19 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 		}
 		return null;
 	}
-	@Override
+
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return _resultSet;}
+
 	@Override
 	public short getItemId() {return XD_RESULTSET;}
+
 	@Override
 	public XDValueType getItemType() {return RESULTSET;}
+
 	@Override
 	public String toString() {return _resultSet == null ? "null" : _resultSet.toString();}
 }

@@ -72,7 +72,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
 "btext         ::= [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
 "emailAddr     ::= ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
-
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
@@ -256,46 +255,54 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		return result;
 	}
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return this;}
 	@Override
+	public Object getObject() {return this;}
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_EMAIL;}
 	@Override
+	public short getItemId() {return XD_EMAIL;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return EMAIL;}
 	@Override
+	public XDValueType getItemType() {return EMAIL;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return stringValue();}
 	@Override
+	public String toString() {return stringValue();}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return isNull() ? "" : _value;}
 	@Override
+	public String stringValue() {return isNull() ? "" : _value;}
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefEmailAddr(_value);}
+
 	@Override
 	public int hashCode() {return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ?  equals((XDValue) arg) : false;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable
 	 * and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -307,45 +314,51 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		}
 		return false;
 	}
-	@Override
+
 	/** Compares this object with the other DefEmail object.
 	 * @param arg other DefEmail object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (arg.getItemId() == XD_BOOLEAN) {
 			if (equals(arg)) return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() {return _value == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDEmailAddr interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get domain part of this email address.
 	 * @return string with domain part of this email address.
 	 */
-	public String getDomain() {return _domain;}
 	@Override
+	public String getDomain() {return _domain;}
+
 	/** Get local part of email this address (user).
 	 * @return string with local part of this email address.
 	 */
-	public String getLocalPart() {return _localPart;}
 	@Override
+	public String getLocalPart() {return _localPart;}
+
 	/** Get user name (display form) of this email address.
 	 * @return string with user name of email this address (or an empty string).
 	 */
-	public String getUserName() {return _userName;}
 	@Override
+	public String getUserName() {return _userName;}
+
 	/** Get source form of this email address.
 	 * @return source form of this email address.
 	 */
+	@Override
 	public String getEmailAddr() {return _value;}
 }

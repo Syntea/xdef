@@ -12,7 +12,6 @@ import org.xdef.sys.SIllegalArgumentException;
  * @author Vaclav Trojan
  */
 public final class DefBoolean extends XDValueAbstract {
-
 	/** The boolean value of item. */
 	private final boolean _value;
 	private final boolean _isNull;
@@ -37,63 +36,71 @@ public final class DefBoolean extends XDValueAbstract {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {
 		return _isNull? null : _value ? Boolean.TRUE : Boolean.FALSE;
 	}
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_BOOLEAN;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return BOOLEAN;}
 
-	@Override
 	/** Return DefBoolean object as boolean.
 	 * @return the DefBoolean object as boolean.
 	 */
+	@Override
 	public boolean booleanValue() {return _value;}
+
 	@Override
 	public byte byteValue() {return _value ? (byte) 1 : (byte) 0;}
+
 	@Override
 	public short shortValue() {return _value ? (short) 1 : (short) 0;}
+
 	@Override
 	public int intValue() {return _value ? 1 : 0;}
+
 	@Override
 	public long longValue() {return _value ? 1 : 0;}
+
 	@Override
 	public float floatValue() {return _value ? 1 : 0;}
+
 	@Override
 	public double doubleValue() {return _value ? 1 : 0;}
+
 	@Override
 	public BigDecimal decimalValue() {
 		return isNull() ? null : _value ? BigDecimal.ONE : BigDecimal.ZERO;
 	}
-	@Override
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {return isNull() ? "":_value ? "true":"false";}
 
-	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
+	@Override
 	public String stringValue() {return isNull()? null: String.valueOf(_value);}
 
-	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefBoolean(_value);}
 
 	@Override
@@ -104,12 +111,12 @@ public final class DefBoolean extends XDValueAbstract {
 		return arg instanceof XDValue ?  equals((XDValue) arg) : false;
 	}
 
-	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value
 	 * of the object is comparable and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -120,12 +127,12 @@ public final class DefBoolean extends XDValueAbstract {
 		return _value == arg.booleanValue();
 	}
 
-	@Override
 	/** Compares this object with the other DefBoolean object.
 	 * @param arg other DefBoolean object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (arg.getItemId() == XD_BOOLEAN) {
 			if (_value == arg.booleanValue()) {
@@ -134,10 +141,11 @@ public final class DefBoolean extends XDValueAbstract {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-	@Override
+
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
 	 * <i>false</i>.
 	 */
+	@Override
 	public boolean isNull() {return _isNull;}
 }

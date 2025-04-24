@@ -71,7 +71,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param stream the input stream.
-	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data strem is processed
+	 * @param xmlFormat if true the from of input data is in XML, otherwise the input data stream is processed
 	 * as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -138,10 +138,10 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 		}
 	}
 
-	@Override
 	/** Reset input stream.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public void reset() throws SRuntimeException {
 		if (_fname.charAt(0) == '#') {
 			return;
@@ -197,33 +197,33 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_INPUT;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return INPUT;}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {return "org.xdef.impl.code.DefInStream(" + _fname + ")";}
 
-	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
+	@Override
 	public String stringValue() {return _fname;}
 
-	@Override
 	/** Clone the item (returns this object here).
 	 * @return this object.
 	 */
+	@Override
 	public XDValue cloneItem() {return this;}
 }

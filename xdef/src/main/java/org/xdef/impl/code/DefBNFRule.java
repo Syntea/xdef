@@ -95,71 +95,66 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Check if the object is null.
 	 * @return true if tje object is null.
 	 */
+	@Override
 	public boolean isNull() {return _rule == null;}
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return _rule;}
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_BNFRULE;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return BNFRULE;}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {return stringValue();}
 
-	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public String stringValue() {return _rule == null ? "null" : _rule.toString();}
 
-	@Override
 	/** Clone the item (returns this object here).
 	 * @return this object.
 	 */
+	@Override
 	public XDValue cloneItem() {return this;}
 
-	@Override
 	/** Get code of operation.
 	 * @return code of operation.
 	 */
+	@Override
 	public short getCode() {return LD_CONST;}
 
 	@Override
 	public int hashCode() {return _rule.hashCode();}
 
 	@Override
-	public boolean equals(final Object arg) {
-		if (!(arg instanceof XDValue)) {
-			return false;
-		}
-		return equals((XDValue) arg);
-	}
+	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
 
-	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return always <i>false</i>.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();

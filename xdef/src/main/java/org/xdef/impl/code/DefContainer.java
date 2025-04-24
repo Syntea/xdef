@@ -42,8 +42,7 @@ import org.xdef.xml.KXpathExpr;
 /** The class DefContainer implements item with org.w3c.dom.NodeList value.
  * @author Vaclav Trojan
  */
-public final class DefContainer extends XDValueAbstract
-	implements XDContainer, XDValueID {
+public final class DefContainer extends XDValueAbstract implements XDContainer, XDValueID {
 	/** The NodeList as value of this item. */
 	private XDValue[] _array;
 	/** The NodeList as value of this item. */
@@ -198,13 +197,13 @@ public final class DefContainer extends XDValueAbstract
 	//map interface
 	////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Set named item to the table of named items.
 	 * @param name the name of item.
 	 * @param val the value of item.
 	 * @return if the named item not exists in the table of named items then
 	 * return <i>null</i> or return the value which was replaced.
 	 */
+	@Override
 	public final XDValue setXDNamedItem(final String name, final XDValue val) {
 		XDNamedValue item = new DefNamedValue(name, val);
 		int len = getXDNamedItemsNumber();
@@ -227,53 +226,51 @@ public final class DefContainer extends XDValueAbstract
 		return null;
 	}
 
-	@Override
 	/** Check if named item exists in the table of named items.
 	 * @param name the name of named item.
 	 * @return <i>true</i> if and only if named item exists in the table.
 	 */
-	public final boolean hasXDNamedItem(final String name) {
-		return namedItemIndex(name)>=0;
-	}
-
 	@Override
+	public final boolean hasXDNamedItem(final String name) {return namedItemIndex(name)>=0;}
+
 	/** Get named item from the table of named items.
 	 * @param name the name of named item.
 	 * @return if item not exists in table return <i>null</i> or
 	 * return the named item from the table of named items.
 	 */
+	@Override
 	public final XDNamedValue getXDNamedItem(final String name) {
 		int i = namedItemIndex(name);
 		return i >= 0 ? _map[i] : null;
 	}
 
-	@Override
 	/** Get value of named item from the table of named items.
 	 * @param name the name of named item.
 	 * @return if item not exists the return <i>null</i> or
 	 * return the named item.
 	 */
+	@Override
 	public final XDValue getXDNamedItemValue(final String name) {
 		int i = namedItemIndex(name);
 		return i >= 0 ? _map[i].getValue() : null;
 	}
 
-	@Override
 	/** Get value of named item from the table of named items as string.
 	 * @param name the name of named item.
 	 * @return if item not exists in table return <i>null</i> or
 	 * return the value of named item as string.
 	 */
+	@Override
 	public final String getXDNamedItemAsString(final String name) {
 		XDValue val = getXDNamedItemValue(name);
 		return val == null ? null : val.stringValue();
 	}
 
-	@Override
 	/** Remove named item from the table of named items.
 	 * @param name the name of named item.
 	 * @return the removed named item or <i>null</i>.
 	 */
+	@Override
 	public final XDValue removeXDNamedItem(final String name) {
 		int i = namedItemIndex(name);
 		if (i < 0) {
@@ -291,38 +288,33 @@ public final class DefContainer extends XDValueAbstract
 		return old[i];
 	}
 
-	@Override
 	/** Get number of named items in the table of named items.
 	 * @return The number of items.
 	 */
-	public final int getXDNamedItemsNumber() {
-		return _map == null ? 0 : _map.length;
-	}
-
 	@Override
+	public final int getXDNamedItemsNumber() {return _map == null ? 0 : _map.length;}
+
 	/** Get array with named items in the table.
 	 * @return array with named items.
 	 */
-	public final XDNamedValue[] getXDNamedItems() {
-		return _map != null ? _map : new XDNamedValue[0];
-	}
-
 	@Override
+	public final XDNamedValue[] getXDNamedItems() {return _map != null ? _map : new XDNamedValue[0];}
+
 	/** Get name of ith named item.
 	 * @param index index of item.
 	 * @return name of item.
 	 */
+	@Override
 	public final String getXDNamedItemName(final int index) {
-		return _map == null || index >= _map.length ?
-			null : _map[index].getName();
+		return _map == null || index >= _map.length ? null : _map[index].getName();
 	}
 
-	@Override
 	/** Set named item to the table of named items.
 	 * @param item the named item.
 	 * @return if the named item not exists then return <i>null</i> or return
 	 * the named item value which was replaced in the table of named items.
 	 */
+	@Override
 	public final XDValue setXDNamedItem(final XDNamedValue item) {
 		String key = item.getName();
 		int i = namedItemIndex(key);
@@ -349,17 +341,9 @@ public final class DefContainer extends XDValueAbstract
 
 	private void initContainer(final XDValue value) {
 		switch (value.getItemId()) {
-			case XD_CONTAINER: {
-				setValuesFromContext((XDContainer) value);
-				break;
-			}
-			case XD_NAMEDVALUE:
-				_map = new XDNamedValue[]{(XDNamedValue) value};
-				_array = null;
-				break;
-			default:
-				_array = new XDValue[]{value};
-				break;
+			case XD_CONTAINER: setValuesFromContext((XDContainer) value); break;
+			case XD_NAMEDVALUE: _map = new XDNamedValue[]{(XDNamedValue) value}; _array = null; break;
+			default: _array = new XDValue[]{value};
 		}
 	}
 
@@ -422,12 +406,9 @@ public final class DefContainer extends XDValueAbstract
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			switch (node.getNodeType()) {
-				case Node.ELEMENT_NODE:
-					ar.add(new DefElement((Element) node));
-					continue;
+				case Node.ELEMENT_NODE: ar.add(new DefElement((Element) node)); continue;
 				case Node.TEXT_NODE:
-				case Node.CDATA_SECTION_NODE:
-					ar.add(new DefString(node.getNodeValue()));
+				case Node.CDATA_SECTION_NODE: ar.add(new DefString(node.getNodeValue()));
 			}
 		}
 		ar.toArray(_array = new  XDValue[ar.size()]);
@@ -546,7 +527,7 @@ public final class DefContainer extends XDValueAbstract
 	 * @param ns map with namespace URIs.
 	 * @param e element with child nodes.
 	 */
-	private void setChildNodes(final Map<String,String> ns, final Element e) {
+	private void setChildNodes(final Map<String, String> ns, final Element e) {
 		if (_array != null && _array.length > 0) {
 			Document doc = e.getOwnerDocument();
 			for (XDValue item: _array) {
@@ -615,23 +596,18 @@ public final class DefContainer extends XDValueAbstract
 									case XD_ELEMENT:
 									case XD_ATTR:
 									case XD_TEXT:
-									case XD_STRING:
-										keys[i] = dc.getXDItem(0).stringValue();
-										break;
+									case XD_STRING: keys[i] = dc.getXDItem(0).stringValue(); break;
 									case XD_DOUBLE:
 									case XD_LONG:
 									case XD_DECIMAL:
 									case XD_BOOLEAN:
 									case XD_DATETIME:
-									case XD_REPORT:
-										keys[i] = dv;
-										break;
-									default:
-	//									XD_BYTES, XX_ELEMENT, XX_TEXT,
-	//									XD_CONTAINER, XD_OBJECT, XD_INPUT,
-	//									XD_OUPUT, XD_EXCEPTION, XMLNODE_VALUE,
-	//									BYTE_VALUE, CHAR_VALUE ...
-										keys[i] = "";
+									case XD_REPORT: keys[i] = dv; break;
+//									XD_BYTES, XX_ELEMENT, XX_TEXT,
+//									XD_CONTAINER, XD_OBJECT, XD_INPUT,
+//									XD_OUPUT, XD_EXCEPTION, XMLNODE_VALUE,
+//									BYTE_VALUE, CHAR_VALUE ...
+									default: keys[i] = "";
 								}
 							}
 						}
@@ -657,8 +633,8 @@ public final class DefContainer extends XDValueAbstract
 	 * @param keys array of keys to be sorted.
 	 * @param asc if true sort ascending, otherwise descending.
 	 */
-	private void sort2(int low,
-		int high,
+	private void sort2(final int low,
+		final int high,
 		final Object[] keys,
 		final boolean asc) {
 		if (low >= high) {
@@ -797,20 +773,19 @@ public final class DefContainer extends XDValueAbstract
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get the item from sequence at given index.
 	 * @param index index of item.
 	 * @return item at given index or return <i>null</i>.
 	 */
+	@Override
 	public final XDValue getXDItem(final int index) {
-		return index < 0 || _array == null || index >= _array.length ?
-			null : _array[index];
+		return index < 0 || _array == null || index >= _array.length ? null : _array[index];
 	}
 
-	@Override
 	/** Add item to the end of sequence.
 	 * @param value new item.
 	 */
+	@Override
 	public final void addXDItem(final XDValue value) {
 		if (_array == null) {
 			_array = new XDValue[] {value};
@@ -819,10 +794,10 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	@Override
 	/** Add item to the end of sequence.
 	 * @param value new item.
 	 */
+	@Override
 	public final void addXDItem(final String value) {
 		XDValue x = new DefString(value);
 		if (_array == null) {
@@ -832,10 +807,10 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	@Override
 	/** Add item to the end of sequence.
 	 * @param value new item.
 	 */
+	@Override
 	public final void addXDItem(final Element value) {
 		XDValue x = new DefElement(value);
 		if (_array == null) {
@@ -845,13 +820,12 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	@Override
 	/** Set item at position given by index.
-	 * @param index index of item item. If index is out of range of items this
-	 * method does nothing.
+	 * @param index index of item item. If index is out of range of items this* method does nothing.
 	 * @param value of item.
 	 * @return original value or null;
 	 */
+	@Override
 	public XDValue replaceXDItem(final int index, final XDValue value) {
 		if (_array != null && index >= 0 && index < _array.length) {
 			XDValue result = _array[index];
@@ -861,11 +835,11 @@ public final class DefContainer extends XDValueAbstract
 		return null;
 	}
 
-	@Override
 	/** Insert item before given index to the sequence.
 	 * @param index index of required item.
 	 * @param value item to be inserted.
 	 */
+	@Override
 	public final void insertXDItemBefore(final int index, final XDValue value) {
 		if (index < 0) {
 			return;
@@ -897,11 +871,11 @@ public final class DefContainer extends XDValueAbstract
 		_array[ndx] = value;
 	}
 
-	@Override
 	/** Remove item from the sequence at given index.
 	 * @param index the index of item in the sequence which will be removed.
 	 * @return removed value or null.
 	 */
+	@Override
 	public final XDValue removeXDItem(final int index) {
 		if (index < 0 || _array == null || index >= _array.length) {
 			return null;
@@ -923,24 +897,22 @@ public final class DefContainer extends XDValueAbstract
 		return result;
 	}
 
-	@Override
 	/** Get number of items in the sequence.
 	 * @return number of items in the sequence.
 	 */
-	public final int getXDItemsNumber() {
-		return _array != null ? _array.length : -1;
-	}
-
 	@Override
+	public final int getXDItemsNumber() {return _array != null ? _array.length : -1;}
+
 	/** Get array of all items in the sequence.
 	 * @return array of all items in the sequence.
 	 */
+	@Override
 	public final XDValue[] getXDItems() {return _array;}
 
-	@Override
 	/** Create new XDContainer with all elements from context.
 	 * @return The new XDContainer with elements.
 	 */
+	@Override
 	public final XDContainer getXDElements() {
 		if (_array == null) {
 			return new DefContainer();
@@ -950,8 +922,7 @@ public final class DefContainer extends XDValueAbstract
 			if (x.getItemId() == XD_ELEMENT) {
 				ar.add(x);
 			} else if (x.getItemId() == XD_CONTAINER) {
-				ar.add(new DefElement(
-					((XDContainer) x).toElement(null, "")));
+				ar.add(new DefElement(((XDContainer) x).toElement(null, "")));
 			}
 		}
 		DefContainer result = new DefContainer();
@@ -960,21 +931,19 @@ public final class DefContainer extends XDValueAbstract
 		return result;
 	}
 
-	@Override
 	/** Get the n-th element from Container or null.
 	 * @param n The index of element.
 	 * @return the n-th element from Container or null..
 	 */
+	@Override
 	public final Element getXDElement(final int n) {
 		if (_array == null) {
 			return null;
 		}
 		if (n >= 0 && n < _array.length) {
 			switch (_array[n].getItemId()) {
-				case XD_ELEMENT:
-					return _array[n].getElement();
-				case XD_CONTAINER:
-					return ((XDContainer)_array[n]).toElement(null, null);
+				case XD_ELEMENT: return _array[n].getElement();
+				case XD_CONTAINER: return ((XDContainer)_array[n]).toElement(null, null);
 			}
 			Document doc = KXmlUtils.newDocument(null, "_", null);
 			Element el = doc.getDocumentElement();
@@ -991,23 +960,20 @@ public final class DefContainer extends XDValueAbstract
 		return null;
 	}
 
-	@Override
 	/** Get all elements with given name from this Container.
 	 * @param name name of element.
 	 * @return new Container with elements.
 	 */
-	public final XDContainer getXDElements(final String name) {
-		return getXDElementsNS(null, name);
-	}
-
 	@Override
+	public final XDContainer getXDElements(final String name) {return getXDElementsNS(null, name);}
+
 	/** Get all elements with given name and namespace from Container.
 	 * @param nsURI NameSpace URI.
 	 * @param localName local name of element.
 	 * @return new Container with all elements with given name and namespace.
 	 */
-	public final XDContainer getXDElementsNS(final String nsURI,
-		final String localName) {
+	@Override
+	public final XDContainer getXDElementsNS(final String nsURI, final String localName) {
 		if (_array == null) {
 			return new DefContainer();
 		}
@@ -1038,10 +1004,10 @@ public final class DefContainer extends XDValueAbstract
 		return result;
 	}
 
-	@Override
 	/** Get all text nodes concatenated as a string.
 	 * @return The string with all text nodes.
 	 */
+	@Override
 	public final String getXDText() {
 		StringBuilder sb = new StringBuilder();
 		if (_array == null) {
@@ -1064,55 +1030,52 @@ public final class DefContainer extends XDValueAbstract
 		return wasItem ? sb.toString() : null;
 	}
 
-	@Override
 	/** Get string from n-th item from this Container. If the node does not
 	 * exist or if it is not text then return the empty string.
 	 * @param n The index of item.
 	 * @return string from n-th item.
 	 */
+	@Override
 	public final String getXDTextItem(final int n) {
 		return n >= 0 && _array != null && n < _array.length &&
-			(_array[n].getItemId() == XD_STRING ||
-			_array[n].getItemId() == XD_TEXT ||
-			_array[n].getItemId() == XD_ATTR) ?
-			_array[n].stringValue() : "";
+			(_array[n].getItemId() == XD_STRING || _array[n].getItemId() == XD_TEXT ||
+			_array[n].getItemId() == XD_ATTR) ? _array[n].stringValue() : "";
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public final short getItemId() {return XD_CONTAINER;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return CONTAINER;}
 
-	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
 	 * <i>false</i>.
 	 */
+	@Override
 	public boolean isNull() { return _array == null && _map == null;}
 
-	@Override
 	/** Check if the object is empty.
 	 * @return <i>true</i> if the object is empty; otherwise returns
 	 * <i>false</i>.
 	 */
+	@Override
 	public boolean isEmpty() {
-		return (_array == null || _array.length == 0) &&
-			(_map == null || _map.length == 0);
+		return (_array == null || _array.length == 0) && (_map == null || _map.length == 0);
 	}
 
-	@Override
 	/** Get value as printable string. */
+	@Override
 	public final String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (_map != null) {
@@ -1134,10 +1097,10 @@ public final class DefContainer extends XDValueAbstract
 		return sb.toString();
 	}
 
-	@Override
 	/** Get boolean value of this object.
 	 * @return boolean value of this object or <i>false</i>.
 	 */
+	@Override
 	public final boolean booleanValue() {
 		if (!isEmpty()) {
 			if (_map == null && _array != null) {
@@ -1169,58 +1132,53 @@ public final class DefContainer extends XDValueAbstract
 		}
 		return false;
 	}
+
 	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
 	public final long longValue() {
 		return (_array != null && _array.length == 1 && _array[0] != null)
 			? _array[0].longValue() : 0;
 	}
+
 	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
 	public final double doubleValue() {
 		return (_array != null && _array.length == 1 && _array[0] != null)
 			? _array[0].doubleValue() : Double.NaN;
 	}
+
 	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
 	public BigDecimal decimalValue() {
 		return (_array != null && _array.length == 1 && _array[0] != null)
 			? _array[0].decimalValue() : null;
 	}
-	@Override
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
+	@Override
 	public final String stringValue() {
 		return toString();
 	}
 
-	@Override
 	/** Create element from this Container.
 	 * @param nsUri of created element.
 	 * @param xmlName name of created element.
 	 * @return element created from this Container.
 	 */
+	@Override
 	public final Element toElement(final String nsUri, final String xmlName) {
 		return toElement(new LinkedHashMap<>(), nsUri, xmlName);
 	}
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return isNull() ? null : this;}
 
-	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public final XDValue cloneItem() {
 		DefContainer result = new DefContainer();
 		if (_array != null) {
@@ -1244,18 +1202,15 @@ public final class DefContainer extends XDValueAbstract
 		return result;
 	}
 
-	@Override
 	/** Sorts this Container.
 	 * If an item is an org.w3c.Node object then as a key it is used
 	 * the text value of an item).
 	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 * @return this Container sorted.
 	 */
-	public final XDContainer sortXD(final boolean asc) {
-		return sortXD(null, asc);
-	}
-
 	@Override
+	public final XDContainer sortXD(final boolean asc) {return sortXD(null, asc);}
+
 	/** Sorts this Container.
 	 * @param key String with XPath expression or null (if null or empty string
 	 * then for org.w3c.Node items it is used as a key the text value of
@@ -1264,18 +1219,19 @@ public final class DefContainer extends XDValueAbstract
 	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 * @return this Container sorted.
 	 */
+	@Override
 	public final XDContainer sortXD(final String key, final boolean asc) {
 		DefContainer dc = new DefContainer(this);
 		sort1(key, asc);
 		return dc;
 	}
 
-	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value
 	 * of the object is comparable and equals to this one.
 	 */
+	@Override
 	public final boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
