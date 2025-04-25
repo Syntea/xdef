@@ -125,10 +125,10 @@ public final class DefLong extends XDValueAbstract {
 
 	@Override
 	public BigInteger integerValue() {return isNull() ? null : BigInteger.valueOf(_value);}
-	
+
 	@Override
 	public boolean booleanValue() {return isNull() ? false : _value != 0;}
-	
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */

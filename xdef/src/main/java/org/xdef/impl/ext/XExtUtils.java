@@ -68,7 +68,7 @@ public final class XExtUtils {
 	public static final String getVersionInfo() {
 		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
-	
+
 	/** Get the prefix part of given QName.
 	 * @param s string with QName,
 	 * @return prefix part of given QName or the empty string.

@@ -25,7 +25,7 @@ public final class DefNamedValue extends XDValueAbstract implements XDNamedValue
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDNamedValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 	/** Get ID of the type of value (org.xdef.XDValueTypes.NAMED_VALUE).
 	 * @return item type (org.xdef.XDValueTypes.NAMED_VALUE).
 	 */
@@ -60,7 +60,7 @@ public final class DefNamedValue extends XDValueAbstract implements XDNamedValue
 		_value = newValue == null ? new DefNull() : newValue;
 		return result;
 	}
-	
+
 ///////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////

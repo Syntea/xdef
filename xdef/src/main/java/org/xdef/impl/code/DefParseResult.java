@@ -56,7 +56,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 		_src = _src.substring(0, from) + s + _src.substring(_pos);
 		_pos = from + s.length();
 	}
-	
+
 ///////////////////////////////////////////////////////////////////////////////////
 //  Implementation of SParser interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	public final String getBufferPart(final int from, final int to) {
 		return (_src != null && from < _pos && _pos <= _src.length()) ? _src.substring(from, to): "";
 	}
-	
+
 	@Override
 	public final ArrayReporter getReporter() {return _ar;}
 
@@ -546,7 +546,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 
 	@Override
 	public final SDuration durationValue() {return _value==null ?null :((XDValue)_value).durationValue();}
-	
+
 /////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
