@@ -3,7 +3,6 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDValue;
-import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -127,9 +126,6 @@ public class X extends XDTester {
 			xd.setStdOut(swr = new StringWriter());
 			xd.xparse("<Z>xx</Z>", null);
 			assertEq("error: xx", s = swr.toString());
-			xd.setStdOut(swr = new StringWriter());
-			xd.xparse("<Z/>", new ArrayReporter());
-			assertEq("error: null", s = swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 

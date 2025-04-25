@@ -56,9 +56,7 @@ import org.xdef.xon.XonTools;
  */
 public final class XExtUtils {
 
-	/** Get information about actual version of X-definition.
-	 */
-//	public static final Object getXon(final XXNode x) {return x.getXon();}
+	/** Get information about actual version of X-definition. */
 	public static final Object getXon(final XXNode x) {return new DefObject(x.getXon());}
 
 
