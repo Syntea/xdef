@@ -66,8 +66,8 @@ public final class TestErrors extends XDTester {
 		return "";
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);

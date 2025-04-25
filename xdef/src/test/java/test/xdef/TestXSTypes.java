@@ -49,20 +49,21 @@ public final class TestXSTypes extends XDTester {
 	private Validator _validator;
 	private String _schema = "";
 	private ErrorHandler _errHandler = new ErrorHandler() {
+
 		@Override
-		final public void warning(final SAXParseException x)
-			throws SAXException{setMesage(x);}
+		final public void warning(final SAXParseException x) throws SAXException{setMesage(x);}
+
 		@Override
-		final public void error(final SAXParseException x)
-			throws SAXException {setMesage(x);}
+		final public void error(final SAXParseException x) throws SAXException {setMesage(x);}
+
 		@Override
-		final public void fatalError(final SAXParseException x)
-			throws SAXException {setMesage(x);}
+		final public void fatalError(final SAXParseException x) throws SAXException {setMesage(x);}
 	};
 	private final EntityResolver _entityResolver =  new EntityResolver() {
+
 		@Override
-		final public InputSource resolveEntity(final String publicId,
-			final String systemId) throws SAXException, IOException {
+		final public InputSource resolveEntity(final String publicId, final String systemId)
+			throws SAXException, IOException {
 			return new InputSource(new StringReader(_schema));
 		}
 	};
@@ -132,8 +133,8 @@ public final class TestXSTypes extends XDTester {
 	private void init() throws Exception {
 		if (XDTester.getFulltestMode()) {
 			_builderFactory = DocumentBuilderFactory.newInstance();
-			_builderFactory.setAttribute(
-				"http://java.sun.com/xml/jaxp/properties/schemaLanguage", XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			_builderFactory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+				XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			_builderFactory.setCoalescing(true);
 			_builderFactory.setNamespaceAware(true);
 			_builderFactory.setExpandEntityReferences(true);
@@ -431,9 +432,7 @@ public final class TestXSTypes extends XDTester {
 "</xd:def>";
 	}
 
-	private XDPool genXDPool(final String xdef) {
-		return compile(xdef);
-	}
+	private XDPool genXDPool(final String xdef) {return compile(xdef);}
 
 	private boolean chkXDef(final String result) {
 		boolean fits = true;

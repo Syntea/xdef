@@ -3335,10 +3335,11 @@ public final class TestXdef extends XDTester {
 		return new DefParseResult(s,new DefDate(sd));
 	}
 	private static final class LicheCislo extends XDParserAbstract {
+
 		LicheCislo() {}
+
 		@Override
-		public final void parseObject(final XXNode xnode,
-			final XDParseResult p) {
+		public final void parseObject(final XXNode xnode, final XDParseResult p) {
 			StringParser parser = new StringParser(p.getSourceBuffer());
 			parser.isSpaces();
 			if (parser.isInteger()) {
@@ -3354,10 +3355,13 @@ public final class TestXdef extends XDTester {
 				p.error(XDEF.XDEF515); // Value error
 			}
 		}
+
 		@Override
 		public final String parserName() {return "licheCislo";}
 	}
+
 	public final static XDParser licheCislo() {return new LicheCislo();}
+
 	public final static boolean x(final XXData x) {return true;}
 
 	/** Run test

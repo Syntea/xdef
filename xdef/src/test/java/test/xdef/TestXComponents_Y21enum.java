@@ -5,16 +5,16 @@ import org.xdef.component.XCEnumeration;
 public enum TestXComponents_Y21enum implements XCEnumeration {
 	a, b, c;
 
-	@Override
 	/** Get object associated with this item of enumeration.
 	 * @return object associated with this item of enumeration.
 	 */
+	@Override
 	public Object itemValue() {return name();}
 
-	@Override
 	/** Get string which is used to create enumeration.
 	 * @return string which is used to create enumeration.
 	 */
+	@Override
 	public final String toString() {return name();}
 
 	/** Create enumeration item from an object.

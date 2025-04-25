@@ -12,8 +12,8 @@ public final class TestUserMethods extends XDTester {
 
 	public TestUserMethods() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XDPool xp;
 		String xdef, xml;

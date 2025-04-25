@@ -85,8 +85,8 @@ public class TestSParser extends STester {
 		return r1.isEmpty() ? r2 : r1 + (r2.isEmpty() ? "" : ("\n" + r2));
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		SDatetime d;
 		StringParser p;

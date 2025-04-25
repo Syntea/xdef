@@ -35,8 +35,8 @@ import static test.XDTester.getFulltestMode;
 public final class Test003 extends XDTester {
 	public Test003() {super();}
 
-	@Override
 	/** Run tests. */
+	@Override
 	public void test() {
 		String xdef;
 		String xml;

@@ -21,8 +21,8 @@ public final class TestOptions extends XDTester {
 
 	public TestOptions() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XDPool xp;
 		XDDocument xd;

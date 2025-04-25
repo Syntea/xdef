@@ -61,8 +61,8 @@ public final class Test002 extends XDTester {
 	public static void setKodPartnera() {}
 	public static String testGetXPos(XXNode x) {return x.getXPos();}
 
-	@Override
 	/** Run tests. */
+	@Override
 	public void test() {
 		String xdef;
 		String xml;

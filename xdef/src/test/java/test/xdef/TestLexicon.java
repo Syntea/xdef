@@ -16,8 +16,8 @@ public final class TestLexicon extends XDTester {
 
 	public TestLexicon() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String xdef;
 		String xml;

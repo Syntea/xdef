@@ -395,8 +395,8 @@ public class TestJsonXdef extends XDTester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void test() {
 		if (!_xdNS.startsWith("http://www.xdef.org/xdef/4.")) {

@@ -67,8 +67,9 @@ public class MyTest extends XDTester {
 		}
 		return result;
 	}
-	@Override
+
 	/** Run test and display error information. */
+	@Override
 	public void test() {
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////

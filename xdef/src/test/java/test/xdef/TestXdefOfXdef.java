@@ -41,8 +41,8 @@ public final class TestXdefOfXdef extends XDTester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String xml;
 		final String dataDir = getDataDir() + "test/";

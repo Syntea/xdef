@@ -9,8 +9,8 @@ import test.XDTester;
 public class X extends XDTester {
 	public X() {}
 
-	@Override
 	/** Run test and display error information. */
+	@Override
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		String s;

@@ -61,8 +61,8 @@ public class TestXDGen extends XDTester {
 		return reporter;
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String dataDir = getDataDir();
 		int ndx = dataDir.indexOf("/xdutils/");

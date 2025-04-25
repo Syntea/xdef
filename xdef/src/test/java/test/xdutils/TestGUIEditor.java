@@ -20,8 +20,8 @@ public class TestGUIEditor  extends XDTester {
 		System.out.println("OK " + params[0] + (params.length > 1 ? " " + params[1] : ""));
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		try {
 ////////////////////////////////////////////////////////////////////////////////

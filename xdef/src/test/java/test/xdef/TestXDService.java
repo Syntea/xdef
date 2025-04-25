@@ -35,8 +35,8 @@ public final class TestXDService extends XDTester {
 
 	public TestXDService() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		try {
 			//Create object with database connection
@@ -147,17 +147,16 @@ public final class TestXDService extends XDTester {
 		@Override
 		public void close() {_data = null;}
 
-		@Override
 		/** Check if the object is <tt>null</tt>.
-		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise return
-		 * <tt>false</tt>.
+		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise return <tt>false</tt>.
 		 */
+		@Override
 		public boolean isNull() { return _data == null;}
 
-	   @Override
 	   /** Check if this object is closed.
 		* @return true if and only if this object is closed.
 		*/
+	   @Override
 		public boolean isClosed() {return _data == null;}
 
 		@Override
@@ -174,8 +173,7 @@ public final class TestXDService extends XDTester {
 		public void setProperty(String name, String value)
 			throws SRuntimeException{
 			//Database statement error&{msg}{: }
-			throw new SRuntimeException(XDEF.XDEF568,
-				"&{msg}Unknown property: " + name);
+			throw new SRuntimeException(XDEF.XDEF568, "&{msg}Unknown property: " + name);
 		}
 
 		@Override
@@ -217,20 +215,16 @@ public final class TestXDService extends XDTester {
 		}
 
 		@Override
-		public XDValue execute(XDValue params) throws SRuntimeException {
-			return query(params);
-		}
+		public XDValue execute(XDValue params) throws SRuntimeException {return query(params);}
 
 		@Override
 		public XDResultSet query(XDValue params) {
 			try {
 				String source = _source;
 				if (params != null) {
-					source = SUtils.modifyString(
-						source, "?", '"' + params.toString() + '"');
+					source = SUtils.modifyString(source, "?", '"' + params.toString() + '"');
 				}
-				return new MyResultSet(
-					new MyIterator((NodeList)KXpathExpr.evaluate(_rs, source)));
+				return new MyResultSet(new MyIterator((NodeList)KXpathExpr.evaluate(_rs, source)));
 			} catch (Exception ex) {
 				//Database statement error&{msg}{: }
 				throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
@@ -238,13 +232,11 @@ public final class TestXDService extends XDTester {
 		}
 
 		@Override
-		public XDResultSet queryItems(String itemName, XDValue params)
-			throws SRuntimeException {
+		public XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException {
 			try {
 				String source = _source;
 				if (params != null) {
-					source = SUtils.modifyString(
-						source, "?", '"' + params.toString() + '"');
+					source = SUtils.modifyString(source, "?", '"' + params.toString() + '"');
 				}
 				return new MyResultSet(
 					new MyIterator((NodeList) KXpathExpr.evaluate(_rs, source)),
@@ -258,17 +250,16 @@ public final class TestXDService extends XDTester {
 		@Override
 		public void close() {_rs = null;}
 
-		@Override
 		/** Check if the object is <tt>null</tt>.
-		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-		 * <tt>false</tt>.
+		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns <tt>false</tt>.
 		 */
+		@Override
 		public boolean isNull() { return _rs == null;}
 
-	   @Override
 	   /** Check if this object is closed.
 		* @return true if and only if this object is closed.
 		*/
+	   @Override
 		public boolean isClosed() {return _rs == null;}
 
 		@Override
@@ -288,9 +279,7 @@ public final class TestXDService extends XDTester {
 
 	}
 
-	private static class MyResultSet extends XDValueAbstract
-	implements XDResultSet {
-
+	private static class MyResultSet extends XDValueAbstract implements XDResultSet {
 		private MyIterator _ri;
 		private int _count;
 		private XDValue _item;
@@ -379,9 +368,7 @@ public final class TestXDService extends XDTester {
 		public int getSize() {return -1;}
 
 		@Override
-		public void close() {
-			_item = null;
-		}
+		public void close() {_item = null;}
 
 		@Override
 		public void closeStatement() {
@@ -389,17 +376,16 @@ public final class TestXDService extends XDTester {
 			_item = null;
 		}
 
-		@Override
 		/** Check if the object is <tt>null</tt>.
-		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-		 * <tt>false</tt>.
+		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns <tt>false</tt>.
 		 */
+		@Override
 		public boolean isNull() { return _ri == null;}
 
-	   @Override
 	   /** Check if this object is closed.
 		* @return true if and only if this object is closed.
 		*/
+	   @Override
 		public boolean isClosed() {return _ri == null;}
 
 		@Override
@@ -421,16 +407,16 @@ public final class TestXDService extends XDTester {
 			return null;
 		}
 
-		@Override
 		/** Get statement from which ResultSet was created.
 		 * @return null here.
 		 */
+		@Override
 		public XDStatement getStatement() {return null;}
 
-		@Override
 		/** Get constructor for creation of item.
 		 * @return constructor for creation of item.
 		 */
+		@Override
 		public XDConstructor getXDConstructor() {return _constructor;}
 
 		@Override
@@ -439,11 +425,11 @@ public final class TestXDService extends XDTester {
 	}
 
 	class MyIterator implements java.util.Iterator {
-
 		private final NodeList _nl;
 		private int _ndx;
 
 		MyIterator(NodeList nl) { _nl = nl;	_ndx = 0; }
+
 		@Override
 		public boolean hasNext() {return _ndx < _nl.getLength();}
 
@@ -451,9 +437,7 @@ public final class TestXDService extends XDTester {
 		public Object next() {return hasNext() ? _nl.item(_ndx++) : null;}
 
 		@Override
-		public void remove() {
-			throw new UnsupportedOperationException("Not supported.");
-		}
+		public void remove() {throw new UnsupportedOperationException("Not supported.");}
 	}
 
 	/** Run test

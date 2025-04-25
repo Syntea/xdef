@@ -44,8 +44,8 @@ public final class TestTypes extends XDTester {
 
 	public TestTypes() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XDPool xp;
 		XDDocument xd;
@@ -1480,8 +1480,10 @@ public final class TestTypes extends XDTester {
 
 	public static XDParser getMyParser() {
 		return new XDParserAbstract() {
+
 			@Override
 			public int getLegalKeys() {return 0;}
+
 			@Override
 			public void parseObject(XXNode xnode, XDParseResult p) {
 				p.isSpaces();
@@ -1493,13 +1495,16 @@ public final class TestTypes extends XDTester {
 					p.error("E000", "Chyba");
 				}
 			}
+
 			@Override
 			public String parserName() {return "myParser";}
 		};
 	}
 
 	private class BoolParser extends XDParserAbstract {
+
 		BoolParser() {}
+
 		@Override
 		public void parseObject(XXNode xnode, XDParseResult p) {
 			p.setEos();
@@ -1509,6 +1514,7 @@ public final class TestTypes extends XDTester {
 			//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}&{#SYS000}
 			p.error(XDEF.XDEF809, parserName());
 		}
+
 		@Override
 		public String parserName() {return "tab";}
 	}

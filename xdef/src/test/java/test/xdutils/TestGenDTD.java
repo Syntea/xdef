@@ -22,8 +22,8 @@ public class TestGenDTD extends XDTester {
 
 	public TestGenDTD() {super(); _handler = new MyHandler();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XMLReader reader = null;
 		String xdef;
@@ -148,8 +148,7 @@ public class TestGenDTD extends XDTester {
 		MyHandler() {}
 
 		@Override
-		public InputSource resolveEntity(String publicID, String systemID)
-		throws IOException, SAXException {
+		public InputSource resolveEntity(String publicID, String systemID) throws IOException, SAXException {
 			return _dtdInput;
 		}
 	}

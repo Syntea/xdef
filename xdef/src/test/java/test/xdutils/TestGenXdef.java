@@ -79,8 +79,8 @@ public class TestGenXdef extends XDTester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String dataDir = getDataDir() + "test/";
 		if (dataDir == null) {

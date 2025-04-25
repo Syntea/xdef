@@ -13,8 +13,8 @@ public final class TestTryCatch extends XDTester {
 
 	public TestTryCatch() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XDPool xp;
 		String xdef;

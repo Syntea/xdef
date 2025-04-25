@@ -14,8 +14,8 @@ public final class TestExternalVariables extends XDTester {
 
 	public TestExternalVariables() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String xml;
 		String xdef;

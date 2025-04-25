@@ -21,8 +21,8 @@ public final class Test001  extends XDTester {
 
 	public Test001() {super();}
 
-	@Override
 	/** Run tests and print error information. */
+	@Override
 	public void test() {
 		String xdef, xml;
 		Element el;

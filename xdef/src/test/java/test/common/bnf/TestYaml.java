@@ -32,6 +32,7 @@ public class TestYaml extends STester {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
 /*
 	yaml.org/spec/1.2/spec.html#YAML 1.1 processing//
 	https://learnxinyminutes.com/docs/yaml/

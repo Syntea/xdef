@@ -19,8 +19,8 @@ public class TestX extends XDTester {
 
 	public static boolean x(XXData x) {return true;}
 
-	@Override
 	/** Run test and display error information. */
+	@Override
 	public void test() {
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 		XDPool xp;

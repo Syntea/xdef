@@ -46,8 +46,8 @@ public final class Test000 extends XDTester {
 
 	private static int _myError = 0;
 
-	@Override
 	/** Run tests and print error information. */
+	@Override
 	public final void test() {
 		String xdef;
 		String xml;

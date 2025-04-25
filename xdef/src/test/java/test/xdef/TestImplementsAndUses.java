@@ -17,8 +17,8 @@ public final class TestImplementsAndUses extends XDTester {
 	final public static boolean x() {return true;}
 	final public static boolean y() {return true;}
 
-	@Override
 	/** Run test and print error information.*/
+	@Override
 	public void test() {
 		String xdef;
 		String xml;

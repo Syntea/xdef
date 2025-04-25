@@ -61,9 +61,9 @@ public final class TestXComponents extends XDTester {
 		return before.equals(after)? "" : ("Before:\n"+before+"After:\n"+after);
 	}
 
+	/** Run test and print error information. */
 	@Override
 	@SuppressWarnings("unchecked")
-	/** Run test and print error information. */
 	public void test() {
 		// just ensure following classes are compiled!
 		TestXComponents_C.class.getClass();

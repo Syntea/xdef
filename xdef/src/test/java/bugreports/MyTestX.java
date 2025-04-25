@@ -93,9 +93,9 @@ public class MyTestX extends XDTester {
 		System.out.println();
 	}
 
+	/** Run test and display error information. */
 	@SuppressWarnings({"unchecked"})
 	@Override
-	/** Run test and display error information. */
 	public void test() {
 /**
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,

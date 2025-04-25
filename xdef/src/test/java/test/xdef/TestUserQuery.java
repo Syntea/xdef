@@ -16,8 +16,8 @@ public final class TestUserQuery extends XDTester {
 
 	public TestUserQuery() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XDPool xp;
 		XDDocument xd;
@@ -472,13 +472,13 @@ public final class TestUserQuery extends XDTester {
 			_firmas.add(firma);
 		}
 
-		@Override
 		/** Implementation of the interface UserQuery on the table.
 		 * @param chkEl the actually processed chkElement object.
 		 * @return if child context exists it returns true and sets the value
 		 * of the child context to the chkElement object. If no child is
 		 * available it returns false.
 		 */
+		@Override
 		public boolean next(XXElement chkEl) {
 			if (_index < _firmas.size()) {
 				chkEl.setUserObject(_firmas.get(_index++));
@@ -487,22 +487,25 @@ public final class TestUserQuery extends XDTester {
 			return false;
 		}
 
-		@Override
 		/** Implementation of the interface UserQuery. Since the table itself
 		 * has no values it does nothing here and it returns the empty string.
 		 * @param chkEl the actually processed chkElement object.
 		 * @param name of required column.
 		 * @return since no columns are here it returns an empty string.
 		 */
+		@Override
 		public String value(XXElement chkEl, String name) {return "";}
 
 		@Override
 		public UserQuery newContext(XXElement chkEl) {
 			return new UserQuery() {
+
 				@Override
 				public boolean next(XXElement chkEl) {return false;}
+
 				@Override
 				public UserQuery newContext(XXElement chkEl) {return this;}
+
 				@Override
 				public String value(XXElement chkEl, String name) {return "";}
 			};
@@ -520,15 +523,13 @@ public final class TestUserQuery extends XDTester {
 				_persons.add(new Employee(firstName, lastName));
 			}
 
-			@Override
-			/** Implementation of the interface UserQuery on the table. The
-			 * method takes the nexr raw from the table and sets it as the
-			 * context for further processing.
-			 * @param chkEl the actualy processed chkElement object.
-			 * @return if child context exists it returns true and sets
-			 * the value of the child context to the chkElement object.
-			 * If no child is available it returns false.
+			/** Implementation of the interface UserQuery on the table. The method takes the next raw from
+			 * the table and sets it as the context for further processing.
+			 * @param chkEl the actually processed chkElement object.
+			 * @return if child context exists it returns true and sets the value of the child context
+			 * t to the chkElement object. If no child is available it returns false.
 			 */
+			@Override
 			public boolean next(XXElement chkEl) {
 				if (_index < _persons.size()) {
 					chkEl.setUserObject(_persons.get(_index++));
@@ -537,13 +538,12 @@ public final class TestUserQuery extends XDTester {
 				return false;
 			}
 
-			@Override
-			/** Implementation of the interface UserQuery. Returns here th name
-			 * or the id of Firma.
-			 * @param chkEl the actualy processed chkElement object.
+			/** Implementation of the interface UserQuery. Returns here the name or the id of Firma.
+			 * @param chkEl the actually processed chkElement object.
 			 * @param name of required column.
 			 * @return value of column item or the empty string.
 			 */
+			@Override
 			public String value(XXElement chkEl, String name) {
 				if ("name".equals(name)) {
 					return _name;
@@ -556,13 +556,15 @@ public final class TestUserQuery extends XDTester {
 			@Override
 			public UserQuery newContext(XXElement chkEl) {
 				return new UserQuery() {
+
 					@Override
 					public boolean next(XXElement chkEl) {return false;}
+
 					@Override
 					public UserQuery newContext(XXElement chkEl) {return this;}
+
 					@Override
-					public String value(XXElement chkEl, String name)
-						{return "";}
+					public String value(XXElement chkEl, String name) {return "";}
 				};
 			}
 
@@ -574,42 +576,42 @@ public final class TestUserQuery extends XDTester {
 					_columns.put("lastName", lastName);
 				}
 
-				@Override
-				/** Implementation of the interface UserQuery on the table.
-				 * Since Employe is a raw of the table it has no raws and so
-				 * it does nothig and returns always false.
-				 * @param chkEl the actualy processed chkElement object.
-				 * @return always false - nas no children.
+				/** Implementation of the interface UserQuery on the table. Since Employe is a raw
+				 * of the table it has no raw and so it does nothing and returns always false.
+				 * @param chkEl the actually processed chkElement object.
+				 * @return always false - has no children.
 				 */
+				@Override
 				public boolean next(XXElement chkEl) {
 					return false; //has no children
 				}
 
-				@Override
 				/** Implementation of the interface UserQuery. Returns the value
 				 * of specified column of the actual raw of the table. If
 				 * required value doesn't exist it returns the empty string.
-				 * @param chkEl the actualy processed chkElement object.
+				 * @param chkEl the actually processed chkElement object.
 				 * @param name of required column.
 				 * @return value of column item or the empty string.
 				 */
+				@Override
 				public String value(XXElement chkEl, String name) {
 					if (_columns.containsKey(name)) {
 						return _columns.get(name);
 					}
 					return "";
 				}
+
 				@Override
 				public UserQuery newContext(XXElement chkEl) {
 					return new UserQuery() {
+
 						@Override
 						public boolean next(XXElement chkEl) {return false;}
+
 						@Override
-						public UserQuery newContext(XXElement chkEl)
-							{return this;}
+						public UserQuery newContext(XXElement chkEl) {return this;}
 						@Override
-						public String value(XXElement chkEl, String name)
-							{return "";}
+						public String value(XXElement chkEl, String name) {return "";}
 					};
 				}
 			}// end of class Employee

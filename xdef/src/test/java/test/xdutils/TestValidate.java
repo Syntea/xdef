@@ -20,8 +20,8 @@ public class TestValidate extends XDTester {
 
 	public TestValidate() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String dataDir = getDataDir() + "test/";
 		if (dataDir == null) {

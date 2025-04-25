@@ -181,9 +181,9 @@ public class MyTest_0 extends XDTester {
 	}
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Run test and display error information. */
 	@SuppressWarnings("unchecked")
 	@Override
-	/** Run test and display error information. */
 	public void test() {
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////

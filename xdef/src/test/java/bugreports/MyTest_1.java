@@ -18,8 +18,8 @@ public class MyTest_1 extends XDTester {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 		String dataDir = getDataDir() + "test/";

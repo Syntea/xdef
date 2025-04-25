@@ -17,8 +17,8 @@ public final class TestGroups extends XDTester {
 
 	public TestGroups() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String xdef;
 		String xml;

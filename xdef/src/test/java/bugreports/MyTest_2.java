@@ -29,9 +29,9 @@ public class MyTest_2 extends XDTester {
 		return XonUtils.xmlToXon(xc.toXml());
 	}
 
+	/** Run test and display error information. */
 	@SuppressWarnings("unchecked")
 	@Override
-	/** Run test and display error information. */
 	public void test() {
 		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////

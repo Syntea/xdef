@@ -18,8 +18,8 @@ public class TestGenCollection extends XDTester {
 
 	public TestGenCollection() {super();}
 
+	/** Run test and print error information. */
 	@Override
-	/** Test */
 	public void test() {
 		Element el, el1;
 		String xdef;

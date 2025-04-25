@@ -9,8 +9,8 @@ public final class TestBNF extends XDTester {
 
 	public TestBNF() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		XDPool xp;
 		String xdef;
