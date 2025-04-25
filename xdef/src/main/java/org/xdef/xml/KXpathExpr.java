@@ -344,6 +344,7 @@ public class KXpathExpr {
 	public static final boolean isXPath2() {return XP2;}
 
 	private final class KFunResolver implements XPathFunctionResolver {
+
 		@Override
 		public final XPathFunction resolveFunction(final QName functionName,
 			final int arity) {
@@ -351,20 +352,24 @@ public class KXpathExpr {
 		}
 	}
 	private final class KVarResolver implements XPathVariableResolver{
+
 		@Override
 		public final Object resolveVariable(final QName variableName) {
 			return _vr!=null ? _vr.resolveVariable(variableName) : null;
 		}
 	}
 	private final class KNsContext implements NamespaceContext {
+
 		@Override
 		public final String getNamespaceURI(final String prefix) {
 			return _nc!=null ? _nc.getNamespaceURI(prefix) : null;
 		}
+
 		@Override
 		public final String getPrefix(final String namespaceURI) {
 			return _nc!=null ? _nc.getPrefix(namespaceURI) : null;
 		}
+
 		@Override
 		@SuppressWarnings("unchecked")
 		public final Iterator<String> getPrefixes(final String namespaceURI) {

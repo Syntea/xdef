@@ -1001,10 +1001,10 @@ public final class CompileXonXdef extends XScriptParser {
 		// Implementation of JParser interface
 		////////////////////////////////////////////////////////////////////////
 
-		@Override
 		/** Put value to result.
 		 * @param value JValue to be added to result object.
 		 */
+		@Override
 		public final void putValue(final JValue value) {
 			switch (_kind) {
 				case ARRAY: _arrays.peek().add(value);
@@ -1017,11 +1017,11 @@ public final class CompileXonXdef extends XScriptParser {
 			_value = value; // it is VALUE
 		}
 
-		@Override
 		/** Set name of value pair.
 		 * @param name value name.
 		 * @return true if the name of pair already exists.
 		 */
+		@Override
 		public final boolean namedValue(final SBuffer name) {
 			String s = name.getString();
 			boolean result = false;
@@ -1035,19 +1035,21 @@ public final class CompileXonXdef extends XScriptParser {
 			_names.push(name);
 			return result;
 		}
-		@Override
+
 		/** Array started.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void arrayStart(final SPosition pos) {
 			 //add ARRAY to kins stack and set it to kind
 			_kinds.push(_kind = ARRAY);
 			_arrays.push(new JArray(pos));  // new item to array stack
 		}
-		@Override
+
 		/** Array ended.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void arrayEnd(final SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -1059,19 +1061,21 @@ public final class CompileXonXdef extends XScriptParser {
 				_arrays.peek().add(_value);
 			} // else it is VALUE
 		}
-		@Override
+
 		/** Map started.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void mapStart(final SPosition pos) {
 			//add MAP to kins stack and set it to kind
 			_kinds.push(_kind = MAP);
 			_maps.push(new JMap(pos)); // new item to map stack
 		}
-		@Override
+
 		/** Map ended.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void mapEnd(final SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -1083,17 +1087,19 @@ public final class CompileXonXdef extends XScriptParser {
 				_arrays.peek().add(_value);
 			} // parent is value
 		}
-		@Override
+
 		/** Processed comment.
 		 * @param value SBuffer with the value of comment.
 		 */
-		public final void comment(final SBuffer value){/*we ingore it here*/}
 		@Override
+		public final void comment(final SBuffer value){/*we ingore it here*/}
+
 		/** X-script item parsed, not used methods for JSON/XON parsing
 		 * (used in X-definition compiler).
 		 * @param name name of item.
 		 * @param value value of item.
 		 */
+		@Override
 		public final void xdScript(final SBuffer name, final SBuffer value) {
 			SPosition spos = value == null ? name : value;
 			JValue jv;
@@ -1117,10 +1123,11 @@ public final class CompileXonXdef extends XScriptParser {
 				_maps.peek().put(SCRIPT_DIRECTIVE, jv);
 			}
 		}
-		@Override
+
 		/** Get result of parser.
 		 * @return parsed object.
 		 */
+		@Override
 		public final Object getResult() {return _value;}
-	} //class XonModelParser
+	}
 }

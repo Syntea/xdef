@@ -242,6 +242,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 	//ErrorHandler
 	////////////////////////////////////////////////////////////////////////////
+
 	private SPosition getPosition(final SAXParseException x) {
 		return new SPosition(x.getLineNumber(), x.getColumnNumber(), _sysId,null);
 	}
@@ -256,10 +257,12 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		}
 		warning(getPosition(x), XML.XML075, x.getMessage());
 	}
+
 	@Override
 	public final void error(final SAXParseException x) {
 		error(getPosition(x), XML.XML075, x.getMessage()); //XML error&{0}{: }
 	}
+
 	@Override
 	public final void fatalError(final SAXParseException x) {
 		String m = x.getMessage();
@@ -281,6 +284,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	/////////////////////////////////////////////////////////////
 	// EntityResolver
 	/////////////////////////////////////////////////////////////
+
 	@Override
 	public InputSource resolveEntity(final String pubID, final String sysID)
 		throws IOException {
@@ -393,6 +397,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	//   - public void endPrefixMapping(final String prefix)
 	//   - public void skippedEntity(final String name)
 	// Foolews methods to be implemented:
+
 	@Override
 	public void startDocument() throws SAXException {}
 

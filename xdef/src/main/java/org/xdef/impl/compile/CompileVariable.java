@@ -75,8 +75,8 @@ public final class CompileVariable extends XVariable {
 	 */
 	public final SPosition getSourcePosition() {return _spos;}
 
-	@Override
 	/** Set value of variable. */
+	@Override
 	public String toString() {
 		return super.toString() + ", parseMethodAddr=" + getParseMethodAddr() + ", codeAddr=" + _codeAddr
 			+ ", parseResultType="  + getTypeName(getParseResultType()) + ", val=" + _value;

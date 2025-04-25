@@ -202,6 +202,7 @@ public class GUIEditor extends GUIScreen {
 		if (text != null) {
 			_sourceArea.getActionMap().put(text, new AbstractAction(text) {
 				private static final long serialVersionUID = 4377386270269629176L;
+
 				@Override
 				public void actionPerformed(ActionEvent evt) {
 					updateSourceItem();

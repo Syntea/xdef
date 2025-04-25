@@ -104,7 +104,9 @@ public class PrettyXdef extends XReader {
 	private static class Attr {
 		final String _name;
 		final String _value;
+
 		Attr(String name, String value) {_name = name; _value = value;}
+
 		@Override
 		public String toString() {return _name + "=" + _value;}
 	}
@@ -402,8 +404,7 @@ public class PrettyXdef extends XReader {
 						continue;
 					}
 					if (s == null) {
-						msg += "Parameter [" + swNum + "], '" + args[swNum-1] +
-							"': missing following argument\n";
+						msg += "Parameter ["+swNum+"], '"+args[swNum-1]+"': missing following argument\n";
 						continue;
 					}
 					fileName = s;
@@ -423,8 +424,7 @@ public class PrettyXdef extends XReader {
 					encoding = s;
 					continue;
 				}
-				default:
-					msg += "Parameter [" + swNum + "], '" + args[swNum-1] + " is incorrect switch\n";
+				default: msg += "Parameter [" + swNum + "], '" + args[swNum-1] + " is incorrect switch\n";
 			}
 		}
 		if (i < args.length) {

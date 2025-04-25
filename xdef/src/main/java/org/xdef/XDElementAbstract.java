@@ -691,9 +691,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		}
 	}
 
-	protected Attr createAttr(final String name,final  String val) {
-		return new MyAttr(name, val, this);
-	}
+	protected Attr createAttr(final String name,final  String val) {return new MyAttr(name, val, this);}
 
 	final class MyAttr implements Attr {
 
@@ -799,9 +797,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public final String getPrefix() {return null;}
 
 		@Override
-		public final void setPrefix(final String prefix) {
-			throw new SUnsupportedOperationException();
-		}
+		public final void setPrefix(final String prefix) {throw new SUnsupportedOperationException();}
 
 		@Override
 		public final String getLocalName() {return _name;}

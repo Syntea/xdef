@@ -151,14 +151,17 @@ public class KDOMBuilder extends DocumentBuilder {
 				_xBuilder.reset();
 			}
 			_xBuilder.setErrorHandler(new ErrorHandler() {
+
 				@Override
 				public void warning(SAXParseException ex) {
 					throwMsg(ex, Report.WARNING);
 				}
+
 				@Override
 				public void error(SAXParseException ex) {
 					throwMsg(ex, Report.ERROR);
 				}
+
 				@Override
 				public void fatalError(SAXParseException ex) {
 					throwMsg(ex, Report.FATAL);
@@ -441,13 +444,13 @@ public class KDOMBuilder extends DocumentBuilder {
 		 }
 	 }
 
-	@Override
 	/** Specify the {@link EntityResolver} to be used to resolve entities present in the XML document to be
 	 * parsed. Setting this to null will result in the underlying implementation using it's own default
 	 * implementation and behavior.
 	 * @param entResolver The EntityResolver to be used to resolve entities present in the XML document
 	 * to be parsed.
 	 */
+	@Override
 	public final void setEntityResolver(final EntityResolver entResolver) {
 		 if (_xBuilder != null) {
 			 _xBuilder.setEntityResolver(entResolver);

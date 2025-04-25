@@ -27,9 +27,7 @@ public final class XDRegex extends XDValueAbstract {
 	private final boolean _mode;
 
 	/** Creates null instance of XDRegex. */
-	public XDRegex() {
-		_source = null; _value = null; _mode = false;
-	}
+	public XDRegex() {_source = null; _value = null; _mode = false;}
 
 	/** Creates new instance of XDRegex.
 	 * @param s The string with regular expression source.
@@ -47,7 +45,6 @@ public final class XDRegex extends XDValueAbstract {
 			if (t == null) {
 				t = ex.toString();
 			}
-
 			throw new SRuntimeException(XDEF.XDEF650, s +"; ("+ t +")");//Incorrect regular expression: &{0}
 		}
 	}
@@ -82,35 +79,35 @@ public final class XDRegex extends XDValueAbstract {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public final short getItemId() {return XD_REGEX;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public final XDValueType getItemType() {return REGEX;}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public final String toString() {return _source;}
 
-	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public final String stringValue() {return _source;}
 
-	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @return true if and only if the argument is equal to this one.
 	 */
+	@Override
 	public final boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -120,10 +117,11 @@ public final class XDRegex extends XDValueAbstract {
 		}
 		return _source==null ? arg.isNull() : _source.equals(arg.stringValue());
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise returns false.
 	 */
+	@Override
 	public boolean isNull() {return _source == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -648,5 +646,4 @@ public final class XDRegex extends XDValueAbstract {
 			return false;
 		}
 	}
-////////////////////////////////////////////////////////////////////////////////
 }

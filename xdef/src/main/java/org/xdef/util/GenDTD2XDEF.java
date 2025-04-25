@@ -270,6 +270,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 	// EntityResolver
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public InputSource resolveEntity(final String pubID, final String sysID) throws IOException {
 		if (_xmlFailed) {
@@ -288,6 +289,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 	// ErrorHandler
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public void warning(SAXParseException x) {_reporter.warning("", x.getMessage());}
 
@@ -300,6 +302,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 	//XHandler
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public final void popReader() {}
 
@@ -309,30 +312,39 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	/////////////////////////////////////////////////////////////
 	// LexicalHandler
 	/////////////////////////////////////////////////////////////
+
 	@Override
 	public final void startEntity(final String name) {}
+
 	@Override
 	public final void endEntity(final String name) {}
+
 	@Override
 	public final void startCDATA() {}
+
 	@Override
 	public final void endCDATA() {}
+
 	@Override
 	public final void startDTD(final String name, final String publicId, final String systemId) {_isDTD=true;}
+
 	@Override
 	public final void endDTD() {_isDTD = false;}
+
 	@Override
 	public final void comment(final char[] ch, final int start, final int length) {}
 
 	////////////////////////////////////////////////////////////////////////////
 	// DeclHandler
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public final void elementDecl(final String name, final String model) {
 		if (_isDTD) {
 			_elemDeclMap.put(name, new ElemDecl(name, model));
 		}
 	}
+
 	@Override
 	public final void attributeDecl(final String eName,
 		final String aName,
@@ -343,8 +355,10 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			_attrDeclList.add(new AttrDecl(eName, aName, type, mode, value));
 		}
 	}
+
 	@Override
 	public final void internalEntityDecl(final String name,final String value){}
+
 	@Override
 	public final void externalEntityDecl(final String name, final String pubId, final String sysId) {}
 
@@ -358,16 +372,19 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		char _type;
 		char _occurs; // '*' | '+' | '?'
 	}
+
 	private static class SeqItemList extends SeqItem {
 		final List<SeqItem> _list = new ArrayList<>();
 		final int size() {return _list.size();}
 		final void add(final SeqItem item) {_list.add(item);}
 		final SeqItem get(final int index) {return _list.get(index);}
 	}
+
 	private static class SeqItemRef extends SeqItem {
 		final String _name;
 		SeqItemRef(final String name, final char rep) {_type = REF; _name = name; _occurs = rep;}
 	}
+
 	/** [69] PEReference::= '%' Name ';'  (Parameter entity reference). */
 	private static boolean isPEReference(final StringParser p) {
 		if (!p.isChar('%')) {
@@ -377,6 +394,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		p.isChar(';');
 		return true;
 	}
+
 	/** [28a] DeclSep::= PEReference | S */
 	private static boolean isDeclSep(StringParser p) {
 		if (p.isSpaces()) {
@@ -429,6 +447,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		}
 		return true;
 	}
+
 	private static void skipDeclSep(StringParser p) {
 		p.isSpaces();
 		if (isPEReference(p)) {
@@ -508,6 +527,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			}
 		}
 	}
+
 /*
 AttType ::= StringType | TokenizedType | EnumeratedType
 StringType ::= 'CDATA'
@@ -564,6 +584,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			}
 		}
 	}
+
 	private void prepareGen() {
 		for (AttrDecl x : _attrDeclList) {
 			ElemDecl y = _elemDeclMap.get(x._eName);
@@ -575,6 +596,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		_xdef = _doc.getDocumentElement();
 		_xdef.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "xmlns:xd", XDConstants.XDEF42_NS_URI);
 	}
+
 	private void genAttributes(Element model, ElemDecl elem) {
 		if (elem._attList != null && !elem._attList.isEmpty()) {
 			for (int i = 0, maxi = elem._attList.size(); i < maxi; i++) {
@@ -600,6 +622,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			}
 		}
 	}
+
 	private void genModel(Element xd, ElemDecl elem) {
 		Element model = xd.getOwnerDocument().createElement(elem._name);
 		xd.appendChild(model);
@@ -629,6 +652,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			genSequence(model, elem._childList, seqType, seqOccurs);
 		}
 	}
+
 	private void genRefItem(Element p, SeqItemRef refItem, char seqOccurs) {
 		ElemDecl elem = _elemDeclMap.get(refItem._name);
 		Element x = p.getOwnerDocument().createElement(refItem._name);
@@ -679,6 +703,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		}
 		p.appendChild(x);
 	}
+
 	private void genItem(Element p, SeqItem item, char seqType, char seqOccurs) {
 		if (item == null) {
 			return;
@@ -709,6 +734,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			genSequence(p, (SeqItemList) item, seqType, seqOccurs);
 		}
 	}
+
 	private void genSequence(final Element p, final SeqItemList seq, final char seqType, final char occurs) {
 		char seqOccurs = occurs;
 		if (seq == null) {
@@ -772,6 +798,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			genItem(x, seq.get(i), seq._type, seqOccurs);
 		}
 	}
+
 	private void genXDef(final String rootName) {
 		prepareGen();
 		ElemDecl root = _elemDeclMap.get(rootName);
@@ -792,6 +819,7 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 			}
 		}
 	}
+
 	private void setRefNumbers(final SeqItem item, final int recurse) {
 		if (item == null || recurse > MAXRECURSE) {
 			return;

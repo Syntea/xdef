@@ -69,10 +69,13 @@ public abstract class XAbstractReader extends Reader {
 
 	@Override
 	abstract public int read() throws IOException;
+
 	@Override
 	abstract public int read(char[] cbuf) throws IOException;
+
 	@Override
 	abstract public int read(char[] cbuf, int off, int len) throws IOException;
+
 	@Override
 	abstract public void close() throws IOException;
 

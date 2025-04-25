@@ -35,15 +35,15 @@ public class KNodeList extends ArrayList<Node> implements NodeList {
 		}
 	}
 
-	@Override
 	/** Get number of items in this list. */
+	@Override
 	public final int getLength() {return size();}
 
-	@Override
 	/** Get node from the index in this list.
 	 * @param index index of item.
 	 * @return node from the index in this list.
 	 */
+	@Override
 	public final Node item(final int index) {return get(index);}
 
 	/** Add node to the position given by argument index.

@@ -276,7 +276,7 @@ public final class XDFactory extends XDTools {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDDocument xparse(final String source, final ReportWriter r) throws SRuntimeException {
+	public static final XDDocument xparse(final String source, final ReportWriter r) throws SRuntimeException{
 		return XBuilder.xparse(source, r);
 	}
 
@@ -354,8 +354,7 @@ public final class XDFactory extends XDTools {
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final XDPool readXDPool(final URL u) throws IOException {return readXDPool(u.openStream());
-	}
+	public static final XDPool readXDPool(final URL u) throws IOException {return readXDPool(u.openStream());}
 
 	/** Check if XQuery implementation is available.
 	 * @return true if XQuery implementation is available.

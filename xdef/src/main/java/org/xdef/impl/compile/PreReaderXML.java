@@ -40,12 +40,12 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 	 */
 	PreReaderXML(final XPreCompiler pcomp) {super(); _pcomp = pcomp;}
 
-	@Override
 	/** This method is called after all attributes of the current element attribute list was reached.
 	 * The implementation may check the list of attributes and to invoke appropriate actions. The method
 	 * is invoked when parser reaches the end of the attribute list.
 	 * @param parsedElem contains name of the element, namespace URI and the list of attributes.
 	 */
+	@Override
 	public final void elementStart(final KParsedElement parsedElem) {
 		String qName = parsedElem.getParsedName();
 		if (_includeElement == null) {
@@ -289,8 +289,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		return name;
 	}
 
-	@Override
 	/** This method is invoked when parser reaches the end of element. */
+	@Override
 	public final void elementEnd() {
 		if (_includeElement != null) {
 			String ns = _includeElement.getPrefix();
@@ -317,10 +317,10 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		_actPNode = _actPNode._parent;
 	}
 
-	@Override
 	/** New text value of current element parsed.
 	 * @param text SBuffer with value of text node.
 	 */
+	@Override
 	public final void text(final SBuffer text) {
 		if (_includeElement != null) {
 			return;

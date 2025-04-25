@@ -37,11 +37,11 @@ public class KNamespace implements NamespaceContext {
 //  Implementation of methods from interface NamespaceContext.
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Find namespace URI assigned to prefix from argument.
 	 * @param prefix namespace prefix to be searched.
 	 * @return namespace URI or null if no URI was found.
 	 */
+	@Override
 	public final String getNamespaceURI(final String prefix) {
 		if (prefix != null && _size > 0) {
 			for (int i = _size - 1; i >= 0; i--) {
@@ -53,11 +53,11 @@ public class KNamespace implements NamespaceContext {
 		return null;
 	}
 
-	@Override
 	/** Find most recent prefix assigned to given namespace URI.
 	 * @param uri namespace URI to be searched.
 	 * @return namespace prefix or null.
 	 */
+	@Override
 	public final String getPrefix(final String uri) {
 		if (uri != null && _size > 0) {
 			for (int i = _size - 1; i >= 0; i--) {
@@ -70,11 +70,11 @@ public class KNamespace implements NamespaceContext {
 		return null;
 	}
 
-	@Override
 	/** Find all prefixes assigned to given namespace URI.
 	 * @param uri namespace URI to be searched.
 	 * @return iterator with list of prefixes.
 	 */
+	@Override
 	public final Iterator<String> getPrefixes(final String uri) {
 		List<String> a = new ArrayList<>();
 		if (uri != null && _size > 0) {

@@ -113,15 +113,15 @@ public final class XScriptMacro {
 		}
 	}
 
-	@Override
 	/** Returns hash code of the object. */
+	@Override
 	public int hashCode() {return _name.hashCode();}
 
-	@Override
 	/** This enables to use the method <i>indexOf(anObject)</i>.
 	 * @param anObject The object to be compared with this one.
 	 * @return <i>true</i> if and only if the object is considered to be equal with this one.
 	 */
+	@Override
 	public boolean equals(final Object anObject) {
 		return (anObject instanceof XScriptMacro) ? ((XScriptMacro) anObject)._name.equals(_name) : false;
 	}

@@ -33,22 +33,25 @@ import org.xdef.xon.XonTools;
  * @author Vaclav Trojan
  */
 public abstract class XDParserAbstract extends XDValueAbstract implements XDParser {
-
+	/** List of integer types id. */
+	private static final short[] INTTYPES = {XD_BYTE, XD_SHORT, XD_INT, XD_LONG, XD_BIGINTEGER};
+	/** List of float types id. */
+	private static final short[] FLOATTYPES = {XD_FLOAT, XD_DOUBLE, XD_DECIMAL};
 	/** Name of type how it was declared, */
 	private String _declaredName;
 	/** Base parser. */
 	private XDParser _base;
 
-	@Override
 	/** Get base parser.
 	 * @return base XDParser or null.
 	 */
+	@Override
 	public XDParser getBase() {return _base;}
 
-	@Override
 	/** Set base parser.
 	 * @param x base XDParser or null.
 	 */
+	@Override
 	public void setBase(final XDParser x) {_base = x;};
 
 	/** Set separator. (May be overwritten.)
@@ -56,22 +59,22 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 */
 	public void setSeparator(final String x) {} // default do nothing
 
-	@Override
 	/** Check value of string.
 	 * @param source string to be checked.
 	 * @param xnode actual XXNode object or null.
 	 */
+	@Override
 	public XDParseResult check(XXNode xnode, String source) {
 		XDParseResult p = new DefParseResult(source);
 		check(xnode, p);
 		return p;
 	}
 
-	@Override
 	/** Create parseResult object from StringParser.
 	 * @param p Parsed result to be checked.
 	 * @param xnode actual XXNode object or null.
 	 */
+	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {
 		if (xnode != null && xnode.getXMElement().getXonMode() != 0 && "null".equals(p.getSourceBuffer())) {
 			p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
@@ -89,32 +92,32 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		}
 	}
 
-	@Override
 	/** This method provides some final checks which are dependent on the context of parsing (such as ENTITY,
 	 * ENTITIES, ID, IDREF, IDREFS). Usually this method is empty and you do not need to override this method.
 	 * @param p Parsed result to be checked.
 	 * @param xnode Actual check node or null.
 	 */
+	@Override
 	public void finalCheck(XXNode xnode, XDParseResult p) {}
 
-	@Override
 	/** Get value of whiteSpace parameter.
 	 * @return 0 .. preserve, 'r' .. replace, 'c' .. collapse
 	 */
+	@Override
 	public byte getWhiteSpaceParam() {return 'c';} // the default value
 
-	@Override
 	/** Get named parameters (pattern,enumeration,white spaces,total digits,..).
 	 * @return named parameters.
 	 */
+	@Override
 	public XDContainer getNamedParams() {return new DefContainer();}
 
-	@Override
 	/** Set named parameters.
 	 * @param xnode actual XXNode object or null.
 	 * @param params container with named items of parameters.
 	 * @throws SException if an error occurs.
 	 */
+	@Override
 	public void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
 		for (XDNamedValue nv: params.getXDNamedItems()) {
 			XDValue val = nv.getValue();
@@ -138,10 +141,10 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		}
 	}
 
-	@Override
 	/** Set value of "sequential" parameters of parser.
-	 * @param param "sequential" parameters.
+	 * @param params "sequential" parameters.
 	 */
+	@Override
 	public void setParseSQParams(Object... params) {}
 
 	@Override
@@ -163,10 +166,10 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	@Override
 	public short parsedType() {return XD_STRING;}
 
-	@Override
 	/** Get integer with bits representing the allowed keyword parameters.
 	 * @return integer with bits representing the allowed keyword parameters.
 	 */
+	@Override
 	public int getLegalKeys() {return 0;}
 
 	@Override
@@ -178,6 +181,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	////////////////////////////////////////////////////////////////////////////
 	//Do not overwrite following methods
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public final short getItemId() {return XD_PARSER;} // do not override
 
@@ -187,23 +191,22 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	@Override
 	public final XDValueType getItemType() {return PARSER;}
 
-	@Override
 	/** Set declared type name of parser.
 	 * @param name the declared type name.
 	 */
+	@Override
 	public final void setDeclaredName(final String name) {_declaredName = name;}
 
-	@Override
 	/** Get declared type name of parser.
 	 * @return declared type name of parser
 	 */
+	@Override
 	public final String getDeclaredName() {return _declaredName;}
 
 	/** Check if value is parser and return it as a Parser or convert it to Parser (if it is possible).
 	 * @param x value to be checked.
 	 * @return return argument as a Parser.
-	 * @throws SRuntimeException with message XDEF474
-	 * if conversion is not possible.
+	 * @throws SRuntimeException with message XDEF474 if conversion is not possible.
 	 */
 	public final XDParser valueToParser(final XDValue x) {
 		if (x != null) {
@@ -224,6 +227,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 				case XD_PARSERESULT: {
 					XDParseResult y = (XDParseResult) x;
 					return new XDParserAbstract() {
+
 						@Override
 						public void parseObject(XXNode xnode, XDParseResult p) {
 							XDParseResult y = (XDParseResult) x;
@@ -232,11 +236,13 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 							p.setParsedValue(y.getParsedValue());
 							p.addReports(y.getReporter());
 						}
+
 						@Override
 						public short parsedType() {
 							XDValue v = y.getParsedValue();
 							return v == null ? XD_ANY : v.getItemId();
 						}
+
 						@Override
 						public String parserName() {return "generatedParser";}
 					};
@@ -297,9 +303,6 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		}
 		return -1;
 	}
-
-	private static final short[] INTTYPES = {XD_BYTE, XD_SHORT, XD_INT, XD_LONG, XD_BIGINTEGER};
-	private static final short[] FLOATTYPES = {XD_FLOAT, XD_DOUBLE, XD_DECIMAL};
 
 	public static final short getItemsType(final XDParser[] x) {
 		short result = x[0].parsedType();

@@ -55,8 +55,8 @@ public final class XDReport extends XDValueAbstract {
 		if (_value == null) {
 			return new XDReport();
 		}
-		Report result = new Report(_value.getType(),
-			_value.getMsgID(), _value.getText(), _value.getModification());
+		Report result =
+			new Report(_value.getType(), _value.getMsgID(), _value.getText(), _value.getModification());
 		result.setParameter(name, value);
 		return new XDReport(result);
 	}

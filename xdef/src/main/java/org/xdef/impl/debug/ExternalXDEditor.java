@@ -33,12 +33,12 @@ public abstract class ExternalXDEditor implements XEditor {
 	abstract public void executeExternalXDEditor(String defPool, String reports, String resultInfo)
 		throws Exception;
 
-	@Override
 	/** Set and open the XEditor.
 	 * @param xp XDPool.
 	 * @param err error reporter.
 	 * @return if true the editing was finished otherwise XDPool will be recompiled.
 	 */
+	@Override
 	public boolean setXEditor(final XDPool xpool, final ArrayReporter reporter){
 		try {
 			// prepare files containing the xpool and reporter
@@ -110,10 +110,10 @@ public abstract class ExternalXDEditor implements XEditor {
 		return f.exists() && f.canRead();
 	}
 
-	@Override
 	/** Close XEditor.
 	 * @param msg text of message to be shown at the end of editing. If null no message is shown.
 	 */
+	@Override
 	public final void closeXEditor(final String msg) {}
 
 	/** Create XDPool from the file. The external editor can use this method to get XDPool from the file

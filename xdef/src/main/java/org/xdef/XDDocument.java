@@ -301,11 +301,6 @@ public interface XDDocument extends XXNode {
 	 */
 	public XDParseResult parseXDType(String typeName, String data);
 
-	/** Get XON result.
-	 * @return XON result or null.
-	 */
-	public Object getXon();
-
 ////////////////////////////////////////////////////////////////////////////////
 	/** Parse and process CSV data and return processed object. If separator is comma header is not skipped.
 	 * @param data string with pathname of CSV file or Reader with CSV data.

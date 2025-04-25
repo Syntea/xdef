@@ -43,7 +43,6 @@ public interface XDParser extends XDValue {
 	public static final int OUTFORMAT =			0x00000000010000;
 	/** Keyword "argument" id.*/
 	public static final int ARGUMENT =			0x00000000020000;
-
 	/** Table of keyword parameters.*/
 	public static final String[] PARAM_NAMES = new String[] {
 		"pattern",

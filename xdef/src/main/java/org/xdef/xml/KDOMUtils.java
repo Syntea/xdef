@@ -1880,8 +1880,10 @@ public class KDOMUtils {
 	/** Implemetation of empty object org.w3c.dom.Nodelist. */
 	private static class EmptyNodeList implements NodeList {
 		private EmptyNodeList() {}
+
 		@Override
 		public final int getLength() {return 0;}
+
 		@Override
 		public final Node item(int index) {return null;}
 	}
@@ -1889,29 +1891,37 @@ public class KDOMUtils {
 	/** Implemetation of empty object org.w3c.dom.NamedNodeMap. */
 	private static class EmptyNamedNodeMap implements NamedNodeMap {
 		private EmptyNamedNodeMap() {}
+
 		@Override
 		public final int getLength() {return 0;}
+
 		@Override
 		public final Node item(int index) {return null;}
+
 		@Override
 		public final Node removeNamedItem(final String name) {
 			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
+
 		@Override
 		public final Node removeNamedItemNS(final String namespaceURI,
 			final String localName)	{
 			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
+
 		@Override
 		public final Node setNamedItem(Node arg) {
 			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
+
 		@Override
 		public final Node setNamedItemNS(Node arg) {
 			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR, "Empty map");
 		}
+
 		@Override
 		public final Node getNamedItemNS(final String namespaceURI, final String localName) {return null;}
+
 		@Override
 		public final Node getNamedItem(final String name) {return null;}
 	}

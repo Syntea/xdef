@@ -27,13 +27,13 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	 */
 	public ChkGUIDisplay(final XDSourceInfo si) {super(si);}
 
-	@Override
 	/** Open GUI.
 	 * @param xp the XDPool object.
 	 * @param err error reporter or null.
 	 * @return true if the GUI was finished ane not continue. If false is returned then the compilation will
 	 * be executed and the editor will be opened again.
 	 */
+	@Override
 	public final boolean setXEditor(final XDPool xp, final ArrayReporter err) {
 		_windowName = "Edit X-definition: ";
 		_frame.setVisible(false);
@@ -66,8 +66,8 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		return true;
 	}
 
-	@Override
 	/** Close XEditor. */
+	@Override
 	public void closeXEditor(String msg) {
 		if (_kill) {
 			throw new Error("Process killed by user");

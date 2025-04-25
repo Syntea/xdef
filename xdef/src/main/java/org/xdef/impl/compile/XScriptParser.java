@@ -1649,29 +1649,29 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 		putReportOnLastPos(Report.error(id, msg, mod));
 	}
 
-	@Override
 	/** Put warning message.
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public void warning(final long registeredID, final Object... mod) {
 		putReportOnLastPos(Report.warning(registeredID, mod));
 	}
 
-	@Override
 	/** Put light error message.
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public void lightError(final long registeredID, final Object... mod) {
 		putReportOnLastPos(Report.lightError(registeredID, mod));
 	}
 
-	@Override
 	/** Put error message with modification parameters.
 	 * @param registeredID registered message ID.
 	 * @param mod Modification string.
 	 */
+	@Override
 	public void error(final long registeredID, final Object... mod) {
 		putReportOnLastPos(Report.error(registeredID, mod));
 	}
@@ -1711,11 +1711,11 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 		putReport(pos, Report.warning(registeredID, mod));
 	}
 
-	@Override
 	/** Put report at position.
 	 * @param pos Source position.
 	 * @param report The report.
 	 */
+	@Override
 	public void putReport(final SPosition pos, final Report report) {
 		if (_xpath != null && !_xpath.isEmpty()) {
 			String s = report.getModification();

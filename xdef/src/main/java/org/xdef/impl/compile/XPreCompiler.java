@@ -282,25 +282,25 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Get namespace URI on given position.
 	 * @param i position
 	 * @return uri on this position or null.
 	 */
+	@Override
 	public String getNSURI(final int i) {return _g._namespaceURIs.get(i);}
 
-	@Override
 	/** Get namespace URI index of given uri.
 	 * @param uri uri to he found.
 	 * @return index of uri from argument.
 	 */
+	@Override
 	public int getNSURIIndex(final String uri) {return _g._namespaceURIs.indexOf(uri);}
 
-	@Override
 	/** Set URI. If the URI already exists just return the index
 	 * @param uri URI to be set.
 	 * @return index of uri.
 	 */
+	@Override
 	public int setNSURI(final String uri) {
 		int i = _g._namespaceURIs.indexOf(uri);
 		if (i >= 0) {
@@ -310,19 +310,19 @@ public class XPreCompiler implements PreCompiler {
 		return _g._namespaceURIs.size() - 1;
 	}
 
-	@Override
 	/** Set URI on given index.
 	 * @param i index where to set.
 	 * @param uri URI to set.
 	 * @return original URI or null.
 	 */
+	@Override
 	public String setURIOnIndex(final int i, final String uri) {return _g._namespaceURIs.set(i, uri);}
 
-	@Override
 	/** Report not legal attributes. All allowed attributes should be
 	 * processed and removed. Not legal attributes generates an error message.
 	 * @param pnode node to be checked.
 	 */
+	@Override
 	public final void reportNotAllowedAttrs(final PNode pnode) {
 		for (PAttr attr: pnode.getAttrs()) {
 			error(attr._value, XDEF.XDEF254, attr._name); //Attribute '&{0}' not allowed here
@@ -330,7 +330,6 @@ public class XPreCompiler implements PreCompiler {
 		pnode.getAttrs().clear();
 	}
 
-	@Override
 	/** Get attribute of given name with or without namespace prefix from node. The attribute is removed from
 	 * the list. If the argument required is set to true put error message that required attribute is missing.
 	 * @param pnode where to find attribute.
@@ -339,6 +338,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param remove if true the attribute is removed.
 	 * @return PAttr object or null.
 	 */
+	@Override
 	public final PAttr getXdefAttr(final PNode pnode,
 		final String localName,
 		final boolean required,
@@ -373,19 +373,19 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Parse string and addAttr it to the set of definitions.
 	 * @param source The source string with definitions.
 	 * @throws RutimeException if an error occurs.
 	 */
+	@Override
 	public final void parseString(final String source) {parseString(source, null);}
 
-	@Override
 	/** Parse string and addAttr it to the set of X-definitions.
 	 * @param source source string with X-definitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
 	 * @throws RutimeException if an error occurs.
 	 */
+	@Override
 	public final void parseString(final String source, final String srcName) {
 		File f = new File(source);
 		if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
@@ -397,18 +397,18 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param fileName pathname of file with with X-definitions.
 	 * @throws RutimeException if an error occurs.
 	 */
+	@Override
 	public final void parseFile(final String fileName) {parseFile(new File(fileName));}
 
-	@Override
 	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param file The file with with X-definitions.
 	 * @throws RutimeException if an error occurs.
 	 */
+	@Override
 	public final void parseFile(final File file) {
 		try {
 			URL url = file.getCanonicalFile().toURI().toURL();
@@ -428,12 +428,12 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
 	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or null.
 	 * @throws RutimeException if an error occurs.
 	 */
+	@Override
 	public final void parseStream(final InputStream in, final String srcName) {
 		try {
 			XInputStream myInputStream = new XInputStream(in);
@@ -455,12 +455,12 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Parse data with source X-definition given by URL and addAttr it
 	 * to the set of X-definitions.
 	 * @param url URL of the file with the X-definition.
 	 * @throws RutimeException if an error occurs.
 	 */
+	@Override
 	public final void parseURL(final URL url) {
 		try {
 			parseStream(url.openStream(), url.toExternalForm());
@@ -475,10 +475,10 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Check if the node has no nested child nodes.
 	 * @param pnode PNode to be tested.
 	 */
+	@Override
 	public final void chkNestedElements(final PNode pnode) {
 		for (PNode p: pnode.getChildNodes()) {
 			if (pnode._nsindex != 0 || !"declaration".equals(pnode._localName)
@@ -488,8 +488,8 @@ public class XPreCompiler implements PreCompiler {
 		}
 	}
 
-	@Override
 	/** Prepare list of declared macros and expand macro references. */
+	@Override
 	public final void prepareMacros() {
 		if (_macrosProcessed) {
 			return;
@@ -568,143 +568,143 @@ public class XPreCompiler implements PreCompiler {
 		_macrosProcessed = true;
 	}
 
-	@Override
 	/** Set System ID for error reporting.
 	 * @param sysId System id.
 	 */
+	@Override
 	public final void setSystemId(final String sysId) {_xmlReader._sysId=sysId;}
 
-	@Override
 	/** Get code generator.
 	 * @return the code generator.
 	 */
+	@Override
 	public CompileCode getCodeGenerator() {return _g;}
 
-	@Override
 	/** Get sources of X-definitions.
 	 * @return array with sources of X-definitions.
 	 */
+	@Override
 	public List<Object> getSources() {return _sources;}
 
-	@Override
 	/** Get list with included sources of X-definitions (URL or File).
 	 * @return list with included sources of X-definitions (URL or File).
 	 */
+	@Override
 	public List<Object> getIncluded() {return _includeList;}
 
-	@Override
 	/** Get prepared sources (PNodes) of X-definition items.
 	 * @return array with PNodes with X-definitions.
 	 */
+	@Override
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
-	@Override
 	/** Get prepared sources (PNodes) of lexicon items.
 	 * @return array with PNodes.
 	 */
+	@Override
 	public final List<PNode> getPLexiconList() {return _lexicons;}
 
-	@Override
 	/** Get prepared sources (PNodes) of collection items.
 	 * @return array with PNodes.
 	 */
+	@Override
 	public final List<PNode> getPCollections() {return _listCollection;}
 
-	@Override
 	/** Get prepared sources (PNodes) of declaration items.
 	 * @return array with PNodes.
 	 */
+	@Override
 	public final List<PNode> getPDeclarations() {return _listDecl;}
 
-	@Override
 	/** Get prepared sources (PNodes) of components items.
 	 * @return array with PNodes.
 	 */
+	@Override
 	public final List<PNode> getPComponents() {return _listComponent;}
 
-	@Override
 	/** Get prepared sources (PNodes) of BNF Grammar items.
 	 * @return array with PNodes.
 	 */
+	@Override
 	public final List<PNode> getPBNFs() {return _listBNF;}
 
-	@Override
 	/** Get report writer.
 	 * @return the report writer.
 	 */
+	@Override
 	public final ReportWriter getReportWriter() {return _reporter;}
 
-	@Override
 	/** Set report writer.
 	 * @param x the report writer to be set.
 	 */
+	@Override
 	public final void setReportWriter(final ReportWriter x) {_reporter = x;}
 
-	@Override
 	/** Get switch if the parser will check warnings as errors.
 	 * @return true if the parser checks warnings as errors.
 	 */
+	@Override
 	final public boolean isChkWarnings() {return _g._chkWarnings;}
 
-	@Override
 	/** Put fatal error message.
 	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Array with message modification parameters.
 	 */
+	@Override
 	public void fatal(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.fatal(registeredID, mod));
 	}
 
-	@Override
 	/** Put error message.
 	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void error(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.error(registeredID, mod));
 	}
 
-	@Override
 	/** Put ligthError message.
 	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void lightError(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.lightError(registeredID, mod));
 	}
 
-	@Override
 	/** Put warning message ( or error if warning flag is false).
 	 * @param pos SPosition.
 	 * @param registeredID registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void warning(final SPosition pos, final long registeredID, final Object... mod) {
 		putReport(pos, Report.warning(registeredID, mod));
 	}
 
-	@Override
 	/** Put report to reporter.
 	 * @param pos SPosition.
 	 * @param rep Report.
 	 */
+	@Override
 	public final void putReport(final SPosition pos, final Report rep) {
 		pos.putReport(rep, getReportWriter());
 	}
 
-	@Override
 	/** Put error to compiler reporter.
 	 * @param ID registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void error(final long ID, final Object... mod) {getReportWriter().error(ID, mod);}
 
-	@Override
 	/** Put report to compiler reporter.
 	 * @param rep Report.
 	 */
+	@Override
 	public final void putReport(final Report rep) {getReportWriter().putReport(rep);}
 }

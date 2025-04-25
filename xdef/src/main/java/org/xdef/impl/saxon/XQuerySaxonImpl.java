@@ -55,12 +55,12 @@ public class XQuerySaxonImpl implements XQueryImpl {
 		return false;
 	}
 
-	@Override
 	/** Execute XPath expression and return result.
 	 * @param node node or null.
 	 * @param xNode node model or null.
 	 * @return The string representation of value of the object.
 	 */
+	@Override
 	public final XDContainer exec(final KXqueryExpr x,
 		final Node node,
 		final XXNode xNode) {

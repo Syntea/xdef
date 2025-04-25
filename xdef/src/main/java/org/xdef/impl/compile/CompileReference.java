@@ -221,6 +221,7 @@ final class CompileReference extends XNode {
 
 	@Override
 	public XMDefinition getXMDefinition() {return _definition;}
+
 	@Override
 	public String toString() {
 		return (getKind() == XMREFERENCE ? "REFERENCE: " + getName()
@@ -228,36 +229,52 @@ final class CompileReference extends XNode {
 			: super.toString()) + getNSUri() != null ? '{' + getNSUri() + '}'
 			: "";
 	}
+
 	@Override
 	public int getInitCode() {return -1;} //not supported here
+
 	@Override
 	public int getFinallyCode() {return -1;} //not supported here
+
 	@Override
 	public int getMatchCode() {return -1;} //not supported here
+
 	@Override
 	public int getComposeCode() {return -1;} //not supported here
+
 	@Override
 	public int getCheckCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnTrueCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnFalseCode() {return -1;} //not supported here
+
 	@Override
 	public int getDefltCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnStartElementCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnAbsenceCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnExcessCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnIllegalAttrCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnIllegalTextCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnIllegalElementCode() {return -1;} //not supported here
+
 	@Override
 	public int getVarinitCode() {return -1;} //not supported here
+
 	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		throw new SRuntimeException(SYS.SYS066, "this method can't be called here");//Internal error&{0}{: }
