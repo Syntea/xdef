@@ -42,10 +42,6 @@ public final class DefString extends XDValueAbstract {
 		return sb.append('\'').toString();
 	}
 
-//	void setNull() {_value = null;}
-
-//	int length() {return _value == null? 0 : _value.length();}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
