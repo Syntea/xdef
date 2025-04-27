@@ -109,10 +109,4 @@ public interface XXElement extends XXNode {
 	 * @throws SRuntimeException if the attribute is not legal in actual model.
 	 */
 	public String getAttributeNS(String uri, String name) throws SRuntimeException;
-
-	/** Get XON result of processed element.
-	 * @return result of JSON/XON parsing or return null.
-	 */
-	@Override
-	public Object getXon();
 }

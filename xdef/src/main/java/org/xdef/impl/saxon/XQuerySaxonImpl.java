@@ -59,11 +59,10 @@ public class XQuerySaxonImpl implements XQueryImpl {
 	 * @param node node or null.
 	 * @param xNode node model or null.
 	 * @return The string representation of value of the object.
+	 * @throws SRuntimeException if an error occurs.
 	 */
 	@Override
-	public final XDContainer exec(final KXqueryExpr x,
-		final Node node,
-		final XXNode xNode) {
+	public final XDContainer exec(final KXqueryExpr x, final Node node, final XXNode xNode) {
 		try {
 			QName[] qnames = x.getAllExternalVariables();
 			if (xNode != null && qnames != null && qnames.length > 0) {
@@ -170,8 +169,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
 					case XQItemType.XQITEMKIND_ITEM: {
 						result.addXDItem(new DefString(item.getItemAsString(null))); continue;
 					}
-					default: throw new SRuntimeException("UNKNOWN RESULT TYPE OF ITEM [" + count + "]: "
-						+ item.getItemType().getClass());
+					default: throw new SRuntimeException("UNKNOWN RESULT TYPE OF ITEM ["
+						+ count + "]: " + item.getItemType().getClass());
 				}
 			}
 			return result;

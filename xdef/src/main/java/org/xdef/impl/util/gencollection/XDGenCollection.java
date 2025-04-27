@@ -71,8 +71,8 @@ public class XDGenCollection {
 
 	static {
 		PROPS_NOEXT = new Properties();
-		PROPS_NOEXT.setProperty(
-			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
+		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 		try {
 			SPF = SAXParserFactory.newInstance();
@@ -108,7 +108,7 @@ public class XDGenCollection {
 			_element = null;
 			_root = null;
 		}
-////////////////////////////////////////////////////////////////////////////////
+
 		private void addText() {
 			if (_text.length() > 0) {
 				String s = _text.toString().trim();
@@ -215,13 +215,8 @@ public class XDGenCollection {
 		Element el = (Element) node.cloneNode(true);
 		switch (el.getLocalName()) {
 			case "thesaurus":
-			case "lexicon":
-				_lexiconList.add(el);
-				_collection.appendChild(el);
-				break;
-			case "declaration":
-				_collection.appendChild(el);
-				return null;
+			case "lexicon": _lexiconList.add(el); _collection.appendChild(el); break;
+			case "declaration": _collection.appendChild(el); return null;
 			case "def":
 				String root = getXdefAttr(el, uri, "root", true);
 				if (root.length() > 0) {
@@ -241,17 +236,15 @@ public class XDGenCollection {
 				_defNames.add(name);
 				_collection.appendChild(el);
 				return el;
-			default:
 		}
 		return null;
 	}
 
 	private void parse(File[] files) throws Exception {
-		if (files == null) {
-			return;
-		}
-		for (File file : files) {
-			parse(file);
+		if (files != null) {
+			for (File file : files) {
+				parse(file);
+			}
 		}
 	}
 
@@ -266,11 +259,10 @@ public class XDGenCollection {
 	}
 
 	private void parse(String... sources) throws Exception {
-		if (sources == null) {
-			return;
-		}
-		for (String source : sources) {
-			parse(source);
+		if (sources != null) {
+			for (String source : sources) {
+				parse(source);
+			}
 		}
 	}
 
@@ -364,17 +356,13 @@ public class XDGenCollection {
 	 */
 	private static boolean isXdefElement(final Node n) {
 		String uri = n.getNamespaceURI();
-		if (n.getNodeType() != Node.ELEMENT_NODE
-			|| uri == null || uri.isEmpty()
-			|| !(XDConstants.XDEF31_NS_URI.equals(uri)
-				|| XDConstants.XDEF32_NS_URI.equals(uri)
-				|| XDConstants.XDEF40_NS_URI.equals(uri)
-				|| XDConstants.XDEF41_NS_URI.equals(uri)
-				|| XDConstants.XDEF42_NS_URI.equals(uri))) {
+		if (n.getNodeType() != Node.ELEMENT_NODE || uri == null || uri.isEmpty()
+			|| !(XDConstants.XDEF31_NS_URI.equals(uri) || XDConstants.XDEF32_NS_URI.equals(uri)
+			|| XDConstants.XDEF40_NS_URI.equals(uri) || XDConstants.XDEF41_NS_URI.equals(uri)
+			|| XDConstants.XDEF42_NS_URI.equals(uri))) {
 			return false;
 		}
-		String xdUri =
-			n.getOwnerDocument().getDocumentElement().getNamespaceURI();
+		String xdUri = n.getOwnerDocument().getDocumentElement().getNamespaceURI();
 		return uri.equals(xdUri);
 	}
 
@@ -503,8 +491,7 @@ public class XDGenCollection {
 					n1 = decl.getAttributeNodeNS(xdUri, "scope");
 				}
 				// If scope is not local the the name of X-definition is null.
-				String s = n1 != null && "local".equals(n1.getNodeValue())
-					? defName : null;
+				String s = n1 != null && "local".equals(n1.getNodeValue()) ? defName : null;
 				NodeList nl2 = KXmlUtils.getChildElementsNS(decl,xdUri,"macro");
 				for (int k = nl2.getLength() - 1; k >= 0 ; k--) {
 					Node n = nl2.item(k);
@@ -527,18 +514,16 @@ public class XDGenCollection {
 	}
 
 	/** Expand all macros in given element and its attributes and child nodes.
-	 * @param el Element in which macros are expanded.
-	 * @param defName name of actual X-definition.
+	 * @param e Element in which macros are expanded.
+	 * @param xName name of actual X-definition.
 	 * @param macros HashMasp with macros.
 	 */
-	private static void expandMacros(final Element el,
-		final String defName,
-		final Map<String, XScriptMacro> macros) {
-		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
-			"1.1".equals(el.getOwnerDocument().getXmlVersion())?StringParser.XMLVER1_1:StringParser.XMLVER1_0,
+	private static void expandMacros(final Element e,final String xName,final Map<String,XScriptMacro>macros){
+		XScriptMacroResolver mr = new XScriptMacroResolver(xName,
+			"1.1".equals(e.getOwnerDocument().getXmlVersion())?StringParser.XMLVER1_1: StringParser.XMLVER1_0,
 			macros,
 			new ArrayReporter());
-		NodeList nl = el.getChildNodes();
+		NodeList nl = e.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node n = nl.item(i);
 			switch (n.getNodeType()) {
@@ -556,11 +541,10 @@ public class XDGenCollection {
 					c.setData(sb.getString());
 					continue;
 				}
-				case Node.ELEMENT_NODE:
-					expandMacros((Element) n, defName, macros);
+				case Node.ELEMENT_NODE: expandMacros((Element) n, xName, macros);
 			}
 		}
-		NamedNodeMap nm = el.getAttributes();
+		NamedNodeMap nm = e.getAttributes();
 		for (int i = 0; nm != null && i < nm.getLength(); i++) {
 			Attr a = (Attr) nm.item(i);
 			SBuffer sb = new SBuffer(a.getValue());
@@ -603,7 +587,7 @@ public class XDGenCollection {
 			for (int i = 0; nm != null && i < nm.getLength(); i++) {
 				Attr a = (Attr) nm.item(i);
 				if (!a.getName().startsWith("xmlns")) {
-					boolean isValue = !"script".equals(a.getLocalName()) || !xdUri.equals(a.getNamespaceURI());
+					boolean isValue= !"script".equals(a.getLocalName()) || !xdUri.equals(a.getNamespaceURI());
 					String s = canonizeScript(a.getValue(), defName, removeActions, isValue);
 					a.setValue(s);
 				}

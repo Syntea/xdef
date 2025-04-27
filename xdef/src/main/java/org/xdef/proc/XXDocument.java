@@ -12,8 +12,7 @@ public interface XXDocument extends XXNode {
 	 */
 	public XXDocument prepareXXDocument();
 
-	/** Add constructed element as a child to the XXElement. Check all attributes and child nodes
-	 * for occurrence.
+	/** Add constructed element as child to XXElement. Check all attributes and child nodes for occurrence.
 	 * @param el element to be added.
 	 * @return true if element was added and complies to X-definition.
 	 */
