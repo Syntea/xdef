@@ -56,6 +56,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
 	}
 
 	/** Execute XPath expression and return result.
+	 * @param x query Expression.
 	 * @param node node or null.
 	 * @param xNode node model or null.
 	 * @return The string representation of value of the object.
@@ -169,8 +170,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
 					case XQItemType.XQITEMKIND_ITEM: {
 						result.addXDItem(new DefString(item.getItemAsString(null))); continue;
 					}
-					default: throw new SRuntimeException("UNKNOWN RESULT TYPE OF ITEM ["
-						+ count + "]: " + item.getItemType().getClass());
+					default: throw new SRuntimeException("UNKNOWN RESULT TYPE OF ITEM [" + count + "]: "
+						+ item.getItemType().getClass());
 				}
 			}
 			return result;

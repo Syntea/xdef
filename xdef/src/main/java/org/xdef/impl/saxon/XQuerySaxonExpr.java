@@ -173,36 +173,34 @@ public class XQuerySaxonExpr implements KXquery {
 		try {
 			if (node == null) {
 				return _value.executeQuery();
-			}
-			switch (node.getNodeType()) {
-				case Node.DOCUMENT_NODE:
-					_value.bindItem(XQConstants.CONTEXT_ITEM,
-						_conn.createItemFromNode(node, _conn.createDocumentType()));
-					return _value.executeQuery();
-				case Node.ELEMENT_NODE:
-					_value.bindItem(XQConstants.CONTEXT_ITEM,
-						_conn.createItemFromNode(node,
-							_conn.createElementType(KXmlUtils.getQName(node), XQItemType.XQBASETYPE_ANYTYPE)));
-					return _value.executeQuery();
-				case Node.TEXT_NODE:
-					_value.bindItem(XQConstants.CONTEXT_ITEM,
-						_conn.createItemFromNode(node, _conn.createTextType()));
-					return _value.executeQuery();
-				case Node.PROCESSING_INSTRUCTION_NODE:
-					_value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(
-						node,_conn.createProcessingInstructionType(node.getNodeValue())));
-					return _value.executeQuery();
-				case Node.COMMENT_NODE:
-					_value.bindItem(XQConstants.CONTEXT_ITEM,
-						_conn.createItemFromNode(node, _conn.createCommentType()));
-					return _value.executeQuery();
-				case Node.ATTRIBUTE_NODE:
-					_value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node,
-						_conn.createAttributeType(KXmlUtils.getQName(node),XQItemType.XQBASETYPE_ANYATOMICTYPE)));
-					return _value.executeQuery();
-				default:
-					//XQuery expression error&{0}{: }
-					throw new SRuntimeException(XML.XML506,"Unknown argument type");
+			} else if (node.getNodeType() == Node.DOCUMENT_NODE) {
+				_value.bindItem(XQConstants.CONTEXT_ITEM,
+					_conn.createItemFromNode(node, _conn.createDocumentType()));
+				return _value.executeQuery();
+			} else if (node.getNodeType() == Node.ELEMENT_NODE) {
+				_value.bindItem(XQConstants.CONTEXT_ITEM,
+					_conn.createItemFromNode(node,
+						_conn.createElementType(KXmlUtils.getQName(node), XQItemType.XQBASETYPE_ANYTYPE)));
+				return _value.executeQuery();
+			} else if (node.getNodeType() == Node.TEXT_NODE) {
+				_value.bindItem(XQConstants.CONTEXT_ITEM,
+					_conn.createItemFromNode(node, _conn.createTextType()));
+				return _value.executeQuery();
+			} else if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
+				_value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(
+					node,_conn.createProcessingInstructionType(node.getNodeValue())));
+				return _value.executeQuery();
+			} else if (node.getNodeType() == Node.COMMENT_NODE) {
+				_value.bindItem(XQConstants.CONTEXT_ITEM,
+					_conn.createItemFromNode(node, _conn.createCommentType()));
+				return _value.executeQuery();
+			} else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+				_value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node,
+					_conn.createAttributeType(KXmlUtils.getQName(node),XQItemType.XQBASETYPE_ANYATOMICTYPE)));
+				return _value.executeQuery();
+			} else {
+				//XQuery expression error&{0}{: }
+				throw new SRuntimeException(XML.XML506,"Unknown argument type");
 			}
 		} catch (XQException | DOMException | SRuntimeException ex) {
 			if (ex instanceof SRuntimeException) {
