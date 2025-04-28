@@ -97,27 +97,27 @@ public class TestXon extends XDTester {
 			assertNull(testA("decimal", "[null, 0D, 1D, -1D, 1.5D,3.33e-5D ]"));
 			assertNull(testA("date", "[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
 			assertNull(testA("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
-			assertNull(testA("gps", "[null,g(20.21,19.99),g(20.2,19.9,0),g(51.52,-0.09,0.0,xxx)]"));
+			assertNull(testA("gps", "[null,g(20.21,19.99), g(20.2,19.9,0), g(51.52, -0.09,0.0, xxx)]"));
 			assertNull(testA("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
 			assertNull(testA("char","[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
 			assertNull(testA("anyURI", "[null, u\"http://a.b\" ]"));
-			assertNull(testA("emailAddr", "[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
+			assertNull(testA("emailAddr", "[null, e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
 			assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
-			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
+			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38, /0.0.0]"));
 			assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
 			assertNull(testA("telephone", "[null, t\"123456\",t\"+420 234 567 890\"]"));
 			assertNull(testA("jnull", "[ null, null ]"));
 			assertNull(testA("jboolean", "[ null, true ]"));
 			assertNull(testA("jnumber", "[ null, 1 ]"));
-			assertNull(testA("jstring", "[ null, \"abc\" ]"));
+			assertNull(testA("string", "[ null, \"abc\" ]"));
 			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
-			assertNull(testA("string", "[null, \"1\",\"true\",\"null\",\"\",\"a b\",\" a \nb \"]"));
+			assertNull(testA("jstring", "[null, \"1\", \"true\", \"null\", \"\", \"a b\", \" a \nb \"]"));
 			assertNull(testA("num", "[null, \"1\", \"0123456\"]"));
 			assertNull(testA("empty", "[\"\"]"));
 			// Map
 			assertNull(testM("string", "{}"));
 			assertNull(testM("int", "{a:null, b:1}"));
-			assertNull(testM("jvalue", "{a:true,b:null,c:\"a\\\"b\"}"));
+			assertNull(testM("jvalue", "{a:true, b:null, c:\"a\\\"b\"}"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
