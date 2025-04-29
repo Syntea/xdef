@@ -106,14 +106,18 @@ public class TestXon extends XDTester {
 			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38, /0.0.0]"));
 			assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
 			assertNull(testA("telephone", "[null, t\"123456\",t\"+420 234 567 890\"]"));
+			assertNull(testA("num", "[null, \"1\", \"0123456\"]"));
+			assertNull(testA("empty", "[null, \"\"]"));
 			assertNull(testA("jnull", "[ null, null ]"));
 			assertNull(testA("jboolean", "[ null, true ]"));
 			assertNull(testA("jnumber", "[ null, 1 ]"));
-			assertNull(testA("string", "[ null, \"abc\" ]"));
+			assertNull(testA("jstring", "[ null, \"abc\", \"\" ]"));
 			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
 			assertNull(testA("jstring", "[null, \"1\", \"true\", \"null\", \"\", \"a b\", \" a \nb \"]"));
-			assertNull(testA("num", "[null, \"1\", \"0123456\"]"));
-			assertNull(testA("empty", "[\"\"]"));
+			assertNull(testX("<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <xd:json name='A'> [\"* eq('ab')\"] </xd:json>\n"+
+"  <xd:component> %class test.TestGJeq %link #A; </xd:component>\n"+
+"</xd:def>", "", "[ null, \"ab\" ]"));
 			// Map
 			assertNull(testM("string", "{}"));
 			assertNull(testM("int", "{a:null, b:1}"));
@@ -1353,7 +1357,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[[],[],[]]"));//error more then two
 			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
 			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
-			xdef =  // test %anyObj in different Xdefinitions
+			xdef =  // test %anyObj in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [ %anyObj=\"?;\" ] </xd:json>\n" +
@@ -1386,7 +1390,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"b", s, "[]")); // must be error!
 			assertNotNull(testX(xp,"b", s, "true")); // must be error!
 			assertNotNull(testX(xp,"b", s, "{a:1, b:null}")); // must be error!
-			xdef = // test XON models in different Xdefinitions
+			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
