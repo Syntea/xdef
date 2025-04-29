@@ -114,10 +114,9 @@ public class TestXon extends XDTester {
 			assertNull(testA("jstring", "[ null, \"abc\", \"\" ]"));
 			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
 			assertNull(testA("jstring", "[null, \"1\", \"true\", \"null\", \"\", \"a b\", \" a \nb \"]"));
-			assertNull(testX("<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"  <xd:json name='A'> [\"* eq('ab')\"] </xd:json>\n"+
-"  <xd:component> %class test.TestGJeq %link #A; </xd:component>\n"+
-"</xd:def>", "", "[ null, \"ab\" ]"));
+			assertNull(testX("<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A'><xd:json name='A'>"+
+"[\"* eq('ab')\"]</xd:json><xd:component>%class test.TestGJeq %link #A;</xd:component></xd:def>",
+				"", "[ null, \"ab\" ]"));
 			// Map
 			assertNull(testM("string", "{}"));
 			assertNull(testM("int", "{a:null, b:1}"));
