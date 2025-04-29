@@ -49,7 +49,7 @@
   type yesNo XDScript.rule('YesNo');
   type lexicon XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
-  type xonScript XDScript.rule('XONScript');
+  type jsonScript XDScript.rule('JSONScript');
   type iniprops XDScript.rule('INIProps');
 
   /* The attribute name must start with the prefix "impl-", the value
@@ -679,34 +679,35 @@ INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]"
 INIProps ::= INICommand*
 
 /******************************************************************************/
-/* XON X-script                                                               */
+/* JSON X-script                                                               */
 /******************************************************************************/
 
-XONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
+JSONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
 
-XONSP ::= (WhiteSpace | XONComment)+ /* sequence of whitespaces and comments */
+JSONSP ::= (WhiteSpace | JSONComment)+ /* sequence of whitespaces and comments */
 
-XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' | ('\u' [0-9a-fA-F]{4})
+JSONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' | ('\u' [0-9a-fA-F]{4})
 
-XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
-  "'" ([^\'] | XONControlchar )* "'")
+JSONString ::= ('"' ([^\"] | JSONControlchar )* '"' |
+  "'" ([^\'] | JSONControlchar )* "'")
 
-XONXscript ::= XONSP? ( ("%script" XONSP? "=" XONSP? XONString)
-  | ( "%oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
+JSONXscript ::= JSONSP? ( ("%script" JSONSP? "=" JSONSP? JSONString)
+  | ( "%oneOf" (JSONSP? "=" JSONSP? JSONString)? ) ) (JSONSP? ",")?
 
-XONPair ::= ("%anyName" (XONSP? "=" XONSP? XONString)? | $ncName | XONString) XONSP? ":" XONSP? XONScriptValue
+JSONPair ::= ("%anyName" (JSONSP? "=" JSONSP? JSONString)?
+  | $ncName | JSONString) JSONSP? ":" JSONSP? JSONScriptValue
 
-XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)* (XONSP? ",")?
+JSONMembers ::= JSONSP? JSONPair (JSONSP? "," JSONSP? JSONPair)* (JSONSP? ",")?
 
-XONObject ::= "{" XONXscript? XONMembers? XONSP? "}"
+JSONObject ::= "{" JSONXscript? JSONMembers? JSONSP? "}"
 
-XONList ::= XONScriptValue (XONSP? "," XONSP? XONScriptValue )* (XONSP? ",")?
+JSONList ::= JSONScriptValue (JSONSP? "," JSONSP? JSONScriptValue )* (JSONSP? ",")?
 
-XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
+JSONArray ::= "[" JSONXscript? JSONSP? JSONList? JSONSP? "]"
 
-XONScriptValue ::= XONSP? ( "%any" | XONString | XONArray | XONObject) XONSP?
+JSONScriptValue ::= JSONSP? ( "%any" | JSONString | JSONArray | JSONObject) JSONSP?
 
-XONScript ::= XONSP? (XONArray | XONObject | XONString)
+JSONScript ::= JSONSP? (JSONArray | JSONObject | JSONString)
 
 ]]>
   </xd:BNFGrammar>

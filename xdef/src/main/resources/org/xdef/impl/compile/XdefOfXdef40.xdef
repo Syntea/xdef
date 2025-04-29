@@ -74,11 +74,11 @@
               name = "required QName; options acceptQualifiedAttr" />
           <XD4.0:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required xonScript;
+              required jsonScript;
           </XD4.0:json>
           <XD4.0:xon xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required xonScript;
+              required jsonScript;
           </XD4.0:xon>
           <XD4.0:ini xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
