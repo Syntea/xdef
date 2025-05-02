@@ -234,7 +234,6 @@ import static org.xdef.impl.code.CodeTable.GET_NUMOFERRORS;
 import static org.xdef.impl.code.CodeTable.GET_NUMOFERRORWARNINGS;
 import static org.xdef.impl.code.CodeTable.GET_OCCURRENCE;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_ERROR;
-import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
@@ -2951,11 +2950,11 @@ public final class XCodeProcessor {
 					_stack[++sp] = null == pr ? new DefParseResult() : pr.getParsedValue();
 					continue;
 				}
-				case GET_PARSED_RESULT: {//get parsed ewsult
-					XDParseResult pr = item.getParam()==1 ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
-					_stack[++sp] = pr;
-					continue;
-				}
+//				case GET_PARSED_RESULT: {//get parsed ewsult
+//					XDParseResult pr = item.getParam()==1 ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
+//					_stack[++sp] = pr;
+//					continue;
+//				}
 				case SET_NAMEDVALUE:
 					if (item.getParam() == 2) {
 						XDValue v = _stack[sp--];

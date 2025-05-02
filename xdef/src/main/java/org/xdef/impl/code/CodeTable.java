@@ -640,10 +640,10 @@ public interface CodeTable {
 	static final short GET_PARSED_STRING = SET_PARSED_STRING + 1;
 	/** Set parsed value. */
 	static final short SET_PARSED_VALUE = GET_PARSED_STRING + 1;
-	/** Get ParseResult value. */
-	static final short GET_PARSED_RESULT = SET_PARSED_VALUE + 1;
+	/** UNUSED Get ParseResult result. */
+	static final short UNUSED_GET_PARSED_RESULT = SET_PARSED_VALUE + 1;
 	/** Get parsed value. */
-	static final short GET_PARSED_VALUE = GET_PARSED_RESULT + 1;
+	static final short GET_PARSED_VALUE = UNUSED_GET_PARSED_RESULT + 1;
 	////////////////////////////////////////////////////////////////////////////
 	// Named value
 	////////////////////////////////////////////////////////////////////////////

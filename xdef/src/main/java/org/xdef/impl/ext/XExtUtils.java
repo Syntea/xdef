@@ -20,6 +20,7 @@ import org.xdef.XDPrice;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XX_ELEMENT;
+import org.xdef.impl.ChkElement;
 import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
@@ -59,6 +60,15 @@ public final class XExtUtils {
 	/** Get information about actual version of X-definition. */
 	public static final Object getXon(final XXNode x) {return new DefObject(x.getXon());}
 
+	/** Get actual ParseResult.
+	 * @param x actual ChkElement.
+	 * @return ParseResult or null.
+	 */
+	public static final XDParseResult getParseResult(final XXNode x) {
+		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
+	}
+
+	/** Get information about actual version of X-definition. */
 
 	/** Get information about actual version of X-definition.
 	 * @return build version and datetime.

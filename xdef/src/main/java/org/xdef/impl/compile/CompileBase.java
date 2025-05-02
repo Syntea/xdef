@@ -194,7 +194,6 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_DOUBLE;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_DURATION;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_ERROR;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_LONG;
-import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_QNAMEURI;
@@ -894,8 +893,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_PARSED_DURATION, XD_DATETIME, TEXT_MODE, 0, 0), "getParsedDuration");
 		method(ti, genInternalMethod(GET_PARSED_DOUBLE, XD_DOUBLE, TEXT_MODE, 0, 0), "getParsedFloat");
 		method(ti, genInternalMethod(GET_PARSED_LONG, XD_LONG, TEXT_MODE, 0, 0), "getParsedInt");
-		method(ti, genInternalMethod(GET_PARSED_RESULT, XD_PARSERESULT, TEXT_MODE, 0, 0),
-			"getParseResult", "?getParsedResult");
+//		method(ti, genInternalMethod(GET_PARSED_RESULT, XD_PARSERESULT, TEXT_MODE, 0, 0),
+//			"getParseResult", "?getParsedResult");
 		method(ti, genInternalMethod(GET_PARSED_VALUE, XD_ANY, TEXT_MODE, 0, 0), "getParsedValue");
 		method(ti, genInternalMethod(GET_QNAMEURI, XD_STRING, ANY_MODE, 1,2,XD_ANY,XD_ELEMENT),"getQnameURI");
 		method(ti, genInternalMethod(GET_ROOTELEMENT, XD_ELEMENT,ELEM_MODE, 0,1,XD_ELEMENT),"getRootElement");
