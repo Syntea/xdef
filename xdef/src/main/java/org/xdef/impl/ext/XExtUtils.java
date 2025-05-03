@@ -57,14 +57,27 @@ import org.xdef.xon.XonTools;
  */
 public final class XExtUtils {
 
-	/** Get information about actual version of X-definition. */
+	/** Get information about actual version of X-definition.
+	 * @param x actual ChkNode.
+	 * @return XON object or null.
+	 */
 	public static final Object getXon(final XXNode x) {return new DefObject(x.getXon());}
 
 	/** Get actual ParseResult.
-	 * @param x actual ChkElement.
+	 * @param x actual ChkNode.
 	 * @return ParseResult or null.
 	 */
 	public static final XDParseResult getParseResult(final XXNode x) {
+		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
+	}
+
+	/** Get actual ParseResult.
+	 * @deprecated please use getParseResult instead
+	 * @param x actual ChkNode.
+	 * @return ParseResult or null.
+	 */
+	@Deprecated
+	public static final XDParseResult getParsedResult(final XXNode x) {
 		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
 	}
 
