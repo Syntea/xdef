@@ -81,8 +81,6 @@ public final class XExtUtils {
 		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
 	}
 
-	/** Get information about actual version of X-definition. */
-
 	/** Get information about actual version of X-definition.
 	 * @return build version and datetime.
 	 */
