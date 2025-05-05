@@ -3,7 +3,6 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.XDValue;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -18,7 +17,6 @@ public class X extends XDTester {
 		XDPool xp;
 		XDDocument xd;
 		StringWriter swr;
-		XDValue val;
 		try {
 			xp = XDFactory.compileXD(null,
 "<x:def xmlns:x = '" + XDConstants.XDEF42_NS_URI + "' name='a' root='a'>\n"+
@@ -28,7 +26,7 @@ public class X extends XDTester {
 			xp.displayCode();
 			xd = xp.createXDDocument();
 			assertEq("20030717", xd.xparse("<a date=\"17.7.2003\"/>", null).getAttribute("date"));
-if(true)return;
+//if(true)return;
 			xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +
 "\n" +
@@ -136,7 +134,7 @@ if(true)return;
 			assertEq("2025-04-03", xd.getVariable("date").toString());
 			xd.setStdOut(swr = new StringWriter());
 			xd.xparse("<Z>xx</Z>", null);
-			assertEq("error: xx", s = swr.toString());
+			assertEq("error: xx", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 
