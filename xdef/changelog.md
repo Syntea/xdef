@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.27, release-date 2025-05-06
-* Fixed bug in parsing JSON data containing quoted string of String method with `%pattern` parameter.
+* Fixed bug in parsing JSON data containing quoted string with string method using `%pattern` parameter.
 
 # Version 42.2.26, release-date 2025-04-15
 * Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables
