@@ -78,6 +78,10 @@ public final class XExtUtils {
 	 */
 	@Deprecated
 	public static final XDParseResult getParsedResult(final XXNode x) {
+		if (x.getXDPool().isChkWarnings()) {
+			//&{0} is deprecated.&{1}{ Please use }{ instead.}&{#SYS000}
+			x.getReportWriter().warning(XDEF.XDEF998, "getParsedResult", "getParseResult");
+		}
 		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
 	}
 
