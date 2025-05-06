@@ -19,13 +19,14 @@ public class X extends XDTester {
 		StringWriter swr;
 		try {
 			xp = XDFactory.compileXD(null,
-"<x:def xmlns:x = '" + XDConstants.XDEF42_NS_URI + "' name='a' root='a'>\n"+
-"  <a x:script='options trimText;'\n"+
+"<x:def xmlns:x = '" + XDConstants.XDEF42_NS_URI + "' root='A'>\n"+
+"  <A x:script='options trimText;'\n"+
+//"     date=\"required xdatetime('d.M.yyyy', 'yyyyMMdd');\"/>\n"+
 "     date=\"required xdatetime('d.M.yyyy'); onTrue setText(toString(getParsedDatetime(),'yyyyMMdd'));\"/>\n"+
 "</x:def>");
 			xp.displayCode();
 			xd = xp.createXDDocument();
-			assertEq("20030717", xd.xparse("<a date=\"17.7.2003\"/>", null).getAttribute("date"));
+			assertEq("20030717", xd.xparse("<A date=\"17.7.2003\"/>", null).getAttribute("date"));
 //if(true)return;
 			xd = XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +
