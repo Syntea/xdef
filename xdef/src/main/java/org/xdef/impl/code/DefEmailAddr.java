@@ -24,54 +24,54 @@ import org.xdef.sys.SException;
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** BNF grammar rules of email address according to RFC 5321. */
 	private static final BNFGrammar BNF = BNFGrammar.compile(
-"FWS           ::= [ #9]+\n"+ // Folding white space
-"ASCIICHAR     ::= [ -~]\n"+ // Printable ASCII character
-"Let_dig       ::= [0-9] | $letter\n" +
-"Ldh_str       ::= '-'+ Let_dig+\n"+
-"sub_domain    ::= Let_dig+ Ldh_str*\n" +
-"Domain        ::= sub_domain ( '.' sub_domain )*\n"+
-"IPv4          ::= Snum ('.'  Snum){3}\n"+
-"Snum          ::= ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
-"IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
-"IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
-"IPv6_full     ::= IPv6_hex ( ':' IPv6_hex ){7}\n" +
-"IPv6_comp     ::= ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
-			   // The '::' represents at least 2 16-bit groups of zeros.
-			   // No more than 6 groups in addition to the '::' may be present.
-"IPv6v4_full   ::= IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
-"IPv6v4_comp   ::= ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
-"                  ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
-			   // The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
-			   // addition to the '::' and IPv4-address-literal may be present.
-"IPv4_addr     ::= IPv4\n"+
-"IPv6_addr     ::= 'IPv6:' IPv6\n"+
-"Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
-"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
-"General_addr  ::= Std_tag ':' ( dcontent )+\n" +
-"address       ::= '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
-"atext         ::= ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
-"Atom          ::= atext ('-'+ atext)*\n" +
-"Dot_string    ::= Atom ('.'  Atom)*\n" +
-"qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
-			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
-			   // blackslash-quoting except double-quote and the backslash itself.
-"quoted_pair   ::= '\\' ASCIICHAR\n" + // %d92 %d32-126
-			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
-"QcontentSMTP  ::= quoted_pair | qtextSMTP\n" +
-"Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
-"Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-"Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
-"comment       ::= ( commentList $rule ) FWS?\n"+
-"commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
-"commentPart   ::= ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+
-"text          ::= ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
-"textItem      ::= FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
-"charsetName   ::= ( [a-zA-Z] ('-'? [a-zA-Z0-9]+)* ) $rule '?' \n"+
-"ptext         ::= FWS? ( ASCIICHAR - [@><()=] )+ $rule\n"+ // Printable ASCII character without @><()=
-"qtext         ::= FWS? ( hexOctet | ASCIICHAR - [=?] )+ $rule \n"+ // Quoted text
-"hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
-"btext         ::= [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
-"emailAddr     ::= ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
+"FWS::=           [ #9]+\n"+ // Folding white space
+"ASCIICHAR::=     [ -~]\n"+ // Printable ASCII character
+"Let_dig::=       [0-9] | $letter\n" +
+"Ldh_str::=       '-'+ Let_dig+\n"+
+"sub_domain::=    Let_dig+ Ldh_str*\n" +
+"Domain::=        sub_domain ( '.' sub_domain )*\n"+
+"IPv4::=          Snum ('.'  Snum){3}\n"+
+"Snum::=          ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
+"IPv6::=          IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
+"IPv6_hex::=      [0-9a-fA-F]{1,4}\n" +
+"IPv6_full::=     IPv6_hex ( ':' IPv6_hex ){7}\n" +
+"IPv6_comp::=     ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
+	// The '::' represents at least 2 16-bit groups of zeros.
+	// No more than 6 groups in addition to the '::' may be present.
+"IPv6v4_full::=   IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
+"IPv6v4_comp::=   ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
+"                 ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
+	// The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
+	// addition to the '::' and IPv4-address-literal may be present.
+"IPv4_addr::=     IPv4\n"+
+"IPv6_addr::=     'IPv6:' IPv6\n"+
+"Std_tag::=       Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
+"dcontent::=      [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
+"General_addr::=  Std_tag ':' ( dcontent )+\n" +
+"address::=       '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
+"atext::=         ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
+"Atom::=          atext ('-'+ atext)*\n" +
+"Dot_string::=    Atom ('.'  Atom)*\n" +
+"qtextSMTP::=     [ !#-Z^-~] | '[' | ']'\n" +
+	// i.e., within a quoted string, any ASCII graphic or space is permitted without
+	// blackslash-quoting except double-quote and the backslash itself.
+"quoted_pair::=   '\\' ASCIICHAR\n" + // %d92 %d32-126
+	// i.e., backslash followed by any ASCII graphic (including itself) or SPace
+"QcontentSMTP::=  quoted_pair | qtextSMTP\n" +
+"Quoted_string::= '\"' QcontentSMTP* '\"'\n" +
+"Local_part::=    Dot_string | Quoted_string\n" + // MAY be case-sensitive
+"Mailbox::=       Local_part '@' ( address | Domain ) $rule\n"+
+"comment::=       ( commentList $rule ) FWS?\n"+
+"commentList::=   ( FWS? '(' commentPart* ')' )+\n"+
+"commentPart::=   ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+
+"text::=          ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
+"textItem::=      FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
+"charsetName::=   ( [a-zA-Z] ('-'? [a-zA-Z0-9]+)* ) $rule '?' \n"+
+"ptext::=         FWS? ( ASCIICHAR - [@><()=] )+ $rule\n"+ // Printable ASCII character without @><()=
+"qtext::=         FWS? ( hexOctet | ASCIICHAR - [=?] )+ $rule \n"+ // Quoted text
+"hexOctet::=      '=' [0-9A-F] [0-9A-F]\n"+
+"btext::=         [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
+"emailAddr::=     ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
