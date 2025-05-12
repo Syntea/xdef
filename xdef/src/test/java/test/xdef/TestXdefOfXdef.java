@@ -220,6 +220,13 @@ public final class TestXdefOfXdef extends XDTester {
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 			}
 		} catch (Exception ex) {fail(ex);}
+		try {
+			 compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <xd:declaration> String x() {return 'a'}; </xd:declaration>\n" +
+"  <A a=\"? string(); onTrue{ x().equals('a'); }\"/>\n" +
+"</xd:def>");
+		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
 	}
