@@ -297,7 +297,8 @@ Statement ::= S? (Statement1 | Statement2)
 Statement1 ::= (Block | SwitchStatement | TryStatement)
 
 Statement2 ::= (IfStatement | ForStatement | WhileStatement | DoStatement | ReturnStatement | ThrowStatement
-  | BreakStatement | ContinueStatement | Method | Increment | AssignmentStatement) $info | EmptyStatement
+  | BreakStatement | ContinueStatement | Method (S? "." S? Method)? | Increment | AssignmentStatement) $info
+  | EmptyStatement
 
 EmptyStatement ::= ";"
 

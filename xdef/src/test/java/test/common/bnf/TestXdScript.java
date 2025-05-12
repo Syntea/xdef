@@ -358,7 +358,6 @@ public class TestXdScript extends XDTester {
 			}
 			assertEq("VariableModifier; (0,9); true", line);
 			g.trace(null);
-
 		} catch (IOException | NumberFormatException | SRuntimeException ex) {
 			fail(ex);
 		}
