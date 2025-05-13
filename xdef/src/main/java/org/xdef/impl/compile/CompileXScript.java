@@ -312,9 +312,6 @@ final class CompileXScript extends CompileStatement {
 				continue;
 			} else if (_sym == IDENTIFIER_SYM || _sym == LPAR_SYM || _sym == NOT_SYM || (_sym == CONSTANT_SYM
 				&& (_parsedValue.getItemId() == XD_STRING || _parsedValue.getItemId() == XD_BOOLEAN))) {
-				if (!occ.isSpecified()) {
-					occ.setRequired();
-				}
 				compileTypeCheck(sc);
 				continue;
 			}
@@ -465,6 +462,9 @@ final class CompileXScript extends CompileStatement {
 				break;
 			}
 			errorAndSkip(XDEF.XDEF425, SCRIPT_SEPARATORS); //Script error
+		}
+		if (sc._check >= 0 && !occ.isSpecified()) {
+			occ.setRequired();
 		}
 		sc.setOccurrence(occ);
 		if (sc._check == -1) {

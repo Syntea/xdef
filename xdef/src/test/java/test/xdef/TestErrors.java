@@ -693,7 +693,6 @@ public final class TestErrors extends XDTester {
 			if (reporter.errorWarnings()) {
 				assertEq("", chkReport(reporter, "XDEF424", "3", "6", null));
 				assertEq("", chkReport(reporter, "XDEF410", "3", "6", null));
-				assertEq("", chkReport(reporter, "XDEF422", "3", "12", null));
 				assertEq("", chkReport(reporter, "XDEF425", "3", "20", null));
 				assertEq("", chkReport(reporter, "XDEF424", "3", "20", null));
 			}

@@ -146,7 +146,7 @@ public final class TestXdef extends XDTester {
 "  <a a=\"required eq('a'); onTrue {outln('a');}; finally {outln('b');};\"/>\n"+
 "</x:def>");
 			compile("<xd:def xmlns:xd='"+_xdNS+"'><xd:declaration/></xd:def>");//check empty declaration
-			compile(//check if comments are ignored
+			compile(//check comments in X-script
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "/*comment*/\n"+
 "  <a a='/*comment*/required/*comment*/string/*comment*/'>\n"+
@@ -2662,7 +2662,7 @@ public final class TestXdef extends XDTester {
 			assertEq("<a>abc<b/>def</a>", parse(xp, "", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
 			xp = compile( // test importLocal attribute
-"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS +"'>\n"+
 "<xd:def name='A' root='A'>\n"+ // no importLocal
 "  <xd:declaration scope='local'>\n"+
 "    void a() {out(xx() + xxx + yy() + yyy);}\n"+
@@ -2729,45 +2729,43 @@ public final class TestXdef extends XDTester {
 "</xd:def>\n"+
 "</xd:collection>");
 			xd = xp.createXDDocument("A");
-			xd.setStdOut(swr = new StringWriter());
 			xml = "<A a='Zx' b='Zy' c='Zx'/>";
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("Zxx4Zyy2", swr.toString());
 			xd = xp.createXDDocument("B");
-			xd.setStdOut(swr = new StringWriter());
 			xml = "<A a='Xx' b='Zy' c='Xx'/>";
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("Xxx2Zyy2", swr.toString());
 			xd = xp.createXDDocument("C");
-			xd.setStdOut(swr = new StringWriter());
 			xml = "<A a='Zx' b='Yy' c='Zx'/>";
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("Zxx4Yyy3", swr.toString());
 			xd = xp.createXDDocument("D");
-			xd.setStdOut(swr = new StringWriter());
 			xml = "<A a='Xx' b='Yy' c='Xx'/>";
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("Xxx2Yyy3", swr.toString());
 			xd = xp.createXDDocument("E");
-			xd.setStdOut(swr = new StringWriter());
 			xml = "<A a='Ex' b='Ey' c='Ex'/>";
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("Exx1Yyy3", swr.toString());
 			xd = compile(
-"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS +"' root='A'>\n" +
 "  <xd:declaration> String x() {return 'a'}; String y='a';</xd:declaration>\n" +
-"  <A a=\"onTrue out(x().equals('a') + ',' + y.equals('a')); ?; string();\"/>\n" +
+"  <A a=\"onTrue out(x().equals('a') + ',' + y.equals('a')); string(); ?;\"/>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<A a='b'/>";
-			xd.setStdOut(swr = new StringWriter());
-			assertEq(xml, parse(xd, xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("true,true", swr.toString());
+			xml = "<A/>";
+			assertEq(xml, parse(xd, xml, reporter, swr = new StringWriter(), null, null));
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test FileReportWriter as parameter of compilation.
 			xdef = "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'><A a='xxxx()'/></xd:def>";
