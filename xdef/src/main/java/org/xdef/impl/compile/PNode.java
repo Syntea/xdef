@@ -23,7 +23,7 @@ public final class PNode {
 	String _nsURI;  //namespace URI
 	byte _xdVersion;  //version of Xdefinion
 	byte _xmlVersion;  //version of xml
-	XDefinition _xdef;  //XDefinition associated with this node
+	XDefinition _xdef;  //X-definition associated with this node
 	SBuffer _value; //value of this node
 	PNode _parent; //parent PNode
 	int _nsindex; //namespace index of this node
@@ -35,8 +35,8 @@ public final class PNode {
 	 * @param name The node name.
 	 * @param position The position in the source text.
 	 * @param parent The parent node.
-	 * @param xdVer version of XDefinition.
-	 * @param xmlVer version of XDefinition.
+	 * @param xdVer version of X-definition.
+	 * @param xmlVer version of X-definition.
 	 */
 	PNode(final String name,final SPosition position,final PNode parent,final byte xdVer,final byte xmlVer) {
 		_name = new SBuffer(name, position);

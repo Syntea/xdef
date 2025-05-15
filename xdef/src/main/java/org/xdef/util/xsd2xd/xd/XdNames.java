@@ -41,7 +41,7 @@ public interface XdNames {
 	/** X-definition <code>text</code> attribute local name.*/
 	public static final String TEXT = "text";
 	//--------------------------------------------------------------------------
-	//                          XDEFINITION TYPE NAMES
+	//                          X-DEFINITION TYPE NAMES
 	//--------------------------------------------------------------------------
 	/** X-definition <code>an</code> type name.*/
 	public static final String ALFA_NUMERIC = "an";

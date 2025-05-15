@@ -82,12 +82,12 @@ public class XdefDocument implements Convertor {
 			//adding name to names table
 			_xdefNames.put(entry.getKey(), name);
 			if (separately) {
-				//creating new document for separate xdefinitions
+				//creating new document for separate X-definitions
 				root = KXmlUtils.newDocument();
 			}
 			//creating and adding <def> element to root node.
 			Element xdef = addDefElement(root);
-			//adding xdefinition name attribute
+			//adding X-definition name attribute
 			addXdefAttr(xdef, XdNames.NAME, name);
 			//resolvin target namespace declaration
 			addTargetNamespaceDeclaration(entry.getValue(), xdef);

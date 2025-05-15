@@ -22,7 +22,7 @@ public class FinalRestriction {
 	/** Contains information about simple types. n/a parameter means that
 	 * current type does not support that kind of restriction.
 	 * 0 - XML schema base type name.
-	 * 1 - XDefinition type validation method name (w/o parameters).
+	 * 1 - X-definition type validation method name (w/o parameters).
 	 * If is empty string - same name as type name.
 	 * 2 - name of method, that is adding length restriction for current type.
 	 * If is empty string - same method as type method.
@@ -179,8 +179,8 @@ public class FinalRestriction {
 		}
 	}
 
-	/** Returns string containing type definition according XDefinition rules.
-	 * @return  XDefinition style type definition string.
+	/** Returns string containing type definition according X-definition rules.
+	 * @return  X-definition style type definition string.
 	 */
 	public String getTypeMethod() {
 		String baseType = _base.getName();

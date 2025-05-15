@@ -170,7 +170,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	/** Create new instance of ChkDocument (this constructor is called only internally from ChkComposer).
-	 * @param xd XDefinition.
+	 * @param xd X-definition.
 	 * @param chkel ChkElement from which the object is created.
 	 */
 	ChkDocument(final XDefinition xd, final ChkElement chkel) {

@@ -398,14 +398,14 @@ public class GUIEditor extends GUIScreen {
 		return data;
 	}
 
-	/** Update list of XDefinitions in the project (assure the sequence from the map in XDSourceInfo).
+	/** Update list of X-definitions in the project (assure the sequence from the map in XDSourceInfo).
 	 * @param project project XML.
 	 * @param si XDSourceInfo object.
 	 */
 	private static void updateXdefList(final Element project, final XDSourceInfo si) {
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		for (int i = nl.getLength() - 1; i >= 0 ; i--) {
-			project.removeChild(nl.item(i));  // romove all XDefinition items
+			project.removeChild(nl.item(i));  // romove all X-definition items
 		}
 		Document doc = project.getOwnerDocument();
 		for (String x: si.getMap().keySet()) {
@@ -680,7 +680,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 			if (!missingDefs.isEmpty()) {
-				throw new RuntimeException("UNAVAILABLE XDEFINITION:\n\n"
+				throw new RuntimeException("UNAVAILABLE X-DEFINITION:\n\n"
 					+ missingDefs + "\nPLEASE CORRECT PROJECT DATA");
 			}
 			boolean changed = false;
@@ -719,7 +719,7 @@ public class GUIEditor extends GUIScreen {
 						}
 					}
 					if (!missingDefs.isEmpty()) {
-						throw new RuntimeException("UNAVAILABLE XDEFINITION:\n\n"
+						throw new RuntimeException("UNAVAILABLE X-DEFINITION:\n\n"
 							+ missingDefs + "\nPLEASE CORRECT PROJECT DATA");
 					}
 					if (xsi == null) {

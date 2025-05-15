@@ -554,7 +554,7 @@ public final class XCodeProcessor {
 	final XPathVariableResolver _variableResolver = new XDVariableResolver();
 
 	/** Creates a new instance of ScriptCodeProcessor
-	 * @param xd XDefinition.
+	 * @param xd X-definition.
 	 * @param r reporter for error messages.
 	 * @param stdOut standard output stream (if null then java.lang.System.out).
 	 * @param stdIn standard input stream (if null then java.lang.System.in).
@@ -567,7 +567,7 @@ public final class XCodeProcessor {
 
 	/** Creates new instance of ScriptCodeProcessor. This constructor is called
 	 * only internally from ChkComposer.
-	 * @param xd XDefinition.
+	 * @param xd X-definition.
 	 * @param ce ChkElement from which the object is created.
 	 */
 	XCodeProcessor(final XDefinition xd, final ChkElement ce) {
@@ -584,7 +584,7 @@ public final class XCodeProcessor {
 		_initialized2 = true;
 	}
 
-	/** Get root XDefinition. */
+	/** Get root X-definition. */
 	final XDefinition getXDefinition() {return _xd;}
 
 	/** Set properties.

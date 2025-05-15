@@ -1492,7 +1492,7 @@ final class ChkComposer extends SReporter {
 	/** Creates a new instance of ChkComposer. This constructor is used only internally
 	 * when the composer is called from script.
 	 * @param reporter temporary reporter from script processor.
-	 * @param xdef the XDefinition.
+	 * @param xdef the X-definition.
 	 * @param nsURI Namespace URI of the element.
 	 * @param qname Qualified name of the element.
 	 * @param chkElem the ChkElement object from which the constructor was called.
@@ -1560,7 +1560,7 @@ final class ChkComposer extends SReporter {
 ///////////////////////////////////////////////////////////////////////////////
 
 	/** Returns available element model represented by given name or null if definition item is not available.
-	 * @param xdef XDefinition.
+	 * @param xdef X-definition.
 	 * @param key The name of definition item used for search.
 	 * @return The required X-element or null.
 	 */
@@ -1589,7 +1589,7 @@ final class ChkComposer extends SReporter {
 	/** Compose the XML element from the source XML element. The name of root element of result is given
 	 * by parameter. NOTE This method is called ONLY internally from script processor!
 	 * @param reporter array report writer.
-	 * @param xdef XDefinition.
+	 * @param xdef X-definition.
 	 * @param rootName name of root element.
 	 * @param chkEl the ChkElement object from which this was called.
 	 * @return composed XML element.

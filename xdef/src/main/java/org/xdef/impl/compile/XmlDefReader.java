@@ -37,7 +37,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DeclHandler;
 
-/** Reads XML source data with XDefinitions, it provides data values with
+/** Reads XML source data with X-definitions, it provides data values with
  * line and position information (including attribute values).
  * @author trojan
  */

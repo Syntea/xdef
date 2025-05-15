@@ -34,23 +34,23 @@ public class TestAllFull {
 		String xdNS = XDTester._xdNS;
 		int result = 0;
 		XDTester._xdNS = XDConstants.XDEF42_NS_URI;
-		System.out.println("[INFO] Testing Xdefinition version 4.2");
+		System.out.println("[INFO] Testing X-definition version 4.2");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
-		System.out.println("[INFO] Testing Xdefinition version 4.1");
+		System.out.println("[INFO] Testing X-definition version 4.1");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
-		System.out.println("[INFO] Testing Xdefinition version 4.0");
+		System.out.println("[INFO] Testing X-definition version 4.0");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
-		System.out.println("[INFO] Testing Xdefinition version 3.2");
+		System.out.println("[INFO] Testing X-definition version 3.2");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF31_NS_URI;
-		System.out.println("[INFO] Testing Xdefinition version 3.1");
+		System.out.println("[INFO] Testing X-definition version 3.1");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {

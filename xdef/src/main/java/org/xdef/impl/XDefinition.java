@@ -48,7 +48,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	private final SPosition _sourcePosition;
 
 	/** Creates a new instance of Definition
-	 * @param name name of definition.
+	 * @param name name of X-definition.
 	 * @param xp XPool object.
 	 * @param uri Namespace URI of X-definition.
 	 * @param pos source position of X-definition.
@@ -297,11 +297,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return xp.getVariable(name); // not found in locals, get global
 	}
 
-	/** Read XDefinition from XDReader.
+	/** Read X-definition from XDReader.
 	 * @param xr Reader with data.
 	 * @param xp base xPool,
 	 * @param list list of nodes.
-	 * @return created XDefinition.
+	 * @return created X-definition.
 	 * @throws IOException if an error occurs.
 	 */
 	public final static XDefinition readXDefinition(final XDReader xr, final XPool xp, final List<XNode> list)

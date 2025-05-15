@@ -77,8 +77,8 @@ public final class XsdUtils {
 		return defName + "_" + elemName;
 	}
 
-	/** Create full simple type name according to given XDefinition name and simple type name.
-	 * @param defName XDefinition name.
+	/** Create full simple type name according to given X-definition name and simple type name.
+	 * @param defName X-definition name.
 	 * @param sTypeName simple type name.
 	 * @return full simple type name.
 	 */
@@ -88,8 +88,8 @@ public final class XsdUtils {
 		return defName + "_" + sTypeName + "_sType";
 	}
 
-	/** Create full group name according to given XDefinition name, group name and group type.
-	 * @param defName XDefinition name.
+	/** Create full group name according to given X-definition name, group name and group type.
+	 * @param defName X-definition name.
 	 * @param groupName group name.
 	 * @param groupType group type.
 	 * @return full group name.
@@ -101,8 +101,8 @@ public final class XsdUtils {
 		return defName + "_" + groupName + "_" + groupType;
 	}
 
-	/** Create full complex type name according to given XDefinition name and complex type name.
-	 * @param defName XDefinition name.
+	/** Create full complex type name according to given X-definition name and complex type name.
+	 * @param defName X-definition name.
 	 * @param cTypeName complex type name.
 	 * @return full complex type name.
 	 */
@@ -112,8 +112,8 @@ public final class XsdUtils {
 		return defName + "_" + cTypeName + "_cType";
 	}
 
-	/** Create full simple type name according to given XDefinition name and model name.
-	 * @param defName XDefinition name.
+	/** Create full simple type name according to given X-definition name and model name.
+	 * @param defName X-definition name.
 	 * @param mName model name.
 	 * @return full simple type name;
 	 */

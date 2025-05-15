@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.27, release-date 2025-05-13
+# Version 42.2.27, release-date 2025-05-15
 * Fixed bug in parsing JSON data containing quoted string with string method using `%pattern` parameter.
 
 # Version 42.2.26, release-date 2025-04-15

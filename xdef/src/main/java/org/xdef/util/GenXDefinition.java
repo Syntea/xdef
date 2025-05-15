@@ -22,7 +22,7 @@ public class GenXDefinition {
 
 	/** Generate X-definition from XML data to X-definition.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data)
-	 * @param xdName name of XDefinition or null.
+	 * @param xdName name of X-definition or null.
 	 * @return org.w3c.dom.Element object with X-definition.
 	 */
 	public static final Element genXdef(final Object obj, final String xdName) {
@@ -44,7 +44,7 @@ public class GenXDefinition {
 	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
 	 * @param outFile output file or pathname.
 	 * @param encoding name of character encoding.
-	 * @param xdName name of XDefinition or null.
+	 * @param xdName name of X-definition or null.
 	 * @throws IOException if an error occurs.
 	 */
 	public static final void genXdef(final Object obj,

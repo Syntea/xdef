@@ -434,7 +434,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 	 * @param source buffer with source code.
 	 * @param actDefName name of actually processed X-definition.
 	 * @param importLocal array of X-definition names to accept locals.
-	 * @param xdVersion version ID of XDefinition.
+	 * @param xdVersion version ID of X-definition.
 	 * @param xpath XPath to source.
 	 */
 	public final void setSource(final SBuffer source,

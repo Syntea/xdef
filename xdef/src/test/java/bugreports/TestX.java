@@ -22,7 +22,7 @@ public class TestX extends XDTester {
 	/** Run test and display error information. */
 	@Override
 	public void test() {
-		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDPool xp;
 		XDDocument xd;
 		String json;

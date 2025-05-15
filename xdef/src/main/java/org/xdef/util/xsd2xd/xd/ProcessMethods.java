@@ -44,7 +44,7 @@ public class ProcessMethods {
 				&& "complexType".equals(parentElem.getLocalName())
 				&& Utils.getMinOccurrence(objectGroupElement) == 1
 				&& Utils.getMaxOccurrence(objectGroupElement) == 1) {
-				//add nothing (return current xdefinition context element)
+				//add nothing (return current X-definition context element)
 				return xdefContextElement;
 			}
 		}

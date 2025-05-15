@@ -321,7 +321,7 @@ public abstract class XDTester extends STester {
 			XMElement xe;
 			XMDefinition xdf = xp.getXMDefinition(dname);
 			if ((xe = getXElement(xdf, (qname = xdf.getName()))) == null) {
-				//Model of element '&{0}' is missing in XDefinition&{1}{ }
+				//Model of element '&{0}' is missing in X-definition&{1}{ }
 				throw new SRuntimeException(XDEF.XDEF601, qname,xdf.getName());
 			}
 			nsURI = xe.getNSUri();
@@ -373,7 +373,7 @@ public abstract class XDTester extends STester {
 		System.err.flush();
 		try {
 			if (xdefs == null || xdefs.length == 0) {
-				throw new Exception("XDefinitions not avaiklable");
+				throw new Exception("X-definitions are not available");
 			}
 			if (reporter != null) {
 				reporter.clear();
@@ -445,7 +445,7 @@ public abstract class XDTester extends STester {
 		final char mode) {
 		try {
 			if (xdefs == null || xdefs.length == 0) {
-				throw new Exception("XDefinitions not avaiklable");
+				throw new Exception("XDefinitions are not available");
 			}
 			chkSyntax(xdefs).checkAndThrowErrors();
 			if (reporter != null) {
@@ -654,7 +654,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xp XDPool containing XDefinitions.
+	 * @param xp XDPool containing X-definitions.
 	 * @param dname X-definition name, or null if it is not specified.
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
@@ -675,7 +675,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xp XDPool containing XDefinitions.
+	 * @param xp XDPool containing X-definitions.
 	 * @param dname X-definition name, or null if it is not specified.
 	 * @param name element name of the constructed XML.
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
@@ -694,7 +694,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xp XDPool containing XDefinitions.
+	 * @param xp XDPool containing X-definitions.
 	 * @param dname X-definition name, or null if it is not specified.
 	 * @param qname QName of model to be created.
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
@@ -727,10 +727,10 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xp XDPool containing XDefinitions.
+	 * @param xp XDPool containing X-definitions.
 	 * @param dname X-definition name, or null if it is not specified.
 	 * @param el Element as XDocument context or null.
-	 * @param ename element ename of the constructed XML.
+	 * @param ename element name of the constructed XML.
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp, final String dname, final Element el, final String ename) {
@@ -775,7 +775,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xp XDPool containing XDefinitions.
+	 * @param xp XDPool containing X-definitions.
 	 * @param dname X-definition name, or null.
 	 * @param el Element as XDocument context or null.
 	 * @param name element name of the constructed XML.
@@ -785,8 +785,8 @@ public abstract class XDTester extends STester {
 	 * @return root element of the created XML document.
 	 */
 	final public Element create(final XDPool xp,
-		final String dname, // xdefinition name
-		final Element el, // context
+		final String dname, // X-definition name
+		final Element el, // contexdefinitionxt
 		final String name, // name of model
 		final String param, // name of vatiable
 		final Object obj, // value of variable
@@ -808,7 +808,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xp XDPool containing XDefinitions.
+	 * @param xp XDPool containing X-definitions.
 	 * @param dname X-definition name, or null.
 	 * @param qname QName of model to be created.
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
@@ -830,7 +830,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xd XDocument created from XDefinitions.
+	 * @param xd XDocument created from X-definitions.
 	 * @param name name of model.
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.
@@ -866,7 +866,7 @@ public abstract class XDTester extends STester {
 	}
 
 	/** Construct a new XML document from the specified data.
-	 * @param xd XDocument created from XDefinitions.
+	 * @param xd XDocument created from X-definitions.
 	 * @param qname QName of model.
 	 * @param reporter ArrayReporter used to write error/warning messages or null.
 	 * @param xml context (source of XML) or null.

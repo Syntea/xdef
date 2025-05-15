@@ -297,7 +297,7 @@ public final class GenXDefXON {
 
 	/** Generate X-definition from input data to given output stream writer.
 	 * @param xon JSON/XON data.
-	 * @param xdName name XDefinition or null.
+	 * @param xdName name X-definition or null.
 	 * @return org.w3c.dom.Document object with X-definition.
 	 */
 	public static final Element genXdef(final Object xon, final String xdName) {

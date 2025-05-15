@@ -80,7 +80,7 @@ public class MyTest_0 extends XDTester {
 	public MyTest_0() {super();}
 
 ////////////////////////////////////////////////////////////////////////////////
-// User methods used in Xdefinitions tests
+// User methods used in X-definitions tests
 ////////////////////////////////////////////////////////////////////////////////
 	public static boolean next(XXElement x) {
 		MyTest_0 y = (MyTest_0) x.getUserObject();
@@ -185,7 +185,7 @@ public class MyTest_0 extends XDTester {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void test() {
-		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = false; // if false, all tests are invoked
 //		T = true; // if true, only the first one test is invoked

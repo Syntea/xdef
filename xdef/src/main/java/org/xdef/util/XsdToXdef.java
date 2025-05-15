@@ -241,8 +241,8 @@ public class XsdToXdef {
 "Using XsdToXdef: \n"
 + "-i, --input <PATH> input main schema location \n"
 + "-o, --output <PATH> output file or directory name \n"
-+ "-s, --separated every schema to standalone xdefinition file \n"
-+ "-p, --xdefPrefix <PREFIX> prefix for xdefinition nodes \n"
++ "-s, --separated every schema to standalone X-definition file \n"
++ "-p, --xdefPrefix <PREFIX> prefix for X-definition nodes \n"
 + "-l, --logFile <PATH> log file name \n"
 + "-?, -h, --help help";
 

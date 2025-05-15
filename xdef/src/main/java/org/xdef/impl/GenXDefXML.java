@@ -342,7 +342,7 @@ public final class GenXDefXML {
 
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param elem XML element.
-	 * @param xdName name of XDefinition or null.
+	 * @param xdName name of X-definition or null.
 	 * @return org.w3c.dom.Document object with X-definition.
 	 */
 	public static final Element genXdef(final Element elem, final String xdName) {

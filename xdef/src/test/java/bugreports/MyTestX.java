@@ -511,7 +511,7 @@ if(T)return;
 clearSources();
 /**/
 		try {
-			xdef = // test XON models in different Xdefinitions
+			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
@@ -594,7 +594,7 @@ if(T)return;
 clearSources();
 /**/
 		try {
-			xdef = // test XON models in different Xdefinitions
+			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "<xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array

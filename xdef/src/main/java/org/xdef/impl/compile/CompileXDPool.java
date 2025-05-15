@@ -1342,8 +1342,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //						newNode = createReference(pnode, pnode._localName,xdef);
 //						break;
 					default:
-						//Element from namespace of XDefinitions is not
-						//allowed here
+						//Element from namespace of XDefinitions is not allowed here
 						error(pnode._name, XDEF.XDEF322);
 						return;
 				}
@@ -1526,7 +1525,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.compileXDHeader(def);
 		}
 		if (_xdefs.containsKey(def.getName())) {
-			error(XDEF.XDEF268, def.getName());//XDefinition '&{0}' already exists
+			error(XDEF.XDEF268, def.getName());//X-definition '&{0}' already exists
 		}
 		_xdefs.put(def.getName(), def);
 	}
@@ -1658,7 +1657,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler.error(sval,XDEF.XDEF216);//Unexpected character&{0}{: '}{'}
 			}
 		}
-		//process attributes of XDefinition
+		//process attributes of X-definition
 		for (PAttr pattr:  pnode.getAttrs()) {
 			if (pattr._name.startsWith("impl-") && pattr._localName.length()>5) {
 				def._properties.put(pattr._name.substring(5), pattr._value.getString());
@@ -1699,7 +1698,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			compileXDefinition(p);
 		}
 		boolean result = true;
-		//check integrity of all XDefinitions
+		//check integrity of all X-definitions
 		Set<XNode> hs = new HashSet<>();
 		for (XDefinition x : _xdefs.values()) {
 			for (XMElement xel: x.getModels()) {
@@ -1738,7 +1737,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_precomp.getIncluded().clear();
 		_nodeList.clear();
 		if (!result) {
-			error(XDEF.XDEF201); //Error of XDefinitions integrity
+			error(XDEF.XDEF201); //Error of X-definitions integrity
 		} else {
 			try {
 				// set code to xdp
@@ -1832,7 +1831,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					SBuffer sbf = _codeGenerator._enums.get(name);
 					String s = sbf.getString();
 					ndx = s.indexOf('#');
-					// set XDefinition name
+					// set X-definition name
 					_codeGenerator._parser._actDefName = s.substring(0, ndx);
 					// qualified name of class
 					String clsname = s.substring(ndx + 1);
@@ -2380,7 +2379,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						if ((j = groupItems.get(s)) != null && notReported) {
 							XData y = (XData) xel._childNodes[j];
 							if (y._match == -1) { // accept items with match
-								//Ambiguous group '&{0}' (equal items) in XDefinition '&{1}'
+								//Ambiguous group '&{0}' (equal items) in X-definition '&{1}'
 								error(x.getSPosition(), XDEF.XDEF234,
 									selectorKind==XMCHOICE ? "choice" : "mixed", xel._definition.getName());
 								notReported = false;
@@ -2416,7 +2415,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							XElement y = (XElement) xel._childNodes[j];
 							if (y._match == -1) {// we accept items with match
 								error(x.getSPosition(),
-									XDEF.XDEF234,//Ambiguous group '&{0}' (equal items) in XDefinition '&{1}'
+									XDEF.XDEF234,//Ambiguous group '&{0}' (equal items) in X-definition '&{1}'
 									selectorKind==XMCHOICE ? "choice" : "mixed",
 									xel._definition.getName());
 								notReported = false;
@@ -2452,7 +2451,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						i = updateSelectors(xel, i + 1, xs, kind == XMCHOICE || ignorable, selective, hs);
 						xs.setEndIndex(i);
 						if (i - xs.getBegIndex() <= 1) {
-							error(xs.getSPosition(), XDEF.XDEF325, //Empty group '&{0}' in XDefinition '&{1}'
+							error(xs.getSPosition(), XDEF.XDEF325, //Empty group '&{0}' in X-definition '&{1}'
 								xs.getName().substring(1), xel._definition.getName());
 							xs.setIgnorable(ignorable = true);
 						}
