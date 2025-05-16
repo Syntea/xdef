@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 /** Provides writing of SObjects to output stream.
  * @author Vaclav Trojan
  */
-public class SObjectWriter {
+public class SObjectWriter extends OutputStream {
 
 	/** OutputStream used by this SObjectWriter. */
 	private final OutputStream _out;
@@ -214,5 +214,13 @@ public class SObjectWriter {
 	/** Close this SObjectWriter.
 	 * @throws IOException if an error occurs.
 	 */
+	@Override
 	public final void close() throws IOException {_out.close();}
+
+	/** Writes the specified byte to this output stream.
+	 * @param b the byte to be written to this output stream.
+	 * @throws IOException if an error occurs.
+	 */
+	@Override
+	public void write(int b) throws IOException {_out.write(b);}
 }

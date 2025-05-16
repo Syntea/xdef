@@ -267,8 +267,7 @@ public class FUtils {
 	 * @param f2 second directory.
 	 * @return list of differences.
 	 */
-	public static final List<Object> dirsEqual(boolean deep,
-		final File f1, final File f2) {
+	public static final List<Object> dirsEqual(boolean deep, final File f1, final File f2) {
 		List<Object> result = new ArrayList<>();
 		if (f1.exists() && f2.exists() && f1.isDirectory() && f2.isDirectory()){
 			File[] files1 = f1.listFiles();
@@ -326,8 +325,7 @@ public class FUtils {
 	 * @return -1 if the files are equal, otherwise the offset of the first difference. If a file doesn't
 	 * exist or if it is not readable return 0;
 	 */
-	public static final long compareFile(final InputStream f1,
-		final InputStream f2) {
+	public static final long compareFile(final InputStream f1, final InputStream f2) {
 		long diff = 0;
 		try {
 			byte[] buf1 = new byte[4096], buf2 = new byte[4096];
@@ -718,8 +716,7 @@ public class FUtils {
 	 * <li>SYS028 Can't read file: {file}
 	 * </ul>
 	 */
-	public static final void copyToFile(final InputStream is,
-		final OutputStream os) throws SException {
+	public static final void copyToFile(final InputStream is, final OutputStream os) throws SException {
 		copyToFile(is, is.getClass().getName(), os, os.getClass().getName());
 	}
 
@@ -1008,7 +1005,7 @@ public class FUtils {
 	}
 
 	/** Read string from file (encoded from "UTF-8" character set).
-	 * @param file input file.
+	 * @param f input file.
 	 * @return String with result.
 	 * @throws SException
 	 * <ul>
@@ -1017,9 +1014,7 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
-	public static final String readString(final File file) throws SException {
-		return readString(file, "UTF-8");
-	}
+	public static final String readString(final File f) throws SException {return readString(f, "UTF-8");}
 
 	/** Read input stream to String.
 	 * @param is input stream.
@@ -1111,9 +1106,8 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
-	public static final void writeStringBuffer(final File file,
-		final StringBuffer buf,
-		final String encoding) throws SException {
+	public static final void writeStringBuffer(final File file, final StringBuffer buf, final String encoding)
+		throws SException {
 		long estimatedSize = buf.length()*2 + 10;
 		if (getUsableSpace(file) < estimatedSize) {
 			throw new SException(SYS.SYS038, file); //File is too big: &{0}
@@ -1298,7 +1292,7 @@ public class FUtils {
 	}
 
 	/** Replace all occurrences of given key in the string by given value.
-	 * @param file file which is modified.
+	 * @param f file which is modified.
 	 * @param key sequence of characters to be replaced
 	 * @param rep sequence of characters which replaces key occurrences
 	 * @throws SException
@@ -1310,10 +1304,10 @@ public class FUtils {
 	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
-	public static final void modifyFile(final File file, final String key,final String rep) throws SException{
-		StringBuffer sb = readToStringBuffer(file, null, null);
+	public static final void modifyFile(final File f, final String key,final String rep) throws SException {
+		StringBuffer sb = readToStringBuffer(f, null, null);
 		SUtils.modifyStringBuffer(sb, key, rep);
-		writeStringBuffer(file, sb);
+		writeStringBuffer(f, sb);
 	}
 
 	/** Very dangerous: if the file is directory it deletes all subdirectories!
@@ -1337,8 +1331,7 @@ public class FUtils {
 	 * @param subdir if <code>true</code> then also subdirectories are deleted.
 	 * @throws SException SYS025 Directory doesn't exist or isn't accessible.
 	 */
-	public static final void deleteAll(final File file, final boolean subdir)
-		throws SException {
+	public static final void deleteAll(final File file, final boolean subdir) throws SException {
 		if (!file.exists() || !file.isDirectory() || file.getParent() == null) {
 
 			throw new SException(SYS.SYS025, file); //Directory doesn't exist or isn't accessible: &{0}
@@ -1351,8 +1344,7 @@ public class FUtils {
 	 * @param subdir if <code>true</code> then also subdirectories are deleted.
 	 * @throws SException SYS025 Directory doesn't exist or isn't accessible.
 	 */
-	public static final void deleteAll(final String fname, final boolean subdir)
-		throws SException {
+	public static final void deleteAll(final String fname, final boolean subdir) throws SException {
 		deleteAll(new File(fname), subdir);
 	}
 
@@ -1773,8 +1765,7 @@ public class FUtils {
 	private static String chkExtension(final File f, final String extension) {
 		String name = f.getName();
 		if (f.isFile()) {
-			if (extension == null || extension.isEmpty()
-				|| name.endsWith('.' + extension)) {
+			if (extension == null || extension.isEmpty() || name.endsWith('.' + extension)) {
 				return name;
 			}
 		}
@@ -1847,8 +1838,7 @@ public class FUtils {
 						File g = new File(fromDir, name);
 						if (!g.exists() || !g.isDirectory()) {
 							deleteAll(f, true);
-							addMessage(sb,
-								"Deleted dir: "	+ f.getCanonicalPath());
+							addMessage(sb, "Deleted dir: "	+ f.getCanonicalPath());
 						}
 					}
 				}

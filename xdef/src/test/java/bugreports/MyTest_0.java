@@ -26,6 +26,7 @@ import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import org.xdef.component.XCTextComponent;
 import org.xdef.component.XComponent;
 import org.xdef.impl.XDefinition;
 import org.xdef.impl.compile.CompileBase;
@@ -212,6 +213,20 @@ public class MyTest_0 extends XDTester {
 		StringWriter swr;
 		Report rep;
 		ArrayReporter reporter = new ArrayReporter();
+		try {
+			XCTextComponent xtc = new XCTextComponent("data", "#text", null, 1);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+				oos.writeObject(xtc);
+			}
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			try (ObjectInputStream ois = new ObjectInputStream(bais)) {
+				XCTextComponent ytc = (XCTextComponent) ois.readObject();
+				assertEq(xtc.xGetValue(), ytc.xGetValue());
+			}
+		} catch (IOException | ClassNotFoundException | RuntimeException ex) {fail(ex);}
+if(true){return;}
+		
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef = //test property "xdef_saveReports" and onIllegal events

@@ -1,5 +1,6 @@
 package org.xdef.component;
 
+import java.io.Serializable;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import java.util.List;
@@ -11,7 +12,7 @@ import org.w3c.dom.Node;
  * Java source of XComponent is possible to generate by {@link org.xdef.component.GenXComponent}.
  * @author Vaclav Trojan
  */
-public interface XComponent {
+public interface XComponent extends Serializable {
 
 	/** Create XML element from this XComponent (marshal).
 	 * If the argument is null null then document is created with created document element.

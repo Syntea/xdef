@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 /** Provides reading of SObjects to output stream.
  * @author Vaclav Trojan
  */
-public class SObjectReader {
+public class SObjectReader extends InputStream {
 
 	/** InputStream used by this SObjectRader. */
 	private final InputStream _in;
@@ -216,5 +216,13 @@ public class SObjectReader {
 	/** Close this SObjectReader.
 	 * @throws IOException if an error occurs.
 	 */
+	@Override
 	public final void close() throws IOException {_in.close();}
+
+	/** read byte from this SObjectReader.
+	 * @return the next byte of data, or -1 if the end of the stream is reached.
+	 * @throws IOException if an error occurs.
+	 */
+	@Override
+	public int read() throws IOException {return _in.read();}
 }

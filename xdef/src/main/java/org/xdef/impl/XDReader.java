@@ -120,8 +120,7 @@ public final class XDReader extends SObjectReader {
 	 */
 	public XDReader(InputStream in) {super(in);}
 
-	private static Class<?> getClassForName(final String name)
-		throws IOException {
+	private static Class<?> getClassForName(final String name) throws IOException {
 		switch(name) { //first check primitive type names
 			case "boolean": return java.lang.Boolean.TYPE;
 			case "byte": return java.lang.Byte.TYPE;
