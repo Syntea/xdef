@@ -226,7 +226,7 @@ public class MyTest_0 extends XDTester {
 			}
 		} catch (IOException | ClassNotFoundException | RuntimeException ex) {fail(ex);}
 if(true){return;}
-		
+
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef = //test property "xdef_saveReports" and onIllegal events

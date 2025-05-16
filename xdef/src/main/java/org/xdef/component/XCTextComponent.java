@@ -171,7 +171,7 @@ public class XCTextComponent implements XComponent {
 	 */
 	@Override
 	public String toXon() {return _value;}
-	
+
 	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
 		XDWriter xw = new XDWriter(out);
 		xw.writeByte((byte) 1); //ID
@@ -180,7 +180,7 @@ public class XCTextComponent implements XComponent {
 		xw.writeString(_model);
 		xw.writeInt(_index);
 	}
-	
+
 	private void readObject(final java.io.ObjectInputStream input) throws IOException {
 		XDReader xr = new XDReader(input);
 		if (1 != xr.readByte()) {
@@ -191,5 +191,5 @@ public class XCTextComponent implements XComponent {
 		_model = xr.readString();
 		_index = xr.readInt();
 	}
-	
+
 }
