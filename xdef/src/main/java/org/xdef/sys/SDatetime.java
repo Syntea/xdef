@@ -2,6 +2,7 @@ package org.xdef.sys;
 
 import org.xdef.msg.SYS;
 import java.io.IOException;
+import java.io.Serializable;
 import static java.lang.Math.round;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,7 +27,7 @@ import javax.xml.namespace.QName;
  * javax.xml.datatype.XMLGregorianCalendar.
  * @author Trojan
  */
-public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatetime> {
+public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatetime>, Serializable {
 	public static final DateFormatSymbols DFS = new DateFormatSymbols(Locale.US);
 	public static final TimeZone UTC_ZONE = new SimpleTimeZone(0, "UTC");
 	public static final TimeZone NULL_ZONE = new SimpleTimeZone(0, "_null_");

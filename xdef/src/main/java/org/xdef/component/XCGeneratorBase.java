@@ -371,9 +371,7 @@ class XCGeneratorBase {
 		}
 		sb.append(modify(
 (_genJavadoc ? "\t/** Value of &{d} \"&{xmlName}\".*/"+LN : "")+
-//"\tprivate"+(max > 1?" final":"")
-//	+" &{typ} _&{name}&{x}",
-"\tprivate &{typ} _&{name}&{x}",
+"\tprivate" + (max > 1?" final":"") + " &{typ} _&{name}&{x}",
 			"&{d}", d,
 			"&{xmlName}", name.replace('$', ':'),
 			"&{typ}", typ,

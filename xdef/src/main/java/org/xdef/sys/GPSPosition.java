@@ -1,11 +1,12 @@
 package org.xdef.sys;
 
+import java.io.Serializable;
 import org.xdef.msg.XDEF;
 
 /** GPS position.
  * @author Vaclav Trojan
  */
-public class GPSPosition {
+public class GPSPosition implements Serializable {
 	/** Earth radius (meters average; see e.g. https://imagine.gsfc.nasa.gov).*/
 	public static final double EARTH_RADIUS = 6367500.0D;
 	/** This constant is used for conversion of degrees to radians. */

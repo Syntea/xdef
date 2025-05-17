@@ -2,6 +2,7 @@ package org.xdef.sys;
 
 import org.xdef.msg.SYS;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.xml.datatype.DatatypeConstants;
@@ -11,7 +12,7 @@ import javax.xml.datatype.Duration;
  * This class implements abstract methods from javax.xml.datatype.Duration.
  * @author Vaclav Trojan
  */
-public final class SDuration extends Duration implements Comparable<SDuration> {
+public final class SDuration extends Duration implements Comparable<SDuration>, Serializable {
 	private int _years;
 	private int _months;
 	private int _days;

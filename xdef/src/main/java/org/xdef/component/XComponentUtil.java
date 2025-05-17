@@ -673,7 +673,7 @@ public class XComponentUtil {
 					}
 					textIndex++;
 					try {
-						Method m = cls.getDeclaredMethod(mName);
+						Method m = cls.getDeclaredMethod(mName); // this method may not exist
 						m.setAccessible(true);
 						Object o = m.invoke(xc);
 						if (o instanceof String) {
@@ -686,10 +686,8 @@ public class XComponentUtil {
 							}
 						}
 						result.add(o);
-					} catch (IllegalAccessException | IllegalArgumentException
-						| NoSuchMethodException | SecurityException | InvocationTargetException ex) {
-						throw new RuntimeException("Can't access getter: " + mName);
-					}
+					} catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
+						| SecurityException | InvocationTargetException ex) {} // ignore it
 				} else {
 					result.add(toXonXD(x, nsStack));
 				}
@@ -749,7 +747,7 @@ public class XComponentUtil {
 					}
 					textIndex++;
 					try {
-						Method m = cls.getDeclaredMethod(mName);
+						Method m = cls.getDeclaredMethod(mName); // this method may not exist
 						m.setAccessible(true);
 						Object o = m.invoke(xc);
 						if (o instanceof String) {
@@ -762,11 +760,8 @@ public class XComponentUtil {
 							}
 						}
 						body.add(o);
-					} catch (IllegalAccessException | IllegalArgumentException
-						| NoSuchMethodException | SecurityException
-						| InvocationTargetException ex) {
-						throw new RuntimeException("Can't access getter: " + mName);
-					}
+					} catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
+						| SecurityException | InvocationTargetException ex) {} // ignore it
 				} else {
 					body.add(toXonXD(x, nsStack));
 				}

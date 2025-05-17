@@ -1,14 +1,11 @@
 package org.xdef.component;
 
-import java.io.IOException;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.impl.XDReader;
-import org.xdef.impl.XDWriter;
 
 /** Implementation of XComponent for text nodes.
  * @author Vaclav Trojan
@@ -171,25 +168,4 @@ public class XCTextComponent implements XComponent {
 	 */
 	@Override
 	public String toXon() {return _value;}
-
-	private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
-		XDWriter xw = new XDWriter(out);
-		xw.writeByte((byte) 1); //ID
-		xw.writeString(_value);
-		xw.writeString(_xpos);
-		xw.writeString(_model);
-		xw.writeInt(_index);
-	}
-
-	private void readObject(final java.io.ObjectInputStream input) throws IOException {
-		XDReader xr = new XDReader(input);
-		if (1 != xr.readByte()) {
-			throw new RuntimeException("XX");
-		}
-		_value = xr.readString();
-		_xpos = xr.readString();
-		_model = xr.readString();
-		_index = xr.readInt();
-	}
-
 }

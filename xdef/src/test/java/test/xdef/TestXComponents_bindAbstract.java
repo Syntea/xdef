@@ -1,9 +1,10 @@
 package test.xdef;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import org.xdef.sys.SDatetime;
 
-public abstract class TestXComponents_bindAbstract {
+public abstract class TestXComponents_bindAbstract implements Serializable {
 
 	protected String name;
 	protected Timestamp birth;

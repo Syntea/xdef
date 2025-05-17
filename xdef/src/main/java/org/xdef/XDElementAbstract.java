@@ -20,6 +20,10 @@ import org.w3c.dom.Text;
 import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 import org.w3c.dom.DOMConfiguration;
+import static org.w3c.dom.Node.ATTRIBUTE_NODE;
+import static org.w3c.dom.Node.DOCUMENT_NODE;
+import static org.w3c.dom.Node.ELEMENT_NODE;
+import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueType.ELEMENT;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefNamedValue;
@@ -30,8 +34,7 @@ import org.xdef.xml.KXmlUtils;
 /** Abstract class for implementation of "pseudo" elements  in X-script.
  * @author Vaclav Trojan
  */
-public abstract class XDElementAbstract extends XDValueAbstract
-implements Element, XDElement, XDValue, NamedNodeMap {
+public abstract class XDElementAbstract extends XDValueAbstract implements Element, XDElement, NamedNodeMap {
 
 	private final static NodeList EMPTYNODELIST = new NodeList() {
 

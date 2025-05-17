@@ -1,5 +1,6 @@
 package org.xdef.sys;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Locale;
@@ -8,7 +9,7 @@ import org.xdef.msg.XDEF;
 /** Price with currency code.
  * @author Vaclav Trojan
  */
-public class Price {
+public class Price implements Serializable {
 	/** Amount of currency */
 	private final BigDecimal _amount;
 	/** Currency */

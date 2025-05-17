@@ -1,5 +1,6 @@
 package org.xdef;
 
+import java.io.Serializable;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import org.w3c.dom.Node;
  * methods to values of variables and of parameters of methods in X-definitions.
  * @author Vaclav Trojan
  */
-public interface XDValue extends Comparable<XDValue>, XDValueID {
+public interface XDValue extends Comparable<XDValue>, XDValueID, Serializable {
 
 	/** Get ID of the type of value (int, float, boolean, date, regex see org.xfef.XDValueID).
 	 * @return item type.

@@ -1,6 +1,8 @@
 package test.xdef;
 
-public class TestXComponents_Y08 {
+import java.io.Serializable;
+
+public class TestXComponents_Y08 implements Serializable {
 	private Integer idFlow;
 	public Integer getIdFlow() {return idFlow;}
 	protected void setIdFlow(Integer idFlow) {
