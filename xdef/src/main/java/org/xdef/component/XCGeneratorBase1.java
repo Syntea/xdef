@@ -114,17 +114,59 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 ////////////////////////////////////////////////////////////////////////////////
 			vars +
 //"\t@Override"+LN+
-//(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return value of item from this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.getx(this, \"get\"+x);}"+LN+
+(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @return value of item from this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.get(this, x);}"+LN+
 //"\t@Override"+LN+
-//(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @param v value to be set."+LN+
-//"\t */"+LN : "") +
-//"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
+(_genJavadoc ? "\t/** Get date from item of this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @return date from item of this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic java.util.Date xGetDate(final String x){return org.xdef.component.XComponentUtil.getDate(this, x);}"+LN+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Get Timestamp from item with date this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @return Timestamp from item of this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic java.sql.Timestamp xGetTimestamp(final String x){return org.xdef.component.XComponentUtil.getTimestamp(this, x);}"+LN+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Get calendat from item with date of this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @return Calendar from item of this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic java.util.Calendar XGetCalendar(final String x){return org.xdef.component.XComponentUtil.getCalendar(this, x);}"+LN+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Get XPosition from item  of this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @return string with XPosition of the item of this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic String XGetXpos(final String x){return org.xdef.component.XComponentUtil.getXpos(this, x);}"+LN+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Get List from item of this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @return List from item of this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic java.util.List XGetList(final String x){return org.xdef.component.XComponentUtil.getList(this, x);}"+LN+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Get Map from this XComponent."+LN+
+"\t * @return Map from this XComponent."+LN+
+"\t */"+LN : "") +
+"\tpublic java.util.Map XGetMap(){return org.xdef.component.XComponentUtil.getMap(this);}"+LN+
+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
+"\t * @param x name item."+LN+
+"\t * @param v value to be set."+LN+
+"\t */"+LN : "") +
+"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
+//"\t@Override"+LN+
+(_genJavadoc ? "\t/** Add value to the list."+LN+
+"\t * @param x name item."+LN+
+"\t * @param v value to be added."+LN+
+"\t */"+LN : "") +
+"\tpublic void xAdd(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"add\"+x,v);}"+LN+
 
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
