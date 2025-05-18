@@ -35,12 +35,12 @@ public class MytestX_CHECK implements org.xdef.component.XComponent{
   private String XD_Name_a="a";
   private String _a;
   private final java.util.List<MytestX_CHECK.b> _b = new java.util.ArrayList<>();
-
-	@Override
-	public Object xGet(final String name) {throw new RuntimeException("Unused");}
-
-	@Override
-	public void xSet(final String name, Object value) {throw new RuntimeException("Unused");}
+//
+//	@Override
+//	public Object xGet(final String name) {throw new RuntimeException("Unused");}
+//
+//	@Override
+//	public void xSet(final String name, Object value) {throw new RuntimeException("Unused");}
   @Override
   public Object toXon() {return org.xdef.component.XComponentUtil.toXon(this);}
   @Override
@@ -253,12 +253,12 @@ public static class b implements org.xdef.component.XComponent{
   public void xAddXChild(org.xdef.component.XComponent x) {}
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
-
-	@Override
-	public Object xGet(final String name) {throw new RuntimeException("Unused");}
-
-	@Override
-	public void xSet(final String name, Object value) {throw new RuntimeException("Unused");}
+//
+//	@Override
+//	public Object xGet(final String name) {throw new RuntimeException("Unused");}
+//
+//	@Override
+//	public void xSet(final String name, Object value) {throw new RuntimeException("Unused");}
 // </editor-fold>
 }
 }

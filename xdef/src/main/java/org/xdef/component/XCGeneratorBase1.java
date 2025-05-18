@@ -113,19 +113,18 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
 			vars +
-
-"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return value of item from this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.getx(this, \"get\"+x);}"+LN+
-"\t@Override"+LN+
-(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @param v value to be set."+LN+
-"\t */"+LN : "") +
-"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
+//"\t@Override"+LN+
+//(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return value of item from this XComponent."+LN+
+//"\t */"+LN : "") +
+//"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.getx(this, \"get\"+x);}"+LN+
+//"\t@Override"+LN+
+//(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @param v value to be set."+LN+
+//"\t */"+LN : "") +
+//"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
 
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
