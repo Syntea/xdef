@@ -137,4 +137,12 @@ public class MytestX_CHK implements org.xdef.component.XComponent{
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
+	@Override
+	public Object xGet(String name) {
+		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+	}
+	@Override
+	public void xSet(String name, Object value) {
+		throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+	}
 }

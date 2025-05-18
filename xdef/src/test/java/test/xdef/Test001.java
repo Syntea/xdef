@@ -1056,10 +1056,8 @@ public final class Test001  extends XDTester {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B/></xd:def>",
-			new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C/></xd:def>")
-				.getBytes(getEncoding()))
+"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B/></xd:def>", new ByteArrayInputStream((
+"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C/></xd:def>").getBytes(getEncoding()))
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			xp = XDFactory.compileXD(null, p1, p2);
@@ -1134,10 +1132,8 @@ public final class Test001  extends XDTester {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A a='x'/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B a='x'/></xd:def>",
-			new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C a='x'/></xd:def>")
-				.getBytes(getEncoding()))
+"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B a='x'/></xd:def>", new ByteArrayInputStream((
+"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C a='x'/></xd:def>").getBytes(getEncoding()))
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			XDFactory.compileXD(null, p1, p2);

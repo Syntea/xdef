@@ -168,4 +168,12 @@ public class XCTextComponent implements XComponent {
 	 */
 	@Override
 	public String toXon() {return _value;}
+
+	@Override
+	public Object xGet(final String name) {throw new UnsupportedOperationException("Not supported");}
+	@Override
+	public void xSet(final String name, Object value) {
+		throw new UnsupportedOperationException("Not supported");
+	}
+
 }

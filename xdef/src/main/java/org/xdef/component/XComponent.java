@@ -128,4 +128,8 @@ public interface XComponent extends Serializable {
 	 * Otherwise return null.
 	 */
 	public Object toXon();
+
+	public Object xGet(final String name);
+
+	public void xSet(final String name, final Object value);
 }

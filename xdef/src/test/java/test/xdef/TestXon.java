@@ -12,6 +12,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDTelephone;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
@@ -19,7 +20,6 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.CsvReader;
 import test.XDTester;
@@ -34,7 +34,6 @@ public class TestXon extends XDTester {
 	 * @param typ validation method.
 	 */
 	private ArrayReporter test(final String typ) {
-		Object o;
 		String xdef,json;
 		XDPool xp;
 		XDDocument xd;
@@ -133,6 +132,7 @@ public class TestXon extends XDTester {
 			xml = "<n:X xmlns:n='a.b' a='2021-12-30' t='2020121101010101'>1<n:Y/><n:Y/>2.0</n:X>";
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
 			o = XonUtils.parseXON(
 "{\"n:X\" : [\n" +
@@ -166,6 +166,7 @@ public class TestXon extends XDTester {
 			o = xd.jparse(json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(o, x = xc.toXon())) {
 				fail(XonUtils.toXonString(o, true)
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
@@ -188,6 +189,7 @@ public class TestXon extends XDTester {
 					+ "\n***\n" + XonUtils.toXonString(o, true));
 			}
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertNoErrorwarningsAndClear(reporter);
 			if (!XonUtils.xonEqual(o, y=xc.toXon())) {
 				fail(XonUtils.xonDiff(o, y)
@@ -207,6 +209,7 @@ public class TestXon extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("A", null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertNoErrorwarningsAndClear(reporter);
 			if (!XonUtils.xonEqual(o, y =xc.toXon())) {
 				fail(XonUtils.xonDiff(o, y)
@@ -355,6 +358,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xc.toXon(),y));
 			el = xc.toXml();
 			s = XonUtils.toXonString(XonUtils.xmlToXon(el), true);
@@ -369,6 +373,7 @@ public class TestXon extends XDTester {
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("A", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
@@ -386,6 +391,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(o, (x = xc.toXon()))) {
 				fail(XonUtils.toXonString(o) + "\n***\n" + XonUtils.toXonString(x));
 			}
@@ -394,6 +400,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(o, (x = xc.toXon()))) {
 				fail(XonUtils.toXonString(o) + "\n***\n" + XonUtils.toXonString(x));
 			}
@@ -425,6 +432,7 @@ public class TestXon extends XDTester {
 			genXComponent(xd.getXDPool());
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(o, x = xc.toXon()));
 			list = (List) ((List) x).get(0);
 			assertEq("Name", list.get(0));
@@ -610,6 +618,7 @@ public class TestXon extends XDTester {
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
 				fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
 			}
@@ -693,6 +702,7 @@ public class TestXon extends XDTester {
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
 				fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
 			}
@@ -741,6 +751,7 @@ public class TestXon extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null,reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("date\n", swr.toString());
 			assertEq(o, xc.toXon());
 			s = "{a:\"202.204.1.0\"}";
@@ -755,6 +766,7 @@ public class TestXon extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null,reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("ipAddr\n", swr.toString());
 			assertEq(o, xc.toXon());
 			s = "{a:[1,2]}";
@@ -769,6 +781,7 @@ public class TestXon extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null,reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("[...]\n", swr.toString());
 			assertEq(o, xc.toXon());
 			s = "{a:\"a\tb\n\"}";
@@ -783,6 +796,7 @@ public class TestXon extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null,reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("string\n", swr.toString());
 			assertEq(o, xc.toXon());
 			xdef = // test forget in XON
@@ -837,6 +851,7 @@ public class TestXon extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(swr.toString(),
 "From Brussels to London is 322 km to Paris is 265 km\n" +
 "From London to Brussels is 322 km to Paris is 344 km\n");
@@ -945,6 +960,7 @@ public class TestXon extends XDTester {
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
 				fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
 			}
@@ -1002,6 +1018,7 @@ public class TestXon extends XDTester {
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
 				fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
 			}
@@ -1076,6 +1093,7 @@ public class TestXon extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(swr.toString(),
 "From Brussels to London is 322 km to Paris is 265 km\n" +
 "From London to Brussels is 322 km to Paris is 344 km\n");
@@ -1601,8 +1619,9 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
-			assertTrue(XonUtils.xonEqual(x, SUtils.getValueFromGetter(xc,"anyItem$")));
+			assertTrue(XonUtils.xonEqual(x, XComponentUtil.getMap(xc)));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:json name='A'> {%anyName: \"* int()\", a:\"? boolean()\"} </xd:json>\n" +
@@ -1618,14 +1637,16 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
-			assertTrue(XonUtils.xonEqual(x, SUtils.getValueFromGetter(xc,"anyItem$")));
+			assertTrue(XonUtils.xonEqual(x, XComponentUtil.getMap(xc)));
 			json = "{ \"\": 1, x: -99, a: true}";
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),y));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
@@ -1644,9 +1665,10 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-			assertEq(1,((Map)SUtils.getValueFromGetter(xc,"anyItem$")).size());
-			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertEq(1,XComponentUtil.getMap(xc).size());
+			assertNull(XComponentUtil.get(xc, "$a"));
 			json = "{ a:0, x: [1,2], y: [] }";
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
@@ -1655,9 +1677,10 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-			assertEq(2, ((Map)SUtils.getValueFromGetter(xc,"anyItem$")).size());
-			assertEq(0, SUtils.getValueFromGetter(xc, "get$a"));
+			assertEq(2, XComponentUtil.getMap(xc).size());
+			assertEq(0, XComponentUtil.get(xc, "$a"));
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test YAML
 			xdef =
@@ -1722,20 +1745,17 @@ public class TestXon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(0), "get$value");
+//			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(0), "$value");
 //			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
 //			assertEq(new ArrayList(), x);
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(1), "get$value");
+//			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(1), "$value");
 //			assertEq("false", XComponentUtil.jlistToList(x).get(0));
 //			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(2), "get$value");
+//			x = XComponentUtil.get(XComponentUtil.getList(xc, "listOfa").get(2), "$value");
 //			assertEq(null, XComponentUtil.jlistToList(x).get(0));
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc,"listOfa")).get(3),"get$value");
+//			x = XComponentUtil.get(XComponentUtil.getList(xc,"a").get(3),"$value");
 //			assertEq(-9, XComponentUtil.jlistToList(x).get(0));
 //			assertEq("", XComponentUtil.jlistToList(x).get(1));
 //			assertEq("\"", XComponentUtil.jlistToList(x).get(2));

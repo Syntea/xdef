@@ -29,6 +29,7 @@ import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import static org.xdef.model.XMNode.XMELEMENT;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
@@ -827,5 +828,82 @@ public class XComponentUtil {
 			}
 		}
 		return toXonXD(xc, new KNamespace());
+	}
+
+	public static final Object getx(final XComponent xc, final String name) {
+		Class<?> cls = xc.getClass();
+		for (;;) {
+			try {
+				Method m = cls.getDeclaredMethod(name);
+				m.setAccessible(true);
+				return m.invoke(xc);
+			} catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
+				| SecurityException | InvocationTargetException ex) {
+				if ((cls = cls.getSuperclass()) == null) {
+					break;
+				}
+			}
+		}
+		//Getter &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
+	}
+
+	public static final Object get(Object o, final String name) {
+		return getx((XComponent) o, "get"+name);
+	}
+
+	public static final java.util.Date getDate(Object o, final String name) {
+		return (java.util.Date) getx((XComponent) o, "dateOf"+name);
+	}
+
+	public static final java.sql.Timestamp getTimestamp(Object o, final String name) {
+		return (java.sql.Timestamp) getx((XComponent) o, "timestampOf"+name);
+	}
+
+	public static final java.util.Calendar getCalendar(Object o, final String name) {
+		return (java.util.Calendar) getx((XComponent) o, "calendarOf"+name);
+	}
+
+	public static final String getXpos(Object o, final String name) {
+		return (String) getx((XComponent) o, "xposOf"+name);
+	}
+
+	public static final java.util.List<?> getList(Object o, final String name) {
+		return (java.util.List<?>) getx((XComponent) o, "listOf"+name);
+	}
+
+	public static final java.util.Map getMap(Object o) {
+		return (java.util.Map) getx((XComponent) o, "anyItem$");
+	}
+
+	public static final void setx(final XComponent xc, final String name, final Object v) {
+		Class<?> cls = xc.getClass();
+		for (;;) {
+			for (Method m: cls.getDeclaredMethods()) {
+				Class<?>[] params = m.getParameterTypes();
+				if ((name).equals(m.getName()) && params!=null && params.length==1) {
+					try {
+						m.setAccessible(true);
+						m.invoke(xc, v);
+						return;
+					} catch (IllegalAccessException | IllegalArgumentException | SecurityException
+						| InvocationTargetException ex) {
+					}
+				}
+			}
+			if ((cls = cls.getSuperclass()) == null) {
+				break;
+			}
+		}
+		//Getter &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
+	}
+
+	public static final void set(final Object o, final String name, final Object v) {
+		setx((XComponent) o, "set"+name, v);
+	}
+
+	public static final void add(final Object o, final String name, final Object v) {
+		setx((XComponent) o, "add"+name, v);
 	}
 }

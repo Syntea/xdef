@@ -2,9 +2,9 @@ package org.xdef.xon;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -596,7 +596,7 @@ public class XonTools {
 	}
 
 	/** Representation of XON/JSON object "null". */
-	public static final class JNull {
+	public static final class JNull implements Serializable {
 		private JNull() {}
 
 		@Override

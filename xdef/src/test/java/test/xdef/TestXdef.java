@@ -37,9 +37,9 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDValueID;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.proc.XXData;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import static test.XDTester._xdNS;
 
@@ -1668,13 +1668,12 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='bac'/>", el);
 			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a attr='required string()'\n"+
-"        xd:script=\"finally out('xyz')\">\n"+
+"  <a attr='required string()'>\n"+
 "    <a xd:script=\"occurs 2\"/>\n"+
 "  </a>\n"+
 "</xd:def>");
 			xml = "<a bttr='attr'><a/><b/></a>";
-			parse(xp, "", xml, reporter, swr = new StringWriter(), null,null);
+			parse(xp, "", xml, reporter);
 			if (reporter.errorWarnings()) {
 				assertTrue(reporter.getErrorCount() == 4, reporter.printToString());
 			} else {
@@ -1794,7 +1793,7 @@ public final class TestXdef extends XDTester {
 "      <O J='optional string(1,36);' />\n"+
 "   </U>\n"+
 "</xd:def>";
-			xb.setSource(new InputStream[]{
+			xb.setSource(new InputStream[] {
 				new ByteArrayInputStream(xdef.getBytes())},
 				new String[]{dataDir + "U.xdef"});
 			xb.compileXD();
@@ -2900,6 +2899,7 @@ public final class TestXdef extends XDTester {
 				"CET\n2024-10-22T11:55:30+02:00\n2024-10-22T09:55:30Z\nGMT\n2024-10-22T08:55:30-01:00\n");
 			genXComponent(xp, clearTempDir());
 			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("<a a='2024-10-22T08:55:30-01:00'/>", xc.toXml());
 			xml = "<a a='2024-10-22T11:55:30+03:30'/>"; // zone SPECIFIED
 			xd = xp.createXDDocument();
@@ -2911,6 +2911,7 @@ public final class TestXdef extends XDTester {
 				"GMT\n2024-10-22T11:55:30+03:30\n2024-10-22T08:25:30Z\nGMT\n2024-10-22T07:25:30-01:00\n");
 			genXComponent(xp, clearTempDir());
 			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("<a a='2024-10-22T07:25:30-01:00'/>", xc.toXml());
 			props = new Properties();
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
@@ -2924,11 +2925,13 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-22T11:55+02:00'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("<a a='2024-10-22T11:55:15+02:00'/>", xc.toXml());
 			xml = "<a a='2024-10-22T11:55Z'/>";
 			assertEq("<a a='2024-10-22T11:55Z'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("<a a='2024-10-22T11:55Z'/>", xc.toXml());
 			assertEq(null, compile("<def xmlns='"+_xdNS+"'/>").getDefaultZone());
 			xp = XDFactory.compileXD(props,
@@ -2941,9 +2944,9 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='20241022115530'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("<a a='20241022115530'/>", xc.toXml());
-			assertEq("2024-10-22T11:55:30+02:00",
-				((SDatetime) SUtils.getValueFromGetter(xc,"geta")).toString());
+			assertEq("2024-10-22T11:55:30+02:00", XComponentUtil.get(xc,"a").toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			props = new Properties();

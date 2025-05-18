@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -38,6 +40,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
@@ -2032,5 +2035,41 @@ public abstract class XDTester extends STester {
 			result += printThrowable(ex) + "\n";
 		}
 		return result.isEmpty() ? null : '~' + src + "~\n" + result;
+	}
+
+	/** Test if XComponent object is serializable.
+	 * @param xc XComponent object to be tested.
+	 * @return empty string or error information.
+	 */
+	public static final String chkCompoinentSerializable(final XComponent xc) {
+		String result = "";
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+				oos.writeObject(xc);
+			}
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			try (ObjectInputStream ois = new ObjectInputStream(bais)) {
+				XComponent yc = (XComponent) ois.readObject();
+				ReportWriter rw = KXmlUtils.compareElements(xc.toXml(), yc.toXml());
+				String s1 = XonUtils.toXonString(xc.toXon());
+				String s2 = XonUtils.toXonString(yc.toXon());
+				if (s1 == null) {
+					if (s2 != null) result += s2;
+				} else {
+					if (!s1.equals(s2)) result += s2;
+				}
+				s1 = KXmlUtils.nodeToString(xc.toXml());
+				s2 = KXmlUtils.nodeToString(yc.toXml());
+				if (s1 == null) {
+					if (s2 != null) result += (!result.isEmpty() ? "\n" : "") + s2;
+				} else {
+					if (!s1.equals(s2)) result += (!result.isEmpty() ? "\n" : "") + s2;
+				}
+			}
+		} catch (IOException | ClassNotFoundException | RuntimeException ex) {
+			result += (!result.isEmpty() ? "\n" : "") + ex;
+		}
+		return result;
 	}
 }

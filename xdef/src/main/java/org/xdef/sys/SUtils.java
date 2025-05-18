@@ -1222,8 +1222,7 @@ public class SUtils extends FUtils {
 	 * @param o the object where is setter.
 	 * @param name name of setter.
 	 * @param v value to be set.
-	 * @throws SRuntimeException if the setter was not found or it is not
-	 * accessible.
+	 * @throws SRuntimeException if the setter was not found or it is not accessible.
 	 */
 	public static final void setValueToSetter(final Object o, final String name, final Object v) {
 		Class<?> cls = o.getClass();

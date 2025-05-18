@@ -186,30 +186,30 @@ public class MyTest extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xc = parseXC(xp, "", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			assertNull(XComponentUtil.get(xc, "a"));
 			xml = "<a a='1,2,3'>4,5,6</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
-			list = (List) SUtils.getValueFromGetter(xc, "geta");
+			list = (List) XComponentUtil.get(xc, "a");
 			assertTrue(list.get(0) instanceof Long);
 			assertEq(1, list.get(0));
 			assertEq(2, list.get(1));
 			assertEq(3, list.get(2));
-			list = (List) SUtils.getValueFromGetter(xc, "get$value");
+			list = (List) XComponentUtil.get(xc, "$value");
 			assertTrue(list.get(0) instanceof Long);
 			assertEq(4, list.get(0));
 			assertEq(5, list.get(1));
 			assertEq(6, list.get(2));
-			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
+			assertNull(XComponentUtil.get(xc, "$b"));
 			assertNoErrorwarningsAndClear(reporter);
 			xml = "<a><b>5,6,7</b></a>";
 			assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
-			assertNull(SUtils.getValueFromGetter(xc, "geta"));
-			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
-			list = (List) SUtils.getValueFromGetter(xc, "get$b");
+			assertNull(XComponentUtil.get(xc, "a"));
+			assertNull(XComponentUtil.get(xc, "$value"));
+			list = (List) XComponentUtil.get(xc, "$b");
 			assertEq(5, list.get(0));
 			assertEq(6, list.get(1));
 			assertEq(7, list.get(2));
@@ -227,13 +227,13 @@ public class MyTest extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xc = parseXC(xp, "", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			assertNull(XComponentUtil.get(xc, "a"));
 			xml = "<a a='1,2,3'>4,5,6</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
-			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
+			if ((o = XComponentUtil.get(xc, "a")) instanceof List) {
 				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(1, ((List) o).get(0));
 				assertEq(2, ((List) o).get(1));
@@ -241,7 +241,7 @@ public class MyTest extends XDTester {
 			} else {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
-			if ((o=SUtils.getValueFromGetter(xc, "get$value")) instanceof List){
+			if ((o=XComponentUtil.get(xc, "$value")) instanceof List){
 				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(4, ((List) o).get(0));
 				assertEq(5, ((List) o).get(1));
@@ -249,14 +249,14 @@ public class MyTest extends XDTester {
 			} else {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
-			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
+			assertNull(XComponentUtil.get(xc, "$b"));
 			assertNoErrorwarningsAndClear(reporter);
 			xml = "<a><b>5,6,7</b></a>";
 			assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
-			assertNull(SUtils.getValueFromGetter(xc, "geta"));
-			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
-			if ((o = SUtils.getValueFromGetter(xc, "get$b")) instanceof List) {
+			assertNull(XComponentUtil.get(xc, "a"));
+			assertNull(XComponentUtil.get(xc, "$value"));
+			if ((o = XComponentUtil.get(xc, "$b")) instanceof List) {
 				assertEq(5, ((List) o).get(0));
 				assertEq(6, ((List) o).get(1));
 				assertEq(7, ((List) o).get(2));
@@ -285,23 +285,15 @@ public class MyTest extends XDTester {
 			xc = parseXC(xp, "", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-			x = SUtils.getValueFromGetter(
-				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(0),
-					"get$value");
+			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(0), "$value");
 			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
 			assertEq(new ArrayList(), x);
-			x = SUtils.getValueFromGetter(
-				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(1),
-					"get$value");
+			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(1), "$value");
 			assertEq("false", XComponentUtil.jlistToList(x).get(0));
 			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-			x = SUtils.getValueFromGetter(
-				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(2),
-					"get$value");
+			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(2), "$value");
 			assertEq(null, XComponentUtil.jlistToList(x).get(0));
-			x = SUtils.getValueFromGetter(
-				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(3),
-					"get$value");
+			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(3), "$value");
 			assertEq(-9, XComponentUtil.jlistToList(x).get(0));
 			assertEq("", XComponentUtil.jlistToList(x).get(1));
 			assertEq("\"", XComponentUtil.jlistToList(x).get(2));
@@ -309,8 +301,7 @@ public class MyTest extends XDTester {
 			alist.add(2);
 			alist.add(new ArrayList<>());
 			alist.add("ab\tc");
-			assertTrue(
-				XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
+			assertTrue(XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
 			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
 //if(true)return;
 			xdef =
@@ -333,8 +324,7 @@ public class MyTest extends XDTester {
 			xd.setXONContext(s);
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(o,
-				SUtils.getValueFromGetter(xc, "toXon")));
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 /**/

@@ -91,8 +91,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final StringBuilder sbi) {
 		final int ndx = typeName.lastIndexOf('.');
 		if (ndx == 0) { // never should happen
-			throw new SRuntimeException(SYS.SYS066,// Internal error&{0}{: }
-				"Error in getter: " + xn.getXDPosition());
+			// Internal error&{0}{: }
+			throw new SRuntimeException(SYS.SYS066, "Error in getter: " + xn.getXDPosition());
 		}
 		String d = descr;
 		String typ = typeName;
@@ -123,8 +123,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				"&{d}" , d,
 				"&{name}", name,
 				"&{typ}", typ));
-				if (typeName.contains("org.xdef.sys.SDatetime")) {
-					// datetime getters
+				if (typeName.contains("org.xdef.sys.SDatetime")) {// datetime getters
 					sb.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
@@ -224,8 +223,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			d += 's';
 			x = "if(x!=null)_&{name}.add(x);";
 		} else {
-			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "+iName+"();_&{name}.")
-				+ "set$value(x);";
+			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "+iName+"();_&{name}.") + "set$value(x);";
 		}
 		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
@@ -366,13 +364,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 
 	/** Create unique model name.
 	 * @param xe Element model from which setter/getter is generated.
-	 * @param namePrefix prefix of the name (eg. "get$")
+	 * @param prefix prefix of the name (eg. "get$")
 	 * @param varNames set with variable names.
 	 * @return unique model name.
 	 */
-	private static String getXonItemName(final XElement xe,
-		final String namePrefix,
-		final Set<String> varNames) {
+	private static String getXonItemName(final XElement xe, final String prefix, final Set<String> varNames) {
 		XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
 		String name = null;
 		if (xe._xon==XConstants.XON_MODE_W && xe._match>=0 && keyAttr!=null
@@ -385,16 +381,15 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					continue;
 				}
 				if (item.getCode() == LD_CONST) {
-					name = namePrefix + code[i].stringValue();
+					name = prefix + code[i].stringValue();
 					break;
 				}
 			}
 		}
 		if (name == null) {
-			name = namePrefix + xe.getLocalName();
+			name = prefix + xe.getLocalName();
 		}
-		name = getUniqueName(
-			getUniqueName(xmlToJavaName(name), RESERVED_NAMES), varNames);
+		name = getUniqueName(getUniqueName(xmlToJavaName(name), RESERVED_NAMES), varNames);
 		varNames.add(name);
 		name = name.substring(4);
 		return name;
@@ -428,8 +423,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			jGet = xe.getXonMode() != 0 && "String".equals(typ)
-				? "org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())"
-				: "y.get"+X_VALATTR+"()";
+				? "org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())" : "y.get"+X_VALATTR+"()";
 			if (keyAttr != null && keyAttr.getFixedValue() == null) {//%anyName
 				template =
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
@@ -818,8 +812,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\treturn _&{iname} == null? null: _&{iname}.toXon();"+LN+
 "\t}"+LN;
 					break;
-				default:
-					return;
+				default: return;
 			}
 			getters.append(modify(template,
 				"&{name}", name,
@@ -846,11 +839,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		String s;
 		if (xe._xon != 0 && nodes.length == 5 //anyObj?
 			&& nodes[0].getKind() == XMCHOICE && nodes[1].getKind() == XMELEMENT
-			&& X_VALUE.equals(nodes[1].getLocalName())
-			&& nodes[2].getKind() == XMELEMENT
+			&& X_VALUE.equals(nodes[1].getLocalName()) && nodes[2].getKind() == XMELEMENT
 			&& X_ARRAY.equals(nodes[2].getLocalName())
-			&& ((XElement) nodes[2]).getChildNodeModels().length == 5
-			&& nodes[3].getKind() == XMELEMENT
+			&& ((XElement) nodes[2]).getChildNodeModels().length == 5 && nodes[3].getKind() == XMELEMENT
 			&& X_MAP.equals(nodes[3].getLocalName())
 			&& ((XElement) nodes[3]).getChildNodeModels().length == 5) {
 			s =
