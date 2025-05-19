@@ -645,7 +645,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			}
 			// setter
 			template =
-(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
+(_genJavadoc ? "\t/** Set value of &{name}."+LN+
+"\t * @param x value to be set"+LN+
+"\t */"+LN : "")+
 "\tpublic void set$&{name}(&{typ} x)";
 			s =
 "\t\tif(x==null) _&{iname}=null; else {"+LN+
@@ -660,7 +662,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				"&{typeName}", typeName));
 			if ("org.xdef.sys.SDatetime".equals(typ)) {
 				template =
-(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
+(_genJavadoc ? "\t/** Set value of &{name}."+LN+
+"\t * @param x value to be set"+LN+
+"\t */"+LN : "")+
 "\tpublic void set$&{name}(&{typ} x)"+
 "{set$&{name}(org.xdef.sys.SDatetime.createFrom(x));}"+LN;
 				setters.append(modify(template,
@@ -683,7 +687,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{typ}", typ));
 				if ("org.xdef.sys.SDatetime".equals(typeName)) {
 					template =
-(_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
+(_genJavadoc ? "\t/** Set value of &{name}."+LN+
+"\t * @param x value to be set"+LN+
+"\t */"+LN : "")+
 "\tpublic void set$&{name}(&{typ} x);"+LN;
 					setters.append(modify(template,
 						"&{name}", name,
