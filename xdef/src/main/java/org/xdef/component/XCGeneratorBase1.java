@@ -516,31 +516,22 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			String key = xctab.keySet().iterator().next();
 			result += ") x); //" + key + LN+"\t}"+LN;
 		} else {
-			boolean first = true;
 			result +=
 "\tpublic void xAddXChild(org.xdef.component.XComponent x) {"+LN+
 "\t\tx.xSetNodeIndex(XD_ndx++);"+LN+
-"\t\tString s = x.xGetModelPosition();"+LN;
-			for (Iterator<Map.Entry<String, String>> it = xctab.entrySet().iterator(); it .hasNext();) {
+"\t\tswitch(x.xGetModelPosition()) {"+LN;
+			for (Iterator<Map.Entry<String, String>> it = xctab.entrySet().iterator(); it.hasNext();) {
 				Map.Entry<String, String> e = it .next();
 				String s = e.getValue().replace('#', '.');
 				if (s.length() > 0) {
 					String typ = s.substring(s.indexOf(";") + 1);
 					String var = s.substring(2, s.indexOf(";"));
-					s = s.charAt(0) == '1' ? "set" + var + "(" + "(" + typ + ")x);"
+					s = s.charAt(0) == '1'
+						? "set" + var + "(" + "(" + typ + ")x);"
 						: "listOf" + var + "().add((" + typ + ")x);";
-					s += !it .hasNext() ? " //" + e.getKey()+LN : LN;
-					if (first) {
-						result += "\t\tif (\"" + e.getKey() + "\".equals(s))"+LN+"\t\t\t" + s;
-						first = false;
-					} else {
-						if (it .hasNext()) {
-							result += "\t\telse if (\"" + e.getKey() + "\".equals(s))"+LN+"\t\t\t" + s;
-						} else {
-							result += "\t\telse"+LN+"\t\t\t" + s + "\t}"+LN;
-							break;
-						}
-					}
+					result += it .hasNext()
+						? "\t\t\tcase \"" + e.getKey() + "\": " + s + " break;"+LN
+						: "\t\t\tdefault: " + s + " //" + e.getKey()+LN+ "\t\t}"+LN+"\t}"+LN;
 				}
 			}
 		}
