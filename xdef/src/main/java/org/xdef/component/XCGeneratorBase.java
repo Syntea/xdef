@@ -402,7 +402,9 @@ class XCGeneratorBase {
 		if (sbi != null) {
 			xpathes.append("\t@Override").append(LN);
 			sbi.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+(_genJavadoc ? ("\t/** Get XPath position of &{descr} \"&{name}\"."+LN+
+"\t* @return string with XPath position."+LN+
+"\t */"+LN) : "")+
 "\tpublic String xposOf&{name}();"+LN,
 				"&{name}", name,
 				"&{descr}", descr));

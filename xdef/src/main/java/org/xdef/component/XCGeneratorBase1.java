@@ -183,10 +183,10 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tpublic String xGetNodeName() {return XD_NodeName;}"+LN+
 (_genJavadoc ?
 "\t/** Update parameters of XComponent."+LN+
-"\t * @param parent p XComponent."+LN+
+"\t * @param p parent XComponent."+LN+
 "\t * @param name name of element."+LN+
 "\t * @param ns namespace."+LN+
-"\t * @param xPos XDPosition."+LN+
+"\t * @param xdPos XDPosition."+LN+
 "\t */"+LN : "") +
 "\t@Override"+LN+
 "\tpublic void xInit(org.xdef.component.XComponent p,"+LN+
