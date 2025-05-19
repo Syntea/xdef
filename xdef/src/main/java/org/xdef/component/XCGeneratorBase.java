@@ -411,7 +411,9 @@ class XCGeneratorBase {
 		}
 		final String x = "attribute".equals(descr) ? "@" + name : "$text";
 		xpathes.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+(_genJavadoc ? ("\t/** Get XPath position of &{descr} \"&{name}\"."+LN+
+"\t* @return string with XPath position."+LN+
+"\t */"+LN) : "")+
 "\tpublic String xposOf&{name}(){return XD_XPos+\"/&{x}\";}"+LN,
 			"&{name}", name,
 			"&{x}", x,
