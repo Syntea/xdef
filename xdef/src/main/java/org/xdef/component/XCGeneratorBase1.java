@@ -34,14 +34,14 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		final StringBuilder creators,
 		final StringBuilder listNodes) {
 		String toXml =
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Create XML element or text node from default model"+LN+
 "\t * as an element created from given document."+LN+
 "\t * @param doc XML Document or <i>null</i>."+LN+
 "\t * If the argument is null <i>null</i> then document is created with"+LN+
 "\t * created document element."+LN+
 "\t * @return XML element belonging to given document from default model."+LN+
-"\t */"+LN : "")+
+"\t */"+LN : "") +
+"\t@Override"+LN+
 "\tpublic org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {"+LN;
 		if (xe.getName().endsWith("$any") || "*".equals(xe.getName())) {
 			toXml +=
@@ -113,76 +113,74 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
 			vars +
+//(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return value of item from this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return value of item from this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.get(this, x);}"+LN+
+//"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.get(this, x);}"+LN+
+//(_genJavadoc ? "\t/** Get date from item of this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return date from item of this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get date from item of this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return date from item of this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic java.util.Date xGetDate(final String x){return org.xdef.component.XComponentUtil.getDate(this, x);}"+LN+
+//"\tpublic java.util.Date xGetDate(final String x){return org.xdef.component.XComponentUtil.getDate(this, x);}"+LN+
+//(_genJavadoc ? "\t/** Get Timestamp from item with date this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return Timestamp from item of this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get Timestamp from item with date this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return Timestamp from item of this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic java.sql.Timestamp xGetTimestamp(final String x){return org.xdef.component.XComponentUtil.getTimestamp(this, x);}"+LN+
+//"\tpublic java.sql.Timestamp xGetTimestamp(final String x){return org.xdef.component.XComponentUtil.getTimestamp(this, x);}"+LN+
+//(_genJavadoc ? "\t/** Get calendat from item with date of this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return Calendar from item of this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get calendat from item with date of this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return Calendar from item of this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic java.util.Calendar XGetCalendar(final String x){return org.xdef.component.XComponentUtil.getCalendar(this, x);}"+LN+
+//"\tpublic java.util.Calendar XGetCalendar(final String x){return org.xdef.component.XComponentUtil.getCalendar(this, x);}"+LN+
+//(_genJavadoc ? "\t/** Get XPosition from item  of this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return string with XPosition of the item of this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get XPosition from item  of this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return string with XPosition of the item of this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic String XGetXpos(final String x){return org.xdef.component.XComponentUtil.getXpos(this, x);}"+LN+
+//"\tpublic String XGetXpos(final String x){return org.xdef.component.XComponentUtil.getXpos(this, x);}"+LN+
+//(_genJavadoc ? "\t/** Get List from item of this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @return List from item of this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get List from item of this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @return List from item of this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic java.util.List XGetList(final String x){return org.xdef.component.XComponentUtil.getList(this, x);}"+LN+
+//"\tpublic java.util.List XGetList(final String x){return org.xdef.component.XComponentUtil.getList(this, x);}"+LN+
+//(_genJavadoc ? "\t/** Get Map from this XComponent."+LN+
+//"\t * @return Map from this XComponent."+LN+
+//"\t */"+LN : "") +
 //"\t@Override"+LN+
-(_genJavadoc ? "\t/** Get Map from this XComponent."+LN+
-"\t * @return Map from this XComponent."+LN+
-"\t */"+LN : "") +
-"\tpublic java.util.Map XGetMap(){return org.xdef.component.XComponentUtil.getMap(this);}"+LN+
+//"\tpublic java.util.Map XGetMap(){return org.xdef.component.XComponentUtil.getMap(this);}"+LN+
+//(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @param v value to be set."+LN+
+//"\t */"+LN : "") +
+//"\t@Override"+LN+
+//"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
+//(_genJavadoc ? "\t/** Add value to the list."+LN+
+//"\t * @param x name item."+LN+
+//"\t * @param v value to be added."+LN+
+//"\t */"+LN : "") +
+//"\t@Override"+LN+
+//"\tpublic void xAdd(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"add\"+x,v);}"+LN+
 
-//"\t@Override"+LN+
-(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
-"\t * @param x name item."+LN+
-"\t * @param v value to be set."+LN+
-"\t */"+LN : "") +
-"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
-//"\t@Override"+LN+
-(_genJavadoc ? "\t/** Add value to the list."+LN+
-"\t * @param x name item."+LN+
-"\t * @param v value to be added."+LN+
-"\t */"+LN : "") +
-"\tpublic void xAdd(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"add\"+x,v);}"+LN+
-
-"\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
 "\t * If the argument is null <i>null</i> then document is created with"+LN+
 "\t * created document element."+LN+
 "\t * @return XML element created from thos object."+LN+
 "\t */"+LN) : "") +
+"\t@Override"+LN+
 "\tpublic org.w3c.dom.Element toXml()"+LN+
 "\t\t{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}"+LN+
-"\t@Override"+LN+
 (_genJavadoc ?
 "\t/** Get name of XML node used for construction of this object."+LN+
 "\t * @return name of XML node used for construction of this object."+LN+
 "\t */"+LN : "") +
-"\tpublic String xGetNodeName() {return XD_NodeName;}"+LN+
 "\t@Override"+LN+
+"\tpublic String xGetNodeName() {return XD_NodeName;}"+LN+
 (_genJavadoc ?
 "\t/** Update parameters of XComponent."+LN+
 "\t * @param parent p XComponent."+LN+
@@ -190,79 +188,80 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @param ns namespace."+LN+
 "\t * @param xPos XDPosition."+LN+
 "\t */"+LN : "") +
+"\t@Override"+LN+
 "\tpublic void xInit(org.xdef.component.XComponent p,"+LN+
 "\t\tString name, String ns, String xdPos) {"+LN+
 "\t\tXD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;"+LN+
 "\t}"+LN+
-"\t@Override"+LN+
 (_genJavadoc ?
 "\t/** Get namespace of node used for construction of this object."+LN+
 "\t * @return namespace of node used for construction of this object."+LN+
 "\t */"+LN : "") +
-"\tpublic String xGetNamespaceURI() {return XD_NamespaceURI;}"+LN+
 "\t@Override"+LN+
+"\tpublic String xGetNamespaceURI() {return XD_NamespaceURI;}"+LN+
 (_genJavadoc ?
 "\t/** Get XPosition of node."+LN+
 "\t * @return XPosition of node."+LN+
 "\t */"+LN : "") +
-"\tpublic String xGetXPos() {return XD_XPos;}"+LN+
 "\t@Override"+LN+
+"\tpublic String xGetXPos() {return XD_XPos;}"+LN+
 (_genJavadoc ?
 "\t/** Set XPosition of node."+LN+
 "\t * @param xpos XPosition of node."+LN+
 "\t */"+LN : "") +
-"\tpublic void xSetXPos(String xpos){XD_XPos = xpos;}"+LN+
 "\t@Override"+LN+
+"\tpublic void xSetXPos(String xpos){XD_XPos = xpos;}"+LN+
 (_genJavadoc ?
 "\t/** Get index of node."+LN+
 "\t * @return index of node."+LN+
 "\t */"+LN : "") +
-"\tpublic int xGetNodeIndex() {return XD_Index;}"+LN+
 "\t@Override"+LN+
+"\tpublic int xGetNodeIndex() {return XD_Index;}"+LN+
 (_genJavadoc ?
 "\t/** Set index of node."+LN+
 "\t * @param index index of node."+LN+
 "\t */"+LN : "") +
-"\tpublic void xSetNodeIndex(int index) {XD_Index = index;}"+LN+
 "\t@Override"+LN+
+"\tpublic void xSetNodeIndex(int index) {XD_Index = index;}"+LN+
 (_genJavadoc ? "\t/** Get parent XComponent."+LN+
 "\t * @return parent XComponent object or null if this object is root."+LN+
 "\t */"+LN : "") +
-"\tpublic org.xdef.component.XComponent xGetParent() {return XD_Parent;}"
-+LN+"\t@Override"+LN+
+"\t@Override"+LN+
+"\tpublic org.xdef.component.XComponent xGetParent() {return XD_Parent;}"+LN+
 (_genJavadoc ? "\t/** Get user object."+LN+
 "\t * @return assigned user object."+LN+
 "\t */"+LN : "") +
-"\tpublic Object xGetObject() {return XD_Object;}"+LN+
 "\t@Override"+LN+
+"\tpublic Object xGetObject() {return XD_Object;}"+LN+
 (_genJavadoc ? "\t/** Set user object."+LN+
 "\t * @param obj assigned user object."+LN+
 "\t */"+LN : "") +
-"\tpublic void xSetObject(final Object obj) {XD_Object = obj;}"+LN+
 "\t@Override"+LN+
+"\tpublic void xSetObject(final Object obj) {XD_Object = obj;}"+LN+
 (_genJavadoc ? "\t/** Create string about this object."+LN+
 "\t * @return string about this object."+LN+
 "\t */"+LN : "") +
-"\tpublic String toString() {return \"XComponent: \"+xGetModelPosition();}"+LN+
 "\t@Override"+LN+
+"\tpublic String toString() {return \"XComponent: \"+xGetModelPosition();}"+LN+
 (_genJavadoc ? "\t/** Get XDPosition of this XComponent."+LN+
 "\t * @return string withXDPosition of this XComponent."+LN+
 "\t */"+LN : "") +
-"\tpublic String xGetModelPosition() {return XD_Model;}"+LN+
 "\t@Override"+LN+
+"\tpublic String xGetModelPosition() {return XD_Model;}"+LN+
 (_genJavadoc ? "\t/** Get index of model of this XComponent."+LN+
 "\t * @return index of model of this XComponent."+LN+
 "\t */"+LN : "") +
+"\t@Override"+LN+
 "\tpublic int xGetModelIndex() {return "+index+";}"+LN+
 (_genJavadoc?"\t/** Get XON version: 0 not set, 1 .. W mode.*/"+LN:"")+
 "\tpublic static final byte XON = " + xe._xon + ";" +LN;
 
 ////////////////////////////////////////////////////////////////////////////////
 		result += genSeparator("Private methods", _genJavadoc) +
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Create list of XComponents for creation of XML."+LN+
 "* @return list of XComponents."+LN+
 "\t */"+LN : "") +
+"\t@Override"+LN+
 "\tpublic java.util.List<org.xdef.component.XComponent> xGetNodeList() {"
 			+LN;
 		if (listNodes.length() == 0) {
@@ -384,11 +383,11 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 (_genJavadoc ? "\t/** Content of xd:any.*/"+LN : "") +
 "\tprivate org.w3c.dom.Element XD_Any;"+LN : "");
 		result +=
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of text node."+LN+
 "\t * @param x Actual XXNode (from text node)."+LN+
 "\t * @param value parsed value."+LN+
-"\t */"+LN : "");
+"\t */"+LN : "") +
+"\t@Override"+LN;
 		int ndx;
 		if (txttab.isEmpty()) {
 			result +=
@@ -424,11 +423,11 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			result += s + "\t\t}"+LN+"\t}"+LN;
 		}
 		result +=
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of attribute."+LN+
 "\t * @param x Actual XXNode (from attribute node)."+LN+
 "\t * @param value parsed value."+LN+
-"\t */"+LN : "");
+"\t */"+LN : "") +
+"\t@Override"+LN;
 		if (atttab.isEmpty()) {
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}"+LN;
@@ -462,11 +461,11 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			result += s+LN+"\t}"+LN;
 		}
 		result +=
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Create instance of child XComponent."+LN+
 "\t * @param x actual XXNode."+LN+
 "\t * @return new empty child XCopmponent."+LN+
-"\t */"+LN : "");
+"\t */"+LN : "") +
+"\t@Override"+LN;
 		if (xctab.isEmpty()) {
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)"+
@@ -500,10 +499,10 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			result += (dflt ? "\t\treturn " + dflt + ';'+LN : "") + "\t}"+LN;
 		}
 		result +=
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Add XComponent object to local variable."+LN+
 "\t * @param x XComponent to be added."+LN+
-"\t */"+LN : "");
+"\t */"+LN : "") +
+"\t@Override"+LN;
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += "\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
 		} else if (xctab.isEmpty()) {
@@ -549,10 +548,10 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			}
 		}
 		result +=
-"\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of xd:any model."+LN+
 "\t * @param el Element which is value of xd:any model."+LN+
-"\t */"+LN : "")+
+"\t */"+LN : "") +
+"\t@Override"+LN+
 "\tpublic void xSetAny(org.w3c.dom.Element el) {";
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += LN+

@@ -94,20 +94,20 @@ public final class GenXComponent {
 						out.write("\t"+ st.nextToken());
 					}
 					final String template =";"+LN+
-(genJavadoc ?
-(LN+"\t@Override"+LN+
+LN+(genJavadoc ? (
 "\t/** Get object associated with this item of enumeration."+LN+
 "\t * @return object associated with this item of enumeration."+LN+
-"\t */"+LN) : "\t@Override"+LN) +
+"\t */"+LN) : "") +
+"\t@Override"+LN+
 "\tpublic final Object itemValue() {return name();}"+LN+
-(genJavadoc ?
-(LN+"\t@Override"+LN+
-"\t/** Get string which is used to create enumeration."+LN+
+LN+(genJavadoc ?
+("\t/** Get string which is used to create enumeration."+LN+
 "\t * @return string which is used to create enumeration."+LN+
-"\t */"+LN) : "\t@Override"+LN) +
+"\t */"+LN) : "") +
+"\t@Override"+LN+
 "\tpublic final String toString() {return name();}"+LN+
-(genJavadoc ?
-(LN+"\t/** Create enumeration item from an object."+LN+
+LN+(genJavadoc ?
+("\t/** Create enumeration item from an object."+LN+
 "\t * @param x Object to be converted."+LN+
 "\t * @return the item of this  enumeration (or null)."+LN+
 "\t */"+LN) : "") +
