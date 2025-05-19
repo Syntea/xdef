@@ -259,8 +259,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 ////////////////////////////////////////////////////////////////////////////////
 		result += genSeparator("Private methods", _genJavadoc) +
 (_genJavadoc ? "\t/** Create list of XComponents for creation of XML."+LN+
-"* @return list of XComponents."+LN+
-"\t */"+LN : "") +
+"\t * @return list of XComponents.*/"+LN : "") +
 "\t@Override"+LN+
 "\tpublic java.util.List<org.xdef.component.XComponent> xGetNodeList() {"
 			+LN;
@@ -323,9 +322,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			}
 		}
 		result +=
-(_genJavadoc ? "\t/** Create an empty object."+LN+
-"\t * @param xd XDPool object from which this XComponent was generated."+LN+
-"\t */"+LN : "")+
+(_genJavadoc ? "\t/** Create an empty object.*/"+LN : "")+
 "\tpublic "+clazz+"() {}"+LN+
 (_genJavadoc ? "\t/** Create XComponent."+LN+
 "\t * @param p parent component."+LN+
