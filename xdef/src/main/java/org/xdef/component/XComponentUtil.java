@@ -43,6 +43,7 @@ import org.xdef.xon.XonTools;
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("unchecked")
 public class XComponentUtil {
 
 	/** Get value of variable of given name from XComponent.
