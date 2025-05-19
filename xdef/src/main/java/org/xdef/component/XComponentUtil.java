@@ -606,6 +606,7 @@ public class XComponentUtil {
 		toXonMap(xc, cls.getDeclaredMethods(), result);
 		return result;
 	}
+
 	/** Create XON map from XComponent.
 	 * @param xc XComponent
 	 * @param nsStack namespace prefixes stack.
@@ -844,6 +845,11 @@ public class XComponentUtil {
 		return toXonXD(xc, new KNamespace());
 	}
 
+	/** Invoke the method with name from argument from XComponent and return the value from method.
+	 * @param xc where to find getter.
+	 * @param name name of getter.
+	 * @return value returned by getter.
+	 */
 	public static final Object getx(final XComponent xc, final String name) {
 		Class<?> cls = xc.getClass();
 		for (;;) {
@@ -862,6 +868,11 @@ public class XComponentUtil {
 		throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
 	}
 
+	/** Return value returned by getter from XComponent with name from argument.
+	 * @param o must be XComponent.
+	 * @param name name of getter.
+	 * @return value returned by getter.
+	 */
 	public static final Object get(Object o, final String name) {
 		return getx((XComponent) o, "get"+name);
 	}
@@ -890,6 +901,11 @@ public class XComponentUtil {
 		return (java.util.Map) getx((XComponent) o, "anyItem$");
 	}
 
+	/** Invoke method with name and parameter from argument from XComponent (typically a setter).
+	 * @param xc XComponent where to fine method.
+	 * @param name name of method.
+	 * @param v value of parameter.
+	 */
 	public static final void setx(final XComponent xc, final String name, final Object v) {
 		Class<?> cls = xc.getClass();
 		for (;;) {
@@ -913,6 +929,11 @@ public class XComponentUtil {
 		throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
 	}
 
+	/** Invoke setter from XComponent with given value.
+	 * @param o must be XComponent.
+	 * @param name name of setter.
+	 * @param v value to be set.
+	 */
 	public static final void set(final Object o, final String name, final Object v) {
 		setx((XComponent) o, "set"+name, v);
 	}
