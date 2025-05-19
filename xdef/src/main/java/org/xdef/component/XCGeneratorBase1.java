@@ -479,18 +479,17 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){"+LN;
 			result +=
-"\t\tString s = x.getXMElement().getXDPosition();"+LN;
+"\t\tswitch(x.getXMElement().getXDPosition()) {"+LN;
 			for (Iterator<Map.Entry<String, String>> it = xctab.entrySet().iterator(); it.hasNext();) {
 				Map.Entry<String, String> e = it.next();
 				String s = e.getValue().replace('#', '.');
 				if (s.isEmpty()) {
 					dflt = true;
 				} else {
-					result += ((it.hasNext() || dflt)
-						? "\t\tif (\""+e.getKey() + "\".equals(s))"+LN+"\t\t\treturn new "
-							+ s.substring(s.indexOf(";") + 1)+"(this, x);"
-						: ("\t\treturn new " + s.substring(s.indexOf(";") + 1)+"(this, x); // " + e.getKey()))
-						+ LN;
+					s = s.substring(s.indexOf(";")+1);
+					result += "\t\t\t" + ((it.hasNext() || dflt)
+						? "case \""+e.getKey()+"\": return new "+s+"(this, x);"
+						: "default: return new "+s+"(this, x); // "+e.getKey()+LN+"\t\t}")+LN;
 				}
 			}
 			result += (dflt ? "\t\treturn " + dflt + ';'+LN : "") + "\t}"+LN;
