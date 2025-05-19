@@ -16,7 +16,6 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.DefBoolean;
@@ -79,16 +78,16 @@ public class XComponentUtil {
 	/** Create XComponent from XComponent according to given model in XDPool.
 	 * @param xc XComponent.
 	 * @param xp XDPool.
-	 * @param xdPosition the XDPosition of model in XDPool.
+	 * @param xdPos XDPosition of model in XDPool.
 	 * @return created XComponent.
 	 */
-	public static final XComponent toXComponent(final XComponent xc, final XDPool xp,final String xdPosition){
-		XMNode xm = xp.findModel(xdPosition);
+	public static final XComponent toXComponent(final XComponent xc, final XDPool xp,final String xdPos) {
+		XMNode xm = xp.findModel(xdPos);
 		if (xm.getKind() != XMELEMENT) {
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition()); //Argument is not model of element: &{0}
 		}
 		Element el = toXml(xc, (XMElement) xm);
-		XDDocument xd = xp.createXDDocument(xdPosition);
+		XDDocument xd = xp.createXDDocument(xdPos);
 		return xd.xparseXComponent(el, null, null);
 	}
 
@@ -270,7 +269,7 @@ public class XComponentUtil {
 	 * @param typeId separator of items.
 	 * @return converted list.
 	 */
-	public static final List<?> valueToList(final XDParseResult value, final int typeId) {
+	public static final List valueToList(final XDParseResult value, final int typeId) {
 		if (value == null) {
 			return null;
 		}
@@ -282,23 +281,26 @@ public class XComponentUtil {
 	 * @param typeId type of items..
 	 * @return converted list.
 	 */
-	public static final List<?> valueToList(final XDContainer c, final int typeId) {
+	public static final List valueToList(final XDContainer c, final int typeId) {
 		int len = c.getXDItemsNumber();
-		List<Object> result = new ArrayList<>();
+		List result = new ArrayList<>();
 		for (int i = 0; i < len; i++) {
 			Object o = c.getXDItem(i).getObject();
 			if (o instanceof XDContainer) {
-				o = valueToList((XDContainer) o, XD_ANY);
+				o = valueToList((XDContainer) o, typeId);
 			}
 			result.add(o);
 		}
 		return result;
 	}
 
-	public static final List<Object> listToJlist(final Object x) {
-		List<Object> result = new ArrayList<>();
-		List list = (List) x;
-		for (Object o: list) {
+	/** Create list of JSON/XON objects from the list of binary objects.
+	 * @param lst list of binary objects.
+	 * @return created list of JSON/XON objects.
+	 */
+	public static final List listToJlist(final List lst) {
+		List result = new ArrayList<>();
+		for (Object o: lst) {
 			if (o == null) {
 				result.add(new DefJNull());
 			} else if (o instanceof String) {
@@ -314,30 +316,19 @@ public class XComponentUtil {
 					: new DefLong(((Number)o).longValue()));
 			} else {
 				result.add(o instanceof Boolean ? new DefBoolean((Boolean)o)
-					: o instanceof List ? listToJlist(o)
-					: o);
+					: o instanceof List ? listToJlist((List) o) : o);
 			}
 		}
 		return result;
 	}
 
-	private static void parseResultToList(final List<Object> list, final XDValue value) {
-		if (value instanceof org.xdef.XDContainer) {
-			XDContainer x = (XDContainer) value;
-			List<Object> y = new ArrayList<>();
-			for (int i = 0; i < x.getXDItemsNumber(); i++) {
-				parseResultToList(y, x.getXDItem(i));
-			}
-			list.add(y);
-		} else {
-			list.add(value);
-		}
-	}
-
-	public static final List<Object> jlistToList(final Object x) {
-		List<Object> result = new ArrayList<>();
-		List list = (List) x;
-		for (Object o: list) {
+	/** Create java.util.List from list with parsed XDValues.
+	 * @param jlst list with XDValues.
+	 * @return list wirh binary objects.
+	 */
+	public static final List jlistToList(final List jlst) {
+		List result = new ArrayList<>();
+		for (Object o: jlst) {
 			if (o instanceof DefString) {
 				String s = o.toString();
 				if (s.startsWith("\"") && s.endsWith("\"")) {
@@ -348,16 +339,36 @@ public class XComponentUtil {
 				result.add(s);
 			} else {
 				result.add(o instanceof DefJNull ? null
-					: o instanceof List ? jlistToList(o)
-					: o instanceof XDValue ? ((XDValue) o).getObject()
-					: o);
+					: o instanceof List ? jlistToList((List) o)
+					: o instanceof XDValue ? ((XDValue) o).getObject() : o);
 			}
 		}
 		return result;
 	}
 
-	public static final List<Object> parseResultToList(final XDParseResult val) {
-		List<Object> result = new ArrayList<>();
+	/** Add XDValue from argument to the list. If the argoment is XDContainer add itsitems to the list.
+	 * @param lst list where to add items.
+	 * @param value X-definition value.
+	 */
+	private static void parseResultToList(final List lst, final XDValue value) {
+		if (value instanceof org.xdef.XDContainer) {
+			XDContainer x = (XDContainer) value;
+			List y = new ArrayList<>();
+			for (int i = 0; i < x.getXDItemsNumber(); i++) {
+				parseResultToList(y, x.getXDItem(i));
+			}
+			lst.add(y);
+		} else {
+			lst.add(value);
+		}
+	}
+
+	/** Create Java.util.List and add to it items from parsed result.
+	 * @param val parsed result.
+	 * @return created List with items from argument val.
+	 */
+	public static final List parseResultToList(final XDParseResult val) {
+		List result = new ArrayList<>();
 		org.xdef.XDContainer x = (org.xdef.XDContainer) val.getParsedValue();
 		for (int i = 0; i < x.getXDItemsNumber(); i++) {
 			parseResultToList(result, x.getXDItem(i));
@@ -365,8 +376,8 @@ public class XComponentUtil {
 		return jlistToList(result);
 	}
 
-	/** Create list of items with separatort (value of parsed list).
-	 * @param list pasrsed list
+	/** Create source list of items with separators (value of parsed list).
+	 * @param list pasrsed list.
 	 * @param isJlist if true generate jlist format, otherwise just list.
 	 * @return list of items with separatort.
 	 */
@@ -385,7 +396,7 @@ public class XComponentUtil {
 			if (o == null) {
 				sb.append("null");
 			} else if (o instanceof XDContainer) {
-				return containerJlist((XDContainer) o);
+				return containerToJlist((XDContainer) o);
 			} else if (o instanceof List) {
 				sb.append(listToString((List) o, true));
 			} else if (o instanceof String) {
@@ -410,7 +421,7 @@ public class XComponentUtil {
 	 * @param c XDContainer to be converted.
 	 * @return string with values of the container from argument.
 	 */
-	public static final String containerJlist(final XDContainer c) {
+	public static final String containerToJlist(final XDContainer c) {
 		int len = c.getXDItemsNumber();
 		if (len == 0) {
 			return "[ ]";
@@ -430,7 +441,7 @@ public class XComponentUtil {
 						sb.append(y.toString());
 						break;
 					case XD_CONTAINER:
-						sb.append(containerJlist((XDContainer) y));
+						sb.append(containerToJlist((XDContainer) y));
 						break;
 					default:
 						sb.append(y.toString());
@@ -452,16 +463,15 @@ public class XComponentUtil {
 ////////////////////////////////////////////////////////////////////////////////
 // Create XON object from X-component.
 ////////////////////////////////////////////////////////////////////////////////
-	private final static Object toXonObject(final Object o) {
-		return o instanceof String
-			? XonTools.xmlToJValue((String) o) : o instanceof XonTools.JNull ? null : o;
+	private static Object toXonObject(final Object o) {
+		return o instanceof String? XonTools.xmlToJValue((String) o) : o instanceof XonTools.JNull? null : o;
 	}
 
 	/** Create XON simple value from XComponent.
 	 * @param xc XComponent
 	 * @return object with XON simple value.
 	 */
-	private final static Object toXonItem(final XComponent xc) {
+	private static Object toXonItem(final XComponent xc) {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("get" + X_VALATTR);
@@ -494,6 +504,10 @@ public class XComponentUtil {
 		return result;
 	}
 
+	/** Convert argument with date to the ISO8601 fromat.
+	 * @param x date to be converted/
+	 * @return date in the ISO8601 fromat.
+	 */
 	public static final String dateToJstring(final SDatetime x) {
 		String s = x.toISO8601();
 		int i = (s.charAt(0) == '0') ? 1 : 0;
@@ -513,7 +527,7 @@ public class XComponentUtil {
 	 * @param methods array with methods.
 	 * @param result the map where put items.
 	 */
-	private final static void toXonMap(final XComponent xc,
+	private static void toXonMap(final XComponent xc,
 		final Method[] methods,
 		final Map<String, Object> result) {
 		for (Method x: methods) {
@@ -656,8 +670,8 @@ public class XComponentUtil {
 	 * @param nsStack namespace prefixes stack.
 	 * @return object with XON array.
 	 */
-	private static List<Object> toXonArrayXD(final XComponent xc, final KNamespace nsStack) {
-		List<Object> result = new ArrayList<>();
+	private static List toXonArrayXD(final XComponent xc, final KNamespace nsStack) {
+		List result = new ArrayList<>();
 		Map<String, Object> attrs = getXonAttrs(xc);
 		if (!attrs.isEmpty()) {
 			result.add(attrs);
@@ -734,7 +748,7 @@ public class XComponentUtil {
 	 * @return object with XON.
 	 */
 	private static void getXonBody(final XComponent xc,
-		final List<Object> body,
+		final List body,
 		final KNamespace nsStack){
 		List<XComponent> components = xc.xGetNodeList();
 		if (components != null) {
@@ -788,7 +802,7 @@ public class XComponentUtil {
 			}
 		}
 		Map<String, Object> result = new LinkedHashMap<>();
-		List<Object> body = new ArrayList<>();
+		List body = new ArrayList<>();
 		Map<String, Object> namedValues = getXonAttrs(xc);
 		String prefix;
 		nsStack.pushContext();
@@ -868,8 +882,8 @@ public class XComponentUtil {
 		return (String) getx((XComponent) o, "xposOf"+name);
 	}
 
-	public static final java.util.List<?> getList(Object o, final String name) {
-		return (java.util.List<?>) getx((XComponent) o, "listOf"+name);
+	public static final List getList(Object o, final String name) {
+		return (List) getx((XComponent) o, "listOf"+name);
 	}
 
 	public static final java.util.Map getMap(Object o) {

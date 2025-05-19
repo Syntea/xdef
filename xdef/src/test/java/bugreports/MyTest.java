@@ -286,23 +286,23 @@ public class MyTest extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
 			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(0), "$value");
-			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
+			assertEq(new ArrayList(), XComponentUtil.jlistToList((List) x));
 			assertEq(new ArrayList(), x);
 			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(1), "$value");
-			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-			assertEq("false", XComponentUtil.jlistToList(x).get(0));
+			assertEq("false", XComponentUtil.jlistToList((List) x).get(0));
+			assertEq("false", XComponentUtil.jlistToList((List) x).get(0));
 			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(2), "$value");
-			assertEq(null, XComponentUtil.jlistToList(x).get(0));
+			assertEq(null, XComponentUtil.jlistToList((List) x).get(0));
 			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(3), "$value");
-			assertEq(-9, XComponentUtil.jlistToList(x).get(0));
-			assertEq("", XComponentUtil.jlistToList(x).get(1));
-			assertEq("\"", XComponentUtil.jlistToList(x).get(2));
+			assertEq(-9, XComponentUtil.jlistToList((List) x).get(0));
+			assertEq("", XComponentUtil.jlistToList((List) x).get(1));
+			assertEq("\"", XComponentUtil.jlistToList((List) x).get(2));
 			ArrayList<Object> alist = new ArrayList<>();
 			alist.add(2);
 			alist.add(new ArrayList<>());
 			alist.add("ab\tc");
-			assertTrue(XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
-			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
+			assertTrue(XonUtils.xonEqual(alist, XComponentUtil.jlistToList((List) x).get(3)));
+			assertEq("-3.5", XComponentUtil.jlistToList((List) x).get(4));
 //if(true)return;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n" +
