@@ -870,36 +870,20 @@ public class XComponentUtil {
 	}
 
 	/** Return value returned by getter from XComponent with name from argument.
-	 * @param o must be XComponent.
+	 * @param xc must be XComponent.
 	 * @param name name of getter.
 	 * @return value returned by getter.
 	 */
-	public static final Object get(final XComponent o, final String name) {
-		return getx(o, "get"+name);
+	public static final Object get(final XComponent xc, final String name) {
+		return getx(xc, "get"+name);
 	}
 
-	public static final java.util.Date getDate(final XComponent o, final String name) {
-		return (java.util.Date) getx(o, "dateOf"+name);
-	}
-
-	public static final java.sql.Timestamp getTimestamp(final XComponent o, final String name) {
-		return (java.sql.Timestamp) getx(o, "timestampOf"+name);
-	}
-
-	public static final java.util.Calendar getCalendar(final XComponent o, final String name) {
-		return (java.util.Calendar) getx(o, "calendarOf"+name);
-	}
-
-	public static final String getXpos(final XComponent o, final String name) {
-		return (String) getx(o, "xposOf"+name);
-	}
-
-	public static final List getList(final XComponent o, final String name) {
-		return (List) getx(o, "listOf"+name);
-	}
-
-	public static final java.util.Map getMap(final XComponent o) {
-		return (java.util.Map) getx(o, "anyItem$");
+	/** Get value of XComponent as the java.util.Map.
+	 * @param xc the XComponent.
+	 * @return value of XComponent as the java.util.Map..
+	 */
+	public static final java.util.Map getMap(final XComponent xc) {
+		return (java.util.Map) getx(xc, "anyItem$");
 	}
 
 	/** Invoke method with name and parameter from argument from XComponent (typically a setter).
@@ -931,15 +915,20 @@ public class XComponentUtil {
 	}
 
 	/** Invoke setter from XComponent with given value.
-	 * @param o must be XComponent.
+	 * @param xc must be XComponent.
 	 * @param name name of setter.
 	 * @param v value to be set.
 	 */
-	public static final void set(final XComponent o, final String name, final Object v) {
-		setx(o, "set"+name, v);
+	public static final void set(final XComponent xc, final String name, final Object v) {
+		setx(xc, "set"+name, v);
 	}
 
-	public static final void add(final XComponent o, final String name, final Object v) {
-		setx(o, "add"+name, v);
+	/** Add value from argument to the list of given name from XComponent.
+	 * @param xc XComponent with the list.
+	 * @param name name of list in the XComponent.
+	 * @param v value to be added.
+	 */
+	public static final void add(final XComponent xc, final String name, final Object v) {
+		setx(xc, "add"+name, v);
 	}
 }

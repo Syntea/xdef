@@ -251,7 +251,7 @@ public final class TestLexicon extends XDTester {
 			el = xc.toXml();
 			assertEq(xml, el);
 			assertEq("0123456789", XComponentUtil.get(xc,"Number"));
-			List<?> l = XComponentUtil.getList(xc, "Client");
+			List l = (List) XComponentUtil.getx(xc, "listOfClient");
 			assertEq(3, l.size());
 		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 		try {

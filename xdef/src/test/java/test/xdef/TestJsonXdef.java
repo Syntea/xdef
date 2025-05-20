@@ -497,20 +497,20 @@ public class TestJsonXdef extends XDTester {
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE);
-			assertEq(2, ((List) x).size());
-			y = (XComponent) ((List) x).get(0);
+			list = (List) XComponentUtil.getx(xc, "listOf" + xon+XonNames.X_VALUE);
+			assertEq(2, list.size());
+			y = (XComponent) list.get(0);
 			assertEq("null", XComponentUtil.get(y, XonNames.X_VALATTR).toString());
-			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE);
-			y = (XComponent) ((List) x).get(1);
+			list = (List) XComponentUtil.getx(xc, "listOf" + xon+XonNames.X_VALUE);
+			y = (XComponent) list.get(1);
 			assertEq("null", XComponentUtil.get(y, XonNames.X_VALATTR).toString());
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE + "_1");
+			x = XComponentUtil.getx(xc, "listOf"+xon+XonNames.X_VALUE + "_1");
 			assertEq(2, ((List) x).size());
 			y = (XComponent) ((List) x).get(0);
 			assertEq(12, XComponentUtil.get(y, XonNames.X_VALATTR));
-			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE + "_1");
+			x = XComponentUtil.getx(xc, "listOf"+xon+XonNames.X_VALUE + "_1");
 			y = (XComponent) ((List) x).get(1);
 			assertEq(13, XComponentUtil.get(y, XonNames.X_VALATTR));
 		} catch (Exception ex) {fail(ex);}

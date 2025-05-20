@@ -316,11 +316,10 @@ clearSources();
 			XComponentUtil.set(xc, "$value", null);
 			o = SUtils.getObjectField("mytests.Y21_enum", "y");
 			XComponentUtil.set(xc, "b", o);
-			list = XComponentUtil.getList(xc, "B");
+			list = (List) XComponentUtil.getx(xc, "listOfB");
 			o = SUtils.getObjectField("test.xdef.TestXComponents_Y21enum", "b");
 			XComponentUtil.set((XComponent) list.get(1), "c", o);
-			assertEq("<A b='y'><B c='a'>x</B><B c='b' d='1 2'>y</B>x</A>",
-				xc.toXml());
+			assertEq("<A b='y'><B c='a'>x</B><B c='b' d='1 2'>y</B>x</A>", xc.toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
 clearSources();
