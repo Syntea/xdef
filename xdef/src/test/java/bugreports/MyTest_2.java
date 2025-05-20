@@ -542,7 +542,7 @@ if(T )return;
 			reporter.checkAndThrowErrors();
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
-			assertEq(123, XComponentUtil.get(XComponentUtil.get(xc, "jx$item"), "val"));
+			assertEq(123, XComponentUtil.get((XComponent) XComponentUtil.get(xc, "jx$item"), "val"));
 
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, reporter);

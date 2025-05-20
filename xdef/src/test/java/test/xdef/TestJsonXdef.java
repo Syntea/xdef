@@ -411,7 +411,7 @@ public class TestJsonXdef extends XDTester {
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
 		StringWriter swr;
-		XComponent xc;
+		XComponent xc, y;
 		XDDocument xd;
 		XDPool xp;
 		try {
@@ -431,12 +431,12 @@ public class TestJsonXdef extends XDTester {
 			fname = "Test008";
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertEq(1, XComponentUtil.get(x, XonNames.X_VALATTR));
-			XComponentUtil.set(x, XonNames.X_VALATTR, 3);
-			assertEq(3, XComponentUtil.get(x, XonNames.X_VALATTR));
-			XComponentUtil.set(x, XonNames.X_VALATTR, null);
-			assertNull(XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertEq(1, XComponentUtil.get(y, XonNames.X_VALATTR));
+			XComponentUtil.set(y, XonNames.X_VALATTR, 3);
+			assertEq(3, XComponentUtil.get(y, XonNames.X_VALATTR));
+			XComponentUtil.set(y, XonNames.X_VALATTR, null);
+			assertNull(XComponentUtil.get(y, XonNames.X_VALATTR));
 			fname = "Test020";
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
@@ -457,40 +457,40 @@ public class TestJsonXdef extends XDTester {
 			fname = "Test021";
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertEq("abc", XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertEq("abc", XComponentUtil.get(y, XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 1);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertEq(123, XComponentUtil.get(x, XonNames.X_VALATTR));
-			XComponentUtil.set(x, XonNames.X_VALATTR, "");
-			assertEq("", XComponentUtil.get(x, XonNames.X_VALATTR));
-			XComponentUtil.set(x, XonNames.X_VALATTR, " a    b \n ");
-			assertEq(" a    b \n ", XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertEq(123, XComponentUtil.get(y, XonNames.X_VALATTR));
+			XComponentUtil.set(y, XonNames.X_VALATTR, "");
+			assertEq("", XComponentUtil.get(y, XonNames.X_VALATTR));
+			XComponentUtil.set(y, XonNames.X_VALATTR, " a    b \n ");
+			assertEq(" a    b \n ", XComponentUtil.get(y, XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 2);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertEq(false, XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertEq(false, XComponentUtil.get(y, XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 3);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertTrue(XComponentUtil.get(x, XonNames.X_VALATTR) != null);
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertTrue(XComponentUtil.get(y, XonNames.X_VALATTR) != null);
 			xc = getXComponent(xp, fname, 4);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertNull(XComponentUtil.get(xc, xon+XonNames.X_VALUE));
 			fname = "Test025";
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertEq("null", XComponentUtil.get(x, XonNames.X_VALATTR).toString());
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE+"_1");
-			assertEq(12, XComponentUtil.get(x, XonNames.X_VALATTR));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE+"_2");
-			assertEq("\" a b \"", XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertEq("null", XComponentUtil.get(y, XonNames.X_VALATTR).toString());
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE+"_1");
+			assertEq(12, XComponentUtil.get(y, XonNames.X_VALATTR));
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE+"_2");
+			assertEq("\" a b \"", XComponentUtil.get(y, XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 1);
 			assertEq("", chkCompoinentSerializable(xc));
-			x = XComponentUtil.get(xc, xon+XonNames.X_VALUE);
-			assertEq("null", XComponentUtil.get(x, XonNames.X_VALATTR).toString());
+			y = (XComponent) XComponentUtil.get(xc, xon+XonNames.X_VALUE);
+			assertEq("null", XComponentUtil.get(y, XonNames.X_VALATTR).toString());
 			assertNull(XComponentUtil.get(xc, xon+XonNames.X_VALUE+"_1"));
 			assertNull(XComponentUtil.get(xc, xon+XonNames.X_VALUE+"_2"));
 			fname = "Test026";
@@ -499,20 +499,20 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE);
 			assertEq(2, ((List) x).size());
-			x = ((List) x).get(0);
-			assertEq("null", XComponentUtil.get(x, XonNames.X_VALATTR).toString());
+			y = (XComponent) ((List) x).get(0);
+			assertEq("null", XComponentUtil.get(y, XonNames.X_VALATTR).toString());
 			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE);
-			x = ((List) x).get(1);
-			assertEq("null", XComponentUtil.get(x, XonNames.X_VALATTR).toString());
+			y = (XComponent) ((List) x).get(1);
+			assertEq("null", XComponentUtil.get(y, XonNames.X_VALATTR).toString());
 			xc = getXComponent(xp, fname, 0);
 			assertEq("", chkCompoinentSerializable(xc));
 			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE + "_1");
 			assertEq(2, ((List) x).size());
-			x = ((List) x).get(0);
-			assertEq(12, XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) ((List) x).get(0);
+			assertEq(12, XComponentUtil.get(y, XonNames.X_VALATTR));
 			x = XComponentUtil.getList(xc, xon+XonNames.X_VALUE + "_1");
-			x = ((List) x).get(1);
-			assertEq(13, XComponentUtil.get(x, XonNames.X_VALATTR));
+			y = (XComponent) ((List) x).get(1);
+			assertEq(13, XComponentUtil.get(y, XonNames.X_VALATTR));
 		} catch (Exception ex) {fail(ex);}
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
@@ -943,10 +943,13 @@ public class TestJsonXdef extends XDTester {
 			XComponentUtil.set(xc, XonNames.X_VALUE+"_5", list);
 			assertEq(2, ((List) XComponentUtil.get(xc, "$"+XonNames.X_VALUE+"_5")).size());
 			assertTrue(((XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP)).toXon() instanceof Map);
-			assertTrue(((List) ((XComponent) XComponentUtil.get(XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
+			assertTrue(((List) ((XComponent) XComponentUtil.get(
+				(XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
 				"jx$"+XonNames.X_ARRAY)).toXon()).isEmpty());
-			assertEq(3, ((List) ((XComponent) XComponentUtil.get(XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
-					"jx$"+XonNames.X_ARRAY+"_1")).toXon()).size());
+			assertEq(3,
+				((List) ((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(
+					xc, "jx$"+XonNames.X_MAP),
+				"jx$"+XonNames.X_ARRAY+"_1")).toXon()).size());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
 "  <xd:json name='z'> [\"* int();\"] </xd:json>\n" +

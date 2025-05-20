@@ -874,32 +874,32 @@ public class XComponentUtil {
 	 * @param name name of getter.
 	 * @return value returned by getter.
 	 */
-	public static final Object get(Object o, final String name) {
-		return getx((XComponent) o, "get"+name);
+	public static final Object get(final XComponent o, final String name) {
+		return getx(o, "get"+name);
 	}
 
-	public static final java.util.Date getDate(Object o, final String name) {
-		return (java.util.Date) getx((XComponent) o, "dateOf"+name);
+	public static final java.util.Date getDate(final XComponent o, final String name) {
+		return (java.util.Date) getx(o, "dateOf"+name);
 	}
 
-	public static final java.sql.Timestamp getTimestamp(Object o, final String name) {
-		return (java.sql.Timestamp) getx((XComponent) o, "timestampOf"+name);
+	public static final java.sql.Timestamp getTimestamp(final XComponent o, final String name) {
+		return (java.sql.Timestamp) getx(o, "timestampOf"+name);
 	}
 
-	public static final java.util.Calendar getCalendar(Object o, final String name) {
-		return (java.util.Calendar) getx((XComponent) o, "calendarOf"+name);
+	public static final java.util.Calendar getCalendar(final XComponent o, final String name) {
+		return (java.util.Calendar) getx(o, "calendarOf"+name);
 	}
 
-	public static final String getXpos(Object o, final String name) {
-		return (String) getx((XComponent) o, "xposOf"+name);
+	public static final String getXpos(final XComponent o, final String name) {
+		return (String) getx(o, "xposOf"+name);
 	}
 
-	public static final List getList(Object o, final String name) {
-		return (List) getx((XComponent) o, "listOf"+name);
+	public static final List getList(final XComponent o, final String name) {
+		return (List) getx(o, "listOf"+name);
 	}
 
-	public static final java.util.Map getMap(Object o) {
-		return (java.util.Map) getx((XComponent) o, "anyItem$");
+	public static final java.util.Map getMap(final XComponent o) {
+		return (java.util.Map) getx(o, "anyItem$");
 	}
 
 	/** Invoke method with name and parameter from argument from XComponent (typically a setter).
@@ -935,11 +935,11 @@ public class XComponentUtil {
 	 * @param name name of setter.
 	 * @param v value to be set.
 	 */
-	public static final void set(final Object o, final String name, final Object v) {
-		setx((XComponent) o, "set"+name, v);
+	public static final void set(final XComponent o, final String name, final Object v) {
+		setx(o, "set"+name, v);
 	}
 
-	public static final void add(final Object o, final String name, final Object v) {
-		setx((XComponent) o, "add"+name, v);
+	public static final void add(final XComponent o, final String name, final Object v) {
+		setx(o, "add"+name, v);
 	}
 }

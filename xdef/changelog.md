@@ -1,9 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.27, release-date 2025-05-19
+# Version 42.2.27, release-date 2025-05-20
 * Fixed bug in parsing JSON data containing quoted string with string method using `%pattern` parameter.
 * The objects created with X-components are now serializable (therefore it is possible to write them to
   java.io.ObjectOutputStream and to read them from java.io.ObjectInputStream).
+* In the class `org.xdef.component.XDComponentUtil` are new methods:
+   - invoke getter of given name in XComponent: public static Object get(XComponent o, String name)
+   - invoke setter of given name in XComponent: public static void set(XComponent o, String name, Object v)
 
 # Version 42.2.26, release-date 2025-04-15
 * Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables

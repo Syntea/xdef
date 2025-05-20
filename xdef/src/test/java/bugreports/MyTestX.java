@@ -318,7 +318,7 @@ clearSources();
 			XComponentUtil.set(xc, "b", o);
 			list = XComponentUtil.getList(xc, "B");
 			o = SUtils.getObjectField("test.xdef.TestXComponents_Y21enum", "b");
-			XComponentUtil.set(list.get(1), "c", o);
+			XComponentUtil.set((XComponent) list.get(1), "c", o);
 			assertEq("<A b='y'><B c='a'>x</B><B c='b' d='1 2'>y</B>x</A>",
 				xc.toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
@@ -725,7 +725,8 @@ clearSources();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertEq("date\n", swr.toString());
-			XComponentUtil.set(XComponentUtil.get(xc,"jx$item_1"), "val", new SDatetime("2022-04-15"));
+			XComponentUtil.set((XComponent) XComponentUtil.get(xc,"jx$item_1"), "val",
+				new SDatetime("2022-04-15"));
 			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
 			s = "{a:\"202.2.4.10\"}";
 			xd = xp.createXDDocument();
@@ -862,8 +863,8 @@ if(T)return;
 			xml = "<a><x:b xmlns:x='x.int' y='1'/></a>";
 			x = SUtils.getNewInstance(_package+".component.Y16");
 			y = SUtils.getNewInstance(_package+".component.Y16a");
-			XComponentUtil.set(y, "y", 1);
-			XComponentUtil.set(x, "$b", y);
+			XComponentUtil.set((XComponent) y, "y", 1);
+			XComponentUtil.set((XComponent) x, "$b", y);
 			o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
@@ -872,14 +873,14 @@ if(T)return;
 				+ '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
 			x = SUtils.getNewInstance(_package+".component.Y16c");
 			y = SUtils.getNewInstance(_package+".component.Y16d");
-			XComponentUtil.set(y, "y", 1);
-			XComponentUtil.add(x, "d", y);
+			XComponentUtil.set((XComponent) y, "y", 1);
+			XComponentUtil.add((XComponent) x, "d", y);
 			xml = "<c><d xmlns='y.int' y='1'/></c>";
 			assertEq(xml, ((XComponent) x).toXml());
 			x = SUtils.getNewInstance(_package+".component.Y16e");
 			y = SUtils.getNewInstance(_package+".component.Y16f");
-			XComponentUtil.set(y, "y", 1);
-			XComponentUtil.set(x, "f", y);
+			XComponentUtil.set((XComponent) y, "y", 1);
+			XComponentUtil.set((XComponent) x, "f", y);
 			xml = "<e><f y='1'/></e>";
 			assertEq(xml, ((XComponent) x).toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
