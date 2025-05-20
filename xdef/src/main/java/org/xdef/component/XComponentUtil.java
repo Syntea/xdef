@@ -874,17 +874,13 @@ public class XComponentUtil {
 	 * @param name name of getter.
 	 * @return value returned by getter.
 	 */
-	public static final Object get(final XComponent xc, final String name) {
-		return getx(xc, "get"+name);
-	}
+	public static final Object get(final XComponent xc, final String name) {return getx(xc, "get"+name);}
 
 	/** Get value of XComponent as the java.util.Map.
 	 * @param xc the XComponent.
 	 * @return value of XComponent as the java.util.Map..
 	 */
-	public static final java.util.Map getMap(final XComponent xc) {
-		return (java.util.Map) getx(xc, "anyItem$");
-	}
+	public static final Map getMap(final XComponent xc) {return (Map) getx(xc, "anyItem$");}
 
 	/** Invoke method with name and parameter from argument from XComponent (typically a setter).
 	 * @param xc XComponent where to fine method.
