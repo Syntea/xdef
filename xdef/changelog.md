@@ -5,8 +5,8 @@
 * The objects created with X-components are now serializable (therefore it is possible to write them to
   java.io.ObjectOutputStream and to read them from java.io.ObjectInputStream).
 * In the class `org.xdef.component.XDComponentUtil` are new methods:
-   - invoke getter of given name in XComponent: public static Object get(XComponent o, String name)
-   - invoke setter of given name in XComponent: public static void set(XComponent o, String name, Object v)
+   - getter of given name in XComponent: `public static Object get(XComponent xc, String name)`
+   - setter of given name in XComponent: `public static void set(XComponent xc, String name, Object v)`
 
 # Version 42.2.26, release-date 2025-04-15
 * Fixed incorrect error message `XDEF457 Incompatible types` when assigning the value `null` to variables
