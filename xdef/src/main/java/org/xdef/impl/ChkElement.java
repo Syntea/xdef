@@ -1568,7 +1568,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	/** If data value was changed in a section then run validation method
 	 * @param xatt model of attribute.
-	 * @param orig original value of dara.
+	 * @param orig original value of data.
 	 * @param nsURI namespace URI of attribute.
 	 * @param qname qualified name of attribute.
 	 */
@@ -2355,8 +2355,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (xatt == null && (err=checkCharset(data)) != null) {
 						//The parsed string contains a character that is not allowed in any of the code
 						//tables: &{0}
-						putTemporaryReport(Report.error(XDEF.XDEF823,
-							qname, getPosMod(getXDPosition(), _xPos)));
+						String s = getPosMod(getXDPosition(), _xPos);
+						int ndx, ndx1;
+						if (s != null && (ndx=s.indexOf("&{line}")) >= 0 && (ndx1=s.indexOf("&{sysId}")) > 0) {
+							s = s.substring(0, ndx) + s.substring(ndx1) + "&{line}?&{column}?";
+							err += s;
+						} else {
+							s = "&{line}?&{column}?";
+						}
+						error(XDEF.XDEF823, err, s);
 						result = false;
 					}
 					if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
