@@ -2355,7 +2355,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (xatt == null && (err=checkCharset(data)) != null) {
 						//The parsed string contains a character that is not allowed in any of the code
 						//tables: &{0}
-						putTemporaryReport(Report.error(XDEF.XDEF823, 
+						putTemporaryReport(Report.error(XDEF.XDEF823,
 							qname, getPosMod(getXDPosition(), _xPos)));
 						result = false;
 					}
