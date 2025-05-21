@@ -48,7 +48,7 @@ public class CharacterTest {
 		File f = new File(new File("").getAbsolutePath() + "/src/test/java/bugreports/CharacterTestData.xml");
 		xdoc.xparse(f, reporter);
 		if (reporter.errors()) {
-			System.out.println("Chyba:\n" + reporter.get(0));
+			System.out.println(reporter);
 		}
 		System.out.println("*************************************");
 	}
