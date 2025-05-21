@@ -68,8 +68,7 @@ public final class Test001  extends XDTester {
 " <Author>John Brown</Author>\n"+
 " <Author>Peter Smith</Author>\n"+
 "</Book>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("ISBN: 123456789; The Crash\n", swr.toString());
 			xdef =
@@ -989,8 +988,7 @@ public final class Test001  extends XDTester {
 			xml = "<Misto name='A'/>";
 			xd = xp.createXDDocument();
 			xd.setVariable("base", base);
-			swr = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			xd.setStdOut(XDFactory.createXDOutput(swr = new StringWriter(), false));
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xml = "<Misto name='B'/>";
@@ -1049,8 +1047,7 @@ public final class Test001  extends XDTester {
 "<Misto name='C'/>"+
 "</Base>");
 			assertNoErrorwarnings(reporter);
-			assertEq("A already defined!\n"+
-				"A/2012-10-02T09:30:00 already exists!\n", swr.toString());
+			assertEq("A already defined!\nA/2012-10-02T09:30:00 already exists!\n", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			// check compiling if source items have assignment of sourceId

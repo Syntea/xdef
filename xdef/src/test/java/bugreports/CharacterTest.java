@@ -2,14 +2,12 @@ package bugreports;
 
 import java.io.File;
 import java.util.Properties;
-import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
 
 public class CharacterTest {
 
@@ -48,9 +46,9 @@ public class CharacterTest {
 		ArrayReporter reporter = new ArrayReporter();
 		System.out.println(new File("").getAbsolutePath());
 		File f = new File(new File("").getAbsolutePath() + "/src/test/java/bugreports/CharacterTestData.xml");
-		Element result = xdoc.xparse(f, reporter);
+		xdoc.xparse(f, reporter);
 		if (reporter.errors()) {
-			System.out.println("Chyba:\n" + reporter);
+			System.out.println("Chyba:\n" + reporter.get(0));
 		}
 		System.out.println("*************************************");
 	}
