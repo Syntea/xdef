@@ -1395,7 +1395,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	final boolean newAttribute(final Attr att) {
 		_node = att;
-		boolean result = addAttributeNS(att.getNamespaceURI(), att.getName(),att.getValue());
+		boolean result = addAttributeNS(att.getNamespaceURI(), att.getName(), att.getValue());
 		_node = null;
 		return result;
 	}
@@ -2357,13 +2357,16 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						//tables: &{0}
 						String s = getPosMod(getXDPosition(), _xPos);
 						int ndx, ndx1;
-						if (s != null && (ndx=s.indexOf("&{line}")) >= 0 && (ndx1=s.indexOf("&{sysId}")) > 0) {
-							s = s.substring(0, ndx) + s.substring(ndx1) + "&{line}?&{column}?";
-							err += s;
+						if (!s.isEmpty() && (ndx=s.indexOf("&{line}"))>=0 && (ndx1=s.indexOf("&{sysId}"))>0) {
+							s = s.substring(0, ndx) + s.substring(ndx1) + "&{line}?&{column}";
+							ndx = s.indexOf("&{xdpos}&");
+							if (ndx == 0 && _xPos != null) {
+								s = "&{xdpos}" + _xPos + s.substring(9);
+							}
 						} else {
-							s = "&{line}?&{column}?";
+							s = (_xPos != null ? "&{xdpos}" + _xPos : "") + "&{line}?&{column}?";
 						}
-						error(XDEF.XDEF823, err, s);
+						error(XDEF.XDEF823, err + s);
 						result = false;
 					}
 					if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {

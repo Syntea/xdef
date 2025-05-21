@@ -87,7 +87,6 @@ import static org.xdef.xon.XonNames.X_VALUE;
  * @author Vaclav Trojan
  */
 public abstract class ChkNode extends XDValueAbstract implements XXNode {
-
 	/** The name of element model. */
 	final String _name;
 	/** Root check Document. */
@@ -279,20 +278,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return source context or <i>null</i> if not available.
 	 */
 	@Override
-	public final XDValue getXDContext() {
-		if (_sourceElem != null) {
-			return new DefElement(_sourceElem);
-		}
-		return null;
-	}
+	public final XDValue getXDContext() {return _sourceElem != null ? new DefElement(_sourceElem) : null;}
 
 	/** Set value from argument as context for create mode.
 	 * @param xdc context to be set (create mode).
 	 */
 	@Override
 	public final void setXDContext(final XDContainer xdc) {
-		if (xdc != null && xdc.getXDItemsNumber() == 1 &&
-			xdc.getXDItem(0).getItemId() == XD_ELEMENT) {
+		if (xdc != null && xdc.getXDItemsNumber() == 1 && xdc.getXDItem(0).getItemId() == XD_ELEMENT) {
 			_sourceElem = xdc.getXDItem(0).getElement();
 			return;
 		}
@@ -424,9 +417,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return;
 		}
 		switch (xv.getType()) {
-			case XD_CONTAINER:
-				_scp.setVariable(xv, new DefContainer(value));
-				return;
+			case XD_CONTAINER: _scp.setVariable(xv, new DefContainer(value)); return;
 			case XD_DATETIME: {
 				if (value instanceof SDatetime) {
 					_scp.setVariable(xv, new DefDate((SDatetime) value));
@@ -510,8 +501,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		} else if (value instanceof InetAddress) {
 			setVariable(name, (new DefIPAddr((InetAddress) value)));
 		} else if (value instanceof Currency) {
-			setVariable(name,
-				new XDCurrency(((Currency) value).getCurrencyCode()));
+			setVariable(name, new XDCurrency(((Currency) value).getCurrencyCode()));
 		} else {
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);

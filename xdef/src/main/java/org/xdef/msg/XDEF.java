@@ -665,7 +665,7 @@ public interface XDEF {
 	public static final long XDEF821 = 31159025991L;
 	/** Parsed result does not fit to CHECK argument&amp;{#SYS000} */
 	public static final long XDEF822 = 31159025992L;
-	/** The parsed string contains a character that is not allowed in any of the code tables: &amp;{0} &amp;{#SYS000} */
+	/** The parsed string contains a character that is not allowed in any of the code tables: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF823 = 31159025993L;
 	/** Class with the external debug editor &amp;{0}{"}{"} is not available. */
 	public static final long XDEF850 = 31159025994L;
