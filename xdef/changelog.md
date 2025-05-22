@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.27, release-date 2025-05-21
+# Version 42.2.27, release-date 2025-05-22
 * Fixed bug in parsing JSON data containing quoted string with string method using `%pattern` parameter.
 * The objects created with X-components are now serializable (therefore it is possible to write them to
   java.io.ObjectOutputStream and to read them from java.io.ObjectInputStream).
