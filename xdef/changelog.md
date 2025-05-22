@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.28, release-date 2025-05-22
+* .
+
 # Version 42.2.27, release-date 2025-05-22
 * Fixed incorrect XDEF823 error reporting in values from parsing data in attributes or text nodes that are
   accessed using the moreAttributes or moreText option.
