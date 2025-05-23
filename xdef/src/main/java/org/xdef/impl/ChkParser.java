@@ -921,7 +921,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_chkElemStack = newList;
 		}
 		_chkElemStack[_level] = _chkEl;
-		for (XMData x: _chkEl.getXMElement().getAttrs()) {
+		for (XMData x: _chkEl.getXMElement().getAttrs()) { // declared attributes
 			KParsedAttr ka = parsedElem.getAttrNS(x.getNSUri(),x.getName());
 			if (ka != null) {
 				if (_locationDetails) {
@@ -931,7 +931,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				ka.setValue(null);
 			}
 		}
-		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
+		for (int i = 0, max = parsedElem.getLength(); i < max; i++) { // other attributes
 			KParsedAttr ka = parsedElem.getAttr(i);
 			if (ka.getValue() != null) {
 				if (_locationDetails) {
