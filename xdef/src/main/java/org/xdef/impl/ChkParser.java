@@ -264,15 +264,20 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	// implementation of XHandler
+	// implementation of XHandler (Stack of readers)
 	////////////////////////////////////////////////////////////////////////////
 
+	/** Push reader the the stack of readers.
+	 * @param mr reader to be pushed.
+	 * @return reader on the tom of the stack befor pushing.
+	 */
 	@Override
 	public InputSource pushReader(XAbstractReader mr) {
 		_stackReader.push(new HandlerInfo(this, mr));
 		return new InputSource(mr);
 	}
 
+	/** Pop reader in the stack of readers. */
 	@Override
 	public final void popReader() {
 		if (!_stackReader.empty()) {
@@ -284,9 +289,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	// Implementation of DomBaseHandler methods
 	/////////////////////////////////////////////////////////////
 
+	/** Prepare parser with this DomBaseHandler and the given InputSource.
+	 * @param is InpusSource to be used.
+	 * @throws Exception if an I/O error occurs.
+	 */
 	@Override
-	public final void prepareParse(final InputSource is)
-		throws IOException, SAXException {
+	public final void prepareParse(final InputSource is) throws Exception {
 		XMLReader xr = getXMLReader();
 		_is = is;
 		xr.parse(is);

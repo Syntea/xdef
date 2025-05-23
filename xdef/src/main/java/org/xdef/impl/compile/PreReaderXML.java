@@ -94,7 +94,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						if (projectNS.isEmpty()) {
 							throw new RuntimeException(); // just force error
 						}
-						new URI(projectNS); // just to check projectNS validity
+						new URI(projectNS); // just to check projectNS form
 					} catch (RuntimeException | URISyntaxException ex) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
@@ -194,16 +194,16 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					elem = _includeElement =
 						KXmlUtils.newDocument(nsuri, _actPNode._name.getString(), null).getDocumentElement();
 				} else {
-					elem =
-						_includeElement.getOwnerDocument().createElementNS(nsuri,_actPNode._name.getString());
+					elem = _includeElement.getOwnerDocument().createElementNS(
+						nsuri,_actPNode._name.getString());
 					_includeElement.appendChild(elem);
 				}
 				for (PAttr aval: _actPNode.getAttrs()) {
 					if (aval._nsindex < 0) {
 						elem.setAttribute(aval._name, aval._value.getString());
 					} else {
-						elem.setAttributeNS(_pcomp.getNSURI(aval._nsindex),
-							aval._name, aval._value.getString());
+						elem.setAttributeNS(
+							_pcomp.getNSURI(aval._nsindex), aval._name, aval._value.getString());
 					}
 				}
 				return;
@@ -220,7 +220,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			} else if ("BNFGrammar".equals(elemLocalName)) {
 				 _pcomp.getPBNFs().add(_actPNode);
 			} else if ("lexicon".equals(elemLocalName)
-				|| ("thesaurus".equals(elemLocalName) &&_actPNode._xdVersion <= 31)) {
+				|| ("thesaurus".equals(elemLocalName) && _actPNode._xdVersion <= 31)) {
 				_pcomp.getPLexiconList().add(_actPNode);
 			} else if ("declaration".equals(elemLocalName)) {
 				_pcomp.getPDeclarations().add(0, _actPNode);

@@ -2359,7 +2359,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						int ndx, ndx1;
 						if (!s.isEmpty() && (ndx=s.indexOf("&{line}"))>=0 && (ndx1=s.indexOf("&{sysId}"))>0) {
 							//TODO this nasty, sbould be solved in ChkPrser -> _parseResult!!!
-							s = s.substring(0, ndx) +"&{line}?&{column}?"+ s.substring(ndx1);
+							s = s.substring(0, ndx) +"&{line}?&{column}?"+ s.substring(ndx1); // unknown pos
 							ndx = s.indexOf("&{xdpos}");
 							if (ndx >= 0) {
 								ndx1 = s.indexOf("&", ndx + 8);
@@ -2367,7 +2367,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 									s = s.substring(0, ndx + 8) + getXMDefinition().getName() + "#"
 										+_xPos.substring(1) + s.substring(ndx1);
 								} else {
-									if (ndx1 < 0) {
+									if (ndx1 < 0) { // last moditier
 										s = s.substring(0, ndx + 9) +"/@"+ qname;
 									} else {
 										s = s.substring(0, ndx1) +"/@"+ qname + s.substring(ndx1);

@@ -213,8 +213,11 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public final void prepareParse(final InputSource is)
-		throws IOException, SAXException {
+	/** Prepare parser with this DomBaseHandler and the given InputSource.
+	 * @param is InpusSource to be used.
+	 * @throws Exception if an I/O error occurs.
+	 */
+	public final void prepareParse(final InputSource is) throws Exception {
 		XMLReader xr;
 		try {
 			xr = SPF.newSAXParser().getXMLReader();
@@ -300,7 +303,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	public void fatalError(SAXParseException x) {_reporter.fatal("", x.getMessage());}
 
 	////////////////////////////////////////////////////////////////////////////
-	//XHandler
+	//XHandler (Stack of readers)
 	////////////////////////////////////////////////////////////////////////////
 
 	@Override

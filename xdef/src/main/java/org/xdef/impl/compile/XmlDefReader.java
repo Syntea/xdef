@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.Document;
@@ -27,12 +28,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.xml.KParsedAttr;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DeclHandler;
@@ -49,8 +51,9 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	private Map<String, String> _entities;
 	private SBuffer _text;
 	public final StringBuilder _sb = new StringBuilder();
+
 	static {
-		try {// Set SAX parser parameters
+		try {// Set SAX parser factory parameters
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
 			SPF.setValidating(false);
@@ -72,7 +75,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			SPF.setFeature("http://xml.org/sax/features/external-general-entities", true);
 			SPF.setFeature("http://xml.org/sax/features/external-parameter-entities",true);
 			SPF.setSchema(null);
-		} catch (Exception ex) {
+		} catch (ParserConfigurationException | SAXNotRecognizedException | SAXNotSupportedException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -137,18 +140,23 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		_reporter = reporter;
 		prepareEnities();
 		_entities = new LinkedHashMap<>();
+		setXMLReader(createReader());
+	}
+
+	/** Create XMLreader for this XmlDefReader. */
+	private XMLReader createReader() {
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
 			xr = sp.getXMLReader();
 			xr.setProperty("http://xml.org/sax/properties/declaration-handler", this);
-		} catch (Exception ex) {
+		} catch (ParserConfigurationException | SAXException ex) {
 			throw new RuntimeException("Parse configuration error", ex);
 		}
 		xr.setContentHandler(this);
 		xr.setErrorHandler(this);
 		xr.setEntityResolver(this);
-		setXMLReader(xr);
+		return xr;
 	}
 
 	/** Prepare entities with predefined items. */
@@ -162,57 +170,26 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		_entities.put("quot", "\"");
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-	// XHandler
-	////////////////////////////////////////////////////////////////////////////
-
-	@Override
-	public InputSource pushReader(XAbstractReader mr) {
-		_stackReader.push(new HandlerInfo(this, mr));
-		setReader(mr);
-		return new InputSource(mr);
-	}
-
-	@Override
-	public final void popReader() {
-		if (!_stackReader.empty()) {
-			_stackReader.pop().resetHandler(this);
-		}
-	}
-	@Override
-	/** Parse X-definition source.
-	 * @param is InputSource with XML data.
+	/** Prepare parser with X-definition InputSource.
+	 * @param is InpusSource with XML data to be used.
+	 * @throws Exception if an I/O error occurs.
 	 */
-	public void prepareParse(final InputSource is) {
-		RuntimeException thwn = null;
-		try {
-			_is = is;
-			_sysId = is.getSystemId();
-			prepareEnities();
-			XMLReader xr;
-			try {
-				SAXParser sp = SPF.newSAXParser();
-				xr = sp.getXMLReader();
-				xr.setProperty("http://xml.org/sax/properties/declaration-handler", this);
-			} catch (Exception ex) {
-				throw new RuntimeException("Parse configuration error", ex);
-			}
-			xr.setContentHandler(this);
-			xr.setErrorHandler(this);
-			xr.setEntityResolver(this);
-			setXMLReader(xr);
-			// continue after fatal error
-			xr.setFeature("http://apache.org/xml/features/continue-after-fatal-error", true);
-			xr.parse(is);
-			getReader().close();
-		} catch (RuntimeException ex) {
-			thwn = ex;
-		} catch (Error | Exception ex) {
-			thwn = new SRuntimeException(XML.XML080, ex); //XML parser was canceled by error&amp;{0}{: }
-		}
-		try {
-			getReader().close();
-		} catch (Exception exx) {}
+	@Override
+	public void prepareParse(final InputSource is) throws Exception {
+		_is = is;
+		_sysId = is.getSystemId();
+		prepareEnities();
+		SAXParser sp = SPF.newSAXParser();
+		XMLReader xr = sp.getXMLReader();
+		xr.setProperty("http://xml.org/sax/properties/declaration-handler", this);
+		xr.setContentHandler(this);
+		xr.setErrorHandler(this);
+		xr.setEntityResolver(this);
+		setXMLReader(xr);
+		// continue after fatal error
+		xr.setFeature("http://apache.org/xml/features/continue-after-fatal-error", true);
+		xr.parse(is);
+		getReader().close();
 		setReader(null);
 		setXMLReader(null);
 		_sb.setLength(0);
@@ -221,9 +198,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		_locator = null;
 		_entities = null;
 		_stackReader.clear();
-		if (thwn != null) {
-			throw thwn;
-		}
 	}
 
 	/** New text value of current element parsed.
@@ -803,5 +777,28 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 */
 	private void putReport(final SPosition pos, final Report rep) {
 		pos.putReport(rep, _reporter);
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	// implementation of XHandler (Stack of readers)
+	////////////////////////////////////////////////////////////////////////////
+
+	/** Push reader the the stack of readers.
+	 * @param mr reader to be pushed.
+	 * @return reader on the tom of the stack befor pushing.
+	 */
+	@Override
+	public InputSource pushReader(XAbstractReader mr) {
+		_stackReader.push(new HandlerInfo(this, mr));
+		setReader(mr);
+		return new InputSource(mr);
+	}
+
+	/** Pop reader in the stack of readers. */
+	@Override
+	public final void popReader() {
+		if (!_stackReader.empty()) {
+			_stackReader.pop().resetHandler(this);
+		}
 	}
 }
