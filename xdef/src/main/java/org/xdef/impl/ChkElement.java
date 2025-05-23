@@ -19,6 +19,7 @@ import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueID.XD_NULL;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XX_ATTR;
@@ -2141,6 +2142,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
 		if (xatt == null) {
 			xatt = _xElement.getDefAttr("$attr", -1); // any attr
+			if (xatt == null && _xElement._moreAttributes == 'T') { // more attributes
+				xatt = new XData(qname, nsURI, getXDPool(), XD_ATTR); // check not declared attributes
+			}
 		}
 		String adata;
 		if ((adata = attrWhitespaces(xatt, data)) == null) {
@@ -2333,12 +2337,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			}
 		}
-		if ((_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I')
+		if ((_xElement._moreAttributes == 'T' || _xElement._moreAttributes == 'I')
 			&& (xatt == null || !xatt.isIllegal())) {
-			boolean result = true;
 			//more attributes allowed, add attribute as it is no X-definition for this attribute
 			if (nsURI != null) {
-				if (_xElement._moreAttributes=='I') {
+				if (_xElement._moreAttributes == 'I') {
 					_element.removeAttributeNS(nsURI, qname);
 				} else {
 					_element.setAttributeNS(nsURI, qname, adata);
@@ -2347,41 +2350,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 				}
 			} else {
-				if (_xElement._moreAttributes=='I') {
+				if (_xElement._moreAttributes == 'I') {
 					_element.removeAttribute(qname);
 				} else {
 					_element.setAttribute(qname, adata);
-					String err;
-					if (xatt == null && (err=checkCharset(data)) != null) {
-						//The parsed string contains a character that is not allowed in any of the code
-						//tables: &{0}
-						String s = getPosMod(getXDPosition(), _xPos);
-						int ndx, ndx1;
-						if (!s.isEmpty() && (ndx=s.indexOf("&{line}"))>=0 && (ndx1=s.indexOf("&{sysId}"))>0) {
-							//TODO this nasty, sbould be solved in ChkPrser -> _parseResult!!!
-							s = s.substring(0, ndx) +"&{line}?&{column}?"+ s.substring(ndx1); // unknown pos
-							ndx = s.indexOf("&{xdpos}");
-							if (ndx >= 0) {
-								ndx1 = s.indexOf("&", ndx + 8);
-								if (ndx1 == ndx + 8) { //empty &{xdpos}
-									s = s.substring(0, ndx + 8) + getXMDefinition().getName() + "#"
-										+_xPos.substring(1) + s.substring(ndx1);
-								} else {
-									if (ndx1 < 0) { // last moditier
-										s = s.substring(0, ndx + 9) +"/@"+ qname;
-									} else {
-										s = s.substring(0, ndx1) +"/@"+ qname + s.substring(ndx1);
-									}
-								}
-							} else {
-								s += "&{xdpos}#" + _xPos;
-							}
-						} else {
-							s = (_xPos != null ? "&{xdpos}" + _xPos + "/@" + qname : "")+"&{line}?&{column}?";
-						}
-						error(XDEF.XDEF823, err, s);
-						result = false;
-					}
 					if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
 						_xComponent.xSetAttr(this, _parseResult);
 					}
@@ -2391,7 +2363,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_attURI = null;
 			_xdata = null;
 			_xPos = xPos;
-			return result;
+			return true;
 		}
 		debugXPos(XDDebug.ONILLEGALATTR);
 		_data = adata = null;

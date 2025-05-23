@@ -1189,8 +1189,8 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreAttributes = moreElements = moreText = true;
-				byte b = "acceptOther".equals(_idName) ? (byte)'T' :(byte) 'I';
-				result._moreAttributes=result._moreElements=result._moreText= b;
+				byte b = "acceptOther".equals(_idName) ? (byte)'T' : (byte) 'I';
+				result._moreAttributes = result._moreElements = result._moreText= b;
 			} else if ("nillable".equals(_idName) || "noNillable".equals(_idName)) {
 				if (nillable) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition

@@ -25,13 +25,18 @@ public class B extends XDTester {
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
 		try {
-			xml = "<A>\n\n  <B a='б' />\n</A>";
-			System.out.println(xml);
+			xml =
+"<A>\n" +
+"\n" +
+"  <B a='b' />\n" +
+"  <B b='b'\n" +
+"         a='б' />\n" +
+"</A>";
 /**/
 			xd = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A>\n" +
-"    <B a='string'/>\n" +
+"    <B xd:script='+' a='string' b='? string' />\n" +
 "  </A>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, xml, reporter);
@@ -40,7 +45,7 @@ public class B extends XDTester {
 			xd = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A>\n" +
-"    <B xd:script='option moreAttributes'/>\n" +
+"    <B xd:script='+; option moreAttributes'/>\n" +
 "  </A>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, xml, reporter);
