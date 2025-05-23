@@ -3167,44 +3167,36 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<X><Y><Z>לוּחַ</Z></Y></X>", reporter);
 			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
 			/////////////////////////////////////////////////
-			xdef =
+			xd = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='A|B' name = 'X'>\n" +
 "  <A a='' xd:script='options moreAttributes, moreText, moreElements'/>\n" +
 "  <B>string();</B>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("X");
-			reporter.clear();
-			xd.xparse("<A a='a'>M</A>", reporter);
+"</xd:def>").createXDDocument("X");
+			parse(xd, "<A a='a'>M</A>", reporter);
 			assertNoErrors(reporter);
-			reporter.clear();
-			xd.xparse("<A\n a='aα'/>", reporter);
-			assertTrue(reporter.getErrorCount()== 1 && reporter.printToString().contains("A/@a"));
-			reporter.clear();
-			xd.xparse("<A a='aα'>Mα</A>", reporter);
-			assertTrue(reporter.getErrorCount()== 2
-				&& (s = reporter.printToString()).contains("A/@a") && s.contains("A/text()"));
-			reporter.clear();
-			xd.xparse("<A\n b='aα' c='bα'/>", reporter);
-			assertTrue(reporter.getErrorCount()== 2
-				&& (s = reporter.printToString()).contains("A/@b") && s.contains("A/@c"));
-			reporter.clear();
-			xd.xparse("<A>Mα</A>", reporter);
-			assertTrue(reporter.getErrorCount()== 1 && reporter.printToString().contains("A/text()"));
-			reporter.clear();
-			xd.xparse("<A>\n<B/>\nMα\n<C/>\nMα\n</A>", reporter);
-			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("A/text()")
-				&& s.contains("line=2;") && s.contains("line=4;"));
-			reporter.clear();
-			xd.xparse("<A><B M='Mα' P='αF' I='c' /></A>", reporter);
-			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("/A/B[1]/@M")
-				&& s.contains("/A/B[1]/@P"));
-			reporter.clear();
-			reporter.clear();
-			xd.xparse("<B>MA</B>", reporter);
+			parse(xd, "<A\n a='aα'/>", reporter);
+			assertTrue(reporter.getErrorCount()== 1 && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("A/@a"));
+			parse(xd, "<A a='aα'>Mα</A>", reporter);
+			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("A/@a") && s.contains("A/text()"));
+			parse(xd, "<A\n b='aα' c='bα'/>", reporter);
+			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("A/@b") && s.contains("A/@c"));
+			parse(xd, "<A>Mα</A>", reporter);
+			assertTrue(reporter.getErrorCount()== 1  && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("A/text()"));
+			parse(xd, "<A>\n<B/>\nMα\n<C/>\nMα\n</A>", reporter);
+			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("A/text()") && s.contains("line=2;") && s.contains("line=4;"));
+			parse(xd, "<A><B M='Mα' P='αF' I='c' /></A>", reporter);
+			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("/A/B[1]/@M") && s.contains("/A/B[1]/@P"));
+			parse(xd, "<B>MA</B>", reporter);
 			assertNoErrors(reporter);
-			xd.xparse("<B>Mα</B>", reporter);
-			assertTrue(reporter.getErrorCount()== 1 && reporter.printToString().contains("B/text()"));
+			parse(xd, "<B>Mα</B>", reporter);
+			assertTrue(reporter.getErrorCount()== 1  && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("B/text()"));
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
@@ -3222,12 +3214,12 @@ public final class TestXdef extends XDTester {
 "  <IdentSmlouvy xd:script=\"implements Common#IdentSmlouvy\"\n" +
 "                IdPojistitel=\"id()\" CisloSmlouvy=\"cisloSmlouvy()\" PoradiVozidla=\"poradiVozidla()\"/>\n"+
 "</xd:def>\n"});
-			xml = "<IdentSmlouvy CisloSmlouvy=\"c\" IdPojistitel=\"1\" PoradiVozidla=\"p\"/>";
 			xd = xp.createXDDocument("Common");
-			assertEq(xml, parse(xd,xml, reporter));
+			xml = "<IdentSmlouvy CisloSmlouvy=\"c\" IdPojistitel=\"1\" PoradiVozidla=\"p\"/>";
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
 			xd = xp.createXDDocument("Example");
-			assertEq(xml, parse(xd,xml, reporter));
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 
