@@ -330,7 +330,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	public static final void checkCharset(final XXNode xnode, final XDParseResult p) {
 		Charset[] chsets;
 		String s;
-		if (xnode != null && (chsets = xnode.getXDPool().getLegalStringCharsets()) != null 
+		if (xnode != null && (chsets = xnode.getXDPool().getLegalStringCharsets()) != null
 			&& chsets.length > 0 && (s = p.getParsedString()) != null && !s.isEmpty()) {
 			for (Charset chset : chsets) {
 				if (s.equals(new String(s.getBytes(chset), chset))) {

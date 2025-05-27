@@ -1499,10 +1499,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (!_parseResult.matches()) { //error
 			for (Report rep: _parseResult.getReporter()) {
 				String s = rep.getModification();
-				if (s == null) {
-					s = "";
+				if (s != null && !s.isEmpty()) {
+					rep.setModification(s + getPosMod(xdata.getXDPosition(),_xPos));
 				}
-				rep.setModification(s + getPosMod(xdata.getXDPosition(),_xPos));
 				if (putTempErrors) {
 					_scp.getTemporaryReporter().putReport(rep);
 				}
@@ -3175,21 +3174,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_parseResult = new DefParseResult(_data);
 						_parseResult.setEos();
 						XDParserAbstract.checkCharset(this, _parseResult);
-						if (!_parseResult.matches()) {//??? Charset error detected, put error
-							//The parsed string contains a character that is not allowed in any of the code
-							// tables: &{0}
+						if (!_parseResult.matches()) { //Charset error detected, put error
+							putTemporaryReport(_parseResult.getReporter().getReport());
 							if (xtxt1._onFalse >= 0) {
+								_elemValue = _element;
+								String x = _data;
 								if (_clearReports) {
 									clearTemporaryReporter();
 								}
-								_elemValue = _element;
-								String x = _data;
 								exec(xtxt1._onFalse, (byte) 'T');
-								if (x != _data && xtxt1._check >= 0) {//_data was changed, even my be equal
+								if (x != _data && xtxt1._check >= 0) {//_data was changed, even may be equal
 									exec(xtxt1._check, (byte) 'T');
+
 								}
-							} else {
-								error(XDEF.XDEF823, _parseResult.getReporter().getReport().getModification());
 							}
 						} else {
 							debugXPos(XDDebug.ONTRUE);

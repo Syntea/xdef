@@ -454,15 +454,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	public final boolean errors() {return !matches();}
 
 	@Override
-	public final boolean matches() {
-		if (_src != null && (_ar == null || !_ar.errors())) {
-			return true;
-		}
-		if (_ar == null) {
-			putDefaultParseError(); //XDF515 Value error&{0}{ :}
-		}
-		return false;
-	}
+	public final boolean matches() {return _ar == null || !_ar.errors() || false;}
 
 	@Override
 	public final void error(final String id) {error(id, null);}
