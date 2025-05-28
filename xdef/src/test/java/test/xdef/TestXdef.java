@@ -3198,12 +3198,11 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<B>Mα</B>", reporter);
 			assertTrue(reporter.getErrorCount()== 1  && (s = reporter.printToString()).contains("XDEF823")
 				&& s.contains("B/text()"));
-			xp = XDFactory.compileXD(props, // missing validation method
+			xd = XDFactory.compileXD(props, // missing validation method
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A a=\"required string(); onTrue out('OK'); onFalse {ParseResult pr = getParseResult();\n" +
 "     if (pr.matches()) out('OK'); else out(pr.getError()); }\"/>\n" +
-"</xd:def>");
-			xd = xp.createXDDocument();
+"</xd:def>").createXDDocument();
 			parse(xd, "<A a='MA' />", reporter, swr = new StringWriter());
 			assertNoErrorsAndClear(reporter);
 			assertEq("OK", swr.toString());
