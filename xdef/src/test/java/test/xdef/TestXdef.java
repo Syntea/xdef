@@ -42,6 +42,7 @@ import org.xdef.proc.XXData;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import static test.XDTester._xdNS;
+import static test.XDTester.chkCompoinentSerializable;
 
 /** All sorts of tests of Xdefinition.
  * @author Vaclav Trojan
@@ -3197,6 +3198,18 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<B>Mα</B>", reporter);
 			assertTrue(reporter.getErrorCount()== 1  && (s = reporter.printToString()).contains("XDEF823")
 				&& s.contains("B/text()"));
+			xp = XDFactory.compileXD(props, // missing validation method
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a=\"required string(); onTrue out('OK'); onFalse {ParseResult pr = getParseResult();\n" +
+"     if (pr.matches()) out('OK'); else out(pr.getError()); }\"/>\n" +
+"</xd:def>");
+			xd = xp.createXDDocument();
+			parse(xd, "<A a='MA' />", reporter, swr = new StringWriter());
+			assertNoErrorsAndClear(reporter);
+			assertEq("OK", swr.toString());
+			parse(xd, "<A a='Mα' />", reporter, swr = new StringWriter());
+			assertNoErrorsAndClear(reporter); // temporary errors are cleared in the onFalse section!
+			assertTrue(swr.toString().contains("XDEF823"), swr.toString()); // but error is printed to swr.
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {

@@ -454,7 +454,15 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	public final boolean errors() {return !matches();}
 
 	@Override
-	public final boolean matches() {return _ar == null || !_ar.errors() || false;}
+	public final boolean matches() {
+		if (_ar == null || !_ar.errors()) {
+			if (_src != null) {
+				return true;
+			}
+			error(XDEF.XDEF516); //Source data not available in ParseResult
+		}
+		return false;
+	}
 
 	@Override
 	public final void error(final String id) {error(id, null);}
