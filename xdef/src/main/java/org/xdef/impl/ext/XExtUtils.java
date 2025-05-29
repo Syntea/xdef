@@ -63,28 +63,6 @@ public final class XExtUtils {
 	 */
 	public static final Object getXon(final XXNode x) {return new DefObject(x.getXon());}
 
-	/** Get actual ParseResult.
-	 * @param x actual ChkNode.
-	 * @return ParseResult or null.
-	 */
-	public static final XDParseResult getParseResult(final XXNode x) {
-		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
-	}
-
-	/** Get actual ParseResult.
-	 * @deprecated please use getParseResult instead
-	 * @param x actual ChkNode.
-	 * @return ParseResult or null.
-	 */
-	@Deprecated
-	public static final XDParseResult getParsedResult(final XXNode x) {
-		if (x.getXDPool().isChkWarnings()) {
-			//&{0} is deprecated.&{1}{ Please use }{ instead.}&{#SYS000}
-			x.getReportWriter().warning(XDEF.XDEF998, "getParsedResult", "getParseResult");
-		}
-		return x instanceof ChkElement ? ((ChkElement) x).getParseResult() : null;
-	}
-
 	/** Get information about actual version of X-definition.
 	 * @return build version and datetime.
 	 */
