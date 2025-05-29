@@ -3209,6 +3209,20 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A a='Mα' />", reporter, swr = new StringWriter());
 			assertNoErrorsAndClear(reporter); // temporary errors are cleared in the onFalse section!
 			assertTrue(swr.toString().contains("XDEF823"), swr.toString()); // but error is printed to swr.
+			xd = XDFactory.compileXD(props, // missing validation method
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a=\"onTrue out('OK'); onFalse {\n" +
+"       ParseResult pr = getParseResult();\n" +
+"       if (pr.matches()) out('OK'); else {out(pr.getError()); error(pr.getError());} \n" +
+"     }\"/>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A a='Mα' ></A>", reporter, swr = new StringWriter());
+			assertTrue(reporter.getErrorCount()== 1 && (s = reporter.printToString()).contains("XDEF823")
+				&& s.contains("A/@a"));
+			assertTrue(swr.toString().contains("XDEF823"), swr.toString());
+			parse(xd, "<A a='MA' ></A>", reporter, swr = new StringWriter());
+			assertNoErrorsAndClear(reporter);
+			assertEq("OK", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
