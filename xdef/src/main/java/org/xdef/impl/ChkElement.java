@@ -470,7 +470,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			c._itemIdex--;
 			decRefNum();
 			_data = null;
-			_parseResult = null;
 		}
 		_xPos = xPos;
 		_xdata = null;
@@ -1490,6 +1489,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			setXXType((byte) 'A');
 			_parseResult = new DefParseResult(_data);
 			_parseResult.setEos();
+			_parseResult.setParsedValue(_data);
 			XDParserAbstract.checkCharset(this, _parseResult);
 			if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
 				_parseResult.setParsedValue(_data);
@@ -3173,6 +3173,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					} else {
 						_parseResult = new DefParseResult(_data);
 						_parseResult.setEos();
+						_parseResult.setParsedValue(_data);
 						XDParserAbstract.checkCharset(this, _parseResult);
 						if (!_parseResult.matches()) { //Charset error detected, put error
 							putTemporaryReport(_parseResult.getReporter().getReport());

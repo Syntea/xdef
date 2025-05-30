@@ -2948,14 +2948,12 @@ public final class XCodeProcessor {
 				}
 				case GET_PARSED_VALUE: {//get result of parsed value
 					XDParseResult pr = item.getParam()==1 ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
-					_stack[++sp] = null == pr ? new DefParseResult() : pr.getParsedValue();
+					_stack[++sp] = null == pr ? new DefNull() : pr.getParsedValue();
 					continue;
 				}
-				case GET_PARSED_RESULT: {//get parsed ewsult
-					XDParseResult pr = item.getParam()==1 ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
-					_stack[++sp] = pr;
+				case GET_PARSED_RESULT: //get parsed result
+					_stack[++sp] = chkEl._parseResult == null ? new DefParseResult() : chkEl._parseResult;
 					continue;
-				}
 				case SET_NAMEDVALUE:
 					if (item.getParam() == 2) {
 						XDValue v = _stack[sp--];
