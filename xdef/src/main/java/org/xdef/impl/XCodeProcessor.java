@@ -2966,7 +2966,7 @@ public final class XCodeProcessor {
 							x = (XDNamedValue) v;
 						}
 						((XDContainer)_stack[sp--]).setXDNamedItem(x);
-					} else {//3
+					} else {// item.getParam() == 3
 						XDValue val = _stack[sp--];
 						String key = _stack[sp--].stringValue();
 						((XDContainer)_stack[sp--]).setXDNamedItem(key, val);
