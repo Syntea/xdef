@@ -70,7 +70,6 @@ public class X extends XDTester {
 "btext::=         [a-zA-Z0-9+/]+ '='? '='? $rule /* Base64 text */ \n" +
 "emailAddr::=     ( text? FWS? '&lt;' Mailbox '>' | comment* Mailbox ) comment*\n"+
 "  </xd:BNFGrammar>\n" +
-"\n" +
 "  <xd:declaration>\n" +
 "    external Datetime date;\n" +
 "    type manufactureDateType union(%item=[date(), xdatetime('\"--\"')]); /* date or -- */\n" +
@@ -86,22 +85,20 @@ public class X extends XDTester {
 "  </xd:declaration>\n" +
 "\n" +
 "  <A>\n" +
-"    <B xd:script = '*;' a = 'required; myEmail();'/>\n" +
+"    <B xd:script = '*;' a = 'required; myEmail();' />\n" +
 "  </A>\n" +
-"\n" +
 "  <X>\n" +
-"    <B xd:script = '*;' a = 'required; price(); onTrue x(getParsedResult())'/>\n" +
+"    <B xd:script = '*;' a = 'required; price(); onTrue x(getParseResult())'/>\n" +
 "  </X>\n" +
-"\n" +
 "  <Y>\n" +
 "    <Z xd:script = '*;'\n" +
 "      a=\"required; manufactureDateType(); finally {\n" +
 "          outln(getQnamePrefix('x:y') + ', ' + getQnameLocalpart('y')\n" +
 "             + ', ' + isLeapYear(now()) + ', ' + easterMonday(now())); \n" +
 "        } onTrue {\n" +
-"          if ('--'.equals(getText())) getParsedResult().setValue(null);\n" +
-"            date = getParsedResult().datetimeValue();\n" +
-"        }\"/>\n" +
+"          if ('--'.equals(getText())) getParseResult().setValue(null);\n" +
+"            date = getParseResult().datetimeValue();\n" +
+"        }\" />\n" +
 "  </Y>\n" +
 "  <Z> required; string(1); onFalse out('error: ' + getText()); </Z>\n" +
 "</xd:def>").createXDDocument();
