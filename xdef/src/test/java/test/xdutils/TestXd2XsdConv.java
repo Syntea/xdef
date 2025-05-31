@@ -122,7 +122,7 @@ public class TestXd2XsdConv extends XDTester {
 			displayFiles(_xdefFile);
 			try {
 				Element el = GenCollection.genCollection(
-					new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
+					new String[]{_xdefFile.getAbsolutePath()}, true, true, true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}
 			setMessage(new ErrMessage("Could not convert given XDefinition file!", _xdefFile, ex));
@@ -139,7 +139,6 @@ public class TestXd2XsdConv extends XDTester {
 			Schema schema = XSDFACTORY.newSchema(mainSchema);
 			_validator = schema.newValidator();
 		} catch (SAXException ex) {
-
 			displayFiles(_xdefFile);
 			System.err.println("============");
 			displayFiles(_tempDir);
@@ -176,7 +175,7 @@ public class TestXd2XsdConv extends XDTester {
 			displayFiles(_xdefFile);
 			try {
 				Element el = XDGenCollection.genCollection(
-						new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
+						new String[]{_xdefFile.getAbsolutePath()}, true, true, true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}
 			System.err.println("============");

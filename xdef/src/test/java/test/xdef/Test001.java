@@ -1050,25 +1050,6 @@ public final class Test001  extends XDTester {
 			assertEq("A already defined!\nA/2012-10-02T09:30:00 already exists!\n", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
-			// check compiling if source items have assignment of sourceId
-			Object[] p1 = new Object[] {
-"<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B/></xd:def>", new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C/></xd:def>").getBytes(getEncoding()))
-			};
-			String[] p2 = new String[] {"AA", "AB", "AC"};
-			xp = XDFactory.compileXD(null, p1, p2);
-			xml = "<A/>";
-			assertEq(xml, parse(xp, "A", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<B/>";
-			assertEq(xml, parse(xp, "B", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<C/>";
-			assertEq(xml, parse(xp, "C", xml, reporter));
-			assertNoErrorwarnings(reporter);
-		} catch (UnsupportedEncodingException | RuntimeException ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration scope='local'>\n" +

@@ -494,7 +494,7 @@ public final class TestErrors extends XDTester {
 "    xdef:script        ='occurs 0..' />\n"+
 "</List>\n"+
 "</xdef:def>";
-			xp = XDFactory.compileXD(props, xdef);
+			xp = compile(xdef);
 			xml =
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789

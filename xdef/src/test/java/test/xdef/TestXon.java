@@ -34,18 +34,14 @@ public class TestXon extends XDTester {
 	 * @param typ validation method.
 	 */
 	private ArrayReporter test(final String typ) {
-		String xdef,json;
-		XDPool xp;
-		XDDocument xd;
-		xdef =
+		String json;
+		XDDocument xd = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:declaration scope='local'> BNFGrammar base = new BNFGrammar('a::=[0-9a-zA-Z]+'); </xd:declaration>\n" +
 "  <xd:json name='A'>\n" +
 "   { \"a\": \"" + typ + "\" }\n" +
 "  </xd:json>\n" +
-"</xd:def>";
-		xp = XDFactory.compileXD(null, xdef);
-		xd = xp.createXDDocument();
+"</xd:def>").createXDDocument();
 		json = "{\"a\":\"unKNOWn\"}";
 		ArrayReporter reporter = new ArrayReporter();
 		String s = XonUtils.toJsonString(xd.jparse(json, reporter));
@@ -467,7 +463,7 @@ public class TestXon extends XDTester {
 			xi = xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
-			xdef =
+			xd = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
 "#this is INI file comment\n" +
@@ -477,8 +473,7 @@ public class TestXon extends XDTester {
 "parser.factor.1=string()\n" +
 "servertool.up=string()\n" +
 "  </xd:ini>\n" +
-"</xd:def>";
-			xd = XDFactory.compileXD(null,xdef).createXDDocument("A");
+"</xd:def>").createXDDocument("A");
 			ini =
 "#this is INI file comment\n" +
 "address=dhcp\1\n" +
@@ -491,7 +486,7 @@ public class TestXon extends XDTester {
 			xi = xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
-			xdef =
+			xd = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
 "proxy type=int(0,9)\n" +
@@ -503,9 +498,7 @@ public class TestXon extends XDTester {
 "[selfupdate]\n" +
 "version=ipAddr()\n" +
 "  </xd:ini>\n"  +
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("A");
+"</xd:def>").createXDDocument("A");
 			ini =
 "proxy type=0\n" +
 "hostaddr=\n" +
@@ -1725,14 +1718,13 @@ public class TestXon extends XDTester {
 			}
 		}
 		try { // test jlist
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "  <x>\n"+
 "    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"+
 "  </x>\n"+
 "  <xd:component> %class "+_package+".TestJList %link x; </xd:component>\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+"</xd:def>");
 			genXComponent(xp, clearTempDir());
 			xml =
 "<x>\n"+

@@ -961,7 +961,7 @@ public final class TestKeyAndRef extends XDTester {
 "    </Streets>\n" +
 "  </Town>\n" +
 "</xd:def>";
-			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xml =
 "<Town>\n" +
 "  <Street Name=\"Empty\" />\n" +

@@ -33,26 +33,22 @@ public class TestXsd2XdConv extends XDTester {
 	private Validator _validator;
 
 	private void init() {
-		_xsdFactory =
-			SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		_xsdFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		_repWriter = new NullReportWriter(false);
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {
-			throw new RuntimeException(
-				"Data directory does not exist or is not a directory");
+			throw new RuntimeException("Data directory does not exist or is not a directory");
 		}
 		_dataDir = new File(dataDir.getAbsolutePath(),"xsd2xd");
 		if (!_dataDir.exists() || !_dataDir.isDirectory()) {
-			throw new RuntimeException(
-				"Xsd2xd directory does not exist or is not a directory");
+			throw new RuntimeException("Xsd2xd directory does not exist or is not a directory");
 		}
 		File tempDir = clearTempDir();
 		if (!tempDir.exists()) {
 			tempDir.mkdir();
 		} else {
 			if (!tempDir.isDirectory()) {
-				throw new RuntimeException(
-					"Temporary directory is not a directory");
+				throw new RuntimeException("Temporary directory is not a directory");
 			}
 		}
 		_tempDir = new File(tempDir.getAbsolutePath(),"xsd2xd");
@@ -60,8 +56,7 @@ public class TestXsd2XdConv extends XDTester {
 			_tempDir.mkdir();
 		} else {
 			if (!_tempDir.isDirectory()) {
-				throw new RuntimeException(
-					"Temporary 'xsd2xd' directory is not a directory");
+				throw new RuntimeException("Temporary 'xsd2xd' directory is not a directory");
 			}
 		}
 		_prepared = false;
@@ -72,8 +67,7 @@ public class TestXsd2XdConv extends XDTester {
 		//prepare schema
 		File schemaFile = new File(_dataDir.getAbsolutePath(), testName+".xsd");
 		if (!schemaFile.exists() || !schemaFile.isFile()) {
-			setMessage(new ErrMessage(
-				"Schema file does not exist or is not a file",schemaFile,null));
+			setMessage(new ErrMessage("Schema file does not exist or is not a file", schemaFile, null));
 			return false;
 		}
 		try {
@@ -85,21 +79,16 @@ public class TestXsd2XdConv extends XDTester {
 			return false;
 		}
 		//generating XDefinition collection
-		String xdefFileName =
-			new File(_tempDir, testName + ".xdef").getAbsolutePath();
+		String xdefFileName = new File(_tempDir, testName + ".xdef").getAbsolutePath();
 		try {
-			XsdToXdef.genCollection(schemaFile.getAbsolutePath(),
-				xdefFileName, null, null);
+			XsdToXdef.genCollection(schemaFile.getAbsolutePath(), xdefFileName, null, null);
 		} catch (IOException | RuntimeException ex) {
-			setMessage(new ErrMessage(
-				"Could not generate XDefinition from given schema",
-				schemaFile, ex));
+			setMessage(new ErrMessage("Could not generate XDefinition from given schema", schemaFile, ex));
 			return false;
 		}
 		File xdefFile = new File(xdefFileName);
 		if (!xdefFile.exists() || !xdefFile.isFile()) {
-			setMessage(new ErrMessage(
-				"Generated XDefinition file does not exist or is not a file",
+			setMessage(new ErrMessage("Generated XDefinition file does not exist or is not a file",
 				xdefFile, null));
 			return false;
 		}
@@ -109,8 +98,7 @@ public class TestXsd2XdConv extends XDTester {
 			xdBuild.setSource(xdefFile);
 			XDPool xdPool = xdBuild.compileXD();
 			if (!xdPool.exists(testName)) {
-				setMessage(new ErrMessage(
-					"Main XDefinition is missing", xdefFile, null));
+				setMessage(new ErrMessage("Main XDefinition is missing", xdefFile, null));
 				return false;
 			}
 			reporter.checkAndThrowErrors();
@@ -119,8 +107,7 @@ public class TestXsd2XdConv extends XDTester {
 			}
 			_chkDoc = xdPool.createXDDocument(testName);
 		} catch (RuntimeException ex) {
-			setMessage(new ErrMessage(
-				"Could not prepare XDefinition", xdefFile, ex));
+			setMessage(new ErrMessage("Could not prepare XDefinition", xdefFile, ex));
 			return false;
 		}
 		_prepared = true;
@@ -133,8 +120,7 @@ public class TestXsd2XdConv extends XDTester {
 		}
 		File xmlFile = new File(_dataDir.getAbsolutePath(), xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
-			setMessage(new ErrMessage(
-				"XML file does not exist or is not a file", xmlFile, null));
+			setMessage(new ErrMessage("XML file does not exist or is not a file", xmlFile, null));
 			return false;
 		}
 		//validate by schema
@@ -142,16 +128,14 @@ public class TestXsd2XdConv extends XDTester {
 		try {
 			_validator.validate(source);
 		} catch (IOException | SAXException ex) {
-			setMessage(new ErrMessage(
-				"XML file IS NOT VALID against schema", xmlFile, ex));
+			setMessage(new ErrMessage("XML file IS NOT VALID against schema", xmlFile, ex));
 			return false;
 		}
 		//validate by XDefinition
 		_repWriter.clear();
 		_chkDoc.xparse(xmlFile, _repWriter);
 		if (_repWriter.errors()) {
-			setMessage(new ErrMessage(
-				"XML file IS NOT VALID against XDefinition", xmlFile, null));
+			setMessage(new ErrMessage("XML file IS NOT VALID against XDefinition", xmlFile, null));
 			return false;
 		}
 		return true;
@@ -163,24 +147,21 @@ public class TestXsd2XdConv extends XDTester {
 		}
 		File xmlFile = new File(_dataDir.getAbsolutePath(), xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
-			setMessage(new ErrMessage(
-				"XML file does not exist or is not a file", xmlFile, null));
+			setMessage(new ErrMessage("XML file does not exist or is not a file", xmlFile, null));
 			return false;
 		}
 		//validate by schema
 		Source source = new StreamSource(xmlFile);
 		try {
 			_validator.validate(source);
-			setMessage(new ErrMessage(
-				"XML file IS VALID against schema", xmlFile, null));
+			setMessage(new ErrMessage("XML file IS VALID against schema", xmlFile, null));
 			return false;
 		} catch (IOException | SAXException ex) {
 			//validate by XDefinition
 			_repWriter.clear();
 			_chkDoc.xparse(xmlFile, _repWriter);
 			if (!_repWriter.errors()) {
-				setMessage(new ErrMessage(
-					"XML file IS VALID against XDefinition",xmlFile,null));
+				setMessage(new ErrMessage("XML file IS VALID against XDefinition",xmlFile,null));
 				return false;
 			}
 			return true;
@@ -200,8 +181,7 @@ public class TestXsd2XdConv extends XDTester {
 
 	private static class ErrMessage {
 
-		public static final ErrMessage NO_MESSAGE =
-			new ErrMessage("No message", null, null);
+		public static final ErrMessage NO_MESSAGE = new ErrMessage("No message", null, null);
 		private final String _message;
 		private final File _file;
 		private final Exception _ex;

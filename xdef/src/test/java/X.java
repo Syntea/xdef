@@ -17,7 +17,7 @@ public class X extends XDTester {
 		XDDocument xd;
 		StringWriter swr;
 		try {
-			xd = XDFactory.compileXD(null,
+			xd = compile(
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +
 "	/* BNF grammar rules of email address according to RFC 5321. */\n"+
 "  <xd:BNFGrammar name='EMAILADDR'>\n" +

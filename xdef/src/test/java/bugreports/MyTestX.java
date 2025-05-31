@@ -148,7 +148,7 @@ public class MyTestX extends XDTester {
 "\"eq('2021')\"\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			xon = "\"2021\"";
 			s = _package+".MytestX_num";
@@ -166,7 +166,7 @@ clearSources();
 "[ \"num()\" ]\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			xon = "[\"2021\"]";
 			s = _package+".MytestX_Str";
@@ -536,7 +536,7 @@ clearSources();
 "  %class "+_package+".MyTestX_AnyXXz %link z#testX;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			s = _package+".MyTestX_AnyXXx";
 			assertNull(testX(xp,"x", s, "null"));
@@ -611,7 +611,7 @@ clearSources();
 "</xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			s = _package+".MyTestX_AnyXXx";
 			assertNull(testX(xp,"x", s, "\" ab\tcd \""));
@@ -634,7 +634,7 @@ if(T)return;
 "]\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			xon = "[b(true), x(0FAE99), x()]";
 			x = XonUtils.parseXON(xon);
@@ -1691,7 +1691,7 @@ clearSources();
 "    <TransF   Column           =\"required string()\"/>\n" +
 "    <TransM   Column           =\"required string()\"/>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			xml =
 "<DefCiselnik_ IdFlow=\"181131058\">\n" +
 "    <ControlId IdDefPartner=\"163\"/>\n" +

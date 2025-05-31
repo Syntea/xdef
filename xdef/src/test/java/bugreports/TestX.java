@@ -30,8 +30,7 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
-			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+

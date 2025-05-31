@@ -169,7 +169,7 @@ public abstract class XDTester extends STester {
 	 */
 	public final XDPool getXdOfXd() {
 		if (_xdOfXd == null) {
-			_xdOfXd = XDFactory.compileXD(null,"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+			_xdOfXd = XDFactory.compileXD(null, "classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 		}
 		return _xdOfXd;
 	}

@@ -103,7 +103,7 @@ public class MyTest extends XDTester {
 "</xd:declaration>\n"+
 "  <A xd:script='finally x();' a='currency();' />\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			parse(xp, "", "<A a='USD'/>", reporter, swr=new StringWriter(), null, null);
 			assertNoErrors(reporter);
 			assertEq("USD", swr.toString());

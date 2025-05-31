@@ -448,7 +448,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "<x>\n"+
 "  <a xd:script='*'>\n"+
@@ -459,8 +459,7 @@ public final class TestXComponents extends XDTester {
 "  </b>\n"+
 "</x>\n"+
 "<xd:component> %class bugreports.JCreateX7 %link x; </xd:component>\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+"</xd:def>");
 			genXComponent(xp, clearTempDir());
 			xml =
 "<x>\n"+

@@ -61,8 +61,7 @@ public final class TestDatabase extends XDTester {
 		// configure and start database engine
 		_ds = new EmbeddedDataSource();
 		// path to store data for database schema "test"
-		_ds.setDatabaseName(tempDir + File.separatorChar + DERBY_STORE +
-				File.separatorChar + "test");
+		_ds.setDatabaseName(tempDir + File.separatorChar + DERBY_STORE + File.separatorChar + "test");
 		// for security reason restrict access to the test database for
 		// the specific user identified by the password
 		_ds.setUser(TEST_USER);
@@ -115,8 +114,7 @@ public final class TestDatabase extends XDTester {
 			}
 		}
 		if(!f.delete()) {
-			fail("File or directory '"
-				+ f.getAbsolutePath() + "' cannot be deleted.");
+			fail("File or directory '" + f.getAbsolutePath() + "' cannot be deleted.");
 		}
 	}
 
@@ -130,14 +128,12 @@ public final class TestDatabase extends XDTester {
 					"," + ATTR_B_VARCHAR + "," + ATTR_C_VARCHAR + ")";
 			st.executeUpdate(sql);
 			for(int i=1; i <= ROWS_A; i++) {
-				sql = "INSERT INTO " + TABLE_A + " (" + ATTR_A + ","
-						+ ATTR_B + "," + ATTR_C + ") VALUES (" +
-						i + ",'" + (ATTR_B+i) + "','" + (ATTR_C+i) + "')";
+				sql = "INSERT INTO " + TABLE_A + " (" + ATTR_A + "," + ATTR_B + "," + ATTR_C + ") VALUES (" +
+					i + ",'" + (ATTR_B+i) + "','" + (ATTR_C+i) + "')";
 				st.executeUpdate(sql);
 			}
 			// table B (big table)
-			sql = "CREATE TABLE " + TABLE_B + "(" + ATTR_A_INT +
-					"," + ATTR_B_VARCHAR + ")";
+			sql = "CREATE TABLE " + TABLE_B + "(" + ATTR_A_INT + "," + ATTR_B_VARCHAR + ")";
 			st.executeUpdate(sql);
 			for(int i=1; i <= ROWS_B; i++) {
 				sql = "INSERT INTO " + TABLE_B + " (" + ATTR_A + ","
@@ -235,8 +231,7 @@ public final class TestDatabase extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			_con = getConnection();
-			el = create(xdef, null, null, "A", "#service",
-				XDFactory.createSQLService(_con), reporter);
+			el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
 			if(reporter.errorWarnings()) {
 				fail(reporter.getReport());
 			}
@@ -247,8 +242,7 @@ public final class TestDatabase extends XDTester {
 				Element ele = (Element)nl.item(i-1);
 				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ATTR_B+i, ele.getAttribute("b"));
-				assertEq(ATTR_C+i,
-					((Element)ele.getChildNodes().item(0)).getTextContent());
+				assertEq(ATTR_C+i, ((Element)ele.getChildNodes().item(0)).getTextContent());
 			}
 
 			// check implicit closing of the Service
@@ -275,8 +269,7 @@ public final class TestDatabase extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			_con = getConnection();
-			el = create(xdef, null, null, "A", "#service",
-				XDFactory.createSQLService(_con), reporter);
+			el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
 			if(reporter.errorWarnings()) {
 				fail(reporter.getReport());
 			}
@@ -287,8 +280,7 @@ public final class TestDatabase extends XDTester {
 				Element ele = (Element)nl.item(i-1);
 				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ATTR_B+i, ele.getAttribute("b"));
-				assertEq(ATTR_C+i,
-					((Element)ele.getChildNodes().item(0)).getTextContent());
+				assertEq(ATTR_C+i, ((Element)ele.getChildNodes().item(0)).getTextContent());
 			}
 
 			// check that external Service wasn't closed
@@ -302,8 +294,7 @@ public final class TestDatabase extends XDTester {
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
 "  <xd:declaration scope='local'>external Service service;</xd:declaration>\n"+
 "  <A xd:script= \"create 1\">\n"+
-"    <" + TABLE_A + " xd:script= \"occurs *; create service.query('SELECT * "
-					+ "FROM " + TABLE_A + "')\"\n"+
+"    <" + TABLE_A + " xd:script= \"occurs *; create service.query('SELECT * FROM " + TABLE_A + "')\"\n"+
 "         a = \"int\"\n"+
 "         b = \"string\">\n"+
 "    </" + TABLE_A + ">\n"+
@@ -379,8 +370,7 @@ public final class TestDatabase extends XDTester {
 "    void doQ() {\n"+
 "      Container c;\n"+
 "      while(rs.hasNext()) {\n"+
-"        c = [%a=rs.getItem('" + ATTR_A + "'),\n"+
-"          %b=rs.getItem('" + ATTR_B + "')];\n"+
+"        c = [%a=rs.getItem('" + ATTR_A + "'), %b=rs.getItem('" + ATTR_B + "')];\n"+
 "        ct.addItem(c);\n"+
 "        rs.next();\n"+
 "      }\n"+
@@ -394,8 +384,7 @@ public final class TestDatabase extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			_con = getConnection();
-			el = create(xdef, null, null, "A", "#service",
-				XDFactory.createSQLService(_con), reporter);
+			el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
 			if(reporter.errorWarnings()) {
 				fail(reporter.getReport());
 			}
@@ -679,8 +668,7 @@ public final class TestDatabase extends XDTester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xd.setVariable("url",
-				"jdbc:derby:" +	tempDir + File.separatorChar + DERBY_STORE +
-				File.separatorChar + "test");
+				"jdbc:derby:" +	tempDir + File.separatorChar + DERBY_STORE + File.separatorChar + "test");
 			xd.setVariable("usr", TEST_USER);
 			xd.setVariable("passw", TEST_PWD);
 			assertEq(xd.xcreate("Books", null), //execute construction,
@@ -696,14 +684,12 @@ public final class TestDatabase extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"dropSchema\">\n"+
 "  <xd:declaration scope='local'> external Service con; </xd:declaration>\n"+
-"  <dropSchema name=\"string; finally\n"+
-"              con.execute('DROP SCHEMA '+ getText() + ' RESTRICT');\" >\n"+
+"  <dropSchema name=\"string; finally con.execute('DROP SCHEMA '+ getText() + ' RESTRICT');\" >\n"+
 "    <table xd:script=\"occurs *\"\n"+
-"           name = \"string; onTrue con.execute('DROP TABLE ' +\n"+
-"             xpath('../../@name') + '.' + getText());\" />\n"+
+"      name = \"string; onTrue con.execute('DROP TABLE ' + xpath('../../@name') + '.' + getText());\" />\n"+
 "  </dropSchema>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(System.getProperties(), xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xd.setVariable("#con", service); //set connection
 			xml =
@@ -749,8 +735,7 @@ public final class TestDatabase extends XDTester {
 "  </C>"+
 "</xd:def>";
 			_con = getConnection();
-			create(xdef, null, null, "A", "#service",
-				XDFactory.createSQLService(_con), reporter);
+			create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
 			assertNoErrorwarnings(reporter);
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {

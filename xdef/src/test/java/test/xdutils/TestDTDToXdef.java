@@ -38,7 +38,6 @@ public class TestDTDToXdef extends XDTester {
 			org.xdef.XDPool xdp;
 			try {
 				String src = org.xdef.xml.KXmlUtils.nodeToString(el, true);
-//				xdp = org.xdef.XDFactory.compileXD(null, src);
 				xdp = compile(src);
 			} catch (Exception e) {
 				fail(e);
@@ -46,8 +45,7 @@ public class TestDTDToXdef extends XDTester {
 				return;
 			}
 			try {
-				org.xdef.sys.ArrayReporter reporter =
-					new org.xdef.sys.ArrayReporter();
+				org.xdef.sys.ArrayReporter reporter = new org.xdef.sys.ArrayReporter();
 				parse(xdp, root, data, reporter);
 				reporter.checkAndThrowErrorWarnings();
 				if ((display & 4) == 4) {
@@ -56,10 +54,8 @@ public class TestDTDToXdef extends XDTester {
 						org.xdef.xml.KXmlUtils.parseXml(data)));
 				}
 			} catch (RuntimeException ex) {
-				fail(ex + "\n"
-					+ org.xdef.xml.KXmlUtils.nodeToString(el, true) + "\n"
-					+ org.xdef.xml.KXmlUtils.nodeToString(
-					org.xdef.xml.KXmlUtils.parseXml(data), true));
+				fail(ex + "\n" + org.xdef.xml.KXmlUtils.nodeToString(el, true) + "\n"
+					+ org.xdef.xml.KXmlUtils.nodeToString(org.xdef.xml.KXmlUtils.parseXml(data), true));
 			}
 		} catch (Exception ex) {fail(ex);}
 	}

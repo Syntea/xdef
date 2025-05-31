@@ -249,12 +249,11 @@ public final class Test000 extends XDTester {
 			xml = "<a x='xx' y='yy' z='S'><b><c d='10'/></b></a>";
 			parse(xdef, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xdef = //xpath: integer variable x (without '$')
+			xp = compile( //xpath: integer variable x (without '$')
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>int x=123;</xd:declaration>\n"+
 "  <a a='string()' xd:script=\"finally out(xpath('/a/@a=$x'));\"/>"+
-"</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+"</xd:def>");
 			xml = "<a a='123'/>";
 			assertEq(xml, parse(xp, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
@@ -368,11 +367,9 @@ public final class Test000 extends XDTester {
 			xml = dataDir + "Test000_01.xml";
 			Properties props = new Properties();
 			//"xdef.doctype", "false"
-			props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,
-				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
+			props.setProperty(XDConstants.XDPROPERTY_DOCTYPE, XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			xp = XDFactory.compileXD(props, xdef);
-			setProperty(XDConstants.XDPROPERTY_DOCTYPE,
-				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
+			setProperty(XDConstants.XDPROPERTY_DOCTYPE, XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			parse(xp, "root", xml, reporter);
 			fail("Exception not thrown");
 		} catch (RuntimeException ex) {
@@ -542,7 +539,7 @@ public final class Test000 extends XDTester {
 "    VIN       =\"optional y;\"\n"+
 "    CisloTP   =\"optional z;\" />\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' "+
 				"CisloTP='SB746826'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));

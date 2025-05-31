@@ -126,7 +126,6 @@ public final class Test003 extends XDTester {
 			XDFactory.compileXD(null, u);
 			xdef = "<xd:collection xmlns:xd='" + _xdNS + "' include='"+u.toExternalForm()+"' />";
 			xp = compile(xdef);
-
 			xml = "<test a='123'/>";
 			f = new File(clearTempDir(), "/aa bb");
 			f.mkdirs();

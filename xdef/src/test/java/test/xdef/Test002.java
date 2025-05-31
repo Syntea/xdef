@@ -1536,7 +1536,6 @@ public final class Test002 extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 //"Testovací data chyba\n" +
-			xd = XDFactory.compileXD(null, xdef).createXDDocument();
 			xml =
 "<A>\n" +
 "    <Misto>\n" +
