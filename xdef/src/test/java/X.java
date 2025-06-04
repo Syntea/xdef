@@ -13,7 +13,6 @@ public class X extends XDTester {
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		System.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-		String s;
 		XDDocument xd;
 		StringWriter swr;
 		try {
@@ -108,9 +107,9 @@ public class X extends XDTester {
 				null);
 			try {
 				xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
-				assertTrue("0.5;USD\n1.2;CZK\n".equals(s = swr.toString()), s);
+				assertTrue("0.5;USD\n1.2;CZK\n".equals(swr.toString()), swr.toString());
 			} catch (RuntimeException ex) {
-				if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {
+				if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
 					fail(ex);
 				}
 			}
@@ -118,9 +117,9 @@ public class X extends XDTester {
 				xd.setStdOut(swr = new StringWriter());
 				xd.xparse("<Y> <Z a='--'/> </Y>", null);
 				assertTrue(xd.getVariable("date").isNull());
-				assertTrue("x, y, false, 2025-04-21\n".equals(s = swr.toString()), s);
+				assertTrue("x, y, false, 2025-04-21\n".equals(swr.toString()), swr.toString());
 			} catch (RuntimeException ex) {
-				if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {
+				if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
 					fail(ex);
 				}
 			}
@@ -128,7 +127,7 @@ public class X extends XDTester {
 				xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
 				assertEq("2025-04-03", xd.getVariable("date").toString());
 			} catch (RuntimeException ex) {
-				if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {
+				if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
 					fail(ex);
 				}
 			}
