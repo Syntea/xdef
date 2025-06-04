@@ -108,11 +108,9 @@ public class X extends XDTester {
 				null);
 			try {
 				xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
-				s = swr.toString();
-				assertTrue("0.5;USD\n1.2;CZK\n".equals(s), s);
+				assertTrue("0.5;USD\n1.2;CZK\n".equals(s = swr.toString()), s);
 			} catch (RuntimeException ex) {
-				s = ex.getMessage();
-				if (s == null || !s.contains("XDEF998")) {
+				if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {
 					fail(ex);
 				}
 			}
@@ -120,11 +118,9 @@ public class X extends XDTester {
 				xd.setStdOut(swr = new StringWriter());
 				xd.xparse("<Y> <Z a='--'/> </Y>", null);
 				assertTrue(xd.getVariable("date").isNull());
-				s = swr.toString();
-				assertTrue("x, y, false, 2025-04-21\n".equals(s), s);
+				assertTrue("x, y, false, 2025-04-21\n".equals(s = swr.toString()), s);
 			} catch (RuntimeException ex) {
-				s = ex.getMessage();
-				if (s == null || !s.contains("XDEF998")) {
+				if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {
 					fail(ex);
 				}
 			}
@@ -132,8 +128,7 @@ public class X extends XDTester {
 				xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
 				assertEq("2025-04-03", xd.getVariable("date").toString());
 			} catch (RuntimeException ex) {
-				s = ex.getMessage();
-				if (s == null || !s.contains("XDEF998")) {
+				if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {
 					fail(ex);
 				}
 			}
