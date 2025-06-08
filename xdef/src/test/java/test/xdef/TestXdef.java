@@ -3151,9 +3151,9 @@ public final class TestXdef extends XDTester {
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Žluťoučký kůň'/>", reporter);
 			assertNoErrorsAndClear(reporter);
-			parse(xd, "<A><B b='Žluťoučký kůň'/></A>", reporter);
+			parse(xd, "<A>Žluťoučký kůň</A>", reporter);
 			assertNoErrorsAndClear(reporter);
-			parse(xd, "<A>Table</A>", reporter);
+			parse(xd, "<A><B b='Žluťoučký kůň'/></A>", reporter);
 			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A>Таблица</A>", reporter);
 			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
