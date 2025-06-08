@@ -16,7 +16,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
-import org.xdef.XDParserAbstract;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ATTR;
@@ -1490,7 +1489,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_parseResult = new DefParseResult(_data);
 			_parseResult.setEos();
 			_parseResult.setParsedValue(_data);
-			XDParserAbstract.checkCharset(this, _parseResult);
+//			org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
 			if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
 				_parseResult.setParsedValue(_data);
 				_xComponent.xSetAttr(this, _parseResult);
@@ -3174,7 +3173,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_parseResult = new DefParseResult(_data);
 						_parseResult.setEos();
 						_parseResult.setParsedValue(_data);
-						XDParserAbstract.checkCharset(this, _parseResult);
+//						org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
 						if (!_parseResult.matches()) { //Charset error detected, put error
 							putTemporaryReport(_parseResult.getReporter().getReport());
 							if (xtxt1._onFalse >= 0) {
@@ -3189,17 +3188,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 								}
 							}
-						} else {
+						} else if (xtxt1._onTrue >= 0) { //if check method is not specified call onTrue action
 							debugXPos(XDDebug.ONTRUE);
-							if (xtxt1._onTrue >= 0) {
-								//if check exception not defined we call onTrue action for value which is not null
-								_elemValue = _element;
-								String x = _data;
-								exec(xtxt1._onTrue, (byte) 'T');
-								copyTemporaryReports();
-								if (x != _data && xtxt1._check >= 0) {//_data was changed, even may be equal
-									exec(xtxt1._check, (byte) 'T');
-								}
+							_elemValue = _element;
+							String x = _data;
+							exec(xtxt1._onTrue, (byte) 'T');
+							copyTemporaryReports();
+							if (x != _data && xtxt1._check >= 0) {//_data was changed, even may be equal
+								exec(xtxt1._check, (byte) 'T');
 							}
 						}
 					}

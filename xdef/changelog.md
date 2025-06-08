@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.28, release-date 2025-06-04
-* .
+# Version 42.2.28, release-date 2025-06-08
+* If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), for items,
+  where there is no validation method declaration, the character dataset is not checked.
 
 # Version 42.2.27, release-date 2025-05-22
 * Fixed incorrect XDEF823 error reporting in values from parsing data in attributes or text nodes that are

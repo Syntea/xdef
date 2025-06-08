@@ -1,9 +1,12 @@
 import java.io.StringWriter;
+import java.util.Properties;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
+import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
+import static test.XDTester._xdNS;
 
 public class X extends XDTester {
 	public X() {}
@@ -15,6 +18,30 @@ public class X extends XDTester {
 		System.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 		XDDocument xd;
 		StringWriter swr;
+		try {
+			Properties props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
+			ArrayReporter reporter = new ArrayReporter();
+			xd = XDFactory.compileXD(props, //moreAttributes
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A xd:script='option moreAttributes'/>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
+			xd = XDFactory.compileXD(props, //moreAttributes
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a=';'/>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
+			xd = XDFactory.compileXD(props, //moreAttributes
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a='string();'/>\n" +
+"</xd:def>").createXDDocument();
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertTrue(reporter.toString().contains("XDEF823")); // chaset is checked
+		} catch (RuntimeException ex) {fail(ex);}
+//if(true)return;
 		try {
 			xd = compile(
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +

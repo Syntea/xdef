@@ -3120,7 +3120,7 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A a='Table' />", reporter);
 			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A a='Таблица' />", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //if no check method is specified the charset is nor checked
 			xd = compile( // missing validation method
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A>required;</A>\n" +
@@ -3128,7 +3128,7 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A>Таблица</A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //if no check method is specified the charset is nor checked
 			xd = compile( //moreAttributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A xd:script='option moreAttributes'/>\n" +
@@ -3136,7 +3136,7 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A a='Table' />", reporter);
 			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A a='Таблица' />", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			xd = compile(// moreText
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A xd:script='option moreText'/>\n" +
@@ -3144,7 +3144,7 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A>Таблица</A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for moreText the charset is not checked
 			xd = compile(// xd:any
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:any xd:name='A' xd:script='occurs 0..; options moreAttributes, moreElements, moreText' />\n"+
@@ -3156,17 +3156,17 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A>Table</A>", reporter);
 			assertNoErrorsAndClear(reporter);
 			parse(xd, "<A>Таблица</A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
 			parse(xd, "<A><B>Таблица</B></A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
 			parse(xd, "<A><B b='Таблица'/></A>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
 			parse(xd, "<X><Y><Z z='Таблица'/></Y></X>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
 			parse(xd, "<X><Y><Z>πίνακας</Z></Y></X>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
 			parse(xd, "<X><Y><Z>לוּחַ</Z></Y></X>", reporter);
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"), reporter);
+			assertNoErrorsAndClear(reporter); //for xd:any the charset is not checked
 			/////////////////////////////////////////////////
 			xd = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='A|B' name = 'X'>\n" +
@@ -3176,23 +3176,17 @@ public final class TestXdef extends XDTester {
 			parse(xd, "<A a='a'>M</A>", reporter);
 			assertNoErrors(reporter);
 			parse(xd, "<A\n a='aα'/>", reporter);
-			assertTrue(reporter.getErrorCount()== 1 && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("A/@a"));
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			parse(xd, "<A a='aα'>Mα</A>", reporter);
-			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("A/@a") && s.contains("A/text()"));
+			assertNoErrorsAndClear(reporter); //for moreAttributes and moreText the charset is not checked
 			parse(xd, "<A\n b='aα' c='bα'/>", reporter);
-			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("A/@b") && s.contains("A/@c"));
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			parse(xd, "<A>Mα</A>", reporter);
-			assertTrue(reporter.getErrorCount()== 1  && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("A/text()"));
+			assertNoErrorsAndClear(reporter); //for moreTexty the charset is not checked
 			parse(xd, "<A>\n<B/>\nMα\n<C/>\nMα\n</A>", reporter);
-			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("A/text()") && s.contains("line=2;") && s.contains("line=4;"));
+			assertNoErrorsAndClear(reporter); //for moreAttributes and moreText the charset is not checked
 			parse(xd, "<A><B M='Mα' P='αF' I='c' /></A>", reporter);
-			assertTrue(reporter.getErrorCount()== 2 && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("/A/B[1]/@M") && s.contains("/A/B[1]/@P"));
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			parse(xd, "<B>MA</B>", reporter);
 			assertNoErrors(reporter);
 			parse(xd, "<B>Mα</B>", reporter);
@@ -3204,22 +3198,21 @@ public final class TestXdef extends XDTester {
 "       if (pr.matches()) out('OK'); else {out(pr.getError()); error(pr.getError());} }\"/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Mα' ></A>", reporter, swr = new StringWriter());
-			assertTrue(reporter.getErrorCount()== 1 && (s = reporter.printToString()).contains("XDEF823")
-				&& s.contains("A/@a")); // error is reported from ParseResult
-			assertTrue(swr.toString().contains("XDEF823"), swr.toString());
+			assertNoErrorsAndClear(reporter); //for no check method the charset is not checked
+			assertEq("OK", swr.toString());
 			parse(xd, "<A a='MA' ></A>", reporter, swr = new StringWriter());
 			assertNoErrorsAndClear(reporter);
 			assertEq("OK", swr.toString());
 			xd = compile( // getLastError() in finally section
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"  <A a= \"required; finally {Report r = getLastError(); if (r==null) out('OK'); else out(r); }\" />\n" +
+"  <A a= \"finally {Report r = getLastError(); if (r==null) out('OK'); else out(r); }\" />\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='MA'/>", reporter, swr = new StringWriter());
 			assertNoErrorsAndClear(reporter);
 			assertEq("OK", swr.toString());
 			parse(xd, "<A a='Mα'/>", reporter, swr = new StringWriter());
-			assertTrue(reporter.getErrorCount() == 1 && reporter.toString().contains("XDEF823"));
-			assertTrue(swr.toString().contains("XDEF823"), swr.toString());
+			assertNoErrorsAndClear(reporter); //for no check method the charset is not checked
+			assertEq("OK", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
