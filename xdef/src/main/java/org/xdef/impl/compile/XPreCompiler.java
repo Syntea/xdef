@@ -16,6 +16,7 @@ import org.xdef.XDConstants;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -183,7 +184,7 @@ public class XPreCompiler implements PreCompiler {
 								int i = p.lastIndexOf('/');
 								sid = i>0 ? p.substring(0, i+1)+sid : ('/'+sid);
 							}
-						} catch (Exception ex) {
+						} catch (IOException ex) {
 							myreporter.error(SYS.SYS024, sid); //File doesn't exist: &{0}
 							sid = ""; // no file
 						}
@@ -229,8 +230,7 @@ public class XPreCompiler implements PreCompiler {
 				StringParser.XML_CHAR_NAME_START && (c  < '0' && c > '9')) {
 				if (!wasColon && c == ':') { // we allow one colon inside name
 					wasColon = true;
-					if (i + 1 < name.length()
-						&& StringParser.getXmlCharType(name.charAt(++i), xmlVersion)
+					if (i + 1 < name.length() && StringParser.getXmlCharType(name.charAt(++i), xmlVersion)
 						!= StringParser.XML_CHAR_NAME_START) { //must follow name
 						continue;
 					}
@@ -250,7 +250,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @return display mode (see XDPool.DISPLAY_FALSE,
 	 * XPool.DISPLAY_TRUE, DISPLAY_ERRORS).
 	 */
-	final byte getDispalyMode() {return _displayMode;}
+	public final byte getDispalyMode() {return _displayMode;}
 
 	private void setMacros(final List<PNode> macros) {
 		for (PNode macro : macros) {
@@ -267,12 +267,8 @@ public class XPreCompiler implements PreCompiler {
 			for (PAttr val : macro.getAttrs()) {
 				params.put(val._name, val._value.getString());
 			}
-			XScriptMacro m = new XScriptMacro(
-				getNameAttr(macro, true, true),
-				def,
-				params,
-				macro._value,
-				getReportWriter());
+			XScriptMacro m = new XScriptMacro(getNameAttr(macro, true, true),
+				def, params, macro._value, getReportWriter());
 			if (_macros.containsKey(m.getName())) {
 				Report rep = Report.error(XDEF.XDEF482, m.getName()); //Macro '&{0}' redefinition
 				macro._name.putReport(rep, getReportWriter());
@@ -375,7 +371,6 @@ public class XPreCompiler implements PreCompiler {
 
 	/** Parse string and addAttr it to the set of definitions.
 	 * @param source The source string with definitions.
-	 * @throws RutimeException if an error occurs.
 	 */
 	@Override
 	public final void parseString(final String source) {parseString(source, null);}
@@ -383,30 +378,32 @@ public class XPreCompiler implements PreCompiler {
 	/** Parse string and addAttr it to the set of X-definitions.
 	 * @param source source string with X-definitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
-	 * @throws RutimeException if an error occurs.
 	 */
 	@Override
 	public final void parseString(final String source, final String srcName) {
 		File f = new File(source);
-		if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
-			&& source.charAt(source.trim().length()-1) == '>' && !f.exists()) {
-			ByteArrayInputStream b = new ByteArrayInputStream(source.trim().getBytes(StandardCharsets.UTF_8));
-			_xmlReader.parseStream(b, srcName);
-		} else {
-			parseFile(f);
+		try {
+			if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
+				&& source.charAt(source.trim().length()-1) == '>' && !f.exists()) {
+				ByteArrayInputStream b =
+					new ByteArrayInputStream(source.trim().getBytes(StandardCharsets.UTF_8));
+				_xmlReader.parseStream(b, srcName);
+			} else {
+				parseFile(f);
+			}
+		} catch (Exception | Error ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 
 	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param fileName pathname of file with with X-definitions.
-	 * @throws RutimeException if an error occurs.
 	 */
 	@Override
 	public final void parseFile(final String fileName) {parseFile(new File(fileName));}
 
 	/** Parse file with source X-definition and addAttr it to the set of definitions.
 	 * @param file The file with with X-definitions.
-	 * @throws RutimeException if an error occurs.
 	 */
 	@Override
 	public final void parseFile(final File file) {
@@ -420,7 +417,7 @@ public class XPreCompiler implements PreCompiler {
 			getSources().add(url);
 			InputStream in = new FileInputStream(file);
 			parseStream(in, url.toExternalForm());
-		} catch (Exception ex) {
+		} catch (IOException | RuntimeException ex) {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
 			}
@@ -431,7 +428,6 @@ public class XPreCompiler implements PreCompiler {
 	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
 	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or null.
-	 * @throws RutimeException if an error occurs.
 	 */
 	@Override
 	public final void parseStream(final InputStream in, final String srcName) {
@@ -458,13 +454,12 @@ public class XPreCompiler implements PreCompiler {
 	/** Parse data with source X-definition given by URL and addAttr it
 	 * to the set of X-definitions.
 	 * @param url URL of the file with the X-definition.
-	 * @throws RutimeException if an error occurs.
 	 */
 	@Override
 	public final void parseURL(final URL url) {
 		try {
 			parseStream(url.openStream(), url.toExternalForm());
-		} catch (Exception ex) {
+		} catch (IOException | RuntimeException ex) {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
 			}

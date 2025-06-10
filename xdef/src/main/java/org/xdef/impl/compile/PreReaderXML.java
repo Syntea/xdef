@@ -7,18 +7,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
-import org.xdef.XDPool;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XDefinition;
 import org.xdef.impl.xml.KParsedAttr;
 import org.xdef.impl.xml.KParsedElement;
-import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.msg.XML;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
@@ -507,21 +503,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			doParse(in, srcName);
 		} catch (RuntimeException ex) {
 			throw ex;
-		} catch (Exception ex) {
-			_actPNode = null; //just let gc to do the job
-			if (_pcomp.getDispalyMode() > XDPool.DISPLAY_FALSE) {
-				if (!(ex instanceof SThrowable)) {
-					//Internal error&{0}{: }
-					getReportWriter().error(SYS.SYS066, "when parsing document\n" + ex);
-				}
-			} else {
-				if (ex instanceof SThrowable && "SYS012".equals(((SThrowable) ex).getMsgID())) {
-					throw (SRuntimeException) ex; //Errors detected&{0}{: }
-				} else {
-					//Internal error: &{0}
-					throw new SRuntimeException(SYS.SYS066, ex, "when parsing document\n" + ex);
-				}
-			}
+		} catch (Exception | Error ex) {
+			throw new RuntimeException(ex);
 		}
 		_actPNode = null; //just let gc to do the job
 	}
