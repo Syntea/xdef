@@ -2486,7 +2486,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xp = compile(//test collection
 "<xd:collection xmlns:xd='" + XDConstants.XDEF31_NS_URI + "'>"+
-"<xd:def xd:name='X' xd:root='a' xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'>"+
+"<xd:def xd:name='X' xd:root='a' xmlns:xd='"+_xdNS+"'>"+
 "  <a a='string()'>"+
 "    <B xd:script='+; ref X#R'/>"+
 "  </a>"+
@@ -2687,7 +2687,7 @@ public final class TestXdef extends XDTester {
 			assertEq("", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test FileReportWriter as parameter of compilation.
-			xdef = "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'><A a='xxxx()'/></xd:def>";
+			xdef = "<xd:def xmlns:xd='"+_xdNS+"'><A a='xxxx()'/></xd:def>";
 			reporter.clear();
 			XDFactory.compileXD(reporter, null, xdef);
 			assertTrue(reporter.printToString().contains("XDEF443")); //Unknown method xxxx
@@ -2914,7 +2914,7 @@ public final class TestXdef extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2100");
 			props.setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31T23:59:59");
 			xp = XDFactory.compileXD(props, //ydatetime
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"root\">\n" +
 "  <root datum=\"ydatetime('yyyy-MM-ddTHH:mm:ss[Z]', 'yyyy-MM-ddTHH:mm:ss');\" />\n" +
 "</xd:def>");
 			xml = "<root datum=\"2024-11-04T10:00:00\" />";
@@ -3000,7 +3000,7 @@ public final class TestXdef extends XDTester {
 			// test string with code restrictions
 			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "ISO8859-2, ISO8859-5");
 			xd = XDFactory.compileXD(props, //string_codes
-"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A><B xd:script='*;' a='? string();' b='? string() CHECK string(1);'/></A>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A><B b='б'/></A>", reporter);
@@ -3017,7 +3017,7 @@ public final class TestXdef extends XDTester {
 			assertTrue(reporter.getErrorCount() == 2 && reporter.toString().contains("XDEF823"));
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
 			xd = compile( // CHECK operator
-"<xd:def xmlns:xd='"+ XDConstants.XDEF42_NS_URI +"' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a='string() CHECK string(1)'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='x' />", reporter);
@@ -3123,17 +3123,17 @@ public final class TestXdef extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:name=\"Types\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"Types\">\n" +
 "    <xd:declaration scope=\"global\">\n" +
 "        type  cisloSmlouvy  string(1, 35);\n" +
 "        type  id            long(-1, 999_999_999_999); /* Gam_Type */\n" +
 "        type  poradiVozidla string(1, 10);\n" +
 "    </xd:declaration>\n" +
 "</xd:def>\n",
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Common\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"IdentSmlouvy\" xd:name=\"Common\">\n" +
 "  <IdentSmlouvy CisloSmlouvy=\"cisloSmlouvy()\" IdPojistitel=\"id()\" PoradiVozidla=\"poradiVozidla()\"/>\n"+
 "</xd:def>\n",
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Example\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"IdentSmlouvy\" xd:name=\"Example\">\n" +
 "  <IdentSmlouvy xd:script=\"implements Common#IdentSmlouvy\"\n" +
 "                IdPojistitel=\"id()\" CisloSmlouvy=\"cisloSmlouvy()\" PoradiVozidla=\"poradiVozidla()\"/>\n"+
 "</xd:def>\n"});
