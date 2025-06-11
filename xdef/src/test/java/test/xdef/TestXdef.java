@@ -95,6 +95,19 @@ public final class TestXdef extends XDTester {
 		} catch (SRuntimeException ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
+		try {// XML syntax error
+			XDFactory.compileXD(null,
+"<xd:def xmlns:xd=\""+_xdNS+"\" >\n" +
+"  <root a=\"int(); onTrue outln('root a: ' + getText());\" >\n" +
+"    <b xd:script=\"occurs *\" \n" + //missing closing '>'
+"      optional string();\n" +
+"    </b>\n" +
+"  </root>\n" +
+"</xd:def>");
+			fail("Error not reported");
+		} catch (SRuntimeException ex) {
+			assertTrue(ex.getMessage().indexOf("XML075") > 0, ex);
+		}
 		try {
 			xp = compile(
 "<xd:def xmlns:xd=\""+_xdNS+"\" xmlns:tns=\"http://www.w3schools.com\">\n" +
