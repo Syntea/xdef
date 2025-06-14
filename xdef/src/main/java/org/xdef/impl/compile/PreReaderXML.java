@@ -501,12 +501,16 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		try {
 			setReportWriter(_pcomp.getReportWriter());
 			doParse(in, srcName);
+			_actPNode = null; //just let gc to do the job
 		} catch (RuntimeException ex) {
 			throw ex;
 		} catch (Exception | Error ex) {
+			if (ex instanceof InternalError && getReportWriter().getFatalErrorCount()
+				+ getReportWriter().getErrorCount() + getReportWriter().getLightErrorCount() > 0) {
+				return; // ex is instance of InternalError and errors reported
+			}
 			throw new RuntimeException(ex);
 		}
-		_actPNode = null; //just let gc to do the job
 	}
 
 	/** Check if the name of X-definition is OK.

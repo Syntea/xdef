@@ -382,17 +382,15 @@ public class XPreCompiler implements PreCompiler {
 	@Override
 	public final void parseString(final String source, final String srcName) {
 		File f = new File(source);
-		try {
-			if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
-				&& source.charAt(source.trim().length()-1) == '>' && !f.exists()) {
-				ByteArrayInputStream b =
-					new ByteArrayInputStream(source.trim().getBytes(StandardCharsets.UTF_8));
-				_xmlReader.parseStream(b, srcName);
-			} else {
-				parseFile(f);
+		if (!f.exists()) {
+			String s = source.trim();
+			if (s.length() > 3 && s.charAt(0) == '<') {
+				_xmlReader.parseStream(new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8)), srcName);
+				f = null;
 			}
-		} catch (Exception | Error ex) {
-			throw new RuntimeException(ex);
+		}
+		if (f != null) {
+			parseFile(f);
 		}
 	}
 
