@@ -188,6 +188,57 @@
             </build>
         </profile>
         <profile>
+            <id>dm-central</id>
+            <!-- activation of profiles sources, javadoc are required with this profile -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <keyname>info@syntea.cz</keyname>
+                            <!--may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
+                                see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
+                            <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
+                            -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>dm-syntea</id>
+            <distributionManagement>
+                <repository>
+                    <id>private</id>
+                    <url>${mrmUrl}/private</url>
+                </repository>
+                <snapshotRepository>
+                    <id>private-snapshot</id>
+                    <url>${mrmUrl}/private-snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <!--zastarale-->
             <id>dm-ossrh</id>
             <!-- activation of profiles sources, javadoc are required with this profile -->
             <build>
@@ -235,19 +286,6 @@
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
                 </repository>
                 -->
-            </distributionManagement>
-        </profile>
-        <profile>
-            <id>dm-syntea</id>
-            <distributionManagement>
-                <repository>
-                    <id>private</id>
-                    <url>${mrmUrl}/private</url>
-                </repository>
-                <snapshotRepository>
-                    <id>private-snapshot</id>
-                    <url>${mrmUrl}/private-snapshot</url>
-                </snapshotRepository>
             </distributionManagement>
         </profile>
     </profiles>
