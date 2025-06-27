@@ -47,8 +47,8 @@ public class TestIni extends STester {
 		return "";
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String s =
 "address=dhcp\n" +

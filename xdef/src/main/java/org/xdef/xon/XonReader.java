@@ -50,7 +50,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
 	private boolean _xonMode;
-	/** Flag if the parsed data are in Xdefinition (default false). */
+	/** Flag if the parsed data are in X-definition (default false). */
 	private boolean _jdef;
 	/** Parser of XON source. */
 	private final XonParser _jp;
@@ -111,7 +111,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @return true if a directive was read.
 	 */
 	private boolean readDirective() {
-		if (!_jdef) { // no Xdefinition model
+		if (!_jdef) { // no X-definition model
 			return false;
 		}
 		SPosition spos = getPosition();
@@ -128,7 +128,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			XonTools.JValue jv = readSimpleValue();
 			value = jv.getSBuffer();
 			if (!(jv.getValue() instanceof String)) {
-				error(JSON.JSON018); //Value must be string with Xscript
+				error(JSON.JSON018); //Value must be string with X-script
 			}
 		} else if (i == 0) { // $script
 			error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
@@ -274,8 +274,7 @@ public final class XonReader extends StringParser implements XonParsers {
 
 	/** Returns parsed simpleValue.
 	 * @param x parsed simpleValue to be returned.
-	 * @return parsed simpleValue. If the switch _genJObjects is true, then
-	 * the parsed simpleValue contains source position.
+	 * @return parsed simpleValue. If _genJObjects is true the parsed value contains the source position.
 	 */
 	private XonTools.JValue returnValue(SPosition spos, final Object x) {return new XonTools.JValue(spos, x);}
 
@@ -284,7 +283,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param code currencyCode of error message.
 	 * @param skipChars string with characters to which source will be skipped.
 	 * @param params list od error message parameters (may be empty.)
-	 * @return parsed simpleValue. If switch _genJObjects is true, then simpleValue contains source position.
+	 * @return parsed simpleValue. If switch _genJObjects is true the simpleValue contains source position.
 	 */
 	private XonTools.JValue returnError(SPosition spos,
 		final Object x,
@@ -341,6 +340,11 @@ public final class XonReader extends StringParser implements XonParsers {
 		int pos = getIndex();
 		if (isChar('"')) { // string
 			String s = XonTools.readJString(this);
+			if (_jdef) { //JSON string in X-definition JSON model
+				s = SUtils.modifyString(s, "\\", "\\\\");
+				s = SUtils.modifyString(s, "\"", "\\\"");
+				return returnValue(spos, s);
+			}
 			if (!_xonMode) {
 				return returnValue(spos, s);
 			} else {
@@ -628,7 +632,7 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else {
 			XonTools.JValue jv = readSimpleValue();
 			if (_jdef && (jv == null || jv.getValue() == null || !(jv.getValue() instanceof String))) {
-				error(JSON.JSON018); //Value in Xdefinition must be a string with Xscript
+				error(JSON.JSON018); //Value in X-definition must be a string with X-script
 				if (jv != null) {
 					Object val = jv.getValue();
 					jv = new XonTools.JValue(jv.getPosition(), val == null ? "null" : val.toString());
@@ -641,7 +645,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param in Reader with XON/JSON source data.
 	 * @param sysId System ID of source position or null.
 	 * @param xonMode if true then XON, if false JSON.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertXDBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed XON or JSON object.
 	 */
 	private static Object parseXonJson(final Reader in,
@@ -667,7 +671,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse XON source data.
 	 * @param in Reader with XON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertXDBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed XON object.
 	 */
 	public static final Object parseXON(final Reader in, final String sysId, final boolean convertXDBytes) {
@@ -677,7 +681,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertXDBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed JSON object.
 	 */
 	public static final Object parseJSON(final Reader in, final String sysId, final boolean convertXDBytes) {
@@ -687,7 +691,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse XON source data.
 	 * @param in input stream with XON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed XON object.
 	 */
 	public static final Object parseXON(final InputStream in, final String sysId, final boolean convertBytes){
@@ -697,7 +701,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertBytes flag if XDBytes objects are converted to byte[].
 	 * @return parsed JSON object.
 	 */
 	public static final Object parseJSON(final InputStream in, final String sysId,final boolean convertBytes){
@@ -785,17 +789,21 @@ public final class XonReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Set mode that XON/JSON is parsed in X-definition compiler. */
 	@Override
-	/** Set mode that XON/JSON is parsed in Xdefinition compiler. */
 	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
-	@Override
+
 	/** Set mode that XON is parsed. */
+	@Override
 	public final void setXonMode() {_jdef = false; _acceptComments = _xonMode = true;}
-	@Override
+
 	/** Set mode for strict JSON parsing (JSON, no comments). */
-	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
 	@Override
+	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
+
 	/** Parse XON/JSON source data (depends on the flag "_xon"). */
+	@Override
 	public final void parse() {
 		if (!_jdef && isToken(XonNames.ENCODING_DIRECTIVE)) { //encoding
 			int pos1 = getIndex() - XonNames.ENCODING_DIRECTIVE.length();

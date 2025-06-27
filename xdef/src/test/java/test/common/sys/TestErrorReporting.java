@@ -43,8 +43,8 @@ public class TestErrorReporting extends STester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		try {
 			test1();

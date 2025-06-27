@@ -3,8 +3,10 @@ package org.xdef.impl.parsers;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
+import org.xdef.xon.XonTools;
 
 /** Parse emailAddr.
  * @author Vaclav Trojan
@@ -13,11 +15,14 @@ public class XDParseEmailAddr extends XDParserAbstract {
 	private static final String ROOTBASENAME = "emailAddr";
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
+	public void parseObject(final XXNode xn, final XDParseResult p) {
 		p.isSpaces();
-		String s = p.getUnparsedBufferPart();
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		String s = q.getUnparsedBufferPart();
 		if (chkEmail(p, s, ROOTBASENAME)) {
 			p.setEos();
+			checkCharset(xn, p);
 		}
 	}
 	/** Check if the argument contains correct email address.
@@ -41,8 +46,10 @@ public class XDParseEmailAddr extends XDParserAbstract {
 		}
 		return false;
 	}
+
 	@Override
 	public short parsedType() {return XD_EMAIL;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

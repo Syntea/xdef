@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -96,7 +97,7 @@ public class XonTools {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// public methods (used also in Xdefinition compilation and Xcomponents)
+// public methods (used also in X-definition compilation and X-components)
 ////////////////////////////////////////////////////////////////////////////////
 	/** Create string from XON/JSON source string data.
 	 * @param s XON/JSON string.
@@ -276,22 +277,20 @@ public class XonTools {
 		}
 		XDParseResult r;
 		if (endChar == '"') {
-			try {
-				switch (ch) {
-					case 'T': return new DefTelephone(s);
-					case 'e': return new DefEmailAddr(s);
-					case 'u': return new DefURI(s);
-					case 'C':
-						if ((r = chkValue(s, new XDParseCurrency())).matches()){
-							return r.getParsedValue().getObject();
-						}
-						break;
-					case 'c':
-						if ((r = chkValue(s, new XDParseChar())).matches()) {
-							return r.getParsedValue().getObject();
-						}
-				}
-			} catch (Exception ex) {}
+			switch (ch) {
+				case 'T': return new DefTelephone(s);
+				case 'e': return new DefEmailAddr(s);
+				case 'u': return new DefURI(s);
+				case 'C':
+					if ((r = chkValue(s, new XDParseCurrency())).matches()){
+						return r.getParsedValue().getObject();
+					}
+					break;
+				case 'c':
+					if ((r = chkValue(s, new XDParseChar())).matches()) {
+						return r.getParsedValue().getObject();
+					}
+			}
 		}
 		return s; // XON/JSON String
 	}
@@ -446,8 +445,7 @@ public class XonTools {
 			case "-":
 			case "null":
 			case "true":
-			case "false":
-			return '"' + s + '"';
+			case "false": return '"' + s + '"';
 		}
 		if (isNumber(s)) {
 			return '"' + s + '"';
@@ -522,7 +520,7 @@ public class XonTools {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Interface and classes used when XON/JSON is parsed in Xdefinition compiler.
+// Interface and classes used when XON/JSON is parsed in X-definition compiler.
 ////////////////////////////////////////////////////////////////////////////////
 	/** Interface of JSON/XON object. */
 	public interface JObject {
@@ -535,11 +533,15 @@ public class XonTools {
 	public static class JMap extends LinkedHashMap<Object, Object>
 		implements JObject {
 		private final SPosition _position; // SPosition of parsed object
+
 		public JMap(final SPosition position) {super(); _position = position;}
+
 		@Override
 		public SPosition getPosition() {return _position;}
+
 		@Override
 		public Object getValue() {return null;}
+
 		@Override
 		public SBuffer getSBuffer() {return null;}
 	}
@@ -547,11 +549,15 @@ public class XonTools {
 	/** XON/JSON array. */
 	public static class JArray extends ArrayList<Object> implements JObject {
 		private final SPosition _position; // SPosition of parsed object
+
 		public JArray(final SPosition position) {super(); _position = position;}
+
 		@Override
 		public SPosition getPosition() {return _position;}
+
 		@Override
 		public Object getValue() {return null;}
+
 		@Override
 		public SBuffer getSBuffer() {return null;}
 	}
@@ -560,16 +566,21 @@ public class XonTools {
 	public static class JValue implements JObject {
 		private final SPosition _position; // SPosition of parsed object
 		private final Object _o; // parsed object
+
 		public JValue(final SPosition position, final Object val) {
 			_position = position;
 			_o = val;
 		}
+
 		@Override
 		public SPosition getPosition() {return _position;}
+
 		@Override
 		public Object getValue() {return _o;}
+
 		@Override
 		public SBuffer getSBuffer(){return new SBuffer(toString(),_position);}
+
 		@Override
 		public String toString() {return _o == null ? "null" : _o.toString();}
 	}
@@ -579,17 +590,21 @@ public class XonTools {
 		public JAny(final SPosition position, final SBuffer val) {
 			super(position, val);
 		}
+
 		@Override
 		public SBuffer getSBuffer() {return (SBuffer) getValue();}
 	}
 
 	/** Representation of XON/JSON object "null". */
-	public static final class JNull {
+	public static final class JNull implements Serializable {
 		private JNull() {}
+
 		@Override
 		public final String toString() {return "null";}
+
 		@Override
 		public final int hashCode(){return 0;}
+
 		@Override
 		public final boolean equals(final Object o) {return o==null || o instanceof JNull;}
 	}

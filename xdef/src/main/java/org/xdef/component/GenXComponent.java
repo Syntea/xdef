@@ -80,7 +80,7 @@ public final class GenXComponent {
 					}
 					if (genJavadoc) {
 						out.write(LN+"/** This enumeration represents the type "
-							+ e.getKey() + " from Xdefinition.*/"+LN);
+							+ e.getKey() + " from X-definition.*/"+LN);
 					}
 					out.write("public enum "
 						+ enumName + " implements org.xdef.component.XCEnumeration{"+LN);
@@ -94,20 +94,20 @@ public final class GenXComponent {
 						out.write("\t"+ st.nextToken());
 					}
 					final String template =";"+LN+
-(genJavadoc ?
-(LN+"\t@Override"+LN+
+LN+(genJavadoc ? (
 "\t/** Get object associated with this item of enumeration."+LN+
 "\t * @return object associated with this item of enumeration."+LN+
-"\t */"+LN) : "\t@Override"+LN) +
+"\t */"+LN) : "") +
+"\t@Override"+LN+
 "\tpublic final Object itemValue() {return name();}"+LN+
-(genJavadoc ?
-(LN+"\t@Override"+LN+
-"\t/** Get string which is used to create enumeration."+LN+
+LN+(genJavadoc ?
+("\t/** Get string which is used to create enumeration."+LN+
 "\t * @return string which is used to create enumeration."+LN+
-"\t */"+LN) : "\t@Override"+LN) +
+"\t */"+LN) : "") +
+"\t@Override"+LN+
 "\tpublic final String toString() {return name();}"+LN+
-(genJavadoc ?
-(LN+"\t/** Create enumeration item from an object."+LN+
+LN+(genJavadoc ?
+("\t/** Create enumeration item from an object."+LN+
 "\t * @param x Object to be converted."+LN+
 "\t * @return the item of this  enumeration (or null)."+LN+
 "\t */"+LN) : "") +
@@ -132,7 +132,7 @@ public final class GenXComponent {
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param xdpool XDPool object with Xcomponents.
+	 * @param xdpool XDPool object with X-components.
 	 * @param fdir path to directory where write the source code. The file name* will be constructed from
 	 * %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used the system character set name).
@@ -150,7 +150,7 @@ public final class GenXComponent {
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param xdpool XDPool object with Xcomponents.
+	 * @param xdpool XDPool object with X-components.
 	 * @param fdir directory where write the source code. The file names will be constructed from %class
 	 * statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used the system character set name).
@@ -185,10 +185,10 @@ public final class GenXComponent {
 				int ndx = s.indexOf(" ");
 				classNames.add(ndx > 0 ? s.substring(0, ndx): s);
 			}
-			// create array of all Xcomponents so that first are the items
-			// which are extensions of an other Xcomponent and then follows
-			// those not extendsd. This ensures that Xcomponents which extends
-			// other Xcomponent are compiled first.
+			// create array of all X-components so that first are the items
+			// which are extensions of an other X-component and then follows
+			// those not extendsd. This ensures that X-components which extends
+			// other X-component are compiled first.
 			List<Entry<String, String>> xcarray = new ArrayList<>();
 			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 				int ndx;
@@ -321,7 +321,7 @@ public final class GenXComponent {
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param xdpool XDPool object with declared Xcomponents.
+	 * @param xdpool XDPool object with declared X-components.
 	 * @param dir path to directory where write the source code. The file names will be constructed from
 	 * %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used the system character set name).
@@ -335,7 +335,7 @@ public final class GenXComponent {
 	/** Call generation of Java source code of XComponents from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
-	 * <li>-i Xdefinitions list of files, required. Wildcards are
+	 * <li>-i X-definitions list of files, required. Wildcards are
 	 * supported, required.
 	 * <li>-x Qualified name of class with XDPool which source will
 	 *  be generated, optional (if not specified, source is not generated)
@@ -349,9 +349,9 @@ public final class GenXComponent {
 	 */
 	public static void main(String... args) {
 		final String info =
-"GenXComponent - generate XComponent Java source code from Xdefinition.\n"+
+"GenXComponent - generate XComponent Java source code from X-definition.\n"+
 "Parameters:\n"+
-" -i Xdefinitions list of files, required. Wildcards may be used. Required.\n"+
+" -i X-definitions list of files, required. Wildcards may be used. Required.\n"+
 " -o Output directory where XComponents are generated, required\n"+
 " -p Output directory where the compiled XDPool will be stored,\n"+
 "    optional (if not specified the XDPool object is not stored)\n"+
@@ -399,7 +399,7 @@ public final class GenXComponent {
 					} else {
 						throw new RuntimeException("Parameter '-e' is not encoding name.\n" + info);
 					}
-				case 'i': // Xdefinitions list of files
+				case 'i': // X-definitions list of files
 					while (++i < args.length && (arg = args[i]) != null && !arg.startsWith("-")) {
 						sources.add(arg);
 					}

@@ -1,5 +1,7 @@
 package org.xdef.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -29,6 +31,7 @@ import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XX_DOCUMENT;
+import static org.xdef.XDValueID.XX_ELEMENT;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefElement;
@@ -54,7 +57,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_VALUE;
 
-/** Constructs XML object according to Xdefinition.
+/** Constructs XML object according to X-definition.
  * @author Vaclav Trojan
  */
 final class ChkComposer extends SReporter {
@@ -228,7 +231,7 @@ final class ChkComposer extends SReporter {
 
 	/** Compose the XML element from the source XML element. The name
 	 * of root element of result is given by parameter. For construction is used
-	 * the Xdefinition specified by ChkComposer constructor.
+	 * the X-definition specified by ChkComposer constructor.
 	 * @param sourceElem The element with source data.
 	 */
 	private void composeRoot(final Element sourceElem) {
@@ -307,7 +310,7 @@ final class ChkComposer extends SReporter {
 			}
 		} catch (SError e) {
 			Report rep = e.getReport();
-			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //Xdefinition canceled
+			if (rep != null && "XDEF906".equals(rep.getMsgID())) { //X-definition canceled
 				error(rep.getMsgID(), rep.getText(), rep.getModification());
 				_rootChkElement._rootChkDocument.endDocument();
 			} else {
@@ -698,6 +701,35 @@ final class ChkComposer extends SReporter {
 		}
 	}
 
+	/** Find XElement reference in childNodes array.
+	 * @param xel to be found.
+	 * @param childNodes where to find.
+	 * @param hs HashSet with processed nodes (revent unlimited recursive call).
+	 * @return true if reference was found.
+	 */
+	private boolean findReferenceRecurse(final XElement xel, final XNode[] childNodes, final Set<XNode> hs) {
+		for (XNode x: childNodes) {
+			if (x == xel) {
+				return true;
+			}
+			if (x.getKind() == XMELEMENT) {
+				if (hs.add(x) && childNodes != ((XElement) x)._childNodes
+					&& findReferenceRecurse(xel, ((XElement) x)._childNodes, hs)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/** Check if given XElement contains a recursion reference.
+	 * @param xel to be checked,
+	 * @return true if it contains a recursion reference.
+	 */
+	private boolean isReferenceRecurse(final XElement xel) {
+		return xel.isReference() && findReferenceRecurse(xel, xel._childNodes, new HashSet<>());
+	}
+
 	/** Execute "compose" action.
 	 * @param chkEl The actual check element.
 	 * @param sourceEl The source element from which the result is composed.
@@ -720,7 +752,13 @@ final class ChkComposer extends SReporter {
 					KXmlUtils.newDocument(chkEl._xElement.getNSUri(), qname,null).getDocumentElement();
 				return new DefElement(chkEl._sourceElem);
 			}
-			if (!chkEl._xElement.isReference()) { //not reference
+			if (isReferenceRecurse(chkEl._xElement)) {// refeference recurse
+				//model is a refenece to another model; in actual context find elements with same name and URI
+				String u = chkEl._xElement.getNSUri();
+				result = new DefContainer(u != null && !u.isEmpty() // is namespace URI
+					? KXmlUtils.getChildElementsNS(sourceEl, u, chkEl._xElement.getLocalName())
+					: KXmlUtils.getChildElements(sourceEl, chkEl._xElement.getName()));
+			} else {
 				DefContainer xdc = new DefContainer(); //create default contex
 				getChildElementsByName(xdc, chkEl, sourceEl, lastEl);
 				Element el = xdc.getXDElement(0);
@@ -739,11 +777,6 @@ final class ChkComposer extends SReporter {
 				}
 				return xdc;
 			}
-			//model is a refenece to another model; in the actual context find elements with same name and URI
-			String u = chkEl._xElement.getNSUri();
-			result = new DefContainer(u != null && !u.isEmpty() // is namespace URI
-				? KXmlUtils.getChildElementsNS(sourceEl, u, chkEl._xElement.getLocalName())
-				: KXmlUtils.getChildElements(sourceEl, chkEl._xElement.getName()));
 		}
 		chkEl.copyTemporaryReports();
 		if (result != null && !result.isNull()) {
@@ -1459,7 +1492,7 @@ final class ChkComposer extends SReporter {
 	/** Creates a new instance of ChkComposer. This constructor is used only internally
 	 * when the composer is called from script.
 	 * @param reporter temporary reporter from script processor.
-	 * @param xdef the XDefinition.
+	 * @param xdef the X-definition.
 	 * @param nsURI Namespace URI of the element.
 	 * @param qname Qualified name of the element.
 	 * @param chkElem the ChkElement object from which the constructor was called.
@@ -1523,11 +1556,11 @@ final class ChkComposer extends SReporter {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// methods called ONLY internally from Xscript processor!
+// methods called ONLY internally from X-script processor!
 ///////////////////////////////////////////////////////////////////////////////
 
 	/** Returns available element model represented by given name or null if definition item is not available.
-	 * @param xdef XDefinition.
+	 * @param xdef X-definition.
 	 * @param key The name of definition item used for search.
 	 * @return The required X-element or null.
 	 */
@@ -1556,7 +1589,7 @@ final class ChkComposer extends SReporter {
 	/** Compose the XML element from the source XML element. The name of root element of result is given
 	 * by parameter. NOTE This method is called ONLY internally from script processor!
 	 * @param reporter array report writer.
-	 * @param xdef XDefinition.
+	 * @param xdef X-definition.
 	 * @param rootName name of root element.
 	 * @param chkEl the ChkElement object from which this was called.
 	 * @return composed XML element.
@@ -1585,7 +1618,7 @@ final class ChkComposer extends SReporter {
 				qname = rootName;
 				nsURI = xe.getNSUri();
 			} else {
-				//Model of element &{0} is missing in Xdefinition &{1}
+				//Model of element &{0} is missing in X-definition &{1}
 				chkEl.error(XDEF.XDEF601, rootName, xdef.getName());
 				return null;
 			}

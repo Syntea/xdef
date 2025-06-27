@@ -41,8 +41,7 @@ public class DefXmlWriter extends KXmlOutStream implements XDXmlOutStream, XDVal
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
+	 * @param writeDocumentHeader if true then the XML header is written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
 	public DefXmlWriter(final OutputStream out, final String encoding, final boolean writeDocumentHeader)
@@ -65,96 +64,131 @@ public class DefXmlWriter extends KXmlOutStream implements XDXmlOutStream, XDVal
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of CodeItem
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** This method is used internally only in the code interpreter - do not override this method!.
 	 * Set result type of operation (if this is an operation it makes nothing).
 	 * @param type id of type.
 	 */
-	public void setItemType(final short type) {throw new SUnsupportedOperationException();}
 	@Override
+	public void setItemType(final short type) {throw new SUnsupportedOperationException();}
+
 	/** This method is used internally only in the code interpreter - do not override this method!.
 	 * Set code of an operation (if this is not an instruction it does nothing).
 	 * @param code the new code of operation.
 	 */
-	public void setCode(final short code) {throw new SUnsupportedOperationException();}
 	@Override
+	public void setCode(final short code) {throw new SUnsupportedOperationException();}
+
 	/** This method is used internally only in the code interpreter - do not override this method!.
 	 * Set parameter of operation (if this is an operation it makes nothing).
 	 * @param param value of operation parameter.
 	 */
+	@Override
 	public void setParam(final int param) {throw new SUnsupportedOperationException();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public short getItemId() {return XD_XMLWRITER;}
+
 	@Override
 	public XDValueType getItemType() {return XMLWRITER;}
+
 	@Override
 	public boolean equals(final XDValue arg) {return arg == this;}
+
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
+
 	@Override
 	public String stringValue() {return super.toString();}
+
 	@Override
 	public char charValue() {return 0;}
+
 	@Override
 	public byte byteValue() {return 0;}
+
 	@Override
 	public short shortValue() {return 0;}
+
 	@Override
 	public int intValue() {return 0;}
+
 	@Override
 	public long longValue() {return 0;}
+
 	@Override
 	public float floatValue() {return 0.0f;}
+
 	@Override
 	public double doubleValue() {return 0.0;}
+
 	@Override
 	public BigDecimal decimalValue() {return null;}
+
 	@Override
 	public BigInteger integerValue() {return null;}
+
 	@Override
 	public boolean booleanValue() {return false;}
+
 	@Override
 	public Node getXMLNode() {return null;}
+
 	@Override
 	public Element getElement() {return null;}
+
 	@Override
 	public SDatetime datetimeValue() {return null;}
+
 	@Override
 	public SDuration durationValue() {return null;}
+
 	@Override
 	public XDContainer containerValue() {return null;}
+
 	@Override
 	public byte[] getBytes() {return null;}
+
 	@Override
 	public XDService serviceValue() {return null;}
+
 	@Override
 	public XDStatement statementValue() {return null;}
+
 	@Override
 	public XDResultSet resultSetValue() {return null;}
+
 	@Override
 	public XDParseResult parseResultValue() {return null;}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() { return false;}
+
 	@Override
 	public Object getObject() {return this;}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Methods used in XD processor for internal code - DO NOT IMPLEMENT!
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public short getCode() {return LD_CONST;}
+
 	@Override
 	public int getParam() {return 0;}
+
 	@Override
 	public XDValue cloneItem() {return this;}
+
 	@Override
 	public String toString() {return stringValue();}
 }

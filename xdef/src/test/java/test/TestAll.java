@@ -19,7 +19,7 @@ public class TestAll {
 		XDTester.setFulltestMode(false);
 		System.out.println("[INFO] Java version: " + System.getProperty("java.version") + " ("
 			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without") + " Saxon library) ...");
-		System.out.println("[INFO] Xdefinition version: " + XDFactory.getXDVersion());
+		System.out.println("[INFO] X-definition version: " + XDFactory.getXDVersion());
 	}
 
 	/** run TestAll in test.common */

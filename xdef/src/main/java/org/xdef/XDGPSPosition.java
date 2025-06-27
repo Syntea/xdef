@@ -6,7 +6,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SIllegalArgumentException;
 
-/** Value of GPS position in Xscript.
+/** Value of GPS position in X-script.
  * @author Vaclav Trojan
  */
 public final class XDGPSPosition extends XDValueAbstract {
@@ -70,6 +70,7 @@ public final class XDGPSPosition extends XDValueAbstract {
 		}
 		return false;
 	}
+
 	@Override
 	public final int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof XDGPSPosition) {
@@ -79,16 +80,22 @@ public final class XDGPSPosition extends XDValueAbstract {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
+
 	@Override
 	public final short getItemId() {return XD_GPSPOSITION;}
+
 	@Override
 	public final XDValueType getItemType() {return GPSPOSITION;}
+
 	@Override
 	public final String stringValue() {return isNull() ? "" : _position.toString();}
+
 	@Override
 	public final boolean isNull() {return _position == null;}
+
 	@Override
 	public final GPSPosition getObject() {return _position;}
+
 	@Override
 	public final String toString() {return _position.toString();}
 }

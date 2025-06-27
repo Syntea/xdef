@@ -41,8 +41,8 @@ public final class TestXdefOfXdef extends XDTester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String xml;
 		final String dataDir = getDataDir() + "test/";
@@ -219,6 +219,13 @@ public final class TestXdefOfXdef extends XDTester {
 "</xd:def>");
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
 			}
+		} catch (Exception ex) {fail(ex);}
+		try {
+			 compile(
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <xd:declaration> String x() {return 'a'}; </xd:declaration>\n" +
+"  <A a=\"? string(); onTrue{ x().equals('a'); }\"/>\n" +
+"</xd:def>");
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

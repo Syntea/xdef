@@ -15,6 +15,7 @@ import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_REPLACE;
+import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.sys.SRuntimeException;
 
@@ -30,6 +31,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 
 	@Override
 	public  void initParams() {_patterns = null; _enumeration = null; _minLength = _maxLength = -1;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -50,20 +52,28 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) { _maxLength = x; }
+
 	@Override
 	public long getMaxLength() { return _maxLength; }
+
 	@Override
 	public void setMinLength(final long x) { _minLength = x; }
+
 	@Override
 	public long getMinLength() { return _minLength; }
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		if (params != null && params.length >= 1) {
@@ -77,6 +87,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		_enumeration = null;
@@ -116,18 +127,22 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 	}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
+		boolean quotedString = xn != null && xn.getXonMode() > 0 && p.isChar('"');
 		if (_whiteSpace == WS_COLLAPSE) {
 			p.isSpaces();
 		}
 		String s;
 		if (_enumeration != null) {
-			checkEnumeration(p, xnode);
+			checkEnumeration(p, xn);
 			if (p.errors()) {
 				return;
 			}
 			s = p.getParsedValue().toString();
+			if (quotedString && s.endsWith("\"") &&  s.length() > 1) {
+				s = s.substring(0, s.length() - 1);
+			}
 			if (_whiteSpace == WS_COLLAPSE) {
 				p.isSpaces();
 			}
@@ -136,21 +151,33 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			while((s = p.nextToken()) != null) {
 				sb.append(s);
 				if (p.isSpaces()) {
+					if (quotedString) {
+						if  (p.isChar('"')) {
+							sb.append('"');
+							if (p.eos()) {
+								break;
+							}
+						} else {
+							sb.append(" \"");
+						}
+					}
 					if (!p.eos()) {
 						sb.append(' ');
 					} else {
 						break;
 					}
-				} else {
-					break;
 				}
 			}
+			p.isSpaces();
 			s = sb.toString();
-			if (_whiteSpace == WS_COLLAPSE) {
-				p.isSpaces();
+			if (quotedString && s.endsWith("\"")) {
+				s = s.substring(0, s.length() - 1).trim(); // remove '"' from the end of string
 			}
 		} else {//preserve or replace
 			s = p.getUnparsedBufferPart();
+			if (quotedString && s.endsWith("\"")) {
+				s = s.substring(0, s.length() - 1);
+			}
 			if (_whiteSpace == WS_REPLACE) { //replace
 				s = s.replace('\t', ' ').replace('\n', ' ').replace('\r', ' ');
 			}
@@ -162,7 +189,14 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		p.setParsedValue(s);
 		checkPatterns(p);
 		checkLength(p);
+		if (quotedString) { // JSON string
+			s = '"' + s + '"';
+			p.replaceParsedBufferFrom(pos0, s);
+			p.setParsedValue(s);
+		}
+		checkCharset(xn, p);
 	}
+
 	void checkLength(XDParseResult p) {
 		if (p.matches()) {
 			String s = p.getParsedValue().toString();
@@ -175,6 +209,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
+
 	void checkEnumeration(final XDParseResult p, final XXNode xnode) {
 		if (p.matches()) {
 			boolean found = false;
@@ -215,6 +250,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
 }

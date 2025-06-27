@@ -150,13 +150,16 @@ public class XVariable implements XMVariable {
 		result._keyIndex = xr.readInt();
 		return result;
 	}
+
 	@Override
 	public final int hashCode() {return _name.hashCode();}
+
 	@Override
 	public final boolean equals(final Object o) {
 		return (o == null) ? false : (o instanceof XVariable) ? _name.equals(((XVariable) o)._name)
 			: (o instanceof String) ? _name.equals((String) o) : false;
 	}
+
 	@Override
 	public String toString() {
 		return (isExternal() ? "external " : "") + (isFinal() ? "final " : "")+
@@ -169,37 +172,44 @@ public class XVariable implements XMVariable {
 ////////////////////////////////////////////////////////////////////////////////
 // implementation of XMVariable
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get name of variable.
 	 * @return name of variable.
 	 */
-	public final String getName() {return _name;}
 	@Override
+	public final String getName() {return _name;}
+
 	/** Get type of variable (see org.xdef.XDValueID).
 	 * @return type of variable.
 	 */
-	public final short getType() {return _type;}
 	@Override
+	public final short getType() {return _type;}
+
 	/** Get kind of variable (global, local, XModel).
 	 * @return 'G' .. global, 'L' .. local, 'X' .. XModel.
 	 */
-	public final byte getKind() {return _kind;}
 	@Override
+	public final byte getKind() {return _kind;}
+
 	/** Get "final" flag.
 	 * @return true if and only if variable is declared as final.
 	 */
-	public final boolean isFinal() {return _isFinal;}
 	@Override
+	public final boolean isFinal() {return _isFinal;}
+
 	/** Get "external" flag.
 	 * @return true if and only if variable is declared as external.
 	 */
+	@Override
 	public final boolean isExternal() {return _isExternal;}
-	@Override
+
 	/** Check if this field is initialized. */
-	public final boolean isInitialized() {return _kind == 'G' || _initialized;}
 	@Override
+	public final boolean isInitialized() {return _kind == 'G' || _initialized;}
+
 	/** Get offset (address) of variable.
 	 * @return offset of variable.
 	 */
+	@Override
 	public final int getOffset() {return _offset;}
 }

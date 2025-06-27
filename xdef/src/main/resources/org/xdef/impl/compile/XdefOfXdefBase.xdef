@@ -11,25 +11,19 @@
   xmlns:XD4.2     = "http://www.xdef.org/xdef/4.2"
   xmlns:w         = "http://www.xdef.org/xdef/4.2"
   w:metaNamespace = "METAXD"
-  xd:root         = "Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
-                     | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component
-                     | Ver3.1#XD3.1:thesaurus
-                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection
-                     | Ver3.2#XD3.2:declaration | Ver3.2#XD3.2:component
-                     | Ver3.2#XD3.2:lexicon
-                     | Ver4.0#XD4.0:def | Ver4.0#XD4.0:collection
-                     | Ver4.0#XD4.0:declaration | Ver4.0#XD4.0:component
-                     | Ver4.0#XD4.0:lexicon
-                     | Ver4.1#XD4.1:def | Ver4.1#XD4.1:collection
-                     | Ver4.1#XD4.1:declaration | Ver4.1#XD4.1:component
-                     | Ver4.1#XD4.1:lexicon
-                     | Ver4.2#XD4.2:def | Ver4.2#XD4.2:collection
-                     | Ver4.2#XD4.2:declaration | Ver4.2#XD4.2:component
-                     | Ver4.2#XD4.2:lexicon">
+  xd:root         = "Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection | Ver3.1#XD3.1:declaration
+                     | Ver3.1#XD3.1:component | Ver3.1#XD3.1:thesaurus
+                     | Ver3.2#XD3.2:def | Ver3.2#XD3.2:collection | Ver3.2#XD3.2:declaration
+                     | Ver3.2#XD3.2:component | Ver3.2#XD3.2:lexicon
+                     | Ver4.0#XD4.0:def | Ver4.0#XD4.0:collection | Ver4.0#XD4.0:declaration
+                     | Ver4.0#XD4.0:component | Ver4.0#XD4.0:lexicon
+                     | Ver4.1#XD4.1:def | Ver4.1#XD4.1:collection | Ver4.1#XD4.1:declaration
+                     | Ver4.1#XD4.1:component | Ver4.1#XD4.1:lexicon
+                     | Ver4.2#XD4.2:def | Ver4.2#XD4.2:collection | Ver4.2#XD4.2:declaration
+                     | Ver4.2#XD4.2:component | Ver4.2#XD4.2:lexicon">
 
 <xd:declaration>
-  /* Variable NS is used as the namespace of the checked source.*/
-  String NS;
+  String NS; /* Variable NS is used as the namespace of the checked source.*/
 
 /******************************************************************************/
 /* Types of values see BNF grammar below                                      */
@@ -55,7 +49,7 @@
   type yesNo XDScript.rule('YesNo');
   type lexicon XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
-  type xonScript XDScript.rule('XONScript');
+  type jsonScript XDScript.rule('JSONScript');
   type iniprops XDScript.rule('INIProps');
 
   /* The attribute name must start with the prefix "impl-", the value
@@ -73,7 +67,6 @@
 /******************************************************************************/
 
   <xd:BNFGrammar name = "XDScript">
-
 <![CDATA[
 
 /******************************************************************************/
@@ -106,19 +99,15 @@ SemicolonOrSourceEnd ::= S? (";" S? | $eos)
   /* At the end of source text the semicolon is not required. */
 
 /* Keywords of the X-script */
-Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
-  | "case" | "for" | "return" | "def" | "try" | "catch" | "throw" | "finally"
-  /* | "fixed" */ | "external" | "new" | "required" | "optional" | "ignore"
-  | "illegal" | "occurs" | "onTrue" | "onError" | "onAbsence" | "default"
-  | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var"
-  | "onIllegalElement" | "onIllegalRoot" | "onXmlError" | "create" | "init"
-  | "options" | "option" | "ref" | "match" | "final" | "forget" | "template"
-  | "type" | "uniqueSet" | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH"
-  | "RSH"  | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR"
-  | "AAND" | "CHECK" | "true" | "false" | "implements" | "extends" | "onFalse"
-  | "$$$script"
-  /* Note "fixed" is not the keyword since it is used also as the name of
-   validation method. */
+Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch" | "case" | "for" | "return"
+  | "def" | "try" | "catch" | "throw" | "finally" /* | "fixed" */ | "external" | "new" | "required"
+  | "optional" | "ignore" | "illegal" | "occurs" | "onTrue" | "onError" | "onAbsence" | "default" | "onExcess"
+  | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var" | "onIllegalElement" | "onIllegalRoot"
+  | "onXmlError" | "create" | "init" | "options" | "option" | "ref" | "match" | "final" | "forget"
+  | "template" | "type" | "uniqueSet" | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" | "RRSH"
+  | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND" | "CHECK" | "true" | "false" | "implements"
+  | "extends" | "onFalse" | "$$$script"
+  /* Note "fixed" is not the keyword since it is used also as the name of validation method. */
 
 /* Predefined constants */
 PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |
@@ -140,12 +129,10 @@ BooleanLiteral ::= ("true" | "false") $rule
 
 DecimalInteger ::= ("_"* Digits)+ ("_")*
 
-IntegerLiteral ::= (("0" [DdIi])? DecimalInteger 
-  | "0" [Xx] ("_"* HexaDigits)+ ("_")*) $rule
-  /* Inside a number specification it is possible to insert the character "_".
-    This character does not influence the value of the number, it just makes
-    a number more readable. E.g. the number 123456789 you can be written
-    as 123_456_789 (or 0x0f123456 as 0x0f_12_34_56). */
+IntegerLiteral ::= (("0" [DdIi])? DecimalInteger  | "0" [Xx] ("_"* HexaDigits)+ ("_")*) $rule
+  /* Inside a number specification it is possible to insert the character "_". This character does not
+    influence the value of the number, it just makes a number more readable. E.g. the number 123456789
+    you can be written as 123_456_789 (or 0x0f123456 as 0x0f_12_34_56). */
 
 FloatLiteral ::= (("0" [Dd]) DecimalInteger "." DecimalInteger? )
   | ((DecimalInteger ("." DecimalInteger Exponent? | Exponent))) $rule
@@ -158,11 +145,9 @@ SpecChar ::= "\" ("\" | '"' | "'" | "n" | "r" | "t") | UnicodeCharSpecification
 
 UnicodeCharSpecification ::= "\u" HexaDigit{4}
 
-StringLiteral ::= ("'" ("''" | [^'\] | SpecChar)* "'" |
-  '"' ('""' | [^"\] | SpecChar)* '"') $rule
-  /* The opening and closing delimiter must be either """ or "'". The occurrence
-     of this delimiter inside of literal can be recorded as a double delimiter
-     or in the form of SpecChar. */
+StringLiteral ::= ("'" ("''" | [^'\] | SpecChar)* "'" | '"' ('""' | [^"\] | SpecChar)* '"') $rule
+  /* The opening and closing delimiter must be either """ or "'". The occurrence of this delimiter inside of
+     literal can be recorded as a double delimiter or in the form of SpecChar. */
 
 Literal ::= BooleanLiteral | NumberLiteral | StringLiteral
 
@@ -178,8 +163,7 @@ XModelName ::= XMLName
 
 importLocal ::= S? ( (XMLName | "#") S? ("," S? (XMLName | "#") S?)*)?
 
-XPosition ::= (XDefName? "#")? XModelName
-  ("/" (XMLName | XGroupRererence | XAnyReference) XPositionIndex?)*
+XPosition ::= (XDefName? "#")? XModelName ("/" (XMLName | XGroupRererence | XAnyReference) XPositionIndex?)*
   ("/" (XAttrReference | XTextReference))?
 
 XPositionIndex ::= "[" Digits "]"
@@ -199,7 +183,7 @@ RootSpecification ::= XPosition | "*"
 
 ExternalMethodType ::= QualifiedIdentifier (S?"[" S? "]")?
 
-ExternalMethod ::= ExternalMethodType S? QualifiedIdentifier S?
+ExternalMethod ::= ExternalMethodType S? QualifiedIdentifier S? 
   "(" S? ExternalMethodParamList? S? ")" S? ("as" S? Identifier)?
 
 ExternalMethodParam ::= ExternalMethodType (S JavaIdentifier)?
@@ -225,9 +209,8 @@ OperatorLevel_2 ::= ("OR" | "OOR" | "XOR" | "||" | "|" | "^") $rule
 
 Expr2 ::= Expr3 (S?  OperatorLevel_2 S? Expr3)*
 
-OperatorLevel_3 ::= ( "LT" | "<" | "GT" | ">" | "==" | "EQ" | "LE"
-  | "<=" | "GE" | ">=" | "!=" | "NE" | "<<" | "LSH" | ">>" | "RSH" | ">>>"
-  | "RRSH" | "CHECK" ) $rule
+OperatorLevel_3 ::= ( "LT" | "<" | "GT" | ">" | "==" | "EQ" | "LE" | "<=" | "GE" | ">=" | "!="
+  | "NE" | "<<" | "LSH" | ">>" | "RSH" | ">>>" | "RRSH" | "CHECK" ) $rule
 
 Expr3 ::= Expr4 (S? OperatorLevel_3 S? Expr4)*
 
@@ -239,8 +222,7 @@ OperatorLevel_5 ::= ("+" | "-") $rule
 
 Expr5 ::= Expr (S? OperatorLevel_5 S? Expr)*
 
-Expr ::= (UnaryOperator S? | CastRequest S?)*
-  (Value | Literal | "(" S? Expression S? ")") (S? "." S? Method)?
+Expr ::= (UnaryOperator S? | CastRequest S?)* (Value | Literal | "(" S? Expression S? ")") (S? "." S? Method)?
 
 ConstantExpression ::= Literal /* ConstantExpression must be a Literal. */
 
@@ -248,16 +230,14 @@ CastRequest ::= S? "(" S? $rule TypeIdentifier S? ")" S?
 
 UnaryOperator ::= "+" | ("-" | "!" | "NOT" | "~") $rule
 
-TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "char" | "Datetime"
-  | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
-  | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
-  | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
-  | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition"
-  | "Price" | "Telephone" | "URI" | "EmailAddr") $rule
+TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "char" | "Datetime" | "Decimal" | "Duration"
+  | "Exception" | "Container" | "Element" | "Message" | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule"
+  | "Parser" | "Service" | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey" | "AnyValue"
+  | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition" | "Price" | "Telephone" | "URI" | "EmailAddr")
+  $rule
 
-Value ::= (Constructor | PredefinedConstant | Increment
-  | Method | VariableReference | KeyParameterReference | Literal | AttributeName
-  | $rule AssignmentStatement) (S? "." S? Method)?
+Value ::= (Constructor | PredefinedConstant | Increment | Method | VariableReference | KeyParameterReference
+  | Literal | AttributeName | $rule AssignmentStatement) (S? "." S? Method)?
 
 NewValue ::= "new" S $rule TypeIdentifier S? ParameterList
 
@@ -271,12 +251,13 @@ ContainerValue ::= "[" S? (ContainerValueStart (S? "," S? Expression)* )? S? "]"
 
 KeyParameterReference ::= KeyName
 
-Method ::= (SchemaTypeName | (QualifiedIdentifier - Keyword)) $rule
-  S? ParameterList?
+Method ::= (SchemaTypeName | (QualifiedIdentifier - Keyword)) $rule S? ParameterList?
 
-SchemaTypeName ::= "xs:" Identifier /* prefix “xs:” is deprecated */
+SchemaTypeName ::= "xs:" Identifier
+  /* prefix “xs:” is deprecated */
 
 incAfter ::= ("++" | "--") S? $rule VariableReference
+
 incBefore ::= VariableReference S? ("++" | "--") S? $rule
 
 Increment ::= incAfter | incBefore
@@ -284,13 +265,12 @@ Increment ::= incAfter | incBefore
 
 Parameter ::= (Expression | "*") $rule
 
-ParameterList ::= "(" S? (Parameter
-   (S? "," S? Parameter)* (S? "," S? "*")? S?)? ")" $rule
+ParameterList ::= "(" S? (Parameter (S? "," S? Parameter)* (S? "," S? "*")? S?)? ")" $rule
 
 VariableReference ::= (Identifier - TypeIdentifier) $rule
 
-MethodDeclaration ::= ("void" | TypeIdentifier) $rule
-  S DeclaredMethodName S? ParameterListDeclaration S? Block
+MethodDeclaration ::= ("void" | TypeIdentifier) $rule S DeclaredMethodName
+  S? ParameterListDeclaration S? Block
 
 DeclaredMethodName ::= Identifier $rule
 
@@ -316,10 +296,9 @@ Statement ::= S? (Statement1 | Statement2)
 
 Statement1 ::= (Block | SwitchStatement | TryStatement)
 
-Statement2 ::= (IfStatement | ForStatement | WhileStatement | DoStatement
-  | ReturnStatement | ThrowStatement | BreakStatement | ContinueStatement
-  | Method | Increment | AssignmentStatement)
-  $info | EmptyStatement
+Statement2 ::= (IfStatement | ForStatement | WhileStatement | DoStatement | ReturnStatement | ThrowStatement
+  | BreakStatement | ContinueStatement | Method (S? "." S? Method)? | Increment | AssignmentStatement) $info
+  | EmptyStatement
 
 EmptyStatement ::= ";"
 
@@ -329,8 +308,7 @@ Block ::= "{" StatementSequence S? "}"
 
 SimpleStatement ::= S? (Statement1 | (Statement2 S? (";" S?)?)) | EmptyStatement
 
-IfStatement ::= "if" ParentalExpression SimpleStatement
-  (S? "else" S? SimpleStatement)?
+IfStatement ::= "if" ParentalExpression SimpleStatement (S? "else" S? SimpleStatement)?
 
 ForStatement ::= "for" $rule S? "(" S? ForInit? S? ";" S?
   ForBooleanExpression? S? ";" S? ForStep? S? ")" S? SimpleStatement
@@ -349,13 +327,10 @@ DoStatement ::= "do" $rule (S? Block | S  Statement) WhileCondition
 
 WhileCondition ::= S? "while" $rule ParentalExpression
 
-SwitchStatement ::= "switch" $rule S? "(" S? Expression S? ")" S?
-   "{" SwitchBlockStatementVariant* S? "}"
-  /* Result of Expression must be integer or string. Each variant may occur
-     in the switch statement only once. */
+SwitchStatement ::= "switch" $rule S? "(" S? Expression S? ")" S? "{" SwitchBlockStatementVariant* S? "}"
+  /* Result of Expression must be integer or string. Each variant may occur only once. */
 
-SwitchBlockStatementVariant ::=
-   S? (DefaultVariant | CaseVariant) S? ":" S? StatementSequence?
+SwitchBlockStatementVariant ::= S? (DefaultVariant | CaseVariant) S? ":" S? StatementSequence?
   /* Type of ConstantExpression must be integer or string. */
 
 DefaultVariant ::= "default" S? $rule
@@ -368,11 +343,9 @@ ExceptionValue ::= NewException | Identifier
 
 NewException ::= "new" S? $rule "Exception" S? "(" S? (Expression S?)? ")"
 
-TryStatement ::= "try" S? $rule "{" S? StatementSequence S? "}"
-  S? CatchStatement
+TryStatement ::= "try" S? $rule "{" S? StatementSequence S? "}" S? CatchStatement
 
-CatchStatement ::=
-  "catch" S? $rule "(" S? "Exception" S?  Identifier S? ")" S?
+CatchStatement ::= "catch" S? $rule "(" S? "Exception" S?  Identifier S? ")" S? 
   "{" S? StatementSequence S? "}"
 
 ReturnStatement ::= "return" $rule (S? Expression)?
@@ -382,35 +355,29 @@ BreakStatement ::= "break" $rule (S? Identifier)?
 ContinueStatement ::= "continue" $rule (S? Identifier)?
 
 AssignmentStatement ::= (Identifier S? ((AssignmentOperator S? Expression) |
- (("=" S? Identifier))+ S? (AssignmentOperator S? Expression)) |
-  S? AssignmentOperator S? Expression)
+  (("=" S? Identifier))+ S? (AssignmentOperator S? Expression)) | S? AssignmentOperator S? Expression)
 
 AssignmentOperator ::= (("|" | "OR" | "^" | "+" | "-" | "*" | "/" | "&" | "AND"
   | "%" | "<<" | "LSH" | ">>>"| "RRSH"  | ">>" | "RSH" )? "=") $rule
 
 VariableModifier ::= ("final" | "external") $rule S
 
-VariableDeclaration ::= VariableModifier*
-  TypeIdentifier S VariableDeclarator (S? "," VariableDeclarator)*
+VariableDeclaration ::= VariableModifier* TypeIdentifier S VariableDeclarator (S? "," VariableDeclarator)*
 
 VariableDeclarator ::= S? (AssignmentStatement | Identifier)
 
 Occurrence ::= ("occurs" S)? ("required" | "optional" | "ignore" | "illegal"
-  | "*" | "+" | "?" | ("*" | "+" | "?" |
-  (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))) $rule
-  /* The value of the second IntegerLiteral (after "..")  must be greater or
-     equal to the first one. */
+  | "*" | "+" | "?" | ("*" | "+" | "?" | (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))) $rule
+  /* The value of the second IntegerLiteral (after "..")  must be greater or equal to the first one. */
 
 ExplicitCode ::= Block
-  /* If the result value is required it must be returned by the command
-   "return" */
+  /* If the result value is required it must be returned by the command "return" */
 
 /******************************************************************************/
 /* Script of X-definition header                                              */
 /******************************************************************************/
 
-XdefScript ::= (S | XdefInitSection | XdefOnIllegalRoot | XdefOnXmlError
-  | XdefOptions | ";")*
+XdefScript ::= (S | XdefInitSection | XdefOnIllegalRoot | XdefOnXmlError | XdefOptions | ";")*
   /* Each item can be specified only once. */
 
 XdefInitSection ::= "init" S Statement
@@ -424,19 +391,13 @@ XdefOptions ::= ("options" | "option") S XdefOptionsList
 XdefOptionsList ::= XdefOption (S? "," S? XdefOption)*
   /* Each option can be specified only once. */
 
-XdefOption ::= "moreAttributes" | "moreElements" | "moreText"
-  | "forget" | "notForget" | "clearAdoptedForgets"
-  | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes"
-  | "preserveComments" | "ignoreComments" | "acceptEmptyAttributes"
-  | "preserveEmptyAttributes" | "ignoreEmptyAttributes"
-  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces"
-  | "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
-  | "setAttrUpperCase" | "setAttrLowerCase"
-  | "setTextUpperCase" | "setTextLowerCase"
-  | "acceptQualifiedAttr" | "notAcceptQualifiedAttr"
-  | "trimAttr" | "noTrimAttr" | "trimText" | "noTrimText"
-  | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes"
-  | "preserveComments" | "ignoreComments"
+XdefOption ::= "moreAttributes" | "moreElements" | "moreText" | "forget" | "notForget" | "clearAdoptedForgets"
+  | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes" | "preserveComments"
+  | "ignoreComments" | "acceptEmptyAttributes" | "preserveEmptyAttributes" | "ignoreEmptyAttributes"
+  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
+  | "setAttrUpperCase" | "setAttrLowerCase" | "setTextUpperCase" | "setTextLowerCase" | "acceptQualifiedAttr"
+  | "notAcceptQualifiedAttr" | "trimAttr" | "noTrimAttr" | "trimText" | "noTrimText" | "resolveEntities"
+  | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
 
 /******************************************************************************/
 /* Script of text nodes and attributes                                        */
@@ -444,20 +405,18 @@ XdefOption ::= "moreAttributes" | "moreElements" | "moreText"
 
 AttributeScript ::= ValueScript
 
-ValueScript ::= ("$$$script:"?) (ValueValidationSection | ValueInitSection
-  | ValueOnTrueSection | ValueOnFalseSection | ValueOnErrorSection
-  | ValueOnAbsenceSection | ValueDefaultSection | ValueCreateSection
-  | ValueFinallySection | ValueMatchSection | AttributeOnStartSection
+ValueScript ::= ("$$$script:"?) (ValueValidationSection | ValueInitSection | ValueOnTrueSection
+  | ValueOnFalseSection | ValueOnErrorSection | ValueOnAbsenceSection | ValueDefaultSection
+  | ValueCreateSection | ValueFinallySection | ValueMatchSection | AttributeOnStartSection
   | AttributeOptions | OnIllegalSection | Reference | S |";")*
-  /* The keyword "$$$script" can be specified only in the template mode.
-     Each section can be specified only once.*/
+  /* The keyword "$$$script" can be specified only in the template mode and it can be specified only once.*/
 
 OnIllegalSection ::= ("onIllegalAttr" | "onIllegalText") S? Statement?
 
 AttributeOnStartSection ::= "onStartElement" S? Statement?
  
 ValueValidationSection ::= ("fixed" S $rule (Expression | Block)
-  | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification)
+  | (Occurrence S? (";" S?)? CheckValueSpecification?) | CheckValueSpecification)
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
   /* ExplicitCode must return a value of boolean type or ParseResult. */
@@ -486,8 +445,8 @@ ValueOnErrorSection ::= "onError" S? (ExplicitCode | Statement)
 
 ValueOnAbsenceSection ::= "onAbsence" S? (ExplicitCode | Statement)
 
-ValueCreateSection ::= "create" S? (ExplicitCode | ValueCreateExpression)
-  (S? ";")* /* ExplicitCode must return a value of String type. */
+ValueCreateSection ::= "create" S? (ExplicitCode | ValueCreateExpression) (S? ";")*
+  /* ExplicitCode must return a value of String type. */
 
 ValueCreateExpression ::= Expression
   /* ValueCreateExpression must return a value of String type. */
@@ -507,12 +466,10 @@ ValueOptions ::= ("options" | "option") S? ValueOptionsList
 ValueOptionsList ::= ValueOption (S? "," S? ValueOption)*
   /* Each option can be specified only once. */
 
-ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
-  | "setTextUpperCase" | "setTextLowerCase" | "trimText" | "noTrimText"
-  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "cdata"
-  | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr"
-  | "ignoreEmptyAttributes" | "acceptEmptyAttributes"
-  | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "preserveTextCase"
+ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces" | "setTextUpperCase" | "setTextLowerCase"
+  | "trimText" | "noTrimText" | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "cdata"
+  | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr" | "ignoreEmptyAttributes"
+  | "acceptEmptyAttributes" | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "preserveTextCase"
 
 Reference ::= "ref" S XPosition
 
@@ -522,20 +479,16 @@ Reference ::= "ref" S XPosition
 
 ElementScript ::= $info ElementExecutivePart* S?
 
-ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence
-  | ElementVarSection | ElementMatchSection | ElementInitSection
-  | ElementOnAbsenceSection | ElementOnExcessSection | ElementCreateSection
-  | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
-  | ElementOnStartSection | ElementOnIllegalSection | ElementStructureCompare
-  | ";")
-  /* Each item can be specified only once. If the occurrence is not specified,
-     the implicit value is "required". The keyword "$$$script" can be specified
-     only in the template model. */
+ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence | ElementVarSection
+  | ElementMatchSection | ElementInitSection | ElementOnAbsenceSection | ElementOnExcessSection
+  | ElementCreateSection | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
+  | ElementOnStartSection | ElementOnIllegalSection | ElementStructureCompare | ";")
+  /* Each item can be specified only once. If the occurrence is not specified, the implicit value is
+    "required". The keyword "$$$script" can be specified only in the template model. */
 
 TemplateSection ::= "template" $rule
 
-ElementVarSection ::= "var" S?
-  (("{"(S? ElementVarSectionItem S?)* "}") | ElementVarSectionItem S?)
+ElementVarSection ::= "var" S? (("{"(S? ElementVarSectionItem S?)* "}") | ElementVarSectionItem S?)
 
 ElementVarSectionItem ::= TypeDeclaration | VariableDeclaration S? ";"  | S? ";"
 
@@ -587,28 +540,22 @@ ElementOption ::= "moreAttributes" | "moreElements" | "moreText"
 DeclarationScript ::= (S? (TypeDeclaration | ExternalMethodDeclaration
   | VariableDeclaration | MethodDeclaration | ";"))* S?
 
-TypeDeclaration ::= ("type" S Identifier S?
-  ((Identifier (S? "CHECK" ? Expression)? S? ";" S? )
-  | TypeDeclarationBody)) 
-  | UniqueSetDeclaration
+TypeDeclaration ::= ("type" S Identifier S? ((Identifier (S? "CHECK" ? Expression)? S? ";" S? )
+  | TypeDeclarationBody)) | UniqueSetDeclaration
 
-TypeDeclarationBody ::= TypeExplicitCode
-  | ( Expression (S? "CHECK" ? Expression)? )
-  /* The first xpression  must return either a boolean 
-    or a ParseResult value. The CHECK expression must return boolean value*/
+TypeDeclarationBody ::= TypeExplicitCode | ( Expression (S? "CHECK" ? Expression)? )
+  /* The first xpression  must return either a boolean  or a ParseResult value. */
 
 TypeExplicitCode ::= /* only X-definition version 2.0 */
   ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}")
   | /* X-definition version 3.1 and higher */ ExplicitCode
 
 ExternalMethodDeclaration ::= "external" S "method"
-  ( S? "{" S? (ExternalMethod S? ";" S? )* ExternalMethod? S? ";"? S? "}"
-  | (S ExternalMethod) ) S? ";"?
+  ( S? "{" S? (ExternalMethod S? ";" S? )* ExternalMethod? S? ";"? S? "}" | (S ExternalMethod) ) S? ";"?
 
 UniqueSetDeclaration ::= "uniqueSet" S Identifier S? UniqueSetDeclarationBody
 
-UniqueSetDeclarationBody ::=
-  ("{" UniqueSetItem (S?";" UniqueSetItem)* (S?";"S?)? S? "}") | Method
+UniqueSetDeclarationBody ::= ("{" UniqueSetItem (S?";" UniqueSetItem)* (S?";"S?)? S? "}") | Method
   /* The method must be a parser. */
 
 UniqueSetItem ::= S? (UniqueSetVar | UniqueSetKey)
@@ -616,8 +563,7 @@ UniqueSetItem ::= S? (UniqueSetVar | UniqueSetKey)
 UniqueSetKey ::= S? Identifier (S?":"S? (("?" | "optional") S? )? Method )?
   /* The method must be a parser. */
 
-UniqueSetVar ::= S? "var" S TypeIdentifier S Identifier
-  (S? "," S? TypeIdentifier S Identifier)*
+UniqueSetVar ::= S? "var" S TypeIdentifier S Identifier (S? "," S? TypeIdentifier S Identifier)*
 
 /******************************************************************************/
 /* BNF grammar                                                                */
@@ -630,8 +576,7 @@ BNFMethodDeclarationSection ::= BNFMethodDeclaration (S? BNFMethodDeclaration)*
 BNFMethodDeclaration ::= "%define" S BNFDefinedMethodName S? ":"
   S ("$" QualifiedIdentifier | BNFDefinedMethodName) S? BNFMethodparameters?
 
-BNFMethodparameters ::= "(" S?
-  (BNFMethodparameter (S? "," S? BNFMethodparameter)* ) ? S? ")"
+BNFMethodparameters ::= "(" S? (BNFMethodparameter (S? "," S? BNFMethodparameter)* ) ? S? ")"
 
 BNFMethodparameter ::= Digits | BNFTerminalSymbol
 
@@ -647,8 +592,7 @@ BNFRuleDecl ::= S? BNFRuleName S? "::=" S?
 
 BNFRuleReference ::= BNFDefinedMethodName | (BNFRuleName - BNFRuleDecl)
 
-BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"'
-  | (BNFHexaCharacter (S? BNFHexaCharacter)* )
+BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"' | (BNFHexaCharacter (S? BNFHexaCharacter)* )
 
 BNFHexaCharacter ::= "#" HexaDigits
 
@@ -658,8 +602,7 @@ BNFExplicitQuantifier ::= "{" S? Digits (S? "," S? Digits)? S? "}"
 
 BNFSet ::= "[" ("^"? Char - "]")* "]" BNFQuantifier?
 
-BNFTerm ::= (BNFTerminalSymbol | BNFSet | BNFRuleReference) BNFQuantifier?
-  | BNFParentalExpr
+BNFTerm ::= (BNFTerminalSymbol | BNFSet | BNFRuleReference) BNFQuantifier? | BNFParentalExpr
 
 BNFParentalExpr ::= "(" S? BNFUnion S? ")" S? BNFQuantifier?
 
@@ -696,8 +639,7 @@ XCEnum ::= "%enum" S JavaTypedQName S (Identifier? "#")? XMLName
 
 XCInterface ::= "%interface" S $JavaQName S XCLink
 
-XCRef ::= "%ref" S ((JavaTypedQName S? XCLink)
-  | ("%enum" S JavaTypedQName S (Identifier? "#")? XMLName))
+XCRef ::= "%ref" S ((JavaTypedQName S? XCLink) | ("%enum" S JavaTypedQName S (Identifier? "#")? XMLName))
 
 XCLink ::= "%link" S ("*" | XPosition (S? "," S? XPosition)*)
 
@@ -717,8 +659,7 @@ ININewLine ::= (#13 #10 | #10)+
 
 INIOctalDigit ::= [0-7]
 
-INIEscapedChar ::=
-  "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
+INIEscapedChar ::= "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 
 INIBaseChar ::= INISP | [ -Z^-~]
   /* ASCII characters without control characters, backslash, brackets */
@@ -739,36 +680,35 @@ INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]"
 INIProps ::= INICommand*
 
 /******************************************************************************/
-/* XON X-script                                                               */
+/* JSON X-script                                                               */
 /******************************************************************************/
 
-XONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
+JSONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
 
-XONSP ::= (WhiteSpace | XONComment)+ /* sequence of whitespaces and comments */
+JSONSP ::= (WhiteSpace | JSONComment)+ /* sequence of whitespaces and comments */
 
-XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
-  ('\u' [0-9a-fA-F]{4})
+JSONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' | ('\u' [0-9a-fA-F]{4})
 
-XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
-  "'" ([^\'] | XONControlchar )* "'")
+JSONString ::= ('"' ([^\"] | JSONControlchar )* '"' |
+  "'" ([^\'] | JSONControlchar )* "'")
 
-XONXscript ::= XONSP? ( ("%script" XONSP? "=" XONSP? XONString)
-  | ( "%oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
+JSONXscript ::= JSONSP? ( ("%script" JSONSP? "=" JSONSP? JSONString)
+  | ( "%oneOf" (JSONSP? "=" JSONSP? JSONString)? ) ) (JSONSP? ",")?
 
-XONPair ::= ("%anyName" (XONSP? "=" XONSP? XONString)?
-  | $ncName | XONString) XONSP? ":" XONSP? XONScriptValue
+JSONPair ::= ("%anyName" (JSONSP? "=" JSONSP? JSONString)?
+  | $ncName | JSONString) JSONSP? ":" JSONSP? JSONScriptValue
 
-XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)* (XONSP? ",")?
+JSONMembers ::= JSONSP? JSONPair (JSONSP? "," JSONSP? JSONPair)* (JSONSP? ",")?
 
-XONObject ::= "{" XONXscript? XONMembers? XONSP? "}"
+JSONObject ::= "{" JSONXscript? JSONMembers? JSONSP? "}"
 
-XONList ::= XONScriptValue (XONSP? "," XONSP? XONScriptValue )* (XONSP? ",")?
+JSONList ::= JSONScriptValue (JSONSP? "," JSONSP? JSONScriptValue )* (JSONSP? ",")?
 
-XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
+JSONArray ::= "[" JSONXscript? JSONSP? JSONList? JSONSP? "]"
 
-XONScriptValue ::= XONSP? ( "%any" | XONString | XONArray | XONObject) XONSP?
+JSONScriptValue ::= JSONSP? ( "%any" | JSONString | JSONArray | JSONObject) JSONSP?
 
-XONScript ::= XONSP? (XONArray | XONObject | XONString)
+JSONScript ::= JSONSP? (JSONArray | JSONObject | JSONString)
 
 ]]>
   </xd:BNFGrammar>

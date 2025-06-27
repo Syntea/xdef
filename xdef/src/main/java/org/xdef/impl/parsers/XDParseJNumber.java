@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefLong;
 
-/** Parser of Xscript "jnumber" type.
+/** Parser of X-script "jnumber" type.
  * @author Vaclav Trojan
  */
 public class XDParseJNumber extends XSParseDouble {
@@ -42,8 +42,10 @@ public class XDParseJNumber extends XSParseDouble {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public short parsedType() {return XD_NUMBER;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

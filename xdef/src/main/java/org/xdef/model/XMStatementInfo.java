@@ -36,8 +36,8 @@ public interface XMStatementInfo {
 	 */
 	public void updateEndPos(long line, long column);
 
-	/** Get name of Xdefinition.
-	 * @return name of Xdefinition.
+	/** Get name of X-definition.
+	 * @return name of X-definition.
 	 */
 	public String getXDName();
 

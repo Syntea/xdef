@@ -24,6 +24,7 @@ public class XSParseDuration extends XSAbstractParseComparable {
 		_enumeration = null;
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -81,8 +82,10 @@ public class XSParseDuration extends XSAbstractParseComparable {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_DURATION;}
 }

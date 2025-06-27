@@ -24,67 +24,54 @@ import org.xdef.sys.SException;
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** BNF grammar rules of email address according to RFC 5321. */
 	private static final BNFGrammar BNF = BNFGrammar.compile(
-"FWS           ::= [ #9]+\n"+ // Folding white space
-"ASCIICHAR     ::= [ -~]\n"+ // Printable ASCII character
-"Domain        ::= sub_domain ( '.' sub_domain )*\n"+
-"sub_domain    ::= Let_dig+ Ldh_str?\n" +
-"Let_dig       ::= [0-9] | $letter\n" +
-"Ldh_str       ::= '-' Let_dig+\n"+
-"General_addr  ::= Std_tag ':' ( dcontent )+\n" +
-"Std_tag       ::= Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
-"dcontent      ::= [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
-
-/*#if RFC5321*#/
-// START RFC5321
-"IPv4          ::= Snum ('.'  Snum){3}\n"+
-"Snum          ::= ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
-"IPv6          ::= IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
-"IPv6_hex      ::= [0-9a-fA-F]{1,4}\n" +
-"IPv6_full     ::= IPv6_hex ( ':' IPv6_hex ){7}\n" +
-"IPv6_comp     ::= ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
-			   // The '::' represents at least 2 16-bit groups of
-			   // zeros. No more than 6 groups in addition to the '::' may be present.
-"IPv6v4_full   ::= IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
-"IPv6v4_comp   ::= ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
-"                  ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
-			   // The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
-			   // addition to the '::' and IPv4-address-literal may be present.
-"IPv4_addr     ::= IPv4\n"+
-"IPv6_addr     ::= 'IPv6:' IPv6\n"+
-"address       ::= '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
-"quoted_pair   ::= '\\' ASCIICHAR\n" + // %d92 %d32-126
-			   // i.e., backslash followed by any ASCII graphic (including itself) or SPace
-"qtextSMTP     ::= [ !#-Z^-~] | '[' | ']'\n" +
-			   // i.e., within a quoted string, any ASCII graphic or space is permitted without
-			   // blackslash-quoting except double-quote and the backslash itself.
-"QcontentSMTP  ::= quoted_pair | qtextSMTP\n" +
-"Quoted_string ::= '\"' QcontentSMTP* '\"'\n" +
-"atext         ::= ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
-"Local_part    ::= Dot_string | Quoted_string\n" + // MAY be case-sensitive
-"Mailbox       ::= Local_part '@' ( address | Domain ) $rule\n"+
-// END RFC5321
-/*#else*/
-// START not RFC5321 (i.e. RFC2822?)
-"atext         ::= ($letter | [0-9_!#$%&'*+/=?^`{|}~\\])+\n"+
-"Local_part    ::= Dot_string\n" + // MAY be case-sensitive, quoted string not allowed
-"Mailbox       ::= Local_part '@' Domain $rule\n"+
-// END not RFC5321 (i.e. RFC2822?)
-/*#end*/
-
-"Atom          ::= atext ('-' atext)*\n" +
-"Dot_string    ::= Atom ('.'  Atom)*\n" +
-"comment       ::= ( commentList $rule ) FWS?\n"+
-"commentList   ::= ( FWS? '(' commentPart* ')' )+\n"+
-"commentPart   ::= ( ASCIICHAR - [()] )+ ( commentList)? $rule\n"+
-"text          ::= ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
-"textItem      ::= FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
-"charsetName   ::= ( [a-zA-Z] ('-'? [a-zA-Z0-9]+)* ) $rule '?' \n"+
-"ptext         ::= FWS? ( ASCIICHAR - [@><()=] )+ $rule\n"+ // Printable ASCII character without @><()=
-"qtext         ::= FWS? ( hexOctet | ASCIICHAR - [=?] )+ $rule \n"+ // Quoted text
-"hexOctet      ::= '=' [0-9A-F] [0-9A-F]\n"+
-"btext         ::= [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
-"emailAddr     ::= ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
-
+"FWS::=           [ #9]+\n"+ // Folding white space
+"ASCIICHAR::=     [ -~]\n"+ // Printable ASCII character
+"Let_dig::=       [0-9] | $letter\n" +
+"Ldh_str::=       '-'+ Let_dig+\n"+
+"sub_domain::=    Let_dig+ Ldh_str*\n" +
+"Domain::=        sub_domain ( '.' sub_domain )*\n"+
+"IPv4::=          Snum ('.'  Snum){3}\n"+
+"Snum::=          ( '2' ([0-4] [0-9] | '5' [0..5]) ) | [0-1] [0-9]{2} | [0-9]{1,2}\n"+
+"IPv6::=          IPv6_full | IPv6_comp | IPv6v4_full | IPv6v4_comp\n" +
+"IPv6_hex::=      [0-9a-fA-F]{1,4}\n" +
+"IPv6_full::=     IPv6_hex ( ':' IPv6_hex ){7}\n" +
+"IPv6_comp::=     ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
+	// The '::' represents at least 2 16-bit groups of zeros.
+	// No more than 6 groups in addition to the '::' may be present.
+"IPv6v4_full::=   IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
+"IPv6v4_comp::=   ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
+"                 ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
+	// The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
+	// addition to the '::' and IPv4-address-literal may be present.
+"IPv4_addr::=     IPv4\n"+
+"IPv6_addr::=     'IPv6:' IPv6\n"+
+"Std_tag::=       Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
+"dcontent::=      [!-Z] | [^-~]\n" + // %d33-90 | %d94-126 Printable US-ASCII; excl. [, ', ]
+"General_addr::=  Std_tag ':' ( dcontent )+\n" +
+"address::=       '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
+"atext::=         ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
+"Atom::=          atext ('-'+ atext)*\n" +
+"Dot_string::=    Atom ('.'  Atom)*\n" +
+"qtextSMTP::=     [ !#-Z^-~] | '[' | ']'\n" +
+	// i.e., within a quoted string, any ASCII graphic or space is permitted without
+	// blackslash-quoting except double-quote and the backslash itself.
+"quoted_pair::=   '\\' ASCIICHAR\n" + // %d92 %d32-126
+	// i.e., backslash followed by any ASCII graphic (including itself) or SPace
+"QcontentSMTP::=  quoted_pair | qtextSMTP\n" +
+"Quoted_string::= '\"' QcontentSMTP* '\"'\n" +
+"Local_part::=    Dot_string | Quoted_string\n" + // MAY be case-sensitive
+"Mailbox::=       Local_part '@' ( address | Domain ) $rule\n"+
+"comment::=       ( commentList $rule ) FWS?\n"+
+"commentList::=   ( FWS? '(' commentPart* ')' )+\n"+
+"commentPart::=   ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+
+"text::=          ( ( comment* (textItem | comment)* ) | comment* ptext )? comment*\n"+
+"textItem::=      FWS? '=?' charsetName ( 'Q?' qtext | 'B?' btext ) '?='\n"+
+"charsetName::=   ( [a-zA-Z] ('-'? [a-zA-Z0-9]+)* ) $rule '?' \n"+
+"ptext::=         FWS? ( ASCIICHAR - [@><()=] )+ $rule\n"+ // Printable ASCII character without @><()=
+"qtext::=         FWS? ( hexOctet | ASCIICHAR - [=?] )+ $rule \n"+ // Quoted text
+"hexOctet::=      '=' [0-9A-F] [0-9A-F]\n"+
+"btext::=         [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
+"emailAddr::=     ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
@@ -177,7 +164,14 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			p.isSpaces();
 			if (localPart != null && domain != null) {
 				localPart = removeWS(localPart);
+				int ndx = localPart.lastIndexOf('(');
+				if (ndx > 0 && localPart.endsWith(")")) { // remove comment from local part
+					localPart = localPart.substring(0, ndx);
+				}
 				domain = removeWS(domain);
+				if (domain.indexOf('(') == 0 && (ndx = domain.indexOf(')')) > 0 && ndx + 1 < domain.length()){
+					domain = domain.substring(ndx + 1); //remove comment from domain
+				}
 				if (localPart.length() <= 64 && domain.length() <= 256) {
 					return new String[] {parsedString, localPart, domain, userName};
 				}
@@ -261,46 +255,54 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		return result;
 	}
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return this;}
 	@Override
+	public Object getObject() {return this;}
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_EMAIL;}
 	@Override
+	public short getItemId() {return XD_EMAIL;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return EMAIL;}
 	@Override
+	public XDValueType getItemType() {return EMAIL;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return stringValue();}
 	@Override
+	public String toString() {return stringValue();}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return isNull() ? "" : _value;}
 	@Override
+	public String stringValue() {return isNull() ? "" : _value;}
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefEmailAddr(_value);}
+
 	@Override
 	public int hashCode() {return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ?  equals((XDValue) arg) : false;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable
 	 * and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -312,45 +314,51 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		}
 		return false;
 	}
-	@Override
+
 	/** Compares this object with the other DefEmail object.
 	 * @param arg other DefEmail object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (arg.getItemId() == XD_BOOLEAN) {
 			if (equals(arg)) return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
+	@Override
 	public boolean isNull() {return _value == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDEmailAddr interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get domain part of this email address.
 	 * @return string with domain part of this email address.
 	 */
-	public String getDomain() {return _domain;}
 	@Override
+	public String getDomain() {return _domain;}
+
 	/** Get local part of email this address (user).
 	 * @return string with local part of this email address.
 	 */
-	public String getLocalPart() {return _localPart;}
 	@Override
+	public String getLocalPart() {return _localPart;}
+
 	/** Get user name (display form) of this email address.
 	 * @return string with user name of email this address (or an empty string).
 	 */
-	public String getUserName() {return _userName;}
 	@Override
+	public String getUserName() {return _userName;}
+
 	/** Get source form of this email address.
 	 * @return source form of this email address.
 	 */
+	@Override
 	public String getEmailAddr() {return _value;}
 }

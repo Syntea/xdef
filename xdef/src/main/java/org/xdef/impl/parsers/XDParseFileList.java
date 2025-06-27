@@ -42,10 +42,13 @@ public class XDParseFileList extends XDParserAbstract {
 		p.setParsedValue(val);
 		p.setEos();
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+
 	@Override
 	public short getAlltemsType() {return XD_STRING;}
 }

@@ -29,13 +29,14 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
-/** Collection of methods supporting Xdefinition programming.
+/** Collection of methods supporting X-definition programming.
  * @author Vaclav Trojan
  */
 public class XDTools {
+	private static final int BUFLEN = 20000;
 
-	/** Get version of this implementation of Xdefinition.
-	 * @return version of this implementation of Xdefinition.
+	/** Get version of this implementation of X-definition.
+	 * @return version of this implementation of X-definition.
 	 */
 	public static final String getXDVersion() {	return BUILD_VERSION + " (" + BUILD_DATETIME + ")";}
 
@@ -197,7 +198,6 @@ public class XDTools {
 	 */
 	public static final XDValue createXDValue(final Object o) {return XBuilder.createXDValue(o);}
 
-	private static final int BUFLEN = 20000;
 	/** Create source Java code with given XDPool.
 	 * @param w where to write.
 	 * @param cls name of created class.
@@ -211,7 +211,7 @@ public class XDTools {
 		}
 		pw.println("public final class " + cls + " extends org.xdef.XDPoolFromClass {");
 		pw.println("\tpublic static final org.xdef.XDPool getXDPool() {return getXDPool("
-			+ (!pckg.trim().isEmpty()? pckg + '.' : "") + cls + ".class);}");
+			+ (!pckg.trim().isEmpty() ? pckg + '.' : "") + cls + ".class);}");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ObjectOutputStream out = new ObjectOutputStream(baos)) {
 			out.writeObject(xp);

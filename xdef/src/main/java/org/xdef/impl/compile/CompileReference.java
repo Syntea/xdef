@@ -20,7 +20,7 @@ import static org.xdef.model.XMNode.XMDEFINITION;
 import static org.xdef.model.XMNode.XMELEMENT;
 import static org.xdef.model.XMNode.XMSELECTOR_END;
 
-/** Provides an object for resolving references in Xdefinition source. This object is pseudo XNode and
+/** Provides an object for resolving references in X-definition source. This object is pseudo XNode and
  * will be replaced by referred object.
  * @author Vaclav Trojan
  */
@@ -30,7 +30,7 @@ final class CompileReference extends XNode {
 	/** Kind of XNode  XINCLUDE */
 	static final short XMINCLUDE = XMREFERENCE + 1;
 	private final String _refXdefName;
-	/** The Xdefinition associated with parent. */
+	/** The X-definition associated with parent. */
 	private final XDefinition _definition;
 	/** The parent node. */
 	final XNode _parent;
@@ -51,7 +51,7 @@ final class CompileReference extends XNode {
 
 	/** Creates a new instance of XReference.
 	 * @param kind XMREFERENCE or XMINCLUDE.
-	 * @param parent parent - Xdefinition or XArchive object.
+	 * @param parent parent - X-definition or XArchive object.
 	 * @param nsURI namespace URI of identifier.
 	 * @param refName reference name.
 	 * @param position source position where the reference was specified.
@@ -67,7 +67,7 @@ final class CompileReference extends XNode {
 
 	/** Creates a new instance of XReference.
 	 * @param kind type of object: XMREFERENCE or XMINCLUDE.
-	 * @param parent parent - Xdefinition or XArchive object.
+	 * @param parent parent - X-definition or XArchive object.
 	 * @param nsURI namespace URI of identifier.
 	 * @param refName reference name.
 	 * @param position source position where the reference was specified.
@@ -148,7 +148,7 @@ final class CompileReference extends XNode {
 			return result;
 		}
 		XMDefinition xdef = getXDPool().getXMDefinition(_refXdefName);
-		if (xdef == null) { // Xdefinition not found
+		if (xdef == null) { // X-definition not found
 			return null;
 		}
 		int ndx = name.indexOf('/');
@@ -221,6 +221,7 @@ final class CompileReference extends XNode {
 
 	@Override
 	public XMDefinition getXMDefinition() {return _definition;}
+
 	@Override
 	public String toString() {
 		return (getKind() == XMREFERENCE ? "REFERENCE: " + getName()
@@ -228,36 +229,52 @@ final class CompileReference extends XNode {
 			: super.toString()) + getNSUri() != null ? '{' + getNSUri() + '}'
 			: "";
 	}
+
 	@Override
 	public int getInitCode() {return -1;} //not supported here
+
 	@Override
 	public int getFinallyCode() {return -1;} //not supported here
+
 	@Override
 	public int getMatchCode() {return -1;} //not supported here
+
 	@Override
 	public int getComposeCode() {return -1;} //not supported here
+
 	@Override
 	public int getCheckCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnTrueCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnFalseCode() {return -1;} //not supported here
+
 	@Override
 	public int getDefltCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnStartElementCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnAbsenceCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnExcessCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnIllegalAttrCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnIllegalTextCode() {return -1;} //not supported here
+
 	@Override
 	public int getOnIllegalElementCode() {return -1;} //not supported here
+
 	@Override
 	public int getVarinitCode() {return -1;} //not supported here
+
 	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		throw new SRuntimeException(SYS.SYS066, "this method can't be called here");//Internal error&{0}{: }

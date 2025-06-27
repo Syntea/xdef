@@ -98,14 +98,11 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 	}
 
 	/** Creates a new instance of DefStream.
-	 * @param name The name of stream: either filename or "#System.out" or
-	 * "#System.err".
+	 * @param name The name of stream: either filename or "#System.out" or "#System.err".
 	 */
 	public DefOutStream(final String name) {
-		_out = name == null || name.length() == 0 ||
-			name.equalsIgnoreCase("#System.out") ?
-			new FileReportWriter(System.out) :
-			name.equalsIgnoreCase("#System.err") ?
+		_out = name == null || name.length() == 0 || name.equalsIgnoreCase("#System.out") ?
+			new FileReportWriter(System.out) : name.equalsIgnoreCase("#System.err") ?
 			new FileReportWriter(System.err) : new FileReportWriter(name);
 	}
 
@@ -123,40 +120,40 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 		_out = new FileReportWriter(os, xmlFormat);
 	}
 
-	/** Creates a new instance of DefStream from reporter. The output format
-	 * depends on the format set in reporter.
+	/** Creates a new instance of DefStream from reporter. The output format depends
+	 * on the format set in reporter.
 	 * @param reporter The reporter.
 	 */
 	public DefOutStream(final ReportWriter reporter) {_out = reporter;}
 
-	@Override
 	/** Write a string to the output stream.
 	 * @param s String to be written.
 	 */
+	@Override
 	public void writeString(final String s) {_out.writeString(s);}
 
-	@Override
 	/** Write a report to the output stream.
 	 * @param rep Report to be written.
 	 */
+	@Override
 	public void putReport(final Report rep) {_out.putReport(rep);}
 
-	@Override
 	/** Close output stream. */
+	@Override
 	public void close() {if (_out != null) _out.close();}
 
-	@Override
 	/** Flush buffer of the output stream. */
+	@Override
 	public void flush() {_out.flush();}
 
-	@Override
 	/** Get writer. */
+	@Override
 	public ReportWriter getWriter() {return _out;}
 
-	@Override
 	/** Get last error report.
 	 * @return last error report (or null if last report is not available).
 	 */
+	@Override
 	public Report getLastErrorReport() {
 		if (_out == null) {
 			return null;
@@ -166,44 +163,50 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 		return rep;
 	}
 
-	@Override
 	/** Get XDInput from this XDOutput.
 	 * @return XDInput created from this XDOutput (if it is possible).
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public XDInput getXDInput() throws SRuntimeException {return new DefInStream(_out.getReportReader());}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_OUTPUT;}
 	@Override
+	public short getItemId() {return XD_OUTPUT;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return OUTPUT;}
 	@Override
+	public XDValueType getItemType() {return OUTPUT;}
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public boolean isNull() {return _out == null;}
 	@Override
+	public boolean isNull() {return _out == null;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return "org.xdef.impl.code.DefOutStream(" + _out + ")";}
 	@Override
+	public String toString() {return "org.xdef.impl.code.DefOutStream(" + _out + ")";}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return toString();}
 	@Override
+	public String stringValue() {return toString();}
+
 	/** Clone the item (get this object here).
 	 * @return this object.
 	 */
+	@Override
 	public XDValue cloneItem() {return this;}
 }

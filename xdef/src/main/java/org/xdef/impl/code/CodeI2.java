@@ -19,38 +19,40 @@ public class CodeI2 extends CodeI1 {
 		_p2 = param2;
 	}
 
-	@Override
 	/** Get parameter 2.
 	 * @return value of the parameter 2.
 	 */
+	@Override
 	public int intValue() {return _p2;}
-	@Override
+
 	/** Get parameter 2.
 	 * @return value of the parameter 2.
 	 */
+	@Override
 	public long longValue() {return _p2;}
-	@Override
+
 	/** Get parameter 2.
 	 * @return value of the parameter 2.
 	 */
+	@Override
 	public String stringValue() {return "" + _p2;}
 
 	/** Set parameter 2.
 	 * @param param2 value of the parameter 2.
 	 */
 	public void setParam2(int param2) {_p2 = param2;}
-	@Override
+
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeI2)) {
 			return false;
 		}
 		CodeI2 x = (CodeI2) o;
-		return getCode() == x.getCode() && _resultType == x.getItemId()
-			&& getParam() == x.getParam() && _p2 == x._p2;
+		return getCode()==x.getCode() && _resultType==x.getItemId()	&& getParam()==x.getParam() && _p2==x._p2;
 	}
 
 	@Override

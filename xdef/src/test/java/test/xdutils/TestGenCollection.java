@@ -18,8 +18,8 @@ public class TestGenCollection extends XDTester {
 
 	public TestGenCollection() {super();}
 
+	/** Run test and print error information. */
 	@Override
-	/** Test */
 	public void test() {
 		Element el, el1;
 		String xdef;
@@ -43,8 +43,7 @@ public class TestGenCollection extends XDTester {
 			assertEq("mtest", el1.getNodeName());
 			el1 = (Element) el1.getChildNodes().item(0).getChildNodes().item(0);
 			assertEq("adam", el1.getNodeName());
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[] {KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
@@ -58,10 +57,8 @@ public class TestGenCollection extends XDTester {
 " <A f=\"default 'abc'\"/>\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"default 1\" />\n" +
@@ -74,8 +71,7 @@ public class TestGenCollection extends XDTester {
 " <A f=\"default 1\" />\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
@@ -89,8 +85,7 @@ public class TestGenCollection extends XDTester {
 " <A f=\"optional int; default 1\" />\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
@@ -104,10 +99,8 @@ public class TestGenCollection extends XDTester {
 " <A f=\"fixed 'abc'\" />\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"fixed 'abc'\" />\n" +
@@ -120,10 +113,8 @@ public class TestGenCollection extends XDTester {
 " <A f=\"fixed 'abc'\" />\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='B0'>\n" +
 " <A f=\"fixed 1\" />\n" +
@@ -136,33 +127,27 @@ public class TestGenCollection extends XDTester {
 " <A f=\"fixed 1\" />\n" +
 "</xd:def>\n" +
 "</xd:collection>", el);
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 			file = new File(dataDir, "test_01.xdef");
 			el = GenCollection.genCollection(new File[]{file}, true, true, true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
-
 			file = new File(dataDir, "multiXdefTest.xdef");
 			el = GenCollection.genCollection(new File[]{file}, true, true, true);
 			XDGenCollection.chkXdef(KXmlUtils.nodeToString(el, false));
-			el1 = GenCollection.genCollection(
-				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
+			el1 = GenCollection.genCollection(new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
 		} catch (Exception ex) {fail(ex);}
 		try {
-			String outFile =
-				new File(clearTempDir(), "collection.xml").getCanonicalPath();
+			String outFile = new File(clearTempDir(), "collection.xml").getCanonicalPath();
 			GenCollection.main(new String[] {
 				"-m",
 				"-o", outFile,
 				"-e", "windows-1250",
-				"-i",getDataDir() + "test/xdef_xdef.xml"});
-			Element collection =
-				KXmlUtils.parseXml(outFile).getDocumentElement();
+				"-i", getDataDir() + "test/xdef_xdef.xml"});
+			Element collection = KXmlUtils.parseXml(outFile).getDocumentElement();
 			NodeList nl = KXmlUtils.getChildElements(collection);
 			if (nl.getLength() != 1) {
 				fail("Num of definitions: " + nl.getLength());

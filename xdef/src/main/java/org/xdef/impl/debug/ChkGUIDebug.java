@@ -60,7 +60,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
-/** Provides debugging tool for Xdefinition.
+/** Provides debugging tool for X-definition.
  * @author Vaclav Trojan
  */
 public class ChkGUIDebug extends GUIBase implements XDDebug {
@@ -92,7 +92,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		"go/Continue/F5",						// DBG_CONTINUE
 		"step/Step over/F8",					// DBG_STEP
 		"stepInto/Step into/F7",				// DBG_STEPINTO
-		"cancel/Cancel Xdefinition",			// DBG_CANCEL
+		"cancel/Cancel X-definition",			// DBG_CANCEL
 		"disable/Disable this stop address",	// DBG_DISABLE
 		"ps/Show stack/F2",						// SHOWSTACK
 		"pl/Show local variables/F3",			// DBG_SHOWLOCALVARS
@@ -117,7 +117,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_si = new XDSourceInfo();
 		_si.copyFrom(xp.getXDSourceInfo());
 		_sources = _si.getMap();
-		_windowName = "Debug Xdefinition:";
+		_windowName = "Debug X-definition:";
 		init(props);
 	}
 
@@ -170,6 +170,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_endPos = endPos;
 			_sourceID = sourceId;
 		}
+
 		@Override
 		public int compareTo(final StopAddr x) {
 			if (x._stopAddr == _stopAddr) {
@@ -206,7 +207,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	private PrintStream _out; // output in command line mode
 
 	/** Initialize this debug GUI object.
-	 * @param xp XDPool of running Xdefinition process.
+	 * @param xp XDPool of running X-definition process.
 	 */
 	private void initGUI(final XDPool xp) {
 		// Initialize SWING objects
@@ -224,18 +225,25 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		openGUI(xp.getXDSourceInfo()); // GUI mode
 		_sourceArea.setEditable(false);
 		_frame.addWindowListener(new WindowListener() {
+
 			@Override
 			public void windowOpened(WindowEvent e) {}
+
 			@Override
 			public void windowClosing(WindowEvent e) {windowClosed(e);}
+
 			@Override
 			public void windowClosed(WindowEvent e) {_debugMode = false;}
+
 			@Override
 			public void windowIconified(WindowEvent e) {}
+
 			@Override
 			public void windowDeiconified(WindowEvent e) {}
+
 			@Override
 			public void windowActivated(WindowEvent e) {}
+
 			@Override
 			public void windowDeactivated(WindowEvent e) {}
 		});
@@ -247,10 +255,13 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		initSourceMap();
 		_sourceItem = null;
 		_frame.addWindowListener(new WindowListener() {
+
 			@Override
 			public void windowOpened(WindowEvent e) {}
+
 			@Override
 			public void windowClosing(WindowEvent e) {windowClosed(e);}
+
 			@Override
 			public synchronized void windowClosed(WindowEvent e) {
 				_debugCommand = DBG_EXIT;
@@ -259,12 +270,16 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				}
 				notifyFrame();
 			}
+
 			@Override
 			public void windowIconified(WindowEvent e) {}
+
 			@Override
 			public void windowDeiconified(WindowEvent e) {}
+
 			@Override
 			public void windowActivated(WindowEvent e) {}
+
 			@Override
 			public void windowDeactivated(WindowEvent e) {}
 		});
@@ -379,11 +394,13 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		} catch (BadLocationException ex) {}
 	}
 
-	/** Initialize window for source code of Xdefinitions. */
+	/** Initialize window for source code of X-definitions. */
 	private void initSourceWindow() {
 		_sourceArea.addMouseListener(new MouseListener() {
+
 			@Override
 			public void mousePressed(MouseEvent e) {}
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e)) {
@@ -438,10 +455,13 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 					}
 				}
 			}
+
 			@Override
 			public void mouseReleased(MouseEvent e) {}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {}
+
 			@Override
 			public void mouseExited(MouseEvent e) {}
 		});
@@ -575,11 +595,11 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 // XDDebug interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Open debugger.
 	 * @param props Properties or null.
 	 * @param xp XDPool.
 	 */
+	@Override
 	public void openDebugger(Properties props, XDPool xp) {
 		if (xp == null || !xp.isDebugMode() || xp.getDisplayMode() == XDPool.DISPLAY_FALSE) {
 			return;
@@ -596,10 +616,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	@Override
 	/** Close debugger and display message.
 	 * @param msg message to be displayed.
 	 */
+	@Override
 	public void closeDebugger(String msg) {
 		closeDebugger();
 		if (msg != null && !msg.isEmpty()) {
@@ -607,8 +627,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	@Override
 	/** Close debugger */
+	@Override
 	public void closeDebugger() {
 		closeGUI(); // do not show mesage the trogram finished
 		_debugMode = false;
@@ -647,22 +667,22 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	@Override
 	/** Get debug PrintStream.
 	 * @return debug PrintStream.
 	 */
+	@Override
 	public final PrintStream getOutDebug() {return _out;}
 
-	@Override
 	/** Get debug InputStream.
 	 * @return debug InputStream.
 	 */
+	@Override
 	public InputStream getInDebug() {return _in;}
 
-	@Override
 	/** Set debug PrintStream.
 	 * @param outDebug debug PrintStream.
 	 */
+	@Override
 	public void setOutDebug(PrintStream outDebug) {
 		_out = outDebug;
 		if (_out != null && _in == null) {
@@ -671,10 +691,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_debugMode = true;
 	}
 
-	@Override
 	/** Set debug InputStream.
 	 * @param inDebug debug InputStream.
 	 */
+	@Override
 	public void setInDebug(InputStream inDebug) {
 		_in = inDebug;
 		if (_in != null && _out == null) {
@@ -722,8 +742,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		return s;
 	}
 
-	@Override
-	/** This method is called from Xscript on break point or
+	/** This method is called from X-script on break point or
 	 * from methods pause and trace.
 	 * @param xnode actual XXNode object.
 	 * @param code executive code.
@@ -735,8 +754,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	 * @param callList call list.
 	 * @param stepMode step mode (NOSTEP, STEPINTO, STEPOVER).
 	 * @return step mode.
-	 * @throws Error if the Xdefinition is canceled.
+	 * @throws Error if the X-definition is canceled.
 	 */
+	@Override
 	public int debug(final XXNode xnode,
 		final XDValue[] code,
 		final int pcounter,
@@ -1042,14 +1062,14 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	@Override
 	/** Clear XScript break point area. */
+	@Override
 	public void clearStopAddrs() {_stopAddresses = new StopAddr[0];}
 
-	@Override
 	/** Check if break point area contains the stop address.
 	 * @return true if break point area contains the stop address.
 	 */
+	@Override
 	public boolean hasStopAddr(int addr) {
 		if (_debugMode) {
 			for (StopAddr x: _stopAddresses) {
@@ -1070,10 +1090,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		return null;
 	}
 
-	@Override
 	/** Set stop address to the breakpoint area.
 	 * @param addr stop address.
 	 */
+	@Override
 	public void setStopAddr(int addr) {
 		XMDebugInfo di = _xdpool.getDebugInfo();
 		if (di == null) {
@@ -1121,11 +1141,11 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	@Override
 	/** Remove stop address from the breakpoint area.
 	 * @param addr stop address.
 	 * @return true stop address was removed.
 	 */
+	@Override
 	public boolean removeStopAddr(int addr) {
 		if (_stopAddresses.length == 0) {
 			return false;
@@ -1153,22 +1173,22 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		return false;
 	}
 
-	@Override
 	/** Clear XPos break point area. */
+	@Override
 	public void clearXPosArea() {_xposItems = null;}
 
-	@Override
 	/** Check if break point area contains the XPos item.
 	 * @return true if break point area contains the XPos item.
 	 */
+	@Override
 	public boolean hasXPos(String xpos) {
 		return !_debugMode || _xposItems == null ? false : Arrays.binarySearch(_xposItems, xpos) >= 0;
 	}
 
-	@Override
 	/** Set XPos item to the break point area.
 	 * @param xpos the string with XPos item.
 	 */
+	@Override
 	public void setXpos(String xpos) {
 		if (_xposItems == null) {
 			_xposItems = new String[]{xpos};
@@ -1189,10 +1209,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	@Override
 	/** Remove all XPos items with given stop address from the break point area.
 	 * @param xpos the string with XPos item.
 	 */
+	@Override
 	public void removeXpos(String xpos) {
 		if (_xposItems == null) {
 			return;

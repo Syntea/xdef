@@ -5,7 +5,7 @@ import org.xdef.impl.code.DefBoolean;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of Xscript "jboolean" type.
+/** Parser of X-script "jboolean" type.
  * @author Vaclav Trojan
  */
 public class XDParseJBoolean extends XSParseBoolean {
@@ -15,6 +15,7 @@ public class XDParseJBoolean extends XSParseBoolean {
 
 	@Override
 	public void initParams() {_whiteSpace = WS_PRESERVE;}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -35,6 +36,7 @@ public class XDParseJBoolean extends XSParseBoolean {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -51,10 +53,13 @@ public class XDParseJBoolean extends XSParseBoolean {
 			checkPatterns(p);
 		}
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_BOOLEAN;}
 }

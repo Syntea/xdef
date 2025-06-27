@@ -12,6 +12,7 @@ public class XSParseGMonthDay extends XSParseDate {
 
 	@Override
 	boolean parse(final StringParser parser) {return parser.isXMLMonthDay();}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 

@@ -17,12 +17,11 @@ public class TestGUIEditor  extends XDTester {
 
 	private void test(final String... params) {
 		GUIEditor.main(params);
-		System.out.println(
-			"OK " + params[0] + (params.length > 1 ? " " + params[1] : ""));
+		System.out.println("OK " + params[0] + (params.length > 1 ? " " + params[1] : ""));
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		try {
 ////////////////////////////////////////////////////////////////////////////////

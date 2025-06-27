@@ -38,8 +38,7 @@ public class KXmlOutStream {
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
+	 * @param writeDocumentHeader if true then the XML header is written. Otherwise, no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
 	public KXmlOutStream(final OutputStream out, final String encoding, final boolean writeDocumentHeader)
@@ -53,12 +52,9 @@ public class KXmlOutStream {
 	/** Creates new instance of DefXmlOutStream with java.io.Writer
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
+	 * @param writeDocumentHeader if true then the XML header is written. Otherwise, no XML header is written.
 	 */
-	public KXmlOutStream(final Writer writer,
-		final String encoding,
-		final boolean writeDocumentHeader) {
+	public KXmlOutStream(final Writer writer, final String encoding, final boolean writeDocumentHeader) {
 		_file = null;
 		_writer = writer;
 		_encoding = encoding == null ? "UTF-8" : encoding;
@@ -69,8 +65,7 @@ public class KXmlOutStream {
 	 * is deleted. The file will be created only if something was written.
 	 * @param filename the name of file where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
+	 * @param writeDocumentHeader if true then the XML header is written. Otherwise, no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
 	public KXmlOutStream(final String filename, final String encoding, final boolean writeDocumentHeader)
@@ -126,11 +121,14 @@ public class KXmlOutStream {
 		return false;
 	}
 
+	/** Initialize writer.
+	 * @throws IOException if an error occurs.
+	 */
 	private void initWriter() throws IOException {
 		if (_writer == null) {
 			String e = _encoding == null ? "UTF-8" : _encoding;
-			_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_file),
-				KCharsetNames.getJavaCharsetName(e)));
+			_writer = new BufferedWriter(
+				new OutputStreamWriter(new FileOutputStream(_file), KCharsetNames.getJavaCharsetName(e)));
 		}
 	}
 
@@ -174,6 +172,12 @@ public class KXmlOutStream {
 		_writer.flush();
 	}
 
+	/** Write attribute.
+	 * @param indent if true then the output will be indented.
+	 * @param name name of attriubute
+	 * @param val value of attribute.
+	 * @throws IOException if an error occurs.
+	 */
 	private void wrAttr(final String indent, final String name, final String val) throws IOException {
 		_writer.write(indent);
 		_writer.write(name);
@@ -199,9 +203,12 @@ public class KXmlOutStream {
 			}
 		}
 		_writer.write('"');
-
 	}
 
+	/** Write start of XML (element name and attributes).
+	 * @param elem element of which the start will be written.
+	 * @throws IOException if an error occurs.
+	 */
 	private void wrElemStart(final Element elem) throws IOException {
 		try {
 			String indent = _rootWritten && _indent != null ? _indent : null;
@@ -280,6 +287,7 @@ public class KXmlOutStream {
 		}
 	}
 
+	/** Finish writing of an element (wWrite XML end tag). */
 	public void writeElementEnd() {writeElementEnd(_names.pop());}
 
 	/** Write XML end tag.
@@ -385,8 +393,7 @@ public class KXmlOutStream {
 							_ns.popContext();
 							_names.pop();
 							if (_indent != null) {
-								_indent =
-									_indent.substring(0, _indent.length() - 2);
+								_indent = _indent.substring(0, _indent.length() - 2);
 							}
 						} else {
 							_writer.write('>');
@@ -394,8 +401,9 @@ public class KXmlOutStream {
 							writeElementEnd(elem);
 						}
 					} catch (IOException ex) {
-						throw new SRuntimeException(SYS.SYS036,//Program exception&{0}{: }
-							STester.printThrowable(ex));
+						//Program exception&{0}{: }
+						throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+
 					}
 					return;
 				}

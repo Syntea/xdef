@@ -4,7 +4,7 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix SYS.
  * Default language ISO639-2 id: eng. */
 public interface SYS {
-	/** &amp;{line}{; line=}&amp;{column}{; column=}&amp;{sysId}{; source="}{"}&amp;{xpath}{; path=}&amp;{xdpos}{; Xposition=} */
+	/** &amp;{line}{; line=}&amp;{column}{; column=}&amp;{sysId}{; source="}{"}&amp;{xpath}{; path=}&amp;{xdpos}{; X-position=} */
 	public static final long SYS000 = 953221120L;
 	/** Build version: &amp;{v}, datetime: &amp;{d} */
 	public static final long SYS010 = 953221121L;
@@ -188,7 +188,7 @@ public interface SYS {
 	public static final long SYS225 = 953221210L;
 	/** Can't read properties with reports: &amp;{0} */
 	public static final long SYS226 = 953221211L;
-	/** System messages of Xdefinitions */
+	/** System messages of X-definitions */
 	public static final long SYS_DESCRIPTION = 953221212L;
 	/** English */
 	public static final long SYS_LANGUAGE = 953221213L;

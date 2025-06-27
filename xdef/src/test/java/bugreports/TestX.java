@@ -19,10 +19,10 @@ public class TestX extends XDTester {
 
 	public static boolean x(XXData x) {return true;}
 
-	@Override
 	/** Run test and display error information. */
+	@Override
 	public void test() {
-		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDPool xp;
 		XDDocument xd;
 		String json;
@@ -30,8 +30,7 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
-			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+

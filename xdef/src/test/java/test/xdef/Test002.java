@@ -61,8 +61,8 @@ public final class Test002 extends XDTester {
 	public static void setKodPartnera() {}
 	public static String testGetXPos(XXNode x) {return x.getXPos();}
 
-	@Override
 	/** Run tests. */
+	@Override
 	public void test() {
 		String xdef;
 		String xml;
@@ -109,9 +109,8 @@ public final class Test002 extends XDTester {
 				}
 			}
 			xp = compile(dataDir + "Test002_3.xdef");
-			swr = new StringWriter();
 			xml = dataDir + "Test002_3.xml";
-			parse(xp, "Example", xml, reporter, swr, null, null);
+			parse(xp, "Example", xml, reporter, swr = new StringWriter(), null, null);
 			assertNoErrorwarnings(reporter);
 			assertEq("Example - start\n"+
 					"partnerLinks\n"+
@@ -125,17 +124,14 @@ public final class Test002 extends XDTester {
 			xdef = dataDir + "Test002_4.xdef";
 			xp = compile(xdef);
 			xml = dataDir + "Test002_4_1.xml";
-			swr = new StringWriter();
-			parse(xp, "DefSystemStatistics", xml, reporter, swr,null,null);
+			parse(xp, "DefSystemStatistics", xml, reporter, swr = new StringWriter(),null,null);
 			assertNoErrorwarnings(reporter);
 			xml = dataDir + "Test002_4_2.xml";
-			swr = new StringWriter();
-			parse(xp, "DefSystemStatistics", xml, reporter, swr,null,null);
+			parse(xp, "DefSystemStatistics", xml, reporter, swr = new StringWriter(),null,null);
 			assertNoErrorwarnings(reporter);
 			xdef = dataDir + "Test002_5.xdef";
 			xml = dataDir + "Test002_5.xml";
-			swr = new StringWriter();
-			parse(xdef, "instance", xml, reporter, swr, null, null);
+			parse(xdef, "instance", xml, reporter, swr = new StringWriter(), null, null);
 			assertNoErrorwarnings(reporter);
 			assertEq("", swr.toString());
 			xdef =  //reference to element with match expression.
@@ -174,11 +170,9 @@ public final class Test002 extends XDTester {
 "  <A a='t3()'>list(int(1,10))</A>\n"+
 "</xd:def>";
 			xml = "<A a='99'>1 2</A>";
-			swr = new StringWriter();
-			el = parse(xdef, "", xml, reporter, swr, null, null);
+			el = parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null);
 			assertEq(xml, el);
 			assertNoErrorwarnings(reporter);
-			swr.close();
 			assertEq("t1t2", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -190,10 +184,8 @@ public final class Test002 extends XDTester {
 "  <A a='t3()'>list(%item=int(1,10))</A>\n"+
 "</xd:def>";
 			xml = "<A a='99'>1 2</A>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
-			swr.close();
 			assertEq("t1t2", swr.toString());
 			String oldProp = getProperty(XDConstants.XDPROPERTY_WARNINGS);
 			try {//test ListOf with XDEF_3.1
@@ -209,11 +201,9 @@ public final class Test002 extends XDTester {
 "</xd:def>";
 				xp = compile(xdef);
 				xml = "<A a='99'>1 2</A>";
-				swr = new StringWriter();
-				el = parse(xp, "", xml, reporter, swr, null, null);
+				el = parse(xp, "", xml, reporter, swr = new StringWriter(), null, null);
 				assertEq(xml, el);
 				assertNoErrorwarnings(reporter);
-				swr.close();
 				assertEq("t1t2", swr.toString());
 				setProperty(XDConstants.XDPROPERTY_WARNINGS,
 					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
@@ -236,10 +226,8 @@ public final class Test002 extends XDTester {
 "  <A a='t3()'>list(%item=int(1,10))</A>\n"+
 "</xd:def>";
 			xml = "<A a='99'>1 2</A>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
-			swr.close();
 			assertEq("t1t2", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -252,10 +240,8 @@ public final class Test002 extends XDTester {
 "  <A a='t3()'>list(%item=int(i,j))</A>\n"+
 "</xd:def>";
 			xml = "<A a='99'>1 2</A>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertErrors(reporter);
-			swr.close();
 			assertEq("t1t2", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -267,10 +253,8 @@ public final class Test002 extends XDTester {
 "  <A a='t3()'>list(%item=int(1,10))</A>\n"+
 "</xd:def>";
 			xml = "<A a='99'>1 2</A>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertErrors(reporter);
-			swr.close();
 			assertEq("t1", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='a'>\n"+
@@ -286,8 +270,7 @@ public final class Test002 extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><C/></a>\n";
-			swr = new StringWriter();
-			el = parse(xp, "A", xml, reporter, swr, null, null);
+			el = parse(xp, "A", xml, reporter, swr = new StringWriter(), null, null);
 			assertNoErrorwarnings(reporter);
 			if (!"C\n".equals(swr.toString())) {
 				fail(swr.toString());
@@ -296,8 +279,7 @@ public final class Test002 extends XDTester {
 				fail(el.getAttribute("atr"));
 			}
 			xml = "<a atr='wxyz'><C/></a>\n";
-			swr = new StringWriter();
-			el = parse(xp, "A", xml, reporter, swr, null, null);
+			el = parse(xp, "A", xml, reporter, swr = new StringWriter(), null, null);
 			assertNoErrorwarnings(reporter);
 			assertEq("C\n", swr.toString());
 			if (!"wxyz".equals(el.getAttribute("atr"))) {
@@ -323,8 +305,7 @@ public final class Test002 extends XDTester {
 "<b/>" +
 "</ZmenaPS>" +
 "</a>";
-			swr = new StringWriter();
-			parse(xdef, "", xml, reporter, swr, null, null);
+			parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null);
 			assertEq(6, reporter.getErrorCount());
 			assertTrue(reporter.printToString().contains("XDEF526")
 				&& reporter.printToString().contains("XDEF534"),
@@ -454,12 +435,10 @@ public final class Test002 extends XDTester {
 				" CisloSmlouvy=\"3060000030\"" +
 				" KodPojistitele=\"0062\"/>" +
 				"</Set_BlokujPSP>";
-			swr  = new StringWriter();
-			el = create(xp, "test", "Set_BlokujPSP_",reporter,xml,swr,null);
+			el = create(xp, "test", "Set_BlokujPSP_", reporter, xml, swr  = new StringWriter(), null);
 			assertNoErrorwarnings(reporter);
 			assertEq("", swr.toString());
-			s = ((Element) el.getChildNodes().item(0).
-				getChildNodes().item(0)).getAttribute("IdPojistitel");
+			s = ((Element) el.getChildNodes().item(0).getChildNodes().item(0)).getAttribute("IdPojistitel");
 			assertEq("0062", s, KXmlUtils.nodeToString(el, true));
 			// we try array of xdefinitions
 			String[] xdefs = new String[] {
@@ -590,13 +569,10 @@ public final class Test002 extends XDTester {
 			assertFalse(test(xdef, xml, "",'P', xml, ""));
 			xdef = dataDir + "Test002_6.xdef"; //test macros, errors etc.
 			xml = dataDir + "Test002_6.xml";
-			swr = new StringWriter();
-			assertEq(xml, parse(xdef, "LDN", xml, reporter, swr, null, null));
-			assertEq(swr.toString(),
-				"XDOUT: ISDN_LDN - ISDN4202/DnSearch/@KodNdnDuvodLustrace\n");
+			assertEq(xml, parse(xdef, "LDN", xml, reporter, swr = new StringWriter(), null, null));
+			assertEq(swr.toString(), "XDOUT: ISDN_LDN - ISDN4202/DnSearch/@KodNdnDuvodLustrace\n");
 			s = reporter.printToString("slk");
-			assertTrue(s.contains("ISDN4202:")
-				&& s.contains("XDEF526:") && s.contains("riadok"), s);
+			assertTrue(s.contains("ISDN4202:") && s.contains("XDEF526:") && s.contains("riadok"), s);
 			xdef = // external methods
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A xd:script=\"finally {out(tab('a', 'b')); pp()}\" />\n"+
@@ -607,8 +583,7 @@ public final class Test002 extends XDTester {
 "    }\n"+
 "  </xd:declaration>\n"+
 "</xd:def>\n";
-			swr = new StringWriter();
-			assertEq("<A/>", parse(xdef,"","<A/>",reporter, swr, null, null));
+			assertEq("<A/>", parse(xdef,"","<A/>",reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(), "true,true,true");
 			//force compilation of test.xdef.TestExtenalMethods_1;
@@ -630,8 +605,7 @@ public final class Test002 extends XDTester {
 "  </xd:declaration>\n"+
 "  <a xd:script=\"finally {x(); x(2); x('a','b'); pp()}\" />\n"+
 "</xd:def>\n";
-			swr = new StringWriter();
-			assertEq("<a/>", parse(xdef,"","<a/>",reporter, swr, null, null));
+			assertEq("<a/>", parse(xdef,"","<a/>",reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(), "true,true,true");
 			xdef = // external methods in local declaration section
@@ -649,8 +623,7 @@ public final class Test002 extends XDTester {
 "  </xd:declaration>\n"+
 "  <a xd:script=\"finally {x(); x(2); x('a','b'); pp()}\" />\n"+
 "</xd:def>\n";
-			swr = new StringWriter();
-			assertEq("<a/>", parse(xdef,"","<a/>",reporter, swr, null, null));
+			assertEq("<a/>", parse(xdef,"","<a/>",reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(), "true,true,true");
 			//xpos
@@ -797,9 +770,8 @@ public final class Test002 extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>");
 			xp = checkExtObjects(xb.compileXD());
-			swr = new StringWriter();
 			xml = "<root><a/><a/></root>";
-			assertEq(xml, parse(xp, "a", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, "a", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("332", swr.toString());
 			xdef = //check declaration sequence independence
@@ -812,9 +784,8 @@ public final class Test002 extends XDTester {
 "  <a xd:script = \"finally {h(); if (k != 1) outln('error');}\"/>\n"+
 "  <xd:declaration> int x = 1; </xd:declaration>\n"+
 "</xd:def>";
-			swr = new StringWriter();
 			xml = "<a/>";
-			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xdef, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("", swr.toString());
 			xdef =
@@ -831,9 +802,8 @@ public final class Test002 extends XDTester {
 "  <xd:declaration scope='global'> int x = 1; </xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
-			swr = new StringWriter();
 			xml = "<a/>";
-			assertEq(xml, parse(xdef, "b", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xdef, "b", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("", swr.toString());
 			// fixed
@@ -935,12 +905,10 @@ public final class Test002 extends XDTester {
 "</x:def>";
 			xp = compile(xdef);
 			xml = "<a x='a'><b y='b'>c</b></a>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, null, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(), "/a/b[1]/text()/a/b[1]/@y/a/@x");
-			swr = new StringWriter();
-			assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
+			assertEq(xml, create(xp, null, "a", reporter, xml, swr = new StringWriter(), null));
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(), "/a/b[1]/text()/a/b[1]/@y/a/@x");
 			xdef =
@@ -956,8 +924,7 @@ public final class Test002 extends XDTester {
 "</x:def>";
 			xp = compile(xdef);
 			xml = "<a x='a'><b y='b'>c</b></a>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, null, xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(), "/a/b[1]/text()/a/b[1]/@y/a/@x");
 			xdef = // Create document from model of element.
@@ -1199,14 +1166,12 @@ public final class Test002 extends XDTester {
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			swr = new StringWriter();
 			xml = "<a><b/></a>";
-			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("1", swr.toString());
-			swr = new StringWriter();
 			xml = "<a/>";
-			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("0", swr.toString());
 			xdef = // should not throw null pointer exception!
@@ -1274,8 +1239,7 @@ public final class Test002 extends XDTester {
 "  </wsd:operation>\n"+
 "</wsd:portType>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, "", xml, reporter, swr);
+			parse(xp, "", xml, reporter, swr = new StringWriter());
 			assertNoErrorwarnings(reporter);
 			assertEq("", swr.toString());
 			xml =
@@ -1308,15 +1272,13 @@ public final class Test002 extends XDTester {
 "  <wsdl:operation name=\"WLTaskEndOp\" />\n"+
 "</wsdl:portType>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, "", xml, reporter, swr);
+			parse(xp, "", xml, reporter, swr = new StringWriter());
 			assertEq("", swr.toString());
 			if (!reporter.errors()) {
 				fail("error not reported");
 			} else {
 				if (reporter.getErrorCount() != 1) {
-					swr = new StringWriter();
-					ReportPrinter.printListing(swr, xml, reporter, true);
+					ReportPrinter.printListing(swr = new StringWriter(), xml, reporter, true);
 					fail(swr.toString());
 				} else {
 					rep = reporter.getReport();
@@ -1353,16 +1315,14 @@ public final class Test002 extends XDTester {
 "</xd:def>";
 			xml ="<root/>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, "", xml, reporter, swr);
+			parse(xp, "", xml, reporter, swr = new StringWriter());
 			assertEq("", swr.toString());
 			if (reporter.errors()) {
 				while ((rep = reporter.getReport()) != null) {
 					fail(rep.toString() + "\n"+ rep.getModification());
 				}
 				reporter.reset();
-				swr = new StringWriter();
-				ReportPrinter.printListing(swr, xml, reporter, true);
+				ReportPrinter.printListing(swr = new StringWriter(), xml, reporter, true);
 				fail(swr.toString());
 			}
 			xdef =
@@ -1390,13 +1350,11 @@ public final class Test002 extends XDTester {
 "</xd:def>";
 			xml ="<a><c/><b/><d/></a>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, "", xml, reporter, swr);
+			parse(xp, "", xml, reporter, swr = new StringWriter());
 			assertEq("", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a><c/><b/><xxx/></a>";
-			swr = new StringWriter();
-			parse(xp, "", xml, reporter, swr);
+			parse(xp, "", xml, reporter, swr = new StringWriter());
 			assertEq("", swr.toString());
 			if (!reporter.errors()) {
 				fail("error not reported");
@@ -1410,8 +1368,7 @@ public final class Test002 extends XDTester {
 				}
 			}
 			xml = "<a><c/></a>";
-			swr = new StringWriter();
-			parse(xp, "", xml, reporter, swr);
+			parse(xp, "", xml, reporter, swr = new StringWriter());
 			assertEq("", swr.toString());
 			assertNoErrorwarnings(reporter);
 			if (reporter.errors()) {
@@ -1419,8 +1376,7 @@ public final class Test002 extends XDTester {
 					fail(rep.toString() + "\n"+ rep.getModification());
 				}
 				reporter.reset();
-				swr = new StringWriter();
-				ReportPrinter.printListing(swr, xml, reporter, true);
+				ReportPrinter.printListing(swr = new StringWriter(), xml, reporter, true);
 				fail(swr.toString());
 			}
 			xdef = // test of reentrance (variable ids)
@@ -1461,8 +1417,7 @@ public final class Test002 extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, null, "<A/>", reporter, swr, null, null);
+			parse(xp, null, "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertEq(swr.toString(), "ABCD");
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -1472,8 +1427,7 @@ public final class Test002 extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, null, "<A/>", reporter, swr, null, null);
+			parse(xp, null, "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertEq(swr.toString(), "B");
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -1483,8 +1437,7 @@ public final class Test002 extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, null, "<A/>", reporter, swr, null, null);
+			parse(xp, null, "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertEq(swr.toString(), "B");
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -1494,8 +1447,7 @@ public final class Test002 extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, null, "<A/>", reporter, swr, null, null);
+			parse(xp, null, "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertEq(swr.toString(), "B");
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -1505,8 +1457,7 @@ public final class Test002 extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			swr = new StringWriter();
-			parse(xp, null, "<A/>", reporter, swr, null, null);
+			parse(xp, null, "<A/>", reporter, swr = new StringWriter(), null, null);
 			assertEq(swr.toString(), "B");
 			assertNoErrorwarnings(reporter);
 			xdef = //variable x with leading "$"
@@ -1585,7 +1536,6 @@ public final class Test002 extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 //"Testovací data chyba\n" +
-			xd = XDFactory.compileXD(null, xdef).createXDDocument();
 			xml =
 "<A>\n" +
 "    <Misto>\n" +

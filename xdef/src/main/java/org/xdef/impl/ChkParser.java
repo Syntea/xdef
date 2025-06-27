@@ -56,7 +56,7 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-/** Parsing of the XML source with the Xdefinition.
+/** Parsing of the XML source with the X-definition.
  * @author Vaclav Trojan
  */
 final class ChkParser extends DomBaseHandler implements XParser {
@@ -264,14 +264,20 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	// implementation of XHandler
+	// implementation of XHandler (Stack of readers)
 	////////////////////////////////////////////////////////////////////////////
+
+	/** Push reader the the stack of readers.
+	 * @param mr reader to be pushed.
+	 * @return reader on the tom of the stack befor pushing.
+	 */
 	@Override
 	public InputSource pushReader(XAbstractReader mr) {
 		_stackReader.push(new HandlerInfo(this, mr));
 		return new InputSource(mr);
 	}
 
+	/** Pop reader in the stack of readers. */
 	@Override
 	public final void popReader() {
 		if (!_stackReader.empty()) {
@@ -282,9 +288,13 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/////////////////////////////////////////////////////////////
 	// Implementation of DomBaseHandler methods
 	/////////////////////////////////////////////////////////////
+
+	/** Prepare parser with this DomBaseHandler and the given InputSource.
+	 * @param is InpusSource to be used.
+	 * @throws Exception if an I/O error occurs.
+	 */
 	@Override
-	public final void prepareParse(final InputSource is)
-		throws IOException, SAXException {
+	public final void prepareParse(final InputSource is) throws Exception {
 		XMLReader xr = getXMLReader();
 		_is = is;
 		xr.parse(is);
@@ -747,7 +757,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_chkElemStack = null;
 		} catch (SError e) {
 			if ("XDEF906".equals(e.getMsgID())) {
-				throw e; //Xdefinition canceled
+				throw e; //X-definition canceled
 			}
 			throw new SRuntimeException(e.getReport(), e.getCause());
 		}
@@ -825,7 +835,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 					try {
 						xdp =(XPool)new XBuilder(null).setSource(u).compileXD();
 					} catch (Exception ex) {
-						//In Xdefinition are errors&{0}{: }
+						//In X-definition are errors&{0}{: }
 						_sReporter.putReport(Report.fatal(XDEF.XDEF543, ex));
 						return;
 					}
@@ -883,12 +893,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 								_chkDoc._xdef = cd._xdef;
 							}
 						} else {
-							_sReporter.fatal(XDEF.XDEF530, value); //Missing Xdefinition &{0}{:}
+							_sReporter.fatal(XDEF.XDEF530, value); //Missing X-definition &{0}{:}
 							return;
 						}
 					}
 				}
-				//remove attributes with Xdefinition instance namespace
+				//remove attributes with X-definition instance namespace
 				parsedElem.remove(xPrefix + "xdefName");
 				parsedElem.remove(xPrefix + "stdOut");
 				parsedElem.remove(xPrefix + "stdErr");
@@ -899,7 +909,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				_element.removeAttribute(xPrefix + "stdIn");
 			}
 			if (_chkDoc == null) {
-				throw new SRuntimeException(XDEF.XDEF550); //Xdefinition is not specified
+				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
 			}
 			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {
@@ -911,7 +921,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_chkElemStack = newList;
 		}
 		_chkElemStack[_level] = _chkEl;
-		for (XMData x: _chkEl.getXMElement().getAttrs()) {
+		for (XMData x: _chkEl.getXMElement().getAttrs()) { // declared attributes
 			KParsedAttr ka = parsedElem.getAttrNS(x.getNSUri(),x.getName());
 			if (ka != null) {
 				if (_locationDetails) {
@@ -921,7 +931,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				ka.setValue(null);
 			}
 		}
-		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
+		for (int i = 0, max = parsedElem.getLength(); i < max; i++) { // other attributes
 			KParsedAttr ka = parsedElem.getAttr(i);
 			if (ka.getValue() != null) {
 				if (_locationDetails) {

@@ -9,8 +9,8 @@ import test.XDTester;
  */
 public class TestGUI extends XDTester {
 
-	@Override
 	/** Run test and display error information. */
+	@Override
 	public void test() {
 		String projectDir = "src/test/java/bugreports/data/project/";
 		clearTempDir();
@@ -18,6 +18,7 @@ public class TestGUI extends XDTester {
 //		GUIEditor.main("-p", projectDir + "json/project.xml");
 		GUIEditor.main("-p", projectDir + "validate/project.xml");
 	}
+
 	/**
 	 * @param args the command line arguments
 	 */

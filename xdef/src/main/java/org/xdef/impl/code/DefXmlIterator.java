@@ -20,7 +20,7 @@ import org.xdef.XDValueType;
 import static org.xdef.XDValueType.RESULTSET;
 import org.xdef.sys.StringParser;
 
-/** Implementation of XDResultSet from XML source.
+/** Implementation of XML iterator.
  * @author Vaclav Trojan
  */
 public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
@@ -108,12 +108,15 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 
 	@Override
 	public int getCount() {return _index;}
+
 	@Override
 	public String itemAsString() {return KXmlUtils.getTextValue(_item);}
+
 	@Override
 	public String itemAsString(int index) {
 		return index < _list.getLength() ?KXmlUtils.getTextValue(_list.item(index)) : null;
 	}
+
 	@Override
 	public String itemAsString(String name) {
 		NamedNodeMap nm = _item.getAttributes();
@@ -144,29 +147,35 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 		KXpathExpr expr = new KXpathExpr(name, _nc, _fr, _vr);
 		return (String) expr.evaluate(_item, XPathConstants.STRING);
 	}
-	@Override
+
 	/** If the iterated object contains the specified item then return true.
 	 * @param name name item.
 	 * @return true if and only if the specified item exists.
 	 */
+	@Override
 	public boolean hasItem(String name) {return itemAsString(name) != null;}
+
 	@Override
 	public int getSize() {return _list == null ? -1 : _list.getLength();}
-	@Override
+
 	/** Get statement from which ResultSet was created.
 	 * @return null here.
 	 */
-	public XDStatement getStatement() {return null;}
 	@Override
+	public XDStatement getStatement() {return null;}
+
 	/** Get constructor for creation of item.
 	 * @return constructor for creation of item.
 	 */
-	public XDConstructor getXDConstructor() {return _constructor;}
 	@Override
+	public XDConstructor getXDConstructor() {return _constructor;}
+
 	/** Set constructor for creation of item.
 	 * @param constructor constructor for creation of item.
 	 */
+	@Override
 	public void setXDConstructor(XDConstructor constructor) {_constructor = constructor;}
+
 	@Override
 	public void close() {
 		_list = null;
@@ -175,21 +184,26 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 		_fr = null;
 		_vr = null;
 	}
-	@Override
+
 	/** Closes both this iterator and the underlying Statement from which this ResultSet was created. */
+	@Override
 	public void closeStatement() {}
-   @Override
+
    /** Check if this object is closed.
 	* @return true if and only if this object is closed.
 	*/
+	@Override
 	public boolean isClosed() {return _list == null;}
+
 	@Override
 	public String stringValue() {return _xpath == null ? "XmlIterator":_xpath;}
+
 	@Override
 	public short getItemId() {return XD_RESULTSET;}
-	@Override
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return RESULTSET;}
 }

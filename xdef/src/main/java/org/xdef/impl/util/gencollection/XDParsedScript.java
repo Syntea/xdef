@@ -10,7 +10,7 @@ import org.w3c.dom.Node;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.StringParser;
 
-/** Parse script of Xdefinition.
+/** Parse script of X-definition.
  * @author Trojan
  */
 public class XDParsedScript {
@@ -79,7 +79,7 @@ public class XDParsedScript {
 						parseTypeSection(sp);
 						continue;
 					} else if (sp._sym == XScriptParser.CONSTANT_SYM
-						&& sp._parsedValue.getItemId()==XScriptParser.XD_STRING) {
+						&& sp._parsedValue.getItemId() == XScriptParser.XD_STRING) {
 						_xOccurrence.setFixed();
 						_default = '\'' + sp._parsedValue.toString() + '\'';
 						sp.nextSymbol();
@@ -97,8 +97,7 @@ public class XDParsedScript {
 						if (_options.length() > 0 ) {
 							_options += ",";
 						}
-						_options += sp._sym == XScriptParser.IDENTIFIER_SYM ?
-							sp._idName : "forget";
+						_options += sp._sym == XScriptParser.IDENTIFIER_SYM ? sp._idName : "forget";
 						sp.nextSymbol();
 						if (sp._sym != XScriptParser.COMMA_SYM) {
 							break;
@@ -548,7 +547,7 @@ public class XDParsedScript {
 
 	/** Create XdParsedScript object from the script.
 	 * @param s string with script.
-	 * @param defName name of Xdefinition.
+	 * @param defName name of X-definition.
 	 * @param isVal if true then script describes text value.
 	 * @return XdParsedScript object created from the script.
 	 */

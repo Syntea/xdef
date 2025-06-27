@@ -1,5 +1,6 @@
 package org.xdef.sys;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Locale;
@@ -8,20 +9,18 @@ import org.xdef.msg.XDEF;
 /** Price with currency code.
  * @author Vaclav Trojan
  */
-public class Price {
+public class Price implements Serializable {
 	/** Amount of currency */
 	private final BigDecimal _amount;
 	/** Currency */
 	private final Currency _currency;
-//
-//	/** Create instance of CurrencyAmount.
-//	 * @param amount currency amount.
-//	 * @param code ISO4217 currency code.
-//	 * @throws SRuntimeException if an error occurs.
-//	 */
-//	public Price(final double amount, final String code) {
-//		this(new BigDecimal(amount), code);
-//	}
+
+	/** Create instance of CurrencyAmount.
+	 * @param amount currency amount.
+	 * @param code ISO4217 currency code.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public Price(final double amount, final String code) {this(new BigDecimal(amount), code);}
 
 	/** Create instance of CurrencyAmount.
 	 * @param source string with price.
@@ -76,9 +75,7 @@ public class Price {
 	 * -1 is returned.
 	 * @return default number of fraction digits used with this currency.
 	 */
-	public final int fractionDigits(){
-		return _currency.getDefaultFractionDigits();
-	}
+	public final int fractionDigits() {return _currency.getDefaultFractionDigits();}
 
 	/** Get printable form of this currency amount.
 	 * @return printable form of this currency amount with required decimal

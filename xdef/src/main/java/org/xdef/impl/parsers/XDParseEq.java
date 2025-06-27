@@ -11,10 +11,11 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonTools;
 
-/** Parser of Xscript "eq" type.
+/** Parser of X-script "eq" type.
  * @author Vaclav Trojan
  */
 public class XDParseEq extends XDParserAbstract {
@@ -24,24 +25,18 @@ public class XDParseEq extends XDParserAbstract {
 	public XDParseEq() {super();}
 
 	@Override
-	public XDParseResult check(final XXNode xn, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		parseObject(xn, p);
-		return p;
-	}
-	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		if (quoted) {
-			if (!_param.equals(XonTools.readJString(p))) {
-				p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-			}
-			return;
-		}
-		if (!p.isToken(_param)) {
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		if (!q.isToken(_param)) {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
+		if (p != q) {
+			p.setEos();
+		}
+		checkCharset(xn, p);
 	}
+
 	@Override
 	public void setParseSQParams(final Object... param) {
 		if (param.length == 1) {
@@ -50,6 +45,7 @@ public class XDParseEq extends XDParserAbstract {
 			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
+
 	@Override
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
@@ -72,6 +68,7 @@ public class XDParseEq extends XDParserAbstract {
 			}
 		}
 	}
+
 	@Override
 	public final XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
@@ -80,8 +77,10 @@ public class XDParseEq extends XDParserAbstract {
 		}
 		return map;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseEq) ) {

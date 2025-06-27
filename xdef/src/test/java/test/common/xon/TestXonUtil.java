@@ -141,8 +141,8 @@ public class TestXonUtil extends STester {
 			"/n*** 22\n" + XonUtils.toXonString(o1, true));
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		init("Test*"); //init directories and test files
 //		init("Test105");

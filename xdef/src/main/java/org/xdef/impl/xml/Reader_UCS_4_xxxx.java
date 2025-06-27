@@ -90,8 +90,10 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 			return result;
 		}
 	}
+
 	@Override
 	public final int read(final char[] cbuf) throws IOException {return read(cbuf, 0, cbuf.length);}
+
 	@Override
 	public final int read(final char[] cbuf, final int off, final int len) throws IOException {
 		int i = off;
@@ -119,6 +121,7 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 		}
 		return i;
 	}
+
 	@Override
 	public final void close() throws IOException {
 		if (!isClosed()) {
@@ -129,6 +132,7 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 			}
 		}
 	}
+
 	@Override
 	public final void stopScanning() {_notScanning = true;}
 }

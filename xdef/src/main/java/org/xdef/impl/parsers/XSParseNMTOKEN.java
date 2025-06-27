@@ -12,6 +12,7 @@ public class XSParseNMTOKEN extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "NMTOKEN";
 
 	public XSParseNMTOKEN() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -28,7 +29,9 @@ public class XSParseNMTOKEN extends XSAbstractParseToken {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
+		checkCharset(xnode, p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

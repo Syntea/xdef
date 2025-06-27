@@ -1,6 +1,7 @@
 package org.xdef;
 
 import java.math.BigDecimal;
+import static org.xdef.XDValueID.XD_PRICE;
 import static org.xdef.XDValueType.PRICE;
 import org.xdef.msg.SYS;
 import org.xdef.sys.Price;
@@ -30,6 +31,11 @@ public final class XDPrice extends XDValueAbstract {
 	 */
 	public BigDecimal amount() {return _amount!=null ? _amount.amount() : null;}
 
+	/**	Get XDCurrency object.
+	 * @return XDCurrency object
+	 */
+	public XDCurrency currency() {return _amount != null ? new XDCurrency(_amount.getCurrency()) : null;}
+
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
 	 */
@@ -48,7 +54,7 @@ public final class XDPrice extends XDValueAbstract {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of methods from XDValue interface
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public boolean equals(final XDValue arg) {
@@ -58,6 +64,7 @@ public final class XDPrice extends XDValueAbstract {
 		}
 		return false;
 	}
+
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof XDPrice) {
@@ -67,16 +74,22 @@ public final class XDPrice extends XDValueAbstract {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 	}
+
 	@Override
 	public short getItemId() {return XD_PRICE;}
+
 	@Override
 	public XDValueType getItemType() {return PRICE;}
+
 	@Override
 	public String stringValue() {return isNull() ? "null" : _amount.toString();}
+
 	@Override
 	public boolean isNull() {return _amount == null;}
+
 	@Override
 	public Price getObject() {return _amount;}
+
 	@Override
 	public String toString() {return stringValue();}
 }

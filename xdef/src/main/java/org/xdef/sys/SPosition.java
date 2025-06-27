@@ -343,7 +343,7 @@ public class SPosition {
 			}
 			if (modification.contains("&{xdpos}") && !text.contains("&{xdpos}")
 				&& !text.contains("&{#SYS000}")) {
-				text += "&{xdpos}{; Xposition=}";
+				text += "&{xdpos}{; X-position=}";
 			}
 		}
 		report.setText(text);

@@ -1,12 +1,15 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
+import static org.xdef.XDParser.WS_PRESERVE;
+import static org.xdef.XDParserAbstract.checkCharset;
+import static org.xdef.XDValueID.XD_CHAR;
 import org.xdef.impl.code.DefChar;
 import org.xdef.xon.XonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of Xscript "char" type.
+/** Parser of X-script "char" type.
  * @author Vaclav Trojan
  */
 public class XDParseChar extends XSAbstractParseToken {
@@ -16,8 +19,9 @@ public class XDParseChar extends XSAbstractParseToken {
 
 	@Override
 	public void initParams() {_whiteSpace = WS_PRESERVE;}
+
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
@@ -30,8 +34,10 @@ public class XDParseChar extends XSAbstractParseToken {
 		String s = p.getBufferPart(pos, p.getIndex());
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
+		checkCharset(xn, p);
 		checkItem(p);
 	}
+
 	boolean parse(final XDParseResult p) {
 		if (p.eos()) {
 			return false;
@@ -53,8 +59,10 @@ public class XDParseChar extends XSAbstractParseToken {
 		p.setParsedValue(new DefChar(ch));
 		return true;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CHAR;}
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-/** Check the source with the Xdefinition for errors.
+/** Check the source with the X-definition for errors.
  * @author Vaclav Trojan
  */
 public class CheckXdef {
@@ -19,8 +19,8 @@ public class CheckXdef {
 	private CheckXdef() {}
 
 	@SuppressWarnings("deprecation")
-	/** Check Xdefinitions.
-	 * @param sources Array of file names or URLs with Xdefinitions.
+	/** Check X-definitions.
+	 * @param sources Array of file names or URLs with X-definitions.
 	 * @return true if no errors are detected.
 	 */
 	public static boolean checkXdef(final String... sources) {
@@ -44,17 +44,17 @@ public class CheckXdef {
 
 	/** String with command line information. */
 	private static final String INFO =
-"Check if Xdefinition is correct.\n" +
+"Check if X-definition is correct.\n" +
 "Command line arguments:\n"+
 "   FileName [FileName1] [ ... ]\n" +
 "Note: wildcard chars '*' or '?' in the file specification are accepted.";
 
-	/** Check file with Xdefinition.
+	/** Check file with X-definition.
 	 * @param args The array of arguments:
 	 * <p>FileName [FileName ... ]
 	 * <p>where:
 	 * <ul>
-	 * <li>FileName the path and name of the source Xdefinition.
+	 * <li>FileName the path and name of the source X-definition.
 	 * Note the file names may contain the "wildcards" as '*' or '?' to specify the group of source files.
 	 * </ul>
 	 */

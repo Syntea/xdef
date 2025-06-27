@@ -29,7 +29,7 @@ public class TestXDGen extends XDTester {
 				+ "\n== xdef ==\n"+ s.trim());
 		}
 		ArrayReporter reporter = new ArrayReporter();
-		XDPool xp = XDFactory.compileXD(null,s);
+		XDPool xp = XDFactory.compileXD(null, s);
 		XDDocument xd = xp.createXDDocument();
 		Element el = xd.xparse(x, reporter);
 		if (reporter.errors()) {
@@ -61,8 +61,8 @@ public class TestXDGen extends XDTester {
 		return reporter;
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String dataDir = getDataDir();
 		int ndx = dataDir.indexOf("/xdutils/");

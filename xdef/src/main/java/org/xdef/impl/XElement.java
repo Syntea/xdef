@@ -31,8 +31,7 @@ import org.xdef.sys.SUtils;
 /** Implementation of the model of an element.
  * @author Vaclav Trojan
  */
-public final class XElement extends XCodeDescriptor
-	implements XMElement, CodeTable {
+public final class XElement extends XCodeDescriptor implements XMElement, CodeTable {
 
 	/** attributes. */
 	public final Map<String, XData> _attrs;
@@ -62,7 +61,7 @@ public final class XElement extends XCodeDescriptor
 	/** Creates a new instance of XElement.
 	 * @param name name of XElement.
 	 * @param nsURI namespace URI.
-	 * @param xdef Xdefinition object.
+	 * @param xdef X-definition object.
 	 */
 	public XElement(final String name, final String nsURI, final XDefinition xdef) {
 		super(name, nsURI, xdef.getXDPool(), XMELEMENT);
@@ -103,10 +102,10 @@ public final class XElement extends XCodeDescriptor
 		_childNodes[oldlist.length] = xnode;
 	}
 
-	@Override
 	/** If this object is clone of other model (reference) return true.
 	 * @return If this model is clone of other model (reference) return true.
 	 */
+	@Override
 	public final boolean isReference() {return _reference;}
 
 	/** Set this if the model is clone of other model (reference).
@@ -114,17 +113,17 @@ public final class XElement extends XCodeDescriptor
 -	 */
 	public final void setReference(boolean isref) {_reference = isref;}
 
-	@Override
 	/** Get reference position if this model was created from other model (reference) or return null.
 	 * @return reference position if this model was created from other model
 	 * (reference) or return null.
 	 */
+	@Override
 	public final String getReferencePos() {return _refPosition;}
 
-	@Override
 	/** Get mode of XON/JSON model.
 	 * @return 0 .. no XON/JSON, 1 .. XON/JSON w3c mode, 2 .. XON/JSON xd mode.
 	 */
+	@Override
 	public final byte getXonMode() {return _xon;}
 
 	/** Set mode of XON/JSON model.
@@ -236,8 +235,8 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public final boolean isMoreAttributes() {return _moreAttributes == 'T' | getDefAttr("$any", - 1) != null;}
 
-	/** Get Xdefinition object.
-	 * @return Xdefinition object.
+	/** Get X-definition object.
+	 * @return X-definition object.
 	 */
 	public final XDefinition getDefinition() {return _definition;}
 
@@ -274,10 +273,10 @@ public final class XElement extends XCodeDescriptor
 	public final void setSqId(int sqId) {_sqId = sqId;}
 
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Write this XElement to XDWriter. */
-	public final void writeXNode(final XDWriter xw,
-		final List<XNode> list) throws IOException{
+	@Override
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException{
 		if (list.indexOf(this) < 1) {
 			list.add(this);
 		}
@@ -374,60 +373,61 @@ public final class XElement extends XCodeDescriptor
 		return x;
 	}
 
-	@Override
 	/** Get XMDefinition assigned to this node.
 	 * @return root XMDefinition node.
 	 */
+	@Override
 	public final XMDefinition getXMDefinition() {return _definition;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // XMElement interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Check if this model allows other elements.
 	 * @return true if and only if this model may contain other elements then defined.
 	 */
+	@Override
 	public final boolean hasOtherElements() {return _moreElements == 'T';}
 
-	@Override
 	/** Check if this model allows other attributes.
 	 * @return true if and only if this model may contain other attributes then defined.
 	 */
+	@Override
 	public final boolean hasOtherAttrs() {return _moreAttributes == 'T';}
 
-	@Override
 	/** Check if this model allows other text nodes.
 	 * @return true if and only if this model may contain other text nodes then defined.
 	 */
+	@Override
 	public final boolean hasOtherText() {return _moreText == 'T';}
 
-	@Override
 	/** Check if this model allows other text nodes.
 	 * @return true if and only if this model may contain other text nodes then defined.
 	 */
+	@Override
 	public final XMNode[] getChildNodeModels() {return _childNodes;}
 
-	@Override
 	/** Get model of attribute (no namespace URI).
 	 * @param name name of attribute.
 	 * @return attribute model or <i>null</i> if attribute is hot specified.
 	 */
+	@Override
 	public final XMData getAttr(final String name) {return getDefAttr(name, -1);}
 
-	@Override
 	/** Get model of attribute with namespace URI.
 	 * @param nsURI namespace URI of attribute or <i>null</i>.
 	 * @param name local name of attribute.
 	 * @return attribute model or <i>null</i> if attribute is hot specified.
 	 */
+	@Override
 	public final XMData getAttrNS(final String nsURI, final String name) {
 		return nsURI == null ? getAttr(name) : getDefAttrNS(nsURI, name,-1);
 	}
 
-	@Override
 	/** Get array of models of attributes.
 	 * @return array of models of attributes.
 	 */
+	@Override
 	public final XMData[] getAttrs() {
 		XData[] result = new XData[_attrs.size()];
 		_attrs.values().toArray(result);
@@ -580,20 +580,20 @@ public final class XElement extends XCodeDescriptor
 		return null;
 	}
 
-	@Override
 	/** Create XDDocument.
-	 * @return XDDocument created from associated Xdefinition.
+	 * @return XDDocument created from associated X-definition.
 	 */
+	@Override
 	public final XDDocument createXDDocument() {
 		ChkDocument xdoc = new ChkDocument(_definition);
 		xdoc.setRootModel(this);
 		return xdoc;
 	}
 
-	@Override
 	/** Get message digest of this model.
 	 * @return message digest of this XDPool.
 	 */
+	@Override
 	public final String getDigest() {
 		if (_digest == null) {
 			genDigestInfo(this);

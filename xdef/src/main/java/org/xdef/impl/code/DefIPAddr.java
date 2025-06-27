@@ -45,16 +45,16 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 // Implementation of XDIPAddr interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
-		/**	Get the raw IP address in a string format.
+	/**	Get the raw IP address in a string format.
 	 * @return raw IP address in a string format.
 	 */
+	@Override
 	public String getHostAddress() {return _value != null ? _value.getHostAddress() : null;}
 
-	@Override
 	/**	Check if IP address of this IPAddrress object is IPv6 version.
 	 * @return true if IP address of this IPAddress object is IPv6 version.
 	 */
+	@Override
 	public boolean isIPv6() {return _value == null ? false : _value.getAddress().length == 16;}
 
 	/** Get bytes from the internal InetAddress.
@@ -66,10 +66,13 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
+
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefIPAddr) {
@@ -78,6 +81,7 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 		}
 		return false;
 	}
+
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof DefIPAddr) {
@@ -87,16 +91,22 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
+
 	@Override
 	public short getItemId() {return XD_IPADDR;}
+
 	@Override
 	public XDValueType getItemType() {return IPADDR;}
+
 	@Override
 	public String stringValue() {return isNull() ? "null" :_value.toString().substring(1);}
+
 	@Override
 	public boolean isNull() {return _value == null;}
+
 	@Override
 	public InetAddress getObject() {return _value;}
+
 	@Override
 	public String toString() {return stringValue();}
 }

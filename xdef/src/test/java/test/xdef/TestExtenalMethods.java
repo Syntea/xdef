@@ -120,6 +120,7 @@ public final class TestExtenalMethods extends XDTester {
 
 	/** Simple user defined class loader. */
 	private static class TestClassLoader extends ClassLoader {
+
 		@Override
 		final public Class<?> loadClass(final String name)
 			throws ClassNotFoundException {
@@ -130,6 +131,7 @@ public final class TestExtenalMethods extends XDTester {
 
 	/** Simple incorrect user defined class loader. */
 	private class TestFailClassLoader extends ClassLoader {
+
 		@Override
 		final public Class<?> loadClass(final String name)
 			throws ClassNotFoundException {
@@ -138,8 +140,8 @@ public final class TestExtenalMethods extends XDTester {
 		}
 	}
 
-	@Override
 	/** Run tests and print error information. */
+	@Override
 	public void test() {
 		test.xdef.TestExtenalMethods_1.class.getClass(); //force compilation
 		test.xdef.TestExtenalMethods_2.class.getClass(); //force compilation

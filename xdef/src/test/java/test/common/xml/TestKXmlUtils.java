@@ -26,8 +26,8 @@ public class TestKXmlUtils extends STester {
 
 	public TestKXmlUtils() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String s;
 		String source;

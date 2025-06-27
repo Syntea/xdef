@@ -38,7 +38,7 @@ public interface JSON {
 	public static final long JSON016 = 13834649615L;
 	/** Not allowed character&amp;{0}{ "}{"}&amp;{#SYS000} */
 	public static final long JSON017 = 13834649616L;
-	/** Value in Xdefinition must be a string with Xscript&amp;{#SYS000} */
+	/** Value in X-definition must be a string with X-script&amp;{#SYS000} */
 	public static final long JSON018 = 13834649617L;
 	/** Comments are not allowed here&amp;{#SYS000} */
 	public static final long JSON019 = 13834649618L;

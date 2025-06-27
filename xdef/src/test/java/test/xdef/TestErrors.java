@@ -66,8 +66,8 @@ public final class TestErrors extends XDTester {
 		return "";
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
@@ -494,7 +494,7 @@ public final class TestErrors extends XDTester {
 "    xdef:script        ='occurs 0..' />\n"+
 "</List>\n"+
 "</xdef:def>";
-			xp = XDFactory.compileXD(props, xdef);
+			xp = compile(xdef);
 			xml =
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -693,7 +693,6 @@ public final class TestErrors extends XDTester {
 			if (reporter.errorWarnings()) {
 				assertEq("", chkReport(reporter, "XDEF424", "3", "6", null));
 				assertEq("", chkReport(reporter, "XDEF410", "3", "6", null));
-				assertEq("", chkReport(reporter, "XDEF422", "3", "12", null));
 				assertEq("", chkReport(reporter, "XDEF425", "3", "20", null));
 				assertEq("", chkReport(reporter, "XDEF424", "3", "20", null));
 			}

@@ -125,6 +125,7 @@ import static org.xdef.impl.code.CodeTable.GET_BNFRULE;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT;
 import static org.xdef.impl.code.CodeTable.GET_NS;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_XPATH;
 import static org.xdef.impl.code.CodeTable.GET_XPATH_FROM_SOURCE;
 import static org.xdef.impl.code.CodeTable.GET_XQUERY;
@@ -1342,6 +1343,12 @@ public final class CompileCode extends CompileBase {
 							return;
 					}
 					break;
+				default:
+					if (xType == XD_PARSERESULT) {
+						addCode(new CodeI1(resultType, GET_PARSED_VALUE, 1), 0);
+						_cstack[_sp] = -1;
+						return;
+					}
 			}
 			//Incompatible types&{0}{: }
 			_parser.error(XDEF.XDEF457, getTypeName(xType) + "," + getTypeName(resultType));

@@ -1,11 +1,12 @@
 package test.xdef;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.xdef.component.XComponent;
 import org.xdef.proc.XXNode;
 
-public class TestXComponents_G {
+public class TestXComponents_G implements Serializable {
 	XComponent _X, _Y, _G;
 
 	private String _XX;

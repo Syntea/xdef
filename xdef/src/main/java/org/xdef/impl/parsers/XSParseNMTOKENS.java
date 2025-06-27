@@ -17,6 +17,7 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "NMTOKENS";
 
 	public XSParseNMTOKENS() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -85,10 +86,13 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 			p.errorWithString(XDEF.XDEF815, parserName());
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+
 	@Override
 	public short getAlltemsType() {return XD_STRING;}
 }

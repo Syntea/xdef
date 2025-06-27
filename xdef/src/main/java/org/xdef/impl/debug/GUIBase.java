@@ -425,11 +425,11 @@ public class GUIBase {
 				&& _line==x._line && _column==x._column;
 		}
 
-		@Override
 		/** Compare this object with another SourcePos.
 		 * @param x other SourcePos object.
 		 * @return -1 this object is less then x, 0 if it is equal otherwise 1.
 		 */
+		@Override
 		public int compareTo(SourcePos x) {
 			if (_sysId.equals(x._sysId)) {
 				if (_pos >= 0 && x._pos >= 0) {

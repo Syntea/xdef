@@ -4,11 +4,10 @@ import java.util.regex.Matcher;
 import static org.xdef.XDValueID.XD_REGEXRESULT;
 import static org.xdef.XDValueType.REGEXRESULT;
 
-/** Implementation of Xscript value of regular expression result.
+/** Implementation of X-script value of regular expression result.
  * @author Vaclav Trojan
  */
 public final class XDRegexResult extends XDValueAbstract {
-
 	/** Matcher object generated from the source expression. */
 	private Matcher _value;
 
@@ -76,35 +75,39 @@ public final class XDRegexResult extends XDValueAbstract {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_REGEXRESULT;}
 	@Override
+	public short getItemId() {return XD_REGEXRESULT;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return REGEXRESULT;}
 	@Override
+	public XDValueType getItemType() {return REGEXRESULT;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {
 		if (_value == null) return "";
 		if (_value.matches()) return _value.group();
 		return "";
 	}
-	@Override
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {return String.valueOf(matches());}
 	@Override
+	public String stringValue() {return String.valueOf(matches());}
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @return true if and only if the argument is equal to this one.
 	 */
+	@Override
 	public final boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -115,9 +118,10 @@ public final class XDRegexResult extends XDValueAbstract {
 		return _value == null ? arg.isNull()
 			: _value.equals(((XDRegexResult) arg)._value);
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise returns false.
 	 */
+	@Override
 	public boolean isNull() {return _value == null;}
 }

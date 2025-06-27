@@ -49,7 +49,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
-/** Generate Xdefinition from XML.
+/** Generate X-definition from XML.
  * @author Vaclav Trojan
  */
 public final class GenXDefXML {
@@ -58,7 +58,9 @@ public final class GenXDefXML {
 	private final static class XAttr {
 		String _type;
 		boolean _required;
+
 		XAttr(String type) {_type = type; _required = true;}
+
 		@Override
 		public String toString() {return (_required ? "" : "optional ") + _type;}
 	}
@@ -316,7 +318,7 @@ public final class GenXDefXML {
 		String uri = qname.getNamespaceURI();
 		if (XDEF31_NS_URI.equals(uri) || XDEF32_NS_URI.equals(uri) || XDEF40_NS_URI.equals(uri)
 			|| XDEF41_NS_URI.equals(uri) || XDEF42_NS_URI.equals(uri)) {
-			//Namespace of Xdefinition is not allowed in XML input data
+			//Namespace of X-definition is not allowed in XML input data
 			throw new SRuntimeException(XDEF.XDEF882);
 		}
 		if (XDEF_NS_PREFIX.equals(qname.getPrefix())) {
@@ -338,10 +340,10 @@ public final class GenXDefXML {
 			: prefix + ':' + name.getLocalPart();
 	}
 
-	/** Generate Xdefinition from a document to given output stream writer.
+	/** Generate X-definition from a document to given output stream writer.
 	 * @param elem XML element.
-	 * @param xdName name of XDefinition or null.
-	 * @return org.w3c.dom.Document object with Xdefinition.
+	 * @param xdName name of X-definition or null.
+	 * @return org.w3c.dom.Document object with X-definition.
 	 */
 	public static final Element genXdef(final Element elem, final String xdName) {
 		Element el = (Element) elem.cloneNode(true);
@@ -547,8 +549,8 @@ public final class GenXDefXML {
 			? el.getOwnerDocument().createElement(name) : el.getOwnerDocument().createElementNS(ns, name);
 	}
 
-	/** Recursive generation of Xdefinition model from given element. Result is added to parent
-	 * (i.e. a node from Xdefinition).
+	/** Recursive generation of X-definition model from given element. Result is added to parent
+	 * (i.e. a node from X-definition).
 	 * @param parent node to which model is added.
 	 * @param x model from which a model is generated.
 	 */

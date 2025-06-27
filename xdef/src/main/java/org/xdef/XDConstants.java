@@ -2,11 +2,10 @@ package org.xdef;
 
 import org.xdef.sys.config.PomInfo;
 
-/** Important constants used by Xdefinition.
- * Note that constants with a name starting with the prefix "XDPROPERTY" are property names.  There are also
- * constants defined for each constant with a name starting with the prefix "XDPROPERTYVALUE", and there are
- * constants with a name starting with the prefix "XDPROPERTYVALUE" to which the corresponding property value
- * options are defined.
+/** Important constants used by X-definition. Note that constants with a name starting with the prefix
+ * "XDPROPERTY" are property names.  There are also constants defined for each constant with a name starting
+ * with the prefix "XDPROPERTYVALUE", and there are constants with a name starting with the prefix
+ * "XDPROPERTYVALUE" to which the corresponding property value options are defined.
   @author Vaclav Trojan
  */
 public interface XDConstants {
@@ -58,7 +57,7 @@ public interface XDConstants {
 	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_FALSE = "false";
 
 	/** Property defines if unresolved external methods are reported (used
-	 * for syntax checking of Xdefinition (default is "false"). */
+	 * for syntax checking of X-definition (default is "false"). */
 	public static final String XDPROPERTY_IGNORE_UNDEF_EXT = "xdef_ignoreUnresolvedExternals";
 	/** Value "true" of property "xdef_ignoreUnresolvedExternals" */
 	public static final String XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE = "true";
@@ -92,9 +91,9 @@ public interface XDConstants {
 
 	/** Property defines debug editor class name.*/
 	public static final String XDPROPERTY_DEBUG_EDITOR = "xdef_debugeditor";
-	/** Property defines Xdefinition editor class name.*/
+	/** Property defines X-definition editor class name.*/
 	public static final String XDPROPERTY_XDEF_EDITOR = "xdef_editor";
-	/** Property defines Xdefinition external editor class name.*/
+	/** Property defines X-definition external editor class name.*/
 	public static final String XDPROPERTY_XDEF_EXTEDITOR = "xdef_exteditor";
 
 	/** Property defines stream used for debug output (default is stdOut). */
@@ -111,22 +110,22 @@ public interface XDConstants {
 	public static final String XINCLUDE_NS_URI = "http://www.w3.org/2001/XInclude";
 
 ////////////////////////////////////////////////////////////////////////////////
-// Xdefinition
+// X-definition
 ////////////////////////////////////////////////////////////////////////////////
-	/** Recommended namespace prefix used for Xdefinition nodes. */
+	/** Recommended namespace prefix used for X-definition nodes. */
 	public static final String XDEF_NS_PREFIX = "xd";
-	/** URI of Xdefinition 3.1. */
+	/** URI of X-definition 3.1. */
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
-	/** URI of Xdefinition 3.2. */
+	/** URI of X-definition 3.2. */
 	public static final String XDEF32_NS_URI = "http://www.xdef.org/xdef/3.2";
-	/** URI of Xdefinition 4.0. */
+	/** URI of X-definition 4.0. */
 	public static final String XDEF40_NS_URI = "http://www.xdef.org/xdef/4.0";
-	/** URI of Xdefinition 4.1. */
+	/** URI of X-definition 4.1. */
 	public static final String XDEF41_NS_URI = "http://www.xdef.org/xdef/4.1";
-	/** URI of Xdefinition 4.1. */
+	/** URI of X-definition 4.1. */
 	public static final String XDEF42_NS_URI = "http://www.xdef.org/xdef/4.2";
 
-	/** The namespace URI for Xdefinition instance. */
+	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI = "http://www.xdef.org/xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +133,7 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 	/** Recommended namespace prefix used for XON/JSON/INI XML format. */
 	public static final String XON_NS_PREFIX = "jx";
-	/** URI of XON/JSON/INI XML Xdefinition conversion. */
+	/** URI of XON/JSON/INI XML X-definition conversion. */
 	public static final String XON_NS_URI_XD = "http://www.xdef.org/xon/4.0";
 	/** URI of XON/JSON/INI XML W3C like conversion*/
 	public static final String XON_NS_URI_W="http://www.xdef.org/xon/4.0/w";

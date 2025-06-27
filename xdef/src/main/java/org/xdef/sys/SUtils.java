@@ -1222,8 +1222,7 @@ public class SUtils extends FUtils {
 	 * @param o the object where is setter.
 	 * @param name name of setter.
 	 * @param v value to be set.
-	 * @throws SRuntimeException if the setter was not found or it is not
-	 * accessible.
+	 * @throws SRuntimeException if the setter was not found or it is not accessible.
 	 */
 	public static final void setValueToSetter(final Object o, final String name, final Object v) {
 		Class<?> cls = o.getClass();
@@ -1347,6 +1346,7 @@ public class SUtils extends FUtils {
 	 * @return ISO 639-2 (3 letters) language ID.
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
+	@Deprecated
 	public static final String getISO3Language() throws SRuntimeException {
 		return getISO3Language(System.getProperties().getProperty("user.language"));
 	}
@@ -1355,17 +1355,20 @@ public class SUtils extends FUtils {
 	 * @deprecated please use System.getProperties().getProperty("user.name")
 	 * @return SYSTEM user name.
 	 */
+	@Deprecated
 	public static final String getUserName() {return System.getProperties().getProperty("user.name");}
 
 	/** Get system country id from System properties.
 	 * @deprecated please use System.getProperties().getProperty("user.country")
 	 * @return The country id.
 	 */
+	@Deprecated
 	public static final String getCountry() {return System.getProperties().getProperty("user.country");}
 
 	/** Get System language from System properties.
 	 * @deprecated please use System.getProperties().getProperty("user.language")
 	 * @return language id.
 	 */
+	@Deprecated
 	public static final String getLanguage() {return System.getProperties().getProperty("user.language");}
 }

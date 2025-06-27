@@ -63,7 +63,6 @@ class XCGeneratorBase {
 	final Map<String, String> _binds;
 	/** XDPool from which components are generated. */
 	final XDPool _xp;
-
 	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
 	byte _byteArrayEncoding;
 	/** Map with components information. */
@@ -162,7 +161,7 @@ class XCGeneratorBase {
 		RESERVED_NAMES.add("org.w3c.dom.Document");
 		RESERVED_NAMES.add("org.w3c.dom.Element");
 		RESERVED_NAMES.add("org.w3c.dom.Node");
-		// Xdefinition names
+		// X-definition names
 		RESERVED_NAMES.add("org.xdef.msg.XDEF");
 		RESERVED_NAMES.add("org.xdef.sys.SDatetime");
 		RESERVED_NAMES.add("org.xdef.sys.SDuration");
@@ -176,9 +175,12 @@ class XCGeneratorBase {
 		RESERVED_NAMES.add("org.xdef.sys.SRuntimeException");
 	}
 
-	XCGeneratorBase(final XDPool xp,
-		final ArrayReporter reporter,
-		final boolean genJavadoc) {
+	/** Create new instance of XCGeneratorBase.
+	 * @param xp XDPool from which to generate X-components.
+	 * @param reporter where to write error messages and warnings.
+	 * @param genJavadoc if true the Javadoc is generated.
+	 */
+	XCGeneratorBase(final XDPool xp, final ArrayReporter reporter, final boolean genJavadoc) {
 		_xp = xp;
 		_reporter = reporter;
 		_binds = xp.getXComponentBinds();
@@ -228,6 +230,11 @@ class XCGeneratorBase {
 		}
 		return null;
 	}
+
+	/** Get string with Java type.
+	 * @param type X-definition type ID.
+	 * @return string with Java type.
+	 */
 	private static String getJavaType(final short type) {
 		switch (type) {
 			case XD_BOOLEAN: return "Boolean";
@@ -371,8 +378,7 @@ class XCGeneratorBase {
 		}
 		sb.append(modify(
 (_genJavadoc ? "\t/** Value of &{d} \"&{xmlName}\".*/"+LN : "")+
-"\tprivate"+(max > 1?" final":"")
-	+" &{typ} _&{name}&{x}",
+"\tprivate" + (max > 1?" final":"") + " &{typ} _&{name}&{x}",
 			"&{d}", d,
 			"&{xmlName}", name.replace('$', ':'),
 			"&{typ}", typ,
@@ -385,6 +391,18 @@ class XCGeneratorBase {
 		sb.append(';').append(LN);
 	}
 
+	/** Generate variable declaration, getter and setter.
+	 * @param xdata node from which to generate methods.
+	 * @param name name of variable.
+	 * @param max maximal occurrence number of items.
+	 * @param descr Description text.
+	 * @param vars String builder where generate variables.
+	 * @param getters String builder where generate getter.
+	 * @param setters String builder where generate setter.
+	 * @param sbi String builder where the code is generated for interface.
+	 * @param xpathes where to generate paths.
+	 * @param sbi String builder where the code is generated for interface.
+	 */
 	final void genBaseVarsGettersSetters(final XData xdata,
 		final String name,
 		final int max,
@@ -403,14 +421,18 @@ class XCGeneratorBase {
 		if (sbi != null) {
 			xpathes.append("\t@Override").append(LN);
 			sbi.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+(_genJavadoc ? ("\t/** Get XPath position of &{descr} \"&{name}\"."+LN+
+"\t* @return string with XPath position."+LN+
+"\t */"+LN) : "")+
 "\tpublic String xposOf&{name}();"+LN,
 				"&{name}", name,
 				"&{descr}", descr));
 		}
 		final String x = "attribute".equals(descr) ? "@" + name : "$text";
 		xpathes.append(modify(
-(_genJavadoc ? ("\t/** Get XPath position of \"&{descr}\".*/"+LN) : "")+
+(_genJavadoc ? ("\t/** Get XPath position of &{descr} \"&{name}\"."+LN+
+"\t* @return string with XPath position."+LN+
+"\t */"+LN) : "")+
 "\tpublic String xposOf&{name}(){return XD_XPos+\"/&{x}\";}"+LN,
 			"&{name}", name,
 			"&{x}", x,
@@ -437,8 +459,7 @@ class XCGeneratorBase {
 		final StringBuilder setters,
 		final StringBuilder sbi,
 		final String nullChoice) {
-		genGetterMethodFromChildElement(xel,
-			className, name, max, descr, getters, sbi);
+		genGetterMethodFromChildElement(xel, className, name, max, descr, getters, sbi);
 		String mname = null;
 		String mURI = null;
 		String mXDPos = null;
@@ -447,8 +468,8 @@ class XCGeneratorBase {
 			mURI = xel.getNSUri();
 			mXDPos = xel.getXDPosition();
 		}
-		genSetterMethodOfChildElement(className, name, max,
-			mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
+		genSetterMethodOfChildElement(
+			className, name, max, mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
 	}
 
 	/** Generate java code of getter method for child element classes.
@@ -770,9 +791,7 @@ class XCGeneratorBase {
 	 * @param name name of attribute.
 	 * @param sb String builder where the code is generated.
 	 */
-	final static void genCreatorOfAttribute(final XMData xdata,
-		final String name,
-		final StringBuilder sb) {
+	final static void genCreatorOfAttribute(final XMData xdata, final String name, final StringBuilder sb) {
 		final String uri = xdata.getNSUri();
 		final String fn = uri != null ? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
@@ -782,9 +801,7 @@ class XCGeneratorBase {
 			XDParser xp  = (XDParser) xdata.getParseMethod();
 			String parseName = xp.parserName();
 			switch ("union".equals(parseName) ? xp.getAlltemsType() : xdata.getParserType()) {
-				case XD_CHAR:
-					x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))";
-					break;
+				case XD_CHAR: x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))"; break;
 				case XD_DATETIME: {
 					String s = xdata.getDateMask();
 					x = s == null ? "org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))"
@@ -795,21 +812,14 @@ class XCGeneratorBase {
 					x = ("base64Binary".equals(xdata.getParserName())
 						? "encodeBase64" : "encodeHex") + "(get&{name}()))";
 					break;
-				case XD_IPADDR:
-					x = "get&{name}().toString().substring(1))";
-					break;
-				case XD_NULL: //jnull
-					x = "\"null\")";
-					break;
-				case XD_STRING:
-					x = "get&{name}())";
-					break;
+				case XD_IPADDR: x = "get&{name}().toString().substring(1))"; break;
+				case XD_NULL: x = "\"null\")"; break; //jnull
+				case XD_STRING: x = "get&{name}())"; break;
 				case XD_CONTAINER: {
 					x = "org.xdef.component.XComponentUtil.listToString(get&{name}(), "
 						+ (parseName.equals("jlist") ? "true" : "false") + "))";
 					break;
 				}
-
 				default: x = "get&{name}().toString())";
 			}
 		}
@@ -827,9 +837,7 @@ class XCGeneratorBase {
 	 * @param sb String builder where code is generated.
 	 * @param isList if true then object is list.
 	 */
-	final void genChildElementCreator(final String name,
-		final StringBuilder sb,
-		final boolean isList) {
+	final void genChildElementCreator(final String name, final StringBuilder sb, final boolean isList) {
 		if (sb.length() == 0) {
 			sb.append("\t\t").append("java.util.List<org.xdef.component.XComponent> a=")
 				.append("new java.util.ArrayList<>();").append(LN);
@@ -845,12 +853,11 @@ class XCGeneratorBase {
 	 * @param sb String builder where code is generated.
 	 */
 	final void genTextNodeCreator(final XMData xdata,
-		final String name,
-		final int max,
+		final String name, final int max,
 		final StringBuilder sb) {
 		if (sb.length() == 0) {
-			sb.append("java.util.List<org.xdef.component.XComponent> a=")
-				.append("new java.util.ArrayList<>();").append(LN);
+			sb.append("java.util.List<org.xdef.component.XComponent> a=");
+			sb.append("new java.util.ArrayList<>();").append(LN);
 		}
 		String x;
 		final String y = max > 1? ".get(i)" : "";
@@ -868,14 +875,9 @@ class XCGeneratorBase {
 			case XD_DECIMAL:
 			case XD_NUMBER:
 			case XD_DURATION:
-				x = z+y+".toString()";
-				break;
-			case XD_CHAR:
-				x = "org.xdef.xon.XonTools.genXMLValue(" + z + y +")";
-				break;
-			case XD_IPADDR:
-				x = "get&{name}().toString().substring(1)";
-				break;
+				x = z+y+".toString()"; break;
+			case XD_CHAR: x = "org.xdef.xon.XonTools.genXMLValue(" + z + y +")"; break;
+			case XD_IPADDR: x = "get&{name}().toString().substring(1)"; break;
 			case XD_DATETIME: {
 				String s = xdata.getDateMask();
 				x = s == null ? "org.xdef.component.XComponentUtil.dateToJstring(" + z+y + ")"
@@ -886,9 +888,7 @@ class XCGeneratorBase {
 				x = ("base64Binary".equals(xdata.getParserName())
 					? "encodeBase64(" : "encodeHex(") + z + y + ")";
 				break;
-			case XD_NULL: //jnull
-				x = "\"null\"";
-				break;
+			case XD_NULL: x = "\"null\""; break; //jnull
 			case XD_ANY: //jvalue
 				if ("jvalue".equals(xdata.getParserName())) {
 					x = z +y + (max <= 1 ? ".toString()" : "");
@@ -942,8 +942,7 @@ class XCGeneratorBase {
 	 * @param xe Model
 	 * @return name of class if reference exists, otherwise return null.
 	 */
-	final String getXDPosition(final XElement xe,
-		final boolean genInterface) {
+	final String getXDPosition(final XElement xe, final boolean genInterface) {
 		if (genInterface) {
 			return ((xe.isReference())
 				? _components.get(xe.getReferencePos()) : _components.get(xe.getXDPosition())).getName();
@@ -1024,8 +1023,7 @@ class XCGeneratorBase {
 	 * @param set set with names.
 	 * @return new name if the the name from argument exists in the set or return the original name;
 	 */
-	final static String getUniqueName(final String name,
-		final Set<String> set) {
+	final static String getUniqueName(final String name, final Set<String> set) {
 		String s = name;
 		for (int i = 1; set.contains(s); i++) {
 			s = name + "_" + i;
@@ -1065,13 +1063,13 @@ class XCGeneratorBase {
 	/** Add name of variable name to the set of variable names.
 	 * @param varNames set of variable names.
 	 * @param name name to add.
-	 * @param xdPosition XDPosition of actual model.
+	 * @param xPos XDPosition of actual model.
 	 * @param ext it it is external name.
 	 * @return the unique name.
 	 */
 	final String addVarName(final Set<String> varNames,
 		final String name,
-		final String xdPosition,
+		final String xPos,
 		final boolean ext) {
 		String iname = getUniqueName(name, varNames); //get unique variable name
 		varNames.add(iname);
@@ -1080,11 +1078,11 @@ class XCGeneratorBase {
 		}
 		if (ext) {
 			//Getter/setter name &{0} in &{1} can't be used. Please change name by command %bind
-			_reporter.error(XDEF.XDEF371, name, xdPosition);
+			_reporter.error(XDEF.XDEF371, name, xPos);
 			return name;
 		} else {
 			//Getter/setter name &{0} in &{1} was changed to &{2}. You can define other name by command %bind
-			_reporter.warning(XDEF.XDEF360, name, xdPosition,iname);
+			_reporter.warning(XDEF.XDEF360, name, xPos,iname);
 		}
 		return iname;
 	}

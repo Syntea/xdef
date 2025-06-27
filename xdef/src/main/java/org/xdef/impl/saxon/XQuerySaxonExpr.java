@@ -41,19 +41,19 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
 	 * The namespace context, functions and variables* are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */
+	@Override
 	public KXquery newExpression(final String source) {return new XQuerySaxonExpr(source);}
 
-	@Override
 	/** Set implicit time zone.
 	 * @param tz time zone to be set as implicit.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException{
 		try {
 			_value.setImplicitTimeZone(tz);
@@ -62,11 +62,11 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Get implicit time zone.
 	 * @return implicit time zone.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public TimeZone getImplicitTimeZone() throws SRuntimeException {
 		try {
 			return _value.getImplicitTimeZone();
@@ -75,10 +75,10 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Get array with QNames of external variables
 	 * @return array with QNames of external variables or null.
 	 */
+	@Override
 	public QName[] getAllExternalVariables() {
 		try {
 			return _value.getAllExternalVariables();
@@ -87,10 +87,10 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Get array with QNames of unbound external variables
 	 * @return array with QNames of unbound external variables or null.
 	 */
+	@Override
 	public QName[] getAllUnboundExternalVariables() {
 		try {
 			return _value.getAllUnboundExternalVariables();
@@ -99,12 +99,12 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Bind variable to XQuery expression.
 	 * @param qname QName of variable.
 	 * @param value object to be bound.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public void bindValue(final QName qname, final Object value) throws SRuntimeException {
 		QName[] qnames = getAllExternalVariables();
 		if (qnames == null || qnames.length == 0 || value == null) {
@@ -163,12 +163,12 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Execute precompiled XQuery expression and return result.
 	 * @param node node or null.
 	 * @return object with result of XQuery expression.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public Object evaluate(final Node node) throws SRuntimeException {
 		try {
 			if (node == null) {
@@ -213,10 +213,10 @@ public class XQuerySaxonExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Execute XQuery expression and return result. If result type is null then result types are checked.
 	 * @return object with result of XQuery expression.
 	 */
+	@Override
 	public Object evaluate() {
 		try {
 			return _value.executeQuery();

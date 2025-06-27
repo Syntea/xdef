@@ -9,7 +9,7 @@ import org.xdef.util.GenXDefinition;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
-/** Test generation of Xdefinition.
+/** Test generation of X-definition.
  * @author Vaclav Trojan
  */
 public class MyTest_1 extends XDTester {
@@ -18,10 +18,10 @@ public class MyTest_1 extends XDTester {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
-		System.out.println("Xdefinition version: " + XDFactory.getXDVersion());
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		String dataDir = getDataDir() + "test/";
 		if (dataDir == null) {
 			fail("Data directory is missing, test canceled");

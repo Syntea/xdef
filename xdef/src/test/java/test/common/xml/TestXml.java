@@ -28,8 +28,8 @@ public class TestXml extends STester  {
 	/** Creates a new instance of TestXml */
 	public TestXml() {}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String s = "Kůň " + (char)9 + (char)13 + " úpěl";
 		DOMImplementation di;

@@ -13,7 +13,7 @@ import org.xdef.sys.SThrowable;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 
-/** Generate Xdefinition from XML or JSON/XON data.
+/** Generate X-definition from XML or JSON/XON data.
  * @author Vaclav Trojan
  */
 public final class GenXDef {
@@ -131,16 +131,16 @@ public final class GenXDef {
 		}
 	}
 
-	/** Generate Xdefinition from a document to given output stream writer.
+	/** Generate X-definition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data).
-	 * @return Element with created XDefinition.
+	 * @return Element with created X-definition.
 	 */
 	public static final Element genXdef(final Object obj) {return genXdef(obj, null);}
 
-	/** Generate Xdefinition from a document to given output stream writer.
+	/** Generate X-definition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source data).
-	 * @param xdName name XDefinition or null.
-	 * @return Element with created XDefinition.
+	 * @param xdName name X-definition or null.
+	 * @return Element with created X-definition.
 	 */
 	public static final Element genXdef(final Object obj, final String xdName) {
 		Object o = readData(obj);

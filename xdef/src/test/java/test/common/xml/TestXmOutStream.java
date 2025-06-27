@@ -16,8 +16,8 @@ public class TestXmOutStream extends STester {
 
 	public TestXmOutStream() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		KXmlOutStream w;
 		ByteArrayOutputStream sw;

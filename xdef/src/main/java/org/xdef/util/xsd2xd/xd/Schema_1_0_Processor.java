@@ -13,13 +13,13 @@ import org.w3c.dom.Element;
 import org.xdef.sys.SReporter;
 
 
-/** Represents XML Schema 1.0 to Xdefinition 2.0 convertor.
+/** Represents XML Schema 1.0 to X-definition 2.0 convertor.
  * @author Ilia Alexandrov
  */
 public class Schema_1_0_Processor extends Processor {
-	/** Xdefinition namespace uri of actual version. */
+	/** X-definition namespace uri of actual version. */
 	public static final String XDEF_URI = XDConstants.XDEF42_NS_URI;
-	/** Representation of Xdefinition document. */
+	/** Representation of X-definition document. */
 	private final XdefDocument _xdef;
 	/** Error and warning reporter. */
 	private final SReporter _reporter;
@@ -30,14 +30,14 @@ public class Schema_1_0_Processor extends Processor {
 	/** Stack of namespaces during importing and including declarations. */
 	private final Stack<String> _namespaceStack = new Stack<>();
 
-	/** Creates instance of XML Schema 1.0 to Xdefinition 2.0 convertor.
-	 * Xdefinition elements will have given prefix. Xdefinition will be
+	/** Creates instance of XML Schema 1.0 to X-definition 2.0 convertor.
+	 * X-definition elements will have given prefix. X-definition will be
 	 * generated from root schema at given URL.
 	 *
-	 * @param xdefPrefix prefix of Xdefinition nodes.
+	 * @param xdefPrefix prefix of X-definition nodes.
 	 * @param reporter reporter to report warnings and errors.
 	 * @param rootSchemaURL URL of root schema to convert.
-	 * @param separately Xdefinitions as separate files.
+	 * @param separately X-definitions as separate files.
 	 */
 	public Schema_1_0_Processor(String xdefPrefix,
 		SReporter reporter,
@@ -226,7 +226,7 @@ public class Schema_1_0_Processor extends Processor {
 //		_reporter.warning("", getTime() + " Processing \""
 //			+ DOMUtils.getXPosition(schemaElement) + "\" schema item "
 //			+ "and adding declaration to \""
-//			+ DOMUtils.getXPosition(xdefElement) + "\" Xdefinition item...");
+//			+ DOMUtils.getXPosition(xdefElement) + "\" X-definition item...");
 	}
 	@Override
 	public void writeCollection(String collectionFileName)
@@ -248,7 +248,7 @@ public class Schema_1_0_Processor extends Processor {
 	}
 
 	/** Returns report message of not supported schema item in current
-	 * Xdefinition version.
+	 * X-definition version.
 	 *
 	 * @param notSupportedScemaItem not supported schema item.
 	 * @return report message.
@@ -256,7 +256,7 @@ public class Schema_1_0_Processor extends Processor {
 	private String getReportMessage(Element notSupportedSchemaElement) {
 		return "Schema item \"" + notSupportedSchemaElement.getLocalName()
 			+ "\" (" + DOMUtils.getXPosition(notSupportedSchemaElement)
-			+ ") is not supported in Xdefinition version 2.0";
+			+ ") is not supported in X-definition version 2.0";
 	}
 	@Override
 	protected void processInclude(Element includeElement,

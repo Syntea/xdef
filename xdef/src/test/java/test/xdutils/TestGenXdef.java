@@ -42,15 +42,13 @@ public class TestGenXdef extends XDTester {
 				o = XonUtils.parseXON(files[i]);
 				x = xd.jparse(f, reporter);
 				if (reporter.errorWarnings()) {
-					fail(id + ", " + f + ":\n" +reporter.printToString()+'\n'+
-						SUtils.readString(f) + '\n'
-						+ SUtils.readString(new File(fname)));
+					fail(id + ", " + f + ":\n" + reporter.printToString() + '\n'
+						+ SUtils.readString(f) + '\n' + SUtils.readString(new File(fname)));
 					reporter.clear();
 				}
-				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f + '\n' +
-					XonUtils.toXonString(o, true) + '\n' +
-					XonUtils.toXonString(x, true) + '\n' +
-					SUtils.readString(new File(fname)));
+				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f + '\n'
+					+ XonUtils.toXonString(o, true) + '\n' + XonUtils.toXonString(x, true) + '\n'
+					+ SUtils.readString(new File(fname)));
 			}
 		} catch (IOException | SException | RuntimeException ex) {
 			fail(f.getAbsolutePath());
@@ -79,8 +77,8 @@ public class TestGenXdef extends XDTester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String dataDir = getDataDir() + "test/";
 		if (dataDir == null) {
@@ -245,10 +243,8 @@ dataDir + "TestValidate2.xml",
 "    ]\n" +
 "  }\n" +
 "}", "D");
-			test(SUtils.getFileGroup(
-				"src/test/resources/test/common/xon/data/*.json"), "F");
-			test(SUtils.getFileGroup(
-				"src/test/resources/test/xdef/data/json/*.json"), "G");
+			test(SUtils.getFileGroup("src/test/resources/test/common/xon/data/*.json"), "F");
+			test(SUtils.getFileGroup("src/test/resources/test/xdef/data/json/*.json"), "G");
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.

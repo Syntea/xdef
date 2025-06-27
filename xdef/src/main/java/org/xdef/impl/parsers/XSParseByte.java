@@ -11,6 +11,7 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XSParseByte extends XSParseLong {
 	private static final String ROOTBASENAME = "byte";
+
 	public XSParseByte() {super();}
 
 	@Override
@@ -23,14 +24,17 @@ public class XSParseByte extends XSParseLong {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.longValue() < -128 || x.longValue() > 127) {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME); //Incorrect range specification of &{0}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_BYTE;}
 }

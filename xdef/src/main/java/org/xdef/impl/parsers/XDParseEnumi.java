@@ -7,8 +7,10 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import java.util.Arrays;
 import org.xdef.XDContainer;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.xon.XonTools;
 
-/** Parser of Xscript "enumi" type.
+/** Parser of X-script "enumi" type.
  * @author Vaclav Trojan
  */
 public class XDParseEnumi extends XDParseEnum {
@@ -17,26 +19,20 @@ public class XDParseEnumi extends XDParseEnum {
 	public XDParseEnumi() {super();}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		int pos = p.getIndex();
-		int len = -1;
+	public void parseObject(final XXNode xn, final XDParseResult p) {
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
 		for (String s : _list) {
-			if (p.isTokenIgnoreCase(s)) {
-				int tlen = s.length();
-				if (tlen > len) {
-					len = tlen;
+			if (q.isTokenIgnoreCase(s)) {
+				if (q.eos()) {
+					p.setEos();
+					return;
 				}
-				p.setIndex(pos);
 			}
 		}
-		if (len != -1) {
-			int i = pos + len;
-			p.setParsedValue(p.getSourceBuffer().substring(pos, i));
-			p.setIndex(i);
-		} else {
-			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-		}
+		p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 	}
+
 	@Override
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
@@ -47,8 +43,10 @@ public class XDParseEnumi extends XDParseEnum {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseEnumi) ) {

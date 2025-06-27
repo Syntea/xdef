@@ -55,15 +55,15 @@ public class XQuerySaxonImpl implements XQueryImpl {
 		return false;
 	}
 
-	@Override
 	/** Execute XPath expression and return result.
+	 * @param x query Expression.
 	 * @param node node or null.
 	 * @param xNode node model or null.
 	 * @return The string representation of value of the object.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final XDContainer exec(final KXqueryExpr x,
-		final Node node,
-		final XXNode xNode) {
+	@Override
+	public final XDContainer exec(final KXqueryExpr x, final Node node, final XXNode xNode) {
 		try {
 			QName[] qnames = x.getAllExternalVariables();
 			if (xNode != null && qnames != null && qnames.length > 0) {

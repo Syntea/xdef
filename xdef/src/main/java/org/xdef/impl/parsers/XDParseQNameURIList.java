@@ -10,7 +10,7 @@ import org.xdef.impl.ext.XExtUtils;
 import org.w3c.dom.Element;
 import org.xdef.XDContainer;
 
-/** Parser of Xscript "QNameURIList" type.
+/** Parser of X-script "QNameURIList" type.
  * @author Vaclav Trojan
  */
 public class XDParseQNameURIList extends XDParseNCNameList {
@@ -40,6 +40,7 @@ public class XDParseQNameURIList extends XDParseNCNameList {
 			SEPARATOR +
 			0;
 	}
+
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser parser) {
 		Element el = _elem == null ? xnode.getElement() : _elem;
@@ -56,6 +57,7 @@ public class XDParseQNameURIList extends XDParseNCNameList {
 		}
 		return new DefString(parser.getParsedString());
 	}
+
 	@Override
 	public void addNamedParams(final XDContainer map) {
 		super.addNamedParams(map);
@@ -63,10 +65,13 @@ public class XDParseQNameURIList extends XDParseNCNameList {
 			map.setXDNamedItem("argument", new DefElement(_elem));
 		}
 	}
+
 	@Override
 	public void setArgument(final XDValue x) {_elem = x.getElement();}
+
 	@Override
 	public XDValue getArgument() {return new DefElement(_elem);}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

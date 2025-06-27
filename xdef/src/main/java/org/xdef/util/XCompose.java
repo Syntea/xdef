@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.sys.SRuntimeException;
 
-/** Process the XML file with the Xdefinition in the construction mode. Also provides main method for calling
+/** Process the XML file with the X-definition in the construction mode. Also provides main method for calling
  * the program from command line. (see {@link org.xdef.util.XCompose#main(String[])})
  * @author  Vaclav Trojan
  */
@@ -104,21 +104,21 @@ public class XCompose {
 
 	/** String with invocation information. */
 	private final static String INFO =
-"Process the XML file with the Xdefinition in construction mode.\n"+
+"Process the XML file with the X-definition in construction mode.\n"+
 "\n"+
 "Command line arguments:\n"+
 " [-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile\n" +
 " [-n rootNameSpace] [-r rootName] -i xmlFile\n"+
 "(Items in the defList are separated by path separators.)";
 
-	/** Validation of pool ox Xdefinitions. This method is possible to invoke from command line.
+	/** Validation of pool ox X-definitions. This method is possible to invoke from command line.
 	 * @param args Array of strings containing command line arguments.
 	 * <p>
 	 * <i>[-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile
 	 * [-n rootNameSpace] [-r rootName] -i xmlFile</i>
 	 * <ul>
-	 *  <li><i>-d defList</i> - list of Xdefinition files
-	 *  <li><i>-x xDefName</i> - Xdefinition name
+	 *  <li><i>-d defList</i> - list of X-definition files
+	 *  <li><i>-x xDefName</i> - X-definition name
 	 *  <li><i>-l logFile</i> - log file
 	 *  <li><i>-e encoding</i> - output file encoding
 	 *  <li><i>-o outFile</i> - output file

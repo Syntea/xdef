@@ -1,5 +1,5 @@
 /**
- * Provides tools for using XON/JSON/Properties/CSV data in Xdefinition.
+ * Provides tools for using XON/JSON/Properties/CSV data in X-definition.
  * <UL>
  *   <li>{@link org.xdef.xon.XonUtils}</li>
  *   <li>{@link org.xdef.xon.XonToXml}</li>

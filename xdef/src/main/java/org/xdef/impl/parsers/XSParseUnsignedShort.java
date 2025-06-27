@@ -25,8 +25,10 @@ public class XSParseUnsignedShort extends XSParseLong {
 			p.error(XDEF.XDEF806, parserName(), val); //Value of '&{0}' is out of range&{1}{: }
 		}
 	}
+
 	@Override
 	public final String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		long val = x.longValue();
@@ -34,6 +36,7 @@ public class XSParseUnsignedShort extends XSParseLong {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_INT;}
 }

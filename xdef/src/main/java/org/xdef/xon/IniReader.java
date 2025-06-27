@@ -23,7 +23,7 @@ import static org.xdef.xon.XonTools.genXMLString;
  * @author Vaclav Trojan
  */
 public class IniReader extends StringParser implements XonParsers, XonNames {
-	/** Flag if the parsed data are in Xdefinition (default false). */
+	/** Flag if the parsed data are in X-definition (default false). */
 	private boolean _jdef;
 	/** Parser of XON source. */
 	private final XonParser _jp;
@@ -95,7 +95,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return ((j - i) & 1) > 0;
 	}
 
-	/** Read text of proerty.
+	/** Read text of property.
 	 * @return SBuffer with property or return null;
 	 */
 	private SBuffer readPropText() {
@@ -149,7 +149,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	/** Put property to ini object.
 	 * @param s String with property.
-	 * @return true if a proprty was added to ini object.
+	 * @return true if a property was added to ini object.
 	 */
 	private boolean putProperty(SBuffer s) {
 		if (s == null || s.getString().charAt(0) == '[') {
@@ -212,12 +212,12 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Parse INI/Properties from reader
 	 * @param in reader with source data.
 	 * @param sysId system ID
 	 * @return map with parsed data.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Map<String, Object> parseINI(Reader in, String sysId) {
 		XonParser jp = new XonObjParser(true);
 		IniReader xr = new IniReader(in, jp);
@@ -310,21 +310,24 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 // interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Parse INI/Properties source data.
 	 * @throws SRuntimeException if an error occurs,
 	 */
+	@Override
 	public final void parse() throws SRuntimeException {
 		readINI();
 		if (!eos()) {
 			error(JSON.JSON008);//Text after JSON not allowed
 		}
 	}
+
 	@Override
-	/** Set mode that INI file is parsed in Xdefinition compiler. */
+	/** Set mode that INI file is parsed in X-definition compiler. */
 	public final void setXdefMode() { _jdef = true;}
+
 	@Override
 	public void setXonMode() {} // not used here
+
 	@Override
 	public void setJsonMode() {} // not used here
 
@@ -386,11 +389,11 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		sb.append('\n');
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Create string with INI/Property source format.
 	 * @param map Map object with INI/Property data.
 	 * @return created string with INI/Property source.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final String toIniString(final Map<String, Object> map) {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, Object> x: map.entrySet()) {
@@ -411,11 +414,11 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		return sb.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Add ini object to XML element element.
 	 * @param ini ini object.
 	 * @param el XML element where to add items.
 	 */
+	@SuppressWarnings("unchecked")
 	private static void iniToXml(final Map<String,Object> ini, final Element el){
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
@@ -447,10 +450,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Create XML Element from object.
-	 * @param ini object wioth Windows ini data.
+	 * @param ini object with Windows ini data.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Element iniToXml(final Object ini) {
 		Document doc = KXmlUtils.newDocument(
 			XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);

@@ -125,7 +125,7 @@ public abstract class Type {
 	 */
 	public String getName() {return _name;}
 
-	/** Returns XDefinition style type definition.
+	/** Returns X-definition style type definition.
 	 * @return  String representing type method.
 	 */
 	public abstract String getTypeMethod();

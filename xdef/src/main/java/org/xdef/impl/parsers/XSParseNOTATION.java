@@ -25,8 +25,10 @@ public class XSParseNOTATION extends XSAbstractParseString {
 		_minLength = _maxLength = -1;
 		_whiteSpace = WS_REPLACE;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_REPLACE;}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		if (_whiteSpace == WS_COLLAPSE) {
@@ -70,11 +72,12 @@ public class XSParseNOTATION extends XSAbstractParseString {
 		p.setEos();
 		checkPatterns(p);
 		checkLength(p);
+		checkCharset(xnode, p);
 	}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult p) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the Xscript of attribute or text node
+			//The validation method &{0} can be called only from the X-script of attribute or text node
 			p.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}
@@ -99,6 +102,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 			p.error(XDEF.XDEF809, parserName(), id); //Incorrect value of '&{0}'&{1}{: }
 		}
 	}
+
 	@Override
 	/** Get name of value.
 	 * @return The name.

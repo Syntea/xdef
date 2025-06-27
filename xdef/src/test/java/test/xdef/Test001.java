@@ -21,8 +21,8 @@ public final class Test001  extends XDTester {
 
 	public Test001() {super();}
 
-	@Override
 	/** Run tests and print error information. */
+	@Override
 	public void test() {
 		String xdef, xml;
 		Element el;
@@ -68,8 +68,7 @@ public final class Test001  extends XDTester {
 " <Author>John Brown</Author>\n"+
 " <Author>Peter Smith</Author>\n"+
 "</Book>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, "", xml, reporter, swr = new StringWriter(), null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("ISBN: 123456789; The Crash\n", swr.toString());
 			xdef =
@@ -989,8 +988,7 @@ public final class Test001  extends XDTester {
 			xml = "<Misto name='A'/>";
 			xd = xp.createXDDocument();
 			xd.setVariable("base", base);
-			swr = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			xd.setStdOut(XDFactory.createXDOutput(swr = new StringWriter(), false));
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xml = "<Misto name='B'/>";
@@ -1049,30 +1047,8 @@ public final class Test001  extends XDTester {
 "<Misto name='C'/>"+
 "</Base>");
 			assertNoErrorwarnings(reporter);
-			assertEq("A already defined!\n"+
-				"A/2012-10-02T09:30:00 already exists!\n", swr.toString());
+			assertEq("A already defined!\nA/2012-10-02T09:30:00 already exists!\n", swr.toString());
 		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			// check compiling if source items have assignment of sourceId
-			Object[] p1 = new Object[] {
-"<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B/></xd:def>",
-			new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C/></xd:def>")
-				.getBytes(getEncoding()))
-			};
-			String[] p2 = new String[] {"AA", "AB", "AC"};
-			xp = XDFactory.compileXD(null, p1, p2);
-			xml = "<A/>";
-			assertEq(xml, parse(xp, "A", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<B/>";
-			assertEq(xml, parse(xp, "B", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<C/>";
-			assertEq(xml, parse(xp, "C", xml, reporter));
-			assertNoErrorwarnings(reporter);
-		} catch (UnsupportedEncodingException | RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
@@ -1134,10 +1110,8 @@ public final class Test001  extends XDTester {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A a='x'/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B a='x'/></xd:def>",
-			new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C a='x'/></xd:def>")
-				.getBytes(getEncoding()))
+"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B a='x'/></xd:def>", new ByteArrayInputStream((
+"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C a='x'/></xd:def>").getBytes(getEncoding()))
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			XDFactory.compileXD(null, p1, p2);

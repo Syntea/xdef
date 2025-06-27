@@ -53,7 +53,10 @@ public class KDOMBuilder extends DocumentBuilder {
 		_namespaceAware = true;
 		_expandEntityReferences = true;
 		_ignoreComments = true;
+//		_validate = false;
 		_resolveIncludes = true;
+//		_ignoreElementContentWhitespace = false;
+//		_ignoreUnresolvedEntities = false;
 	}
 
 	private void throwMsg(final SAXParseException ex, final byte type) {
@@ -111,8 +114,7 @@ public class KDOMBuilder extends DocumentBuilder {
 				_xBuilder = null;
 			}
 			if (BUILDER_FACTORY.isExpandEntityReferences() != _expandEntityReferences) {
-				BUILDER_FACTORY.setExpandEntityReferences(
-					_expandEntityReferences);
+				BUILDER_FACTORY.setExpandEntityReferences(_expandEntityReferences);
 				_xBuilder = null;
 			}
 			if (BUILDER_FACTORY.isIgnoringComments() != _ignoreComments) {
@@ -138,24 +140,28 @@ public class KDOMBuilder extends DocumentBuilder {
 				}
 			} catch (UnsupportedOperationException ex) {
 				if (_resolveIncludes) {
-					//Unsupported feature of DomBuilder&{0}{: }
+					//Unsupported feature of DomBuilder&{0}{: }&{#SYS000}
 					throw new SUnsupportedOperationException(XML.XML405, "setXIncludeAware");
 				}
+				_xBuilder = null;
 			}
 			if (_xBuilder == null) {
 				_xBuilder = BUILDER_FACTORY.newDocumentBuilder();
 			} else {
 				_xBuilder.reset();
 			}
-			_xBuilder.setErrorHandler(new ErrorHandler(){
+			_xBuilder.setErrorHandler(new ErrorHandler() {
+
 				@Override
 				public void warning(SAXParseException ex) {
 					throwMsg(ex, Report.WARNING);
 				}
+
 				@Override
 				public void error(SAXParseException ex) {
 					throwMsg(ex, Report.ERROR);
 				}
+
 				@Override
 				public void fatalError(SAXParseException ex) {
 					throwMsg(ex, Report.FATAL);
@@ -178,24 +184,27 @@ public class KDOMBuilder extends DocumentBuilder {
 				});
 			}
 		} catch (ParserConfigurationException ex) {
-			throw new SRuntimeException(XML.XML402, ex); //Parser configuration error: &{0}
+			throw new SRuntimeException(XML.XML402, ex);//Parser configuration error: &{0}
 		}
 	}
 
-	@Override
 	/** Get DomImplementation from this builder.
 	 * @return DomImplementation from this builder.
 	 */
+	@Override
 	public final DOMImplementation getDOMImplementation() {
 		checkBuilder();
 		return _xBuilder.getDOMImplementation();
 	}
 
-	@Override
 	/** Create new empty document.
 	 * @return new empty document.
 	 */
-	public final Document newDocument() {checkBuilder(); return _xBuilder.newDocument();}
+	@Override
+	public final Document newDocument() {
+		checkBuilder();
+		return _xBuilder.newDocument();
+	}
 
 	/** Creates an XML Document object with empty root element created by document builder
 	 * (see SetDOMImplementation).
@@ -209,8 +218,8 @@ public class KDOMBuilder extends DocumentBuilder {
 		return _xBuilder.getDOMImplementation().createDocument(nsURI, qname, docType);
 	}
 
-	/** Specifies that the DOM parser code will convert CDATA nodes to Text nodes and append it to the
-	 * adjacent (if any) text node. By default the value of this is set to true.
+	/** Specifies that the DOM parser code will convert CDATA nodes to Text nodes and append it to
+	 * the adjacent (if any) text node. By default the value of this is set to true.
 	 * @param coalescing true if the DOM parser will convert CDATA nodes
 	 * to Text nodes and append it to the adjacent (if any) text node; false otherwise.
 	 */
@@ -223,14 +232,15 @@ public class KDOMBuilder extends DocumentBuilder {
 
 	/** Specifies that the DOM parser will provide support
 	 * for XML namespaces. By default the value of this is set to true.
-	 * @param namespaceAware true if the DOM parser will provide support for XML namespaces; false otherwise.
+	 * @param namespaceAware true if the DOM parser will provide
+	 * support for XML namespaces; false otherwise.
 	 */
 	public final void setNamespaceAware(final boolean namespaceAware) {_namespaceAware = namespaceAware;}
 
-	@Override
 	/** Get switch if the DOM parser will provide support for XML namespaces.
 	 * @return true if the DOM parser will provide support for XML namespaces.
 	 */
+	@Override
 	public final boolean isNamespaceAware() {return _namespaceAware;}
 
 	/** Specifies that the DOM parser must eliminate whitespace in element content (sometimes known loosely
@@ -250,21 +260,18 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final boolean isIgnoringElementContentWhitespace() {return _ignoreElementContentWhitespace;}
 
-	/** Set the XML parser will expand entity reference nodes. By default the
-	 * value of this is set to true.
-	 * @param expandEntityReferences set the expandEntityReferences switch.
+	/** Set the XML parser will expand entity reference nodes. By default the value of this is set to true.
+	 * @param x to be set to expandEntityReferences switch.
 	 */
-	public final void setExpandEntityReferences(final boolean expandEntityReferences)
-	{
-		_expandEntityReferences = expandEntityReferences;
-	}
+	public final void setExpandEntityReferences(final boolean x) {_expandEntityReferences = x;}
 
 	/** Get the expand Entity references switch.
 	 * @return the expand Entity references switch.
 	 */
 	public final boolean isExpandEntityReferences() {return _expandEntityReferences;}
 
-	/** Set the parser will ignore comments. By default the value of this is set to true.
+	/** Set the parser will ignore comments. By default
+	 * the value of this is set to true.
 	 * @param ignoreComents set the ignoreComments switch.
 	 */
 	public final void setIgnoringComments(final boolean ignoreComents) {_ignoreComments = ignoreComents;}
@@ -274,15 +281,16 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final boolean isIgnoringComments() {return _ignoreComments;}
 
-	/** Set the parser to resolve include nodes. By default the value of this is set to false.
+	/** Set the parser to resolve include nodes. By default
+	 * the value of this is set to false.
 	 * @param resolveIncludes set the resolveIncludes switch.
 	 */
 	public final void setXIncludeAware(final boolean resolveIncludes) {_resolveIncludes = resolveIncludes;}
 
-	@Override
 	/** Get the resolveIncludes switch.
 	 * @return the resolveIncludes switch.
 	 */
+	@Override
 	public final boolean isXIncludeAware() {return _resolveIncludes;}
 
 	/** Set the parser to provide DTD validating. By default the value of this is set to false.
@@ -290,10 +298,10 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final void setValidating(final boolean validate) {_validate = validate;}
 
-	@Override
 	/** Get DTD validating switch.
 	 * @return the validate switch.
 	 */
+	@Override
 	public final boolean isValidating() {return _validate;}
 
 	/** Set the parser to ignore unresolved entities. By default the value of this is set to false.
@@ -306,12 +314,12 @@ public class KDOMBuilder extends DocumentBuilder {
 	 */
 	public final boolean isIgnoreUnresolvedEntities() {return _ignoreUnresolvedEntities;}
 
-	@Override
 	/** Parse XML file.
 	 * @param file the file with XML document
 	 * @return object org.w3c.dom.Document with parsed XML document.
 	 * @throws SRuntimeException if reporter was not specified and when an error occurs.
 	 */
+	@Override
 	public final Document parse(final File file) {
 		Document doc = null;
 		if (_reporter != null) {
@@ -343,7 +351,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		try {
 			doc = _xBuilder.parse(url.openStream());
 		} catch (IOException | SAXException ex) {
-			putReport(Report.fatal(XML.XML403, ex));//Error while reading XML document: &{0}
+			putReport(Report.fatal(XML.XML403, ex)); //Error while reading XML document: &{0}
 		}
 		if (_reporter != null) {
 			_reporter.checkAndThrowErrors();
@@ -351,12 +359,12 @@ public class KDOMBuilder extends DocumentBuilder {
 		return doc;
 	}
 
-	@Override
 	/** Parse XML from InputStream.
 	 * @param stream the InputStream with XML document
 	 * @return object org.w3c.dom.Document with parsed XML document.
 	 * @throws SRuntimeException if reporter was not specified and when an error occurs.
 	 */
+	@Override
 	public final Document parse(final InputStream stream) {return parse(stream, true);}
 
 	/** Parse XML from InputStream.
@@ -385,18 +393,18 @@ public class KDOMBuilder extends DocumentBuilder {
 		return doc;
 	}
 
-	@Override
 	/** Parse XML from data from argument.
-	 * @param source If this argument starts with "&lt;" then it is parsed as XML data.
-	 * Otherwise it is interpreted as a pathname of the file with XML data.
+	 * @param source If this argument starts with "&lt;" then it is parsed as XML data. Otherwise it is
+	 * interpreted as a pathname of the file with XML data.
 	 * @return object org.w3c.dom.Document with parsed XML document.
 	 */
+	@Override
 	public final Document parse(final String source) {
 		if (_reporter != null) {
 			_reporter.clear();
 		}
 		if (source == null || source.isEmpty()) {
-			throw new SRuntimeException(SYS.SYS065, source);//Invalid file name: '&{0}'
+			throw new SRuntimeException(SYS.SYS065, source); //Invalid file name: '&{0}'
 		}
 		Document doc = null;
 		if (source.charAt(0) == '<') {
@@ -423,11 +431,11 @@ public class KDOMBuilder extends DocumentBuilder {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	/** Specify the {@link ErrorHandler} to be used by the parser. Setting this to <code>null</code> will
-	 * result in the underlying implementation using it's own default implementation and behavior.
-	 * @param errHandler The <code>ErrorHandler</code> to be used by the parser.
+	/** Specify the {@link ErrorHandler} to be used by the parser. Setting this to null will result in the
+	 * underlying implementation using it's own default implementation and* behavior.
+	 * @param errHandler The ErrorHandler to be used by the parser.
 	 */
+	@Override
 	 public final void setErrorHandler(final ErrorHandler errHandler) {
 		 if (_xBuilder != null) {
 			 _xBuilder.setErrorHandler(errHandler);
@@ -436,25 +444,24 @@ public class KDOMBuilder extends DocumentBuilder {
 		 }
 	 }
 
-	@Override
 	/** Specify the {@link EntityResolver} to be used to resolve entities present in the XML document to be
-	 * parsed. Setting this to <code>null</code> will result in the underlying implementation using it's own
-	 * default implementation and behavior.
-	 * @param entResolver The <code>EntityResolver</code> to be used to resolve entities present in the
-	 * XML document to be parsed.
+	 * parsed. Setting this to null will result in the underlying implementation using it's own default
+	 * implementation and behavior.
+	 * @param entResolver The EntityResolver to be used to resolve entities present in the XML document
+	 * to be parsed.
 	 */
+	@Override
 	public final void setEntityResolver(final EntityResolver entResolver) {
 		 if (_xBuilder != null) {
 			 _xBuilder.setEntityResolver(entResolver);
 		 } else {
-			throw new UnsupportedClassVersionError();
+			throw new SRuntimeException(XML.XML404, "DomBuilder is null"); //DomBuilder report&{0}{: }
 		 }
 	}
 
 	@Override
 	/** Parse the content of the given input source as an XML document and return a new DOM {@link Document}
-	 * object. An <code>IllegalArgumentException</code> is thrown if the <code>InputSource</code>
-	 * is <code>null</code>.
+	 * object. An IllegalArgumentException is thrown if the InputSource is null null.
 	 * @param is InputSource containing the content to be parsed.
 	 * @exception IOException If any IO errors occur.
 	 * @exception SAXException If any parse errors occur.
@@ -466,17 +473,15 @@ public class KDOMBuilder extends DocumentBuilder {
 	}
 
 	/** Parse the content of the given input source as an XML document and return a new DOM {@link Document}
-	 * object. An <code>IllegalArgumentException</code> is thrown if the <code>InputSource</code>
-	 * is <code>null</code>.
+	 * object. An IllegalArgumentException is thrown if the InputSource is null null.
 	 * @param is InputSource containing the content to be parsed.
-	 * @param closeStream if true the input stream is closed after parsing.
+	 * @param close if true the input stream is closed after parsing.
 	 * @exception IOException If any IO errors occur.
 	 * @exception SAXException If any parse errors occur.
 	 * @see org.xml.sax.DocumentHandler
 	 * @return A new DOM Document object.
 	 */
-	public final Document parse(final InputSource is, final boolean closeStream)
-		throws  SAXException, IOException {
-		return parse(is.getByteStream(), closeStream);
+	public final Document parse(final InputSource is, final boolean close) throws  SAXException, IOException {
+		return parse(is.getByteStream(), close);
 	}
 }

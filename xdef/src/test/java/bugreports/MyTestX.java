@@ -12,6 +12,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
@@ -93,9 +94,9 @@ public class MyTestX extends XDTester {
 		System.out.println();
 	}
 
+	/** Run test and display error information. */
 	@SuppressWarnings({"unchecked"})
 	@Override
-	/** Run test and display error information. */
 	public void test() {
 /**
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
@@ -147,7 +148,7 @@ public class MyTestX extends XDTester {
 "\"eq('2021')\"\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			xon = "\"2021\"";
 			s = _package+".MytestX_num";
@@ -165,7 +166,7 @@ clearSources();
 "[ \"num()\" ]\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			xon = "[\"2021\"]";
 			s = _package+".MytestX_Str";
@@ -312,14 +313,13 @@ clearSources();
 			xc = parseXC(xp,"Y21", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			SUtils.setValueToSetter(xc, "set$value", null);
+			XComponentUtil.set(xc, "$value", null);
 			o = SUtils.getObjectField("mytests.Y21_enum", "y");
-			SUtils.setValueToSetter(xc, "setb", o);
-			list = (List) SUtils.getValueFromGetter(xc, "listOfB");
+			XComponentUtil.set(xc, "b", o);
+			list = (List) XComponentUtil.getx(xc, "listOfB");
 			o = SUtils.getObjectField("test.xdef.TestXComponents_Y21enum", "b");
-			SUtils.setValueToSetter(list.get(1), "setc", o);
-			assertEq("<A b='y'><B c='a'>x</B><B c='b' d='1 2'>y</B>x</A>",
-				xc.toXml());
+			XComponentUtil.set((XComponent) list.get(1), "c", o);
+			assertEq("<A b='y'><B c='a'>x</B><B c='b' d='1 2'>y</B>x</A>", xc.toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
 clearSources();
@@ -511,7 +511,7 @@ if(T)return;
 clearSources();
 /**/
 		try {
-			xdef = // test XON models in different Xdefinitions
+			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
@@ -536,7 +536,7 @@ clearSources();
 "  %class "+_package+".MyTestX_AnyXXz %link z#testX;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			s = _package+".MyTestX_AnyXXx";
 			assertNull(testX(xp,"x", s, "null"));
@@ -594,7 +594,7 @@ if(T)return;
 clearSources();
 /**/
 		try {
-			xdef = // test XON models in different Xdefinitions
+			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "<xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
@@ -611,7 +611,7 @@ clearSources();
 "</xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			s = _package+".MyTestX_AnyXXx";
 			assertNull(testX(xp,"x", s, "\" ab\tcd \""));
@@ -634,7 +634,7 @@ if(T)return;
 "]\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			xon = "[b(true), x(0FAE99), x()]";
 			x = XonUtils.parseXON(xon);
@@ -724,9 +724,8 @@ clearSources();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertEq("date\n", swr.toString());
-			SUtils.setValueToSetter(
-				SUtils.getValueFromGetter(xc,"getjx$item_1"),
-				"setval", new SDatetime("2022-04-15"));
+			XComponentUtil.set((XComponent) XComponentUtil.get(xc,"jx$item_1"), "val",
+				new SDatetime("2022-04-15"));
 			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
 			s = "{a:\"202.2.4.10\"}";
 			xd = xp.createXDDocument();
@@ -810,7 +809,7 @@ clearSources();
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("null\n", swr.toString());
-			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertNull(XComponentUtil.get(xc, "$a"));
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertTrue(((Map) xc.toXon()).containsKey("a"));
 			s = "{}";
@@ -828,7 +827,7 @@ clearSources();
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", swr.toString());
-			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertNull(XComponentUtil.get(xc, "$a"));
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertFalse(((Map) xc.toXon()).containsKey("a"));
 	} catch (RuntimeException ex) {fail(ex); reporter.clear();}
@@ -863,8 +862,8 @@ if(T)return;
 			xml = "<a><x:b xmlns:x='x.int' y='1'/></a>";
 			x = SUtils.getNewInstance(_package+".component.Y16");
 			y = SUtils.getNewInstance(_package+".component.Y16a");
-			SUtils.setValueToSetter(y, "sety", 1);
-			SUtils.setValueToSetter(x, "setx$b", y);
+			XComponentUtil.set((XComponent) y, "y", 1);
+			XComponentUtil.set((XComponent) x, "$b", y);
 			o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
@@ -873,14 +872,14 @@ if(T)return;
 				+ '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
 			x = SUtils.getNewInstance(_package+".component.Y16c");
 			y = SUtils.getNewInstance(_package+".component.Y16d");
-			SUtils.setValueToSetter(y, "sety", 1);
-			SUtils.setValueToSetter(x, "addd", y);
+			XComponentUtil.set((XComponent) y, "y", 1);
+			XComponentUtil.add((XComponent) x, "d", y);
 			xml = "<c><d xmlns='y.int' y='1'/></c>";
 			assertEq(xml, ((XComponent) x).toXml());
 			x = SUtils.getNewInstance(_package+".component.Y16e");
 			y = SUtils.getNewInstance(_package+".component.Y16f");
-			SUtils.setValueToSetter(y, "sety", 1);
-			SUtils.setValueToSetter(x, "setf", y);
+			XComponentUtil.set((XComponent) y, "y", 1);
+			XComponentUtil.set((XComponent) x, "f", y);
 			xml = "<e><f y='1'/></e>";
 			assertEq(xml, ((XComponent) x).toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
@@ -1067,11 +1066,11 @@ clearSources();
 			json = "{}";
 			assertNull(testX(xp, "", s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), SUtils.getValueFromGetter(xc, "getMap$")));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), XComponentUtil.get(xc, "Map$")));
 			json = "{ a:1, b:true }";
 			assertNull(testX(xp, "", s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), SUtils.getValueFromGetter(xc, "getMap$")));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), XComponentUtil.get(xc, "Map$")));
 //			setValueToSetter(xc, "setval", 2);
 			json = "null";
 			assertNotNull(testX(xp, "", s, json)); // error: not map
@@ -1091,9 +1090,9 @@ clearSources();
 			json = "1";
 			assertNull(testX(xp,"",s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertEq(1, SUtils.getValueFromGetter(xc, "getval"));
-			SUtils.setValueToSetter(xc, "setval", 2);
-			assertEq(2, SUtils.getValueFromGetter(xc, "getval"));
+			assertEq(1, XComponentUtil.get(xc, "val"));
+			XComponentUtil.set(xc, "val", 2);
+			assertEq(2, XComponentUtil.get(xc, "val"));
 		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
@@ -1110,11 +1109,11 @@ clearSources();
 			json = "[1]";
 			assertNull(testX(xp,"",s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertEq(xc.toXon(), SUtils.getValueFromGetter(xc, "getArray$"));
-			SUtils.setValueToSetter(xc, "set$item", 2);
+			assertEq(xc.toXon(), XComponentUtil.get(xc, "Array$"));
+			XComponentUtil.set(xc, "$item", 2);
 			assertEq(1, ((List) xc.toXon()).size());
 			assertEq(2, ((List) xc.toXon()).get(0));
-			assertEq(xc.toXon(), SUtils.getValueFromGetter(xc, "getArray$"));
+			assertEq(xc.toXon(), XComponentUtil.get(xc, "Array$"));
 		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
@@ -1131,21 +1130,21 @@ clearSources();
 			json = "{}";
 			assertNull(testX(xp,"",s, json)); // OK
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertEq(xc.toXon(), SUtils.getValueFromGetter(xc, "getMap$"));
-			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertEq(xc.toXon(), XComponentUtil.get(xc, "Map$"));
+			assertNull(XComponentUtil.get(xc, "$a"));
 			json = "{a:123}";
 			assertNull(testX(xp,"",s, json)); // OK
-			SUtils.setValueToSetter(xc, "set$a", 9);
-			assertEq(9, SUtils.getValueFromGetter(xc, "get$a"));
-			SUtils.setValueToSetter(xc, "set$a", null);
-			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			XComponentUtil.set(xc, "$a", 9);
+			assertEq(9, XComponentUtil.get(xc, "$a"));
+			XComponentUtil.set(xc, "$a", null);
+			assertNull(XComponentUtil.get(xc, "$a"));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertEq(xc.toXon(), SUtils.getValueFromGetter(xc, "getMap$"));
-			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
-			SUtils.setValueToSetter(xc, "set$a", 9);
-			assertEq(9, SUtils.getValueFromGetter(xc, "get$a"));
-			SUtils.setValueToSetter(xc, "set$a", null);
-			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertEq(xc.toXon(), XComponentUtil.get(xc, "Map$"));
+			assertEq(123, XComponentUtil.get(xc, "$a"));
+			XComponentUtil.set(xc, "$a", 9);
+			assertEq(9, XComponentUtil.get(xc, "$a"));
+			XComponentUtil.set(xc, "$a", null);
+			assertNull(XComponentUtil.get(xc, "$a"));
 		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
@@ -1692,7 +1691,7 @@ clearSources();
 "    <TransF   Column           =\"required string()\"/>\n" +
 "    <TransM   Column           =\"required string()\"/>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			xml =
 "<DefCiselnik_ IdFlow=\"181131058\">\n" +
 "    <ControlId IdDefPartner=\"163\"/>\n" +

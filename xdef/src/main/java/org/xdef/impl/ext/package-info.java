@@ -1,4 +1,4 @@
-/** The source code in this package is in the implementation of Xdefinition
+/** The source code in this package is in the implementation of X-definition
  * processor.
  * It is NOT  designed for common user.
  */

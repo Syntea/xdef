@@ -13,7 +13,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of Xscript "jstring" (XON/JSON string) type.
+/** Parser of X-script "jstring" (XON/JSON string) type.
  * @author Vaclav Trojan
  */
 public class XDParseJString extends XSAbstractParseToken {
@@ -28,6 +28,7 @@ public class XDParseJString extends XSAbstractParseToken {
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -48,6 +49,7 @@ public class XDParseJString extends XSAbstractParseToken {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -76,9 +78,12 @@ public class XDParseJString extends XSAbstractParseToken {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
+		checkCharset(xn, p);
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

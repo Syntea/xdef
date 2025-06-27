@@ -32,47 +32,56 @@ public final class DefText extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_TEXT;}
 	@Override
+	public short getItemId() {return XD_TEXT;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.TEXT;}
 	@Override
+	public XDValueType getItemType() {return XDValueType.TEXT;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return _value == null ? "" : _value.getData();}
 	@Override
+	public String toString() {return _value == null ? "" : _value.getData();}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public String stringValue() {return toString();}
+
 	@Override
 	public boolean booleanValue() {
 		String s = _value == null ? null : _value.getData();
 		return s != null && !s.isEmpty();
 	}
-	@Override
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefText(_value);}
+
 	@Override
 	public int hashCode() {return _value.hashCode();}
+
 	@Override
 	public boolean equals(final Object arg) {return (arg instanceof DefText) ? equals((DefText) arg) : false;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
 	 * equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -82,12 +91,13 @@ public final class DefText extends XDValueAbstract {
 		}
 		return _value.equals(((DefText) arg)._value);
 	}
-	@Override
+
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return 0 if the object is identical to the argument.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (equals(arg)) {
 			return 0;

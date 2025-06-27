@@ -45,28 +45,28 @@ public final class DefChar extends XDValueAbstract {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return _isNull? null : _value;}
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_CHAR;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return CHAR;}
 
-	@Override
 	/** Return DefBoolean object as char.
 	 * @return the DefBoolean object as char.
 	 */
+	@Override
 	public char charValue() {return isNull() ? SParser.NOCHAR : _value;}
 
 	@Override
@@ -88,22 +88,20 @@ public final class DefChar extends XDValueAbstract {
 	public double doubleValue() {return charValue();}
 
 	@Override
-	public BigDecimal decimalValue() {
-		return isNull() ? null : new BigDecimal(_value);
-	}
+	public BigDecimal decimalValue() {return isNull() ? null : new BigDecimal(_value);}
 
-	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
+	@Override
 	public String stringValue() {return isNull() ? "" : String.valueOf(_value);}
 
-	@Override
 	/** Compares this object with the other DefBoolean object.
 	 * @param arg other DefBoolean object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (equals(arg)) {
 			return 0;
@@ -114,11 +112,11 @@ public final class DefChar extends XDValueAbstract {
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 
-	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
 	 * <i>false</i>.
 	 */
+	@Override
 	public boolean isNull() {return _isNull;}
 
 	@Override
@@ -129,18 +127,18 @@ public final class DefChar extends XDValueAbstract {
 		return arg instanceof XDValue ? equals((XDValue) arg) : false;
 	}
 
-	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value
 	 * of the object is comparable and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		return isNull() ? arg == null || arg.isNull()
 			: charValue() == arg.charValue();
 	}
 
-	@Override
 	/** Get String created from the value of this object. */
+	@Override
 	public String toString() {return stringValue();}
 }

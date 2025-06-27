@@ -7,7 +7,7 @@ import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.sys.SUtils;
+import org.xdef.component.XComponentUtil;
 
 /** Test of Lexicon.
  * @author Vaclav Trojan
@@ -16,8 +16,8 @@ public final class TestLexicon extends XDTester {
 
 	public TestLexicon() {super();}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String xdef;
 		String xml;
@@ -246,11 +246,12 @@ public final class TestLexicon extends XDTester {
 			genXComponent(xp); // create and compile X-components
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertNoErrorwarnings(reporter);
 			el = xc.toXml();
 			assertEq(xml, el);
-			assertEq("0123456789", SUtils.getValueFromGetter(xc,"getNumber"));
-			List<?> l = (List<?>)SUtils.getValueFromGetter(xc,"listOfClient");
+			assertEq("0123456789", XComponentUtil.get(xc,"Number"));
+			List l = (List) XComponentUtil.getx(xc, "listOfClient");
 			assertEq(3, l.size());
 		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 		try {
@@ -349,8 +350,9 @@ public final class TestLexicon extends XDTester {
 			xd.setLexiconLanguage("deu");
 			XComponent xc = parseXC(xd, xml_deu, null, reporter);
 			assertNoErrorwarnings(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml_deu, xc.toXml());
-			assertEq("Nonehill", SUtils.getValueFromGetter(xc,"getName"));
+			assertEq("Nonehill", XComponentUtil.get(xc,"Name"));
 		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.

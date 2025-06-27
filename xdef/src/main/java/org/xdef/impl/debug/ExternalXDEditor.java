@@ -17,12 +17,12 @@ import org.xdef.sys.FileReportReader;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.SRuntimeException;
 
-/** Provides tools for connection of an external editor of Xdefinitions.
+/** Provides tools for connection of an external editor of X-definitions.
  * @author Vaclav Trojan
  */
 public abstract class ExternalXDEditor implements XEditor {
 
-	/** Execute the external editor of Xdefinitions (must be implemented). The external editor MUST return
+	/** Execute the external editor of X-definitions (must be implemented). The external editor MUST return
 	 * the file with the result information.
 	 * @param defPool filename of the file with XDPool.
 	 * @param reports filename of the file with reports written by compiler.
@@ -33,12 +33,12 @@ public abstract class ExternalXDEditor implements XEditor {
 	abstract public void executeExternalXDEditor(String defPool, String reports, String resultInfo)
 		throws Exception;
 
-	@Override
 	/** Set and open the XEditor.
 	 * @param xp XDPool.
 	 * @param err error reporter.
 	 * @return if true the editing was finished otherwise XDPool will be recompiled.
 	 */
+	@Override
 	public boolean setXEditor(final XDPool xpool, final ArrayReporter reporter){
 		try {
 			// prepare files containing the xpool and reporter
@@ -110,10 +110,10 @@ public abstract class ExternalXDEditor implements XEditor {
 		return f.exists() && f.canRead();
 	}
 
-	@Override
 	/** Close XEditor.
 	 * @param msg text of message to be shown at the end of editing. If null no message is shown.
 	 */
+	@Override
 	public final void closeXEditor(final String msg) {}
 
 	/** Create XDPool from the file. The external editor can use this method to get XDPool from the file
@@ -151,7 +151,7 @@ public abstract class ExternalXDEditor implements XEditor {
 		return ar;
 	}
 
-	/** Create file with results of editor. This file is used by the Xdefinition engine when the
+	/** Create file with results of editor. This file is used by the X-definition engine when the
 	 * external editor finished.
 	 * @param fileName the filename of the file to be created.
 	 * @param editingFinished true if editing was finished, otherwise recompile XDPool with the files

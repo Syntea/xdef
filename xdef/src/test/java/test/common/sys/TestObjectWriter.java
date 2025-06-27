@@ -118,8 +118,9 @@ public class TestObjectWriter extends STester {
 			return printThrowable(e);  //return string with the exception
 		}
 	}
-	@Override
+
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String s;
 		assertTrue("".equals(s = test((byte) 0)), s);

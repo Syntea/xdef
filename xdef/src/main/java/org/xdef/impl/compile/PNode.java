@@ -23,7 +23,7 @@ public final class PNode {
 	String _nsURI;  //namespace URI
 	byte _xdVersion;  //version of Xdefinion
 	byte _xmlVersion;  //version of xml
-	XDefinition _xdef;  //XDefinition associated with this node
+	XDefinition _xdef;  //X-definition associated with this node
 	SBuffer _value; //value of this node
 	PNode _parent; //parent PNode
 	int _nsindex; //namespace index of this node
@@ -35,8 +35,8 @@ public final class PNode {
 	 * @param name The node name.
 	 * @param position The position in the source text.
 	 * @param parent The parent node.
-	 * @param xdVer version of XDefinition.
-	 * @param xmlVer version of XDefinition.
+	 * @param xdVer version of X-definition.
+	 * @param xmlVer version of X-definition.
 	 */
 	PNode(final String name,final SPosition position,final PNode parent,final byte xdVer,final byte xmlVer) {
 		_name = new SBuffer(name, position);
@@ -131,8 +131,8 @@ public final class PNode {
 	 */
 	public final SBuffer getValue() {return _value;}
 
-	/** Get version of the Xdefinition.
-	 * @return version of the Xdefinition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
+	/** Get version of the X-definition.
+	 * @return version of the X-definition ("3.2"...."4.2" see org.xdef.impl.XConstants.XDxx).
 	 */
 	public final byte getXdefVersion() {return _xdVersion;}
 
@@ -191,7 +191,7 @@ public final class PNode {
 
 	/** Expand macros.
 	 * @param reporter error reporter.
-	 * @param actDefName actual Xdefinition name.
+	 * @param actDefName actual X-definition name.
 	 * @param macros map with macros.
 	 */
 	public void expandMacros(final ReportWriter reporter,

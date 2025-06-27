@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Value of array of bytes in Xscript.
+/** Value of array of bytes in X-script.
  * @author Vaclav Trojan
  */
 public interface XDBytes extends XDValue {

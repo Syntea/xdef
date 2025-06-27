@@ -19,7 +19,7 @@ public class XSParseIDREFS extends XSParseENTITIES {
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
-			//The validation method &{0} can be called only from the Xscript of attribute or text node
+			//The validation method &{0} can be called only from the X-script of attribute or text node
 			result.error(XDEF.XDEF574, ROOTBASENAME);
 			return;
 		}
@@ -33,6 +33,7 @@ public class XSParseIDREFS extends XSParseENTITIES {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

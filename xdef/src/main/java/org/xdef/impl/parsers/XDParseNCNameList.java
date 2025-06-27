@@ -19,7 +19,7 @@ import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
 
-/** Parser of Xscript "NCNameList" type.
+/** Parser of X-script "NCNameList" type.
  * @author Vaclav Trojan
  */
 public class XDParseNCNameList extends XSAbstractParseToken {
@@ -48,6 +48,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 			SEPARATOR +
 			0;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -100,6 +101,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 		p.setParsedValue(results);
 		checkItem(p);
 	}
+
 	@Override
 	public void addNamedParams(final XDContainer map) {
 		if (_separator != null) {
@@ -113,14 +115,19 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 		}
 		return new DefString(parser.getParsedString());
 	}
+
 	@Override
 	public void setSeparator(final String x) {_separator = x;}
+
 	@Override
 	public String getSeparator() {return _separator;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short getAlltemsType() {return XD_STRING;}
 }

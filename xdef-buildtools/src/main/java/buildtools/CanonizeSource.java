@@ -18,31 +18,26 @@ import java.util.Date;
 import org.xdef.sys.NameWildCardFilter;
 
 /** Provides canonizing of text files.
- * All lines of the source is checked for leading and trailing spaces and tabs.
- * First, trailing spaces and tabs are removed. Then behavior depends on the
- * switches -t and -s. If switch - t is set all sequences of leading spaces are
- * replaced by tabs, otherwise the tabs are replaced by spaces.
- * All occurrences of couples id carriage return characters (CR - 0x0d) and line
- * feed characters (LF - 0x0a) are replaced by line feed characters. If the
- * switch "-CR" is specified, the couple of both characters is generated.
+ * All lines of the source is checked for leading and trailing spaces and tabs. First, trailing spaces
+ * and tabs are removed. Then behavior depends on the switches -t and -s. If switch - t is set all sequences
+ * of leading spaces are replaced by tabs, otherwise the tabs are replaced by spaces. All occurrences
+ * of couples id carriage return characters (CR - 0x0d) and line feed characters (LF - 0x0a) are replaced
+ * by line feed characters. If the switch "-CR" is specified, the couple of both characters is generated.
  * The program may be invoked from command line with following parameters:
  * <br>-i input [-r] [-o outputDirectory] (-t |-s) [-n indent] [-h]
  * <br>where:
- * <br> -i input Input may be specified as the file with input source or as the
- * directory. If the parameter is not directory, also wildcards '*' or '?' may
- * be used to specify group of files. The parameter is obligatory.
- * <br> -r process directory tree. The parameter is optional and forces to
- * process all subdirectories of the directory where process started.
- * <br> -o outputDirectory: The directory where output files are stored. The
- * parameter is optional. If it is not specified the source file is
- * overwritten.
+ * <br> -i input Input may be specified as the file with input source or as the directory. If the parameter
+ * is not directory, also wildcards '*' or '?' may be used to specify group of files.
+ * The parameter is obligatory.
+ * <br> -r process directory tree. The parameter is optional and forces to process all subdirectories
+ * of the directory where process started.
+ * <br> -o outputDirectory: The directory where output files are stored. The parameter is optional.
+ * If it is not specified the source file is overwritten.
  * <br> -t spaces are replaced by tabs The parameter is optional.
  * <br> -s tabs are replaced by spaces The parameter is optional.
- * <br> -cr lines are separated by the couple of CR and LF The parameter
- * is optional.
+ * <br> -cr lines are separated by the couple of CR and LF The parameter is optional.
  * <br> -h The parameter displays help text.
- * <i>Switches -t and  -s are exclusive. If none of them is specified the -s is
- * set as the default value.</i>
+ * <i>Switches -t and  -s are exclusive. If none of them is specified the -s is set as the default value.</i>
  *
  * @author  Vaclav Trojan
  */
@@ -467,10 +462,8 @@ public class CanonizeSource {
 		_errors++;
 	}
 
-	/**
-	 * Get array of existing files represented by given argument. The argument
-	 * can either represent one concrete file or it can represent a set of files
-	 * with wildcards '*' and/or '?'.
+	/** Get array of existing files represented by given argument. The argument can either represent
+	 * one concrete file or it can represent a set of files with wildcards '*' and/or '?'.
 	 * @param wildName The file name (wildcards are accepted) .
 	 * @return The array of existing files represented by argument.
 	 */
@@ -600,31 +593,25 @@ public class CanonizeSource {
 	}
 
 	/** Call CanonizeSource from program.
-	 * @param input The string with specification of the input file(s) or the
-	 * directory.
-	 * @param outDir The directory where put the changed files. If this argument
-	 * is null the changed file will replace the input file.
-	 * @param dirTree If the value of this argument is true the
-	 * program will scan also subdirectories..
+	 * @param input The string with specification of the input file(s) or the directory.
+	 * @param outDir The directory where put the changed files. If this argument is null the changed file
+	 * will replace the input file.
+	 * @param dirTree If the value of this argument is true the program will scan also subdirectories..
 	 * @param out The printstream where will be printed output messages.
 	 * @param err The printstream where will be printed input messages.
 	 * @param verbose If the value of this argument is true the
-	 * @param genCR If the value of this argument is true the
-	 * program will generate the couple of CR LF as line separators. Otherwise
-	 * only LF characters are generated.
-	 * @param spacesToTab If the value of this argument is true
-	 * the program will convert all leading spaces to tabs.
-	 * @param indentSize The number of position for indenting used in original
-	 * source.
+	 * @param genCR If the value of this argument is true the program will generate the couple of CR LF
+	 * as line separators. Otherwise only LF characters are generated.
+	 * @param spacesToTab If the value of this argument is true the program will convert all leading spaces
+	 * to tabs.
+	 * @param indentSize The number of position for indenting used in original source.
 	 * @param newIndent new indenting parameter if it should be changed (or 0).
 	 * @param header The file name of the header template.
 	 * @param headerKeep if true the existing header will not be changed.
 	 * @param tail The file name of tail info template.
 	 * @param tailKeep if true the existing tail info will not be changed.
-	 * @param charset name of character set of data. If it is null then the
-	 * default system encoding is used.
-	 * @return string with error message if the program can't work due to
-	 * parameter error or return null.
+	 * @param charset name of character set of data. If it is null then the default system encoding is used.
+	 * @return string with error message if the program can't work due to parameter error or return null.
 	 */
 	public static String canonize(final String input,
 		final String outDir,
@@ -739,12 +726,10 @@ public class CanonizeSource {
 	}
 
 	/** Call CanonizeSource from program.
-	 * @param args Array of strings with command line parameters (see
-	 * {@link CanonizeSource}).
+	 * @param args Array of strings with command line parameters (see {@link CanonizeSource}).
 	 * @param out The printstream where will be printed output messages.
 	 * @param err The printstream where will be printed input messages.
-	 * @return string with error message if the program can't work due to
-	 * parameter error or return null.
+	 * @return string with error message if the program can't work due to parameter error or return null.
 	 */
 	public static String canonize(final String[] args,
 		final PrintStream out,
@@ -956,24 +941,19 @@ public class CanonizeSource {
 	/** Canonize sources according to arguments. and print results.
 	 * @param sources Source file(s) (may contain wildcards).
 	 * @param dirTree if true the child directories are processed too.
-	 * @param tabs if true, leading spaces are replaced by tabs, if false
-	 * the leading tabs are replaced by spaces.
-	 * @param n the number of spaces per tab. If this argument is -1 then
-	 * no modifications of leading spaces is done.
-	 * @param header the name of file containing string with header ("copyright")
-	 * information which will be inserted or replaced as the top of the source.
-	 * If the file is the empty (i.e. it has the zero length) the header
-	 * information is deleted. If this argument is null no header
-	 * information is processed. Note the information is considered in the form
-	 * of Java or "C" comment.
-	 * @param tail the name of file containing string with tail ("log")
-	 * information which will be added to the end of source or it will replace
-	 * the existing information. If the file is the empty (i.e. it has zero
-	 * length) then the existing tail will be information is deleted.
-	 * If this argument is null no tail information is processed.
+	 * @param tabs if true, leading spaces are replaced by tabs, if false the leading tabs are replaced
+	 * by spaces.
+	 * @param n the number of spaces per tab. If this argument is -1 then no modifications of leading spaces
+	 * is done.
+	 * @param header the name of file containing string with header ("copyright") information which will
+	 * be inserted or replaced as the top of the source. If the file is the empty (i.e. it has the zero
+	 * length) the header information is deleted. If this argument is null no header information is processed.
 	 * Note the information is considered in the form of Java or "C" comment.
-	 * @param charset name of character set of data. If it is null then the
-	 * default system encoding is used.
+	 * @param tail the name of file containing string with tail ("log") information which will be added
+	 * to the end of source or it will replace the existing information. If the file is the empty (i.e.
+	 * it has zero length) then the existing tail will be information is deleted. If this argument is null no
+	 * tail information is processed. Note the information is considered in the form of Java or "C" comment.
+	 * @param charset name of character set of data. If it is null then the default system encoding is used.
 	 * @param crlf if true end line will generated CR and LF, otherwise only LF.
 	 */
 	public static void canonize(final String sources,
@@ -1040,10 +1020,13 @@ public class CanonizeSource {
 			}
 			String errMsg = canonize(myArgs, System.out, System.err);
 			if (errMsg != null) {
-				System.err.println("[ERROR] " + errMsg);
+//				System.err.println("[ERROR] " + errMsg);
+				throw new RuntimeException("[ERROR] " + errMsg);
 			}
+		} catch (RuntimeException ex) {
+			throw ex;
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
+			throw new RuntimeException(ex);
 		}
 	}
 

@@ -18,30 +18,30 @@ public interface PreCompiler {
 	 */
 	public void parseString(final String source);
 
-	/** Parse string and addAttr it to the set of Xdefinitions.
-	 * @param source source string with Xdefinitions.
+	/** Parse string and addAttr it to the set of X-definitions.
+	 * @param source source string with X-definitions.
 	 * @param srcName pathname of source (URL or an identifying name or null).
 	 */
 	public void parseString(final String source, final String srcName);
 
-	/** Parse file with source Xdefinition and addAttr it to the set of definitions.
-	 * @param file The file with with Xdefinitions.
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
+	 * @param file The file with with X-definitions.
 	 */
 	public void parseFile(final File file);
 
-	/** Parse InputStream source Xdefinition and addAttr it to the set of definitions.
-	 * @param in input stream with the Xdefinition.
+	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
+	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or null.
 	 */
 	public void parseStream(final InputStream in, final String srcName);
 
-	/** Parse data with source Xdefinition given by URL and addAttr it to the set of Xdefinitions.
-	 * @param url URL of the file with the Xdefinition.
+	/** Parse data with source X-definition given by URL and addAttr it to the set of X-definitions.
+	 * @param url URL of the file with the X-definition.
 	 */
 	public void parseURL(final URL url);
 
-	/** Parse file with source Xdefinition and addAttr it to the set of definitions.
-	 * @param fileName pathname of file with with Xdefinitions.
+	/** Parse file with source X-definition and addAttr it to the set of X-definitions.
+	 * @param fileName pathname of file with with X-definitions.
 	 */
 	public void parseFile(final String fileName);
 
@@ -50,18 +50,18 @@ public interface PreCompiler {
 	 */
 	public CompileCode getCodeGenerator();
 
-	/** Get sources of Xdefinitions.
-	 * @return array with sources of Xdefinitions.
+	/** Get sources of X-definitions.
+	 * @return array with sources of X-definitions.
 	 */
 	public List<Object> getSources();
 
-	/** Get list with included sources of Xdefinitions (URL or File).
-	 * @return list with included sources of Xdefinitions (URL or File).
+	/** Get list with included sources of X-definitions (URL or File).
+	 * @return list with included sources of X-definitions (URL or File).
 	 */
 	public List<Object> getIncluded();
 
-	/** Get precompiled sources (PNodes) of Xdefinition items.
-	 * @return array with PNodes with Xdefinitions.
+	/** Get precompiled sources (PNodes) of X-definition items.
+	 * @return array with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs();
 

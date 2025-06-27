@@ -33,38 +33,49 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 
 	@Override
 	public SDuration durationValue() {return _value;}
-	@Override
+
 	/** Set duration.
 	 * @param value SDuration object.
 	 */
+	@Override
 	public void setDuration(SDuration value) {_value = value;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public Object getObject() {return _value;}
+
 	@Override
 	public short getItemId() {return XD_DURATION;}
+
 	@Override
 	public XDValueType getItemType() {return DURATION;}
+
 	@Override
 	public boolean isNull() {return _value == null;}
-	@Override
+
 	/** Get value as String.
 	 * @return ISO8601 string value of this object or "null".
 	 */
+	@Override
 	public String toString() {return _value==null ? "" : _value.toString();}
+
 	@Override
 	public String stringValue() {return toString();}
+
 	@Override
 	public XDValue cloneItem() {
 		return _value == null ?new DefDuration() : new DefDuration(new SDuration(_value));
 	}
+
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
+
 	@Override
 	public boolean equals(final Object arg) {return (arg instanceof XDValue) ? equals((XDValue) arg) : false;}
+
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
@@ -75,6 +86,7 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 		}
 		return _value.equals(arg.durationValue());
 	}
+
 	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		if (arg.getItemId() == XD_DURATION) {

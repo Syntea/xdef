@@ -64,22 +64,22 @@ import org.xdef.xon.XonTools.JMap;
 import org.xdef.xon.XonTools.JObject;
 import org.xdef.xon.XonTools.JValue;
 
-/** Create Xdefinition model from xd:json/xon element.
+/** Create X-definition model from xd:json/xon element.
  * @author Vaclav Trojan
  */
 public final class CompileXonXdef extends XScriptParser {
 
-	/** Prefix of Xdefinition namespace. */
+	/** Prefix of X-definition namespace. */
 	private final String _xdPrefix;
-	/** Index of Xdefinition namespace. */
+	/** Index of X-definition namespace. */
 	private final int _xdIndex;
-	/** Namespace of Xdefinition.*/
+	/** Namespace of X-definition.*/
 	private final String _xdNamespace;
 	/** XPath position of XON/JSON description.*/
 	private final String _basePos;
 	/** PNode with generated model.*/
 	private final PNode _xonModel;
-	/** Xposition of generated %any model.*/
+	/** X-position of generated %any model.*/
 	private String _anyXPos;
 /*#if DEBUG*#/
 	/** debugging switches; from properties. *#/
@@ -149,7 +149,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 	/** Skip white space separators and comments. Note: line comments are not
-	 * allowed in Xscript.
+	 * allowed in X-script.
 	 */
 	private void skipSpacesAndComments() {
 		isSpaces();
@@ -173,11 +173,11 @@ public final class CompileXonXdef extends XScriptParser {
 		}
 	}
 
-	/** Parse Xscript and return occurrence and executive part
+	/** Parse X-script and return occurrence and executive part
 	 * (type declaration) in separate fields.
-	 * @param sbuf source text with Xscript
+	 * @param sbuf source text with X-script
 	 * @return array with SBuffer items (item 0 is occurrence specification)
-	 * and item 1 is composed form remaining Xscript parts).
+	 * and item 1 is composed form remaining X-script parts).
 	 */
 	private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
 		SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
@@ -247,7 +247,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create Xdefinition model from xd:json/xon (use W3C format)
+// Create X-definition model from xd:json/xon (use W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Add match section to xd:script attribute. If match section already
@@ -706,10 +706,10 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 /*#end*/
 
-	/** Create Xdefinition model from PNode with XON/JSON description.
+	/** Create X-definition model from PNode with XON/JSON description.
 	 * @param pn PNode with XON/JSON script.
 	 * @param format "xon" or "ini".
-	 * @param name name of XON/JSON model in Xdefinition.
+	 * @param name name of XON/JSON model in X-definition.
 	 * @param reporter report writer
 	 */
 	final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
@@ -728,7 +728,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Xscript parser
+// X-script parser
 ////////////////////////////////////////////////////////////////////////////////
 	/** Check if id of parsed section name is a section name.
 	 * @param sym ID of parsed section name.
@@ -814,8 +814,8 @@ public final class CompileXonXdef extends XScriptParser {
 		sectionList.add(new SBuffer(s, pos));
 	}
 
-	/** Parse Xscript and return the section list.
-	 * @param source Source text with Xscript.
+	/** Parse X-script and return the section list.
+	 * @param source Source text with X-script.
 	 * @return section list. Each section is composed of two items: the first
 	 * item is id of section (a character) and the following item is a SBuffer
 	 * with the source of the section command.
@@ -825,7 +825,7 @@ public final class CompileXonXdef extends XScriptParser {
 		return parseXscript();
 	}
 
-	/** Parse Xscript and return the section list.
+	/** Parse X-script and return the section list.
 	 * @return section list. Each section is composed of two items: the first
 	 * item is id of section (a character) and the following item is a SBuffer
 	 * with the source of the section command.
@@ -876,9 +876,9 @@ public final class CompileXonXdef extends XScriptParser {
 		return sectionList;
 	}
 
-	/** Create Xscript string from the list of sections.
+	/** Create X-script string from the list of sections.
 	 * @param sectionList list of sections.
-	 * @return string with Xscript source.
+	 * @return string with X-script source.
 	 */
 	private static SBuffer xsToString(final List<Object> sectionList) {
 		String result = "";
@@ -971,7 +971,7 @@ public final class CompileXonXdef extends XScriptParser {
 
 	/** This class provides parsing of XON/JSON source and creates the XON
 	 * structure composed from JObjets used for compilation of XON/JSON model
-	 * in Xdefinition.
+	 * in X-definition.
 	 */
 	private final static class XonModelParser implements XonParser {
 		/** kind = value */
@@ -1001,10 +1001,10 @@ public final class CompileXonXdef extends XScriptParser {
 		// Implementation of JParser interface
 		////////////////////////////////////////////////////////////////////////
 
-		@Override
 		/** Put value to result.
 		 * @param value JValue to be added to result object.
 		 */
+		@Override
 		public final void putValue(final JValue value) {
 			switch (_kind) {
 				case ARRAY: _arrays.peek().add(value);
@@ -1017,11 +1017,11 @@ public final class CompileXonXdef extends XScriptParser {
 			_value = value; // it is VALUE
 		}
 
-		@Override
 		/** Set name of value pair.
 		 * @param name value name.
 		 * @return true if the name of pair already exists.
 		 */
+		@Override
 		public final boolean namedValue(final SBuffer name) {
 			String s = name.getString();
 			boolean result = false;
@@ -1035,19 +1035,21 @@ public final class CompileXonXdef extends XScriptParser {
 			_names.push(name);
 			return result;
 		}
-		@Override
+
 		/** Array started.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void arrayStart(final SPosition pos) {
 			 //add ARRAY to kins stack and set it to kind
 			_kinds.push(_kind = ARRAY);
 			_arrays.push(new JArray(pos));  // new item to array stack
 		}
-		@Override
+
 		/** Array ended.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void arrayEnd(final SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -1059,19 +1061,21 @@ public final class CompileXonXdef extends XScriptParser {
 				_arrays.peek().add(_value);
 			} // else it is VALUE
 		}
-		@Override
+
 		/** Map started.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void mapStart(final SPosition pos) {
 			//add MAP to kins stack and set it to kind
 			_kinds.push(_kind = MAP);
 			_maps.push(new JMap(pos)); // new item to map stack
 		}
-		@Override
+
 		/** Map ended.
 		 * @param pos source position.
 		 */
+		@Override
 		public final void mapEnd(final SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -1083,17 +1087,19 @@ public final class CompileXonXdef extends XScriptParser {
 				_arrays.peek().add(_value);
 			} // parent is value
 		}
-		@Override
+
 		/** Processed comment.
 		 * @param value SBuffer with the value of comment.
 		 */
-		public final void comment(final SBuffer value){/*we ingore it here*/}
 		@Override
-		/** Xscript item parsed, not used methods for JSON/XON parsing
-		 * (used in Xdefinition compiler).
+		public final void comment(final SBuffer value){/*we ingore it here*/}
+
+		/** X-script item parsed, not used methods for JSON/XON parsing
+		 * (used in X-definition compiler).
 		 * @param name name of item.
 		 * @param value value of item.
 		 */
+		@Override
 		public final void xdScript(final SBuffer name, final SBuffer value) {
 			SPosition spos = value == null ? name : value;
 			JValue jv;
@@ -1117,10 +1123,11 @@ public final class CompileXonXdef extends XScriptParser {
 				_maps.peek().put(SCRIPT_DIRECTIVE, jv);
 			}
 		}
-		@Override
+
 		/** Get result of parser.
 		 * @return parsed object.
 		 */
+		@Override
 		public final Object getResult() {return _value;}
-	} //class XonModelParser
+	}
 }

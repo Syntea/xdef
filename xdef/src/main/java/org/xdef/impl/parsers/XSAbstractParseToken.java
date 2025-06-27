@@ -23,6 +23,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 	long _maxLength;
 
 	XSAbstractParseToken() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
+
 	@Override
 	public  void initParams() {
 		_whiteSpace = WS_COLLAPSE;
@@ -30,6 +31,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -50,22 +52,31 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+
 	@Override
 	public void setLength(final long x) { _minLength = _maxLength = x; }
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) { _maxLength = x; }
+
 	@Override
 	public long getMaxLength() { return _maxLength; }
+
 	@Override
 	public void setMinLength(final long x) { _minLength = x; }
+
 	@Override
 	public long getMinLength() { return _minLength; }
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		if (params != null && params.length >= 1) {
@@ -78,6 +89,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		_enumeration = null;
@@ -90,6 +102,10 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
+	/** Check argument for patterns, minLength,maxlength, enumeration. Put error message if it does not fit.
+	 * @param p XDParseResult to be checked.
+	 */
 	void checkItem(XDParseResult p) {
 		if (p.matches()) {
 			checkPatterns(p);
@@ -107,6 +123,7 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 			}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
 }

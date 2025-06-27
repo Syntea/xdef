@@ -6,8 +6,9 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonTools;
 
-/** Parser of Xscript "eqi" type.
+/** Parser of X-script "eqi" type.
  * @author Vaclav Trojan
  */
 public class XDParseEqi extends XDParseEq {
@@ -16,16 +17,6 @@ public class XDParseEqi extends XDParseEq {
 	public XDParseEqi() {super();}
 
 	@Override
-	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		if (!_param.equalsIgnoreCase(s)) {
-			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-		} else {
-			p.setEos();
-		}
-		return p;
-	}
-	@Override
 	public void setParseSQParams(final Object... param) {
 		if (param.length == 1) {
 			_param = param[0].toString();
@@ -33,16 +24,23 @@ public class XDParseEqi extends XDParseEq {
 			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
+
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (p.isTokenIgnoreCase(_param)) {
-			p.setParsedValue(_param);
-		} else {
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new DefParseResult(XonTools.readJString(p)) : p;
+		if (!q.isTokenIgnoreCase(_param)) {
 			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 		}
+		if (p != q) {
+			p.setEos();
+		}
+		checkCharset(xn, p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseEqi) ) {

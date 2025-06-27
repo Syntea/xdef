@@ -75,103 +75,127 @@ public final class DefNull extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public final short getItemId() {return _type;}
 	@Override
+	public final short getItemId() {return _type;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public final XDValueType getItemType() {return NULL;}
 	@Override
+	public final XDValueType getItemType() {return NULL;}
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise returns false.
 	 */
-	public final boolean isNull() {return true;}
 	@Override
+	public final boolean isNull() {return true;}
+
 	/** Return DefBoolean object as boolean.
 	 * @return the DefBoolean object as boolean.
 	 */
-	public final boolean booleanValue() {return false;}
 	@Override
+	public final boolean booleanValue() {return false;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public final String toString() {return "";}
 	@Override
+	public final String toString() {return "";}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public final String stringValue() {return null;}
 	@Override
+	public final String stringValue() {return null;}
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public final XDValue cloneItem() {return this;}
+
 	@Override
 	public final int hashCode() {return 1;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
 	 * equals to this one.
 	 */
+	@Override
 	public final boolean equals(final XDValue arg) {return arg==null || arg.isNull();}
+
 	@Override
 	public final boolean equals(final Object arg) {
 		return arg instanceof XDValue ? ((XDValue) arg).isNull() : arg == null;
 	}
+
 	@Override
 	public final int intValue() {return 0;}
+
 	@Override
 	public final long longValue() {return 0;}
+
 	@Override
 	public final float floatValue() {return 0;}
+
 	@Override
 	public final double doubleValue() {return 0;}
+
 	@Override
 	public final BigDecimal decimalValue() {return null;}
+
 	@Override
 	public final Node getXMLNode() {return null;}
+
 	@Override
 	public final Element getElement() {return null;}
-	@Override
+
 	/** Get SDatetime value.
 	 * @return SDatetime value of this object or return null.
 	 */
-	public final SDatetime datetimeValue() {return null;}
 	@Override
+	public final SDatetime datetimeValue() {return null;}
+
 	/** Get SDuration value.
 	 * @return SDuration value of this object or return null.
 	 */
-	public final SDuration durationValue() {return null;}
 	@Override
+	public final SDuration durationValue() {return null;}
+
 	/** Get XDContainer value.
 	 * @return XDContext value of this object or return null.
 	 */
-	public final XDContainer containerValue() {return null;}
 	@Override
+	public final XDContainer containerValue() {return null;}
 	/** Get XDService value.
 	 * @return XDService value of this object or return null.
 	 */
-	public final XDService serviceValue() {return null;}
 	@Override
+	public final XDService serviceValue() {return null;}
+
 	/** Get XDStatement value.
 	 * @return XDStatement value of this object or return null.
 	 */
-	public final XDStatement statementValue() {return null;}
 	@Override
+	public final XDStatement statementValue() {return null;}
+
 	/** Get XDResultSet value.
 	 * @return XDResultSet value of this object or return null.
 	 */
-	public final XDResultSet resultSetValue() {return null;}
 	@Override
+	public final XDResultSet resultSetValue() {return null;}
+
 	/** Get XDParseResult value.
 	 * @return XDParseResult value of this object or return null.
 	 */
+	@Override
 	public final XDParseResult parseResultValue() {return null;}
+
 	/** Create "null" XD object of given type.
 	 * @param type type ID of DefNull object.
 	 * @return created null XDValue object.

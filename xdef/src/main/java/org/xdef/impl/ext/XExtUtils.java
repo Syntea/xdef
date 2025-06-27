@@ -20,6 +20,7 @@ import org.xdef.XDPrice;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XX_ELEMENT;
+import org.xdef.impl.ChkElement;
 import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
@@ -32,6 +33,7 @@ import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
+import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.msg.XDEF;
@@ -50,17 +52,65 @@ import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
-/** External utilities called from Xdefinition processor.
+/** External utilities called from X-definition processor.
  * @author Vaclav Trojan
  */
 public final class XExtUtils {
 
-	/** Get information about actual version of Xdefinition.
+	/** Get information about actual version of X-definition.
+	 * @param x actual ChkNode.
+	 * @return XON object or null.
+	 */
+	public static final Object getXon(final XXNode x) {return new DefObject(x.getXon());}
+
+	/** Get information about actual version of X-definition.
 	 * @return build version and datetime.
 	 */
 	public static final String getVersionInfo() {
 		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
+
+	/** Get the prefix part of given QName.
+	 * @param s string with QName,
+	 * @return prefix part of given QName or the empty string.
+	 */
+	public static final String getQnamePrefix(final String s) {
+		int ndx = s.indexOf(':');
+		return ndx > 0 ? s.substring(0, ndx) : "";
+	}
+
+	/** Get the local part of given QName.
+	 * @param s string with QName,
+	 * @return local part of given QName .
+	 */
+	public static final String getQnameLocalpart(final String s) {
+		int ndx = s.indexOf(':');
+		return ndx > 0 ? s.substring(ndx + 1) : s;
+	}
+
+	/** Check if the given year is a leap year.
+	 * @param n the year
+	 * @return true if the the year is a leap year.
+	 */
+	public static final boolean isLeapYear(final long n) {return SDatetime.isLeapYear((int) n);}
+
+	/** Check if the year from given date is a leap year.
+	 * @param d date to be checked.
+	 * @return true if the the year from given date is a leap year.
+	 */
+	public static final boolean isLeapYear(final SDatetime d) {return d.isLeapYear();}
+
+	/** Get the date with the Easter Monday of the year from given date.
+	 * @param date date with the year to be used for computing Easter Monday date.
+	 * @return date with the Easter Monday of the year from given date.
+	 */
+	public static final SDatetime easterMonday(final SDatetime date) {return date.getEasterMonday();}
+
+	/** Get the date with the Easter Monday of given year.
+	 * @param year year to be used for computing Easter Monday date.
+	 * @return date with the Easter Monday of given year
+	 */
+	public static final SDatetime easterMonday(final long year) {return SDatetime.getEasterMonday((int)year);}
 
 	/** Check if XQuery implementation is available.
 	 * @return true if XQuery implementation is available.
@@ -250,15 +300,15 @@ public final class XExtUtils {
 		return el != null ? el.getTextContent() : null;
 	}
 
-	/** Get Xposition of XXNode.
+	/** Get X-position of XXNode.
 	 * @param x node with position.
-	 * @return Xposition of node.
+	 * @return X-position of node.
 	 */
 	public static final String getXPos(final XXNode x) {return x.getXPos();}
 
-	/** Get Xposition of model in Xdefinition.
+	/** Get X-position of model in X-definition.
 	 * @param x node with position.
-	 * @return Xposition of model of XXNode..
+	 * @return X-position of model of XXNode..
 	 */
 	public static final String getXDPosition(final XXNode x) {return x.getXMNode().getXDPosition();}
 
@@ -422,18 +472,18 @@ public final class XExtUtils {
 	 */
 	public static final XDValue getXDValueOfXon(final XXElement xel){return getXDValueOfObject(xel.getXon());}
 
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of script methods.
-////////////////////////////////////////////////////////////////////////////////
+/* **********************************
+* Implementation of script methods. *
+************************************/
 
-	/** Cancel running Xdefinition process. */
-	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //Xdefinition canceled
+	/** Cancel running X-definition process. */
+	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //X-definition canceled
 
-	/** Cancel running Xdefinition process and throw message.
+	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
 	public static final void cancel(final String msg) {
-		throw new SError(Report.error(XDEF.XDEF906, msg)); //Xdefinition canceled&{0}{; }
+		throw new SError(Report.error(XDEF.XDEF906, msg)); //X-definition canceled&{0}{; }
 	}
 
 	/** Parse base64 data.
@@ -460,9 +510,9 @@ public final class XExtUtils {
 		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Methods with XXNode
-////////////////////////////////////////////////////////////////////////////////
+/* ********************
+* Methods with XXNode *
+**********************/
 
 	public static final Element getCreateContextElement(final XXNode xElem) {
 		return ((ChkNode) xElem).getElemValue();
@@ -515,14 +565,14 @@ public final class XExtUtils {
 			? new DefContainer() : fromRoot(xElem, expr, val.getElement());
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// PARSERESULT
-////////////////////////////////////////////////////////////////////////////////
+/* ************
+* PARSERESULT *
+**************/
 	public static final void clearReports(final XDParseResult x) {x.clearReports();}
 	public static final String getSource(final XDParseResult x) {return x.getSourceBuffer();}
-////////////////////////////////////////////////////////////////////////////////
-// dateTime
-////////////////////////////////////////////////////////////////////////////////
+/* *********
+* dateTime *
+***********/
 	public static final int getMaxYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
 	public static final void setMaxYear(XXNode xnode, int i) {xnode.getXDDocument().setMaxYear(i);}
 	public static final int getMinYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
@@ -549,10 +599,10 @@ public final class XExtUtils {
 		return p.isRFC822Datetime() && p.eos() && p.testParsedDatetime() ? p.getParsedSDatetime() : null;
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of predefined Xscript Math methods (ensure conversion
-// of arguments long -> double). Other math methods are available in Math.
-////////////////////////////////////////////////////////////////////////////////
+/* ************************************************************************
+* Implementation of predefined X-script Math methods (ensure conversion   *
+* of arguments long -> double). Other math methods are available in Math. *
+**************************************************************************/
 	public static final double acos(final long a) {return Math.acos(a);}
 	public static final double asin(final long a) {return Math.asin(a);}
 	public static final double atan(final long a) {return Math.atan(a);}

@@ -62,8 +62,8 @@ public interface XMOccurrence {
 	public boolean isMaxUnlimited();
 
 	@Override
-	/** Get Xdefinition source form of Occurrence.
-	 * @return Xdefinition source form of Occurrence.
+	/** Get X-definition source form of Occurrence.
+	 * @return X-definition source form of Occurrence.
 	 */
 	public String toString();
 }

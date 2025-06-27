@@ -25,7 +25,7 @@ public class XDebugInfo implements XMDebugInfo {
 
 	/** Add debug info item and return index.
 	 * @param pos Source position.
-	 * @param defName name of Xdefinition.
+	 * @param defName name of X-definition.
 	 * @param adr code address.
 	 * @param tab local variables table.
 	 * @return index of debug info item or -1.
@@ -61,6 +61,10 @@ public class XDebugInfo implements XMDebugInfo {
 		}
 	}
 
+	/** Get statement information corresponding to the code address.
+	 * @param codeAdr Code address.
+	 * @return XMStatementInfo object or null.
+	 */
 	@Override
 	public final XMStatementInfo getInfo(final int codeAdr) {
 		int len = _statementList.size();
@@ -93,12 +97,12 @@ public class XDebugInfo implements XMDebugInfo {
 		return null;
 	}
 
-	@Override
-	/** Get array of statement information objects assigned to given Xdefinition and source line.
+	/** Get array of statement information objects assigned to given X-definition and source line.
 	 * @param line source line.
-	 * @param xdName name of Xdefinition.
+	 * @param xdName name of X-definition.
 	 * @return array XMStatementInfo objects (if no statement information is found the array is empty).
 	 */
+	@Override
 	public final XMStatementInfo[] getStatementInfo(final long line, final String xdName) {
 		for (int i = 0; i < _statementList.size(); i++) {
 			XStatementInfo x = _statementList.get(i);
@@ -122,14 +126,14 @@ public class XDebugInfo implements XMDebugInfo {
 		return new XMStatementInfo[0];
 	}
 
-	@Override
 	/** Get statement information according to the source position.
 	 * @param line source line.
 	 * @param column source column.
 	 * @param sysId source ID (pathname, URL).
-	 * @param xdName name of Xdefinition (may be null).
+	 * @param xdName name of X-definition (may be null).
 	 * @return XMStatementInfo object or null.
 	 */
+	@Override
 	public final XMStatementInfo getStatementInfo(final long line,
 		final long column,
 		final String sysId,
@@ -154,21 +158,21 @@ public class XDebugInfo implements XMDebugInfo {
 		return null;
 	}
 
-	@Override
 	/** Get array of all statement information objects.
 	 * @return array of XMStatementInfo objects.
 	 */
+	@Override
 	public final XMStatementInfo[] getStatementInfo() {
 		XStatementInfo[] result = new XStatementInfo[_statementList.size()];
 		_statementList.toArray(result);
 		return result;
 	}
 
-	@Override
 	/** Get statement information of the next statement after argument.
 	 * @param si XMStatementInfo object or null.
 	 * @return next XMStatementInfo object after argument or null.
 	 */
+	@Override
 	public final XMStatementInfo nextStatementInfo(final XMStatementInfo si) {
 		if (si != null) {
 			for (int i = 0; i < _statementList.size(); i++) {
@@ -180,11 +184,11 @@ public class XDebugInfo implements XMDebugInfo {
 		return null;
 	}
 
-	@Override
 	/** Get statement information of the previous statement before argument.
 	 * @param si XMStatementInfo object or null.
 	 * @return previous XMStatementInfo object before argument or null.
 	 */
+	@Override
 	public final XMStatementInfo prevStatementInfo(final XMStatementInfo si) {
 		if (si != null) {
 			for (int i = 0; i < _statementList.size(); i++) {
@@ -334,34 +338,45 @@ public class XDebugInfo implements XMDebugInfo {
 			_varTables[old.length] = varTable;
 			return old.length;
 		}
+
 		@Override
 		public final String getSysId() {return _sysId;}
+
 		@Override
 		public final long getColumn() {return _column;}
+
 		@Override
 		public final long getLine() {return _line;}
+
 		@Override
 		public final long getEndColumn() {return _end_column;}
+
 		@Override
 		public final void updateEndPos(final long line, final long column) {
 			_end_line = line;
 			_end_column = column;
 		}
+
 		@Override
 		public final long getEndLine() {return _end_line;}
+
 		@Override
 		public final int getAddr() {return _codeAdr;}
-		@Override
-		/** Get name of Xdefinition.
-		 * @return name of Xdefinition.
+
+		/** Get name of X-definition.
+		 * @return name of X-definition.
 		 */
+		@Override
 		public final String getXDName() {return _xdName;}
+
 		@Override
 		public final XMVariable[] getLocalVariables() {
 			return _varTableIndex < 0 ? null : _varTables[_varTableIndex];
 		}
+
 		@Override
 		public int hashCode() {return (int) (11*_codeAdr + 7*(_line + 5*(_column+_varTableIndex)));}
+
 		@Override
 		public boolean equals(final Object obj) {
 			if (obj == null || !(obj instanceof XStatementInfo)) {
@@ -372,6 +387,7 @@ public class XDebugInfo implements XMDebugInfo {
 				&& (_xdName != null && _xdName.equals(x._xdName) || _xdName == null && x._xdName == null)
 				&& _codeAdr == x._codeAdr && _varTableIndex == x._varTableIndex;
 		}
+
 		@Override
 		public String toString() {
 			String s = "Line:" + getLine() + ", column: " + getColumn() + ", source: " + _sysId +
@@ -405,9 +421,7 @@ public class XDebugInfo implements XMDebugInfo {
 			return line <= _end_line;
 		}
 
-		public final int comparePos(final XStatementInfo x) {
-			return comparePos(x._line, x._column);
-		}
+		public final int comparePos(final XStatementInfo x) {return comparePos(x._line, x._column);}
 
 		public final int comparePos(final long line, final long column) {
 			if (_line < line) {

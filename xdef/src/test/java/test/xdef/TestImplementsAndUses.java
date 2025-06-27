@@ -17,8 +17,8 @@ public final class TestImplementsAndUses extends XDTester {
 	final public static boolean x() {return true;}
 	final public static boolean y() {return true;}
 
-	@Override
 	/** Run test and print error information.*/
+	@Override
 	public void test() {
 		String xdef;
 		String xml;
@@ -516,7 +516,7 @@ public final class TestImplementsAndUses extends XDTester {
 "<xd:def  xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='B' root='s:A'>\n" +
 "  <s:A xd:script='implements A#s:A'><B/><C/></s:A>\n" +
 "</xd:def>";
-			XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+			compile(new String[]{xdef1, xdef2});
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			String xdef1 =
@@ -527,7 +527,7 @@ public final class TestImplementsAndUses extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:t='a.b' name='B' root='t:A'>\n" +
 "  <t:A xd:script='implements A#t:A'><B/><C/></t:A>\n" +
 "</xd:def>";
-			XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+			compile(new String[]{xdef1, xdef2});
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			String xdef1 =
@@ -538,7 +538,7 @@ public final class TestImplementsAndUses extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='b.c' name='B' root='s:A'>\n" +
 "  <s:A xd:script='implements A#s:A'><B/><C/></s:A>\n" +
 "</xd:def>";
-			XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+			compile(new String[]{xdef1, xdef2});
 		} catch (RuntimeException ex) {
 			if (!ex.getMessage().contains("XDEF122")) { // comparing skipped
 				fail(ex);
@@ -554,7 +554,7 @@ public final class TestImplementsAndUses extends XDTester {
 "        xmlns:t='a.b'>\n" +
 "  <s:A xd:script='implements A#t:A'><B/><C/></s:A>\n" +
 "</xd:def>";
-			XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+			compile(new String[]{xdef1, xdef2});
 		} catch (RuntimeException ex) {
 			if (!ex.getMessage().contains("XDEF122")) { // comparing skipped
 				fail(ex);

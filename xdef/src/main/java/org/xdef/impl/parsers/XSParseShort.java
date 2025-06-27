@@ -24,8 +24,10 @@ public class XSParseShort extends XSParseLong {
 			}
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		long val =  x.longValue();
@@ -33,6 +35,7 @@ public class XSParseShort extends XSParseLong {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_SHORT;}
 }

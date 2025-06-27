@@ -103,8 +103,8 @@ public class TestExpr extends STester {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		BNFGrammar g;
 		g = BNFGrammar.compile(null,

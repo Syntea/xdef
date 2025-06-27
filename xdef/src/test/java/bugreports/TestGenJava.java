@@ -61,8 +61,8 @@ public class TestGenJava extends XDTester {
 		assertNoErrorsAndClear(reporter);
 	}
 
-	@Override
 	/** Run test and display error information. */
+	@Override
 	public void test() {
 		String xdef, xml;
 		try {

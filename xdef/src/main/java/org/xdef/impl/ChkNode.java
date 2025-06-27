@@ -87,7 +87,6 @@ import static org.xdef.xon.XonNames.X_VALUE;
  * @author Vaclav Trojan
  */
 public abstract class ChkNode extends XDValueAbstract implements XXNode {
-
 	/** The name of element model. */
 	final String _name;
 	/** Root check Document. */
@@ -152,56 +151,56 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get list of object to be managed before dispose.*/
 	final List<XDValue> getFinalList() {return _finalList;}
 
-	@Override
 	/** Get name of the X-model.
 	 * @return The name of node.
 	 */
+	@Override
 	public final String getXXName() {return _name;}
 
-	@Override
 	/** Get namespace URI of the X-model.
 	 * @return namespace URI of node or <i>null</i>.
 	 */
+	@Override
 	public String getXXNSURI() {return (_xElement == null) ? null : _xElement.getNSUri();}
 
-	@Override
 	/** get User object.
 	 * @return The user object.
 	 */
+	@Override
 	public final Object getUserObject() {return _userObject;}
 
-	@Override
 	/** set User object.
 	 * @param obj The user object.
 	 */
+	@Override
 	public final void setUserObject(final Object obj) {_userObject = obj;}
 
-	@Override
 	/** Set named user object.
 	 * @param id identifier of the object.
 	 * @param obj user object.
 	 * @return previous value of the object or <i>null</i>.
 	 */
+	@Override
 	public final Object setUserObject(final String id, final Object obj) {return _scp.setUserObject(id, obj);}
 
-	@Override
 	/** Remove named user object.
 	 * @param id identifier of the object.
 	 * @return value of the object or <i>null</i>.
 	 */
+	@Override
 	public Object removeUserObject(final String id) {return _scp.removeUserObject(id);}
 
-	@Override
 	/** Get named user object.
 	 * @param id identifier of the object.
 	 * @return value of the object or <i>null</i>.
 	 */
+	@Override
 	public final Object getUserObject(final String id) {return _scp.getUserObject(id);}
 
-	@Override
 	/** Return parent node.
 	 * @return The parent node.
 	 */
+	@Override
 	public final XXNode getParent() {return _parent;}
 
 	/** Get nesting level the check node (model). The level of ChkDocument
@@ -275,41 +274,35 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		}
 	}
 
-	@Override
 	/** Get actual source context for create mode.
 	 * @return source context or <i>null</i> if not available.
 	 */
-	public final XDValue getXDContext() {
-		if (_sourceElem != null) {
-			return new DefElement(_sourceElem);
-		}
-		return null;
-	}
-
 	@Override
+	public final XDValue getXDContext() {return _sourceElem != null ? new DefElement(_sourceElem) : null;}
+
 	/** Set value from argument as context for create mode.
 	 * @param xdc context to be set (create mode).
 	 */
+	@Override
 	public final void setXDContext(final XDContainer xdc) {
-		if (xdc != null && xdc.getXDItemsNumber() == 1 &&
-			xdc.getXDItem(0).getItemId() == XD_ELEMENT) {
+		if (xdc != null && xdc.getXDItemsNumber() == 1 && xdc.getXDItem(0).getItemId() == XD_ELEMENT) {
 			_sourceElem = xdc.getXDItem(0).getElement();
 			return;
 		}
 		_sourceElem = xdc == null ? null : xdc.toElement(null, "_");
 	}
 
-	@Override
 	/** Set source element as context for create mode.
 	 * @param xdc context to be set (create mode).
 	 */
+	@Override
 	public final void setXDContext(final XDResultSet xdc) {_iterator = xdc;}
 
-	@Override
 	/** Set source element as context for create mode.
 	 * @param node XML node (Element or a Node). If this argument is not an
 	 * Element then it represents Document element of owner document.
 	 */
+	@Override
 	public final void setXDContext(final Node node) {
 		_sourceElem = node == null ? null
 			: node.getNodeType() == Node.ELEMENT_NODE ? (Element) node
@@ -317,22 +310,22 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			: node.getOwnerDocument().getDocumentElement();
 	}
 
-	@Override
 	/** Set XON/JSON data as context for create mode.
 	 * @param data the XON/JSON data. It can be either pathname or URL.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
+	@Override
 	public final void setXONContext(final String data) throws SRuntimeException {
 		setXDContext(XonUtils.xonToXmlW(data));
 	}
 
-	@Override
 	/** Set XON/JSON data as context for create mode.
 	 * @param data the XON/JSON data. It can be either XON/JSON object or
 	 * File, URL or InputStream with XON/JSON data* or XDResultSet
 	 * or XML data to be converted to XON/JSON.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
+	@Override
 	public final void setXONContext(final Object data) throws SRuntimeException{
 		Element e = null;
 		if (data == null || data instanceof Map || data instanceof List
@@ -355,37 +348,37 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		setXDContext(e);
 	}
 
-	@Override
 	/** Set source element as context for create mode.
 	 * @param source string with pathname, URL or source of XML node.
 	 */
+	@Override
 	public final void setXDContext(final String source) {setXDContext(KXmlUtils.parseXml(source));}
 
-	@Override
 	/** Get names of variables.
 	 * @return array of names of variables.
 	 */
+	@Override
 	public final String[] getVariableNames() {
 		return _rootChkDocument._xdef.getXDPool().getVariableTable().getVariableNames();
 	}
 
-	@Override
 	/** Get XDDocument.
 	 * @return XDDocument.
 	 */
+	@Override
 	public final XDDocument getXDDocument() {return _rootChkDocument;}
 
-	@Override
 	/** Get XDPool.
 	 * @return XDPool.
 	 */
+	@Override
 	public final XDPool getXDPool() {return _rootChkDocument.getXMDefinition().getXDPool();}
 
-	@Override
 	/** Get value of variable from XMDefinition.
 	 * @param name name of variable.
 	 * @return XDValue object or <i>null</i>.
 	 */
+	@Override
 	public final XDValue getVariable(final String name) {return _scp.getVariable(name);}
 
 	/** Find variable for setVariable (it Can't be final).
@@ -408,11 +401,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		throw new SRuntimeException(XDEF.XDEF563, name); //Variable '&{0}' doesn't exist
 	}
 
-	@Override
 	/** Set variable.
 	 * @param name name name of variable.
 	 * @param value value to be set to the variable.
 	 */
+	@Override
 	public final void setVariable(final String name, final Object value) {
 		if (value instanceof XDValue) {
 			setVariable(name, (XDValue) value);
@@ -424,9 +417,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return;
 		}
 		switch (xv.getType()) {
-			case XD_CONTAINER:
-				_scp.setVariable(xv, new DefContainer(value));
-				return;
+			case XD_CONTAINER: _scp.setVariable(xv, new DefContainer(value)); return;
 			case XD_DATETIME: {
 				if (value instanceof SDatetime) {
 					_scp.setVariable(xv, new DefDate((SDatetime) value));
@@ -510,68 +501,57 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		} else if (value instanceof InetAddress) {
 			setVariable(name, (new DefIPAddr((InetAddress) value)));
 		} else if (value instanceof Currency) {
-			setVariable(name,
-				new XDCurrency(((Currency) value).getCurrencyCode()));
+			setVariable(name, new XDCurrency(((Currency) value).getCurrencyCode()));
 		} else {
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);
 		}
 	}
 
-	@Override
 	/** Set variable.
 	 * @param name name name of variable.
 	 * @param value value to be set to the variable.
 	 */
+	@Override
 	public final void setVariable(final String name, final long value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value)); return;
-			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value)); return;
-			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value)); return;
-			case XD_BIGINTEGER:
-				_scp.setVariable(xv, new DefBigInteger(value)); return;
-			case XD_STRING:
-				_scp.setVariable(xv, new DefString(String.valueOf(value))); return;
+			case XD_DOUBLE: _scp.setVariable(xv, new DefDouble(value)); return;
+			case XD_LONG: _scp.setVariable(xv, new DefLong(value)); return;
+			case XD_DECIMAL: _scp.setVariable(xv, new DefDecimal(value)); return;
+			case XD_BIGINTEGER: _scp.setVariable(xv, new DefBigInteger(value)); return;
+			case XD_STRING: _scp.setVariable(xv, new DefString(String.valueOf(value))); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
 	}
 
-	@Override
 	/** Set variable.
 	 * @param name name name of variable.
 	 * @param value value to be set to the variable.
 	 */
+	@Override
 	public final void setVariable(final String name, final double value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value)); return;
-			case XD_STRING:
-				_scp.setVariable(xv, new DefString(String.valueOf(value))); return;
-			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(String.valueOf(value))); return;
+			case XD_DOUBLE: _scp.setVariable(xv, new DefDouble(value)); return;
+			case XD_STRING: _scp.setVariable(xv, new DefString(String.valueOf(value))); return;
+			case XD_DECIMAL: _scp.setVariable(xv, new DefDecimal(String.valueOf(value))); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
 	}
 
-	@Override
 	/** Set variable.
 	 * @param name name name of variable.
 	 * @param value value to be set to the variable.
 	 */
+	@Override
 	public final void setVariable(final String name, final boolean value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_BOOLEAN:
-				_scp.setVariable(xv, new DefBoolean(value)); return;
-			case XD_STRING:
-				_scp.setVariable(xv, new DefString(String.valueOf(value))); return;
+			case XD_BOOLEAN: _scp.setVariable(xv, new DefBoolean(value)); return;
+			case XD_STRING: _scp.setVariable(xv, new DefString(String.valueOf(value))); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -587,10 +567,8 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			_scp.setVariable(xv, value);
 		} else {
 			switch (xv.getType()) {
-				case XD_CONTAINER:
-					_scp.setVariable(xv, new DefContainer(value)); return;
-				case XD_STRING:
-					setVariable(name, value.toString()); return;
+				case XD_CONTAINER: _scp.setVariable(xv, new DefContainer(value)); return;
+				case XD_STRING: setVariable(name, value.toString()); return;
 				case XD_DOUBLE:
 					if (value.getItemId() == XD_LONG) {
 						setVariable(name, value.doubleValue()); return;
@@ -606,8 +584,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 						_scp.setVariable(xv, new DefBoolean(value.toString())); return;
 					}
 					break;
-				case XD_PARSER:
-					_scp.setVariable(xv, (XDParser) value); return;
+				case XD_PARSER: _scp.setVariable(xv, (XDParser) value); return;
 			}
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);
@@ -622,18 +599,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
 			case XD_STRING:
-			case XD_CONTAINER:
-				_scp.setVariable(xv, new DefString(value)); return;
-			case XD_BOOLEAN:
-				_scp.setVariable(xv, new DefBoolean(value)); return;
-			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value)); return;
-			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value)); return;
-			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value)); return;
-			case XD_BIGINTEGER:
-				_scp.setVariable(xv, new DefBigInteger(value)); return;
+			case XD_CONTAINER: _scp.setVariable(xv, new DefString(value)); return;
+			case XD_BOOLEAN: _scp.setVariable(xv, new DefBoolean(value)); return;
+			case XD_DOUBLE: _scp.setVariable(xv, new DefDouble(value)); return;
+			case XD_LONG: _scp.setVariable(xv, new DefLong(value)); return;
+			case XD_DECIMAL: _scp.setVariable(xv, new DefDecimal(value)); return;
+			case XD_BIGINTEGER: _scp.setVariable(xv, new DefBigInteger(value)); return;
 			case XD_ELEMENT:
 				_scp.setVariable(xv, new DefElement(KXmlUtils.parseXml(value).getDocumentElement())); return;
 		}
@@ -648,14 +619,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	private void setVariable(final String name, final BigDecimal value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value.longValue())); return;
-			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value.doubleValue())); return;
-			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value)); return;
-			case XD_STRING:
-				_scp.setVariable(xv, new DefString(value.toString())); return;
+			case XD_LONG: _scp.setVariable(xv, new DefLong(value.longValue())); return;
+			case XD_DOUBLE: _scp.setVariable(xv, new DefDouble(value.doubleValue())); return;
+			case XD_DECIMAL: _scp.setVariable(xv, new DefDecimal(value)); return;
+			case XD_STRING: _scp.setVariable(xv, new DefString(value.toString())); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -726,10 +693,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public abstract Element getElemValue();
 
-	@Override
 	/** Get actual element.
 	 * @return The element.
 	 */
+	@Override
 	public final Element getElement() {return _element;}
 
 	/** Assign Element value to this node.
@@ -737,16 +704,16 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	abstract void setElemValue(Element elem);
 
-	@Override
 	/** Get position of the node as a XPath expression string.
 	 * @return position of the node as a XPath expression string.
 	 */
+	@Override
 	public final String getXPos() {return _xPos;}
 
-	@Override
 	/** Get source position.
 	 * @return source position or <i>null</i> if position is not available.
 	 */
+	@Override
 	public SPosition getSPosition() {return _rootChkDocument._reporter;}
 
 	/** Set position of the node as XPath expression.
@@ -761,17 +728,17 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 // Methods for reporting
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get report writer assigned to the report generator.
 	 * @return The report writer.
 	 */
+	@Override
 	public final ReportWriter getReportWriter() {return _rootChkDocument._reporter.getReportWriter();}
 
-	@Override
 	/** Copy temporary reports to global reporter.
 	 * @return true if and only if temporary reporter contained errors before
 	 * it was cleared.
 	 */
+	@Override
 	public final boolean copyTemporaryReports() {
 		Report rep;
 		while ((rep = _scp.getTemporaryReporter().getReport()) != null) {
@@ -782,147 +749,147 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return result;
 	}
 
-	@Override
 	/** Clear temporary reporter. */
+	@Override
 	public final void clearTemporaryReporter() {_scp.getTemporaryReporter().clear();}
 
-	@Override
 	/** Put message to temporary reporter.
 	 * @param report report to be added to the temporary reporter.
 	 */
+	@Override
 	public final void putTemporaryReport(Report report) {
 		ensurePosInfo(report);
 		_scp.getTemporaryReporter().putReport(report);
 	}
 
-	@Override
 	/** Remove report from temporary reporter.
 	 * @param rep report to be removed.
 	 * @return true if report was found and removed.
 	 */
+	@Override
 	public final boolean removeTemporaryReport(final Report rep) {
 		return _scp.getTemporaryReporter().removeReport(rep);
 	}
 
-	@Override
 	/** Get temporary reporter.
 	 * @return ArrayReporter used as temporary reporter.
 	 */
+	@Override
 	public final ArrayReporter getTemporaryReporter() {return _scp.getTemporaryReporter();}
 
-	@Override
 	/** Check if temporary reporter has errors.
 	 * @return true if temporary reporter has errors.
 	 */
+	@Override
 	public final boolean chkTemporaryErrors() {return _scp.getTemporaryReporter().errors();}
 
-	@Override
 	/** Set new temporary reporter.
 	 * @param reporter new temporary reporter.
 	 * @return ArrayReporter old temporary reporter.
 	 */
+	@Override
 	public final ArrayReporter setTemporaryReporter(ArrayReporter reporter) {
 		ArrayReporter result = _scp.getTemporaryReporter();
 		_scp.setTemporaryReporter(reporter);
 		return result;
 	}
 
-	@Override
 	/** Get SReporter of XDDocument.
 	 * @return SReporter of XDDocument..
 	 */
+	@Override
 	public final SReporter getReporter() {return _rootChkDocument._reporter;}
 
-	@Override
 	/** Check if errors, fatal errors, light errors or warnings were reported.
 	 * @return <i>true</i> if errors, fatal errors, light errors
 	 * or warnings were reported.
 	 */
+	@Override
 	public boolean errorWarnings() {return _rootChkDocument._reporter.errorWarnings();}
 
-	@Override
 	/** Check if errors, fatal errors or light errors were reported.
 	 * @return <i>true</i> if errors, fatal errors or light errors were
 	 * reported.
 	 */
+	@Override
 	public boolean errors() {return _rootChkDocument._reporter.errors();}
 
-	@Override
 	/** Put fatal error message with modification parameters.
 	 * @param id The message id.
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
-	@Override
 	/** Put error message with modification parameters.
 	 * @param id The message id.
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
-	@Override
 	/** Put warning message with modification parameters.
 	 * @param id The message id.
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void warning(final String id, final String msg, final Object... mod) {
 		putReport(Report.warning(id, msg, mod));
 	}
 
-	@Override
 	/** Put fatal error message with modification parameters.
 	 * @param id registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public final void fatal(final long id, final Object... mod) {putReport(Report.fatal(id, mod));}
 
-	@Override
 	/** Put error message with modification parameters.
 	 * @param id registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public void error(final long id, final Object... mod) {putReport(Report.error(id, mod));}
 
-	@Override
 	/** Put warning message with modification parameters.
 	 * @param id registered report id.
 	 * @param mod Message modification parameters.
 	 */
+	@Override
 	public void warning(final long id, final Object... mod) {putReport(Report.warning(id, mod));}
 
-	@Override
 	/** Put report.
 	 * @param report The report.
 	 */
+	@Override
 	public final void putReport(final Report report) {
 		ensurePosInfo(report);
 		_rootChkDocument._reporter.putReport(report);
 	}
 
-	@Override
 	/** Get XMDefinition.
-	 * @return Xdefinition of this document.
+	 * @return X-definition of this document.
 	 */
+	@Override
 	public final XMDefinition getXMDefinition() {return _rootChkDocument._xdef;}
 
-	@Override
 	/** Get model of the processed object.
 	 * @return model of the processed object (XMElement).
 	 */
+	@Override
 	public final XMElement getXMElement() {return _xElement;}
 
-	@Override
 	/** Get XDPosition of the processed element.
 	 * @return XDPosition of the processed element.
 	 */
+	@Override
 	public final String getXDPosition() {
 		String result = _xElement == null ? null : _xElement.getXDPosition();
 		return result == null ? "" : result;
@@ -932,37 +899,40 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 // Interface of XXNode.
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get array of XXNodes or null.
 	 * @return array of XXNodes or null.
 	 */
+	@Override
 	abstract public XXNode[] getChildXXNodes();
 
 	// can't be final this method is overriden!
 	abstract List<ChkElement> getChkChildNodes();
 
-	@Override
 	/** Get parsed result of an attribute or text node.
 	 * @return parsed result of an attribute or text node.
 	 */
+	@Override
 	public final XDParseResult getParseResult() {return _parseResult;}
 
-	@Override
 	/** Get XON mode.
 	 * @return XON mode or zero.
 	 */
+	@Override
 	public final byte getXonMode() {return _xElement == null ? 0 : _xElement._xon;}
 
-	@Override
 	/** Get actual value of default time zone.
 	 * @return actual value of default time zone.
 	 */
+	@Override
 	public final TimeZone getDefaultZone() {return _scp.getDefaultZone();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Message reporting
 ////////////////////////////////////////////////////////////////////////////////
 
+	/** Ensure creating X-position in the report.
+	 * @param report where ensure creating X-position.
+	 */
 	public final void ensurePosInfo(final Report report) {
 		String mod = report.getModification();
 		if (mod == null) {
@@ -1014,11 +984,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return "";
 	}
 
-	/** Get Xposition and XPath information. If it is XON/JSON, then create
+	/** Get X-position and XPath information. If it is XON/JSON, then create
 	 * modified XON/JSON path.
-	 * @param xpos Xposition of model.
+	 * @param xpos X-position of model.
 	 * @param xpath XPath of data (may be null).
-	 * @return array with two items - the first one is Xposition and the
+	 * @return array with two items - the first one is X-position and the
 	 * second one is XPath.
 	 */
 	final String[] getPosInfo(final String xpos, final String xpath) {
@@ -1176,7 +1146,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	/** Get XPosition, XPath and source position for modification information
 	 * in message reporting.
-	 * @param xpos string with Xposition.
+	 * @param xpos string with X-position.
 	 * @param xpath XPath of data (may be null).
 	 * @return modification information (convert to XON format if XON).
 	 */

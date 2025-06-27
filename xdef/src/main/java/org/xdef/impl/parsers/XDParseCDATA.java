@@ -1,6 +1,5 @@
 package org.xdef.impl.parsers;
 
-import java.nio.charset.Charset;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
 import org.xdef.XDNamedValue;
@@ -10,9 +9,10 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import org.xdef.sys.SRuntimeException;
 
-/** Parser of Xscript "CDATA" type.
+/** Parser of X-script "CDATA" type.
  * @author Vaclav Trojan
  */
 public class XDParseCDATA extends XDParserAbstract {
@@ -21,7 +21,7 @@ public class XDParseCDATA extends XDParserAbstract {
 	public XDParseCDATA() {super(); _minLength = 1; _maxLength = -1;}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p){
 		String s = p.getUnparsedBufferPart();
 		int len = s.length();
 		p.setParsedValue(s);
@@ -31,35 +31,17 @@ public class XDParseCDATA extends XDParserAbstract {
 			_minLength >= 0 && len < _minLength) {
 			p.errorWithString(XDEF.XDEF814, "string"); //Length of value of '&{0}' is too short&{0}'{: }
 		} else {
+			checkCharset(xn, p);
 			p.setEos();
 		}
-		Charset[] chsets = xnode != null ? xnode.getXDPool().getLegalStringCharsets() : null;
-		if (chsets != null && chsets.length > 0) {
-			for (Charset chset : chsets) {
-				byte[] bytes = s.getBytes(chset);
-				if (bytes.length != s.length()) {
-				} else {
-					String t = new String(bytes, chset);
-					if (!s.equals(t)) {
-					} else {
-						return;
-					}
-				}
-			}
-			s = "";
-			for (int i = 0; i < chsets.length; i++) {
-				if (i > 0) {
-					s += ", ";
-				}
-				s += chsets[i].name();
-			}
-			p.error(XDEF.XDEF823, s);
-		}
 	}
+
 	@Override
 	public String toString() {return "string";}
+
 	@Override
 	public String parserName() {return "string";}
+
 	@Override
 	public final void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
 		_minLength = _maxLength = -1;
@@ -67,20 +49,18 @@ public class XDParseCDATA extends XDParserAbstract {
 		if (params == null || (pars = params.getXDNamedItems()) == null) {
 			return;
 		}
-		for (int i = 0; i < pars.length; i++) {
-			String name = pars[i].getName();
-			if ("length".equals(name)) {
-				_minLength = _maxLength = pars[i].getValue().intValue();
-			} else if ("minLength".equals(name)) {
-				_minLength = pars[i].getValue().intValue();
-			} else if ("maxLength".equals(name)) {
-				_maxLength = pars[i].getValue().intValue();
+		for (XDNamedValue x: pars) {
+			switch (x.getName()) {
+				case "length": _minLength = _maxLength = x.getValue().intValue(); break;
+				case "minLength": _minLength = x.getValue().intValue(); break;
+				case "maxLength": _maxLength = x.getValue().intValue(); break;
 			}
 		}
 		if (_minLength >= 0 && _maxLength >= 0 && _minLength > _maxLength) {
 			throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
 		}
 	}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		if (params != null && params.length >= 1) {
@@ -93,6 +73,7 @@ public class XDParseCDATA extends XDParserAbstract {
 			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
+
 	@Override
 	public final XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();

@@ -51,48 +51,56 @@ public final class DefLocale extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return _value;}
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_LOCALE;}
 	@Override
+	public short getItemId() {return XD_LOCALE;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return LOCALE;}
 	@Override
+	public XDValueType getItemType() {return LOCALE;}
+
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return _value == null ? "" : _value.toString();}
 	@Override
+	public String toString() {return _value == null ? "" : _value.toString();}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {return toString();}
 	@Override
+	public String stringValue() {return toString();}
+
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefLocale(_value);}
+
 	@Override
 	public int hashCode() {return _value.hashCode();}
+
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals(((XDValue) arg)) : false;}
-	@Override
+
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
 	 * equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -102,9 +110,10 @@ public final class DefLocale extends XDValueAbstract {
 		}
 		return _value.equals(((DefLocale)arg)._value);
 	}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise returns false.
 	 */
+	@Override
 	public boolean isNull() {return _value == null;}
 }

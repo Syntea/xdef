@@ -119,7 +119,6 @@ import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE_XDARRAY;
 import static org.xdef.impl.code.CodeTable.FLOAT_FORMAT;
 import static org.xdef.impl.code.CodeTable.GET_DAY;
 import static org.xdef.impl.code.CodeTable.GET_DAYTIMEMILLIS;
-import static org.xdef.impl.code.CodeTable.GET_EASTERMONDAY;
 import static org.xdef.impl.code.CodeTable.GET_FRACTIONSECOND;
 import static org.xdef.impl.code.CodeTable.GET_HOUR;
 import static org.xdef.impl.code.CodeTable.GET_INDEXOFSTRING;
@@ -153,13 +152,12 @@ import static org.xdef.impl.code.CodeTable.GET_ZONEID;
 import static org.xdef.impl.code.CodeTable.GET_ZONEOFFSET;
 import static org.xdef.impl.code.CodeTable.INTEGER_FORMAT;
 import static org.xdef.impl.code.CodeTable.IS_CREATEMODE;
-import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LOWERCASE;
 import static org.xdef.impl.code.CodeTable.NEW_BNFGRAMAR;
 import static org.xdef.impl.code.CodeTable.NEW_BYTES;
 import static org.xdef.impl.code.CodeTable.NEW_CONTAINER;
-import static org.xdef.impl.code.CodeTable.NEW_CURRAMOOUNT;
+import static org.xdef.impl.code.CodeTable.NEW_CURRENCY;
 import static org.xdef.impl.code.CodeTable.NEW_ELEMENT;
 import static org.xdef.impl.code.CodeTable.NEW_EXCEPTION;
 import static org.xdef.impl.code.CodeTable.NEW_GPSPOSITION;
@@ -276,9 +274,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					throw new SRuntimeException(XDEF.XDEF536); //Icorrect type conversion from AnyValue
 				}
 				return p;
-			case BYTES_CLEAR: //Clear byte array
-				((DefBytes) p).clear();
-				return p;
+			case BYTES_CLEAR: ((DefBytes) p).clear(); return p; //Clear byte array
 			case BYTES_SIZE: return new DefLong(((DefBytes) p).size()); //size of byte array
 			case BYTES_TO_BASE64: return new DefString(((DefBytes) p).getBase64());
 			case BYTES_TO_HEX: return new DefString(((DefBytes) p).getHex());
@@ -303,8 +299,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case DURATION_GETRECURRENCE:
 				return p==null || p.isNull() ? new DefLong(-1):new DefLong(p.durationValue().getRecurrence());
 			case DURATION_GETFRACTION:
-				return p==null || p.isNull()
-					? new DefDouble(-1) : new DefDouble(p.durationValue().getFraction());
+				return p==null||p.isNull()? new DefDouble(-1): new DefDouble(p.durationValue().getFraction());
 			case DURATION_GETSTART:
 				return p==null || p.isNull() ? new DefDate() : new DefDate(p.durationValue().getStart());
 			case DURATION_GETEND:
@@ -350,9 +345,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case GET_MILLIS: return new DefLong(p.datetimeValue().getMillisecond());//Get millisecond
 			case GET_NANOS: return new DefLong(p.datetimeValue().getNanos());
 			case GET_FRACTIONSECOND: return new DefDouble(p.datetimeValue().getFraction());
-			case GET_EASTERMONDAY:
-				return new DefDate(p.getItemId() == XD_DATETIME
-					? p.datetimeValue().getEasterMonday() : SDatetime.getEasterMonday(p.intValue()));
 			case GET_LASTDAYOFMONTH: return new DefLong(SDatetime.getLastDayOfMonth(p.datetimeValue()));
 			case GET_DAYTIMEMILLIS: return new DefLong(p.datetimeValue().getDaytimeInMillis());
 			case GET_ZONEOFFSET: return new DefLong(p.datetimeValue().getTimeZoneOffset());//zone shift to GMT
@@ -361,9 +353,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				TimeZone tz;
 				return d == null || (tz = d.getTZ()) == null ? new DefString() : new DefString(tz.getID());
 			}
-			case IS_LEAPYEAR: //check leap year.
-				return new DefBoolean(SDatetime.isLeapYear(
-					p.getItemId() == XD_LONG ? p.intValue() : p.datetimeValue().getYear()));
 			case LOWERCASE: { //set to lower case
 				String s = p.stringValue();
 				return s != null ? new DefString(s.toLowerCase()) : p;
@@ -418,8 +407,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			//Element
 			case ELEMENT_ADDELEMENT: { // Add element to element as child
 				Element el1 = p1.getElement();
-				el1.appendChild(
-					el1.getOwnerDocument().importNode(p2.getElement(), true));
+				el1.appendChild(el1.getOwnerDocument().importNode(p2.getElement(), true));
 				return;
 			}
 			case ELEMENT_ADDTEXT: { // Add text to element as child
@@ -1082,17 +1070,17 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					stack[sp] = new XDGPSPosition(new GPSPosition(latitude, longitude, altitude, name));
 				} catch (Exception ex) {
 					 cp.putError(chkNode, XDEF.XDEF222, //Incorrect GPS position &amp;{0}
-						latitude+","+longitude+","+altitude+","+name);
+						latitude + "," + longitude + "," + altitude + "," + name);
 					stack[sp] = DefNull.genNullValue(XD_GPSPOSITION);
 				}
 				return sp;
 			}
-			case NEW_CURRAMOOUNT: {
+			case NEW_CURRENCY: {
 				try {
 					stack[sp-1] = new XDPrice(new Price(stack[sp-1].decimalValue(), stack[sp].stringValue()));
 				} catch (SRuntimeException ex) {
 					cp.putError(chkNode, XDEF.XDEF575, //"Invalid currency code: "{0}"
-						stack[sp-1].toString() + " " + stack[sp].stringValue());
+						stack[sp-1] + " " + stack[sp].stringValue());
 					stack[sp-1] = DefNull.genNullValue(XD_PRICE);
 				}
 				return --sp;

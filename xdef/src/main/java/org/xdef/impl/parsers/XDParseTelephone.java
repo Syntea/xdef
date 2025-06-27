@@ -7,7 +7,7 @@ import org.xdef.impl.code.DefTelephone;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parser of Xscript "telephone" type.
+/** Parser of X-script "telephone" type.
  * @author Vaclav Trojan
  */
 public class XDParseTelephone extends XDParserAbstract {
@@ -32,8 +32,10 @@ public class XDParseTelephone extends XDParserAbstract {
 			p.setParsedValue(new DefTelephone(parsedValue));
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_TELEPHONE;}
 }

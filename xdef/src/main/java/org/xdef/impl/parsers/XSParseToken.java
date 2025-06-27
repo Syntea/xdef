@@ -36,6 +36,7 @@ public class XSParseToken extends XSAbstractParseToken {
 		p.setParsedValue(s);
 		checkItem(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

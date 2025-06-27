@@ -211,7 +211,6 @@ import static org.xdef.impl.code.CodeTable.GET_DAYTIMEMILLIS;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY_ITEM;
 import static org.xdef.impl.code.CodeTable.GET_DEFAULTZONE;
-import static org.xdef.impl.code.CodeTable.GET_EASTERMONDAY;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_LOCALNAME;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_NAME;
@@ -238,8 +237,6 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_ERROR;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
-import static org.xdef.impl.code.CodeTable.GET_QNLOCALPART;
-import static org.xdef.impl.code.CodeTable.GET_QNPREFIX;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_END;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_NUM;
@@ -284,7 +281,6 @@ import static org.xdef.impl.code.CodeTable.IS_DATETIME;
 import static org.xdef.impl.code.CodeTable.IS_EMPTY;
 import static org.xdef.impl.code.CodeTable.IS_FLOAT;
 import static org.xdef.impl.code.CodeTable.IS_INT;
-import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
 import static org.xdef.impl.code.CodeTable.IS_NUM;
 import static org.xdef.impl.code.CodeTable.JMPEQ;
 import static org.xdef.impl.code.CodeTable.JMPF_OP;
@@ -350,7 +346,7 @@ import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.PARSE_XML;
 import static org.xdef.impl.code.CodeTable.POP_OP;
 import static org.xdef.impl.code.CodeTable.PRICE_AMOUNT;
-import static org.xdef.impl.code.CodeTable.PRICE_CURRENCY_CODE;
+import static org.xdef.impl.code.CodeTable.PRICE_CURRENCY;
 import static org.xdef.impl.code.CodeTable.PRICE_DISPLAY;
 import static org.xdef.impl.code.CodeTable.PRICE_FRACTDIGITS;
 import static org.xdef.impl.code.CodeTable.PRINTF_STREAM;
@@ -502,6 +498,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonTools;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -529,7 +526,7 @@ public final class XCodeProcessor {
 	private Properties _props;
 	/** Switch to debug mode. */
 	private boolean _debug = false; //debug switch
-	/** Xdefinition from which processor was created. */
+	/** X-definition from which processor was created. */
 	private XDefinition _xd;
 	/** Global variables:<p>
 	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn, 3 $IDParser$, 4 $IDuniqueSet$</p>
@@ -558,7 +555,7 @@ public final class XCodeProcessor {
 	final XPathVariableResolver _variableResolver = new XDVariableResolver();
 
 	/** Creates a new instance of ScriptCodeProcessor
-	 * @param xd XDefinition.
+	 * @param xd X-definition.
 	 * @param r reporter for error messages.
 	 * @param stdOut standard output stream (if null then java.lang.System.out).
 	 * @param stdIn standard input stream (if null then java.lang.System.in).
@@ -571,7 +568,7 @@ public final class XCodeProcessor {
 
 	/** Creates new instance of ScriptCodeProcessor. This constructor is called
 	 * only internally from ChkComposer.
-	 * @param xd XDefinition.
+	 * @param xd X-definition.
 	 * @param ce ChkElement from which the object is created.
 	 */
 	XCodeProcessor(final XDefinition xd, final ChkElement ce) {
@@ -588,7 +585,7 @@ public final class XCodeProcessor {
 		_initialized2 = true;
 	}
 
-	/** Get root XDefinition. */
+	/** Get root X-definition. */
 	final XDefinition getXDefinition() {return _xd;}
 
 	/** Set properties.
@@ -604,8 +601,8 @@ public final class XCodeProcessor {
 		}
 	}
 
-	/** Set Xdefinition property to SManager. If properties are null the new properties  will be created.
-	 * @param key name of Xdefinition property.
+	/** Set X-definition property to SManager. If properties are null the new properties  will be created.
+	 * @param key name of X-definition property.
 	 * @param value value of property or null. If the value is null the property is removed from properties.
 	 */
 	public final void setProperty(final String key, final String value) {
@@ -1000,7 +997,7 @@ public final class XCodeProcessor {
 				if (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP) {
 					step= _debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
 					if (step == XDDebug.KILL) {
-						throw new SError(XDEF.XDEF906); //Xdefinition canceled
+						throw new SError(XDEF.XDEF906); //X-definition canceled
 					}
 				}
 			}
@@ -1288,7 +1285,7 @@ public final class XCodeProcessor {
 						_catchItem = _catchItem.getPrevItem();
 						continue;
 					}
-					//Xdefinition script exception, PC=&{0}&{1}{; }
+					//X-definition script exception, PC=&{0}&{1}{; }
 					Report rep = Report.error(XDEF.XDEF905, pc - 1, ((XDException) _stack[sp--]).toString());
 					updateReport(rep, chkEl);
 					throw new XXException(rep);
@@ -1350,11 +1347,11 @@ public final class XCodeProcessor {
 					}
 					_stack[sp] = new DefDecimal(((XDPrice)_stack[sp]).amount());
 					continue;
-				case PRICE_CURRENCY_CODE:
+				case PRICE_CURRENCY:
 					if (_stack[sp].isNull()) {
 						throwInfo(chkEl, XDEF.XDEF573, "Price"); //Null value of &{0}
 					}
-					_stack[sp] = new DefString(((XDPrice) _stack[sp]).currencyCode());
+					_stack[sp] = ((XDPrice) _stack[sp]).currency();
 					continue;
 				case PRICE_FRACTDIGITS:
 					if (_stack[sp].isNull()) {
@@ -2228,18 +2225,6 @@ public final class XCodeProcessor {
 					_stack[++sp] = new DefString(tz == null ? null : tz.getID());
 					continue;
 				}
-				case GET_QNPREFIX: { //getQnamePrefix()
-					String s = _stack[sp].toString();
-					int ndx = s.indexOf(':');
-					_stack[sp] = new DefString(ndx > 0 ? s.substring(0, ndx) : "");
-					continue;
-				}
-				case GET_QNLOCALPART: {//getQnameLocalpart
-					String s = _stack[sp].toString();
-					int ndx = s.indexOf(':');
-					_stack[sp] = new DefString(ndx > 0 ? s.substring(ndx + 1) : s);
-					continue;
-				}
 				case CONTEXT_GETELEMENTS: //getElements(container)
 					if (item.getParam() == 2) {
 						_stack[--sp] = ((XDContainer) _stack[sp]).getXDElements(_stack[sp+1].stringValue());
@@ -2581,7 +2566,7 @@ public final class XCodeProcessor {
 						if (i > 0) {
 							xdef = _xd.getXDPool().getXMDefinition(rootName.substring(0,i));
 							if (xdef == null) {
-								chkEl.fatal(XDEF.XDEF530, rootName); //Missing Xdefinition &{0}
+								chkEl.fatal(XDEF.XDEF530, rootName); //Missing X-definition &{0}
 								_stack[sp] = new DefElement(chkEl.getElemValue());
 								chkEl._sourceElem = oldContext;
 								continue;
@@ -2699,7 +2684,7 @@ public final class XCodeProcessor {
 						if (ndx > 0) {
 							xdef = _xd.getXDPool().getXMDefinition(s.substring(0,ndx));
 							if (xdef == null) {
-								chkEl.fatal(XDEF.XDEF530, s); //Missing Xdefinition &{0}
+								chkEl.fatal(XDEF.XDEF530, s); //Missing X-definition &{0}
 								_stack[sp] = new DefElement(chkEl.getElemValue());
 								continue;
 							}
@@ -2710,7 +2695,7 @@ public final class XCodeProcessor {
 					} else {
 						xdef = _xd;
 					}
-					//parse element with Xdefinition
+					//parse element with X-definition
 					ChkDocument x = (ChkDocument) ("*".equals(s)
 						? xdef.getXDPool().createXDDocument() : xdef.getXDPool().createXDDocument(s));
 					//set our global variables to parser!!!
@@ -2817,25 +2802,72 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case BNF_PARSE: {
-					String s = item.getParam() == 2 ? chkEl.getTextValue() : _stack[sp--].toString();
+					String s;
+					boolean quoted = false;
+					if (item.getParam() == 2) {
+						s = chkEl.getTextValue();
+						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
+							&& s.startsWith("\"") && s.endsWith("\"")) {
+							StringParser p = new StringParser(s);
+							p.setIndex(1);
+							s = XonTools.readJString(p);
+							quoted = true;
+						}
+					} else {
+						s = _stack[sp--].toString();
+					}
 					String ruleName = _stack[sp--].stringValue();
 					DefBNFRule r = ((DefBNFGrammar) _stack[sp]).getRule(ruleName);
+					DefParseResult result;
 					if (r.ruleValue() == null) {
-						DefParseResult pr = new DefParseResult(s);
-						pr.error(XDEF.XDEF567, ruleName); //Script error: BNF rule '&{0}' not exists
-						_stack[sp] = pr;
+						result = new DefParseResult(s);
+						result.error(XDEF.XDEF567, ruleName); //Script error: BNF rule '&{0}' not exists
 					} else {
-						_stack[sp] = r.perform(s);
+						result =  r.perform(s);
+						if (quoted) {
+							result.setParsedValue(chkEl.getTextValue());
+							result.setEos();
+						}
 					}
+					_stack[sp] = result;
 					continue;
 				}
 				case BNFRULE_PARSE: {
-					String s = item.getParam() == 1 ? chkEl.getTextValue() : _stack[sp--].toString();
-					_stack[sp] = ((DefBNFRule) _stack[sp]).perform(s);
+					String s;
+					boolean quoted = false;
+					if (item.getParam() == 1) {
+						s = chkEl.getTextValue();
+						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
+							&& s.startsWith("\"") && s.endsWith("\"")) {
+							StringParser p = new StringParser(s);
+							p.setIndex(1);
+							s = XonTools.readJString(p);
+							quoted = true;
+						}
+					} else {
+						s = _stack[sp--].toString();
+					}
+					DefParseResult result = ((DefBNFRule) _stack[sp]).perform(s);
+					if (result.matches() && quoted) {
+						result.setParsedValue(chkEl.getTextValue());
+						result.setEos();
+					}
+					_stack[sp] = result;
 					continue;
 				}
 				case BNFRULE_VALIDATE: {
-					String s = item.getParam() == 1 ? chkEl.getTextValue() : _stack[sp--].toString();
+					String s;
+					if (item.getParam() == 1) {
+						s = chkEl.getTextValue();
+						if (chkEl != null && chkEl.getXonMode() > 0 && s!= null && s.length() > 1
+							&& s.startsWith("\"") && s.endsWith("\"")) {
+							StringParser p = new StringParser(s);
+							p.setIndex(1);
+							s = XonTools.readJString(p);
+						}
+					} else {
+						s = _stack[sp--].toString();
+					}
 					_stack[sp] = new DefBoolean(((DefBNFRule) _stack[sp]).perform(s).matches());
 					continue;
 				}
@@ -2916,14 +2948,12 @@ public final class XCodeProcessor {
 				}
 				case GET_PARSED_VALUE: {//get result of parsed value
 					XDParseResult pr = item.getParam()==1 ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
-					_stack[++sp] = null == pr ? new DefParseResult() : pr.getParsedValue();
+					_stack[++sp] = null == pr ? new DefNull() : pr.getParsedValue();
 					continue;
 				}
-				case GET_PARSED_RESULT: {//get parsed ewsult
-					XDParseResult pr = item.getParam()==1 ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
-					_stack[++sp] = pr;
+				case GET_PARSED_RESULT: //get parsed result
+					_stack[++sp] = chkEl._parseResult == null ? new DefParseResult() : chkEl._parseResult;
 					continue;
-				}
 				case SET_NAMEDVALUE:
 					if (item.getParam() == 2) {
 						XDValue v = _stack[sp--];
@@ -2936,7 +2966,7 @@ public final class XCodeProcessor {
 							x = (XDNamedValue) v;
 						}
 						((XDContainer)_stack[sp--]).setXDNamedItem(x);
-					} else {//3
+					} else {// item.getParam() == 3
 						XDValue val = _stack[sp--];
 						String key = _stack[sp--].stringValue();
 						((XDContainer)_stack[sp--]).setXDNamedItem(key, val);
@@ -3080,12 +3110,10 @@ public final class XCodeProcessor {
 				case GET_MILLIS:
 				case GET_NANOS:
 				case GET_FRACTIONSECOND:
-				case GET_EASTERMONDAY:
 				case GET_LASTDAYOFMONTH:
 				case GET_DAYTIMEMILLIS:
 				case GET_ZONEOFFSET:
 				case GET_ZONEID:
-				case IS_LEAPYEAR:
 			//String
 				case LOWERCASE:
 				case UPPERCASE:
@@ -3354,7 +3382,7 @@ public final class XCodeProcessor {
 	public final Object getUserObject(final String id) {return _userObjects.get(id);}
 
 	/** This method is revoked if an exception is thrown when Xscript
-	 * is processed and process Xdefinition is to be finished with fatal error.
+	 * is processed and process X-definition is to be finished with fatal error.
 	 * @param pc program counter.
 	 * @param sp stack pointer.
 	 * @param ex exception.
@@ -3417,13 +3445,13 @@ public final class XCodeProcessor {
 
 	public class XDFunctionResolver implements XPathFunctionResolver {
 		@Override
-		//TODO
-		public XPathFunction resolveFunction(final QName functionName, final int arity) { return null;}
+		public XPathFunction resolveFunction(final QName functionName, final int arity) { return null;} //TODO
 	}
 
 	public class XDVariableResolver implements XPathVariableResolver {
 		public final boolean XPATH2 = DefXPathExpr.isXPath2();
 		public boolean convertToString;
+
 		@Override
 		public Object resolveVariable(final QName qname) {
 			String name = qname.toString();
@@ -3529,18 +3557,23 @@ public final class XCodeProcessor {
 		////////////////////////////////////////////////////////////////////////
 		// XDValue methods
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public final short getItemId() {return XD_ANY;}
+
 		@Override
 		public final XDValueType getItemType() {return OBJECT;}
 
 		////////////////////////////////////////////////////////////////////////
 		// XDCallItem methods
 		////////////////////////////////////////////////////////////////////////
+
 		@Override
 		public final XDCallItem getParentCallItem() {return _parent;}
+
 		@Override
 		public final int getDebugMode() {return _step;}
+
 		@Override
 		public final int getReturnAddr() {return _returnAddr;}
 	}

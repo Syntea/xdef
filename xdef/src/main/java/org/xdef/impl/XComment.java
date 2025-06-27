@@ -18,11 +18,10 @@ public final class XComment extends XData implements XMNode {
 		setOccurrence(REQUIRED, Integer.MAX_VALUE); //???unlimited
 	}
 
-	@Override
 	/** Write this XComment to XDWriter. */
+	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
-		 //TODO!
-		writeXCodeDescriptor(xw);
+		writeXCodeDescriptor(xw); //TODO!
 	}
 
 	final static XComment readXComment(final XDReader xr, final XDefinition xd) throws IOException {

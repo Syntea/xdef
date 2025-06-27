@@ -46,7 +46,7 @@ import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
-/** Implementation of the XDPool containing the set of Xdefinitions.
+/** Implementation of the XDPool containing the set of X-definitions.
  * @author Vaclav Trojan
  */
 public final class XPool implements XDPool, Serializable {
@@ -57,7 +57,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool (e.g. 4.0.001.005). */
-	private static final String XD_MIN_VERSION = "4.2.002.019";
+	private static final String XD_MIN_VERSION = "4.2.002.026";
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
@@ -68,7 +68,7 @@ public final class XPool implements XDPool, Serializable {
 	private byte _debugMode;
 	/** Class name of debug editor.*/
 	private String _debugEditor;
-	/** Class name of Xdefinition editor.*/
+	/** Class name of X-definition editor.*/
 	private String _xdefEditor;
 	/** DisplayMode.*/
 	private byte _displayMode;
@@ -151,8 +151,7 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE, XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
 			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
 		//showErrors display mode
-		_displayMode = (byte) readProperty(_props,
-			XDConstants.XDPROPERTY_DISPLAY,
+		_displayMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DISPLAY,
 			new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE,
 				XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS, XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
@@ -168,14 +167,12 @@ public final class XPool implements XDPool, Serializable {
 				XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0; //default is true
 		//ignore undefined external objects
-		_ignoreUnresolvedExternals = readProperty(_props,
-			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+		_ignoreUnresolvedExternals = readProperty(_props, XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			new String[] {XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE,
 				XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE},
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE) == 0;
 		// generate detailed location information in XML parser
-		_locationdetails =  readProperty(_props,
-			XDConstants.XDPROPERTY_LOCATIONDETAILS,
+		_locationdetails =  readProperty(_props, XDConstants.XDPROPERTY_LOCATIONDETAILS,
 			new String[] {XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE,
 				XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE},
 			XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_FALSE) == 0;
@@ -298,10 +295,10 @@ public final class XPool implements XDPool, Serializable {
 		return 0; // default value
 	}
 
-	/** Add source data of Xdefinition or collection. If the argument starts with "&lt;" character then it is
-	 * interpreted as source Xdefinition data, otherwise it can be the pathname of the file or URL. If it is
+	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then it is
+	 * interpreted as source X-definition data, otherwise it can be the pathname of the file or URL. If it is
 	 * a pathname format then it may contain also wildcard characters representing a group of files.
-	 * @param source The string with source Xdefinition.
+	 * @param source The string with source X-definition.
 	 * @param sourceId name of source source data corresponding to the argument source used in reporting.
 	 * @throws RuntimeException if source is missing or if an error occurs.
 	 */
@@ -324,7 +321,7 @@ public final class XPool implements XDPool, Serializable {
 						src = source.substring(1);
 						sid = source.substring(1, source.length()-2) + "def";
 					}
-					if (src != null) { // Generate a Xdefinition from XML
+					if (src != null) { // Generate a X-definition from XML
 						src = KXmlUtils.nodeToString(
 							GenXDef.genXdef(KXmlUtils.parseXml(src).getDocumentElement()), true);
 						setSource(src, sid);
@@ -337,7 +334,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 		String s = sourceId;
 		if (source == null || source.isEmpty()) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903, sourceId);
 			return;
 		}
@@ -357,7 +354,7 @@ public final class XPool implements XDPool, Serializable {
 				File[] files = SUtils.getFileGroup(source);
 				if (files == null || files.length == 0) {
 					_sourceInfo.getMap().put(source, new XDSourceItem(source));
-					//Xdefinition source is missing or incorrect&{0}{: }
+					//X-definition source is missing or incorrect&{0}{: }
 					_compiler.getReportWriter().error(XDEF.XDEF903, source);
 					return;
 				}
@@ -378,7 +375,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add source data of Xdefinitions or collections. If an item starts with "&lt;" character then
+	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then
 	 * it is interpreted as source data, otherwise it can be the pathname of the file or URL. If it
 	 * is a pathname format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
@@ -388,7 +385,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final String[] sources, final String[] sourceIds) {
 		if (sources == null || sources.length == 0) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -397,12 +394,12 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add file with source data of Xdefinition or collection.
+	/** Add file with source data of X-definition or collection.
 	 * @param source The file with source.
 	 */
 	final void setSource(final File source) {
 		if (source == null) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -423,12 +420,12 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add files with source data of  Xdefinitions or collections.
+	/** Add files with source data of  X-definitions or collections.
 	 * @param sources array of files with sources.
 	 */
 	final void setSource(final File[] sources) {
 		if (sources == null || sources.length == 0) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -437,12 +434,12 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add URL with source data of Xdefinition or collection.
+	/** Add URL with source data of X-definition or collection.
 	 * @param source The URL with source.
 	 */
 	final void setSource(final URL source) {
 		if (source == null) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -459,12 +456,12 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add URLs with source data of Xdefinitions or collections.
+	/** Add URLs with source data of X-definitions or collections.
 	 * @param sources array of URLs with sources.
 	 */
 	final void setSource(final URL[] sources) {
 		if (sources == null || sources.length == 0) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -473,7 +470,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add input stream with source data of a Xdefinition or collection.
+	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
 	 * @param sourceId name of source source data corresponding to the stream (may be null).
 	 */
@@ -483,7 +480,7 @@ public final class XPool implements XDPool, Serializable {
 			s = "Stream_" + (++_streamItem);
 		}
 		if (source == null) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903, s);
 			return;
 		}
@@ -501,13 +498,13 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add input streams with sources data of Xdefinitions or collections.
+	/** Add input streams with sources data of X-definitions or collections.
 	 * @param sources array of input streams with sources.
 	 * @param sourceIds array of names of source source data corresponding to streams (may be null).
 	 */
 	final void setSource(final InputStream sources[], final String sourceIds[]) {
 		if (sources == null || sources.length == 0) {
-			//Xdefinition source is missing or incorrect&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -642,7 +639,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param localVariablesMaxSize the maximum size of local variables table.
 	 * @param stackMaxSize the maximum size of stack.
 	 * @param init the starting point of init action for the code.
-	 * @param xdVersion version ID of Xdefinition.
+	 * @param xdVersion version ID of X-definition.
 	 * @param lexicon XDLexicon or null.
 	 */
 	public final void setCode(final List<XDValue> code,
@@ -712,7 +709,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	public final XDValue[] getCode() {return _code;}
 
-	/** Get Xdefinition version ID.
+	/** Get X-definition version ID.
 	 * @param ver string with version.
 	 * @return XDVersionID as a long integer or -1 if version is incorrect.
 	 */
@@ -739,42 +736,46 @@ public final class XPool implements XDPool, Serializable {
 // Interface XDPool
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get version information.
 	 * @return version information.
 	 */
-	public final String getVersionInfo() {return XD_VERSION;}
 	@Override
+	public final String getVersionInfo() {return XD_VERSION;}
+
 	/** Check compatibility of this instance of XDPool with given version.
 	 * @param version the version to be checked.
 	 * @return true if this instance of XDPool is compatible with given version. Otherwise return false.
 	 */
+	@Override
 	public final boolean chkCompatibility(final String version) {
 		return getXDVersionID(version) >= getXDVersionID(XD_MIN_VERSION);
 	}
-	@Override
+
 	/** Get array with all XMDefinitions from this XDPool.
 	 * @return array with all XMDefinitions from this XDPool.
 	 */
+	@Override
 	public final XMDefinition[] getXMDefinitions() {
 		XMDefinition[] result = new XMDefinition[_xdefs.size()];
 		_xdefs.values().toArray(result);
 		return result;
 	}
-	@Override
-	/** Get array with all Xdefinitions from this XDPool.
-	 * @return array with all Xdefinitions from this XDPool.
+
+	/** Get array with all X-definitions from this XDPool.
+	 * @return array with all X-definitions from this XDPool.
 	 */
+	@Override
 	public final String[] getXMDefinitionNames() {
 		String[] result = new String[_xdefs.size()];
 		_xdefs.keySet().toArray(result);
 		return result;
 	}
-	@Override
+
 	/** Find XModel in XDPool.
 	 * @param xdpos position of XModel in XDPool.
 	 * @return XMNode representing model or null if model was nod found.
 	 */
+	@Override
 	public final XMNode findModel(final String xdpos) {
 		if (xdpos == null) {
 			return null;
@@ -788,7 +789,7 @@ public final class XPool implements XDPool, Serializable {
 			if (xdpos.indexOf('/') < 0) {
 				xdName = xdpos; path = ""; // just XDef name
 			} else {
-				xdName = ""; path = xdpos; // nameless Xdefinition and path
+				xdName = ""; path = xdpos; // nameless X-definition and path
 			}
 		}
 		XDefinition xd = _xdefs.get(xdName);
@@ -821,7 +822,7 @@ public final class XPool implements XDPool, Serializable {
 		if (s.endsWith("[1]")) {
 			s = s.substring(0, s.length() - 3).trim();
 		}
-		//search models of Xdefinition
+		//search models of X-definition
 		for (XMElement xe: xd.getModels()) {
 			if (ndx < 0 && xe.getXonMode()>0 && s.indexOf(':')<0 && s.equals(xe.getQName().getLocalPart())) {
 				return xe;
@@ -859,50 +860,58 @@ public final class XPool implements XDPool, Serializable {
 		return (ndx < 0 || xe == null) ? xe : findXMNode(xe, path.substring(ndx+1), 0, -1);
 	}
 
-	/** Get nameless Xdefinition from this XDPool.
-	 * @return nameless Xdefinition from this XDPool.
+	/** Get nameless X-definition from this XDPool.
+	 * @return nameless X-definition from this XDPool.
 	 */
 	@Override
 	public final XMDefinition getXMDefinition() {
 		return _xdefs.size() == 1 ? _xdefs.values().iterator().next() : _xdefs.get("");
 	}
-	/** Get Xdefinition from this XDPool.
-	 * @param name the name of Xdefinition.
-	 * @return specified Xdefinition from this XDPool.
+
+	/** Get X-definition from this XDPool.
+	 * @param name the name of X-definition.
+	 * @return specified X-definition from this XDPool.
 	 */
 	@Override
 	public final XMDefinition getXMDefinition(final String name) {return _xdefs.get(name);}
+
 	/** Check if debug mode is set on.
 	 * @return value of debug mode.
 	 */
 	@Override
 	public final boolean isDebugMode() {return _debugMode > 0;}
+
 	/** Get display mode.
 	 * @return display mode.
 	 */
 	@Override
 	public final byte getDisplayMode(){return _displayMode;}
+
 	/** Check if unresolved externals will be ignored.
 	 * @return true if unresolved externals will be ignored.
 	 */
 	@Override
 	public final boolean isIgnoreUnresolvedExternals() {return _ignoreUnresolvedExternals;}
-	/** Check if exists the Xdefinition of given name.
-	 * @param name the name of Xdefinition (or <i>null</i>) if noname Xdefinition is checked.
-	 * @return true if and only if the Xdefinition of given name exists in the XDPool.
+
+	/** Check if exists the X-definition of given name.
+	 * @param name the name of X-definition (or <i>null</i>) if noname X-definition is checked.
+	 * @return true if and only if the X-definition of given name exists in the XDPool.
 	 */
 	@Override
 	public final boolean exists(final String name) {return _xdefs.containsKey(name == null ? "" : name);}
+
 	/** Get table of global variables.
 	 * @return table of global variables.
 	 */
 	@Override
 	public final XMVariableTable getVariableTable() {return _variables;}
+
 	/** Print code to PrintStream.
 	 * @param out stream where code is printed.
 	 */
 	@Override
 	public final void displayCode(final PrintStream out) {CodeDisplay.displayCode(_code, out);}
+
 	/** Print code from XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
@@ -915,34 +924,41 @@ public final class XPool implements XDPool, Serializable {
 			CodeDisplay.displayDefNode(((XDefinition) getXMDefinition(x)), out, processed);
 		}
 	}
+
 	/** Display XDPool on System.out. */
 	@Override
 	public final void display() {display(System.out);}
+
 	/** Display code of XDPool on System.out. */
 	@Override
 	public final void displayCode() {displayCode(System.out);}
+
 	/** Display debugging information of XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
 	@Override
 	public final void displayDebugInfo(final PrintStream out) {CodeDisplay.displayDebugInfo(this, out);}
+
 	/** Display debugging information of XDPool on System.out. */
 	@Override
 	public final void displayDebugInfo() {displayDebugInfo(System.out);}
+
 	/** Get properties from XDPool.
 	 * @return properties from XDPool.
 	 */
 	@Override
 	public final Properties getProperties() {return _props;}
-	/** Create new XDDocument with default Xdefinition.
+
+	/** Create new XDDocument with default X-definition.
 	 * @return the XDDocument object.
 	 */
 	@Override
 	public final XDDocument createXDDocument() {return new ChkDocument((XDefinition) getXMDefinition());}
+
 	/** Create new XDDocument.
-	 * @param id Identifier of Xdefinition (or <i>null</i>).
+	 * @param id Identifier of X-definition (or <i>null</i>).
 	 * @return the XDDocument object.
-	 * @throws SRuntimeException if Xdefinition doesn't exist.
+	 * @throws SRuntimeException if X-definition doesn't exist.
 	 */
 	@Override
 	public final XDDocument createXDDocument(final String id) {
@@ -953,7 +969,7 @@ public final class XPool implements XDPool, Serializable {
 		if (ndx < 0) {
 			XDefinition xd = (XDefinition) getXMDefinition(id);
 			if (xd == null) {
-				throw new SRuntimeException(XDEF.XDEF602, id);//The Xdefinition&{0}{ '}{'} is missing
+				throw new SRuntimeException(XDEF.XDEF602, id);//The X-definition&{0}{ '}{'} is missing
 			}
 			return new ChkDocument((XDefinition) getXMDefinition(id));
 		} else {
@@ -964,97 +980,120 @@ public final class XPool implements XDPool, Serializable {
 			throw new SRuntimeException(XDEF.XDEF603, id); //'&{0' doesn't point to model of element
 		}
 	}
+
 	/** Get debug information or null.
 	 * @return debug information object.
 	 */
 	@Override
 	public final XMDebugInfo getDebugInfo() {return _debugInfo;}
+
 	/** Get switch if the parser allows XML XInclude.
 	 * @return true if the parser allows XInclude.
 	 */
 	@Override
 	public final boolean isResolveIncludes() {return _resolveIncludes;}
+
 	/** Get the switch if XML parser will generate detailed location reports.
 	 * @return the location details switch.
 	 */
 	@Override
 	public final boolean isLocationsdetails() {return _locationdetails;}
+
 	/** Get switch if the parser do not allow DOCTYPE.
 	 * @return true if the parser do not allow DOCTYPE or return false if DOCTYPE is processed.
 	 */
 	@Override
 	final public boolean isIllegalDoctype() {return _illegalDoctype;}
+
 	/** Get switch if the parser will check warnings as errors.
 	 * @return true if the parser checks warnings as errors.
 	 */
 	@Override
 	final public boolean isChkWarnings() {return _chkWarnings;}
+
 	/** Get switch if the actullal reporter is cleared in the executed code of sections
 	 * 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'. Default value is 'true'.
 	 * @return true if reporter will be cleared.
 	 */
 	@Override
 	final public boolean isClearReports() {return _clearReports;}
+
 	/** Get list of XComponents.
 	 * @return list of XComponents.
 	 */
 	@Override
 	public final Map<String, String> getXComponents() {return _components;}
+
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
 	 */
 	public final void setXComponents(Map<String, String> p) {_components = p;}
+
 	/** Get list of XComponent binds.
 	 * @return list of XComponent binds.
 	 */
 	@Override
 	public final Map<String, String> getXComponentBinds() {return _binds;}
+
 	/** Get list of XComponent enumerations.
 	 * @return list of XComponent enumerations.
 	 */
 	@Override
 	public final Map<String, String> getXComponentEnums() {return _enums;}
+
 	/** Get default TimeZone.
 	 * @return default TimeZone.
 	 */
 	@Override
 	public final TimeZone getDefaultZone() {return _defaultZone;}
+
 	/** Get minimum valid year of date.
 	 * @return minimum valid year (Integer.MIN if not set).
 	 */
 	@Override
 	public final int getMinYear() {return _minYear;}
+
 	/** Get maximum valid year of date (or Integer.MIN if not set).
 	 * @return maximum valid year (Integer.MIN if not set).
 	 */
 	@Override
 	public final int getMaxYear()  {return _maxYear;}
+
 	/** Get array of dates to be accepted out of interval minYear..maxYear.
 	 * @return array with special values of valid dates.
 	 */
 	@Override
 	public final SDatetime[] getSpecialDates() {return _specialDates;}
-	/** Get the object with the map of source items of compiled Xdefinitions and with editing information.
-	 * @return object with the map of source items of compiled Xdefinitions
+
+	/** Get the object with the map of source items of compiled X-definitions and with editing information.
+	 * @return object with the map of source items of compiled X-definitions
 	 * and with editing information.
 	 */
 	@Override
+
 	/** Array wioth charsets used for values of parsed strings.
 	 * @return Array wioth Charset objects or null.
 	 */
 	public Charset[] getLegalStringCharsets() {return _charsets;}
+
+	/** Get the object with the map of source items of compiled X-definitions and with editing information.
+	 * @return object with the map of source items of compiled X-definitions and with editing information.
+	 */
 	@Override
 	public XDSourceInfo getXDSourceInfo() {return _sourceInfo;}
+
 	/** Get debug editor class name.
 	 * @return debug editor class name (if null. the default debug editor will be used).
 	 */
 	@Override
 	public final String getDebugEditor() {return _debugEditor;}
-	/** Get class name of the editor of Xdefinition.
-	 * @return class name of the editor of Xdefinition which will be used).
+
+	/** Get class name of the editor of X-definition.
+	 * @return class name of the editor of X-definition which will be used).
 	 */
 	@Override
 	public final String getXdefEditor() {return _xdefEditor;}
+
 	/** Generate XComponent Java source classes from XDPool.
 	 * @param fdir directory where write the source code. The file names will be constructed from
 	 * %class statements as "className.java".
@@ -1186,7 +1225,7 @@ public final class XPool implements XDPool, Serializable {
 			xw.writeString(name);
 			((XDefinition) getXMDefinition(name)).writeXNode(xw, list);
 		}
-		//we must write root selections after Xdefinitions are processed!
+		//we must write root selections after X-definitions are processed!
 		for(String name: _xdefs.keySet()) {
 			xw.writeString(name);
 			XDefinition xd = (XDefinition) getXMDefinition(name);

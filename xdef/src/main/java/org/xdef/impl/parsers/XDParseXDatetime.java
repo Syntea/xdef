@@ -22,7 +22,7 @@ import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDValueID.XD_DATETIME;
 
-/** Parser of Xscript "xdatetime" type.
+/** Parser of X-script "xdatetime" type.
  * @author Vaclav Trojan
  */
 public class XDParseXDatetime extends XSAbstractParseComparable {
@@ -38,6 +38,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		_format = null;
 		_outFormat = null;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -103,14 +104,19 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 			throw new SException(XDEF.XDEF545, "format"); //Missing required parameter: &{0}
 		}
 	}
+
 	@Override
 	public void setFormat(final String x) {_format = x;}
+
 	@Override
 	public String getFormat() { return _format; }
+
 	@Override
 	public void setOutFormat(final String x) {_outFormat = x;}
+
 	@Override
 	public String getOutFormat() { return _outFormat; }
+
 	@Override
 	public void addNamedParams(final XDContainer map) {
 		if (_format != null) {
@@ -120,8 +126,10 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 			map.setXDNamedItem("outFormat", new DefString(_outFormat));
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_DATETIME;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

@@ -14,12 +14,12 @@ public final class XdGroup extends XdModel {
 	 */
 	private final int _type;
 
-	/** Creates instance of Xdefinition node group model.
+	/** Creates instance of X-definition node group model.
 	 *
 	 * @param def model Xdefiniton.
 	 * @param name group name.
 	 * @param type group type.
-	 * @throws NullPointerException if given model Xdefinition or group name is
+	 * @throws NullPointerException if given model X-definition or group name is
 	 * null.
 	 * @throws IllegalArgumentException if given group name is empty or given
 	 * group type is unknown.

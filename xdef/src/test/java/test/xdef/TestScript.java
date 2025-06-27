@@ -537,7 +537,7 @@ public final class TestScript extends XDTester {
 		test("1999-05-01T20:43:09+01:00", "setResult(eq(toString(parseDate('1999-05-01T20:43:09+01:00'))));");
 		test("1999-05-01", "setResult(eq(parseDate(getText(), 'yyyy-MM-dd').toString()));");
 		test("1999-04-05", "setResult(eq(easterMonday(1999).toString()));");
-		test("1999-04-05", "setResult(eq(parseDate(getText()).easterMonday().toString()));");
+		test("1999-04-05", "setResult(eq(easterMonday(parseDate(getText())).toString()));");
 		test("1999-04-05", "setResult(parseDate(getText()).lastDayOfMonth() == 30);");
 		test("Mon, 23 Jan 2006 20:26:46", "setResult(emailDate());");
 		test("Mon, 23 Jan 2006 20:26:46 +0100", "setResult(emailDate());");
@@ -582,7 +582,7 @@ public final class TestScript extends XDTester {
 		test("--0230", "{setResult(!gMonthDay());}");
 		setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
-		setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+		setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31,3000-12-31T00:00:01,3000-12-31T23:59:59");
 		test("1999", "{setResult(gYear());}");
 		test("1915", "{setResult(!gYear());}");
 		test("2217", "{setResult(!gYear());}");
@@ -594,7 +594,7 @@ public final class TestScript extends XDTester {
 		test("1999-13", "{setResult(!gYearMonth());}");
 		test("199913", "{setResult(!gYearMonth());}");
 		test("1999-12-31", "{setResult(date());}");
-		test("1999-12-31", "{setResult(date());}");
+		test("3000-12-31T00:00:00", "{setResult(!dateTime());}");
 		test("1999-12-31T12:31:59+01:00", "{setResult(dateTime());}");
 		test("1999-12-31T12:31:59Z", "{setResult(dateTime());}");
 		test("1999-12-31T12:31:59", "{setResult(dateTime());}");
@@ -603,7 +603,7 @@ public final class TestScript extends XDTester {
 		test("1999-12-31T12:31:59", "{setResult(dateTime());}");
 		test("2999-12-31T12:31:59+01:00", "{setResult(!dateTime());}");
 		test("3000-12-31T00:00:00", "{setResult(dateTime());}");
-		test("3000-12-31T00:00:01", "{setResult(!dateTime());}");
+		test("3000-12-31T00:00:01", "{setResult(dateTime());}");
 		test("01.03.1999", "{setResult(xdatetime('dd.MM.yyyy'));}");
 		test("01.03.1699", "{setResult(!xdatetime('dd.MM.yyyy'));}");
 		test("01.03.2999", "{setResult(!xdatetime('dd.MM.yyyy'));}");
@@ -1190,6 +1190,31 @@ public final class TestScript extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
+			setProperty(XDConstants.XDPROPERTY_MINYEAR, "1900");//min hodnota
+			setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2100");//max hodnota
+			setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31, 3000-12-31T23:59:59");
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\" >\n" +
+"  <A>\n" +
+"    <xd:mixed>\n" +
+"		<B xd:script='*' d=\"date()\" />\n" +
+"		<C xd:script='*' d=\"dateTime()\" />\n" +
+"    </xd:mixed>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+
+			xml =
+"<A>\n"+
+"  <B d='3000-12-31' />\n"+
+"  <C d='3000-12-31T00:00:00' />\n"+
+"  <C d='3000-12-31T23:59:59' />\n"+
+"  <C d='3000-12-31T23:59:58' />\n"+
+"</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			s = reporter.printToString();
+			assertTrue(reporter.getErrorCount() == 2 && s.contains("/A/C[1]/@d") && s.contains("/A/C[3]/@d"));
+			reporter.clear();
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 		resetTester();
 	}

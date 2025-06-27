@@ -49,7 +49,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
-/** Convertor of Xdefinition to XML Schema.
+/** Convertor of X-definition to XML Schema.
  * @author Vaclav Trojan, Anna Kchmascheva
  */
 public class Xd2Xsd {
@@ -77,7 +77,7 @@ public class Xd2Xsd {
 	private final Element _types;
 
 	/** Create new instance of XsdGenerator.
-	 * @param xp XDPool with Xdefinitions.
+	 * @param xp XDPool with X-definitions.
 	 * @param outName name base of XML schema names.
 	 * @param outType name of XML schema file with type declarations.
 	 * @param genInfo if true the annotations with documentation is generated.
@@ -104,7 +104,7 @@ public class Xd2Xsd {
 	}
 
 	/** Prepare XML schema element with declared types for XML schema file.
-	 * @param xp compiled pool with Xdefinitions.
+	 * @param xp compiled pool with X-definitions.
 	 * @return Element with XML schema with declared types or null.
 	 */
 	private Element genDeclaredTypes(final XDPool xp) {
@@ -391,7 +391,7 @@ public class Xd2Xsd {
 
 	/** Set occurrence restrictions to an element.
 	 * @param el Element where to set restrictions.
-	 * @param xel Xdefinition model of element.
+	 * @param xel X-definition model of element.
 	 */
 	private static void setOccurrence(final Element el, final XMNode xel) {
 		XMOccurrence occ = xel.getOccurence();
@@ -702,9 +702,9 @@ public class Xd2Xsd {
 		}
 	}
 
-	/** Create XML schema from Xdefinition model element.
+	/** Create XML schema from X-definition model element.
 	 * @param parent where add the model.
-	 * @param xel Xdefinition model of element.
+	 * @param xel X-definition model of element.
 	 * @return created XML schema.
 	 */
 	private Element genElem(final Element parent, final XMElement xel) {
@@ -1176,7 +1176,7 @@ public class Xd2Xsd {
 
 	/** Run XML schema generator.
 	 * @param xp compiled XDPool.
-	 * @param xdName name of root Xdefinition.
+	 * @param xdName name of root X-definition.
 	 * @param modelName name of the root model. May be null, then all values from "xs:root" parameter
 	 * are used to create models.
 	 * @param outName name of root XML schema file.
@@ -1197,7 +1197,7 @@ public class Xd2Xsd {
 		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
 		XMDefinition xdef = xp.getXMDefinition(xname);
 		if (xdef == null) {
-			throw new SRuntimeException(XDCONV.XDCONV201, xname); //Can't find an Xdefinition&{0}{ "}{"}
+			throw new SRuntimeException(XDCONV.XDCONV201, xname); //Can't find an X-definition&{0}{ "}{"}
 		}
 		String mname;
 		XMElement[] roots;

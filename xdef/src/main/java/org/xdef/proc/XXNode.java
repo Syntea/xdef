@@ -22,7 +22,7 @@ import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.sys.SRuntimeException;
 
-/** Interface of models in Xdefinition.
+/** Interface of models in X-definition.
 * @author Vaclav Trojan
  */
 public interface XXNode extends XDValue {
@@ -81,7 +81,7 @@ public interface XXNode extends XDValue {
 	 */
 	public String getXPos();
 
-	/** Get source position of this model in Xdefinition.
+	/** Get source position of this model in X-definition.
 	 * @return SPosition or null if position is not available.
 	 */
 	public SPosition getSPosition();
@@ -127,7 +127,7 @@ public interface XXNode extends XDValue {
 	public String getXDPosition();
 
 	/** Get XMDefinition.
-	 * @return Xdefinition of this document.
+	 * @return X-definition of this document.
 	 */
 	public XMDefinition getXMDefinition();
 
@@ -136,7 +136,7 @@ public interface XXNode extends XDValue {
 	 */
 	public String[] getVariableNames();
 
-	/** Get value of variable from Xdefinition.
+	/** Get value of variable from X-definition.
 	 * @param name name of variable.
 	 * @return XDValue object or null if variable with the name not exists.
 	 */
@@ -347,4 +347,9 @@ public interface XXNode extends XDValue {
 	 * @return actual value of default time zone.
 	 */
 	public TimeZone getDefaultZone();
+
+	/** Get XON result of processed document or element.
+	 * @return result of JSON/XON parsing or return null.
+	 */
+	public Object getXon();
 }

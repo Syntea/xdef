@@ -24,6 +24,7 @@ import org.xdef.proc.XXNode;
 import javax.xml.namespace.QName;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.xdef.XDConstants;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
 import org.xdef.sys.SDatetime;
@@ -2582,27 +2583,28 @@ final public class TestCompose extends XDTester {
 				}
 			}
 		}
+		reporter.clear();
 		try { //Test create mode with recursive reference.
 			xd =  compile( // create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X a=\"string()\">\n" +
 "      <X xd:script=\"0..; create from('X'); ref X\"/>\n" +
 "   </X>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd =  compile( // no create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X a=\"string()\">\n" +
 "      <X xd:script=\"0..; ref X\"/>\n" +
 "   </X>\n" +
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd = compile( // create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X xd:script=\"ref Y\"/>\n" +
 "   <Y a=\"string()\">\n" +
 "      <X xd:script=\"0..; create from('X'); ref Y\"/>\n" +
@@ -2610,9 +2612,20 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
+			xd = compile( // create section
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
+"   <X xd:script=\"ref Y\"/>\n" +
+"   <Y a=\"string()\">\n" +
+"      <Z xd:script=\"?\"/>\n" +
+"      <X xd:script=\"0..; create from('X'); ref Y\"/>\n" +
+"   </Y>\n" +
+"</xd:def>").createXDDocument();
+			xml = "<X a=\"a1\"><Z/><X a=\"a2\"><Z/></X><X a=\"a3\"/></X>";
+			xd.setXDContext(xml);
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd = compile( // no create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <X xd:script=\"ref Y\"/>\n" +
 "   <Y a=\"string()\">\n" +
 "      <X xd:script=\"0..; ref Y\"/>\n" +
@@ -2620,9 +2633,9 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<X a=\"a1\"><X a=\"a2\"/><X a=\"a3\"/></X>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("X", null));
+			assertEq(xml, xd.xcreate("X", reporter));
 			xd = compile( // create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
 "   </Vehicle>\n" +
@@ -2632,9 +2645,9 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("Vehicle", null));
-			xd = compile( // no create section
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+			assertEq(xml, xd.xcreate("Vehicle", reporter));
+			xd = compile( // no create section, default contruction, reference recursive
+"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "   <Vehicle>\n" +
 "     <Part xd:script=\"0..; ref X\"/>\n" +
 "   </Vehicle>\n" +
@@ -2644,7 +2657,46 @@ final public class TestCompose extends XDTester {
 "</xd:def>").createXDDocument();
 			xml = "<Vehicle><Part name=\"a1\"><Part name=\"a2\"/><Part name=\"a3\"/></Part></Vehicle>";
 			xd.setXDContext(xml);
-			assertEq(xml, xd.xcreate("Vehicle", null));
+			assertEq(xml, xd.xcreate("Vehicle", reporter));
+			xd = compile( // no recursion reference, no context. no create section
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A a=\"string(); default 'A'\">\n" +
+"    <B a=\"string(); default 'y'\" xd:script='occurs 2..*; ref X;'/>\n" + // minimum 2 occurrences of B
+"  </A>\n" +
+"  <X a=\"string(); default 'x'\">\n" + // creates attribute a='x'
+"    <C> <D xd:script='occurs 2..*;'/> </C>\n" +
+"  </X>\n" +
+"</xd:def>").createXDDocument();
+			assertEq("<A a='A'><B a='y'><C><D/><D/></C></B><B a='y'><C><D/><D/></C></B></A>", //two B
+				xd.xcreate("A", reporter));
+			assertNoErrorsAndClear(reporter);
+			xd = compile( // recursion reference, no context. no create section
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"  <A xd:script='ref B'/>\n" +
+"  <B>\n" +
+"    <C> <D xd:script='?; ref B'/> </C>\n" +
+"  </B>\n" +
+"</xd:def>").createXDDocument();
+			xd.xparse("<A><C/></A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			xd.xparse("<A><C><D><C/></D></C></A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq("<A><C/></A>", xd.xcreate("A", reporter));
+			assertNoErrorsAndClear(reporter);
+			xd = compile(
+"<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A'>\n" +
+"  <A>\n" +
+"    <B xd:script='+; ref X'/>\n" +
+"  </A>\n" +
+"  <X a='default \"b\"; string();'>\n" +
+"    <C>\n" +
+"      <D>\n" +
+"        <E xd:script='*; ref X'/>\n" +
+"      </D>\n" +
+"    </C>\n" +
+"  </X>\n" +
+"</xd:def>").createXDDocument();
+			assertEq("<A><B a='b'><C><D/></C></B></A>", xd.xcreate("A", reporter));
 		} catch (RuntimeException ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.
 		resetTester();

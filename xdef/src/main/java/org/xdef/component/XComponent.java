@@ -1,5 +1,6 @@
 package org.xdef.component;
 
+import java.io.Serializable;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import java.util.List;
@@ -7,21 +8,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Interface of XComponent (Java class generated from Xdefinition according to model of Element).
+/** Interface of XComponent (Java class generated from X-definition according to model of Element).
  * Java source of XComponent is possible to generate by {@link org.xdef.component.GenXComponent}.
  * @author Vaclav Trojan
  */
-public interface XComponent {
+public interface XComponent extends Serializable {
 
-	/** Create XML element from this XComponent (marshal).
-	 * If the argument is null null then document is created with created document element.
+	/** Create XML element from this XComponent (marshal). If the argument is null null then document
+	 * is created with created document element.
 	 * @return XML element created from this object.
 	 */
 	public Element toXml();
 
 	/** Create XML element or text node from default model as element created from given document.
-	 * @param doc XML Document or null.
-	 * If the argument is null null then document is created with created document element.
+	 * @param doc XML Document or null. If the argument is null null then document is created
+	 * with created document element.
 	 * @return XML node belonging to given document from this XComponent.
 	 */
 	public Node toXml(Document doc);
@@ -122,9 +123,62 @@ public interface XComponent {
 	 */
 	public void xInit(XComponent p, String name, String ns, String xPos);
 
-	/** Get XON object from this Xcomponent (if it is possible).
-	 * @return XON object if this Xcomponent is created from JSON/XON/INI/CSV.
-	 * Otherwise return null.
+	/** Get XON object from this X-component (if it is possible).
+	 * @return XON object if this X-component is created from JSON/XON/INI/CSV. Otherwise return null.
 	 */
 	public Object toXon();
+
+//	/** Get value of item from this XComponent.
+//	 * @param x name item.
+//	 * @return value of item from this XComponent.
+//	 */
+//	public Object xGet(final String x);
+//
+//	/** Get date from item of this XComponent.
+//	 * @param x name item.
+//	 * @return date from item of this XComponent.
+//	 */
+//	public java.util.Date xGetDate(final String x);
+//
+//	/** Get Timestamp from item with date this XComponent.
+//	 * @param x name item.
+//	 * @return Timestamp from item of this XComponent.
+//	 */
+//	public java.sql.Timestamp xGetTimestamp(final String x);
+//
+//	/** Get calendat from item with date of this XComponent.
+//	 * @param x name item.
+//	 * @return Calendar from item of this XComponent.
+//	 */
+//	public java.util.Calendar XGetCalendar(final String x);
+//
+//	/** Get XPosition from item  of this XComponent.
+//	 * @param x name item.
+//	 * @return string with XPosition of the item of this XComponent.
+//	 */
+//	public String XGetXpos(final String x);
+//
+//	/** Get List from item of this XComponent.
+//	 * @param x name item.
+//	 * @return List from item of this XComponent.
+//	 */
+//	public java.util.List XGetList(final String x);
+//
+//	/** Get Map from this XComponent.
+//	 * @return Map from this XComponent.
+//	 */
+//	public java.util.Map XGetMap();
+//
+//	/** Set value of item in this XComponent.
+//	 * @param x name item.
+//	 * @param v value to be set.
+//	 */
+//	public void xSet(final String x, final Object v);
+//
+//	/** Add value to the list.
+//	 * @param x name item.
+//	 * @param v value to be added.
+//	 */
+//	public void xAdd(final String x, final Object v);
+
 }

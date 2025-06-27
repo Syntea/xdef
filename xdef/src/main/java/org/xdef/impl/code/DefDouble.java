@@ -38,35 +38,34 @@ public final class DefDouble extends XDValueAbstract {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
+	@Override
 	public Object getObject() {return isNull() ? null : _value;}
 
-	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
+	@Override
 	public short getItemId() {return XD_DOUBLE;}
 
-	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
+	@Override
 	public XDValueType getItemType() {return DOUBLE;}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {return stringValue();}
 
-	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
-	 * string value.
 	 */
+	@Override
 	public String stringValue() {
 		return isNull() ? "" :
 			_value == Double.NEGATIVE_INFINITY ? "-INF" :
@@ -74,10 +73,10 @@ public final class DefDouble extends XDValueAbstract {
 			_value == Double.NaN ? "NaN" : String.valueOf(_value);
 	}
 
-	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
+	@Override
 	public XDValue cloneItem() {return new DefDouble(_value);}
 
 	@Override
@@ -86,12 +85,12 @@ public final class DefDouble extends XDValueAbstract {
 	@Override
 	public boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
 
-	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return <i>true</i> if argument is same type as this XDValue and the value of the object is comparable
 	 * and equals to this one.
 	 */
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -101,35 +100,45 @@ public final class DefDouble extends XDValueAbstract {
 		}
 		return Double.isNaN(_value) ? Double.isNaN(arg.doubleValue()) :  _value == arg.doubleValue();
 	}
-	@Override
+
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return If both objects are comparable then returns -1, 0, or a 1as this XDValue object is less than,
 	 * equal to, or greater than the specified object.
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
+	@Override
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
 		return Double.compare(_value, arg.doubleValue());
 	}
+
 	@Override
 	public byte byteValue() {return (byte) _value;}
+
 	@Override
 	public short shortValue() {return (short) _value;}
+
 	@Override
 	public int intValue() {return (int) _value;}
+
 	@Override
 	public long longValue() {return (long) _value;}
+
 	@Override
 	public float floatValue() {return (float) _value;}
+
 	@Override
 	public double doubleValue() {return _value;}
+
 	@Override
 	public BigDecimal decimalValue() {return isNull() ? null : new BigDecimal(_value);}
+
 	@Override
 	public BigInteger integerValue() {return isNull() ? null : decimalValue().toBigInteger();}
-	@Override
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise returns false.
 	 */
+	@Override
 	public boolean isNull() {return _isNull;}
 }

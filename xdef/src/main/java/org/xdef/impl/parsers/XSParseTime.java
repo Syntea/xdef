@@ -12,6 +12,7 @@ public class XSParseTime extends XSParseDate {
 
 	@Override
 	boolean parse(final StringParser parser) {return parser.isXMLTime();}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

@@ -19,6 +19,7 @@ public class XDParseUrl extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		if (chkUrl(p, s, ROOTBASENAME)) {
 			p.setParsedValue(s);
+			checkCharset(xnode, p);
 			p.setEos();
 		}
 	}
@@ -40,6 +41,7 @@ public class XDParseUrl extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 		return false;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

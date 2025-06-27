@@ -33,6 +33,7 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 			BASE +
 			0;
 	}
+
 	@Override
 	public  void initParams() {
 		_patterns = null;
@@ -40,6 +41,7 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 		_minLength = _maxLength = -1;
 		_whiteSpace = WS_REPLACE;
 	}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -57,6 +59,7 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 		}
 		_enumeration = e;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
@@ -109,8 +112,10 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 		checkPatterns(p);
 		checkLength(p);
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_REPLACE;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

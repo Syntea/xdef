@@ -99,8 +99,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 	 * @param xnode actual XXNode object.
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
-		if (xnode != null && xnode.getXMElement().getXonMode() != 0
-			&& "null".equals(p.getSourceBuffer())) {
+		if (xnode != null && xnode.getXMElement().getXonMode() != 0 && "null".equals(p.getSourceBuffer())) {
 			p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
 			p.setEos();
 			return;
@@ -130,24 +129,34 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 			finalCheck(xnode, p);
 		}
 	}
+
 	@Override
 	/** Get value of whiteSpace parameter.
 	 * @return 0 .. preserve, 'r' .. replace, 'c' .. collapse
 	 */
 	public byte getWhiteSpaceParam() {return _whiteSpace;}
+
 	public void setMinExclusive(final XDValue x) {}//default not specified
+
 	public void setMaxExclusive(final XDValue x) {}//default not specified
+
 	public void setMinInclusive(final XDValue x) {}//default not specified
+
 	public void setMaxInclusive(final XDValue x) {}//default not specified
+
 	public void setTotalDigits(final long x) {} //default: not specified
+
 	public void setFractionDigits(final long x) {
 		if (x != 0) {
 			//Parameter '&{0}' can be only '&{1}' for '&{2}'
 			throw new SRuntimeException(XDEF.XDEF812, "fractionDigits", "0", parserName());
 		}
 	} //default: not specified
+
 	public void setLength(final long x) {} //default: not specified
+
 	public void setMinLength(final long x) {} //default: not specified
+
 	public void setMaxLength(final long x) {} //default: not specified
 
 	public void setWhiteSpace(final String s) {
@@ -169,7 +178,9 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 	}
 
 	public void setItem(final XDValue item) {} //default: not specified
+
 	abstract public byte getDefaultWhiteSpace();
+
 	private int getKeyId(final String name) {
 		int keyMask = getLegalKeys();
 		for (int i = 0, id = 1; i < PARAM_NAMES.length; i++, id += id) {
@@ -187,8 +198,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 				for (int j = 0; j < params.length; j+=2) {
 					if (name.equals(params[j].toString())) {
 						XDValue result = params[j+1];
-						return result != null
-							? result.isNull() ? null : result : null;
+						return result != null ? result.isNull() ? null : result : null;
 					}
 				}
 				break;
@@ -324,6 +334,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 			setWhiteSpace(item.toString());
 		}
 	}
+
 	@Override
 	public void setNamedParams(final XXNode xnode,
 		final XDContainer params) throws SException {
@@ -364,6 +375,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		}
 		p.errorWithString(XDEF.XDEF811, parserName()); //Doesn't fit any pattern from list for '&{0}'
 	}
+
 	@Override
 	public XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
@@ -407,14 +419,11 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		if (getDefaultWhiteSpace() != getWhiteSpace()) {
 			switch (getWhiteSpace()) {
 				case 'c':
-					map.setXDNamedItem("whiteSpace", new DefString("collapse"));
-					break;
+					map.setXDNamedItem("whiteSpace", new DefString("collapse")); break;
 				case 'r':
-					map.setXDNamedItem("whiteSpace", new DefString("replace"));
-					break;
+					map.setXDNamedItem("whiteSpace", new DefString("replace")); break;
 				case 0:
-					map.setXDNamedItem("whiteSpace", new DefString("preserve"));
-					break;
+					map.setXDNamedItem("whiteSpace", new DefString("preserve")); break;
 			}
 		}
 		XDValue[] en = getEnumeration();
@@ -431,19 +440,31 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		}
 		return map;
 	}
+
 	public void addNamedParams(final XDContainer map) {}
+
 	public long getTotalDigits() { return -1; }//default 0
+
 	public long getFractionDigits() { return -1; } //default 0
+
 	public XDValue getMinExclusive() { return null; }; //default null
+
 	public XDValue getMaxExclusive() { return null; }; //default null
+
 	public XDValue getMinInclusive() { return null; }; //default null
+
 	public XDValue getMaxInclusive() { return null; }; //default null
 
 	public long getLength() { return -1; }
+
 	public long getMinLength() { return -1; }
+
 	public long getMaxLength() { return -1; }
+
 	public byte getWhiteSpace() { return _whiteSpace; }
+
 	public XDValue[] getEnumeration() {return null;} //default null
+
 	public void checkEnumeration(final XDParseResult p) {
 		if (p.matches()) {
 			XDValue[] enumeration = getEnumeration();
@@ -458,6 +479,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 			}
 		}
 	}
+
 	public XDRegex[] getPatterns() {return _patterns;}
 
 	@Override
@@ -467,12 +489,19 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 	public abstract short parsedType();
 
 	public boolean addTypeParser(final XDValue x){return false;}//must be Parser
+
 	public void setFormat(final String x) {}
+
 	public String getFormat() { return null; }
+
 	public void setOutFormat(final String x) {}
+
 	public String getOutFormat() { return null; }
+
 	public void setArgument(final XDValue x) {}
+
 	public XDValue getArgument() { return null; }
+
 	protected final int getIdIndex(final int id, final int[] legalIds) {
 		for (int i = 0; i < legalIds.length; i++) {
 			if (id == legalIds[i]) {
@@ -481,33 +510,40 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		}
 		return -1;
 	}
+
 	@Override
 	public String toString() {return parserName();}
+
 	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
 	public XDValue cloneItem() {return this;}
+
 	@Override
 	/** Set result type of operation (ignored here).
 	 * @param resultType id of result type.
 	 */
 	public void setItemType(final short resultType) {}
+
 	@Override
 	/** Get parameter of operation (returns 0 here).
 	 * @return parameter.
 	 */
 	public int getParam() {return 0;}
+
 	@Override
 	/** Set parameter of operation (ignored here).
 	 * @param param value of operation parameter.
 	 */
 	public void setParam(final int param) {}
+
 	@Override
 	/** Get name of value.
 	 * @return The name.
 	 */
 	public abstract String parserName();
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!(o instanceof XSAbstractParser)) {
@@ -571,7 +607,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		if (getFractionDigits() != x.getFractionDigits()) {
 			return false;
 		}
-		if (getMinLength()!=x.getMinLength()||getMaxLength()!=getMaxLength()) {
+		if (getMinLength() != x.getMinLength() || getMaxLength() != getMaxLength()) {
 			return false;
 		}
 		if (getMinInclusive() == null) {
@@ -641,6 +677,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
 		}
 		return true;
 	}
+
 	@Override
 	abstract public int getLegalKeys();
 }

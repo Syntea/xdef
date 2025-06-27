@@ -21,7 +21,7 @@ import static org.xdef.XDValueID.XD_CONTAINER;
 import org.xdef.impl.code.DefString;
 import org.xdef.msg.XDEF;
 
-/** Parser of Xscript "sequence" type.
+/** Parser of X-script "sequence" type.
  * @author Vaclav Trojan
  */
 public class XDParseSequence extends XSAbstractParser {
@@ -42,6 +42,7 @@ public class XDParseSequence extends XSAbstractParser {
 		_separatorChars = null;
 		_itemTypes = null;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -62,8 +63,10 @@ public class XDParseSequence extends XSAbstractParser {
 			BASE +
 			0;
 	}
+
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+
 	@Override
 	public boolean addTypeParser(final XDValue x) {
 		if (_itemTypes == null) {
@@ -77,20 +80,28 @@ public class XDParseSequence extends XSAbstractParser {
 		_itemTypes[old.length] = valueToParser(x);
 		return true;
 	}
+
 	@Override
 	public void setLength(final long x) {_minLength = _maxLength = x;}
+
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
+
 	@Override
 	public void setMaxLength(final long x) {_maxLength = x;}
+
 	@Override
 	public long getMaxLength() {return _maxLength;}
+
 	@Override
 	public void setMinLength(final long x) {_minLength = x;}
+
 	@Override
 	public long getMinLength() {return _minLength;}
+
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
+
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -102,6 +113,7 @@ public class XDParseSequence extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
+
 	@Override
 	public void setItem(final XDValue item) {
 		if (item.getItemId() != XD_CONTAINER) {
@@ -113,14 +125,17 @@ public class XDParseSequence extends XSAbstractParser {
 			addTypeParser(c.getXDItem(i));
 		}
 	}
+
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {
 		parse(xnode, p, true);
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		parse(xnode, p, false);
 	}
+
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		boolean isFinal) {
@@ -189,6 +204,7 @@ public class XDParseSequence extends XSAbstractParser {
 		}
 		//replace source from pos0 to actual position by 's' and setthe actual position after it.
 	}
+
 	@Override
 	public void addNamedParams(final XDContainer map) {
 		map.setXDNamedItem("item", new DefContainer(_itemTypes));
@@ -196,8 +212,10 @@ public class XDParseSequence extends XSAbstractParser {
 			map.setXDNamedItem("separator", new DefString(_separatorChars));
 		}
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseSequence)) {
@@ -236,12 +254,16 @@ public class XDParseSequence extends XSAbstractParser {
 			return true;
 		}
 	}
+
 	@Override
 	public void setSeparator(final String x) {_separatorChars = x;}
+
 	@Override
 	public String getSeparator() {return _separatorChars;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+
 	@Override
 	public short getAlltemsType() {return getItemsType(_itemTypes);}
 }

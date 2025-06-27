@@ -6,7 +6,6 @@ import org.xdef.XDValue;
  * @author Vaclav Trojan
  */
 public class CodeXD extends CodeI1 {
-
 	private XDValue _p2;
 
 	/** Creates a new instance of CodeX.
@@ -20,10 +19,10 @@ public class CodeXD extends CodeI1 {
 		_p2 = param2;
 	}
 
-	@Override
 	/** Get value as string.
 	 * @return string value of parameter 2.
 	 */
+	@Override
 	public String stringValue() {return _p2==null ? "null" : _p2.stringValue();}
 
 	/** Set parameter 2.
@@ -36,17 +35,17 @@ public class CodeXD extends CodeI1 {
 	 */
 	public XDValue getParam2() {return _p2;}
 
-	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
+	@Override
 	public String toString() {return CodeDisplay.getCodeName(_code)+"("+_param+","+_p2+")";}
 
-	@Override
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeXD)) {
 			return false;

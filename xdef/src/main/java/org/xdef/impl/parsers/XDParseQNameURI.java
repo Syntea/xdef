@@ -10,7 +10,7 @@ import org.xdef.impl.code.DefString;
 import org.xdef.impl.ext.XExtUtils;
 import org.w3c.dom.Element;
 
-/** Parser of Xscript "NCNameURI" type.
+/** Parser of X-script "NCNameURI" type.
  * @author Vaclav Trojan
  */
 public class XDParseQNameURI extends XSAbstractParseToken {
@@ -40,8 +40,10 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			ARGUMENT +
 			0;
 	}
+
 	@Override
 	public void initParams() {super.initParams(); _elem = null;}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -101,12 +103,16 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 			checkEnumeration(p);
 		}
 	}
+
 	@Override
 	public void setArgument(final XDValue x) {_elem = x.getElement();}
+
 	@Override
 	public XDValue getArgument() {return new DefElement(_elem);}
+
 	@Override
 	public short parsedType() {return XD_STRING;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

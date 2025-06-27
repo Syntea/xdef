@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Telephone number in Xscript.
+/** Telephone number in X-script.
  * @author Vaclav Trojan
  */
 public interface XDTelephone extends XDValue {

@@ -1,4 +1,4 @@
-<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.1"
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
   xd:script = "options ignoreEntities"
   xd:name = "empty" xd:root = "empty" >
 

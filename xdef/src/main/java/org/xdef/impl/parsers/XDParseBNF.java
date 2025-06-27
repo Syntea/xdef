@@ -14,9 +14,12 @@ import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
+import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import static org.xdef.XDValueID.XD_BNFRULE;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.msg.XDEF;
 import org.xdef.xon.XonTools;
 
 /** Parse BNF
@@ -36,14 +39,14 @@ public class XDParseBNF extends XDParserAbstract {
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos0 = p.getIndex();
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		StringParser parser = quoted ? new StringParser(XonTools.readJString(p), pos0)
-			: new StringParser(p.getSourceBuffer(), pos0);
-		XDParseResult r = _rule.perform(parser);
-		p.setParsedValue(r.getParsedValue());
-		p.addReports(p.getReporter());
-		p.setIndex(parser.getIndex());
-		p.isSpaces();
+		StringParser parser = xn != null && xn.getXonMode() > 0 && p.isChar('"')
+			? new StringParser(XonTools.readJString(p)) : new StringParser(p.getUnparsedBufferPart(), pos0);
+		if (_rule.perform(parser).matches()) {
+			p.setEos();
+		} else {
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
+		}
+		checkCharset(xn, p);
 	}
 
 	@Override
@@ -84,6 +87,7 @@ public class XDParseBNF extends XDParserAbstract {
 			throw new SException(BNF.BNF901, ruleName); //Rule '&{0}' doesn't exist
 		}
 	}
+
 	@Override
 	public void setParseSQParams(final Object... params) {
 		ArrayReporter reporter = new ArrayReporter();
@@ -95,14 +99,17 @@ public class XDParseBNF extends XDParserAbstract {
 			throw new SRuntimeException(BNF.BNF901, ruleName); // Rule '&{0}' doesn't exist
 		}
 	}
+
 	@Override
 	public XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();
 		map.setXDNamedItem("a1", _rule);
 		return map;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
 }

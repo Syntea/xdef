@@ -43,75 +43,75 @@ public class KXqueryExpr implements KXquery {
 		}
 	}
 
-	@Override
 	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
 	 * The namespace context, functions and variables are retrieved  from the argument.
 	 * @param source String with XQuery expression.
 	 * @return the KXqueryExpr object.
 	 */
+	@Override
 	public KXqueryExpr newExpression(final String source) {return new KXqueryExpr(source);}
 
-	@Override
 	/** Set implicit time zone.
 	 * @param tz time zone to be set as implicit.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException{
 		if (_impl != null) {
 			_impl.setImplicitTimeZone(tz);
 		}
 	}
 
-	@Override
 	/** Get implicit time zone.
 	 * @return implicit time zone.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public TimeZone getImplicitTimeZone() throws SRuntimeException {
 		return (_impl != null) ? _impl.getImplicitTimeZone() : null;
 	}
 
-	@Override
 	/** Get array with QNames of external variables
 	 * @return array with QNames of external variables or null.
 	 */
+	@Override
 	public QName[] getAllExternalVariables() {return (_impl!=null) ? _impl.getAllExternalVariables() : null;}
 
-	@Override
 	/** Get array with QNames of unbound external variables
 	 * @return array with QNames of unbound external variables or null.
 	 */
+	@Override
 	public QName[] getAllUnboundExternalVariables() {
 		return (_impl != null) ? _impl.getAllUnboundExternalVariables() : null;
 	}
 
-	@Override
 	/** Bind variable to XQuery expression.
 	 * @param qname QName of variable.
 	 * @param value object to be bound.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public void bindValue(final QName qname, final Object value) throws SRuntimeException {
 		if (_impl != null) {
 			_impl.bindValue(qname, value);
 		}
 	}
 
-	@Override
 	/** Execute compiled XQuery expression and return result.
 	 * @param node node or null.
 	 * @return object with result of XQuery expression.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public Object evaluate(final Node node) throws SRuntimeException {
 		return _impl != null ? _impl.evaluate(node) : null;
 	}
 
-	@Override
 	/** Execute XQuery expression and return result. If result type is null then result types are checked in
 	 * following sequence:
 	 * @return object with result of XQuery expression.
 	 */
+	@Override
 	public Object evaluate() {return _impl != null ? _impl.evaluate() : null;}
 
 	/** Get string with source expression.

@@ -29,30 +29,30 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final Map<String, String> _namespaces;
 	/** root selection. */
 	public Map<String,XNode> _rootSelection;
-	/** Array of Xdefinitions names from where to accept local declarations. */
+	/** Array of X-definitions names from where to accept local declarations. */
 	public String[] _importLocal;
 
-	/** Version of Xdefinition (see org.xdef.impl.XConstants.XDxx). */
+	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
-	/** Version of XML from which the Xdefinition was created (see org.xdef.impl.XConstants.XDxx). */
+	/** Version of XML from which the X-definition was created (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Actions on Document
 	////////////////////////////////////////////////////////////////////////////
-	/** Action if the root was not found in Xdefinition. */
+	/** Action if the root was not found in X-definition. */
 	public int _onIllegalRoot;
 	/** Action if an XML error occurs. */
 	public int _onXmlError;
-	/** Source ID of this Xdefinition. */
+	/** Source ID of this X-definition. */
 	private final SPosition _sourcePosition;
 
 	/** Creates a new instance of Definition
-	 * @param name name of definition.
+	 * @param name name of X-definition.
 	 * @param xp XPool object.
-	 * @param uri Namespace URI of Xdefinition.
-	 * @param pos source position of Xdefinition.
-	 * @param ver XML version of Xdefinition source.
+	 * @param uri Namespace URI of X-definition.
+	 * @param pos source position of X-definition.
+	 * @param ver XML version of X-definition source.
 	 */
 	public XDefinition(final String name,final XDPool xp,final String uri,final SPosition pos,final byte ver){
 		super(name, uri, (XPool) xp, XMDEFINITION);
@@ -73,38 +73,38 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_onXmlError = -1;
 	}
 
-	@Override
-	/** Get source position of this Xdefinition.
-	 * @return source ID of this Xdefinition..
+	/** Get source position of this X-definition.
+	 * @return source ID of this X-definition..
 	 */
+	@Override
 	public final SPosition getSourcePosition() {return _sourcePosition;}
 
-	@Override
-	/** Get all Element models from this Xdefinition.
+	/** Get all Element models from this X-definition.
 	 * @return The array of element models.
 	 */
+	@Override
 	public final XMElement[] getModels() {
 		XElement[] result = new XElement[_xElements.size()];
 		_xElements.toArray(result);
 		return result;
 	}
 
-	@Override
-	/** Get all Element models defined as root from this Xdefinition.
+	/** Get all Element models defined as root from this X-definition.
 	 * @return The array of root element models.
 	 */
+	@Override
 	public final XMElement[] getRootModels() {
 		XNode[] result = new XElement[_rootSelection.size()];
 		_rootSelection.values().toArray(result);
 		return (XMElement[]) result;
 	}
 
-	@Override
 	/** Get Element model with given namespace and name.
 	 * @param nsURI namespace URI of element or <i>null</i>.
 	 * @param name name of element (may be prefixed).
 	 * @return Element model with given namespace and name or return null if such model not exists.
 	 */
+	@Override
 	public final XMElement getModel(final String nsURI, final String name) {
 		String lockey;
 		XDefinition def;
@@ -140,36 +140,35 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return null;
 	}
 
-	@Override
 	/** Get XMDefinition assigned to this node.
 	 * @return root XMDefinition node.
 	 */
+	@Override
 	public final XMDefinition getXMDefinition() {return this;}
 
-	@Override
 	/** Create XDDocument.
 	 * @return XDDocument created from this XMDefinition.
 	 */
+	@Override
 	public final XDDocument createXDDocument() {return new ChkDocument(this);}
 
-	@Override
-	/** Get version of Xdefinition.
-	 * @return version of Xdefinition (see {@link org.xdef.XDConstants#XD2_0}
-	 * or {@link org.xdef.XDConstants#XD3_1}).
+	/** Get version of X-definition.
+	 * @return version of X-definition (see org.xdef.impl.XConstants.XDxx).
 	 */
+	@Override
 	public final byte getXDVersion() {return _xdVersion;}
 
-	@Override
-	/** Get XML version of Xdefinition source.
-	 * @return XML version of Xdefinition source ("1.0" -> 10, "1.1" -> 11).
+	/** Get XML version of X-definition source.
+	 * @return XML version of X-definition source ("1.0" -&gt; 10, "1.1" -&gt; 11).
 	 */
+	@Override
 	public final byte getXmlVersion() {return _xmlVersion;}
 
-	@Override
-	/** Check if given name is declared as local in this Xdefinition.
+	/** Check if given name is declared as local in this X-definition.
 	 * @param name the name to be checked.
-	 * @return true if given name is declared as local in this Xdefinition.
+	 * @return true if given name is declared as local in this X-definition.
 	 */
+	@Override
 	public final boolean isLocalName(final String name) {
 		if (name != null) {
 			int ndx = name.indexOf('#');
@@ -191,25 +190,25 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return false;
 	}
 
-	@Override
-	/** Get implementation properties of Xdefinition.
-	 * @return the implementation properties of Xdefinition.
+	/** Get implementation properties of X-definition.
+	 * @return the implementation properties of X-definition.
 	 */
+	@Override
 	public final Properties getImplProperties() {return _properties;}
 
-	@Override
-	/** Get implementation property of Xdefinition.
+	/** Get implementation property of X-definition.
 	 * @param name The name of property.
-	 * @return the value implementation property of Xdefinition.
+	 * @return the value implementation property of X-definition.
 	 */
+	@Override
 	public final String getImplProperty(final String name) {return _properties.getProperty(name);}
 
-	@Override
-	/** Write this Xdefinition to XDWriter.
-	 * @param wr where to write.
+	/** Write this X-definition to XDWriter.
+	 * @param xw where to write.
 	 * @param list list of nodes..
 	 * @throws IOException if an error occurs.
 	 */
+	@Override
 	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeSPosition(_sourcePosition);
 		writeXCodeDescriptor(xw);
@@ -241,11 +240,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		}
 	}
 
-	@Override
-	/** Compare Xdefinition with an object.
+	/** Compare X-definition with an object.
 	 * @param o object to be compared.
-	 * @return true if and only if the compared object is an Xdefinition and if it's name equals to this.
+	 * @return true if and only if the compared object is an X-definition and if it's name equals to this.
 	 */
+	@Override
 	public final boolean equals(final Object o) {
 		if (o instanceof String) {
 			return getName().equals((String)o);
@@ -259,7 +258,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Add new XElement as model.
 	 * @param newModel XElement
 	 * @return <i>true</i> if and only if the new model was added
-	 * to Xdefinition.
+	 * to X-definition.
 	 */
 	public final boolean addModel(final XElement newModel) {
 		String name = newModel.getName();
@@ -298,17 +297,17 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return xp.getVariable(name); // not found in locals, get global
 	}
 
-	/** Read XDefinition from XDReader.
+	/** Read X-definition from XDReader.
 	 * @param xr Reader with data.
 	 * @param xp base xPool,
 	 * @param list list of nodes.
-	 * @return created XDefinition.
+	 * @return created X-definition.
 	 * @throws IOException if an error occurs.
 	 */
 	public final static XDefinition readXDefinition(final XDReader xr, final XPool xp, final List<XNode> list)
 		throws IOException {
 		SPosition sourcePos = xr.readSPosition();
-		if (xr.readShort() != XMDEFINITION) {//must be Xdefinition
+		if (xr.readShort() != XMDEFINITION) {//must be X-definition
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "XMDefinition expected");
 		}

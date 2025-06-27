@@ -50,6 +50,7 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 		p.replaceParsedBufferFrom(pos0, s);
 		check(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

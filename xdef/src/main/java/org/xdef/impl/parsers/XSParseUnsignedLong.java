@@ -14,7 +14,6 @@ import java.math.BigInteger;
  */
 public class XSParseUnsignedLong extends XSParseInteger {
 	private static final String ROOTBASENAME = "unsignedLong";
-	private static final BigDecimal MAX_VALUE = new BigDecimal("18446744073709551615");
 	private int _totalDigits;
 
 	public XSParseUnsignedLong() {super();}
@@ -59,8 +58,10 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public void checkValue(final XDValue x) {
 		BigDecimal val = x.decimalValue();
@@ -69,6 +70,7 @@ public class XSParseUnsignedLong extends XSParseInteger {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
 		}
 	}
+
 	@Override
 	public short parsedType() {return XD_DECIMAL;}
 }

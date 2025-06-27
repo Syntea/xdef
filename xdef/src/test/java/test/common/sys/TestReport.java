@@ -34,8 +34,8 @@ public class TestReport extends STester {
 		}
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public final void test() {
 		String s;
 		Report r;

@@ -52,11 +52,11 @@ public final class PAttr {
 	 */
 	public final SBuffer getValue() {return _value;}
 
-	@Override
 	/** Check another attribute if it is equal to this one. We consider
 	 * two attributes equal if both local names and namespaces are equal.
 	 * @param o The object to be compared.
 	 */
+	@Override
 	public boolean equals(final Object o) {
 		if (o == null || !(o instanceof PAttr)) {
 			return false;
@@ -65,8 +65,8 @@ public final class PAttr {
 		return _localName.equals(attr._localName) && _nsindex == attr._nsindex;
 	}
 
-	@Override
 	/** Returns hash code of the object. */
+	@Override
 	public int hashCode() {return 89 * (89 * 7 + _localName.hashCode()) + _nsindex;}
 
 	@Override

@@ -55,11 +55,12 @@ public class CodeStringList extends CodeI1 {
 		}
 		return sb.append(')').toString();
 	}
-	@Override
+
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public boolean equals(final XDValue o) {
 		if (o == null || !(o instanceof CodeStringList)) {
 			return false;

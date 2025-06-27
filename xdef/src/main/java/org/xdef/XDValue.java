@@ -1,5 +1,6 @@
 package org.xdef;
 
+import java.io.Serializable;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import java.math.BigDecimal;
@@ -7,11 +8,11 @@ import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Provides the interface for usage of internal objects of Xscript. This interface provides general access
- * methods to values of variables and of parameters of methods in Xdefinitions.
+/** Provides the interface for usage of internal objects of X-script. This interface provides general access
+ * methods to values of variables and of parameters of methods in X-definitions.
  * @author Vaclav Trojan
  */
-public interface XDValue extends Comparable<XDValue>, XDValueID {
+public interface XDValue extends Comparable<XDValue>, XDValueID, Serializable {
 
 	/** Get ID of the type of value (int, float, boolean, date, regex see org.xfef.XDValueID).
 	 * @return item type.
@@ -158,8 +159,6 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 * @return true if the object is null otherwise returns false.
 	 */
 	public boolean isNull();
-
-	////////////////////////////////////////////////////////////////////////////
 
 	/** Get code of operation. This method is used internally only in the code interpreter. Any user
 	 * implementation of this interface MUST return 0!

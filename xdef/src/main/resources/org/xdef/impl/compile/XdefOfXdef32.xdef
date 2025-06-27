@@ -1,7 +1,7 @@
 <!--
- Description of XML document which must fit Xdefinition 3.2 specification.
- Meta namespace of Xdefinition is "METAXD".
- Prefix of objects describing Xdefinition 3.2 is XD3.2.
+ Description of XML document which must fit X-definition 3.2 specification.
+ Meta namespace of X-definition is "METAXD".
+ Prefix of objects describing X-definition 3.2 is XD3.2.
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -14,7 +14,7 @@
   w:metaNamespace = "METAXD">
 
 /******************************************************************************/
-/* Xdefinition of Xdefinition ver 3.2, metanamespace: METAXD, prefix: XD3.2 */
+/* X-definition of X-definition ver 3.2, metanamespace: METAXD, prefix: XD3.2 */
 /******************************************************************************/
 
     <XD3.2:collection xd:script = "options moreAttributes;
@@ -25,7 +25,7 @@
     <!-- Other attribute names (xd:attr) must begin with the prefix "impl-" -->
 
     <xd:mixed>
-      <!-- Here may be objects from all versions of Xdefinition -->
+      <!-- Here may be objects from all versions of X-definition -->
       <XD3.1:def xd:script = "occurs *; ref Ver3.1#XD3.1:def" />
       <XD3.2:def xd:script = "occurs *; ref XD3.2:def" />
       <XD3.1:declaration xd:script = "occurs *; ref Ver3.1#XD3.1:declaration" />
@@ -69,11 +69,11 @@
               name = "required QName; options acceptQualifiedAttr" />
           <XD3.2:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required xonScript;
+              required jsonScript;
           </XD3.2:json>
           <XD3.2:xon xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required xonScript;
+              required jsonScript;
           </XD3.2:xon>
           <XD3.2:any xd:script = "occurs *; match @XD3.2:name; ref XD3.2:anyDef;
                             options moreAttributes, moreElements"

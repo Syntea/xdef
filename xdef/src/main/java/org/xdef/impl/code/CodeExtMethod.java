@@ -7,7 +7,6 @@ import org.xdef.XDValue;
  * @author Vaclav Trojan
  */
 public class CodeExtMethod extends CodeI1 {
-
 	/** Method name. */
 	private final String _name;
 	/** External method pointer. */
@@ -34,24 +33,23 @@ public class CodeExtMethod extends CodeI1 {
 
 	public final Method getExtMethod() {return _extMethod;}
 
-	@Override
 	/** Get string representation of the object.
 	 * @return The string representation of the object.
 	 */
+	@Override
 	public String toString() {return _name + "(" + _param + ")";}
 
-	@Override
 	/** Compare this object with other CodeItem.
 	 * @param o other object to be compared.
 	 * @return true if both objects are equal.
 	 */
+	@Override
 	public final boolean equals(final XDValue o) {
 		if (_extMethod == null || o == null || !(o instanceof CodeExtMethod)) {
 			return false;
 		}
 		CodeExtMethod x = (CodeExtMethod) o;
-		if (getCode() != x.getCode() ||	getParam() != x.getParam() ||
-			_resultType != x.getItemId()) {
+		if (getCode() != x.getCode() ||	getParam() != x.getParam() || _resultType != x.getItemId()) {
 			return false;
 		}
 		if (!_name.equals(x._name)) {

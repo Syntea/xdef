@@ -117,8 +117,8 @@ public class TestKDOMBuilder extends XDTester {
 		return sb.toString();
 	}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		try {
 			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -760,7 +760,7 @@ public class TestKDOMBuilder extends XDTester {
 					_src = null;
 					_dst = null;
 				}
-				@Override
+
 				/** This method is called whenever the node for which this
 				 * handler is registered is imported or cloned.
 				 * <br>DOM applications must not raise exceptions in a
@@ -779,6 +779,7 @@ public class TestKDOMBuilder extends XDTester {
 				 * @param dst Specifies the node newly created if any, or
 				 * <code>null</code>.
 				 */
+				@Override
 				public void handle(short operation,
 					String key,
 					Object data,

@@ -35,6 +35,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
+
 	@Override
 	public  void initParams() {
 		_whiteSpace = WS_COLLAPSE;
@@ -43,6 +44,7 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		_minExcl = _minIncl = _maxExcl = _maxIncl = null;
 		_fractionDigits = _totalDigits = -1;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -109,16 +111,22 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		checkPatterns(p);
 		checkComparable(p);
 	}
+
 	@Override
 	public void setTotalDigits(final long x) {_totalDigits = x;}
+
 	@Override
 	public long getTotalDigits() {return _totalDigits;}
+
 	@Override
 	public void setFractionDigits(final long x) {_fractionDigits = x;}
+
 	@Override
 	public long getFractionDigits() {return _fractionDigits;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_DECIMAL;}
 }

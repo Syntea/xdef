@@ -41,22 +41,26 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
+
 	@Override
 	public XDStatement statementValue(){return this;}
-	@Override
+
 	/** Set constructor.
 	 * @param constructor constructor for result of statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public void setXDConstructor(XDConstructor constructor) {_constructor = constructor;}
+
 	@Override
 	public XDConstructor getXDConstructor() {return _constructor;}
-	@Override
+
 	/** Bind indexed value to statement.
 	 * @param value value to be bound.
 	 * @return true if value was bound.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public boolean bind(XDValue value) throws SRuntimeException {
 		if (value == null) {
 			return true;
@@ -86,8 +90,9 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 		} catch (SQLException ex) {}
 		return false;
 	}
-   @Override
+
    /** Close this statement and release all allocated resources.*/
+	@Override
 	public void close() {
 		if (_stmt != null) {
 			try {
@@ -96,21 +101,24 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 			_stmt = null;
 		}
 	}
-   @Override
+
    /** Check if this object is closed.
 	* @return true if and only if this object is closed.
 	*/
-	public boolean isClosed() {return _stmt == null;}
 	@Override
+	public boolean isClosed() {return _stmt == null;}
+
 	/** Check if the object is null.
 	 * @return true if the object is null otherwise return false.
 	 */
-	public boolean isNull() { return _stmt == null;}
 	@Override
+	public boolean isNull() { return _stmt == null;}
+
 	/** Execute statement.
 	 * @param params parameters or null.
 	 * @throws SRuntimeException id an error occurs.
 	 */
+	@Override
 	public final XDValue execute(final XDValue params) throws SRuntimeException {
 		try {
 			if (params != null) {
@@ -126,49 +134,55 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 			throw new SRuntimeException(XDEF.XDEF568, msg); //Database statement error&{0}{: }
 		}
 	}
-	@Override
+
 	/** Invoke query statement with parameters.
 	 * @param params parameters of statement (sequence of values).
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
+	@Override
 	public XDResultSet query(XDValue params) throws SRuntimeException {
 		return new DefSQLResultSet(this, params);
 	}
-	@Override
+
 	/** Execute query and return the specified items.
 	 * @param itemName name of items to be returned.
 	 * @param params parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException{
+	@Override
+	public final XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException {
 		return new DefSQLResultSet(this, itemName, params);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-	@Override
+
 	/** Get associated object.
 	 * @return the associated object or null.
 	 */
-	public Object getObject() {return _stmt;}
 	@Override
+	public Object getObject() {return _stmt;}
+
 	/** Get ID of the type of value (int, float, boolean, date, regex - see
 	 * the interface org.xdef.XDValueTypes).
 	 * @return item type.
 	 */
-	public short getItemId() {return XD_STATEMENT;}
 	@Override
+	public short getItemId() {return XD_STATEMENT;}
+
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return STATEMENT;}
 	@Override
+	public XDValueType getItemType() {return STATEMENT;}
+
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 * string value.
 	 */
+	@Override
 	public String stringValue() {return _source;}
 }

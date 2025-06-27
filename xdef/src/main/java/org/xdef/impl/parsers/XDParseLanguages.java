@@ -6,13 +6,14 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefString;
 
-/** Parser of Xscript "languages" type items (RFC 3066 or IETF BCP 47).
+/** Parser of X-script "languages" type items (RFC 3066 or IETF BCP 47).
  * @author Vaclav Trojan
  */
 public class XDParseLanguages extends XDParseNCNameList {
 	private static final String ROOTBASENAME = "languages";
 
 	public XDParseLanguages() {super();}
+
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser p) {
 		int pos = p.getIndex();
@@ -24,6 +25,7 @@ public class XDParseLanguages extends XDParseNCNameList {
 		} catch (Exception ex) {}
 		return null;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

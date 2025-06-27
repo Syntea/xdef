@@ -97,8 +97,9 @@ public class TestSUtils extends STester {
 			return "";
 		} catch (SException ex) {return STester.printThrowable(ex);}
 	}
-	@Override
+
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		Calendar c;
 		String s, s1, s2;
@@ -1551,6 +1552,7 @@ public class TestSUtils extends STester {
 			InputStream is = new InputStream() {
 				private int i = 0;
 				final private byte[] buf = fs.getBytes();
+
 				@Override
 				public int read() throws IOException {
 					if (i >= buf.length) {
@@ -1558,10 +1560,12 @@ public class TestSUtils extends STester {
 					}
 					return (int) buf[i++];
 				}
+
 				@Override
 				public int read(byte[] b) throws IOException {
 					return read(b, 0, b.length);
 				}
+
 				@Override
 				public int read(byte[] b, int off, int len) throws IOException {
 					if (i>= buf.length) {
@@ -1585,6 +1589,7 @@ public class TestSUtils extends STester {
 			is = new InputStream() {
 				private int i = 0;
 				final private byte[] buf = fs2.getBytes();
+
 				@Override
 				public int read() throws IOException {
 					if (i >= buf.length) {
@@ -1592,10 +1597,12 @@ public class TestSUtils extends STester {
 					}
 					return (int) buf[i++];
 				}
+
 				@Override
 				public int read(byte[] b) throws IOException {
 					return read(b, 0, b.length);
 				}
+
 				@Override
 				public int read(byte[] b, int off, int len) throws IOException {
 					if (i>= buf.length) {

@@ -161,7 +161,7 @@ final class CompileXScript extends CompileStatement {
 		}
 	}
 
-	/** Compile script from Xdefinition header.*/
+	/** Compile script from X-definition header.*/
 	final void compileXDHeader(final XDefinition def) {
 		_options = false;
 		nextSymbol();
@@ -306,13 +306,12 @@ final class CompileXScript extends CompileStatement {
 				if (!occ.isIgnore() && occ.maxOccurs() > 1 && !sc.getName().startsWith("$")) {
 					error (XDEF.XDEF262);//Occurrence of attribute or text value can't be more then 1
 				}
-				compileTypeCheck(sc);
+				if (_sym != SEMICOLON_SYM) {
+					compileTypeCheck(sc); // try validation method without semicilon
+				}
 				continue;
 			} else if (_sym == IDENTIFIER_SYM || _sym == LPAR_SYM || _sym == NOT_SYM || (_sym == CONSTANT_SYM
 				&& (_parsedValue.getItemId() == XD_STRING || _parsedValue.getItemId() == XD_BOOLEAN))) {
-				if (!occ.isSpecified()) {
-					occ.setRequired();
-				}
 				compileTypeCheck(sc);
 				continue;
 			}
@@ -330,10 +329,10 @@ final class CompileXScript extends CompileStatement {
 					_g._sp  = -1;
 					if (addr >= 0) {
 						int check = sc._check;
-						if (check >= 0 && _g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
+						if (check >= 0 && _g._code.get(_g._lastCodeIndex).getCode() == STOP_OP
 							&& (_g._code.get(check).getCode() == LD_CONST
 							&&_g._code.get(check).getItemId() == XD_PARSER
-							|| _g._code.get(check).getCode()==PARSEANDSTOP)) {
+							|| _g._code.get(check).getCode() == PARSEANDSTOP)) {
 							if (addr+3 == _g._lastCodeIndex &&_g._code.get(addr).getCode() == INIT_NOPARAMS_OP
 								&& _g._code.get(addr).getParam() == 0
 								&& _g._code.get(addr+1).getCode() == LD_CONST
@@ -464,7 +463,13 @@ final class CompileXScript extends CompileStatement {
 			}
 			errorAndSkip(XDEF.XDEF425, SCRIPT_SEPARATORS); //Script error
 		}
+		if (sc._check >= 0 && !occ.isSpecified()) {
+			occ.setRequired();
+		}
 		sc.setOccurrence(occ);
+		if (sc._check == -1) {
+			sc._check = -2;
+		}
 		if (!sc.isSpecified()) {
 			sc.setOptional();
 		} else if (sc.isFixed() && sc._deflt >= 0) {
@@ -478,11 +483,6 @@ final class CompileXScript extends CompileStatement {
 				sc._check = _g._lastCodeIndex;
 				_g.genStop();
 				_g._sp  = -1;
-			}
-			if (sc._onFalse != -1) {
-				if (_g._chkWarnings) {
-					warning(XDEF.XDEF114); //Action 'OnFalse' never invoked
-				}
 			}
 		}
 	}
@@ -1189,8 +1189,8 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreAttributes = moreElements = moreText = true;
-				byte b = "acceptOther".equals(_idName) ? (byte)'T' :(byte) 'I';
-				result._moreAttributes=result._moreElements=result._moreText= b;
+				byte b = "acceptOther".equals(_idName) ? (byte)'T' : (byte) 'I';
+				result._moreAttributes = result._moreElements = result._moreText= b;
 			} else if ("nillable".equals(_idName) || "noNillable".equals(_idName)) {
 				if (nillable) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition

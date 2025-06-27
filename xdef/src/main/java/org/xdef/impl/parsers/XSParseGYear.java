@@ -12,6 +12,7 @@ public class XSParseGYear extends XSParseDate {
 
 	@Override
 	boolean parse(final StringParser parser) {return parser.isXMLYear();}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

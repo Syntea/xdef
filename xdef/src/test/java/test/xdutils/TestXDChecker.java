@@ -17,8 +17,8 @@ public class TestXDChecker extends XDTester {
 
 	public static boolean typX(XXData xdata) {return "xxx".equals(xdata .getTextValue());}
 
-	@Override
 	/** Run test and print error information. */
+	@Override
 	public void test() {
 		String methods = "boolean " + TestXDChecker.class.getName() + ".typX(XXData);";
 		String declarations =

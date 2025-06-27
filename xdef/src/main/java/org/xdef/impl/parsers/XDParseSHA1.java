@@ -15,6 +15,7 @@ public class XDParseSHA1 extends XSParseHexBinary {
 		_enumeration = null;
 		_minLength = _maxLength = 20;
 	}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -35,6 +36,7 @@ public class XDParseSHA1 extends XSParseHexBinary {
 //			BASE +
 			0;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }
