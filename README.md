@@ -208,7 +208,7 @@ Configuration file pom.xml:
       </dependency>
   <dependencies>
   ```
-* dependency on release or snapshot version in oss.sonatype.org:
+* dependency on release or snapshot version in central.sonatype.com:
 
   ```xml
   <dependencies>
@@ -219,14 +219,14 @@ Configuration file pom.xml:
       </dependency>
   <dependencies>
   <distributionManagement>
-      <snapshotRepository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </snapshotRepository>
       <repository>
           <id>ossrh</id>
           <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
       </repository>
+      <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      </snapshotRepository>
   </distributionManagement>
   ```
 
