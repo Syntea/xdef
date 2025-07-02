@@ -191,13 +191,13 @@ You can try your examples online at:
 
 Links:
 * release versions from the central maven repository: <https://search.maven.org/search?q=g:org.xdef>
-* release and snapshot versions from oss.sonatype.org: <https://oss.sonatype.org/#nexus-search;gav~org.xdef>
+* snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
 
 
 ## For maven projects
 
 Configuration file pom.xml:
-* dependency on release version in the central maven repository:
+* dependency on a release version in the central maven repository:
 
   ```xml
   <dependencies>
@@ -208,26 +208,24 @@ Configuration file pom.xml:
       </dependency>
   <dependencies>
   ```
-* dependency on release or snapshot version in central.sonatype.com:
+* dependency on a snapshot (or also release) version in the central maven snapshot repository:
 
   ```xml
   <dependencies>
       <dependency>
           <groupId>org.xdef</groupId>
           <artifactId>xdef</artifactId>
-          <version>[release or snapshot version]</version>
+          <version>[snapshot (or also release) version]</version>
       </dependency>
-  <dependencies>
-  <distributionManagement>
+  </dependencies>
+  <repositories>
       <repository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+          <id>central-snapshot</id>
+          <url>https://central.sonatype.com/repository/maven-snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
       </repository>
-      <snapshotRepository>
-          <id>ossrh</id>
-          <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      </snapshotRepository>
-  </distributionManagement>
+  </repositories>
   ```
 
 
@@ -303,19 +301,19 @@ Prerequisities:
             * during the package build by the user when prompted by the pgp-agent
             * or beforehand to the environment variable _MAVEN_GPG_PASSPHRASE_
               (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>)
-    * authentication to the maven repository manager _oss.sonatype.org_
-      (having id _"ossrh"_ in the file [xdef/pom.xml](xdef/pom.xml))
+    * authentication to the central maven repository manager _central.sonatype.com_
+      (having id _"central"_ in the file [xdef/pom.xml](xdef/pom.xml))
         * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
         * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
 
 Deploying:
-* build and deploy the snapshot package to the repository _oss.sonatype.org_:
+* build and deploy the X-definition snapshot package to the central maven snapshot repository:
 
   ```shell
-  mvn deploy -Pjavadoc,sources,dm-ossrh
+  mvn deploy -Pjavadoc,sources,dm-central
   ```
-* build and deploy the X-definition release package to the central maven repository (through the repository _oss.sonatype.org_):
+* build and deploy the X-definition release package to the central maven repository:
 
   ```shell
-  mvn deploy -Prelease,javadoc,sources,dm-ossrh
+  mvn deploy -Prelease,javadoc,sources,dm-central
   ```

@@ -221,7 +221,7 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <autoPublish>true</autoPublish>
-                            <waitUntil>uploaded</waitUntil>
+                            <waitUntil>validated</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -241,7 +241,7 @@
             </distributionManagement>
         </profile>
         <profile>
-            <!--zastarale-->
+            <!-- deprecated -->
             <id>dm-ossrh</id>
             <!-- activation of profiles sources, javadoc are required with this profile -->
             <build>
