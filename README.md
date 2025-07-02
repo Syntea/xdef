@@ -265,14 +265,19 @@ Frequent building operations:
   ```shell
   mvn package -Pjavadoc,sources
   ```
-* by using the "skipTests" profile, avoid junit-tests:
+* using the profile "skipTests", avoid junit-tests:
 
   ```shell
   mvn package -PskipTests
   ```
-* by using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms,
-  i.e. Java-8 (it is run by default in module "xdef"), Java-11 (using the module "xdef-test11"),
-  Java-17 (using the module "xdef-test17"), Java-21 (using the module "xdef-test21"):
+* using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms,
+  i.e. Java-8 (by default it is run in module "xdef"), Java-11 (it is run in the module "xdef-test11"),
+  Java-17 (it is run in the module "xdef-test17"), Java-21 (it is run in the module "xdef-test21").
+  It uses file system symbolic links. If it's not enabled, it can be enabled by two git-commands
+  (run from the project root directory) "git config set core.symlinks true", "git reset --hard".
+  For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
+  in addition, "Developer Mode" (Start > Settings > Update & Security > For developers > Developer Mode > On)
+  must be enabled in the system settings beforehand:
 
   ```shell
   mvn package -PtestOnAllJvms
