@@ -7,9 +7,9 @@
     <!-- ... -->
     
     <servers>
-        <!-- authentication to the maven repository manager oss.sonatype.org -->
+        <!-- authentication to the central maven repository manager central.sonatype.com -->
         <server>
-            <id>ossrh</id>
+            <id>central</id>
             <username>[user-token-name]</username>
             <password>[user-token-password]</password>
         </server>
@@ -21,7 +21,7 @@
 
     <profiles>
         <profile>
-            <id>dm-ossrh</id>
+            <id>dm-central</id>
             <properties>
                 <!-- configuration maven-gpg-plugin -->
                 <!-- pgp-manager executable command, plugin default value: gpg or gpg.exe by the platform
@@ -38,7 +38,7 @@
                 see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName)
                 <gpg.passphraseEnvName>MAVEN_GPG_PASSPHRASE</gpg.passphraseEnvName>
                 or as fallback may be entered into property "gpg.passphrase"
-                (it is deprecated, unrecommended, insecure and unreliable on all platforms)
+                (it is deprecated, unrecommended, insecure and unreliable on some platforms)
                 <gpg.passphrase>[pgp-private-key passphrase]</gpg.passphrase>
                 -->
             </properties>

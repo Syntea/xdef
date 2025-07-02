@@ -190,14 +190,14 @@ You can try your examples online at:
 ## Check and download available versions
 
 Links:
-* release versions from the central maven repository: <https://search.maven.org/search?q=g:org.xdef>
-* release and snapshot versions from oss.sonatype.org: <https://oss.sonatype.org/#nexus-search;gav~org.xdef>
+* release versions from the central maven repository: <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
+* snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
 
 
 ## For maven projects
 
 Configuration file pom.xml:
-* dependency on release version in the central maven repository:
+* dependency on a release version in the central maven repository:
 
   ```xml
   <dependencies>
@@ -208,26 +208,24 @@ Configuration file pom.xml:
       </dependency>
   <dependencies>
   ```
-* dependency on release or snapshot version in oss.sonatype.org:
+* dependency on a snapshot (or also release) version in the central maven snapshot repository:
 
   ```xml
   <dependencies>
       <dependency>
           <groupId>org.xdef</groupId>
           <artifactId>xdef</artifactId>
-          <version>[release or snapshot version]</version>
+          <version>[snapshot (or also release) version]</version>
       </dependency>
-  <dependencies>
-  <distributionManagement>
-      <snapshotRepository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </snapshotRepository>
+  </dependencies>
+  <repositories>
       <repository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+          <id>central-snapshot</id>
+          <url>https://central.sonatype.com/repository/maven-snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
       </repository>
-  </distributionManagement>
+  </repositories>
   ```
 
 
@@ -240,11 +238,11 @@ Prerequisities:
 * download project X-definition, eg. from GitHub
 * install _java_ (at least version 8)
 * install _maven_ (at least version 3.6)
-* configure:
+* configuration:
     * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
-        * configuration the xml-file _~/.m2/toolchains.xml_ in the home directory
-        * see the template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
+        * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
+        * see the template-file [configuration/maven/toolchains.xml](configuration/maven/toolchains.xml)
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
@@ -272,12 +270,12 @@ Frequent building operations:
   ```shell
   mvn package -PskipTests
   ```
-* by using the "testOnAllJvm" profile, junit-tests will be run on all configured Java platforms,
-  i.e. Java-8 (it is run by default in xdef module), Java-11 (using the xdef-test11 module),
-  Java-17 (using the xdef-test17 module), Java-21 (using the xdef-test21 module):
+* by using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms,
+  i.e. Java-8 (it is run by default in module "xdef"), Java-11 (using the module "xdef-test11"),
+  Java-17 (using the module "xdef-test17"), Java-21 (using the module "xdef-test21"):
 
   ```shell
-  mvn package -PtestOnAllJvm
+  mvn package -PtestOnAllJvms
   ```
 * build the release package:
 
@@ -296,26 +294,26 @@ Frequent building operations:
 Prerequisities:
 * satisfy prerequisities for building
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
-* configure:
+* configuration:
     * unlocking the appropriate pgp-key
         * insert the appropriate key to the the pgp-manager
         * enter the pgp-key-password for the pgp-key:
             * during the package build by the user when prompted by the pgp-agent
             * or beforehand to the environment variable _MAVEN_GPG_PASSPHRASE_
               (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>)
-    * authentication to the maven repository manager _oss.sonatype.org_
-      (having id _"ossrh"_ in the file [xdef/pom.xml](xdef/pom.xml))
+    * authentication to the central maven repository manager _central.sonatype.com_
+      (having id _"central"_ in the file [xdef/pom.xml](xdef/pom.xml))
         * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
-        * see template-file [configure/maven/settings.xml](configure/maven/settings.xml)
+        * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
 
 Deploying:
-* build and deploy the snapshot package to the repository _oss.sonatype.org_:
+* build and deploy the X-definition snapshot package to the central maven snapshot repository:
 
   ```shell
-  mvn deploy -Pjavadoc,sources,dm-ossrh
+  mvn deploy -Pjavadoc,sources,dm-central
   ```
-* build and deploy the X-definition release package to the central maven repository (through the repository _oss.sonatype.org_):
+* build and deploy the X-definition release package to the central maven repository:
 
   ```shell
-  mvn deploy -Prelease,javadoc,sources,dm-ossrh
+  mvn deploy -Prelease,javadoc,sources,dm-central
   ```

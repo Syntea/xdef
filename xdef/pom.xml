@@ -13,7 +13,7 @@
     </parent>
 
     <artifactId>xdef</artifactId>
-    
+
     <name>xdef</name>
     <description>X-definition ${specification.version} (Open Source Software)</description>
     <url>http://www.xdef.org</url>
@@ -21,15 +21,15 @@
         <url>https://github.com/Syntea/xdef</url>
         <connection>scm:git:git@github.com:Syntea/xdef.git</connection>
     </scm>
-    
-    <properties>    
+
+    <properties>
         <!-- do install and deploy -->
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-        
+
     <dependencies>
         <!-- third parties -->
         <dependency>
@@ -37,10 +37,10 @@
             <artifactId>Saxon-HE</artifactId>
             <classifier>xqj</classifier>
         </dependency>
-       
+
         <!-- test-phase -->
         <!-- ========== -->
-        
+
         <!-- third parties -->
         <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -52,13 +52,13 @@
             <artifactId>derby</artifactId>
             <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>1.29</version>
-			<scope>test</scope>
-		</dependency>
-		
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.29</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -81,8 +81,8 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <scope>test</scope>
             <version>2.44.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.opera</groupId>
@@ -98,7 +98,7 @@
         </dependency>
 
     </dependencies>
-    
+
     <build>
         <resources>
             <resource>
@@ -109,7 +109,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        
+
         <plugins>
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
@@ -121,11 +121,11 @@
                             <goal>revision</goal>
                         </goals>
                     </execution>
-                </executions>            
+                </executions>
             </plugin>
         </plugins>
     </build>
-        
+
     <profiles>
         <profile>
             <id>javadoc</id>
@@ -188,6 +188,60 @@
             </build>
         </profile>
         <profile>
+            <id>dm-central</id>
+            <!-- activation of profiles sources, javadoc are required with this profile -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <keyname>info@syntea.cz</keyname>
+                            <!--may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
+                                see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
+                            <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
+                            -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- see https://central.sonatype.org/publish/publish-portal-maven -->
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>validated</waitUntil>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>dm-syntea</id>
+            <distributionManagement>
+                <repository>
+                    <id>private</id>
+                    <url>${mrmUrl}/private</url>
+                </repository>
+                <snapshotRepository>
+                    <id>private-snapshot</id>
+                    <url>${mrmUrl}/private-snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <!-- deprecated -->
             <id>dm-ossrh</id>
             <!-- activation of profiles sources, javadoc are required with this profile -->
             <build>
@@ -237,19 +291,6 @@
                 -->
             </distributionManagement>
         </profile>
-        <profile>
-            <id>dm-syntea</id>
-            <distributionManagement>
-                <repository>
-                    <id>private</id>
-                    <url>${mrmUrl}/private</url>
-                </repository>
-                <snapshotRepository>
-                    <id>private-snapshot</id>
-                    <url>${mrmUrl}/private-snapshot</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
     </profiles>
-    
+
 </project>
