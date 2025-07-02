@@ -190,7 +190,7 @@ You can try your examples online at:
 ## Check and download available versions
 
 Links:
-* release versions from the central maven repository: <https://search.maven.org/search?q=g:org.xdef>
+* release versions from the central maven repository: <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
 * snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
 
 
