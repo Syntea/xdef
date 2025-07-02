@@ -137,6 +137,11 @@
                 <artifactId>derby</artifactId>
                 <version>${derby.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.29</version>
+            </dependency>
 
             <!-- test-phase -->
             <dependency>
