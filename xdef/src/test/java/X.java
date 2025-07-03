@@ -11,7 +11,7 @@ import static test.XDTester._xdNS;
 public class X extends XDTester {
 	public X() {}
 
-	/** Run test and display error information. */
+	/** Run test and display error info. */
 	@Override
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
