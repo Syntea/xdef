@@ -320,7 +320,7 @@ Deploying:
   ```
 * build and deploy the X-definition release package to the central maven repository
   (you can watch processes uploading, validation and publishing in
-  <https://central.sonatype.com/publishing/deployments> as logged in appripriate user):
+  <https://central.sonatype.com/publishing/deployments> as logged in appropriate user):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-central
