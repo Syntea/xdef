@@ -312,12 +312,15 @@ Prerequisities:
         * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
 
 Deploying:
-* build and deploy the X-definition snapshot package to the central maven snapshot repository:
+* build and deploy the X-definition snapshot package to the central maven snapshot repository 
+  (immediate deploy without processes validation and publishing):
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-central
   ```
-* build and deploy the X-definition release package to the central maven repository:
+* build and deploy the X-definition release package to the central maven repository
+  (you can watch processes uploading, validation and publishing in
+  <https://central.sonatype.com/publishing/deployments> as logged in appripriate user):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-central
