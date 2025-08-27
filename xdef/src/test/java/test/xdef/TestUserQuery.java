@@ -28,7 +28,7 @@ public final class TestUserQuery extends XDTester {
 		// userQuery method)
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
@@ -63,7 +63,7 @@ public final class TestUserQuery extends XDTester {
 		// parameter new UserTable().
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
@@ -98,7 +98,7 @@ public final class TestUserQuery extends XDTester {
 		// is called in element
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
@@ -134,7 +134,7 @@ public final class TestUserQuery extends XDTester {
 		// is called from sequence item
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
@@ -172,7 +172,7 @@ public final class TestUserQuery extends XDTester {
 		// inside of sequence block. User method is called inside of sequence.
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
@@ -207,7 +207,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
@@ -263,7 +263,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {//create books from simulated select (with element qualifier "*")
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='test' root='test'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
@@ -287,7 +287,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {// the same with sequence (qualifier "*")
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='test' root='test'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
@@ -315,7 +315,7 @@ public final class TestUserQuery extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {//this is the example of an external user object passed to creator
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='test' root='test'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+

@@ -139,7 +139,7 @@ if (T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  [\n" +
 "    { %script= \"occurs 1..*;\",\n" +
@@ -1051,18 +1051,18 @@ if(T ){return;}
 if(T ){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:lexicon language='eng' >\n"+
 "#a      =    a\n"+
 "#a/c    =    b\n"+
 "#a/c/@f =    e\n"+
 "</xd:lexicon>\n"+
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='slk' >\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='slk' >\n"+
 "#a      =    a\n"+
 "#a/c    =    d\n"+
 "#a/c/@f =    g\n"+
 "</xd:lexicon>\n"+
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='ces' default='yes' />\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='ces' default='yes' />\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A %link #a;\n"+
 "</xd:component>\n"+
@@ -1104,7 +1104,7 @@ if(T ){return;}
 			assertNoErrorwarnings(reporter);
 			assertEq("<a><b e='a'/></a>", xc.toXml());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Contract'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Contract'>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.Contract %link #Contract;\n"+
 "</xd:component>\n"+
@@ -1133,7 +1133,7 @@ if(T ){return;}
 "</Agreement>\n"+
 "</xd:def>";
 			String[] params = new String[]{xdef,
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng'>\n"+
 "#Contract =                         Contract\n"+
 "#Contract/@Number =                 Number\n"+
 "#Contract/Client =                  Client\n"+
@@ -1157,7 +1157,7 @@ if(T ){return;}
 "#Agreement/Mediator/@ID =           ID\n"+
 "#Agreement/Mediator/@Name =         Name\n"+
 "</xd:lexicon>",
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='ces'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='ces'>\n"+
 "#Contract =                         Smlouva\n"+
 "#Contract/@Number =                 Číslo\n"+
 "#Contract/Client =                  Klient\n"+
@@ -1181,7 +1181,7 @@ if(T ){return;}
 "#Agreement/Mediator/@ID =           IČO\n"+
 "#Agreement/Mediator/@Name =         Název\n"+
 "</xd:lexicon>",
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='deu'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='deu'>\n"+
 "#Contract =                         Vertrag\n"+
 "#Contract/@Number =                 Nummer\n"+
 "#Contract/Client =                  Klient\n"+

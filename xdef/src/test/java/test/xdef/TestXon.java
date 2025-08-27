@@ -36,7 +36,7 @@ public class TestXon extends XDTester {
 	private ArrayReporter test(final String typ) {
 		String json;
 		XDDocument xd = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:declaration scope='local'> BNFGrammar base = new BNFGrammar('a::=[0-9a-zA-Z]+'); </xd:declaration>\n" +
 "  <xd:json name='A'>\n" +
 "   { \"a\": \"" + typ + "\" }\n" +
@@ -119,7 +119,7 @@ public class TestXon extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='M' root='y:X' xmlns:y='a.b'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='M' root='y:X' xmlns:y='a.b'>\n" +
 "  <xd:declaration>type gam xdatetime('yyyyMMddHHmmssSS');</xd:declaration>\n" +
 "  <y:X a = '?date()' t='gam();' >? int() <y:Y xd:script='*'/>dec()</y:X>\n" +
 "  <xd:component>%class " + _package + ".MGam %link y:X</xd:component>\n" +
@@ -144,7 +144,7 @@ public class TestXon extends XDTester {
 "}");
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
 "  <xd:component>%class " + _package + ".Csvxx %link a</xd:component>\n" +
 " <xd:json name='a'>\n" +
 "    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
@@ -168,7 +168,7 @@ public class TestXon extends XDTester {
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "    [\"hexBinary()\",\"base64Binary()\",\"hexBinary()\",\"base64Binary()\"]\n"+
 "  </xd:json>\n" +
@@ -372,7 +372,7 @@ public class TestXon extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
 "  <xd:component>%class " + _package + ".Xona %link a</xd:component>\n" +
 "  <xd:json name='a'>\n" +
 "    [\n" +
@@ -401,7 +401,7 @@ public class TestXon extends XDTester {
 				fail(XonUtils.toXonString(o) + "\n***\n" + XonUtils.toXonString(x));
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n" +
 "  <xd:component>%class " + _package + ".Xonb %link X</xd:component>\n" +
 "  <xd:json name=\"X\">\n" +
 "[\n" +
@@ -444,7 +444,7 @@ public class TestXon extends XDTester {
 			assertNull(list.get(1));
 			assertNull(list.get(2));
 			xdef = // test Windows INI
-"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='test' name='A'>\n" +
 "  <xd:ini xd:name = \"test\">\n" +
 "    name = string();\n" +
 "    date = date();\n" +
@@ -464,7 +464,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
 			xd = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
 "#this is INI file comment\n" +
 "address=string(); options noTrimAttr\n" +
@@ -487,7 +487,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
 			xd = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
 "proxy type=int(0,9)\n" +
 "hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
@@ -532,7 +532,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"TRSconfig\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"TRSconfig\">\n" +
 "  <xd:ini xd:name=\"TRSconfig\">\n" +
 "    TRSUser = string()\n" +
 "    [User]\n" +
@@ -575,7 +575,7 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(xi, xd.iparse(XonUtils.toIniString(xi), reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef = //test CSV data with head line (column names)
-"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV'>\n" +
 "  <xd:component>%class " + _package + ".CsvTest %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
@@ -637,7 +637,7 @@ public class TestXon extends XDTester {
 					+ "*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = \"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root = \"test\">\n" +
 "  <xd:json name = \"test\">\n" +
 "[\n" +
 "  [\"occurs 2.. string();\"], # header line\n" +
@@ -663,7 +663,7 @@ public class TestXon extends XDTester {
 			assertEq(null, ((List) ((List) o).get(2)).get(2));
 			assertEq(3, ((List) ((List) o).get(2)).size());
 			xdef = // no CSV head line with bames;
-"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV'>\n" +
 "  <xd:component>%class " + _package + ".CsvTest1 %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n"+
@@ -719,7 +719,7 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xdef = // test %oneOf
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "  <xd:component>%class "+_package+".MyTestX_OneOf %link test</xd:component>\n"+
 "  <xd:json name=\"test\">\n" +
 "{ a:[ %oneOf,\n" +
@@ -793,7 +793,7 @@ public class TestXon extends XDTester {
 			assertEq("string\n", swr.toString());
 			assertEq(o, xc.toXon());
 			xdef = // test forget in XON
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".data.TestXonForget %link test\n"+
 "  </xd:component>\n" +
@@ -851,7 +851,7 @@ public class TestXon extends XDTester {
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n" +
@@ -917,7 +917,7 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(swr.toString(), s);
 			xdef = // CSV with head
-"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV'>\n" +
 "  <xd:component>%class "+_package+".CsvTest %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
@@ -979,7 +979,7 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xdef = // no head;
-"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV'>\n" +
 "  <xd:component>%class "+_package+".CsvTest1 %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "    [\n" +
@@ -1035,7 +1035,7 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xdef = // test forget
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".data.TestXonForget %link test\n" +
 "  </xd:component>\n"+
@@ -1093,7 +1093,7 @@ public class TestXon extends XDTester {
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 			xdef = // test %anyName in map
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "    { %anyName: \"? int();\", x: \"? int();\" }\n" +
 "  </xd:json>\n" +
@@ -1104,7 +1104,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "{}"));
 			assertNull(testX(xp, "", s, "{\"x\" : 1, \"xxx\" : 2}"));
 			xdef = // %anyName items and one named item
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "    { %anyName: \"* int(); finally out('X'+getText())\", x: \"? int();\" }\n" +
 "  </xd:json>\n" +
@@ -1115,7 +1115,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "{}", ""));
 			assertNull(testX(xp, "", s, "{ a: 1, b: 2, x: 999 }", "X1X2"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'> { %anyName: [\"* int();\"] } </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_3 %link A</xd:component>\n" +
 "</xd:def>";
@@ -1123,34 +1123,41 @@ public class TestXon extends XDTester {
 			s = _package+".MyTestAny_3"; // class name
 			assertNull(testX(xp, "", s, "{ \"x\": [] }"));
 			assertNull(testX(xp, "", s, "{ \"x\": [1,2i] }"));
-			xd = compile(// test %anyObj
-"<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
-"<xd:json name=\"Any\">\n" +
-" %anyObj\n" +
-"</xd:json>\n" +
-"</xd:def>").createXDDocument();
-			o = xd.jparse(
-"[\n" +
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='Any'>\n" +
+"  <xd:json name=\"Any\"> %anyObj </xd:json>\n" +
+"  <xd:component>%class "+_package+".MyTestAny_4 %link Any</xd:component>\n" +
+"</xd:def>";
+			xd = (xp = compile(xdef)).createXDDocument();
+			o = xd.jparse(json = "[\n" +
 "  [6, 1, \"a\t\n\\\"b\", false],\n" +
 "  [6, null, null, true],\n" +
 "  [null, null, null, null]\n" +
 "]", reporter);
 			assertNoErrors(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(XonUtils.toJsonString(o)), o));
+			genXComponent(xp);
+			s = _package+".MyTestAny_4"; // class name
+			assertNull(testX(xp, "", s, "true"));
+			assertNull(testX(xp, "", s, "1"));
+			assertNull(testX(xp, "", s, "null"));
+			assertNull(testX(xp, "", s, "{}"));
+			assertNull(testX(xp, "", s, "[0]"));
+			assertNull(testX(xp, "", s, json));
 			xdef = // %anyName in map with %anyObj items
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:json name='A'> { %anyName: %anyObj=\"*;\"} </xd:json>\n"+
-"  <xd:component>%class "+_package+".MyTestAny_4 %link A</xd:component>\n"+
+"  <xd:component>%class "+_package+".MyTestAny_5 %link A</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
-			s = _package+".MyTestAny_4"; // class name
+			s = _package+".MyTestAny_5"; // class name
 			assertNull(testX(xp, "", s, "{}"));
 			assertNull(testX(xp, "", s, "{\"\": {} }"));
 			assertNull(testX(xp, "", s, "{ a: [] }"));
 			assertNull(testX(xp, "", s, "{ \" \": [\"\",null, false] }"));
 			assertNull(testX(xp, "", s, "{ p:[8d,9D],q:[],r:{},s:\"\" }"));
 			xdef = //test num, eq, gYear, int in array
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:component>%class "+_package+".MytestX_numeq %link #A;</xd:component>\n" +
 "  <xd:json name='A'>\n" +
 "    [ \"num()\", \"eq('2021')\", \"gYear()\", \"int(2021,2021)\" ]\n" +
@@ -1161,7 +1168,7 @@ public class TestXon extends XDTester {
 			s = _package+".MytestX_numeq";
 			assertNull(testX(xp,"", s, xon));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
@@ -1227,7 +1234,7 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(swr.toString(), s);
 			xdef = // test %anyName, %oneOf, ref
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"a\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"a\">\n" +
 "  <xd:json name=\"a\">[ { %script=\"occurs *; ref B\" } ]</xd:json>\n" +
 "  <xd:json name=\"B\">\n" +
 "    { %anyName: [%oneOf,\n" +
@@ -1247,7 +1254,7 @@ public class TestXon extends XDTester {
 "]";
 			assertNull(testX(xp, "", _package+".TestAnyRef", json));
 			xdef = //test anyName, oneOf
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"a\" root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"a\" root=\"test\">\n" +
 "<xd:json name=\"test\">[ %script=\"ref A\" ]</xd:json>\n" +
 "  <xd:json name=\"A\">\n" +
 "    [%oneOf,\n"+
@@ -1281,7 +1288,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "a", s, "[[1, true]]"));
 			assertNull(testX(xp, "a",s,"[{a:1,b:[3,4],c:{d:5,e:[6,7]},f:{}}]"));
 			xdef = // test reference to %oneOf
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 " <xd:json name=\"A\">\n" +
 "[ \"?; jvalue()\",\n" +
 "  [ %oneOf=\"?; ref X\" ]\n" +
@@ -1307,7 +1314,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s,"[[],[]]"));
 			assertNotNull(testX(xp,"",s,"[{},{}]"));
 			xdef = // test %anyObj
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"a\" root=\"testX\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\">%anyObj</xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".MyTestX_any %link a#testX;\n" +
@@ -1335,7 +1342,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"a", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
 			assertNull(testX(xp,"a", s, "{a:[1, true], b:null}"));
 			xdef = // test occurrence 1 for %anyObj directives
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 "  <xd:json name=\"A\"> [ %anyObj=\"occurs 1;\" ] </xd:json>\n" +
 "  <xd:component>\n" +
 	 "%class "+_package+".TestArrayAnyObj1 %link #A;\n" +
@@ -1355,7 +1362,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[[],[]]")); // error more then one
 			assertNotNull(testX(xp,"",s, "[{},{}]")); // error more then one
 			xdef = // test occurrence 2 for %anyObj directives
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 "  <xd:json name=\"A\"> [ %anyObj=\"occurs 2;\" ] </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".TestArrayAnyObj2 %link #A;\n" +
@@ -1382,7 +1389,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
 			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
 			xdef =  // test %anyObj in different X-definitions
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [ %anyObj=\"?;\" ] </xd:json>\n" +
 "</xd:def>\n" +
@@ -1415,7 +1422,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"b", s, "true")); // must be error!
 			assertNotNull(testX(xp,"b", s, "{a:1, b:null}")); // must be error!
 			xdef = // test XON models in different X-definitions
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
 "  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
 "</xd:def>\n" +
@@ -1495,7 +1502,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"x", s, "\"\\\"\""));
 			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
 			xdef = // test XON reference to %any in %oneOf
-"<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
 "  <xd:json name=\"Any\">\n" +
 "    [ %oneOf, \"jvalue();\",\n" +
 "      [ %script=\"*; ref anyA;\" ],\n" +
@@ -1536,7 +1543,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			xdef = //jvalue
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:json name='a'> \"jvalue()\" </xd:json>\n" +
 "  <xd:component> %class "+_package+".MyTestX_jval %link #a; </xd:component>\n"+
 "</xd:def>";
@@ -1549,7 +1556,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "\"a\""));
 			assertNull(testX(xp, "", s, "\"a b\""));
 			xdef = //jstring
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:json name='a'> \"jstring()\" </xd:json>\n" +
 "  <xd:component> %class "+_package+".MyTestX_jstr %link #a; </xd:component>\n"+
 "</xd:def>";
@@ -1560,7 +1567,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "\" \""));
 			assertNull(testX(xp, "", s, "\" \\\" \""));
 			xdef = //int
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:json name='a'> \"int()\" </xd:json>\n" +
 "  <xd:component> %class "+_package+".MyTestX_int %link #a; </xd:component>\n" +
 "</xd:def>";
@@ -1570,7 +1577,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "-3"));
 			assertNull(testX(xp, "", s, "123456"));
 			xdef = // num
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:component>%class "+_package+".MytestX_num %link #A;</xd:component>\n" +
 "  <xd:json name='A'> \"num()\" </xd:json>\n" +
 "</xd:def>";
@@ -1580,7 +1587,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"", s, "\"00001\""));
 			assertNull(testX(xp,"", s, "\"2021\""));
 			xdef = //boolean
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:json name='a'> \"boolean()\" </xd:json>\n" +
 "  <xd:component> %class "+_package+".MyTestX_bool %link #a; </xd:component>\n"+
 "</xd:def>";
@@ -1589,7 +1596,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "true"));
 			assertNull(testX(xp, "", s, "false"));
 			xdef = //double
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:json name='a'> \"double()\" </xd:json>\n" +
 "  <xd:component> %class "+_package+".MyTestX_dbl %link #a; </xd:component>\n" +
 "</xd:def>";
@@ -1598,7 +1605,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "-12.34"));
 			assertNull(testX(xp, "", s, "1234"));
 			xdef = //jvalue in map
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:json name='a'> { a:\"jvalue()\" } </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestX_jvalM %link #a;</xd:component>\n" +
 "</xd:def>";
@@ -1612,7 +1619,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "{\"a\": 1234}"));
 			assertNull(testX(xp, "", s, "{\"a\": null}"));
 			xdef = // %anyName, name of item is an empty string
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'> {%anyName: \"? int()\"} </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_x1 %link A</xd:component>\n" +
 "</xd:def>";
@@ -1630,7 +1637,7 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
 			assertTrue(XonUtils.xonEqual(x, XComponentUtil.getMap(xc)));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'> {%anyName: \"* int()\", a:\"? boolean()\"} </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_x2 %link A</xd:component>\n" +
 "</xd:def>";
@@ -1656,7 +1663,7 @@ public class TestXon extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "    { %anyName: [%script=\"?\", %anyObj=\"*\"], a: %anyObj=\"?\" }\n" +
 "  </xd:json>\n" +
@@ -1691,7 +1698,7 @@ public class TestXon extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test YAML
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='test' name='A'>\n"+
 "  <xd:json name=\"test\">\n" +
 "    { \"cities\": [\n" +
 "        \"date();\",\n" +
@@ -1733,7 +1740,7 @@ public class TestXon extends XDTester {
 		}
 		try { // test jlist
 			xp = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='x'>\n"+
 "  <x>\n"+
 "    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"+
 "  </x>\n"+

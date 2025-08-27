@@ -93,7 +93,7 @@ public final class TestXComponents extends XDTester {
 		XDPool xp;
 		try {
 			xdef = // test datetime with milliseconds = 0
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
 "  <X a='gam()'>int()<Y xd:script='*' a='int()'/>? date()</X>\n"+
 "  <xd:component>%class "+_package+".Mgam %link X</xd:component>\n"+
@@ -112,7 +112,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
 "  <xd:component> %class "+_package+".MichalTest %link #A; </xd:component>\n" +
 "</xd:def>";
@@ -127,7 +127,7 @@ public final class TestXComponents extends XDTester {
 				XComponentUtil.get((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(
 					xc, "C"),"B"), "b"));
 			xdef = // GPSPosition, Price
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:declaration\n>\n"+
 "    Price a;\n"+
 "    GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
@@ -156,13 +156,13 @@ public final class TestXComponents extends XDTester {
 			assertEq(1030, xd.getVariable("d").intValue());
 			assertEq("51.52, -0.09, 0.0, London", xd.getVariable("q").toString());
 			xp = compile(new String[] { // nested declaration of type
-"<xd:def xmlns:xd='" + _xdNS + "' name='D7_xc'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='D7_xc'>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".IdentDN %link D7_#A;\n" +
 "    %class "+_package+".VymazDN extends test.xdef.IdentDN %link D7_#B;\n" +
 "  </xd:component>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' name='D7_' root='A | B'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='D7_' root='A | B'>\n" +
 "  <xd:declaration scope=\"global\">\n" +
 "    type  cisloDN num(5);\n" +
 "    type  cj      string(1,50);\n" +
@@ -172,7 +172,7 @@ public final class TestXComponents extends XDTester {
 "  <A RokDN=\"rokDN()\" CisloDN=\"cisloDN()\"/>\n" +
 "  <B xd:script=\"ref A\" C=\"cj()\" P=\"? plan()\"/>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' name='D7_decl'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='D7_decl'>\n" +
 "  <xd:declaration scope=\"global\">\n" +
 "    type  gamYear  long(1800, 2200);\n" +
 "    type  gamDate  xdatetime('yyyyMMdd');\n" +
@@ -200,7 +200,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("x", XComponentUtil.get(xc,"C"));
 			assertEq(new SDatetime("2021-05-24"), XComponentUtil.get(xc,"P"));
 			xdef = // test base64/hex
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <X a='hex()' b='base64Binary()' c='SHA1()'/>\n"+
 "  <xd:component> %class "+_package+".TestXexBase64 %link X; </xd:component>\n"+
 "</xd:def>";
@@ -216,7 +216,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(el,parse(xd, KXmlUtils.nodeToString(xc.toXml()),reporter));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Person' root='Person'>\n"+
 "  <Person Name  = \"string()\"\n" +
 "          Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
 "          Sex   = \"enum('M','W', 'X')\"/>\n" +
@@ -245,7 +245,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='X' root='XdPoolCfg'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='XdPoolCfg'>\n" +
 "  <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +
 "  <IncludeXDPoolCfg>\n" +
 "    <PoolCfg xd:script=\"occurs 0..; ref Resource\"/>\n" +
@@ -289,7 +289,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
 			xdef =
-"<xd:def xmlns:xd=\"" + _xdNS + "\" name = \"X\" root = \"a\">\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" name = \"X\" root = \"a\">\n" +
 "  <a>\n" +
 "    <b xd:script = \"occurs 0..\" Name = \"string(1,20)\">\n" +
 "      <Param xd:script = \"occurs 0..\" Name = \"string(1,20)\">\n" +
@@ -338,7 +338,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
 			xdef = // test jcreateXComponent
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:json name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:json>\n"+
 "  <xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
 "</xd:def>";
@@ -360,7 +360,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
 "  <xd:json name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
 "</xd:def>";
@@ -377,7 +377,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
 "  <xd:json name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
 "</xd:def>";
@@ -394,7 +394,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:json name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:json>\n"+
 "  <xd:component> %class "+_package+".JCreateX4 %link X </xd:component>\n"+
 "</xd:def>";
@@ -413,7 +413,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
 			xdef = // jcreate with create section
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:json name = 'X'>\n"+
 "   [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
 "  </xd:json>\n"+
@@ -430,7 +430,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:json name = 'X'>\n"+
 "    { a:\"int(); create '1'\",\n"+
 "      b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
@@ -449,7 +449,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
 			xp = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='x'>\n"+
 "<x>\n"+
 "  <a xd:script='*'>\n"+
 "    jlist(%item=jvalue())\n"+
@@ -488,7 +488,7 @@ public final class TestXComponents extends XDTester {
 			assertFalse((boolean)list.get(2));
 			assertNull(list.get(3));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
 "  <xd:json name='a'>\n" +
 "    {\n" +
@@ -551,7 +551,7 @@ public final class TestXComponents extends XDTester {
 			assertNull(XComponentUtil.get(xc, "$manager"));
 			assertNull(XComponentUtil.get(xc, "$subordinates"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
 "  <xd:json name=\"test\">\n" +
 "    { a:[ %oneOf=\"?\",\n" +
@@ -684,7 +684,7 @@ public final class TestXComponents extends XDTester {
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertFalse(((Map) xc.toXon()).containsKey("a"));
 			xdef = // sequence with separator
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
 "  <xd:declaration>\n"+
 "    type s sequence(%separator=',', %item=[int, long, long]);\n"+
@@ -737,7 +737,7 @@ public final class TestXComponents extends XDTester {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
 			xdef = //Names of getters of A/B and A/C/B must be same
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
 "  <xd:component> %class "+_package+".TestB %link #A; </xd:component>\n" +
 "</xd:def>";
@@ -751,7 +751,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("2", XComponentUtil.get((XComponent) XComponentUtil.get(
 				(XComponent) XComponentUtil.get(xc, "C"), "B"), "b"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A0'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A0'>\n" +
 "  <A0>\n" +
 "    <B><D xd:script=\"ref D\" /><C c=\"string(1)\"/></B>\n" +
 "  </A0>\n"+
@@ -772,7 +772,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("d/c", XComponentUtil.get((XComponent) XComponentUtil.get(
 				(XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(xc, "B"), "D"), "C"), "c"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A1'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A1'>\n" +
 "  <A1>\n" +
 "    <B><C c=\"string(1)\"/><D xd:script=\"ref D\" /></B>\n" +
 "  </A1>\n"+
@@ -808,11 +808,11 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
 			xp = compile(new String[] { // any, create mode
-"<xd:def  xmlns:xd='" + _xdNS + "' name='A' root='A'>\n" +
+"<xd:def  xmlns:xd='"+_xdNS+"' name='A' root='A'>\n" +
 "  <A><xd:any xd:script='options moreElements,moreText,moreAttributes'/></A>\n"+
 "  <xd:component> %class "+_package+".Kalcik %link A#A; </xd:component>\n" +
 "</xd:def>",
-"<xd:def  xmlns:xd='" + _xdNS + "' name='B' root='X'>\n" +
+"<xd:def  xmlns:xd='"+_xdNS+"' name='B' root='X'>\n" +
 "  <X xd:script='create from(\"/*\")' a=\"string()\" b=\"date()\" />\n" +
 "</xd:def>"});
 			genXComponent(xp);
@@ -828,7 +828,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq("<X b='2000-01-21' a='x' />", el);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 "  <A a='int(-1) || int(0, 100);'/>\n" +
 "  <xd:component> %class "+_package+".TestXKoci1 %link #A; </xd:component>\n" +
 "</xd:def>";
@@ -843,7 +843,7 @@ public final class TestXComponents extends XDTester {
 			assertTrue(o instanceof String && "20".equals(o));
 			assertEq(xml, xc.toXml());
 			xdef = // test union
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 "  <xd:declaration>\n"+
 "    type s union(%item=[byte(-1), int(1, 100)]);\n"+
 "  </xd:declaration>\n"+

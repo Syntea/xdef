@@ -83,7 +83,7 @@ public class TestGenJava extends XDTester {
 			test("bugreports.TestGenJava_2", compile(xdef), "", xml);
 
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root = 'A'>\n"+
 "<xd:declaration>\n"+
 "   external method XDContainer bugreports.TestGenJava.x(XDContainer x, String a, String b, String mask);\n"+
 "   type xx xdatetime('yyyy-MM-dd');\n"+

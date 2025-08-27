@@ -64,7 +64,7 @@ public final class TestScript extends XDTester {
 		System.out.flush();
 		System.err.flush();
 		String xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
 "   script='options preserveEmptyAttributes," +
 "           preserveAttrWhiteSpaces, noTrimAttr'>\n"+
 "<xd:declaration>\n"+
@@ -121,7 +121,7 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  String result='?';\n"+
 "</xd:declaration>\n"+
@@ -160,7 +160,7 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
@@ -212,7 +212,7 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+			"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
 "      void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
@@ -277,7 +277,7 @@ public final class TestScript extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 		xdef = // test rounding seconds acordint to milliseconds
-"<xd:def xmlns:xd='" + _xdNS + "' root='T'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='T'>\n" +
 "  <xd:declaration>\n" +
 "    type x xdatetime(\n"+
 "            '{SSS000}yyyy-MM-dd HH:mm:ss[.S]','yyyy-MM-ddTHH:mm:ss');\n"+
@@ -911,7 +911,7 @@ public final class TestScript extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a date=\"required xdatetime('d.M.yyyy','HH:mm:ss')\"/>\n"+
 "</xd:def>";
 			xml = "<a date= '1.1.2000'/>";
@@ -924,7 +924,7 @@ public final class TestScript extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("00:00:00", el.getAttribute("date"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    <![CDATA[\n"+
 "    int count;\n"+
@@ -1018,7 +1018,7 @@ public final class TestScript extends XDTester {
 			assertFalse(test(xdef, xml, "", 'P', xml,
 				"OK 1 OK 2 OK 3 OK 4 OK 5 OK 6 OK 7 OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    void x() {\n"+
 "      Decimal d = decimalValue('123');\n"+
@@ -1037,7 +1037,7 @@ public final class TestScript extends XDTester {
 			assertFalse(test(xdef, xml, "", 'P', xml,
 "3.141592653589793115997963468544185161590576171875; 312561.52461"));
 			xdef = // Test hasAttribute and hasNamedItem
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration><![CDATA[\n"+
 "    Container c = [%a='a'];"+
 "    Element e = xparse(\"<a a='a'/>\");\n]]>\n"+
@@ -1053,7 +1053,7 @@ public final class TestScript extends XDTester {
 			xp.createXDDocument().xparse("<a/>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef = // Test reference to model with different namespace
-"<xd:def xmlns:xd='" + _xdNS + "' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
 "        root='a:a | b:a'>\n"+
 "  <a:a a='int()' a:b='int()' >\n"+
 "    <a:b a='int()' a:b='int()' />\n"+
@@ -1078,7 +1078,7 @@ public final class TestScript extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
 "  <a a='int()' a:b='int()' >\n"+
 "    <b a='int()' a:b='int()' />\n"+
@@ -1100,7 +1100,7 @@ public final class TestScript extends XDTester {
 			assertEq(xml, parse(xp, "B", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // Test reference to model with different namespace
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
 "  <a a='int()' a:b='int()' >\n"+
 "    <b a='int()' a:b='int()' />\n"+
@@ -1170,7 +1170,7 @@ public final class TestScript extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n" +
 "    ParseResult a(){return new ParseResult(getText());}\n" +
 "    type b long();\n" +
@@ -1194,7 +1194,7 @@ public final class TestScript extends XDTester {
 			setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2100");//max hodnota
 			setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31, 3000-12-31T23:59:59");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\" >\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root=\"A\" >\n" +
 "  <A>\n" +
 "    <xd:mixed>\n" +
 "		<B xd:script='*' d=\"date()\" />\n" +

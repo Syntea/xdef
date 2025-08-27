@@ -12,7 +12,6 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDXmlOutStream;
 import org.w3c.dom.Element;
-import org.xdef.XDTools;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
@@ -35,7 +34,7 @@ public final class TestXmlWriter extends XDTester {
 		Element el;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='books'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='books'>\n"+
 "  <books>\n"+
 "    <book xd:script='+; forget' ISBN='int'>\n"+
 "      <title>string</title>\n"+
@@ -70,7 +69,7 @@ public final class TestXmlWriter extends XDTester {
 			assertEq("<books/>", el);
 
 			xdef = // Test XmlOutStream methods
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external String xmlFile;\n"+
 "    XmlOutStream x = new XmlOutStream(xmlFile,'UTF-8',true);\n"+
@@ -100,7 +99,7 @@ public final class TestXmlWriter extends XDTester {
 			el = KXmlUtils.parseXml(xmlFile).getDocumentElement();
 			assertEq(xml, el);
 			xdef = // Test XmlOutStream methods
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> external XmlOutStream x; </xd:declaration>\n"+
 "  <a x='' xd:script='onStartElement x.writeElementStart();\n"+
 "            finally {x.writeElementEnd(); x.close();}'>\n"+

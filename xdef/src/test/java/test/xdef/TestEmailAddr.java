@@ -18,7 +18,7 @@ public class TestEmailAddr extends XDTester {
 	public TestEmailAddr() {super();}
 
 	private final XDPool _xp = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration> external EmailAddr email; </xd:declaration>\n"+
 "  <A> emailAddr(); finally email = getParsedValue(); </A>\n" +
 "</xd:def>");

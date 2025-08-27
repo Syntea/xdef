@@ -27,7 +27,7 @@ public final class TestLexicon extends XDTester {
 		XDDocument xd;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Contract' name='contract'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Contract' name='contract'>\n"+
 "\n"+
 "<Contract Number=\"num()\">\n"+
 "  <Client xd:script=\"+\"\n"+
@@ -59,7 +59,7 @@ public final class TestLexicon extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			String lexicon1 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng'>\n"+
 "contract#Contract =                         Contract\n"+
 "contract#Contract/@Number =                 Number\n"+
 "contract#Contract/Client =                  Client\n"+
@@ -84,7 +84,7 @@ public final class TestLexicon extends XDTester {
 "contract#Agreement/Mediator/@Name =         Name\n"+
 "</xd:lexicon>";
 			String lexicon2 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='ces'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='ces'>\n"+
 "contract#Contract =                         Smlouva\n"+
 "contract#Contract/@Number =                 Číslo\n"+
 "contract#Contract/Client =                  Klient\n"+
@@ -172,7 +172,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			lexicon1 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng' default='yes'>\n"+
 "/* this is just a comment */\n"+
 "</xd:lexicon>";
 			xp = compile(new String[]{xdef, lexicon1, lexicon2});
@@ -197,7 +197,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			lexicon1 =
-"<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
+"<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng' default='yes'>\n"+
 "</xd:lexicon>";
 			xp = compile(new String[]{xdef, lexicon1, lexicon2});
 			xd = xp.createXDDocument("contract");
@@ -256,7 +256,7 @@ public final class TestLexicon extends XDTester {
 		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Town' name='town'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Town' name='town'>\n"+
 "  <Town Name=\"string\">\n" +
 "     <Street xd:script=\"*;\" Name=\"string\">\n" +
 "        <House xd:script=\"*; ref _house\"/>\n" +

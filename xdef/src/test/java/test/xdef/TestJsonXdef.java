@@ -522,7 +522,7 @@ public class TestJsonXdef extends XDTester {
 		// Other tests
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Person' root='Person'>\n"+
 "  <xd:json name=\"Person\">\n"+
 "    { \"Person\": { \"Name\": \"jstring(1, 50);\",\n" +
 "        \"Pay\": \"int(1000, 99999);\",\n" +
@@ -562,7 +562,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Person_list'>\n"+
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
@@ -608,7 +608,7 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Person_list'>\n"+
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
@@ -656,7 +656,7 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Matrix'>\n"+
 "  <xd:json name=\"Matrix\">\n"+
 "    [\n" +
 "      [ %script=\"occurs 3;\",\n" +
@@ -680,7 +680,7 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Matrix", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "  <xd:json name=\"Skladby\">\n"+
 "    [\n" +
 "      { %script= \"occurs 1..*;\",\n" +
@@ -752,7 +752,7 @@ public class TestJsonXdef extends XDTester {
 			parse(xp, "", el, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='B'>\n"+
 "  <xd:json name='B'>\n"+
 "    [%script=\"init out('a');finally out('b')\",\"int();finally out('x')\"]\n"+
 "  </xd:json>\n"+
@@ -951,7 +951,7 @@ public class TestJsonXdef extends XDTester {
 					xc, "jx$"+XonNames.X_MAP),
 				"jx$"+XonNames.X_ARRAY+"_1")).toXon()).size());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='z'>\n" +
 "  <xd:json name='z'> [\"* int();\"] </xd:json>\n" +
 "  <xd:component>%class "+_package+".X_int %link #z;</xd:component>\n" +
 "</xd:def>";
@@ -969,7 +969,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq(1, ((List) XComponentUtil.get(xc, "$item")).get(0));
 			assertEq(3, ((List) XComponentUtil.get(xc, "$item")).size());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='z'>\n" +
 "  <xd:json name='z'> [\"* jvalue();\"] </xd:json>\n" +
 "  <xd:component>%class "+_package+".X_jval %link #z;</xd:component>\n" +
 "</xd:def>";

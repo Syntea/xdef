@@ -23,19 +23,19 @@ public class X extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
 			ArrayReporter reporter = new ArrayReporter();
 			xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A xd:script='option moreAttributes'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Таблица' />", reporter);
 			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a=';'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Таблица' />", reporter);
 			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a='string();'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Таблица' />", reporter);

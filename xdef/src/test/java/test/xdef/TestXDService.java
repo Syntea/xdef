@@ -46,7 +46,7 @@ public final class TestXDService extends XDTester {
 			MyService service = new MyService(url, user, password);
 			//Generate XDPool
 			String xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='query'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='query'>\n"+
 "  <xd:declaration>\n"+
 "    external final Service ser.vice;\n"+
 "  </xd:declaration>\n"+

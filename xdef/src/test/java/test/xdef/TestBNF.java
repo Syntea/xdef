@@ -18,7 +18,7 @@ public final class TestBNF extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
 "  <root> required myType() </root>\n"+
 "</xd:def>\n"+
@@ -42,7 +42,7 @@ public final class TestBNF extends XDTester {
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
 "  <root> required myType; </root>\n"+
 "</xd:def>\n"+
@@ -71,7 +71,7 @@ public final class TestBNF extends XDTester {
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= [0-9]+\n"+
@@ -87,7 +87,7 @@ public final class TestBNF extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= [0-9]+\n"+
@@ -103,7 +103,7 @@ public final class TestBNF extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= [0-9]+\n"+
@@ -121,7 +121,7 @@ public final class TestBNF extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { // BNF
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name = 'test' root='a'>\n"+
 "  <a>required myType()</a>\n"+
 "</xd:def>\n"+
@@ -153,7 +153,7 @@ public final class TestBNF extends XDTester {
 			parse(xp, "test", xml, reporter);
 			assertErrors(reporter);
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:root = 'root'>\n"+
 "  <root> required myType() </root>\n"+
 "</xd:def>\n"+
@@ -175,7 +175,7 @@ public final class TestBNF extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:BNFGrammar name=\"rr\">\n"+
 "    M      ::= [#9#10#13 ]*   /*skip white spaces*/\n"+
 "    OD     ::= M \",\" M        /*separator of values*/\n"+
@@ -237,7 +237,7 @@ public final class TestBNF extends XDTester {
 			assertTrue(reporter.errorWarnings() && reporter.getErrorCount()==2);
 			//BNF - final variable
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "  final BNFGrammar rr = new BNFGrammar('\n"+
 "    M      ::= [#9#10#13 ]*  /*skip white spaces*/\n"+
@@ -296,7 +296,7 @@ public final class TestBNF extends XDTester {
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings() && reporter.getErrorCount()==2);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "  final BNFGrammar rr = new BNFGrammar('\n"+
 "    _WS_   ::= [#9#10#13 ]*    /*skip white spaces*/\n"+
