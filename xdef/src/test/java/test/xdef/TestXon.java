@@ -1123,6 +1123,20 @@ public class TestXon extends XDTester {
 			s = _package+".MyTestAny_3"; // class name
 			assertNull(testX(xp, "", s, "{ \"x\": [] }"));
 			assertNull(testX(xp, "", s, "{ \"x\": [1,2i] }"));
+			xd = compile(// test %anyObj
+"<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
+"<xd:json name=\"Any\">\n" +
+" %anyObj\n" +
+"</xd:json>\n" +
+"</xd:def>").createXDDocument();
+			o = xd.jparse(
+"[\n" +
+"  [6, 1, \"a\t\n\\\"b\", false],\n" +
+"  [6, null, null, true],\n" +
+"  [null, null, null, null]\n" +
+"]", reporter);
+			assertNoErrors(reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(XonUtils.toJsonString(o)), o));
 			xdef = // %anyName in map with %anyObj items
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:json name='A'> { %anyName: %anyObj=\"*;\"} </xd:json>\n"+
