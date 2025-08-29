@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
@@ -1817,48 +1816,13 @@ public final class XCodeProcessor {
 				}
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
-/**
-					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
-					dt.setKeyIndex(item.getParam());
-					String s = chkEl.getTextValue();
-					StringTokenizer st = new StringTokenizer(s = s.trim());
-					DefContainer val = new DefContainer();
-					ArrayReporter reporter = new ArrayReporter();
-					while (st.hasMoreTokens()) {
-						String t = st.nextToken();
-						chkEl.setTextValue(t);
-						execUniqueParser(dt, sp, chkEl);
-						XDValue v = chkEl._parseResult;
-						val.addXDItem(v);
-						if (chkEl._parseResult.errors()) {
-							reporter.addAll(chkEl._parseResult.getReporter());
-						} else {
-							ArrayReporter list = dt.chkId();
-							if (list != null) {
-								Report rep = Report.error(XDEF.XDEF522, //Unique value "&{0}" was not set
-									(dt.getName() != null ? dt.getName() + " " : "") + v);
-								updateReport(rep, chkEl);
-								if (code == UNIQUESET_IDREFS) {
-									list.putReport(rep);
-								} else {
-									reporter.putReport(rep);
-								}
-							}
-						}
-					}
-					chkEl.setTextValue(s);
-					DefParseResult p = new DefParseResult(s);
-					p.setParsedValue(val);
-					p.addReports(reporter);
-					_stack[sp] = chkEl._parseResult = p;
-					continue;
-/**/									
-					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
-					dt.setKeyIndex(item.getParam());
 					String s = chkEl.getTextValue().trim();
+					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
+					dt.setKeyIndex(item.getParam());
+					DefParseResult p = new DefParseResult(s);
 					ArrayReporter reporter = new ArrayReporter();
-					DefContainer val = new DefContainer();
 					int ndx = 0;
+					DefContainer val = new DefContainer();
 					while (ndx < s.length()) {
 						String t;
 						int ndx1;
@@ -1902,6 +1866,7 @@ public final class XCodeProcessor {
 								updateReport(rep, chkEl);
 								if (code == UNIQUESET_IDREFS) {
 									list.putReport(rep);
+//									p.putReport(rep);
 								} else {
 									reporter.putReport(rep);
 								}
@@ -1909,12 +1874,10 @@ public final class XCodeProcessor {
 						}
 					}
 					chkEl.setTextValue(s);
-					DefParseResult p = new DefParseResult(s);
 					p.setParsedValue(val);
 					p.addReports(reporter);
 					_stack[sp] = chkEl._parseResult = p;
 					continue;
-/**/
 				}
 				case UNIQUESET_KEY_NEWKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
@@ -3413,7 +3376,13 @@ public final class XCodeProcessor {
 						case UNIQUESET_KEY_IDREF:
 						case UNIQUESET_M_IDREF:
 						case UNIQUESET_IDREF:
+							if (chkNode._parseResult != null) {
+								_reporter.putReport(rep);
+							}
 							list.putReport(rep);
+//							if (chkNode._parseResult != null) {
+//								chkNode._parseResult.putReport(rep);
+//							}
 							break;
 						default :
 							if (chkNode._parseResult == null) {

@@ -1,9 +1,12 @@
 package test.xdef;
 
+import org.xdef.XDFactory;
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.XDPool;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of attribute processing and match expression; test DTD types.
  * @author Vaclav Trojan
@@ -169,6 +172,28 @@ public final class TestDTDTypes extends XDTester {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
+			rep = reporter.getReport();
+			if (rep == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    type t1 string();\n"+
+"    uniqueSet u{t:t1};\n"+
+"  </xd:declaration>\n"+
+"  <A>\n"+
+"    <B xd:script='*' a='? u.t.ID' b='? u.t.IDREFS()'/>\n"+
+"  </A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A><B b=\"'a''c'\"/><B b='def'/><B b=\"'a''c' 'def'\"/><B a=\"a'c\"/><B a='def'/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			xml = "<A><B b=\"123 124\"/><B a='123'/><B a='125'/></A>";
+			parse(xp, "", xml, reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
 				fail("Error not reported");

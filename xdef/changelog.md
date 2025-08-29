@@ -1,8 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.29, release-date 2025-08-27
-* The value of the IDRES() method can be a list of values separated by spaces. If the value contains an
-  apostrophe or spaces, it must be enclosed in apostrophes. All apostrophes in the value must then be doubled.
+# Version 42.2.29, release-date 2025-08-29
+* The value of the IDRES() method can be a list of values separated by spaces. If a value contains a space
+  or an apostrophe, it is enclosed in apostrophesthe value must then be doubled.
 
 # Version 42.2.28, release-date 2025-06-11
 * If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), for items,
