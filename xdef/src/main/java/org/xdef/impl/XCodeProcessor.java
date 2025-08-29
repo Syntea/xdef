@@ -1817,6 +1817,7 @@ public final class XCodeProcessor {
 				}
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
+/**
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					dt.setKeyIndex(item.getParam());
 					String s = chkEl.getTextValue();
@@ -1851,6 +1852,69 @@ public final class XCodeProcessor {
 					p.addReports(reporter);
 					_stack[sp] = chkEl._parseResult = p;
 					continue;
+/**/									
+					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
+					dt.setKeyIndex(item.getParam());
+					String s = chkEl.getTextValue().trim();
+					ArrayReporter reporter = new ArrayReporter();
+					DefContainer val = new DefContainer();
+					int ndx = 0;
+					while (ndx < s.length()) {
+						String t;
+						int ndx1;
+						if (s.charAt(ndx) == '\'') {
+							ndx1 = s.indexOf('\'', ndx+1);
+							boolean doubleapos = false;
+							while (ndx1+1 < s.length() && s.charAt(ndx1+1) == '\'') {
+								ndx1 = s.indexOf('\'', ndx1+2);
+								doubleapos = true;
+							}
+							if (ndx1 < ndx) {
+								t = s.substring(ndx);
+								ndx1 = s.length();
+							} else {
+								t = s.substring(ndx+1, ndx1);
+							}
+							if (doubleapos) {
+								t = t.replaceAll("''", "'");
+							}
+						} else {
+							ndx1 = s.indexOf(' ', ndx);
+							if (ndx1 < ndx) {
+								t = s.substring(ndx);
+								ndx1 = s.length();
+							} else {
+								t = s.substring(ndx, ndx1);
+							}
+						}
+						for (ndx = ndx1+1; ndx < s.length() && s.charAt(ndx) == ' '; ndx++);
+						chkEl.setTextValue(t);
+						execUniqueParser(dt, sp, chkEl);
+						XDValue v = chkEl._parseResult;
+						val.addXDItem(v);
+						if (chkEl._parseResult.errors()) {
+							reporter.addAll(chkEl._parseResult.getReporter());
+						} else {
+							ArrayReporter list = dt.chkId();
+							if (list != null) {
+								Report rep = Report.error(XDEF.XDEF522, //Unique value "&{0}" was not set
+									(dt.getName() != null ? dt.getName() + " " : "") + v);
+								updateReport(rep, chkEl);
+								if (code == UNIQUESET_IDREFS) {
+									list.putReport(rep);
+								} else {
+									reporter.putReport(rep);
+								}
+							}
+						}
+					}
+					chkEl.setTextValue(s);
+					DefParseResult p = new DefParseResult(s);
+					p.setParsedValue(val);
+					p.addReports(reporter);
+					_stack[sp] = chkEl._parseResult = p;
+					continue;
+/**/
 				}
 				case UNIQUESET_KEY_NEWKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
