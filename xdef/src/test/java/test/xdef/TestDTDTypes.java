@@ -1,6 +1,5 @@
 package test.xdef;
 
-import org.xdef.XDFactory;
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -31,8 +30,7 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF814".equals(rep.getMsgID()), rep.toString());
@@ -48,8 +46,7 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF523", rep.getMsgID(), rep.toString());
@@ -65,8 +62,7 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF523", rep.getMsgID(), rep.toString());
@@ -83,8 +79,7 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -101,8 +96,7 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -119,8 +113,7 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -139,15 +132,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -165,15 +156,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -192,10 +181,8 @@ public final class TestDTDTypes extends XDTester {
 			xml = "<A><B b=\"'a''c'\"/><B b='def'/><B b=\"'a''c' 'def'\"/><B a=\"a'c\"/><B a='def'/></A>";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			xml = "<A><B b=\"123 124\"/><B a='123'/><B a='125'/></A>";
-			parse(xp, "", xml, reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			parse(xp, "", "<A><B b=\"123 124\"/><B a='123'/><B a='125'/></A>", reporter);
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -214,15 +201,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -240,15 +225,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
@@ -264,22 +247,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
@@ -295,22 +275,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF804", rep.getMsgID(), rep.toString());
@@ -326,15 +303,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
@@ -350,15 +325,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
@@ -381,22 +354,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X X'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
@@ -419,22 +389,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X X'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
@@ -463,15 +430,13 @@ public final class TestDTDTypes extends XDTester {
 "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
@@ -500,15 +465,13 @@ public final class TestDTDTypes extends XDTester {
 "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());

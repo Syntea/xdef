@@ -2,7 +2,6 @@ package test.xdef;
 
 import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;

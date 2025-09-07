@@ -1835,7 +1835,7 @@ public final class XCodeProcessor {
 								t = s.substring(ndx, ndx1);
 							}
 						}
-						for (ndx = ndx1+1; ndx < s.length() && s.charAt(ndx) == ' '; ndx++);
+						for (ndx = ndx1+1; ndx < s.length() && s.charAt(ndx) == ' '; ndx++){}
 						chkEl.setTextValue(t);
 						execUniqueParser(dt, sp, chkEl);
 						XDValue v = chkEl._parseResult;
