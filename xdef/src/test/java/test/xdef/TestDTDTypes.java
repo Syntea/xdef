@@ -168,24 +168,31 @@ public final class TestDTDTypes extends XDTester {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <xd:declaration scope='local'>\n"+
-"    type t1 string();\n"+
-"    uniqueSet u{t:t1};\n"+
-"  </xd:declaration>\n"+
-"  <A>\n"+
-"    <B xd:script='*' a='? u.t.ID' b='? u.t.IDREFS()'/>\n"+
-"  </A>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A | X'>\n"+
+"  <xd:declaration> type t1 string(); uniqueSet u{t:t1}; uniqueSet v{t: int()}; </xd:declaration>\n"+
+"  <A> <B xd:script='*' a='? u.t.ID' b='? u.t.IDREFS()'/> </A>\n"+
+"  <X> <B xd:script='*' a='? v.t.ID' b='? v.t.IDREFS()'/> </X>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<A><B b=\"'a''c'\"/><B b='def'/><B b=\"'a''c' 'def'\"/><B a=\"a'c\"/><B a='def'/></A>";
-			parse(xp, "", xml, reporter);
+			parse(xp, "", "<A><B b=\"ALPHA BETA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			parse(xp, "", "<A><B b=\"123 124\"/><B a='123'/><B a='125'/></A>", reporter);
+			// string
+			parse(xp, "", "<A><B b=\"ALPHA GAMA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
 			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
-				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+				assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#u GAMA"));
+			}
+			parse(xp, "", "<A><B b=\"'a''c'\"/><B b=\"'a''c' 'd'\"/><B a=\"a'c\"/><B a='d'/></A>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			// int
+			parse(xp, "", "<X><B b=\"01\"/><B b='2'/><B b=\"1 02\"/><B a=\"1\"/><B a='2'/></X>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			parse(xp, "", "<X><B b=\"123 0124\"/><B a='0123'/><B a='125'/></X>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#v 0124"));
 			}
 //CHKIDS
 			xdef =
