@@ -1233,7 +1233,6 @@ public final class Test000 extends XDTester {
 	public static final String getTab(final XXNode x, final String s1, final String s2, final String s3) {
 		return "-1";
 	}
-	public static final String getIdPrace(final XXNode x) {return "-1";}
 	public static final String getAppName(final XXNode x) {return "-1";}
 	public static final String getAppVersion(final XXNode x) {return "-1";}
 	public static final String getAppInstallationDate(final XXNode x){return "-1";}

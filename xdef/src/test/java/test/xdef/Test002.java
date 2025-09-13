@@ -52,7 +52,7 @@ public final class Test002 extends XDTester {
 		return !OTAZNIKY3.equals(c.getTextValue());
 	}
 	public static boolean unknown(XXData c, XDValue[] params){
-		  return OTAZNIKY3.equals(c.getTextValue());
+		return OTAZNIKY3.equals(c.getTextValue());
 	}
 	public static void initData() {}
 	public static void output(String data) {}
