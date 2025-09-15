@@ -243,6 +243,16 @@ public final class TestDTDTypes extends XDTester {
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
+"  <xd:component>%class " + _package + ".D_idref1 %link A</xd:component>\n" +
+"  <xd:declaration scope='local'> uniqueSet u{t: string()}; </xd:declaration>\n"+
+"  <A> <B xd:script='*' b='? u.t.CHKIDS();' a='? u.t.ID'/> </A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 //NMTOKEN
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+

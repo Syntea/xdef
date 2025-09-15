@@ -1951,6 +1951,20 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
+		try {
+			xdef = // test IDREFS
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
+"  <xd:component>%class " + _package + ".D_idref1 %link A</xd:component>\n" +
+"  <xd:declaration scope='local'> uniqueSet u{t: string()}; </xd:declaration>\n"+
+"  <A> <B xd:script='*' b='? u.t.IDREFS();' a='? u.t.ID'/> </A>\n"+
+"</xd:def>";
+			genXComponent(xp = compile(xdef));
+			xd = xp.createXDDocument();
+			xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
+			xc = parseXC(xd, xml, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 		resetTester();

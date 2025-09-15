@@ -347,7 +347,7 @@ public class XComponentUtil {
 		return result;
 	}
 
-	/** Add XDValue from argument to the list. If the argoment is XDContainer add itsitems to the list.
+	/** Add XDValue from argument to the list. If the argument is XDContainer add items to the list.
 	 * @param lst list where to add items.
 	 * @param value X-definition value.
 	 */

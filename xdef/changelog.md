@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.29, release-date 2025-09-08
+# Version 42.2.29, release-date 2025-09-15
 * The value of the IDRES() and CHKIDS() methods can be a list of values separated by spaces. If the value
   contains a space or apostrophe, it is enclosed in apostrophes and the value must be doubled.
 
