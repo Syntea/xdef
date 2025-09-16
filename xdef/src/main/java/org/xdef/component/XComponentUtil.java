@@ -377,6 +377,29 @@ public class XComponentUtil {
 		return jlistToList(result);
 	}
 
+	/** Create source list of ID of IDREFS od CHKIDS.
+	 * @param list pasrsed list of ID.
+	 * @return source form of list of ID.
+	 */
+	public static final String idsToString(final List list) {
+		if (list == null) return "null";
+		StringBuilder sb = new StringBuilder();
+		boolean wasFirst = false;
+		for (Object o: list) {
+			if (wasFirst) {
+				sb.append(" ");
+			}
+			wasFirst = true;
+			String s = (o == null) ? "" : o.toString();
+			if (s.contains(" ") || s.contains("'")) {
+				s = s.replaceAll("'", "''");
+				s = '\'' + s + '\'';
+			}
+			sb.append(s);
+		}
+		return sb.toString();
+	}
+
 	/** Create source list of items with separators (value of parsed list).
 	 * @param list pasrsed list.
 	 * @param isJlist if true generate jlist format, otherwise just list.

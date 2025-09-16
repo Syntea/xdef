@@ -800,27 +800,31 @@ class XCGeneratorBase {
 		} else {
 			XDParser xp  = (XDParser) xdata.getParseMethod();
 			String parseName = xp.parserName();
-			switch ("union".equals(parseName) ? xp.getAlltemsType() : xdata.getParserType()) {
-				case XD_CHAR: x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))"; break;
-				case XD_DATETIME: {
-					String s = xdata.getDateMask();
-					x = s == null ? "org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))"
-						: "get&{name}().formatDate("+s+"))";
-					break;
+			if ("CHKIDS".equals(parseName) || "IDREFS".equals(parseName)) {
+				x = "org.xdef.component.XComponentUtil.idsToString(get&{name}()))";
+			} else {
+				switch ("union".equals(parseName) ? xp.getAlltemsType() : xdata.getParserType()) {
+					case XD_CHAR: x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))"; break;
+					case XD_DATETIME: {
+						String s = xdata.getDateMask();
+						x = s == null ? "org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))"
+							: "get&{name}().formatDate("+s+"))";
+						break;
+					}
+					case XD_BYTES:
+						x = ("base64Binary".equals(xdata.getParserName())
+							? "encodeBase64" : "encodeHex") + "(get&{name}()))";
+						break;
+					case XD_IPADDR: x = "get&{name}().toString().substring(1))"; break;
+					case XD_NULL: x = "\"null\")"; break; //jnull
+					case XD_STRING: x = "get&{name}())"; break;
+					case XD_CONTAINER: {
+						x = "org.xdef.component.XComponentUtil.listToString(get&{name}(), "
+							+ (parseName.equals("jlist") ? "true" : "false") + "))";
+						break;
+					}
+					default: x = "get&{name}().toString())";
 				}
-				case XD_BYTES:
-					x = ("base64Binary".equals(xdata.getParserName())
-						? "encodeBase64" : "encodeHex") + "(get&{name}()))";
-					break;
-				case XD_IPADDR: x = "get&{name}().toString().substring(1))"; break;
-				case XD_NULL: x = "\"null\")"; break; //jnull
-				case XD_STRING: x = "get&{name}())"; break;
-				case XD_CONTAINER: {
-					x = "org.xdef.component.XComponentUtil.listToString(get&{name}(), "
-						+ (parseName.equals("jlist") ? "true" : "false") + "))";
-					break;
-				}
-				default: x = "get&{name}().toString())";
 			}
 		}
 		sb.append(modify(

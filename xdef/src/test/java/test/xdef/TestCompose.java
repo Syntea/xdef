@@ -218,7 +218,7 @@ final public class TestCompose extends XDTester {
 			assertEq(2, el.getElementsByTagName("B").getLength());
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'><a> string(); create [1,2]; </a></xd:def>";
-			assertEq("<a>1 2</a>", create(xdef, "", "a", reporter, null));
+			assertEq("<a>1\n2</a>", create(xdef, "", "a", reporter, null));
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+

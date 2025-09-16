@@ -35,5 +35,8 @@ public class XSParseIDREFS extends XSParseENTITIES {
 	}
 
 	@Override
+	public short parsedType() {return XD_CONTAINER;}
+
+	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

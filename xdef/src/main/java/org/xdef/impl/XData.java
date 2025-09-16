@@ -553,8 +553,12 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 				|| c==UNIQUESET_KEY_IDREF || c==UNIQUESET_KEY_CHKID || c==UNIQUESET_ID || c==UNIQUESET_SET
 				|| c==UNIQUESET_IDREF || c==UNIQUESET_IDREFS || c==UNIQUESET_CHKID || c==UNIQUESET_CHKIDS)
 			&& xv[xi+2].getCode()==STOP_OP) {
-			y = c==UNIQUESET_IDREFS ? new XSParseIDREFS() : c==UNIQUESET_CHKIDS ? new XDParseCHKIDS()
-				: xv[xi = xv[xi+1].intValue()];
+			if (c==UNIQUESET_IDREFS) {
+				return new XSParseIDREFS();
+			} else if (c==UNIQUESET_CHKIDS) {
+				return new XDParseCHKIDS();
+			}
+			y = xv[xi = xv[xi+1].intValue()];
 		}
 		for (;;) {
 			switch (y.getCode()) {

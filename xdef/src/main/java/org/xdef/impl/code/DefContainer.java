@@ -1078,7 +1078,6 @@ public final class DefContainer extends XDValueAbstract implements XDContainer, 
 	@Override
 	public final String toString() {
 		StringBuilder sb = new StringBuilder();
-/**
 		if (_map != null) {
 			for (XDNamedValue x: _map) {
 				if (sb.length() > 0) {
@@ -1090,37 +1089,11 @@ public final class DefContainer extends XDValueAbstract implements XDContainer, 
 		if (_array != null) {
 			for (XDValue _array1 : _array) {
 				if (sb.length() > 0) {
-					sb.append(' ');
+					sb.append('\n');
 				}
 				sb.append(_array1.toString());
 			}
 		}
-/**/
-		if (_map != null) {
-			for (XDNamedValue x: _map) {
-				if (sb.length() > 0) {
-					sb.append('\n');
-				}
-				sb.append(x.toString());
-			}
-		}
-		if (_array != null) {
-			if (_array.length == 1) {
-				return sb.toString() + _array[0];
-			}
-			for (XDValue _array1 : _array) {
-				if (sb.length() > 0) {
-					sb.append(' ');
-				}
-				String s = _array1.toString();
-				if (s.contains(" ") || s.contains("'")) {
-					s = s.replaceAll("'", "''");
-					s = '\'' + s + '\'';
-				}
-				sb.append(s);
-			}
-		}
-/**/
 		return sb.toString();
 	}
 
