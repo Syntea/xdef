@@ -1971,7 +1971,7 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
-			xml = "<A><B a=\"a'b\"/><B a='a b'/><B a='c'/><B b=\"'a b' 'a''b' c\"/></A>";
+			xml = "<A><B b=\"'a b' 'a''b' c\"/><B a=\"a'b\"/><B a='a b'/><B a='c'/></A>";
 			xc = parseXC(xd, xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
