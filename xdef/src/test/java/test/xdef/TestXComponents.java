@@ -1952,15 +1952,45 @@ public final class TestXComponents extends XDTester {
 			assertEq("", chkCompoinentSerializable(xc));
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 		try {
-			xdef = // test IDREFS
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <xd:component>%class " + _package + ".D_idref1 %link A</xd:component>\n" +
-"  <xd:declaration scope='local'> uniqueSet u{t: string()}; </xd:declaration>\n"+
+			xdef = // test IDREFS, CHKIDS, ENTITIES, NMTOKENS
+"<xd:def xmlns:xd='"+_xdNS+"' root='A|B|C|D'>\n"+
+"  <xd:component>\n" +
+"	  %class " + _package + ".D_idrefA %link A;\n" +
+"	  %class " + _package + ".D_idrefB %link B;\n" +
+"	  %class " + _package + ".D_idrefC %link C;\n" +
+"	  %class " + _package + ".D_idrefD %link D;\n" +
+"  </xd:component>\n" +
+"  <xd:declaration scope='local'>\n"+
+"    uniqueSet u{t: string()};\n"+
+"    uniqueSet v{t: int()};\n"+
+"  </xd:declaration>\n"+
 "  <A> <B xd:script='*' b='? u.t.IDREFS();' a='? u.t.ID'/> </A>\n"+
+"  <B> <B xd:script='*' b='? v.t.CHKIDS();' a='? v.t.ID'/> </B>\n"+
+"  <C a = 'required ENTITIES'/>\n"+
+"  <D a = 'required NMTOKENS'/>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
-			xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
+			xml = "<A><B b=\"'a b' 'a''b' c\"/><B a=\"a'b\"/><B a='a b'/><B a='c'/></A>";
+			xc = parseXC(xd, xml, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			xml = "<B><B a=\"1\"/><B a='2'/><B b=\"1 2\"/></B>";
+			xc = parseXC(xd, xml, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			xml =
+"<!DOCTYPE C [\n"+
+"<!ELEMENT C ANY>\n"+
+"<!ATTLIST C a CDATA #IMPLIED>\n"+
+"<!ENTITY X '003-2.ent'>\n"+
+"<!ENTITY Y '003-3.ent'>\n"+
+"]>\n"+
+"<C a = 'X Y'/>";
+			xc = parseXC(xd, xml, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			xml = "<D a = 'X Y'/>";
 			xc = parseXC(xd, xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());

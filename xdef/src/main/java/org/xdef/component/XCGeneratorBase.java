@@ -30,6 +30,7 @@ import static org.xdef.XDValueID.XD_IPADDR;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_NULL;
 import static org.xdef.XDValueID.XD_NUMBER;
+import static org.xdef.XDValueID.XD_OBJECT;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PRICE;
 import static org.xdef.XDValueID.XD_SHORT;
@@ -258,9 +259,10 @@ class XCGeneratorBase {
 			case XD_IPADDR: return "java.net.InetAddress";
 			case XD_BYTES: return "byte[]";
 			case XD_TELEPHONE: return "org.xdef.XDTelephone";
+			case XD_OBJECT:
+			case XD_CONTAINER:
 			case XD_NULL: //jnull
-			case XD_ANY:
-			case XD_CONTAINER: return "Object";
+			case XD_ANY: return "Object";
 		}
 		return "String"; // default
 	}
@@ -800,7 +802,8 @@ class XCGeneratorBase {
 		} else {
 			XDParser xp  = (XDParser) xdata.getParseMethod();
 			String parseName = xp.parserName();
-			if ("CHKIDS".equals(parseName) || "IDREFS".equals(parseName)) {
+			if ("CHKIDS".equals(parseName) || "IDREFS".equals(parseName)
+				|| "ENTITIES".equals(parseName) || "NMTOKENS".equals(parseName)) {
 				x = "org.xdef.component.XComponentUtil.idsToString(get&{name}()))";
 			} else {
 				switch ("union".equals(parseName) ? xp.getAlltemsType() : xdata.getParserType()) {
