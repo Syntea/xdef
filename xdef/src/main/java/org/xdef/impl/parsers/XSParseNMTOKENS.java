@@ -88,11 +88,11 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 	}
 
 	@Override
-	public String parserName() {return ROOTBASENAME;}
-
-	@Override
 	public short parsedType() {return XD_CONTAINER;}
 
 	@Override
 	public short getAlltemsType() {return XD_STRING;}
+
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }
