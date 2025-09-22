@@ -1914,12 +1914,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final ReportWriter reporter) throws SRuntimeException {
 		Class<?> yClass  = xClass;
 		Object o = getSource(data);
-		if (o == null || o instanceof Map || o instanceof List || o instanceof Number ||o instanceof Boolean){
+		if (o==null || o instanceof Map || o instanceof List || o instanceof Number || o instanceof Boolean) {
 			if (yClass == null) {
 				for (String s: getXDPool().getXComponents().keySet()) {
-					String className = getXDPool().getXComponents().get(s);
 					try {
-						yClass = Class.forName(className);
+						yClass = Class.forName(getXDPool().getXComponents().get(s)); // s is class name
 						String jmodel = (String) yClass.getDeclaredField("XD_NAME").get(null);
 						byte jVersion = (Byte) yClass.getDeclaredField("XON").get(null);
 						if (jVersion > 0) {
@@ -1951,14 +1950,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else if (o instanceof InputStream) {
 			return jparseXComponent((InputStream)o, yClass, sourceId, reporter);
 		} else if (o instanceof Document) {
-			return jparseXComponent(XonUtils.xmlToXon(((Document) o).getDocumentElement()),
-				yClass, reporter);
+			return jparseXComponent(XonUtils.xmlToXon(((Document) o).getDocumentElement()), yClass, reporter);
 		} else if (o instanceof Element) {
 			return jparseXComponent(XonUtils.xmlToXon((Element) o),yClass,reporter);
 		}
 		//Unsupported type of argument &{0}: &{1}
 		throw new SRuntimeException(SYS.SYS037, "source", o.getClass());
 	}
+
 	/** Get printable string from this object. */
 	@Override
 	public final String toString() {return "ChkDocument: " + _xElement;}
