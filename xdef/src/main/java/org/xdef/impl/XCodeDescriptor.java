@@ -7,7 +7,6 @@ import org.xdef.XDPool;
  * @author Vaclav Trojan
  */
 public abstract class XCodeDescriptor extends XNode {
-
 	////////////////////////////////////////////////////////////////////////////
 	// Actions
 	////////////////////////////////////////////////////////////////////////////
@@ -83,7 +82,6 @@ public abstract class XCodeDescriptor extends XNode {
 	////////////////////////////////////////////////////////////////////////////
 	// Variables
 	////////////////////////////////////////////////////////////////////////////
-
 	/** Variable table declared in the node. */
 	public XVariableTable _vartable;
 	/** Number of variables. */
@@ -105,7 +103,7 @@ public abstract class XCodeDescriptor extends XNode {
 	}
 
 	/** Creates the new instance as a copy of given argument.
-	 * @param x the XCodeDescriptor object from which is the copy created.
+	 * @param x XCodeDescriptor object from which this instance of XCodeDescriptor is created.
 	 */
 	public XCodeDescriptor(XCodeDescriptor x) {
 		this(x.getName(), x.getNSUri(), x.getKind(), x);
@@ -115,9 +113,9 @@ public abstract class XCodeDescriptor extends XNode {
 
 	/** Creates the new instance as a copy of given argument.
 	 * @param name Name of item.
-	 * @param nsURI namespace of the object (may be <i>null</i>).
+	 * @param nsURI namespace of the object (may be null).
 	 * @param kind The kind of object.
-	 * @param x the XCodeDescriptor object from which is the copy created.
+	 * @param x XCodeDescriptor object from which this instance of XCodeDescriptor is created.
 	 */
 	public XCodeDescriptor(final String name, final String nsURI, final short kind, XCodeDescriptor x) {
 		super(nsURI, name, x.getXDPool(), kind);
@@ -128,6 +126,16 @@ public abstract class XCodeDescriptor extends XNode {
 		copyActions(x);
 	}
 
+	/** Clear all options in this descriptor. */
+	public final void clearOptions() {
+		_ignoreComments = _attrWhiteSpaces = _textWhiteSpaces = _ignoreEmptyAttributes = _attrValuesCase
+			= _textValuesCase = _trimAttr = _trimText = _moreElements = _moreText = _xon = _moreAttributes
+			= _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = 0;
+	}
+
+	/** Copy all options from the given XCodeDescriptor to this object.
+	 * @param x XCodeDescriptor from which to copy options to this object.
+	 */
 	public final void copyOptions(final XCodeDescriptor x) {
 		_ignoreComments = x._ignoreComments;
 		_attrWhiteSpaces = x._attrWhiteSpaces;
@@ -148,12 +156,15 @@ public abstract class XCodeDescriptor extends XNode {
 		_cdata = x._cdata;
 	}
 
-	public final void clearOptions() {
-		_ignoreComments = _attrWhiteSpaces = _textWhiteSpaces = _ignoreEmptyAttributes = _attrValuesCase
-			= _textValuesCase = _trimAttr = _trimText = _moreElements = _moreText = _xon = _moreAttributes
-			= _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = 0;
+	/** Clear all actions in this descriptor. */
+	public final void clearActions() {
+		_init = _finaly = _match = _compose = _check = _onTrue = _onFalse = _deflt = _onStartElement
+			= _onAbsence = _onExcess = _onIllegalAttr = _onIllegalText = _onIllegalElement = _varinit = -1;
 	}
 
+	/** Copy all actions from the given XCodeDescriptor to this object.
+	 * @param x XCodeDescriptor from which to copy actions to this object.
+	 */
 	public final void copyActions(final XCodeDescriptor x) {
 		_init = x._init;
 		_finaly = x._finaly;
@@ -173,23 +184,108 @@ public abstract class XCodeDescriptor extends XNode {
 		_vartable = x._vartable;
 	}
 
-	public final void clearActions() {
-		_init = _finaly = _match = _compose = _check = _onTrue = _onFalse = _deflt = _onStartElement
-			= _onAbsence = _onExcess = _onIllegalAttr = _onIllegalText = _onIllegalElement = _varinit = -1;
-	}
+	/** Initialize code address or -1.
+	 * @return address of initialize code.
+	 */
+	@Override
+	public final int getInitCode() {return _init;}
 
+	/** Finally code address or -1.
+	 * @return address of finally code or -1.
+	 */
+	@Override
+	public final int getFinallyCode() {return _finaly;}
+
+	/** Match code address or -1.
+	 * @return address of match code or -1.
+	 */
+	@Override
+	public final int getMatchCode() {return _match;}
+
+	/** Compose action code address or -1.
+	 * @return address of compose action code or -1.
+	 */
+	@Override
+	public final int getComposeCode() {return _compose;}
+
+	/** Check value of attribute or text node code address or -1.
+	 * @return address of code of check value method or -1.
+	 */
+	@Override
+	public final int getCheckCode() {return _check;}
+
+	/** Type check passed code address or -1.
+	 * @return address of check passed method code or -1.
+	 */
+	@Override
+	public final int getOnTrueCode() {return _onTrue;}
+
+	/** Type check failed code address or -1.
+	 * @return address of failed method code or -1.
+	 */
+	@Override
+	public final int getOnFalseCode() {return _onFalse;}
+
+	/** If text object is missing code address or -1.
+	 * @return address of text object is missing code or -1.
+	 */
+	@Override
+	public final int getDefltCode() {return _deflt;}
+
+	/** On start of element (all source attributes are accessible) code address or -1.
+	 * @return address of on start of element method code or -1
+	 */
+	@Override
+	public final int getOnStartElementCode() {return _onStartElement;}
+
+	/** OnAbsence code address or -1.
+	 * @return address of onAbsence code or -1.
+	 */
+	@Override
+	public final int getOnAbsenceCode() {return _onAbsence;}
+
+	/** OnExcess code address or -1.
+	 * @return address of onExcess  code or -1.
+	 */
+	@Override
+	public final int getOnExcessCode() {return _onExcess;}
+
+	/** Occurrence of illegal attribute code address or -1.
+	 * @return address of occurrence of illegal attribute code or -1.
+	 */
+	@Override
+	public final int getOnIllegalAttrCode() {return _onIllegalAttr;}
+
+	/** Occurrence of illegal text node code address or -1.
+	 * @return address of occurrence of illegal text node code or -1.
+	 */
+	@Override
+	public final int getOnIllegalTextCode() {return _onIllegalText;}
+
+	/** occurrence of illegal element code address or -1.
+	 * @return address of occurrence of illegal element code or -1.
+	 */
+	@Override
+	public final int getOnIllegalElementCode() {return _onIllegalElement;}
+
+	/** Variables initialization code address or -1.
+	 * @return address of variables initialization code or -1.
+	 */
+	@Override
+	public final int getVarinitCode() {return _varinit;}
+
+	/** Write descriptor to XDWriter.
+	 * @param xw where to write.
+	 * @throws IOException if an error occurs.
+	 */
 	final void writeXCodeDescriptor(XDWriter xw) throws IOException {
 		xw.writeShort(getKind());
 		xw.writeString(getName());
 		xw.writeString(getNSUri());
-		////////////////////////////////////////////////////////////////////////
 		// Occurrence
-		////////////////////////////////////////////////////////////////////////
 		xw.writeInt(minOccurs()); // occurrence minimum.
 		xw.writeInt(maxOccurs()); // occurrence maximum.
-		////////////////////////////////////////////////////////////////////////
 		// Actions
-		////////////////////////////////////////////////////////////////////////
 		xw.writeInt(_init); // Init command.
 		xw.writeInt(_finaly); // Finally.
 		xw.writeInt(_match); // Check match condition of an element.
@@ -205,10 +301,8 @@ public abstract class XCodeDescriptor extends XNode {
 		xw.writeInt(_onIllegalText); // occurrence of illegal text node.
 		xw.writeInt(_onIllegalElement); // occurrence of illegal element.
 		xw.writeInt(_varinit); // init variables.
-		////////////////////////////////////////////////////////////////////////
 		// Options
-		////////////////////////////////////////////////////////////////////////
-		byte[] b = new byte[] {
+		xw.writeBytes(new byte[] { // write all options as byte array.
 			_ignoreComments, //0 not set, 'T' or 'F'
 			_attrWhiteSpaces, //0 not set, 'T' or 'F'
 			_textWhiteSpaces, //0 not set, 'T' or 'F'
@@ -226,11 +320,8 @@ public abstract class XCodeDescriptor extends XNode {
 			_xon, //0 not set, or XON/JSON version
 			_nillable, //0 not set 'T' or 'F'
 			_cdata //0 not set 'T' or 'F'
-		};
-		xw.writeBytes(b);
-		////////////////////////////////////////////////////////////////////////
+		});
 		// variables
-		////////////////////////////////////////////////////////////////////////
 		xw.writeInt(_varsize); // size of variables.
 		if (_vartable == null) {
 			xw.writeBoolean(false);
@@ -238,23 +329,20 @@ public abstract class XCodeDescriptor extends XNode {
 			xw.writeBoolean(true);
 			_vartable.writeXD(xw);
 		}
-		////////////////////////////////////////////////////////////////////////
 		// Position
-		////////////////////////////////////////////////////////////////////////
 		xw.writeSPosition(getSPosition());
 		xw.writeString(getXDPosition());
 	}
 
+	/** Read descriptor from XDReader.
+	 * @param xw where to read.
+	 * @throws IOException if an error occurs.
+	 */
 	final void readXCodeDescriptor(final XDReader xr) throws IOException {
 		// kind, namespace UR name already processed in the upper class
-		////////////////////////////////////////////////////////////////////////
-		// Occurrence
-		////////////////////////////////////////////////////////////////////////
-		setOccurrence(xr.readInt() , xr.readInt());// occurrence
-		////////////////////////////////////////////////////////////////////////
+		setOccurrence(xr.readInt(), xr.readInt()); // read occurrence
 		// Actions
-		////////////////////////////////////////////////////////////////////////
-		_init = xr.readInt(); // Init command.
+		_init = xr.readInt(); // Init action.
 		_finaly = xr.readInt(); // Finally.
 		_match = xr.readInt(); // Check match condition of an element.
 		_compose = xr.readInt(); // Compose action in the compose mode.
@@ -269,127 +357,30 @@ public abstract class XCodeDescriptor extends XNode {
 		_onIllegalText = xr.readInt(); // occurrence of illegal text node.
 		_onIllegalElement = xr.readInt(); // occurrence of illegal element.
 		_varinit = xr.readInt(); // init variables.
-		////////////////////////////////////////////////////////////////////////
 		// Options
-		////////////////////////////////////////////////////////////////////////
 		byte[] b = xr.readBytes();
-		_ignoreComments = (byte) (b[0] & 255); //0 not set, 'T' or 'F'
-		_attrWhiteSpaces = (byte) (b[1] & 255); //0 not set, 'T' or 'F'
-		_textWhiteSpaces = (byte) (b[2] & 255); //0 not set, 'T' or 'F'
-		_ignoreEmptyAttributes = (byte) (b[3] & 255); //0 not set, 'T','P' or 'F'
-		_attrValuesCase = (byte) (b[4] & 255); //0 not set, 'I' ignore, 'T' or 'F'
-		_textValuesCase = (byte) (b[5] & 255); //0 not set, 'I' ignore, 'T' or 'F'
-		_trimAttr = (byte) (b[6] & 255); //0 not set, 'T' or 'F'
-		_trimText = (byte) (b[7] & 255); //0 not set 'T' or 'F'
-		_resolveEntities = (byte) (b[8] & 255);
-		_resolveIncludes = (byte) (b[9] & 255);
-		_acceptQualifiedAttr = (byte) (b[10] & 255); //0 not set 'T' or 'F'
-		_moreAttributes = (byte) (b[11] & 255); //0 not set, 'T' or 'F'
-		_moreElements = (byte) (b[12] & 255); //0 not set, 'T' or 'F'
-		_moreText = (byte) (b[13] & 255); //0 not set, 'T' or 'F'
-		_xon = (byte) (b[14] & 255); //0 not set, or version number
-		_nillable = (byte) (b[15] & 255); //0 not set 'T' or 'F'
-		_cdata = (byte) (b[16] & 255); //0 not set 'T' or 'F'
-
-		////////////////////////////////////////////////////////////////////////
+		_ignoreComments = b[0]; //0 not set, 'T' or 'F'
+		_attrWhiteSpaces = b[1]; //0 not set, 'T' or 'F'
+		_textWhiteSpaces = b[2]; //0 not set, 'T' or 'F'
+		_ignoreEmptyAttributes = b[3]; //0 not set, 'T','P' or 'F'
+		_attrValuesCase = b[4]; //0 not set, 'I' ignore, 'T' or 'F'
+		_textValuesCase = b[5]; //0 not set, 'I' ignore, 'T' or 'F'
+		_trimAttr = b[6]; //0 not set, 'T' or 'F'
+		_trimText = b[7]; //0 not set 'T' or 'F'
+		_resolveEntities = b[8];
+		_resolveIncludes = b[9];
+		_acceptQualifiedAttr = b[10]; //0 not set 'T' or 'F'
+		_moreAttributes = b[11]; //0 not set, 'T' or 'F'
+		_moreElements = b[12]; //0 not set, 'T' or 'F'
+		_moreText = b[13]; //0 not set, 'T' or 'F'
+		_xon = b[14]; //0 not set, or version number
+		_nillable = b[15]; //0 not set 'T' or 'F'
+		_cdata = b[16]; //0 not set 'T' or 'F'
 		// variables
-		////////////////////////////////////////////////////////////////////////
 		_varsize = xr.readInt(); // size of variables.
 		_vartable = xr.readBoolean() ? XVariableTable.readXD(xr) : null;
-		////////////////////////////////////////////////////////////////////////
 		// Position
-		////////////////////////////////////////////////////////////////////////
 		setSPosition(xr.readSPosition());
 		setXDPosition(xr.readString());
 	}
-
-	/** Initialize code or -1.
-	 * @return address of initialize code.
-	 */
-	@Override
-	public final int getInitCode() {return _init;}
-
-	/** Finally code or -1.
-	 * @return address of finally code or -1.
-	 */
-	@Override
-	public final int getFinallyCode() {return _finaly;}
-
-	/** Match code or -1.
-	 * @return address of match code or -1.
-	 */
-	@Override
-	public final int getMatchCode() {return _match;}
-
-	/** Compose action code or -1.
-	 * @return address of compose action code or -1.
-	 */
-	@Override
-	public final int getComposeCode() {return _compose;}
-
-	/** Check value of attribute or text node code or -1.
-	 * @return address of code of check value method or -1.
-	 */
-	@Override
-	public final int getCheckCode() {return _check;}
-
-	/** Type check passed code or -1.
-	 * @return address of check passed method code or -1.
-	 */
-	@Override
-	public final int getOnTrueCode() {return _onTrue;}
-
-	/** Type check failed code or -1.
-	 * @return address of failed method code or -1.
-	 */
-	@Override
-	public final int getOnFalseCode() {return _onFalse;}
-
-	/** If text object is missing code or -1.
-	 * @return address of text object is missing code or -1.
-	 */
-	@Override
-	public final int getDefltCode() {return _deflt;}
-
-	/** On start of element (all source attributes are accessible) code or -1.
-	 * @return address of on start of element method code or -1
-	 */
-	@Override
-	public final int getOnStartElementCode() {return _onStartElement;}
-
-	/** OnAbsence code or -1.
-	 * @return address of onAbsence code or -1.
-	 */
-	@Override
-	public final int getOnAbsenceCode() {return _onAbsence;}
-
-	/** OnExcess  code or -1.
-	 * @return address of onExcess  code or -1.
-	 */
-	@Override
-	public final int getOnExcessCode() {return _onExcess;}
-
-	/** Occurrence of illegal attribute code or -1.
-	 * @return address of occurrence of illegal attribute code or -1.
-	 */
-	@Override
-	public final int getOnIllegalAttrCode() {return _onIllegalAttr;}
-
-	/** Occurrence of illegal text node code or -1.
-	 * @return address of occurrence of illegal text node code or -1.
-	 */
-	@Override
-	public final int getOnIllegalTextCode() {return _onIllegalText;}
-
-	/** occurrence of illegal element code or -1.
-	 * @return address of occurrence of illegal element code or -1.
-	 */
-	@Override
-	public final int getOnIllegalElementCode() {return _onIllegalElement;}
-
-	/** Variables initialization code or -1.
-	 * @return address of variables initialization code or -1.
-	 */
-	@Override
-	public final int getVarinitCode() {return _varinit;}
 }
