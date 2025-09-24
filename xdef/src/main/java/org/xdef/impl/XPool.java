@@ -19,6 +19,8 @@ import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.XDConstants;
+import static org.xdef.XDConstants.BUILD_VERSION;
+import static org.xdef.XDConstants.XDPOOL_MIN_VERSION;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import static org.xdef.XDPool.DISPLAY_TRUE;
@@ -54,10 +56,6 @@ public final class XPool implements XDPool, Serializable {
 	private static final long serialVersionUID = -4736745770531753457L;
 	/** Magic ID.*/
 	private static final short XD_MAGIC_ID = 0x7653;
-	/** XDPool version.*/
-	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
-	/** Last compatible version of XDPool (e.g. 4.0.001.005). */
-	private static final String XD_MIN_VERSION = "4.2.002.026";
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
@@ -112,7 +110,7 @@ public final class XPool implements XDPool, Serializable {
 	XDLexicon _lexicon = null;
 	/** Reporter writer.*/
 	ReportWriter _reporter;
-	/** CompileXDPool for definitions.*/
+	/** CompileXDPool for definitions. */
 	CompileXDPool _compiler;
 	/** Table of definitions.*/
 	Map<String, XDefinition> _xdefs;
@@ -120,28 +118,28 @@ public final class XPool implements XDPool, Serializable {
 	private XDSourceInfo _sourceInfo;
 	/** Default time zone.*/
 	private TimeZone _defaultZone = null;
-	// valid date parameters
+	/** Array with Charset mappings of legal values of parsed strings.*/
+	private Charset[] _charsets;
+///////////////////////////////////////////////////////////////////////////////////
+// Valid date parameters
+///////////////////////////////////////////////////////////////////////////////////
 	/** Maximal accepted value of the year.*/
 	private int _maxYear;
 	/** Minimal accepted value of the year.*/
 	private int _minYear;
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
 	private SDatetime _specialDates[];
-	/** Array with charsets of legal values of parsed strings.*/
-	private Charset[] _charsets;
-////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////
 // Constructors
 ////////////////////////////////////////////////////////////////////////////////
-
-	private XPool() {_xdefs = new LinkedHashMap<>(); _sourceInfo = new XDSourceInfo();}
-
-	/** Creates instance of XDPool with properties, external objects and reporter.
-	 * @param props Properties or <i>null</i>.
+	/** Create instance of XDPool with properties, external objects and reporter.
+	 * @param props Properties or null.
 	 * @param extClasses The array of classes where are available methods referred from definitions.
-	 * @param reporter report writer or <i>null</i>.
+	 * @param reporter report writer or null.
 	 */
 	XPool(final Properties props, final ReportWriter reporter, final Class<?>... extClasses) {
-		this();
+		_xdefs = new LinkedHashMap<>(); _sourceInfo = new XDSourceInfo();
 		_extClasses = extClasses;
 		_reporter = reporter;
 		_props = props != null ? props : SManager.getProperties();
@@ -380,7 +378,7 @@ public final class XPool implements XDPool, Serializable {
 	 * is a pathname format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
 	 * @param sourceIds array of names of source source data corresponding to
-	 * the sources argument used in reporting (any item or even this argument may be <i>null</i>).
+	 * the sources argument used in reporting (any item or even this argument may be null).
 	 * @throws RuntimeException if source is missing or if an error occurs.
 	 */
 	final void setSource(final String[] sources, final String[] sourceIds) {
@@ -666,7 +664,7 @@ public final class XPool implements XDPool, Serializable {
 
 	/** Get global variable of given name.
 	 * @param name name of global variable.
-	 * @return XMVariable object of the global variable or <i>null</i>.
+	 * @return XMVariable object of the global variable or null.
 	 */
 	final XVariable getVariable(final String name) {
 		return _variables!=null ? (XVariable) _variables.getVariable(name):null;
@@ -740,7 +738,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @return version information.
 	 */
 	@Override
-	public final String getVersionInfo() {return XD_VERSION;}
+	public final String getVersionInfo() {return "XD" + BUILD_VERSION;}
 
 	/** Check compatibility of this instance of XDPool with given version.
 	 * @param version the version to be checked.
@@ -748,7 +746,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	@Override
 	public final boolean chkCompatibility(final String version) {
-		return getXDVersionID(version) >= getXDVersionID(XD_MIN_VERSION);
+		return getXDVersionID(version) >= getXDVersionID(XDPOOL_MIN_VERSION);
 	}
 
 	/** Get array with all XMDefinitions from this XDPool.
@@ -894,7 +892,7 @@ public final class XPool implements XDPool, Serializable {
 	public final boolean isIgnoreUnresolvedExternals() {return _ignoreUnresolvedExternals;}
 
 	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or <i>null</i>) if noname X-definition is checked.
+	 * @param name the name of X-definition (or null) if noname X-definition is checked.
 	 * @return true if and only if the X-definition of given name exists in the XDPool.
 	 */
 	@Override
@@ -956,7 +954,7 @@ public final class XPool implements XDPool, Serializable {
 	public final XDDocument createXDDocument() {return new ChkDocument((XDefinition) getXMDefinition());}
 
 	/** Create new XDDocument.
-	 * @param id Identifier of X-definition (or <i>null</i>).
+	 * @param id Identifier of X-definition (or null).
 	 * @return the XDDocument object.
 	 * @throws SRuntimeException if X-definition doesn't exist.
 	 */
