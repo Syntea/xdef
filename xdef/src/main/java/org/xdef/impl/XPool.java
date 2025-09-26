@@ -128,7 +128,7 @@ public final class XPool implements XDPool, Serializable {
 	/** Minimal accepted value of the year.*/
 	private int _minYear;
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
-	private SDatetime _specialDates[];
+	private SDatetime[] _specialDates;
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Constructors
