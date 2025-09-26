@@ -611,11 +611,6 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Get address of initialization code.
-	 * @return address of initialization code.
-	 */
-	final int getInitAddress() {return _init;}
-
 	/** Get max. size of stack.
 	 * @return size of stack.
 	 */
@@ -754,20 +749,14 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	@Override
 	public final XMDefinition[] getXMDefinitions() {
-		XMDefinition[] result = new XMDefinition[_xdefs.size()];
-		_xdefs.values().toArray(result);
-		return result;
+		return _xdefs.values().toArray(new XMDefinition[_xdefs.size()]);
 	}
 
 	/** Get array with all X-definitions from this XDPool.
 	 * @return array with all X-definitions from this XDPool.
 	 */
 	@Override
-	public final String[] getXMDefinitionNames() {
-		String[] result = new String[_xdefs.size()];
-		_xdefs.keySet().toArray(result);
-		return result;
-	}
+	public final String[] getXMDefinitionNames() {return (String[]) _xdefs.keySet().toArray();}
 
 	/** Find XModel in XDPool.
 	 * @param xdpos position of XModel in XDPool.
@@ -853,7 +842,7 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 		ndx1 = s.indexOf(':');
-		String nsURI = xd._namespaces.get(ndx1 > 0 ? s.substring(0, ndx1) : "");
+		String nsURI = xd._namespaces.get(ndx1 >= 0 ? s.substring(0, ndx1) : "");
 		XMElement xe = xd.getModel(nsURI, s);
 		return (ndx < 0 || xe == null) ? xe : findXMNode(xe, path.substring(ndx+1), 0, -1);
 	}
@@ -1063,15 +1052,16 @@ public final class XPool implements XDPool, Serializable {
 	@Override
 	public final SDatetime[] getSpecialDates() {return _specialDates;}
 
-	/** Get the object with the map of source items of compiled X-definitions and with editing information.
-	 * @return object with the map of source items of compiled X-definitions
-	 * and with editing information.
+	/** Get address of XDPool initialization code section.
+	 * @return address of XDPool initialization code section or -1.
 	 */
 	@Override
+	public final int getInitAddress() {return _init;}
 
-	/** Array wioth charsets used for values of parsed strings.
-	 * @return Array wioth Charset objects or null.
+	/** Array with Charsets used for values of parsed strings.
+	 * @return Array with Charset objects or null.
 	 */
+	@Override
 	public Charset[] getLegalStringCharsets() {return _charsets;}
 
 	/** Get the object with the map of source items of compiled X-definitions and with editing information.

@@ -199,6 +199,11 @@ public interface XDPool extends Serializable {
 	 */
 	public SDatetime[] getSpecialDates();
 
+	/** Get address of XDPool initialization code section.
+	 * @return address of XDPool initialization code section or -1.
+	 */
+	public int getInitAddress();
+
 	/** Array wioth charsets used for values of parsed strings.
 	 * @return Array wioth Charset objects or null.
 	 */
