@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.sys.ReportWriter;
 import javax.xml.namespace.QName;
+import org.xdef.impl.XDefinition;
 
 /** Provides processing of given X-definition. For processing of X-definition you must create and instance
  * of XDDocument created from XDPool with given X-definition in which is defined root (starting point)
@@ -566,6 +567,11 @@ public interface XDDocument extends XXNode {
 	 * @param doc w3c.dom.Document to set.
 	 */
 	public void setDocument(final Document doc);
+
+	/** Set XDefinition to this object.
+	 * @param xdef XDefinition to be set.
+	 */
+	public void setXDefinition(final XDefinition xdef);
 
 ////////////////////////////////////////////////////////////////////////////////
 // deprecated

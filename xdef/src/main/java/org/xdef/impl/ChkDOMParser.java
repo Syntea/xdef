@@ -191,7 +191,7 @@ class ChkDOMParser extends SReporter {
 									}
 								}
 								_chkDoc = (ChkDocument) def.createXDDocument();
-								_chkDoc._reporter.setReportWriter(getReportWriter());
+								_chkDoc.getReporter().setReportWriter(getReportWriter());
 								if (stdOut != null) {
 									_chkDoc.setStdOut(stdOut);
 								}
@@ -280,14 +280,14 @@ class ChkDOMParser extends SReporter {
 			XCodeProcessor scp = _chkDoc._scp;
 			Properties props = scp.getProperties();
 			_chkDoc._scp = null;
-			_chkDoc.init(chkDoc._xdef,
+			_chkDoc.init((XDefinition) chkDoc.getXMDefinition(),
 				(Document) _chkDoc.getDocument().cloneNode(false),
-				chkDoc._reporter,
+				chkDoc.getReporter(),
 				props,
 				chkDoc._userObject);
 			_chkDoc._scp = scp;
 			_doc = _chkDoc.getDocument();
-			setReportWriter(chkDoc._reporter.getReportWriter());
+			setReportWriter(chkDoc.getReporter().getReportWriter());
 			setIndex(-1);
 			setLineNumber(-1);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) { // open debugger

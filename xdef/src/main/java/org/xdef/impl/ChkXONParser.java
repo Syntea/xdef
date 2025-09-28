@@ -260,15 +260,15 @@ final class ChkXONParser implements XParser, XonParser {
 			XCodeProcessor scp = _chkDoc._scp;
 			Properties props = scp.getProperties();
 			_chkDoc._scp = null;
-			_chkDoc.init(((ChkDocument)chkDoc)._xdef,
+			_chkDoc.init((XDefinition) chkDoc.getXMDefinition(),
 				(Document) _chkDoc.getDocument().cloneNode(false),
-				((ChkDocument)chkDoc)._reporter,
+				chkDoc.getReporter(),
 				scp.getProperties(),
-				((ChkDocument)chkDoc)._userObject);
+				chkDoc.getUserObject());
 			_chkDoc._scp = scp;
 			_chkDoc._rootChkDocument.setDocument(null);
 			_chkDoc.setDocument(null);
-			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
+			XPool xdp = (XPool) ((ChkDocument)chkDoc).getXDPool();
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);

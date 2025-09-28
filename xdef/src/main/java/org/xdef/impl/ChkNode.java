@@ -359,7 +359,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	@Override
 	public final String[] getVariableNames() {
-		return _rootChkDocument._xdef.getXDPool().getVariableTable().getVariableNames();
+		return _rootChkDocument.getXDPool().getVariableTable().getVariableNames();
 	}
 
 	/** Get XDDocument.
@@ -372,7 +372,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return XDPool.
 	 */
 	@Override
-	public final XDPool getXDPool() {return _rootChkDocument.getXMDefinition().getXDPool();}
+	public final XDPool getXDPool() {return ((XDefinition)_rootChkDocument.getXMDefinition()).getXDPool();}
 
 	/** Get value of variable from XMDefinition.
 	 * @param name name of variable.
@@ -386,10 +386,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return suitable variable.
 	 */
 	private XVariable findVariable(final String name) {
-		XPool xp = (XPool) _rootChkDocument._xdef.getXDPool();
+		XPool xp = (XPool) _rootChkDocument.getXDPool();
 		XVariable xv = xp.getVariable(name);
 		if (xv == null) {
-			xv = _rootChkDocument._xdef.findVariable(name);
+			xv = ((XDefinition) _rootChkDocument.getXMDefinition()).findVariable(name);
 		}
 		if (xv != null) {
 			if (xv.isFinal() && _scp.getVariable(name) != null) {
@@ -714,7 +714,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return source position or <i>null</i> if position is not available.
 	 */
 	@Override
-	public SPosition getSPosition() {return _rootChkDocument._reporter;}
+	public SPosition getSPosition() {return _rootChkDocument.getReporter();}
 
 	/** Set position of the node as XPath expression.
 	 * @param xPath string with position of the node as XPath expression.
@@ -732,7 +732,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return The report writer.
 	 */
 	@Override
-	public final ReportWriter getReportWriter() {return _rootChkDocument._reporter.getReportWriter();}
+	public final ReportWriter getReportWriter() {return _rootChkDocument.getReporter().getReportWriter();}
 
 	/** Copy temporary reports to global reporter.
 	 * @return true if and only if temporary reporter contained errors before
@@ -795,24 +795,22 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	}
 
 	/** Get SReporter of XDDocument.
-	 * @return SReporter of XDDocument..
+	 * @return SReporter of XDDocument.
 	 */
 	@Override
-	public final SReporter getReporter() {return _rootChkDocument._reporter;}
+	public SReporter getReporter() {return _rootChkDocument.getReporter();}
 
 	/** Check if errors, fatal errors, light errors or warnings were reported.
-	 * @return <i>true</i> if errors, fatal errors, light errors
-	 * or warnings were reported.
+	 * @return true if errors, fatal errors, light errors or warnings were reported.
 	 */
 	@Override
-	public boolean errorWarnings() {return _rootChkDocument._reporter.errorWarnings();}
+	public boolean errorWarnings() {return _rootChkDocument.getReporter().errorWarnings();}
 
 	/** Check if errors, fatal errors or light errors were reported.
-	 * @return <i>true</i> if errors, fatal errors or light errors were
-	 * reported.
+	 * @return true if errors, fatal errors or light errors were reported.
 	 */
 	@Override
-	public boolean errors() {return _rootChkDocument._reporter.errors();}
+	public boolean errors() {return _rootChkDocument.getReporter().errors();}
 
 	/** Put fatal error message with modification parameters.
 	 * @param id The message id.
@@ -871,14 +869,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	@Override
 	public final void putReport(final Report report) {
 		ensurePosInfo(report);
-		_rootChkDocument._reporter.putReport(report);
+		_rootChkDocument.getReporter().putReport(report);
 	}
 
 	/** Get XMDefinition.
 	 * @return X-definition of this document.
 	 */
 	@Override
-	public final XMDefinition getXMDefinition() {return _rootChkDocument._xdef;}
+	public XMDefinition getXMDefinition() {return _rootChkDocument.getXMDefinition();}
 
 	/** Get model of the processed object.
 	 * @return model of the processed object (XMElement).

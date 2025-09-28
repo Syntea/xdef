@@ -48,6 +48,7 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
+import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import static org.xdef.model.XMNode.XMCHOICE;
@@ -98,12 +99,12 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	private byte _setTextValuesCase; //0 not set, 'I' ignore, 'T' or 'F'
 	////////////////////////////////////////////////////////////////////////////
 	/** Root definition. */
-	XDefinition _xdef;
+	private XDefinition _xdef;
 	/** Report generator. */
-	SReporter _reporter;
+	private SReporter _reporter;
 	/** Actual w3c.dom.Document. */
 	private Document _doc;
-	/** Root check element. */
+	/** Root ChkElement. */
 	ChkElement _chkRoot;
 	/** XDLexicon source language ID.*/
 	int _sourceLanguageID = -1;
@@ -1962,10 +1963,11 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	@Override
 	public final String toString() {return "ChkDocument: " + _xElement;}
 
-	@Override
-	/** Get document with root element.
-	 * @return The Document object.
+////////////////////////////////////////////////////////////////////////////////
+	/** Set w3c.dom.Document to this object.
+	 * @param doc w3c.dom.Document to set.
 	 */
+	@Override
 	public final Document getDocument() {return _doc;}
 
 	/** Set w3c.dom.Document to this object.
@@ -1973,6 +1975,25 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	 */
 	@Override
 	public final void setDocument(final Document doc) {_doc = doc;}
+
+	/** Get XDefinition assigned to this object.
+	 * @return XDefinition assigned to this object.
+	 */
+	@Override
+	public final XMDefinition getXMDefinition() {return _xdef;}
+
+	/** Set XDefinition to this object.
+	 * @param xdef XDefinition to be set.
+	 */
+	@Override
+	public final void setXDefinition(final XDefinition xdef) {_xdef = xdef;}
+
+	/** Get SReporter of XDDocument.
+	 * @return SReporter of XDDocument.
+	 */
+	@Override
+	public final SReporter getReporter() {return _reporter;}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // deprecated
