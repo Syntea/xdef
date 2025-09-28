@@ -1441,9 +1441,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		int ndx = qname.indexOf(':');
 		String localName = qname.substring(ndx + 1);
-		XData xatt = _xElement.getDefAttrNS(nsURI, localName, _rootChkDocument._sourceLanguageID);
+		XData xatt = _xElement.getDefAttrNS(nsURI, localName, _rootChkDocument.getSourceLanguageID());
 		if (xatt == null && nsURI.equals(_element.getNamespaceURI())) {
-			XData xa = _xElement.getDefAttr(localName, _rootChkDocument._sourceLanguageID);
+			XData xa = _xElement.getDefAttr(localName, _rootChkDocument.getSourceLanguageID());
 			if (xa != null && xa._acceptQualifiedAttr == 'T') {
 				return xa;
 			}
@@ -1452,7 +1452,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	private XData getXAttr(final String name) {
-		return _xElement.getDefAttr(name, _rootChkDocument._sourceLanguageID);
+		return _xElement.getDefAttr(name, _rootChkDocument.getSourceLanguageID());
 	}
 
 	/** Execute validation method and if putTempErrors is true then put errors to reporter.

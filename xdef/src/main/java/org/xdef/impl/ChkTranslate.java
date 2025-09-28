@@ -197,8 +197,8 @@ final class ChkTranslate extends SReporter {
 		XElement oldXElement = chkDoc._xElement; //Save XElement
 		boolean oldMode = chkDoc.isCreateMode();
 		Element oldContext = chkDoc._sourceElem;
-		int oldSourceLanguageID = chkDoc._sourceLanguageID;
-		int oldDestLanguageID = chkDoc._destLanguageID;
+		int oldSourceLanguageID = chkDoc.getSourceLanguageID();
+		int oldDestLanguageID = chkDoc.getDestLanguageID();
 		_lexicon = ((XPool) chkDoc.getXDPool())._lexicon;
 		if (_lexicon == null) {
 			throw new SRuntimeException(XDEF.XDEF143); //Lexicon is not available in the XDPool object
@@ -208,9 +208,9 @@ final class ChkTranslate extends SReporter {
 		setReportWriter(chkDoc.getReportWriter());
 		try {
 			chkDoc.setLexiconLanguage(sourceLanguage);
-			_sourceLanguageID = chkDoc._sourceLanguageID;
+			_sourceLanguageID = chkDoc.getSourceLanguageID();
 			chkDoc.setDestLexiconLanguage(destLanguage);
-			_destLanguageID = chkDoc._destLanguageID;
+			_destLanguageID = chkDoc.getDestLanguageID();
 			String nsuri = inElem.getNamespaceURI();
 			XElement xel = chkDoc.getXElement(inElem.getTagName(), nsuri, _sourceLanguageID);
 			String name = ((XPool) chkDoc.getXDPool())._lexicon.findText(xel.getXDPosition(),_destLanguageID);
@@ -230,8 +230,8 @@ final class ChkTranslate extends SReporter {
 			KXmlUtils.setNecessaryXmlnsAttrs(chkDoc.getElement());
 			chkDoc.setCreateMode(oldMode);
 			chkDoc._sourceElem = oldContext;
-			chkDoc._sourceLanguageID = oldSourceLanguageID;
-			chkDoc._destLanguageID = oldDestLanguageID;
+			chkDoc.setSourceLanguageID(oldSourceLanguageID);
+			chkDoc.setDestLanguageID(oldDestLanguageID);
 		}
 	}
 
@@ -571,14 +571,14 @@ final class ChkTranslate extends SReporter {
 		chkElem._xdata = null;
 		chkElem._xPos = xpos;
 		NamedNodeMap nm = chkElem._element.getAttributes();
-		int languageID = _rootChkElement._rootChkDocument._destLanguageID;
-		int savedLanguageID =_rootChkElement._rootChkDocument._sourceLanguageID;
-		_rootChkElement._rootChkDocument._sourceLanguageID = languageID;
+		int languageID = _rootChkElement._rootChkDocument.getDestLanguageID();
+		int savedLanguageID =_rootChkElement._rootChkDocument.getSourceLanguageID();
+		_rootChkElement._rootChkDocument.setSourceLanguageID(languageID);
 		//validate attributes
 		for (int i = nm.getLength() - 1; i >= 0; i--) {
 			chkElem.newAttribute((Attr) nm.item(i));
 		}
-		_rootChkElement._rootChkDocument._sourceLanguageID =savedLanguageID;
+		_rootChkElement._rootChkDocument.setSourceLanguageID(savedLanguageID);
 		if (xel._moreAttributes == 'T' && sourceElem != null) {
 			NamedNodeMap nm1 = sourceElem.getAttributes();
 			if (nm1!= null) {// copy other attributes

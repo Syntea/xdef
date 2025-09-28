@@ -104,15 +104,10 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	private SReporter _reporter;
 	/** Actual w3c.dom.Document. */
 	private Document _doc;
-	/** Root ChkElement. */
-	ChkElement _chkRoot;
 	/** XDLexicon source language ID.*/
-	int _sourceLanguageID = -1;
+	private int _sourceLanguageID = -1;
 	/** XDLexicon destination language ID.*/
-	int _destLanguageID = -1;
-	/** XON object, result of XON/JSON parsing */
-	Object _xon;
-	////////////////////////////////////////////////////////////////////////////
+	private int _destLanguageID = -1;
 	/** The list of child check elements. */
 	private final List<ChkElement> _chkChildNodes;
 	/** Reference number - max. 1 for root. */
@@ -126,7 +121,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	/** Switch to generate XComponent instead of Element; */
 	private boolean _genXComponent;
 	////////////////////////////////////////////////////////////////////////////
-	// valid date parameters
+	// parameters of valid dates
+	////////////////////////////////////////////////////////////////////////////
 	/** Maximal accepted value of the year. */
 	private int _maxYear = Integer.MIN_VALUE;
 	/** Minimal accepted value of the year. */
@@ -135,6 +131,11 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	private SDatetime _specialDates[];
 	/** Switch to check if date is legal. */
 	private boolean _stopCheckDateLegal;
+	////////////////////////////////////////////////////////////////////////////
+	/** XON object, result of XON/JSON parsing */
+	Object _xon;
+	/** Root ChkElement. */
+	ChkElement _chkRoot;
 
 	/** Create new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
@@ -1994,6 +1995,25 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	@Override
 	public final SReporter getReporter() {return _reporter;}
 
+	/** Get XDLexicon source language ID.
+	 * @return XDLexicon source language ID.
+	 */
+	public final int getSourceLanguageID() {return _sourceLanguageID;}
+
+	/** Set XDLexicon source language ID.
+	 * @param x XDLexicon source language ID.
+	 */
+	public final void setSourceLanguageID(int x) {_sourceLanguageID = x;}
+
+	/** Get XDLexicon destination language ID.
+	 * @return XDLexicon destination language ID.
+	 */
+	public final int  getDestLanguageID() {return _destLanguageID;}
+
+	/** Set XDLexicon destination language ID.
+	 * @param x XDLexicon destination language ID.
+	 */
+	public final void setDestLanguageID(int x) {_destLanguageID = x;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // deprecated
