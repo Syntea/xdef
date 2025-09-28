@@ -155,12 +155,14 @@ final class ChkXONParser implements XParser, XonParser {
 			if (_chkDoc == null) {
 				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
 			}
-			_chkDoc._doc=KXmlUtils.newDocument(parsedElem.getParsedNSURI(), parsedElem.getParsedName(), null);
-			_element = _chkDoc._doc.getDocumentElement();
+			_chkDoc.setDocument(
+				KXmlUtils.newDocument(parsedElem.getParsedNSURI(), parsedElem.getParsedName(), null));
+			_element = _chkDoc.getDocument().getDocumentElement();
 			addAttrs(parsedElem);
 			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {
-			Element el = _chkDoc._doc.createElementNS(parsedElem.getParsedNSURI(),parsedElem.getParsedName());
+			Element el = _chkDoc.getDocument().createElementNS(
+				parsedElem.getParsedNSURI(),parsedElem.getParsedName());
 			_element.appendChild(el);
 			_element = el;
 			addAttrs(parsedElem);
@@ -176,7 +178,7 @@ final class ChkXONParser implements XParser, XonParser {
 			KParsedAttr ka = parsedElem.getAttrNS(x.getNSUri(),x.getName());
 			if (ka != null) {
 				_sReporter.setPosition(ka.getPosition());
-				Attr att = _chkDoc._doc.createAttributeNS(ka.getNamespaceURI(), ka.getName());
+				Attr att = _chkDoc.getDocument().createAttributeNS(ka.getNamespaceURI(), ka.getName());
 				att.setValue(ka.getValue());
 				_chkEl.newAttribute(att);
 				parsedElem.remove(ka); // processed, remove from attr list
@@ -264,7 +266,8 @@ final class ChkXONParser implements XParser, XonParser {
 				scp.getProperties(),
 				((ChkDocument)chkDoc)._userObject);
 			_chkDoc._scp = scp;
-			_chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
+			_chkDoc._rootChkDocument.setDocument(null);
+			_chkDoc.setDocument(null);
 			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger

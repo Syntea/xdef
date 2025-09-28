@@ -656,7 +656,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get document with root element.
 	 * @return The Document object.
 	 */
-	public final Document getDocument() {return _rootChkDocument._doc;}
+	public Document getDocument() {return _rootChkDocument.getDocument();}
 
 	/** Get document element.
 	 * @return root element of the document.

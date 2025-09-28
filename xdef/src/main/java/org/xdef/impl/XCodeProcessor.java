@@ -2246,7 +2246,7 @@ public final class XCodeProcessor {
 					int i = item.getParam() == 2 ? _stack[sp--].intValue() : 0;
 					Element elem = ((XDContainer) _stack[sp]).getXDElement(i);
 					if (elem == null) {
-						elem = chkEl._rootChkDocument._doc.createElementNS(null, UNDEF_ID);
+						elem = chkEl._rootChkDocument.getDocument().createElementNS(null, UNDEF_ID);
 					}
 					_stack[sp] = new DefElement(elem);
 					continue;
@@ -2660,7 +2660,7 @@ public final class XCodeProcessor {
 						ns = item.getParam() == 2 ? _stack[sp--].toString() : null;
 						name = _stack[sp--].toString();
 					}
-					_stack[++sp] = new DefElement(chkEl._rootChkDocument._doc, ns, name);
+					_stack[++sp] = new DefElement(chkEl._rootChkDocument.getDocument(), ns, name);
 					continue;
 				}
 				case CREATE_ELEMENTS: {
@@ -2676,7 +2676,7 @@ public final class XCodeProcessor {
 					int i = _stack[sp].intValue();
 					DefElement[] values = new DefElement[i];
 					for (int j = 0; j < i; j++) {
-						 values[j] = new DefElement(chkEl._rootChkDocument._doc, ns, name);
+						values[j] = new DefElement(chkEl._rootChkDocument.getDocument(), ns, name);
 					}
 					_stack[sp] = new DefContainer(values);
 					continue;

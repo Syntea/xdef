@@ -408,7 +408,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				_isDTD = true;
 				_doc = _docBuilder.parse(in, sysId);
 				_isDTD = isDTD;
-				_chkDoc._doc = _chkDoc._rootChkDocument._doc = _doc;
+				_chkDoc.setDocument(_doc);
+				_chkDoc._rootChkDocument.setDocument(_doc); //???
 				_element = _doc.getDocumentElement();
 			} catch (IOException | SAXException ex) { // never should happen!
 				throw new RuntimeException(ex);
@@ -704,7 +705,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				scp.getProperties(),
 				((ChkDocument)chkDoc)._userObject);
 			_chkDoc._scp = scp;
-			_doc = _chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
+			_chkDoc.setDocument(_doc = null);
+			_chkDoc._rootChkDocument.setDocument(null);
 			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
 			setIgnoringComments(true); // ????
 			_illegalDoctype = !getBooleanProperty(xdp.isIllegalDoctype(), XDPROPERTY_DOCTYPE, props);
@@ -880,7 +882,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 							if (_chkDoc == null) {
 								_chkDoc = new ChkDocument(def);
 								_chkDoc._reporter.setReportWriter(_sReporter.getReportWriter());
-								_chkDoc._doc = _element.getOwnerDocument();
+								_chkDoc.setDocument(_element.getOwnerDocument());
 								_chkDoc.setStdOut(stdOut);
 							} else {
 								XCodeProcessor scp = _chkDoc._scp;

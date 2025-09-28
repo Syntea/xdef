@@ -139,7 +139,8 @@ public final class XPool implements XDPool, Serializable {
 	 * @param reporter report writer or null.
 	 */
 	XPool(final Properties props, final ReportWriter reporter, final Class<?>... extClasses) {
-		_xdefs = new LinkedHashMap<>(); _sourceInfo = new XDSourceInfo();
+		_xdefs = new LinkedHashMap<>();
+		_sourceInfo = new XDSourceInfo();
 		_extClasses = extClasses;
 		_reporter = reporter;
 		_props = props != null ? props : SManager.getProperties();

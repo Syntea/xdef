@@ -286,7 +286,7 @@ class ChkDOMParser extends SReporter {
 				props,
 				chkDoc._userObject);
 			_chkDoc._scp = scp;
-			_doc = _chkDoc._doc;
+			_doc = _chkDoc.getDocument();
 			setReportWriter(chkDoc._reporter.getReportWriter());
 			setIndex(-1);
 			setLineNumber(-1);

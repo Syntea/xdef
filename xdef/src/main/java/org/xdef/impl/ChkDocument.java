@@ -80,7 +80,7 @@ import org.xdef.xon.XonUtils;
 /** Provides root check object for generation of check tree and processing of the X-definition.
  * @author Vaclav Trojan
  */
-final class ChkDocument extends ChkNode	implements XDDocument {
+final class ChkDocument extends ChkNode implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options
 	////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Report generator. */
 	SReporter _reporter;
 	/** Actual w3c.dom.Document. */
-	Document _doc;
+	private Document _doc;
 	/** Root check element. */
 	ChkElement _chkRoot;
 	/** XDLexicon source language ID.*/
@@ -177,7 +177,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		this();
 		setDateRestrictions(xd.getXDPool());
 		init(xd,
-			chkel._rootChkDocument._doc,
+			chkel._rootChkDocument.getDocument(),
 			chkel._rootChkDocument._reporter,
 			chkel._scp.getProperties(),
 			chkel.getUserObject());
@@ -1961,6 +1961,18 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get printable string from this object. */
 	@Override
 	public final String toString() {return "ChkDocument: " + _xElement;}
+
+	@Override
+	/** Get document with root element.
+	 * @return The Document object.
+	 */
+	public final Document getDocument() {return _doc;}
+
+	/** Set w3c.dom.Document to this object.
+	 * @param doc w3c.dom.Document to set.
+	 */
+	@Override
+	public final void setDocument(final Document doc) {_doc = doc;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // deprecated

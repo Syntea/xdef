@@ -162,9 +162,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else if (_element != null) {
 			Element el;
 			if (_parent._parent == null) { //root element
-				el = _rootChkDocument._doc.getDocumentElement();
+				el = _rootChkDocument.getDocument().getDocumentElement();
 				if (el == null) {
-					_rootChkDocument._doc.appendChild(_element);
+					_rootChkDocument.getDocument().appendChild(_element);
 				} else if (el != _element) {
 					el.appendChild(_element);
 				}
@@ -450,8 +450,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (_data != null) {
 			if (!_data.equals(orig)) {
-				Node txt = xtxt._cdata == 'T' ? _rootChkDocument._doc.createCDATASection(_data)
-					: _rootChkDocument._doc.createTextNode(_data);
+				Node txt = xtxt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
+					: _rootChkDocument.getDocument().createTextNode(_data);
 				if (orig == null) {
 					if (c == null) {
 						_element.appendChild(txt);
@@ -1293,8 +1293,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	private Node appendTextNode(final String data, final XData xtxt) {
-		Node txt = xtxt._cdata == 'T' ? _rootChkDocument._doc.createCDATASection(data)
-			: _rootChkDocument._doc.createTextNode(data);
+		Node txt = xtxt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(data)
+			: _rootChkDocument.getDocument().createTextNode(data);
 		_element.appendChild(txt);
 		if (_scp.getXmlStreamWriter() != null) {
 			try {
@@ -2473,8 +2473,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	@Override
 	public final XXElement prepareXXElementNS(final String ns, final String qname) {
-		return createChkElement(ns == null ? _rootChkDocument._doc.createElement(qname)
-			: _rootChkDocument._doc.createElementNS(ns,qname));
+		return createChkElement(ns == null ? _rootChkDocument.getDocument().createElement(qname)
+			: _rootChkDocument.getDocument().createElementNS(ns,qname));
 	}
 
 	/** Prepare construction of the new element according to X-definition.
@@ -2492,8 +2492,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	public final XXElement createChildXXElement(final XMElement model) {
 		String ns = model.getNSUri();
 		String qname = model.getName();
-		Element el = ns == null ? _rootChkDocument._doc.createElement(qname)
-			: _rootChkDocument._doc.createElementNS(ns, qname);
+		Element el = ns == null ? _rootChkDocument.getDocument().createElement(qname)
+			: _rootChkDocument.getDocument().createElementNS(ns, qname);
 		return chkElem((XElement) model, el);
 	}
 
