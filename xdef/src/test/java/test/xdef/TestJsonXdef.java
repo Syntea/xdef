@@ -1025,6 +1025,15 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
 			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
 		} catch (SRuntimeException ex) {fail(ex);}
+		try {
+			XDFactory.compileXD(null, // incorrect excape characters in script
+				"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
+"   <xd:json name = \"test\">[ { \"adresa\": \"%script= \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"</xd:def>");
+			fail("Error not detected");
+		} catch (RuntimeException ex) {
+			if (!ex.toString().contains("XDEF425")) fail(ex);
+		}
 
 		clearTempDir(); // delete temporary files.
 	}
