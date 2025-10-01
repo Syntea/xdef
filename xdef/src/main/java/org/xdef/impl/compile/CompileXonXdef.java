@@ -757,7 +757,15 @@ public final class CompileXonXdef extends XScriptParser {
 				}
 			} while(!eos());
 		} else if (_sym != SEMICOLON_SYM && _sym!= NOCHAR) {
-			while(nextSymbol() != SEMICOLON_SYM && _sym!= NOCHAR){}
+			if (nextSymbol() == UNDEF_SYM) {
+				setEos();
+				return false;
+			}
+			while(_sym != SEMICOLON_SYM && _sym!= NOCHAR){
+				if (nextSymbol() == UNDEF_SYM) {
+					return false;
+				}
+			}
 			return true;
 		}
 		return false;
@@ -860,6 +868,7 @@ public final class CompileXonXdef extends XScriptParser {
 				spos = getLastPosition();
 				if (!readSectionCommand()) {// this never should not happeh
 					error(XDEF.XDEF425); //Script error&{#SYS000}
+					break; // do not continue parsing, return sectionList;
 				}
 				addSection("", sectionList, spos);
 			} else {
