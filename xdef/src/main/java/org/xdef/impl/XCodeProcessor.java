@@ -2907,7 +2907,7 @@ public final class XCodeProcessor {
 					if (result.matches()) {
 						chkEl.setTextValue(result.getSourceBuffer());
 					}
-					return chkEl._parseResult = result;
+					return result;
 				}
 				case PARSEANDCHECK:
 					_stack[sp] = new DefBoolean(((XDParser) _stack[sp]).check(chkEl,
@@ -2994,7 +2994,7 @@ public final class XCodeProcessor {
 				case GET_NAMEDVALUE: {//get named item from Container
 					String name = (item.getParam() == 1) ? item.stringValue() : _stack[sp--].toString();
 					XDValue v = ((XDContainer)_stack[sp]).getXDNamedItemValue(name);
-					_stack[sp] = v == null ? new DefString() : v;
+					_stack[sp] = v == null ? new DefString() /*empty string*/ : v;
 					continue;
 				}
 				case HAS_NAMEDVALUE: {//has named item in Container
@@ -3011,7 +3011,7 @@ public final class XCodeProcessor {
 				case GET_NAMED_AS_STRING: {//named item from Container as string
 					String name = (item.getParam() == 1) ? item.stringValue() : _stack[sp--].toString();
 					XDValue v = ((XDContainer)_stack[sp]).getXDNamedItemValue(name);
-					_stack[sp] = v == null ? new DefString() : new DefString(v.stringValue());
+					_stack[sp] = v == null ? new DefString()/*empty string*/ : new DefString(v.stringValue());
 					continue;
 				}
 				case NAMEDVALUE_GET: _stack[sp] = ((XDNamedValue) _stack[sp]).getValue(); continue;
@@ -3223,8 +3223,7 @@ public final class XCodeProcessor {
 				Report report = ex.getReport();
 				throw new XXException(updateReport(report, chkEl), ex);
 			} catch (InvocationTargetException ex) {
-				Throwable thr;
-				thr = ex.getCause();
+				Throwable thr = ex.getCause();
 				if (thr instanceof Error) {
 					throw (Error) thr;
 				}
