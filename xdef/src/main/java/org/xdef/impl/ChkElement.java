@@ -151,7 +151,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			int xPosCnt = getElemXPos(((ChkElement)_parent)._xPosOccur, _xPos);
 			_xPos += '[' + String.valueOf(xPosCnt)+ ']';
 		}
-		_errCount=getReporter().getErrorCount()+_scp._reporter.getErrorCount();
+		_errCount=getReporter().getErrorCount()+_scp.getTemporaryReporter().getErrorCount();
 		_childList = _xElement._childNodes;
 		_actDefIndex = -1; //index of actual X-definition
 		_counters = new int[_childList.length + 1]; //one more for '*'

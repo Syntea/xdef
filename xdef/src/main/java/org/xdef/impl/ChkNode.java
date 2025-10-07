@@ -644,10 +644,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public abstract KNamespace getXXNamespaceContext();
 
 	@Override
-	public final XPathFunctionResolver getXXFunctionResolver() {return _scp._functionResolver;}
+	public final XPathFunctionResolver getXXFunctionResolver() {return _scp.getFunctionResolver();}
 
 	@Override
-	public final XPathVariableResolver getXXVariableResolver() {return _scp._variableResolver;}
+	public final XPathVariableResolver getXXVariableResolver() {return _scp.getVariableResolver();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods to retrieve values from checked tree.
