@@ -492,7 +492,7 @@ public class TestXon extends XDTester {
 "proxy type=int(0,9)\n" +
 "hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
 "port= ? int(0, 9999);\n" +
-"[system] %script = optional\n" +
+"[system] optional\n" +
 "autolaunch=int()\n" +
 "[ x.y ]\n" +
 "[selfupdate]\n" +
@@ -540,7 +540,7 @@ public class TestXon extends XDTester {
 "      Authority=enum(\"SECURITY\",\"SOFTWARE\",\"CLIENT\",\"UNREGISTRED\")\n" +
 "      ItemSize = int(10000, 15000000)\n" +
 "      ReceiverSleep = int(1, 3600)\n" +
-"    [Server] %script = optional\n" +
+"    [Server] optional;\n" +
 "      RemoteServerURL = url()\n" +
 "      SeverIP = ipAddr()\n" +
 "      SendMailHost = domainAddr()\n" +

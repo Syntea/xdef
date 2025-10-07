@@ -796,9 +796,9 @@ public class TestJsonXdef extends XDTester {
 "   B=int(); finally out(\"B\");\n" +
 "   C=date(); finally out(\"C\");\n" +
 "   D=decimal(); finally out(\"D\");\n" +
-"   [E ; %script = optional; finally out(\"[E]\");]\n" +
+"   [E] optional; finally out(\"[E]\");\n" +
 "     x = ?int(); finally out(\"x\");\n" +
-"   [F;%script=finally out(\"[F]\");]\n" +
+"   [F]finally out(\"[F]\");\n" +
 " </xd:ini>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -858,7 +858,7 @@ public class TestJsonXdef extends XDTester {
 "   B=int()\n" +
 "   C=date()\n" +
 "   D=decimal()\n" +
-"   [ E-F.G ; %script=?]\n" +
+"   [ E-F.G ] ?\n" +
 "     x = ?int()\n" +
 "   [ F ]\n" +
 " </xd:ini>\n"+
@@ -870,6 +870,7 @@ public class TestJsonXdef extends XDTester {
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument("TestINI");
 			xc = xd.iparseXComponent(ini, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("a", XComponentUtil.get(xc, "$A"));
 			assertEq(1, XComponentUtil.get(xc, "$B"));
@@ -879,6 +880,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("b", XComponentUtil.get(xc, "$A"));
 			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[F]";
 			xc = xd.iparseXComponent(ini, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("a", XComponentUtil.get(xc, "$A"));
 			assertEq(1, XComponentUtil.get(xc, "$B"));
