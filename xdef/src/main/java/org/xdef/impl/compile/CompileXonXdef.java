@@ -36,6 +36,7 @@ import static org.xdef.impl.compile.XScriptParser.PLUS_SYM;
 import static org.xdef.impl.compile.XScriptParser.REF_SYM;
 import static org.xdef.impl.compile.XScriptParser.REQUIRED_SYM;
 import static org.xdef.impl.compile.XScriptParser.SEMICOLON_SYM;
+import static org.xdef.impl.compile.XScriptParser.UNDEF_SYM;
 import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
@@ -340,10 +341,10 @@ public final class CompileXonXdef extends XScriptParser {
 
 	private void setName(final PNode pn, final String name) {
 		if (ANY_NAME.equals(name)) {
-			setAttr(pn,X_KEYATTR, new SBuffer("string();", pn._name));
+			setAttr(pn, X_KEYATTR, new SBuffer("string();", pn._name));
 		} else {
 			addMatchExpression(pn, '@' + X_KEYATTR + "=='"+ name +"'");
-			setAttr(pn,X_KEYATTR,new SBuffer("fixed('"+name+ "');",pn._name));
+			setAttr(pn, X_KEYATTR, new SBuffer("fixed('"+name+ "');", pn._name));
 		}
 	}
 
@@ -402,7 +403,7 @@ public final class CompileXonXdef extends XScriptParser {
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
 			Object o = entry.getValue();
-			if (key == null || ANY_NAME.equals(key)) {
+			if (key == null) { // ANY_NAME ... || ANY_NAME.equals(key)
 				anyItem = o;
 			} else {
 				String keyXmlName = XonTools.toXmlName(key);
@@ -1110,12 +1111,14 @@ public final class CompileXonXdef extends XScriptParser {
 		 */
 		@Override
 		public final void xdScript(final SBuffer name, final SBuffer value) {
+			String s = name.getString();
+			if (s == null) { // ANY_NAME!!!
+				namedValue(new SBuffer(null, name));
+				return;
+			}
 			SPosition spos = value == null ? name : value;
 			JValue jv;
 			switch (name.getString()) {
-				case ANY_NAME:
-					namedValue(new SBuffer(null, name));
-					return;
 				case ANY_OBJ:
 					putValue(new JAny((SPosition)name, value));
 					return;

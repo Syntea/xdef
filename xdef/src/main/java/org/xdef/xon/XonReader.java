@@ -168,7 +168,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					wasAnyName = true;
 					skipSpacesOrComments();
-					_jp.xdScript(new SBuffer(ANY_NAME, spos), null);
+					_jp.xdScript(new SBuffer(null, spos), null); // &anyName -> null!!!
 					name = null;
 				} else {
 					if (isChar('"')) {
