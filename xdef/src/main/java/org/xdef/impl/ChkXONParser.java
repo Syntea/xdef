@@ -92,7 +92,7 @@ final class ChkXONParser implements XParser, XonParser {
 				URL u = SUtils.getExtendedURL(s);
 				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
-			} catch (IOException ex) {
+			} catch (IOException | RuntimeException ex) {
 				try { // try if it is a file name
 					File f = new File(s);
 					_in = XonReader.getXonReader(new FileInputStream(f));
