@@ -138,6 +138,11 @@ public final class XonReader extends StringParser implements XonParsers {
 				s = SUtils.modifyString(s, "\"", "\\\"");
 				value = new SBuffer(s, spos);
 			}
+		} else if (i == 3) { // "%oneof"
+			skipSpacesOrComments();
+			if (!isChar('"')) { // read '"'
+				error(JSON.JSON002, "\""); //"&{0}"&{1}{ or "}{"} expected
+			}
 		} else if (i == 0 || i == 2) { // $script
 			error(JSON.JSON002, "=", ":"); //"&{0}"&{1}{ or "}{"} expected
 			value = new SBuffer("", getPosition());

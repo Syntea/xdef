@@ -147,7 +147,7 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
 "  <xd:component>%class " + _package + ".Csvxx %link a</xd:component>\n" +
 " <xd:json name='a'>\n" +
-"    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
+"    [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
 " </xd:json>\n" +
 "</xd:def>"));
 			xd = xp.createXDDocument();
@@ -373,7 +373,7 @@ public class TestXon extends XDTester {
 "  <xd:component>%class " + _package + ".Xona %link a</xd:component>\n" +
 "  <xd:json name='a'>\n" +
 "    [\n" +
-"      [ %script= \"optional\", \"boolean();\", \"optional int();\" ]\n" +
+"      [ \"%script: optional\", \"boolean();\", \"optional int();\" ]\n" +
 "    ]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
@@ -402,7 +402,7 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"X\">\n" +
 "[\n" +
 "  [\"fixed 'Name'\",\"fixed 'Email'\",\"fixed 'Mobile Number'\"],\n" +
-"  [%script=\"+\",\n" +
+"  [\"%script:+\",\n" +
 "    \"string()\",\n" +
 "    \"union(%item=[emailAddr(), jnull])\",\n" +
 "    \"union(%item=[telephone(), jnull])\"\n" +
@@ -572,7 +572,7 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
 "  [\"3 string();\"],\n" + // head
-"  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
+"  [\"%script:+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
@@ -633,7 +633,7 @@ public class TestXon extends XDTester {
 "[\n" +
 "  [\"occurs 2.. string();\"], # header line\n" +
 "  # CSV lines:\n" +
-"  [ %script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
+"  [ \"%script: +\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>").createXDDocument();
@@ -656,7 +656,7 @@ public class TestXon extends XDTester {
 "  <xd:component>%class " + _package + ".CsvTest1 %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n"+
-"  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
+"  [\"%script: +\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
@@ -710,10 +710,10 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "  <xd:component>%class "+_package+".MyTestX_OneOf %link test</xd:component>\n"+
 "  <xd:json name=\"test\">\n" +
-"{ a:[ %oneOf,\n" +
+"{ a:[ \"%oneOf\",\n" +
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
-"       [%script=\"finally outln('[...]')\",\"*int()\"], \n" +
+"       [\"%script:finally outln('[...]')\",\"*int()\"], \n" +
 "       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +
@@ -787,10 +787,10 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"test\">\n" +
 "    {date: \"date()\",\n" +
 "      cities: [\n" +
-"        { %script = \"occurs 1..*; finally outln(); forget\",\n" +
+"        { \"%script: occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally out('From ' + getText());\",\n" +
-"            { %script = \"occurs 1..*;\",\n" +
+"            { \"%script: occurs 1..*;\",\n" +
 "              \"to\": \"jstring();finally out(' to '+getText()+' is ');\",\n" +
 "              \"distance\": \"int(); finally out(getText() + ' km');\"\n" +
 "            }\n" +
@@ -842,7 +842,7 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
 "  [\"3..3 string();\"],\n" + // head
-"  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
+"  [\"%script :+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
@@ -902,7 +902,7 @@ public class TestXon extends XDTester {
 "  <xd:component>%class "+_package+".CsvTest1 %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "    [\n" +
-"      [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
+"      [\"%script:+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "    ]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
@@ -960,10 +960,10 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"test\">\n" +
 "    {date: \"date()\",\n" +
 "      cities: [\n" +
-"        { %script = \"occurs 1..*; finally outln(); forget\",\n" +
+"        { \"%script : occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally out('From ' + getText());\",\n" +
-"            { %script = \"occurs 1..*;\",\n" +
+"            { \"%script: occurs 1..*;\",\n" +
 "              \"to\": \"jstring();finally out(' to '+getText()+' is ');\",\n" +
 "              \"distance\": \"int(); finally out(getText() + ' km');\"\n" +
 "            }\n" +
@@ -1009,29 +1009,30 @@ public class TestXon extends XDTester {
 "From London to Brussels is 322 km to Paris is 344 km\n");
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
-			xd = compile( // declaration of "%anyName" item in map
+			genXComponent(xp = compile( // declaration of "%anyName" item in map
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'> { \"\\u0025anyName\": \"string();\" } </xd:json>\n" +
-"</xd:def>").createXDDocument();
+"  <xd:component>%class "+_package+".MyTestAny_0_ %link A</xd:component>\n" +
+"</xd:def>"));
+			xd = xp.createXDDocument();
 			xd.jvalidate("{ \"%anyName\": \"xxx\" }", reporter); // item accepted
 			assertNoErrorsAndClear(reporter);
 			xd.jvalidate("{ \"x\": \"xxx\" }", reporter);  // illegal item
 			assertErrorsAndClear(reporter);
-			xd = compile( // declaration of both "%anyName" item and %anyName in map
+			genXComponent(xp = compile( // declaration of both "%anyName" item and %anyName in map
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
-"    {\n" +
-"      %anyName: \"string();\",\n" +
-"      \"\\u0025anyName\": \"int();\"\n" +
-"    }\n" +
+"    { \"%anyName\": \"string();\", \"\\u0025anyName\": \"int();\" }\n" +
 "  </xd:json>\n" +
-"</xd:def>").createXDDocument();
+"  <xd:component>%class "+_package+".MyTestAny_0 %link A</xd:component>\n" +
+"</xd:def>"));
+			xd = xp.createXDDocument();
 			xd.jvalidate("{ \"%anyName\": 1, \"x\": \"x\" }", reporter);
 			assertNoErrorsAndClear(reporter);
 			genXComponent(xp = compile( // test %anyName
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
-"    { %anyName: \"? int();\", x: \"? int();\" }\n" +
+"    { \"%anyName\": \"? int();\", x: \"? int();\" }\n" +
 "  </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_1 %link A</xd:component>\n" +
 "</xd:def>"));
@@ -1041,7 +1042,7 @@ public class TestXon extends XDTester {
 			genXComponent(xp = compile(// %anyName items and one named item
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
-"    { %anyName: \"* int(); finally out('X'+getText())\", x: \"? int();\" }\n" +
+"    { \"%anyName\": \"* int(); finally out('X'+getText())\", x: \"? int();\" }\n" +
 "  </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_2 %link A</xd:component>\n" +
 "</xd:def>"));
@@ -1050,7 +1051,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "{ a: 1, b: 2, x: 999 }", "X1X2"));
 			genXComponent(xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <xd:json name='A'> { %anyName: [\"* int();\"] } </xd:json>\n" +
+"  <xd:json name='A'> { \"%anyName\": [\"* int();\"] } </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_3 %link A</xd:component>\n" +
 "</xd:def>"));
 			s = _package+".MyTestAny_3"; // class name
@@ -1058,7 +1059,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "{ \"x\": [1,2i] }"));
 			xd = (xp = compile( // %anyObj
 "<xd:def xmlns:xd='"+_xdNS+"' root='Any'>\n" +
-"  <xd:json name=\"Any\"> %anyObj </xd:json>\n" +
+"  <xd:json name=\"Any\"> \"%anyObj\" </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_4 %link Any</xd:component>\n" +
 "</xd:def>")).createXDDocument();
 			o = xd.jparse(json = "[\n" +
@@ -1078,7 +1079,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, json));
 			genXComponent(xp = compile( // %anyName in map with %anyObj items
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <xd:json name='A'> { %anyName: %anyObj=\"*;\"} </xd:json>\n"+
+"  <xd:json name='A'> { \"%anyName\": \"%anyObj:*;\"} </xd:json>\n"+
 "  <xd:component>%class "+_package+".MyTestAny_5 %link A</xd:component>\n"+
 "</xd:def>"));
 			s = _package+".MyTestAny_5"; // class name
@@ -1102,10 +1103,10 @@ public class TestXon extends XDTester {
 "  <xd:json name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n" +
-"    { %script = \"occurs 1..*;\",\n" +
-"      %anyName: [%script = \"occurs 1..*;\n"+
+"    { \"%script: occurs 1..*;\",\n" +
+"      \"%anyName\": [\"%script: occurs 1..*;\n"+
 "                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
-"        { %script = \"occurs 1..*; finally outln();\",\n" +
+"        { \"%script: occurs 1..*; finally outln();\",\n" +
 "          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
 "          \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
 "        }\n" +
@@ -1167,10 +1168,10 @@ public class TestXon extends XDTester {
 "  <xd:json name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
-"    { %script = \"occurs 1..*;\",\n" +
-"      %anyName: [%script = \"occurs 1..*;\n"+
+"    { \"%script: occurs 1..*;\",\n" +
+"      %anyName: [\"%script: occurs 1..*;\n"+
 "                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
-"        { %script = \"occurs 1..*; finally outln();\",\n" +
+"        { \"%script : occurs 1..*; finally outln();\",\n" +
 "          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
 "          \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
 "        }\n" +
@@ -1229,9 +1230,9 @@ public class TestXon extends XDTester {
 			assertEq(swr.toString(), s);
 			genXComponent(xp = compile( // test %anyName, %oneOf, ref
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"a\">\n" +
-"  <xd:json name=\"a\">[ { %script=\"occurs *; ref B\" } ]</xd:json>\n" +
+"  <xd:json name=\"a\">[ { \"%script: occurs *; ref B\" } ]</xd:json>\n" +
 "  <xd:json name=\"B\">\n" +
-"    { %anyName: [%oneOf,\n" +
+"    { \"%anyName\": [%oneOf,\n" +
 "        \"string()\",\n" +
 "        [\"occurs *; string()\"]\n" +
 "      ]\n" +
@@ -1248,17 +1249,17 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", _package+".TestAnyRef", json));
 			genXComponent(xp = compile( //test anyName, oneOf
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"a\" root=\"test\">\n" +
-"<xd:json name=\"test\">[ %script=\"ref A\" ]</xd:json>\n" +
+"<xd:json name=\"test\">[ \"%script:ref A\" ]</xd:json>\n" +
 "  <xd:json name=\"A\">\n" +
-"    [%oneOf,\n"+
+"    [\"%oneOf\",\n"+
 "      \"jvalue();\",\n" +
 "      [\"*; jvalue();\" ],\n" +
-"      {%anyName:\n" +
-"        [%oneOf,\n" +
+"      {\"%anyName\":\n" +
+"        [\"%oneOf\",\n" +
 "          \"jvalue();\",\n" +
 "          [\"*; jvalue();\"],\n" +
-"          {%anyName:\n" +
-"            [%oneOf,\n" +
+"          {\"%anyName\":\n" +
+"            [\"%oneOf\",\n" +
 "              \"jvalue();\",\n" +
 "              [\"*; jvalue();\"],\n" +
 "            ]\n" +

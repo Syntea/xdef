@@ -33,6 +33,7 @@ import org.xdef.xon.XonNames;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
+import static test.XDTester.chkCompoinentSerializable;
 
 /** Test processing JSON objects with Xdefinitions and X-components.
  * @author Vaclav Trojan
@@ -566,7 +567,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
-"        { %script= \"occurs 1..*;\",\n"+
+"        { \"%script: occurs 1..*;\",\n"+
 "          \"Person\": { \"Name\": \"string(1, 50)\",\n" +
 "             \"Pay\": \"int(1000, 99999)\",\n" +
 "             \"Birth date.\": \"date()\"\n" +
@@ -612,7 +613,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
-"        { %script = \"occurs 1..*; ref Person\" }\n"+
+"        { \"%script: occurs 1..*; ref Person\" }\n"+
 "      ]\n"+
 "    }\n"+
 "  </xd:json>\n"+
@@ -659,7 +660,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root='Matrix'>\n"+
 "  <xd:json name=\"Matrix\">\n"+
 "    [\n" +
-"      [ %script=\"occurs 3;\",\n" +
+"      [ \"%script:occurs 3;\",\n" +
 "        \"occurs 3; float()\"\n" +
 "      ]\n" +
 "    ]\n"+
@@ -683,9 +684,9 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "  <xd:json name=\"Skladby\">\n"+
 "    [\n" +
-"      { %script= \"occurs 1..*;\",\n" +
+"      { \"%script: occurs 1..*;\",\n" +
 "         \"Name\": \"string()\",\n" +
-"         \"Style\": [ %oneOf,\n" +
+"         \"Style\": [ \"%oneOf\",\n" +
 "           \"string()\",\n" +
 "           [ \"occurs 2..* string()\" ]\n" +
 "         ]\n" +
@@ -753,9 +754,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='B'>\n"+
-"  <xd:json name='B'>\n"+
-"    [%script=\"init out('a');finally out('b')\",\"int();finally out('x')\"]\n"+
-"  </xd:json>\n"+
+"  <xd:json name='B'> [\"%script:init out('a');finally out('b')\",\"int();finally out('x')\"] </xd:json>\n"+
 "</xd:def>\n";
 			xd = compile(xdef).createXDDocument();
 			swr = new StringWriter();
@@ -858,9 +857,9 @@ public class TestJsonXdef extends XDTester {
 "   B=int()\n" +
 "   C=date()\n" +
 "   D=decimal()\n" +
-"   [ E-F.G ] ?\n" +
+"   [E-F.G] ? /*this is optional section*/\n" +
 "     x = ?int()\n" +
-"   [ F ]\n" +
+"   [ F ] /*this is required section*/\n" +
 " </xd:ini>\n"+
 " <xd:component>\n" +
 "  %class "+_package+".TestINI %link TestINI#a" + ";\n" +
@@ -908,9 +907,7 @@ public class TestJsonXdef extends XDTester {
 "      \"* ipAddr()\"\n" +
 "    ]\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n"+
-"    %class "+_package+".X_on %link #a;\n"+
-"  </xd:component>\n"+
+"  <xd:component> %class "+_package+".X_on %link #a; </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			json =
