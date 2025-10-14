@@ -567,7 +567,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
-"        { \"%script: occurs 1..*;\",\n"+
+"        { \"%script\": \"occurs 1..*;\",\n"+
 "          \"Person\": { \"Name\": \"string(1, 50)\",\n" +
 "             \"Pay\": \"int(1000, 99999)\",\n" +
 "             \"Birth date.\": \"date()\"\n" +
@@ -613,7 +613,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
-"        { \"%script: occurs 1..*; ref Person\" }\n"+
+"        { \"%script\": \"occurs 1..*; ref Person\" }\n"+
 "      ]\n"+
 "    }\n"+
 "  </xd:json>\n"+
@@ -684,7 +684,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "  <xd:json name=\"Skladby\">\n"+
 "    [\n" +
-"      { \"%script: occurs 1..*;\",\n" +
+"      { \"%script\": \"occurs 1..*;\",\n" +
 "         \"Name\": \"string()\",\n" +
 "         \"Style\": [ \"%oneOf\",\n" +
 "           \"string()\",\n" +
@@ -1024,6 +1024,15 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
 			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
 		} catch (SRuntimeException ex) {fail(ex);}
+		try {
+			XDFactory.compileXD(null, // incorrect excape characters in script
+				"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
+"   <xd:json name = \"test\">[ { \"adresa\": \"%script: \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"</xd:def>");
+			fail("Error not detected");
+		} catch (RuntimeException ex) {
+			if (!ex.toString().contains("XDEF425")) fail(ex);
+		}
 
 		clearTempDir(); // delete temporary files.
 	}

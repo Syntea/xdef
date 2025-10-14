@@ -1,7 +1,7 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xd:name='Test017' xd:root='a'>
 <xd:json name='a'>
 [
-  { "%script: occurs 1..*",
+  { "%script": "occurs 1..*",
     "Name": "string()",
     "Genre": [ "%oneOf",
       "string()",

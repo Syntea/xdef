@@ -151,6 +151,31 @@ public final class XonReader extends StringParser implements XonParsers {
 		return true;
 	}
 
+	private boolean readMapDirective() {
+		int i;
+		final String[] directives = new String[]{'"' + SCRIPT_DIRECTIVE+'"', '"' + ONEOF_DIRECTIVE+'"'};
+		SPosition spos = getPosition();
+		if (!_jdef || (i = isOneOfTokens(directives)) < 0) {
+			return false; // no X-definition model and not dirctive
+		}
+		SBuffer name = new SBuffer(i==0 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
+		skipSpacesOrComments();
+		if (isChar(':')) {
+			skipSpacesOrComments();
+			XonTools.JValue jv = readSimpleValue();
+			if (!(jv.getValue() instanceof String)) {
+				error(JSON.JSON018); //Value must be string with X-script
+			}
+			SBuffer value = jv.getSBuffer();
+			_jp.xdScript(name, value);
+			return true;
+		} else { // $script
+			error(JSON.JSON002, "=", ":"); //"&{0}"&{1}{ or "}{"} expected
+			_jp.xdScript(name, new SBuffer("", getPosition()));
+			return true;
+		}
+	}
+
 	/** Read XON/JSON map. */
 	private void readMap() {
 		_jp.mapStart(getPosition());
@@ -163,7 +188,7 @@ public final class XonReader extends StringParser implements XonParsers {
 		boolean wasItem = false;
 		boolean wasAnyName = false;
 		while(!eos()) {
-			if (wasItem || !readDirective()) {
+			if (wasItem || !readMapDirective()) {
 				wasItem = true;
 				SBuffer name;
 				spos = getPosition();

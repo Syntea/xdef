@@ -15,7 +15,6 @@ import org.w3c.dom.Element;
 import org.xdef.XDPool;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
-import static org.xdef.sys.STester.runTest;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
 import org.xdef.xon.XonUtils;
@@ -494,7 +493,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
 "  <xd:json name='a'>\n" +
 "    {\n" +
-"      \"%oneOf: optional;\",\n" +
+"      \"%oneOf\": \"optional;\",\n" +
 "      \"manager\": \"string()\",\n" +
 "      \"subordinates\":[ \"* string();\" ]\n" +
 "    }\n" +
@@ -561,7 +560,7 @@ public final class TestXComponents extends XDTester {
 "        \"date(); finally outln('date')\", \n" +
 "        \"ipAddr(); finally outln('ipAddr')\", \n" +
 "        [\"%script: finally outln('[...]')\",\"*int()\"], \n" +
-"        {\"%script: finally outln('{ . }')\",x:\"? int()\",y:\"?string()\"},\n"+
+"        {\"%script\": \"finally outln('{ . }')\",x:\"? int()\",y:\"?string()\"},\n"+
 "        \"string(); finally outln('string')\" \n" +
 "      ]\n" +
 "    }\n" +

@@ -787,10 +787,10 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"test\">\n" +
 "    {date: \"date()\",\n" +
 "      cities: [\n" +
-"        { \"%script: occurs 1..*; finally outln(); forget\",\n" +
+"        { \"%script\": \"occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally out('From ' + getText());\",\n" +
-"            { \"%script: occurs 1..*;\",\n" +
+"            { \"%script\": \"occurs 1..*;\",\n" +
 "              \"to\": \"jstring();finally out(' to '+getText()+' is ');\",\n" +
 "              \"distance\": \"int(); finally out(getText() + ' km');\"\n" +
 "            }\n" +
@@ -960,10 +960,10 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"test\">\n" +
 "    {date: \"date()\",\n" +
 "      cities: [\n" +
-"        { \"%script : occurs 1..*; finally outln(); forget\",\n" +
+"        { \"%script\": \"occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally out('From ' + getText());\",\n" +
-"            { \"%script: occurs 1..*;\",\n" +
+"            { \"%script\": \"occurs 1..*;\",\n" +
 "              \"to\": \"jstring();finally out(' to '+getText()+' is ');\",\n" +
 "              \"distance\": \"int(); finally out(getText() + ' km');\"\n" +
 "            }\n" +
@@ -1103,10 +1103,10 @@ public class TestXon extends XDTester {
 "  <xd:json name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n" +
-"    { \"%script: occurs 1..*;\",\n" +
+"    { \"%script\": \"occurs 1..*;\",\n" +
 "      \"%anyName\": [\"%script: occurs 1..*;\n"+
 "                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
-"        { \"%script: occurs 1..*; finally outln();\",\n" +
+"        { \"%script\": \"occurs 1..*; finally outln();\",\n" +
 "          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
 "          \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
 "        }\n" +
@@ -1168,10 +1168,10 @@ public class TestXon extends XDTester {
 "  <xd:json name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
-"    { \"%script: occurs 1..*;\",\n" +
-"      %anyName: [\"%script: occurs 1..*;\n"+
+"    { \"%script\": \"occurs 1..*;\",\n" +
+"      \"%anyName\": [\"%script: occurs 1..*;\n"+
 "                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
-"        { \"%script : occurs 1..*; finally outln();\",\n" +
+"        { \"%script\": \"occurs 1..*; finally outln();\",\n" +
 "          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
 "          \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
 "        }\n" +
@@ -1230,7 +1230,7 @@ public class TestXon extends XDTester {
 			assertEq(swr.toString(), s);
 			genXComponent(xp = compile( // test %anyName, %oneOf, ref
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"a\">\n" +
-"  <xd:json name=\"a\">[ { \"%script: occurs *; ref B\" } ]</xd:json>\n" +
+"  <xd:json name=\"a\">[ { \"%script\": \"occurs *; ref B\" } ]</xd:json>\n" +
 "  <xd:json name=\"B\">\n" +
 "    { \"%anyName\": [%oneOf,\n" +
 "        \"string()\",\n" +
@@ -1510,7 +1510,7 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"Any\">\n" +
 "    [ \"%oneOf\", \"jvalue();\",\n" +
 "      [ \"%script:*; ref anyA;\" ],\n" +
-"      { \"%script:*; ref anyM;\" }\n" +
+"      { \"%script\": \"*; ref anyM;\" }\n" +
 "    ]\n" +
 "  </xd:json>\n" +
 "  <xd:json name=\"anyA\"> [ \"%anyObj:*;\" ] </xd:json>\n" +
@@ -1678,10 +1678,10 @@ public class TestXon extends XDTester {
 "  <xd:json name=\"test\">\n" +
 "    { \"cities\": [\n" +
 "        \"date();\",\n" +
-"        { \"%script : occurs 1..*;\",\n" +
+"        { \"%script\": \"occurs 1..*;\",\n" +
 "          \"from\": [\n" +
 "            \"string();\",\n" +
-"            { \"%script : occurs 1..*; \",\n" +
+"            { \"%script\": \"occurs 1..*; \",\n" +
 "              \"to\": \"jstring();\",\n" +
 "              \"distance\": \"int();\"\n" +
 "            }\n" +
