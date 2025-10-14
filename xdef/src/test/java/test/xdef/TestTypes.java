@@ -1310,9 +1310,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // country, countries
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <A a=\"country()\" b=\"countries()\"/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'> <A a=\"country()\" b=\"countries()\"/> </xd:def>";
 			xml =
 "<A a='cz' b='CZE gb US CA SK RUS IT LY GE FRA SE usa IL' />";
 			el = parse(xdef, "", xml, reporter);
@@ -1428,7 +1426,7 @@ public final class TestTypes extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|J'>\n" +
 "  <xd:json name='J'>\n" +
 "	[\n" +
-"	  { %script=\"occurs *;\",\n" +
+"	  { \"%script:occurs *;\",\n" +
 "	    \"a\": \"? regex('[ ]*[0-9]*')\",\n" +
 "	    \"b\": \"? string(%pattern='[ ]*[0-9]*')\"\n" +
 "	    \"c\": \"? string(%whiteSpace='collapse', %pattern='[0-9]*')\"\n" +

@@ -124,7 +124,7 @@ public final class XonReader extends StringParser implements XonParsers {
 		SBuffer name = new SBuffer(i < 2 ? directives[i] : directives[i - 2], spos);
 		skipSpacesOrComments();
 		SBuffer value = null;
-		if (isChar('=') || isChar(':')) {
+		if (isChar(':') || isChar('=')) { //?????
 			skipSpacesOrComments();
 			if (i < 2) {
 				XonTools.JValue jv = readSimpleValue();
@@ -140,7 +140,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			}
 		} else if (i == 3) { // "%oneof"
 			skipSpacesOrComments();
-			if (!isChar('"')) { // read '"'
+			if (!isChar('"')) {
 				error(JSON.JSON002, "\""); //"&{0}"&{1}{ or "}{"} expected
 			}
 		} else if (i == 0 || i == 2) { // $script
@@ -633,7 +633,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			SBuffer name = new SBuffer(ANY_OBJ, spos);
 			SBuffer val = new SBuffer("", spos);
 			skipSpacesOrComments();
-			if (isChar('=') || isChar(':')) {
+			if (isChar(':') || isChar('=')) { //?????
 				skipSpacesOrComments();
 				if (i == 0) {
 					XonTools.JValue jv = readSimpleValue();

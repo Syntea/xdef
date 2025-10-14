@@ -161,7 +161,7 @@ public final class GenXDefXON {
 					sb.append("]");
 				} else {
 					if (!_occ.isRequired()) {
-						sb.append("%script = \"");
+						sb.append("\"%script: ");
 						sb.append(occToString(false)).append("\"");
 						size++;
 						first = false;
@@ -181,8 +181,7 @@ public final class GenXDefXON {
 				sb.append(indent).append("{ ");
 				int size = map.size();
 				if (!_occ.isRequired()) {
-					sb.append("%script=\"");
-					sb.append(occToString(false)).append("\"");
+					sb.append("\"%script:").append(occToString(false)).append("\"");
 					size++;
 					first = false;
 				}

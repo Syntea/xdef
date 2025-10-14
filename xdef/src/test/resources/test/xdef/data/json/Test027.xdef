@@ -1,5 +1,5 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xd:name='Test027' root='a'>
 <xd:json name='a'>
-[[%oneOf, "int()", "boolean()"]]
+[["%oneOf", "int()", "boolean()"]]
 </xd:json>
 </xd:def>

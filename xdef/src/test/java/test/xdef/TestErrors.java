@@ -457,7 +457,7 @@ public final class TestErrors extends XDTester {
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"<xd:json name='A'>{\"\": [%script=\"5\", \"int()\"] }</xd:json>\n" +
+"<xd:json name='A'>{\"\": [\"%script:5\", \"int()\"] }</xd:json>\n" +
 "</xd:def>";
 			reporter = test(props, xdef);
 			assertEq("", chkReport(reporter, "XDEF535", "2", "25", null));

@@ -26,11 +26,13 @@ import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SException;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import test.XDTester;
 import static test.XDTester._xdNS;
+import static test.XDTester.chkCompoinentSerializable;
 import static test.XDTester.parseXC;
 
 /** Test XComponents.
@@ -492,7 +494,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
 "  <xd:json name='a'>\n" +
 "    {\n" +
-"      %oneOf= \"optional;\",\n" +
+"      \"%oneOf: optional;\",\n" +
 "      \"manager\": \"string()\",\n" +
 "      \"subordinates\":[ \"* string();\" ]\n" +
 "    }\n" +
@@ -554,12 +556,12 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
 "  <xd:json name=\"test\">\n" +
-"    { a:[ %oneOf=\"?\",\n" +
+"    { a:[ \"%oneOf: ?\",\n" +
 "        \"jnull(); finally outln('null')\", \n" + // must be first
 "        \"date(); finally outln('date')\", \n" +
 "        \"ipAddr(); finally outln('ipAddr')\", \n" +
-"        [%script=\"finally outln('[...]')\",\"*int()\"], \n" +
-"        {%script=\"finally outln('{ . }')\",x:\"?int()\",y:\"?string()\"},\n"+
+"        [\"%script: finally outln('[...]')\",\"*int()\"], \n" +
+"        {\"%script: finally outln('{ . }')\",x:\"? int()\",y:\"?string()\"},\n"+
 "        \"string(); finally outln('string')\" \n" +
 "      ]\n" +
 "    }\n" +
