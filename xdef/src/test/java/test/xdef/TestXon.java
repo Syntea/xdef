@@ -1232,7 +1232,7 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"a\">\n" +
 "  <xd:json name=\"a\">[ { \"%script\": \"occurs *; ref B\" } ]</xd:json>\n" +
 "  <xd:json name=\"B\">\n" +
-"    { \"%anyName\": [%oneOf,\n" +
+"    { \"%anyName\": [\"%oneOf\",\n" +
 "        \"string()\",\n" +
 "        [\"occurs *; string()\"]\n" +
 "      ]\n" +
@@ -1307,7 +1307,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s,"[{},{}]"));
 			genXComponent(xp = compile(// %anyName, name of item is an empty string
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <xd:json name='A'> {%anyName: \"? int()\"} </xd:json>\n" +
+"  <xd:json name='A'> {\"%anyName\": \"? int()\"} </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_x1 %link A</xd:component>\n" +
 "</xd:def>"));
 			xd = xp.createXDDocument();

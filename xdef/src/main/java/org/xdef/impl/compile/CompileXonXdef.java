@@ -385,8 +385,7 @@ public final class CompileXonXdef extends XScriptParser {
 					setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
 			} else {
-				pn1 = genJElement(parent, X_MAP, map.getPosition());
-				pn2 = pn1;
+				pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition());
 				if (!eos()) {
 					setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
@@ -396,8 +395,7 @@ public final class CompileXonXdef extends XScriptParser {
 			pn2 = genXDElement(pn1, "mixed", map.getPosition());
 			pn1.addChildNode(pn2);
 		} else {
-			pn1 = genJElement(parent, X_MAP, map.getPosition());
-			pn2 = pn1;
+			pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition());
 		}
 		Object anyItem = null;
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {

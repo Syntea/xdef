@@ -311,9 +311,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	/** Check absence of an element node in model. */
-	final void chkElementAbsence(final int index,
-		final XElement xelem,
-		final Counter c) {
+	final void chkElementAbsence(final int index, final XElement xelem, final Counter c) {
 		if ( _nil) {
 			return;
 		}
@@ -403,65 +401,62 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	/** Check absence of a text node in model. */
-	final void chkTextAbsence(final int index,
-		final XData xtxt,
-		final boolean ignoreAbsence,
-		final Counter c) {
-		if (_counters[index] != 0 || xtxt.minOccurs() <= XOccurrence.IGNORE) {
+	final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter c){
+		if (_counters[index] != 0 || txt.minOccurs() <= XOccurrence.IGNORE) {
 			return; //exists or IGNORED
 		}
-		_xdata = xtxt;
+		_xdata = txt;
 		String orig = _data = null;
 		_parseResult = null;
 		String xPos = _xPos;
 		String txtname = getTextPathIndex(index); // index or ""
 		_xPos += "/text()" + txtname;
 		txtname = "$text" + txtname;
-		if (!_attNames.contains(txtname) && xtxt._onAbsence >= 0) {
+		if (!_attNames.contains(txtname) && txt._onAbsence >= 0) {
 			_attNames.add(txtname);
 			_elemValue = _element;
 			if (_clearReports) {
 				clearTemporaryReporter();
 			}
-			exec(xtxt._onAbsence, (byte) 'T'); //exec onAbsence
+			exec(txt._onAbsence, (byte) 'T'); //exec onAbsence
 			if (_data != null) {
-				checkDatatype(xtxt, true);
+				checkDatatype(txt, true);
 			}
 			copyTemporaryReports();
-		} else if (!ignoreAbsence && _data == null && xtxt.minOccurs() >= XData.REQUIRED && !_nil) {
+		} else if (!ignoreAbsence && _data == null && txt.minOccurs() >= XData.REQUIRED && !_nil) {
 			error(XDEF.XDEF527); //Missing required text
 		}
-		if (_data == null && xtxt._deflt >= 0) {//exec default
+		if (_data == null && txt._deflt >= 0) {//exec default
 			_data = null;
 			_parseResult = null;
 			_elemValue = _element;
-			XDValue value = exec(xtxt._deflt, (byte) 'T');
+			XDValue value = exec(txt._deflt, (byte) 'T');
 			if (value != null) {
 				_data = value.toString();
-				checkDatatype(xtxt, true);
+				checkDatatype(txt, true);
 			}
 			copyTemporaryReports();
 		}
 		debugXPos(XDDebug.FINALLY);
-		if (xtxt._finaly >= 0) {
+		if (txt._finaly >= 0) {
 			_elemValue = _element;
-			exec(xtxt._finaly, (byte) 'T');
+			exec(txt._finaly, (byte) 'T');
 			copyTemporaryReports();
 		}
 		if (_data != null) {
 			if (!_data.equals(orig)) {
-				Node txt = xtxt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
+				Node txt1 = txt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
 					: _rootChkDocument.getDocument().createTextNode(_data);
 				if (orig == null) {
 					if (c == null) {
-						_element.appendChild(txt);
+						_element.appendChild(txt1);
 					} else {
-						_element.insertBefore(txt, getNodeByIndex(c._itemIdex));
+						_element.insertBefore(txt1, getNodeByIndex(c._itemIdex));
 						c._itemIdex++;
 					}
 					incRefNum();
 				} else {
-					_element.replaceChild(txt, getNodeByIndex(c._itemIdex));
+					_element.replaceChild(txt1, getNodeByIndex(c._itemIdex));
 				}
 			}
 		} else if (orig != null) {
@@ -1691,8 +1686,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			//check absence within a group. If actual node is the end of a group
 			// then set "skipselector" to true, othewise to false.
-			checkAbsence(_selector,
-				null,
+			checkAbsence(_selector, null,
 				_nextDefIndex<_childList.length&&_childList[_nextDefIndex].getKind()==XMSELECTOR_END&&nested);
 			if (_selector._kind == XMSEQUENCE && _selector._count <_selector.minOccurs()) {
 				error(XDEF.XDEF555, "sequence"); //Minimum occurrence not reached for &{0}

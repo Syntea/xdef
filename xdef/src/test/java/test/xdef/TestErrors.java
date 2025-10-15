@@ -460,7 +460,7 @@ public final class TestErrors extends XDTester {
 "<xd:json name='A'>{\"\": [\"%script:5\", \"int()\"] }</xd:json>\n" +
 "</xd:def>";
 			reporter = test(props, xdef);
-			assertEq("", chkReport(reporter, "XDEF535", "2", "25", null));
+			assertEq("", chkReport(reporter, "XDEF535", "2", "33", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try { //test file names etc
