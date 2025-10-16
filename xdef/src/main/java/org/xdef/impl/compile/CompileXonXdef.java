@@ -294,9 +294,7 @@ public final class CompileXonXdef extends XScriptParser {
 		}
 	}
 
-	private PNode genXonValue(final String name,
-		final JValue jo,
-		final PNode parent) {
+	private PNode genXonValue(final String name, final JValue jo, final PNode parent) {
 		SBuffer sbf, sbocc;
 		PNode pn = genJElement(parent, X_VALUE, jo.getPosition());
 		if (jo.getValue() != null) {

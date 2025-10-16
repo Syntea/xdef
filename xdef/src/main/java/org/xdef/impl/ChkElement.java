@@ -367,7 +367,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (ndx >= 0) {
 					int ndx1 = x[0].indexOf("']", ndx);
 					if (ndx1 > 0) {
-						name = x[0].substring(ndx + 2, ndx1);
+						XMData keyAttr = xelem.getAttr("key");
+						if (keyAttr == null || (name = keyAttr.getFixedValue().stringValue()) == null) {
+							name = x[0].substring(ndx + 2, ndx1);
+						}
 					}
 				}
 			}

@@ -1,9 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.30, release-date 2025-10-15
+# Version 42.2.30, release-date 2025-10-16
 * The type of value of result of methods `ENTITIES` and `NMTOKENS` in XComponent is `List<String>`
   and the type of value  of result of methods `IDREFS` and `CHKIDS` is `List<Object>`.
 * Fixed infinite loop when parsing JSON model description containing string with incorrect escape characters.
+* The JSON model in X-definition now complies with JSON syntax (e.g., keywords beginning with the character
+  "%" must be enclosed in quotation marks).
+* Fixed incorrect error reporting in extended map item reference.
 
 # Version 42.2.29, release-date 2025-09-18
 * The value of the IDRES() and CHKIDS() methods can be a list of values separated by spaces. If the value
