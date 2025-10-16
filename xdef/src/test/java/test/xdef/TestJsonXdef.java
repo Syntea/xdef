@@ -1024,6 +1024,30 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
 			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
 		} catch (SRuntimeException ex) {fail(ex);}
+		try { // test extension of map and correct reporting.
+			xd = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>{ \"address\": { \"%script\": \"optional; ref addr\", \"x\": \"int()\"} }</xd:json>\n" +
+"  <xd:json name='addr'> { \"d\": \"string()\" } </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			jparse(xd, "{ }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"cde\", \"x\": 1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"dd\" } }", reporter);
+			if (reporter.size() != 1 || !reporter.toString().contains("'x'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
+			}
+			jparse(xd, "{ \"address\": { \"x\": 1 } }", reporter);
+			if (reporter.size() != 1 || !reporter.toString().contains("'d'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'd' is missing
+			}
+			jparse(xd, "{ \"address\": { } }", reporter);
+			if (reporter.size() != 2
+				|| !(reporter.toString().contains("'d'") && reporter.toString().contains("'x'"))) {
+				fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
+			}
+		} catch (SRuntimeException ex) {fail(ex);}
 		try {
 			XDFactory.compileXD(null, // incorrect excape characters in script
 				"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
