@@ -117,15 +117,16 @@ public final class XonReader extends StringParser implements XonParsers {
 		}
 		boolean wasItem = false;
 		boolean wasAnyName = false;
-		final String[] directives = new String[]{'"' + SCRIPT_DIRECTIVE+'"', '"' + ONEOF_DIRECTIVE+'"'};
+		final String[] directives = new String[] {
+			'"' + SCRIPT_DIRECTIVE + '"', '"' + ONEOF_DIRECTIVE + '"', SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE};
 		while(!eos()) {
 			int i;
 			SPosition spos = getPosition();
 			SBuffer name;
 			if (!wasItem && _jdef && (i = isOneOfTokens(directives)) >= 0) { // read directive in map
-				name = new SBuffer(i==0 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
+				name = new SBuffer(i==0 || i == 2 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
 				skipSpacesOrComments();
-				if (isChar(':')) {
+				if (isChar(i < 2 ? ':' : '=')) {
 					skipSpacesOrComments();
 					XonTools.JValue jv = readSimpleValue();
 					if (!(jv.getValue() instanceof String)) {
@@ -133,14 +134,14 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					SBuffer value = jv.getSBuffer();
 					_jp.xdScript(name, value);
-				} else if (i == 0) { // $script
-					error(JSON.JSON002, "=", ":"); //"&{0}"&{1}{ or "}{"} expected
+				} else if (i == 0 || i == 2) { // $script
+					error(JSON.JSON002, i == 0 ? ":" : "="); //"&{0}"&{1}{ or "}{"} expected
 					_jp.xdScript(name, new SBuffer("", getPosition()));
 				}
 			} else {
 				wasItem = true;
 				spos = getPosition();
-				if (_jdef && isToken('"' + ANY_NAME + '"')) {
+				if (_jdef && isOneOfTokens(new String[]{'"' + ANY_NAME + '"', ANY_NAME}) >= 0 ) {
 					if (wasAnyName) {
 						error(JSON.JSON022, new SBuffer(ANY_NAME, spos)); //Value pair &{0} already exists
 					}
@@ -215,29 +216,38 @@ public final class XonReader extends StringParser implements XonParsers {
 			_jp.arrayEnd(getPosition());
 			return;
 		}
-		final String[] directives = new String[]{'"' + SCRIPT_DIRECTIVE, '"' + ONEOF_DIRECTIVE};
+		final String[] directives = new String[] {
+			'"' + SCRIPT_DIRECTIVE , '"' + ONEOF_DIRECTIVE, SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE};
 		boolean wasItem = false;
 		boolean wasErrorReported = false;
 		while(!eos()) {
 			int i;
 			if (!wasItem && _jdef && (i = isOneOfTokens(directives)) >= 0) { // read directive in array
 				SPosition spos = getPosition();
-				SBuffer name = new SBuffer(i==0 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
+				SBuffer name = new SBuffer(i==0 || i == 2 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
 				skipSpacesOrComments();
 				SBuffer value = null;
-				if (isChar(':')) {
+				if (isChar(i < 2 ? ':' : '=')) {
 					skipSpacesOrComments();
-					String s = XonTools.readJString(this);
-					s = SUtils.modifyString(s, "\\", "\\\\");
-					s = SUtils.modifyString(s, "\"", "\\\"");
-					value = new SBuffer(s, spos);
-				} else if (i == 1) { // "%oneof"
+					if (i < 2) {
+						String s = XonTools.readJString(this);
+						s = SUtils.modifyString(s, "\\", "\\\\");
+						s = SUtils.modifyString(s, "\"", "\\\"");
+						value = new SBuffer(s, spos);
+					} else {
+						XonTools.JValue jv = readSimpleValue();
+						value = jv.getSBuffer();
+						if (!(jv.getValue() instanceof String)) {
+							error(JSON.JSON018); //Value must be string with X-script
+						}
+					}
+				} else if (i == 1) { // "%oneOf"
 					skipSpacesOrComments();
 					if (!isChar('"')) {
 						error(JSON.JSON002, "\""); //"&{0}"&{1}{ or "}{"} expected
 					}
-				} else if (i == 0) { // $script
-					error(JSON.JSON002, ":"); //"&{0}"&{1}{ or "}{"} expected
+				} else if (i == 0 || i == 2) { // $script
+					error(JSON.JSON002, i == 0 ? ":" : "="); //"&{0}"&{1}{ or "}{"} expected
 					value = new SBuffer("", getPosition());
 				}
 				_jp.xdScript(name, value);

@@ -806,8 +806,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				default:
 			}
 		}
-		if (!skip && selector._occur == false
-			&& selector._count == 0 && required) {
+		if (!skip && selector._occur == false && selector._count == 0 && required) {
 			// do not report error if onAbsence
 			if (((XSelector) _childList[selector._begIndex])._onAbsence < 0) {
 				//Missing required item(s0 in &{0}
