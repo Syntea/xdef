@@ -46,6 +46,11 @@ import static org.xdef.impl.xml.XAbstractInputStream.readChar;
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
+	/** Internal form of SCRIPT_DIRECTIVE. */
+	public static final String X_SCRIPT_DIRECTIVE = "" + (char) 0xFFFF;
+	/** Internal form of ONEOF_DIRECTIVE. */
+	public static final String X_ONEOF_DIRECTIVE = "" + (char) 0xFFFE;
+
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -124,7 +129,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			SPosition spos = getPosition();
 			SBuffer name;
 			if (!wasItem && _jdef && (i = isOneOfTokens(directives)) >= 0) { // read directive in map
-				name = new SBuffer(i==0 || i == 2 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
+				name = new SBuffer(i==0 || i == 2 ? X_SCRIPT_DIRECTIVE : X_ONEOF_DIRECTIVE, spos);
 				skipSpacesOrComments();
 				if (isChar(i < 2 ? ':' : '=')) {
 					skipSpacesOrComments();

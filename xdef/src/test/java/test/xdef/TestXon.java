@@ -1019,7 +1019,7 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			xd.jvalidate("{ \"x\": \"xxx\" }", reporter);  // illegal item
 			assertErrorsAndClear(reporter);
-			genXComponent(xp = compile( // declaration of both "%anyName" item and %anyName in map
+			genXComponent(xp = compile( // declaration of both "\\u0025anyName" item and %anyName in map
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +
 "    { \"%anyName\": \"string();\", \"\\u0025anyName\": \"int();\" }\n" +
@@ -1029,6 +1029,25 @@ public class TestXon extends XDTester {
 			xd = xp.createXDDocument();
 			xd.jvalidate("{ \"%anyName\": 1, \"x\": \"x\" }", reporter);
 			assertNoErrorsAndClear(reporter);
+			xp = compile(// declaration of anyName and  "%script", "%oneOf", "%anyName"
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
+" <xd:json name='a'>\n" +
+"[ {\n" +
+"      \"%script\": \"optional\",\n" +
+"      \"\\u0025script\": \"? int;\",\n" +
+"      \"\\u0025oneOf\": \"? int;\",\n" +
+"      \"\\u0025anyName\": \"? int;\"\n" +
+"      \"%anyName\": \"string;\"\n" +
+"} ]\n" +
+" </xd:json>\n" +
+"</xd:def>");
+			xd = xp.createXDDocument();
+			jparse(xd, "[]", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "[{ \"xyx\": \"xyx\" }]", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "[{ \"%script\": 0,  \"%anyName\": 1, \"%oneOf\": 2, \"xyx\": \"xyx\" }]", reporter);
+			assertNoErrorsAndClear(reporter); //OK
 			genXComponent(xp = compile( // test %anyName
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'>\n" +

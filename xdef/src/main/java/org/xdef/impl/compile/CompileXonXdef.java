@@ -58,6 +58,8 @@ import static org.xdef.xon.XonNames.X_VALUE;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
+import static org.xdef.xon.XonReader.X_ONEOF_DIRECTIVE;
+import static org.xdef.xon.XonReader.X_SCRIPT_DIRECTIVE;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonTools.JAny;
 import org.xdef.xon.XonTools.JArray;
@@ -348,13 +350,13 @@ public final class CompileXonXdef extends XScriptParser {
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode pn1, pn2;
-		Object val = map.get(SCRIPT_DIRECTIVE);
+		Object val = map.get(X_SCRIPT_DIRECTIVE);
 		if (val != null && val instanceof JValue) {
-			map.remove(SCRIPT_DIRECTIVE);
+			map.remove(X_SCRIPT_DIRECTIVE);
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			skipSpacesAndComments();
-			if (isToken(ONEOF_DIRECTIVE)) {
+			if (isToken(X_ONEOF_DIRECTIVE)) {
 				pn1 = genJElement(parent, X_MAP, map.getPosition());
 				pn2 = genXDElement(pn1, "choice", getPosition());
 				pn1.addChildNode(pn2);
@@ -1118,17 +1120,23 @@ public final class CompileXonXdef extends XScriptParser {
 				case ANY_OBJ:
 					putValue(new JAny((SPosition)name, value));
 					return;
-				case ONEOF_DIRECTIVE:
+				case X_ONEOF_DIRECTIVE:
 					jv =  new JValue(
-						name, new JValue(spos, ONEOF_DIRECTIVE + (value == null? "" : value.getString())));
+						name, new JValue(spos, X_ONEOF_DIRECTIVE + (value == null? "" : value.getString())));
 					break;
+				case ONEOF_DIRECTIVE:
+					if (_kind == 1) {
+						jv =  new JValue(
+							name, new JValue(spos, ONEOF_DIRECTIVE + (value==null? "" : value.getString())));
+						break;
+					}
 				default:
 					jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
 			}
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
 			} else if (_kind == 2) { // map
-				_maps.peek().put(SCRIPT_DIRECTIVE, jv);
+				_maps.peek().put(X_SCRIPT_DIRECTIVE, jv);
 			}
 		}
 
