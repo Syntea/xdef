@@ -46,10 +46,12 @@ import static org.xdef.impl.xml.XAbstractInputStream.readChar;
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
-	/** Internal form of SCRIPT_DIRECTIVE. */
-	public static final String X_SCRIPT_DIRECTIVE = "" + (char) 0xFFFF;
+	/** Internal form of ANY_NAME. */
+	public static final String X_ANY_NAME = "" + (char) 0xFFF8; //illegeal UTF16 character
 	/** Internal form of ONEOF_DIRECTIVE. */
-	public static final String X_ONEOF_DIRECTIVE = "" + (char) 0xFFFE;
+	public static final String X_ONEOF_DIRECTIVE = "" + (char) 0xFFFE; //illegeal UTF16 character
+	/** Internal form of SCRIPT_DIRECTIVE. */
+	public static final String X_SCRIPT_DIRECTIVE = "" + (char) 0xFFFF; //illegeal UTF16 character
 
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
@@ -152,7 +154,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					wasAnyName = true;
 					skipSpacesOrComments();
-					_jp.xdScript(new SBuffer(null, spos), null); // &anyName -> null!!!
+					_jp.xdScript(new SBuffer(X_ANY_NAME, spos), null); // &anyName -> null!!!
 					name = null;
 				} else {
 					if (isChar('"')) {

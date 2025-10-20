@@ -49,7 +49,6 @@ import org.xdef.xon.IniReader;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ANY_OBJ;
 import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
-import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
@@ -58,6 +57,7 @@ import static org.xdef.xon.XonNames.X_VALUE;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
+import static org.xdef.xon.XonReader.X_ANY_NAME;
 import static org.xdef.xon.XonReader.X_ONEOF_DIRECTIVE;
 import static org.xdef.xon.XonReader.X_SCRIPT_DIRECTIVE;
 import org.xdef.xon.XonTools;
@@ -785,8 +785,7 @@ public final class CompileXonXdef extends XScriptParser {
 			case ASK_SYM:
 			case OPTIONAL_SYM:
 			case IGNORE_SYM:
-			case ILLEGAL_SYM:
-				return spos;
+			case ILLEGAL_SYM: return spos;
 			case CONSTANT_SYM:
 				int pos = getIndex();
 				char sym = _sym;
@@ -802,8 +801,7 @@ public final class CompileXonXdef extends XScriptParser {
 					}
 				}
 				return spos;
-			default:
-				return null;
+			default: return null;
 		}
 	}
 
@@ -1015,12 +1013,8 @@ public final class CompileXonXdef extends XScriptParser {
 		@Override
 		public final void putValue(final JValue value) {
 			switch (_kind) {
-				case ARRAY: _arrays.peek().add(value);
-					return;
-				case MAP:
-					SBuffer name = _names.pop();
-					_maps.peek().put(name.getString(), value);
-					return;
+				case ARRAY: _arrays.peek().add(value); return;
+				case MAP: _maps.peek().put(_names.pop().getString(), value); return;
 			}
 			_value = value; // it is VALUE
 		}
@@ -1109,17 +1103,11 @@ public final class CompileXonXdef extends XScriptParser {
 		 */
 		@Override
 		public final void xdScript(final SBuffer name, final SBuffer value) {
-			String s = name.getString();
-			if (s == null) { // ANY_NAME!!!
-				namedValue(new SBuffer(null, name));
-				return;
-			}
 			SPosition spos = value == null ? name : value;
 			JValue jv;
 			switch (name.getString()) {
-				case ANY_OBJ:
-					putValue(new JAny((SPosition)name, value));
-					return;
+				case X_ANY_NAME: namedValue(new SBuffer(null, name)); return;
+				case ANY_OBJ: putValue(new JAny((SPosition)name, value)); return;
 				case X_ONEOF_DIRECTIVE:
 					jv =  new JValue(
 						name, new JValue(spos, X_ONEOF_DIRECTIVE + (value == null? "" : value.getString())));
@@ -1130,8 +1118,7 @@ public final class CompileXonXdef extends XScriptParser {
 							name, new JValue(spos, ONEOF_DIRECTIVE + (value==null? "" : value.getString())));
 						break;
 					}
-				default:
-					jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
+				default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
 			}
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
