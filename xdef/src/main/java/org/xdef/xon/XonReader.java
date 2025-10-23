@@ -367,6 +367,9 @@ public final class XonReader extends StringParser implements XonParsers {
 		if (isChar('"')) { // string
 			String s = XonTools.readJString(this);
 			if (_jdef) { //JSON string in X-definition JSON model
+				if (s.trim().isEmpty()) {
+					error(XDEF.XDEF224); //Empty script in JSON model				
+				}
 				s = SUtils.modifyString(s, "\\", "\\\\");
 				s = SUtils.modifyString(s, "\"", "\\\"");
 				return returnValue(spos, s);

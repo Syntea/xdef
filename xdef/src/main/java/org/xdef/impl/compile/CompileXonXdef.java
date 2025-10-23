@@ -85,7 +85,7 @@ public final class CompileXonXdef extends XScriptParser {
 	/** X-position of generated %any model.*/
 	private String _anyXPos;
 /*#if DEBUG*#/
-	/** debugging switches; from properties. *#/
+	// debugging switches; from properties.
 	private final String _dbgSwitches; // remove this code in future
 /*#end*/
 
@@ -176,11 +176,10 @@ public final class CompileXonXdef extends XScriptParser {
 		}
 	}
 
-	/** Parse X-script and return occurrence and executive part
-	 * (type declaration) in separate fields.
+	/** Parse X-script and return occurrence and executive part (type declaration) in separate fields.
 	 * @param sbuf source text with X-script
-	 * @return array with SBuffer items (item 0 is occurrence specification)
-	 * and item 1 is composed form remaining X-script parts).
+	 * @return array with SBuffer items (item 0 is occurrence specification) and item 1 is composed
+	 * form remaining X-script parts).
 	 */
 	private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
 		SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
@@ -253,9 +252,8 @@ public final class CompileXonXdef extends XScriptParser {
 // Create X-definition model from xd:json/xon (use W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Add match section to xd:script attribute. If match section already
-	 * in this attribute exists then add the argument to the expression with
-	 * the operator "AAND".
+	/** Add match section to xd:script attribute. If match section already in this attribute exists then
+	 * add the argument to the expression with the operator "AAND".
 	 * @param pn PNode where to set or update the xd:script attribute.
 	 * @param matchexpr the match expression.
 	 */
@@ -537,8 +535,7 @@ public final class CompileXonXdef extends XScriptParser {
 						}
 					}
 					if (index < len-1 && pn.getNSIndex() == _xdIndex //xdef
-						&& ("mixed".equals(pn.getLocalName()) // mixed or choice
-							|| "choice".equals(pn.getLocalName()))
+						&& ("mixed".equals(pn.getLocalName()) || "choice".equals(pn.getLocalName()))
 						|| occ != null && occ.minOccurs() != occ.maxOccurs()) {
 						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
 						String s = sbs[1].getString();
@@ -689,16 +686,14 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 /*#if DEBUG*#/
-	/** Display the compiled model in debug mode. Remove this code method
-	 * in the future.
-	 * @param pn model to be displayed
-	 *#/
+	// Display the compiled model in debug mode. Remove this code method in the future.
+	// @param pn model to be displayed
 	private void displayModel(final PNode pn) {
 		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)) {
 			System.out.flush();
 			System.err.flush();
-			System.out.println("*** xdef: \"" + (pn._parent._xdef != null
-				? pn._parent._xdef.getName() : "???") +'"');
+			System.out.println("*** xdef: \""
+				+ (pn._parent._xdef != null ? pn._parent._xdef.getName() : "???") +'"');
 			System.out.println("* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
 			System.out.flush();
 		}
@@ -713,8 +708,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 */
 	final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
 		XonModelParser jp = new XonModelParser(this);
-		XonParsers xp = format.equals("xon")
-			? new XonReader(pn._value, jp) : new IniReader(pn._value, jp);
+		XonParsers xp = format.equals("xon") ? new XonReader(pn._value, jp) : new IniReader(pn._value, jp);
 		xp.setReportWriter(reporter);
 		xp.setXdefMode();
 		xp.parse();
@@ -821,9 +815,8 @@ public final class CompileXonXdef extends XScriptParser {
 
 	/** Parse X-script and return the section list.
 	 * @param source Source text with X-script.
-	 * @return section list. Each section is composed of two items: the first
-	 * item is id of section (a character) and the following item is a SBuffer
-	 * with the source of the section command.
+	 * @return section list. Each section is composed of two items: the first item is id of section
+	 * (a character) and the following item is a SBuffer with the source of the section command.
 	 */
 	private List<Object> parseXscript(SBuffer source) {
 		setSourceBuffer(source);
@@ -832,8 +825,8 @@ public final class CompileXonXdef extends XScriptParser {
 
 	/** Parse X-script and return the section list.
 	 * @return section list. Each section is composed of two items: the first
-	 * item is id of section (a character) and the following item is a SBuffer
-	 * with the source of the section command.
+	 * item is id of section (a character) and the following item is a SBuffer with the source
+	 * of the section command.
 	 */
 	private List<Object> parseXscript() {
 		List<Object> sectionList = new ArrayList<>();
@@ -975,9 +968,8 @@ public final class CompileXonXdef extends XScriptParser {
 // XonModelParser - implementation of XonParser
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** This class provides parsing of XON/JSON source and creates the XON
-	 * structure composed from JObjets used for compilation of XON/JSON model
-	 * in X-definition.
+	/** This class provides parsing of XON/JSON source and creates the XON structure composed from JObjets
+	 * used for compilation of XON/JSON model in X-definition.
 	 */
 	private final static class XonModelParser implements XonParser {
 		/** kind = value */
@@ -1096,8 +1088,7 @@ public final class CompileXonXdef extends XScriptParser {
 		@Override
 		public final void comment(final SBuffer value){/*we ingore it here*/}
 
-		/** X-script item parsed, not used methods for JSON/XON parsing
-		 * (used in X-definition compiler).
+		/** X-script item parsed, not used methods for JSON/XON parsing (used in X-definition compiler).
 		 * @param name name of item.
 		 * @param value value of item.
 		 */
@@ -1110,12 +1101,12 @@ public final class CompileXonXdef extends XScriptParser {
 				case ANY_OBJ: putValue(new JAny((SPosition)name, value)); return;
 				case X_ONEOF_DIRECTIVE:
 					jv =  new JValue(
-						name, new JValue(spos, X_ONEOF_DIRECTIVE + (value == null? "" : value.getString())));
+						name, new JValue(spos, X_ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
 					break;
 				case ONEOF_DIRECTIVE:
 					if (_kind == 1) {
 						jv =  new JValue(
-							name, new JValue(spos, ONEOF_DIRECTIVE + (value==null? "" : value.getString())));
+							name, new JValue(spos, ONEOF_DIRECTIVE + (value==null ? "" : value.getString())));
 						break;
 					}
 				default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));

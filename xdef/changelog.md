@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.30, release-date 2025-10-20
+# Version 42.2.30, release-date 2025-10-23
 * The type of value of result of methods `ENTITIES` and `NMTOKENS` in XComponent is `List<String>`
   and the type of value  of result of methods `IDREFS` and `CHKIDS` is `List<Object>`.
 * Fixed infinite loop when parsing JSON model description containing string with incorrect escape characters.
