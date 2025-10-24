@@ -130,10 +130,10 @@ public final class XonReader extends StringParser implements XonParsers {
 			int i;
 			SPosition spos = getPosition();
 			SBuffer name;
-			if (!wasItem && _jdef && (i = isOneOfTokens(directives)) >= 0) { // read directive in map
+			if (!wasItem && _jdef && (i = isOneOfTokens(directives)) >= 0) { //xdef command in map
 				name = new SBuffer(i==0 || i == 2 ? X_SCRIPT_DIRECTIVE : X_ONEOF_DIRECTIVE, spos);
 				skipSpacesOrComments();
-				if (isChar(i < 2 ? ':' : '=')) {
+				if (isChar(':') || (i > 2 && isChar('='))) {
 					skipSpacesOrComments();
 					XonTools.JValue jv = readSimpleValue();
 					if (!(jv.getValue() instanceof String)) {
@@ -234,9 +234,9 @@ public final class XonReader extends StringParser implements XonParsers {
 				SBuffer name = new SBuffer(i==0 || i == 2 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
 				skipSpacesOrComments();
 				SBuffer value = null;
-				if (isChar(i < 2 ? ':' : '=')) {
+				if (isChar(':') || (i >= 2 && isChar('='))) {
 					skipSpacesOrComments();
-					if (i < 2) {
+					if (i < 2) { // JSON format
 						String s = XonTools.readJString(this);
 						s = SUtils.modifyString(s, "\\", "\\\\");
 						s = SUtils.modifyString(s, "\"", "\\\"");
@@ -246,14 +246,18 @@ public final class XonReader extends StringParser implements XonParsers {
 						value = jv.getSBuffer();
 						if (!(jv.getValue() instanceof String)) {
 							error(JSON.JSON018); //Value must be string with X-script
+							value = null;
 						}
+					}
+					if ((i == 0 || i == 2) && value != null && value.getString().trim().isEmpty()) {
+						error(XDEF.XDEF224); //Empty script in JSON model
 					}
 				} else if (i == 1) { // "%oneOf"
 					skipSpacesOrComments();
 					if (!isChar('"')) {
 						error(JSON.JSON002, "\""); //"&{0}"&{1}{ or "}{"} expected
 					}
-				} else if (i == 0 || i == 2) { // $script
+				} else if (i == 0 || i == 2) { // "$script || $script
 					error(JSON.JSON002, i == 0 ? ":" : "="); //"&{0}"&{1}{ or "}{"} expected
 					value = new SBuffer("", getPosition());
 				}
@@ -456,8 +460,10 @@ public final class XonReader extends StringParser implements XonParsers {
 				} else {
 					try {
 						return returnValue(spos, Long.valueOf(s));
-					} catch (NumberFormatException exx) {
-						return returnValue(spos, new BigInteger(s));
+					} catch (NumberFormatException ex) {
+						try {
+							return returnValue(spos, new BigInteger(s));
+						} catch (Exception exx) {}
 					}
 				}
 			}
@@ -643,33 +649,31 @@ public final class XonReader extends StringParser implements XonParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-		} else if (_jdef && (i = isOneOfTokens(new String[]{ANY_OBJ, '"' + ANY_OBJ})) >= 0) {
+		} else if (_jdef && (i = isOneOfTokens(new String[]{'"' + ANY_OBJ, ANY_OBJ})) >= 0) { //xdef command
 			SPosition spos = getPosition(); // xdef %anyObj
 			spos.setIndex(getIndex() - ANY_OBJ.length());
 			SBuffer name = new SBuffer(ANY_OBJ, spos);
-			SBuffer val = new SBuffer("", spos);
+			SBuffer value = new SBuffer("", spos);
 			skipSpacesOrComments();
-			if (isChar(':') || isChar('=')) { //?????
+			if (isChar(':') || (i == 1 && isChar('='))) {
 				skipSpacesOrComments();
-				if (i == 0) {
+				if (i == 0) { // JSON format
+					String s = XonTools.readJString(this);
+					s = SUtils.modifyString(s, "\\", "\\\\");
+					s = SUtils.modifyString(s, "\"", "\\\"");
+					value = new SBuffer(s, spos);
+				} else {
 					XonTools.JValue jv = readSimpleValue();
 					if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
 						error(JSON.JSON021); //After ":" in the command %anyObj must follow simpleValue
 					} else {
-						val = jv.getSBuffer();
+						value = jv.getSBuffer();
 					}
-				} else {
-					String s = XonTools.readJString(this);
-					s = SUtils.modifyString(s, "\\", "\\\\");
-					s = SUtils.modifyString(s, "\"", "\\\"");
-					val = new SBuffer(s, spos);
 				}
-			} else if (i == 1) {
-				if (!isChar('"')) {
-					error(JSON.JSON002, "\""); //"&{0}"&{1}{ or "}{"} expected
-				}
+			} else if (i == 0 && !isChar('"')) { // not closed string
+				error(JSON.JSON002, "\""); //"&{0}"&{1}{ or "}{"} expected
 			}
-			_jp.xdScript(name, val);
+			_jp.xdScript(name, value);
 		} else {
 			XonTools.JValue jv = readSimpleValue();
 			if (_jdef && (jv == null || jv.getValue() == null || !(jv.getValue() instanceof String))) {
@@ -780,7 +784,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				if (XonNames.ENCODING_DIRECTIVE.equals(s)) {
 					while((i = readChar(in,encoding,buf,count,baos)) == ' ' || i == '\t') {} // skip spaces
 					if (i == '=') {
-						while((i=readChar(in,encoding,buf,count,baos)) == ' ' || i == '\t') {}
+						while((i = readChar(in,encoding,buf,count,baos)) == ' ' || i == '\t') {}
 					} else { // missing eq sign
 						//Incorrect %encoding directive: "&{0}"
 						throw new SRuntimeException(JSON.JSON081, baos.toByteArray());

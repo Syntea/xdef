@@ -1044,22 +1044,37 @@ public final class TestErrors extends XDTester {
 			if (!ex.toString().contains("XDEF425")) fail(ex);
 		}
 		try {
+			XDFactory.compileXD(null, // incorrect excape characters in JSON X-script
+"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
+"   <xd:json name = \"test\">[ { \"adresa\": \"%script= \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"</xd:def>");
+			fail("Error not detected");
+		} catch (RuntimeException ex) {
+			if (!ex.toString().contains("XDEF425")) fail(ex);
+		}
+		try {
 			XDFactory.compileXD(null, // Empty script in JSON map
-"<xd:def xmlns:xd='"+_xdNS+"' root='test'><xd:json name=\"a\">{ \"x\": \"\"}</xd:json></xd:def>");
+"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n"+
+"  <xd:json name=\"a\">{ \"x\": \"\"}</xd:json>\n"+
+"</xd:def>");
 			fail("Error not detected");
 		} catch (RuntimeException ex) {
 			if (!ex.toString().contains("XDEF224")) fail(ex);
 		}
 		try {
 			XDFactory.compileXD(null, // Empty script in JSON array
-"<xd:def xmlns:xd='"+_xdNS+"' root='test'><xd:json name=\"a\">[ \"\" ]</xd:json></xd:def>");
+"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n"+
+"  <xd:json name=\"a\">[ \"\" ]</xd:json>\n"+
+"</xd:def>");
 			fail("Error not detected");
 		} catch (RuntimeException ex) {
 			if (!ex.toString().contains("XDEF224")) fail(ex);
 		}
 		try {
 			XDFactory.compileXD(null, // Empty script in JSON model
-"<xd:def xmlns:xd='"+_xdNS+"' root='test'><xd:json name=\"a\"> \"\" </xd:json></xd:def>");
+"<xd:def xmlns:xd='"+_xdNS+"' root='test'>n"+
+"  <xd:json name=\"a\">\"\"</xd:json>\n"+
+"</xd:def>");
 			fail("Error not detected");
 		} catch (RuntimeException ex) {
 			if (!ex.toString().contains("XDEF224")) fail(ex);
