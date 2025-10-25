@@ -303,7 +303,7 @@ public class TestJsonXdef extends XDTester {
 					result += (result.isEmpty() ? "" : "\n") + "Error X-component toJsjon " + id + "\n"
 						+ XonUtils.toJsonString(json) + "\n" + XonUtils.toJsonString(o) + "\n";
 				}
-				// test to parse cXON from X-component
+				// test to parse XON from X-component
 				xc = xp.createXDDocument("Test"+id).jparseXComponent(xc.toXon(),
 					Class.forName("test.common.json.component.Test"+id), null);
 				assertEq("", chkCompoinentSerializable(xc));
@@ -1049,14 +1049,33 @@ public class TestJsonXdef extends XDTester {
 			}
 		} catch (SRuntimeException ex) {fail(ex);}
 		try {
-			XDFactory.compileXD(null, // incorrect excape characters in script
-				"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
-"   <xd:json name = \"test\">[ { \"adresa\": \"%script: \\\"ref adr;\\\"\"  } ]</xd:json>" +
+			xp = compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"X9\" xd:root=\"CaseFile\">\n" +
+" <xd:json name=\"LossEventBase\">\n" +
+"{  \"lossEventNumber\": \"integer();\", \"lossEventCauseCode\": \"int();\" }\n" +
+"</xd:json>\n" +
+" <xd:json name=\"LossEventX9\">\n" +
+"{  \"%script\": \"ref LossEventBase;\",\n" +
+"   \"disbursementRecords\": [ \"%script:optional; \", \"occurs 0..*; string();\" ]\n" +
+"}\n" +
+"</xd:json>\n" +
+" <xd:json name=\"CaseFile\">\n" +
+"{  \"%script\": \"ref LossEventX9;\",\n" +
+"   \"isSpecialAttention\": \"optional; boolean();\",\n" +
+"   \"originalCaseFileNumber\": \"optional; string();\"\n" +
+"}\n" +
+"</xd:json>\n" +
 "</xd:def>");
-			fail("Error not detected");
-		} catch (RuntimeException ex) {
-			if (!ex.toString().contains("XDEF425")) fail(ex);
-		}
+			json =
+"{ \"lossEventNumber\":1012,\n" +
+"  \"lossEventCauseCode\":1,\n" +
+"  \"disbursementRecords\":[ ],\n" +
+"  \"isSpecialAttention\":false,\n" +
+"  \"originalCaseFileNumber\":\"76\"\n" +
+"}";
+			jparse(xp, "X9", json, reporter);
+			assertNoErrorsAndClear(reporter);
+		} catch (SRuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}

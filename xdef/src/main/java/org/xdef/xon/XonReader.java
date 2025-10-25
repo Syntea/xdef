@@ -231,7 +231,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			int i;
 			if (!wasItem && _jdef && (i = isOneOfTokens(directives)) >= 0) { // read directive in array
 				SPosition spos = getPosition();
-				SBuffer name = new SBuffer(i==0 || i == 2 ? SCRIPT_DIRECTIVE : ONEOF_DIRECTIVE, spos);
+				SBuffer name = new SBuffer(i==0 || i == 2 ? X_SCRIPT_DIRECTIVE : X_ONEOF_DIRECTIVE, spos);
 				skipSpacesOrComments();
 				SBuffer value = null;
 				if (isChar(':') || (i >= 2 && isChar('='))) {

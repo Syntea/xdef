@@ -1343,7 +1343,7 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, XComponentUtil.getMap(xc)));
 			genXComponent(xp = compile( // test %anyObj
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"a\" root=\"testX\">\n" +
-"  <xd:json name=\"testX\">%anyObj</xd:json>\n" +
+"  <xd:json name=\"testX\">\"%anyObj\"</xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".MyTestX_any %link a#testX;\n" +
 "  </xd:component>\n"+

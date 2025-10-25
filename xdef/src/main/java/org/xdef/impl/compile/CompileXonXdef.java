@@ -377,8 +377,12 @@ public final class CompileXonXdef extends XScriptParser {
 				}
 			} else if (map.size() > 1) {
 				pn1 = genJElement(parent, X_MAP, map.getPosition());
-				pn2 = genXDElement(pn1, "mixed", map.getPosition());
-				pn1.addChildNode(pn2);
+				if ("json".equals(parent.getLocalName())) { // map is root in the model
+					pn2 = pn1;
+				} else {
+					pn2 = genXDElement(pn1, "mixed", map.getPosition());
+					pn1.addChildNode(pn2);
+				}
 				if (!eos()) {
 					setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
@@ -478,7 +482,7 @@ public final class CompileXonXdef extends XScriptParser {
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				skipSpacesAndComments();
-				if (isToken(ONEOF_DIRECTIVE)) {
+				if (isToken(X_ONEOF_DIRECTIVE)) {
 					String s = getUnparsedBufferPart().trim();
 					pn = genXDElement(parent, "choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
@@ -501,7 +505,8 @@ public final class CompileXonXdef extends XScriptParser {
 							setSourceBuffer(item);
 							nextSymbol();
 							isOccurrence(occ);
-							if (occ.minOccurs() == 0 && X_MAP.equals(parent.getLocalName())) {
+							if (occ.minOccurs() == 0 && (X_MAP.equals(parent.getLocalName())
+								|| "mixed".equals(parent.getLocalName()))) {
 								setXDAttr(pn, "script",new SBuffer("?", spos));
 							}
 						}

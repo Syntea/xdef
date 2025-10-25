@@ -1079,6 +1079,15 @@ public final class TestErrors extends XDTester {
 		} catch (RuntimeException ex) {
 			if (!ex.toString().contains("XDEF224")) fail(ex);
 		}
+		try {
+			XDFactory.compileXD(null, // incorrect excape characters in script
+"<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
+"   <xd:json name = \"test\">[ { \"adresa\": \"%script: \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"</xd:def>");
+			fail("Error not detected");
+		} catch (RuntimeException ex) {
+			if (!ex.toString().contains("XDEF425")) fail(ex);
+		}
 		resetTester();
 		clearTempDir(); // clear temporary directory
 	}
