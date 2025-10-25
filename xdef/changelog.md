@@ -6,7 +6,8 @@
 * Fixed infinite loop when parsing JSON model description containing string with incorrect escape characters.
 * The JSON model in X-definition now complies with JSON syntax (e.g., keywords beginning with the character
   "%" must be enclosed in quotation marks).
-* Fixed incorrect error reporting in extended map item reference.
+* Fixed incorrect error reporting in extended JSON map item reference.
+* Fixed a bug that ignored the occurrence specification in the JSON "%oneOf" command in the map.
 
 # Version 42.2.29, release-date 2025-09-18
 * The value of the IDRES() and CHKIDS() methods can be a list of values separated by spaces. If the value
