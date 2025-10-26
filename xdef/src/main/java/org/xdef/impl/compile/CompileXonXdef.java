@@ -375,22 +375,22 @@ public final class CompileXonXdef extends XScriptParser {
 						}
 					}
 				}
-			} else if (map.size() <= 1 //less then 2 items or parent is a json or xon model
-				|| "json".equals(parent.getLocalName()) || "xon".equals(parent.getLocalName())) {
-				pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition()); // do not add "xd:mixed" node
-			} else { // more then 1 items -> // add "xd:mixed" element
+			} else if (map.size() <= 1 || "json".equals(parent.getLocalName())) {
+				// less then 2 items or parent is a json model => no "xd:mixed" node!
+				pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition());
+			} else { // more then 1 items
 				pn1 = genJElement(parent, X_MAP, map.getPosition());
-				pn2 = genXDElement(pn1, "mixed", map.getPosition());
+				pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
 				pn1.addChildNode(pn2);
 			}
 			if (!eos()) { // set xd:script attribute
 				setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 			}
 		} else if (map.size() <= 1) { // less then 2 items
-			pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition()); // do not add "xd:mixed" element
-		} else { // more then 1 items -> // add "xd:mixed" element
+			pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition()); // no "xd:mixed" node!
+		} else { // more then 1 items
 			pn1 = genJElement(parent, X_MAP, map.getPosition());
-			pn2 = genXDElement(pn1, "mixed", map.getPosition());
+			pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
 			pn1.addChildNode(pn2);
 		}
 		Object anyItem = null;

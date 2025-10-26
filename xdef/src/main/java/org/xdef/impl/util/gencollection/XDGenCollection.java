@@ -665,8 +665,7 @@ public class XDGenCollection {
 			} else if (n.getNodeType() == Node.TEXT_NODE) {
 				if (!("declaration".equals(el.getLocalName()) || "component".equals(el.getLocalName())
 					|| "BNFGrammar".equals(el.getLocalName()) || "thesaurus".equals(el.getLocalName())
-					|| "lexicon".equals(el.getLocalName()) || "json".equals(el.getLocalName())
-					|| "xon".equals(el.getLocalName()))
+					|| "lexicon".equals(el.getLocalName()) || "json".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
 					String s = ((Text) n).getData();
