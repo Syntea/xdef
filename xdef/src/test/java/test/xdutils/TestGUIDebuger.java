@@ -294,9 +294,7 @@ public final class TestGUIDebuger extends XDTester {
 "<xd:json name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
 "      [\n" +
-"        {\n" +
-"          %script= \"occurs 1..*; ref B\" \n" +
-"        }\n" +
+"        { \"%script\": \"occurs 1..*; ref B\" }\n" +
 "      ]\n" +
 "  }\n" +
 "}\n" +
@@ -308,11 +306,11 @@ public final class TestGUIDebuger extends XDTester {
 "      \"given\":\"optional jstring()\"\n"+
 "   },\n"+
 "   \"email\": \"emailAddr();\",\n" +
-"   \"link\": { %script= \"ref C\" }\n" +
+"   \"link\": { \"%script\": \"ref C\" }\n" +
 "}\n" +
 "</xd:json>\n" +
 "<xd:json name=\"C\" >\n" +
-"{  %oneOf= \"optional;\",\n" +
+"{  \"%oneOf\": \"optional;\",\n" +
 "   \"manager\": \"jstring()\",\n" +
 "   \"subordinates\":[\n" +
 "      \"* jstring();\"\n" +

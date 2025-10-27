@@ -468,9 +468,9 @@ clearSources();
 			xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
 "<xd:json name=\"Any\">\n" +
-" [ %oneOf, \"jvalue();\",\n" +
-"   [ %script=\"*; ref anyA;\" ],\n" +
-"   { %script=\"*; ref anyM;\" }\n" +
+" [ \"%oneOf\", \"jvalue();\",\n" +
+"   [ \"%script:*; ref anyA;\" ],\n" +
+"   { \"%script\":\"*; ref anyM;\" }\n" +
 " ]\n" +
 "</xd:json>\n" +
 "<xd:json name=\"anyA\">\n" +
@@ -579,7 +579,7 @@ if(T)return;
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name=\"X\" root=\"testI\">\n" +
 "<xd:json name=\"testI\">\n"  +
-"  [ %oneOf, \"jvalue()\", [%anyObj], {%anyName: %anyObj} ]\n"  +
+"  [ \"%oneOf\", \"jvalue()\", [%anyObj], {%anyName: %anyObj} ]\n"  +
 "</xd:json>\n"  +
 "<xd:component> %class "+_package+".MyTestXX12 %link X#testI; </xd:component>\n"+
 "</xd:def>\n"+
@@ -677,16 +677,16 @@ if(T)return;
 			xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
 "<xd:json name=\"Any\">\n" +
-" [ %oneOf, \"jvalue();\",\n" +
-"   [ %script=\"*; ref anyA;\" ],\n" +
-"   { %script=\"*; ref anyM;\" }\n" +
+" [ \"%oneOf\", \"jvalue();\",\n" +
+"   [ \"%script: *; ref anyA;\" ],\n" +
+"   { \"%script\":\"*; ref anyM;\" }\n" +
 " ]\n" +
 "</xd:json>\n" +
 "<xd:json name=\"anyA\">\n" +
-" [ %anyObj ]\n" +
+" [ \"%anyObj\" ]\n" +
 "</xd:json>\n" +
 "<xd:json name=\"anyM\">\n" +
-" { %anyName: %anyObj }\n"+
+" { \"%anyName\": \"%anyObj\" }\n"+
 "</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX11 %link X#Any; </xd:component>\n"+
 "</xd:def>";
@@ -714,12 +714,12 @@ clearSources();
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
 "<xd:json name=\"test\">\n" +
-"{ a:[ %oneOf=\"?\",\n" +
+"{ a:[ \"%oneOf: ?\",\n" +
 "       \"jnull(); finally outln('null')\", \n" + // must be first
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
-"       [%script=\"finally outln('[...]')\",\"*int()\"], \n" +
-"       {%script=\"finally outln('{ . }')\",x:\"? int()\",y:\"? string()\"},\n"+
+"       [\"%script:finally outln('[...]')\",\"*int()\"], \n" +
+"       {\"%script\":\"finally outln('{ . }')\",x:\"? int()\",y:\"? string()\"},\n"+
 "       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +
@@ -1307,20 +1307,20 @@ clearSources();
 			xdef = // test XON models
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
 "<xd:json name=\"Any\">\n" +
-" [ %oneOf, \"jvalue(); finally out('V')\",\n" +
-"   [ %script=\"*; ref anyA; finally out('A')\" ],\n" +
-"   { %script=\"*; ref anyM; finally out('M')\" }\n" +
+" [ \"%oneOf\", \"jvalue(); finally out('V')\",\n" +
+"   [ \"%script: *; ref anyA; finally out('A')\" ],\n" +
+"   { \"%script\": \"*; ref anyM; finally out('M')\" }\n" +
 " ]\n" +
 "</xd:json>\n" +
 "<xd:json name=\"anyA\">\n" +
-" [ %anyObj=\"*;\" ]\n" +
+" [ \"%anyObj: *;\" ]\n" +
 //" [ [%script=\"*; finally outln('AA');\", %anyObj ] ]\n" +
 "</xd:json>\n" +
 "<xd:json name=\"anyM\">\n" +
-//" { %anyName: %anyObj }\n"+
+//" { \"%anyName\": \"%anyOb\"j }\n"+
 " {%anyName:\n" +
-"   [%oneOf, \"jvalue()\",\n" +
-"     [%script=\"ref Any; finally outln('MM')\"],\n" +
+"   [\"%oneOf\", \"jvalue()\",\n" +
+"     [\"%script: ref Any; finally outln('MM')\"],\n" +
 "   ]\n" +
 " }\n" +
 "</xd:json>\n" +
@@ -1419,7 +1419,7 @@ clearSources();
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  {\n" +
-"     \"Style\": [ %oneOf,\n" +
+"     \"Style\": [ \"%oneOf\",\n" +
 "       [ \"occurs 2..* string()\" ],\n" +
 "       \"string()\"\n" +
 "     ]\n" +
@@ -1473,7 +1473,7 @@ clearSources();
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  {\n" +
-"     \"Style\": [ %oneOf,\n" +
+"     \"Style\": [ \"%oneOf\",\n" +
 "       [ \"occurs 2..* string()\" ],\n" +
 "       \"string()\"\n" +
 "     ]\n" +
@@ -1504,7 +1504,7 @@ clearSources();
 "<xd:json name='a'>\n" +
 "[\n" +
 "  { %script= \"occurs 1..*\",\n" +
-"    \"Genre\": [ %oneOf,\n" +
+"    \"Genre\": [ \"%oneOf\",\n" +
 "      \"string()\",\n" +
 "      [\"occurs 1..* string()\"]\n" +
 "    ]\n" +

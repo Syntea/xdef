@@ -367,17 +367,17 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n"+
 "<xd:json name=\"test\">\n"+
-"  [%oneOf=\"ref A\"]\n"+
+"  [\"%oneOf: ref A\"]\n"+
 "</xd:json>\n"+
 "<xd:json name=\"A\">\n"+
-" [%oneOf,\n"+
+" [\"%oneOf\",\n"+
 "    \"jvalue();\",\n"+
 "    [\"* jvalue();\" ],\n"+
 "    {%anyName:\n"+
-"       [%oneOf,\n"+
+"       [\"%oneOf\",\n"+
 "         \"jvalue();\",\n"+
 "         [\"* jvalue();\" ],\n"+
-"         {%anyName: [%oneOf=\" ref test\"]}\n"+
+"         {%anyName: [\"%oneOf: ref test\"]}\n"+
 "       ]\n"+
 "    }\n"+
 "  ]\n"+
@@ -404,8 +404,8 @@ public class MyTest extends XDTester {
 "<xd:json name='network'>\n" +
 "{\n" +
 "  a: \"optional string();\"\n" +
-"  b: {%script=\"optional\", a: \"optional string();\"}\n" +
-"  c: [%script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
+"  b: {\"%script\":\"optional\", a: \"optional string();\"}\n" +
+"  c: [\"%script:optional\", \"int();\", { a: \"int();\"}]\n" +
 "}\n" +
 "</xd:json>\n" +
 "</xd:def>";

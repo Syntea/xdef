@@ -14,7 +14,6 @@ import java.net.URL;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonTools;
 import static test.XDTester._xdNS;
@@ -142,10 +141,10 @@ if(T)return;
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  [\n" +
-"    { %script= \"occurs 1..*;\",\n" +
+"    { \"%script: occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
 "       \"xxx\": \"? string()\",\n" +
-"       \"Style\": [ %oneOf,\n" +
+"       \"Style\": [ \"%oneOf\",\n" +
 "         \"string()\",\n" +
 "         [ \"occurs 2..* string()\" ]\n" +
 "       ]\n" +
@@ -482,7 +481,7 @@ if(T )return;
 "</xd:declaration>\n" +
 "<xd:json name='a'>\n" +
 "{\n" +
-"  \"Genre\": [%oneOf,\n" +
+"  \"Genre\": [\"%oneOf\",\n" +
 "     \"genre\",\n" +
 "     [\"occurs 1..*; genre\"]\n" +
 "  ]\n" +
