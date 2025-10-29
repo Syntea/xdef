@@ -1088,6 +1088,24 @@ public final class TestErrors extends XDTester {
 		} catch (RuntimeException ex) {
 			if (!ex.toString().contains("XDEF425")) fail(ex);
 		}
+		try { //Incorrect reference to an array from map
+			xp = compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"A\" root=\"a\">\n" +
+"<xd:json name=\"a\">\n" +
+"{\n" +
+"    \"c\": [\"%script: ref b\"]\n" +
+"}\n" +
+"</xd:json>\n" +
+"<xd:json name=\"b\"> {\"a\": \"int\"} </xd:json>\n" +
+"</xd:def>");
+			fail("Error expected"); // must be XDEF311: Incorrect reference to an array or map
+			jparse(xp, "A", "{ \"c\": { \"a\": 1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+		} catch (Exception ex) {
+			if (!ex.getMessage().contains("XDEF311")) {
+				fail(ex);
+			}
+		}
 		resetTester();
 		clearTempDir(); // clear temporary directory
 	}

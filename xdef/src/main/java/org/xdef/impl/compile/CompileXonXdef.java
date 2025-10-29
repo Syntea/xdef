@@ -416,6 +416,10 @@ public final class CompileXonXdef extends XScriptParser {
 								error(XDEF.XDEF535, key);
 							}
 						}
+						if ((sbf = findSection("ref", parseXscript(xscr._value))) != null
+							&& "array".equals(pn3.getLocalName())) {
+							error(XDEF.XDEF311);
+						}
 					}
 					if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
 						for (PNode pn : pn3.getChildNodes()) {
