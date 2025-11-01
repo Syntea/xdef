@@ -317,8 +317,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-	@Override
 	/** Set mode that INI file is parsed in X-definition compiler. */
+	@Override
 	public final void setXdefMode() { _jdef = true;}
 
 	@Override

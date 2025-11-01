@@ -164,8 +164,8 @@ public class X extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 
-	/** Run test
-	 * @param args the command line arguments
+	/** Run test.
+	 * @param args the command line arguments.
 	 */
 	public static void main(String... args) {
 		XDTester.setFulltestMode(true);
