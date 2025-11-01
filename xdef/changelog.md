@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.31, release-date 2025-11-01
+*
+
 # Version 42.2.30, release-date 2025-11-01
 * The type of value of result of methods `ENTITIES` and `NMTOKENS` in XComponent is `List<String>`
   and the type of value  of result of methods `IDREFS` and `CHKIDS` is `List<Object>`.
