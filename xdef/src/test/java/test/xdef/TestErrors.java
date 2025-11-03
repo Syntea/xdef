@@ -25,8 +25,7 @@ public final class TestErrors extends XDTester {
 	private void printReport(final Report report, final String data) {
 		System.out.flush();
 		System.err.flush();
-		fail(new Throwable(
-			report.toString() + "; '" + report.getModification() + "'"));
+		fail(new Throwable(report.toString() + "; '" + report.getModification() + "'"));
 		System.err.flush();
 		System.out.flush();
 		ArrayReporter reporter = new ArrayReporter();
@@ -52,12 +51,9 @@ public final class TestErrors extends XDTester {
 		} else {
 			boolean err = id == null ?  false : !id.equals(report.getMsgID());
 			if (report.getModification() != null) {
-				err |= line != null &&
-					!report.getModification().contains("&{line}" + line);
-				err |= column != null &&
-					!report.getModification().contains("&{column}" + column);
-				err |= source != null &&
-					!report.getModification().contains(source);
+				err |= line != null && !report.getModification().contains("&{line}" + line);
+				err |= column != null && !report.getModification().contains("&{column}" + column);
+				err |= source != null && !report.getModification().contains(source);
 			}
 			if (err) {
 				return report.toString() + "; '" + report.getModification()+"'";
@@ -69,10 +65,8 @@ public final class TestErrors extends XDTester {
 	/** Run test and print error information. */
 	@Override
 	public void test() {
-		setProperty(XDConstants.XDPROPERTY_WARNINGS,
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-		setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS,
-			XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+		setProperty(XDConstants.XDPROPERTY_LOCATIONDETAILS, XDConstants.XDPROPERTYVALUE_LOCATIONDETAILS_TRUE);
 		try {
 			test1();
 		} catch (Error ex) {
@@ -97,8 +91,7 @@ public final class TestErrors extends XDTester {
 	 * @param cls array with external classes.
 	 * @return reporter connected to compilation.
 	 */
-	private ArrayReporter test(final Properties props,
-		final String[] xdef) {
+	private ArrayReporter test(final Properties props, final String[] xdef) {
 			ArrayReporter rw = new ArrayReporter();
 			XDBuilder xb = XDFactory.getXDBuilder(rw, props);
 			xb.setSource(xdef);
@@ -1025,9 +1018,8 @@ public final class TestErrors extends XDTester {
 				}
 			}
 		} catch (Exception ex) { fail(ex); }
-
 		try {
-			compile(dataDir + "bla/blabla.xdef");
+			XDFactory.compileXD(null, dataDir + "bla/blabla.xdef");
 			fail("Error not reported");
 		} catch (Exception ex) {
 			if (!ex.toString().contains("XDEF903")) {
@@ -1089,7 +1081,7 @@ public final class TestErrors extends XDTester {
 			if (!ex.toString().contains("XDEF425")) fail(ex);
 		}
 		try { //Incorrect reference to an array from map
-			xp = compile(
+			xp = XDFactory.compileXD(null,
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"A\" root=\"a\">\n" +
 "<xd:json name=\"a\">\n" +
 "{\n" +

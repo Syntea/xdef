@@ -422,8 +422,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						className += extension.substring(12);
 					}
-					s = _codeGenerator._components.put(
-						model, new SBuffer(className, spos));
+					s = _codeGenerator._components.put(model, new SBuffer(className, spos));
 					if (s != null && !className.equals(s.getString())) {
 						//Duplicate declaration of class &{0} // for XComponent &{1}
 						error(spos, XDEF.XDEF352, className, model);
@@ -558,8 +557,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			int len;
 			if ((len = list.size()) > 0) {
 				int size = _codeGenerator._globalVariables.size();
-				int lastOffset =
-					_codeGenerator._globalVariables.getLastOffset();
+				int lastOffset = _codeGenerator._globalVariables.getLastOffset();
 				for (int n = 0; ; n++) {
 					int errndx = -1;
 					// now we check items from the list. We break the cycle when we find an item with an
@@ -577,8 +575,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							Report report;
 							//check if there is undefined variable report
 							while ((report = reporter.getReport()) != null) {
-								//XDEF424 ... Undefined variable &{0}
-								//XDEF443 ... Unknown method &{0}
+								//XDEF424 ... Undefined variable &{0}; XDEF443 ... Unknown method &{0}
 								if ("XDEF424".equals(report.getMsgID())||("XDEF443".equals(report.getMsgID())
 									&& list == _listDecl)) {
 									errndx = i; //set index of this item
@@ -747,7 +744,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		for (PNode nodei : listComponent) {
-			String defName = nodei._xdef == null ? "" : nodei._xdef.getName();
+			String defName = nodei._xdef==null ? "" : nodei._xdef.getName();
 			_scriptCompiler.setSource(
 				nodei._value, defName, nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
 			compileComponentDeclaration();
@@ -1017,8 +1014,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pn._nsPrefixes,
 						pn._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setInitCode(_scriptCompiler.compileSection(
-						ELEM_MODE, XD_VOID,	INIT_SYM));
+					newNode.setInitCode(_scriptCompiler.compileSection(ELEM_MODE, XD_VOID,	INIT_SYM));
 				}
 				pa = _precomp.getXdefAttr(pn, "occurs", false, true);
 				if (pa != null) {
@@ -1360,8 +1356,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			return;
 		} else if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 			switch (pnode._localName) {
-				case "data":
-					reportDeprecated(pnode._name, "\"data\"", "\"text\"");
+				case "data": reportDeprecated(pnode._name, "\"data\"", "\"text\"");
 				case "text":
 					_precomp.chkNestedElements(pnode);
 					XData xtext = new XData("$text", null, xdef.getXDPool(), XMTEXT);
@@ -1387,8 +1382,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							pnode._xpathPos+"/text()");
 						pnode._value = null;
 						_scriptCompiler.compileDataScript(xtext);
-						if (!xtext.getOccurence().isIgnore()
-							&& xtext.getOccurence().maxOccurs() > 1) {
+						if (!xtext.getOccurence().isIgnore() && xtext.getOccurence().maxOccurs() > 1) {
 							//Occurrence of attribute or text value can't be more then 1
 							_scriptCompiler.error(XDEF.XDEF262);
 						}
@@ -1398,8 +1392,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 					_precomp.reportNotAllowedAttrs(pnode);
 					break;
-				case "includeChildNodes":
-					reportDeprecated(pnode._name, "\"includeChildNodes\"", "\"list\"");
+				case "includeChildNodes": reportDeprecated(pnode._name, "\"includeChildNodes\"", "\"list\"");
 				case "list":
 					_precomp.chkNestedElements(pnode);
 					if (level == 1) {
@@ -1540,8 +1533,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			String name = nodei._localName;
 			PAttr pa = nodei.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
 			SBuffer gname = pa == null ? null : pa._value;
-			if (nodei._nsindex == XPreCompiler.NS_XDEF_INDEX
-				&& ("choice".equals(name)
+			if (nodei._nsindex == XPreCompiler.NS_XDEF_INDEX && ("choice".equals(name)
 				|| "mixed".equals(name) || "sequence".equals(name)
 //				|| "PI".equals(name) //TODO
 //				|| "comment".equals(name) //TODO
@@ -1638,8 +1630,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					if (x == null) { //Unresolved reference
 						xref.putTargetError(getReportWriter());
 					} else {
-						if (pnode._xdVersion < XConstants.XD40
-							&& x.getName().endsWith("$choice")) {
+						if (pnode._xdVersion < XConstants.XD40 && x.getName().endsWith("$choice")) {
 							//Reference to "xd:choice" in the "xd:root" attribute is allowed in versions 4.0
 							// and higher
 							_precomp.warning(pos, XDEF.XDEF803);
@@ -1668,7 +1659,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	}
 
 	/** Get identifier of type from a model.*/
-	private static short getTypeId(XMNode xn) {
+	private static short getTypeId(final XMNode xn) {
 		if (xn.getKind() == XMELEMENT) {
 			// all elements have same type (i.e XComponent or List<XComponent>)
 			return (short) (250 + (((XMElement) xn).maxOccurs() > 1 ? 0 : 1));
@@ -1887,7 +1878,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} catch (RuntimeException ex) {
 				throw ex;
 			} catch (Exception ex) {
-				throw new SRuntimeException(SYS.SYS066,ex,ex); //Internal error: &{0}
+				throw new SRuntimeException(SYS.SYS066, ex); //Internal error: &{0}
 			}
 			// finally check "implements" and "uses" requests
 			// Note this must be done after all referrences are resolved
@@ -1952,8 +1943,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		return newSelector;
 	}
 
-	/** Copy child nodes, if position in the source and destination differs then
-	 * replace selectors by a clone.
+	/** Copy child nodes, if position in the source and destination differs then replace selectors by a clone.
 	 * @param fromList - the source array.
 	 * @param fromIndex - start position in the source array.
 	 * @param toList - the destination array.
@@ -1987,8 +1977,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Resolve references.
 	 * @param xel the XElement.
 	 * @param level The recursion level.
-	 * @param ignoreOccurrence if <i>true</i> the occurrence specification
-	 * from the referred object is ignored.
+	 * @param ignoreOccurrence if <i>true</i> the occurrence specification from referred object is ignored.
 	 * @param ar node list.
 	 * @return true if reverence was resolved.
 	 */
@@ -2278,11 +2267,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						nestedSelectors++;
 						break;
 					}
-					case XMSELECTOR_END:
-						nestedSelectors--;
-						break;
-					default:
-						break;
+					case XMSELECTOR_END: nestedSelectors--; break;
+					default: break;
 				}
 				childNodes[j] = xn;
 			}
