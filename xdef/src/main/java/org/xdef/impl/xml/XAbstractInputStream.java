@@ -20,12 +20,16 @@ public class XAbstractInputStream extends InputStream {
 	public XAbstractInputStream(final InputStream in) throws IOException {_in = in; _len = -1;}
 
 	public final void setHdrIndex(final int hdrIndex) {_hdrIndex = hdrIndex;}
+
 	public final InputStream getInputStream() {return _len == 0 ? _in : this;}
+
 	public final byte[] getparsedBytes() {return _buf;}
+
 	public final void setBuffer(final byte[] buf) {
 		_buf = buf;
 		_len = _buf == null ? -1 : _buf.length;
 	}
+
 ////////////////////////////////////////////////////////////////////////////////
 	/** Detect encoding from Byte Order Mark (BOM)
 	 * (see http://www.w3.org/TR/REC-xml/#charsets).

@@ -704,11 +704,9 @@ public final class XCodeProcessor {
 	 */
 	final TimeZone getDefaultZone() {
 		String s;
-		if (_props!=null && (s=_props.getProperty(XDConstants.XDPROPERTY_DEFAULTZONE))!=null && !s.isEmpty()){
-			return TimeZone.getTimeZone(s);
-		} else {
-			return _xd.getXDPool().getDefaultZone();
-		}
+		return _props != null
+			&& (s = _props.getProperty(XDConstants.XDPROPERTY_DEFAULTZONE)) != null && !s.isEmpty()
+			? TimeZone.getTimeZone(s) : _xd.getXDPool().getDefaultZone();
 	}
 
 	/** Get assigned standard output stream.
@@ -779,8 +777,8 @@ public final class XCodeProcessor {
 				String debugEditor = xp.getDebugEditor();
 				if (debugEditor != null) {
 					try { // try to get external debugger
-						Class<?> cls = Class.forName(debugEditor);
-						Constructor<?> c = cls.getDeclaredConstructor(Properties.class, XDPool.class);
+						Constructor<?> c = Class.forName(debugEditor).getDeclaredConstructor(
+							Properties.class, XDPool.class);
 						_debugger = (XDDebug) c.newInstance(null, xp);
 					} catch (Exception ex) {
 						_debugger = null; // will be used the default debugger
@@ -1157,6 +1155,13 @@ public final class XCodeProcessor {
 				case TO_CHAR_X: {
 					int i = sp - item.getParam(); _stack[i] = new DefChar(_stack[i].longValue()); continue;
 				}
+				case TO_STRING_X:
+					_stack[sp-item.getParam()]=new DefString(_stack[sp-item.getParam()].toString()); continue;
+				case TO_MILLIS:_stack[sp]= new DefLong(_stack[sp].datetimeValue().getTimeInMillis());continue;
+				case TO_MILLIS_X:
+					_stack[sp - item.getParam()] =
+						new DefLong(_stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
+					continue;
 				case NULL_OR_TO_STRING:
 					if (_stack[sp] == null || _stack[sp].isNull()) {
 						_stack[sp] = new DefString();
@@ -1168,13 +1173,6 @@ public final class XCodeProcessor {
 					}
 					continue;
 				case EQUALS_OP: _stack[--sp] = new DefBoolean(_stack[sp].equals(_stack[sp+1])); continue;
-				case TO_STRING_X:
-					_stack[sp-item.getParam()]=new DefString(_stack[sp-item.getParam()].toString()); continue;
-				case TO_MILLIS:_stack[sp]= new DefLong(_stack[sp].datetimeValue().getTimeInMillis());continue;
-				case TO_MILLIS_X:
-					_stack[sp - item.getParam()] =
-						new DefLong(_stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
-					continue;
 				case TO_BOOLEAN: _stack[sp] = new DefBoolean(_stack[sp].booleanValue()); continue;
 				case STACK_TO_CONTAINER: { // create container from stack values
 					int n = item.getParam(); // number of stack items
@@ -1441,9 +1439,8 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case COMPILE_XPATH: { //compile XPath
-					DefXPathExpr xp = (DefXPathExpr) item;
 					//we MUST recompile this with actual resolvers!!!
-					xp = new DefXPathExpr(xp.sourceValue(),
+					DefXPathExpr xp = new DefXPathExpr(((DefXPathExpr) item).sourceValue(),
 						chkEl.getXXNamespaceContext(), _functionResolver, _variableResolver);
 					xp.setCode(LD_CONST); //However, we do it just first time!
 					_code[pc - 1] = _stack[++sp] = _code[pc-1] = xp;
@@ -1670,8 +1667,7 @@ public final class XCodeProcessor {
 				case COMPILE_REGEX: _stack[sp] = new XDRegex(_stack[sp].toString(), false); continue;
 				case CHAR_AT: { // charAt
 					int i = _stack[sp--].intValue();
-					String s = _stack[sp].stringValue();
-					_stack[sp] = new DefChar(s.charAt(i));
+					_stack[sp] = new DefChar(_stack[sp].stringValue().charAt(i));
 					continue;
 				}
 				case CONTAINS: {
