@@ -76,7 +76,7 @@ public final class PNode {
 		return ndx < 0 ? s : s.substring(ndx + 1);
 	}
 
-	/** Get namsepace index of the node .
+	/** Get namespace index of the node .
 	 * @return node name (as SBufer).
 	 */
 	public final int getNSIndex() {return _nsindex;}
@@ -171,9 +171,7 @@ public final class PNode {
 	 * @param patt the attribute to be removed..
 	 * @return true if the attribute was removed.
 	 */
-	final boolean removeAttr(final PAttr patt) {
-		return removeAttr(patt.getName());
-	}
+	final boolean removeAttr(final PAttr patt) {return removeAttr(patt.getName());}
 
 	/** Remove attribute.
 	 * @param name the name of attribute.

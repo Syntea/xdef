@@ -78,9 +78,8 @@ public final class KCharsetNames {
 	/** Don't allow user to create an instance of this class. */
 	private KCharsetNames() {}
 
-	/** Get XML encoding name. Return null if encoding name is
-	 * unknown. The argument can be either a XML encoding name or character set
-	 * name.
+	/** Get XML encoding name. Return null if encoding name is unknown. The argument can be either
+	 * a XML encoding name or character set name.
 	 * @param name the XML encoding name or the character set name.
 	 * @return canonized XML encoding name or null.
 	 */
@@ -89,9 +88,8 @@ public final class KCharsetNames {
 		return result!=null ? result : Charset.isSupported(name) ? name : null;
 	}
 
-	/** Get canonized java character set name. The argument can be either
-	 * a XML encoding name or a character set name. Returns null if the
-	 * character set name is unknown.
+	/** Get canonized java character set name. The argument can be either a XML encoding name or a character
+	 * set name. Returns null if the character set name is unknown.
 	 * @param name The name of character set.
 	 * @return canonized character set name or null.
 	 */
