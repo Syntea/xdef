@@ -262,19 +262,18 @@ public final class CompileXonXdef extends XScriptParser {
 		SBuffer val;
 		if (attr != null) {
 			val = attr._value;
-			List<Object> sectionList = parseXscript(val);
-			SBuffer matchItem = findSection("match", sectionList);
+			List<Object> sections = parseXscript(val);
+			SBuffer matchItem = findSection("match", sections);
 			if (matchItem == null) {
-				matchItem =
-					new SBuffer(matchexpr, sectionList.isEmpty() ? pn._name : (SBuffer) sectionList.get(1));
-				sectionList.add("match");
-				sectionList.add(matchItem);
+				matchItem = new SBuffer(matchexpr, sections.isEmpty() ? pn._name : (SBuffer) sections.get(1));
+				sections.add("match");
+				sections.add(matchItem);
 			} else {
 				String s = matchItem.getString();
 				matchItem.setString(s.startsWith("{")
 					? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AAND " + s);
 			}
-			val = xsToString(sectionList);
+			val = xsToString(sections);
 		} else {
 			val = new SBuffer("match " + matchexpr + ';', pn._name);
 		}
@@ -416,7 +415,7 @@ public final class CompileXonXdef extends XScriptParser {
 								error(XDEF.XDEF535, key);
 							}
 						}
-						if ((sbf = findSection("ref", parseXscript(xscr._value))) != null
+						if (findSection("ref", parseXscript(xscr._value)) != null
 							&& "array".equals(pn3.getLocalName())) {
 							error(XDEF.XDEF311);
 						}
@@ -1023,8 +1022,7 @@ public final class CompileXonXdef extends XScriptParser {
 			String s = name.getString();
 			boolean result = false;
 			for (SBuffer x: _names) {
-				if (s != null && s.equals(x.getString())
-					|| s == null && x.getString() == null) {
+				if (s != null && s.equals(x.getString()) || s == null && x.getString() == null) {
 					result = true;
 					break;
 				}
@@ -1103,13 +1101,13 @@ public final class CompileXonXdef extends XScriptParser {
 				case X_ANY_NAME: namedValue(new SBuffer(null, name)); return;
 				case ANY_OBJ: putValue(new JAny((SPosition)name, value)); return;
 				case X_ONEOF_DIRECTIVE:
-					jv =  new JValue(
-						name, new JValue(spos, X_ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
+					jv = new JValue(name,
+						new JValue(spos, X_ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
 					break;
 				case ONEOF_DIRECTIVE:
 					if (_kind == 1) {
-						jv =  new JValue(
-							name, new JValue(spos, ONEOF_DIRECTIVE + (value==null ? "" : value.getString())));
+						jv =  new JValue(name,
+							new JValue(spos, ONEOF_DIRECTIVE + (value==null ? "" : value.getString())));
 						break;
 					}
 				default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));

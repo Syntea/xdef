@@ -820,12 +820,9 @@ public final class XonReader extends StringParser implements XonParsers {
 	public static final Reader getXonReader(final InputStream in) {
 		try {
 			XonInputStream x = new XonInputStream(in);
-			if ("X-ISO-10646-UCS-4-2143".equals(x._encoding)) {
-				return new Reader_UCS_4_2143(x.getInputStream());
-			} else if ("X-ISO-10646-UCS-4-3412".equals(x._encoding)) {
-				return new Reader_UCS_4_3412(x.getInputStream());
-			}
-			return new InputStreamReader(x.getInputStream(), Charset.forName(x._encoding));
+			return "X-ISO-10646-UCS-4-2143".equals(x._encoding) ? new Reader_UCS_4_2143(x.getInputStream())
+				: "X-ISO-10646-UCS-4-3412".equals(x._encoding) ?  new Reader_UCS_4_3412(x.getInputStream())
+				: new InputStreamReader(x.getInputStream(), Charset.forName(x._encoding));
 		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS052, ex); //Unsupported encoding name&{0}{: "}{"}
 		}
