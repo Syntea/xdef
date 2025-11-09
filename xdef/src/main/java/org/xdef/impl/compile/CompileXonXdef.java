@@ -416,7 +416,7 @@ public final class CompileXonXdef extends XScriptParser {
 						}
 						if (findSection("ref", parseXscript(xscr._value)) != null
 							&& "array".equals(pn3.getLocalName())) {
-							error(XDEF.XDEF311);
+							error(XDEF.XDEF311); //Incorrect reference to an array or map
 						}
 					}
 					if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
