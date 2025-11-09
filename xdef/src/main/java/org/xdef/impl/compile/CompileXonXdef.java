@@ -347,9 +347,8 @@ public final class CompileXonXdef extends XScriptParser {
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode pn1, pn2;
-		Object val = map.get(X_SCRIPT_DIRECTIVE);
-		if (val != null && val instanceof JValue) {
-			map.remove(X_SCRIPT_DIRECTIVE);
+		Object val;
+		if ((val = map.remove(X_SCRIPT_DIRECTIVE)) != null && val instanceof JValue) {
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			skipSpacesAndComments();
@@ -1104,12 +1103,6 @@ public final class CompileXonXdef extends XScriptParser {
 					jv = new JValue(name,
 						new JValue(spos, X_ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
 					break;
-				case ONEOF_DIRECTIVE:
-					if (_kind == 1) {
-						jv =  new JValue(name,
-							new JValue(spos, ONEOF_DIRECTIVE + (value==null ? "" : value.getString())));
-						break;
-					}
 				default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
 			}
 			if (_kind == 1) { // array
