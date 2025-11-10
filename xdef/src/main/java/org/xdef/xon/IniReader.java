@@ -17,6 +17,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
+import static org.xdef.xon.XonReader.X_SCRIPT_DIRECTIVE;
 import static org.xdef.xon.XonTools.genXMLString;
 
 /** Methods for INI/Properties data.
@@ -259,7 +260,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 						if (!s.endsWith(";")) {
 							s += ";";
 						}
-						p1 = new SBuffer(SCRIPT_DIRECTIVE, spos1);
+						p1 = new SBuffer(X_SCRIPT_DIRECTIVE, spos1);
 						p2 = new SBuffer(s.substring(0, s.length()-1), p.getPosition());
 					}
 					if (p1 == null) {

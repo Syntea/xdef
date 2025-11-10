@@ -168,14 +168,13 @@ public final class XDFactory extends XDTools {
 
 	/** Compile XDPool from sources.
 	 * @param props Properties or null.
-	 * @param params list of strings with X-definition file names.
+	 * @param pars list of strings with X-definition file names.
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDPool compileXD(final Properties props, final String... params)
-		throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props,final String... pars)throws SRuntimeException{
 		XDBuilder builder = getXDBuilder(props);
-		setParam(builder, params);
+		setParam(builder, pars);
 		return builder.compileXD();
 	}
 
@@ -237,8 +236,7 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDPool compileXD(final Properties props, final Object... pars)
-		throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props,final Object... pars)throws SRuntimeException{
 		return compileXD((ReportWriter) null, props, pars);
 	}
 
