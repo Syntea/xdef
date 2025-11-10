@@ -475,7 +475,7 @@ public final class CompileXonXdef extends XScriptParser {
 		if (len > 0) {
 			Object jo = array.get(0);
 			Object o = jo == null ? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
-			if (o != null && o instanceof JValue) {
+			if (jo != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				skipSpacesAndComments();
 				if (isToken(X_ONEOF_DIRECTIVE)) {
