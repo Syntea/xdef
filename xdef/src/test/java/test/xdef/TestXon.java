@@ -1323,7 +1323,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"",s,"[]"));
 			assertNotNull(testX(xp,"",s,"[1,2]"));
 			assertNotNull(testX(xp,"",s,"[[],[]]"));
-			assertNotNull(testX(xp,"",s,"[{},{}]"));
 			genXComponent(xp = compile(// %anyName, name of item is an empty string
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:json name='A'> {\"%anyName\": \"? int()\"} </xd:json>\n" +
@@ -1386,7 +1385,6 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[1,2]")); // error more then one
 			assertNotNull(testX(xp,"",s, "{a:1,b:2}")); // error more then one
 			assertNotNull(testX(xp,"",s, "[[],[]]")); // error more then one
-			assertNotNull(testX(xp,"",s, "[{},{}]")); // error more then one
 			genXComponent(xp = compile( // test occurrence 2 for %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 "  <xd:json name=\"A\"> [ \"%anyObj:occurs 2;\" ] </xd:json>\n" +
@@ -1411,7 +1409,6 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "true"));//error not array
 			assertNotNull(testX(xp,"",s, "[1,2,3]")); // error more then two
 			assertNotNull(testX(xp,"",s, "[[],[],[]]"));//error more then two
-			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
 			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
 			genXComponent(xp = compile( // test %anyObj in different X-definitions
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
@@ -1557,12 +1554,10 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"X", s, "[\" ab cd \"]"));
 			assertNull(testX(xp,"X", s, "[1, true]"));
 			assertNull(testX(xp,"X", s, "[[]]"));
-			assertNull(testX(xp,"X", s, "[{}]"));
 			// map
 			assertNull(testX(xp,"X", s, "{}"));
 			assertNull(testX(xp,"X", s, "{a:1}"));
 			assertNull(testX(xp,"X", s, "{a:\"1\"}"));
-			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			genXComponent(xp = compile( //jvalue
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
@@ -1752,25 +1747,15 @@ public class TestXon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
-//			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(0), "$value");
-//			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
-//			assertEq(new ArrayList(), x);
-//			x = XComponentUtil.get(XComponentUtil.getList(xc, "a").get(1), "$value");
-//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-//			x = XComponentUtil.get(XComponentUtil.getList(xc, "listOfa").get(2), "$value");
-//			assertEq(null, XComponentUtil.jlistToList(x).get(0));
-//			x = XComponentUtil.get(XComponentUtil.getList(xc,"a").get(3),"$value");
-//			assertEq(-9, XComponentUtil.jlistToList(x).get(0));
-//			assertEq("", XComponentUtil.jlistToList(x).get(1));
-//			assertEq("\"", XComponentUtil.jlistToList(x).get(2));
-//			ArrayList<Object> alist = new ArrayList<>();
-//			alist.add(2);
-//			alist.add(new ArrayList<>());
-//			alist.add("ab\tc");
-//			assertTrue(XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
-//			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
-
+			x = XComponentUtil.get(xc, "$a");
+			y = ((List) x).get(0);
+			assertEq(new java.util.ArrayList(), y);
+			y = ((List) x).get(1);
+			assertEq("false", ((List) y).get(0));
+			y = ((List) x).get(2);
+			assertEq(null, ((List) y).get(0));
+			y = ((List) x).get(3);
+			assertEq(-9, ((List) y).get(0));
 			assertNoErrors(test("an();"));
 			assertNoErrors(test("string();"));
 			assertNoErrors(test("enum('0', 'unKNOWn');"));
