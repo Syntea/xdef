@@ -94,6 +94,36 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xdef =
+"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" name = \"Example\" root = \"test\">\n" +
+"  <xd:json name = \"test\">\n" +
+"{ \"a\": \n" +
+"     {\n" +
+//"        \"%oneOf\": [\"b\", \"c\"],\n" +
+//"        \"b\": [\"occurs 0..*; string();\"],\n" +
+"        \"c\": \"int();\",\n" +
+"        \"b\": [\"%script: ?;\", \"occurs 0..*; string();\"],\n" +
+"        \"c\": \"? int();\",\n" +
+"        \"event\":\"string()\"\n" +
+"     }\n" +
+"}\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			jparse(xp, "Example", "{ \"a\": { \"event\":\"\", \"c\":1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xp, "Example", "{ \"a\": { \"event\":\"\", \"b\": [ \"u\" ] } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xp, "Example", "{ \"a\": { \"event\":\"\" } }", reporter);
+			assertErrorsAndClear(reporter);  // error
+			jparse(xp, "Example", "{ \"a\": { \"event\":\"\", \"b\": [ \"u\" ], \"c\":2 } }", reporter);
+			assertErrorsAndClear(reporter); // error
+			jparse(xp, "Example", "{ \"a\": { \"event\":\"\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
+			assertErrorsAndClear(reporter);  // error
+		} catch (Exception ex) {fail(ex);}
+if(true) return;
+/**/
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void x() {\n" +
