@@ -1383,7 +1383,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"",s, "[{a:1,b:2}]")); // OK
 			assertNotNull(testX(xp,"",s, "[]")); // error empty
 			assertNotNull(testX(xp,"",s, "[1,2]")); // error more then one
-			assertNotNull(testX(xp,"",s, "{a:1,b:2}")); // error more then one
+			assertNotNull(testX(xp,"",s, "{a:1,b:2}")); // error not array
 			assertNotNull(testX(xp,"",s, "[[],[]]")); // error more then one
 			genXComponent(xp = compile( // test occurrence 2 for %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1763,6 +1763,38 @@ public class TestXon extends XDTester {
 			assertNoErrors(test("base.rule('a');"));
 			assertNoErrors(test("BNF(base,'a');"));
 		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			xp = compile(
+"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" root = \"test\">\n" +
+"  <xd:json name = \"test\">\n" +
+"{ \"a\": \n" +
+"     {\n" +
+"        \"%oneOf\": [\"b\", \"c\"],\n" +
+"        \"b\": [\"occurs 1..*; string();\"],\n" +
+"        \"c\": \"int();\",\n" +
+"        \"event\":\"string()\"\n" +
+"     }\n" +
+"}\n" +
+"  </xd:json>\n" +
+"  <xd:component>%class "+_package+".oneOf_1 %link test</xd:component>\n"+
+"</xd:def>");
+			xd = xp.createXDDocument();
+			genXComponent(xp);
+			xc = xd.jparseXComponent("{ \"a\": { \"event\":\"x\", \"c\":1 } }" , null, reporter);
+			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
+			jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ] } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"a\": { \"event\":\"x\" } }", reporter);
+			assertErrorsAndClear(reporter);  // error
+			jparse(xd, "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ], \"c\":2 } }", reporter);
+			assertErrorsAndClear(reporter); // error
+			try { // ??? see runtimeException in elementEnd in CHKXONParser
+				jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
+			} catch (Exception ex) {if (!ex.getMessage().contains("XDEF507")) fail(ex);}
+			assertErrorsAndClear(reporter);  // error
+		} catch (Exception ex) {fail(ex);}
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
 		}
