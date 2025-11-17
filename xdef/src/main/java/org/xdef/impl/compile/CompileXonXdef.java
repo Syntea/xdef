@@ -348,6 +348,24 @@ public final class CompileXonXdef extends XScriptParser {
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode pn1, pn2;
 		Object val;
+		List<String> oneOfList = new ArrayList<>();
+		List<Object> sections;
+		SBuffer sbf;
+		if ((val = map.remove(X_ONEOF_DIRECTIVE)) != null && val instanceof JValue) {
+			String[] list = ((JValue) val).toString().split(X_ONEOF_DIRECTIVE);
+			for (int i = 1; i < list.length; i++) {
+				String x = list[i];
+				if (map.containsKey(x)) {
+					oneOfList.add(x);
+				} else {
+					SPosition spos = ((JValue)val).getPosition();
+					error(spos, XDEF.XDEF122, "'"+x+"'"); //Referred object not exists: &{0}
+				}
+			}
+			if (oneOfList.size() == 1) {
+				oneOfList.clear();
+			}
+		}
 		if ((val = map.remove(X_SCRIPT_DIRECTIVE)) != null && val instanceof JValue) {
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
@@ -359,8 +377,8 @@ public final class CompileXonXdef extends XScriptParser {
 				skipSemiconsBlanksAndComments();
 				if (!eos()) {
 					setXDAttr(pn2, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
-					List<Object> sectionList = parseXscript();
-					SBuffer item = removeSection("occurs", sectionList);
+					sections = parseXscript();
+					SBuffer item = removeSection("occurs", sections);
 					if (item != null) {
 						XOccurrence occ = new XOccurrence();
 						setSourceBuffer(item);
@@ -392,24 +410,55 @@ public final class CompileXonXdef extends XScriptParser {
 			pn1.addChildNode(pn2);
 		}
 		Object anyItem = null;
+		boolean allOneOfRequired = true;
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
 			Object o = entry.getValue();
 			if (key == null) { // ANY_NAME ... || ANY_NAME.equals(key)
 				anyItem = o;
 			} else {
+				boolean maxOccursErrorReported = false;
+				PNode pn3;
 				String keyXmlName = XonTools.toXmlName(key);
+				if (o instanceof Map || o instanceof List) {
+					pn3 = genXonModel(o, pn2);
+					if (!(_xdPrefix.equals(pn3.getPrefix()) && "choice".equals(pn3.getLocalName()))) {
+						updateKeyInfo(pn3, keyXmlName);
+					}
+				} else {
+					pn3 = genXonValue(keyXmlName, (JValue) o, pn2);
+					pn2.addChildNode(pn3);
+					maxOccursErrorReported = true;
+				}
+				PAttr xscr = getXDAttr(pn3, "script");
+				if (xscr != null) {
+					sbf = removeSection("occurs", parseXscript(xscr._value));
+					if (sbf != null) {
+						XOccurrence occ = new XOccurrence();
+						setSourceBuffer(sbf);
+						nextSymbol();
+						isOccurrence(occ);
+						if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
+							//Maximum occurrence of item "&{0}" can not be higher then 1
+							error(XDEF.XDEF535, key);
+							maxOccursErrorReported = true;
+						}
+					}
+					if (findSection("ref", parseXscript(xscr._value)) != null
+						&& "array".equals(pn3.getLocalName())) {
+						error(XDEF.XDEF311); //Incorrect reference to an array or map
+					}
+				}
 				if (o != null && (o instanceof Map || o instanceof List)) {
-					PNode pn3 = genXonModel(o, pn2);
-					PAttr xscr = getXDAttr(pn3, "script");
+					xscr = getXDAttr(pn3, "script");
 					if (xscr != null) {
-						SBuffer sbf = removeSection("occurs", parseXscript(xscr._value));
+						sbf = removeSection("occurs", parseXscript(xscr._value));
 						if (sbf != null) {
 							XOccurrence occ = new XOccurrence();
 							setSourceBuffer(sbf);
 							nextSymbol();
 							isOccurrence(occ);
-							if (occ.maxOccurs() > 1) {
+							if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
 								//Maximum occurrence of item "&{0}" can not be higher then 1
 								error(XDEF.XDEF535, key);
 							}
@@ -420,14 +469,51 @@ public final class CompileXonXdef extends XScriptParser {
 						}
 					}
 					if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
-						for (PNode pn : pn3.getChildNodes()) {
-							updateKeyInfo(pn, keyXmlName);
+						for (PNode x : pn3.getChildNodes()) {
+							updateKeyInfo(x, keyXmlName);
 						}
 					} else {
 						updateKeyInfo(pn3, keyXmlName);
 					}
-				} else {
-					pn2.addChildNode(genXonValue(keyXmlName, (JValue) o, pn2));
+				}
+				if (oneOfList.contains(key)) {
+					SBuffer sbf1;
+					if (xscr == null) {
+						sbf1 = new SBuffer("?;", pn3._name);
+						setXDAttr(pn3, "script", sbf1);
+						xscr = getXDAttr(pn3, "script");
+						sections = parseXscript(xscr._value);
+					} else {
+						sbf1 = removeSection("occurs", sections = parseXscript(xscr._value));
+						if (sbf1 != null) {
+							XOccurrence occ = new XOccurrence();
+							setSourceBuffer(sbf1);
+							nextSymbol();
+							isOccurrence(occ);
+							if (!occ.isRequired()) {
+								allOneOfRequired = false;
+							}
+						}
+						sections.add(0, "occurs");
+						sections.add(1, new SBuffer("occurs ?;", xscr._value));
+						sbf1 = xsToString(sections);
+					}
+					setXDAttr(pn3, "script", sbf1);
+					xscr = getXDAttr(pn3, "script");
+					sections = parseXscript(xscr._value);
+					sbf = removeSection("match", sections);
+					String t;
+					if (sbf != null && !(t=sbf.getString().trim()).isEmpty()) {
+						while (t.endsWith(";")) {
+							t = t.substring(t.length() - 1);
+						}
+						t += " AAND ($oneOf++)==0;";
+					} else {
+						t = "($oneOf++)==0;";
+					}
+					sections.add("match");
+					sections.add(new SBuffer(t, xscr._value));
+					setXDAttr(pn3, "script", xsToString(sections));
 				}
 			}
 		}
@@ -451,6 +537,41 @@ public final class CompileXonXdef extends XScriptParser {
 					pn2.addChildNode(pn3);
 				}
 			}
+		}
+		if (!oneOfList.isEmpty()) {
+			PAttr xscr = getXDAttr(pn1, "script");
+			if (xscr != null && xscr._value != null) {
+				sections = parseXscript(xscr._value);
+			} else {
+				sections = new ArrayList<>();
+			}
+			if ((sbf = findSection("var", sections)) == null) {
+				sections.add("var");
+				sections.add(new SBuffer("int $oneOf = 0;", pn1._name));
+			} else {
+				String s =  sbf.getString().trim();
+				if (s.endsWith(";")) {
+					s += ';';
+				}
+				s += "int $oneOf = 0;";
+				sbf.setString(s);
+			}
+			if (allOneOfRequired) {
+				sbf = findSection("finally", sections);
+				if (sbf == null) {
+					sections.add("finally");
+					sections.add(new SBuffer(
+						"if($oneOf==0) error ('XDEF241','Required oneOf item is missing');", pn1._name));
+				} else {
+					String s = sbf.getString();
+					if (!s.endsWith(";")) {
+						s += ';';
+					}
+					sbf.setString(s);
+				}
+			}
+			sbf = xsToString(sections);
+			setXDAttr(pn1, "script", sbf);
 		}
 		return pn1;
 	}
@@ -1096,19 +1217,19 @@ public final class CompileXonXdef extends XScriptParser {
 		public final void xdScript(final SBuffer name, final SBuffer value) {
 			SPosition spos = value == null ? name : value;
 			JValue jv;
-			switch (name.getString()) {
+			String s = name.getString();
+			switch (s) {
 				case X_ANY_NAME: namedValue(new SBuffer(null, name)); return;
 				case ANY_OBJ: putValue(new JAny((SPosition)name, value)); return;
 				case X_ONEOF_DIRECTIVE:
-					jv = new JValue(name,
-						new JValue(spos, X_ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
+					jv = new JValue(name, new JValue(spos, s + (value == null ? "" : value.getString())));
 					break;
 				default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
 			}
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
 			} else if (_kind == 2) { // map
-				_maps.peek().put(X_SCRIPT_DIRECTIVE, jv);
+				_maps.peek().put(s, jv);
 			}
 		}
 

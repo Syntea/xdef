@@ -12,7 +12,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefTelephone;
@@ -135,12 +137,50 @@ public final class XonReader extends StringParser implements XonParsers {
 				skipSpacesOrComments();
 				if (isChar(':') || (i > 2 && isChar('='))) {
 					skipSpacesOrComments();
-					XonTools.JValue jv = readSimpleValue();
-					if (!(jv.getValue() instanceof String)) {
-						error(JSON.JSON018); //Value must be string with X-script
+					if (i == 0 || i == 2) { // SCRIPT_DIRECTIVE
+						XonTools.JValue jv = readSimpleValue();
+						if (!(jv.getValue() instanceof String)) {
+							error(JSON.JSON018); //Value must be string with X-script
+						}
+						SBuffer value = jv.getSBuffer();
+						_jp.xdScript(name, value);
+					} else { // ONEOF_DIRECTIVE
+						if (isChar('[')) {
+							List<String> oneOfList = new ArrayList<>();
+							boolean endList = false;
+							spos = getPosition();
+							while(!endList && !eos()) {
+								skipSpacesOrComments();
+								if (isChar(']')) { // empty array
+									endList = true;
+								} else {
+									if (isChar('"')) {
+										String s = XonTools.readJString(this);
+										if (oneOfList.contains(s)) {
+											error(XDEF.XDEF240,s);//The name "&{0}" already exists in the list
+										} else {
+											oneOfList.add(s);
+										}
+										skipSpacesOrComments();
+										if (isChar(']')) {
+											break;
+										} else if (!isChar(',')) {
+											error(JSON.JSON002,",","]"); //"&{0}"&{1}{ or "}{"} expected
+											break;
+										}
+									} else {
+										error(JSON.JSON002,"name","]"); //"&{0}"&{1}{ or "}{"} expected
+										break;
+									}
+								}
+							}
+							StringBuilder sb = new StringBuilder();
+							for (String s: oneOfList) {
+								sb.append(s).append(X_ONEOF_DIRECTIVE);
+							}
+							_jp.xdScript(name, new SBuffer(sb.toString(), spos));
+						}
 					}
-					SBuffer value = jv.getSBuffer();
-					_jp.xdScript(name, value);
 				} else if (i == 0 || i == 2) { // $script
 					error(JSON.JSON002, i == 0 ? ":" : "="); //"&{0}"&{1}{ or "}{"} expected
 					_jp.xdScript(name, new SBuffer("", getPosition()));

@@ -4,9 +4,9 @@
 </xd:json>
 <xd:json name="B" >
   /** description: Test of reference to "%oneOf" */
-  {"%oneOf": "optional;",
-     "manager": "string()",
-     "subordinates":[ "* int();" ]
+  {"%oneOf": ["manager", "subordinates"],
+     "manager": "? string()",
+     "subordinates":["%script: ?;", "* int();" ]
   }
 </xd:json>
 </xd:def>

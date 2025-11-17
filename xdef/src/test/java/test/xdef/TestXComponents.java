@@ -493,9 +493,9 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
 "  <xd:json name='a'>\n" +
 "    {\n" +
-"      \"%oneOf\": \"optional;\",\n" +
-"      \"manager\": \"string()\",\n" +
-"      \"subordinates\":[ \"* string();\" ]\n" +
+"      \"%oneOf\": [\"manager\", \"subordinates\"],\n" +
+"      \"manager\": \"? string()\",\n" +
+"      \"subordinates\":[\"%script: ?;\", \"* string();\" ]\n" +
 "    }\n" +
 "  </xd:json>\n" +
 "</xd:def>";

@@ -10,7 +10,7 @@
                     "given": "optional string()"
                 },
                 "email": "emailAddr();",
-                "link": { "%oneOf": "optional",
+                "link": { "%oneOf": ["manager", "subordinates"],
                     "manager": "string();",
                     "subordinates": [ "occurs 0..* string() /* finally outln('xxx'); */" ]
                 }
