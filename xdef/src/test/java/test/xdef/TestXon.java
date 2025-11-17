@@ -1781,7 +1781,6 @@ public class TestXon extends XDTester {
 			xd = xp.createXDDocument();
 			genXComponent(xp);
 			xc = xd.jparseXComponent("{ \"a\": { \"event\":\"x\", \"c\":1 } }" , null, reporter);
-			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
 			jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":1 } }", reporter);
 			assertNoErrorsAndClear(reporter); //OK
 			jparse(xd, "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ] } }", reporter);
