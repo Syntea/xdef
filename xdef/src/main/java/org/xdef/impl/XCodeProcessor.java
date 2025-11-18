@@ -2880,7 +2880,7 @@ public final class XCodeProcessor {
 					String s = _stack[sp--].toString();
 					DefBNFRule br =  ((DefBNFGrammar) _stack[sp]).getRule(s);
 					if (br == null || br.isNull()) {
-						throwInfo(chkEl, XDEF.XDEF572, s); //BNF rule '&{0}' not exists
+						throwInfo(chkEl, XDEF.XDEF108, s); //BNF rule '&{0}' not exists in the grammar
 					}
 					_stack[sp] = br;
 					continue;
@@ -2905,7 +2905,7 @@ public final class XCodeProcessor {
 					DefParseResult result;
 					if (r.ruleValue() == null) {
 						result = new DefParseResult(s);
-						result.error(XDEF.XDEF567, ruleName); //Script error: BNF rule '&{0}' not exists
+						result.error(XDEF.XDEF108, ruleName); //BNF rule '&{0}' not exists in the grammar
 					} else {
 						result =  r.perform(s);
 						if (quoted) {

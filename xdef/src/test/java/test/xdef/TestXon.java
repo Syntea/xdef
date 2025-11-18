@@ -1780,20 +1780,27 @@ public class TestXon extends XDTester {
 "</xd:def>");
 			xd = xp.createXDDocument();
 			genXComponent(xp);
-			xc = xd.jparseXComponent("{ \"a\": { \"event\":\"x\", \"c\":1 } }" , null, reporter);
-			jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":1 } }", reporter);
+			json = "{ \"a\": { \"event\":\"x\", \"c\":1 } }";
+			x = (xd.jparseXComponent(json, null, reporter)).toXon();
+			assertNoErrorsAndClear(reporter);  // OK
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter); //OK
-			jparse(xd, "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ] } }", reporter);
+			assertEq(x, o);
+			json = "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ] } }";
+			x = (xd.jparseXComponent(json, null, reporter)).toXon();
+			assertNoErrorsAndClear(reporter);  // OK
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter); //OK
-			jparse(xd, "{ \"a\": { \"event\":\"x\" } }", reporter);
-			assertErrorsAndClear(reporter);  // error
-			jparse(xd, "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ], \"c\":2 } }", reporter);
-			assertErrorsAndClear(reporter); // error
-			try { // ??? see runtimeException in elementEnd in CHKXONParser
-				jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
-			} catch (Exception ex) {if (!ex.getMessage().contains("XDEF507")) fail(ex);}
-			assertErrorsAndClear(reporter);  // error
-		} catch (Exception ex) {fail(ex);}
+			assertEq(x, o);
+			json = "{ \"a\": { \"event\":\"x\" } }"; // oneOf item is missing in map
+			jparse(xd, json, reporter);
+			assertErrorsAndClear(reporter);  //XDEF241 Required item is missing in the map
+			json = "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ], \"c\":2 } }";
+			jparse(xd, json, reporter);
+			assertErrorsAndClear(reporter); //XDEF507: Not allowed item "c" in map
+			jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
+			assertErrorsAndClear(reporter);  //XDEF507: Not allowed item "b" in map
+		} catch (RuntimeException ex) {fail(ex);}
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
 		}

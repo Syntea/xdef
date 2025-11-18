@@ -560,8 +560,8 @@ public final class CompileXonXdef extends XScriptParser {
 				sbf = findSection("finally", sections);
 				if (sbf == null) {
 					sections.add("finally");
-					sections.add(new SBuffer(
-						"if($oneOf==0) error ('XDEF241','Required oneOf item is missing');", pn1._name));
+					sections.add(new SBuffer("if($oneOf==0) error("
+						+ "'XDEF241','Required oneOf item is missing in the map');", pn1._name));
 				} else {
 					String s = sbf.getString();
 					if (!s.endsWith(";")) {
