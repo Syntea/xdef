@@ -15,8 +15,7 @@ public class References {
 		if (x.getKind() == XMNode.XMELEMENT && ((XMElement) x).isReference()) {
 			XMNode xn = x;
 			System.out.println(x.getXDPosition());
-			while (xn.getKind() == XMNode.XMELEMENT
-			&& ((XMElement) xn).isReference()) {
+			while (xn.getKind() == XMNode.XMELEMENT && ((XMElement) xn).isReference()) {
 				XMElement xe = (XMElement) xn;
 				String xref = xe.getReferencePos();
 				System.out.println(" -> " + xref);
