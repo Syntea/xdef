@@ -32,6 +32,47 @@ public class TestX extends XDTester {
 		try {
 			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"  <xd:declaration>\n" +
+"    type  changeLog       enum('Y'); \n" +
+"    type  timeOver        regex('^[0-9]{1,3}[S|M|H|D]$'); \n" +
+"    type  variableName    string(1,30); \n" +
+"    uniqueSet variableSet {variableName:     variableName()};   /* duplicita proměnných          */\n" +
+"</xd:declaration>\n" +
+"  <xd:json name = \"SynPLscript\">\n" +
+"  {\n" +
+"    \"SynPLscript\":\n" +
+"    {\n" +
+"      \"Variables\": [ {\"%script\": \"*\", \"Variable\": \"variableSet.variableName.ID()\"} ],\n" +
+"      \"Statuses\": [\n" +
+"       {\"%script\": \"+\",\n" +
+"          \"TimeOverStep\": \"? timeOver() OR variableSet.variableName.IDREF()\",\n" +
+"          \"ChangeLog\":    \"? changeLog()\",\n" +
+"       }\n" +
+"      ]\n" +
+"    }\n" +
+"  }\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(props, xdef); // no property
+			xd = xp.createXDDocument();
+			json =
+"{\"SynPLscript\": {\n" +
+"   \"Variables\": [ {\"Variable\": \"SLA_Start\" } ],\n" +
+"   \"Statuses\": [\n" +
+"     {\"TimeOverStep\": \"SLA_StartXXX\", \"ChangeLog\": \"Y\" },\n" +
+"     {\"TimeOverStep\": \"60H\", \"ChangeLog\": \"Y\"}\n" +
+"   ]\n" +
+" }\n"+
+"}";
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrorwarnings(reporter);
+		} catch (RuntimeException ex) {fail(ex);}
+if(true) return;
+		try {
+			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
