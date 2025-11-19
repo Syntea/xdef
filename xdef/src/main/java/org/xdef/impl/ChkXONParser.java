@@ -163,10 +163,12 @@ final class ChkXONParser implements XParser, XonParser {
 		} else {
 			Element el = _chkDoc.getDocument().createElementNS(
 				parsedElem.getParsedNSURI(),parsedElem.getParsedName());
-			_element.appendChild(el);
+			if (_element != null) {
+				_element.appendChild(el);
+			}
 			_element = el;
 			addAttrs(parsedElem);
-			_chkEl = _chkEl.createChkElement(_element);
+			_chkEl = _chkEl.createChkElement(el);
 		}
 		if (_level >= _chkElemStack.length) { //increase nodelist
 			ChkElement[] newList = new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];

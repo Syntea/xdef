@@ -35,9 +35,9 @@ public class TestX extends XDTester {
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
-"  { %script= \"occurs 1..*\",\n" +
+"  { \"%script\": \"occurs 1..*\",\n" +
 "    \"Name\": \"string()\",\n" +
-"    \"Genre\": [ %oneOf,\n" +
+"    \"Genre\": [ \"%oneOf:\",\n" +
 "      \"string()\",\n" +
 "       [\"occurs 1..* string()\"]\n" +
 "    ]\n" +
@@ -67,8 +67,8 @@ public class TestX extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
-"{ %oneOf= \"optional;\",\n" +
-"  \"manager\": \"string()\",\n" +
+"{ \"%oneOf\": [\"manager\", \"subordinates\"],\n" +
+"  \"manager\": \"?string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
 " </xd:json>\n"+
@@ -120,10 +120,10 @@ public class TestX extends XDTester {
 " <xd:json name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
-"       { %script= \"occurs 1..*\",\n" +
+"       { \"%script\": \"occurs 1..*\",\n" +
 "         \"from\": [\n" +
 "           \"string()\",\n" +
-"           {%script= \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
+"           {\"%script\": \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
 "    	  ]\n" +
 "        }\n" +
 "      ]\n" +

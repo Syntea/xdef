@@ -1076,6 +1076,38 @@ public class TestJsonXdef extends XDTester {
 			jparse(xp, "X9", json, reporter);
 			assertNoErrorsAndClear(reporter);
 		} catch (SRuntimeException ex) {fail(ex);}
+		try {
+			xd = compile(
+"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" xd:root = \"SynPLscript\">\n" +
+"  <xd:json name = \"SynPLscript\"> \n" +
+"    { \"Statuses\": [\n" +
+"        {  \"Status\": \"string()\",\n" +
+"           \"Events\": [\n" +
+"              {\"%script\": \"+\",\n" +
+"                 \"Event\": \"string()\",\n" +
+"                 \"UserRoleAny\": [\"1..* string()\"]\n" +
+"              }\n" +
+"           ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			xd.jparse(
+"{ \"Statuses\": [\n" +
+"    { \"Status\": \"INIT\",\n" +
+"      \"Events\": [{\"Event\": \"Start\", \"UserRoleAny\": [\"Reporter\", \"PM\"] }]\n" +
+"    },\n" +
+"    {\"Status\": \"ANY\",\n" +
+"      \"Events\": [\n" +
+"        {\"Event\": \"TimeOver_\", \"UserRoleAny\": [\"#WF\"]},\n" +
+"        {\"Event\": \"TaskRole\", \"UserRoleAny\": [\"Reporter\",\"PM\"]}\n" +
+"      ]\n" +
+"    }\n" +
+"  ]\n" +
+"}", reporter);
+			assertErrorsAndClear(reporter); //E XDEF507: Not allowed item in array
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}

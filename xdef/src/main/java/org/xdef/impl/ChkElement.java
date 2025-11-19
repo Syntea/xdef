@@ -175,8 +175,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				&& "true".equals(_element.getAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI,"nil"))){
 				_nil = true;
 			}
-		}
-		if (!_ignoreAll && _element != null) {
 			if (_xElement._xon > 0) { //XON
 				if (_element.hasAttribute(X_KEYATTR)) {
 					_xonKey = XonTools.xmlToJName(_element.getAttribute(X_KEYATTR));
@@ -2665,7 +2663,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (_ignoreAll) { //all checks are ignored (undef element)
 			if (_element!=null && (_elemValue = _parent.getElement())!=null) {
-				_elemValue.removeChild(_element);
+				try {
+					_elemValue.removeChild(_element);
+				} catch (RuntimeException ex) {}
 			}
 			//let's garbage collector do the job
 			_chkChildNodes = null;
