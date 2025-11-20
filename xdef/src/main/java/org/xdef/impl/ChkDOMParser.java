@@ -331,5 +331,6 @@ class ChkDOMParser extends SReporter {
 	final void xparse(final ChkDocument chkDoc) {
 		setReportWriter(chkDoc.getReportWriter());
 		new DOMValidate().xvalidate(chkDoc, _elem);
+		chkDoc.endDocument(); // close documet (if it was not closed)
 	}
 }
