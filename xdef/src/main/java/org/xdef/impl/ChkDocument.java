@@ -444,6 +444,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	final ChkElement createRootChkElement(final Element element, final boolean checkRoot) {
 		String uri = element.getNamespaceURI();
 		String name = element.getNodeName();
+		_documentClosed = false;
 		_element = element;
 		if (_xElement == null) {
 			int languageId = isCreateMode() ? _destLanguageID:_sourceLanguageID;
@@ -624,6 +625,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
 		_chkRoot.initElem();
 		return _chkRoot;
 	}
+
+	final void startDocument() {_documentClosed = false;}
 
 	final void endDocument() {
 		if (!_documentClosed) {
@@ -1363,6 +1366,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
+		_documentClosed = false;
 		Class<?> yClass  = xClass;
 		if (data == null || data instanceof Map) {
 			@SuppressWarnings("unchecked")
@@ -1714,14 +1718,16 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	 */
 	private Element xparse(final XParser parser, final ReportWriter reporter) {
 		Element result;
+		startDocument();
+		_reporter = parser.getReporter();
 		try {
-			_reporter = parser.getReporter();
 			_scp.setStdErr(new DefOutStream(_reporter.getReportWriter()));
 			_refNum = 0; // we must clear counter!
 			parser.xparse(this);
 			_xElement = null;
 			result = chkAndGetRootElement(parser.getReporter(), reporter==null);
 			parser.closeReader();
+			endDocument();
 			_xon = _chkRoot.getXon();//prepare XON
 			return result;
 		} catch (SRuntimeException ex) {
@@ -1738,8 +1744,10 @@ final class ChkDocument extends ChkNode implements XDDocument {
 				if (parser != null) {
 					parser.closeReader();
 				}
+				endDocument();
 				return null;
 			}
+			endDocument();
 			if (parser != null) {
 				parser.closeReader();
 			}
@@ -1748,6 +1756,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
 			}
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		} catch (SError e) {
+			endDocument();
 			Report rep = e.getReport();
 			if (rep == null || !"XDEF906".equals(rep.getMsgID())) { //X-definition canceled
 				throw e;
@@ -1924,6 +1933,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
+		_documentClosed = false;
 		Class<?> yClass  = xClass;
 		Object o = getSource(data);
 		if (o==null || o instanceof Map || o instanceof List || o instanceof Number || o instanceof Boolean) {

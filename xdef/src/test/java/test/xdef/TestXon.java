@@ -1803,8 +1803,13 @@ public class TestXon extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xd = compile(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='SynPLscript'>\n" +
-"  <xd:declaration>uniqueSet variableSet {variableName: string()};/* variable duplicity*/</xd:declaration>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='SynPLscript | A'>\n" +
+"  <xd:declaration>uniqueSet variableSet {variableName: string(1,30)};/*check duplicity*/</xd:declaration>\n"+
+"  <A>\n" +
+"    <Variables xd:script='*' name='variableSet.variableName.ID()'/>\n" +
+"    <Status xd:script='*' TimeOverStep='? variableSet.variableName.IDREFS()' ChangeLog='? string()' />\n" +
+"  </A>\n" +
+"\n" +
 "  <xd:json name = 'SynPLscript'>\n" +
 "  {\n" +
 "    \"SynPLscript\":\n" +
@@ -1812,30 +1817,36 @@ public class TestXon extends XDTester {
 "      \"Variables\": [ {\"%script\": \"*\", \"Variable\": \"variableSet.variableName.ID()\"} ],\n" +
 "      \"Statuses\": [\n" +
 "       {\"%script\": \"+\",\n" +
-"          \"a\": \"? string()\",\n" + //OK if this line is removed
-"          \"b\": \"? variableSet.variableName.IDREFS()\",\n" +
+//"          \"TimeOverStep\": \"? variableSet.variableName.CHKIDS()\",\n" +
+"          \"TimeOverStep\": \"? variableSet.variableName.IDREFS()\",\n" +
+"          \"ChangeLog\": \"? string()\",\n" +
 "       }\n" +
 "      ]\n" +
 "    }\n" +
 "  }\n" +
 "  </xd:json>\n" +
 "</xd:def>").createXDDocument();
-			json =
+			parse(xd,
+"<A>\n" +
+"    <Variables name='SLA'/>\n" +
+"    <Status TimeOverStep='SLA_XX'/>\n" +
+"      <Status TimeOverStep='60H'/>\n" +
+"</A>", reporter);
+			assertErrorsAndClear(reporter);
+			xd.jparse(
 "{\"SynPLscript\": {\n" +
-"   \"Variables\": [ {\"Variable\": \"SLA_Start\" } ],\n" +
+"   \"Variables\": [ {\"Variable\": \"SLA\" } ],\n" +
 "   \"Statuses\": [\n" +
-"     {\"TimeOverStep\": \"SLA_Start_XXX\", \"ChangeLog\": \"Y\" },\n" +
+"     {\"TimeOverStep\": \"SLA_XX\", \"ChangeLog\": \"Y\" },\n" +
 "     {\"TimeOverStep\": \"60H\", \"ChangeLog\": \"Y\"}\n" +
 "   ]\n" +
 " }\n"+
-"}";
-			xd.jparse(json, reporter);
+"}", reporter);
 			assertErrorsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
 		}
-
 		clearTempDir(); // clear temporary directory
 	}
 
