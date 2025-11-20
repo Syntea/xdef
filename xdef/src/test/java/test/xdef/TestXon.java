@@ -1804,21 +1804,18 @@ public class TestXon extends XDTester {
 		try {
 			xd = compile(
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='SynPLscript | A'>\n" +
-"  <xd:declaration>uniqueSet variableSet {variableName: string(1,30)};/*check duplicity*/</xd:declaration>\n"+
+"  <xd:declaration>uniqueSet variableSet {variableName: string(2,30)};/*check duplicity*/</xd:declaration>\n"+
 "  <A>\n" +
 "    <Variables xd:script='*' name='variableSet.variableName.ID()'/>\n" +
-"    <Status xd:script='*' TimeOverStep='? variableSet.variableName.IDREFS()' ChangeLog='? string()' />\n" +
+"    <Status xd:script='*' TimeOverStep='? string(1) || variableSet.variableName.IDREFS()' ChangeLog='? string()' />\n" +
 "  </A>\n" +
 "\n" +
-"  <xd:json name = 'SynPLscript'>\n" +
-"  {\n" +
-"    \"SynPLscript\":\n" +
-"    {\n" +
-"      \"Variables\": [ {\"%script\": \"*\", \"Variable\": \"variableSet.variableName.ID()\"} ],\n" +
+"  <xd:json name='SynPLscript'>\n" +
+"  { \"SynPLscript\":\n" +
+"    { \"Variables\": [ {\"%script\": \"*\", \"Variable\": \"variableSet.variableName.ID()\"} ],\n" +
 "      \"Statuses\": [\n" +
 "       {\"%script\": \"+\",\n" +
-//"          \"TimeOverStep\": \"? variableSet.variableName.CHKIDS()\",\n" +
-"          \"TimeOverStep\": \"? variableSet.variableName.IDREFS()\",\n" +
+"          \"TimeOverStep\": \"? string(1) || variableSet.variableName.IDREFS()\",\n" +
 "          \"ChangeLog\": \"? string()\",\n" +
 "       }\n" +
 "      ]\n" +
@@ -1829,20 +1826,22 @@ public class TestXon extends XDTester {
 			parse(xd,
 "<A>\n" +
 "    <Variables name='SLA'/>\n" +
-"    <Status TimeOverStep='SLA_XX'/>\n" +
-"      <Status TimeOverStep='60H'/>\n" +
+"    <Status TimeOverStep='SLX' ChangeLog='Y'/>\n" +
+"    <Status TimeOverStep='*' ChangeLog='Y'/>\n" +
 "</A>", reporter);
-			assertErrorsAndClear(reporter);
+			assertTrue(reporter.getErrorCount() == 1);
+			reporter.clear();
 			xd.jparse(
 "{\"SynPLscript\": {\n" +
 "   \"Variables\": [ {\"Variable\": \"SLA\" } ],\n" +
 "   \"Statuses\": [\n" +
-"     {\"TimeOverStep\": \"SLA_XX\", \"ChangeLog\": \"Y\" },\n" +
-"     {\"TimeOverStep\": \"60H\", \"ChangeLog\": \"Y\"}\n" +
+"     {\"TimeOverStep\": \"SLX\", \"ChangeLog\": \"Y\"},\n" +
+"     {\"TimeOverStep\": \"*\", \"ChangeLog\": \"Y\"}\n" +
 "   ]\n" +
 " }\n"+
 "}", reporter);
-			assertErrorsAndClear(reporter);
+			assertTrue(reporter.getErrorCount() == 1);
+			reporter.clear();
 		} catch (RuntimeException ex) {fail(ex);}
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
