@@ -285,6 +285,7 @@ class ChkDOMParser extends SReporter {
 				chkDoc.getReporter(),
 				props,
 				chkDoc._userObject);
+			_chkDoc.startDocument();
 			_chkDoc._scp = scp;
 			_doc = _chkDoc.getDocument();
 			setReportWriter(chkDoc.getReporter().getReportWriter());
@@ -330,7 +331,8 @@ class ChkDOMParser extends SReporter {
 	 */
 	final void xparse(final ChkDocument chkDoc) {
 		setReportWriter(chkDoc.getReportWriter());
+		chkDoc.startDocument();
 		new DOMValidate().xvalidate(chkDoc, _elem);
-		chkDoc.endDocument(); // close documet (if it was not closed)
+		chkDoc.endDocument();
 	}
 }
