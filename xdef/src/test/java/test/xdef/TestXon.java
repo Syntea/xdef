@@ -1801,6 +1801,37 @@ public class TestXon extends XDTester {
 			jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
 			assertErrorsAndClear(reporter);  //XDEF507: Not allowed item "b" in map
 		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			xd = compile(
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='SynPLscript'>\n" +
+"  <xd:declaration>uniqueSet variableSet {variableName: string()};/* variable duplicity*/</xd:declaration>\n" +
+"  <xd:json name = 'SynPLscript'>\n" +
+"  {\n" +
+"    \"SynPLscript\":\n" +
+"    {\n" +
+"      \"Variables\": [ {\"%script\": \"*\", \"Variable\": \"variableSet.variableName.ID()\"} ],\n" +
+"      \"Statuses\": [\n" +
+"       {\"%script\": \"+\",\n" +
+"          \"a\": \"? string()\",\n" + //OK if this line is removed
+"          \"b\": \"? variableSet.variableName.IDREFS()\",\n" +
+"       }\n" +
+"      ]\n" +
+"    }\n" +
+"  }\n" +
+"  </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			json =
+"{\"SynPLscript\": {\n" +
+"   \"Variables\": [ {\"Variable\": \"SLA_Start\" } ],\n" +
+"   \"Statuses\": [\n" +
+"     {\"TimeOverStep\": \"SLA_Start_XXX\", \"ChangeLog\": \"Y\" },\n" +
+"     {\"TimeOverStep\": \"60H\", \"ChangeLog\": \"Y\"}\n" +
+"   ]\n" +
+" }\n"+
+"}";
+			xd.jparse(json, reporter);
+			assertErrorsAndClear(reporter);
+		} catch (RuntimeException ex) {fail(ex);}
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
 		}

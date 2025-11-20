@@ -131,6 +131,9 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	private SDatetime _specialDates[];
 	/** Switch to check if date is legal. */
 	private boolean _stopCheckDateLegal;
+
+	/** Flag document is clesed. */
+	private boolean _documentClosed;
 	////////////////////////////////////////////////////////////////////////////
 	/** XON object, result of XON/JSON parsing */
 	Object _xon;
@@ -140,7 +143,11 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	/** Create new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
 	 */
-	private ChkDocument() {super("$root", null); _chkChildNodes = new ArrayList<>();}
+	private ChkDocument() {
+		super("$root", null);
+		_chkChildNodes = new ArrayList<>();
+		_documentClosed = false;
+	}
 
 	/** Create new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
@@ -619,20 +626,23 @@ final class ChkDocument extends ChkNode implements XDDocument {
 	}
 
 	final void endDocument() {
-		if (_xdef != null) {
-			if (_xdef._finaly >= 0) {
-				_chkRoot.setXXType((byte) 'D');
-				_scp.exec(_xdef._finaly, _chkRoot);
-			} else {
-				debugXPos(XDDebug.FINALLY);
+		if (!_documentClosed) {
+			_documentClosed = true;
+			if (_xdef != null) {
+				if (_xdef._finaly >= 0) {
+					_chkRoot.setXXType((byte) 'D');
+					_scp.exec(_xdef._finaly, _chkRoot);
+				} else {
+					debugXPos(XDDebug.FINALLY);
+				}
 			}
+			if (_scp.getXmlStreamWriter() != null) {
+				_scp.getXmlStreamWriter().flushStream();
+			}
+			// Check unresolved IdRefs (print errors) and clear memory.
+			_scp.endXDProcessing(); //TODO???
+			copyTemporaryReports();
 		}
-		if (_scp.getXmlStreamWriter() != null) {
-			_scp.getXmlStreamWriter().flushStream();
-		}
-		// Check unresolved IdRefs (print errors) and clear memory.
-		_scp.endXDProcessing(); //TODO???
-		copyTemporaryReports();
 	}
 
 	/** Throw SRuntimeException If noreporter is true Check if the property XDPROPERTY_WARNINGS is true,

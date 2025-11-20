@@ -1,9 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.31, release-date 2025-11-19
+# Version 42.2.31, release-date 2025-11-20
 * The %oneOf directive in the JSON map is now recorded as an array of names of named items. If all variants
   from the list are described as required, exactly one of the variants must be present in the data. If any
   variant in the list is described as optional, no variant from the list needs to be present in the data.
+* Fixed a bug when processing JSON containing the IDREFS() method.
 
 # Version 42.2.30, release-date 2025-11-01
 * The type of value of result of methods `ENTITIES` and `NMTOKENS` in XComponent is `List<String>`
