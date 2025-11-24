@@ -6,52 +6,52 @@ package bugreports;
 public class XCStatuses implements org.xdef.component.XComponent{
   public XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$Status(){
-    return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
+	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
   public XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$ActionCode(){
-    return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
+	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
   public XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$TimeOverStep(){
-    return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
+	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
   public XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
   public String get$ChangeLog(){
-    return _jx$item_3==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_3.getval());
+	return _jx$item_3==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_3.getval());
   }
   public XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array getjx$array() {return _jx$array;}
   public java.util.List<Object> get$Events() {
-    return _jx$array == null? null: _jx$array.toXon();
+	return _jx$array == null? null: _jx$array.toXon();
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
   public void setjx$item(XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$Status(String x){
-    if(x==null) _jx$item=null; else {
-      if(_jx$item==null) setjx$item(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item());
-      _jx$item.setval(x);
-    }
+	if(x==null) _jx$item=null; else {
+	  if(_jx$item==null) setjx$item(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item());
+	  _jx$item.setval(x);
+	}
   }
   public void setjx$item_1(XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$ActionCode(String x){
-    if(x==null) _jx$item_1=null; else {
-      if(_jx$item_1==null) setjx$item_1(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1());
-      _jx$item_1.setval(x);
-    }
+	if(x==null) _jx$item_1=null; else {
+	  if(_jx$item_1==null) setjx$item_1(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1());
+	  _jx$item_1.setval(x);
+	}
   }
   public void setjx$item_2(XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
   public void set$TimeOverStep(String x){
-    if(x==null) _jx$item_2=null; else {
-      if(_jx$item_2==null) setjx$item_2(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2());
-      _jx$item_2.setval(x);
-    }
+	if(x==null) _jx$item_2=null; else {
+	  if(_jx$item_2==null) setjx$item_2(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2());
+	  _jx$item_2.setval(x);
+	}
   }
   public void setjx$item_3(XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
   public void set$ChangeLog(String x){
-    if(x==null) _jx$item_3=null; else {
-      if(_jx$item_3==null) setjx$item_3(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3());
-      _jx$item_3.setval(x);
-    }
+	if(x==null) _jx$item_3=null; else {
+	  if(_jx$item_3==null) setjx$item_3(new XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3());
+	  _jx$item_3.setval(x);
+	}
   }
   public void setjx$array(XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array x) {_jx$array=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -62,17 +62,17 @@ public class XCStatuses implements org.xdef.component.XComponent{
   private XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array _jx$array;
   @Override
   public java.util.Map<String, Object> toXon(){
-    return org.xdef.component.XComponentUtil.toXonMap(this);
+	return org.xdef.component.XComponentUtil.toXonMap(this);
   }
   @Override
   public org.w3c.dom.Element toXml()
-    {return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
   @Override
   public String xGetNodeName() {return XD_NodeName;}
   @Override
   public void xInit(org.xdef.component.XComponent p,
-    String name, String ns, String xdPos) {
-    XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
   }
   @Override
   public String xGetNamespaceURI() {return XD_NamespaceURI;}
@@ -99,47 +99,47 @@ public class XCStatuses implements org.xdef.component.XComponent{
   public static final byte XON = 1;
   @Override
   public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
-    java.util.List<org.xdef.component.XComponent> a=new java.util.ArrayList<>();
-    org.xdef.component.XComponentUtil.addXC(a, getjx$item());
-    org.xdef.component.XComponentUtil.addXC(a, getjx$item_1());
-    org.xdef.component.XComponentUtil.addXC(a, getjx$item_2());
-    org.xdef.component.XComponentUtil.addXC(a, getjx$item_3());
-    org.xdef.component.XComponentUtil.addXC(a, getjx$array());
-    return a;
+	java.util.List<org.xdef.component.XComponent> a=new java.util.ArrayList<>();
+	org.xdef.component.XComponentUtil.addXC(a, getjx$item());
+	org.xdef.component.XComponentUtil.addXC(a, getjx$item_1());
+	org.xdef.component.XComponentUtil.addXC(a, getjx$item_2());
+	org.xdef.component.XComponentUtil.addXC(a, getjx$item_3());
+	org.xdef.component.XComponentUtil.addXC(a, getjx$array());
+	return a;
   }
   @Override
   public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
-    org.w3c.dom.Element el;
-    if (doc==null) {
-      doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,XD_NodeName,null);
-      el = doc.getDocumentElement();
-    } else {
-      el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
-      if (doc.getDocumentElement()==null) doc.appendChild(el);
-    }
-    for (org.xdef.component.XComponent x: xGetNodeList())
-      el.appendChild(x.toXml(doc));
-    return el;
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,XD_NodeName,null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	  if (doc.getDocumentElement()==null) doc.appendChild(el);
+	}
+	for (org.xdef.component.XComponent x: xGetNodeList())
+	  el.appendChild(x.toXml(doc));
+	return el;
   }
   public XCStatuses() {}
   public XCStatuses(org.xdef.component.XComponent p,
-    String name, String ns, String xPos, String XDPos) {
-    XD_NodeName=name; XD_NamespaceURI=ns;
-    XD_XPos=xPos;
-    XD_Model=XDPos;
-    XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
   }
   public XCStatuses(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
-    org.w3c.dom.Element el=x.getElement();
-    XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
-    XD_XPos=x.getXPos();
-    XD_Model=x.getXMElement().getXDPosition();
-    XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
-    if (!"8926B52AAF559FA547FEB292BD32373132A6DAD485B4DEA5F213A56A7F4C51E6".equals(
-      x.getXMElement().getDigest())) { //incompatible element model
-      throw new org.xdef.sys.SRuntimeException(
-        org.xdef.msg.XDEF.XDEF374);
-    }
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
+	if (!"8926B52AAF559FA547FEB292BD32373132A6DAD485B4DEA5F213A56A7F4C51E6".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
   }
   public static final String XD_NAME="Statuses";
   private org.xdef.component.XComponent XD_Parent;
@@ -156,24 +156,24 @@ public class XCStatuses implements org.xdef.component.XComponent{
   public void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){
-    switch(x.getXMElement().getXDPosition()) {
-      case "Statuses#Statuses/jx:map/$mixed/jx:item": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item(this, x);
-      case "Statuses#Statuses/jx:map/$mixed/jx:item[2]": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1(this, x);
-      case "Statuses#Statuses/jx:map/$mixed/jx:item[3]": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2(this, x);
-      case "Statuses#Statuses/jx:map/$mixed/jx:item[4]": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3(this, x);
-      default: return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array(this, x); // Statuses#Statuses/jx:map/$mixed/jx:array
-    }
+	switch(x.getXMElement().getXDPosition()) {
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item(this, x);
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item[2]": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1(this, x);
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item[3]": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2(this, x);
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item[4]": return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3(this, x);
+	  default: return new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array(this, x); // Statuses#Statuses/jx:map/$mixed/jx:array
+	}
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x) {
-    x.xSetNodeIndex(XD_ndx++);
-    switch(x.xGetModelPosition()) {
-      case "Statuses#Statuses/jx:map/$mixed/jx:item": setjx$item((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item)x); break;
-      case "Statuses#Statuses/jx:map/$mixed/jx:item[2]": setjx$item_1((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1)x); break;
-      case "Statuses#Statuses/jx:map/$mixed/jx:item[3]": setjx$item_2((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2)x); break;
-      case "Statuses#Statuses/jx:map/$mixed/jx:item[4]": setjx$item_3((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3)x); break;
-      default: setjx$array((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array)x); //Statuses#Statuses/jx:map/$mixed/jx:array
-    }
+	x.xSetNodeIndex(XD_ndx++);
+	switch(x.xGetModelPosition()) {
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item": setjx$item((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item)x); break;
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item[2]": setjx$item_1((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1)x); break;
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item[3]": setjx$item_2((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2)x); break;
+	  case "Statuses#Statuses/jx:map/$mixed/jx:item[4]": setjx$item_3((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3)x); break;
+	  default: setjx$array((bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array)x); //Statuses#Statuses/jx:map/$mixed/jx:array
+	}
   }
   @Override
   public void xSetAny(org.w3c.dom.Element el) {}
