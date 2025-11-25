@@ -264,7 +264,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	@Override
 	public void xparse(final XDDocument chkDoc) {
 		_chkDoc = (ChkDocument) chkDoc;
-		_doc = _chkDoc._doc;
+		_doc = _chkDoc.getDocument();
 		chkDoc.getReporter();
 		_p.parse();
 		_chkDoc._xon = _chkEl._xonArray != null ? _chkEl._xonArray

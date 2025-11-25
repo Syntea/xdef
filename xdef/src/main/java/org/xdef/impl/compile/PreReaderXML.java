@@ -403,8 +403,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			return;
 		}
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("xon".equals(_actPNode._localName) || "json".equals(_actPNode._localName) //json
-				|| "ini".equals(_actPNode._localName)) { // ini
+			if ("json".equals(_actPNode._localName) || "ini".equals(_actPNode._localName)) { // json or ini
 				if (_level != 1) {
 					//JSON model can be declared only as a child of X-definition
 					error(_actPNode._value, XDEF.XDEF310, _actPNode._localName);
@@ -434,8 +433,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				for (PAttr pattr:  pnode.getAttrs()) {
 					error(pattr._value, XDEF.XDEF254, pattr._name); //Attribute '&{0}' not allowed here
 				}
-				String anyXpos = compileXon.genXdef(
-					pnode, xdname.equals("json") ? "xon" : xdname, sval, _pcomp.getReportWriter());
+				String anyXpos = compileXon.genXdef(pnode,
+					xdname.equals("json") ? "xon" : xdname, sval, _pcomp.getReportWriter());
 				pnode._name = paName!=null ? paName._value : new SBuffer("");
 				pnode._localName = paName!=null ? paName._value.getString(): "";
 				pnode._nsURI = null; // set no namespace

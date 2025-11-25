@@ -33,6 +33,7 @@ import org.xdef.xon.XonNames;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
+import static test.XDTester.chkCompoinentSerializable;
 
 /** Test processing JSON objects with Xdefinitions and X-components.
  * @author Vaclav Trojan
@@ -302,7 +303,7 @@ public class TestJsonXdef extends XDTester {
 					result += (result.isEmpty() ? "" : "\n") + "Error X-component toJsjon " + id + "\n"
 						+ XonUtils.toJsonString(json) + "\n" + XonUtils.toJsonString(o) + "\n";
 				}
-				// test to parse cXON from X-component
+				// test to parse XON from X-component
 				xc = xp.createXDDocument("Test"+id).jparseXComponent(xc.toXon(),
 					Class.forName("test.common.json.component.Test"+id), null);
 				assertEq("", chkCompoinentSerializable(xc));
@@ -522,7 +523,7 @@ public class TestJsonXdef extends XDTester {
 		// Other tests
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Person' root='Person'>\n"+
 "  <xd:json name=\"Person\">\n"+
 "    { \"Person\": { \"Name\": \"jstring(1, 50);\",\n" +
 "        \"Pay\": \"int(1000, 99999);\",\n" +
@@ -562,11 +563,11 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Person_list'>\n"+
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
-"        { %script= \"occurs 1..*;\",\n"+
+"        { \"%script\": \"occurs 1..*;\",\n"+
 "          \"Person\": { \"Name\": \"string(1, 50)\",\n" +
 "             \"Pay\": \"int(1000, 99999)\",\n" +
 "             \"Birth date.\": \"date()\"\n" +
@@ -608,11 +609,11 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Person_list'>\n"+
 "  <xd:json name=\"Person_list\">\n"+
 "    { \"Seznam\": \n"+
 "      [\n"+
-"        { %script = \"occurs 1..*; ref Person\" }\n"+
+"        { \"%script\": \"occurs 1..*; ref Person\" }\n"+
 "      ]\n"+
 "    }\n"+
 "  </xd:json>\n"+
@@ -656,10 +657,10 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Matrix'>\n"+
 "  <xd:json name=\"Matrix\">\n"+
 "    [\n" +
-"      [ %script=\"occurs 3;\",\n" +
+"      [ \"%script:occurs 3;\",\n" +
 "        \"occurs 3; float()\"\n" +
 "      ]\n" +
 "    ]\n"+
@@ -680,12 +681,12 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Matrix", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "  <xd:json name=\"Skladby\">\n"+
 "    [\n" +
-"      { %script= \"occurs 1..*;\",\n" +
+"      { \"%script\": \"occurs 1..*;\",\n" +
 "         \"Name\": \"string()\",\n" +
-"         \"Style\": [ %oneOf,\n" +
+"         \"Style\": [ \"%oneOf\",\n" +
 "           \"string()\",\n" +
 "           [ \"occurs 2..* string()\" ]\n" +
 "         ]\n" +
@@ -752,10 +753,8 @@ public class TestJsonXdef extends XDTester {
 			parse(xp, "", el, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
-"  <xd:json name='B'>\n"+
-"    [%script=\"init out('a');finally out('b')\",\"int();finally out('x')\"]\n"+
-"  </xd:json>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='B'>\n"+
+"  <xd:json name='B'> [\"%script:init out('a');finally out('b')\",\"int();finally out('x')\"] </xd:json>\n"+
 "</xd:def>\n";
 			xd = compile(xdef).createXDDocument();
 			swr = new StringWriter();
@@ -796,9 +795,9 @@ public class TestJsonXdef extends XDTester {
 "   B=int(); finally out(\"B\");\n" +
 "   C=date(); finally out(\"C\");\n" +
 "   D=decimal(); finally out(\"D\");\n" +
-"   [E ; %script = optional; finally out(\"[E]\");]\n" +
+"   [E] optional; finally out(\"[E]\");\n" +
 "     x = ?int(); finally out(\"x\");\n" +
-"   [F;%script=finally out(\"[F]\");]\n" +
+"   [F]finally out(\"[F]\");\n" +
 " </xd:ini>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -858,9 +857,9 @@ public class TestJsonXdef extends XDTester {
 "   B=int()\n" +
 "   C=date()\n" +
 "   D=decimal()\n" +
-"   [ E-F.G ; %script=?]\n" +
+"   [E-F.G] ? /*this is optional section*/\n" +
 "     x = ?int()\n" +
-"   [ F ]\n" +
+"   [ F ] /*this is required section*/\n" +
 " </xd:ini>\n"+
 " <xd:component>\n" +
 "  %class "+_package+".TestINI %link TestINI#a" + ";\n" +
@@ -870,6 +869,7 @@ public class TestJsonXdef extends XDTester {
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument("TestINI");
 			xc = xd.iparseXComponent(ini, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("a", XComponentUtil.get(xc, "$A"));
 			assertEq(1, XComponentUtil.get(xc, "$B"));
@@ -879,6 +879,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("b", XComponentUtil.get(xc, "$A"));
 			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[F]";
 			xc = xd.iparseXComponent(ini, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq("a", XComponentUtil.get(xc, "$A"));
 			assertEq(1, XComponentUtil.get(xc, "$B"));
@@ -906,9 +907,7 @@ public class TestJsonXdef extends XDTester {
 "      \"* ipAddr()\"\n" +
 "    ]\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n"+
-"    %class "+_package+".X_on %link #a;\n"+
-"  </xd:component>\n"+
+"  <xd:component> %class "+_package+".X_on %link #a; </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			json =
@@ -951,7 +950,7 @@ public class TestJsonXdef extends XDTester {
 					xc, "jx$"+XonNames.X_MAP),
 				"jx$"+XonNames.X_ARRAY+"_1")).toXon()).size());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='z'>\n" +
 "  <xd:json name='z'> [\"* int();\"] </xd:json>\n" +
 "  <xd:component>%class "+_package+".X_int %link #z;</xd:component>\n" +
 "</xd:def>";
@@ -969,7 +968,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq(1, ((List) XComponentUtil.get(xc, "$item")).get(0));
 			assertEq(3, ((List) XComponentUtil.get(xc, "$item")).size());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='z'>\n" +
 "  <xd:json name='z'> [\"* jvalue();\"] </xd:json>\n" +
 "  <xd:component>%class "+_package+".X_jval %link #z;</xd:component>\n" +
 "</xd:def>";
@@ -1025,6 +1024,90 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
 			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
 		} catch (SRuntimeException ex) {fail(ex);}
+		try { // test extension of map and correct reporting.
+			xd = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>{ \"address\": { \"%script\": \"optional; ref addr\", \"x\": \"int()\"} }</xd:json>\n" +
+"  <xd:json name='addr'> { \"d\": \"string()\" } </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			jparse(xd, "{ }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"cde\", \"x\": 1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"dd\" } }", reporter);
+			if (reporter.size() != 1 || !reporter.toString().contains("'x'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
+			}
+			jparse(xd, "{ \"address\": { \"x\": 1 } }", reporter);
+			if (reporter.size() != 1 || !reporter.toString().contains("'d'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'd' is missing
+			}
+			jparse(xd, "{ \"address\": { } }", reporter);
+			if (reporter.size() != 2
+				|| !(reporter.toString().contains("'d'") && reporter.toString().contains("'x'"))) {
+				fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
+			}
+		} catch (SRuntimeException ex) {fail(ex);}
+		try {
+			xp = compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"X9\" xd:root=\"CaseFile\">\n" +
+" <xd:json name=\"LossEventBase\">\n" +
+"{  \"lossEventNumber\": \"integer();\", \"lossEventCauseCode\": \"int();\" }\n" +
+"</xd:json>\n" +
+" <xd:json name=\"LossEventX9\">\n" +
+"{  \"%script\": \"ref LossEventBase;\",\n" +
+"   \"disbursementRecords\": [ \"%script:optional; \", \"occurs 0..*; string();\" ]\n" +
+"}\n" +
+"</xd:json>\n" +
+" <xd:json name=\"CaseFile\">\n" +
+"{  \"%script\": \"ref LossEventX9;\",\n" +
+"   \"isSpecialAttention\": \"optional; boolean();\",\n" +
+"   \"originalCaseFileNumber\": \"optional; string();\"\n" +
+"}\n" +
+"</xd:json>\n" +
+"</xd:def>");
+			json =
+"{ \"lossEventNumber\":1012,\n" +
+"  \"lossEventCauseCode\":1,\n" +
+"  \"disbursementRecords\":[ ],\n" +
+"  \"isSpecialAttention\":false,\n" +
+"  \"originalCaseFileNumber\":\"76\"\n" +
+"}";
+			jparse(xp, "X9", json, reporter);
+			assertNoErrorsAndClear(reporter);
+		} catch (SRuntimeException ex) {fail(ex);}
+		try {
+			xd = compile(
+"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" xd:root = \"SynPLscript\">\n" +
+"  <xd:json name = \"SynPLscript\"> \n" +
+"    { \"Statuses\": [\n" +
+"        {  \"Status\": \"string()\",\n" +
+"           \"Events\": [\n" +
+"              {\"%script\": \"+\",\n" +
+"                 \"Event\": \"string()\",\n" +
+"                 \"UserRoleAny\": [\"1..* string()\"]\n" +
+"              }\n" +
+"           ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			xd.jparse(
+"{ \"Statuses\": [\n" +
+"    { \"Status\": \"INIT\",\n" +
+"      \"Events\": [{\"Event\": \"Start\", \"UserRoleAny\": [\"Reporter\", \"PM\"] }]\n" +
+"    },\n" +
+"    {\"Status\": \"ANY\",\n" +
+"      \"Events\": [\n" +
+"        {\"Event\": \"TimeOver_\", \"UserRoleAny\": [\"#WF\"]},\n" +
+"        {\"Event\": \"TaskRole\", \"UserRoleAny\": [\"Reporter\",\"PM\"]}\n" +
+"      ]\n" +
+"    }\n" +
+"  ]\n" +
+"}", reporter);
+			assertErrorsAndClear(reporter); //E XDEF507: Not allowed item in array
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}

@@ -35,7 +35,7 @@ public class TestParseType extends XDTester {
 	@Override
 	public void test() {
 		String xdef1 =
-"<xd:def xmlns:xd='" + _xdNS + "' name='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='A'>\n"+
 "  /* This declaration contains types to be checked. */\n"+
 "  <xd:declaration scope='local'>\n"+
 "    type t1 int();\n"+
@@ -44,7 +44,7 @@ public class TestParseType extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 		String xdef2 =
-"<xd:def xmlns:xd='" + _xdNS + "' name='B'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='B'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    BNFGrammar g = new BNFGrammar('\n"+
 "      x ::= S? [0-9]+\n"+
@@ -56,18 +56,13 @@ public class TestParseType extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 		String xdef3 =
-"<xd:def xmlns:xd='" + _xdNS + "' name='C'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='C'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    type t4 tt();\n"+
-"    boolean tt() {\n"+
-"      return getText().startsWith('a');\n"+
-"    }\n"+
+"    boolean tt() { return getText().startsWith('a'); }\n"+
 "  </xd:declaration>\n"+
 "</xd:def>";
-		String xdef4 =
-"<xd:def xmlns:xd='" + _xdNS + "' name='X'\n"+
-"        importLocal='A, B, C'>\n"+
-"</xd:def>";
+		String xdef4 = "<xd:def xmlns:xd='"+_xdNS+"' name='X' importLocal='A, B, C'> </xd:def>";
 
 		Properties props = new Properties();
 		XDPool xp = XDFactory.compileXD(props, xdef1, xdef2, xdef3, xdef4);

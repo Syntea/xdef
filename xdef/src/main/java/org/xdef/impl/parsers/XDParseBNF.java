@@ -18,7 +18,6 @@ import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import static org.xdef.XDValueID.XD_BNFRULE;
 import static org.xdef.XDValueID.XD_CONTAINER;
-import org.xdef.impl.code.DefParseResult;
 import org.xdef.msg.XDEF;
 import org.xdef.xon.XonTools;
 

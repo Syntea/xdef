@@ -17,6 +17,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
+import static org.xdef.xon.XonReader.X_SCRIPT_DIRECTIVE;
 import static org.xdef.xon.XonTools.genXMLString;
 
 /** Methods for INI/Properties data.
@@ -245,31 +246,27 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 			SPosition spos = p.getPosition();
 			String name;
 			SBuffer p1 = null, p2 = null;
-			if (_jdef && p.findChar(';')) {
-				name = p.getBufferPart(spos.getIndex(), p.getIndex());
+			if (_jdef && p.findChar(']')) {
+				name = p.getBufferPart(spos.getIndex(), p.getIndex()).trim();
 				_jp.namedValue(new SBuffer(name.trim(), spos));
 				_jp.mapStart(spos);
+				p.nextChar();
 				p.isSpaces();
-				if (p.isChar(';')) {
+				SPosition spos1 = p.getPosition();
+				if (!p.eos()) {
 					p.isSpaces();
-					SPosition spos1 = p.getPosition();
-					if (p.isToken(SCRIPT_DIRECTIVE)) {
-						p.isSpaces();
-						if (p.isChar('=')) {
-							p.isSpaces();
-							String s = p.getUnparsedBufferPart();
-							int ndx = s.lastIndexOf(']');
-							if (ndx > 0 ) {
-								p1 = new SBuffer(SCRIPT_DIRECTIVE, spos1);
-								p2 = new SBuffer(s.substring(0, s.length()-1), p.getPosition());
-							}
+					String s = p.getUnparsedBufferPart().trim();
+					if (!s.isEmpty()) {
+						if (!s.endsWith(";")) {
+							s += ";";
 						}
+						p1 = new SBuffer(X_SCRIPT_DIRECTIVE, spos1);
+						p2 = new SBuffer(s.substring(0, s.length()-1), p.getPosition());
+					}
+					if (p1 == null) {
+						error(JSON.JSON018); //Value of x:script must be string with Xscript
 					}
 				}
-				if (p1 == null) {
-					error(JSON.JSON018); //Value of x:script must be string with Xscript
-				}
-				p.findChar(']');
 			} else {
 				p.setPosition(spos);
 				if (!p.findChar(']')) {
@@ -321,8 +318,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		}
 	}
 
-	@Override
 	/** Set mode that INI file is parsed in X-definition compiler. */
+	@Override
 	public final void setXdefMode() { _jdef = true;}
 
 	@Override
@@ -365,15 +362,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @return object converted to string
 	 */
 	private static String valueToString(final Object val) {
-		if (val == null) {
-			return "";
-		} else if (val instanceof InetAddress) {
-			return ((InetAddress) val).toString().substring(1);
-		} else if (val instanceof byte[]) {
-			return new String(SUtils.encodeHex((byte[]) val), Charset.forName("ISO8859-2"));
-		} else {
-			return val.toString();
-		}
+		return val == null ? ""
+			: val instanceof InetAddress ? ((InetAddress) val).toString().substring(1)
+			: val instanceof byte[] ? new String(SUtils.encodeHex((byte[]) val), Charset.forName("ISO8859-2"))
+			: val.toString();
 	}
 
 	/** Create the line of INI/Property item.
@@ -452,6 +444,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 
 	/** Create XML Element from object.
 	 * @param ini object with Windows ini data.
+	 * @return created XML Element.
 	 */
 	@SuppressWarnings("unchecked")
 	public static final Element iniToXml(final Object ini) {

@@ -1,7 +1,23 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.29, release-date 2025-06-14
-.
+# Version 42.2.31, release-date 2025-11-24
+* The %oneOf directive in the JSON map is now recorded as an array of names of named items. If all variants
+  from the list are described as required, exactly one of the variants must be present in the data. If any
+  variant in the list is described as optional, no variant from the list needs to be present in the data.
+* Fixed a bug when processing JSON containing the IDREFS() method.
+
+# Version 42.2.30, release-date 2025-11-01
+* The type of value of result of methods `ENTITIES` and `NMTOKENS` in XComponent is `List<String>`
+  and the type of value  of result of methods `IDREFS` and `CHKIDS` is `List<Object>`.
+* Fixed infinite loop when parsing JSON model description containing string with incorrect escape characters.
+* The JSON model in X-definition now complies with JSON syntax (e.g., keywords beginning with the character
+  "%" must be enclosed in quotation marks).
+* Fixed incorrect error reporting in extended JSON map item reference.
+* Fixed a bug that ignored the occurrence specification in the JSON "%oneOf" command in the map.
+
+# Version 42.2.29, release-date 2025-09-18
+* The value of the IDRES() and CHKIDS() methods can be a list of values separated by spaces. If the value
+  contains a space or apostrophe, it is enclosed in apostrophes and the value must be doubled.
 
 # Version 42.2.28, release-date 2025-06-11
 * If the `xdef_string_codes` property is set (org.xdef.XDConstants.XDPROPERTY_STRING_CODES), for items,

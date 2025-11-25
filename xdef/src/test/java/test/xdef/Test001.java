@@ -32,7 +32,7 @@ public final class Test001  extends XDTester {
 		StringWriter swr;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "     <b attr = \"required string()\"\n"+
 "        xd:script = \"occurs 0..1; finally {outln(@attr); \n"+
@@ -53,7 +53,7 @@ public final class Test001  extends XDTester {
 				"xxxx\n1.xxxx\n2.xxxx\nfalse\n"+
 				"false\nxxxx\nxxxx\ntext: orig1\ntext: \n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Book'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Book'>\n"+
 "  <Book ISBN = \"int(0, 999999999)\"\n"+
 "      published  = \"? gYear()\"\n " +
 "      xd:script = \"finally outln('ISBN: '+@ISBN+'; '+getElementText());\">\n"+
@@ -72,7 +72,7 @@ public final class Test001  extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("ISBN: 123456789; The Crash\n", swr.toString());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <xd:choice>\n"+
 "      <from xd:script=\"match(@partnerLink OR @endpointReference)\"\n"+
@@ -106,7 +106,7 @@ public final class Test001  extends XDTester {
 			xml = "<a><from variable = 'a' property = 'a' ></from></a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='List'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='List'>\n"+
 "  <xd:declaration> int $n = 0; </xd:declaration>\n"+
 "  <List xd:script = \"init outln('List of employes:\\n');" +
 "                    finally outln('\\nNumber of employes: ' + $n)\" >\n"+
@@ -157,7 +157,7 @@ public final class Test001  extends XDTester {
 	"3. Peter Black carpenter (electrician)\n\n"+
 	"Number of employes: 3\n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Contract'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Contract'>\n"+
 "  <xd:declaration>\n"+
 "    int ii = 3*5, jj = 2*ii, kk = 2*jj; \n"+
 "    boolean $checkId(){\n"+
@@ -235,7 +235,7 @@ public final class Test001  extends XDTester {
 				"OK\n"));
 
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='GenContract'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='GenContract'>\n"+
 "  <Contract cId = \"required num(10)\" >\n"+
 "    <Policyholder\n"+
 "         xd:script=\"create from('/Contract/Client[@role=\\'3\\']')\"\n"+
@@ -280,7 +280,7 @@ public final class Test001  extends XDTester {
 				"</Contract>",
 				""));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='GenContract'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='GenContract'>\n"+
 "  <Contract cId='required num(10)'>\n"+
 "    <Policyholder\n"+
 "         xd:script=\"create from('/Contract/Client[@role=\\'3\\']')\">\n"+
@@ -302,7 +302,7 @@ public final class Test001  extends XDTester {
 					"</Contract>",
 				""));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='Contract'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='Contract'>\n"+
 "  <Contract cId = \"required num(10); create '0123456789'\">\n"+
 "    <Holder IC    = \"required num(8); create '87654321'\"\n"+
 "            Title = \"required string(1,30); create 'Michael Grey';\" >\n"+
@@ -316,7 +316,7 @@ public final class Test001  extends XDTester {
   "<Holder IC='87654321' Title='Michael Grey'>holder OK</Holder>" +
 "</Contract>", ""));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='test' xd:root=\"DavkaA|ZaznamB\" >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='test' xd:root=\"DavkaA|ZaznamB\" >\n"+
 "  <DavkaA>\n"+
 "    <ZaznamA xd:script=\"occurs 1..;\n"+
 "             finally setElement(xcreate('ZaznamB')); forget\"\n"+
@@ -361,7 +361,7 @@ public final class Test001  extends XDTester {
 	"<ChildB1 ChildB1Attr=\"2 1\"/>" +
 "</ZaznamB>"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='aaa'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='aaa'>\n"+
 "  <aaa>\n"+
 "    <bbb attr = \"ignore\" xd:script = \"occurs 0..3\" />\n"+
 "      required string(1,9999); onTrue setText('OK1');\n"+
@@ -386,7 +386,7 @@ public final class Test001  extends XDTester {
 			"<aaa><bbb/><bbb/><bbb/>OK1<ccc/><ddd xx='xxx'><x/></ddd></aaa>",
 			""));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Weather'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Weather'>\n"+
 "  <xd:declaration> float $sum = 0; int $num = 0; </xd:declaration>" +
 "  <html>\n"+
 "    <body>\n"+
@@ -428,7 +428,7 @@ public final class Test001  extends XDTester {
 "</body></html>",
 "sum=13.2, num=1\nsum=28.2, num=2\nsum=46.0, num=3\nsum=62.0, num=4\n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Weather'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Weather'>\n"+
 "  <xd:declaration> float $sum = 0; int $num = 0; </xd:declaration>" +
 "  <html>\n"+
 "    <body>\n"+
@@ -479,7 +479,7 @@ public final class Test001  extends XDTester {
 " 05:00 11:00 15:00 20:00\n"+
 "sum=13.2, num=1\nsum=28.2, num=2\nsum=46.0, num=3\nsum=62.0, num=4\n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='test' root='aaa'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='test' root='aaa'>\n"+
 "  <aaa>\n"+
 "     <bbb xd:script='occurs 0..3' attr='ignore'/>\n"+
 "       required string(1,9999); onTrue setText('OK1');\n"+
@@ -506,7 +506,7 @@ public final class Test001  extends XDTester {
 				"<aaa><bbb/><bbb/><bbb/>OK1<ccc/>wasstring<ddd xx='xxx'>" +
 				"<x/></ddd></aaa>", ""));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='test'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='test'>\n"+
 "  <xd:declaration>int $n = 0;</xd:declaration>\n"+
 "  <test>\n"+
 "    <a n='required int(); create ++$n' xd:script='*;create newElements(3)'>\n"+
@@ -523,7 +523,7 @@ public final class Test001  extends XDTester {
 			"<test><a n='1'>1</a><a n='2'>2</a><a n='3'>3</a><c/><c/></test>",
 			""));
 			xdef =
-"<xd:collection xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd = '"+_xdNS+"'>\n"+
 "<xd:def root='aaa'>\n"+
 "  <aaa>\n"+
 "    <bbb attr = \"required string()/*xx*/\"\n"+
@@ -576,7 +576,7 @@ public final class Test001  extends XDTester {
 				"xxxx\ntext: orig1\ntext: \nv=3:\n"+
 				"1->2\n1->3\n2->3\n1->2\n3->1\n3->2\n1->2\n"));
 			xdef =
-"<x:def xmlns:x='" + _xdNS + "' root='a'\n"+
+"<x:def xmlns:x='"+_xdNS+"' root='a'\n"+
 "       script='options ignoreEmptyAttributes'>\n"+
 "  <a x:script = \"ref b\">\n"+
 "    <p/>\n"+
@@ -593,7 +593,7 @@ public final class Test001  extends XDTester {
 			xml = "<a attr='b123c'><c/><p/><q/>123</a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
-"<x:def xmlns:x='" + _xdNS + "' root='a'\n"+
+"<x:def xmlns:x='"+_xdNS+"' root='a'\n"+
 "       script='options ignoreEmptyAttributes'>\n"+
 "  <a x:script = \"ref b\">\n"+
 "    <p/>\n"+
@@ -612,7 +612,7 @@ public final class Test001  extends XDTester {
 			assertFalse(test(xdef, xml, "",'P',
 				"<a attr='b123c'><c/><p/><q/>123<r/></a>", ""));
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root='a:aaa'\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root='a:aaa'\n"+
 "    xmlns:a='nsa' xmlns:b='nsb' xmlns:c='nsc'>\n"+
 "  <a:aaa>\n"+
 "    <b:bbb c:attr='required string()' xmlns:b='nsb' xmlns:c='nsc'\n"+
@@ -648,7 +648,7 @@ public final class Test001  extends XDTester {
 				"xxxx\ntext: orig1\ntext: orig2\n"));
 
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "	<xd:def xmlns:s=\"http://www.w3c.org/2003/05/soap-envelope\"\n"+
 "		impl-version='0.0.1' impl-date='18.9.2006'\n"+
 "		name='XDefSOAP' root='s:Envelope'>\n"+
@@ -690,7 +690,7 @@ public final class Test001  extends XDTester {
   "</Body>" +
 "</Envelope>");
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "	<xd:def xmlns:s='http://www.w3c.org/2003/05/soap-envelope'\n"+
 "		impl-version='0.0.1' impl-date='18.9.2006'\n"+
 "		name='XDefSOAP' root='s:Envelope'>\n"+
@@ -738,7 +738,7 @@ public final class Test001  extends XDTester {
 					&& r.getModification().startsWith("&{0}p:at"),r.toString());
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'root'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root = 'root'>\n"+
 "  <r><xd:choice occurs = '?'><A/><B/></xd:choice></r>\n"+
 "  <root xd:script='ref r' />\n"+
 "</xd:def>\n";
@@ -748,7 +748,7 @@ public final class Test001  extends XDTester {
 			assertFalse(test(xdef, xml, "",'P'));
 //test recusive references in groups
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'Expr'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root = 'Expr'>\n"+
 "  <V>required int(); finally outln(getText());</V>\n"+
 "  <S>\n"+
 "    <xd:choice>\n"+
@@ -813,7 +813,7 @@ public final class Test001  extends XDTester {
 				"<V>4</V></MUL></M></Expr>";
 			assertFalse(test(xdef, xml, "", 'P', xml, "2\n3\n+\n4\n*\n=\n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
 "        xd:script='options ignoreEmptyAttributes'>\n"+
 "  <a xd:script='ref b'>\n"+
 "    <xd:mixed><xd:list xd:ref='dummy1'/></xd:mixed>\n"+
@@ -831,7 +831,7 @@ public final class Test001  extends XDTester {
 			xml = "<a attr='attr'><c/><p/><q/>text<s/></a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
 "        xd:script='options ignoreEmptyAttributes'>\n"+
 "  <a xd:script='ref b'>\n"+
 "    <xd:list xd:ref='dummy1' />\n"+
@@ -849,7 +849,7 @@ public final class Test001  extends XDTester {
 			xml = "<a attr='attr'><c/><p/><q/>text<s/></a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def root='a' script='options ignoreEmptyAttributes' >\n"+
 "  <a>\n"+
 "    <xd:mixed>\n"+
@@ -871,7 +871,7 @@ public final class Test001  extends XDTester {
 			assertFalse(test(xdef, "<a><r/><q/>123<q/><p/></a>", "",'P'));
 			assertFalse(test(xdef,"<a><r/><p/><q/>123<q/><p/><r/></a>","",'P'));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xmlns:a='a' root='a:aaa'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:a='a' root='a:aaa'>\n"+
 "  <a:aaa>\n"+
 "    <a:bbb attr='required string()'\n"+
 "      xd:script='occurs 0..1; finally outln(@attr)'/>\n"+
@@ -891,7 +891,7 @@ public final class Test001  extends XDTester {
 				"<aaa xmlns='a'><bbb attr='xxxx'/>text1</aaa>",
 				"xxxx\ntext: orig1\n"));
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xmlns:a='a' root='a:aaa'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:a='a' root='a:aaa'>\n"+
 "  <a:aaa>\n"+
 "    <a:bbb attr='required string()'\n"+
 "      xd:script='occurs 0..1; finally outln(@attr)'/>\n"+
@@ -918,7 +918,7 @@ public final class Test001  extends XDTester {
 				"text2</aaa>",
 				"xxxx\ntext: orig1\ntext: \n");
 			xdef = //test setValidateAttrNames in Simpledom
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a attr='optional'>\n"+
 "    <b attr='ignore' xd:script='occurs 0..3'/>\n"+
 "    required string(1,9);\n"+
@@ -936,7 +936,7 @@ public final class Test001  extends XDTester {
 					test(xdef, xml, "", null, reporter, 'P'));
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Misto|Udaj|Base'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Misto|Udaj|Base'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    external Element base; /*V tomto elementu je nase databaze. */\n"+
 "    /*Add to database nedw element “Misto” if it not exists yet*/\n"+
@@ -1109,9 +1109,9 @@ public final class Test001  extends XDTester {
 		try {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
-"<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A a='x'/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B a='x'/></xd:def>", new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C a='x'/></xd:def>").getBytes(getEncoding()))
+"<xd:def xmlns:xd='"+_xdNS+"' root='A' name='A'><A a='x'/></xd:def>",
+"<xd:def xmlns:xd='"+_xdNS+"' root='B' name='B'><B a='x'/></xd:def>", new ByteArrayInputStream((
+"<xd:def xmlns:xd='"+_xdNS+"' root='C' name='C'><C a='x'/></xd:def>").getBytes(getEncoding()))
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			XDFactory.compileXD(null, p1, p2);

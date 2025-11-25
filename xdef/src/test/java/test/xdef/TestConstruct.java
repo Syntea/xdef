@@ -22,7 +22,7 @@ public final class TestConstruct extends XDTester {
 		XXElement rootChkel, chkel;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='messages'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='messages'>\n"+
 "  <messages>\n"+
 "    <child/>\n"+
 "    <xd:any xd:script = \"occurs 0..\"\n"+
@@ -56,7 +56,7 @@ public final class TestConstruct extends XDTester {
 				+ " ces=\"Toto je zprava\" eng=\"This is message\"/>"
 				+ "</messages>");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xmlns:a=\"a.a\" xmlns:b=\"b.b\"\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:a=\"a.a\" xmlns:b=\"b.b\"\n"+
 "        xd:name=\"test\" xd:root=\"a:root\">\n"+
 "  <a:root>\n"+
 "    <b:child/>\n"+

@@ -51,15 +51,13 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		} else if (creators.length() == 0 && listNodes.length() == 0) {
 			toXml +=  // no creators and no node list
 "\t\treturn doc!=null? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
-"\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+LN+
-"\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+LN+
+"\t\t\t: org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,XD_NodeName,null).getDocumentElement();"+LN+
 "\t}"+LN;
 		} else {
 			toXml +=
 "\t\torg.w3c.dom.Element el;"+LN+
 "\t\tif (doc==null) {"+LN+
-"\t\t\tdoc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,"+LN+
-"\t\t\t\tXD_NodeName, null);"+LN+
+"\t\t\tdoc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,XD_NodeName,null);"+LN+
 "\t\t\tel = doc.getDocumentElement();"+LN+
 "\t\t} else {"+LN+
 (isRoot ? "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN+

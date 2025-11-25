@@ -3,18 +3,16 @@
 {
     "personnel": {
         "person": [
-            {%script="occurs 1..*",
+            {"%script": "occurs 1..*",
                 "id": "string()",
                 "name": {
                     "family": "string()",
                     "given": "optional string()"
                 },
                 "email": "emailAddr();",
-                "link": { %oneOf="optional",
+                "link": { "%oneOf": ["manager", "subordinates"],
                     "manager": "string();",
-                    "subordinates": [
-                         "occurs 0..* string() /* finally outln('xxx'); */"
-                    ]
+                    "subordinates": [ "occurs 0..* string() /* finally outln('xxx'); */" ]
                 }
             }
         ]

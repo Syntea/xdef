@@ -4,6 +4,8 @@ import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.XDPool;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of attribute processing and match expression; test DTD types.
  * @author Vaclav Trojan
@@ -21,22 +23,21 @@ public final class TestDTDTypes extends XDTester {
 		try {
 //CDATA
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required CDATA'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF814".equals(rep.getMsgID()), rep.toString());
 			}
 //ID
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
@@ -45,15 +46,14 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF523", rep.getMsgID(), rep.toString());
 			}
 //ID
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
@@ -62,15 +62,14 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF523", rep.getMsgID(), rep.toString());
 			}
 //IDREF
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREF'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -80,15 +79,14 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 //IDREF
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREF'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -98,15 +96,14 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 //CHKID
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKID'/>\n"+
@@ -116,15 +113,14 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 //IDREFS
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREFS'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -136,21 +132,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREFS'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
@@ -162,22 +156,47 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='A | X'>\n"+
+"  <xd:declaration> type t1 string(); uniqueSet u{t:t1}; uniqueSet v{t: int()}; </xd:declaration>\n"+
+"  <A> <B xd:script='*' a='? u.t.ID' b='? u.t.IDREFS()'/> </A>\n"+
+"  <X> <B xd:script='*' a='? v.t.ID' b='? v.t.IDREFS()'/> </X>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			parse(xp, "", "<A><B b=\"ALPHA BETA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			// string
+			parse(xp, "", "<A><B b=\"ALPHA GAMA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#u GAMA"));
+			}
+			parse(xp, "", "<A><B b=\"'a''c'\"/><B b=\"'a''c' 'd'\"/><B a=\"a'c\"/><B a='d'/></A>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			// int
+			parse(xp, "", "<X><B b=\"01\"/><B b='2'/><B b=\"1 02\"/><B a=\"1\"/><B a='2'/></X>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			parse(xp, "", "<X><B b=\"123 0124\"/><B a='0123'/><B a='125'/></X>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#v 0124"));
 			}
 //CHKIDS
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
@@ -189,21 +208,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
@@ -215,22 +232,30 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF522", rep.getMsgID(), rep.toString());
 			}
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
+"  <xd:component>%class " + _package + ".D_idref1 %link A</xd:component>\n" +
+"  <xd:declaration scope='local'> uniqueSet u{t: string()}; </xd:declaration>\n"+
+"  <A> <B xd:script='*' b='? u.t.CHKIDS();' a='? u.t.ID'/> </A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 //NMTOKEN
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -239,29 +264,26 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
 			}
 //NMTOKEN
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -270,29 +292,26 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF804", rep.getMsgID(), rep.toString());
 			}
 //NMTOKENS
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -301,22 +320,20 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 //NMTOKENS
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -325,15 +342,13 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertEq("XDEF809", rep.getMsgID(), rep.toString());
@@ -341,7 +356,7 @@ public final class TestDTDTypes extends XDTester {
 //ENTITY
 //			if (hasDatatype) {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -356,22 +371,19 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X X'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
@@ -379,7 +391,7 @@ public final class TestDTDTypes extends XDTester {
 //			}
 //ENTITY
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -394,29 +406,26 @@ public final class TestDTDTypes extends XDTester {
 			parse(xp, "", "<a a = 'X X'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
 			}
 //ENTITIES
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -438,22 +447,20 @@ public final class TestDTDTypes extends XDTester {
 "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 //ENTITIES
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -475,22 +482,20 @@ public final class TestDTDTypes extends XDTester {
 "<a a = 'X Y'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 			parse(xp, "", "<a a = ''/>", reporter);
-			rep = reporter.getReport();
-			if (rep == null) {
+			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else {
 				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
 			}
 //Test NOTATION
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NOTATION'/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -509,7 +514,7 @@ public final class TestDTDTypes extends XDTester {
 
 //Test of ID, IDREF, IDREFS
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name=\"test1\">\n"+
 "  <xd:declaration scope='global'>\n"+
 "    uniqueSet id2 {c: cislo};\n"+

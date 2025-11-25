@@ -11,7 +11,7 @@ import static test.XDTester._xdNS;
 public class X extends XDTester {
 	public X() {}
 
-	/** Run test and display error information. */
+	/** Run test and display error info. */
 	@Override
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
@@ -23,19 +23,19 @@ public class X extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
 			ArrayReporter reporter = new ArrayReporter();
 			xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A xd:script='option moreAttributes'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Таблица' />", reporter);
 			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a=';'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Таблица' />", reporter);
 			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
 			xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a='string();'/>\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<A a='Таблица' />", reporter);
@@ -164,8 +164,8 @@ public class X extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 
-	/** Run test
-	 * @param args the command line arguments
+	/** Run test.
+	 * @param args the command line arguments.
 	 */
 	public static void main(String... args) {
 		XDTester.setFulltestMode(true);

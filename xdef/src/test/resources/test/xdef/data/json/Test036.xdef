@@ -7,19 +7,19 @@
 {
   "Title": "optional jstring()",
   "Artists": [
-    {%script="occurs 1..*",
+    {"%script": "occurs 1..*",
       "Name": "string()",
       "Albums": [
-        {%script="occurs 1..*",
+        {"%script": "occurs 1..*",
           "Name": "string()",
-          "Genre": [%oneOf,
+          "Genre": ["%oneOf",
                "genre()",
                ["occurs 1..*; genre()"]
            ],
           "ReleaseDate": "date()",
           "Label": "string()",
           "Tracks": [
-            {%script="occurs 0..*",
+            {"%script": "occurs 0..*",
               "Title": "string()",
               "Duration": "string(%pattern=['[0-9]{2}:[0-9]{2}'])",
               "Writer": "optional string()"

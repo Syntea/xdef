@@ -91,10 +91,9 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
-/**/
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void x() {\n" +
 "    Currency c = new Currency('USD');\n" +
@@ -112,7 +111,7 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xp = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:declaration>\n" +
 "  void testLoop() {\n"+
 "    for (int i=0; ;) {\n"+
@@ -171,7 +170,7 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xdef = // sequence with separator
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:component>%class " + _package + ".MytestX_SQ %link #a;</xd:component>\n"+
 "  <xd:declaration>\n"+
 "    type s sequence(%separator=',', %item=[int, long, long]);\n"+
@@ -213,7 +212,7 @@ public class MyTest extends XDTester {
 			assertEq(6, list.get(1));
 			assertEq(7, list.get(2));
 			xdef = // sequence with separator
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:component>%class " + _package + ".MytestX_SQ %link #a;</xd:component>\n"+
 "  <xd:declaration>\n"+
 "    type s sequence(%separator=',', %item=[int, long, long]);\n"+
@@ -264,7 +263,7 @@ public class MyTest extends XDTester {
 			}
 //if(true)return;
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='x'>\n"+
 "  <x>\n"+
 "    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"+
 "  </x>\n"+
@@ -305,7 +304,7 @@ public class MyTest extends XDTester {
 			assertEq("-3.5", XComponentUtil.jlistToList((List) x).get(4));
 //if(true)return;
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n" +
 "  <xd:json name = 'X'>\n" +
 "     [\"* jvalue();\"]\n" +
 "  </xd:json>\n" +
@@ -330,7 +329,7 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "   <A><B xd:script='ref B;' /></A>\n" +
 "   <B b='string()'><B xd:script='?; ref B;'/></B>\n" +
 "</xd:def>";
@@ -345,7 +344,7 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"'>\n" +
 "  <a>\n" +
 "    <b/>\n" +
 "    <xd:choice>\n" +
@@ -365,19 +364,19 @@ public class MyTest extends XDTester {
 //if (true) return;
 		try {// test %anyName in map
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n"+
 "<xd:json name=\"test\">\n"+
-"  [%oneOf=\"ref A\"]\n"+
+"  [\"%oneOf: ref A\"]\n"+
 "</xd:json>\n"+
 "<xd:json name=\"A\">\n"+
-" [%oneOf,\n"+
+" [\"%oneOf\",\n"+
 "    \"jvalue();\",\n"+
 "    [\"* jvalue();\" ],\n"+
 "    {%anyName:\n"+
-"       [%oneOf,\n"+
+"       [\"%oneOf\",\n"+
 "         \"jvalue();\",\n"+
 "         [\"* jvalue();\" ],\n"+
-"         {%anyName: [%oneOf=\" ref test\"]}\n"+
+"         {%anyName: [\"%oneOf: ref test\"]}\n"+
 "       ]\n"+
 "    }\n"+
 "  ]\n"+
@@ -400,12 +399,12 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='network'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='network'>\n" +
 "<xd:json name='network'>\n" +
 "{\n" +
 "  a: \"optional string();\"\n" +
-"  b: {%script=\"optional\", a: \"optional string();\"}\n" +
-"  c: [%script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
+"  b: {\"%script\":\"optional\", a: \"optional string();\"}\n" +
+"  c: [\"%script:optional\", \"int();\", { a: \"int();\"}]\n" +
 "}\n" +
 "</xd:json>\n" +
 "</xd:def>";
@@ -424,7 +423,7 @@ public class MyTest extends XDTester {
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, "");
 		try {
 			xdef =
-"<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n" +
+"<xd:def xmlns:xd ='"+_xdNS+"' name='a' root='a'\n" +
 "   script='options preserveEmptyAttributes,\n" +
 "           preserveAttrWhiteSpaces, noTrimAttr'>\n" +
 "<xd:declaration>\n" +
@@ -443,7 +442,7 @@ public class MyTest extends XDTester {
 			assertNoErrors(reporter);
 			assertTrue(_xxx);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:declaration>\n" +
 "    type y list(%length=3, %item=xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n" +
@@ -459,7 +458,7 @@ public class MyTest extends XDTester {
 //if(true)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
 "<xd:declaration>\n" +
 "  external method String bugreports.MyTest.xxx(XXNode);\n" +
 "</xd:declaration>\n" +
@@ -489,7 +488,7 @@ public class MyTest extends XDTester {
 //if(true)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='x|y|y1|y2'>\n" +
 "<x>\n" +
 "  <a xd:script='*'>\n" +
 "    jlist(%item=jvalue())\n" +
@@ -601,7 +600,7 @@ public class MyTest extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='z'>\n" +
 "<xd:json name='z'>\n" +
 "  [\"* int();\"]\n" +
 "</xd:json>\n" +
@@ -622,7 +621,7 @@ public class MyTest extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:BNFGrammar name=\"g\" scope=\"local\">\n"+
 "    prvek      ::= 'a' | 'a' | 'b' | 'c'\n"+
 "    prvekS     ::=  prvek ',' \n"+
@@ -660,7 +659,7 @@ public class MyTest extends XDTester {
 			// \p{Ll} small letters
 			// \.     dot
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
 //"  <a a='string(%pattern=[\"\\\\p{Lu}(\\\\.|\\\\p{Ll}+)( \\\\p{Lu}(\\\\p{Ll}*|\\\\.))*\"]);'/>\n" +
 "  <a a='string(%pattern=[\"[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ](\\\\.|[a-záčďéěíňóřšťúůýž]+)"+
 	"( [A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]([a-záčďéěíňóřšťúůýž]*|\\\\.))*\"]);'/>\n"+

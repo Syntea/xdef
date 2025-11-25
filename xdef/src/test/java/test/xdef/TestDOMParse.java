@@ -44,7 +44,7 @@ public final class TestDOMParse extends XDTester {
 		KDOMBuilder builder;
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = \"root\" name = \"root\">\n"+
 "  <root attr='required string()'\n"+
 "      xd:script=\"finally out('xyz')\">\n"+
 "    <a xd:script=\"occurs 2\"/>\n"+
@@ -67,7 +67,7 @@ public final class TestDOMParse extends XDTester {
 				fail("Unexpected error");
 			}
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = \"root\" name = \"root\">\n"+
 "  <root attr='required string()'\n"+
 "      xd:script=\"finally out('xyz')\">\n"+
 "    <a xd:script=\"occurs 2\"/>\n"+
@@ -106,7 +106,7 @@ public final class TestDOMParse extends XDTester {
 				}
 			}
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = \"root\" name = \"root\">\n"+
 "  <root attr='required string()'\n"+
 "      xd:script=\"finally out('xyz')\">\n"+
 "    <a xd:script=\"occurs 2\"/>\n"+
@@ -152,7 +152,7 @@ public final class TestDOMParse extends XDTester {
 				fail("Errors not reported");
 			}
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = \"root\" name = \"root\">\n"+
 "  <root attr='required string()'>\n"+
 "    <a xd:script=\"occurs 2\"/>\n"+
 "  </root>\n"+
@@ -189,7 +189,7 @@ public final class TestDOMParse extends XDTester {
 				fail("Errors not reported");
 			}
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = \"root\" name = \"root\">\n"+
 "  <root attr='required string()'>\n"+
 "    <a xd:script=\"occurs 2\"/>\n"+
 "  </root>\n"+
@@ -208,7 +208,7 @@ public final class TestDOMParse extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'\n"+
 "    xmlns:s = \"http://www.w3c.org/2003/05/soap-envelope\"\n"+
 "    impl-version = \"2.0.0.0\"\n"+
 	"impl-date = \"18.9.2007\"\n"+

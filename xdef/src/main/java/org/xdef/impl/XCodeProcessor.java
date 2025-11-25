@@ -2,6 +2,11 @@ package org.xdef.impl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -19,6 +24,7 @@ import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDCallItem;
@@ -52,23 +58,38 @@ import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTES;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_CURRENCY;
 import static org.xdef.XDValueID.XD_DATETIME;
 import static org.xdef.XDValueID.XD_DECIMAL;
 import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_DURATION;
 import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_EMAIL;
+import static org.xdef.XDValueID.XD_EXCEPTION;
+import static org.xdef.XDValueID.XD_GPSPOSITION;
 import static org.xdef.XDValueID.XD_INPUT;
+import static org.xdef.XDValueID.XD_IPADDR;
 import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_OBJECT;
 import static org.xdef.XDValueID.XD_OUTPUT;
+import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_PRICE;
+import static org.xdef.XDValueID.XD_REGEX;
+import static org.xdef.XDValueID.XD_REGEXRESULT;
 import static org.xdef.XDValueID.XD_REPORT;
 import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_SERVICE;
 import static org.xdef.XDValueID.XD_STATEMENT;
 import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_TELEPHONE;
+import static org.xdef.XDValueID.XD_VOID;
 import static org.xdef.XDValueID.XD_XPATH;
 import static org.xdef.XDValueID.XD_XQUERY;
 import static org.xdef.XDValueID.XX_ATTR;
@@ -81,6 +102,7 @@ import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.OBJECT;
 import org.xdef.XDXmlOutStream;
+import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
@@ -195,6 +217,15 @@ import static org.xdef.impl.code.CodeTable.ENDSWITHI;
 import static org.xdef.impl.code.CodeTable.EQUALSI;
 import static org.xdef.impl.code.CodeTable.EQUALS_OP;
 import static org.xdef.impl.code.CodeTable.EQ_NULL;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_ARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL_ARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL_XDARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XDARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXELEM;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE_XDARRAY;
 import static org.xdef.impl.code.CodeTable.FLOAT_FORMAT;
 import static org.xdef.impl.code.CodeTable.FORMAT_STRING;
 import static org.xdef.impl.code.CodeTable.FROM_ELEMENT;
@@ -220,6 +251,7 @@ import static org.xdef.impl.code.CodeTable.GET_IMPLROPERTY;
 import static org.xdef.impl.code.CodeTable.GET_INDEXOFSTRING;
 import static org.xdef.impl.code.CodeTable.GET_ITEM;
 import static org.xdef.impl.code.CodeTable.GET_LASTDAYOFMONTH;
+import static org.xdef.impl.code.CodeTable.GET_LASTERROR;
 import static org.xdef.impl.code.CodeTable.GET_LASTINDEXOFSTRING;
 import static org.xdef.impl.code.CodeTable.GET_MESSAGE;
 import static org.xdef.impl.code.CodeTable.GET_MILLIS;
@@ -230,13 +262,22 @@ import static org.xdef.impl.code.CodeTable.GET_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.GET_NAMED_AS_STRING;
 import static org.xdef.impl.code.CodeTable.GET_NANOS;
 import static org.xdef.impl.code.CodeTable.GET_NOW;
+import static org.xdef.impl.code.CodeTable.GET_NS;
 import static org.xdef.impl.code.CodeTable.GET_NUMOFERRORS;
 import static org.xdef.impl.code.CodeTable.GET_NUMOFERRORWARNINGS;
 import static org.xdef.impl.code.CodeTable.GET_OCCURRENCE;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_BOOLEAN;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_BYTES;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_DATETIME;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_DECIMAL;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_DOUBLE;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_DURATION;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_ERROR;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_LONG;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
+import static org.xdef.impl.code.CodeTable.GET_QNAMEURI;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_END;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_NUM;
@@ -277,6 +318,7 @@ import static org.xdef.impl.code.CodeTable.INC_R;
 import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
 import static org.xdef.impl.code.CodeTable.INIT_PARAMS_OP;
 import static org.xdef.impl.code.CodeTable.INTEGER_FORMAT;
+import static org.xdef.impl.code.CodeTable.IS_CREATEMODE;
 import static org.xdef.impl.code.CodeTable.IS_DATETIME;
 import static org.xdef.impl.code.CodeTable.IS_EMPTY;
 import static org.xdef.impl.code.CodeTable.IS_FLOAT;
@@ -316,6 +358,8 @@ import static org.xdef.impl.code.CodeTable.NEW_CONTAINER;
 import static org.xdef.impl.code.CodeTable.NEW_CURRENCY;
 import static org.xdef.impl.code.CodeTable.NEW_ELEMENT;
 import static org.xdef.impl.code.CodeTable.NEW_EMAIL;
+import static org.xdef.impl.code.CodeTable.NEW_EXCEPTION;
+import static org.xdef.impl.code.CodeTable.NEW_GPSPOSITION;
 import static org.xdef.impl.code.CodeTable.NEW_INSTREAM;
 import static org.xdef.impl.code.CodeTable.NEW_IPADDR;
 import static org.xdef.impl.code.CodeTable.NEW_LOCALE;
@@ -342,6 +386,8 @@ import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_DATE;
 import static org.xdef.impl.code.CodeTable.PARSE_DURATION;
+import static org.xdef.impl.code.CodeTable.PARSE_FLOAT;
+import static org.xdef.impl.code.CodeTable.PARSE_INT;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.PARSE_XML;
 import static org.xdef.impl.code.CodeTable.POP_OP;
@@ -358,6 +404,7 @@ import static org.xdef.impl.code.CodeTable.REMOVE_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.REMOVE_TEXT;
 import static org.xdef.impl.code.CodeTable.REPLACEFIRST_S;
 import static org.xdef.impl.code.CodeTable.REPLACE_S;
+import static org.xdef.impl.code.CodeTable.REPORT_GETPARAM;
 import static org.xdef.impl.code.CodeTable.REPORT_SETPARAM;
 import static org.xdef.impl.code.CodeTable.REPORT_SETTYPE;
 import static org.xdef.impl.code.CodeTable.REPORT_TOSTRING;
@@ -447,6 +494,9 @@ import static org.xdef.impl.code.CodeTable.UNIQUESET_SET;
 import static org.xdef.impl.code.CodeTable.UNIQUESET_SETVALUEX;
 import static org.xdef.impl.code.CodeTable.UPPERCASE;
 import static org.xdef.impl.code.CodeTable.WHITESPACES_S;
+import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT;
+import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT_END;
+import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT_START;
 import static org.xdef.impl.code.CodeTable.WRITE_TEXTNODE;
 import static org.xdef.impl.code.CodeTable.XOR_B;
 import org.xdef.impl.code.CodeUniqueset;
@@ -461,6 +511,7 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefException;
@@ -473,29 +524,38 @@ import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
+import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.impl.code.ParseItem;
 import static org.xdef.impl.compile.CompileBase.getParser;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.impl.debug.ChkGUIDebug;
+import org.xdef.impl.ext.XExtUtils;
 import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMDefinition;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
+import org.xdef.proc.XXElement;
 import org.xdef.proc.XXException;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
 import org.xdef.sys.SError;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
+import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonTools;
@@ -504,7 +564,6 @@ import org.xdef.xon.XonTools;
  * @author Vaclav Trojan
  */
 public final class XCodeProcessor {
-
 	/** This identifier is created if it is undefined. */
 	private static final String UNDEF_ID = "__UNDEF_ID__";
 	/** Switch to allow/restrict DOCTYPE in XML. */
@@ -534,7 +593,7 @@ public final class XCodeProcessor {
 	 */
 	private XDValue[] _globalVariables;
 	/** Temporary  reporter */
-	ArrayReporter _reporter;
+	private ArrayReporter _reporter;
 	/** XML writer for default output. */
 	private XDXmlOutStream _outWriter;
 	/** flag 'init1' processed. */
@@ -548,11 +607,17 @@ public final class XCodeProcessor {
 	/** List of items to be managed at the end of process. */
 	private List<XDValue> _finalList;
 	/** Map of named user objects. */
-	private final Map<String, Object> _userObjects = new LinkedHashMap<>();
+	private final Map<String, Object> _userObjects;
 	/** XPath function resolver. */
-	final XPathFunctionResolver _functionResolver = new XDFunctionResolver();
+	private final XPathFunctionResolver _functionResolver;
 	/** XPath variable resolver. */
-	final XPathVariableResolver _variableResolver = new XDVariableResolver();
+	private final XPathVariableResolver _variableResolver;
+
+	private XCodeProcessor() {
+		_userObjects = new LinkedHashMap<>();
+		_functionResolver = new XDFunctionResolver();
+		_variableResolver = new XDVariableResolver();
+	}
 
 	/** Creates a new instance of ScriptCodeProcessor
 	 * @param xd X-definition.
@@ -562,6 +627,7 @@ public final class XCodeProcessor {
 	 * @param userObj Assigned user's object.
 	 */
 	XCodeProcessor(final XDefinition xd, final SReporter r, final XDOutput stdOut, final XDInput stdIn) {
+		this();
 		init(xd, null);
 		init1(xd, r.getReportWriter(), stdOut, stdIn);
 	}
@@ -572,6 +638,7 @@ public final class XCodeProcessor {
 	 * @param ce ChkElement from which the object is created.
 	 */
 	XCodeProcessor(final XDefinition xd, final ChkElement ce) {
+		this();
 		init(xd, ce._scp._props);
 		_globalVariables = ce._scp._globalVariables;
 		_debugger = ce._scp.getDebugger();
@@ -637,11 +704,9 @@ public final class XCodeProcessor {
 	 */
 	final TimeZone getDefaultZone() {
 		String s;
-		if (_props!=null && (s=_props.getProperty(XDConstants.XDPROPERTY_DEFAULTZONE))!=null && !s.isEmpty()){
-			return TimeZone.getTimeZone(s);
-		} else {
-			return _xd.getXDPool().getDefaultZone();
-		}
+		return _props != null
+			&& (s = _props.getProperty(XDConstants.XDPROPERTY_DEFAULTZONE)) != null && !s.isEmpty()
+			? TimeZone.getTimeZone(s) : _xd.getXDPool().getDefaultZone();
 	}
 
 	/** Get assigned standard output stream.
@@ -712,8 +777,8 @@ public final class XCodeProcessor {
 				String debugEditor = xp.getDebugEditor();
 				if (debugEditor != null) {
 					try { // try to get external debugger
-						Class<?> cls = Class.forName(debugEditor);
-						Constructor<?> c = cls.getDeclaredConstructor(Properties.class, XDPool.class);
+						Constructor<?> c = Class.forName(debugEditor).getDeclaredConstructor(
+							Properties.class, XDPool.class);
 						_debugger = (XDDebug) c.newInstance(null, xp);
 					} catch (Exception ex) {
 						_debugger = null; // will be used the default debugger
@@ -908,6 +973,16 @@ public final class XCodeProcessor {
 	 */
 	final void setTemporaryReporter(final ArrayReporter reporter) {_reporter = reporter;}
 
+	/** Get FunctionResolver.
+	 * @return FunctionResolver.
+	 */
+	final XPathFunctionResolver getFunctionResolver() {return _functionResolver;}
+
+	/** Get VariableResolver.
+	 * @return VariableResolver.
+	 */
+	final XPathVariableResolver getVariableResolver() {return _variableResolver;}
+
 	/** Set XML output stream.
 	 *  @param stream XML output stream to be set.
 	 */
@@ -995,7 +1070,7 @@ public final class XCodeProcessor {
 			try {
 			if (_debug) {
 				if (_debugger.hasStopAddr(pc) || step != XDDebug.NOSTEP) {
-					step= _debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
+					step =_debugger.debug(chkEl,_code,pc,sp,_stack,_localVariables,_debugInfo,_callList,step);
 					if (step == XDDebug.KILL) {
 						throw new SError(XDEF.XDEF906); //X-definition canceled
 					}
@@ -1004,7 +1079,6 @@ public final class XCodeProcessor {
 			int code;
 			switch (code = (item = _code[pc++]).getCode()) {
 				case NO_OP: continue; //No operation
-////////////////////////////////////////////////////////////////////////////////
 				case LD_CONST: _stack[++sp] = item.cloneItem(); continue;
 				case LD_CODE: _stack[++sp] = _code[item.getParam()].cloneItem(); continue;
 				case LD_TRUE_AND_SKIP: _stack[++sp] = new DefBoolean(true); pc++; continue;
@@ -1023,7 +1097,7 @@ public final class XCodeProcessor {
 					if (val == null) {
 						XVariable xv = ((XVariableTable)_xd.getXDPool().getVariableTable()).getXVariable(
 							item.getParam());
-						if (xv != null && xv.isExternal()) {
+						if (xv.isExternal()) { // null value of external varialble
 							putError(chkEl, //Null value of &{0}
 								XDEF.XDEF573, "external " + getTypeName(xv.getType()) + " " + xv.getName());
 						}
@@ -1067,47 +1141,38 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case TO_BIGINTEGER_X: {
-					int i = item.getParam();
-					_stack[sp - i] = new DefBigInteger(_stack[sp - i].integerValue());
+					int i = sp - item.getParam();
+					_stack[i] = new DefBigInteger(_stack[i].integerValue());
 					continue;
 				}
 				case TO_FLOAT: _stack[sp] = new DefDouble(_stack[sp].doubleValue()); continue;
 				case TO_FLOAT_X: {
-					int i = item.getParam();
-					_stack[sp - i] = new DefDouble(_stack[sp-i].doubleValue());
-					continue;
+					int i = sp - item.getParam(); _stack[i] = new DefDouble(_stack[i].doubleValue());continue;
 				}
 				case TO_INT_X: {
-					int i = item.getParam();
-					_stack[sp - i] = new DefLong(_stack[sp - i].longValue());
-					continue;
+					int i = sp - item.getParam(); _stack[i] = new DefLong(_stack[i].longValue()); continue;
 				}
 				case TO_CHAR_X: {
-					int i = item.getParam();
-					_stack[sp - i] = new DefChar(_stack[sp - i].longValue());
-					continue;
+					int i = sp - item.getParam(); _stack[i] = new DefChar(_stack[i].longValue()); continue;
 				}
+				case TO_STRING_X:
+					_stack[sp-item.getParam()]=new DefString(_stack[sp-item.getParam()].toString()); continue;
+				case TO_MILLIS:_stack[sp]= new DefLong(_stack[sp].datetimeValue().getTimeInMillis());continue;
+				case TO_MILLIS_X:
+					_stack[sp - item.getParam()] =
+						new DefLong(_stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
+					continue;
 				case NULL_OR_TO_STRING:
 					if (_stack[sp] == null || _stack[sp].isNull()) {
 						_stack[sp] = new DefString();
 						continue;
 					}
 				case TO_STRING:
-					if (_stack[sp] == null) {
-						_stack[sp] = new DefString(_stack[sp].toString());
-					} else if (_stack[sp].getItemId() != XD_STRING) {
+					if (_stack[sp] == null || _stack[sp].getItemId() != XD_STRING) {
 						_stack[sp] = new DefString(_stack[sp].toString());
 					}
 					continue;
 				case EQUALS_OP: _stack[--sp] = new DefBoolean(_stack[sp].equals(_stack[sp+1])); continue;
-				case TO_STRING_X:
-					_stack[sp - item.getParam()] = new DefString(_stack[sp - item.getParam()].toString());
-					continue;
-				case TO_MILLIS:_stack[sp]= new DefLong(_stack[sp].datetimeValue().getTimeInMillis());continue;
-				case TO_MILLIS_X:
-					_stack[sp - item.getParam()] =
-						new DefLong(_stack[sp - item.getParam()].datetimeValue().getTimeInMillis());
-					continue;
 				case TO_BOOLEAN: _stack[sp] = new DefBoolean(_stack[sp].booleanValue()); continue;
 				case STACK_TO_CONTAINER: { // create container from stack values
 					int n = item.getParam(); // number of stack items
@@ -1118,10 +1183,9 @@ public final class XCodeProcessor {
 					}
 					continue;
 				}
-				case CREATE_NAMEDVALUE:_stack[sp]= new DefNamedValue(item.stringValue(), _stack[sp]);continue;
+				case CREATE_NAMEDVALUE: _stack[sp]= new DefNamedValue(item.stringValue(),_stack[sp]);continue;
 ////////////////////////////////////////////////////////////////////////////////
 //binary operators
-////////////////////////////////////////////////////////////////////////////////
 				case AND_B:
 					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() & _stack[sp + 1].booleanValue());
 					continue;
@@ -1145,8 +1209,7 @@ public final class XCodeProcessor {
 				case SUB_I:
 					_stack[--sp] = new DefLong(_stack[sp].longValue() - _stack[sp + 1].longValue()); continue;
 				case SUB_R:
-					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() - _stack[sp + 1].doubleValue());
-					continue;
+					_stack[--sp] =new DefDouble(_stack[sp].doubleValue()-_stack[sp+1].doubleValue());continue;
 				case OR_B:
 					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() | _stack[sp + 1].booleanValue());
 					continue;
@@ -1156,8 +1219,7 @@ public final class XCodeProcessor {
 				case MOD_I:
 					_stack[--sp] = new DefLong(_stack[sp].longValue() % _stack[sp + 1].longValue()); continue;
 				case MOD_R:
-					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() % _stack[sp + 1].doubleValue());
-					continue;
+					_stack[--sp] =new DefDouble(_stack[sp].doubleValue()%_stack[sp+1].doubleValue());continue;
 				case LSHIFT_I:/** Left bit shift. */
 					_stack[--sp] = new DefLong(_stack[sp].longValue() << _stack[sp + 1].intValue()); continue;
 				case RSHIFT_I:/** Right bit shift. */
@@ -1216,9 +1278,7 @@ public final class XCodeProcessor {
 // jumps and program controls
 ////////////////////////////////////////////////////////////////////////////////
 				case STOP_OP: {
-					XDValue result = sp == -1 ? null : _stack[sp];
-					Arrays.fill(_stack, null); // clear stack
-					return result;
+					XDValue result = sp == -1 ? null : _stack[sp]; Arrays.fill(_stack, null); return result;
 				}
 				case JMP_OP: pc = item.getParam(); continue;
 				case JMPF_OP:
@@ -1297,8 +1357,7 @@ public final class XCodeProcessor {
 				case ELEMENT_GETTEXT: {
 					Element el = (item.getParam() == 1)
 						? _stack[sp--].getElement() : chkEl != null ? chkEl.getElement() : null;
-					String s = el == null ? null : KXmlUtils.getTextValue(el);
-					_stack[++sp] = new DefString(s);
+					_stack[++sp] = new DefString(el == null ? null : KXmlUtils.getTextValue(el));
 					continue;
 				}
 				case GET_ELEMENT: _stack[++sp] = new DefElement(chkEl.getElement()); continue;
@@ -1380,9 +1439,8 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case COMPILE_XPATH: { //compile XPath
-					DefXPathExpr xp = (DefXPathExpr) item;
 					//we MUST recompile this with actual resolvers!!!
-					xp = new DefXPathExpr(xp.sourceValue(),
+					DefXPathExpr xp = new DefXPathExpr(((DefXPathExpr) item).sourceValue(),
 						chkEl.getXXNamespaceContext(), _functionResolver, _variableResolver);
 					xp.setCode(LD_CONST); //However, we do it just first time!
 					_code[pc - 1] = _stack[++sp] = _code[pc-1] = xp;
@@ -1609,8 +1667,7 @@ public final class XCodeProcessor {
 				case COMPILE_REGEX: _stack[sp] = new XDRegex(_stack[sp].toString(), false); continue;
 				case CHAR_AT: { // charAt
 					int i = _stack[sp--].intValue();
-					String s = _stack[sp].stringValue();
-					_stack[sp] = new DefChar(s.charAt(i));
+					_stack[sp] = new DefChar(_stack[sp].stringValue().charAt(i));
 					continue;
 				}
 				case CONTAINS: {
@@ -1817,14 +1874,42 @@ public final class XCodeProcessor {
 				}
 				case UNIQUESET_IDREFS:
 				case UNIQUESET_CHKIDS: {
+					String s = chkEl.getTextValue().trim();
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					dt.setKeyIndex(item.getParam());
-					String s = chkEl.getTextValue();
-					StringTokenizer st = new StringTokenizer(s = s.trim());
-					DefContainer val = new DefContainer();
+					DefParseResult p = new DefParseResult(s);
 					ArrayReporter reporter = new ArrayReporter();
-					while (st.hasMoreTokens()) {
-						String t = st.nextToken();
+					int ndx = 0;
+					DefContainer val = new DefContainer();
+					while (ndx < s.length()) {
+						String t;
+						int ndx1;
+						if (s.charAt(ndx) == '\'') {
+							ndx1 = s.indexOf('\'', ndx+1);
+							boolean doubleapos = false;
+							while (ndx1+1 < s.length() && s.charAt(ndx1+1) == '\'') {
+								ndx1 = s.indexOf('\'', ndx1+2);
+								doubleapos = true;
+							}
+							if (ndx1 < ndx) {
+								t = s.substring(ndx);
+								ndx1 = s.length();
+							} else {
+								t = s.substring(ndx+1, ndx1);
+							}
+							if (doubleapos) {
+								t = t.replaceAll("''", "'");
+							}
+						} else {
+							ndx1 = s.indexOf(' ', ndx);
+							if (ndx1 < ndx) {
+								t = s.substring(ndx);
+								ndx1 = s.length();
+							} else {
+								t = s.substring(ndx, ndx1);
+							}
+						}
+						for (ndx = ndx1+1; ndx < s.length() && s.charAt(ndx) == ' '; ndx++){}
 						chkEl.setTextValue(t);
 						execUniqueParser(dt, sp, chkEl);
 						XDValue v = chkEl._parseResult;
@@ -1846,7 +1931,6 @@ public final class XCodeProcessor {
 						}
 					}
 					chkEl.setTextValue(s);
-					DefParseResult p = new DefParseResult(s);
 					p.setParsedValue(val);
 					p.addReports(reporter);
 					_stack[sp] = chkEl._parseResult = p;
@@ -2236,7 +2320,7 @@ public final class XCodeProcessor {
 					int i = item.getParam() == 2 ? _stack[sp--].intValue() : 0;
 					Element elem = ((XDContainer) _stack[sp]).getXDElement(i);
 					if (elem == null) {
-						elem = chkEl._rootChkDocument._doc.createElementNS(null, UNDEF_ID);
+						elem = chkEl._rootChkDocument.getDocument().createElementNS(null, UNDEF_ID);
 					}
 					_stack[sp] = new DefElement(elem);
 					continue;
@@ -2650,7 +2734,7 @@ public final class XCodeProcessor {
 						ns = item.getParam() == 2 ? _stack[sp--].toString() : null;
 						name = _stack[sp--].toString();
 					}
-					_stack[++sp] = new DefElement(chkEl._rootChkDocument._doc, ns, name);
+					_stack[++sp] = new DefElement(chkEl._rootChkDocument.getDocument(), ns, name);
 					continue;
 				}
 				case CREATE_ELEMENTS: {
@@ -2666,7 +2750,7 @@ public final class XCodeProcessor {
 					int i = _stack[sp].intValue();
 					DefElement[] values = new DefElement[i];
 					for (int j = 0; j < i; j++) {
-						 values[j] = new DefElement(chkEl._rootChkDocument._doc, ns, name);
+						values[j] = new DefElement(chkEl._rootChkDocument.getDocument(), ns, name);
 					}
 					_stack[sp] = new DefContainer(values);
 					continue;
@@ -2796,7 +2880,7 @@ public final class XCodeProcessor {
 					String s = _stack[sp--].toString();
 					DefBNFRule br =  ((DefBNFGrammar) _stack[sp]).getRule(s);
 					if (br == null || br.isNull()) {
-						throwInfo(chkEl, XDEF.XDEF572, s); //BNF rule '&{0}' not exists
+						throwInfo(chkEl, XDEF.XDEF108, s); //BNF rule '&{0}' not exists in the grammar
 					}
 					_stack[sp] = br;
 					continue;
@@ -2821,7 +2905,7 @@ public final class XCodeProcessor {
 					DefParseResult result;
 					if (r.ruleValue() == null) {
 						result = new DefParseResult(s);
-						result.error(XDEF.XDEF567, ruleName); //Script error: BNF rule '&{0}' not exists
+						result.error(XDEF.XDEF108, ruleName); //BNF rule '&{0}' not exists in the grammar
 					} else {
 						result =  r.perform(s);
 						if (quoted) {
@@ -2897,7 +2981,7 @@ public final class XCodeProcessor {
 					if (result.matches()) {
 						chkEl.setTextValue(result.getSourceBuffer());
 					}
-					return chkEl._parseResult = result;
+					return result;
 				}
 				case PARSEANDCHECK:
 					_stack[sp] = new DefBoolean(((XDParser) _stack[sp]).check(chkEl,
@@ -2984,7 +3068,7 @@ public final class XCodeProcessor {
 				case GET_NAMEDVALUE: {//get named item from Container
 					String name = (item.getParam() == 1) ? item.stringValue() : _stack[sp--].toString();
 					XDValue v = ((XDContainer)_stack[sp]).getXDNamedItemValue(name);
-					_stack[sp] = v == null ? new DefString() : v;
+					_stack[sp] = v == null ? new DefString() /*empty string*/ : v;
 					continue;
 				}
 				case HAS_NAMEDVALUE: {//has named item in Container
@@ -3001,7 +3085,7 @@ public final class XCodeProcessor {
 				case GET_NAMED_AS_STRING: {//named item from Container as string
 					String name = (item.getParam() == 1) ? item.stringValue() : _stack[sp--].toString();
 					XDValue v = ((XDContainer)_stack[sp]).getXDNamedItemValue(name);
-					_stack[sp] = v == null ? new DefString() : new DefString(v.stringValue());
+					_stack[sp] = v == null ? new DefString()/*empty string*/ : new DefString(v.stringValue());
 					continue;
 				}
 				case NAMEDVALUE_GET: _stack[sp] = ((XDNamedValue) _stack[sp]).getValue(); continue;
@@ -3061,6 +3145,8 @@ public final class XCodeProcessor {
 					_stack[++sp] = (XDValue) p;
 					continue;
 				}
+				case NEW_NAMEDVALUE:
+					_stack[--sp] = new DefNamedValue(_stack[sp].stringValue(), _stack[sp+1]); continue;
 				case GET_BYTES_FROM_STRING: {
 					String s = _stack[sp].toString();
 					if (item.getParam() == 1) {
@@ -3070,140 +3156,1028 @@ public final class XCodeProcessor {
 					}
 					continue;
 				}
-			//Codes implemented in XCodeImplMethods
-				case GET_TYPEID: //get type of a value (as integer type id)
-				case GET_TYPENAME: // get name of type of a value
-				case CHECK_TYPE:
-			//Bytes
-				case BYTES_CLEAR:
-				case BYTES_SIZE: //size of byte array
-				case BYTES_TO_BASE64:
-				case BYTES_TO_HEX:
-			//Duration
+				case NEW_CONTAINER: {
+					int i;
+					if ((i = item.getParam()) == 0) {
+						_stack[++sp] = DefNull.genNullValue(XD_CONTAINER);
+					} else {
+						sp -= i - 1;
+						_stack[sp] = new DefContainer(_stack, sp, sp + i - 1);
+					}
+					continue;
+				}
+				case NEW_ELEMENT: {
+					String name = _stack[sp].toString();
+					String uri = item.getParam()==1 ? null : _stack[--sp].toString();
+					Element el = KXmlUtils.newDocument(uri, name, null).getDocumentElement();
+					if (uri != null) {
+						String nsAttr = "xmlns";
+						int i = name.indexOf(':');
+						if (i > 0) {
+							nsAttr += ':' + name.substring(0, i);
+						}
+						el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, nsAttr, uri);
+					}
+					_stack[sp] = new DefElement(el);
+					continue;
+				}
+				case NEW_BYTES:
+					if (item.getParam() == 0) {
+						_stack[++sp] = new DefBytes(new byte[0]);
+					} else {
+						_stack[sp] = new DefBytes(new byte[_stack[sp].intValue()]);
+					}
+					continue;
+				case NEW_INSTREAM:
+					switch (item.getParam()) {
+						case 3: {
+							boolean xmlFormat = _stack[sp--].booleanValue();
+							String s = _stack[sp--].toString();
+							_stack[sp] = new DefInStream(_stack[sp].toString(), s, xmlFormat);
+							break;
+						}
+						case 2: {
+							XDValue v = _stack[sp--];
+							if (v.getItemId() == XD_BOOLEAN) {
+								_stack[sp] = new DefInStream(_stack[sp].toString(), v.booleanValue());
+							} else {
+								_stack[sp] =	new DefInStream(_stack[sp].toString(), v.toString(), false);
+							}
+							break;
+						}
+						default: _stack[sp] = new DefInStream(_stack[sp].toString(), false);
+					}
+					continue;
+				case NEW_OUTSTREAM: {
+					switch (item.getParam()) {
+						case 3: {
+							boolean xmlFormat = _stack[sp--].booleanValue();
+							String s = _stack[sp--].toString();
+							_stack[sp] = new DefOutStream(_stack[sp].toString(),s, xmlFormat);
+							break;
+						}
+						case 2: {
+							String s = _stack[sp--].toString();
+							_stack[sp] = new DefOutStream(_stack[sp].toString(), s);
+							break;
+						}
+						default: _stack[sp] = new DefOutStream(_stack[sp].toString());
+					}
+					continue;
+				}
+				case NEW_BNFGRAMAR: {
+					int extndx;
+					DefBNFGrammar y;
+					String s;
+					if (item.getParam() == 1) {
+						extndx = -1;
+						y = null;
+						s = _stack[sp].toString();
+					} else {
+						extndx = 0;
+						y = (DefBNFGrammar) _stack[sp--];
+						s = _stack[sp].toString();
+					}
+					try {
+						//we MUST recompile this with actual data!!!
+						DefBNFGrammar x = new DefBNFGrammar(y, extndx, new SBuffer(s), null);
+						x.setCode(LD_CONST); //However, we do it just first time!
+						_stack[sp] = x;
+					} catch (SRuntimeException ex) {
+						getTemporaryReporter().putReport(ex.getReport());
+					}
+					continue;
+				}
+				case NEW_SERVICE: {
+					String passw = _stack[sp--].stringValue();
+					String user = _stack[sp--].stringValue();
+					String url = _stack[sp--].stringValue();
+					String service = _stack[sp].stringValue();
+					XDService c;
+					if ("JDBC".equalsIgnoreCase(service)) {
+						c = new DefSQLService(url, user, passw);
+						c.setProperty("autocomit", "yes");
+						_stack[sp] = c;
+					} else {
+						throw new SRuntimeException("Unknown service: " + service);
+					}
+					continue;
+				}
+				case NEW_TELEPHONE: _stack[sp] = new DefTelephone(_stack[sp].stringValue()); continue;
+				case NEW_XMLWRITER: {
+					boolean writehdr = item.getParam() == 3 ? _stack[sp--].booleanValue() : true;
+					String encoding = item.getParam() >= 2 ? _stack[sp--].stringValue() : null;
+					String name = _stack[sp].stringValue();
+					_stack[sp] = new DefXmlWriter(name, encoding, writehdr);
+					continue;
+				}
+				case NEW_REPORT: {
+					int numPar = item.getParam();
+					if (numPar == 1) {
+						_stack[sp] = new XDReport(_stack[sp].toString());
+					} else {
+						String modification = numPar == 3 ? _stack[sp--].stringValue() : null;
+						String text = _stack[sp--].stringValue();
+						String id = _stack[sp].stringValue();
+						_stack[sp] = new XDReport(Report.text(id, text, modification));
+					}
+					continue;
+				}
+				case NEW_LOCALE: {
+					int numPar = item.getParam();
+					switch (numPar) {
+						case 1:
+							_stack[sp] = new DefLocale(_stack[sp].toString().toLowerCase());
+							break;
+						case 2:
+							_stack[sp - 1] = new DefLocale(
+								_stack[sp-1].toString().toLowerCase(), _stack[sp].toString().toUpperCase());
+							sp--;
+							break;
+						default:
+							_stack[sp - 2] = new DefLocale(_stack[sp-2].toString().toLowerCase(),
+								_stack[sp-1].toString().toUpperCase(), _stack[sp].toString());
+							sp -= 2;
+					}
+					continue;
+				}
+				case NEW_EXCEPTION: {
+					Report rep;
+					switch (item.getParam()) {
+						case 1:
+							rep = Report.error(null, _stack[sp].toString());
+							break;
+						case 2:
+							sp--;
+							rep = Report.error(_stack[sp].toString(), _stack[sp].toString());
+							break;
+						default: //if (item.getParam() == 3)
+							sp -= 2;
+							rep = Report.error(
+								_stack[sp].toString(), _stack[sp + 1].toString(), _stack[sp + 2].toString());
+					}
+					_stack[sp] = new DefException(rep, chkEl != null ? chkEl.getXPos() : null, pc);
+					continue;
+				}
+				case NEW_GPSPOSITION: {
+					double latitude;
+					double longitude;
+					double altitude = Double.MIN_VALUE;
+					String name = null;
+					switch (item.getParam()) {
+						case 4:
+							latitude = _stack[sp-3].doubleValue();
+							longitude = _stack[sp-2].doubleValue();
+							altitude = _stack[sp-1].doubleValue();
+							name = _stack[sp].isNull() ? null : _stack[sp].stringValue();
+							sp -= 3;
+							break;
+						case 3:
+							if (!_stack[sp].isNull() || _stack[sp].getItemId()==XD_DOUBLE
+								|| _stack[sp].getItemId()==XD_DECIMAL || _stack[sp].getItemId()==XD_LONG){
+								altitude = _stack[sp].doubleValue();
+							} else {
+								name = _stack[sp].stringValue();
+							}
+							latitude = _stack[sp-2].doubleValue();
+							longitude = _stack[sp-1].doubleValue();
+							sp -= 2;
+							break;
+						default:
+							latitude = _stack[sp-1].doubleValue();
+							longitude = _stack[sp].doubleValue();
+							sp--;
+					}
+					try {
+						_stack[sp] = new XDGPSPosition(new GPSPosition(latitude, longitude, altitude, name));
+					} catch (Exception ex) {
+						 putError(chkEl, XDEF.XDEF222, //Incorrect GPS position &amp;{0}
+							latitude + "," + longitude + "," + altitude + "," + name);
+						_stack[sp] = DefNull.genNullValue(XD_GPSPOSITION);
+					}
+					continue;
+				}
+				case GET_TYPEID: _stack[sp] = new DefLong(_stack[sp].getItemId()); continue;
+				case GET_TYPENAME: _stack[sp] = new DefString(getTypeName(_stack[sp].getItemId())); continue;
+				case CHECK_TYPE: {
+					if (_stack[sp]!=null && !_stack[sp].isNull() && _stack[sp].getItemId()!=item.getParam()) {
+						switch (_stack[sp].getItemId()) {
+							case XD_BOOLEAN: _stack[sp] = new DefBoolean(_stack[sp].booleanValue()); continue;
+							case XD_LONG: _stack[sp] = new DefLong(_stack[sp].intValue()); continue;
+							case XD_DOUBLE: _stack[sp] = new DefDouble(_stack[sp].floatValue()); continue;
+							case XD_DECIMAL: _stack[sp] = new DefDecimal(_stack[sp].decimalValue()); continue;
+							case XD_BIGINTEGER: _stack[sp] =
+								new DefBigInteger(_stack[sp].integerValue()); continue;
+							case XD_DATETIME: _stack[sp] = new DefDate(_stack[sp].datetimeValue()); continue;
+							case XD_DURATION: _stack[sp] =
+								new DefDuration(_stack[sp].durationValue()); continue;
+							case XD_STRING: _stack[sp] = new DefString(_stack[sp].stringValue()); continue;
+							case XD_ELEMENT: _stack[sp] = item.getParam() == XD_CONTAINER
+								? new DefContainer(_stack[sp]) : DefNull.genNullValue(XD_ELEMENT); continue;
+							case XD_EMAIL:
+							case XD_CURRENCY:
+							case XD_TELEPHONE:
+							case XD_IPADDR: continue;
+						}
+						throw new SRuntimeException(XDEF.XDEF536); //Icorrect type conversion from AnyValue
+					}
+					continue;
+				}
+				case BYTES_CLEAR: ((DefBytes) _stack[sp]).clear(); continue;
+				case BYTES_SIZE: _stack[sp] = new DefLong(((DefBytes) _stack[sp]).size()); continue;
+				case BYTES_TO_BASE64: _stack[sp]=new DefString(((DefBytes) _stack[sp]).getBase64()); continue;
+				case BYTES_TO_HEX: _stack[sp] = new DefString(((DefBytes) _stack[sp]).getHex()); continue;
 				case PARSE_DURATION:
+					try {
+						_stack[sp] = new DefDuration(_stack[sp].toString());
+					} catch (SRuntimeException ex) {
+						_stack[sp] = DefNull.genNullValue(XD_DURATION);
+					}
+					continue;
 				case DURATION_GETYEARS:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getYears());
+					continue;
 				case DURATION_GETMONTHS:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getMonths());
+					continue;
 				case DURATION_GETDAYS:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getDays());
+					continue;
 				case DURATION_GETHOURS:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getHours());
+					continue;
 				case DURATION_GETMINUTES:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getMinutes());
+					continue;
 				case DURATION_GETSECONDS:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getSeconds());
+					continue;
 				case DURATION_GETRECURRENCE:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefLong(-1) : new DefLong(_stack[sp].durationValue().getRecurrence());
+					continue;
 				case DURATION_GETFRACTION:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefDouble(-1) : new DefDouble(_stack[sp].durationValue().getFraction());
+					continue;
 				case DURATION_GETSTART:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefDate() : new DefDate(_stack[sp].durationValue().getStart());
+					continue;
 				case DURATION_GETEND:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefDate() : new DefDate(_stack[sp].durationValue().getEnd());
+					continue;
 				case DURATION_GETNEXTTIME:
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull()
+						? new DefDate() : new DefDate(_stack[sp].durationValue().getNextTime());
+					continue;
 			//Element
-				case ELEMENT_CHILDNODES:
-				case ELEMENT_ATTRS:
-				case ELEMENT_NAME:
-				case ELEMENT_NSURI:
+				case ELEMENT_CHILDNODES: {
+					Element el;
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull() || (el=_stack[sp].getElement())==null
+						? new DefContainer() : new DefContainer(el.getChildNodes());
+						continue;
+				}
+				case ELEMENT_ATTRS: {
+					Element el;
+					XDContainer c = new DefContainer();
+					if (_stack[sp]!=null && !_stack[sp].isNull() && (el = _stack[sp].getElement()) != null) {
+						NamedNodeMap nnm = el.getAttributes();
+						for (int i = 0; i < nnm.getLength(); i++) {
+							Node n = nnm.item(i);
+							c.addXDItem(new DefNamedValue(n.getNodeName(), new DefString(n.getNodeValue())));
+						}
+					}
+					_stack[sp] = c;
+					continue;
+				}
+				case ELEMENT_NAME: {
+					Element el;
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull() || (el=_stack[sp].getElement())==null
+						? new DefString(null) : new DefString(el.getTagName());
+					continue;
+				}
+				case ELEMENT_NSURI: {
+					Element el;
+					_stack[sp] = _stack[sp]==null || _stack[sp].isNull() || (el=_stack[sp].getElement())==null
+						? new DefString(null) : new DefString(el.getNamespaceURI());
+					continue;
+				}
 			//ParseResult
 				case GET_PARSED_STRING:
+					_stack[sp] = new DefString(((DefParseResult) _stack[sp]).getSourceBuffer()); continue;
 			//Datetime
-				case GET_DAY:
-				case GET_WEEKDAY:
-				case GET_MONTH:
-				case GET_YEAR:
-				case GET_HOUR:
-				case GET_MINUTE:
-				case GET_SECOND:
-				case GET_MILLIS:
-				case GET_NANOS:
-				case GET_FRACTIONSECOND:
-				case GET_LASTDAYOFMONTH:
-				case GET_DAYTIMEMILLIS:
-				case GET_ZONEOFFSET:
-				case GET_ZONEID:
+				case GET_DAY: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getDay()); continue;
+				case GET_WEEKDAY:_stack[sp] = new DefLong(_stack[sp].datetimeValue().getDayOfWeek());continue;
+				case GET_MONTH: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getMonth()); continue;
+				case GET_YEAR: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getYear()); continue;
+				case GET_HOUR: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getHour()); continue;
+				case GET_MINUTE: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getMinute()); continue;
+				case GET_SECOND: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getSecond()); continue;
+				case GET_MILLIS:_stack[sp]=new DefLong(_stack[sp].datetimeValue().getMillisecond()); continue;
+				case GET_NANOS: _stack[sp] = new DefLong(_stack[sp].datetimeValue().getNanos()); continue;
+				case GET_FRACTIONSECOND: _stack[sp] =
+					new DefDouble(_stack[sp].datetimeValue().getFraction()); continue;
+				case GET_LASTDAYOFMONTH: _stack[sp] =
+					new DefLong(SDatetime.getLastDayOfMonth(_stack[sp].datetimeValue())); continue;
+				case GET_DAYTIMEMILLIS: _stack[sp] =
+					new DefLong(_stack[sp].datetimeValue().getDaytimeInMillis()); continue;
+				case GET_ZONEOFFSET: _stack[sp] = //zone shift to GMT
+					new DefLong(_stack[sp].datetimeValue().getTimeZoneOffset()); continue;
+				case GET_ZONEID: {
+					SDatetime d = _stack[sp].datetimeValue();
+					TimeZone tz;
+					_stack[sp] = d==null||(tz=d.getTZ())==null ? new DefString() : new DefString(tz.getID());
+					continue;
+			}
 			//String
-				case LOWERCASE:
-				case UPPERCASE:
-				case TRIM_S:
-				case GET_STRING_LENGTH: //s.length()
-				case WHITESPACES_S:
-			//Report
-				case GET_REPORT: _stack[sp] = XCodeProcessorExt.perform1v(item, _stack[sp]); continue;
-			//Element
-				case ELEMENT_ADDELEMENT:
-				case ELEMENT_ADDTEXT:
-			//Bytes
-				case BYTES_ADDBYTE: //Add byte
-			//Report
+				case LOWERCASE: { //set to lower case
+					String s = _stack[sp].stringValue();
+					if (s != null) {
+						_stack[sp] = new DefString(s.toLowerCase());
+					}
+					continue;
+				}
+				case UPPERCASE: { //set to upper case
+					String s = _stack[sp].stringValue();
+					if (s != null) {
+						_stack[sp] = new DefString(s.toUpperCase());
+					}
+					continue;
+				}
+				case TRIM_S:{
+					String s = _stack[sp].stringValue();
+					if (s != null) {
+						_stack[sp] = new DefString(s.trim());
+					}
+					continue;
+				}
+				case GET_STRING_LENGTH: {//s.length()
+					String s = _stack[sp].stringValue();
+					_stack[sp] = new DefLong(s != null ? s.length() : 0);
+					continue;
+				}
+				case WHITESPACES_S:{
+					StringBuilder s = new StringBuilder(_stack[sp].toString().trim());
+					for (int i = s.length() -1; i >= 0; i--) {
+						char c;
+						int j = i;
+						while (j >= 0 && ((c = s.charAt(j)) == ' ' ||
+							c == '\n' || c == '\t'  || c == '\r')) {
+							j--;
+						}
+						if (j < i) {
+							s.replace(j+1,i+1, " ");
+							i = j;
+						}
+					}
+					_stack[sp] = new DefString(s.toString());
+					continue;
+				}
+				case GET_REPORT: {
+					_stack[sp] = new XDReport(_stack[sp].isNull() ? null
+						: _stack[sp].getItemId() == XD_EXCEPTION ? ((XDException) _stack[sp]).reportValue()
+						: ((XDOutput) _stack[sp]).getLastErrorReport());
+					continue;
+				}
+				case ELEMENT_ADDELEMENT:{ // Add element to element as child
+					Element el1 = _stack[sp-1].getElement();
+					el1.appendChild(el1.getOwnerDocument().importNode(_stack[sp].getElement(), true));
+					sp -= 2;
+					continue;
+				}
+				case ELEMENT_ADDTEXT:{ // Add text to element as child
+					Element el = _stack[sp-1].getElement();
+					String s = _stack[sp].stringValue();
+					sp -= 2;
+					if (s != null && !s.isEmpty()) {
+						el.appendChild(el.getOwnerDocument().createTextNode(s));
+					}
+					continue;
+				}
+				case BYTES_ADDBYTE: ((DefBytes) _stack[sp-1]).add(_stack[sp].intValue()); sp -= 2; continue;
 				case PUT_REPORT:
-			//XmlWriter
+					if (!_stack[sp-1].isNull()) {
+						((XDOutput) _stack[sp-1]).putReport(((XDReport)_stack[sp]).reportValue());
+					}
+					sp -= 2; continue;
 				case SET_XMLWRITER_INDENTING: // Set writer indenting.
+					((XDXmlOutStream) _stack[sp-1]).setIndenting(_stack[sp].booleanValue()); sp-=2; continue;
 				case WRITE_TEXTNODE:
-					XCodeProcessorExt.perform2(item, _stack[sp-1], _stack[sp]); sp-=2; continue;
-			//formating to string
+					((XDXmlOutStream) _stack[sp-1]).writeText(_stack[sp].stringValue()); sp-=2; continue;
 				case INTEGER_FORMAT:
-				case FLOAT_FORMAT:
-			//Bytes
+				case FLOAT_FORMAT: {
+					String s = _stack[sp].toString();
+					int ndx;
+					DecimalFormat ds;
+					if (s.length() > 2 && s.startsWith("{L(") &&
+						(ndx = s.indexOf(")}")) > 0) {
+						StringTokenizer st = new StringTokenizer(s.substring(3,ndx), " \n\t\r,");
+						s = s.substring(ndx + 2);
+						ds = new DecimalFormat(s);
+						String s1 = st.nextToken().toLowerCase();
+						String s2 = (st.hasMoreTokens() ? st.nextToken():"").toUpperCase();
+						DecimalFormatSymbols dfs = new DecimalFormatSymbols(
+							st.hasMoreTokens() ? new Locale(s1,s2,st.nextToken()) : new Locale(s1,s2));
+						ds.setDecimalFormatSymbols(dfs);
+					} else {
+						ds = new DecimalFormat(s);
+						if (code==FLOAT_FORMAT) {
+							DecimalFormatSymbols df = ds.getDecimalFormatSymbols();
+							df.setDecimalSeparator('.');
+							ds.setDecimalFormatSymbols(df);
+						}
+					}
+					_stack[--sp] = new DefString(code==INTEGER_FORMAT
+						? ds.format(_stack[sp].longValue()) : ds.format(_stack[sp].doubleValue()));
+					continue;
+				}
 				case BYTES_GETAT: //Get byte at position
-			//Date
-				case DATE_FORMAT:
-				case ADD_DAY:
-				case ADD_MONTH:
-				case ADD_YEAR:
-				case ADD_HOUR:
-				case ADD_MINUTE:
-				case ADD_SECOND:
-				case ADD_MILLIS:
-				case ADD_NANOS:
-				case SET_DAY:
-				case SET_MONTH:
-				case SET_YEAR:
-				case SET_HOUR:
-				case SET_MINUTE:
-				case SET_SECOND:
-				case SET_MILLIS:
-				case SET_NANOS:
-				case SET_FRACTIONSECOND:
-				case SET_DAYTIMEMILLIS:
-				case SET_ZONEOFFSET:
-				case SET_ZONEID:
+					_stack[--sp] = new DefLong(((DefBytes) _stack[sp]).getAt(_stack[sp+1].intValue()));
+					continue;
+				case DATE_FORMAT: _stack[--sp] =
+					new DefString(_stack[sp].datetimeValue().formatDate(_stack[sp+1].toString())); continue;
+				case ADD_DAY: _stack[--sp] =
+						new DefDate(_stack[sp].datetimeValue().add(0,0,_stack[sp+1].intValue(),0,0,0,0.0));
+					continue;
+				case ADD_MONTH: _stack[--sp] =
+						new DefDate(_stack[sp].datetimeValue().add(0,_stack[sp+1].intValue(),0,0,0,0,0.0));
+					continue;
+				case ADD_YEAR: _stack[--sp] =
+						new DefDate(_stack[sp].datetimeValue().add(_stack[sp+1].intValue(),0,0,0,0,0,0.0));
+					continue;
+				case ADD_HOUR: _stack[--sp] =
+						new DefDate(_stack[sp].datetimeValue().add(0,0,0,_stack[sp+1].intValue(),0,0,0.0));
+					continue;
+				case ADD_MINUTE: _stack[--sp] =
+						new DefDate(_stack[sp].datetimeValue().add(0,0,0,0,_stack[sp+1].intValue(),0,0.0));
+					continue;
+				case ADD_SECOND: _stack[--sp] =
+						new DefDate(_stack[sp].datetimeValue().add(0,0,0,0,0,_stack[sp+1].intValue(),0.0));
+					continue;
+				case ADD_MILLIS:{//Add millisecs to date.
+					long amount = _stack[sp].longValue();
+					_stack[--sp] = new DefDate(
+						_stack[sp].datetimeValue().add(0,0,0,0,0,(int) amount/1000, (amount%1000)/1000.0));
+					continue;
+				}
+				case ADD_NANOS: {
+					long amount = _stack[sp].longValue();
+					_stack[--sp] = new DefDate(_stack[sp].datetimeValue().add(0,
+						0, 0, 0, 0, (int) (amount / 1000000000L), (amount % 1000000000L)/1000000000.0));
+					continue;
+				}
+				case SET_DAY:{//Set day from date.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setDay(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+			}
+				case SET_MONTH: {//Set month from date.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setMonth(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_YEAR: {//Set year from date.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setYear(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_HOUR:{//Set hour from date.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setHour(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_MINUTE: {//Set minute from date.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setMinute(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_SECOND: {//Set second from date.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setSecond(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_MILLIS: {//Set milliseconds.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setMillisecond(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_NANOS: {//Set nanoseconds.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setNanos(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_FRACTIONSECOND: {//Set fraction of second.
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setFraction(_stack[sp].doubleValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_DAYTIMEMILLIS: {
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setDaytimeInMillis(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_ZONEOFFSET: {
+					SDatetime t = _stack[sp-1].datetimeValue();
+					t.setRawZoneOffset(_stack[sp].intValue());
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
+				case SET_ZONEID: { //Set time zone name
+					SDatetime t = _stack[sp-1].datetimeValue();
+					String s = _stack[sp].stringValue();
+					if (s == null || (s = s.trim()).isEmpty()) {
+						t.setTZ(null);
+					} else {
+						TimeZone tz;
+						if ((tz = TimeZone.getTimeZone(s)) == null || !s.equals(tz.getID())) {
+							if ((TimeZone.getTimeZone("GMT" + s))==null || !("GMT" + s).equals(tz.getID())) {
+								throw new SRuntimeException(SYS.SYS057,s);//Incorrect timezone name{0}{: "}{"}
+							}
+						}
+						t.setTZ(tz);
+					}
+					_stack[--sp] = new DefDate(t);
+					continue;
+				}
 			//String
-				case GET_STRING_TAIL: //tail(s,i);
-				case CUT_STRING: //cut(s,i);
+				case GET_STRING_TAIL: {//tail(s,i);
+					int i = _stack[sp].intValue();
+					String s = _stack[sp-1].stringValue();
+					if (s != null) {
+						int j = s.length() -  i;
+						if (j > 0) {
+							s = s.substring(j);
+						}
+					}
+					_stack[--sp] = new DefString(s);
+					continue;
+				}
+				case CUT_STRING: {//s.substring(i);
+					int i = _stack[sp].intValue();
+					String s = _stack[sp-1].stringValue();
+					_stack[--sp] =
+						(s!=null && s.length()>i) ? new DefString(s.substring(0,i)) : new DefString(s);
+					continue;
+				}
 			//Report
 				case REPORT_TOSTRING:
-				case NEW_NAMEDVALUE:
-					_stack[--sp] = XCodeProcessorExt.perform2v(item,_stack[sp], _stack[sp+1]); continue;
+					_stack[--sp] =new DefString(((XDReport) _stack[sp+1]).toString(_stack[sp].stringValue()));
+					continue;
+				case REPORT_GETPARAM: _stack[--sp] =
+					new DefString(((XDReport) _stack[sp+1]).getParameter(_stack[sp].stringValue())); continue;
+				case GET_SUBSTRING: {//s.substring(i[,j]);
+					int j = _stack[sp--].intValue();
+					if (item.getParam() == 2) {//s.substring(i)
+						String s = _stack[sp].stringValue();
+						_stack[sp] = new DefString(s != null && s.length() >  j ? s.substring(j) : "");
+					} else {
+						int i = _stack[sp--].intValue();
+						String s = _stack[sp].stringValue();
+						_stack[sp] = new DefString(s != null && s.length() >  i ? s.substring(i, j) : "");
+					}
+					continue;
+				}
 			//Bytes
-				case BYTES_INSERT: //Insert byte before
-				case BYTES_REMOVE: //remove byte(s)
-				case BYTES_SETAT: //set byte at position
+				case BYTES_INSERT: {//Insert byte before
+					int b = _stack[sp--].intValue();
+					int pos = _stack[sp--].intValue();
+					((DefBytes) _stack[sp--]).insertBefore(pos, b);
+					continue;
+				}
+				case BYTES_REMOVE: {//remove byte(s)
+					int size = item.getParam() == 2 ? 1 : _stack[sp--].intValue();
+					int pos = _stack[sp--].intValue();
+					((DefBytes) _stack[sp--]).remove(pos, size);
+					continue;
+				}
+				case BYTES_SETAT: {//set byte at position
+					int b = _stack[sp--].intValue();
+					int pos = _stack[sp--].intValue();
+					((DefBytes) _stack[sp--]).setAt(pos, b);
+					continue;
+				}
 			//Element
-				case ELEMENT_TOSTRING:
-				case ELEMENT_GETATTR:
-				case ELEMENT_HASATTR:
-				case ELEMENT_SETATTR:
-				case ELEMENT_TOCONTAINER:
+				case ELEMENT_TOSTRING: { //Get text value of the element
+					boolean indent = item.getParam() == 2 ? _stack[sp--].booleanValue() : false;
+					Element el = _stack[sp].getElement();
+					_stack[sp] = el != null
+						? new DefString(KXmlUtils.nodeToString(el,indent)) : DefNull.genNullValue(XD_ELEMENT);
+					continue;
+				}
+				case ELEMENT_GETATTR: { // Get attribute of the element
+					String name = _stack[sp--].toString();
+					String uri = item.getParam() == 3 ? _stack[sp--].stringValue() : null;
+					Element el = _stack[sp].getElement();
+					if (uri == null) {
+						_stack[sp] = new DefString(el.getAttribute(name));
+					} else {
+						int i = name.indexOf(':');
+						if (i > 0) {
+							name = name.substring(i + 1);
+						}
+						_stack[sp] = new DefString(el.getAttributeNS(uri, name));
+					}
+					continue;
+				}
+				case ELEMENT_HASATTR: { // has attribute of the element
+					String name = _stack[sp--].toString();
+					String uri = item.getParam() == 3 ? _stack[sp--].stringValue() : null;
+					Element el = _stack[sp].getElement();
+					if (uri == null) {
+						_stack[sp] = new DefBoolean(el.hasAttribute(name));
+					} else {
+						int i = name.indexOf(':');
+						if (i > 0) {
+							name = name.substring(i + 1);
+						}
+						_stack[sp] = new DefBoolean(el.hasAttributeNS(uri, name));
+					}
+					continue;
+				}
+				case ELEMENT_SETATTR: { // Set attribute to element
+					String value = _stack[sp--].stringValue();
+					String name = _stack[sp--].toString();
+					String uri = item.getParam() == 4 ? _stack[sp--].stringValue() : null;
+					Element el = _stack[sp--].getElement();
+					if (uri != null) {
+						if (value == null) {
+							int i = name.indexOf(':');
+							if (i > 0) {
+								name = name.substring(i + 1);
+							}
+							el.removeAttributeNS(uri, name);
+						} else {
+							el.setAttributeNS(uri, name, value);
+						}
+					} else {
+						if (value == null) {
+							el.removeAttribute(name);
+						} else {
+							el.setAttribute(name, value);
+						}
+					}
+					continue;
+				}
+				case ELEMENT_TOCONTAINER: // Element to container
+					_stack[sp] = new DefElement(_stack[sp].getElement()).toContainer(); continue;
 			//Datetime
-				case PARSE_DATE:
-			//String
-				case TRANSLATE_S:
-				case REPLACEFIRST_S:
-				case REPLACE_S:
-				case GET_SUBSTRING: //s.substring(i[,j]);
+				case PARSE_DATE: { //parse Datetime
+					String mask = null;
+					if (item.getParam() == 2) {
+						mask = _stack[sp--].stringValue();
+					}
+					String s = _stack[sp].stringValue();
+					s = s == null ? "" : s.trim();
+					StringParser p = getStringParser();
+					p.setSourceBuffer(s);
+					boolean parsed = mask == null ? p.isISO8601Datetime() : p.isDatetime(mask);
+					_stack[sp] = parsed && p.eos() && p.testParsedDatetime()
+						? new DefDate(p.getParsedSDatetime())
+						: DefNull.genNullValue(XD_DATETIME);
+					continue;
+				}
+				//String
+				case TRANSLATE_S:  // translate(s,t)
+				case REPLACEFIRST_S: // replaceFirst(s,t)
+				case REPLACE_S: { // replace(s,t)
+					String q = _stack[sp--].stringValue();
+					String p = _stack[sp--].stringValue();
+					String s = _stack[sp].stringValue();
+					_stack[sp] = new DefString(code==TRANSLATE_S ? SUtils.translate(s, p, q)
+						: code==REPLACEFIRST_S ? SUtils.modifyFirst(s, p, q) : SUtils.modifyString(s, p, q));
+					continue;
+				}
 				case GET_INDEXOFSTRING:
-				case GET_LASTINDEXOFSTRING:
+				case GET_LASTINDEXOFSTRING: {
+					int ndx;
+					if (item.getParam() == 2) {//s.indexOf(s)
+						String s = _stack[sp--].stringValue();
+						String t = _stack[sp].stringValue();
+						ndx = code==GET_INDEXOFSTRING ? t.indexOf(s) : t.lastIndexOf(s);
+					} else {//s.indexOf(s, pos)
+						int i = _stack[sp--].intValue();
+						String s = _stack[sp--].stringValue();
+						String t = _stack[sp].stringValue();
+						ndx = code==GET_INDEXOFSTRING ? t.indexOf(s, i) : t.lastIndexOf(s, i);
+					}
+					_stack[sp] = new DefLong(ndx);
+					continue;
+				}
 			//Report
-				case REPORT_SETPARAM:
-				case REPORT_SETTYPE: //set report type ('E', 'W', 'F', ...)
-			//Constructors
-				case NEW_CONTAINER:
-				case NEW_ELEMENT:
-				case NEW_BYTES:
-				case NEW_INSTREAM:
-				case NEW_OUTSTREAM:
-				case NEW_BNFGRAMAR:
-				case NEW_SERVICE:
-				case NEW_TELEPHONE:
-				case NEW_XMLWRITER:
-				case NEW_REPORT:
-				case NEW_LOCALE: sp = XCodeProcessorExt.perform(this, item, sp, _stack); continue;
+				case REPORT_SETPARAM: {
+					String value = _stack[sp--].stringValue();
+					String name = _stack[sp--].stringValue();
+					XDReport x = (XDReport) _stack[sp];
+					_stack[sp] = x.setParameter(name, value);
+					continue;
+				}
+				case REPORT_SETTYPE: {//set report type ('E', 'W', 'F', ...)
+					String s = _stack[sp--].toString();
+					_stack[sp] = ((XDReport) _stack[sp]).setType(
+						(byte) (s == null || s.isEmpty() ? 'T' : s.charAt(0)));
+					continue;
+				}
+			// parse methods
+				case PARSE_INT: {
+					String s = _stack[sp].stringValue();
+					s = s == null ? "" : s.trim();
+					StringParser p = getStringParser();
+					p.setSourceBuffer(s);
+					_stack[sp] = p.isSignedInteger() && p.eos()
+						? new DefLong(p.getParsedLong()) : DefNull.genNullValue(XD_LONG);
+					continue;
+				}
+				case PARSE_FLOAT: {
+					String s = _stack[sp].stringValue();
+					s = s == null ? "" : s.trim();
+					StringParser p = getStringParser();
+					p.setSourceBuffer(s);
+					_stack[sp] = p.isSignedFloat() && p.eos()
+						? new DefDouble(p.getParsedDouble()) : DefNull.genNullValue(XD_DOUBLE);
+					continue;
+				}
+				case GET_PARSED_BOOLEAN:
+				case GET_PARSED_BYTES:
+				case GET_PARSED_DECIMAL:
+				case GET_PARSED_LONG:
+				case GET_PARSED_DOUBLE:
+				case GET_PARSED_DATETIME:
+				case GET_PARSED_DURATION: {
+					XDParseResult pr=(item.getParam()==1) ? (XDParseResult) _stack[sp--] : chkEl._parseResult;
+					XDValue val = pr.getParsedValue();
+					if (val == null) {
+						val = new DefNull();
+					}
+					_stack[++sp] = val;
+					continue;
+				}
+			/////////////////
+				case GET_NS: { //getNamespaceURI()
+					if (item.getParam() == 0) {
+						String s = chkEl.getElement().getNamespaceURI();
+						if (s == null) {
+							s = "";
+						}
+						 _stack[++sp] = new DefString(s);
+					} else {
+						Element el;
+						String prefix;
+						if (item.getParam() == 1) {
+							if (_stack[sp].getItemId() == XD_ELEMENT) {
+								el = ((DefElement) _stack[sp]).getElement();
+								String s = el == null ? "" : el.getNamespaceURI();
+								if (s == null) {
+									s = "";
+								}
+								_stack[sp] = new DefString(s);
+								continue;
+							} else {
+								prefix = _stack[sp].toString();
+								el = chkEl.getElement();
+							}
+						} else {
+							prefix = _stack[sp].toString();
+							el = ((DefElement) _stack[--sp]).getElement();
+						}
+						_stack[sp] = new DefString(XExtUtils.getNSUri(prefix, el));
+					}
+					continue;
+				}
+				case GET_QNAMEURI: {//getQnameURI(s[,e])
+					String prefix = _stack[sp].isNull()? "" : _stack[sp].toString();
+					Element el = item.getParam() == 1
+						? chkEl.getElement() : ((DefElement) _stack[--sp]).getElement();
+					int ndx;
+					prefix = (ndx = prefix.indexOf(':')) <= 0 ? "" : prefix.substring(0, ndx);
+					_stack[sp] = new DefString(XExtUtils.getNSUri(prefix, el));
+					continue;
+				}
+				case WRITE_ELEMENT_START: { // Write element start.
+					Element el = item.getParam() == 2 ? _stack[sp--].getElement() : chkEl.getElement();
+					((XDXmlOutStream) _stack[sp--]).writeElementStart(el);
+					continue;
+				}
+				case WRITE_ELEMENT_END: {// Write element end tag.
+					if (item.getParam() == 2) {
+						sp--;
+					}
+					((XDXmlOutStream) _stack[sp--]).writeElementEnd();
+					continue;
+				}
+				case WRITE_ELEMENT: {// Write element.
+					Element el = item.getParam() == 2 ? _stack[sp--].getElement() : chkEl.getElement();
+					((XDXmlOutStream) _stack[sp--]).writeNode(el);
+					continue;
+				}
+				case GET_LASTERROR: {
+					Report rep = getTemporaryReporter().getLastErrorReport();
+					if (rep == null) {
+						rep = chkEl.getReportWriter().getLastErrorReport();
+					}
+					_stack[++sp] = new XDReport(rep);
+					continue;
+				}
+				case IS_CREATEMODE: {
+					_stack[++sp] = new DefBoolean(chkEl.getXDDocument().isCreateMode());
+					continue;
+				}
+			// External methods
+				case EXTMETHOD:
+				case EXTMETHOD_CHKEL:
+				case EXTMETHOD_ARRAY:
+				case EXTMETHOD_CHKEL_ARRAY:
+				case EXTMETHOD_XXNODE:
+				case EXTMETHOD_XDARRAY:
+				case EXTMETHOD_CHKEL_XDARRAY:
+				case EXTMETHOD_XXNODE_XDARRAY:
+				case EXTMETHOD_XXELEM: {
+					int paramCount = item.getParam();
+					Object[] pars;
+					XDValue[] parlist;
+					CodeExtMethod dm = (CodeExtMethod) item;
+					Method m = dm.getExtMethod();
+					if (code == EXTMETHOD || code == EXTMETHOD_CHKEL || code == EXTMETHOD_XXNODE
+						|| code == EXTMETHOD_ARRAY || code == EXTMETHOD_XDARRAY || code == EXTMETHOD_CHKEL_XDARRAY
+						|| code == EXTMETHOD_XXNODE_XDARRAY || code == EXTMETHOD_CHKEL_ARRAY
+						|| code == EXTMETHOD_XXELEM) {
+						if (paramCount == 0) {
+							switch (code) {
+								case EXTMETHOD_CHKEL_XDARRAY: pars =new Object[] {chkEl,new XDValue[0]};break;
+								case EXTMETHOD_XXNODE_XDARRAY:
+									pars = new Object[] {(XXNode) chkEl, new XDValue[0]}; break;
+								case EXTMETHOD_XDARRAY: pars = new Object[] {new XDValue[0]}; break;
+								case EXTMETHOD_CHKEL: pars = new Object[] {chkEl}; break;
+								case EXTMETHOD_XXNODE: pars = new Object[] {(XXNode) chkEl}; break;
+								case EXTMETHOD_XXELEM: pars = new Object[] {(XXElement) chkEl}; break;
+								default: pars = new Object[0];
+							}
+						} else {
+							int k;
+							if (code == EXTMETHOD_CHKEL || code == EXTMETHOD_XXNODE
+								|| code == EXTMETHOD_XXNODE_XDARRAY || code == EXTMETHOD_CHKEL_XDARRAY
+								|| code == EXTMETHOD_CHKEL_ARRAY) {
+								pars = new Object[paramCount + 1];
+								pars[0] = chkEl;
+								if (code == EXTMETHOD_XXNODE || code == EXTMETHOD_XXNODE_XDARRAY) {
+									pars[0] = (XXNode) chkEl;
+								}
+								k = 1;
+							} else {
+								pars = new Object[paramCount];
+								k = 0;
+							}
+							if (code == EXTMETHOD || code == EXTMETHOD_CHKEL || code == EXTMETHOD_XXELEM
+								|| code == EXTMETHOD_XXNODE) {
+								Class<?>[] p = m.getParameterTypes();
+								for (int i = sp - paramCount + 1, j = 0;
+									i <= sp; i++, j++) {
+									if (p[j + k].equals(XDValue.class)) {
+										pars[j + k] = _stack[i];
+										continue;
+									}
+									switch (_stack[i].getItemId()) {
+										case XD_DECIMAL: pars[j + k] = _stack[i].decimalValue(); break;
+										case XD_BIGINTEGER: pars[j + k] = _stack[i].integerValue(); break;
+										case XD_LONG: {
+											Class<?> x;
+											if ((x = p[j+k]).equals(Long.TYPE) || x.equals(Long.class)) {
+												pars[j+k] = _stack[i].longValue();
+											} else if (x.equals(Integer.TYPE) || x.equals(Integer.class)) {
+												pars[j+k] = _stack[i].intValue();
+											} else if (x.equals(Short.TYPE) || x.equals(Short.class)) {
+												pars[j+k] = _stack[i].shortValue();
+											} else if (x.equals(Byte.TYPE) || x.equals(Byte.class)) {
+												pars[j+k] = _stack[i].byteValue();
+											}
+											break;
+										}
+										case XD_DOUBLE:
+											Class<?> x;
+											if ((x=p[j+k]).equals(Double.TYPE) || x.equals(Double.class)) {
+												pars[j+k] = _stack[i].doubleValue();
+											} else if (x.equals(Float.TYPE) || x.equals(Float.class)) {
+												pars[j+k] = _stack[i].floatValue();
+											}
+											break;
+										case XD_BOOLEAN: pars[j + k] =
+											_stack[i].booleanValue() ? Boolean.TRUE : Boolean.FALSE; break;
+										case XD_STRING: pars[j + k]= _stack[i].stringValue(); break;
+										case XD_DATETIME: pars[j + k] = _stack[i].datetimeValue(); break;
+										case XD_DURATION: pars[j + k] = _stack[i].durationValue(); break;
+										case XD_ELEMENT: pars[j + k] = _stack[i].getElement(); break;
+										case XD_CONTAINER: pars[j + k] = _stack[i]; break;
+										case XD_BYTES: pars[j + k] = _stack[i].getBytes(); break;
+										case XD_XPATH: pars[j + k] = _stack[i].stringValue(); break;
+										case XD_IPADDR:
+										case XD_CURRENCY: pars[j + k] = _stack[i].getObject(); break;
+										case XD_REGEX:
+										case XD_REGEXRESULT:
+										case XD_INPUT:
+										case XD_OUTPUT:
+										case XD_RESULTSET:
+										case XD_STATEMENT:
+										case XD_SERVICE:
+										case XX_ELEMENT:
+										case XD_PARSERESULT:
+										case XD_ANY:
+										case XD_OBJECT:
+										case XX_ATTR:
+										case XX_TEXT:
+										case XD_PARSER:
+										case XD_GPSPOSITION:
+										case XD_PRICE:
+										case XD_EMAIL: pars[j + k] = _stack[i]; break;
+										default: throw new SError(XDEF.XDEF202,//Internal error: &{0}
+											"Undefined type on PC=" + (pc - 1) + "; "
+												+ item.getClass().getName() + "; code= " + code);
+									}
+								}
+							} else {
+								parlist = new XDValue[paramCount];
+								System.arraycopy(_stack, sp - paramCount + 1, parlist, 0, paramCount);
+								switch (code) {
+									case EXTMETHOD_CHKEL_XDARRAY:
+									case EXTMETHOD_CHKEL_ARRAY: pars = new Object[] {chkEl, parlist}; break;
+									case EXTMETHOD_XXNODE_XDARRAY:
+										pars = new Object[]{(XXNode)chkEl, parlist}; break;
+									default: pars = new Object[] {parlist}; //EXTERNAL_METHOD_ARRAY_CODE
+								}
+							}
+							sp -= paramCount;
+						}
+						Object o = m.invoke(null, pars);
+						short type = dm.getItemId();
+						if (o == null) {
+							_stack[++sp] = DefNull.genNullValue(type);
+						} else if (o instanceof XDValue) {
+							if (type != XD_VOID) {
+								XDValue x = (XDValue) o;
+								if (type == x.getItemId()) {
+									_stack[++sp] = x;
+								} else {
+									switch (dm.getItemId()) {
+										case XD_VOID: break;
+										case XD_DECIMAL: _stack[++sp] = new DefDecimal((BigDecimal) o); break;
+										case XD_BIGINTEGER:
+											_stack[++sp] = new DefBigInteger((BigInteger) o); break;
+										case XD_LONG: _stack[++sp] = new DefLong(x.longValue()); break;
+										case XD_DOUBLE: _stack[++sp] = new DefDouble(x.doubleValue()); break;
+										case XD_BOOLEAN:_stack[++sp] =new DefBoolean(x.booleanValue()); break;
+										case XD_STRING: _stack[++sp] = new DefString(x.stringValue()); break;
+										default: _stack[++sp] = x;
+									}
+								}
+							}
+						} else {
+							switch (dm.getItemId()) {
+								case XD_VOID: break;
+								case XD_DECIMAL: _stack[++sp] = new DefDecimal((BigDecimal) o); break;
+								case XD_BIGINTEGER: _stack[++sp] = new DefBigInteger((BigInteger) o); break;
+								case XD_LONG: _stack[++sp] = new DefLong(((Number) o).longValue()); break;
+								case XD_DOUBLE: _stack[++sp]=new DefDouble(((Number) o).doubleValue()); break;
+								case XD_BOOLEAN: _stack[++sp] = new DefBoolean(((Boolean) o)); break;
+								case XD_STRING: _stack[++sp] = new DefString((String) o); break;
+								case XD_DATETIME: _stack[++sp] = new DefDate((SDatetime) o); break;
+								case XD_DURATION: _stack[++sp] = new DefDuration((SDuration) o); break;
+								case XD_ELEMENT: _stack[++sp] = new DefElement((Element) o); break;
+								case XD_CONTAINER: _stack[++sp] = (DefContainer) o; break;
+								case XD_BYTES: _stack[++sp] = new DefBytes((byte[]) o); break;
+								case XD_OBJECT: _stack[++sp] = (DefObject) o; break;
+								case XD_PARSER: _stack[++sp] = (XDParser) o; break;
+								case XD_PARSERESULT: _stack[++sp] = (XDParseResult) o; break;
+								case XD_ANY: _stack[++sp] = (XDValue) o; break;
+								default: throw new SError(XDEF.XDEF202,//Internal error: &{0}
+									"Undefined result type on PC = " + (pc-1) +"; "+ item.getClass().getName()
+										 + "; code= " + code + "; type= " + dm.getItemId());
+							}
+						}
+						continue;
+					}
+					if (paramCount != 0) {
+						parlist = new XDValue[paramCount];
+						sp -= paramCount;
+						System.arraycopy(_stack, sp + 1, parlist, 0, paramCount);
+					}
+				}// ext methods
 				}//switch
-				//Other codes (implemented in XCodeProcessorExt)
-				sp = XCodeProcessorExt.performX(this, item, chkEl, sp, _stack, pc);
 			} catch (SRuntimeException ex) {
 				if (_catchItem != null) {
 					pc = genDefException(pc, ex, chkEl);
@@ -3213,8 +4187,7 @@ public final class XCodeProcessor {
 				Report report = ex.getReport();
 				throw new XXException(updateReport(report, chkEl), ex);
 			} catch (InvocationTargetException ex) {
-				Throwable thr;
-				thr = ex.getCause();
+				Throwable thr = ex.getCause();
 				if (thr instanceof Error) {
 					throw (Error) thr;
 				}
@@ -3349,13 +4322,16 @@ public final class XCodeProcessor {
 						case UNIQUESET_KEY_IDREF:
 						case UNIQUESET_M_IDREF:
 						case UNIQUESET_IDREF:
+							if (chkNode._parseResult != null) {
+								_reporter.putReport(rep);
+							}
 							list.putReport(rep);
 							break;
 						default :
-							if (chkNode._parseResult == null) {
-								_reporter.putReport(rep);
-							} else {
+							if (chkNode._parseResult != null) {
 								chkNode._parseResult.putReport(rep);
+							} else {
+								_reporter.putReport(rep);
 							}
 					}
 				}

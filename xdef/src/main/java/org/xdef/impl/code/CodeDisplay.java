@@ -192,9 +192,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param value byte of option type.
 	 * @return string with printable form of option.
 	 */
-	private static String printOption(final String s,
-		final String name,
-		final byte value) {
+	private static String printOption(final String s, final String name, final byte value) {
 		if (value == 0) {
 			return s;
 		}
@@ -205,8 +203,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param sc code descriptor.
 	 * @param out where to print.
 	 */
-	private static void displayDesriptor(final XCodeDescriptor sc,
-		final PrintStream out) {
+	private static void displayDesriptor(final XCodeDescriptor sc, final PrintStream out) {
 		out.println(sc.getXDPosition() + ": " + sc.getName() + " " + sc.minOccurs() + ".."
 			+ (sc.maxOccurs() == Integer.MAX_VALUE ? "*" : String.valueOf(sc.maxOccurs())));
 		if (sc.getKind() == XMELEMENT) {
@@ -390,8 +387,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param code array of script code.
 	 * @param out PrintStream where pool is printed.
 	 */
-	public static final void displayCode(final XDValue[] code,
-		final PrintStream out) {
+	public static final void displayCode(final XDValue[] code, final PrintStream out) {
 		displayCode(code, out, 0, code != null ? code.length : -1);
 	}
 

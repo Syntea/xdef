@@ -52,7 +52,7 @@ public final class TestGUIDebuger extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
 		try { // XScript breakpoints
 			xdef =
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+                 	//01
+"<x:collection xmlns:x='"+_xdNS+"'>\n"+                 	//01
 "<x:def name = 'a' root = 'a'>\n"+								//02
 "  <a a = \"required eq('a');\n"+								//03
 "         create 'a';\n"+										//04
@@ -110,13 +110,11 @@ public final class TestGUIDebuger extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { // XPos breakpoints
 			xdef =
-"<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
+"<x:def xmlns:x='"+_xdNS+"' root='a'>\n"+
 "  <a a = \"required;\">\n"+
 "    <b x:script='*'/>\n"+
 "  </a>\n"+
-"  <x:declaration>\n"+
-"    String s = 'a';\n"+
-"  </x:declaration>\n"+
+"  <x:declaration> String s = 'a'; </x:declaration>\n"+
 "</x:def>";
 			xp = compile(xdef);
 			// create mode
@@ -132,17 +130,17 @@ public final class TestGUIDebuger extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { // trace, pause
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = 'a'>\n"+
 " <a a='required'>\n"+
 "   <b xd:script = \"finally {\n"+
-"      trace(xpath('../@a').toString());\n"+
-"      trace(now().toString());\n"+
-"      trace('this'.toString());\n"+
-"      Regex x = new Regex('[A-Z]');\n"+
-"      trace(x.toString());\n"+
-"      RegexResult r = x.getMatcher('DCBA');\n"+
-"      trace(r.toString());\n"+
-"      }\" />\n"+
+"       trace(xpath('../@a').toString());\n"+
+"       trace(now().toString());\n"+
+"       trace('this'.toString());\n"+
+"       Regex x = new Regex('[A-Z]');\n"+
+"       trace(x.toString());\n"+
+"       RegexResult r = x.getMatcher('DCBA');\n"+
+"       trace(r.toString());\n"+
+"     }\" />\n"+
 " </a>\n"+
 "</xd:def>";
 			xml = "<a a='1'> <b/></a>";
@@ -157,24 +155,22 @@ public final class TestGUIDebuger extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='SouborY1A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='SouborY1A'>\n"+
 " <SouborY1A\n"+
 "    Davka        = \"required\"\n"+
 "    ZeDne        = \"required\" > \n"+
 "    <a  xd:script = \"finally {\n"+
 "      Container c = xpath('../@Davka');\n"+
-"		String error; \n"+
-"		error = '._OK._';\n"+
-"		trace(error);\n"+
-"		trace(replace(error, '._', '???'));\n"+
-"		trace(replaceFirst(error, '._', '???'));\n"+
-"		int i = 1; if (2*i EQ 1) trace('ERROR');\n"+
-"		/*comment*/\n"+
-"		pause(xpath('..'));\n"+
-"		trace(xpath('..'));\n"+
-"		outln('len=' + c.getLength()\n"+
-"		+', typ=' + c.getItemType(0)\n"+
-"		+', value=' + c.getText(0));\n"+
+"		 String error; \n"+
+"		 error = '._OK._';\n"+
+"		 trace(error);\n"+
+"		 trace(replace(error, '._', '???'));\n"+
+"		 trace(replaceFirst(error, '._', '???'));\n"+
+"		 int i = 1; if (2*i EQ 1) trace('ERROR');\n"+
+"		 /*comment*/\n"+
+"		 pause(xpath('..'));\n"+
+"		 trace(xpath('..'));\n"+
+"		 outln('len=' + c.getLength() + ', typ=' + c.getItemType(0) + ', value=' + c.getText(0));\n"+
 "      }\" /> \n"+
 "   string();\n"+
 " </SouborY1A>\n"+
@@ -190,12 +186,8 @@ public final class TestGUIDebuger extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+
-"<x:def name         = 'a'\n"+
-"       root         = 'a|*'\n"+
-"       impl-version = '1.0.0'\n"+
-"       impl-date    = '1.11.2000'\n"+
-"       script       = 'options ignoreEmptyAttributes' >\n"+
+"<x:collection xmlns:x='"+_xdNS+"'>\n"+
+"<x:def name='a' root='a|*' impl-version='1' impl-date='1.11.2000' script='options ignoreEmptyAttributes'>\n"+
 "  <x:declaration>\n"+
 "    String $verze = '1.23';\n"+
 "    String $x = '???';\n"+
@@ -213,9 +205,7 @@ public final class TestGUIDebuger extends XDTester {
 	"       }\" />\n"+
 "  </a>\n"+
 "</x:def>\n"+
-"<x:def name         = 'b'\n"+
-"       impl-version = '2.0.0'\n"+
-"       impl-date    = '2.11.2000' />\n"+
+"<x:def name='b' root='B' impl-version = '2' impl-date='2.11.2000'> <B/> </x:def>\n"+
 "</x:collection>";
 			xp = compile(xdef);
 			xml = "<a><b a = 'b' /><b a = 'c' /></a>";
@@ -228,11 +218,8 @@ public final class TestGUIDebuger extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {// check impl properties and "*" in the root selection
 			xdef =
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+
-"<x:def name = 'a' root = 'a|*'\n"+
-"       impl-version = '1.0.0'\n"+
-"       impl-date    = '1.11.2000'\n"+
-"       script       = 'options ignoreEmptyAttributes' >\n"+
+"<x:collection xmlns:x='"+_xdNS+"'>\n"+
+"<x:def name='a' root='a|*' impl-version='1' impl-date='1.11.2000' script='options ignoreEmptyAttributes'>\n"+
 "  <a a = \"required eq('a');\n"+
 "         finally {\n"+
 "           String s = getImplProperty('version');\n"+
@@ -261,7 +248,7 @@ public final class TestGUIDebuger extends XDTester {
 "           pause(s);\n"+
 "         }\" />\n"+
 "</x:def>\n"+
-"<x:def name='b' impl-version='2.0.0' impl-date='2.11.2000'/>\n"+
+"<x:def name='b' root='B' impl-version='2' impl-date='2.11.2000'> <B/> </x:def>\n"+
 "</x:collection>";
 			xp = compile(xdef);
 			xml = "<a a = 'b' />";
@@ -294,29 +281,22 @@ public final class TestGUIDebuger extends XDTester {
 "<xd:json name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
 "      [\n" +
-"        {\n" +
-"          %script= \"occurs 1..*; ref B\" \n" +
-"        }\n" +
+"        { \"%script\": \"occurs 1..*; ref B\" }\n" +
 "      ]\n" +
 "  }\n" +
 "}\n" +
 "</xd:json>\n" +
 "<xd:json name=\"B\" >\n" +
 "{ \"id\": \"string()\",\n" +
-"   \"name\":{\n"+
-"      \"family\":\"jstring()\",\n"+
-"      \"given\":\"optional jstring()\"\n"+
-"   },\n"+
+"   \"name\":{ \"family\":\"jstring()\", \"given\":\"optional jstring()\" },\n"+
 "   \"email\": \"emailAddr();\",\n" +
-"   \"link\": { %script= \"ref C\" }\n" +
+"   \"link\": { \"%script\": \"ref C\" }\n" +
 "}\n" +
 "</xd:json>\n" +
 "<xd:json name=\"C\" >\n" +
-"{  %oneOf= \"optional;\",\n" +
+"{  \"%oneOf\": \"optional;\",\n" +
 "   \"manager\": \"jstring()\",\n" +
-"   \"subordinates\":[\n" +
-"      \"* jstring();\"\n" +
-"   ]\n" +
+"   \"subordinates\":[ \"* jstring();\" ]\n" +
 "}\n" +
 "</xd:json>\n" +
 "</xd:def>";

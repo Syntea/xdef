@@ -1,9 +1,9 @@
 {
-	"plat":1000,
-	"jmeno":"Alena",
-	"zena": true,
-	"kocka" : {
-		"jmeno": "Mnau",
-		"vek":1
+	"salary": 1000,
+	"name": "Hana",
+	"female": true,
+	"pet" : {
+		"name": "Mnau",
+		"age": 3
 	}
 }

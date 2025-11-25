@@ -2,7 +2,6 @@ package test.xdef;
 
 import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
@@ -18,7 +17,7 @@ public class TestEmailAddr extends XDTester {
 	public TestEmailAddr() {super();}
 
 	private final XDPool _xp = compile(
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration> external EmailAddr email; </xd:declaration>\n"+
 "  <A> emailAddr(); finally email = getParsedValue(); </A>\n" +
 "</xd:def>");

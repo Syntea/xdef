@@ -16,12 +16,15 @@ public class XCTextComponent implements XComponent {
 	private String _model;
 	private int _index;
 
-	public XCTextComponent(final String value,
-		final String xdPos,
-		final String xpos,
-		final int index) {
+	/** Create new instance of XCTextComponent.
+	 * @param value value with text.
+	 * @param model XPosition of this text in the model.
+	 * @param xpos XPosition of text node (may be null).
+	 * @param index index of node.
+	 */
+	public XCTextComponent(final String value, final String model, final String xpos, final int index) {
 		_value = value;
-		_model = xdPos;
+		_model = model;
 		_xpos = xpos;
 		_index = index;
 	}
@@ -74,7 +77,7 @@ public class XCTextComponent implements XComponent {
 	 * @param xpos XPosition of node.
 	 */
 	@Override
-	public void xSetXPos(String xpos){_xpos = xpos;}
+	public void xSetXPos(String xpos) {_xpos = xpos;}
 
 	/** Get XDPosition of this XComponent.
 	 * @return string withXDPosition of this XComponent.
@@ -161,19 +164,11 @@ public class XCTextComponent implements XComponent {
 	 * @param name name of element.
 	 */
 	@Override
-	public void xInit(final XComponent p, final String name, final String ns, final String xPos){}
+	public void xInit(final XComponent p, final String name, final String ns, final String xPos) {}
 
 	/** Get XON object from this X-component.
 	 * @return XON object if this X-component.
 	 */
 	@Override
 	public String toXon() {return _value;}
-//
-//	@Override
-//	public Object xGet(final String name) {throw new UnsupportedOperationException("Not supported");}
-//	@Override
-//	public void xSet(final String name, Object value) {
-//		throw new UnsupportedOperationException("Not supported");
-//	}
-
 }

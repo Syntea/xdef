@@ -42,7 +42,7 @@ public class TestGenDTD extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def xd:name=\"a\" xd:root=\"aaa#log | bbb#mog | *\">\n" +
 "</xd:def>\n" +
 "<xd:def xd:name=\"aaa\">\n" +

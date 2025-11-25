@@ -230,7 +230,7 @@ if(true){return;}
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef = //test property "xdef_saveReports" and onIllegal events
-"<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root = \"A\">\n" +
 "<A xd:script='option clearReports; onIllegalElement out(\"e\");'\n" +
 "   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+
 "  <B xd:script='illegal; option clearReports; onIllegalElement out(\"e\");'/>\n" +
@@ -249,7 +249,7 @@ if(true){return;}
 				fail(KXmlUtils.nodeToString(el));
 			}
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root = \"A\">\n" +
 "<A xd:script='option preserveReports; onIllegalElement out(\"e\");'\n" +
 "   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+
 "  <B xd:script='illegal; option preserveReports; onIllegalElement out(\"e\");'/>\n" +
@@ -405,7 +405,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<X:def xmlns:X='" + _xdNS + "' root='a|root'>\n"+
+"<X:def xmlns:X='"+_xdNS+"' root='a|root'>\n"+
 "  <X:declaration scope='local'>\n"+
 "    BNFGrammar g = new BNFGrammar('\n"+
 "      x ::= S? [0-9]+\n"+
@@ -584,7 +584,7 @@ if(T)return;
 //if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n"+
 "    uniqueSet r {a: int();};\n"+
 "     type s string(1,*);\n" +
@@ -612,7 +612,7 @@ if(T)return;
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a='? t()'/>\n"+
 "  <xd:declaration>\n"+
 "     type t enum(%argument=['a','b']);\n"+
@@ -636,7 +636,7 @@ System.out.println("ParserName: " + xmd.getParserName());
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "   <a xd:text='* string()'/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -651,7 +651,7 @@ if(T){return;}
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "   <a xd:text='* string()'>\n" +
 "     <b xd:script='*'/>\n" +
 "   </a>\n" +
@@ -703,7 +703,7 @@ if(T){return;}
 			assertEq(xml, create(xp, "", "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'/>\n" +
 "</xd:def>";
@@ -712,7 +712,7 @@ if(T){return;}
 			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
 "   <a xd:text='* string(); create ++i'>\n" +
 "     <b xd:script='*'/>\n" +
@@ -732,7 +732,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root = 'a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root = 'a'>\n"+
 "  <a xd:textcontent=\"string();\n" +
 "       onTrue out('T:'+getText()); finally out('f:'+getText());\">\n"+
 "    <b/>\n"+
@@ -765,7 +765,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n"+
 "    uniqueSet r {a: int();};\n"+
 "     type s string(1,*);\n" +
@@ -864,7 +864,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='A' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='A' root='A'>\n"+
 "  <xd:declaration scope='global'>\n" +
 "    type name string(1, 128);\n" +
 "  </xd:declaration>\n" +
@@ -884,21 +884,21 @@ if(T){return;}
 			// filepath
 			XDFactory.compileXD(null, s);//with wildcards
 			XDFactory.compileXD(null,
-"<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='" + s + "'/>");
+"<xd:def xmlns:xd='"+_xdNS+"' xd:name='X' xd:include='" + s + "'/>");
 			XDFactory.compileXD(null,
-"<xd:collection xmlns:xd='" + _xdNS + "' xd:include='" + s + "'/>");
+"<xd:collection xmlns:xd='"+_xdNS+"' xd:include='" + s + "'/>");
 			// URL (file:/filepath)
 			XDFactory.compileXD(null, "file:/" + s);
 			XDFactory.compileXD((Properties) null,
-"<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='file:/" + s + "'/>");
+"<xd:def xmlns:xd='"+_xdNS+"' xd:name='X' xd:include='file:/" + s + "'/>");
 			XDFactory.compileXD((Properties) null,
-"<xd:collection xmlns:xd='" + _xdNS + "' xd:include='file:/" + s + "'/>");
+"<xd:collection xmlns:xd='"+_xdNS+"' xd:include='file:/" + s + "'/>");
 		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			reporter.clear();
 			xp = XDFactory.compileXD(reporter, (Properties) null,
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    int i;\n"+
 "    int x(){return 0;}\n"+
@@ -924,7 +924,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"A\">\n" +
 "<xd:declaration scope = 'local'>\n" +
 "type t string(1,10,%pattern=[\"[a-z]+\", \"d+\"], %whiteSpace=\"replace\");\n"+
 "</xd:declaration>\n" +
@@ -951,12 +951,12 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'\n" +
+"<xd:def xmlns:xd='"+_xdNS+"'\n" +
 "   xd:name=\"Test\" xd:root=\"json\">\n" +
 "  <xd:json name='json'>{\"A\":\"int();\"}</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef,
-"<xd:def xmlns:xd='" + _xdNS + "'\n" +
+"<xd:def xmlns:xd='"+_xdNS+"'\n" +
 "   xd:name=\"Test1\" xd/:root=\"Test#json\"/>"
 			);
 			xd = xp.createXDDocument("Test1");
@@ -1010,7 +1010,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script='var {type x int(2,3); uniqueSet u {p: x; q: t};}'\n"+
 "    a='? t()'\n"+
 "    b='? x()'\n"+
@@ -1052,7 +1052,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 " <xd:declaration scope='global'>\n"+
 "   <xd:macro name='moreAll'>options moreAttributes,moreElements;</xd:macro>\n"+
 " </xd:declaration>\n"+
@@ -1062,7 +1062,7 @@ if(T){return;}
 			parse(xp, "", "<A a = 'a'><XXX xx='xx'>xx</XXX></A>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 " <xd:declaration scope='local'>\n"+
 "  <xd:macro name='moreAll'>options moreAttributes,moreElements;</xd:macro>\n"+
 " </xd:declaration>\n"+
@@ -1072,7 +1072,7 @@ if(T){return;}
 			parse(xp, "", "<A a = 'a'><XXX xx='xx'>xx</XXX></A>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:declaration>\n"+
 "  <xd:macro name=\"moreAll\">options moreAttributes,moreElements;\n"+
 "    </xd:macro>\n"+
@@ -1088,7 +1088,7 @@ if(T){return;}
 "<xd:declaration xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n"+
 " <xd:macro name='moreAll'>options moreAttributes,moreElements;</xd:macro>\n"+
 "</xd:declaration>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A xd:script='${moreAll}'/>\n"+
 "</xd:def>"
 			});
@@ -1098,7 +1098,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='B' root='A'>\n"+
 "  <xd:declaration> Parser p; uniqueSet u {x: p} </xd:declaration>\n"+
 "  <A id=\"? xdType(); onTrue p = getParsedValue();\" />\n"+
@@ -1172,7 +1172,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= [0-9]+\n"+
@@ -1190,7 +1190,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script='finally out(parseInt(\"12x3\"))'>\n" +
 "<xd:mixed>\n"+
 "    match getOccurrence() == 0; ? string(); \n" +
@@ -1211,7 +1211,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script='finally out(parseInt(\"12x3\"))'>\n" +
 "    <xd:mixed>\n"+
 "       match getOccurrence() == 0; ? string(); \n" +
@@ -1232,7 +1232,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:textcontent='int(); create 123; option cdata;'/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -1264,7 +1264,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean bugreports.MyTest_0.next(XXElement xyz_);\n"+
 "    external method boolean bugreports.MyTest_0.methodA(XXElement $_x);\n"+
@@ -1297,7 +1297,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "   ParseResult licheCislo() {\n"+
 "      ParseResult p = int();\n"+
@@ -1318,7 +1318,7 @@ if(T){return;}
 			assertErrors(reporter);
 			assertEq("", swr.toString());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  ParseResult lc() {\n"+
 "    ParseResult r = int();\n"+
@@ -1340,7 +1340,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "   boolean licheCislo() {\n"+
 "     return parseInt(getText()) % 2 != 0\n"+
@@ -1354,7 +1354,7 @@ if(T){return;}
 			parse(xdef, "", "<a a='2'></a>", reporter);
 			assertErrors(reporter);
 			xdef = // var in model with reference
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script='var {int j, i=123;}'>\n"+
 "    <xd:choice xd:script=\"?\">\n"+
 "      <O xd:script=\"occurs 0..2;\n"+
@@ -1385,7 +1385,7 @@ if(T){return;}
 		try {
 			setChkSyntax(false);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 " external method {\n"+
 "   void bugreports.MyTest_0.p3(Long,) as p;\n"+
@@ -1415,7 +1415,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<a>\n"+
 "  <b>required string()</b>\n"+
 "  <xd:sequence occurs = '*'>\n"+
@@ -1434,7 +1434,7 @@ if(T){return;}
 			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:macro name='m' p='?'>init out('i#{p}');finally out('f#{p}')</xd:macro>\n"+
 "  <a xd:script=\"${m(p='a')}\">\n"+
 "    <xd:choice>\n"+
@@ -1502,7 +1502,7 @@ if(T){return;}
 			assertEq("iaic1fc1id1fd1ie2fe2ie2fe2fa", swr.toString());
 			assertEq(el, xml);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='A'>\n"+
 "<xd:macro name='m' p='?'>init out('i#{p}');finally out('f#{p}')</xd:macro>\n"+
 " <A xd:script=\"1;${m(p='A')}\">\n"+
 "   <xd:sequence xd:script=\"1;${m(p='SQ')}\">\n"+
@@ -1534,7 +1534,7 @@ if(T){return;}
 			assertEq(xml, el);
 			assertEq("iAiSQiBfBiXfXfSQiDfDfA", swr.toString());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 " <a xd:script='init out(\"ia\");finally out(\"fa\")'>\n"+
 "   <xd:sequence xd:script='1;init out(\"im\");finally out(\"fm\")'>\n"+
 "      <b xd:script='init out(\"ib\");finally out(\"fb\")'/>\n"+
@@ -1565,7 +1565,7 @@ if(T){return;}
 			assertEq(xml, el);
 			assertEq("iaimibfbixfxfmicfcfa", swr.toString());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name='a' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='a' root='a'>\n"+
 "    <a>\n"+
 "        <xd:mixed xd:script='?;'>\n"+
 "            <d xd:script='1; create from(\"/a/d\")'/>\n"+
@@ -1583,7 +1583,7 @@ if(T){return;}
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a>\n"+
 "    <xd:mixed>\n"+
 "      <xd:mixed> <p/> <q/> </xd:mixed>\n"+
@@ -1600,7 +1600,7 @@ if(T){return;}
 			parse(xp, "", "<a><b/><c/><p/><q/><z/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a>\n"+
 "    <xd:sequence>\n"+
 "      <xd:mixed><p/><q/></xd:mixed>\n"+
@@ -1618,7 +1618,7 @@ if(T){return;}
 			parse(xp, "", "<a><p/><p/><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a>\n"+
 "    <xd:sequence>\n"+
 "      <b/>\n"+
@@ -1637,7 +1637,7 @@ if(T){return;}
 			parse(xp, "", "<a><b/><p/><p/><c/></a>", reporter);
 			assertErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a>\n"+
 "    <xd:sequence>\n"+
 "      <b/>\n"+
@@ -1653,7 +1653,7 @@ if(T){return;}
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b/><c/></a>", reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> int $typ = 1; </xd:declaration>\n"+
 "  <a>\n"+
 "    <xd:choice xd:script='occurs 2;create 2'>\n"+
@@ -1670,7 +1670,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' xd:root = \"err\" >\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' xd:root = \"err\" >\n"+
 "<xd:declaration>\n"+
 "  external method void bugreports.MyTest_0.exc()\n"+
 "</xd:declaration>\n"+
@@ -1687,7 +1687,7 @@ if(T){return;}
 if(T){return;}
 		try {//union with base
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method boolean bugreports.MyTest_0.cPar(XDContainer c);\n"+
 "  NamedValue n = %y = 'Y';\n"+
@@ -1713,7 +1713,7 @@ if(T){return;}
 			el = parse(xp, "", "<a>x</a>", reporter);
 			assertEq("<a>A,B,1,Y,Z,1,15,%q=Q,Q,Y,1,true</a>", el);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name = 'test' root = 'a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name = 'test' root = 'a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = sequence(%item=[boolean,decimal],\n"+
 "    %enumeration=['true 1', 'false 2']); \n"+
@@ -1728,7 +1728,7 @@ if(T){return;}
 			parse(xp, "", "<a a='false 1' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='Example' root='a'> <a>required myType()</a> </xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -1755,7 +1755,7 @@ if(T){return;}
 			parse(xd, "<a>Arthur C Clark, Jack London</a>", reporter);
 			assertTrue(reporter.errorWarnings(),"error not recognized");
 			xdef =
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='Example' root='a'> <a> required myType() </a> </xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -1777,7 +1777,7 @@ if(T){return;}
 			parse(xd, "<a>123, 456, 789</a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
 "      integer ::= S? [0-9]+\n"+
@@ -1794,7 +1794,7 @@ if(T){return;}
 			parse(xd, "<a> 123, 456, 789 </a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 " <a a='required decimal(%whiteSpace = \"collapse\");\n"+
 "       options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
 "</xd:def>";
@@ -1804,7 +1804,7 @@ if(T){return;}
 			parse(xd, "<a a=' 1' />", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 " <a a='required decimal(%whiteSpace = \"collapse\");\n"+
 "       options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
 "</xd:def>";
@@ -1814,7 +1814,7 @@ if(T){return;}
 			parse(xd, "<a a='   1   ' />", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 " <a a='required decimal; options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -1823,7 +1823,7 @@ if(T){return;}
 			parse(xd, "<a a=' 1' />", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = list(%item=decimal, %enumeration=['1', '2', '3 4']); \n"+
 "  Parser t = union(%item=[boolean, s]); \n"+
@@ -1844,7 +1844,7 @@ if(T){return;}
 			parse(xd, "<a a=' true 1 ' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = sequence(%item=[boolean,decimal],\n"+
 "                      %enumeration=['true 1', 'false 2']); \n"+
@@ -1864,7 +1864,7 @@ if(T){return;}
 			parse(xd, "<a a=' 1 2' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = sequence(%item=[boolean,decimal],\n"+
 "                      %enumeration=['true 1', 'false 2']);\n"+
@@ -1879,7 +1879,7 @@ if(T){return;}
 			parse(xd, "<a a='false 1' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  Parser s = string(%enumeration=['abc', 'xyz']); \n"+
 "  Parser t = union(%item=[decimal, boolean, s ]); \n"+
@@ -1896,7 +1896,7 @@ if(T){return;}
 			parse(xd, "<a a=' 1 2' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  type t  int;\n"+
 "</xd:declaration>\n"+
@@ -1912,7 +1912,7 @@ if(T){return;}
 			parse(xd, "<a a=' 1 2' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<a a='decimal(0,1)'/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -1921,7 +1921,7 @@ if(T){return;}
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"optional; finally \n"+
 "    {if(!gYear(%minInclusive='1999').parse()) error('false');}\"/>\n"+
 "</xd:def>";
@@ -1931,7 +1931,7 @@ if(T){return;}
 			parse(xd, "<a a='1999'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>int $i = 5; </xd:declaration>\n"+
 "<a a='list(%item=decimal(%minInclusive=1,%maxInclusive=$i," +
 "      %totalDigits=1,%fractionDigits=0,%enumeration=[1,3]," +
@@ -1947,7 +1947,7 @@ if(T){return;}
 			parse(xd, "<a a='2000'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<a a='list(%item=decimal(%minInclusive= -100))'/>"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -1960,7 +1960,7 @@ if(T){return;}
 			parse(xd, "<a a='1 4'/>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "external method XDParseResult bugreports.MyTest_0.kp(XXNode x,XDValue[] y);\n"+
 "</xd:declaration>\n"+
@@ -1972,7 +1972,7 @@ if(T){return;}
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<a a='decimal'/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -1985,7 +1985,7 @@ if(T){return;}
 			parse(xd, "<a a='--99999999999999999.0000999999'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<a a='decimal(%base=decimal(%minInclusive=0),%minInclusive=1," +
 "      %maxInclusive=5,%totalDigits=1,%fractionDigits=0," +
 "      %enumeration=[1,3],%pattern=[\"\\\\d\"])'\n"+
@@ -1997,7 +1997,7 @@ if(T){return;}
 			xd.xparse("<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>int $i = 5; </xd:declaration>\n"+
 "<a a='decimal(%minInclusive=1, %maxInclusive=$i, %totalDigits=1," +
 "      %enumeration=[1,3],%pattern=[\"\\\\d\"])'\n"+
@@ -2009,7 +2009,7 @@ if(T){return;}
 			xd.xparse("<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<a a='decimal(0,5, %totalDigits=1,\n"+
 "      %enumeration=[1,3],%pattern=[\"\\\\d\"])'\n"+
 "/>\n"+
@@ -2020,7 +2020,7 @@ if(T){return;}
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>int $i = 5; </xd:declaration>\n"+
 "<a a='decimal( 0, $i, %totalDigits=1," +
 "      %enumeration=[1,3],%pattern=[\"\\\\d\"])'\n"+
@@ -2032,7 +2032,7 @@ if(T){return;}
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>int $i = 5; </xd:declaration>\n"+
 "<a a='decimal(%base=decimal(%minInclusive=0),%minInclusive=1," +
 "      %maxInclusive=5,%totalDigits=1,%fractionDigits=0,%enumeration=[1,3]," +
@@ -2044,7 +2044,7 @@ if(T){return;}
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 " <a a='union(%item=[decimal(%maxInclusive=5), boolean()])'/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();

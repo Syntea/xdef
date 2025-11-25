@@ -423,7 +423,7 @@ public final class TestXSTypes extends XDTester {
 
 	void genXDef() {
 		_xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
 "  script='options noTrimAttr,preserveEmptyAttributes,\n"+
 "    preserveAttrWhiteSpaces, noTrimText,preserveTextWhiteSpaces'>\n"+
 "  <a a=\"" + _params + "\">\n"+

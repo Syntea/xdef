@@ -48,6 +48,7 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
+import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import static org.xdef.model.XMNode.XMCHOICE;
@@ -80,7 +81,7 @@ import org.xdef.xon.XonUtils;
 /** Provides root check object for generation of check tree and processing of the X-definition.
  * @author Vaclav Trojan
  */
-final class ChkDocument extends ChkNode	implements XDDocument {
+final class ChkDocument extends ChkNode implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options
 	////////////////////////////////////////////////////////////////////////////
@@ -98,20 +99,15 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private byte _setTextValuesCase; //0 not set, 'I' ignore, 'T' or 'F'
 	////////////////////////////////////////////////////////////////////////////
 	/** Root definition. */
-	XDefinition _xdef;
+	private XDefinition _xdef;
 	/** Report generator. */
-	SReporter _reporter;
+	private SReporter _reporter;
 	/** Actual w3c.dom.Document. */
-	Document _doc;
-	/** Root check element. */
-	ChkElement _chkRoot;
+	private Document _doc;
 	/** XDLexicon source language ID.*/
-	int _sourceLanguageID = -1;
+	private int _sourceLanguageID = -1;
 	/** XDLexicon destination language ID.*/
-	int _destLanguageID = -1;
-	/** XON object, result of XON/JSON parsing */
-	Object _xon;
-	////////////////////////////////////////////////////////////////////////////
+	private int _destLanguageID = -1;
 	/** The list of child check elements. */
 	private final List<ChkElement> _chkChildNodes;
 	/** Reference number - max. 1 for root. */
@@ -125,7 +121,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Switch to generate XComponent instead of Element; */
 	private boolean _genXComponent;
 	////////////////////////////////////////////////////////////////////////////
-	// valid date parameters
+	// parameters of valid dates
+	////////////////////////////////////////////////////////////////////////////
 	/** Maximal accepted value of the year. */
 	private int _maxYear = Integer.MIN_VALUE;
 	/** Minimal accepted value of the year. */
@@ -135,10 +132,22 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Switch to check if date is legal. */
 	private boolean _stopCheckDateLegal;
 
+	/** Flag document is clesed. */
+	private boolean _documentClosed;
+	////////////////////////////////////////////////////////////////////////////
+	/** XON object, result of XON/JSON parsing */
+	Object _xon;
+	/** Root ChkElement. */
+	ChkElement _chkRoot;
+
 	/** Create new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
 	 */
-	private ChkDocument() {super("$root", null); _chkChildNodes = new ArrayList<>();}
+	private ChkDocument() {
+		super("$root", null);
+		_chkChildNodes = new ArrayList<>();
+		_documentClosed = false;
+	}
 
 	/** Create new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
@@ -177,7 +186,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		this();
 		setDateRestrictions(xd.getXDPool());
 		init(xd,
-			chkel._rootChkDocument._doc,
+			chkel._rootChkDocument.getDocument(),
 			chkel._rootChkDocument._reporter,
 			chkel._scp.getProperties(),
 			chkel.getUserObject());
@@ -435,6 +444,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	final ChkElement createRootChkElement(final Element element, final boolean checkRoot) {
 		String uri = element.getNamespaceURI();
 		String name = element.getNodeName();
+		_documentClosed = false;
 		_element = element;
 		if (_xElement == null) {
 			int languageId = isCreateMode() ? _destLanguageID:_sourceLanguageID;
@@ -616,21 +626,26 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return _chkRoot;
 	}
 
+	final void startDocument() {_documentClosed = false;}
+
 	final void endDocument() {
-		if (_xdef != null) {
-			if (_xdef._finaly >= 0) {
-				_chkRoot.setXXType((byte) 'D');
-				_scp.exec(_xdef._finaly, _chkRoot);
-			} else {
-				debugXPos(XDDebug.FINALLY);
+		if (!_documentClosed) {
+			_documentClosed = true;
+			if (_xdef != null) {
+				if (_xdef._finaly >= 0) {
+					_chkRoot.setXXType((byte) 'D');
+					_scp.exec(_xdef._finaly, _chkRoot);
+				} else {
+					debugXPos(XDDebug.FINALLY);
+				}
 			}
+			if (_scp.getXmlStreamWriter() != null) {
+				_scp.getXmlStreamWriter().flushStream();
+			}
+			// Check unresolved IdRefs (print errors) and clear memory.
+			_scp.endXDProcessing(); //TODO???
+			copyTemporaryReports();
 		}
-		if (_scp.getXmlStreamWriter() != null) {
-			_scp.getXmlStreamWriter().flushStream();
-		}
-		// Check unresolved IdRefs (print errors) and clear memory.
-		_scp.endXDProcessing(); //TODO???
-		copyTemporaryReports();
 	}
 
 	/** Throw SRuntimeException If noreporter is true Check if the property XDPROPERTY_WARNINGS is true,
@@ -1351,6 +1366,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
+		_documentClosed = false;
 		Class<?> yClass  = xClass;
 		if (data == null || data instanceof Map) {
 			@SuppressWarnings("unchecked")
@@ -1702,14 +1718,16 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	private Element xparse(final XParser parser, final ReportWriter reporter) {
 		Element result;
+		startDocument();
+		_reporter = parser.getReporter();
 		try {
-			_reporter = parser.getReporter();
 			_scp.setStdErr(new DefOutStream(_reporter.getReportWriter()));
 			_refNum = 0; // we must clear counter!
 			parser.xparse(this);
 			_xElement = null;
 			result = chkAndGetRootElement(parser.getReporter(), reporter==null);
 			parser.closeReader();
+			endDocument();
 			_xon = _chkRoot.getXon();//prepare XON
 			return result;
 		} catch (SRuntimeException ex) {
@@ -1726,8 +1744,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				if (parser != null) {
 					parser.closeReader();
 				}
+				endDocument();
 				return null;
 			}
+			endDocument();
 			if (parser != null) {
 				parser.closeReader();
 			}
@@ -1736,6 +1756,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex)); //Program exception&{0}{: }
 		} catch (SError e) {
+			endDocument();
 			Report rep = e.getReport();
 			if (rep == null || !"XDEF906".equals(rep.getMsgID())) { //X-definition canceled
 				throw e;
@@ -1912,14 +1933,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
+		_documentClosed = false;
 		Class<?> yClass  = xClass;
 		Object o = getSource(data);
-		if (o == null || o instanceof Map || o instanceof List || o instanceof Number ||o instanceof Boolean){
+		if (o==null || o instanceof Map || o instanceof List || o instanceof Number || o instanceof Boolean) {
 			if (yClass == null) {
 				for (String s: getXDPool().getXComponents().keySet()) {
-					String className = getXDPool().getXComponents().get(s);
 					try {
-						yClass = Class.forName(className);
+						yClass = Class.forName(getXDPool().getXComponents().get(s)); // s is class name
 						String jmodel = (String) yClass.getDeclaredField("XD_NAME").get(null);
 						byte jVersion = (Byte) yClass.getDeclaredField("XON").get(null);
 						if (jVersion > 0) {
@@ -1951,17 +1972,68 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else if (o instanceof InputStream) {
 			return jparseXComponent((InputStream)o, yClass, sourceId, reporter);
 		} else if (o instanceof Document) {
-			return jparseXComponent(XonUtils.xmlToXon(((Document) o).getDocumentElement()),
-				yClass, reporter);
+			return jparseXComponent(XonUtils.xmlToXon(((Document) o).getDocumentElement()), yClass, reporter);
 		} else if (o instanceof Element) {
 			return jparseXComponent(XonUtils.xmlToXon((Element) o),yClass,reporter);
 		}
 		//Unsupported type of argument &{0}: &{1}
 		throw new SRuntimeException(SYS.SYS037, "source", o.getClass());
 	}
+
 	/** Get printable string from this object. */
 	@Override
 	public final String toString() {return "ChkDocument: " + _xElement;}
+
+////////////////////////////////////////////////////////////////////////////////
+	/** Set w3c.dom.Document to this object.
+	 * @param doc w3c.dom.Document to set.
+	 */
+	@Override
+	public final Document getDocument() {return _doc;}
+
+	/** Set w3c.dom.Document to this object.
+	 * @param doc w3c.dom.Document to set.
+	 */
+	@Override
+	public final void setDocument(final Document doc) {_doc = doc;}
+
+	/** Get XDefinition assigned to this object.
+	 * @return XDefinition assigned to this object.
+	 */
+	@Override
+	public final XMDefinition getXMDefinition() {return _xdef;}
+
+	/** Set XDefinition to this object.
+	 * @param xdef XDefinition to be set.
+	 */
+	@Override
+	public final void setXDefinition(final XDefinition xdef) {_xdef = xdef;}
+
+	/** Get SReporter of XDDocument.
+	 * @return SReporter of XDDocument.
+	 */
+	@Override
+	public final SReporter getReporter() {return _reporter;}
+
+	/** Get XDLexicon source language ID.
+	 * @return XDLexicon source language ID.
+	 */
+	public final int getSourceLanguageID() {return _sourceLanguageID;}
+
+	/** Set XDLexicon source language ID.
+	 * @param x XDLexicon source language ID.
+	 */
+	public final void setSourceLanguageID(int x) {_sourceLanguageID = x;}
+
+	/** Get XDLexicon destination language ID.
+	 * @return XDLexicon destination language ID.
+	 */
+	public final int  getDestLanguageID() {return _destLanguageID;}
+
+	/** Set XDLexicon destination language ID.
+	 * @param x XDLexicon destination language ID.
+	 */
+	public final void setDestLanguageID(int x) {_destLanguageID = x;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // deprecated

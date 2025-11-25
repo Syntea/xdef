@@ -92,7 +92,7 @@ final class ChkXONParser implements XParser, XonParser {
 				URL u = SUtils.getExtendedURL(s);
 				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
-			} catch (IOException ex) {
+			} catch (IOException | RuntimeException ex) {
 				try { // try if it is a file name
 					File f = new File(s);
 					_in = XonReader.getXonReader(new FileInputStream(f));
@@ -155,16 +155,20 @@ final class ChkXONParser implements XParser, XonParser {
 			if (_chkDoc == null) {
 				throw new SRuntimeException(XDEF.XDEF550); //X-definition is not specified
 			}
-			_chkDoc._doc=KXmlUtils.newDocument(parsedElem.getParsedNSURI(), parsedElem.getParsedName(), null);
-			_element = _chkDoc._doc.getDocumentElement();
+			_chkDoc.setDocument(
+				KXmlUtils.newDocument(parsedElem.getParsedNSURI(), parsedElem.getParsedName(), null));
+			_element = _chkDoc.getDocument().getDocumentElement();
 			addAttrs(parsedElem);
 			_chkEl = _chkDoc.createRootChkElement(_element, true);
 		} else {
-			Element el = _chkDoc._doc.createElementNS(parsedElem.getParsedNSURI(),parsedElem.getParsedName());
-			_element.appendChild(el);
+			Element el = _chkDoc.getDocument().createElementNS(
+				parsedElem.getParsedNSURI(),parsedElem.getParsedName());
+			if (_element != null) {
+				_element.appendChild(el);
+			}
 			_element = el;
 			addAttrs(parsedElem);
-			_chkEl = _chkEl.createChkElement(_element);
+			_chkEl = _chkEl.createChkElement(el);
 		}
 		if (_level >= _chkElemStack.length) { //increase nodelist
 			ChkElement[] newList = new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
@@ -176,7 +180,7 @@ final class ChkXONParser implements XParser, XonParser {
 			KParsedAttr ka = parsedElem.getAttrNS(x.getNSUri(),x.getName());
 			if (ka != null) {
 				_sReporter.setPosition(ka.getPosition());
-				Attr att = _chkDoc._doc.createAttributeNS(ka.getNamespaceURI(), ka.getName());
+				Attr att = _chkDoc.getDocument().createAttributeNS(ka.getNamespaceURI(), ka.getName());
 				att.setValue(ka.getValue());
 				_chkEl.newAttribute(att);
 				parsedElem.remove(ka); // processed, remove from attr list
@@ -201,7 +205,7 @@ final class ChkXONParser implements XParser, XonParser {
 		if (_level >= 0) {
 			_chkEl = _chkElemStack[_level];
 			_element = _chkEl._element;
-			if (_element == null) { // ???
+			if (_element == null && _level == 0) { // ???
 				throw new SRuntimeException(_sReporter.printToString());
 			}
 		}
@@ -258,14 +262,15 @@ final class ChkXONParser implements XParser, XonParser {
 			XCodeProcessor scp = _chkDoc._scp;
 			Properties props = scp.getProperties();
 			_chkDoc._scp = null;
-			_chkDoc.init(((ChkDocument)chkDoc)._xdef,
+			_chkDoc.init((XDefinition) chkDoc.getXMDefinition(),
 				(Document) _chkDoc.getDocument().cloneNode(false),
-				((ChkDocument)chkDoc)._reporter,
+				chkDoc.getReporter(),
 				scp.getProperties(),
-				((ChkDocument)chkDoc)._userObject);
+				chkDoc.getUserObject());
 			_chkDoc._scp = scp;
-			_chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
-			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
+			_chkDoc._rootChkDocument.setDocument(null);
+			_chkDoc.setDocument(null);
+			XPool xdp = (XPool) ((ChkDocument)chkDoc).getXDPool();
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);

@@ -347,7 +347,7 @@ public class XComponentUtil {
 		return result;
 	}
 
-	/** Add XDValue from argument to the list. If the argoment is XDContainer add itsitems to the list.
+	/** Add XDValue from argument to the list. If the argument is XDContainer add items to the list.
 	 * @param lst list where to add items.
 	 * @param value X-definition value.
 	 */
@@ -375,6 +375,29 @@ public class XComponentUtil {
 			parseResultToList(result, x.getXDItem(i));
 		}
 		return jlistToList(result);
+	}
+
+	/** Create source list of ID of IDREFS od CHKIDS.
+	 * @param list pasrsed list of ID.
+	 * @return source form of list of ID.
+	 */
+	public static final String idsToString(final List list) {
+		if (list == null) return "null";
+		StringBuilder sb = new StringBuilder();
+		boolean wasFirst = false;
+		for (Object o: list) {
+			if (wasFirst) {
+				sb.append(" ");
+			}
+			wasFirst = true;
+			String s = (o == null) ? "" : o.toString();
+			if (s.contains(" ") || s.contains("'")) {
+				s = s.replaceAll("'", "''");
+				s = '\'' + s + '\'';
+			}
+			sb.append(s);
+		}
+		return sb.toString();
 	}
 
 	/** Create source list of items with separators (value of parsed list).

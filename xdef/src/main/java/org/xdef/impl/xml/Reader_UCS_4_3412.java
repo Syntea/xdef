@@ -2,7 +2,7 @@ package org.xdef.impl.xml;
 
 import java.io.InputStream;
 
-/** Reader of X-ISO-10646-UCS-4-2143 or X-ISO-10646-UCS-4-3412 charset.
+/** Reader of X-ISO-10646-UCS-4-2143 or X-ISO-10646-UCS-4-3412 character set.
  * @author Vaclav Trojan
  */
 public class Reader_UCS_4_3412 extends Reader_UCS_4_xxxx {

@@ -53,6 +53,8 @@ import org.xdef.model.XMDefinition;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
+import org.xdef.impl.parsers.XDParseCHKIDS;
+import org.xdef.impl.parsers.XSParseIDREFS;
 
 /** Implementation of the model of attributes or text nodes.
  * @author Vaclav Trojan
@@ -89,8 +91,11 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 // impemetation of method from interfaces.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Write this XDATA to XDWriter. */
 	// This method can't be final, it can be overwritten!
+	/** Write this XDATA to XDWriter.
+	 @param xw where to write.
+	 @param list list of XNodes.
+	 */
 	@Override
 	public void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
@@ -548,7 +553,12 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 				|| c==UNIQUESET_KEY_IDREF || c==UNIQUESET_KEY_CHKID || c==UNIQUESET_ID || c==UNIQUESET_SET
 				|| c==UNIQUESET_IDREF || c==UNIQUESET_IDREFS || c==UNIQUESET_CHKID || c==UNIQUESET_CHKIDS)
 			&& xv[xi+2].getCode()==STOP_OP) {
-			y = xv[xi = xv[xi+1].intValue()]; // this should be parser
+			if (c==UNIQUESET_IDREFS) {
+				return new XSParseIDREFS();
+			} else if (c==UNIQUESET_CHKIDS) {
+				return new XDParseCHKIDS();
+			}
+			y = xv[xi = xv[xi+1].intValue()];
 		}
 		for (;;) {
 			switch (y.getCode()) {

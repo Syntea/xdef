@@ -550,6 +550,9 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
 	public final XDValueType getItemType() {return PARSERESULT;}
 
 	@Override
+	public Object getObject() {return getParsedValue();}
+
+	@Override
 	public final String toString() {return _value == null ? "" : _src;}
 
 	@Override

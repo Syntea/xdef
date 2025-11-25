@@ -48,7 +48,7 @@ public final class TestDebug extends XDTester {
 		try {
 			// Xscript breakpoints
 			xdef =
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+ 	                //01
+"<x:collection xmlns:x='"+_xdNS+"'>\n"+ 	                //01
 "<x:def name = 'a' root = 'a'>\n"+								//02
 "  <a a = \"required eq('a');\n"+								//03
 "         create 'a';\n"+										//04
@@ -119,7 +119,7 @@ public final class TestDebug extends XDTester {
 			assertTrue(s.indexOf("a/@a;") > 0 && s.indexOf("No local variables") > 0, s);
 			// XPos breakpoints
 			xdef =
-"<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
+"<x:def xmlns:x='"+_xdNS+"' root='a'>\n"+
 "  <a a = \"required;\">\n"+
 "    <b x:script='*'/>\n"+
 "  </a>\n"+
@@ -169,7 +169,7 @@ public final class TestDebug extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"' root = 'a'>\n"+
 "  <a a='required'>\n"+
 "    <b xd:script = \"finally {\n"+
 "       trace(xpath('../@a').toString());\n"+
@@ -196,7 +196,7 @@ public final class TestDebug extends XDTester {
 			out.close();
 			assertEq("", baos.toString());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='SouborY1A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='SouborY1A'>\n"+
 "  <SouborY1A\n"+
 "    Davka        = \"required\"\n"+
 "    ZeDne        = \"required\" > \n"+
@@ -235,7 +235,7 @@ public final class TestDebug extends XDTester {
 			s = baos.toString();
 			assertTrue(("len=1, typ=" + XDValueID.XD_ATTR + ", value=davka\n").equals(s), s);
 			xdef =
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+
+"<x:collection xmlns:x='"+_xdNS+"'>\n"+
 "<x:def name='a' root='a|*' impl-version='1.0.0' impl-date='1.11.2000'\n"+
 "       script='options ignoreEmptyAttributes'>\n"+
 "  <x:declaration>\n"+
@@ -281,7 +281,7 @@ public final class TestDebug extends XDTester {
 			}
 			// check impl properties and "*" in the root selection
 			xdef =
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+
+"<x:collection xmlns:x='"+_xdNS+"'>\n"+
 "<x:def name = \"a\" root = \"a|*\"\n"+
 "       impl-version = \"1.0.0\"\n"+
 "       impl-date    = \"1.11.2000\"\n"+

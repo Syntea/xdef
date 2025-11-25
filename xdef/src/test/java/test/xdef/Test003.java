@@ -100,9 +100,9 @@ public final class Test003 extends XDTester {
 		} catch (IOException | RuntimeException ex) {fail(ex);}
 		try {// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] { // sources
-"<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='A' ><A/></xd:def>",
-"<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B' ><B/></xd:def>",new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C' ><C/></xd:def>").getBytes("UTF-8"))};
+"<xd:def  xmlns:xd='"+_xdNS+"' root='A' name='A' ><A/></xd:def>",
+"<xd:def xmlns:xd='"+_xdNS+"' root='B' name='B' ><B/></xd:def>",new ByteArrayInputStream((
+"<xd:def xmlns:xd='"+_xdNS+"' root='C' name='C' ><C/></xd:def>").getBytes("UTF-8"))};
 			String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
 			xp = XDFactory.compileXD(null, p1, p2);
 			assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));
@@ -118,13 +118,13 @@ public final class Test003 extends XDTester {
 			f = new File(f, "čé řž.xdef");
 			Writer wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
 			wr.write(
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
 "<test a='int()'/>\n" +
 "</xd:def>");
 			wr.close();
 			URL u = f.toURI().toURL();
 			XDFactory.compileXD(null, u);
-			xdef = "<xd:collection xmlns:xd='" + _xdNS + "' include='"+u.toExternalForm()+"' />";
+			xdef = "<xd:collection xmlns:xd='"+_xdNS+"' include='"+u.toExternalForm()+"' />";
 			xp = compile(xdef);
 			xml = "<test a='123'/>";
 			f = new File(clearTempDir(), "/aa bb");
@@ -142,7 +142,7 @@ public final class Test003 extends XDTester {
 		} catch (IOException | RuntimeException ex) {fail(ex);}
 		try {// join elements "B" which can be joined.
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root = 'A'>\n"+
 "<xd:declaration>\n"+
 "  /** Test if the element f can be joined with the element e. */\n" +
 "  boolean join(Element e, Element f, String a, String b, String mask) {\n"+
@@ -222,7 +222,7 @@ public final class Test003 extends XDTester {
 		if (getFulltestMode()) {
 			try {
 				xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"koně\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"koně\">\n"+
 "  <koně>\n"+
 "    <kůň xd:script = '*; forget'\n" +
 "      jaký = \"eq('úplně šílený nóbl žluťoučký kůň')\"\n" +

@@ -215,7 +215,7 @@ public final class TestDatabase extends XDTester {
 		// Use non-external connection
 		try {
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    Service service;\n"+
 "    ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
@@ -253,7 +253,7 @@ public final class TestDatabase extends XDTester {
 			}
 		// Use external connection
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
 "    ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
@@ -291,7 +291,7 @@ public final class TestDatabase extends XDTester {
 			}
 			// using ResultSet created implicitly
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>external Service service;</xd:declaration>\n"+
 "  <A xd:script= \"create 1\">\n"+
 "    <" + TABLE_A + " xd:script= \"occurs *; create service.query('SELECT * FROM " + TABLE_A + "')\"\n"+
@@ -322,7 +322,7 @@ public final class TestDatabase extends XDTester {
 			}
 		// using macro
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
 "    ResultSet rs;"+
@@ -362,7 +362,7 @@ public final class TestDatabase extends XDTester {
 			}
 // test "boolean ResultSet.next()" and "boolean ResultSet.hasNext()" method
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
 "    ResultSet rs = service.query('SELECT * FROM " + TABLE_A + "');\n"+
@@ -406,7 +406,7 @@ public final class TestDatabase extends XDTester {
 			XDService service = XDFactory.createSQLService(getConnection());
 			//create database
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='schema'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='schema'>\n"+
 "  <xd:declaration scope='local'>external Service con;</xd:declaration>\n"+
 "  <schema name=\"string; onTrue con.execute('CREATE SCHEMA '+ getText())\">\n"+
 "    <table xd:script=\"occurs +\" name = \"string\">\n"+
@@ -453,7 +453,7 @@ public final class TestDatabase extends XDTester {
 			xd.xparse(xml, null);
 			//insert 1
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"Books|Book\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"Books|Book\">\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
 "	int inserted = 0;\n"+
@@ -531,7 +531,7 @@ public final class TestDatabase extends XDTester {
 			assertEq(5, xd.getVariable("#inserted").intValue());
 			// insert 2
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"Books\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"Books\">\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
 "    int inserted = 0;\n"+
@@ -600,7 +600,7 @@ public final class TestDatabase extends XDTester {
 
 			// read 1
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
 "    String qry = \"SELECT AUTHOR\n"+
@@ -648,7 +648,7 @@ public final class TestDatabase extends XDTester {
 "</Books>");
 			// read 2
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:name=\"query\" >\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"query\" >\n"+
 "  <xd:declaration scope='global'>\n"+
 "    external String url;\n"+
 "    external String usr;\n"+
@@ -682,7 +682,7 @@ public final class TestDatabase extends XDTester {
 "</Books>");
 			//Drop database
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"dropSchema\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"dropSchema\">\n"+
 "  <xd:declaration scope='local'> external Service con; </xd:declaration>\n"+
 "  <dropSchema name=\"string; finally con.execute('DROP SCHEMA '+ getText() + ' RESTRICT');\" >\n"+
 "    <table xd:script=\"occurs *\"\n"+
@@ -704,7 +704,7 @@ public final class TestDatabase extends XDTester {
 		// multiple query with a big amout of ResultSet cursors
 		// test implicitly and manually closing of cursors
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    ResultSet rs;\n"+
 "    external Service service;\n"+
@@ -745,7 +745,7 @@ public final class TestDatabase extends XDTester {
 			}
 		// test close(), isClosed() and closeStatement() function
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
+"<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
 "    void doA() {\n"+

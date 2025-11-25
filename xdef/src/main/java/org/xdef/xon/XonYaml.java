@@ -91,31 +91,4 @@ public final class XonYaml {
 				? ex.getCause() : ex);
 		}
 	}
-
-	/** Convert YAML source format of data X-definition model to JSON format.
-	 * @param yaml string with YAML format of data X-definition model.
-	 * @return JSON format of data X-definition model.
-	 */
-	public static final String yamlToJsonXScript(final String yaml) {
-		Object x = XonUtils.parseYAML(yaml);
-		String s = XonUtils.toJsonString(XonUtils.xonToJson(x), true);
-		String[] keys = {"%anyName", "%anyObj", "%script", "%oneOf"};
-		for (String key : keys) {
-			int ndx; // index of the key in the source
-			while ((ndx = s.indexOf("\"" + key)) >= 0) {
-				int ndx1 = ndx + key.length() + 1;
-				if (ndx1 >= s.length()) break;
-				switch(s.charAt(ndx1++)) {
-					case '=':
-						s = s.substring(0, ndx) + key+"=\"" + s.substring(ndx1);
-						break;
-					case '"':
-						s = ("%script".equals(key) && ndx1 < s.length() && s.charAt(ndx1) == ':')
-							? s.substring(0,ndx) + key+"=" + s.substring(++ndx1) //%script: -> %script=
-							: s.substring(0, ndx) + key + s.substring(ndx1);
-				}
-			}
-		}
-		return s.endsWith("\n") ? s : (s + '\n');
-	}
 }
