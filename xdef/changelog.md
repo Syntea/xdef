@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.32, release-date 2025-11-25
+.
+
 # Version 42.2.31, release-date 2025-11-25
 * The %oneOf directive in the JSON map is now recorded as an array of names of named items. If all variants
   from the list are described as required, exactly one of the variants must be present in the data. If any
