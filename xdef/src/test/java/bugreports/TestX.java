@@ -9,6 +9,7 @@ import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
+import static test.XDTester._xdNS;
 
 /** Tests used for development..
  * @author Vaclav Trojan
@@ -36,8 +37,8 @@ public class TestX extends XDTester {
 " <xd:json name='a'>\n"+
 "[\n" +
 "  { \"%script\": \"occurs 1..*\",\n" +
-"    \"Name\": \"string()\",\n" +
-"    \"Genre\": [ \"%oneOf:\",\n" +
+"    Name: \"string()\",\n" +
+"    Genre: [ \"%oneOf\",\n" +
 "      \"string()\",\n" +
 "       [\"occurs 1..* string()\"]\n" +
 "    ]\n" +
@@ -49,16 +50,16 @@ public class TestX extends XDTester {
 			xd = xp.createXDDocument();
 			json = "[\n" +
 "  {\n" +
-"    \"Name\": \"A\",\n" +
-"    \"Genre\": [\"A1\"]\n" +
+"    Name: \"A\",\n" +
+"    Genre: [\"A1\"]\n" +
 "  },\n" +
 "  {\n" +
-"    \"Name\": \"B\",\n" +
-"    \"Genre\": [\"B1\", \"B2\"]\n" +
+"    Name: \"B\",\n" +
+"    Genre: [\"B1\", \"B2\"]\n" +
 "  },\n" +
 "  {\n" +
-"    \"Name\": \" cc dd \",\n" +
-"    \"Genre\": \"C1\"\n" +
+"    Name: \" cc dd \",\n" +
+"    Genre: \"C1\"\n" +
 "  }\n" +
 "]";
 			reporter.clear();
@@ -68,22 +69,22 @@ public class TestX extends XDTester {
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "{ \"%oneOf\": [\"manager\", \"subordinates\"],\n" +
-"  \"manager\": \"?string()\",\n" +
-"  \"subordinates\":[ \"* string();\" ]\n" +
+"  manager: \"?string()\",\n" +
+"  subordinates:[ \"* string();\" ]\n" +
 "}\n" +
 " </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
-			json = "{\"manager\": \"BigBoss\"}";
+			json = "{manager: \"BigBoss\"}";
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
-			json = "{\"subordinates\": []}";
+			json = "{subordinates: []}";
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
-			json = "{\"subordinates\": [\"first\", \"second\"]}";
+			json = "{subordinates: [\"first\", \"second\"]}";
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
@@ -96,7 +97,7 @@ public class TestX extends XDTester {
 " <xd:json name='a'>\n"+
 "[\n" +
 "  {\n" +
-"    \"A\": [%oneOf= \"occurs *\", \"string()\", [\"occurs 1..* string()\"]]\n"+
+"    A: [\"%oneOf: occurs *\", \"string()\", [\"occurs 1..* string()\"]]\n"+
 "  }\n" +
 "]\n" +
 " </xd:json>\n"+
@@ -104,9 +105,9 @@ public class TestX extends XDTester {
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
 			json = "[\n" +
-"  {\"A\": [\"A1\"]},\n" +
-"  {\"A\": [\"B1\", \"B2\"]},\n" +
-"  {\"A\": \"C1\"}\n" +
+"  {A: [\"A1\"]},\n" +
+"  {A: [\"B1\", \"B2\"]},\n" +
+"  {A: \"C1\"}\n" +
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
@@ -118,10 +119,10 @@ public class TestX extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
-"   { \"date\" : \"date()\",\n" +
-"     \"cities\"  : [\n" +
+"   { date : \"date()\",\n" +
+"     cities  : [\n" +
 "       { \"%script\": \"occurs 1..*\",\n" +
-"         \"from\": [\n" +
+"         from: [\n" +
 "           \"string()\",\n" +
 "           {\"%script\": \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
 "    	  ]\n" +
@@ -133,14 +134,14 @@ public class TestX extends XDTester {
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
 			json =
-"{ \"date\" : \"2020-02-22\",\n" +
-"\"cities\" : [ \n" +
-" {\"from\": [\"Brussels\",\n" +
-"   {\"to\":\"London\",\"dist\":322},{\"to\":\"Paris\",\"dist\":265}\n" +
+"{ date : \"2020-02-22\",\n" +
+"  cities : [ \n" +
+" { from: [\"Brussels\",\n" +
+"   { to :\"London\", dist:322},{ to:\"Paris\", dist:265}\n" +
 "  ]\n" +
 " },\n" +
-" {\"from\": [\"London\",\n" +
-"   {\"to\":\"Brussels\",\"dist\":322},{\"to\":\"Paris\",\"dist\":344}\n" +
+" { from: [\"London\",\n" +
+"   { to:\"Brussels\", dist:322},{ to :\"Paris\", dist:344}\n" +
 "  ]\n" +
 " }\n" +
 "]\n" +
@@ -153,14 +154,14 @@ public class TestX extends XDTester {
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "  {\n" +
-"    \"A\":  \"string()\",\n" +
-"    \"B\":  \"string()\",\n" +
+"    A:  \"string()\",\n" +
+"    B:  \"string()\",\n" +
 "  }\n" +
 " </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
-			json = "{ \"A\": \"a\", \"B\": \"b\" }";
+			json = "{ A: \"a\", B: \"b\" }";
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
