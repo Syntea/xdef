@@ -93,20 +93,22 @@ import java.nio.charset.Charset;
  * <p> JavaPreprocessor may be executed from command line with following parameters:</p>
  * <p>[-h] [-r] [-t] [-v] -i input [-o output] [-c charset] [-s switches]</p>
  * <p>where</p>
- * <p>-r dirTree process directory tree. The parameter is optional.</p>
- * <p>-t delete trailing spaces. The parameter is optional.</p>
- * <p>-v make verbose output. The parameter is optional.</p>
- * <p>-s switches: The list of switch names. Each switch name is composed from letters, digits, '.' or '_'s.
- *   The switch can be either prefixed with '!' or not specified. The parameter is optional.</p>
- * <p>-i input: The file name list of the directories with the Java packages. Each directory is supposed
+ * <ul>
+ * <li>-r dirTree process directory tree. The parameter is optional.</li>
+ * <li>-t delete trailing spaces. The parameter is optional.</li>
+ * <li>-v make verbose output. The parameter is optional.</li>
+ * <li>-s switches: The list of switch names. Each switch name is composed from letters, digits, '.' or '_'s.
+ *   The switch can be either prefixed with '!' or not specified. The parameter is optional.</li>
+ * <li>-i input: The file name list of the directories with the Java packages. Each directory is supposed
  *   to be the root of package. Only the files with the extension 'java' are processed. The parameter
- *   is obligatory.</p>
- * <p>-o output: The directory where the output files are stored. The parameter is optional. If it is missing
- *   the source files are replaced.</p>
- * <p>-c charset: name of character table, if it is not specified then the default system character set
- *   is used. The parameter is optional.</p>
- * <p>-l if specified all the end of all lines are generated as CR LF, otherwise only LF.</p>
- * <p>-h display the help text.</p>
+ *   is obligatory.</li>
+ * <li>-o output: The directory where the output files are stored. The parameter is optional. If it is missing
+ *   the source files are replaced.</li>
+ * <li>-c charset: name of character table, if it is not specified then the default system character set
+ *   is used. The parameter is optional.</li>
+ * <li>-l if specified all the end of all lines are generated as CR LF, otherwise only LF.</li>
+ * <li>-h display the help text.</li>
+ * </ul>
  * @author  Vaclav Trojan
  */
 public class JavaPreprocessor {

@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 /** Canonize sources.
- * <p>1. Remove all spaces after last non-blank character at the end of line, replace leading spaces by tabs.
- * <p>2. Check and generate message report classes.
+ * <p>1. Remove all spaces after the last non-blank character at the end of line and replace leading spaces
+ * by tabs.</p>
+ * <p>2. Check and generate message report classes.</p>
  * @author  Vaclav Trojan
  */
 public class Canonize {
@@ -16,21 +17,20 @@ public class Canonize {
 	private Canonize() {}
 
 	/** Canonize sources. Remove all trailing white spaces on all lines and handle with leading spaces
-	 * an all lines according to argument <code>tabs</code>. Insert or update header or _tail information
-	 * to sources according to value of arguments <code>_hdr</code> and <code>_tail</code>.
-	 * If the argument <code>dirTree</code> is true, do it with all specified files in child directories.
+	 * an all lines according to argument <tt>tabs</tt>. Insert or update header or _tail information
+	 * to sources according to value of arguments <tt>_hdr</tt> and <tt>_tail</tt>.
+	 * If the argument <tt>dirTree</tt> is true, do it with all specified files in child directories.
 	 * @param projectBase file name of project directory.
 	 * @param filename name of file (wildcards are possible).
-	 * @param dirTree If <code>true<code> then dirTree process in child subdirectories.
-	 * @param hdr If <code>true</code> then leading standard copyright information is inserted before
-	 * the first line of Java source or it replaces the existing one. The template for the copyright
-	 * information is taken from the file <code>hdrinfo.txt</code>the root directory <code>java</code>
-	 * (under which are projects).If the argument's value is <code>false</code> then the top of source
-	 * remains unchanged.
-	 * @param tail If <code>true</code> then log information is added after the last line of Java source
-	 * or it replaces the existing one. The template used for the log information is taken from the file
-	 * <code>tailinfo.txt</code> in the root directory <code>java</code> (under which are projects).
-	 * If the value of this* argument is <code>false</code> then the end source remains unchanged.
+	 * @param dirTree If <tt>true</tt> then dirTree process in child subdirectories.
+	 * @param hdr If <tt>true</tt> then leading standard copyright information is inserted before the first
+	 * line of Java source or it replaces the existing one. The template for the copyright information is
+	 * taken from the file <tt>hdrinfo.txt</tt>the root directory <tt>java</tt> (under which are projects).
+	 * If the argument's value is <tt>false</tt> then the top of source remains unchanged.
+	 * @param tail If <tt>true</tt> then log information is added after the last line of Java source or
+	 * it replaces the existing one. The template used for the log information is taken from the file
+	 * <tt>tailinfo.txt</tt> in the root directory <tt>java</tt> (under which are projects). If the value of
+	 * this argument is <tt>false</tt> then the end source remains unchanged.
 	 */
 	private static void doSources(final String projectBase, final String filename, final boolean dirTree) {
 		try {

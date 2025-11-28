@@ -3,7 +3,7 @@ package buildtools;
 import java.io.File;
 import java.io.IOException;
 
-/** Call preprocessor and reset all switches and update source code.
+/** Reset all switches and update source code.
  * @author Vaclav Trojan
  */
 public class ResetPreprocessorSwitches {
