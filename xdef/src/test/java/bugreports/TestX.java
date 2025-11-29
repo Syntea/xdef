@@ -5,9 +5,11 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import java.util.Properties;
+import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 
@@ -24,12 +26,14 @@ public class TestX extends XDTester {
 	@Override
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
-		XDPool xp;
-		XDDocument xd;
 		String json;
-		String xdef;
+		Object o;
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
+		XDPool xp;
+		XComponent xc;
+		XDDocument xd;
+		String xdef;
 		try {
 			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
@@ -152,19 +156,20 @@ public class TestX extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
-"  {\n" +
-"    A:  \"string()\",\n" +
-"    B:  \"string()\",\n" +
-"  }\n" +
-" </xd:json>\n"+
+"  <xd:json name='a'>\n"+
+"    { \"A\": \"string()\", \"B\": \"string()\" }\n" +
+"  </xd:json>\n"+
+"  <xd:component> %class " +_package+ ".TestX_X %link X#a; </xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-			xd = xp.createXDDocument();
-			json = "{ A: \"a\", B: \"b\" }";
+			genXComponent(xp = XDFactory.compileXD(props, xdef)); // no property
+			xd = xp.createXDDocument("X");
+			json = "{ \"A\": \"a\", \"B\": \"b\" }";
 			reporter.clear();
-			xd.jparse(json, reporter);
+			o = xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
 	}
 
