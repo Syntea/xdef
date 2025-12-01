@@ -346,7 +346,6 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
-		PNode pn1, pn2;
 		Object val;
 		List<String> oneOfList = new ArrayList<>();
 		List<Object> sections;
@@ -366,12 +365,12 @@ public final class CompileXonXdef extends XScriptParser {
 				oneOfList.clear();
 			}
 		}
+		PNode pn2, pn1 = genJElement(parent, X_MAP, map.getPosition());
 		if ((val = map.remove(X_SCRIPT_DIRECTIVE)) != null && val instanceof JValue) {
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			skipSpacesAndComments();
 			if (isToken(X_ONEOF_DIRECTIVE)) {
-				pn1 = genJElement(parent, X_MAP, map.getPosition());
 				pn2 = genXDElement(pn1, "choice", getPosition());
 				pn1.addChildNode(pn2);
 				skipSemiconsBlanksAndComments();
@@ -390,12 +389,12 @@ public final class CompileXonXdef extends XScriptParser {
 							error(XDEF.XDEF252, ONEOF_DIRECTIVE);
 						}
 					}
+					eos();
 				}
 			} else if (map.size() <= 1 || "json".equals(parent.getLocalName())) {
-				// less then 2 items or parent is a json model => no "xd:mixed" node!
+				// less then 2 items or parent is a json model => do not add "xd:mixed" element
 				pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition());
-			} else { // more then 1 items
-				pn1 = genJElement(parent, X_MAP, map.getPosition());
+			} else { // more then 1 items and parent is not json model => add "xd:mixed" element
 				pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
 				pn1.addChildNode(pn2);
 			}
@@ -403,9 +402,8 @@ public final class CompileXonXdef extends XScriptParser {
 				setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 			}
 		} else if (map.size() <= 1) { // less then 2 items
-			pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition()); // no "xd:mixed" node!
+			pn2 = pn1; // no "xd:mixed" node!
 		} else { // more then 1 items
-			pn1 = genJElement(parent, X_MAP, map.getPosition());
 			pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
 			pn1.addChildNode(pn2);
 		}
@@ -504,7 +502,7 @@ public final class CompileXonXdef extends XScriptParser {
 					sbf = removeSection("match", sections);
 					String t;
 					if (sbf != null && !(t=sbf.getString().trim()).isEmpty()) {
-						while (t.endsWith(";")) {
+						while (t.endsWith(";")) { // remove trailing semicolons
 							t = t.substring(t.length() - 1);
 						}
 						t += " AAND ($oneOf++)==0;";
