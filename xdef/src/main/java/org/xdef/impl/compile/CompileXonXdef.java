@@ -478,9 +478,6 @@ public final class CompileXonXdef extends XScriptParser {
 					SBuffer sbf1;
 					if (xscr == null) {
 						sbf1 = new SBuffer("?;", pn3._name);
-						setXDAttr(pn3, "script", sbf1);
-						xscr = getXDAttr(pn3, "script");
-						sections = parseXscript(xscr._value);
 					} else {
 						sbf1 = removeSection("occurs", sections = parseXscript(xscr._value));
 						if (sbf1 != null) {
@@ -801,19 +798,19 @@ public final class CompileXonXdef extends XScriptParser {
 		pn1.addChildNode(pn2);
 		pn.addChildNode(pn1);
 /*#if DEBUG*#/
-		displayModel(pn); // remove this code in future
+		displayModel(pn, anyName); // remove this code in future
 /*#end*/
 	}
 
 /*#if DEBUG*#/
 	// Display the compiled model in debug mode. Remove this code method in the future.
 	// @param pn model to be displayed
-	private void displayModel(final PNode pn) {
+	private void displayModel(final PNode pn, final String modelName) {
 		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)) {
 			System.out.flush();
 			System.err.flush();
-			System.out.println("*** xdef: \""
-				+ (pn._parent._xdef != null ? pn._parent._xdef.getName() : "???") +'"');
+			System.out.println("*** xdef: \"" + (pn._parent._xdef!=null ? pn._parent._xdef.getName() : "???")
+				+ "\", JSON model: \"" + modelName + "\"");
 			System.out.println("* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
 			System.out.flush();
 		}
@@ -835,7 +832,7 @@ public final class CompileXonXdef extends XScriptParser {
 		genXonModel(jp.getResult(), pn);
 		pn._value = null;
 /*#if DEBUG*#/
-		displayModel(pn); // remove this code in future
+		displayModel(pn, name.getString()); // remove this code in future
 /*#end*/
 		return _anyXPos;
 	}
