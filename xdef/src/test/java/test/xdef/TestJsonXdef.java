@@ -130,7 +130,7 @@ public class TestJsonXdef extends XDTester {
 				System.arraycopy(_jfiles, 0, files, 1, _jfiles.length);
 				files[0] = componentFile;
 				xp = compile(files);
-			} catch (Exception ex) {
+			} catch (RuntimeException ex) {
 				throw new RuntimeException(ex);
 			}
 			File oldFile, newFile;
@@ -151,7 +151,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			try {
 				SUtils.deleteAll(xdir, true);// delete X-components java sources
-			} catch (SException ex) {}
+			} catch (Exception ex) {}
 			if (!rebuild) {
 				for (File fdef: _jfiles) {
 					String id = getId(fdef);
@@ -196,7 +196,9 @@ public class TestJsonXdef extends XDTester {
 				compileSources(classpath, classDir, sources);
 			}
 			return xp; // return XDPool with compiled Xdefinitions
-		} catch (RuntimeException | SException ex) {
+		} catch (RuntimeException ex) {
+			throw ex;
+		} catch (SException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -324,8 +326,7 @@ public class TestJsonXdef extends XDTester {
 					result += (result.isEmpty() ? "" : "\n") + "Error not reported: "+f.getName();
 				}
 			} catch (SRuntimeException ex) {
-				result += (result.isEmpty() ? "" : "\n")
-					+ "Error jerr: " + f.getName() + "\n" + printThrowable(ex);
+				result += (result.isEmpty() ? "" : "\n")+"Error jerr: "+f.getName()+"\n"+printThrowable(ex);
 			}
 		}
 		return result;
@@ -422,7 +423,7 @@ public class TestJsonXdef extends XDTester {
 				String s = testJdef(xp, getId(f));
 				assertTrue(s.isEmpty(), s );
 			}
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			fail(ex); // should not happen!!!
 			return;
 		}
@@ -514,7 +515,7 @@ public class TestJsonXdef extends XDTester {
 			x = XComponentUtil.getx(xc, "listOf"+xon+XonNames.X_VALUE + "_1");
 			y = (XComponent) ((List) x).get(1);
 			assertEq(13, XComponentUtil.get(y, XonNames.X_VALATTR));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (getFailCount() == 0) {
@@ -1023,7 +1024,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", testEncoding(xp, json, "UTF-32LE", false));//authomatic
 			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
 			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
-		} catch (SRuntimeException ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try { // test extension of map and correct reporting.
 			xd = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
@@ -1047,7 +1048,7 @@ public class TestJsonXdef extends XDTester {
 				|| !(reporter.toString().contains("'d'") && reporter.toString().contains("'x'"))) {
 				fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
 			}
-		} catch (SRuntimeException ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xp = compile(
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"X9\" xd:root=\"CaseFile\">\n" +
@@ -1075,7 +1076,7 @@ public class TestJsonXdef extends XDTester {
 "}";
 			jparse(xp, "X9", json, reporter);
 			assertNoErrorsAndClear(reporter);
-		} catch (SRuntimeException ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xd = compile(
 "<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" xd:root = \"SynPLscript\">\n" +
@@ -1108,6 +1109,18 @@ public class TestJsonXdef extends XDTester {
 "}", reporter);
 			assertErrorsAndClear(reporter); //E XDEF507: Not allowed item in array
 		} catch (RuntimeException ex) {fail(ex);}
+//		try {
+//			xp = compile(
+//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='a'>\n" +
+//"  <xd:json name='a'>\n" +
+//"    {  \"%script\": \"finally now();\",\n"+
+//"       \"a\":  \"int()\", \"b\":  \"string();\", \"c\": \"string();\",\n" +
+//"    }\n" +
+//"  </xd:json>\n" +
+//"</xd:def>");
+//			jparse(xp, "", "{\"c\":\"LMN0H7\",\"a\":1,\"b\":\"MA5800-X17\"}", reporter);
+//			assertNoErrorsAndClear(reporter);
+//		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}
