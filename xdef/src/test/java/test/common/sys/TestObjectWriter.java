@@ -98,8 +98,7 @@ public class TestObjectWriter extends STester {
 				in = new ByteArrayInputStream(out.toByteArray());
 				SObjectReader r = new SObjectReader(in);
 				byte[] bytes1 = r.readBytes();
-				result = Arrays.equals(bytes, bytes) ? obj :
-					("Error bytes, len=" + bytes1.length);
+				result = Arrays.equals(bytes, bytes) ? obj : ("Error bytes, len=" + bytes1.length);
 			} else if (obj instanceof StringBuffer) {//len
 				Integer i = Integer.valueOf(obj.toString());
 				obj = i;
@@ -112,8 +111,8 @@ public class TestObjectWriter extends STester {
 			} else {
 				return "Unsupported type: " + obj;
 			}
-			return "" + (in.read() >= 0 ? "Not eof" : "") +
-				(obj.equals(result) ? "" : ("error:" + result.toString()));
+			return (in.read() >= 0 ? "Not eof" : "")
+				+ (obj.equals(result) ? "" : ("error:" + result.toString()));
 		} catch (IOException | NumberFormatException e) {
 			return printThrowable(e);  //return string with the exception
 		}
@@ -201,8 +200,7 @@ public class TestObjectWriter extends STester {
 		for (int i = 0; i < chars.length; i++) {
 			chars[i] = (char) 1234;
 		}
-		s = String.valueOf(chars);
-		assertTrue("".equals(s = test(s)), s);
+		assertTrue("".equals(s = test(String.valueOf(chars))), s);
 		byte[] bytes = new byte[66000];
 		for (int i = 0; i < bytes.length; i++) {
 			bytes[i] = (byte) 123;
@@ -210,8 +208,7 @@ public class TestObjectWriter extends STester {
 		assertTrue("".equals(s = test(bytes)), s);
 		assertTrue("".equals(s = test(new SDatetime("2015-11-15"))), s);
 		assertTrue("".equals(s = test(new SDatetime("2015-11-15-05:00"))), s);
-		assertTrue(
-			"".equals(s = test(new SDatetime("2015-11-15T11:31:01-05:00"))), s);
+		assertTrue("".equals(s = test(new SDatetime("2015-11-15T11:31:01-05:00"))), s);
 	}
 
 	/** Run test

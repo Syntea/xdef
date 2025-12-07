@@ -63,13 +63,14 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	}
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!(parser.isDatetime(_format) && parser.testParsedDatetime())) {
-			p.errorWithString(XDEF.XDEF809, parserName()+" ("+_format+")");//Incorrect value of '&{0}'&{1}{: }
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName() + " (" + _format + ")");
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
@@ -106,13 +107,19 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	}
 
 	@Override
-	public void setFormat(final String x) {_format = x;}
+	public void setFormat(final String x) {
+		SDatetime.checkFormat(x);
+		_format = x;
+	}
 
 	@Override
 	public String getFormat() { return _format; }
 
 	@Override
-	public void setOutFormat(final String x) {_outFormat = x;}
+	public void setOutFormat(final String x) {
+		SDatetime.checkFormat(x);
+		_outFormat = x;
+	}
 
 	@Override
 	public String getOutFormat() { return _outFormat; }

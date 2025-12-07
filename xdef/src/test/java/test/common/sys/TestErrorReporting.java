@@ -103,56 +103,56 @@ public class TestErrorReporting extends STester {
 			reporter = (ArrayReporter) p.getReportWriter();
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"1".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}0&{line}1&{column}1")) {
+			} else if (!"1".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}0&{line}1&{column}1")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"2".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}2&{line}3&{column}1")) {
+			} else if (!"2".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}2&{line}3&{column}1")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"3".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}3&{line}3&{column}2")) {
+			} else if (!"3".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}3&{line}3&{column}2")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"4".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}4&{line}3&{column}3")) {
+			} else if (!"4".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}4&{line}3&{column}3")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"5".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}5&{line}3&{column}4")) {
+			} else if (!"5".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}5&{line}3&{column}4")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"6".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}7&{line}4&{column}2")) {
+			} else if (!"6".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}7&{line}4&{column}2")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"7".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}8&{line}4&{column}3")) {
+			} else if (!"7".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}8&{line}4&{column}3")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"8".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}10&{line}6&{column}1")) {
+			} else if (!"8".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}10&{line}6&{column}1")) {
 				printReport(report, source);
 			}
 			if ((report = reporter.getReport()) == null) {
 				fail("report missing");
-			} else if (!"9".equals(report.getMsgID()) ||
-				!report.getModification().equals("&{pos}10&{line}6&{column}1")) {
+			} else if (!"9".equals(report.getMsgID())
+				|| !report.getModification().equals("&{pos}10&{line}6&{column}1")) {
 				printReport(report, source);
 			}
 			while ((report = reporter.getReport()) != null) {
@@ -161,7 +161,6 @@ public class TestErrorReporting extends STester {
 		} catch (Exception ex) {
 			fail(ex);
 		}
-
 	}
 
 	/** Run test

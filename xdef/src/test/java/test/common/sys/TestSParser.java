@@ -8,6 +8,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
@@ -23,8 +24,7 @@ public class TestSParser extends STester {
 	/** Check if both arguments with XMLGregorianCalendar values are equal.
 	 * @param d1 first XMLGregorianCalendar value.
 	 * @param d2 SECOND XMLGregorianCalendar value.
-	 * @return empty string if both arguments are equal. Otherwise returns
-	 * the string with information about differences.
+	 * @return empty string if both arguments are equal. Otherwise returns string with differences.
 	 */
 	private static String checkDateEQ(final XMLGregorianCalendar d1, final XMLGregorianCalendar d2) {
 		String result = "";
@@ -71,12 +71,10 @@ public class TestSParser extends STester {
 		return result;
 	}
 
-	/** Check if both arguments with XMLGregorianCalendar values are equal.
-	 * (before and after normalization).
+	/** Check if both arguments with XMLGregorianCalendar values are equal (before and after normalization).
 	 * @param d1 first XMLGregorianCalendar value.
 	 * @param d2 SECOND XMLGregorianCalendar value.
-	 * @return empty string if both arguments are equal. Otherwise returns
-	 * the string with information about differences.
+	 * @return empty string if both arguments are equal. Otherwise returns string with differences.
 	 */
 	private static String checkDateEQ2(final XMLGregorianCalendar d1, final XMLGregorianCalendar d2) {
 		String r1 = checkDateEQ(d1, d2);
@@ -102,186 +100,157 @@ public class TestSParser extends STester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			//datetime format literals in mask
-			p = new StringParser("11.2009");
-			if (p.isDatetime("M'-'y|M'.'y")) {
+			if ((p = new StringParser("11.2009")).isDatetime("M'-'y|M'.'y")) {
 				assertEq("11/2009", p.getParsedSDatetime().formatDate("M'/'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11'2009");
-			if (p.isDatetime("M''''y|M'.'y")) {
+			if ((p = new StringParser("11'2009")).isDatetime("M''''y|M'.'y")) {
 				assertEq("11'2009",p.getParsedSDatetime().formatDate("M''''y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11'2009");
-			if (p.isDatetime("M'.'y|M''''y")) {
+			if ((p = new StringParser("11'2009")).isDatetime("M'.'y|M''''y")) {
 				assertEq("11'2009", p.getParsedSDatetime().formatDate("M''''y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11'a2009");
-			if (p.isDatetime("M'.'y|M'''a'y")) {
+			if ((p = new StringParser("11'a2009")).isDatetime("M'.'y|M'''a'y")) {
 				assertEq("11'a2009", p.getParsedSDatetime().formatDate("M'''a'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11a'2009");
-			if (p.isDatetime("M'.'y|M'a'''y")) {
+			if ((p = new StringParser("11a'2009")).isDatetime("M'.'y|M'a'''y")) {
 				assertEq("11a'2009", p.getParsedSDatetime().formatDate("M'a'''y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11'a'2009");
-			if (p.isDatetime("M'.'y|M'''a'''y")) {
+			if ((p = new StringParser("11'a'2009")).isDatetime("M'.'y|M'''a'''y")) {
 				assertEq("11'a'2009", p.getParsedSDatetime().formatDate("M'''a'''y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11a''b2009");
-			if (p.isDatetime("M'.'y|M'a''''b'y")) {
+			if ((p = new StringParser("11a''b2009")).isDatetime("M'.'y|M'a''''b'y")) {
 				assertEq("11a''b2009", p.getParsedSDatetime().formatDate("M'a''''b'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11a'b'c2009");
-			if (p.isDatetime("M'.'y|M'a''b''c'y")) {
+			if ((p = new StringParser("11a'b'c2009")).isDatetime("M'.'y|M'a''b''c'y")) {
 				assertEq("11a'b'c2009", p.getParsedSDatetime().formatDate("M'a''b''c'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11a2009");
-			if (p.isDatetime("M'.'y|M?'a''b''c'y")) {
+			if ((p = new StringParser("11a2009")).isDatetime("M'.'y|M?'a''b''c'y")) {
 				assertEq("11a2009", p.getParsedSDatetime().formatDate("M'a'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11/2009");
-			if (p.isDatetime("M'.'y|M?'a''b''c'y|M'/'y")) {
+			if ((p = new StringParser("11/2009")).isDatetime("M'.'y|M?'a''b''c'y|M'/'y")) {
 				assertEq("11/2009", p.getParsedSDatetime().formatDate("M'/'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11'2009");
-			if (p.isDatetime("M'.'y|M?'a''b''c'y")) {
+			if ((p = new StringParser("11'2009")).isDatetime("M'.'y|M?'a''b''c'y")) {
 				assertEq("11'2009", p.getParsedSDatetime().formatDate("M''''y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11b2009");
-			if (p.isDatetime("M'.'y|M?'a''b''c'y")) {
+			if ((p = new StringParser("11b2009")).isDatetime("M'.'y|M?'a''b''c'y")) {
 				assertEq("11b2009", p.getParsedSDatetime().formatDate("M'b'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11c2009");
-			if (p.isDatetime("M'.'y|M?'a''b''c'y")) {
+			if ((p = new StringParser("11c2009")).isDatetime("M'.'y|M?'a''b''c'y")) {
 				assertEq("11c2009", p.getParsedSDatetime().formatDate("M'c'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("11/2009");
-			if (p.isDatetime("M'.'y|M?'a''b''c'y|M'/'y")) {
+			if ((p = new StringParser("11/2009")).isDatetime("M'.'y|M?'a''b''c'y|M'/'y")) {
 				assertEq("11/2009", p.getParsedSDatetime().formatDate("M'/'y"));
 			} else {
 				fail();
 			}
-			p = new StringParser("1.1.2000");
-			if (p.isDatetime("d.M.y")) {
+			if ((p = new StringParser("1.1.2000")).isDatetime("d.M.y")) {
 				assertEq("00:00:00.0", p.getParsedSDatetime().formatDate("HH:mm:ss.S"));
 			} else {
 				fail();
 			}
 			//datetime format ISO
-			p = new StringParser("2009-11-09");
-			if (p.isDatetime("y-MM-dd")) {
+			if ((p = new StringParser("2009-11-09")).isDatetime("y-MM-dd")) {
 				assertEq("2009-11-09", p.getParsedSDatetime().formatDate("y-MM-dd"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("-2009-11-09");
-			if (p.isDatetime("y-MM-dd")) {
+			if ((p = new StringParser("-2009-11-09")).isDatetime("y-MM-dd")) {
 				assertEq("-2009-11-09", p.getParsedSDatetime().formatDate("y-MM-dd"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("0009-11-09");
-			if (p.isDatetime("y-MM-dd")) {
+			if ((p = new StringParser("0009-11-09")).isDatetime("y-MM-dd")) {
 				assertEq("0009-11-09", p.getParsedSDatetime().formatDate("y-MM-dd"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("-0009-11-09");
-			if (p.isDatetime("y-MM-dd")) {
+			if ((p = new StringParser("-0009-11-09")).isDatetime("y-MM-dd")) {
 				assertEq("-0009-11-09", p.getParsedSDatetime().formatDate("y-MM-dd"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("1996-12-31");
-			if (p.isISO8601Date()) {
+			if ((p = new StringParser("1996-12-31")).isISO8601Date()) {
 				assertEq("1996-12-31", p.getParsedSDatetime().formatDate("y-MM-dd"));
 				assertEq("1996W532", p.getParsedSDatetime().formatDate("y'W'wwe"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("1997-W1-2");
-			if (p.isISO8601Date()) {
+			if ((p = new StringParser("1997-W1-2")).isISO8601Date()) {
 				assertEq("1996-12-31", p.getParsedSDatetime().formatDate("y-MM-dd"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("1997W012");
-			if (p.isISO8601Date()) {
+			if ((p = new StringParser("1997W012")).isISO8601Date()) {
 				assertEq("1996-12-31", p.getParsedSDatetime().formatDate("y-MM-dd"));
 				assertEq("1996W532", p.getParsedSDatetime().formatDate("y'W'wwe"));
 			} else {
 				fail();
 			}
-			p = new StringParser("1996W532");
-			if (p.isISO8601Date()) {
+			if ((p = new StringParser("1996W532")).isISO8601Date()) {
 				assertEq("1996-12-31", p.getParsedSDatetime().formatDate("y-MM-dd"));
 				assertEq("1996W532", p.getParsedSDatetime().formatDate("y'W'wwe"));
 			} else {
 				fail();
 			}
-			p = new StringParser("19950204");
-			if (p.isDatetime("yyyyMMdd[Z]")) {
+			if ((p = new StringParser("19950204")).isDatetime("yyyyMMdd[Z]")) {
 				assertEq("1995-02-04", p.getParsedSDatetime().formatDate("y-MM-dd"));
 				assertEq("19950204", p.getParsedSDatetime().formatDate("yMMdd"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("1995-035");
-			if (p.isISO8601Date()) {
+			if ((p = new StringParser("1995-035")).isISO8601Date()) {
 				assertEq("1995-02-04", p.getParsedSDatetime().formatDate("y-MM-dd"));
 				assertEq("1995-035", p.getParsedSDatetime().formatDate("y-DDD"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("1995035");
-			if (p.isDatetime("yyyyDDD[Z]")) {
+			if ((p = new StringParser("1995035")).isDatetime("yyyyDDD[Z]")) {
 				assertEq("1995-02-04", p.getParsedSDatetime().formatDate("y-MM-dd"));
 				assertEq("1995035", p.getParsedSDatetime().formatDate("yDDD"));
 			} else {
 				fail();
 			}
-			p  = new StringParser("23:59:59.1234567");
-			if (p.isISO8601Time()) {
+			if ((p = new StringParser("23:59:59.1234567")).isISO8601Time()) {
 				assertEq("23:59:59", p.getParsedSDatetime().formatDate("HH:mm:ss"));
 				assertEq("23:59:59.1234567", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			p  = new StringParser("23:59");
-			if (p.isISO8601Time()) {
+			if ((p = new StringParser("23:59")).isISO8601Time()) {
 				assertEq("23:59:00", p.getParsedSDatetime().formatDate("HH:mm:ss"));
 				assertEq("23:59", p.getParsedSDatetime().formatDate("HH:mm"));
 				assertEq("23:59", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			p  = new StringParser("1995-02-04T24:00:00+01:30");
-			if (p.isISO8601Datetime()) {
+			if ((p = new StringParser("1995-02-04T24:00:00+01:30")).isISO8601Datetime()) {
 				assertEq("1995-02-05T00:00:00+01:30", p.getParsedSDatetime().toISO8601());
 			} else {
 				fail();
@@ -399,8 +368,7 @@ public class TestSParser extends STester {
 			p.isSpaces();
 			assertTrue(p.isToken("END"), "Not recognized token");
 			assertTrue(p.eos(), "End of source expected");
-			p = new StringParser("19731100");
-			if (p.isDatetime("yyyyMMdd")) {
+			if ((p = new StringParser("19731100")).isDatetime("yyyyMMdd")) {
 				assertTrue(p.eos());
 				d = p.getParsedSDatetime();
 				assertFalse(d.chkDatetime(), "Error not reported, day = 0!");
@@ -422,8 +390,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MINUTE), 59);
 				assertEq(c.get(Calendar.SECOND), 58);
 			}
-			p = new StringParser("20.11.2005");
-			if (!p.isDatetime("{H23m59s58}d/M/yyyy[ HH:mm:ss]|d.M.yyyy")) {
+			if (!(p = new StringParser("20.11.2005")).isDatetime("{H23m59s58}d/M/yyyy[ HH:mm:ss]|d.M.yyyy")) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -440,8 +407,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MINUTE), 33);
 				assertEq(c.get(Calendar.SECOND), 44);
 			}
-			p = new StringParser("20/11/2005");
-			if (!p.isDatetime("{H23m59s58S543}d/M/y[[ H:m[:s[?',.'S]]]")) {
+			if (!(p = new StringParser("20/11/2005")).isDatetime("{H23m59s58S543}d/M/y[[ H:m[:s[?',.'S]]]")) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -502,8 +468,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MILLISECOND), 543);
 			}
 			s = "29/10/1975 11:55:23.345 CET";
-			p = new StringParser(s);
-			if (!p.isDatetime("d?'/.'M?'./'yyyy HH:mm:ss?',.'S z")) {
+			if (!(p = new StringParser(s)).isDatetime("d?'/.'M?'./'yyyy HH:mm:ss?',.'S z")) {
 				fail(s);
 			} else {
 				assertTrue(p.eos());
@@ -511,8 +476,7 @@ public class TestSParser extends STester {
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = s.replace('.', ',').replace('/', '.');
-			p = new StringParser(s);
-			if (!p.isDatetime("d?'/.'M?'./'yyyy HH:mm:ss?',.'S z")) {
+			if (!(p = new StringParser(s)).isDatetime("d?'/.'M?'./'yyyy HH:mm:ss?',.'S z")) {
 				fail(s);
 			} else {
 				assertTrue(p.eos());
@@ -520,8 +484,7 @@ public class TestSParser extends STester {
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = s.replace('.', '?');
-			p = new StringParser(s);
-			if (!p.isDatetime("d?M?yyyy HH:mm:ss?',.'S z")) {
+			if (!(p = new StringParser(s)).isDatetime("d?M?yyyy HH:mm:ss?',.'S z")) {
 				fail(s);
 			} else {
 				assertTrue(p.eos());
@@ -529,8 +492,7 @@ public class TestSParser extends STester {
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = "11/10/2005 17:56:46.395 CETXYZ";
-			p = new StringParser(s);
-			if (!p.isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
+			if (!(p = new StringParser(s)).isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
 				fail();
 			} else {
 				assertTrue(p.isToken("XYZ"), p.getUnparsedBufferPart());
@@ -541,8 +503,7 @@ public class TestSParser extends STester {
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = "11/10/2005 17:56:46.395 GMT+01:00";
-			p = new StringParser(s);
-			if (!p.isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
+			if (!(p = new StringParser(s)).isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -550,9 +511,7 @@ public class TestSParser extends STester {
 				assertEq("UTC", c.getTimeZone().getID());
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
-			s = "2005-10-11T17:56:46+01:00";
-			p = new StringParser(s);
-			if (!p.isISO8601Datetime()) {
+			if (!(p = new StringParser("2005-10-11T17:56:46+01:00")).isISO8601Datetime()) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -560,11 +519,8 @@ public class TestSParser extends STester {
 				assertEq("UTC", c.getTimeZone().getID());
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
-			//Example: 2006W023 represents Wednesday (1 .. Monday)
-			//of the second week of 2006 (=> 2006-01-10).
-			s = "2006-W02-3 Z";
-			p = new StringParser(s);
-			if (!p.isISO8601Date()) {
+			//Example: 2006W023 represents Wednesday (1 .. Monday) of the second week of 2006 (=> 2006-01-10).
+			if (!(p = new StringParser("2006-W02-3 Z")).isISO8601Date()) {
 				fail();
 			} else {
 				assertTrue(p.isToken(" Z"));
@@ -574,9 +530,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MONTH), 0);
 				assertEq(c.get(Calendar.DATE), 11);
 			}
-			s = "2006W101";
-			p = new StringParser(s);
-			if (!p.isISO8601Date()) {
+			if (!(p = new StringParser("2006W101")).isISO8601Date()) {
 				fail();
 			} else {
 				assertTrue(p.eos());
@@ -585,9 +539,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MONTH), 2);
 				assertEq(c.get(Calendar.DATE), 6);
 			}
-			s = "2006-010T13:30:01Z";
-			p = new StringParser(s);
-			if (!p.isISO8601Datetime()) {
+			if (!(p = new StringParser("2006-010T13:30:01Z")).isISO8601Datetime()) {
 				fail();
 			} else {
 				assertTrue(p.eos(), s.substring(0, p.getIndex()));
@@ -599,10 +551,9 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.SECOND), 1);
 				assertEq(c.get(Calendar.ZONE_OFFSET), 0);
 			}
-			s = "2006010T133001Z"; //tenth day of 2006
-			p = new StringParser(s);
-			if (p.isDatetime("yyyyDDDTHHmmss[.S][Z]")) {
-				assertTrue(p.eos(), s.substring(0, p.getIndex()));
+
+			if ((p = new StringParser("2006010T133001Z")).isDatetime("yyyyDDDTHHmmss[.S][Z]")) {
+				assertTrue(p.eos(), s.substring(0, p.getIndex())); //tenth day of 2006
 				c = p.getParsedCalendar();
 				assertEq(c.get(Calendar.YEAR), 2006);
 				assertEq(c.get(Calendar.MONTH), 0);
@@ -613,9 +564,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "1993-02-14";
-			p = new StringParser(s);
-			if (!p.isISO8601Datetime()) {
+			if (!(p = new StringParser("1993-02-14")).isISO8601Datetime()) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -623,9 +572,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MONTH), 1);
 				assertEq(c.get(Calendar.DATE), 14);
 			}
-			s = "19930214";
-			p = new StringParser(s);
-			if (p.isDatetime("yyyyMMdd[Z]")) {
+			if ((p = new StringParser("19930214")).isDatetime("yyyyMMdd[Z]")) {
 				c = p.getParsedCalendar();
 				assertEq(c.get(Calendar.YEAR), 1993);
 				assertEq(c.get(Calendar.MONTH), 1);
@@ -633,9 +580,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "1993-045";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
+			if ((p = new StringParser("1993-045")).isISO8601Datetime()) {
 				c = p.getParsedCalendar();
 				assertEq(c.get(Calendar.YEAR), 1993);
 				assertEq(c.get(Calendar.MONTH), 1);
@@ -643,9 +588,8 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "1993045";
-			p = new StringParser(s);
-			if (p.isDatetime("yyyyDDD[Z]")) {
+			;
+			if ((p = new StringParser("1993045")).isDatetime("yyyyDDD[Z]")) {
 				c = p.getParsedCalendar();
 				assertEq(c.get(Calendar.YEAR), 1993);
 				assertEq(c.get(Calendar.MONTH), 1);
@@ -653,9 +597,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "1993-W7-7";
-			p = new StringParser(s);
-			if (!p.isISO8601Datetime()) {
+			if (!(p = new StringParser("1993-W7-7")).isISO8601Datetime()) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -663,9 +605,7 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MONTH), 1);
 				assertEq(c.get(Calendar.DATE), 14);
 			}
-			s = "1993W077";
-			p = new StringParser(s);
-			if (!p.isISO8601Datetime()) {
+			if (!(p = new StringParser("1993W077")).isISO8601Datetime()) {
 				fail();
 			} else {
 				c = p.getParsedCalendar();
@@ -673,18 +613,14 @@ public class TestSParser extends STester {
 				assertEq(c.get(Calendar.MONTH), 1);
 				assertEq(c.get(Calendar.DATE), 14);
 			}
-			p = new StringParser("abc");
-			assertTrue(p.isToken("abc"));
+			assertTrue(new StringParser("").eos());
+			assertTrue((p = new StringParser("abc")).isToken("abc"));
 			assertTrue(p.eos());
-			p = new StringParser("");
-			assertTrue(p.eos());
-			p = new StringParser("abc  d");
-			assertTrue(p.isToken("abc"));
+			assertTrue((p = new StringParser("abc  d")).isToken("abc"));
 			assertTrue(p.isSpaces());
 			assertTrue(p.isChar('d'));
 			assertTrue(p.eos());
-			s = "\n\t2005-03-11T13:46:05+01:00\n\t;";
-			p = new StringParser(s);
+			p = new StringParser("\n\t2005-03-11T13:46:05+01:00\n\t;");
 			assertEq(p.getLineNumber(), 1);
 			assertEq(p.getColumnNumber(), 1);
 			assertEq(p.getSourcePosition(), 0);
@@ -745,8 +681,7 @@ public class TestSParser extends STester {
 			assertEq(p.getLineNumber(), 1);
 			assertEq(p.getColumnNumber(), 5);
 			assertEq(p.getSourcePosition(), 4);
-			s = "2005-03-11T13:46:05+01:00";
-			p = new StringParser(s);
+			p = new StringParser("2005-03-11T13:46:05+01:00");
 			if (p.isISO8601Datetime()) {
 				c = p.getParsedCalendar();
 				if (c.get(Calendar.DAY_OF_MONTH) != 11 || c.get(Calendar.MONTH) != 2
@@ -852,84 +787,48 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "---02";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("---02", s);
+			if ((p = new StringParser("---02")).isISO8601Datetime()) {
+				assertEq("---02", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "--02-03";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("--02-03", s);
+			if ((p = new StringParser("--02-03")).isISO8601Datetime()) {
+				assertEq("--02-03", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "1234";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("1234", s);
+			if ((p = new StringParser("1234")).isISO8601Datetime()) {
+				assertEq("1234", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "-1234";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("-1234", s);
+			if ((p = new StringParser("-1234")).isISO8601Datetime()) {
+				assertEq("-1234", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "-1234-05";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("-1234-05", s);
+			if ((p = new StringParser("-1234-05")).isISO8601Datetime()) {
+				assertEq("-1234-05", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "23:05";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("23:05", s);
+			if ((p = new StringParser("23:05")).isISO8601Datetime()) {
+				assertEq("23:05", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "23:15:01.3456-01:00";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("23:15:01.3456-01:00", s);
+			if ((p = new StringParser("23:15:01.3456-01:00")).isISO8601Datetime()) {
+				assertEq("23:15:01.3456-01:00", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "-0001-01-01";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("-0001-01-01", s);
+			if ((p = new StringParser("-0001-01-01")).isISO8601Datetime()) {
+				assertEq("-0001-01-01", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
-			s = "1999-05-01T20:43:09.876+01:00";
-			p = new StringParser(s);
-			if (p.isISO8601Datetime()) {
-				d = p.getParsedSDatetime();
-				s = d.toString();
-				assertEq("1999-05-01T20:43:09.876+01:00", s);
+			if ((p = new StringParser("1999-05-01T20:43:09.876+01:00")).isISO8601Datetime()) {
+				assertEq("1999-05-01T20:43:09.876+01:00", p.getParsedSDatetime().toString());
 			} else {
 				fail();
 			}
@@ -938,8 +837,7 @@ public class TestSParser extends STester {
 			s = d.toISO8601();
 			assertEq("2009-02-12", s);
 			s = "05-03-11";
-			p = new StringParser(s);
-			if (p.isDatetime("RR-M-d")) {
+			if ((p = new StringParser(s)).isDatetime("RR-M-d")) {
 				d = p.getParsedSDatetime();
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
@@ -954,8 +852,7 @@ public class TestSParser extends STester {
 				fail();
 			}
 			s = "55-03-11";
-			p = new StringParser(s);
-			if (p.isDatetime("RR-MM-dd")) {
+			if ((p = new StringParser(s)).isDatetime("RR-MM-dd")) {
 				d = p.getParsedSDatetime();
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
@@ -970,8 +867,7 @@ public class TestSParser extends STester {
 				fail();
 			}
 			s = "05-03-11";
-			p = new StringParser(s);
-			if (p.isDatetime("yy-M-d")) {
+			if ((p = new StringParser(s)).isDatetime("yy-M-d")) {
 				d = p.getParsedSDatetime();
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
@@ -985,8 +881,7 @@ public class TestSParser extends STester {
 				fail();
 			}
 			s = "05-03-11";
-			p = new StringParser(s);
-			if (p.isDatetime("yy-M-d")) {
+			if ((p = new StringParser(s)).isDatetime("yy-M-d")) {
 				d = p.getParsedSDatetime();
 				assertTrue(d.getDay() == 11, d.toISO8601());
 				assertTrue(d.getMonth() == 3, d.toISO8601());
@@ -999,14 +894,10 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			p = new StringParser("7/6");
-			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
-			p = new StringParser("7/6/2020");
-			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
-			p = new StringParser("7.6");
-			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
-			p = new StringParser("7.6.2020");
-			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			assertTrue((p = new StringParser("7/6")).isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			assertTrue((p = new StringParser("7/6/2020")).isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			assertTrue((p = new StringParser("7.6")).isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
+			assertTrue((p = new StringParser("7.6.2020")).isDatetime("d/M|d.M|d.M.yyyy|d/M/yyyy") && p.eos());
 			p = new StringParser("7.6.2020");
 			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy") && p.eos());
 			p = new StringParser("7.6.2020:16");
@@ -1019,8 +910,7 @@ public class TestSParser extends STester {
 			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y") && p.eos());
 			p = new StringParser(p.getParsedSDatetime().formatDate("{L(en)}d/MMM/y"));
 			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y") && p.eos());
-			p = new StringParser("20.11.");
-			assertTrue(!p.isDatetime("d.M.yyyy[ HH:mm]"));
+			assertTrue(!(p = new StringParser("20.11.")).isDatetime("d.M.yyyy[ HH:mm]"));
 			p = new StringParser("20.11.2005 23:");
 			assertTrue(!(p.isDatetime("d.M.yyyy[ HH:mm]") && p.eos()));
 			assertEq(" 23:", p.getUnparsedBufferPart());
@@ -1115,9 +1005,9 @@ public class TestSParser extends STester {
 				y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
-		} catch (Error ex) {
+		} catch (Error | Exception ex) {
 			fail(ex);
-		} catch (Exception ex) {fail(ex);}
+		}
 		try {//SDuration
 			SDuration du;
 			du = new SDuration("1999-11-05T23:11:05/P2Y1M3DT11H");
@@ -1185,24 +1075,24 @@ public class TestSParser extends STester {
 			du = new SDuration("1999-11-05T23:11:05/P0001-10-11T23:01:55/2009-11-05T23:11:05");
 			assertEq("1999-11-05T23:11:05/P1Y10M11DT23H1M55S/2009-11-05T23:11:05", du.toString());
 			try {
-				if (new SDuration("P1M2Y") != null) {}
+				new SDuration("P1M2Y");
 				fail("parts order - Y must precede M");
-			} catch (Exception ex) {}
+			} catch (SRuntimeException ex) {}
 			try {
-				if (new SDuration("P1Y-1M") != null) {}
+				new SDuration("P1Y-1M");
 				fail("all parts must be positive, error not thrown");
-			} catch (Exception ex) {
+			} catch (SRuntimeException ex) {
 				String msg = "" + ex.getMessage();
-				if (msg.indexOf("SYS056") < 0) {
+				if (!msg.contains("SYS056")) {
 					fail(ex);
 				}
 			}
 			try {
 				new SDuration("1999-111-5T23:11:05/P2Y3D1MT11H");
 				fail("Incorrect format of time period: not thrown");
-			} catch (Exception ex) {
+			} catch (SRuntimeException ex) {
 				String msg = "" + ex.getMessage();
-				if (msg.indexOf("SYS056") < 0) {
+				if (!msg.contains("SYS056")) {
 					fail(ex);
 				}
 			}
@@ -1244,7 +1134,7 @@ public class TestSParser extends STester {
 			st1 = sd.getNextTime(st1);
 			s = st1.toISO8601();
 			assertEq("2000-05-01T00:00:00", s);
-		} catch (Exception ex) {fail(ex);}
+		} catch (SRuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test

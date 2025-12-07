@@ -929,8 +929,7 @@ public class StringParser extends SReporter implements SParser {
 	final void setSourceReader(final File file, final String charset) {
 		try {
 			if (charset == null) {
-				setSourceReader(new InputStreamReader(
-				new FileInputStream(file)));
+				setSourceReader(new InputStreamReader(new FileInputStream(file)));
 			} else {
 				setSourceReader(new InputStreamReader(new FileInputStream(file),charset));
 			}
@@ -1069,15 +1068,13 @@ public class StringParser extends SReporter implements SParser {
 			if ((len = _reader.read(_cbuf)) <= 0) {
 				int count = 0;
 				while (len == 0) {//some streams may return length == 0 ???
-					if (count++ > 1000) {
-						throw new SIOException(SYS.SYS034,//IO error detected on &{0}&{1}{, reason: }
-							getSystemId(), "block length=0");
+					if (count++ > 1000) { //IO error detected on &{0}&{1}{, reason: }
+						throw new SIOException(SYS.SYS034, getSystemId(), "block length=0");
 					}
 					try {
 						sleepwile();
-					} catch (InterruptedException ex) {
-						throw new SIOException(SYS.SYS034,//IO error detected on &{0}&{1}{, reason: }
-							getSystemId(), ex);
+					} catch (InterruptedException ex) {//IO error detected on &{0}&{1}{, reason: }
+						throw new SIOException(SYS.SYS034, getSystemId(), ex);
 					}
 					len = _reader.read(_cbuf);
 				}
@@ -1114,6 +1111,7 @@ public class StringParser extends SReporter implements SParser {
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
+
 	private void sleepwile() throws InterruptedException {Thread.sleep(5);}
 
 	/** Increase buffer for next character.
@@ -1152,8 +1150,7 @@ public class StringParser extends SReporter implements SParser {
 					closeReader();
 					int pos = getIndex(); //save position
 					if (popParser()) {
-						if (getIndex() < _endPos) {
-							// append remaining buffer part
+						if (getIndex() < _endPos) {// append remaining buffer part
 							sb.append(getUnparsedBufferPart());
 							setEndBuffer(sb.length()); // update buffer length
 							super.setIndex(pos);
@@ -1281,11 +1278,11 @@ public class StringParser extends SReporter implements SParser {
 	public final boolean isLineInfoFlag() {return _lineInfo;}
 
 	/** Get part of source buffer from given position to end.
-	 * @param index starting position.
+	 * @param pos starting position.
 	 * @return string with part of the source buffer from index to end.
 	 */
-	public final String getBufferPartFrom(final int index) {
-		return index < _endPos ? _source.substring(index, _endPos) : "";
+	public final String getBufferPartFrom(final int pos) {
+		return pos < _endPos ? _source.substring(pos, _endPos) : "";
 	}
 
 	/** Increase buffer index.
@@ -2046,8 +2043,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Check if parser reached the end of source.
-	 * @return true if parser reached the end of source, otherwise
-	 * return false.
+	 * @return true if parser reached the end of source, otherwise return false.
 	 */
 	public final boolean eos() {return (getIndex()>=_endPos&&!readNextBuffer());}
 
@@ -2059,8 +2055,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Parse white space.
-	 * @return true if white space was present at actual position,
-	 * otherwise return false.
+	 * @return true if white space was present at actual position, otherwise return false.
 	 */
 	public final boolean isSpace() {
 		if (XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
@@ -2075,8 +2070,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Parse one or more white spaces.
-	 * @return true if white spaces were present at actual position,
-	 * otherwise return false.
+	 * @return true if white spaces were present at actual positio otherwise return false.
 	 */
 	public final boolean isSpaces() {
 		if (XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
@@ -2330,10 +2324,8 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if date on current position suits to ISO8601 date and time format.
 	 */
 	public final boolean isISO8601Datetime() {
-		return isDatetime("yyyy-MM-dd['T'HH:mm[:ss[.S]][Z]]" +
-			"|yyyy-DDD['T'HH:mm[:ss[.S]][Z]]" +
-			"|yyyy-'W'w-e['T'HH:mm[:ss[.S]][Z]]" +
-			"|yyyy'W'wwe['T'HH:mm[:ss[.S]]][Z]" +
+		return isDatetime("yyyy-MM-dd['T'HH:mm[:ss[.S]][Z]]" + "|yyyy-DDD['T'HH:mm[:ss[.S]][Z]]" +
+			"|yyyy-'W'w-e['T'HH:mm[:ss[.S]][Z]]" + "|yyyy'W'wwe['T'HH:mm[:ss[.S]]][Z]" +
 			"|--MM[-dd][Z]" + //month or month day
 			"|---dd[Z]"+ //day
 			"|yyyy[-MM][Z]"+ // year or year momth
@@ -2345,20 +2337,17 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if date on current position suits to ISO8601 date format.
 	 */
 	public final boolean isISO8601DateAndTime() {
-		return isDatetime("yyyy-MM-dd'T'HH:mm[:ss[.S]][Z]" +
-			"|yyyy-DDD'T'HH:mm[:ss[.S]][Z]" +
-			"|yyyy-'W'w-e'T'HH:mm[:ss[.S]][Z]" +
-			"|yyyy'W'wwe'T'HH:mm[:ss[.S]][Z]");
+		return isDatetime("yyyy-MM-dd'T'HH:mm[:ss[.S]][Z]" + "|yyyy-DDD'T'HH:mm[:ss[.S]][Z]" +
+			"|yyyy-'W'w-e'T'HH:mm[:ss[.S]][Z]" + "|yyyy'W'wwe'T'HH:mm[:ss[.S]][Z]");
 	}
 
-	/** Parse date and/or time. Argument is string with format mask where
-	 * characters are interpreted as follows:
+	/** Parse date and/or time. Argument is string with format mask where characters are as follows:
 	 * <br><b>a</b> AM/PM marker
 	 * <br><b>D</b> day in year
 	 * <br><b>d</b> day of month (1 through 31)
 	 * <br><b>E</b> day of week (text)
-	 *  <p> E, EE, EEE - abbreviated day name (Mon, Tue, .. Sun
-	 *  <p> EEEE (and more)- full month name (Monday, Tuesday, .. Sunday
+	 * <p> E, EE, EEE - abbreviated day name (Mon, Tue, .. Sun
+	 * <p> EEEE (and more)- full month name (Monday, Tuesday, .. Sunday
 	 * <br><b>e</b> day of week (number 1=Monday, 7=Sunday)
 	 * <br><b>F</b> day of week in month
 	 * <br><b>G</b> era (0=BC, 1=AD)
@@ -2367,30 +2356,23 @@ public class StringParser extends SReporter implements SParser {
 	 * <br><b>K</b> hour 0..11 with am/pm)
 	 * <br><b>k</b> hour 1..23
 	 * <br><b>M</b> month in year (1=January .. 12=December).
-	 *  <p> M - number without leading zero
-	 *  <p> MM - number with leading zero
-	 *  <p> MMM - abbreviated month name (Jan, Feb, .. Dec
-	 *  <p> MMMM (and more)- full month name (January, February, .. December
+	 * <p> M - number without leading zero
+	 * <p> MM - number with leading zero
+	 * <p> MMM - abbreviated month name (Jan, Feb, .. Dec
+	 * <p> MMMM (and more)- full month name (January, February, .. December
 	 * <br><b>m</b> minute (0 through 59)
 	 * <br><b>s</b> second (0 through 59, may be 60)
 	 * <br><b>S</b> digits representing a decimal fraction of a second
 	 * <br><b>y</b> year
-	 * <br><b>Y</b> year (ISO variant, including negative numbers and leading
-	 * zeroes)
-	 * <br><b>YY</b> year (two digits specification, century is added from
-	 * the actual year)
-	 * <br><b>RR</b> year - two digits specification, century is added
-	 * according to ORACLE specification:
-	 * <p>Let c is century of actual date and y is number representing the year
-	 * in actual century. Let r be the specified two-digit year; then
-	 * <p>if 00 &lt;= y &lt;= 49 and 00 &lt;= r &lt;= 49 then
-	 * result = c * 100 + r
-	 * <p>if 00 &lt;= y &lt;= 49 and 50 &lt;= r &lt;= 99 then
-	 * result = (c + 1) * 100 + r
-	 * <p>if 50 &lt;= y &lt;= 99 and 00 &lt;= r &lt;= 49 then
-	 * result = (c - 1) * 100 + r
-	 * <p>if 50 &lt;= y &lt;= 99 and 50 &lt;= r &lt;= 99 then
-	 * result = c * 100 + r
+	 * <br><b>Y</b> year (ISO variant, including negative numbers and leading zeroes)
+	 * <br><b>YY</b> year (two digits specification, century is added from the actual year)
+	 * <br><b>RR</b> year - two digits specification, century is added according to ORACLE specification:
+	 * <p>Let c is century of actual date and y is number representing the year in actual century.
+	 * Let r be the specified two-digit year; then
+	 * <p>if 00 &lt;= y &lt;= 49 and 00 &lt;= r &lt;= 49 then result = c * 100 + r
+	 * <p>if 00 &lt;= y &lt;= 49 and 50 &lt;= r &lt;= 99 then result = (c + 1) * 100 + r
+	 * <p>if 50 &lt;= y &lt;= 99 and 00 &lt;= r &lt;= 49 then result = (c - 1) * 100 + r
+	 * <p>if 50 &lt;= y &lt;= 99 and 50 &lt;= r &lt;= 99 then result = c * 100 + r
 	 * <br><b>W</b> week in month
 	 * <br><b>w</b> week in year
 	 * <br><b>Z</b> time zone designator (Z or +hh:mm or -hh:mm)
@@ -2400,27 +2382,22 @@ public class StringParser extends SReporter implements SParser {
 	 * <br><b>z</b> zone name
 	 * <p><b>z, zz, zzz</b> abbreviated zone name (CET)
 	 * <p><b>zzzz</b> and more full zone name (Central European Time)
-	 * <p>One occurrence of above characters represent number without leading
-	 * zeroes. Repeated characters M,d,H,h,m and s represents n-digit number
-	 * with leading zeroes. However, the only year specifications 'y', 'yy'
-	 * and 'yyyy' are permitted, otherwise  the exception SYS059 is thrown.
-	 * <p>Other characters are interpreted as strings which must match. If the
-	 * mask should describe one of above characters it must be quoted in
-	 * apostrophes. The character apostrophe itself must be doubled.
+	 * <p>One occurrence of above characters represent number without leading zeroes. Repeated characters
+	 * M,d,H,h,m and s represents n-digit number with leading zeroes. However, the only year specifications
+	 * 'y', 'yy' and 'yyyy' are permitted, otherwise  the exception SYS059 is thrown.
+	 * <p>Other characters are interpreted as strings which must match. If the mask should describe one of
+	 * above characters it must be quoted in apostrophes. The character apostrophe itself must be doubled.
 	 * <p>Parts of mask in square brackets are optional (e.g.:
 	 * <p><b>"HH:mm[:ss[.SSS]][z]"</b>
-	 * <p>describes time specification where fields with seconds, milliseconds
-	 * or zone are optional).
+	 * <p>describes time specification where fields with seconds, milliseconds or zone are optional).
 	 * <p>Variants of mask are separated by bar character '|' (e.g.
 	 * <p><b>"yyyyMMdd|EEE, d MMM y H:m:s"</b>
-	 * <p>allows to specify date in format of number or in "unix" format).
-	 * Specification of default (predefined) value is in {} brackets and must
-	 * precede each variant specification (e.g.:
+	 * <p>allows to specify date in format of number or in "unix" format). Specification of default
+	 * (predefined) value is in {} brackets and must precede each variant specification (e.g.:
 	 * <p><b>"{H8m30}[HH:mm]ss|{H8m30}yyyyMMdd[HH:mm]"</b>
-	 * - if hours and minutes are not specified the value is set to 08:30).
+	 * - if hours and minutes are not specified the value is set to 08:30).</p>
 	 * @param mask String with date format.
-	 * @return true if the date source on current position suits
-	 * to given format.
+	 * @return true if the date source on current position suits to given format.
 	 * @throws SRuntimeException if mask format is incorrect:
 	 * <br>SYS059 incorrect year specification
 	 * <br>SYS049 unclosed quoted literal
@@ -2669,8 +2646,11 @@ public class StringParser extends SReporter implements SParser {
 				case 'k': //hour in day (1..24)
 				case 'H': //hour in day (0..23)
 				case 'h': //hour in am/pm (1..12)
-					hourKind = pat;
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
+						failVariant = true;
+						continue;
+					}
+					if ((hourKind = pat) == 'h' && i > 12) {
 						failVariant = true;
 						continue;
 					}
@@ -2739,18 +2719,16 @@ public class StringParser extends SReporter implements SParser {
 /*
   Two digits year (see Oracle format). Century is generated according to following rules:
   If RR is from the interval  00 .. 49 then
-  a) if last two digits of the actual year are 00..49 then the century is taken
-	 from the actual year.
-  b) if last two digits of the actual year are 50..99 then the century is taken
-	 from the actual year increased by 1.
+  a) if last two digits of the actual year are 00..49 then the century is taken from the actual year.
+  b) if last two digits of the actual year are 50..99 then the century is taken from the actual year
+	 increased by 1.
   If RR is from the interval  50 .. 99 then
   c) if last two digits of the actual year are 00..49 then the century is taken
 	 from the actual year decreased by 1.
-  d) if last two digits of the actual year are 50..99 then the century is taken
-	 from the actual year.
+  d) if last two digits of the actual year are 50..99 then the century is taken from the actual year.
 */
 					if (n != 2) {
-						//Datetime mask: incorrect year specification &{0}{, position: }
+						//SYS059=Datetime mask: incorrect year specification &{0}{, position: }
 						throw new SRuntimeException(SYS.SYS059, fpos-3);
 					}
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
@@ -2759,8 +2737,7 @@ public class StringParser extends SReporter implements SParser {
 					}
 					int y = new GregorianCalendar().get(Calendar.YEAR);
 					int c = y /100; //actual century
-					y = y % 100; //last two digits of the actual year
-					//actual years in the actual century < 50
+					y = y % 100; //last two digits of the actual year actual years in the actual century < 50
 					myDate._year = i < 50 ? y < 50 ? c * 100 + i : ((c + 1) * 100 + i)
 						: y < 50 ? (c - 1) * 100 + i : (c * 100 + i);
 					continue;
@@ -2769,7 +2746,7 @@ public class StringParser extends SReporter implements SParser {
 				case 'z': {//RFC822 zone
 					if (n != 0 && n != 2 && n != 5 && n != 6) {
 						freeBuffer();
-						//Datetime mask: incorrect zone format &{0}{, position: }
+						//SYS050=Datetime mask: incorrect zone format &{0}{, position: }
 						throw new SRuntimeException(SYS.SYS050, fpos-n);
 					}
 					TimeZone tz = readTimeZone(n, pat);
@@ -2842,7 +2819,7 @@ public class StringParser extends SReporter implements SParser {
 						}
 						if (pat != delim) {
 							freeBuffer();
-							//Datetime mask: unclosed quoted literal&{0}{, position: }
+							//SYS049=Datetime mask: unclosed quoted literal&{0}{, position: }
 							throw new SRuntimeException(SYS.SYS049, beg);
 						}
 						if (foundChar) {
@@ -3538,13 +3515,12 @@ public class StringParser extends SReporter implements SParser {
 				case 'K': //hour 0..11
 				case 'k': //hour in day (1..24)
 				case 'H': //hour in day (0..23)
-				case 'h': //hour in am/pm (1..12)
+				case 'h': //hour (1..12) AM/PM
 				case 'Y': //year ISO
 				case 'y': //year
 				case 'R': //year (two digits database)
 				case 'Z': //RFC822 zone
-				case 'z': //general zone
-				{
+				case 'z': { //general zone
 					char ch = _ch;
 					int n = 0;
 					while (isChar(ch)) {
@@ -3668,12 +3644,12 @@ public class StringParser extends SReporter implements SParser {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get type of character. This method returns one of:
-	 * <br>XML_CHAR_ILLEGAL .. unknown type (0)
-	 * <br>XML_CHAR .. valid XML character (1)
-	 * <br>XML_CHAR_WHITESPACE .. space, TAB, CR, LF (2)
-	 * <br>XML_CHAR_COLON .. ':' (4)
-	 * <br>XML_CHAR_NAME_START .. first character of XML name (8)
-	 * <br>XML_CHAR_NAME_EXT .. character of XML name (16)
+	 * <p>XML_CHAR_ILLEGAL .. unknown type (0)
+	 * <p>XML_CHAR .. valid XML character (1)
+	 * <p>XML_CHAR_WHITESPACE .. space, TAB, CR, LF (2)
+	 * <p>XML_CHAR_COLON .. ':' (4)
+	 * <p>XML_CHAR_NAME_START .. first character of XML name (8)
+	 * <p>XML_CHAR_NAME_EXT .. character of XML name (16)
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return type of character.
 	 */
@@ -3682,8 +3658,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse NMToken.
-	 * [7] NMToken::= (NameChar)+
-	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':' | CombiningChar | Extender
+	 * <p>[7] NMToken::= (NameChar)+
+	 * <p>[4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':' | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if rule passed.
 	 */
@@ -3714,8 +3690,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse NCName according to Namespaces in W3C.
-	 * [4] NCName::= (Letter | '_') (NCNameChar)* //An XML Name, minus the ":"
-	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_' | CombiningChar | Extender
+	 * <p>[4] NCName::= (Letter | '_') (NCNameChar)* //An XML Name, minus the ":"
+	 * <p>[5] NCNameChar::= Letter | Digit | '.' | '-' | '_' | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if NCNname was recognized.
 	 */
@@ -3944,8 +3920,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 			int j = getParsedInt();
 			if (j > 59) {
-				//Minutes must be in interval 0 .. 59
-				getReportWriter().putReport(Report.error(SYS.SYS087));
+				getReportWriter().putReport(Report.error(SYS.SYS087));//Minutes must be in interval 0 .. 59
 				j = 59;
 			} else if (i == 14 && j > 0) {
 				//Time zone must be in interval -14 .. 14 hours
@@ -4522,13 +4497,13 @@ public class StringParser extends SReporter implements SParser {
 	public static final boolean isEmoji(final String s) {
 		return s.matches("(?:[\uD83C\uDF00-\uD83D\uDDFF]|[\uD83E\uDD00-\uD83E\uDDFF]|" +
 			"[\uD83D\uDE00-\uD83D\uDE4F]|[\uD83D\uDE80-\uD83D\uDEFF]|" +
-			"[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|" +
-			"[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|" +
-			"[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|" +
+			"[\u2600-\u26FF]\uFE0F?|[\u2700-\u27BF]\uFE0F?|\u24C2\uFE0F?|[\uD83C\uDDE6-\uD83C\uDDFF]{1,2}|" +
+			"[\uD83C\uDD70\uD83C\uDD71\uD83C\uDD7E\uD83C\uDD7F\uD83C\uDD8E\uD83C\uDD91-\uD83C\uDD9A]\uFE0F?|"+
 			"[\u0023\u002A\u0030-\u0039]\uFE0F?\u20E3|[\u2194-\u2199\u21A9-\u21AA]\uFE0F?|" +
 			"[\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55]\uFE0F?|" +
 			"[\u2934\u2935]\uFE0F?|[\u3030\u303D]\uFE0F?|[\u3297\u3299]\uFE0F?|" +
-			"[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|" +
+			"[\uD83C\uDE01\uD83C\uDE02\uD83C\uDE1A\uD83C\uDE2F\uD83C\uDE32-" +
+			"\uD83C\uDE3A\uD83C\uDE50\uD83C\uDE51]\uFE0F?|" +
 			"[\u203C\u2049]\uFE0F?|[\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE]\uFE0F?|" +
 			"[\u00A9\u00AE]\uFE0F?|[\u2122\u2139]\uFE0F?|\uD83C\uDC04\uFE0F?|\uD83C\uDCCF\uFE0F?|" +
 			"[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?)+");

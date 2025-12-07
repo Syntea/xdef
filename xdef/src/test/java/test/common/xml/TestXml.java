@@ -49,17 +49,15 @@ public class TestXml extends STester  {
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 			transformer.transform(new DOMSource(el), new StreamResult(buffer));
-			s = buffer.toString();
-
-			s = s.trim();
+			s = buffer.toString().trim();
 			if (!("<root atr=\"Kůň &#9;&#13; úpěl\">Kůň " + (char)9 + "&#13; úpěl</root>").equals(s)
 				//ignore case if there is hexacecimal reprezentation
-				 && !("<root atr=\"kůň &#x9;&#xd; úpěl\">kůň "+(char)9+"&#xd; úpěl</root>")
-					 .equals(s.toLowerCase())) {
+				&& !("<root atr=\"kůň &#x9;&#xd; úpěl\">kůň "+(char)9+"&#xd; úpěl</root>")
+					.equals(s.toLowerCase())) {
 				fail(s);
 			}
-		} catch (IllegalArgumentException | ParserConfigurationException
-			| TransformerException | DOMException ex) {
+		} catch (IllegalArgumentException | ParserConfigurationException | TransformerException
+			| DOMException ex) {
 			fail(ex);
 		}
 		try {
@@ -70,8 +68,7 @@ public class TestXml extends STester  {
 			el = doc.getDocumentElement();
 			assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getAttribute("atr"));
 			assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getChildNodes().item(0).getNodeValue());
-		} catch (IOException | ParserConfigurationException
-			| DOMException | SAXException ex) {
+		} catch (IOException | ParserConfigurationException | DOMException | SAXException ex) {
 			fail(ex);
 		}
 	}

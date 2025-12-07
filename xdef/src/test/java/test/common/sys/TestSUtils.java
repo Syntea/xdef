@@ -102,7 +102,7 @@ public class TestSUtils extends STester {
 	@Override
 	public void test() {
 		Calendar c;
-		String s, s1, s2;
+		String s, s1;
 		SDatetime d, d1, d2;
 		StringParser p;
 		try { // TimeZone
@@ -633,8 +633,8 @@ public class TestSUtils extends STester {
 			p = new StringParser(s);
 			if (p.isDatetime("EEE, dd MMM yyyy HH:mm:ss ZZZZZ[ (z)]") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
-				assertEq("Tue, 27 Nov 2001 14:05:12 +0100", s2);
+				assertEq("Tue, 27 Nov 2001 14:05:12 +0100",
+					SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ"));
 			} else {
 				fail();
 			}
@@ -645,10 +645,8 @@ public class TestSUtils extends STester {
 			s1 = "yyyy-MM-dd h:m:saZ";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,s1);
-				assertEq(s, s2);
-				s2 = SDatetime.formatDate(c,"yyyy-MM-dd H:m:sZ");
-				assertEq("1992-05-26 1:30:15-04:00", s2);
+				assertEq(s, SDatetime.formatDate(c,s1));
+				assertEq("1992-05-26 1:30:15-04:00", SDatetime.formatDate(c,"yyyy-MM-dd H:m:sZ"));
 			} else {
 				fail();
 			}
@@ -656,10 +654,8 @@ public class TestSUtils extends STester {
 			p = new StringParser(s);
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,s1);
-				assertEq(s, s2);
-				s2 = SDatetime.formatDate(c,"yyyy-MM-dd H:m:sZ");
-				assertEq("1992-05-26 13:30:15-04:00", s2);
+				assertEq(s, SDatetime.formatDate(c,s1));
+				assertEq("1992-05-26 13:30:15-04:00", SDatetime.formatDate(c,"yyyy-MM-dd H:m:sZ"));
 			} else {
 				fail();
 			}
@@ -668,8 +664,8 @@ public class TestSUtils extends STester {
 			s1 = "{H10m11s13Z-08:30}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
-				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)", s2);
+				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)",
+					SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)"));
 			} else {
 				fail();
 			}
@@ -677,8 +673,8 @@ public class TestSUtils extends STester {
 			s1 = "{H10m11s13Z-08:30}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
-				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)", s2);
+				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)",
+					SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)"));
 			} else {
 				fail();
 			}
@@ -686,8 +682,8 @@ public class TestSUtils extends STester {
 			s1 = "{H10m11s13Z-08:30}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
-				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)", s2);
+				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)",
+					SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)"));
 			} else {
 				fail();
 			}
@@ -695,8 +691,8 @@ public class TestSUtils extends STester {
 			s1 = "{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "{L(en)}EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
-				assertEq("Mon, 23 Jan 2006 10:11:13 +0100", s2);
+				assertEq("Mon, 23 Jan 2006 10:11:13 +0100",
+					SDatetime.formatDate(c, "{L(en)}EEE, dd MMM yyyy HH:mm:ss ZZZZZ"));
 			} else {
 				fail();
 			}
@@ -705,37 +701,26 @@ public class TestSUtils extends STester {
 				"{L(cs)H10m11s13z(Europe/Prague)}EEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, s1);
-				assertEq(s,s2);
-				s2 = SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
-				assertEq("lun., 23. janvier 2006 10:11:13 +0100", s2);
-				s2 = SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
-				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-					assertEq("Po, 23. ledna 2006 10:11:13 +0100", s2);
-				} else {
-					assertEq("po, 23. ledna 2006 10:11:13 +0100", s2);
-				}
+				assertEq(s, SDatetime.formatDate(c, s1));
+				assertEq("lun., 23. janvier 2006 10:11:13 +0100",
+					SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ"));
+				assertEq(SUtils.JAVA_RUNTIME_VERSION_ID <= 108
+					? "Po, 23. ledna 2006 10:11:13 +0100" : "po, 23. ledna 2006 10:11:13 +0100",
+					SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ"));
 			} else {
 				fail();
 			}
-			if (SUtils.JAVA_RUNTIME_VERSION_ID == 108) {
-				s = "Po, 23. ledna 2006";
-			} else {
-				s = "po, 23. ledna 2006";
-			}
+			s = SUtils.JAVA_RUNTIME_VERSION_ID == 108 ? "Po, 23. ledna 2006" : "po, 23. ledna 2006";
 			p = new StringParser(s);
 			s1 = "{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y|" +
 				"{L(cs)H10m11s13z(Europe/Prague)}EEE, d. MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
-				assertEq("lun., 23. janvier 2006 10:11:13 +0100", s2);
-				s2 = SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
-				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-					assertEq("Po, 23. ledna 2006 10:11:13 +0100", s2);
-				} else {
-					assertEq("po, 23. ledna 2006 10:11:13 +0100", s2);
-				}
+				assertEq("lun., 23. janvier 2006 10:11:13 +0100",
+					SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ"));
+				assertEq(SUtils.JAVA_RUNTIME_VERSION_ID <= 108
+					? "Po, 23. ledna 2006 10:11:13 +0100" : "po, 23. ledna 2006 10:11:13 +0100",
+				SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ"));
 			} else {
 				fail();
 			}
@@ -744,18 +729,12 @@ public class TestSUtils extends STester {
 				+ "{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
-				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-					assertEq("lun., 23. janvier 2006 10:11:13 +0100",s2);
-				} else {
-					assertEq("lun., 23. janvier 2006 10:11:13 +0100",s2);
-				}
-				s2 = SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
-				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-					assertEq("Po, 23. ledna 2006 10:11:13 +0100", s2);
-				} else {
-					assertEq("po, 23. ledna 2006 10:11:13 +0100", s2);
-				}
+				assertEq(SUtils.JAVA_RUNTIME_VERSION_ID <= 108
+					? "lun., 23. janvier 2006 10:11:13 +0100" : "lun., 23. janvier 2006 10:11:13 +0100",
+					SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ"));
+				assertEq(SUtils.JAVA_RUNTIME_VERSION_ID <= 108 ?
+					"Po, 23. ledna 2006 10:11:13 +0100" : "po, 23. ledna 2006 10:11:13 +0100",
+					SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ"));
 			} else {
 				fail();
 			}
@@ -764,10 +743,8 @@ public class TestSUtils extends STester {
 			s1 = "EEE, d MMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,s1);
-				assertEq(s,s2);
-				s2 = SDatetime.formatDate(c,"yyyy-MM-dd");
-				assertEq("2006-01-23", s2);
+				assertEq(s, SDatetime.formatDate(c,s1));
+				assertEq("2006-01-23", SDatetime.formatDate(c, "yyyy-MM-dd"));
 			} else {
 				fail();
 			}
@@ -776,22 +753,16 @@ public class TestSUtils extends STester {
 			s1 = "d/M/y|{L(cs)}d/MMM/y|{L(*)}d/MMM/y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,"d/M/y");
-				assertEq(s, s2);
+				assertEq(s, SDatetime.formatDate(c,"d/M/y"));
 			} else {
 				fail();
 			}
-			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-				s = "12/Čer/1961";
-			} else {
-				s = "12/čvn/1961";
-			}
+			s = SUtils.JAVA_RUNTIME_VERSION_ID <= 108 ? "12/Čer/1961" : "12/čvn/1961";
 			p = new StringParser(s);
 			s1 = "d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,"d/M/y");
-				assertEq("12/6/1961", s2);
+				assertEq("12/6/1961", SDatetime.formatDate(c,"d/M/y"));
 			} else {
 				fail(p.getParsedBufferPart());
 			}
@@ -800,8 +771,7 @@ public class TestSUtils extends STester {
 			s1 = "d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,"d/M/y");
-				assertEq("12/6/1961", s2);
+				assertEq("12/6/1961", SDatetime.formatDate(c,"d/M/y"));
 			} else {
 				fail();
 			}
@@ -810,18 +780,15 @@ public class TestSUtils extends STester {
 			s1 = "d?'./'M?'./'y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,s1);
-				assertEq("16.7.2015", s2);
+				assertEq("16.7.2015", SDatetime.formatDate(c,s1));
 			} else {
 				fail();
 			}
-			s = "1992-05-26-04:00";
-			p = new StringParser(s);
+			p = new StringParser("1992-05-26-04:00");
 			s1 = "yyyy-MM-ddZZZZZ|yyyy-MM-ddZ";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,s1);
-				assertEq("1992-05-26-0400", s2);
+				assertEq("1992-05-26-0400", SDatetime.formatDate(c, s1));
 			} else {
 				fail();
 			}
@@ -830,102 +797,89 @@ public class TestSUtils extends STester {
 			s = "1992-05-26T13:30:15-04:00";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime() && p.eos()) {
-				c = p.getParsedSDatetime().getCalendar();
-				assertEq(s, SDatetime.toISO8601(c));
+				assertEq(s, SDatetime.toISO8601(p.getParsedSDatetime().getCalendar()));
 			} else {
 				fail();
 			}
 			p = new StringParser("1992-05-26T13:30:15-04:00");
 			if (p.isISO8601Datetime() && p.eos()) {
-				c = p.getParsedSDatetime().getCalendar();
-				assertEq(s, SDatetime.toISO8601(c));
+				assertEq(s, SDatetime.toISO8601(p.getParsedSDatetime().getCalendar()));
 			} else {
 				fail();
 			}
 			s = "1992-05-26T13:30:15Z";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime() && p.eos()) {
-				c = p.getParsedSDatetime().getCalendar();
-				assertEq(s, SDatetime.toISO8601(c));
+				assertEq(s, SDatetime.toISO8601(p.getParsedSDatetime().getCalendar()));
 			} else {
 				fail();
 			}
 			p = new StringParser("1992-05-26T13:30:15Z");
 			if (p.isISO8601Datetime() && p.eos()) {
-				c = p.getParsedSDatetime().getCalendar();
-				assertEq(s, SDatetime.toISO8601(c));
+				assertEq(s, SDatetime.toISO8601(p.getParsedSDatetime().getCalendar()));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T14:48:59.956+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ");
-				assertEq("2005-03-01T14:48:59.956+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZ");
-				assertEq("2005-03-01T14:48:59.96+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSZZZZZZ");
-				assertEq("2005-03-01T14:48:59.956+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSSZZZZZ");
-				assertEq("2005-03-01T14:48:59.9560+0200", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSSS");
-				assertEq("2005-03-01T14:48:59.95600", s);
+				assertEq("2005-03-01T14:48:59.956+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ"));
+				assertEq("2005-03-01T14:48:59.96+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZ"));
+				assertEq("2005-03-01T14:48:59.956+02:00",
+					SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSZZZZZZ"));
+				assertEq("2005-03-01T14:48:59.9560+0200",
+					SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSSZZZZZ"));
+				assertEq("2005-03-01T14:48:59.95600", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSSS"));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T14:48:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ");
-				assertEq("2005-03-01T14:48:59.996+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZZZZZ");
-				assertEq("2005-03-01T14:49:00.00+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSZZZZZ");
-				assertEq("2005-03-01T14:48:59.996+0200", s);
+				assertEq("2005-03-01T14:48:59.996+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ"));
+				assertEq("2005-03-01T14:49:00.00+02:00",
+					SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZZZZZ"));
+				assertEq("2005-03-01T14:48:59.996+0200",
+					SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSZZZZZ"));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T23:59:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ");
-				assertEq("2005-03-01T23:59:59.996+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZZZZZ");
-				assertEq("2005-03-01T24:00:00.00+02:00", s);
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSZZZZZ");
-				assertEq("2005-03-01T23:59:59.996+0200", s);
+				assertEq("2005-03-01T23:59:59.996+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ"));
+				assertEq("2005-03-01T24:00:00.00+02:00",
+					SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZZZZZ"));
+				assertEq("2005-03-01T23:59:59.996+0200",
+					SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSSZZZZZ"));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T14:48:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
-				assertEq("2005-03-01T14:49:00+02:00", s);
+				assertEq("2005-03-01T14:49:00+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ"));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T23:59:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
-				assertEq("2005-03-01T24:00:00+02:00", s);
+				assertEq("2005-03-01T24:00:00+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ"));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T22:59:59.999+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
-				assertEq("2005-03-01T23:00:00+02:00", s);
+				assertEq("2005-03-01T23:00:00+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ"));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T23:59:59.499+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
-				assertEq("2005-03-01T23:59:59+02:00", s);
+				assertEq("2005-03-01T23:59:59+02:00", SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ"));
 			} else {
 				fail();
 			}
@@ -966,10 +920,8 @@ public class TestSUtils extends STester {
 			}
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // SDatetime
-			s1 = "2005-03-01T23:59:59+02:00";
-			s2 = "2006-03-01T13:59:59+02:00";
-			d1 = SDatetime.parseISO8601(s1);
-			d2 = SDatetime.parseISO8601(s2);
+			d1 = SDatetime.parseISO8601("2005-03-01T23:59:59+02:00");
+			d2 = SDatetime.parseISO8601("2006-03-01T13:59:59+02:00");
 			assertEq(SDatetime.getCalendarDaysDifference(d1, d2), 365);
 			assertEq(SDatetime.getCalendarMonthsDifference(d1, d2), 12);
 			assertEq(SDatetime.getCalendarYearsDifference(d1, d2), 1);
@@ -978,10 +930,8 @@ public class TestSUtils extends STester {
 			assertEq(d1.getYear(), 2005);
 			assertEq(d1.getHour(), 23);
 			assertEq(d1.getDayOfYear(), 60);
-			s1 = "2004-03-01T23:59:59+02:00"; //leap year
-			s2 = "2006-03-01T13:59:59+02:00";
-			d1 = SDatetime.parseISO8601(s1);
-			d2 = SDatetime.parseISO8601(s2);
+			d1 = SDatetime.parseISO8601("2004-03-01T23:59:59+02:00"); //leap year
+			d2 = SDatetime.parseISO8601("2006-03-01T13:59:59+02:00");
 			assertEq(SDatetime.getCalendarDaysDifference(d1, d2), 731);
 			assertEq(SDatetime.getCalendarMonthsDifference(d1, d2), 24);
 			assertEq(SDatetime.getCalendarYearsDifference(d1, d2), 2);
@@ -1552,7 +1502,6 @@ public class TestSUtils extends STester {
 			InputStream is = new InputStream() {
 				private int i = 0;
 				final private byte[] buf = fs.getBytes();
-
 				@Override
 				public int read() throws IOException {
 					if (i >= buf.length) {
@@ -1560,12 +1509,10 @@ public class TestSUtils extends STester {
 					}
 					return (int) buf[i++];
 				}
-
 				@Override
 				public int read(byte[] b) throws IOException {
 					return read(b, 0, b.length);
 				}
-
 				@Override
 				public int read(byte[] b, int off, int len) throws IOException {
 					if (i>= buf.length) {
