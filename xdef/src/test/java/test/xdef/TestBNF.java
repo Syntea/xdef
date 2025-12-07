@@ -13,7 +13,6 @@ public final class TestBNF extends XDTester {
 	@Override
 	public void test() {
 		XDPool xp;
-		String xdef;
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		try {
