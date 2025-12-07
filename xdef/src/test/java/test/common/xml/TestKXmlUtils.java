@@ -81,13 +81,14 @@ public class TestKXmlUtils extends STester {
 			}
 		} catch (DOMException ex) {fail(ex);}
 		try { // namespace
-			source = "<root atr=\"atr1\" xmlns=\"a\">\n"+
-				"  <child xmlns:u=\"t\" childAtr1='atr1' u:childAtr2='atr3'\n"+
-				"         v:childAtr2=\"atr2\" xmlns:v=\"t\">\n"+
-				"    This is text1...\n"+
-				"  </child>\n"+
-				" This is text2...\n"+
-				"</root>\n";
+			source =
+"<root atr=\"atr1\" xmlns=\"a\">\n"+
+"  <child xmlns:u=\"t\" childAtr1='atr1' u:childAtr2='atr3'\n"+
+"         v:childAtr2=\"atr2\" xmlns:v=\"t\">\n"+
+"    This is text1...\n"+
+"  </child>\n"+
+" This is text2...\n"+
+"</root>\n";
 			try {
 				//warning "XML025"
 				root = KXmlUtils.parseXml(source).getDocumentElement();
@@ -100,13 +101,14 @@ public class TestKXmlUtils extends STester {
 					fail(ex);
 				}
 			}
-			source = "<root atr=\"atr1\" xmlns=\"a\">\n" +
-				"  <child xmlns:u=\"uu\" childAtr1='atr1' u:childAtr2='atr3'\n"+
-				"         v:childAtr2=\"atr2\" xmlns:v=\"vv\">\n"+
-				"    This is text1...\n"+
-				"  </child>\n"+
-				" This is text2...\n"+
-				"</root>\n";
+			source =
+"<root atr=\"atr1\" xmlns=\"a\">\n" +
+"  <child xmlns:u=\"uu\" childAtr1='atr1' u:childAtr2='atr3'\n"+
+"         v:childAtr2=\"atr2\" xmlns:v=\"vv\">\n"+
+"    This is text1...\n"+
+"  </child>\n"+
+" This is text2...\n"+
+"</root>\n";
 			root = KXmlUtils.parseXml(source).getDocumentElement();
 			assertEq("a", root.getNamespaceURI());
 			assertEq("a", root.getElementsByTagName("child").item(0).getNamespaceURI());
@@ -212,17 +214,17 @@ public class TestKXmlUtils extends STester {
 			doc.appendChild(root);
 			KXmlUtils.setNecessaryXmlnsAttrs(root);
 			s = KXmlUtils.nodeToString(root);
-			cmpResult = KXmlUtils.compareElements(
-				"<a:root a=\"a\" b:b=\"b\" c:c=\"c\" " +
-				"xmlns:a=\"syntea.cz\" " +
-				"xmlns:b=\"syntea.cz\" " +
-				"xmlns:c=\"syntea.com\">" +
-				"<child1/>" +
-				"<child2 xmlns=\"syntea.com\"/>" +
-				"<b:child3/>" +
-				"<a:child4 xmlns:a=\"syntea.eu\"/>" +
-				"<x:child5 xmlns:x=\"syntea.eu\"/>" +
-				"</a:root>", s);
+			cmpResult = KXmlUtils.compareElements(s,
+"<a:root a=\"a\" b:b=\"b\" c:c=\"c\" " +
+"xmlns:a=\"syntea.cz\" " +
+"xmlns:b=\"syntea.cz\" " +
+"xmlns:c=\"syntea.com\">" +
+"<child1/>" +
+"<child2 xmlns=\"syntea.com\"/>" +
+"<b:child3/>" +
+"<a:child4 xmlns:a=\"syntea.eu\"/>" +
+"<x:child5 xmlns:x=\"syntea.eu\"/>" +
+"</a:root>");
 			if (cmpResult.errorWarnings()) {
 				fail(cmpResult.toString() + "\n" + s);
 			}
@@ -234,17 +236,14 @@ public class TestKXmlUtils extends STester {
 			}
 			el = KXmlUtils.cloneWithChangedNamespace(root, "syntea.cz", "syntea.org");
 			s = KXmlUtils.nodeToString(el);
-			cmpResult = KXmlUtils.compareElements(
-				"<a:root a=\"a\" b:b=\"b\" c:c=\"c\" " +
-				"xmlns:a=\"syntea.org\" " +
-				"xmlns:b=\"syntea.org\" " +
-				"xmlns:c=\"syntea.com\">" +
-				"<child1/>" +
-				"<child2 xmlns=\"syntea.com\"/>" +
-				"<b:child3/>" +
-				"<a:child4 xmlns:a=\"syntea.eu\"/>" +
-				"<x:child5 xmlns:x=\"syntea.eu\"/>" +
-				"</a:root>", s);
+			cmpResult = KXmlUtils.compareElements(s,
+"<a:root a=\"a\" b:b=\"b\" c:c=\"c\" xmlns:a=\"syntea.org\" xmlns:b=\"syntea.org\" xmlns:c=\"syntea.com\">" +
+"<child1/>" +
+"<child2 xmlns=\"syntea.com\"/>" +
+"<b:child3/>" +
+"<a:child4 xmlns:a=\"syntea.eu\"/>" +
+"<x:child5 xmlns:x=\"syntea.eu\"/>" +
+"</a:root>");
 			if (cmpResult.errorWarnings()) {
 				fail(cmpResult.toString() + "\n" + s);
 			}

@@ -1,6 +1,7 @@
 package test.common.xml;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.xdef.sys.STester;
 import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlOutStream;
@@ -72,7 +73,7 @@ public class TestXmOutStream extends STester {
 "<f f=\"&amp;p \"><g><h h=\"H\"/></g> text&amp;1 </f>\n"+
 "</a>\n"+
 "<!-- c2 -->");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException | IOException ex) {fail(ex);}
 		try {// indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -123,7 +124,7 @@ public class TestXmOutStream extends STester {
 "  </f>\n"+
 "</a>\n"+
 "<!-- c2 -->");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException | IOException ex) {fail(ex);}
 		try {// namespace, no indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -167,7 +168,7 @@ public class TestXmOutStream extends STester {
 "<a xmlns=\"a\" a=\"1\">\n"+
 "<f f=\"&amp;p \"><g><h h=\"H\"/></g> text&amp;1 </f>\n"+
 "</a>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException | IOException ex) {fail(ex);}
 		try {// namespace, indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -217,7 +218,7 @@ public class TestXmOutStream extends STester {
 "    text&amp;1\n"+
 "  </f>\n"+
 "</a>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException | IOException ex) {fail(ex);}
 		try {// namespace, no indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -256,7 +257,7 @@ public class TestXmOutStream extends STester {
 "</m:GetStockPrice>"+
 "</soap:Body>"+
 "</soap:Envelope>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException | IOException ex) {fail(ex);}
 		try {// namespace, no indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -297,7 +298,7 @@ public class TestXmOutStream extends STester {
 "    </m:GetStockPrice>\n"+
 "  </soap:Body>\n"+
 "</soap:Envelope>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException | IOException ex) {fail(ex);}
 	}
 
 	/** Run test

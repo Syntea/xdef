@@ -151,7 +151,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			try {
 				SUtils.deleteAll(xdir, true);// delete X-components java sources
-			} catch (Exception ex) {}
+			} catch (SException ex) {}
 			if (!rebuild) {
 				for (File fdef: _jfiles) {
 					String id = getId(fdef);

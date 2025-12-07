@@ -73,8 +73,7 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <a a='required string; finally if (!(from(\"@a\").toString()==\"x\"))\n"+
-"        error(from(\"@a\").toString());'/>\n"+
+"  <a a='required string; finally if (!(from(\"@a\").toString()==\"x\"))error(from(\"@a\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
@@ -93,9 +92,9 @@ public final class Test000 extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"' impl-ver='1.0'>\n"+
 "<xd:def xd:name='z'>\n"+
-"  <xd:declaration scope = 'global'> int k = 1; int j = k; </xd:declaration>\n"+
+"  <xd:declaration scope='global'> int k = 1; int j = k; </xd:declaration>\n"+
 "</xd:def>\n"+
-"<xd:def xd:name='test' xd:root = 'a' >\n"+
+"<xd:def xd:name='test' xd:root='a' >\n"+
 "  <a xd:script=\"finally {h(); if (k != 1) outln('error');}\"/>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    int i = 0;\n"+
@@ -172,8 +171,7 @@ public final class Test000 extends XDTester {
 "</input>" +
 "</meta>" +
 "</a>";
-			assertFalse(test(xdef, xml, "",'P',
-				xml,
+			assertFalse(test(xdef, xml, "",'P', xml,
 				"targetNamespace=\"abc\", localName=\"B\", prefix=\"ab\"\n"+
 				"targetNamespace=\"abc\", localName=\"D\", prefix=\"b\"\n"+
 				"targetNamespace=\"abc\", localName=\"C\", prefix=\"c\"\n"+
@@ -221,8 +219,7 @@ public final class Test000 extends XDTester {
 "  <xd:declaration scope='global'>int k=1;</xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
-			xml = "<a><b attr='x' />orig1</a>\n";
-			assertFalse(test(xdef, xml, "a",'P',
+			assertFalse(test(xdef, "<a><b attr='x' />orig1</a>", "a",'P',
 				"<a><b attr='x'/>text1<c/>text2</a>",
 				"x\ntext: orig1\ntext: \nv=3:\n"+
 				"1->2\n1->3\n2->3\n1->2\n3->1\n3->2\n1->2\n"));
@@ -231,10 +228,8 @@ public final class Test000 extends XDTester {
 "  <a xd:script='ref X;' z=\"enum('I','S','X')\">\n"+
 "    <b xd:script='1'>\n"+
 "      <xd:choice xd:script='?'>\n"+
-"        <c xd:script=\"match (xpath('../../@z').toString() EQ 'I');\"\n"+
-"           c=\"num();\"/>\n"+
-"        <c xd:script=\"match(xpath('../../@z').toString()=='S');occurs 1\"\n"+
-"           d='num();'/>\n"+
+"        <c xd:script=\"match (xpath('../../@z').toString() EQ 'I');\" c=\"num();\"/>\n"+
+"        <c xd:script=\"match(xpath('../../@z').toString()=='S');occurs 1\" d='num();'/>\n"+
 "      </xd:choice>\n"+
 "     </b>\n"+
 "  </a>\n"+
@@ -267,8 +262,7 @@ public final class Test000 extends XDTester {
 "</xd:def>";
 			xml = "<a x='12' y='ab'/>";
 			assertFalse(test(xdef, xml, "",'P'));
-			xml =
-"<a x='1' y='a'><b/><a><a><a><a x='2' y='b'><b/><a/></a></a></a></a></a>";
+			xml = "<a x='1' y='a'><b/><a><a><a><a x='2' y='b'><b/><a/></a></a></a></a></a>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='People'>\n"+
@@ -327,18 +321,16 @@ public final class Test000 extends XDTester {
 "    </xd:sequence>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xml = "<a><AAA/><BBB/><AAA/><BBB/></a>";
-			assertFalse(test(xdef, xml, "",'P'));
+			assertFalse(test(xdef, "<a><AAA/><BBB/><AAA/><BBB/></a>", "",'P'));
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"string(1,8);onTrue{if (!'1'.equals(@a))error('á');}\"/>\n"+
 "</xd:def>";
-			xml = "<a a=\"1\"/>";
-			assertFalse(test(xdef, xml, "",'P'));
+			assertFalse(test(xdef, "<a a=\"1\"/>", "",'P'));
 			//test ignoring of attributes from namespace XMLschema-instance.
 			xd = XDFactory.xparse(dataDir + "Test000_00.xml", null);
-			if (!"empty".equals(xd.getElement().getNodeName()) ||
-				xd.getElement().getChildNodes().getLength() != 0) {
+			if (!"empty".equals(xd.getElement().getNodeName())
+				|| xd.getElement().getChildNodes().getLength() != 0) {
 				fail(KXmlUtils.nodeToString(xd.getElement()));
 			}
 			//Lubor
@@ -372,8 +364,7 @@ public final class Test000 extends XDTester {
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			parse(xp, "root", xml, reporter);
 			fail("Exception not thrown");
-		} catch (RuntimeException ex) {
-			//XML099 = DOCTYPE is set as not allowed&
+		} catch (RuntimeException ex) {//XML099 = DOCTYPE is set as not allowed&
 			assertTrue(ex.getMessage().indexOf("XML099")>0, ex.getMessage());
 		}
 		resetProperties();
@@ -443,35 +434,31 @@ public final class Test000 extends XDTester {
 				"()\n");
 			if (reporter.errors()) {
 				if ((rep = reporter.getReport()) != null) {
-					if (!rep.getModification().contains("/a/c[1]/d[3]/@a1")
-						|| !"XDEF523".equals(rep.getMsgID())
-						&& !"XDEF515".equals(rep.getMsgID())
-						|| rep.getModification() == null) {
+					if (!rep.getModification().contains("/a/c[1]/d[3]/@a1")||!"XDEF523".equals(rep.getMsgID())
+						&& !"XDEF515".equals(rep.getMsgID()) || rep.getModification() == null) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!rep.getModification().contains("/a/c[2]/d[3]/@a2")
-						|| !"XDEF523".equals(rep.getMsgID()) && !"XDEF515".equals(rep.getMsgID())
-						|| rep.getModification() == null) {
+					if (!rep.getModification().contains("/a/c[2]/d[3]/@a2")||!"XDEF523".equals(rep.getMsgID())
+						 && !"XDEF515".equals(rep.getMsgID()) || rep.getModification() == null) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!rep.getModification().contains("/a/c[2]/e[1]/@a3")
-						|| !"XDEF522".equals(rep.getMsgID()) || rep.getModification() == null) {
+					if (!rep.getModification().contains("/a/c[2]/e[1]/@a3")||!"XDEF522".equals(rep.getMsgID())
+						 || rep.getModification() == null) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF522".equals(rep.getMsgID())
-						|| rep.getModification() == null
+					if (!"XDEF522".equals(rep.getMsgID()) || rep.getModification() == null
 						|| (!rep.getModification().contains("/a/b[1]/@a")
 						&& !rep.getModification().contains("/a/f[1]/@a4"))) {
 						fail(rep.toString());
@@ -480,9 +467,8 @@ public final class Test000 extends XDTester {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF522".equals(rep.getMsgID())
-						|| null == rep.getModification() ||
-						(!rep.getModification().contains("/a/b[1]/@a")
+					if (!"XDEF522".equals(rep.getMsgID()) || null == rep.getModification()
+						|| (!rep.getModification().contains("/a/b[1]/@a")
 						&& !rep.getModification().contains("/a/f[1]/@a4"))) {
 						fail(rep.toString());
 					}
@@ -498,14 +484,12 @@ public final class Test000 extends XDTester {
 			parse(dataDir + "Test000_03.xdef", //recursive reference, unique set
 				"", dataDir + "Test000_03.xml", reporter);
 			assertNoErrorwarnings(reporter);
-			parse(dataDir + "Test000_04.xdef",
-				"", dataDir + "Test000_04.xml", reporter);
+			parse(dataDir + "Test000_04.xdef", "", dataDir + "Test000_04.xml", reporter);
 			assertNoErrorwarnings(reporter);
 			parse(dataDir + "Test000_rus.xdef", //test encoding - russian
 				"test", dataDir + "Test000_rus.xml", reporter);
 			assertNoErrorwarnings(reporter);
-			parse(dataDir + "Test000_rus_1.xdef",
-				"test", dataDir + "Test000_rus_1.xml", reporter);
+			parse(dataDir + "Test000_rus_1.xdef", "test", dataDir + "Test000_rus_1.xml", reporter);
 			assertNoErrorwarnings(reporter);
 /*#if DEBUG*#/
 			parse(dataDir + "Test000_rus_2.xdef", //code page ISO8859-5
@@ -515,14 +499,11 @@ public final class Test000 extends XDTester {
 				"test", dataDir + "Test000_rus_3.xml", reporter);
 			assertNoErrorwarnings(reporter);
 /*#end*/
-			parse(dataDir + "Test000_rus_4.xdef",
-				"test", dataDir + "Test000_rus_4.xml", reporter);
+			parse(dataDir + "Test000_rus_4.xdef", "test", dataDir + "Test000_rus_4.xml", reporter);
 			assertNoErrorwarnings(reporter);
-			parse(dataDir + "Test000_rus_5.xdef", //UTF-16
-				"test", dataDir + "Test000_rus_5.xml", reporter);
+			parse(dataDir + "Test000_rus_5.xdef", "test", dataDir + "Test000_rus_5.xml", reporter); //UTF-16
 			assertNoErrorwarnings(reporter);
-			parse(dataDir + "Test000_rus_6.xdef",
-				"test", dataDir + "Test000_rus_6.xml", reporter);
+			parse(dataDir + "Test000_rus_6.xdef", "test", dataDir + "Test000_rus_6.xml", reporter);
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { //Matej2
@@ -540,8 +521,7 @@ public final class Test000 extends XDTester {
 "    CisloTP   =\"optional z;\" />\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' "+
-				"CisloTP='SB746826'/>";
+			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' CisloTP='SB746826'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter, xml);
 		} catch (RuntimeException ex) {fail(ex);}
@@ -568,8 +548,7 @@ public final class Test000 extends XDTester {
 			durationInfo += "; process " + df.format(kb) +	"KB " +
 				df.format(duration) + "s (" + df.format(kb/duration) + "KB/s))";
 			repw.close();
-			InputStreamReader isr =
-				new InputStreamReader(new FileInputStream(dataFile));
+			InputStreamReader isr = new InputStreamReader(new FileInputStream(dataFile));
 			ReportReader repIn = new FileReportReader(errFile, true);
 			OutputStream lstStream = new FileOutputStream(lstFile);
 			OutputStreamWriter lst = new OutputStreamWriter(lstStream);
@@ -592,14 +571,13 @@ public final class Test000 extends XDTester {
 			el=parse(xp,"RegistraceSU_",dataDir+"Test000_06_out.xml",reporter);
 			assertEq(el, dataDir + "Test000_06_out.xml");
 			assertNoErrorwarnings(reporter, dataDir + "Test000_06_out.xml");
-			//Igor
-			File[] files = SUtils.getFileGroup(dataDir + "Test000_08*.xdef");
+
+			File[] files = SUtils.getFileGroup(dataDir + "Test000_08*.xdef"); //Igor
 			xp = XDFactory.compileXD(null, files);
 			parse(xp, "SoapRequestB1", dataDir + "Test000_08.xml", reporter);
 			assertErrors(reporter);
-			//Igor2
 			_myError = 0;
-			xdef = dataDir + "Test000_07.xdef";
+			xdef = dataDir + "Test000_07.xdef"; //Igor2
 			xp = compile(xdef);
 			xml = dataDir + "Test000_07_1.xml";
 			parse(xp,"XDefSOAP", xml, reporter);
@@ -633,8 +611,7 @@ public final class Test000 extends XDTester {
 "  <s:Envelope\n"+
 "    s:encodingStyle=\"fixed 'encoding'\">\n"+
 "    <s:Header>\n"+
-"      <b:User xd:script=\"occurs 1; ref BM#User\"\n"+
-"        s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
+"      <b:User xd:script=\"occurs 1; ref BM#User\" s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
 "      <b:Request xd:script=\"occurs 1; ref BM#Request\"\n"+
 "        s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
 "    </s:Header>\n"+
@@ -687,8 +664,7 @@ public final class Test000 extends XDTester {
 				}
 			}
 			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='PSP'\n"+
-"        xmlns        =\"http://ws.ckp.cz/pis/B1/2007/04\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='PSP' xmlns=\"http://ws.ckp.cz/pis/B1/2007/04\">\n"+
 "	<PSP ORD          =\"optional int()\"\n"+
 "		InfoDatum     =\"required xdatetime('yyyyMMdd')\"\n"+
 "		KodPojistitele=\"required num(4)\"\n"+
@@ -714,36 +690,27 @@ public final class Test000 extends XDTester {
 "	</PSP>\n"+
 "</xd:def>";
 			xml =
-"<c:PSP xmlns:c=\"http://ws.ckp.cz/pis/B1/2007/04\""+
-" InfoDatum=\"20080319\" PoradiVozidla=\"1\" ORD=\"-19\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\">"+
+"<c:PSP xmlns:c=\"http://ws.ckp.cz/pis/B1/2007/04\" InfoDatum=\"20080319\" PoradiVozidla=\"1\" ORD=\"-19\""
++ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\">"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070915\""
-			+ " UsekPojisteniDo=\"20071214\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\"/>"+
++ " UsekPojisteniDo=\"20071214\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\"/>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070615\""
-			+ " UsekPojisteniDo=\"20070914\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030315711\">"+
++ " UsekPojisteniDo=\"20070914\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030315711\">"+
 "<c:RozhodnaUdalost DatumCasSU=\"200709050000\" Rezerva=\"0\""
-			+ " KlasifikovanaUdalost=\"A\" Vyplaceno=\"46879\"/>"+
++ " KlasifikovanaUdalost=\"A\" Vyplaceno=\"46879\"/>"+
 "</c:UsekPojisteni>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070315\""
-			+ " UsekPojisteniDo=\"20070614\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030302032\"/>"+
++ " UsekPojisteniDo=\"20070614\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030302032\"/>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070215\""
-			+ " UsekPojisteniDo=\"20070314\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030296016\"/>"+
++ " UsekPojisteniDo=\"20070314\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030296016\"/>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070115\""
-			+ " UsekPojisteniDo=\"20070214\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030289842\"/>"+
++ " UsekPojisteniDo=\"20070214\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030289842\"/>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20061115\""
-			+ " UsekPojisteniDo=\"20070114\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030275736\"/>"+
++ " UsekPojisteniDo=\"20070114\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030275736\"/>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20061013\""
-			+ " UsekPojisteniDo=\"20061112\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030265978\"/>"+
++ " UsekPojisteniDo=\"20061112\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030265978\"/>"+
 "<c:UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20060714\""
-			+ " UsekPojisteniDo=\"20061012\" PoradiVozidla=\"1\""
-			+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030247163\"/>"+
++ " UsekPojisteniDo=\"20061012\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030247163\"/>"+
 "</c:PSP>";
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
@@ -753,42 +720,32 @@ public final class Test000 extends XDTester {
 			xml =
 "<PSP xmlns=\"http://ws.ckp.cz/pis/B1/2007/04\""+
 " InfoDatum=\"20080319\" PoradiVozidla=\"1\" ORD=\"-19\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\">"+
++ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\">"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070915\""
-				+ " UsekPojisteniDo=\"20071214\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\"/>"+
++ " UsekPojisteniDo=\"20071214\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030331580\"/>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070615\""
-				+ " UsekPojisteniDo=\"20070914\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030315711\">"+
-"<RozhodnaUdalost DatumCasSU=\"200709050000\" Rezerva=\"0\""
-				+ " KlasifikovanaUdalost=\"A\" Vyplaceno=\"46879\"/>"+
++ " UsekPojisteniDo=\"20070914\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030315711\">"+
+"<RozhodnaUdalost DatumCasSU=\"200709050000\" Rezerva=\"0\" KlasifikovanaUdalost=\"A\" Vyplaceno=\"46879\"/>"+
 "</UsekPojisteni>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070315\""
-				+ " UsekPojisteniDo=\"20070614\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030302032\"/>"+
++ " UsekPojisteniDo=\"20070614\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030302032\"/>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070215\""
-				+ " UsekPojisteniDo=\"20070314\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030296016\"/>"+
++ " UsekPojisteniDo=\"20070314\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030296016\"/>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20070115\""
-				+ " UsekPojisteniDo=\"20070214\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030289842\"/>"+
++ " UsekPojisteniDo=\"20070214\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030289842\"/>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20061115\""
-				+ " UsekPojisteniDo=\"20070114\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030275736\"/>"+
++ " UsekPojisteniDo=\"20070114\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030275736\"/>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20061013\""
-				+ " UsekPojisteniDo=\"20061112\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030265978\"/>"+
++ " UsekPojisteniDo=\"20061112\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030265978\"/>"+
 "<UsekPojisteni DruhVozidla=\"03\" UsekPojisteniOd=\"20060714\""
-				+ " UsekPojisteniDo=\"20061012\" PoradiVozidla=\"1\""
-				+ " KodPojistitele=\"0034\" CisloSmlouvy=\"3030247163\"/>"+
++ " UsekPojisteniDo=\"20061012\" PoradiVozidla=\"1\" KodPojistitele=\"0034\" CisloSmlouvy=\"3030247163\"/>"+
 "</PSP>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter, xml);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter, xml);
 			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='PSP'\n"+
-"        xmlns='http://ws.ckp.cz/pis/B1/2007/04'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='PSP' xmlns='http://ws.ckp.cz/pis/B1/2007/04'>\n"+
 "	<PSP ORD          =\"optional int()\"\n"+
 "		InfoDatum     =\"required xdatetime('yyyyMMdd')\"\n"+
 "		KodPojistitele=\"required num(4)\"\n"+
@@ -830,18 +787,14 @@ public final class Test000 extends XDTester {
 "<xd:def xmlns:s='soap' xmlns:b='request' name='a' root='s:Envelope'>\n"+
 "  <s:Envelope xd:script=\"init out('&lt;s:Envelope xmlns:s=&quot;soap&quot;');"
 				+ " finally out('&lt;/s:Envelope&gt;')\"\n"+
-"    s:encodingStyle=\"fixed 'encoding'; onTrue "
-				+ "out(' s:encodingStyle = &quot;encoding&quot; &gt;')\">\n"+
-"    <s:Header xd:script=\"init out('&lt;s:Header>');"
-				+ " finally out('&lt;/s:Header>')\">\n"+
+"    s:encodingStyle=\"fixed 'encoding'; onTrue out(' s:encodingStyle = &quot;encoding&quot; &gt;')\">\n"+
+"    <s:Header xd:script=\"init out('&lt;s:Header>'); finally out('&lt;/s:Header>')\">\n"+
 "      <b:User xd:script=\"occurs 1; init out('&lt;s:User'); onStartElement"
 				+ " out('>'); ref BM#User; finally out('&lt;/s:User>')\"\n"+
-"        s:understand=\"fixed 'true';"
-				+ " onTrue out(' s:understand = &quot;true&quot;');\"\n"+
+"        s:understand=\"fixed 'true'; onTrue out(' s:understand = &quot;true&quot;');\"\n"+
 "        s:actor='illegal' />\n"+
 "      <b:Request xd:script='occurs 1; ref BM#Request'\n"+
-"        s:understand=\"fixed 'true';"
-				+ " onTrue out(' s:understand = &quot;true&quot;')\"\n"+
+"        s:understand=\"fixed 'true'; onTrue out(' s:understand = &quot;true&quot;')\"\n"+
 "        s:actor='illegal'/>\n"+
 "    </s:Header>\n"+
 "    <s:Body>\n"+
@@ -884,8 +837,7 @@ public final class Test000 extends XDTester {
 "<b:PingFlow Flow='B1'/>"+
 "</s:Body>"+
 "</s:Envelope>", parse(xp, "a", xml, reporter, swr = new StringWriter(), null, null));
-			assertEq(swr.toString(),"<s:Envelope xmlns:s=\"soap\" "+
-				"s:encodingStyle = \"encoding\" >" +
+			assertEq(swr.toString(),"<s:Envelope xmlns:s=\"soap\" s:encodingStyle = \"encoding\" >" +
 				"<s:Header><s:User></s:User> s:understand = \"true\"" +
 				"</s:Header></s:Envelope>");
 			assertNoErrorwarnings(reporter, xml);
@@ -957,12 +909,12 @@ public final class Test000 extends XDTester {
 "</xd:collection>";
 			xp = compile(xdef);
 			el = parse(xp, "EndRec",
- "<EndRec IdPrace=\"1\" SeqRec=\"3\" DruhSouboru=\"L1D\">\n"
-+" <OperaceL1 Operace=\"ZmenaSU\"\n"
-+"   IdentZaznamu=\"500000000003\"\n"
-+"   CisloSmlouvy=\"???\"\n"
-+"   PoradiVozidla=\"???\"/>\n"
-+"</EndRec>", reporter);
+ "<EndRec IdPrace=\"1\" SeqRec=\"3\" DruhSouboru=\"L1D\">\n" +
+" <OperaceL1 Operace=\"ZmenaSU\"\n" +
+"   IdentZaznamu=\"500000000003\"\n" +
+"   CisloSmlouvy=\"???\"\n" +
+"   PoradiVozidla=\"???\"/>\n" +
+"</EndRec>", reporter);
 			if ((rep = reporter.getReport()) == null) {
 				fail("Error not reported");
 			} else if (!"XDEF501".equals(rep.getMsgID())) {
@@ -977,13 +929,9 @@ public final class Test000 extends XDTester {
 			// external methods - error in declaration
 			xdef = //missing close bracket in method declaration
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method boolean test.xdef.Test002.tab(String, String\n"+
-"</xd:declaration>\n"+
+"<xd:declaration> external method boolean test.xdef.Test002.tab(String, String </xd:declaration>\n"+
 "<a xd:script=\"finally {out(tab('a', 'b')); pp()}\" />\n"+
-"<xd:declaration>\n"+
-"  void pp() {out(','+tab('a', 'b')+','+test.xdef.Test002.tab('a','b'));}\n"+
-"</xd:declaration>\n"+
+"<xd:declaration> void pp() {out(','+tab('a', 'b')+','+test.xdef.Test002.tab('a','b'));}</xd:declaration>\n"+
 "</xd:def>\n";
 			XDFactory.compileXD(null, xdef);
 			fail("error not reported");
@@ -996,11 +944,9 @@ public final class Test000 extends XDTester {
 		try {// error *
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='RegistracePN'>\n"+
-"  <RezervaPU Rezerva=\"required int(0,99999999);\"\n"+
-"    Mena=\"onAbsence setText('CZK')\"/>\n"+
-"  <Plneni PodtypSkody=\"required string();\"\n"+
-"    Vyplaceno=\"required int(0,99999999);\"\n"+
-"    Mena     =\"required string(); onAbsence setText('CZK')\"/>\n"+
+"  <RezervaPU Rezerva=\"required int(0,99999999);\" Mena=\"onAbsence setText('CZK')\"/>\n"+
+"  <Plneni PodtypSkody=\"required string();\" Vyplaceno=\"required int(0,99999999);\"\n"+
+"    Mena=\"required string(); onAbsence setText('CZK')\"/>\n"+
 "  <PN xd:script=\"finally out('PN')\"\n"+
 "     IdentZaznamu   =\"required string(1,12)\"\n"+
 "     CisloPU        =\"required string(3,35)\"\n"+
@@ -1011,8 +957,7 @@ public final class Test000 extends XDTester {
 "     <Plneni xd:script=\"occurs 0..;  ref Plneni\"/>\n"+
 "     <SkodaVozidla xd:script=\"occurs 0..;  ref SkodaVozidla\"/>\n"+
 "  </PN>\n"+
-"  <SkodaVozidla\n"+
-"     Mena=\"optional string();onAbsence{if(@Skoda)setText('CZK');}\"\n"+
+"  <SkodaVozidla Mena=\"optional string();onAbsence{if(@Skoda)setText('CZK');}\"\n"+
 "    KodOpravny=\"optional string()\" />\n"+
 "  <RegistracePN  xd:script=\"ref PN\"/>\n"+
 "</xd:def>";
@@ -1043,15 +988,13 @@ public final class Test000 extends XDTester {
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='a' root='aaa#log|bbb#mog'/>\n"+
 "<xd:def xd:name='aaa'>\n"+
-"<log bttr='required'> </log>\n"+
+"  <log bttr='required'> </log>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='bbb'>\n"+
-"<mog attr='required'></mog>\n"+
+"  <mog attr='required'></mog>\n"+
 "</xd:def>\n"+
 "<xd:def name='abc' root='abc#Davka'>\n"+
-"<xd:declaration>\n"+
-"  boolean x() {return string(3,3) AND (eq('abc')|eq('xyz'));}\n"+
-"</xd:declaration>\n"+
+"<xd:declaration> boolean x() {return string(3,3) AND (eq('abc')|eq('xyz'));} </xd:declaration>\n"+
 "<Davka Verze=\"fixed '2.0'\" xmlns:a='abc'\n"+
 "       a:Kanal=\"required\"\n"+
 "       Seq=\"required int()\"\n"+
@@ -1122,9 +1065,7 @@ public final class Test000 extends XDTester {
 		try {//ParseResult created with parse method and incomplete sequence
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:declaration scope='global'>\n"+
-"  ParseResult p=int.parse('123');\n"+
-"</xd:declaration>\n"+
+"<xd:declaration scope='global'> ParseResult p=int.parse('123'); </xd:declaration>\n"+
 "<A a='p.matches()'>\n" +
 "    <xd:sequence>\n" +
 "        <A/>\n" +
@@ -1148,8 +1089,7 @@ public final class Test000 extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:declaration>\n"+
-"  external method String test.xdef.Test000.convertBoolean(\n"+
-"    XXElement, XDContainer);\n"+
+"  external method String test.xdef.Test000.convertBoolean(XXElement, XDContainer);\n"+
 "</xd:declaration>\n"+
 "  <A> <X x='optional boolean()'/></A>\n" +
 "  <B>\n" +
@@ -1170,9 +1110,8 @@ public final class Test000 extends XDTester {
 			xd.setXDContext(xml);
 			assertEq(xd.xcreate("B", reporter), "<B><C y='A'/></B>");
 			assertNoErrorwarnings(reporter);
-				xml = "<A><X/></A>";
 			xd = xp.createXDDocument();
-			xd.setXDContext(xml);
+			xd.setXDContext("<A><X/></A>");
 			assertEq(xd.xcreate("B", reporter), "<B><C y='N'/></B>");
 			assertNoErrorwarnings(reporter);
 		} catch (RuntimeException ex) {fail(ex);}

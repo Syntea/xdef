@@ -50,8 +50,7 @@ public final class Test003 extends XDTester {
 		final String dataDir = getDataDir() + "test/";
 		try {
 			reporter.clear();
-			xp = compile(dataDir + "TestChkParser1_1.xdef");
-			xd = xp.createXDDocument("CKP");
+			xd = compile(dataDir + "TestChkParser1_1.xdef").createXDDocument("CKP");
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
 			assertNoErrorwarnings(reporter);
 		} catch(RuntimeException ex) {fail(ex);}
@@ -77,8 +76,8 @@ public final class Test003 extends XDTester {
 			}
 			xd.setUserObject(this);
 			el = xd.xparse(dataDir + "SouborD1D.xml", rw);
-			if (null != xd.getDocument().getXmlEncoding() && !"UTF-8".equalsIgnoreCase(
-				el.getOwnerDocument().getXmlEncoding())) {
+			if (null != xd.getDocument().getXmlEncoding()
+				&& !"UTF-8".equalsIgnoreCase(el.getOwnerDocument().getXmlEncoding())) {
 				fail("encoding: " + xd.getDocument().getXmlEncoding());
 			}
 			isr = new InputStreamReader(new FileInputStream(dataDir + "SouborD1B.xml"));
@@ -117,10 +116,7 @@ public final class Test003 extends XDTester {
 			f.mkdirs();
 			f = new File(f, "čé řž.xdef");
 			Writer wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
-			wr.write(
-"<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
-"<test a='int()'/>\n" +
-"</xd:def>");
+			wr.write("<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\"><test a='int()'/></xd:def>");
 			wr.close();
 			URL u = f.toURI().toURL();
 			XDFactory.compileXD(null, u);
@@ -159,15 +155,13 @@ public final class Test003 extends XDTester {
 "    Datetime t2 = new Datetime(f.getAttribute(a));\n"+
 "    Container eatrs = e.getAttributes();\n" +
 "    Container fatrs = f.getAttributes();\n" +
-"    if (!t1.equals(t2) || eatrs.getLength() != fatrs.getLength()\n" +
-"      || !e.hasAttribute(a) || !f.hasAttribute(a)\n" +
-"      || !e.hasAttribute(b) || !f.hasAttribute(b)) {\n" +
+"    if (!t1.equals(t2) || eatrs.getLength() != fatrs.getLength() || !e.hasAttribute(a)\n" +
+"      || !f.hasAttribute(a) || !e.hasAttribute(b) || !f.hasAttribute(b)) {\n" +
 "      return false; /*can't join*/\n"+
 "    }\n"+
 "    for (int i = 0; i LT eatrs.getLength(); i++) {\n" +
 "      String name = ((NamedValue) eatrs.item(i)).getName();\n" +
-"      if (!a.equals(name) AAND !b.equals(name) AAND\n" +
-"		 !e.getAttribute(name).equals(f.getAttribute(name)))\n" +
+"      if (!a.equals(name) AAND !b.equals(name) AAND !e.getAttribute(name).equals(f.getAttribute(name)))\n" +
 "		 return false; /*can't join*/\n" +
 "    }\n" +
 "    return true;\n" +
@@ -192,8 +186,7 @@ public final class Test003 extends XDTester {
 "</xd:declaration>\n"+
 "<A>\n"+
 "  <B xd:script=\"occurs *; create x(from('//B'), 'x', 'y', 'yyyy-MM-dd');\"\n"+
-"    a='string' b='string'\n"+
-"    x=\"xdatetime('yyyy-MM-dd')\" y=\"xdatetime('yyyy-MM-dd')\"/>\n"+
+"    a='string' b='string' x=\"xdatetime('yyyy-MM-dd')\" y=\"xdatetime('yyyy-MM-dd')\"/>\n"+
 "</A>\n"+
 "</xd:def>";
 		xml =
