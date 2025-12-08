@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.32, release-date 2025-12-08
-.
+  * If the format `h` (i.e., 12-hour time) is specified in the mask for time, then it is mandatory to specify
+    also `a` (i.e., AM/PM).
 
 # Version 42.2.31, release-date 2025-11-25
 * The %oneOf directive in the JSON map is now recorded as an array of names of named items. If all variants
