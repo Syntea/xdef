@@ -195,13 +195,13 @@ public final class TestTypes extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xd = compile( // test 12 hour with AM/PM
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
-"  <a b=\"xdatetime('yyyy-MM-ddThh:mm:ssa', 'dd.MM.yyyy hh:mm:ssa'); create from('@input')\" />\n" +
+"  <a b=\"xdatetime('yyyy-MM-ddThh:mm:ssa', 'dd.MM.yyyy HH:mm:ss');\" />\n" +
 "</xd:def>").createXDDocument();
 			parse(xd, "<a b='2025-01-12T06:15:52'/>", reporter); //error: AM/PM missing
 			assertErrorsAndClear(reporter);
 			parse(xd, "<a b='2025-01-12T15:15:52PM'/>", reporter); //error: hour > 12
 			assertErrorsAndClear(reporter);
-			assertEq("<a b='12.01.2025 05:15:52PM'/>", parse(xd, "<a b='2025-01-12T05:15:52PM'/>", reporter));
+			assertEq("<a b='12.01.2025 17:15:52'/>", parse(xd, "<a b='2025-01-12T05:15:52PM'/>", reporter));
 			assertNoErrorsAndClear(reporter);
 			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
