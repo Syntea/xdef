@@ -2125,7 +2125,7 @@ public final class CompileCode extends CompileBase {
 								}
 								p.setNamedParams(null, d);
 							}
-						} catch (SException ex) {
+						} catch (SException | SRuntimeException ex) {
 							_parser.putReport(ex.getReport());
 						}
 						genLDC(p);
