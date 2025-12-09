@@ -160,6 +160,8 @@ public class TestSUtils extends STester {
 			}
 			//Test local setings
 			assertEq("May", p.getParsedSDatetime().formatDate( "{L(en)}MMM"));
+			assertEq("May", p.getParsedSDatetime().formatDate("{L(en,GB)}MMM"));
+			assertEq("May", p.getParsedSDatetime().formatDate("{L(en,US)}MMM"));
 			assertEq("Mai", p.getParsedSDatetime().formatDate( "{L(de)}MMM"));
 			s = p.getParsedSDatetime().formatDate("{L(cs,CZ)}MMM");
 			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {

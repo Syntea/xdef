@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.32, release-date 2025-12-08
+# Version 42.2.32, release-date 2025-12-09
   * If the format `h` (i.e., 12-hour time) is specified in the mask for time, then it is mandatory to specify
     also `a` (i.e., AM/PM).
 
