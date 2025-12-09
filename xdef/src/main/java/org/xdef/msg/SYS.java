@@ -92,7 +92,7 @@ public interface SYS {
 	public static final long SYS056 = 953221162L;
 	/** Incorrect zone timezone name&amp;{0}{: "}{"}&amp;{#SYS000} */
 	public static final long SYS057 = 953221163L;
-	/** The time format specification "h" (12 hours) must also include "a" (AM/PM)&amp;{0}{: "}{"}&amp;{#SYS000} */
+	/** The time format specification containing "h" (12 hours)&amp;{0}{: "}{"} must also include "a" (AM/PM)&amp;{#SYS000} */
 	public static final long SYS058 = 953221164L;
 	/** Datetime mask error: incorrect year specification&amp;{0}{, position: }&amp;{#SYS000} */
 	public static final long SYS059 = 953221165L;

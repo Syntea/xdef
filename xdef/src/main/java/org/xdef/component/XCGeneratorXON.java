@@ -124,6 +124,22 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				"&{name}", name,
 				"&{typ}", typ));
 				if (typeName.contains("org.xdef.sys.SDatetime")) {// datetime getters
+					sbi.append(modify(
+(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
+"\t * @return value of &{d} as java.util.Date or null."+LN+
+"\t */"+LN : "")+
+"\tpublic java.util.Date dateOf$&{name}();"+LN+
+(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+LN+
+"\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
+"\t */"+LN : "")+
+"\tpublic java.sql.Timestamp timestampOf$&{name}();"+LN+
+(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
+"\t * @return value of &{d} as java.util.Calendar or null."+LN+
+"\t */"+LN : "")+
+"\tpublic java.util.Calendar calendarOf$&{name}();"+LN,
+						"&{xmlName}", xmlName,
+						"&{d}" , d,
+						"&{name}", name));
 					sb.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+

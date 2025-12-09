@@ -132,8 +132,8 @@ final class XCGenerator extends XCGeneratorXON {
 								className, name.substring(ndx+7), name.substring(0, ndx));
 							name = name.substring(0, ndx);
 						} else {
-							//Class &{0} is not root. It can't be extended
-							// to &{1} according to command %bind &{2}
+							//Class &{0} is not root. It can't be extended to &{1} according to command
+							// %bind &{2}
 							_reporter.error(XDEF.XDEF376,
 								className, name.substring(ndx+7), name.substring(0, ndx));
 						}
@@ -193,10 +193,8 @@ final class XCGenerator extends XCGeneratorXON {
 					if (groupKind == XMCHOICE) {
 						String xclear = "";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
-							xclear += (String) choiceStack.get(j-1) //iname
-								+ ((Integer)choiceStack.get(j) > 1
-								? ".clear();"//it is final List so clear it!
-								: "=null;"); //othrewise set null
+							xclear += (String) choiceStack.get(j-1)/*iname*/ +((Integer)choiceStack.get(j) > 1
+								?".clear();"/*it is final List so clear it!*/ : "=null;");//othrewise set null
 							if ((Integer) choiceStack.get(j-3) == groupFirst) {
 								break; // index == first, finish;
 							}
@@ -248,14 +246,14 @@ final class XCGenerator extends XCGeneratorXON {
 								if (isRoot) {
 									ext = true;
 									extClazz = " extends " + name.substring(ndx+7) + extClazz;
-									//"In command "%class &{0}" is missing parameter
-									//"extends". In command "%bind &{2}" is parameter "%with &{1}!
+									//"In command "%class &{0}" is missing parameter "extends".
+									//In command "%bind &{2}" is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
 								} else {
-									//Class &{0} is not root. It can't be extended
-									//to &{1} according to command %bind &{2}
+									//Class &{0} is not root. It can't be extended to &{1} according
+									//to command %bind &{2}
 									_reporter.error(XDEF.XDEF376,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 								}
@@ -287,8 +285,8 @@ final class XCGenerator extends XCGeneratorXON {
 						(groupMax == 1 ? "1" : "2") + "," + getParsedResultGetter(xdata) + ";" + name);
 					if (isRoot && nodes.length==1 && xe.getAttrs().length==0) {
 						 // no attrs,only text; direct getters/setters for text child
-						genDirectSetterAndGetter(
-							xe, xmlToJavaName(xe.getName()), null, true, setters, getters, sbi);
+						genDirectSetterAndGetter(xe,
+							xmlToJavaName(xe.getName()), null, true, setters, getters, sbi);
 					}
 					continue;
 				}
@@ -314,16 +312,15 @@ final class XCGenerator extends XCGeneratorXON {
 							} else {
 								if (isRoot) {
 									ext = true;
-									extClazz = " extends "
-										+ name.substring(ndx+7)+extClazz;
+									extClazz = " extends " + name.substring(ndx+7)+extClazz;
 									//"In command "%class &{0}" is missing parameter "extends". In command
 									// "%bind &{2}" is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
 								} else {
-									//Class &{0} is not root. It can't extend
-									//to &{1} according to command %bind &{2}
+									//Class &{0} is not root. It can't extend to &{1} according to command
+									//%bind &{2}
 									_reporter.error(XDEF.XDEF376,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 								}
@@ -407,16 +404,15 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
 					if (!ext) {
-						genVariableFromModel(null,
-							typeName, iname, max, "element", vars);
+						genVariableFromModel(null, typeName, iname, max, "element", vars);
 						if (xnds.length==1 && xnds[0].getKind()==XMTEXT && groupKind != XMCHOICE
 							&& xe1.getAttrs().length == 0) {//no attrs,only text
 							// direct getters/setters for text child
 							genDirectSetterAndGetter(xe1, iname, typeName, false, setters, getters, sbi);
 						}
 						if (groupKind != XMCHOICE){
-							genChildElementGetterSetter(
-								xe1, typeName, iname, max, "element", getters, setters, sbi,"");
+							genChildElementGetterSetter(xe1,
+								typeName, iname, max, "element", getters, setters, sbi,"");
 						}
 					}
 					genChildElementCreator(iname,  listNodes, max > 1);
@@ -424,16 +420,16 @@ final class XCGenerator extends XCGeneratorXON {
 						if (XON_NS_URI_W.equals(xe1.getNSUri())) {
 							if (groupKind != XMCHOICE) {
 								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
-									genXonItemGetterAndSetter(
-										xe1, typeName, iname, max, setters, getters, sbi, varNames);
+									genXonItemGetterAndSetter(xe1,
+										typeName, iname, max, setters, getters, sbi, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
 									genXonEntryMethod(xe1, typeName, iname, max, getters, sbi, varNames);
 								}
 							}
 						} else { // XON map items
 							if (groupKind != XMCHOICE) {
-								genXonItemGetterAndSetter(
-									xe1, typeName, iname, max, setters, getters, sbi, varNames);
+								genXonItemGetterAndSetter(xe1,
+									typeName, iname, max, setters, getters, sbi, varNames);
 							}
 						}
 					}
@@ -445,9 +441,8 @@ final class XCGenerator extends XCGeneratorXON {
 							i, // index
 							newClassName, //class name
 							"", //no class extension and interfaces
-							(xcClass0 != null)? xcClass0.substring(10): "",
-							(packageName.length() > 0 //interface
-								? packageName+"." : "")+classNameBase+'#'+newClassName,
+							(xcClass0 != null) ? xcClass0.substring(10): "",
+							(packageName.length() > 0 ? packageName+"." : "")+classNameBase+'#'+newClassName,
 							"", //classNameBase
 							_components, //Map with components
 							classNames, //Set with class names or null
@@ -548,8 +543,7 @@ final class XCGenerator extends XCGeneratorXON {
 			true); //root element.
 		String hdrTemplate =
 "// This file was generated by org.xdef.component.GenXComponent."+LN+
-"// X-position: \"" +
-(definitionName == null ? "" : definitionName) + '#' +	modelName + "\"."+LN+
+"// X-position: \"" + (definitionName == null ? "" : definitionName) + '#' +	modelName + "\"."+LN+
 "// Any modifications to this file will be lost upon recompilation."+LN;
 		String packageName1 = packageName;
 		String interfaceName1 = interfaceName;
@@ -563,16 +557,14 @@ final class XCGenerator extends XCGeneratorXON {
 			if (packageName1 != null && packageName1.length() > 0) {
 				s += "package " + packageName1 + ";"+LN;
 			}
-			s += LN+
-"public interface "+interfaceName1+" extends org.xdef.component.XComponent {"+LN;
+			s += LN+"public interface "+interfaceName1+" extends org.xdef.component.XComponent {"+LN;
 			_interfaces.insert(0, s).append("}");
 		}
 		if (className.isEmpty()) {
 			return null;
 		}
-		StringBuilder sb = new StringBuilder(
-			SUtils.modifyString(hdrTemplate,
-				"&{xdpos}", (definitionName != null ? "" : definitionName) + '#' + modelName));
+		StringBuilder sb = new StringBuilder(SUtils.modifyString(hdrTemplate,
+			"&{xdpos}", (definitionName != null ? "" : definitionName) + '#' + modelName));
 		if (packageName1 != null && packageName1.length() > 0) {
 			sb.append("package ").append(packageName1).append(';').append(LN);
 		}
