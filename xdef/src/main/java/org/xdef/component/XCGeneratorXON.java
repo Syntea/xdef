@@ -840,10 +840,16 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				"&{name}", name,
 				"&{iname}", iname,
 				"&{typ}", typ,
-				"&{typeName}", typeName));
+				"&{typeName}", typeName,
+				"&{d}", xe.getName()));
 			if (sbi != null) { // generate interface
-				sbi.append(modify(template +";"+LN,
+				int ndx = template.indexOf(" {"+LN);
+				template = template.substring(0, ndx)+";"+LN;
+				sbi.append(modify(template,
 					"&{name}", name,
+					"&{iname}", iname,
+					"&{typ}", typ,
+					"&{typeName}", typeName,
 					"&{d}", xe.getName()));
 			}
 		}

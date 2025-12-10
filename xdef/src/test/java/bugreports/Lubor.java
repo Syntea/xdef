@@ -34,11 +34,54 @@ public class Lubor extends XDTester {
 //			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 ////////////////////////////////////////////////////////////////////////////////
-		String xdef, xml;
+		Object o;
+		String json, xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"PlatneOd\">\n" +
+"<xd:json name='PlatneOd'>[\"*; dateTime()\"]</xd:json>\n" +
+"<xd:component>\n" +
+"  %interface "+_package+".Lubor_I_3 %link #PlatneOd;\n" +
+"  %class "+_package+".Lubor_XC_3 %link #PlatneOd;\n" +
+"</xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			xd = xp.createXDDocument("");
+			json = "[\"2025-03-12T16:37:09\"]";
+			o = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(o, xc.toXon());
+		} catch (RuntimeException ex) {fail(ex);}
+//if(true)return;
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"PlatneOd\">\n" +
+"<xd:json name='PlatneOd'>{a: [\"*; dateTime()\"] }</xd:json>\n" +
+"<xd:component>\n" +
+"  %interface "+_package+".Lubor_I_2 %link #PlatneOd;\n" +
+"  %class "+_package+".Lubor_XC_2 %link #PlatneOd;\n" +
+"</xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			xd = xp.createXDDocument("");
+			json = "{\"a\": [\"2025-03-12T16:37:09\"]}";
+			o = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(o, xc.toXon());
+		} catch (RuntimeException ex) {fail(ex);}
+//if(true)return;
 /**/
 		try {
 			xdef =
@@ -80,7 +123,7 @@ public class Lubor extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 /**/
 		clearTempDir(); // delete temporary files.
 	}
