@@ -339,7 +339,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler.skipBlanksAndComments();
 				_scriptCompiler.isChar(';');
 				continue;
-			} else {
+			} else { // %class or %interface
 				ndx = result.indexOf(" %link ");
 				String modelName = result.substring(ndx + 7);
 				result = result.substring(0, ndx);
@@ -369,8 +369,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				SBuffer s = _codeGenerator._components.get(model);
 				if (s != null) {
 					String t = s.getString();
-					if (result.startsWith("%class ")
-						&& t.startsWith("interface ")) {
+					if (result.startsWith("%class ") && t.startsWith("interface ")) {
 						if (result.indexOf(" %interface ") > 0) {
 							error(spos, XDEF.XDEF351, "interface;"+model);//Duplicate declaration of &{0}
 						} else {
@@ -383,6 +382,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							error(spos, XDEF.XDEF351, "interface;"+model);//Duplicate declaration of &{0}
 						} else {
 							t += ' ' + result.substring(1);
+							ndx = t.indexOf(" extends");
+							if (ndx > 0) {
+								t = t.substring(0, ndx);// remove extension from interface!
+							}
 							s = new SBuffer(t, s);
 							_codeGenerator._components.put(model, s);
 						}

@@ -1,6 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.33, release-date 2025-12-10
+# Version 42.2.33, release-date 2025-12-13
+  * Fixed a bug when the %interface command in the XComponent contained the word `extends`.
   * Fixed a bug when generating the XComponent interface with a datetime type value in array.
 
 # Version 42.2.32, release-date 2025-12-09
