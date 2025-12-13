@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.34, release-date 2025-12-13
+  .
+
 # Version 42.2.33, release-date 2025-12-13
   * Fixed a bug when the %interface command in the XComponent contained the word `extends`.
   * Fixed a bug when generating the XComponent interface with a datetime type value in array.
@@ -8,7 +11,7 @@
   * If the format `h` (i.e., 12-hour time) is specified in the mask for time, then it is mandatory to specify
     also `a` (i.e., AM/).
   * Fixed a bug when generating the XComponent interface with a datetime type value. The interface did not
-   generate getters for the java.util.Date, java.sql.Timestamp, and java.util.Calendar types.
+    generate getters for the java.util.Date, java.sql.Timestamp, and java.util.Calendar types.
 
 # Version 42.2.31, release-date 2025-11-25
 * The %oneOf directive in the JSON map is now recorded as an array of names of named items. If all variants
