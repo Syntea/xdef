@@ -1996,6 +1996,34 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 		} catch (RuntimeException ex) {fail(ex);}
+		try { // the command %interface with extension
+			genXComponent(xp=compile(
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"A | B\">\n" +
+"  <A a = \"int()\" />\n" +
+"  <B xd:script =\"ref A\" b=\"string()\" />\n" +
+"<xd:component>\n" +
+"%class "+_package+".L_X_1 %link #A; %class "+_package+".L_XX_1 %link #B;\n" +
+"%interface "+_package+".L_I_1 %link #A;\n" +
+"%interface "+_package+".L_II_1 extends "+_package+".Lubor1_I_1 %link #B;\n" +
+"</xd:component>\n" +
+"</xd:def>"));
+			xd = xp.createXDDocument("");
+			xml = "<A a=\"1\" />";
+			parse(xd, xml, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+//			assertEq(1, ((L_I_1) xc).geta());
+			xml = "<B a=\"2\" b=\"c d\" />";
+			parse(xd, xml, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+//			assertEq(2, ((L_II_1) xc).geta());
+//			assertEq("c d", ((L_II_1) xc).getb());
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 		resetTester();
