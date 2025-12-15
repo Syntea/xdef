@@ -637,7 +637,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{name}", name));
 			}
 			if (sbi != null) { // generate interface
-				sbi.append(modify(template + ";" + LN,
+				sbi.append(modify(
+(_genJavadoc ? "\t/** Get XON value of textnode of &{d}."+LN+
+"\t * @return value of text of &{d}"+LN+
+"\t */"+LN : "")+
+"\tpublic &{typ} get$&{name}();"+LN,
 					"&{name}", name,
 					"&{d}", xe.getName(),
 					"&{typ}", typ));
@@ -697,7 +701,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{typ}", "java.util.Calendar"));
 			}
 			if (sbi != null) { // generate interface
-				sbi.append(modify(template +  ";" + LN,
+				sbi.append(modify(
+(_genJavadoc ? "\t/** Set value of &{name}."+LN+
+"\t * @param x value to be set"+LN+
+"\t */"+LN : "")+
+"\tpublic void set$&{name}(&{typ} x);"+LN,
 					"&{name}", name,
 					"&{d}", xe.getName(),
 					"&{typ}", typ));
@@ -815,23 +823,23 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			name = getXonItemName(xe, "get$", varNames);
 			switch (xe.getLocalName()) {
 				case X_ARRAY:
-					typ = "java.util.List<Object>";
+					typ = typeName;
 					template =
 (_genJavadoc ? "\t/** Get array from map entry &{name}."+LN+
 "\t * @return array from map entry &{name}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}() {"+LN+
-"\t\treturn _&{iname} == null? null: _&{iname}.toXon();"+LN+
+"\t\treturn _&{iname} == null? null: _&{iname};"+LN+
 "\t}"+LN;
 					break;
 				case X_MAP:
-					typ = "java.util.Map<String, Object>";
+					typ = typeName;
 					template =
-(_genJavadoc ? "\t/** Get array from map entry &{name}."+LN+
-"\t * @return array from map entry &{name}"+LN+
+(_genJavadoc ? "\t/** Get map from map entry &{name}."+LN+
+"\t * @return map from map entry &{name}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}() {"+LN+
-"\t\treturn _&{iname} == null? null: _&{iname}.toXon();"+LN+
+"\t\treturn _&{iname} == null? null: _&{iname};"+LN+
 "\t}"+LN;
 					break;
 				default: return;
