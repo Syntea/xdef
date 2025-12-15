@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.34, release-date 2025-12-13
-  .
+# Version 42.2.34, release-date 2025-12-15
+  * Fixed a bug when generating the XComponent interface with a reference to a map or array.
 
 # Version 42.2.33, release-date 2025-12-13
   * Fixed a bug when the %interface command in the XComponent contained the word `extends`.
