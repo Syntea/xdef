@@ -11,6 +11,7 @@ import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 
@@ -239,7 +240,7 @@ public class Mates extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
 if(true)return;
 /**/
