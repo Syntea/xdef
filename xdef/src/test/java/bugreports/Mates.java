@@ -12,6 +12,7 @@ import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
+import static test.XDTester._xdNS;
 
 /** Tests.
  * @author Vaclav Trojan
@@ -159,13 +160,13 @@ public class Mates extends XDTester {
 "    %interface "+_package+".Mates_Statuses_I %link Statuses;\n" +
 "  </xd:component>\n" +
 "</xd:def>\n" +
-"<xd:def name = 'EndStatuses'>\n" +
-"  <xd:json name = 'EndStatuses'>\n" +
-"                    {\n" +
+"<xd:def name='EndStatuses' root='EndStatuses'>\n" +
+"  <xd:json name='EndStatuses'>\n" +
+"                  {\n" +
 "                    \"EndStatus\":  \"  statusSet.statusName.ID()\",\n" +
 "                    \"ActionCode\": \"? actionCode()\",\n" +
 "                    \"ChangeLog\":  \"? changeLog()\"\n" +
-"                    }\n" +
+"                  }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_EndStatuses %link EndStatuses;\n" +
@@ -178,34 +179,34 @@ public class Mates extends XDTester {
 			json =
 "{\"SynPLscript\":\n" +
 "            {\n" +
-"                \"Name\":    \"wfScriptName\",\n" +
 "                \"Version\": \"2025-11-21\",\n" +
 "                \"Desc\":    \"???????\",\n" +
 "                \"SysValues\": [ ],\n" +
 "                \"Variables\": [ ],\n" +
 "                \"UserRoles\": [ ],\n" +
 "                \"UsedFunctions\": [ ],\n" +
-"                \"Statuses\": [\n" +							//10
+"                \"EndStatuses\": [\n" +
 "                  {\n" +
-"                    \"Status\":       \"statusName\",\n" +
+"                    \"EndStatus\":  \"statusName1\",\n" +
+"                    \"ActionCode\": \"actionCode\",\n" +
+"                    \"ChangeLog\":  \"Y\"\n" +
+"                  }\n" +
+"                ],\n" +
+"                \"Name\":    \"wfScriptName\",\n" +
+"                \"Statuses\": [\n" +
+"                  {\n" +
 "                    \"ActionCode\":   \"actionCode\",\n" +
+"                    \"Status\":       \"statusName\",\n" +
 "                    \"TimeOverStep\": \"60H\",\n" +
 "                    \"ChangeLog\":    \"Y\",\n" +
 "                    \"Events\": [\n" +
 "                      {\n" +
 "                        \"Event\":       \"eventName\",\n" +
+"                        \"ActionCode\":  \"actionCode\",\n" +
 "                        \"UserRoleAny\": [\"userRole\"],\n" +
-"                        \"ActionCode\":  \"actionCode\",\n" +	//20
 "                        \"NextStatus\":  \"statusName\"\n" +
 "                      }\n" +
 "                    ]\n" +
-"                  }\n" +
-"                ],\n" +
-"                \"EndStatuses\": [\n" +
-"                  {\n" +
-"                    \"EndStatus\":  \"statusName1\",\n" +
-"                    \"ActionCode\": \"actionCode\",\n" +
-"                    \"ChangeLog\":  \"Y\"\n" +					//30
 "                  }\n" +
 "                ]\n" +
 "            }\n" +
@@ -217,19 +218,28 @@ public class Mates extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			Mates_SynPLscript xPLscript = (Mates_SynPLscript) xc;
 			Map<String, Object> map = xPLscript.getMap$();
-			System.out.println(map.get("SynPLscript").getClass());
-			System.out.println(map.get("SynPLscript"));
 			Map map1 = (Map) map.get("SynPLscript");
-			System.out.println(map1.get("Statuses"));
 			List list1 = (List) map1.get("Statuses");
+			assertEq("60H", ((Map) list1.get(0)).get("TimeOverStep"));
 			Map map2 = (Map) list1.get(0);
-			System.out.println(map2.get("Events"));
 			List list2 = (List) map2.get("Events");
+			assertEq("eventName", ((Map) list2.get(0)).get("Event"));
 			Map map3 = (Map) list2.get(0);
-			System.out.println(map3);
-			System.out.println(map3.get("NextStatus"));
-			Mates_SynPLscript xsyn = (Mates_SynPLscript) xc;
-			xsyn.getjx$map();
+			assertEq("statusName", map3.get("NextStatus"));
+			assertEq("wfScriptName", ((Mates_SynPLscript) xc).get$SynPLscript().get$Name());
+
+			xd = xp.createXDDocument("EndStatuses");
+			json =
+"{\n" +
+"  \"ActionCode\": \"actionCode\",\n" +
+"  \"EndStatus\":  \"statusSet.statusName\",\n" +
+"  \"ChangeLog\":  \"Y\"\n" +
+"}";
+			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+
 		} catch (RuntimeException ex) {fail(ex);}
 if(true)return;
 /**/
