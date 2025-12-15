@@ -445,7 +445,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> anyItem$() ";
+"\tpublic java.util.Map<String, &{typ}> anyItem$()";
 				getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
@@ -472,7 +472,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> anyItem$() ";
+"\tpublic java.util.Map<String, &{typ}> anyItem$()";
 					getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
@@ -488,6 +488,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					if (sbi != null) { // generate interface
 						sbi.append(modify(template +";"+LN,
 							"&{name}", name,
+							"&{tyo}", typ,
 							"&{d}", xe.getName()));
 					}
 				}
@@ -580,7 +581,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> anyItem$() ";
+"\tpublic java.util.Map<String, &{typ}> anyItem$()";
 				getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String,&{typ}>x=new java.util.LinkedHashMap<>();"+LN+
@@ -597,6 +598,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				if (sbi != null) { // generate interface
 					sbi.append(modify(template +";"+LN,
 						"&{name}", name,
+						"&{typ}", typ,
 						"&{d}", xe.getName()));
 				}
 			}

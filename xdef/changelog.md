@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.35, release-date 2025-12-15
+  * Fixed a bug when generating the XComponent interface with inner map.
+
 # Version 42.2.34, release-date 2025-12-15
   * Fixed a bug when generating the XComponent interface with a reference to a map or array.
 

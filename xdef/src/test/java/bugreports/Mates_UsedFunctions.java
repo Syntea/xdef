@@ -3,13 +3,13 @@
 // Any modifications to this file will be lost upon recompilation.
 package bugreports;
 @SuppressWarnings("unchecked")
-public class XCUsedFunctions implements org.xdef.component.XComponent{
-  public XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item getjx$item() {return _jx$item;}
+public class Mates_UsedFunctions implements bugreports.Mates_UsedFunctions_I,org.xdef.component.XComponent{
+  public Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$Params(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
-  public java.util.Map<String, String> anyItem$() {
+  public Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public java.util.Map<String, String> anyItem$(){
 	java.util.Map<String,String>x=new java.util.LinkedHashMap<>();
 	if (_jx$item_1 != null) {
 	  x.put(org.xdef.xon.XonTools.xmlToJName(_jx$item_1.getkey()), _jx$item_1.getval());
@@ -20,23 +20,23 @@ public class XCUsedFunctions implements org.xdef.component.XComponent{
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$Params(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$item(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item _jx$item;
-  private XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 _jx$item_1;
+  private Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item _jx$item;
+  private Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 _jx$item_1;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -95,15 +95,15 @@ public class XCUsedFunctions implements org.xdef.component.XComponent{
 	  el.appendChild(x.toXml(doc));
 	return el;
   }
-  public XCUsedFunctions() {}
-  public XCUsedFunctions(org.xdef.component.XComponent p,
+  public Mates_UsedFunctions() {}
+  public Mates_UsedFunctions(org.xdef.component.XComponent p,
 	String name, String ns, String xPos, String XDPos) {
 	XD_NodeName=name; XD_NamespaceURI=ns;
 	XD_XPos=xPos;
 	XD_Model=XDPos;
 	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
   }
-  public XCUsedFunctions(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
+  public Mates_UsedFunctions(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
 	org.w3c.dom.Element el=x.getElement();
 	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
 	XD_XPos=x.getXPos();
@@ -131,16 +131,16 @@ public class XCUsedFunctions implements org.xdef.component.XComponent{
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){
 	switch(x.getXMElement().getXDPosition()) {
-	  case "UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item": return new bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item(this, x);
-	  default: return new bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1(this, x); // UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item[2]
+	  case "UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item": return new bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item(this, x);
+	  default: return new bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1(this, x); // UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item[2]
 	}
   }
   @Override
   public void xAddXChild(org.xdef.component.XComponent x) {
 	x.xSetNodeIndex(XD_ndx++);
 	switch(x.xGetModelPosition()) {
-	  case "UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item": setjx$item((bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item)x); break;
-	  default: setjx$item_1((bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1)x); //UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item[2]
+	  case "UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item": setjx$item((bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item)x); break;
+	  default: setjx$item_1((bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1)x); //UsedFunctions#UsedFunctions/jx:map/$mixed/jx:item[2]
 	}
   }
   @Override
