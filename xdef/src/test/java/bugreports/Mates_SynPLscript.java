@@ -3382,11 +3382,7 @@ public static class jx$array_4 implements org.xdef.component.XComponent{
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
   public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1 x) {
-	if (x!=null) {
-		if (x.xGetXPos()==null)
-		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map");
-	  _jx$map.add(x);
-	}
+	if (x!=null) _jx$map.add(x);
   }
   public String xposOfkey(){return XD_XPos+"/@key";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
@@ -3519,6 +3515,10 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
   public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array get$Events() {
 	return _jx$array == null? null: _jx$array;
   }
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_4 getjx$item_4() {return _jx$item_4;}
+  public String get$xxx(){
+	return _jx$item_4==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_4.getval());
+  }
   public java.util.Map<String, Object> getMap$() {return toXon();}
   public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$Status(String x){
@@ -3549,12 +3549,20 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
 	}
   }
   public void setjx$array(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array x) {_jx$array=x;}
+  public void setjx$item_4(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_4 x) {_jx$item_4=x;}
+  public void set$xxx(String x){
+	if(x==null) _jx$item_4=null; else {
+	  if(_jx$item_4==null) setjx$item_4(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_4());
+	  _jx$item_4.setval(x);
+	}
+  }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item _jx$item;
   private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 _jx$item_1;
   private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 _jx$item_2;
   private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 _jx$item_3;
   private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array _jx$array;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_4 _jx$item_4;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -3600,6 +3608,7 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
 	org.xdef.component.XComponentUtil.addXC(a, getjx$item_2());
 	org.xdef.component.XComponentUtil.addXC(a, getjx$item_3());
 	org.xdef.component.XComponentUtil.addXC(a, getjx$array());
+	org.xdef.component.XComponentUtil.addXC(a, getjx$item_4());
 	return a;
   }
   @Override
@@ -3629,7 +3638,7 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
 	XD_XPos=x.getXPos();
 	XD_Model=x.getXMElement().getXDPosition();
 	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
-	if (!"8926B52AAF559FA547FEB292BD32373132A6DAD485B4DEA5F213A56A7F4C51E6".equals(
+	if (!"E6A4626D7DD8B8A2A1400D3F1C6B5979569F4E7974893231B2AA3596F209B239".equals(
 	  x.getXMElement().getDigest())) { //incompatible element model
 	  throw new org.xdef.sys.SRuntimeException(
 		org.xdef.msg.XDEF.XDEF374);
@@ -3655,7 +3664,8 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
 	  case "Statuses#Statuses/jx:map/$mixed/jx:item[2]": return new jx$item_1(this, x);
 	  case "Statuses#Statuses/jx:map/$mixed/jx:item[3]": return new jx$item_2(this, x);
 	  case "Statuses#Statuses/jx:map/$mixed/jx:item[4]": return new jx$item_3(this, x);
-	  default: return new jx$array(this, x); // Statuses#Statuses/jx:map/$mixed/jx:array
+	  case "Statuses#Statuses/jx:map/$mixed/jx:array": return new jx$array(this, x);
+	  default: return new jx$item_4(this, x); // SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map/jx:item
 	}
   }
   @Override
@@ -3666,7 +3676,8 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
 	  case "Statuses#Statuses/jx:map/$mixed/jx:item[2]": setjx$item_1((jx$item_1)x); break;
 	  case "Statuses#Statuses/jx:map/$mixed/jx:item[3]": setjx$item_2((jx$item_2)x); break;
 	  case "Statuses#Statuses/jx:map/$mixed/jx:item[4]": setjx$item_3((jx$item_3)x); break;
-	  default: setjx$array((jx$array)x); //Statuses#Statuses/jx:map/$mixed/jx:array
+	  case "Statuses#Statuses/jx:map/$mixed/jx:array": setjx$array((jx$array)x); break;
+	  default: setjx$item_4((jx$item_4)x); //SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map/jx:item
 	}
   }
   @Override
@@ -5032,6 +5043,125 @@ public static class jx$item_2 implements org.xdef.component.XComponent{
 // </editor-fold>
 }
 }
+}
+@SuppressWarnings("unchecked")
+public static class jx$item_4 implements org.xdef.component.XComponent{
+  public String getval() {return _val;}
+  public String getkey() {return _key;}
+  public void setval(String x) {_val=x;}
+  public void setkey(String x) {_key=x;}
+  public String xposOfval(){return XD_XPos+"/@val";}
+  public String xposOfkey(){return XD_XPos+"/@key";}
+//<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  private String XD_Name_val="val";
+  private String _val;
+  private String XD_Name_key="key";
+  private String _key="xxx";
+  @Override
+  public String toXon() {
+	Object o = getval();
+	return (o instanceof org.xdef.xon.XonTools.JNull)? null
+	  : (String) org.xdef.xon.XonTools.xmlToJValue((String)o);
+  }
+  @Override
+  public org.w3c.dom.Element toXml()
+	{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}
+  @Override
+  public String xGetNodeName() {return XD_NodeName;}
+  @Override
+  public void xInit(org.xdef.component.XComponent p,
+	String name, String ns, String xdPos) {
+	XD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;
+  }
+  @Override
+  public String xGetNamespaceURI() {return XD_NamespaceURI;}
+  @Override
+  public String xGetXPos() {return XD_XPos;}
+  @Override
+  public void xSetXPos(String xpos){XD_XPos = xpos;}
+  @Override
+  public int xGetNodeIndex() {return XD_Index;}
+  @Override
+  public void xSetNodeIndex(int index) {XD_Index = index;}
+  @Override
+  public org.xdef.component.XComponent xGetParent() {return XD_Parent;}
+  @Override
+  public Object xGetObject() {return XD_Object;}
+  @Override
+  public void xSetObject(final Object obj) {XD_Object = obj;}
+  @Override
+  public String toString() {return "XComponent: "+xGetModelPosition();}
+  @Override
+  public String xGetModelPosition() {return XD_Model;}
+  @Override
+  public int xGetModelIndex() {return 7;}
+  public static final byte XON = 1;
+  @Override
+  public java.util.List<org.xdef.component.XComponent> xGetNodeList() {
+	return new java.util.ArrayList<>();
+  }
+  @Override
+  public org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {
+	org.w3c.dom.Element el;
+	if (doc==null) {
+	  doc = org.xdef.xml.KXmlUtils.newDocument(XD_NamespaceURI,XD_NodeName,null);
+	  el = doc.getDocumentElement();
+	} else {
+	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
+	}
+	if (getval() != null)
+	  el.setAttribute(XD_Name_val, getval());
+	if (getkey() != null)
+	  el.setAttribute(XD_Name_key, getkey());
+	return el;
+  }
+  public jx$item_4() {}
+  public jx$item_4(org.xdef.component.XComponent p,
+	String name, String ns, String xPos, String XDPos) {
+	XD_NodeName=name; XD_NamespaceURI=ns;
+	XD_XPos=xPos;
+	XD_Model=XDPos;
+	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
+  }
+  public jx$item_4(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
+	org.w3c.dom.Element el=x.getElement();
+	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
+	XD_XPos=x.getXPos();
+	XD_Model=x.getXMElement().getXDPosition();
+	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
+	if (!"8E2E4B4CF1E9FFB54FCFA8556CF75EFA78E4060B8B9062AC59E5C98C080EE1DF".equals(
+	  x.getXMElement().getDigest())) { //incompatible element model
+	  throw new org.xdef.sys.SRuntimeException(
+		org.xdef.msg.XDEF.XDEF374);
+	}
+  }
+  public static final String XD_NAME="jx:item";
+  private org.xdef.component.XComponent XD_Parent;
+  private Object XD_Object;
+  private String XD_NodeName = "jx:item";
+  private String XD_NamespaceURI = "http://www.xdef.org/xon/4.0/w";
+  private int XD_Index = -1;
+  private String XD_XPos;
+  private String XD_Model="SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map/jx:item";
+  @Override
+  public void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}
+  @Override
+  public void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {
+	if (x.getXMNode().getXDPosition().endsWith("/@val")) {
+	  XD_Name_val = x.getNodeName();
+	  setval(value.getParsedValue().isNull()? null: value.getParsedValue().toString());
+	} else {
+	  XD_Name_key = x.getNodeName();
+	  setkey(value.getParsedValue().isNull()? null: value.getParsedValue().toString());
+	}
+  }
+  @Override
+  public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){return null;}
+  @Override
+  public void xAddXChild(org.xdef.component.XComponent x) {}
+  @Override
+  public void xSetAny(org.w3c.dom.Element el) {}
+// </editor-fold>
 }
 }
 }
