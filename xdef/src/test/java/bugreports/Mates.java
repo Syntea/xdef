@@ -46,6 +46,89 @@ public class Mates extends XDTester {
 		XComponent xc;
 		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
+/**
+		try {
+			xdef =
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def name='A' root='A'>\n" +
+"  <xd:json name = \"A\">\n" +
+"    {\"A\":\n" +
+"      {\n" +
+"         \"Name\":    \"string()\",\n" +
+"         \"End\": [ {\"%script\": \"+; ref EndStatuses#EndStatuses\", \"x\": \"?; string()\"} ]\n" +
+"      }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_A %link A;\n" +
+"    %interface "+_package+".Mates_A_I %link A;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"<xd:def name='EndStatuses' root='EndStatuses'>\n" +
+"  <xd:json name='EndStatuses'>\n" +
+"    {\n" +
+"       \"EndStatus\":  \"string()\",\n" +
+"       \"ChangeLog\":  \"? string()\"\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_EndStatuses %link EndStatuses;\n" +
+"    %interface "+_package+".Mates_EndStatuses_I %link EndStatuses;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"</xd:collection>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			json =
+"{\"A\":\n" +
+"            {\n" +
+"                \"Name\": \"xxxxxxx\",\n" +
+"                \"End\": [\n" +
+"                  {\n" +
+"                    \"ChangeLog\": \"Y\",\n" +
+"                    \"EndStatus\": \"actionCode\",\n" +
+"                    \"x\":       \"xxx\",\n" +
+"                  },\n" +
+"                  {\n" +
+"                    \"ChangeLog\": \"Y\",\n" +
+"                    \"EndStatus\": \"actionCode1\",\n" +
+"                    \"x\":       \"xxx1\",\n" +
+"                  }\n" +
+"                ]\n" +
+"            }\n" +
+"}\n";
+			xd = xp.createXDDocument("A");
+			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			json =
+"{\"A\":\n" +
+"            {\n" +
+"                \"Name\": \"xxxxxxx\",\n" +
+"                \"End\": [\n" +
+"                  {\n" +
+"                    \"ChangeLog\": \"Y\",\n" +
+"                    \"EndStatus\": \"actionCode\",\n" +
+"                    \"x\":       \"xxx\",\n" +
+"                  },\n" +
+"                  {\n" +
+"                    \"ChangeLog\": \"Y\",\n" +
+"                    \"x\":       \"xxx1\",\n" +
+"                    \"EndStatus\": \"actionCode1\",\n" +
+"                  }\n" +
+"                ]\n" +
+"            }\n" +
+"}\n";
+			xd = xp.createXDDocument("A");
+			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+		} catch (RuntimeException ex) {fail(ex);}
+if(true)return;
 /**/
 		try {
 			xdef =
@@ -83,7 +166,7 @@ public class Mates extends XDTester {
 "                \"Variables\": [ {\"%script\":  \"*; ref Variables#Variables;\"} ],\n" +
 "                \"UserRoles\": [ {\"%script\":  \"*; ref UserRoles#UserRoles\"} ],\n" +
 "                \"UsedFunctions\": [ {\"%script\":  \"*; ref UsedFunctions#UsedFunctions\"} ],\n" +
-"                \"Statuses\": [ {\"%script\": \"+; ref Statuses#Statuses\"} ]\n" +
+"                \"Statuses\": [ {\"%script\": \"+; ref Statuses#Statuses\", \"xxx\": \"?; string();\"} ]\n" +
 "                \"EndStatuses\": [ {\"%script\": \"+; ref EndStatuses#EndStatuses\"} ]\n" +
 "            }\n" +
 "        }\n" +
@@ -163,11 +246,12 @@ public class Mates extends XDTester {
 "</xd:def>\n" +
 "<xd:def name='EndStatuses' root='EndStatuses'>\n" +
 "  <xd:json name='EndStatuses'>\n" +
-"                  {\n" +
+"    {\n" +
+//"                    \"%script\": \"?; ref Statuses$Statuses;\",\n" +
 "                    \"EndStatus\":  \"  statusSet.statusName.ID()\",\n" +
 "                    \"ActionCode\": \"? actionCode()\",\n" +
 "                    \"ChangeLog\":  \"? changeLog()\"\n" +
-"                  }\n" +
+"    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_EndStatuses %link EndStatuses;\n" +
@@ -199,7 +283,6 @@ public class Mates extends XDTester {
 "                    \"ActionCode\":   \"actionCode\",\n" +
 "                    \"Status\":       \"statusName\",\n" +
 "                    \"TimeOverStep\": \"60H\",\n" +
-"                    \"ChangeLog\":    \"Y\",\n" +
 "                    \"Events\": [\n" +
 "                      {\n" +
 "                        \"Event\":       \"eventName\",\n" +
@@ -207,7 +290,9 @@ public class Mates extends XDTester {
 "                        \"UserRoleAny\": [\"userRole\"],\n" +
 "                        \"NextStatus\":  \"statusName\"\n" +
 "                      }\n" +
-"                    ]\n" +
+"                    ],\n" +
+"                    \"ChangeLog\":    \"Y\",\n" +
+"                    \"xxx\":          \"xxx\",\n" +
 "                  }\n" +
 "                ]\n" +
 "            }\n" +
