@@ -26,19 +26,20 @@ import org.xdef.sys.NameWildCardFilter;
  * The program may be invoked from command line with following parameters:
  * <br>-i input [-r] [-o outputDirectory] (-t |-s) [-n indent] [-h]
  * <br>where:
- * <br> -i input Input may be specified as the file with input source or as the directory. If the parameter
- * is not directory, also wildcards '*' or '?' may be used to specify group of files.
- * The parameter is obligatory.
- * <br> -r process directory tree. The parameter is optional and forces to process all subdirectories
- * of the directory where process started.
- * <br> -o outputDirectory: The directory where output files are stored. The parameter is optional.
- * If it is not specified the source file is overwritten.
- * <br> -t spaces are replaced by tabs The parameter is optional.
- * <br> -s tabs are replaced by spaces The parameter is optional.
- * <br> -cr lines are separated by the couple of CR and LF The parameter is optional.
- * <br> -h The parameter displays help text.
- * <i>Switches -t and  -s are exclusive. If none of them is specified the -s is set as the default value.</i>
- *
+ * <ul>
+ * <li> -i input Input may be specified as the file with input source or as the directory. If the parameter
+ * is not directory, also wildcards '*' or '?' may be used to specify group of files. The parameter is
+ * obligatory.</li>
+ * <li> -r process directory tree. The parameter is optional and forces to process all subdirectories
+ * of the directory where process started.</li>
+ * <li> -o outputDirectory: The directory where output files are stored. The parameter is optional.
+ * If it is not specified the source file is overwritten.</li>
+ * <li> -t spaces are replaced by tabs The parameter is optional.</li>
+ * <li> -s tabs are replaced by spaces The parameter is optional.</li>
+ * <li> -cr lines are separated by the couple of CR and LF The parameter is optional.</li>
+ * <li> -h The parameter displays help text.</li>
+ * </ul>
+ * <i>Switches -t and -s are exclusive. If none of them is specified the -s is set as the default value.</i>
  * @author  Vaclav Trojan
  */
 public class CanonizeSource {
@@ -110,8 +111,7 @@ public class CanonizeSource {
 		}
 	}
 
-	/** Read and canonize all lines form the file. The result of the file is
-	 * in the StringBuffer <tt>_sb</tt>.
+	/** Read and canonize all lines form the file. The result of the file is in the StringBuffer <tt>_sb</tt>.
 	 * @param file The file with the source.
 	 * @return true if an modification of the source was processed.
 	 * @throws IOException if an error occurs.
@@ -131,12 +131,11 @@ public class CanonizeSource {
             modified = false;
             while ((line = in.readLine()) != null) {
                 _lines++;
-                //cut final white spaces
+                
                 int len = line.length();
                 int i = len;
                 int k;
-                while((len > 0)
-                    && line.charAt(len - 1) <= ' ') {
+                while((len > 0) && line.charAt(len - 1) <= ' ') {//cut final white spaces
                     len--;
                 }
                 _linePos = _sb.length();
@@ -157,15 +156,9 @@ public class CanonizeSource {
                     for (i = 0, k = 0; i < len; i++) {
                         char ch = line.charAt(i);
                         switch (ch) {
-                            case '\t':
-                                k = (((k + _indentSize - 1)/_indentSize) + 1)
-                                    *_indentSize;
-                                break;
-                            case ' ':
-                                k++;
-                                break;
-                            default:
-                                break OUTER;
+                            case '\t': k = (((k + _indentSize - 1)/_indentSize) + 1) *_indentSize; break;
+                            case ' ': k++; break;
+                            default: break OUTER;
                         }
                     }
                     if (i < len) { //not empty line
@@ -182,14 +175,9 @@ public class CanonizeSource {
                     for (i = 0, k = 0; i < len; i++) {
                         char ch = line.charAt(i);
                         switch (ch) {
-                            case '\t':
-                                k = (((k+_oldIndent-1)/_oldIndent)+1)*_oldIndent;
-                                break;
-                            case ' ':
-                                k++;
-                                break;
-                            default:
-                                break OUTER_1;
+                            case '\t': k = (((k+_oldIndent-1)/_oldIndent)+1)*_oldIndent; break;
+                            case ' ': k++; break;
+                            default: break OUTER_1;
                         }
                     }
                     if (i < len) { //not empty line
@@ -263,8 +251,7 @@ public class CanonizeSource {
 			}
 			modified = readLines(fi);
 		} catch (Exception ex) {
-			error("Can't read input file: " + fi.getAbsolutePath()
-				+ "\n" + ex);
+			error("Can't read input file: " + fi.getAbsolutePath() + "\n" + ex);
 			return;
 		}
 		// remove trailing blanks
@@ -272,8 +259,7 @@ public class CanonizeSource {
 		int len = len0;
 		char c;
 		while (len > 0 && (
-			(c = _sb.charAt(--len)) == '\n'
-			|| c == ' ' || c == '\t' || c == '\r' || c == '\f')) {
+			(c = _sb.charAt(--len)) == '\n' || c == ' ' || c == '\t' || c == '\r' || c == '\f')) {
 			_sb.deleteCharAt(len);
 		}
 		if (len0 - 2 > len) {
@@ -281,44 +267,30 @@ public class CanonizeSource {
 			modified = true;
 		}
 		//prepare file name and path names for modifications
-		String pathname;
-		if (outDir == null) {
-			pathname = fi.getAbsolutePath();
-		} else {
-			pathname = new File(outDir).getAbsolutePath() + fi.getName();
-		}
+		String pathname = outDir == null
+			? fi.getAbsolutePath() : new File(outDir).getAbsolutePath() + fi.getName();
 		pathname = pathname.replace('\\', '/');
 		//NOTE tail MUST be processed first!
 		int ndx = pathname.lastIndexOf('/');
-		String fname;
-		if (ndx >= 0) {
-			fname = pathname.substring(ndx + 1);
-		} else {
-			fname = pathname;
-		}
+		String fname = ndx >= 0 ? pathname.substring(ndx + 1) : pathname;
 		if (_tail != null) {
 			ndx = 0;
 			int i;
 			String s = _tail;
 			while ((i = s.indexOf("&{FILENAME}", ndx)) > 0) {
-				s = s.substring(ndx, i)
-					+ fname + s.substring(i + 11);
+				s = s.substring(ndx, i) + fname + s.substring(i + 11);
 				ndx = i + fname.length();
 			}
 			ndx = 0;
 			while ((i = s.indexOf("&{PATHNAME}", ndx)) > 0) {
-				s = s.substring(ndx, i)
-					+ pathname + s.substring(i + 11);
+				s = s.substring(ndx, i) + pathname + s.substring(i + 11);
 				ndx = i + pathname.length();
 			}
-			if (_linePos >= 0
-				&& _lastCommentLine == _linePos
-				&& _lastCommentStart <= _linePos) {
+			if (_linePos >= 0 && _lastCommentLine == _linePos && _lastCommentStart <= _linePos) {
 				if (!_tailKeep) {
 					_sb.delete(_lastCommentStart, _sb.length());
 					//remove final empty lines
-					while((i = _sb.length()) > 0
-						&& _sb.charAt(--i) <= ' ') {
+					while((i = _sb.length()) > 0 && _sb.charAt(--i) <= ' ') {
 						_sb.deleteCharAt(i);
 					}
 					if (s.length() > 0) {
@@ -337,8 +309,7 @@ public class CanonizeSource {
 			}
 		}
 		// remove all final white spaces
-		while(_sb.length() > 0
-			&& _sb.charAt(_sb.length() - 1) <= ' ') {
+		while(_sb.length() > 0 && _sb.charAt(_sb.length() - 1) <= ' ') {
 			_sb.deleteCharAt(_sb.length() - 1);
 			modified = true;
 		}
@@ -347,8 +318,7 @@ public class CanonizeSource {
 			int i;
 			String s = _header;
 			while ((i = s.indexOf("&{FILENAME}", ndx)) > 0) {
-				s = s.substring(ndx, i)
-					+ fname + s.substring(i + 11);
+				s = s.substring(ndx, i) + fname + s.substring(i + 11);
 				ndx = i + fname.length();
 			}
 			if (_firstCommentStart == 0) {
@@ -382,8 +352,7 @@ public class CanonizeSource {
 		}
 		if (_errors > 0) {
 			_out.flush();
-			_err.println("[ERROR] " +
-				_errors +  " error(s) detected in " + fi.getAbsolutePath());
+			_err.println("[ERROR] " + _errors +  " error(s) detected in " + fi.getAbsolutePath());
 			return;
 		}
 		_processedCount++;
@@ -415,8 +384,7 @@ public class CanonizeSource {
 					renamed = new File(fi.getAbsoluteFile() + ".bak");
 					if (renamed.exists()) {
 						if (!renamed.delete()) {
-							error("Can't delete file "
-								+ renamed.getAbsoluteFile());
+							error("Can't delete file " + renamed.getAbsoluteFile());
 						}
 					}
 					if (!fi.renameTo(renamed)) {
@@ -507,8 +475,7 @@ public class CanonizeSource {
 		}
 		File fi = new File(info);
 		if (!fi.exists()) {
-			throw new Exception(
-				"Input file doesn't exist: " + fi.getAbsolutePath());
+			throw new Exception("Input file doesn't exist: " + fi.getAbsolutePath());
 		}
 		if (!fi.canRead()) {
 			throw new Exception("Can't access file: " +  fi.getAbsolutePath());
@@ -516,16 +483,14 @@ public class CanonizeSource {
 		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader in = charset != null
-				? new BufferedReader(new InputStreamReader(
-					new FileInputStream(fi), charset))
+				? new BufferedReader(new InputStreamReader(new FileInputStream(fi), charset))
 				: new BufferedReader(new FileReader(fi));
 			String line;
 			while ((line = in.readLine()) != null) { //process all lines
 				//cut final white spaces
 				int len = line.length();
 				//remove final white spaces.
-				while((len > 0)
-					&& line.charAt(len - 1) <= ' ') {
+				while((len > 0) && line.charAt(len - 1) <= ' ') {
 					len--;
 				}
 				int linePos = sb.length();
@@ -563,27 +528,22 @@ public class CanonizeSource {
 				if (mask.length() == 0) {
 					date = DateFormat.getDateTimeInstance().format(datetime);
 				} else {
-					date =
-						new SimpleDateFormat(mask).format(datetime);
+					date = new SimpleDateFormat(mask).format(datetime);
 				}
-				result = result.substring(ndx, i)
-					+ date + result.substring(j + 1);
+				result = result.substring(ndx, i) + date + result.substring(j + 1);
 				ndx = i + date.length();
 			}
 			// replace &{ISODATE} parameters
 			ndx = 0;
 			while ((i = result.indexOf("&{ISODATE}", ndx)) > 0) {
-				String date = new SimpleDateFormat("yyyy-MM-DD'T'HH:mm:ssZ")
-					.format(datetime);
-				result = result.substring(ndx, i)
-					+ date + result.substring(i + 10);
+				String date = new SimpleDateFormat("yyyy-MM-DD'T'HH:mm:ssZ").format(datetime);
+				result = result.substring(ndx, i) + date + result.substring(i + 10);
 				ndx = i + date.length();
 			}
 			// replace &{USER} parameters
 			ndx = 0;
 			while ((i = result.indexOf("&{USER}", ndx)) > 0) {
-				result = result.substring(ndx, i)
-					+ user + result.substring(i + 7);
+				result = result.substring(ndx, i) + user + result.substring(i + 7);
 				ndx = i + user.length();
 			}
 			return result;
@@ -647,11 +607,7 @@ public class CanonizeSource {
 			//read header template file
 			cs._header = updateInfo(header, datetime, user, "header", charset);
 			if (cs._header != null && cs._header.length() > 0) {
-				if (genCR) {
-					cs._header += "\r\n\r\n";
-				} else  {
-					cs._header += "\n\n";
-				}
+				cs._header += genCR ? "\r\n\r\n" : "\n\n";
 			}
 			cs._headerKeep = headerKeep;
 			//read tail template file
@@ -717,8 +673,7 @@ public class CanonizeSource {
 			err.flush();
 		}
 		if (verbose && out != null && cs._processedCount > 0) {
-			out.println("Inspected " + cs._processedCount
-				+ " file(s), changed " + cs._modifyCount + ".");
+			out.println("Inspected " + cs._processedCount + " file(s), changed " + cs._modifyCount + ".");
 			out.flush();
 		}
 		System.out.println("Processed " + cs._lines + " lines.");
@@ -727,13 +682,11 @@ public class CanonizeSource {
 
 	/** Call CanonizeSource from program.
 	 * @param args Array of strings with command line parameters (see {@link CanonizeSource}).
-	 * @param out The printstream where will be printed output messages.
-	 * @param err The printstream where will be printed input messages.
+	 * @param out PrintStream where will be printed output messages.
+	 * @param err PrintStream where will be printed input messages.
 	 * @return string with error message if the program can't work due to parameter error or return null.
 	 */
-	public static String canonize(final String[] args,
-		final PrintStream out,
-		final PrintStream err) {
+	public static String canonize(final String[] args, final PrintStream out, final PrintStream err) {
 		if (args.length < 1) {
 			return "Required parameters are missing.";
 		}
@@ -783,7 +736,7 @@ public class CanonizeSource {
 							return "Incorrect value of switch '-t' or '-s'";
 						}
 					} catch (NumberFormatException ex) {
-						return "after the switch '-n' should be number.";
+						return "after the switch '-n' should be a number.";
 					}
 				} else {
 					return "after the switch '-n' is required a number.";
@@ -816,8 +769,7 @@ public class CanonizeSource {
 					try {
 						replacement = Integer.parseInt(s);
 					} catch (NumberFormatException ex) {
-						return
-							"after the switch '-t' or '-s' should be number.";
+						return "after the switch '-t' or '-s' should be a number.";
 					}
 				}
 			} else if (args[i].equals("-v")) {
@@ -866,8 +818,7 @@ public class CanonizeSource {
 				if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
 					s = args[++i];
 				} else {
-					return "Missing specification of header information file("
-						+ args[i] + ")";
+					return "Missing specification of header information file(" + args[i] + ")";
 				}
 				if (s.length() > 0) {
 					if ("nul".equalsIgnoreCase(s)) {
@@ -891,8 +842,7 @@ public class CanonizeSource {
 				if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
 					s = args[++i];
 				} else {
-					return "Missing specification of tail information file ("
-						+ args[i] + ")";
+					return "Missing specification of tail information file (" + args[i] + ")";
 				}
 				if (s.length() > 0) {
 					if ("nul".equalsIgnoreCase(s)) {
@@ -920,7 +870,6 @@ public class CanonizeSource {
 		if (f.isDirectory()) {
 			return "Input file can't be directory.";
 		}
-
 		return canonize(input,
 			outDir,
 			dirTree,
@@ -943,9 +892,8 @@ public class CanonizeSource {
 	 * @param dirTree if true the child directories are processed too.
 	 * @param tabs if true, leading spaces are replaced by tabs, if false the leading tabs are replaced
 	 * by spaces.
-	 * @param n the number of spaces per tab. If this argument is -1 then no modifications of leading spaces
-	 * is done.
-	 * @param header the name of file containing string with header ("copyright") information which will
+	 * @param n number of spaces per tab. If this argument is -1 no modifications of leading spaces is done.
+	 * @param header name of file containing string with header ("copyright") information which will
 	 * be inserted or replaced as the top of the source. If the file is the empty (i.e. it has the zero
 	 * length) the header information is deleted. If this argument is null no header information is processed.
 	 * Note the information is considered in the form of Java or "C" comment.
@@ -1000,19 +948,11 @@ public class CanonizeSource {
 			}
 			if (header != null) {
 				myArgs[ndx++] = "-c";
-				if (header.length() == 0) {
-					myArgs[ndx++] = "nul";
-				} else {
-					myArgs[ndx++] = header;
-				}
+				myArgs[ndx++] = header.length() == 0 ?"nul" : header;
 			}
 			if (tail != null) {
 				myArgs[ndx++] = "-e";
-				if (tail.length() == 0) {
-					myArgs[ndx++] = "nul";
-				} else {
-					myArgs[ndx++] = tail;
-				}
+				myArgs[ndx++] = tail.length() == 0 ? "nul" : tail;
 			}
 			if (charset != null && !charset.trim().isEmpty()) {
 				myArgs[ndx++] = "-encoding";
@@ -1020,7 +960,6 @@ public class CanonizeSource {
 			}
 			String errMsg = canonize(myArgs, System.out, System.err);
 			if (errMsg != null) {
-//				System.err.println("[ERROR] " + errMsg);
 				throw new RuntimeException("[ERROR] " + errMsg);
 			}
 		} catch (RuntimeException ex) {
@@ -1047,8 +986,7 @@ public class CanonizeSource {
 +"inserted (or the old one is replaced) as a comment on the top of source data.\n"
 +"If -e switch is set on then the final information is added to the end of source\n"
 +"data. If the switch is -cc or -ee the existing information is not replaced.\n"
-		: "[ERROR] " + msg + "\n"
-		)
+		: "[ERROR] " + msg + "\n" )
 +"usage: -i input [-r] [-o outDir] [(-t|-s) [n]] [-n n] [-h] [-c hdr] [-e tail]\n"
 +"where\n"
 +"-i input The input may be specified as a file or as the group of files\n"

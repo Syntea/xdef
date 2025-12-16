@@ -1337,6 +1337,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 			"ref",			// 4
 		};
 		int command = isOneOfTokens(commands);
+		boolean isInterface = command == 0;
 		boolean isClass = command == 1;
 		boolean isRef = command == 4;
 		if (command >= 0 && isBlanksAndComments()) {
@@ -1442,9 +1443,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 		skipBlanksAndComments();
 		setLastPosition();
 		if (isToken("extends")) {
-			if (!isClass) { // not %class
-				error(XDEF.XDEF363, "extends");//{0} is not allowed here
-			} else {
+			if (isClass || isInterface) { // %class or %interface
 				if (isBlanksAndComments()) {
 					setLastPosition();
 					if (isJavaTypedQName()) {
@@ -1459,6 +1458,8 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
 					error(XDEF.XDEF356, "class name");//'&{0}' expected
 					return null;
 				}
+			} else {
+				error(XDEF.XDEF363, "extends");//{0} is not allowed here
 			}
 		}
 		boolean isImplements = false;

@@ -55,14 +55,10 @@ public class TestKDOMBuilder extends XDTester {
 		System.out.print("level: " + level + ", " + node.getNodeName() + ", ");
 		switch (node.getNodeType()) {
 			case Node.ATTRIBUTE_NODE:
-				System.out.println("(ATTRIBUTE) value: '" + node.getNodeValue() + "'");
-				return;
+				System.out.println("(ATTRIBUTE) value: '" + node.getNodeValue() + "'"); return;
 			case Node.CDATA_SECTION_NODE:
-				System.out.println("(CDATA_SECTION) value: '" + node.getNodeValue() + "'");
-				return;
-			case Node.COMMENT_NODE:
-				System.out.println("(COMMENT)");
-				return;
+				System.out.println("(CDATA_SECTION) value: '" + node.getNodeValue() + "'"); return;
+			case Node.COMMENT_NODE: System.out.println("(COMMENT)"); return;
 			case Node.DOCUMENT_FRAGMENT_NODE:
 				System.out.println("(DOCUMENT_FRAGMENT)");
 				displayNodeList(node.getChildNodes(), level + 1);
@@ -87,15 +83,11 @@ public class TestKDOMBuilder extends XDTester {
 				System.out.print("(ENTITY_REFERENCE) value: '" + node.getNodeValue() + "'");
 				displayNodeList(node.getChildNodes(), level + 1);
 				return;
-			case Node.NOTATION_NODE:
-				System.out.println("(NOTATION)");
-				return;
+			case Node.NOTATION_NODE: System.out.println("(NOTATION)"); return;
 			case Node.PROCESSING_INSTRUCTION_NODE:
 				System.out.println("(PROCESSING_INSTRUCTION) value: '" + node.getNodeValue() + "'");
 				return;
-			case Node.TEXT_NODE:
-				System.out.println("(TEXT) value: '" + node.getNodeValue() + "'");
-				return;
+			case Node.TEXT_NODE: System.out.println("(TEXT) value: '" + node.getNodeValue() + "'"); return;
 			default:
 				System.out.println("(UNKNOWN) value: '" + node.getNodeValue() + "'");
 				displayNodeList(node.getChildNodes(), level + 1);
@@ -567,13 +559,12 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(false);
 			builder.setCoalescing(false);
 			builder.setValidating(true);
-			data = "<!-- t1 -->\n"
-				+ "<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n"
-				+ "<!ENTITY e2 \"&e1;e\">\n"
-				+ "<!ELEMENT a (#PCDATA)>\n"
-				+ "<!ATTLIST a b CDATA #REQUIRED>\n]>"
-				+ "<a b='&e2;'>&lt;x&e2;y&gt;</a>"
-				+ "<!-- t2 -->";
+			data =
+"<!-- t1 -->\n" +
+"<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n" +
+"<!ENTITY e2 \"&e1;e\">\n" +
+"<!ELEMENT a (#PCDATA)>\n" +
+"<!ATTLIST a b CDATA #REQUIRED>\n]><a b='&e2;'>&lt;x&e2;y&gt;</a><!-- t2 -->";
 			doc = builder.parse(data);
 			dt = doc.getDoctype();
 			try {
@@ -613,10 +604,11 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setCoalescing(true);
 			builder.setValidating(true);
-			doc = builder.parse("<!DOCTYPE a [<!ENTITY a \"abc\">\n"
-				+ "<!ELEMENT a (#PCDATA)>\n"
-				+ "<!ATTLIST a b CDATA #REQUIRED>\n]>"
-				+ "<a b='&a;'>&lt;x&a;y&gt;</a>");
+			doc = builder.parse(
+"<!DOCTYPE a [<!ENTITY a \"abc\">\n" +
+"<!ELEMENT a (#PCDATA)>\n" +
+"<!ATTLIST a b CDATA #REQUIRED>\n]>" +
+"<a b='&a;'>&lt;x&a;y&gt;</a>");
 			el = doc.getDocumentElement();
 			assertEq("abc", el.getAttributeNode("b").getValue());
 			if (el.getChildNodes().getLength() != 1) {
@@ -640,13 +632,6 @@ public class TestKDOMBuilder extends XDTester {
 			} catch (DOMException ex) {
 				assertEq(ex.code, DOMException.NO_MODIFICATION_ALLOWED_ERR, ex);
 			}
-//			try {
-//				e.setNodeValue("b");
-//				assertNull(e.getNodeValue());
-//				fail("Exception not thrown");
-//			} catch (DOMException ex) {//new version of javax
-//				assertEq(ex.code, DOMException.NO_MODIFICATION_ALLOWED_ERR, ex);
-//			}
 			try {
 				e.normalize();
 			} catch (Exception ex) {fail(ex);}
@@ -665,13 +650,13 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(false);
 			builder.setCoalescing(false);
 			builder.setValidating(true);
-			data = "<!-- t1 -->\n"
-				+ "<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n"
-				+ "<!ENTITY e2 \"&e1;<b>?</b>e\">\n"
-				+ "<!ELEMENT a (#PCDATA|b)*>\n"
-				+ "<!ELEMENT b (#PCDATA)>\n]>\n"
-				+ "<a>&lt;x&e2;y&gt;</a>"
-				+ "<!-- t2 -->";
+			data =
+"<!-- t1 -->\n" +
+"<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n" +
+"<!ENTITY e2 \"&e1;<b>?</b>e\">\n" +
+"<!ELEMENT a (#PCDATA|b)*>\n" +
+"<!ELEMENT b (#PCDATA)>\n]>\n" +
+"<a>&lt;x&e2;y&gt;</a><!-- t2 -->";
 			doc = builder.parse(data);
 			el = doc.getDocumentElement();
 			nl = el.getChildNodes();
@@ -694,25 +679,25 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setCoalescing(true);
 			builder.setValidating(true);
-			data = "<!-- t1 -->\n"
-				+ "<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n"
-				+ "<!ENTITY e2 \"&e1;<b>?</b>e\">\n"
-				+ "<!ELEMENT a (#PCDATA|b)*>\n"
-				+ "<!ELEMENT b (#PCDATA)>\n]>\n"
-				+ "<a>&lt;x&e2;y&gt;</a>"
-				+ "<!-- t2 -->";
+			data =
+"<!-- t1 -->\n" +
+"<!DOCTYPE a [\n<!ENTITY e1 \"abcd\">\n" +
+"<!ENTITY e2 \"&e1;<b>?</b>e\">\n" +
+"<!ELEMENT a (#PCDATA|b)*>\n" +
+"<!ELEMENT b (#PCDATA)>\n]>\n" +
+"<a>&lt;x&e2;y&gt;</a><!-- t2 -->";
 			doc = builder.parse(data);
 			el = doc.getDocumentElement();
 			assertEq("<a>&lt;xabcd<b>?</b>ey></a>", KXmlUtils.nodeToString(el));
 			//getWholeText, replaceWholeText, getTextContent, setTextContent
-			data = "<!-- t1 -->\n"
-				+ "<!DOCTYPE a [\n<!ENTITY a \"abcd\">\n<!ENTITY b \"&a;e\">\n"
-				+ "<!ELEMENT a ANY>\n"
-				+ "<!ATTLIST a b CDATA #IMPLIED>\n"
-				+ "<!ELEMENT b ANY>\n"
-				+ "<!ELEMENT c ANY>]>\n"
-				+ "<a b='&a;'>&lt;x&b;<![CDATA[y>]]><b>q</b>xx<c/></a>"
-				+ "<!-- t1 -->";
+			data =
+"<!-- t1 -->\n" +
+"<!DOCTYPE a [\n<!ENTITY a \"abcd\">\n<!ENTITY b \"&a;e\">\n" +
+"<!ELEMENT a ANY>\n" +
+"<!ATTLIST a b CDATA #IMPLIED>\n" +
+"<!ELEMENT b ANY>\n" +
+"<!ELEMENT c ANY>]>\n" +
+"<a b='&a;'>&lt;x&b;<![CDATA[y>]]><b>q</b>xx<c/></a><!-- t1 -->";
 			builder = new KDOMBuilder();
 			builder.setCoalescing(false);
 			builder.setExpandEntityReferences(false);
@@ -796,13 +781,13 @@ public class TestKDOMBuilder extends XDTester {
 			MyHandler u1 = new MyHandler();
 			MyHandler u2 = new MyHandler();
 			MyHandler u3 = new MyHandler();
-			data = "<!-- t1 -->\n"
-				+ "<!DOCTYPE a [\n<!ENTITY a \"abcd\">\n"
-				+ "<!ELEMENT a (#PCDATA|b|c)*>\n"
-				+ "<!ELEMENT b (#PCDATA)*>\n"
-				+ "<!ENTITY b \"&a;e\">\n]>"
-				+ "<a b='&a;'>&lt;x&b;<![CDATA[y>]]><b>q</b>xx<c/></a>"
-				+ "<!-- t1 -->";
+			data =
+"<!-- t1 -->\n" +
+"<!DOCTYPE a [\n<!ENTITY a \"abcd\">\n" +
+"<!ELEMENT a (#PCDATA|b|c)*>\n" +
+"<!ELEMENT b (#PCDATA)*>\n" +
+"<!ENTITY b \"&a;e\">\n]>" +
+"<a b='&a;'>&lt;x&b;<![CDATA[y>]]><b>q</b>xx<c/></a><!-- t1 -->";
 			builder = new KDOMBuilder();
 			builder.setCoalescing(false);
 			builder.setExpandEntityReferences(false);
@@ -829,12 +814,11 @@ public class TestKDOMBuilder extends XDTester {
 			assertTrue(a == u3._src, "src: " + u3._src);
 			assertTrue(n == u3._dst, "dst: " + u3._src);
 			//parse
-			data = "<!-- t1 -->"
-				+ "<!DOCTYPE a [\n<!ENTITY a \"abcd\">\n<!ENTITY b \"&a;e\">\n"
-				+ "<!ELEMENT a ANY>\n"
-				+ "<!ATTLIST a b CDATA #IMPLIED>]>\n"
-				+ "<a b='&a;'>&lt;x&b;y&gt;</a>"
-				+ "<!-- t1 -->";
+			data =
+"<!-- t1 --><!DOCTYPE a [\n<!ENTITY a \"abcd\">\n<!ENTITY b \"&a;e\">\n" +
+"<!ELEMENT a ANY>\n" +
+"<!ATTLIST a b CDATA #IMPLIED>]>\n" +
+"<a b='&a;'>&lt;x&b;y&gt;</a><!-- t1 -->";
 			builder = new KDOMBuilder();
 			builder.setExpandEntityReferences(false);
 			builder.setValidating(true);
@@ -854,10 +838,11 @@ public class TestKDOMBuilder extends XDTester {
 				fail("setExpandEntityReferences false");
 			}
 			builder.setExpandEntityReferences(true);
-			doc = builder.parse("<!DOCTYPE a [<!ENTITY a \"abc\">\n"
-				+ "<!ELEMENT a ANY>\n"
-				+ "<!ATTLIST a b CDATA #IMPLIED>]>\n"
-				+ "<a b='&a;'>&lt;x&a;y&gt;</a>");
+			doc = builder.parse(
+"<!DOCTYPE a [<!ENTITY a \"abc\">\n" +
+"<!ELEMENT a ANY>\n" +
+"<!ATTLIST a b CDATA #IMPLIED>]>\n" +
+"<a b='&a;'>&lt;x&a;y&gt;</a>");
 			el = doc.getDocumentElement();
 			s = el.getAttributeNode("b").getValue();
 			assertEq("abc", s);
@@ -910,14 +895,6 @@ public class TestKDOMBuilder extends XDTester {
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);
 			builder.setValidating(false);
-/* this test fails *
-			doc = builder.parse(data);
-			el = doc.getDocumentElement();
-			assertEq(":a", el.getTagName());
-			assertEq(":a", el.getNodeName());
-			assertEq("a", el.getLocalName());
-			assertEq("", el.getPrefix());
-/**/
 			//parse
 			data = "<a: xmlns:a = 'xyz'>\n</a:>";
 			builder = new KDOMBuilder();
@@ -1322,9 +1299,10 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(true);
 			builder.setIgnoringComments(false);
-			data = "<!DOCTYPE a [<!ELEMENT a EMPTY>\n"
-				+ "<!ATTLIST a b CDATA #REQUIRED>]>\n"
-				+ "<a b=''/>";
+			data =
+"<!DOCTYPE a [<!ELEMENT a EMPTY>\n" +
+"<!ATTLIST a b CDATA #REQUIRED>]>\n" +
+"<a b=''/>";
 			builder.parse(data);
 		} catch (DOMException ex) {
 			fail(ex);
@@ -1335,12 +1313,13 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(true);
 			builder.setIgnoringComments(false);
-			data = "<!DOCTYPE a [\n" //notation B is missing
-				+ "<!ELEMENT a EMPTY>\n"
-				+ "<!ATTLIST a b NOTATION (A | B) #REQUIRED>\n" +
-				"<!NOTATION A PUBLIC \"Test\" >\n"
-				+ "]>\n"
-				+ "<a b = 'A'/>";
+			data =
+"<!DOCTYPE a [\n" + //notation B is missing
+"<!ELEMENT a EMPTY>\n" +
+"<!ATTLIST a b NOTATION (A | B) #REQUIRED>\n" +
+"<!NOTATION A PUBLIC \"Test\" >\n" +
+"]>\n" +
+"<a b = 'A'/>";
 			builder.parse(data);
 			fail("Error not thrown");
 		} catch (SRuntimeException ex) {
@@ -1403,13 +1382,14 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(true);
 			builder.setIgnoringComments(false);
-			data = "<!DOCTYPE a [\n" //C is not notation
-				+ "<!ELEMENT a EMPTY>\n"
-				+ "<!ATTLIST a b NOTATION (A | B) #REQUIRED>\n"
-				+ "<!NOTATION A PUBLIC \"Test\" >\n"
-				+ "<!NOTATION B SYSTEM \"Test1\" >\n"
-				+ "]>\n"
-				+ "<a b = 'C'/>";
+			data =
+"<!DOCTYPE a [\n" + //C is not notation
+"<!ELEMENT a EMPTY>\n" +
+"<!ATTLIST a b NOTATION (A | B) #REQUIRED>\n" +
+"<!NOTATION A PUBLIC \"Test\" >\n" +
+"<!NOTATION B SYSTEM \"Test1\" >\n" +
+"]>\n" +
+"<a b = 'C'/>";
 			builder.parse(data);
 			fail("Error not thrown");
 		} catch (SRuntimeException ex) {
@@ -1424,11 +1404,12 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(true);
 			builder.setIgnoringComments(false);
-			data = "<!DOCTYPE a [<!ELEMENT a (#PCDATA | b)* >\n"
-				+ "<!ELEMENT b EMPTY>\n"
-				+ "<!ATTLIST a xmlns CDATA #FIXED 'a.b.c'>\n"
-				+ "<!ATTLIST b xmlns CDATA #FIXED 'd.e.f'>]>\n"
-				+ "<a><b/></a>";
+			data =
+"<!DOCTYPE a [<!ELEMENT a (#PCDATA | b)* >\n" +
+"<!ELEMENT b EMPTY>\n" +
+"<!ATTLIST a xmlns CDATA #FIXED 'a.b.c'>\n" +
+"<!ATTLIST b xmlns CDATA #FIXED 'd.e.f'>]>\n" +
+"<a><b/></a>";
 			doc = builder.parse(data);
 			el = doc.getDocumentElement();
 			if (el == null) {
@@ -1439,13 +1420,14 @@ public class TestKDOMBuilder extends XDTester {
 			el1 = (Element) el.getFirstChild();
 			assertEq("d.e.f", el1.getAttribute("xmlns"));
 			assertEq("d.e.f", el1.getNamespaceURI());
-			data = "<!DOCTYPE x:a [<!ELEMENT x:a (#PCDATA | y:b)* >\n"+
-				"<!ELEMENT y:b EMPTY>\n"+
-				"<!ATTLIST x:a xmlns:x CDATA #FIXED 'a.b.c'\n" +
-				"          xml:lang CDATA 'en'\n"+
-				"          xml:space CDATA #FIXED 'preserve'>\n"+
-				"<!ATTLIST y:b xmlns:y CDATA #FIXED 'd.e.f'>]>\n"+
-				"<x:a><y:b/></x:a>";
+			data =
+"<!DOCTYPE x:a [<!ELEMENT x:a (#PCDATA | y:b)* >\n" +
+"<!ELEMENT y:b EMPTY>\n" +
+"<!ATTLIST x:a xmlns:x CDATA #FIXED 'a.b.c'\n" +
+"          xml:lang CDATA 'en'\n" +
+"          xml:space CDATA #FIXED 'preserve'>\n" +
+"<!ATTLIST y:b xmlns:y CDATA #FIXED 'd.e.f'>]>\n" +
+"<x:a><y:b/></x:a>";
 			doc = builder.parse(data);
 			el = doc.getDocumentElement();
 			if (el == null) {
@@ -1476,12 +1458,13 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(true);
 			builder.setIgnoringComments(false);
-			data = "<!DOCTYPE a [\n"
-				+ "<!ELEMENT a EMPTY>\n"
-				+ "<!ATTLIST a b CDATA #REQUIRED>\n"
-				+ "<?PI pi?>\n"
-				+ "]>\n"
-				+ "<a b = 'A'/>";
+			data =
+"<!DOCTYPE a [\n" +
+"<!ELEMENT a EMPTY>\n" +
+"<!ATTLIST a b CDATA #REQUIRED>\n" +
+"<?PI pi?>\n" +
+"]>\n" +
+"<a b = 'A'/>";
 			doc = builder.parse(data);
 			dt = doc.getDoctype();
 			el = doc.getDocumentElement();
@@ -1555,8 +1538,7 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(false);
 			builder.setValidating(false);
 			builder.setIgnoringComments(false);
-			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:space='preserve'"
-				+ " xml:lang='en' a='a' >"
+			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:space='preserve' xml:lang='en' a='a' >"
 				+ "<b:b b='b' b:b='c' /></a>\n");
 			el = doc.getDocumentElement();
 			assertEq("a", el.getNamespaceURI());
@@ -1577,15 +1559,13 @@ public class TestKDOMBuilder extends XDTester {
 			if (!"b".equals(s = el1.getAttributeNode("b:b").getNamespaceURI())){
 				fail(s);
 			}
-			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:space='xyz'"
-				+ " xml:lang='en' a='a' >"
+			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:space='xyz' xml:lang='en' a='a' >"
 				+ "<b:b b='b' b:b='c' /></a>\n");
 			el = doc.getDocumentElement();
 			assertEq("http://www.w3.org/XML/1998/namespace",
 				el.getAttributeNode("xml:space").getNamespaceURI());
 			assertEq("xyz", el.getAttribute("xml:space"));
-			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:SPACE='preserve'"
-				+ " xml:LANG='en' a='a' >"
+			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:SPACE='preserve' xml:LANG='en' a='a' >"
 				+ "<b:b b='b' b:b='c' /></a>\n");
 			el = doc.getDocumentElement();
 			assertEq("http://www.w3.org/XML/1998/namespace",
@@ -1593,8 +1573,7 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq("http://www.w3.org/XML/1998/namespace",
 				el.getAttributeNode("xml:LANG").getNamespaceURI());
 			try {
-				builder.parse("<a XMLNS='a' XMLNS:b='b' XML:space='preserve'"
-					+ " XML:lang='en' a='a' >"
+				builder.parse("<a XMLNS='a' XMLNS:b='b' XML:space='preserve' XML:lang='en' a='a' >"
 					+ "<b:b b='b' b:b='c' /></a>\n");
 				fail("Error not thrown");
 			} catch (Exception ex) {
@@ -1636,8 +1615,7 @@ public class TestKDOMBuilder extends XDTester {
 				}
 			}
 			try {
-				el1.setAttributeNS("http://www.w3.org/2000/xmlns/",
-					"xml:space", "preserve");
+				el1.setAttributeNS("http://www.w3.org/2000/xmlns/", "xml:space", "preserve");
 				fail("Error not thrown");
 			} catch (DOMException ex) {
 				if (ex.code != DOMException.NAMESPACE_ERR) {
@@ -1703,8 +1681,7 @@ public class TestKDOMBuilder extends XDTester {
 			}
 			try {
 				el1 = doc.createElementNS(null, "a");
-				el1.setAttributeNS("http://www.w3.org/2000/xmlns/", //NSURI_XMLNS
-					"xmlns", "c.d");
+				el1.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "c.d"); //NSURI_XMLNS
 			} catch (DOMException ex) {	fail(ex);}
 			//test NodeList, NamedNodeList
 			builder = new KDOMBuilder();
@@ -1784,8 +1761,8 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(false);
 			builder.setIgnoringComments(false);
-			builder.parse("<root atr=\"atr1\" xmlns=\"a\">\n"+
-				"<child xmlns:u=\"t\" xmlns:v=\"t\"\n"+
+			builder.parse("<root atr=\"atr1\" xmlns=\"a\">\n" +
+				"<child xmlns:u=\"t\" xmlns:v=\"t\"\n" +
 				" childAtr1='atr1' u:childAtr2='atr3' v:childAtr2=\"atr2\"/>\n"+
 				"</root>\n");
 			fail("Error not thrown");
@@ -1818,7 +1795,7 @@ public class TestKDOMBuilder extends XDTester {
 			assertEq("a", el.getNodeName());
 			nl = el.getChildNodes();
 			assertTrue(nl != null && nl.getLength() == 1
-				&&"\n  <b>txt</b>\n".equals(el.getFirstChild().getNodeValue()));
+				&& "\n  <b>txt</b>\n".equals(el.getFirstChild().getNodeValue()));
 			//test include - href not exists (no fallback)
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);

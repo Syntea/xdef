@@ -416,9 +416,8 @@ class XCGeneratorBase {
 		final StringBuilder sbi) {
 		final String typ = getJavaObjectTypeName(xdata);
 		genVariableFromModel(xdata,typ,name,max,descr,vars);
-		genGetterMethodFromChildElement(xdata,typ,name,max,descr,getters,sbi);
-		genSetterMethodOfChildElement(
-			typ, name, max, null, null, null, descr, setters, sbi, "");
+		genGetterMethodFromChildElement(xdata, typ, name, max, descr, getters, sbi);
+		genSetterMethodOfChildElement(typ, name, max, null, null, null, descr, setters, sbi, "");
 		// gen "xposOf" method
 		if (sbi != null) {
 			xpathes.append("\t@Override").append(LN);
@@ -528,8 +527,24 @@ class XCGeneratorBase {
 				"&{name}", name,
 				"&{typ}", typ));
 				if (typeName.contains("org.xdef.sys.SDatetime")) {
+					sbi.append(modify(
+(_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
+"\t * @return value of &{d} as java.util.Date or null."+LN+
+"\t */"+LN : "")+
+"\t"+publ+" java.util.Date dateOf&{name}();"+LN+
+(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+LN+
+"\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
+"\t */"+LN : "")+
+"\t"+publ+" java.sql.Timestamp timestampOf&{name}();"+LN+
+(_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
+"\t * @return value of &{d} as java.util.Calendar or null."+LN+
+"\t */"+LN : "")+
+"\t"+publ+" java.util.Calendar calendarOf&{name}();"+LN,
+						"&{xmlName}", xmlName,
+						"&{d}" , d,
+						"&{name}", name));
 					// datetime getters
-					sb.append(modify(
+					sb.append("\t@Override").append(LN).append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+

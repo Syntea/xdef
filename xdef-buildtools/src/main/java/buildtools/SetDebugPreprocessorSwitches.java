@@ -3,7 +3,7 @@ package buildtools;
 import java.io.File;
 import java.io.IOException;
 
-/** Modify sources with the "DEBUG" switch of prepocessor.
+/** Modify sources with the "DEBUG" switch.
  * @author Vaclav Trojan
  */
 public class SetDebugPreprocessorSwitches {

@@ -117,7 +117,7 @@ public class TestXon extends XDTester {
 			assertNull(testM("string", "{}"));
 			assertNull(testM("int", "{a:null, b:1}"));
 			assertNull(testM("jvalue", "{a:true, b:null, c:\"a\\\"b\"}"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			genXComponent(xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' name='M' root='y:X' xmlns:y='a.b'>\n" +
@@ -1720,8 +1720,8 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xd.yparse(XonUtils.toYamlString(x), reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-		} catch (SRuntimeException ex) {
-			if ("JSON101".equals(ex.getMsgID())) {
+		} catch (RuntimeException ex) {
+			if (ex instanceof SRuntimeException && "JSON101".equals(((SRuntimeException) ex).getMsgID())) {
 				setResultInfo("YAML tests skipped; org.yaml.snakeyaml is not available");
 			} else {
 				fail(ex);
@@ -1807,7 +1807,8 @@ public class TestXon extends XDTester {
 "  <xd:declaration>uniqueSet variableSet {variableName: string(2,30)};/*check duplicity*/</xd:declaration>\n"+
 "  <A>\n" +
 "    <Variables xd:script='*' name='variableSet.variableName.ID()'/>\n" +
-"    <Status xd:script='*' TimeOverStep='? string(1) || variableSet.variableName.IDREFS()' ChangeLog='? string()' />\n" +
+"    <Status xd:script='*'\n" +
+"            TimeOverStep='? string(1) || variableSet.variableName.IDREFS()' ChangeLog='? string()' />\n" +
 "  </A>\n" +
 "\n" +
 "  <xd:json name='SynPLscript'>\n" +
@@ -1843,6 +1844,7 @@ public class TestXon extends XDTester {
 			assertTrue(reporter.getErrorCount() == 1);
 			reporter.clear();
 		} catch (RuntimeException ex) {fail(ex);}
+
 		if (oldCodes != null) {
 			setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
 		}

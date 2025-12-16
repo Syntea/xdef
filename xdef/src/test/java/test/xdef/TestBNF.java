@@ -13,11 +13,10 @@ public final class TestBNF extends XDTester {
 	@Override
 	public void test() {
 		XDPool xp;
-		String xdef;
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		try {
-			xdef =
+			xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
 "  <root> required myType() </root>\n"+
@@ -36,12 +35,11 @@ public final class TestBNF extends XDTester {
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "  </xd:BNFGrammar>\n"+
 "</xd:def>\n"+
-"</xd:collection>";
-			xp = compile(xdef);
+"</xd:collection>");
 			xml = "<root>123, 456, 789</root>";
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef =
+			xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
 "  <root> required myType; </root>\n"+
@@ -62,15 +60,14 @@ public final class TestBNF extends XDTester {
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "  </xd:BNFGrammar>\n"+
 "</xd:def>\n"+
-"</xd:collection>";
-			xp = compile(xdef);
+"</xd:collection>");
 			xml = "<root>123, 456, 789</root>";
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xml = "<root>1a</root>";
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertErrors(reporter);
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
@@ -81,12 +78,11 @@ public final class TestBNF extends XDTester {
 "  type intList rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
+"</xd:def>");
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
@@ -97,12 +93,11 @@ public final class TestBNF extends XDTester {
 "  type intList rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
+"</xd:def>");
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
 "    BNFGrammar rrr = new BNFGrammar('\n"+
@@ -113,14 +108,13 @@ public final class TestBNF extends XDTester {
 "  type intList rrr.rule('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
+"</xd:def>");
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // BNF
-			xdef =
+			xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name = 'test' root='a'>\n"+
 "  <a>required myType()</a>\n"+
@@ -138,8 +132,7 @@ public final class TestBNF extends XDTester {
 "    type myType rrr.parse('list');\n"+
 "  </xd:declaration>\n"+
 "</xd:def>\n"+
-"</xd:collection>";
-			xp = compile(xdef);
+"</xd:collection>");
 			xml = "<a>123</a>";
 			assertEq(xml, parse(xp, "test", xml, reporter));
 			assertNoErrorwarnings(reporter);
@@ -152,7 +145,7 @@ public final class TestBNF extends XDTester {
 			xml = "<a>Arthur C Clark, Jack London</a>";
 			parse(xp, "test", xml, reporter);
 			assertErrors(reporter);
-			xdef =
+			xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:root = 'root'>\n"+
 "  <root> required myType() </root>\n"+
@@ -169,12 +162,11 @@ public final class TestBNF extends XDTester {
 "     type myType rrr.rule(x);\n"+
 "  </xd:declaration>\n"+
 "</xd:def>\n"+
-"</xd:collection>";
-			xp = compile(xdef);
+"</xd:collection>");
 			xml = "<root>4, 5, Arhur C. Klark, Jan Novak, 55</root>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:BNFGrammar name=\"rr\">\n"+
 "    M      ::= [#9#10#13 ]*   /*skip white spaces*/\n"+
@@ -208,8 +200,7 @@ public final class TestBNF extends XDTester {
 "  <a> \n"+
 "    <y xd:script=\"+\" a=\"rr.rule('reccur')\">? rr.rule('reccur')</y>\n"+
 "  </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
+"</xd:def>");
 			xml =
 "<a>\n"+
 "  <y a=''> </y>\n"+
@@ -229,14 +220,9 @@ public final class TestBNF extends XDTester {
 "</a>";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xml =
-"<a>\n"+
-"  <y a='M(32)'>M(0)</y>\n"+
-"</a>";
-			parse(xp, "", xml, reporter);
+			parse(xp, "", "<a><y a='M(32)'>M(0)</y></a>", reporter);
 			assertTrue(reporter.errorWarnings() && reporter.getErrorCount()==2);
-			//BNF - final variable
-			xdef =
+			xp = compile( //BNF - final variable
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "  final BNFGrammar rr = new BNFGrammar('\n"+
@@ -266,8 +252,7 @@ public final class TestBNF extends XDTester {
 "  <a> \n"+
 "    <y xd:script='+'>? rr.rule('reccur');</y>\n"+
 "  </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
+"</xd:def>");
 			xml =
 "<a>\n"+
 "  <y></y>\n"+
@@ -288,14 +273,10 @@ public final class TestBNF extends XDTester {
 "</a>";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xml =
-"<a>\n"+
-"  <y>M(32)</y>\n"+
-"  <y>M(0)</y>\n"+
-"</a>";
+			xml = "<a><y>M(32)</y><y>M(0)</y></a>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings() && reporter.getErrorCount()==2);
-			xdef =
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "  final BNFGrammar rr = new BNFGrammar('\n"+
@@ -323,8 +304,7 @@ public final class TestBNF extends XDTester {
 "  <a> \n"+
 "    <y xd:script='+'>? BNF(rr, 'reccur');</y>\n"+
 "  </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
+"</xd:def>");
 			xml =
 "<a>\n"+
 "  <y></y>\n"+
@@ -345,15 +325,10 @@ public final class TestBNF extends XDTester {
 "</a>";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xml =
-"<a>\n"+
-"  <y>M(32)</y>\n"+
-"  <y>M(0)</y>\n"+
-"</a>";
+			xml = "<a><y>M(32)</y><y>M(0)</y></a>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings() && reporter.getErrorCount()==2);
 		} catch (Exception ex) {fail(ex);}
-
 		resetTester();
 	}
 

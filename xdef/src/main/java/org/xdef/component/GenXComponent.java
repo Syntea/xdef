@@ -287,8 +287,8 @@ LN+(genJavadoc ?
 					continue;
 				}
 				XCGenerator genxc = new XCGenerator(xdpool, reporter, genJavadoc);
-				final String result = genxc.genXComponent(
-					model, className, extClass, interfaceName, packageName, components);
+				final String result = genxc.genXComponent(model,
+					className, extClass, interfaceName, packageName, components);
 				if (result != null) {
 					File f = new File(fparent, fName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);

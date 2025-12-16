@@ -346,7 +346,6 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
-		PNode pn1, pn2;
 		Object val;
 		List<String> oneOfList = new ArrayList<>();
 		List<Object> sections;
@@ -366,12 +365,12 @@ public final class CompileXonXdef extends XScriptParser {
 				oneOfList.clear();
 			}
 		}
+		PNode pn2, pn1 = genJElement(parent, X_MAP, map.getPosition());
 		if ((val = map.remove(X_SCRIPT_DIRECTIVE)) != null && val instanceof JValue) {
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			skipSpacesAndComments();
 			if (isToken(X_ONEOF_DIRECTIVE)) {
-				pn1 = genJElement(parent, X_MAP, map.getPosition());
 				pn2 = genXDElement(pn1, "choice", getPosition());
 				pn1.addChildNode(pn2);
 				skipSemiconsBlanksAndComments();
@@ -390,12 +389,12 @@ public final class CompileXonXdef extends XScriptParser {
 							error(XDEF.XDEF252, ONEOF_DIRECTIVE);
 						}
 					}
+					eos();
 				}
 			} else if (map.size() <= 1 || "json".equals(parent.getLocalName())) {
-				// less then 2 items or parent is a json model => no "xd:mixed" node!
+				// less then 2 items or parent is a json model => do not add "xd:mixed" element
 				pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition());
-			} else { // more then 1 items
-				pn1 = genJElement(parent, X_MAP, map.getPosition());
+			} else { // more then 1 items and parent is not json model => add "xd:mixed" element
 				pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
 				pn1.addChildNode(pn2);
 			}
@@ -403,9 +402,8 @@ public final class CompileXonXdef extends XScriptParser {
 				setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
 			}
 		} else if (map.size() <= 1) { // less then 2 items
-			pn2 = pn1 = genJElement(parent, X_MAP, map.getPosition()); // no "xd:mixed" node!
+			pn2 = pn1; // no "xd:mixed" node!
 		} else { // more then 1 items
-			pn1 = genJElement(parent, X_MAP, map.getPosition());
 			pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
 			pn1.addChildNode(pn2);
 		}
@@ -480,9 +478,6 @@ public final class CompileXonXdef extends XScriptParser {
 					SBuffer sbf1;
 					if (xscr == null) {
 						sbf1 = new SBuffer("?;", pn3._name);
-						setXDAttr(pn3, "script", sbf1);
-						xscr = getXDAttr(pn3, "script");
-						sections = parseXscript(xscr._value);
 					} else {
 						sbf1 = removeSection("occurs", sections = parseXscript(xscr._value));
 						if (sbf1 != null) {
@@ -504,7 +499,7 @@ public final class CompileXonXdef extends XScriptParser {
 					sbf = removeSection("match", sections);
 					String t;
 					if (sbf != null && !(t=sbf.getString().trim()).isEmpty()) {
-						while (t.endsWith(";")) {
+						while (t.endsWith(";")) { // remove trailing semicolons
 							t = t.substring(t.length() - 1);
 						}
 						t += " AAND ($oneOf++)==0;";
@@ -803,19 +798,19 @@ public final class CompileXonXdef extends XScriptParser {
 		pn1.addChildNode(pn2);
 		pn.addChildNode(pn1);
 /*#if DEBUG*#/
-		displayModel(pn); // remove this code in future
+		displayModel(pn, anyName); // remove this code in future
 /*#end*/
 	}
 
 /*#if DEBUG*#/
 	// Display the compiled model in debug mode. Remove this code method in the future.
 	// @param pn model to be displayed
-	private void displayModel(final PNode pn) {
+	private void displayModel(final PNode pn, final String modelName) {
 		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)) {
 			System.out.flush();
 			System.err.flush();
-			System.out.println("*** xdef: \""
-				+ (pn._parent._xdef != null ? pn._parent._xdef.getName() : "???") +'"');
+			System.out.println("*** xdef: \"" + (pn._parent._xdef!=null ? pn._parent._xdef.getName() : "???")
+				+ "\", JSON model: \"" + modelName + "\"");
 			System.out.println("* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
 			System.out.flush();
 		}
@@ -837,7 +832,7 @@ public final class CompileXonXdef extends XScriptParser {
 		genXonModel(jp.getResult(), pn);
 		pn._value = null;
 /*#if DEBUG*#/
-		displayModel(pn); // remove this code in future
+		displayModel(pn, name.getString()); // remove this code in future
 /*#end*/
 		return _anyXPos;
 	}

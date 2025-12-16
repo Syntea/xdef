@@ -3,15 +3,15 @@
 // Any modifications to this file will be lost upon recompilation.
 package bugreports;
 @SuppressWarnings("unchecked")
-public class XCSynPLscript implements org.xdef.component.XComponent{
-  public XCSynPLscript.jx$map getjx$map() {return _jx$map;}
-  public java.util.Map<String, Object> get$SynPLscript() {
-	return _jx$map == null? null: _jx$map.toXon();
+public class Mates_SynPLscript implements bugreports.Mates_SynPLscript_I,org.xdef.component.XComponent{
+  public Mates_SynPLscript.jx$map getjx$map() {return _jx$map;}
+  public Mates_SynPLscript.jx$map get$SynPLscript() {
+	return _jx$map == null? null: _jx$map;
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$map(XCSynPLscript.jx$map x) {_jx$map=x;}
+  public void setjx$map(Mates_SynPLscript.jx$map x) {_jx$map=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private XCSynPLscript.jx$map _jx$map;
+  private Mates_SynPLscript.jx$map _jx$map;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -69,15 +69,15 @@ public class XCSynPLscript implements org.xdef.component.XComponent{
 	  el.appendChild(x.toXml(doc));
 	return el;
   }
-  public XCSynPLscript() {}
-  public XCSynPLscript(org.xdef.component.XComponent p,
+  public Mates_SynPLscript() {}
+  public Mates_SynPLscript(org.xdef.component.XComponent p,
 	String name, String ns, String xPos, String XDPos) {
 	XD_NodeName=name; XD_NamespaceURI=ns;
 	XD_XPos=xPos;
 	XD_Model=XDPos;
 	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
   }
-  public XCSynPLscript(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
+  public Mates_SynPLscript(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
 	org.w3c.dom.Element el=x.getElement();
 	XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
 	XD_XPos=x.getXPos();
@@ -115,102 +115,102 @@ public class XCSynPLscript implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$map implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public bugreports.XCSynPLscript.jx$map.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$item getjx$item() {return _jx$item;}
   public String get$Name(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public org.xdef.sys.SDatetime get$Version(){
 	return _jx$item_1==null? null: _jx$item_1.getval();
   }
   public java.util.Date dateOf$Version(){return org.xdef.sys.SDatetime.getDate(get$Version());}
   public java.sql.Timestamp timestampOf$Version(){return org.xdef.sys.SDatetime.getTimestamp(get$Version());}
   public java.util.Calendar calendarOf$Version(){return org.xdef.sys.SDatetime.getCalendar(get$Version());}
-  public bugreports.XCSynPLscript.jx$map.jx$item_2 getjx$item_2() {return _jx$item_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$Desc(){
 	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$item_3 getjx$item_3() {return _jx$item_3;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$item_3 getjx$item_3() {return _jx$item_3;}
   public String get$Note(){
 	return _jx$item_3==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_3.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array getjx$array() {return _jx$array;}
-  public java.util.List<Object> get$SysValues() {
-	return _jx$array == null? null: _jx$array.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array getjx$array() {return _jx$array;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array get$SysValues() {
+	return _jx$array == null? null: _jx$array;
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_1 getjx$array_1() {return _jx$array_1;}
-  public java.util.List<Object> get$Variables() {
-	return _jx$array_1 == null? null: _jx$array_1.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_1 getjx$array_1() {return _jx$array_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_1 get$Variables() {
+	return _jx$array_1 == null? null: _jx$array_1;
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_2 getjx$array_2() {return _jx$array_2;}
-  public java.util.List<Object> get$UserRoles() {
-	return _jx$array_2 == null? null: _jx$array_2.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_2 getjx$array_2() {return _jx$array_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_2 get$UserRoles() {
+	return _jx$array_2 == null? null: _jx$array_2;
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_3 getjx$array_3() {return _jx$array_3;}
-  public java.util.List<Object> get$UsedFunctions() {
-	return _jx$array_3 == null? null: _jx$array_3.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_3 getjx$array_3() {return _jx$array_3;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_3 get$UsedFunctions() {
+	return _jx$array_3 == null? null: _jx$array_3;
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4 getjx$array_4() {return _jx$array_4;}
-  public java.util.List<Object> get$Statuses() {
-	return _jx$array_4 == null? null: _jx$array_4.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4 getjx$array_4() {return _jx$array_4;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4 get$Statuses() {
+	return _jx$array_4 == null? null: _jx$array_4;
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_5 getjx$array_5() {return _jx$array_5;}
-  public java.util.List<Object> get$EndStatuses() {
-	return _jx$array_5 == null? null: _jx$array_5.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_5 getjx$array_5() {return _jx$array_5;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_5 get$EndStatuses() {
+	return _jx$array_5 == null? null: _jx$array_5;
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$item x) {_jx$item=x;}
   public void set$Name(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$item_1 x) {_jx$item_1=x;}
   public void set$Version(org.xdef.sys.SDatetime x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
   public void set$Version(java.util.Date x){set$Version(org.xdef.sys.SDatetime.createFrom(x));}
   public void set$Version(java.sql.Timestamp x){set$Version(org.xdef.sys.SDatetime.createFrom(x));}
   public void set$Version(java.util.Calendar x){set$Version(org.xdef.sys.SDatetime.createFrom(x));}
-  public void setjx$item_2(bugreports.XCSynPLscript.jx$map.jx$item_2 x) {_jx$item_2=x;}
+  public void setjx$item_2(bugreports.Mates_SynPLscript.jx$map.jx$item_2 x) {_jx$item_2=x;}
   public void set$Desc(String x){
 	if(x==null) _jx$item_2=null; else {
-	  if(_jx$item_2==null) setjx$item_2(new bugreports.XCSynPLscript.jx$map.jx$item_2());
+	  if(_jx$item_2==null) setjx$item_2(new bugreports.Mates_SynPLscript.jx$map.jx$item_2());
 	  _jx$item_2.setval(x);
 	}
   }
-  public void setjx$item_3(bugreports.XCSynPLscript.jx$map.jx$item_3 x) {_jx$item_3=x;}
+  public void setjx$item_3(bugreports.Mates_SynPLscript.jx$map.jx$item_3 x) {_jx$item_3=x;}
   public void set$Note(String x){
 	if(x==null) _jx$item_3=null; else {
-	  if(_jx$item_3==null) setjx$item_3(new bugreports.XCSynPLscript.jx$map.jx$item_3());
+	  if(_jx$item_3==null) setjx$item_3(new bugreports.Mates_SynPLscript.jx$map.jx$item_3());
 	  _jx$item_3.setval(x);
 	}
   }
-  public void setjx$array(bugreports.XCSynPLscript.jx$map.jx$array x) {_jx$array=x;}
-  public void setjx$array_1(bugreports.XCSynPLscript.jx$map.jx$array_1 x) {_jx$array_1=x;}
-  public void setjx$array_2(bugreports.XCSynPLscript.jx$map.jx$array_2 x) {_jx$array_2=x;}
-  public void setjx$array_3(bugreports.XCSynPLscript.jx$map.jx$array_3 x) {_jx$array_3=x;}
-  public void setjx$array_4(bugreports.XCSynPLscript.jx$map.jx$array_4 x) {_jx$array_4=x;}
-  public void setjx$array_5(bugreports.XCSynPLscript.jx$map.jx$array_5 x) {_jx$array_5=x;}
+  public void setjx$array(bugreports.Mates_SynPLscript.jx$map.jx$array x) {_jx$array=x;}
+  public void setjx$array_1(bugreports.Mates_SynPLscript.jx$map.jx$array_1 x) {_jx$array_1=x;}
+  public void setjx$array_2(bugreports.Mates_SynPLscript.jx$map.jx$array_2 x) {_jx$array_2=x;}
+  public void setjx$array_3(bugreports.Mates_SynPLscript.jx$map.jx$array_3 x) {_jx$array_3=x;}
+  public void setjx$array_4(bugreports.Mates_SynPLscript.jx$map.jx$array_4 x) {_jx$array_4=x;}
+  public void setjx$array_5(bugreports.Mates_SynPLscript.jx$map.jx$array_5 x) {_jx$array_5=x;}
   public String xposOfkey(){return XD_XPos+"/@key";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="SynPLscript";
-  private bugreports.XCSynPLscript.jx$map.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$item_1 _jx$item_1;
-  private bugreports.XCSynPLscript.jx$map.jx$item_2 _jx$item_2;
-  private bugreports.XCSynPLscript.jx$map.jx$item_3 _jx$item_3;
-  private bugreports.XCSynPLscript.jx$map.jx$array _jx$array;
-  private bugreports.XCSynPLscript.jx$map.jx$array_1 _jx$array_1;
-  private bugreports.XCSynPLscript.jx$map.jx$array_2 _jx$array_2;
-  private bugreports.XCSynPLscript.jx$map.jx$array_3 _jx$array_3;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4 _jx$array_4;
-  private bugreports.XCSynPLscript.jx$map.jx$array_5 _jx$array_5;
+  private bugreports.Mates_SynPLscript.jx$map.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$item_2 _jx$item_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$item_3 _jx$item_3;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array _jx$array;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_1 _jx$array_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_2 _jx$array_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_3 _jx$array_3;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4 _jx$array_4;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_5 _jx$array_5;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -833,12 +833,12 @@ public static class jx$item_3 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1 x) {
 	if (x!=null) {
 		if (x.xGetXPos()==null)
 		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array/jx:map");
@@ -849,7 +849,7 @@ public static class jx$array implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="SysValues";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -956,56 +956,56 @@ public static class jx$array implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_1 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$SysValue(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$Type(){
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$Value(){
 	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
   public String get$Desc(){
 	return _jx$item_3==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_3.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$SysValue(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$Type(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
-  public void setjx$item_2(bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
+  public void setjx$item_2(bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
   public void set$Value(String x){
 	if(x==null) _jx$item_2=null; else {
-	  if(_jx$item_2==null) setjx$item_2(new bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_2());
+	  if(_jx$item_2==null) setjx$item_2(new bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_2());
 	  _jx$item_2.setval(x);
 	}
   }
-  public void setjx$item_3(bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
+  public void setjx$item_3(bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
   public void set$Desc(String x){
 	if(x==null) _jx$item_3=null; else {
-	  if(_jx$item_3==null) setjx$item_3(new bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_3());
+	  if(_jx$item_3==null) setjx$item_3(new bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_3());
 	  _jx$item_3.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_1 _jx$item_1;
-  private bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_2 _jx$item_2;
-  private bugreports.XCSynPLscript.jx$map.jx$array.jx$map_1.jx$item_3 _jx$item_3;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_2 _jx$item_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array.jx$map_1.jx$item_3 _jx$item_3;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -1601,12 +1601,12 @@ public static class jx$item_3 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array_1 implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1 x) {
 	if (x!=null) {
 		if (x.xGetXPos()==null)
 		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[2]/jx:map");
@@ -1617,7 +1617,7 @@ public static class jx$array_1 implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="Variables";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -1724,56 +1724,56 @@ public static class jx$array_1 implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_1 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$Variable(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$Type(){
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$Ref(){
 	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
   public String get$Desc(){
 	return _jx$item_3==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_3.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$Variable(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$Type(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
-  public void setjx$item_2(bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
+  public void setjx$item_2(bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
   public void set$Ref(String x){
 	if(x==null) _jx$item_2=null; else {
-	  if(_jx$item_2==null) setjx$item_2(new bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2());
+	  if(_jx$item_2==null) setjx$item_2(new bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2());
 	  _jx$item_2.setval(x);
 	}
   }
-  public void setjx$item_3(bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
+  public void setjx$item_3(bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
   public void set$Desc(String x){
 	if(x==null) _jx$item_3=null; else {
-	  if(_jx$item_3==null) setjx$item_3(new bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3());
+	  if(_jx$item_3==null) setjx$item_3(new bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3());
 	  _jx$item_3.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1 _jx$item_1;
-  private bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2 _jx$item_2;
-  private bugreports.XCSynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3 _jx$item_3;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_2 _jx$item_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_1.jx$map_1.jx$item_3 _jx$item_3;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -2369,12 +2369,12 @@ public static class jx$item_3 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array_2 implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1 x) {
 	if (x!=null) {
 		if (x.xGetXPos()==null)
 		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[3]/jx:map");
@@ -2385,7 +2385,7 @@ public static class jx$array_2 implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="UserRoles";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -2492,32 +2492,32 @@ public static class jx$array_2 implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_1 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$UserRole(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$Desc(){
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$UserRole(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$Desc(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_2.jx$map_1.jx$item_1 _jx$item_1;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -2869,12 +2869,12 @@ public static class jx$item_1 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array_3 implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1 x) {
 	if (x!=null) {
 		if (x.xGetXPos()==null)
 		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[4]/jx:map");
@@ -2885,7 +2885,7 @@ public static class jx$array_3 implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="UsedFunctions";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -2992,12 +2992,12 @@ public static class jx$array_3 implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_1 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$Params(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
-  public java.util.Map<String, String> anyItem$() {
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public java.util.Map<String, String> anyItem$(){
 	java.util.Map<String,String>x=new java.util.LinkedHashMap<>();
 	if (_jx$item_1 != null) {
 	  x.put(org.xdef.xon.XonTools.xmlToJName(_jx$item_1.getkey()), _jx$item_1.getval());
@@ -3008,23 +3008,23 @@ public static class jx$map_1 implements org.xdef.component.XComponent{
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$Params(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$item(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_3.jx$map_1.jx$item_1 _jx$item_1;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -3376,12 +3376,12 @@ public static class jx$item_1 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array_4 implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1 x) {
 	if (x!=null) {
 		if (x.xGetXPos()==null)
 		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map");
@@ -3392,7 +3392,7 @@ public static class jx$array_4 implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="Statuses";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -3499,62 +3499,62 @@ public static class jx$array_4 implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_1 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$Status(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$ActionCode(){
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$TimeOverStep(){
 	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 getjx$item_3() {return _jx$item_3;}
   public String get$ChangeLog(){
 	return _jx$item_3==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_3.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array getjx$array() {return _jx$array;}
-  public java.util.List<Object> get$Events() {
-	return _jx$array == null? null: _jx$array.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array getjx$array() {return _jx$array;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array get$Events() {
+	return _jx$array == null? null: _jx$array;
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$Status(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$ActionCode(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
-  public void setjx$item_2(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
+  public void setjx$item_2(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
   public void set$TimeOverStep(String x){
 	if(x==null) _jx$item_2=null; else {
-	  if(_jx$item_2==null) setjx$item_2(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2());
+	  if(_jx$item_2==null) setjx$item_2(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2());
 	  _jx$item_2.setval(x);
 	}
   }
-  public void setjx$item_3(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
+  public void setjx$item_3(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 x) {_jx$item_3=x;}
   public void set$ChangeLog(String x){
 	if(x==null) _jx$item_3=null; else {
-	  if(_jx$item_3==null) setjx$item_3(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3());
+	  if(_jx$item_3==null) setjx$item_3(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3());
 	  _jx$item_3.setval(x);
 	}
   }
-  public void setjx$array(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array x) {_jx$array=x;}
+  public void setjx$array(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array x) {_jx$array=x;}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 _jx$item_1;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 _jx$item_2;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 _jx$item_3;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array _jx$array;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_2 _jx$item_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$item_3 _jx$item_3;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array _jx$array;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -4151,19 +4151,19 @@ public static class jx$item_3 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2 x) {
 	if (x!=null) _jx$map.add(x);
   }
   public String xposOfkey(){return XD_XPos+"/@key";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="Events";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -4270,50 +4270,50 @@ public static class jx$array implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_2 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item getjx$item() {return _jx$item;}
   public String get$Event(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 getjx$array() {return _jx$array;}
-  public java.util.List<Object> get$UserRoleAny() {
-	return _jx$array == null? null: _jx$array.toXon();
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 getjx$array() {return _jx$array;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 get$UserRoleAny() {
+	return _jx$array == null? null: _jx$array;
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$ActionCode(){
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2 getjx$item_2() {return _jx$item_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$NextStatus(){
 	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item x) {_jx$item=x;}
   public void set$Event(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$array(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 x) {_jx$array=x;}
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$array(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 x) {_jx$array=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1 x) {_jx$item_1=x;}
   public void set$ActionCode(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
-  public void setjx$item_2(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2 x) {_jx$item_2=x;}
+  public void setjx$item_2(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2 x) {_jx$item_2=x;}
   public void set$NextStatus(String x){
 	if(x==null) _jx$item_2=null; else {
-	  if(_jx$item_2==null) setjx$item_2(new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2());
+	  if(_jx$item_2==null) setjx$item_2(new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2());
 	  _jx$item_2.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 _jx$array;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1 _jx$item_1;
-  private bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2 _jx$item_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1 _jx$array;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$item_2 _jx$item_2;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
@@ -4550,29 +4550,29 @@ public static class jx$item implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array_1 implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item> listOfjx$item() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item> listOfjx$item() {
 	return _jx$item;
   }
   public java.util.List<String> get$item(){
 	java.util.List<String> x=new java.util.ArrayList<>();
-	for(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item y: _jx$item) x.add(org.xdef.xon.XonTools.jstringFromSource(y.getval()));
+	for(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item y: _jx$item) x.add(org.xdef.xon.XonTools.jstringFromSource(y.getval()));
 	return x;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$item(bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item x) {
+  public void addjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item x) {
 	if (x!=null) _jx$item.add(x);
   }
   public void additem(String x){
 	if (x!=null) {
-	  bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item y=new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item();
+	  bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item y=new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item();
 	  y.setval(org.xdef.xon.XonUtils.toJsonString(x,false)); addjx$item(y);
 	}
   }
   public void setitem(java.util.List<String> x){
 	_jx$item.clear(); if (x==null) return;
 	for (String y:x) {
-	  bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item z=new bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item();
+	  bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item z=new bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item();
 	  z.setval(y); addjx$item(z);
 	}
   }
@@ -4580,7 +4580,7 @@ public static class jx$array_1 implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="UserRoleAny";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item> _jx$item=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_4.jx$map_1.jx$array.jx$map_2.jx$array_1.jx$item> _jx$item=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -5038,12 +5038,12 @@ public static class jx$item_2 implements org.xdef.component.XComponent{
 @SuppressWarnings("unchecked")
 public static class jx$array_5 implements org.xdef.component.XComponent{
   public String getkey() {return _key;}
-  public java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1> listOfjx$map() {
+  public java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1> listOfjx$map() {
 	return _jx$map;
   }
   public java.util.List<Object> getArray$() {return toXon();}
   public void setkey(String x) {_key=x;}
-  public void addjx$map(bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1 x) {
+  public void addjx$map(bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1 x) {
 	if (x!=null) {
 		if (x.xGetXPos()==null)
 		  x.xInit(this, "jx:map", "http://www.xdef.org/xon/4.0/w", "SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[6]/jx:map");
@@ -5054,7 +5054,7 @@ public static class jx$array_5 implements org.xdef.component.XComponent{
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_key="key";
   private String _key="EndStatuses";
-  private final java.util.List<bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1> _jx$map=new java.util.ArrayList<>();
+  private final java.util.List<bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1> _jx$map=new java.util.ArrayList<>();
   @Override
   public java.util.List<Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonArray(this);
@@ -5161,44 +5161,44 @@ public static class jx$array_5 implements org.xdef.component.XComponent{
 // </editor-fold>
 @SuppressWarnings("unchecked")
 public static class jx$map_1 implements org.xdef.component.XComponent{
-  public bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item getjx$item() {return _jx$item;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item getjx$item() {return _jx$item;}
   public String get$EndStatus(){
 	return _jx$item==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1 getjx$item_1() {return _jx$item_1;}
   public String get$ActionCode(){
 	return _jx$item_1==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_1.getval());
   }
-  public bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
+  public bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2 getjx$item_2() {return _jx$item_2;}
   public String get$ChangeLog(){
 	return _jx$item_2==null? null: org.xdef.xon.XonTools.jstringFromSource(_jx$item_2.getval());
   }
   public java.util.Map<String, Object> getMap$() {return toXon();}
-  public void setjx$item(bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item x) {_jx$item=x;}
+  public void setjx$item(bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item x) {_jx$item=x;}
   public void set$EndStatus(String x){
 	if(x==null) _jx$item=null; else {
-	  if(_jx$item==null) setjx$item(new bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item());
+	  if(_jx$item==null) setjx$item(new bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item());
 	  _jx$item.setval(x);
 	}
   }
-  public void setjx$item_1(bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
+  public void setjx$item_1(bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1 x) {_jx$item_1=x;}
   public void set$ActionCode(String x){
 	if(x==null) _jx$item_1=null; else {
-	  if(_jx$item_1==null) setjx$item_1(new bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1());
+	  if(_jx$item_1==null) setjx$item_1(new bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1());
 	  _jx$item_1.setval(x);
 	}
   }
-  public void setjx$item_2(bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
+  public void setjx$item_2(bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2 x) {_jx$item_2=x;}
   public void set$ChangeLog(String x){
 	if(x==null) _jx$item_2=null; else {
-	  if(_jx$item_2==null) setjx$item_2(new bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2());
+	  if(_jx$item_2==null) setjx$item_2(new bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2());
 	  _jx$item_2.setval(x);
 	}
   }
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item _jx$item;
-  private bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1 _jx$item_1;
-  private bugreports.XCSynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2 _jx$item_2;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item _jx$item;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_1 _jx$item_1;
+  private bugreports.Mates_SynPLscript.jx$map.jx$array_5.jx$map_1.jx$item_2 _jx$item_2;
   @Override
   public java.util.Map<String, Object> toXon(){
 	return org.xdef.component.XComponentUtil.toXonMap(this);
