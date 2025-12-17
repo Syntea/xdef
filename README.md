@@ -212,15 +212,12 @@ Links:
 ## Package content
 
 Package content:
-
-<table>
-<tr><td><em>xdef-{version}.jar</em>         </td><td>the java-library X-definition                          </td></tr>
-<tr><td><em>xdef-{version}.pom</em>         </td><td>maven metadata                                         </td></tr>
-<tr><td><em>xdef-{version}-javadoc.jar</em> </td><td>java-documentation                                     </td></tr>
-<tr><td><em>xdef-{version}-sources.jar</em> </td><td>origin java-sources                                    </td></tr>
-<tr><td><em>xdef-{version}-src.zip</em>     </td><td>java-sources insertable directly into your source code </td></tr>
-<tr><td><em>xdef-{version}-userdoc.zip</em> </td><td>complete user documentation                            </td></tr>
-<table>
+  * _xdef-{version}.jar_            - the java-library X-definition
+  * _xdef-{version}.pom_            - maven metadata
+  * _xdef-{version}-javadoc.jar_    - java-documentation
+  * _xdef-{version}-sources.jar_    - origin java-sources
+  * _xdef-{version}-src.zip_        - java-sources insertable directly into your source code
+  * _xdef-{version}-userdoc.zip_    - complete user documentation
 
 ## For maven projects
 
