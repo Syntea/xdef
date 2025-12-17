@@ -192,7 +192,7 @@ containing the code of X‑definition language.
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
 
-You can try your examples online at:
+You can try your examples at following **online playgrounds**:
   * validation mode: <http://xdef.syntea.cz/tutorial/examples/validate.html>
   * construction mode: <http://xdef.syntea.cz/tutorial/examples/compose.html>
   * BNF-grammar: <http://xdef.syntea.cz/tutorial/examples/BNF.html>
