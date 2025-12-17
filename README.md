@@ -214,12 +214,12 @@ Links:
 Package content:
 
 <table>
-<tr><td>- <em>xdef-{version}.jar</em>           </td><td>- the java-library X-definition                            </td></tr>
-<tr><td>- <em>xdef-{version}.pom</em>           </td><td>- maven metadata                                           </td></tr>
-<tr><td>- <em>xdef-{version}-javadoc.jar</em>   </td><td>- java-documentation                                       </td></tr>
-<tr><td>- <em>xdef-{version}-sources.jar</em>   </td><td>- origin java-sources                                      </td></tr>
-<tr><td>- <em>xdef-{version}-src.zip</em>       </td><td>- java-sources insertable directly into your source code   </td></tr>
-<tr><td>- <em>xdef-{version}-userdoc.zip</em>   </td><td>- complete user documentation                              </td></tr>
+<tr><td><em>xdef-{version}.jar</em>         </td><td>the java-library X-definition                          </td></tr>
+<tr><td><em>xdef-{version}.pom</em>         </td><td>maven metadata                                         </td></tr>
+<tr><td><em>xdef-{version}-javadoc.jar</em> </td><td>java-documentation                                     </td></tr>
+<tr><td><em>xdef-{version}-sources.jar</em> </td><td>origin java-sources                                    </td></tr>
+<tr><td><em>xdef-{version}-src.zip</em>     </td><td>java-sources insertable directly into your source code </td></tr>
+<tr><td><em>xdef-{version}-userdoc.zip</em> </td><td>complete user documentation                            </td></tr>
 <table>
 
 ## For maven projects
