@@ -31,20 +31,20 @@ Let´s have the following XML data:
 
 ```xml
 <Employee
-    FirstName = "Andrew"
-    LastName  = "Aardvark"
-    EnterDate = "1996-03-12"
-    Salary    = "21700"
+  FirstName = "Andrew"
+  LastName  = "Aardvark"
+  EnterDate = "1996-03-12"
+  Salary    = "21700"
 >
-    <Address
-        Street = "Broadway"
-        Number = "255"
-        Town   = "Beverly Hills"
-        State  = "CA"
-        Zip    = "90210"
-    />
-    <Competence>electrician</Competence>
-    <Competence>carpenter</Competence>
+  <Address
+    Street = "Broadway"
+    Number = "255"
+    Town   = "Beverly Hills"
+    State  = "CA"
+    Zip    = "90210"
+  />
+  <Competence>electrician</Competence>
+  <Competence>carpenter</Competence>
 </Employee>
 ```
 
@@ -53,23 +53,23 @@ This is the complete X-definition file with the model of the XML data on the lef
 
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Employee">
-<Employee
+  <Employee
     FirstName = "required string()"
     LastName  = "required string()"
     EnterDate = "required date()"
     Salary    = "optional decimal()"
->
+  >
     <Address
-        Street = "required string()"
-        Number = "required int()"
-        Town   = "required string()"
-        State  = "required string()"
-        Zip    = "required int()"
+      Street = "required string()"
+      Number = "required int()"
+      Town   = "required string()"
+      State  = "required string()"
+      Zip    = "required int()"
     />
     <Competence xd:script = "occurs 1..5">
-        required string()
+      required string()
     </Competence>
-</Employee>
+  </Employee>
 </xd:def>
 ```
 
@@ -81,24 +81,34 @@ XML data:
 
 ```xml
 <Family>
-  <Father    GivenName  = "John"
-             FamilyName = "Smith"
-             PersonalID = "7107130345"
-             Salary     = "18800" />
-  <Mother    GivenName  = "Jane"
-             FamilyName = "Smith"
-             PersonalID = "7653220029"
-             Salary     = "19400" />
-  <Son       GivenName  = "John"
-             FamilyName = "Smith"
-             PersonalID = "9211090121" />
-  <Daughter  GivenName  = "Jane"
-             FamilyName = "Smith"
-             PersonalID = "9655270067" />
-  <Residence Street     = "Small"
-             Number     = "5"
-             Town       = "Big"
-             Zip        = "12300" />
+  <Father
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "7107130345"
+    Salary     = "18800"
+  />
+  <Mother
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "7653220029"
+    Salary     = "19400"
+  />
+  <Son
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "9211090121"
+  />
+  <Daughter
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "9655270067"
+  />
+  <Residence
+    Street     = "Small"
+    Number     = "5"
+    Town       = "Big"
+    Zip        = "12300"
+  />
 </Family>
 ```
 
@@ -107,22 +117,26 @@ Model of the XML data:
 
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Family">
-<Family>
-  <Father    xd:script = "occurs 0..1; ref Person" />
-  <Mother    xd:script = "occurs 1..1; ref Person" />
-  <Son       xd:script = "occurs 0..*; ref Person" />
-  <Daughter  xd:script = "occurs 0..*; ref Person " />
-  <Residence xd:script = "occurs 1;    ref Address" />
-</Family>
-
-<Person GivenName  = "string()" 
-        FamilyName = "string()" 
-        PersonalID = "long()"
-        Salary     = "optional int()" />
-<Address Street = "string()"
-         Number = "int()"
-         Town   = "string()"
-         Zip    = "int()" />
+  <Family>
+    <Father    xd:script = "occurs 0..1; ref Person"  />
+    <Mother    xd:script = "occurs 1..1; ref Person"  />
+    <Son       xd:script = "occurs 0..*; ref Person"  />
+    <Daughter  xd:script = "occurs 0..*; ref Person " />
+    <Residence xd:script = "occurs 1;    ref Address" />
+  </Family>
+  
+  <Person
+    GivenName  = "string()" 
+    FamilyName = "string()" 
+    PersonalID = "long()"
+    Salary     = "optional int()"
+  />
+  <Address
+    Street = "string()"
+    Number = "int()"
+    Town   = "string()"
+    Zip    = "int()"
+  />
 </xd:def>
 ```
 
@@ -174,13 +188,15 @@ The term "X‑definition" we use in the two different meanings:
 either as a name of the programming language or as an XML element
 containing the code of X‑definition language.
 
+# Documentation and online advances
+
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
 
 You can try your examples online at:
-* validation mode: <http://xdef.syntea.cz/tutorial/examples/validate.html>
-* construction mode: <http://xdef.syntea.cz/tutorial/examples/compose.html>
-* BNF-grammar: <http://xdef.syntea.cz/tutorial/examples/BNF.html>
-* template: <http://xdef.syntea.cz/tutorial/examples/template.html>
+  * validation mode: <http://xdef.syntea.cz/tutorial/examples/validate.html>
+  * construction mode: <http://xdef.syntea.cz/tutorial/examples/compose.html>
+  * BNF-grammar: <http://xdef.syntea.cz/tutorial/examples/BNF.html>
+  * template: <http://xdef.syntea.cz/tutorial/examples/template.html>
 
 
 
@@ -190,135 +206,144 @@ You can try your examples online at:
 ## Check and download available versions
 
 Links:
-* release versions from the central maven repository: <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
-* snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
+  * release versions from the central maven repository: <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
+  * snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
+    (SNAPSHOT www-browsing may be unavailable yet)
 
 
 ## For maven projects
 
 Configuration file pom.xml:
-* dependency on a release version in the central maven repository:
+  * dependency on a release version in the central maven repository:
 
-  ```xml
-  <dependencies>
-      <dependency>
-          <groupId>org.xdef</groupId>
-          <artifactId>xdef</artifactId>
-          <version>[release version]</version>
-      </dependency>
-  <dependencies>
-  ```
-* dependency on a snapshot (or also release) version in the central maven snapshot repository:
+    ```xml
+    <dependencies>
+        <dependency>
+            <groupId>org.xdef</groupId>
+            <artifactId>xdef</artifactId>
+            <version>[release version]</version>
+        </dependency>
+    <dependencies>
+    ```
+  * dependency on a snapshot (or also release) version in the central maven snapshot repository:
 
-  ```xml
-  <dependencies>
-      <dependency>
-          <groupId>org.xdef</groupId>
-          <artifactId>xdef</artifactId>
-          <version>[snapshot (or also release) version]</version>
-      </dependency>
-  </dependencies>
-  <repositories>
-      <repository>
-          <id>central-snapshot</id>
-          <url>https://central.sonatype.com/repository/maven-snapshots</url>
-          <releases><enabled>false</enabled></releases>
-          <snapshots><enabled>true</enabled></snapshots>
-      </repository>
-  </repositories>
-  ```
+    ```xml
+    <dependencies>
+        <dependency>
+            <groupId>org.xdef</groupId>
+            <artifactId>xdef</artifactId>
+            <version>[snapshot (or also release) version]</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>central-snapshot</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+    ```
 
 
 # Building this project
 
 Source code at GitHub:
-* link to the last stable version (to the branch "master"): <https://github.com/Syntea/xdef>
+  * link to the last stable version (to the branch "master"): <https://github.com/Syntea/xdef>
 
 Prerequisities:
-* download project X-definition, eg. from GitHub
-* install _java_ (at least version 8)
-* install _maven_ (at least version 3.6)
-* configuration:
+  * download project X-definition, e.g. from GitHub
+  * install _java_ (at least version 8)
+  * install _maven_ (at least version 3.6)
+  * configuration:
     * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
-        * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
-        * see the template-file [configuration/maven/toolchains.xml](configuration/maven/toolchains.xml)
+      * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
+      * see the template-file [configuration/maven/toolchains.xml](configuration/maven/toolchains.xml)
 
 Frequent building operations:
-* cleaning before any compiling, building, deploying, etc.:
+  * cleaning before any compiling, building, deploying, etc.:
 
-  ```shell
-  mvn clean
-  ```
-* compile all java-resources, respectively all compilable resources:
+    ```shell
+    mvn clean
+    ```
+  * compile all java-resources, respectively all compilable resources:
 
-  ```shell
-  mvn compile
-  ```
-* build the snapshot package:
+    ```shell
+    mvn compile
+    ```
+  * build the snapshot package:
 
-  ```shell
-  mvn package
-  ```
-* build the snapshot package including javadoc, sources, documentation:
+    ```shell
+    mvn package
+    ```
+  * build the snapshot package including javadoc, sources, documentation:
 
-  ```shell
-  mvn package -Pjavadoc,sources
-  ```
-* using the profile "skipTests", avoid junit-tests:
+    ```shell
+    mvn package -Pjavadoc,sources
+    ```
+  * using the profile "skipTests", avoid junit-tests:
 
-  ```shell
-  mvn package -PskipTests
-  ```
-* using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms,
-  i.e. Java-8 (by default it is run in module "xdef"), Java-11 (it is run in the module "xdef-test11"),
-  Java-17 (it is run in the module "xdef-test17"), Java-21 (it is run in the module "xdef-test21").
-  It uses file system symbolic links. If it's not enabled, it can be enabled by two git-commands
-  (run from the project root directory) "git config set core.symlinks true", "git reset --hard".
-  For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
-  in addition, "Developer Mode" (Start > Settings > Update & Security > For developers > Developer Mode > On)
-  must be enabled in the system settings beforehand:
+    ```shell
+    mvn package -PskipTests
+    ```
+  * using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms, i.e.:
+    * Java-8 (by default it is run in module "xdef")
+    * Java-11 (it is run in the module "xdef-test11")
+    * Java-17 (it is run in the module "xdef-test17")
+    * Java-21 (it is run in the module "xdef-test21")
 
-  ```shell
-  mvn package -PtestOnAllJvms
-  ```
-* build the release package:
+    It uses file system symbolic links. If it's not enabled, it can be enabled by two git-commands
+    (run from the project root directory) "git config set core.symlinks true", "git reset --hard".
+    For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
+    in addition, "Developer Mode" (Start > Settings > Update & Security > For developers > Developer Mode > On)
+    must be enabled in the system settings beforehand:
 
-  ```shell
-  mvn package -Prelease
-  ```
-* build the release package including javadoc, sources, documentation:
+    ```shell
+    mvn package -PtestOnAllJvms
+    ```
+  * build the release package:
 
-  ```shell
-  mvn package -Prelease,javadoc,sources
-  ```
+    ```shell  
+    mvn package -Prelease
+    ```
+  * build the release package including javadoc, sources, documentation:
+
+    ```shell
+    mvn package -Prelease,javadoc,sources
+    ```
 
 
 ## Deploying to the maven central repository
 
 Prerequisities:
-* satisfy prerequisities for building
-* install the pgp-managing software GnuPG (<https://gnupg.org/>)
-* configuration:
-    * unlocking the appropriate pgp-key
-        * insert the appropriate key to the the pgp-manager
-        * enter the pgp-key-password for the pgp-key:
-            * during the package build by the user when prompted by the pgp-agent
-            * or beforehand to the environment variable _MAVEN_GPG_PASSPHRASE_
-              (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>)
-    * authentication to the central maven repository manager _central.sonatype.com_
+  * satisfy prerequisities for building
+  * install the pgp-managing software GnuPG (<https://gnupg.org/>)
+  * configuration:
+    * unlocking the appropriate pgp-key to sign artifacts:
+      * insert the appropriate key to the the pgp-manager
+      * enter the pgp-key-password for the pgp-key:
+        * during the package build by the user when prompted by the pgp-agent
+        * or beforehand to the environment variable _MAVEN_GPG_PASSPHRASE_
+          (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>)
+    * authentication to the central maven repository manager _central.sonatype.com_:
       (having id _"central"_ in the file [xdef/pom.xml](xdef/pom.xml))
-        * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
-        * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
+      * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
+      * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
 
 Deploying:
-* build and deploy the X-definition snapshot package to the central maven snapshot repository:
+  * build and deploy the X-definition snapshot package to the central maven snapshot repository 
+    (immediate deploy without processes validation and publishing):
 
-  ```shell
-  mvn deploy -Pjavadoc,sources,dm-central
-  ```
-* build and deploy the X-definition release package to the central maven repository:
+    ```shell
+    mvn deploy -Pjavadoc,sources,dm-central
+    ```
+  * build and deploy the X-definition release package to the central maven repository
+    * you can watch processes uploading, validation and publishing in
+      <https://central.sonatype.com/publishing/deployments> as logged in appropriate user
+    * the central repository requires to sign (this is done by using the profile "sign") deploying release-artifacts
+      (on the other hand, the repository doesn't require to sign deploying snapshot-artifacts)
 
-  ```shell
-  mvn deploy -Prelease,javadoc,sources,dm-central
-  ```
+    ```shell
+    mvn deploy -Prelease,javadoc,sources,dm-central,sign
+    ```
