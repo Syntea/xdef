@@ -278,6 +278,7 @@ Frequent building operations:
     * Java-11 (it is run in the module "xdef-test11")
     * Java-17 (it is run in the module "xdef-test17")
     * Java-21 (it is run in the module "xdef-test21")
+
     It uses file system symbolic links. If it's not enabled, it can be enabled by two git-commands
     (run from the project root directory) "git config set core.symlinks true", "git reset --hard".
     For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
