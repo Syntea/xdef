@@ -194,6 +194,7 @@ You can try your examples online at:
 Links:
   * release versions from the central maven repository: <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
   * snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
+    (SNAPSHOT www-browsing may be unavailable yet)
 
 
 ## For maven projects
