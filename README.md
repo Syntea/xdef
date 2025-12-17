@@ -211,7 +211,7 @@ Links:
 
 ## Package content
 
-Package content:
+List of file assets:
   * _xdef-{version}.jar_            - the java-library X-definition
   * _xdef-{version}.pom_            - maven metadata
   * _xdef-{version}-javadoc.jar_    - java-documentation
