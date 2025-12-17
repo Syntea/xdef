@@ -21,7 +21,7 @@ The source code for this project is licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
 
 
-# Examples
+# Illustrative examples
 
 You can try the following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
 
@@ -188,7 +188,7 @@ The term "X‑definition" we use in the two different meanings:
 either as a name of the programming language or as an XML element
 containing the code of X‑definition language.
 
-# Documentation and online advances
+# Documentation and online playground
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
 
