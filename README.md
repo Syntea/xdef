@@ -3,9 +3,9 @@
 X-definition is registered technology of the Syntea software group a.s.,
 for processing of the XML documents or JSON data.
 
-For the purpose of describing the structure of XML documents or JSON data,
-their validation, processing and creation, this tool was developed
-by Syntea Software Group Inc. It allows the user to not only define
+For the purpose of
+**describing the structure of XML documents or JSON data, their validation, processing and creation**,
+this tool was developed by Syntea Software Group Inc. It allows the user to not only define
 the structure of XML documents or JSON data, but also to describe specifically
 their processing and construction.
 
@@ -202,7 +202,6 @@ You can try your examples at following **online playgrounds**:
 
 # Usage in other projects
 
-
 ## Check and download available versions
 
 Links:
@@ -210,6 +209,18 @@ Links:
   * snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
     (SNAPSHOT www-browsing may be unavailable yet)
 
+## Package content
+
+Package content:
+
+<table>
+<tr><td>- <em>xdef-{version}.jar</em>           </td><td>- the java-library X-definition                            </td></tr>
+<tr><td>- <em>xdef-{version}.pom</em>           </td><td>- maven metadata                                           </td></tr>
+<tr><td>- <em>xdef-{version}-javadoc.jar</em>   </td><td>- java-documentation                                       </td></tr>
+<tr><td>- <em>xdef-{version}-sources.jar</em>   </td><td>- origin java-sources                                      </td></tr>
+<tr><td>- <em>xdef-{version}-src.zip</em>       </td><td>- java-sources insertable directly into your source code   </td></tr>
+<tr><td>- <em>xdef-{version}-userdoc.zip</em>   </td><td>- complete user documentation                              </td></tr>
+<table>
 
 ## For maven projects
 
