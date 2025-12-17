@@ -188,7 +188,9 @@
         </profile>
         <profile>
             <id>sign</id>
-            <!-- sign deploying/publishing artifacts, required by dm-central for publishing release artifacts -->
+            <!-- sign deploying/publishing artifacts.
+                It is required by the central repository to publish release-artifacts
+            -->
             <build>
                 <plugins>
                     <plugin>
@@ -196,8 +198,7 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <configuration>
                             <keyname>info@syntea.cz</keyname>
-                            <!--
-                                may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
+                            <!-- may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
                                 see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
                                 <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
                             -->
@@ -217,9 +218,8 @@
         </profile>
         <profile>
             <id>dm-central</id>
-            <!--
-                activation of profiles sign (only for publishing release artifacts), sources,
-                javadoc are required with this profile
+            <!-- activation of profiles sign, sources, javadoc are required with this profile.
+                Tje profile "sign" is required to publish release-artifacts (not snapshot-artifacts) only
             -->
             <build>
                 <plugins>
@@ -262,9 +262,9 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <configuration>
                             <keyname>info@syntea.cz</keyname>
-                            <!--may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
+                            <!-- may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
                                 see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
-                            <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
+                                <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
                             -->
                         </configuration>
                         <executions>
