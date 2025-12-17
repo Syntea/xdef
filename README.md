@@ -31,20 +31,20 @@ Let´s have the following XML data:
 
 ```xml
 <Employee
-    FirstName = "Andrew"
-    LastName  = "Aardvark"
-    EnterDate = "1996-03-12"
-    Salary    = "21700"
+  FirstName = "Andrew"
+  LastName  = "Aardvark"
+  EnterDate = "1996-03-12"
+  Salary    = "21700"
 >
-    <Address
-        Street = "Broadway"
-        Number = "255"
-        Town   = "Beverly Hills"
-        State  = "CA"
-        Zip    = "90210"
-    />
-    <Competence>electrician</Competence>
-    <Competence>carpenter</Competence>
+  <Address
+    Street = "Broadway"
+    Number = "255"
+    Town   = "Beverly Hills"
+    State  = "CA"
+    Zip    = "90210"
+  />
+  <Competence>electrician</Competence>
+  <Competence>carpenter</Competence>
 </Employee>
 ```
 
@@ -53,23 +53,23 @@ This is the complete X-definition file with the model of the XML data on the lef
 
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Employee">
-<Employee
+  <Employee
     FirstName = "required string()"
     LastName  = "required string()"
     EnterDate = "required date()"
     Salary    = "optional decimal()"
->
+  >
     <Address
-        Street = "required string()"
-        Number = "required int()"
-        Town   = "required string()"
-        State  = "required string()"
-        Zip    = "required int()"
+      Street = "required string()"
+      Number = "required int()"
+      Town   = "required string()"
+      State  = "required string()"
+      Zip    = "required int()"
     />
     <Competence xd:script = "occurs 1..5">
-        required string()
+      required string()
     </Competence>
-</Employee>
+  </Employee>
 </xd:def>
 ```
 
@@ -81,24 +81,34 @@ XML data:
 
 ```xml
 <Family>
-  <Father    GivenName  = "John"
-             FamilyName = "Smith"
-             PersonalID = "7107130345"
-             Salary     = "18800" />
-  <Mother    GivenName  = "Jane"
-             FamilyName = "Smith"
-             PersonalID = "7653220029"
-             Salary     = "19400" />
-  <Son       GivenName  = "John"
-             FamilyName = "Smith"
-             PersonalID = "9211090121" />
-  <Daughter  GivenName  = "Jane"
-             FamilyName = "Smith"
-             PersonalID = "9655270067" />
-  <Residence Street     = "Small"
-             Number     = "5"
-             Town       = "Big"
-             Zip        = "12300" />
+  <Father
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "7107130345"
+    Salary     = "18800"
+  />
+  <Mother
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "7653220029"
+    Salary     = "19400"
+  />
+  <Son
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "9211090121"
+  />
+  <Daughter
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "9655270067"
+  />
+  <Residence
+    Street     = "Small"
+    Number     = "5"
+    Town       = "Big"
+    Zip        = "12300"
+  />
 </Family>
 ```
 
@@ -107,22 +117,26 @@ Model of the XML data:
 
 ```xml
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Family">
-<Family>
-  <Father    xd:script = "occurs 0..1; ref Person" />
-  <Mother    xd:script = "occurs 1..1; ref Person" />
-  <Son       xd:script = "occurs 0..*; ref Person" />
-  <Daughter  xd:script = "occurs 0..*; ref Person " />
-  <Residence xd:script = "occurs 1;    ref Address" />
-</Family>
-
-<Person GivenName  = "string()" 
-        FamilyName = "string()" 
-        PersonalID = "long()"
-        Salary     = "optional int()" />
-<Address Street = "string()"
-         Number = "int()"
-         Town   = "string()"
-         Zip    = "int()" />
+  <Family>
+    <Father    xd:script = "occurs 0..1; ref Person"  />
+    <Mother    xd:script = "occurs 1..1; ref Person"  />
+    <Son       xd:script = "occurs 0..*; ref Person"  />
+    <Daughter  xd:script = "occurs 0..*; ref Person " />
+    <Residence xd:script = "occurs 1;    ref Address" />
+  </Family>
+  
+  <Person
+    GivenName  = "string()" 
+    FamilyName = "string()" 
+    PersonalID = "long()"
+    Salary     = "optional int()"
+  />
+  <Address
+    Street = "string()"
+    Number = "int()"
+    Town   = "string()"
+    Zip    = "int()"
+  />
 </xd:def>
 ```
 
