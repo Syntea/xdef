@@ -213,11 +213,12 @@ Links:
 
 List of file assets:
   * _xdef-{version}.jar_            - the java-library X-definition
-  * _xdef-{version}.pom_            - maven metadata
-  * _xdef-{version}-javadoc.jar_    - java-documentation
-  * _xdef-{version}-sources.jar_    - origin java-sources
-  * _xdef-{version}-src.zip_        - java-sources insertable directly into your source code
   * _xdef-{version}-userdoc.zip_    - complete user documentation
+  * _xdef-{version}-javadoc.jar_    - html-documentation of java source code generated from java source code
+  * _xdef-{version}-sources.jar_    - origin java source code
+  * _xdef-{version}-src.zip_        - java source code insertable directly into your source code,
+                                      very similar to _xdef-{version}-sources.jar_
+  * _xdef-{version}.pom_            - maven metadata of the package
 
 ## For maven projects
 
