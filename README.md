@@ -238,7 +238,7 @@ Source code at GitHub:
   * link to the last stable version (to the branch "master"): <https://github.com/Syntea/xdef>
 
 Prerequisities:
-  * download project X-definition, eg. from GitHub
+  * download project X-definition, e.g. from GitHub
   * install _java_ (at least version 8)
   * install _maven_ (at least version 3.6)
   * configuration:
