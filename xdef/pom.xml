@@ -218,8 +218,8 @@
         </profile>
         <profile>
             <id>dm-central</id>
-            <!-- activation of profiles sign, sources, javadoc are required with this profile.
-                Tje profile "sign" is required to publish release-artifacts (not snapshot-artifacts) only
+            <!-- activation of profiles sign, sources, javadoc are required by this profile.
+                The profile "sign" is required to publish release-artifacts (not snapshot-artifacts) only
             -->
             <build>
                 <plugins>
@@ -227,7 +227,6 @@
                         <!-- see https://central.sonatype.org/publish/publish-portal-maven -->
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.8.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
@@ -249,57 +248,6 @@
                     <id>private-snapshot</id>
                     <url>${mrmUrl}/private-snapshot</url>
                 </snapshotRepository>
-            </distributionManagement>
-        </profile>
-        <profile>
-            <!-- deprecated -->
-            <id>dm-ossrh</id>
-            <!-- activation of profiles sources, javadoc are required with this profile -->
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <configuration>
-                            <keyname>info@syntea.cz</keyname>
-                            <!-- may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
-                                see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
-                                <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
-                            -->
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-                <!-- when using plugin nexus-staging-maven-plugin release-repository isn't needed
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-                </repository>
-                -->
             </distributionManagement>
         </profile>
     </profiles>
