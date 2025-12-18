@@ -274,7 +274,7 @@ Prerequisities:
     * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
       * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
-      * see the template-file [configuration/maven/toolchains.xml](configuration/maven/toolchains.xml)
+      * see the template-file [administration/configuration-templates/maven/toolchains.xml](administration/configuration-templates/maven/toolchains.xml)
 
 Frequent building operations:
   * cleaning before any compiling, building, deploying, etc.:
@@ -344,7 +344,7 @@ Prerequisities:
     * authentication to the central maven repository manager _central.sonatype.com_:
       (having id _"central"_ in the file [xdef/pom.xml](xdef/pom.xml))
       * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
-      * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
+      * see template-file [administration/configuration-templates/maven/settings.xml](administration/configuration-templates/maven/settings.xml)
 
 Deploying:
   * build and deploy the X-definition snapshot package to the central maven snapshot repository 
