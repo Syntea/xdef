@@ -56,6 +56,7 @@ import static org.xdef.model.XMNode.XMMIXED;
 import static org.xdef.model.XMNode.XMSELECTOR_END;
 import static org.xdef.model.XMNode.XMSEQUENCE;
 import static org.xdef.model.XMNode.XMTEXT;
+import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariable;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -2191,7 +2192,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (leny > 0) {
 					copyChildNodes(y._childNodes, 0, childNodes, 0, leny);
 				}
-				copyChildNodes(xel._childNodes, 1, childNodes, leny, lenx);
+				if (lenx > 0 && leny > lenx && childNodes[leny-lenx].getKind() == XMSELECTOR_END) {
+					XSelectorEnd xsel =  (XSelectorEnd) childNodes[leny-lenx]; // ends with XMSELECTOR_END?
+					childNodes[leny] = xsel; // move it ti te end
+					copyChildNodes(xel._childNodes, 1, childNodes, leny-lenx, lenx);
+				} else {
+					copyChildNodes(xel._childNodes, 1, childNodes, leny, lenx);
+				}
 				xel._childNodes = childNodes;
 				if (nsOrig != null && nsNew != null && !nsOrig.equals(nsNew)) {
 					changeModelNS(xel, nsOrig, nsNew, new HashSet<>());// namespace of root element changed

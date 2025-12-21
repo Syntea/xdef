@@ -1867,7 +1867,6 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xd, xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
-			assertEq("x", XComponentUtil.get(xc, "x"));
 			list = (List) XComponentUtil.getx(xc, "listOfY");
 			assertEq(list.size(), 3);
 			assertEq(1, XComponentUtil.get((XComponent) list.get(0), "y"));
@@ -2139,7 +2138,7 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-//			assertEq(1, ((L_I_1) xc).geta());
+			assertEq(1, XComponentUtil.get(xc, "a")); //	assertEq(1, ((L_I_1) xc).geta());
 			xml = "<B a=\"2\" b=\"c d\" />";
 			parse(xd, xml, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -2148,6 +2147,40 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 //			assertEq(2, ((L_II_1) xc).geta());
 //			assertEq("c d", ((L_II_1) xc).getb());
+		} catch (RuntimeException ex) {fail(ex);}
+		try {// test reference to map
+			xp = compile(
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def name='A' root='A'>\n" +
+"  <xd:json name=\"A\">\n" +
+"    {\"A\":\n" +
+"      { \"Name\": \"string()\", \"End\": [ {\"%script\": \"+; ref E#E\", \"x\": \"?; string()\"} ] }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>\n" +
+"<xd:def name='E' root='E'>\n" +
+"  <xd:json name='E'> { \"E\": \"string()\", \"L\": \"? string()\" } </xd:json>\n" +
+"</xd:def>\n" +
+"<xd:component>\n" +
+"  %class "+_package+".Mates_A %link A#A; %interface "+_package+".Mates_A_I %link A#A;\n" +
+"  %class "+_package+".Mates_EndS %link E#E; %interface "+_package+".Mates_EndS_I %link E#E;\n" +
+"</xd:component>\n" +
+"</xd:collection>");
+			genXComponent(xp);
+			json =
+"{\"A\":\n" +
+"  { \"Name\": \"xxx\",\n" +
+"    \"End\": [\n" +
+"      { \"L\": \"Y\", \"E\": \"aa\", \"x\": \"xx\" }, { \"L\": \"N\", \"x\": \"xy\", \"E\": \"ab\" }\n" +
+"    ]\n" +
+"  }\n" +
+"}";
+			xd = xp.createXDDocument("A");
+			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.

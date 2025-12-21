@@ -990,7 +990,8 @@ class XCGeneratorBase {
 							return null;
 						}
 					} else { // we return model class
-						return _components.get(s).getName();
+						XComponentInfo xcinfo = _components.get(s);
+						return xcinfo == null ? null : _components.get(s).getName();
 					}
 				}
 				// we have both, reference and model
@@ -1054,7 +1055,7 @@ class XCGeneratorBase {
 	}
 
 	/** Return correct name of inner class in the X-component.
-	 * @param className the name to be corrected.
+	 * @param className the class name to be corrected.
 	 * @param classNameBase base to chich tne new inner class is added.
 	 * @param classNames set with class names.
 	 * @return correct class name.
