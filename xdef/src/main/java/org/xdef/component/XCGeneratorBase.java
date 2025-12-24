@@ -1065,21 +1065,25 @@ class XCGeneratorBase {
 		final Set<String> classNames) {
 		int ndx = classNameBase.lastIndexOf('.');
 		String s = ndx >= 0 ? classNameBase.substring(ndx + 1) : classNameBase;
-		ndx=0;
 		String[] ss = s.split("#");
 		String t = className;
+		int x = 0;
 		for (int j = 0; j < ss.length; j++) {
 			if (t.equals(ss[j])) {
-				t = className + "_" + (++ndx);
+				t = className + "_" + (++x);
 				j = 0;
 			}
 		}
 		String s1 = s + '#' + t;
 		for (; classNames.contains(s1);) {
-			s1 = s + '#' + className + "_" + (++ndx);
+			t =  className + "_" + (++x);
+			if (s.contains(t)) {
+				t =  className + "_" + (++x);
+			}
+			s1 = s + '#' + t;
 		}
-		classNames.add(s1);
 		ndx = s1.lastIndexOf('#');
+		classNames.add(s1);
 		return s1.substring(ndx+1);
 	}
 

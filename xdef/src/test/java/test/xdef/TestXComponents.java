@@ -2182,6 +2182,41 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			genXComponent(xp = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"<A>\n" +
+"  <A/>\n" +
+"  <A>\n" +
+"      <A/>\n" +
+"      <A/>\n" +
+"  </A>\n" +
+"</A>\n" +
+"  <xd:component>%class "+_package+".Mates1_A %link A;</xd:component>\n" +
+"</xd:def>"));
+			parse(xp, "", xml = "<A><A/><A><A/><A/></A></A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xp.createXDDocument().xparseXComponent(xml, null, reporter).toXml());
+			assertNoErrorsAndClear(reporter);
+			xp = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>\n" +
+"{ \"A\": [\"occurs 0..* string();\"],\n" +
+"  \"B\": [\n" +
+"    { \"C\": [\"occurs 0..* string();\"], \"D\": [\"occurs 0..* string();\"] }\n" +
+"  ],\n" +
+"}\n" +
+"  </xd:json>\n" +
+"  <xd:component> %class "+_package+".XCA %link A;</xd:component>\n" +
+"</xd:def>");
+			json = "{ \"A\": [], \"B\": [ { \"C\": [\"b 2\"], \"D\": [] } ] }";
+			o = jparse(xp, "", json, reporter);
+			assertNoErrorsAndClear(reporter);
+			genXComponent(xp);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 		resetTester();
