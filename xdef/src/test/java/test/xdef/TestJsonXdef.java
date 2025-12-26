@@ -1185,7 +1185,6 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			json = "{\"A\": { \"B\": { \"y\": \"y\", \"x\": \"x\", \"q\": \"Q\", \"p\": \"P\" } } }\n";
-			xd = xp.createXDDocument("A");
 			x = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);

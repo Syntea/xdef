@@ -2193,15 +2193,28 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				XNode[] childNodes;
 				if (lenx > 1 && "map".equals(xel.getLocalName())
 					&& XDConstants.XON_NS_URI_W.equals(xel.getNSUri())
+					&& "map".equals(y.getLocalName()) && XDConstants.XON_NS_URI_W.equals(y.getNSUri())
 					&& xel._childNodes[0].getKind() == XMREFERENCE
 					&& xel._childNodes[1].getKind() == XMMIXED
 					&& xel._childNodes[lenx].getKind() == XMSELECTOR_END
-					&& leny > 1 && y._childNodes[0].getKind() == XMMIXED
-					&& y._childNodes[leny-1].getKind() == XMSELECTOR_END) {
-					// both mixed -> join to one
-					childNodes = new XNode[lenx + leny - 2];
-					copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
-					copyChildNodes(y._childNodes, 1, childNodes, lenx - 1, leny-1);
+					&& (leny > 1 && y._childNodes[0].getKind() == XMMIXED
+						&& y._childNodes[leny-1].getKind() == XMSELECTOR_END
+					 || leny <= 1)) {
+					if (leny > 1) {
+						// both mixed -> join to one
+						childNodes = new XNode[lenx + leny - 2];
+						copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
+						copyChildNodes(y._childNodes, 1, childNodes, lenx - 1, leny-1);
+					} else {
+						childNodes = new XNode[lenx + leny];
+						copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
+						if (leny > 0) {
+							childNodes[lenx - 1] = y._childNodes[0];
+							childNodes[lenx] = xel._childNodes[lenx];
+						} else {
+							childNodes[lenx-1] = xel._childNodes[lenx];
+						}
+					}
 				} else {
 					childNodes = new XNode[lenx + leny];
 					if (leny > 0) {
