@@ -70,7 +70,6 @@ public class TestGenJava extends XDTester {
 			xml = "<A/>";
 			test("TestGenJava_0", compile(xdef), "", xml);
 
-
 			xdef = "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"A\"><A/></xd:def>";
 			xml = "<A/>";
 			test("bugreports.TestGenJava_1", compile(xdef), "", xml);

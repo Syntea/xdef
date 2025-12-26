@@ -72,16 +72,10 @@ public class MyTest extends XDTester {
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
-		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-			XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);// true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef_debug
-//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
+//		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
 		Object o, x, j;
 		String json, s, xdef, xml;
