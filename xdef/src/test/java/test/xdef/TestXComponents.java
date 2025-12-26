@@ -2162,8 +2162,8 @@ public final class TestXComponents extends XDTester {
 "  <xd:json name='E'> { \"E\": \"string()\", \"L\": \"? string()\" } </xd:json>\n" +
 "</xd:def>\n" +
 "<xd:component>\n" +
-"  %class "+_package+".Mates_A %link A#A; %interface "+_package+".Mates_A_I %link A#A;\n" +
-"  %class "+_package+".Mates_EndS %link E#E; %interface "+_package+".Mates_EndS_I %link E#E;\n" +
+"  %class "+_package+".Matesx_A %link A#A; %interface "+_package+".Matesx_A_I %link A#A;\n" +
+"  %class "+_package+".Matesx_EndS %link E#E; %interface "+_package+".Matesx_EndS_I %link E#E;\n" +
 "</xd:component>\n" +
 "</xd:collection>");
 			genXComponent(xp);
@@ -2176,7 +2176,7 @@ public final class TestXComponents extends XDTester {
 "  }\n" +
 "}";
 			xd = xp.createXDDocument("A");
-			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);

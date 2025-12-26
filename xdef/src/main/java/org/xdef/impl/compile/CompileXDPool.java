@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
@@ -40,6 +41,8 @@ import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.compile.CompileBase.ELEM_MODE;
 import static org.xdef.impl.compile.CompileBase.GLOBAL_MODE;
+import static org.xdef.impl.compile.CompileReference.XMINCLUDE;
+import static org.xdef.impl.compile.CompileReference.XMREFERENCE;
 import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
 import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
 import static org.xdef.impl.compile.XScriptParser.INIT_SYM;
@@ -56,7 +59,6 @@ import static org.xdef.model.XMNode.XMMIXED;
 import static org.xdef.model.XMNode.XMSELECTOR_END;
 import static org.xdef.model.XMNode.XMSEQUENCE;
 import static org.xdef.model.XMNode.XMTEXT;
-import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariable;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -2188,16 +2190,30 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				//replace reference with child nodes of the referred node
 				lenx--; //reference itself we remove
-				XNode[] childNodes = new XNode[lenx + leny];
-				if (leny > 0) {
-					copyChildNodes(y._childNodes, 0, childNodes, 0, leny);
-				}
-				if (lenx > 0 && leny > lenx && childNodes[leny-lenx].getKind() == XMSELECTOR_END) {
-					XSelectorEnd xsel =  (XSelectorEnd) childNodes[leny-lenx]; // ends with XMSELECTOR_END?
-					childNodes[leny] = xsel; // move it ti te end
-					copyChildNodes(xel._childNodes, 1, childNodes, leny-lenx, lenx);
+				XNode[] childNodes;
+				if (lenx > 1 && "map".equals(xel.getLocalName())
+					&& XDConstants.XON_NS_URI_W.equals(xel.getNSUri())
+					&& xel._childNodes[0].getKind() == XMREFERENCE
+					&& xel._childNodes[1].getKind() == XMMIXED
+					&& xel._childNodes[lenx].getKind() == XMSELECTOR_END
+					&& leny > 1 && y._childNodes[0].getKind() == XMMIXED
+					&& y._childNodes[leny-1].getKind() == XMSELECTOR_END) {
+					// both mixed -> join to one
+					childNodes = new XNode[lenx + leny - 2];
+					copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
+					copyChildNodes(y._childNodes, 1, childNodes, lenx - 1, leny-1);
 				} else {
-					copyChildNodes(xel._childNodes, 1, childNodes, leny, lenx);
+					childNodes = new XNode[lenx + leny];
+					if (leny > 0) {
+						copyChildNodes(y._childNodes, 0, childNodes, 0, leny);
+					}
+					if (lenx > 0 && leny > lenx && childNodes[leny-lenx].getKind() == XMSELECTOR_END) {
+						XSelectorEnd xsel =  (XSelectorEnd) childNodes[leny-lenx]; // ends with XMSELECTOR_END?
+						childNodes[leny] = xsel; // move it ti te end
+						copyChildNodes(xel._childNodes, 1, childNodes, leny-lenx, lenx);
+					} else {
+						copyChildNodes(xel._childNodes, 1, childNodes, leny, lenx);
+					}
 				}
 				xel._childNodes = childNodes;
 				if (nsOrig != null && nsNew != null && !nsOrig.equals(nsNew)) {
@@ -2284,6 +2300,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 			y._childNodes = childNodes;
 			childNodes = xel._childNodes;
+/**/
 			if (leny == 1) {
 				xel._childNodes[i] = y._childNodes[0];
 			}
@@ -2298,6 +2315,28 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if (i < lenx - 1) {
 				copyChildNodes(childNodes,i+1,xel._childNodes,i+leny,lenx-i-1);
 			}
+/**
+			XNode lastEnd = null;
+			if (i > 0) {
+				copyChildNodes(childNodes, 0, xel._childNodes, 0, i);
+			}
+			if (lenx > 0 && childNodes[0].getKind() == XMINCLUDE && leny > 1
+				&& y._childNodes[leny - 1].getKind() == XMSELECTOR_END) {
+				copyChildNodes(y._childNodes, 0, xel._childNodes, i, leny-1);
+				lastEnd = y._childNodes[leny-1];
+			} else {
+				copyChildNodes(y._childNodes, 0, xel._childNodes, i, leny);
+			}
+			if (i < lenx - 1) {
+				if (lastEnd != null) {
+					copyChildNodes(childNodes,i+1,xel._childNodes,i+leny-1,lenx-i-1);
+					xel._childNodes[newLen - 1] = lastEnd;
+
+				} else {
+					copyChildNodes(childNodes,i+1,xel._childNodes,i+leny,lenx-i-1);
+				}
+			}
+/**/
 			lenx = newLen;
 		}
 		return result;

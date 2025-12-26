@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.36, release-date 2025-12-26
-  .
+  * Fixed a bug when generating an XComponent interface with an internal map when importing more than one
+    named item.
 
 # Version 42.2.35, release-date 2025-12-16
   * Fixed a bug when generating the XComponent interface with inner map.
