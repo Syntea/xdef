@@ -38,6 +38,34 @@ public class Mates extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+/**/
+		try { // test extension of map and correct reporting.
+			xd = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>{ \"address\": { \"%script\": \"optional; ref addr\", \"x\": \"int()\"} }</xd:json>\n" +
+"  <xd:json name='addr'> { \"d\": \"string()\" } </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			jparse(xd, "{ }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"cde\", \"x\": 1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"dd\" } }", reporter);
+			if (reporter.size() != 1 || !reporter.toString().contains("'x'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
+			}
+			jparse(xd, "{ \"address\": { \"x\": 1 } }", reporter);
+//			if (reporter.size() != 1 || !reporter.toString().contains("'d'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'd' is missing
+//			}
+			jparse(xd, "{ \"address\": { } }", reporter);
+//			if (reporter.size() != 2) {
+//E XDEF539: Required element 'd' is missing; line=1; column=15; source="STRING_DATA"; path=$.['address']; X-position=#addr/$.['d']
+//E XDEF539: Required element 'x' is missing; line=1; column=15; source="STRING_DATA"; path=$.['address']; X-position=#A/$.['address'].['d']
+
+				fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
+//			}
+		} catch (RuntimeException ex) {fail(ex);}
+if(true)return;
 /**
 		try {
 			xdef =
