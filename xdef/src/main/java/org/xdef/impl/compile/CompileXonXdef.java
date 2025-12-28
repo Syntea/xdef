@@ -391,7 +391,7 @@ public final class CompileXonXdef extends XScriptParser {
 					}
 					eos();
 				}
-			} else if (map.size() <= 1 || "json".equals(parent.getLocalName())) {
+			} else if (map.size() <= 1) {
 				pn2 = pn1; // less then 2 items or parent is a json model => do not add "xd:mixed" element
 			} else { // more then 1 items and parent is not json model => add "xd:mixed" element
 				pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element

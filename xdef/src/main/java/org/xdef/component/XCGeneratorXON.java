@@ -910,14 +910,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\treturn (o instanceof org.xdef.xon.XonTools.JNull)? null"+LN+
 "\t\t\t: ";
 				switch (typ) {
-					case "String":
-						s +=
-"(String) org.xdef.xon.XonTools.xmlToJValue((String)o);";
-						break;
+					case "String": s += "(String) org.xdef.xon.XonTools.xmlToJValue((String)o);"; break;
 					case "Object":
-						s +=
-"o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;";
-						break;
+						s += "o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;"; break;
 					default: s += "("+typ+")o;";
 				}
 				s += LN+"\t}"+LN;
@@ -957,8 +952,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				s += nodes[3].maxOccurs() > 1
 ?("\t\tif (!_jx$map.isEmpty()) return _jx$map.get(0).toXon();"+LN)
 :("\t\tif (_jx$map != null) return _jx$map.toXon();"+LN);
-				s +=
-"\t\treturn _jx$item != null? _jx$item.toXon(): null;"+LN+"\t";
+				s += "\t\treturn _jx$item != null? _jx$item.toXon(): null;"+LN+"\t";
 			} else {
 				s += "return org.xdef.component.XComponentUtil.toXon(this);";
 			}

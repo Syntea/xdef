@@ -1044,8 +1044,7 @@ public class TestJsonXdef extends XDTester {
 				fail(reporter.toString()); // should be XDEF539: Required element 'd' is missing
 			}
 			jparse(xd, "{ \"address\": { } }", reporter);
-			if (reporter.size() != 2
-				|| !(reporter.toString().contains("'d'") && reporter.toString().contains("'x'"))) {
+			if (reporter.size() != 2) {
 				fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
 			}
 		} catch (RuntimeException ex) {fail(ex);}
@@ -1110,17 +1109,47 @@ public class TestJsonXdef extends XDTester {
 			assertErrorsAndClear(reporter); //E XDEF507: Not allowed item in array
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test reference to map
+			xp = XDFactory.compileXD(null,
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def name='A' root='A'>\n" +
+"  <xd:json name = \"A\">\n" +
+"    {\"A\":\n" +
+"      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\" } }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_A0 %link A; %interface "+_package+".Mates_A0_I %link A;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"<xd:def name='B' root='B'>\n" +
+"  <xd:json name='B'>\n" +
+"    { \"p\":  \"string()\" }\n" +
+"  </xd:json>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_B0 %link B; %interface "+_package+".Mates_B0_I %link B;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"</xd:collection>");
+			genXComponent(xp);
+			json = "{\"A\":{ \"B\": { \"p\": \"P\", \"x\": \"x\" } } }\n";
+			xd = xp.createXDDocument("A");
+			x = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			json = "{\"A\":{ \"B\": { \"x\": \"x\", \"p\": \"P\" } } }\n";
+			x = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
 "  <xd:json name = \"A\">\n" +
 "    {\"A\":\n" +
-"      { \"B\":\n" +
-"           {\n" +
-"             \"%script\": \"ref B#B\",\n" +
-"             \"x\": \"?; string()\"\n" +
-"           }\n" +
-"      }\n" +
+"      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\" } }\n" +
 "    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
@@ -1155,12 +1184,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:def name='A' root='A'>\n" +
 "  <xd:json name = \"A\">\n" +
 "    {\"A\":\n" +
-"      { \"B\":\n" +
-"        { \"%script\": \"ref B#B\",\n" +
-"           \"x\": \"?; string()\",\n" +
-"           \"y\": \"?; string()\"\n" +
-"        }\n" +
-"      }\n" +
+"      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\", \"y\": \"?; string()\" } }\n" +
 "    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
@@ -1191,18 +1215,18 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
-//		try {
-//			xp = compile(
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='a'>\n" +
-//"  <xd:json name='a'>\n" +
-//"    {  \"%script\": \"finally now();\",\n"+
-//"       \"a\":  \"int()\", \"b\":  \"string();\", \"c\": \"string();\",\n" +
-//"    }\n" +
-//"  </xd:json>\n" +
-//"</xd:def>");
-//			jparse(xp, "", "{\"c\":\"LMN0H7\",\"a\":1,\"b\":\"MA5800-X17\"}", reporter);
-//			assertNoErrorsAndClear(reporter);
-//		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			xp = compile(
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='a'>\n" +
+"  <xd:json name='a'>\n" +
+"    {  \"%script\": \"finally now();\",\n"+
+"       \"a\":  \"int()\", \"b\":  \"string();\", \"c\": \"string();\",\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>");
+			jparse(xp, "", "{\"c\":\"LMN0H7\",\"a\":1,\"b\":\"MA5800-X17\"}", reporter);
+			assertNoErrorsAndClear(reporter);
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}

@@ -41,7 +41,6 @@ import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.compile.CompileBase.ELEM_MODE;
 import static org.xdef.impl.compile.CompileBase.GLOBAL_MODE;
-import static org.xdef.impl.compile.CompileReference.XMINCLUDE;
 import static org.xdef.impl.compile.CompileReference.XMREFERENCE;
 import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
 import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
@@ -2191,16 +2190,22 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				//replace reference with child nodes of the referred node
 				lenx--; //reference itself we remove
 				XNode[] childNodes;
-				if (lenx > 1 && "map".equals(xel.getLocalName())
+				if ("map".equals(xel.getLocalName())
 					&& XDConstants.XON_NS_URI_W.equals(xel.getNSUri())
 					&& "map".equals(y.getLocalName()) && XDConstants.XON_NS_URI_W.equals(y.getNSUri())
-					&& xel._childNodes[0].getKind() == XMREFERENCE
+					&& (lenx > 1 && xel._childNodes[0].getKind() == XMREFERENCE
 					&& xel._childNodes[1].getKind() == XMMIXED
 					&& xel._childNodes[lenx].getKind() == XMSELECTOR_END
-					&& (leny > 1 && y._childNodes[0].getKind() == XMMIXED
+					&& y._childNodes[0].getKind() == XMMIXED
 						&& y._childNodes[leny-1].getKind() == XMSELECTOR_END
-					 || leny <= 1)) {
-					if (leny > 1) {
+					|| leny <= 1 || lenx == 1 && leny == 1)) {
+					if (lenx == 1 && leny == 1) {
+						childNodes = new XNode[4];
+						childNodes[0] = new XMixed();
+						childNodes[1] = y._childNodes[0]; // XMixed
+						childNodes[2] = xel._childNodes[1];
+						childNodes[3] = new XSelectorEnd(); // selector_end
+					} else if (leny > 1) {
 						// both mixed -> join to one
 						childNodes = new XNode[lenx + leny - 2];
 						copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
