@@ -402,22 +402,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 					}
 				} else {
-					for (Entry<String, SBuffer> e:
-						_codeGenerator._components.entrySet()) {
-						String cn = e.getValue().getString();
-						ndx = cn.indexOf(" extends ");
-						if (ndx > 0) {
-							cn = cn.substring(0, ndx);
+					for (Entry<String, SBuffer> e: _codeGenerator._components.entrySet()) {
+						String t = e.getValue().getString();
+						if ((ndx = t.indexOf(" extends ")) > 0) {
+							t = t.substring(0, ndx);
 						}
-						ndx = cn.indexOf(" implements ");
-						if (ndx > 0) {
-							cn = cn.substring(0, ndx);
+						if ((ndx = t.indexOf(" implements ")) > 0) {
+							t = t.substring(0, ndx);
 						}
-						ndx = cn.indexOf(" interface ");
-						if (ndx > 0) {
-							cn = cn.substring(0, ndx);
+						if ((ndx = t.indexOf(" interface ")) > 0) {
+							t = t.substring(0, ndx);
 						}
-						if (className.equals(cn) && !model.equals(e.getKey())) {
+						if (className.equals(t) && !model.equals(e.getKey())) {
 							//Duplicate declaration of class &{0} for XComponent &{1}
 							error(spos, XDEF.XDEF352, className,model);
 						}
@@ -633,7 +629,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				SBuffer lang = pa == null ? null : pa._value;
 				pa = _precomp.getXdefAttr(nodei, "default", false, true);
 				SBuffer deflt = pa == null ? null : pa._value;
-				_scriptCompiler.compileLexicon(nodei,lang,deflt,xp,languages);
+				_scriptCompiler.compileLexicon(nodei, lang, deflt, xp, languages);
 				_precomp.reportNotAllowedAttrs(nodei);
 			}
 			if (!languages .isEmpty()) {
@@ -694,8 +690,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						if (ndx >= 0) {
 							v = v.substring(ndx+1);
 						}
-						ndx = v.lastIndexOf('/');
-						if (ndx >= 0) {
+						if ((ndx = v.lastIndexOf('/')) >= 0) {
 							v = v.substring(ndx+1);
 						}
 						if (v.startsWith("@")) {
@@ -713,8 +708,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private void compileDeclaration(final PNode nodei, final boolean remove) {
 		boolean local = isLocalScope(nodei, remove);
 		String defName = nodei._xdef == null ? null : nodei._xdef.getName();
-		_scriptCompiler.setSource(
-			nodei._value, defName, nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
+		_scriptCompiler.setSource(nodei._value,
+			defName, nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
 		_scriptCompiler.compileDeclaration(local);
 	}
 
@@ -750,8 +745,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		for (PNode nodei : listComponent) {
 			String defName = nodei._xdef==null ? "" : nodei._xdef.getName();
-			_scriptCompiler.setSource(
-				nodei._value, defName, nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
+			_scriptCompiler.setSource(nodei._value,
+				defName, nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
 			compileComponentDeclaration();
 		}
 	}
@@ -762,12 +757,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setReportWriter(reporter); // set reporter to the compiler of script
 		_scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
 		compileMethodsAndClassesAttrs();
-		// Move all declarations of BNF grammars and variables from the list of X-definitions to the separated
-		// lists of variable declarations and of BNF grammar declarations.
+		//Move all declarations of BNF grammars and variables from the list of X-definitions to the separated
+		//lists of variable declarations and of BNF grammar declarations.
 		for (PNode def : _xdefPNodes) {
-			// since we are removing childnodes from X-definition we must process the childnodes list
-			// downwards! However, we insert the item to the first position of the created
-			// list to assure the original sequence of items in the X-definition
+			//Since we are removing childnodes from X-definition we must process the childnodes list
+			//downwards! However, we insert the item to the first position of the created
+			//list to assure the original sequence of items in the X-definition
 			for (int j = def.getChildNodes().size() - 1;  j >= 0; j--) {
 				PNode nodei = def.getChildNodes().get(j);
 				if (nodei._nsindex != XPreCompiler.NS_XDEF_INDEX) {
@@ -797,14 +792,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				def.getChildNodes().remove(j); // remove this node from the X-definition PNode
 			}
 		}
-
 		_scriptCompiler.setReportWriter(new ArrayReporter()); //set a temporary reporter which we throw out.
-		//Compile declarations and we throw errors out. Due to this trick after this step there will be
-		//resolved postdefines and we'll know all types of declared variables and methods. precompile
-		// declarations and BNF grammars - just to prepare variable list and to sort item
-		//to resolve cross references.
+		//Compile declarations and we throw errors out. Due to this trick after this step there will resolve
+		//postdefines and we'll know all types of declared variables and methods. precompile declarations
+		//and BNF grammars - just to prepare variable list and to sort item to resolve cross references.
 		preCompileDeclarations();
-
 		//Now forget the generated code and compile declatations again with known types of declared objects
 		//and with the original error reporter. After compilation the nodes containing declarations
 		//are removed from the tree.
@@ -813,17 +805,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler.setReportWriter(reporter); //reset original reporter
 		_codeGenerator.reInit(); //clear the generated code
 		_scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
-		// now compile all: BNF gramars, declarations, components, lexicon
+		//Now compile all: BNF gramars, declarations, components, lexicon
 		compileDeclarations(_listBNF, _listDecl, _listComponent);
-		// clear all postdefines (should be already dleared, but who knows?)
+		//Clear all postdefines (should be already dleared, but who knows?)
 		_codeGenerator.clearPostdefines();
 	}
 
 	/** Add the name of X-definition if it is not yet there. */
 	private String canonizeReferenceName(final String refName,
 		final XDefinition xdef) {
-		String name = refName;
-		String defName = xdef.getName();
+		String name = refName, defName = xdef.getName();
 		int i = name.indexOf('#');
 		if (i == 0) {
 			name = name.substring(1);
@@ -969,26 +960,17 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			newNode = new XSequence();
 			defaultOcc.setUnspecified();
 		} else switch (refName) {
-			case "mixed":
-				newNode = new XMixed();
-				defaultOcc.setUnspecified();
-				break;
-			case "choice":
-				newNode = new XChoice(); //min=1; max=1
-				break;
-			case "sequence":
-				newNode = new XSequence(); //min=1;max=1
-				break;
-			default: //include
-				newNode = new XSequence();
-				defaultOcc.setUnspecified();
+			case "mixed": newNode = new XMixed(); defaultOcc.setUnspecified(); break;
+			case "choice": newNode = new XChoice(); break; //min=1; max=1
+			case "sequence": newNode = new XSequence(); break; //min=1;max=1
+			default: newNode = new XSequence(); defaultOcc.setUnspecified(); //include				
 		}
 		newNode.setUnspecified();
 		newNode.setSPosition(copySPosition(pn._name));
 		PAttr pa = _precomp.getXdefAttr(pn, "ref", false, true);
 		SBuffer ref = pa == null ? null : pa._value;
-		newNode.setXDPosition(
-			xdef.getXDPosition()+'$' + pn._name.getString() + (ref != null ? "("+ref.getString()+")" : ""));
+		newNode.setXDPosition(xdef.getXDPosition()+'$' + pn._name.getString()
+			+ (ref != null ? "("+ref.getString()+")" : ""));
 		short kind = newNode.getKind();
 		if (kind == XMCHOICE || kind == XMMIXED || kind == XMSEQUENCE) {
 			pa = _precomp.getXdefAttr(pn, "script", false, true);
@@ -1003,7 +985,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				SBuffer s = _scriptCompiler.compileGroupScript(newNode);
 				if (s != null) {
 					if (ref != null) {
-						//Reference ca'nt be specified both in attributes 'ref' and 'script'
+						//Reference can't be specified both in attributes 'ref' and 'script'
 						error(ref, XDEF.XDEF117);
 					}
 					ref = s;
@@ -1159,11 +1141,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						String pfx = e.getKey();
 						int ndx = name.indexOf(':');
 						if (ndx > 0) {
-							if (pfx.isEmpty()) {
-								name = name.substring(ndx + 1);
-							} else {
-								name = pfx + name.substring(ndx);
-							}
+							name = pfx.isEmpty() ? name.substring(ndx + 1) : pfx + name.substring(ndx);
 						} else if (!pfx.isEmpty()) {
 							name = pfx + ':' + name;
 						}

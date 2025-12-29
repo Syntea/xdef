@@ -209,10 +209,8 @@ LN+(genJavadoc ?
 			 // in first run generate only component classes, in second run generate only interfaces
 			for (Entry<String, String> e: xcarray) {
 				final String model = e.getKey();
-				String className = e.getValue();
-				String extName = "", interfaceName = "";
+				String className = e.getValue(), packageName = "", extName = "", interfaceName = "";
 				int ndx;
-				String packageName = "";
 				if ((ndx = className.indexOf(" interface ")) > 0) {
 					if (runCount == 0) {
 						String s = className.substring(ndx + 11);
