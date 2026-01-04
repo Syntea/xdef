@@ -224,7 +224,7 @@ public final class TestXComponents extends XDTester {
 "    %class "+_package+".xcomp.XCPerson\n" +
 "        extends "+_package+".TestXComponents_bindAbstract\n" +
 "        implements "+_package+".TestXComponents_bindInterface\n" +
-"    %link Person#Person;\n" +
+"        %link Person#Person;\n" +
 "    %bind Name %with "+_package+".obj.Person %link Person#Person/@Name;\n" +
 "    %bind SBirth %with "+_package+".obj.Person %link Person#Person/@Birth;\n" +
 "    %bind SexString %with "+_package+".obj.Person %link Person#Person/@Sex;\n" +
@@ -2126,9 +2126,10 @@ public final class TestXComponents extends XDTester {
 "  <A a = \"int()\" />\n" +
 "  <B xd:script =\"ref A\" b=\"string()\" />\n" +
 "<xd:component>\n" +
-"%class "+_package+".L_X_1 %link #A; %class "+_package+".L_XX_1 %link #B;\n" +
+"%class "+_package+".L_X_1 %link #A;\n" +
+"%class "+_package+".L_XX_1 %link #B;\n" +
 "%interface "+_package+".L_I_1 %link #A;\n" +
-"%interface "+_package+".L_II_1 extends "+_package+".Lubor1_I_1 %link #B;\n" +
+"%interface "+_package+".L_II_1 extends "+_package+".L_I_1 %link #B;\n" +
 "</xd:component>\n" +
 "</xd:def>"));
 			xd = xp.createXDDocument("");

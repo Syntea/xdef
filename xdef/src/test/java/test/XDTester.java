@@ -1820,6 +1820,43 @@ public abstract class XDTester extends STester {
 		return genXComponent(xp, new File(dir));
 	}
 
+	/** Create XComponents from XDPool to temp directory xp and copy created files to souorce directory.
+	 * @param xp XDPool with description of XComponents.
+	 * @return ArrayReporter with error messages from XComponent generation.
+	 * @throws RuntimeException if an error occurs.
+	 */
+	public ArrayReporter genXComponentAndCopySources(final XDPool xp) {
+		ArrayReporter ar = genXComponent(xp);
+		try {
+			copySources(new File(getTempDir()), new File(getSourceDir()).getParentFile());
+		} catch (SException ex) {
+			throw new SRuntimeException(ex.getReport());
+		}
+		return ar;
+	}
+
+	/** Copy files from fromFile to toFile.
+	 * @param fromFile file to copy
+	 * @param toFile where to copy.
+	 * @throws SException if an error occurs.
+	 */
+	private void copySources(final File fromFile, final File toFile) throws SException {
+		if (fromFile.isDirectory()) {
+			for (File x: fromFile.listFiles()) {
+				if (x.isDirectory()) {
+					File y;
+					y = new File(toFile, x.getName());
+					y.mkdir();
+					copySources(x, y);
+				} else {
+					copySources(x, new File(toFile, x.getName()));
+				}
+			}
+		} else {
+			FUtils.copyToFile(fromFile, toFile);
+		}
+	}
+
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir directory where to generate Java sources.
@@ -1838,6 +1875,42 @@ public abstract class XDTester extends STester {
 			return result;
 		} catch (IOException ex) {
 			throw new SRuntimeException(ex);
+		}
+	}
+
+	/** Delete sources created with genXComponentAndCopySources */
+	public void deleteCreatedSources() {
+		deleteCreatedSources(new File(getTempDir(), "bugreports"),
+			new File(new File(getSourceDir()).getParentFile(), "bugreports"));
+	}
+
+	/** Delete files in whereFile which are copy of fromFile. */
+	private void deleteCreatedSources(final File fromFile, final File whereFile) {
+		if (fromFile == null || !fromFile.exists() || whereFile == null || !whereFile.exists()) {
+			return; // nothing to do
+		}
+		if (fromFile.isDirectory()) {
+			if (!whereFile.isDirectory()) {
+				throw new RuntimeException("Nof dir: " + whereFile);
+			}
+			for (File x: fromFile.listFiles()) {
+				File y = new File(whereFile, x.getName());
+				if (x.isDirectory()) {
+					deleteCreatedSources(x, y);
+				} else {
+					y.delete();
+				}
+			}
+			if (whereFile.listFiles().length == 0) {
+				whereFile.delete();
+			}
+		} else {
+			if (whereFile.isDirectory()) {
+				throw new RuntimeException("Nof dir: " + whereFile);
+			}
+			if (whereFile.listFiles().length == 0) {
+				whereFile.delete();
+			}
 		}
 	}
 
@@ -2051,7 +2124,7 @@ public abstract class XDTester extends STester {
 			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 			try (ObjectInputStream ois = new ObjectInputStream(bais)) {
 				XComponent yc = (XComponent) ois.readObject();
-				ReportWriter rw = KXmlUtils.compareElements(xc.toXml(), yc.toXml());
+				KXmlUtils.compareElements(xc.toXml(), yc.toXml());
 				String s1 = XonUtils.toXonString(xc.toXon());
 				String s2 = XonUtils.toXonString(yc.toXon());
 				if (s1 == null) {
