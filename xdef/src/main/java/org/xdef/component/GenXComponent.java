@@ -276,7 +276,7 @@ LN+(genJavadoc ?
 					extClass = " extends " + className.substring(ndx+8).trim();
 					className = className.substring(0,ndx).trim();
 				} else if ((ndx = className.indexOf(" implements")) > 0) {
-					extClass=" implements "+className.substring(ndx+11).trim();
+					extClass = " implements "+className.substring(ndx+11).trim();
 					className = className.substring(0,ndx).trim();
 				}
 				XMNode xn = xdpool.findModel(model);
