@@ -1,40 +1,83 @@
 #!/bin/bash
 #update actual commit as new release-version (update pom.xml, changelog.md, create git-tag) and
-#shift version to the next development version (entered from std-input) as new commit
+#shift version to the next development version (entered from std-input, without postfix '-SNAPSHOT') as new commit
+set -e
 
-#parameters
-if [ $# -eq 0 ]
-then
-    read -p "enter next development version: " versionNext
-else 
-    versionNext=$1
-fi
+#constants
+nl='
+'
 
+
+echo '========================'
+echo 'Check and set parameters'
+echo '========================'
+#check git status up-to-date
+( unset LANG; git status; ) | grep 'Your branch is up to date with' > /dev/null ||
+    { echo "ERROR: git-repo is not up-to-date"; set -x; git status; exit; }
+
+#get actual parameters
 version=$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)
 releaseDate=$(date +'%Y-%m-%d')
 changelog=$(awk -v RS='(\r?\n){2,}' 'NR == 1' xdef/changelog.md)
 
+#set a check new parameters
+if [ $# -eq 0 ]
+then
+    echo "actual version to release: ${version} (Major.Minor.Revision)"
+    echo "release-date:              ${releaseDate} (YYYY-MM-DD)"
+    echo "changelog:${nl}------------------${nl}${changelog}${nl}------------------"
+
+    read -p "enter next development version (Major.Minor.Revision): " versionNext
+else 
+    versionNext=$1
+fi
+
+echo "${versionNext}" | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' > /dev/null || \
+    { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}"; exit; }
+
+echo "========================================="
 echo "actual version to release: ${version}"
 echo "release-date:              ${releaseDate}"
-echo "changelog:\n------\n${changelog}\n------\n"
-echo "next development version:  ${versionNext}"
-read -p "Press key Enter to continue... "
+echo "next development version:  ${versionNext}-SNAPSHOT"
+echo "changelog:${nl}------------------${nl}${changelog}${nl}------------------"
+echo "========================================="
 
-mvn versions:set-property -Dproperty=release.date -DnewVersion="${releaseDate}"
+read -p "Press key Enter to continue... " xxx
 
-sed 's/\${version}/'"${version}"'/;s/\${release.date}/'"${releaseDate}"'/' xdef/changelog.md | head -n 10
-description=$(head -n1 xdef/changelog.md | tr '#')
 
-git tag "version/${version}" --description "${description}"
-git commit -m "update pom.xml/release.date and xdef/changelog.md as for release-version ${version}"
+echo '====================='
+echo 'Create release commit'
+echo '====================='
+set -x
+mvn versions:set-property -Dproperty=release.date -DnewVersion="${releaseDate}" > /dev/null
+echo "pom.xml: set release.date: $(mvn help:evaluate -Dexpression=release.date -q -DforceStdout)"
 
-mvn versions:set-property -Dproperty=revision -DnewVersion=${VERSION_NEXT}
-(   echo '# Version ${version}, release-date ${release.date}'
-    echo
-    cat xdef/changelog.md
-) > xdef/changelog.md
+sed -i 's/\${version}/'"${version}"'/;s/\${release.date}/'"${releaseDate}"'/' xdef/changelog.md
+tag="version/${version}"
+tagDesc="Version ${version}, release-date ${releaseDate}${nl}${nl}${changelog}"
 
+git add pom.xml xdef/changelog.md
+git commit -m "update pom.xml:release.date and xdef/changelog.md as for release-version ${version}"
+git tag "${tag}" -m "${tagDesc}"
+
+
+set +x
+echo '=============================='
+echo 'Create next development commit'
+echo '=============================='
+set -x
+mvn versions:set-property -Dproperty=revision -DnewVersion="${versionNext}" > /dev/null
+echo "pom.xml: set version: $(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)"
+sed -i '1i # Version ${version}, release-date ${release.date}\n' xdef/changelog.md
+
+git add pom.xml xdef/changelog.md
 git commit -m "shift version to the next development version ${versionNext}"
 
-#git push
-#git push tags
+
+set +x
+echo '====================='
+echo 'Push commits and tags'
+echo '====================='
+set -x
+git push
+git push origin "${tag}"
