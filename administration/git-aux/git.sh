@@ -11,9 +11,10 @@ nl='
 echo '========================'
 echo 'Check and set parameters'
 echo '========================'
-#check git status up-to-date
-( unset LANG; git status; ) | grep 'Your branch is up to date with' > /dev/null ||
-    { echo "ERROR: git-repo is not up-to-date"; set -x; git status; exit; }
+#check git status up-to-date and clean
+( unset LANG; git status; ) | grep -z 'Your branch is up to date with.*nothing to commit, working tree clean' > /dev/null \
+    && { echo "git-repo is up-to-date and clean"; } \
+    || { echo "ERROR: git-repo is not up-to-date and clean"; set -x; git status; exit; }
 
 #get actual parameters
 version=$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)
@@ -32,8 +33,8 @@ else
     versionNext=$1
 fi
 
-echo "${versionNext}" | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' > /dev/null || \
-    { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}"; exit; }
+echo "${versionNext}" | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' > /dev/null \
+    || { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}"; exit; }
 
 echo "========================================="
 echo "actual version to release: ${version}"
