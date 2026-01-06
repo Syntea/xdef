@@ -60,13 +60,13 @@
 
     <properties>
         <!-- update after release version, may change by:
-             > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
+            > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
         -->
         <revision>42.2.37</revision>
         <!-- use profile "release" for build release-version -->
         <changelist>-SNAPSHOT</changelist>
         <!-- update before release version, may change by:
-             > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
+            > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
         -->
         <release.date>2025-12-28</release.date>
         <specification.version>4.2</specification.version>
