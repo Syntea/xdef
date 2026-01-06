@@ -28,6 +28,7 @@ import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.component.XCTextComponent;
 import org.xdef.component.XComponent;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.XDefinition;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.parsers.XSAbstractParser;
@@ -190,14 +191,10 @@ public class MyTest_0 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = false; // if false, all tests are invoked
 //		T = true; // if true, only the first one test is invoked
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);// true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef_debug
-//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
+		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
+//		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
 
 		File tempDir = clearTempDir();

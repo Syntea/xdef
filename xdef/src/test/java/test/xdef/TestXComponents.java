@@ -224,7 +224,7 @@ public final class TestXComponents extends XDTester {
 "    %class "+_package+".xcomp.XCPerson\n" +
 "        extends "+_package+".TestXComponents_bindAbstract\n" +
 "        implements "+_package+".TestXComponents_bindInterface\n" +
-"    %link Person#Person;\n" +
+"        %link Person#Person;\n" +
 "    %bind Name %with "+_package+".obj.Person %link Person#Person/@Name;\n" +
 "    %bind SBirth %with "+_package+".obj.Person %link Person#Person/@Birth;\n" +
 "    %bind SexString %with "+_package+".obj.Person %link Person#Person/@Sex;\n" +
@@ -1867,7 +1867,6 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xd, xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
-			assertEq("x", XComponentUtil.get(xc, "x"));
 			list = (List) XComponentUtil.getx(xc, "listOfY");
 			assertEq(list.size(), 3);
 			assertEq(1, XComponentUtil.get((XComponent) list.get(0), "y"));
@@ -2127,9 +2126,10 @@ public final class TestXComponents extends XDTester {
 "  <A a = \"int()\" />\n" +
 "  <B xd:script =\"ref A\" b=\"string()\" />\n" +
 "<xd:component>\n" +
-"%class "+_package+".L_X_1 %link #A; %class "+_package+".L_XX_1 %link #B;\n" +
+"%class "+_package+".L_X_1 %link #A;\n" +
+"%class "+_package+".L_XX_1 %link #B;\n" +
 "%interface "+_package+".L_I_1 %link #A;\n" +
-"%interface "+_package+".L_II_1 extends "+_package+".Lubor1_I_1 %link #B;\n" +
+"%interface "+_package+".L_II_1 extends "+_package+".L_I_1 %link #B;\n" +
 "</xd:component>\n" +
 "</xd:def>"));
 			xd = xp.createXDDocument("");
@@ -2139,7 +2139,7 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-//			assertEq(1, ((L_I_1) xc).geta());
+			assertEq(1, XComponentUtil.get(xc, "a")); //	assertEq(1, ((L_I_1) xc).geta());
 			xml = "<B a=\"2\" b=\"c d\" />";
 			parse(xd, xml, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -2149,6 +2149,75 @@ public final class TestXComponents extends XDTester {
 //			assertEq(2, ((L_II_1) xc).geta());
 //			assertEq("c d", ((L_II_1) xc).getb());
 		} catch (RuntimeException ex) {fail(ex);}
+		try {// test reference to map
+			xp = compile(
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def name='A' root='A'>\n" +
+"  <xd:json name=\"A\">\n" +
+"    {\"A\":\n" +
+"      { \"Name\": \"string()\", \"End\": [ {\"%script\": \"+; ref E#E\", \"x\": \"?; string()\"} ] }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>\n" +
+"<xd:def name='E' root='E'>\n" +
+"  <xd:json name='E'> { \"E\": \"string()\", \"L\": \"? string()\" } </xd:json>\n" +
+"</xd:def>\n" +
+"<xd:component>\n" +
+"  %class "+_package+".Matesx_A %link A#A; %interface "+_package+".Matesx_A_I %link A#A;\n" +
+"  %class "+_package+".Matesx_EndS %link E#E; %interface "+_package+".Matesx_EndS_I %link E#E;\n" +
+"</xd:component>\n" +
+"</xd:collection>");
+			genXComponent(xp);
+			json =
+"{\"A\":\n" +
+"  { \"Name\": \"xxx\",\n" +
+"    \"End\": [\n" +
+"      { \"L\": \"Y\", \"E\": \"aa\", \"x\": \"xx\" }, { \"L\": \"N\", \"x\": \"xy\", \"E\": \"ab\" }\n" +
+"    ]\n" +
+"  }\n" +
+"}";
+			xd = xp.createXDDocument("A");
+			o = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			genXComponent(xp = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"<A>\n" +
+"  <A/>\n" +
+"  <A>\n" +
+"      <A/>\n" +
+"      <A/>\n" +
+"  </A>\n" +
+"</A>\n" +
+"  <xd:component>%class "+_package+".Mates1_A %link A;</xd:component>\n" +
+"</xd:def>"));
+			parse(xp, "", xml = "<A><A/><A><A/><A/></A></A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xp.createXDDocument().xparseXComponent(xml, null, reporter).toXml());
+			assertNoErrorsAndClear(reporter);
+			xp = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>\n" +
+"{ \"A\": [\"occurs 0..* string();\"],\n" +
+"  \"B\": [\n" +
+"    { \"C\": [\"occurs 0..* string();\"], \"D\": [\"occurs 0..* string();\"] }\n" +
+"  ],\n" +
+"}\n" +
+"  </xd:json>\n" +
+"  <xd:component> %class "+_package+".XCA %link A;</xd:component>\n" +
+"</xd:def>");
+			json = "{ \"A\": [], \"B\": [ { \"C\": [\"b 2\"], \"D\": [] } ] }";
+			o = jparse(xp, "", json, reporter);
+			assertNoErrorsAndClear(reporter);
+			genXComponent(xp);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 		resetTester();

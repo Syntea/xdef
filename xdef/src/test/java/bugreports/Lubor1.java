@@ -13,9 +13,9 @@ import test.XDTester;
 /** Tests.
  * @author Vaclav Trojan
  */
-public class Lubor extends XDTester {
+public class Lubor1 extends XDTester {
 
-	public Lubor() {
+	public Lubor1() {
 		super();
 		setChkSyntax(false); // here it MUST be false!
 	}
@@ -39,24 +39,41 @@ public class Lubor extends XDTester {
 /**/
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"PlatneOd\">\n" +
-"<xd:json name='PlatneOd'>[\"*; dateTime()\"]</xd:json>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneOdDo' name='PIS_iop_common'>\n" +
+"<PlatneOd PlatnostOd='date()'/>\n" +
+"<PlatneOdDo xd:script='ref PlatneOd' PlatnostDo='date()'/>\n" +
 "<xd:component>\n" +
-"  %interface "+_package+".Lubor_I_3 %link #PlatneOd;\n" +
-"  %class "+_package+".Lubor_XC_3 %link #PlatneOd;\n" +
+"%class cz.syntea.skp.pis.common.api.operation.common.domain.iop.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
+//"%class cz.syntea.skp.pis.common.api.operation.common.domain.iop.PlatneOdDo %link PIS_iop_common#PlatneOdDo;\n" +
+"%class cz.syntea.skp.pis.common.api.operation.common.domain.iop.PlatneOdDo extends cz.syntea.skp.pis.common.api.operation.common.domain.iop.PlatneOd %link PIS_iop_common#PlatneOdDo;\n" +
+"\n" +
+" %interface cz.syntea.skp.pis.common.api.operation.common.domain.iop.subelem.PlatneOd\n" +
+"   %link PIS_iop_common#PlatneOd;\n" +
+"%interface cz.syntea.skp.pis.common.api.operation.common.domain.iop.subelem.PlatneOdDo\n" +
+"   extends cz.syntea.skp.pis.common.api.operation.common.domain.iop.subelem.PlatneOd\n" +
+"   %link PIS_iop_common#PlatneOdDo;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp);
 			xd = xp.createXDDocument("");
-			json = "[\"2025-03-12T16:37:09\"]";
-			o = jparse(xd, json, reporter);
+			xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
-			xc = xd.jparseXComponent(json, null, reporter);
+			assertEq(xml, (xc = xd.xparseXComponent(xml, null, reporter)).toXml());
 			assertNoErrorsAndClear(reporter);
-			assertEq(o, xc.toXon());
+//			assertEq("2025-01-01", ((bugreports.iop.subelem.PlatneOd) xc).getPlatnostOd().toString());
+
+			xml = "<PlatneOdDo PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, (xc = xd.xparseXComponent(xml, null, reporter)).toXml());
+			assertNoErrorsAndClear(reporter);
+//			assertEq("2025-01-01", ((bugreports.iop.subelem.PlatneOd) xc).getPlatnostOd().toString());
+//			assertEq("2025-01-01", ((bugreports.iop.subelem.PlatneOdDo) xc).getPlatnostOd().toString());
+//			assertEq("2025-02-01", ((bugreports.iop.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
 		} catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(true)return;
 /**/
 		try {
 			xdef =
@@ -115,9 +132,8 @@ public class Lubor extends XDTester {
 			xml = "<PlatneOd>2025-03-12T16:37:09</PlatneOd>";
 			parse(xd, xml, reporter);
 			assertNoErrorsAndClear(reporter);
-			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq(xml, xd.xparseXComponent(xml, null, reporter).toXml());
 			assertNoErrorsAndClear(reporter);
-			assertEq(xml, xc.toXml());
 		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 /**/

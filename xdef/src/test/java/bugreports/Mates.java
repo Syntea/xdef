@@ -1,8 +1,5 @@
 package bugreports;
 
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -31,21 +28,112 @@ public class Mates extends XDTester {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);// true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef_debug
-//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
+		setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
+//		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
 		Object o;
-		String json, xdef;
+		String json, xml, xdef;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
-		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
+/**/
+		try { // test extension of map and correct reporting.
+			xd = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>{ \"address\": { \"%script\": \"optional; ref addr\", \"x\": \"int()\"} }</xd:json>\n" +
+"  <xd:json name='addr'> { \"d\": \"string()\" } </xd:json>\n" +
+"</xd:def>").createXDDocument();
+			jparse(xd, "{ }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"cde\", \"x\": 1 } }", reporter);
+			assertNoErrorsAndClear(reporter); //OK
+			jparse(xd, "{ \"address\": { \"d\": \"dd\" } }", reporter);
+			if (reporter.size() != 1 || !reporter.toString().contains("'x'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
+			}
+			jparse(xd, "{ \"address\": { \"x\": 1 } }", reporter);
+//			if (reporter.size() != 1 || !reporter.toString().contains("'d'")) {
+				fail(reporter.toString()); // should be XDEF539: Required element 'd' is missing
+//			}
+			jparse(xd, "{ \"address\": { } }", reporter);
+//			if (reporter.size() != 2) {
+//E XDEF539: Required element 'd' is missing; line=1; column=15; source="STRING_DATA"; path=$.['address']; X-position=#addr/$.['d']
+//E XDEF539: Required element 'x' is missing; line=1; column=15; source="STRING_DATA"; path=$.['address']; X-position=#A/$.['address'].['d']
+
+				fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
+//			}
+		} catch (RuntimeException ex) {fail(ex);}
+if(true)return;
+/**
+		try {
+			xdef =
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def name='A' root='A'>\n" +
+"<A>\n" +
+"  <B>\n" +
+"    <xd:mixed xd:ref='B#B'>\n" +
+//"    <xd:mixed xd:script='ref B#B'>\n" +
+"      <X/>\n" +
+"      <Y/>\n" +
+"    </xd:mixed>\n" +
+"  </B>\n" +
+"</A>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_A %link A;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"<xd:def name='B'>\n" +
+"    <xd:mixed xd:name='B'>\n" +
+"      <P/>\n" +
+"      <Q/>\n" +
+"    </xd:mixed>\n" +
+//"  <B>\n" +
+//"    <xd:mixed>\n" +
+//"      <P/>\n" +
+//"      <Q/>\n" +
+//"    </xd:mixed>\n" +
+//"  </B>\n" +
+"  <xd:component>\n" +
+//"    %class "+_package+".Mates_B %link B;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"</xd:collection>";
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp);
+			xml =
+"<A>\n" +
+"  <B>\n" +
+"    <P/>\n" +
+"    <Q/>\n" +
+"    <X/>\n" +
+"    <Y/>\n" +
+"  </B>\n" +
+"</A>\n";
+			xd = xp.createXDDocument("A");
+			parse(xd, xml, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			xml =
+"<A>\n" +
+"  <B>\n" +
+"    <Y/>\n" +
+"    <X/>\n" +
+"    <Q/>\n" +
+"    <P/>\n" +
+"  </B>\n" +
+"</A>\n";
+			xd = xp.createXDDocument("A");
+			parse(xd, xml, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (RuntimeException ex) {fail(ex);}
+if(true)return;
 /**
 		try {
 			xdef =
@@ -54,14 +142,95 @@ public class Mates extends XDTester {
 "  <xd:json name = \"A\">\n" +
 "    {\"A\":\n" +
 "      {\n" +
-"         \"Name\":    \"string()\",\n" +
-"         \"End\": [ {\"%script\": \"+; ref EndStatuses#EndStatuses\", \"x\": \"?; string()\"} ]\n" +
+"         \"End\":\n" +
+"           {\n" +
+"             \"%script\": \"ref B#B\",\n" +
+"             \"x\": \"?; string()\",\n" +
+"             \"y\": \"?; string()\"\n" +
+"           }\n" +
 "      }\n" +
 "    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_A %link A;\n" +
-"    %interface "+_package+".Mates_A_I %link A;\n" +
+ "   %interface "+_package+".Mates_A_I %link A;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"<xd:def name='B' root='B'>\n" +
+"  <xd:json name='B'>\n" +
+"    {\n" +
+"       \"p\":  \"string()\",\n" +
+"       \"q\":  \"? string()\"\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_B %link B;\n" +
+"    %interface "+_package+".Mates_B_I %link B;\n" +
+"  </xd:component>\n" +
+"</xd:def>\n" +
+"</xd:collection>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			json =
+"{\"A\":\n" +
+"   {\n" +
+"     \"End\":\n" +
+"       {\n" +
+"         \"p\": \"P\",\n" +
+"         \"q\": \"Q\",\n" +
+"         \"x\": \"x\",\n" +
+"         \"y\": \"y\",\n" +
+"       }\n" +
+"   }\n" +
+"}\n";
+			xd = xp.createXDDocument("A");
+			o = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			json =
+"{\"A\":\n" +
+"   {\n" +
+"     \"End\":\n" +
+"       {\n" +
+"         \"y\": \"y\",\n" +
+"         \"x\": \"x\",\n" +
+"         \"q\": \"Q\",\n" +
+"         \"p\": \"P\",\n" +
+"       }\n" +
+"   }\n" +
+"}\n";
+			xd = xp.createXDDocument("A");
+			o = jparse(xd, json, reporter);
+			assertNoErrorsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+		} catch (RuntimeException ex) {fail(ex);}
+if(true)return;
+/**/
+		try {
+			xdef =
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def name='A' root='A'>\n" +
+"  <xd:json name = \"A\">\n" +
+"    {\"A\":\n" +
+"      {\n" +
+"         \"Name\":    \"string()\",\n" +
+"         \"End\": [\n" +
+"           {\n" +
+"             \"%script\": \"+; ref EndStatuses#EndStatuses\",\n" +
+"             \"x\": \"?; string()\",\n" +
+//"             \"y\": \"?; string()\"\n" +
+"           }\n" +
+"         ]\n" +
+"      }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Mates_A %link A;\n" +
+// "    %interface "+_package+".Mates_A_I %link A;\n" +
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='EndStatuses' root='EndStatuses'>\n" +
@@ -98,7 +267,7 @@ public class Mates extends XDTester {
 "            }\n" +
 "}\n";
 			xd = xp.createXDDocument("A");
-			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -122,7 +291,7 @@ public class Mates extends XDTester {
 "            }\n" +
 "}\n";
 			xd = xp.createXDDocument("A");
-			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -298,36 +467,24 @@ if(true)return;
 "            }\n" +
 "}\n";
 			xd = xp.createXDDocument("SynPLscript");
-			jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			Mates_SynPLscript xPLscript = (Mates_SynPLscript) xc;
-			Map<String, Object> map = xPLscript.getMap$();
-			Map map1 = (Map) map.get("SynPLscript");
-			List list1 = (List) map1.get("Statuses");
-			assertEq("60H", ((Map) list1.get(0)).get("TimeOverStep"));
-			Map map2 = (Map) list1.get(0);
-			List list2 = (List) map2.get("Events");
-			assertEq("eventName", ((Map) list2.get(0)).get("Event"));
-			Map map3 = (Map) list2.get(0);
-			assertEq("statusName", map3.get("NextStatus"));
-			assertEq("wfScriptName", ((Mates_SynPLscript) xc).get$SynPLscript().get$Name());
-
-			xd = xp.createXDDocument("EndStatuses");
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 			json =
 "{\n" +
 "  \"ActionCode\": \"actionCode\",\n" +
 "  \"EndStatus\":  \"statusSet.statusName\",\n" +
 "  \"ChangeLog\":  \"Y\"\n" +
 "}";
-			o = jparse(xd, json, reporter, swr=new StringWriter(), null, null);
+			o = jparse(xd, json, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 		} catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 /**/
 		clearTempDir(); // delete temporary files.
 	}
