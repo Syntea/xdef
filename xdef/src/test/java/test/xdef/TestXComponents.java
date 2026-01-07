@@ -243,6 +243,9 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq("", chkCompoinentSerializable(xc));
 			assertEq(xml, xc.toXml());
+			assertEq("M", ((TestXComponents_bindAbstract) xc).getSexString());
+			((TestXComponents_bindAbstract) xc).setSexString("W");
+			assertEq("W", ((TestXComponents_bindAbstract) xc).getSexString());
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='XdPoolCfg'>\n" +
 "  <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +

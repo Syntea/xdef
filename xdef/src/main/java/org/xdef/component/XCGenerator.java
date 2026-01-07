@@ -125,7 +125,7 @@ final class XCGenerator extends XCGeneratorXON {
 					} else {
 						if (isRoot) {
 							ext = true;
-							extClazz=" extends "+name.substring(ndx+7)+extClazz;
+							extClazz = " extends " + name.substring(ndx+7) + extClazz;
 							//In command "%class &amp;{0}" is missing parameter "extends". In command
 							// "%bind &amp;{2}" is parameter "%with &amp;{1}"!
 							_reporter.error(XDEF.XDEF375,
@@ -312,7 +312,7 @@ final class XCGenerator extends XCGeneratorXON {
 							} else {
 								if (isRoot) {
 									ext = true;
-									extClazz = " extends " + name.substring(ndx+7)+extClazz;
+									extClazz = " extends " + name.substring(ndx+7) + extClazz;
 									//"In command "%class &{0}" is missing parameter "extends". In command
 									// "%bind &{2}" is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
@@ -557,7 +557,7 @@ final class XCGenerator extends XCGeneratorXON {
 			if (packageName1 != null && packageName1.length() > 0) {
 				s += "package " + packageName1 + ";"+LN;
 			}
-			s += LN+"public interface "+interfaceName1+" extends org.xdef.component.XComponent {"+LN;
+			s += LN + "public interface " + interfaceName1 + " extends org.xdef.component.XComponent {" + LN;
 			_interfaces.insert(0, s).append("}");
 		}
 		if (className.isEmpty()) {
