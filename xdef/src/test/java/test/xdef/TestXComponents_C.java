@@ -4,7 +4,6 @@ import org.xdef.component.XComponent;
 import org.xdef.proc.XXData;
 
 public class TestXComponents_C {
-
 	private int _n = 0;
 
 	public static void test(XXData a) {
@@ -17,5 +16,4 @@ public class TestXComponents_C {
 	}
 
 	public int getTest() {return _n;}
-
 }
