@@ -17,7 +17,7 @@ set -x
 git fetch
 set +x
 ( unset LANG; git status; ) | grep -z 'Your branch is up to date with.*nothing to commit, working tree clean' > /dev/null \
-    && { echo "git-repo is up-to-date and clean"; } \
+    && { echo "INFO: git-repo is up-to-date and clean"; } \
     || { echo "ERROR: git-repo is not up-to-date and clean"; set -x; git status; exit; }
 
 #get actual parameters
