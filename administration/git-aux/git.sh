@@ -33,7 +33,7 @@ then
     echo "changelog:${nl}------------------${nl}${changelog}${nl}------------------"
 
     read -p "enter next development version (Major.Minor.Revision): " versionNext
-else 
+else
     versionNext=$1
 fi
 
