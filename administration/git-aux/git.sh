@@ -55,8 +55,10 @@ echo 'Create release commit'
 echo '====================='
 set -x
 mvn versions:set-property -Dproperty=release.date -DnewVersion="${releaseDate}" > /dev/null
-echo "pom.xml: set release.date: $(mvn help:evaluate -Dexpression=release.date -q -DforceStdout)"
+set +x
+echo "INFO: pom.xml: set release.date: $(mvn help:evaluate -Dexpression=release.date -q -DforceStdout)"
 
+set -x
 sed -i 's/\${version}/'"${version}"'/;s/\${release.date}/'"${releaseDate}"'/' xdef/changelog.md
 tag="version/${version}"
 tagDesc="Version ${version}, release-date ${releaseDate}${nl}${nl}${changelog}"
@@ -72,7 +74,9 @@ echo 'Create next development commit'
 echo '=============================='
 set -x
 mvn versions:set-property -Dproperty=revision -DnewVersion="${versionNext}" > /dev/null
-echo "pom.xml: set version: $(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)"
+set +x
+echo "INFO: pom.xml: set version: $(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)"
+set -x
 sed -i '1i # Version ${version}, release-date ${release.date}\n' xdef/changelog.md
 
 git add pom.xml xdef/changelog.md
