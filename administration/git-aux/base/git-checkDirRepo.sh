@@ -23,8 +23,8 @@ check () {
             exit
         }
 
-    #git-pull
     set -x
+    #git-pull
     git pull
     set +x
     
@@ -52,7 +52,7 @@ check $1
 #check secondary repo of main-branch if required
 if [ "$1" = "main" ]
 then
-    #check main-branch name
+    #check variable main-branch name
     [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
 
     if [ -d "../xdef-${mainBranchName}" ]
@@ -60,8 +60,8 @@ then
         cd "../xdef-${mainBranchName}"
     else
         cd ..
-        #clone git-repo "xdef" main-branche
         set -x
+        #clone git-repo "xdef" main-branche
         git clone --branch "${mainBranchName}" git@github.com:Syntea/xdef.git "xdef-${mainBranchName}"
         set +x
         cd "xdef-${mainBranchName}"

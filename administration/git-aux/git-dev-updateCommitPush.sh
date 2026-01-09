@@ -7,10 +7,10 @@ scriptDir="$(dirname $(readlink -f "$0"))"
 #run from repo-root-dir
 cd ../..
 
-. ${scriptDir}/base/env.sh
+. "${scriptDir}"/base/env.sh
 
 #check dir-repo, git-pull included, dirty repo is accepted
-${scriptDir}/base/git-checkDirRepo.sh dirty
+"${scriptDir}"/base/git-checkDirRepo.sh dirty
 
 #do commit and push all changes if repo is dirty
 ( unset LANG; git status; ) | grep -z 'nothing to commit, working tree clean' > /dev/null || {
@@ -25,7 +25,7 @@ ${scriptDir}/base/git-checkDirRepo.sh dirty
 }
 
 #do merge main-branch, may be empty
-${scriptDir}/base/git-merge-main2dev.sh
+"${scriptDir}"/base/git-merge-main2dev.sh
 
 echo '====================='
 echo 'successfully finished'

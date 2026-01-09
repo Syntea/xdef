@@ -4,7 +4,7 @@ set -e
 
 branchCurrent="$(git branch --show-current)"
 
-#check main-branch name
+#check variable main-branch name
 [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
 
 echo '=========================='
