@@ -1,3 +1,3 @@
 #parameters:
 # - mainBranchName: name of the main-branch, default 'main'
-export mainBranchName=master
+export mainBranchName=main2

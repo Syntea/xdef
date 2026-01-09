@@ -62,7 +62,7 @@ then
     else
         cd ..
         #clone git-repo "xdef" main-branche
-        git clone git@github.com:Syntea/xdef.git "xdef-${mainBranchName}"
+        git clone --branch "${mainBranchName}" git@github.com:Syntea/xdef.git "xdef-${mainBranchName}"
         cd "xdef-${mainBranchName}"
     fi
 
