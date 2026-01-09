@@ -527,9 +527,7 @@
   * model has occurrence more then one and it has only a text child node.
   * improved creation of XML from JSON.
   * improved error reporting in JSON.
-  * ==================================================================
-  * NOTE this version implements some new features prepared for version 41.0.0:
-  * ==================================================================
+  * **NOTE:** this version implements some new features prepared for version 41.0.0, it follows
   * added the Java method `rule.validate(String)` to X-script of `BNFRule` objects.
     Result of this method is a `boolean` value.
   * added new Java method to `XDDocument`:

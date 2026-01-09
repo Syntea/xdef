@@ -268,6 +268,11 @@ Source code at GitHub:
 
 Prerequisities:
   * download project X-definition, e.g. from GitHub
+    * git-repo uses file system symbolic links. If it's not enabled in your git, it can be enabled by two git-commands
+      (run from the git-project root directory) "git config set core.symlinks true", "git reset --hard".
+      For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
+      in addition, "Developer Mode" (Start > Settings > Update & Security > For developers > Developer Mode > On)
+      must be enabled in the system settings beforehand
   * install _java_ (at least version 8)
   * install _maven_ (at least version 3.6)
   * configuration:
@@ -307,12 +312,6 @@ Frequent building operations:
     * Java-11 (it is run in the module "xdef-test11")
     * Java-17 (it is run in the module "xdef-test17")
     * Java-21 (it is run in the module "xdef-test21")
-
-    It uses file system symbolic links. If it's not enabled, it can be enabled by two git-commands
-    (run from the project root directory) "git config set core.symlinks true", "git reset --hard".
-    For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
-    in addition, "Developer Mode" (Start > Settings > Update & Security > For developers > Developer Mode > On)
-    must be enabled in the system settings beforehand:
 
     ```shell
     mvn package -PtestOnAllJvms
