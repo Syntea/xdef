@@ -30,8 +30,8 @@ else
     versionNext="$1"
 fi
 
-echo "${versionNext}" | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' > /dev/null \
-    || { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}"; exit; }
+echo "${versionNext}" | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' > /dev/null || \
+    { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}"; exit; }
 
 echo "========================================="
 echo "actual version to release: ${version}"
@@ -73,8 +73,8 @@ set -x
 mvn versions:set-property -Dproperty=revision -DnewVersion="${versionNext}" > /dev/null
 versionNextSet="$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)"
 set +x
-[ "${versionNextSet}" = "${versionNext}" ] \
-    || { echo "ERROR: next development version set incorrectly: ${versionNextSet}"; exit; }
+[ "${versionNextSet}" = "${versionNext}" ] || \
+    { echo "ERROR: next development version set incorrectly: ${versionNextSet}"; exit; }
 
 #update xdef/changelog.md - add section for new development version
 set -x
