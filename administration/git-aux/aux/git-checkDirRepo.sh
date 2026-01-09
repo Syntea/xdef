@@ -53,8 +53,8 @@ check $1
 #check secondary repo of main-branch if required
 if [ "$1" = "main" ]
 then
-    #default main-branch name
-    [ -n "${mainBranchName}" ] || { mainBranchName="main"; }
+    #check main-branch name
+    [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
 
     if [ -d "../xdef-${mainBranchName}" ]
     then

@@ -4,8 +4,8 @@ set -e
 
 branchCurrent="$(git branch --show-current)"
 
-#default main-branch name
-[ -n "${mainBranchName}" ] || { mainBranchName="main"; }
+#check main-branch name
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
 
 set -x
 git merge -m "Merge remote-tracking branch 'origin/${mainBranchName}' into '${branchCurrent}'" "origin/${mainBranchName}"

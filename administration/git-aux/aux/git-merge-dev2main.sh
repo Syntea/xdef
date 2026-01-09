@@ -5,8 +5,8 @@ set -e
 pwd="$(pwd)"
 branchCurrent="$(git branch --show-current)"
 
-#default main-branch name
-[ -n "${mainBranchName}" ] || { mainBranchName="main"; }
+#check main-branch name
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
 
 cd "../xdef-${mainBranchName}"
 set -x
