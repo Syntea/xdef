@@ -11,7 +11,7 @@ nl='
 pwd="$(pwd)"
 scriptDir="$(dirname $(readlink -f "$0"))"
 #check variable main-branch name
-[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
 
 #enter into main-repo
 cd "../xdef-${mainBranchName}"

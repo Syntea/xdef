@@ -5,7 +5,7 @@ set -e
 branchCurrent="$(git branch --show-current)"
 
 #check variable main-branch name
-[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
 
 echo '=========================='
 echo 'Merge branch main into dev'

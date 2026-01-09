@@ -6,7 +6,7 @@ pwd="$(pwd)"
 branchCurrent="$(git branch --show-current)"
 
 #check variable main-branch name
-[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
 
 #enter into main-repo
 cd "../xdef-${mainBranchName}"

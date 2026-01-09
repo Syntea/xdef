@@ -12,7 +12,7 @@ check () {
 
     #check actual dir is maven-project
     [ -f "pom.xml" ] || \
-        { echo "ERROR: dir $(pwd) is not maven-project, file 'pom.xml' not found"; exit; }
+        { echo "ERROR: dir $(pwd) is not maven-project, file 'pom.xml' not found"; exit 1; }
 
     #check actual maven-project signature
     prjGroup=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
@@ -20,7 +20,7 @@ check () {
     [ "${prjGroup}" = "org.xdef" -a "${prjArtifact}" = "xdef-parent" ] || \
         {   echo "ERROR: maven-project $(pwd) is not org.xdef:xdef-parent," \
                  "actual signature: ${prjGroup}:${prjArtifact}"
-            exit
+            exit 1
         }
 
     set -x
@@ -31,13 +31,13 @@ check () {
     #check git status up-to-date and clean
     gitStatus="$(unset LANG; git status;)"
     echo "${gitStatus}" | grep -z 'Your branch is up to date with' > /dev/null || \
-        { echo "ERROR: git-repo $(pwd) is not up-to-date"; set -x; git status; set +x; exit; }
+        { echo "ERROR: git-repo $(pwd) is not up-to-date"; set -x; git status; set +x; exit 1; }
 
     #check git status clean, if required
     if [ ! "$1" = "dirty" ]
     then
         echo "${gitStatus}" | grep -z 'nothing to commit, working tree clean' > /dev/null || \
-            { echo "ERROR: git-repo $(pwd) is not up-to-date and clean"; set -x; git status; set +x; exit; }
+            { echo "ERROR: git-repo $(pwd) is not up-to-date and clean"; set -x; git status; set +x; exit 1; }
     fi
 }
 
@@ -53,7 +53,7 @@ check $1
 if [ "$1" = "main" ]
 then
     #check variable main-branch name
-    [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
+    [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
 
     if [ -d "../xdef-${mainBranchName}" ]
     then
@@ -75,7 +75,7 @@ then
     [ "${branchCurrentName}" = "${mainBranchName}" ] || \
         {   echo "ERROR: git-repo $(pwd) branch name is not '${mainBranchName}'," \
                  "branch name: ${branchCurrentName}"
-            exit
+            exit 1
         }
 
     cd ${pwd}
