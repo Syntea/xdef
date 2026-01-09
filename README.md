@@ -52,7 +52,10 @@ Let´s have the following XML data:
 This is the complete X-definition file with the model of the XML data on the left:
 
 ```xml
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Employee">
+<xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Employee"
+>
   <Employee
     FirstName = "required string()"
     LastName  = "required string()"
@@ -116,7 +119,10 @@ XML data:
 Model of the XML data:
 
 ```xml
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Family">
+<xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Family"
+>
   <Family>
     <Father    xd:script = "occurs 0..1; ref Person"  />
     <Mother    xd:script = "occurs 1..1; ref Person"  />
@@ -213,11 +219,12 @@ Links:
 
 List of file assets:
   * _xdef-{version}.jar_            - the java-library X-definition
-  * _xdef-{version}.pom_            - maven metadata
-  * _xdef-{version}-javadoc.jar_    - java-documentation
-  * _xdef-{version}-sources.jar_    - origin java-sources
-  * _xdef-{version}-src.zip_        - java-sources insertable directly into your source code
   * _xdef-{version}-userdoc.zip_    - complete user documentation
+  * _xdef-{version}-javadoc.jar_    - html-documentation of java source code generated from the java source code
+  * _xdef-{version}-sources.jar_    - origin java source code
+  * _xdef-{version}-src.zip_        - java source code insertable directly into your source code,
+                                      very similar to _xdef-{version}-sources.jar_
+  * _xdef-{version}.pom_            - maven metadata of the package
 
 ## For maven projects
 
@@ -267,7 +274,7 @@ Prerequisities:
     * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
       * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
-      * see the template-file [configuration/maven/toolchains.xml](configuration/maven/toolchains.xml)
+      * see the template-file [administration/configuration-templates/maven/toolchains.xml](administration/configuration-templates/maven/toolchains.xml)
 
 Frequent building operations:
   * cleaning before any compiling, building, deploying, etc.:
@@ -337,7 +344,7 @@ Prerequisities:
     * authentication to the central maven repository manager _central.sonatype.com_:
       (having id _"central"_ in the file [xdef/pom.xml](xdef/pom.xml))
       * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
-      * see template-file [configuration/maven/settings.xml](configuration/maven/settings.xml)
+      * see template-file [administration/configuration-templates/maven/settings.xml](administration/configuration-templates/maven/settings.xml)
 
 Deploying:
   * build and deploy the X-definition snapshot package to the central maven snapshot repository 
