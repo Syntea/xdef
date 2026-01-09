@@ -9,7 +9,7 @@ pwd="$(pwd)"
 scriptDir="$(dirname $(readlink -f "$0"))"
 
 check () {
-    echo "INFO: check directory: $(pwd)"
+    echo "INFO: check directory $(pwd)"
 
     #check actual dir is maven-project
     [ -f "pom.xml" ] || \
@@ -62,7 +62,9 @@ then
     else
         cd ..
         #clone git-repo "xdef" main-branche
+        set -x
         git clone --branch "${mainBranchName}" git@github.com:Syntea/xdef.git "xdef-${mainBranchName}"
+        set +x
         cd "xdef-${mainBranchName}"
     fi
 
