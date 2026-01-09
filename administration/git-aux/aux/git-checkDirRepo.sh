@@ -6,7 +6,6 @@
 set -e
 
 pwd="$(pwd)"
-scriptDir="$(dirname $(readlink -f "$0"))"
 
 check () {
     echo "INFO: check directory $(pwd)"

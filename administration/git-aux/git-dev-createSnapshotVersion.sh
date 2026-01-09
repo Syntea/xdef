@@ -8,9 +8,11 @@ scriptDir="$(dirname $(readlink -f "$0"))"
 cd ../..
 
 . ${scriptDir}/aux/env.sh
-
 ${scriptDir}/aux/git-checkDirRepo.sh main
-${scriptDir}/aux/git-merge-dev2main.sh
 
-${scriptDir}/aux/git-checkDirRepo.sh
+${scriptDir}/aux/git-merge-dev2main.sh
 ${scriptDir}/aux/git-merge-main2dev.sh
+
+echo '====================='
+echo 'successfully finished'
+echo '====================='

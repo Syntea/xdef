@@ -14,6 +14,9 @@ ${scriptDir}/aux/git-checkDirRepo.sh dirty
 
 #do commit and push all changes if repo is dirty
 ( unset LANG; git status; ) | grep -z 'nothing to commit, working tree clean' > /dev/null || {
+    echo '==============='
+    echo 'Commit and push'
+    echo '==============='
     set -x
     git add --all
     git commit
@@ -23,3 +26,7 @@ ${scriptDir}/aux/git-checkDirRepo.sh dirty
 
 #do merge main-branch, may be empty
 ${scriptDir}/aux/git-merge-main2dev.sh
+
+echo '====================='
+echo 'successfully finished'
+echo '====================='
