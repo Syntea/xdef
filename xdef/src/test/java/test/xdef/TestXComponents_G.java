@@ -7,10 +7,9 @@ import org.xdef.component.XComponent;
 import org.xdef.proc.XXNode;
 
 public class TestXComponents_G implements Serializable {
-	XComponent _X, _Y, _G;
-
 	private String _XX;
 	private int _flags;
+	XComponent _X, _Y, _G;
 
 	public static void setXX(XXNode xx, String s) {
 		if (xx.getXComponent() != null) {
@@ -24,31 +23,21 @@ public class TestXComponents_G implements Serializable {
 		if (null == name) {
 			throw new RuntimeException("Unknown element:" + name);
 		} else switch (name) {
-			case "G":
-				xm._G = xnode.getXComponent();
-				break;
-			case "XXX":
-				xm._X = xnode.getXComponent();
-				break;
-			case "YYY":
-				xm._Y = xnode.getXComponent();
-				break;
-			default:
-				throw new RuntimeException("Unknown element:" + name);
+			case "G": xm._G = xnode.getXComponent(); break;
+			case "XXX": xm._X = xnode.getXComponent(); break;
+			case "YYY": xm._Y = xnode.getXComponent(); break;
+			default: throw new RuntimeException("Unknown element:" + name);
 		}
 	}
+	private final List<XComponent> _YYY = new ArrayList<>();
+	private String _g;
+	private XComponent _XXX;
 
 	public String getXX() {return _XX;}
 	public final void xSetFlags(final int flags) {_flags |= flags;}
 	public final void xClearFlags(final int flags) {_flags &= ~flags;}
-	public final boolean xCheckFlags(final int flags) {
-		return (flags & _flags) == flags;
-	}
+	public final boolean xCheckFlags(final int flags) {return (flags & _flags) == flags;}
 	public final int xGetFlags() {return _flags;}
-
-	private final List<XComponent> _YYY = new ArrayList<>();
-	private String _g;
-	private XComponent _XXX;
 
 	public String getg() {return _g;}
 	public void setg(String x) {_g = x + '_';}

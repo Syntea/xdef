@@ -40,7 +40,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
-import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
@@ -350,10 +349,8 @@ public abstract class XDTester extends STester {
 			XDFactory.writeXDPool(baos, xp1);
 			bais = new ByteArrayInputStream(baos.toByteArray());
 			return XDFactory.readXDPool(bais);
-		} catch(IOException e) {
+		} catch(IOException | Error e) {
 			throw new RuntimeException(e.getMessage(), e);
-		} catch(Error e) {
-			throw new RuntimeException(e);
 		}
 	}
 
@@ -941,8 +938,7 @@ public abstract class XDTester extends STester {
 		final String xml,
 		final StringWriter swr,
 		final Object userObj) {
-		XDDocument xd = xp.createXDDocument(dname);
-		return create(xd, name, reporter, xml, swr, userObj);
+		return create(xp.createXDDocument(dname), name, reporter, xml, swr, userObj);
 	}
 
 	/** Construct a new XML document from the specified data.
@@ -1154,8 +1150,7 @@ public abstract class XDTester extends STester {
 	 * @param obj context (object) or null.
 	 * @return created XON/JSON object.
 	 */
-	final public Object jcreate(final XDDocument xd,
-		final String name,
+	final public Object jcreate(final XDDocument xd,final String name,
 		final ArrayReporter reporter,
 		final Object obj) {
 		return jcreate(xd, name, reporter, obj, null, null);
@@ -1413,8 +1408,8 @@ public abstract class XDTester extends STester {
 		}
 		if (input != null) {
 			if (input instanceof String) {
-				xd.setStdIn(XDFactory.createXDInput(
-					new ByteArrayInputStream(((String)input).getBytes()), false));
+				xd.setStdIn(
+					XDFactory.createXDInput(new ByteArrayInputStream(((String)input).getBytes()), false));
 			} else if (input instanceof InputStreamReader) {
 				xd.setStdIn(XDFactory.createXDInput((InputStreamReader) input, false));
 			} else if (input instanceof InputStream) {
@@ -1646,8 +1641,7 @@ public abstract class XDTester extends STester {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		Object o = json == null
-			? null
+		Object o = json == null ? null
 			: json instanceof String ? xd.jparse((String) json,reporter) : xd.jparse((String) json,reporter);
 		if (swr != null) {
 			try {
@@ -2021,7 +2015,7 @@ public abstract class XDTester extends STester {
 			}
 			if (outResult != null && swr != null) {
 				if (!outResult.equals(swr.toString())) {
-					result += "** 3 '"+outResult+"', '"+swr.toString()+"'\n";
+					result += "** 3 '" + outResult + "', '" + swr.toString() + "'\n";
 				}
 			}
 			xd = xp.createXDDocument(xname);
@@ -2038,7 +2032,7 @@ public abstract class XDTester extends STester {
 			}
 			if (outResult != null && swr != null) {
 				if (!outResult.equals(swr.toString())) {
-					result +="** 6 '"+outResult+"', '"+swr.toString()+"'\n";
+					result +="** 6 '" + outResult + "', '" + swr.toString() + "'\n";
 				}
 			}
 			x = xc.toXon();
@@ -2061,7 +2055,7 @@ public abstract class XDTester extends STester {
 			}
 			if (outResult != null && swr != null) {
 				if (!outResult.equals(swr.toString())) {
-					result += "** 10 '"+outResult+"', '" + swr.toString()+"'\n";
+					result += "** 10 '" + outResult + "', '" + swr.toString() + "'\n";
 				}
 			}
 			if (cls != null) {
@@ -2077,11 +2071,11 @@ public abstract class XDTester extends STester {
 				}
 				x = xc.toXon();
 				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 12\n"+XonUtils.toXonString(x, true)+"\n";
+					result += "** 12\n" + XonUtils.toXonString(x, true) + "\n";
 				}
 				if (outResult != null && swr != null) {
 					if (!outResult.equals(swr.toString())) {
-						result +="** 13 '"+outResult+"', '" + swr.toString()+"'\n";
+						result +="** 13 '" + outResult + "', '" + swr.toString() + "'\n";
 					}
 				}
 				xd = xp.createXDDocument(xname);
@@ -2096,11 +2090,11 @@ public abstract class XDTester extends STester {
 				}
 				x = xc.toXon();
 				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 15\n" + XonUtils.toXonString(x,true)+"\n";
+					result += "** 15\n" + XonUtils.toXonString(x,true) + "\n";
 				}
 				if (outResult != null && swr != null) {
 					if (!outResult.equals(swr.toString())) {
-						result +="** 16 '"+outResult+"', '" + swr.toString()+"'\n";
+						result +="** 16 '" + outResult + "', '" + swr.toString() + "'\n";
 					}
 				}
 			}

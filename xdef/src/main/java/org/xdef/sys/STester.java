@@ -4,14 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -836,7 +835,8 @@ public abstract class STester {
 			Constructor c = Class.forName(className).getDeclaredConstructor(new Class<?>[0]);
 			c.setAccessible(true);
 			return (STester) c.newInstance(new Object[0]);
-		} catch (Exception ex) {
+		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
+			InstantiationException | NoSuchMethodException | SecurityException|InvocationTargetException ex) {
 			throw new RuntimeException("Can't invoke: new " + className + "()");
 		}
 	}
@@ -949,46 +949,6 @@ public abstract class STester {
 		return classDir;
 	}
 
-	public final File copyToSourceDir(final File file, final String dir, final String name) {
-		try {
-			InputStream in = new FileInputStream(new File(new File(file, dir), name+".java"));
-			return copyToSourceDir(in, dir, name);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	public final File copyToSourceDir(final InputStream in, final String dir, final String name) {
-		try {
-			File f2 = new File(getSourceDir(), name + ".java");
-			FUtils.copyToFile(in, f2, false);
-			return f2;
-		} catch (SException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	public final File copyToTempDir(final File file, final String dir, final String name) {
-		try {
-			InputStream in = new FileInputStream(new File(new File(file, dir), name+".java"));
-			return copyToTempDir(in, dir, name);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	public final File copyToTempDir(final InputStream in, final String dir, final String name) {
-		try {
-			File f = new File(getTempDir() + dir);
-			f.mkdirs();
-			File f2 = new File(f, name + ".java");
-			FUtils.copyToFile(in, f2, false);
-			return f2;
-		} catch (SException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
 //This method must be implemented in the class with test(extended from STester)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1075,11 +1035,8 @@ public abstract class STester {
 							cancel("Can't create log stream:" + s);
 						}
 						continue;
-					case 'h':
-						cancel(null);
-						continue;
-					default:
-						cancel("Incorrect parameter: " + args[i]);
+					case 'h': cancel(null); continue;
+					default: cancel("Incorrect parameter: " + args[i]);
 				}
 			} else {
 				cancel("Incorrect parameter: " + args[i]);

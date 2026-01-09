@@ -8,7 +8,6 @@ implements TestXComponents_Y06DomainContainer<T>, Serializable {
 
 	@Override
 	public T getDomain() {return this.domain;}
-
 	@Override
 	public void setDomain(T domain) {this.domain = domain;}
 }
