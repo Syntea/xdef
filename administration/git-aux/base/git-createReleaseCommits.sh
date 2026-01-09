@@ -1,28 +1,22 @@
 #!/bin/bash
-#in main-repo create commits releted to release version, i.e.:
+#in current repo create commits releted to release version, i.e.:
 # - new release-version commit - update pom.xml, changelog.md,create git-tag
 # - and commit with shifted version to the next development version (entered by user, without postfix '-SNAPSHOT')
+#parameters: [ <versionNext> ]
+# - <versionNext>: next development version, optional, if not entered it's entered during script from std-input
 set -e
 
 #constants
 nl='
 '
 
-pwd="$(pwd)"
-
-#check main-branch name
-[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
-
-#enter into main-repo
-cd "../xdef-${mainBranchName}"
-
 echo '========================'
 echo 'Check and set parameters'
 echo '========================'
 #get actual parameters
-version=$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)
-releaseDate=$(date +'%Y-%m-%d')
-changelog=$(awk -v RS='(\r?\n){2,}' 'NR == 1' xdef/changelog.md)
+version="$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)"
+releaseDate="$(date +'%Y-%m-%d')"
+changelog="$(awk -v RS='(\r?\n){2,}' 'NR == 1' xdef/changelog.md)"
 
 #set a check new parameters
 if [ $# -eq 0 ]
@@ -99,11 +93,4 @@ set -x
 #push created two commits and release-tag
 git push
 git push origin "${tag}"
-set +x
-
-#reenter back and pull
-cd ${pwd}
-echo "git-repo $(pwd): pull"
-set -x
-git pull
 set +x

@@ -1,0 +1,26 @@
+#!/bin/bash
+#in main-repo create commits releted to release version
+#parameters: [ <versionNext> ]
+#see ./git-createReleaseCommits.sh
+set -e
+
+#constants
+nl='
+'
+
+pwd="$(pwd)"
+scriptDir="$(dirname $(readlink -f "$0"))"
+#check variable main-branch name
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
+
+#enter into main-repo
+cd "../xdef-${mainBranchName}"
+
+"${scriptDir}"/git-createReleaseCommits.sh $@
+
+#reenter back and pull
+cd "${pwd}"
+echo "git-repo $(pwd): pull"
+set -x
+git pull
+set +x
