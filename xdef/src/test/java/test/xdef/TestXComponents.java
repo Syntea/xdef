@@ -229,6 +229,11 @@ public final class TestXComponents extends XDTester {
 			XComponentUtil.set(xc, "Sex", TestXComponents_bindEnum.M);
 			xml = "<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>";
 			assertEq(xml, xc.toXml());
+			xc = (XComponent) SUtils.getNewInstance(_package+".Lubor1_XCPerson");
+			XComponentUtil.set(xc, "Name", "John Brown");
+			XComponentUtil.set(xc, "SBirth", new SDatetime(new java.util.Date(0)));
+			XComponentUtil.set(xc, "SexString", TestXComponents_bindEnum.M.toString());
+			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument("XPerson");
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(null, "Person", null, reporter);

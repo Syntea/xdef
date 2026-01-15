@@ -1838,9 +1838,14 @@ public abstract class XDTester extends STester {
 		if (fromFile.isDirectory()) {
 			for (File x: fromFile.listFiles()) {
 				if (x.isDirectory()) {
-					File y;
-					y = new File(toFile, x.getName());
-					y.mkdir();
+					File y = new File(toFile, x.getName());
+					if (!y.exists()) {
+						if (!y.mkdir()) {
+							throw new RuntimeException("Can't create directory: " + y);
+						}
+					} else if (!y.isDirectory()) {
+						throw new RuntimeException("Directory is expected: " + y);
+					}
 					copySources(x, y);
 				} else {
 					copySources(x, new File(toFile, x.getName()));

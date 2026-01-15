@@ -929,8 +929,8 @@ public class XComponentUtil {
 				break;
 			}
 		}
-		//Getter &{0} not found in class &{1}
-		throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
+		//Setter &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS105, name, xc.getClass().getName());
 	}
 
 	/** Invoke setter from XComponent with given value.

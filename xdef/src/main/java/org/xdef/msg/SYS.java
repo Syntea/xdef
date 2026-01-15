@@ -130,11 +130,11 @@ public interface SYS {
 	public static final long SYS080 = 953221181L;
 	/** Can't set this buffer position for this parser&amp;{0}{: } */
 	public static final long SYS081 = 953221182L;
-	/** Incorrect property value: &amp;{0} */
+	/** Incorrect property value: "&amp;{0}" */
 	public static final long SYS082 = 953221183L;
-	/** Illegal use of method: &amp;{0} */
+	/** Illegal use of method: "&amp;{0}" */
 	public static final long SYS083 = 953221184L;
-	/** Illegal argument in method: &amp;{0} */
+	/** Illegal argument in method: "&amp;{0}" */
 	public static final long SYS084 = 953221185L;
 	/** Incomparable arguments */
 	public static final long SYS085 = 953221186L;
@@ -150,15 +150,15 @@ public interface SYS {
 	public static final long SYS092 = 953221191L;
 	/** Can't write this node */
 	public static final long SYS093 = 953221192L;
-	/** Constructor in the class &amp;{0} not found */
+	/** Constructor in the class "&amp;{0}" not found */
 	public static final long SYS101 = 953221193L;
-	/** Class &amp;{0} not found */
+	/** Class "&amp;{0}" not found */
 	public static final long SYS102 = 953221194L;
-	/** Field &amp;{0} not found in class &amp;{1} */
+	/** Field "&amp;{0}" not found in class &amp;{1} */
 	public static final long SYS103 = 953221195L;
-	/** Getter &amp;{0} not found in class &amp;{1} */
+	/** Getter "&amp;{0}" not found in class &amp;{1} */
 	public static final long SYS104 = 953221196L;
-	/** Setter &amp;{0} not found in class &amp;{1} */
+	/** Setter "&amp;{0}" not found in class &amp;{1} */
 	public static final long SYS105 = 953221197L;
 	/** Can't read report source&amp;{0}{: } */
 	public static final long SYS201 = 953221198L;
@@ -168,13 +168,13 @@ public interface SYS {
 	public static final long SYS210 = 953221200L;
 	/** Unclosed parameter in the text of report &amp;{0}, table &amp;{1} */
 	public static final long SYS212 = 953221201L;
-	/** Ambiguous default language of reports" &amp;{0} in the table &amp;{1}, set &amp;{2} */
+	/** Ambiguous default language of reports "&amp;{0}" in the table &amp;{1}, set &amp;{2} */
 	public static final long SYS213 = 953221202L;
-	/** Message prefix is incorrect or not specified: &amp;{0} */
+	/** Message prefix is incorrect or not specified: "&amp;{0}" */
 	public static final long SYS214 = 953221203L;
-	/** Message language is incorrect or not specified: &amp;{0} */
+	/** Message language is incorrect or not specified: "&amp;{0}" */
 	public static final long SYS215 = 953221204L;
-	/** Incorrect message key: &amp;{0} */
+	/** Incorrect message key: "&amp;{0}" */
 	public static final long SYS216 = 953221205L;
 	/** Parameters in tables &amp;{0} and &amp;{1} differs, report: &amp;{2} */
 	public static final long SYS217 = 953221206L;
