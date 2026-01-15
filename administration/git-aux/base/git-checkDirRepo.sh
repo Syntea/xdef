@@ -25,7 +25,7 @@ check () {
 
     set -x
     #git-pull fastforward-only
-    git pull --ff-only
+    git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed"
     set +x
     
     #check git status up-to-date and clean

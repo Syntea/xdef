@@ -1,15 +1,18 @@
 #auxiliary commands to fix repo in not-up-to-date or not-clean status
 #=====
 
+#sloucit rozhozenou vetev, tj. byla vytvorena druha varianta vetve
+git pull
+
 #reset changes in actual branch
 git reset --hard
 
-#checkout remote branch and create local brach, if already exists replaces it
-git checkout -B main origin/main
+#checkout remote branch and reset local brach to it
 git checkout -B user/trojan/dev origin/user/trojan/dev
-#similar to previous, create local branch to the start-point, if already exists replaces it
-git branch -f origin/main
+git checkout -B main origin/main
+#similar to previous, but without checkout - reset local branch to the remote branch
 git branch -f origin/user/trojan/dev
+git branch -f origin/main
 
 #smazat main-repo, scripty si je pripadne opet stahnou z GitHub-u samy
 rm -rf .../project/xdef-main
