@@ -16,6 +16,20 @@ echo 'Merge branch dev into main'
 echo '=========================='
 set -x
 git merge --no-ff -m "Merge remote-tracking branch 'origin/${branchCurrent}' into '${mainBranchName}'" "origin/${branchCurrent}"
+set +x
+
+echo '==============================='
+echo 'Verifying snapshot-build: start'
+echo '==============================='
+set -x
+mvn clean package -Pjavadoc,sources
+mvn clean
+set +x
+echo '===================================='
+echo 'Verifying snapshot-build: successful'
+echo '===================================='
+
+set -x
 git push
 set +x
 

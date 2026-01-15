@@ -7,6 +7,9 @@ set -e
 
 pwd="$(pwd)"
 
+#check variable main-branch name
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
+
 check () {
     echo "INFO: check directory $(pwd)"
 
@@ -52,9 +55,6 @@ check $1
 #check secondary repo of branch-main if required
 if [ "$1" = "main" ]
 then
-    #check variable main-branch name
-    [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
-
     if [ -d "../xdef-${mainBranchName}" ]
     then
         cd "../xdef-${mainBranchName}"

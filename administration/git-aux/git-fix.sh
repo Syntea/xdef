@@ -10,6 +10,7 @@ git reset --hard
 #checkout remote branch and reset local brach to it
 git checkout -B user/trojan/dev origin/user/trojan/dev
 git checkout -B main origin/main
+
 #similar to previous, but without checkout - reset local branch to the remote branch
 git branch -f origin/user/trojan/dev
 git branch -f origin/main

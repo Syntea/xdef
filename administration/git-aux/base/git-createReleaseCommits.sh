@@ -66,6 +66,18 @@ set +x
 
 
 echo '=============================='
+echo 'Verifying release-build: start'
+echo '=============================='
+set -x
+mvn clean package -Prelease,javadoc,sources
+mvn clean
+set +x
+echo '==================================='
+echo 'Verifying release-build: successful'
+echo '==================================='
+
+
+echo '=============================='
 echo 'Create next development commit'
 echo '=============================='
 set -x
