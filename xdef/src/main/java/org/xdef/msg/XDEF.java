@@ -585,11 +585,11 @@ public interface XDEF {
 	public static final long XDEF581 = 31159025951L;
 	/** Attempt to access illegal item&amp;{#SYS000} */
 	public static final long XDEF582 = 31159025952L;
-	/** Model of element '&amp;{0}' is missing in X-definition&amp;{1}{ }&amp;{#SYS000} */
+	/** Model of element "&amp;{0}" is missing in X-definition&amp;{1}{ "}{"}&amp;{#SYS000} */
 	public static final long XDEF601 = 31159025953L;
-	/** The X-definition&amp;{0}{ '}{'} is missing */
+	/** The X-definition&amp;{0}{ "}{"} is missing */
 	public static final long XDEF602 = 31159025954L;
-	/** '&amp;{0}' does not point to the model of element */
+	/** "&amp;{0}" does not point to the model of element */
 	public static final long XDEF603 = 31159025955L;
 	/** Incorrect regular expression: &amp;{0}&amp;{#SYS000} */
 	public static final long XDEF650 = 31159025956L;

@@ -94,77 +94,55 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		final Map<String, String> atttab,
 		final Map<String, String> txttab,
 		final Map<String, String> xctab) {
+		String s = clazz, exts = "", impls = "";
+		int ndx;
+		if ((ndx = clazz.indexOf(" implements ")) > 0) {
+			s = clazz.substring(0, ndx);
+			impls = clazz.substring(ndx + 12);
+		}
+		if ((ndx = clazz.indexOf(" extends ")) > 0) {
+			s = clazz.substring(0, ndx);
+			exts = clazz.substring(ndx);
+		}
+		if ((ndx = extClazz.indexOf(" extends ")) >= 0) {
+			exts = extClazz.substring(ndx);
+			if (ndx == 0)
+				if ((ndx = extClazz.indexOf(" implements ")) >= 0) {
+					exts = extClazz.substring(0, ndx);
+					if (!impls.isEmpty()) {
+						impls += ',';
+					}
+					impls += extClazz.substring(ndx + 12);
+				}
+		}
+		if ((ndx = extClazz.indexOf(" implements ")) >= 0) {
+			if (impls.isEmpty()) {
+				impls = extClazz.substring(ndx + 12);
+			} else if (!impls.contains(extClazz.substring(ndx + 12))) { // prevent implement duplicity
+				impls += ',' + extClazz.substring(ndx + 12);
+			}
+		}
+		if (!interfcName.isEmpty()) {
+			if (!impls.isEmpty()) {
+				impls += ',';
+			}
+			impls += interfcName;
+		}
+		if (!impls.isEmpty()) {
+			impls += ',';
+		}
 		String result =
 (_genJavadoc ?
 "/** Object of XModel \""+model+"\" from X-definition \""+xdname+"\".*/"+LN : "") +
 "@SuppressWarnings(\"unchecked\")"+LN+
-"public "+(isRoot?"":"static ")+"class "+
-			clazz + extClazz + (interfcName.length() > 0 ?
-				extClazz.contains("implements ") ? ", " + interfcName : (" implements " + interfcName)
-				: extClazz.contains("implements ") ? ",org.xdef.component.XComponent"
-				: " implements org.xdef.component.XComponent")+ "{"+LN;
-		result += genSeparator("Getters", _genJavadoc & getters.length() > 0)
+"public "+(isRoot?"":"static ")+"class "+s+exts+" implements "+impls+"org.xdef.component.XComponent {"+LN +
+			genSeparator("Getters", _genJavadoc & getters.length() > 0)
 			+ getters
 			+ genSeparator("Setters", _genJavadoc & setters.length() > 0)
 			+ setters
 			+ xpathes.toString() +
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
-////////////////////////////////////////////////////////////////////////////////
 			vars +
-//(_genJavadoc ? "\t/** Get value of item from this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return value of item from this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic Object xGet(final String x){return org.xdef.component.XComponentUtil.get(this, x);}"+LN+
-//(_genJavadoc ? "\t/** Get date from item of this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return date from item of this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic java.util.Date xGetDate(final String x){return org.xdef.component.XComponentUtil.getDate(this, x);}"+LN+
-//(_genJavadoc ? "\t/** Get Timestamp from item with date this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return Timestamp from item of this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic java.sql.Timestamp xGetTimestamp(final String x){return org.xdef.component.XComponentUtil.getTimestamp(this, x);}"+LN+
-//(_genJavadoc ? "\t/** Get calendat from item with date of this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return Calendar from item of this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic java.util.Calendar XGetCalendar(final String x){return org.xdef.component.XComponentUtil.getCalendar(this, x);}"+LN+
-//(_genJavadoc ? "\t/** Get XPosition from item  of this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return string with XPosition of the item of this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic String XGetXpos(final String x){return org.xdef.component.XComponentUtil.getXpos(this, x);}"+LN+
-//(_genJavadoc ? "\t/** Get List from item of this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @return List from item of this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic java.util.List XGetList(final String x){return org.xdef.component.XComponentUtil.getList(this, x);}"+LN+
-//(_genJavadoc ? "\t/** Get Map from this XComponent."+LN+
-//"\t * @return Map from this XComponent."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic java.util.Map XGetMap(){return org.xdef.component.XComponentUtil.getMap(this);}"+LN+
-//(_genJavadoc ? "\t/** Set value of item in this XComponent."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @param v value to be set."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic void xSet(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"set\"+x,v);}"+LN+
-//(_genJavadoc ? "\t/** Add value to the list."+LN+
-//"\t * @param x name item."+LN+
-//"\t * @param v value to be added."+LN+
-//"\t */"+LN : "") +
-//"\t@Override"+LN+
-//"\tpublic void xAdd(final String x, final Object v){org.xdef.component.XComponentUtil.setx(this, \"add\"+x,v);}"+LN+
-
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
 "\t * If the argument is null <i>null</i> then document is created with"+LN+
 "\t * created document element."+LN+
@@ -383,7 +361,6 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @param value parsed value."+LN+
 "\t */"+LN : "") +
 "\t@Override"+LN;
-		int ndx;
 		if (txttab.isEmpty()) {
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}"+LN;
@@ -393,8 +370,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			ndx = val.indexOf(';');
 			String name = val.substring(ndx + 1);
 			String getter = val.substring(2, ndx);
-			String s = val.startsWith("1") ? "\t\tset" + name +"("+getter+")"
-				: "\t\tlistOf" + name + "().add("+getter+")";
+			s = val.startsWith("1")
+				? "\t\tset" + name +"("+getter+")" : "\t\tlistOf" + name + "().add("+getter+")";
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN+
 (val.startsWith("1") ?
@@ -403,7 +380,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		} else {
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN;
-			String s = "";
+			s = "";
 			for(Map.Entry<String, String> e: txttab.entrySet()) {
 				s += (s.isEmpty() ? "\t\t" : "\t\t} else ")
 					+ "if (\"" + e.getKey() + "\".equals(x.getXMNode().getXDPosition())){"+LN;
@@ -413,7 +390,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 				String getter = val.substring(2, ndx);
 				s += (val.startsWith("1") ? "\t\t\t_$"+name+"=(char) XD_ndx++;"+LN+"\t\t\tset" + name
 					: "\t\t\t_$" + name + ".append((char) XD_ndx++);"+LN+
-						"\t\t\tget" + name + "().add") + "("+getter+");"+LN;
+						"\t\t\tget" + name + "().add") + "(" + getter + ");"+LN;
 			}
 			result += s + "\t\t}"+LN+"\t}"+LN;
 		}
@@ -424,8 +401,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "") +
 "\t@Override"+LN;
 		if (atttab.isEmpty()) {
-			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}"+LN;
+			result += "\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}"+LN;
 		} else if (atttab.size() == 1) {
 			String val = atttab.entrySet().iterator().next().getValue();
 			ndx = val.indexOf(';');
@@ -438,7 +414,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		} else {
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {"+LN;
-			String s = "";
+			s = "";
 			for (Iterator<Map.Entry<String, String>> it = atttab.entrySet().iterator(); it.hasNext();) {
 				Map.Entry<String, String> en = it.next();
 				s += s.isEmpty() ? "\t\t" : " else ";
@@ -448,8 +424,9 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 				s += (it.hasNext() ? "if (x.getXMNode().getXDPosition().endsWith(\""+ key +"\")) {" : "{")+LN;
 				String val = en.getValue();
 				ndx = val.indexOf(';');
-				s += "\t\t\tXD_Name_" + val.substring(ndx + 1) + " = x.getNodeName();"+LN;
-				s += "\t\t\tset" + val.substring(ndx+1);
+				s +=
+"\t\t\tXD_Name_" + val.substring(ndx + 1) + " = x.getNodeName();"+LN+
+"\t\t\tset" + val.substring(ndx+1);
 				String getter = val.substring(0, ndx);
 				s += "(" + getter + ");"+LN+"\t\t}";
 			}
@@ -463,24 +440,21 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t@Override"+LN;
 		if (xctab.isEmpty()) {
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)"+
-	"{return null;}"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){return null;}"+LN;
 		} else if (xctab.size() == 1) {
 			Map.Entry<String, String> e = xctab.entrySet().iterator().next();
-			String s = e.getValue().replace('#', '.');
+			s = e.getValue().replace('#', '.');
 			s = s.length() != 0 ? "new "+s.substring(s.indexOf(";") + 1)+"(this, x)" : "this";
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)"+
-	"{return " + s + ";}"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){return " + s + ";}"+LN;
 		} else {
 			boolean dflt = false;
 			result +=
 "\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){"+LN;
-			result +=
-"\t\tswitch(x.getXMElement().getXDPosition()) {"+LN;
+			result += "\t\tswitch(x.getXMElement().getXDPosition()) {"+LN;
 			for (Iterator<Map.Entry<String, String>> it = xctab.entrySet().iterator(); it.hasNext();) {
 				Map.Entry<String, String> e = it.next();
-				String s = e.getValue().replace('#', '.');
+				s = e.getValue().replace('#', '.');
 				if (s.isEmpty()) {
 					dflt = true;
 				} else {
@@ -500,13 +474,12 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += "\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
 		} else if (xctab.isEmpty()) {
-			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
+			result += "\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
 		} else if (xctab.size() == 1) {
 			result +=
 "\tpublic void xAddXChild(org.xdef.component.XComponent x) {"+LN+
 "\t\tx.xSetNodeIndex(XD_ndx++);"+LN;
-			String s = xctab.values().iterator().next().replace('#', '.');
+			s = xctab.values().iterator().next().replace('#', '.');
 			String typ = s.substring(s.indexOf(";") + 1);
 			String var = s.substring(2, s.indexOf(";"));
 			result += s.charAt(0)=='1' ? "\t\tset"+ var +"(" + "("+ typ : "\t\tlistOf"+ var +"().add(("+ typ;
@@ -519,15 +492,13 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\tswitch(x.xGetModelPosition()) {"+LN;
 			for (Iterator<Map.Entry<String, String>> it = xctab.entrySet().iterator(); it.hasNext();) {
 				Map.Entry<String, String> e = it .next();
-				String s = e.getValue().replace('#', '.');
+				s = e.getValue().replace('#', '.');
 				if (s.length() > 0) {
 					String typ = s.substring(s.indexOf(";") + 1);
 					String var = s.substring(2, s.indexOf(";"));
 					s = s.charAt(0) == '1'
-						? "set" + var + "(" + "(" + typ + ")x);"
-						: "listOf" + var + "().add((" + typ + ")x);";
-					result += it .hasNext()
-						? "\t\t\tcase \"" + e.getKey() + "\": " + s + " break;"+LN
+						? "set" + var + "(" + "(" + typ + ")x);" : "listOf" + var + "().add((" + typ + ")x);";
+					result += it .hasNext() ? "\t\t\tcase \"" + e.getKey() + "\": " + s + " break;"+LN
 						: "\t\t\tdefault: " + s + " //" + e.getKey()+LN+ "\t\t}"+LN+"\t}"+LN;
 				}
 			}

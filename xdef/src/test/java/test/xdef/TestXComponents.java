@@ -19,7 +19,6 @@ import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SException;
-import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -214,17 +213,17 @@ public final class TestXComponents extends XDTester {
 "          Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
 "          Sex   = \"enum('M', 'W', 'X')\"/>\n" +
 "  <xd:component>\n" +
-"    %class "+_package+".Lubor1_XCPersonXCPerson\n" +
+"    %class "+_package+".Lubor1_XCPerson\n" +
 "        extends "+_package+".TestXComponents_bindAbstract\n" +
 "        implements "+_package+".TestXComponents_bindInterface\n" +
 "        %link XPerson#Person;\n" +
-"    %bind Name %with "+_package+".Lubor1_XCPersonXCPerson %link XPerson#Person/@Name;\n" +
-"    %bind SBirth %with "+_package+".Lubor1_XCPersonXCPerson %link XPerson#Person/@Birth;\n" +
-"    %bind SexString %with "+_package+".Lubor1_XCPersonXCPerson %link XPerson#Person/@Sex;\n" +
+"    %bind Name %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Name;\n" +
+"    %bind SBirth %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Birth;\n" +
+"    %bind SexString %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Sex;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
-			xc = (XComponent) SUtils.getNewInstance(_package+".Lubor1_XCPersonXCPerson");
+			xc = (XComponent) SUtils.getNewInstance(_package+".Lubor1_XCPerson");
 			XComponentUtil.set(xc, "Name", "John Brown");
 			XComponentUtil.set(xc, "Birth", new java.sql.Timestamp(new java.util.Date(0).getTime()));
 			XComponentUtil.set(xc, "Sex", TestXComponents_bindEnum.M);
@@ -1084,10 +1083,10 @@ public final class TestXComponents extends XDTester {
 "  <A a = \"int()\" />\n" +
 "  <B xd:script =\"ref A\" b=\"string()\" />\n" +
 "<xd:component>\n" +
-"%class "+_package+".L_X_1 %link #A;\n" +
-"%class "+_package+".L_XX_1 %link #B;\n" +
-"%interface "+_package+".L_I_1 %link #A;\n" +
-"%interface "+_package+".L_II_1 extends "+_package+".L_I_1 %link #B;\n" +
+"%class "+_package+".LA_1 %link #A;\n" +
+"%class "+_package+".LB_1 %link #B;\n" +
+"%interface "+_package+".LA_1_I %link #A;\n" +
+"%interface "+_package+".LB_1_I extends "+_package+".LA_1_I %link #B;\n" +
 "</xd:component>\n" +
 "</xd:def>"));
 			xd = xp.createXDDocument("");
@@ -1184,7 +1183,7 @@ public final class TestXComponents extends XDTester {
 			getDataDir() + "test/TestXComponents.xdef", getDataDir() + "test/TestXComponent_Z.xdef"});
 		// generate and compile XComponents from xp
 		assertNoErrors(genXComponent(xp));
-		
+
 //////////////////////////////////
 		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";

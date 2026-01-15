@@ -963,7 +963,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			case "mixed": newNode = new XMixed(); defaultOcc.setUnspecified(); break;
 			case "choice": newNode = new XChoice(); break; //min=1; max=1
 			case "sequence": newNode = new XSequence(); break; //min=1;max=1
-			default: newNode = new XSequence(); defaultOcc.setUnspecified(); //include				
+			default: newNode = new XSequence(); defaultOcc.setUnspecified(); //include
 		}
 		newNode.setUnspecified();
 		newNode.setSPosition(copySPosition(pn._name));
@@ -1765,8 +1765,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				((XPool) xdp).setXComponents(x);
 				// binds
 				x = new LinkedHashMap<>();
-				for (Map.Entry<String, SBuffer> en:
-					_codeGenerator._binds.entrySet()) {
+				for (Map.Entry<String, SBuffer> en: _codeGenerator._binds.entrySet()) {
 					XMNode xn = xdp.findModel(en.getKey());
 					if (xn == null || xn.getKind() != XMELEMENT && xn.getKind() != XMATTRIBUTE
 						&& xn.getKind() != XMTEXT) {
@@ -1779,8 +1778,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					if (ndx > 0) {
 						short typ = getTypeId(xn);
 						// Check if all binds conneted to the same class have the same type.
-						for (Map.Entry<String, SBuffer> en1:
-							_codeGenerator._binds.entrySet()) {
+						for (Map.Entry<String, SBuffer> en1: _codeGenerator._binds.entrySet()) {
 							if (!en.getKey().equals(en1.getKey())
 								&& en.getValue().getString().equals(en1.getValue().getString())) {
 								XMNode xm = xdp.findModel(en1.getKey());
@@ -1863,8 +1861,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} catch (Exception ex) {
 				throw new SRuntimeException(SYS.SYS066, ex); //Internal error: &{0}
 			}
-			// finally check "implements" and "uses" requests
-			// Note this must be done after all referrences are resolved
+			// Finally check "implements" and "uses" requests. Note this after referrences are resolved
 			boolean errs = getReportWriter().errors();
 			for (CompileReference xref : _scriptCompiler._implList) {
 				XNode xn = xref.getTargetModel();

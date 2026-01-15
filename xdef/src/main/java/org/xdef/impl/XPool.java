@@ -941,7 +941,13 @@ public final class XPool implements XDPool, Serializable {
 	 * @return the XDDocument object.
 	 */
 	@Override
-	public final XDDocument createXDDocument() {return new ChkDocument((XDefinition) getXMDefinition());}
+	public final XDDocument createXDDocument() {
+		XDefinition xd = (XDefinition) getXMDefinition();
+		if (xd != null) {
+			return new ChkDocument((XDefinition) xd);
+		}
+		throw new SRuntimeException(XDEF.XDEF602); //The X-definition&{0}{ "}{"} is missing
+	}
 
 	/** Create new XDDocument.
 	 * @param id Identifier of X-definition (or null).
@@ -950,23 +956,25 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	@Override
 	public final XDDocument createXDDocument(final String id) {
+		XDDocument result;
 		if (id == null || id.length() == 0) {
-			return createXDDocument();
-		}
-		int ndx = id.indexOf('#');
-		if (ndx < 0) {
-			XDefinition xd = (XDefinition) getXMDefinition(id);
-			if (xd == null) {
-				throw new SRuntimeException(XDEF.XDEF602, id);//The X-definition&{0}{ '}{'} is missing
-			}
-			return new ChkDocument((XDefinition) getXMDefinition(id));
+			result = createXDDocument();
 		} else {
-			XMNode xn = findModel(id);
-			if (xn != null  && xn.getKind() == XMELEMENT) {
-				return ((XMElement) xn).createXDDocument();
+			int ndx = id.indexOf('#');
+			if (ndx < 0) {
+				XDefinition xd = (XDefinition) getXMDefinition(id);
+				result = xd == null ? null : new ChkDocument((XDefinition) getXMDefinition(id));
+			} else {
+				XMNode xn = findModel(id);
+				if (xn != null  && xn.getKind() == XMELEMENT) {
+					result = ((XMElement) xn).createXDDocument();
+				} else {
+					throw new SRuntimeException(XDEF.XDEF603, id); //"&{0" doesn't point to model of element
+				}
 			}
-			throw new SRuntimeException(XDEF.XDEF603, id); //'&{0' doesn't point to model of element
 		}
+		if (result != null) return result;
+		throw new SRuntimeException(XDEF.XDEF602, id);//The X-definition&{0}{ "}{"} is missing
 	}
 
 	/** Get debug information or null.

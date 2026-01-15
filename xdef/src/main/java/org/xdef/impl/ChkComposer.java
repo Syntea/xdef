@@ -1618,7 +1618,7 @@ final class ChkComposer extends SReporter {
 				qname = rootName;
 				nsURI = xe.getNSUri();
 			} else {
-				//Model of element &{0} is missing in X-definition &{1}
+				//Model of element "&{0}" is missing in X-definition&{1}{ "}{"}
 				chkEl.error(XDEF.XDEF601, rootName, xdef.getName());
 				return null;
 			}

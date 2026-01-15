@@ -88,7 +88,7 @@ final class XCGenerator extends XCGeneratorXON {
 		if (clsNames != null) {
 			classNames.addAll(clsNames);
 		}
-		if (isRoot && className != null) {
+		if (isRoot && className != null && !className.isEmpty()) {
 			classNames.add(className);
 		}
 		final String xdname = xe.getXMDefinition().getName();
@@ -554,7 +554,7 @@ final class XCGenerator extends XCGeneratorXON {
 				interfaceName1 = interfaceName1.substring(ndx + 1);
 			}
 			String s = hdrTemplate;
-			if (packageName1 != null && packageName1.length() > 0) {
+			if (packageName1 != null && !packageName1.isEmpty()) {
 				s += "package " + packageName1 + ";"+LN;
 			}
 			s += LN + "public interface " + interfaceName1 + " extends org.xdef.component.XComponent {" + LN;
