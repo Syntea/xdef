@@ -24,8 +24,8 @@ check () {
         }
 
     set -x
-    #git-pull
-    git pull
+    #git-pull fastforward-only
+    git pull --ff-only
     set +x
     
     #check git status up-to-date and clean
@@ -46,10 +46,10 @@ echo '===================='
 echo 'Check git-repository'
 echo '===================='
 
-#check repo/project in actual dir
+#check repo in actual dir
 check $1
 
-#check secondary repo of main-branch if required
+#check secondary repo of branch-main if required
 if [ "$1" = "main" ]
 then
     #check variable main-branch name
@@ -61,15 +61,15 @@ then
     else
         cd ..
         set -x
-        #clone git-repo "xdef" main-branche
+        #clone git-repo "xdef" branche-main
         git clone --branch "${mainBranchName}" git@github.com:Syntea/xdef.git "xdef-${mainBranchName}"
         set +x
         cd "xdef-${mainBranchName}"
     fi
 
-    #check repo/project
+    #check repo-main
     check
-    
+
     #check branch-name
     branchCurrentName="$(git branch --show-current)"
     [ "${branchCurrentName}" = "${mainBranchName}" ] || \

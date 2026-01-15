@@ -24,7 +24,7 @@ cd ../..
     set +x
 }
 
-#do merge main-branch, may be empty
+#do merge branch-main, may be empty
 "${scriptDir}"/base/git-merge-main2dev.sh
 
 echo '====================='
