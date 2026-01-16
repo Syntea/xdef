@@ -22,8 +22,17 @@ echo '==============================='
 echo 'Verifying snapshot-build: start'
 echo '==============================='
 set -x
-mvn clean package -Pjavadoc,sources
-mvn clean
+{   mvn clean package -Pjavadoc,sources &&
+    mvn clean
+} || {
+    set +x
+    echo "ERROR: Verifying snapshot-build: failed - reset branch-main"
+    branchCurrentName="$(git branch --show-current)"
+    set -x
+    git checkout -B "${branchCurrentName}" "origin/${branchCurrentName}"
+    set +x
+    exit 1
+}
 set +x
 echo '===================================='
 echo 'Verifying snapshot-build: successful'
