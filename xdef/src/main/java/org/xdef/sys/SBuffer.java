@@ -1,5 +1,7 @@
 package org.xdef.sys;
 
+import java.util.Objects;
+
 /** Contains string connected with source position.
  *
  * @author  Vaclav Trojan
@@ -68,5 +70,23 @@ public final class SBuffer extends SPosition {
 	public final void setString(final String s) {_source = s;}
 
 	@Override
+	public int hashCode() {
+		return  97 + 3*Objects.hashCode(this._source);
+	}
+
+	@Override
 	public final String toString() {return super.toString() + ";\n" + _source;}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (o instanceof SBuffer) {
+			if (!super.equals(o)) return false;
+			if (_source == null) {
+				return  ((SBuffer) o)._source == null;
+			} else {
+				return _source.equals(((SBuffer) o)._source);
+			}
+		}
+		return false;
+	}
 }

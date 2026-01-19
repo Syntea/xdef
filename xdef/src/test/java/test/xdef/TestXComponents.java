@@ -217,9 +217,9 @@ public final class TestXComponents extends XDTester {
 "        extends "+_package+".TestXComponents_bindAbstract\n" +
 "        implements "+_package+".TestXComponents_bindInterface\n" +
 "        %link XPerson#Person;\n" +
-"    %bind Name %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Name;\n" +
-"    %bind SBirth %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Birth;\n" +
-"    %bind SexString %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Sex;\n" +
+"    %bind Name %with "+_package+".TestXComponents_bindAbstract %link XPerson#Person/@Name;\n" +
+"    %bind SBirth %with "+_package+".TestXComponents_bindAbstract %link XPerson#Person/@Birth;\n" +
+"    %bind SexString %with "+_package+".TestXComponents_bindAbstract %link XPerson#Person/@Sex;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
@@ -232,7 +232,7 @@ public final class TestXComponents extends XDTester {
 			xc = (XComponent) SUtils.getNewInstance(_package+".Lubor1_XCPerson");
 			XComponentUtil.set(xc, "Name", "John Brown");
 			XComponentUtil.set(xc, "SBirth", new SDatetime(new java.util.Date(0)));
-			XComponentUtil.set(xc, "SexString", TestXComponents_bindEnum.M.toString());
+			XComponentUtil.set(xc, "SexString", "M");
 			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument("XPerson");
 			xd.setXDContext(xml);
@@ -1535,6 +1535,11 @@ public final class TestXComponents extends XDTester {
 			assertEq("<G g='g_'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>", xc.toXml());
 			assertEq("x", XComponentUtil.get((XComponent) SUtils.getObjectField(o, "_X"), "x"));
 			assertEq("z", XComponentUtil.getVariable((XComponent) SUtils.getObjectField(o, "_Y"),"y"));
+			assertEq("g_", XComponentUtil.get(xc, "g"));
+			assertEq("x", XComponentUtil.get((XComponent)XComponentUtil.get(xc, "XXX"), "x"));
+			assertEq("y", XComponentUtil.get((XComponent) XComponentUtil.listOf(xc, "YYY").get(0), "y"));
+			XComponentUtil.set(xc, "XX", "abc");
+			assertEq("abc", XComponentUtil.get(xc, "XX"));
 
 			xml =
 "<s:H xmlns:s='soap' s:encodingStyle='encoding'>"+

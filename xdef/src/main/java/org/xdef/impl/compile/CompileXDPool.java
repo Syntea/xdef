@@ -384,7 +384,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							error(spos, XDEF.XDEF351, "interface;"+model);//Duplicate declaration of &{0}
 						} else {
 							t += ' ' + result.substring(1);
-							ndx = t.indexOf(" extends");
+							ndx = t.indexOf(" extends ");
 							if (ndx > 0) {
 								t = t.substring(0, ndx);// remove extension from interface!
 							}
@@ -1777,23 +1777,22 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					int ndx = s.indexOf(" %with ");
 					if (ndx > 0) {
 						short typ = getTypeId(xn);
+						String key = en.getKey();
 						// Check if all binds conneted to the same class have the same type.
 						for (Map.Entry<String, SBuffer> en1: _codeGenerator._binds.entrySet()) {
-							if (!en.getKey().equals(en1.getKey())
-								&& en.getValue().getString().equals(en1.getValue().getString())) {
+							if (!key.equals(en1.getKey()) && s.equals(en1.getValue().getString())) {
 								XMNode xm = xdp.findModel(en1.getKey());
 								if (xm == null) {
-									error(en1.getValue(),XDEF.XDEF353,en.getKey());//Unresolved reference &{0}
+									error(en1.getValue(), XDEF.XDEF353, key);//Unresolved reference &{0}
 								} else if (typ != getTypeId(xdp.findModel(en1.getKey()))) {
-									// same name in same class must have same typ
-									s = s.substring(ndx + 7, s.indexOf(' '));
 									//Types of items &{0},&{1} bound to class &{2} differs
-									error(en1.getValue(),XDEF.XDEF358, en.getKey(), en1.getKey(), s);
+									error(en1.getValue(),
+										XDEF.XDEF358, key, en1.getKey(), s.substring(ndx+7, s.indexOf(' ')));
 								}
 							}
 						}
 					}
-					x.put(en.getKey(), en.getValue().getString());
+					x.put(en.getKey(), s);
 				}
 				((XPool) xdp).setXComponentBinds(x);
 				// enumerations

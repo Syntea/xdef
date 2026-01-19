@@ -34,6 +34,7 @@ public class TestXComponents_G implements Serializable {
 	private XComponent _XXX;
 
 	public String getXX() {return _XX;}
+	public void setXX(String s) {_XX = s;}
 	public final void xSetFlags(final int flags) {_flags |= flags;}
 	public final void xClearFlags(final int flags) {_flags &= ~flags;}
 	public final boolean xCheckFlags(final int flags) {return (flags & _flags) == flags;}

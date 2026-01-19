@@ -400,7 +400,7 @@ public class SPosition {
 	 * @param obj Object to be compared.
 	 * @return true if argument is considered as the same position as this one, otherwise return false.
 	 */
-	public final boolean equals(final Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == null || !(obj instanceof SPosition)) {
 			return false;
 		}
