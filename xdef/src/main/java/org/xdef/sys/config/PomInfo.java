@@ -87,14 +87,17 @@ public class PomInfo {
 	 * @return product-identifier
 	 */
 	public String getProductIdentifier() {
-		return groupId + ":" + artifactId + ":" + version + " ("
-			+ (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate)
-			+ (gitCommitIdAbbrev.isEmpty() ? ""
-				: ", commit " + gitCommitIdAbbrev + " " + gitCommitTime + ", tags: "
-				+ (gitTags.isEmpty() ? "[NoTags]" : gitTags)
-				+ ", branch: "
-				+ (gitBranch.isEmpty() ? "[NoBranch]" : gitBranch))
-			+ ")";
+		return
+		    groupId + ":" + artifactId + ":" + version + " (" +
+			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
+			(gitCommitIdAbbrev.isEmpty() ? "" :
+				", commit " + gitCommitIdAbbrev + " " + gitCommitTime +
+				(gitTags  .isEmpty()     ? "" : ", tags: "   + gitTags) +
+				(gitBranch.isEmpty()     ? "" : ", branch: " + gitBranch) +
+				("true".equals(gitDirty) ? "" : ", dirty-commit")
+			) +
+			")"
+		;
 	}
 
 	public String getGroupId() {return groupId;}
