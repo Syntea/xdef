@@ -1,7 +1,11 @@
-#auxiliary commands to fix repo in not-up-to-date or not-clean status
-#=====
+#auxiliary commands to fix repo in not-up-to-date or not-clean status, don't run as script
 
-#sloucit rozhozenou vetev, tj. byla vytvorena druha varianta vetve
+echo "don't run as script, select one command and run it, the listing of this file follows:"
+echo "====================================================================================="
+cat "$(readlink -f "$0")"
+exit
+
+#sloucit rozdelenou vetev, tj. byla vytvorena druha varianta vetve
 git pull
 
 #reset changes in actual branch
@@ -15,5 +19,5 @@ git checkout -B main origin/main
 git branch -f origin/user/trojan/dev
 git branch -f origin/main
 
-#smazat main-repo, scripty si je pripadne opet stahnou z GitHub-u samy
+#smazat repo-main, scripty si je pripadne znovu stahnou z GitHub-u samy ciste
 rm -rf .../project/xdef-main

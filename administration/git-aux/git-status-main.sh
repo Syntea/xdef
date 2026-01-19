@@ -1,5 +1,6 @@
 #!/bin/bash
 #in main-repo show git-status, git-log-graph
+#run from dir of this script
 set -e
 
 . base/env.sh
@@ -8,6 +9,7 @@ set -e
 cd "../../../xdef-${mainBranchName}"
 
 set -x
+git fetch
 git status
 set +x
 read -p "Press key Enter to continue ... " enter

@@ -1,5 +1,6 @@
 #!/bin/bash
 #in repo-main merge actual branch into branche-main and also do verifying snapshot-build
+#run from root-repo-dir
 set -e
 
 pwd="$(pwd)"

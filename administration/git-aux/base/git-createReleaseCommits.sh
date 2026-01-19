@@ -5,6 +5,7 @@
 #and also do verifying release-build
 #parameters: [ <versionNext> ]
 # - <versionNext>: next development version, optional, if not entered it's entered during script from std-input
+#run from root-repo-dir
 set -e
 
 #constants

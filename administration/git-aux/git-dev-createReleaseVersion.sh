@@ -2,6 +2,7 @@
 #create release-version
 #parameters: [ <versionNext> ]
 # - <versionNext>: next development version, optional, if not entered it's entered during script from std-input
+#run from dir of this script
 set -e
 
 scriptDir="$(dirname $(readlink -f "$0"))"

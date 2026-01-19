@@ -1,5 +1,6 @@
 #!/bin/bash
 #commit and push changes and then merge main-branch into current branch
+#run from dir of this script
 set -e
 
 scriptDir="$(dirname $(readlink -f "$0"))"

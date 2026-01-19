@@ -3,6 +3,7 @@
 set -e
 
 set -x
+git fetch
 git status
 set +x
 read -p "Press key Enter to continue ... " enter

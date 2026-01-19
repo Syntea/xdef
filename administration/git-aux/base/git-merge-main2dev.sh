@@ -1,5 +1,6 @@
 #!/bin/bash
 #do merge main-branch into actual branch
+#run from root-repo-dir
 set -e
 
 branchCurrent="$(git branch --show-current)"

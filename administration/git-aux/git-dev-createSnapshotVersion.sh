@@ -1,5 +1,6 @@
 #!/bin/bash
 #create snapshot-version
+#run from dir of this script
 set -e
 
 scriptDir="$(dirname $(readlink -f "$0"))"

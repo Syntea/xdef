@@ -3,6 +3,7 @@
 #parameter 1 values:
 # - main:  check also main-repo, usually in directory "../xdef-main"
 # - dirty: don't check repo is clean
+#run from root-repo-dir
 set -e
 
 pwd="$(pwd)"

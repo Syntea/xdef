@@ -2,6 +2,7 @@
 #in main-repo create commits releted to release version
 #parameters: [ <versionNext> ]
 #see ./git-createReleaseCommits.sh
+#run from root-repo-dir
 set -e
 
 #constants
