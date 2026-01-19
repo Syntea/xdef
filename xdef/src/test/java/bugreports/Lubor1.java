@@ -49,13 +49,13 @@ public class Lubor1 extends XDTester {
 "          Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
 "          Sex   = \"enum('M', 'W', 'X')\"/>\n" +
 "  <xd:component>\n" +
-"    %class "+_package+".Lubor1_XCPerson\n" +
+"    %class test.xdef.Lubor1_XCPerson\n" +
 "        extends test.xdef.TestXComponents_bindAbstract\n" +
 "        implements test.xdef.TestXComponents_bindInterface\n" +
 "        %link XPerson#Person;\n" +
-"    %bind Name %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Name;\n" +
-"    %bind SBirth %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Birth;\n" +
-"    %bind SexString %with "+_package+".Lubor1_XCPerson %link XPerson#Person/@Sex;\n" +
+"    %bind Name %with test.xdef.TestXComponents_bindAbstract %link XPerson#Person/@Name;\n" +
+"    %bind SBirth %with test.xdef.TestXComponents_bindAbstract %link XPerson#Person/@Birth;\n" +
+"    %bind SexString %with test.xdef.TestXComponents_bindAbstract %link XPerson#Person/@Sex;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
 			genXComponentAndCopySources(xp = org.xdef.XDFactory.compileXD(null, xdef));

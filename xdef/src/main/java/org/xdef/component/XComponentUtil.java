@@ -891,7 +891,7 @@ public class XComponentUtil {
 		//Getter &{0} not found in class &{1}
 		throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
 	}
-	
+
 	/** Return value returned by getter from XComponent with name from argument.
 	 * @param xc must be XComponent.
 	 * @param name name of getter.
@@ -907,7 +907,7 @@ public class XComponentUtil {
 	public static final List listOf(final XComponent xc, final String name){
 		return (List) getx(xc, "listOf"+name);
 	}
-	
+
 	/** Get value of XComponent as the java.util.Map.
 	 * @param xc the XComponent.
 	 * @return value of XComponent as the java.util.Map..
