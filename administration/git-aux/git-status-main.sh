@@ -9,7 +9,7 @@ set -e
 cd "../../../xdef-${mainBranchName}"
 
 set -x
-git fetch
+git fetch --prune --prune-tags --force
 git status
 set +x
 read -p "Press key Enter to continue ... " enter

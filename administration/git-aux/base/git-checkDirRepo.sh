@@ -28,7 +28,8 @@ check () {
         }
 
     set -x
-    #git-pull fastforward-only
+    #git: fetch-prune, pull-fastforward-only
+    git fetch --prune --prune-tags --force
     git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed"
     set +x
     
