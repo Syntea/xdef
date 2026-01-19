@@ -1,7 +1,7 @@
 # About X-definition
 
 X-definition is registered technology of the Syntea software group a.s.,
-for processing of the XML documents or JSON data.
+**for processing of the XML documents or JSON data**.
 
 For the purpose of
 **describing the structure of XML documents or JSON data, their validation, processing and creation**,
@@ -268,6 +268,7 @@ Source code at GitHub:
 
 Prerequisities:
   * download project X-definition, e.g. from GitHub
+    * for example git-command: `git clone git@github.com:Syntea/xdef.git`
     * git-repo uses file system symbolic links. If it's not enabled in your git, it can be enabled by two git-commands
       (run from the git-project root directory) "git config set core.symlinks true", "git reset --hard".
       For example, on Linux OS it is enabled by default. For example, on Windows OS it is disabled by default and
@@ -308,7 +309,7 @@ Frequent building operations:
     mvn package -PskipTests
     ```
   * using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms, i.e.:
-    * Java-8 (by default it is run in module "xdef")
+    * Java-8 (by default it is run in the module "xdef")
     * Java-11 (it is run in the module "xdef-test11")
     * Java-17 (it is run in the module "xdef-test17")
     * Java-21 (it is run in the module "xdef-test21")

@@ -3,16 +3,20 @@
 #parameter 1 values:
 # - main:  check also main-repo, usually in directory "../xdef-main"
 # - dirty: don't check repo is clean
+#run from root-repo-dir
 set -e
 
 pwd="$(pwd)"
+
+#check variable main-branch name
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
 
 check () {
     echo "INFO: check directory $(pwd)"
 
     #check actual dir is maven-project
     [ -f "pom.xml" ] || \
-        { echo "ERROR: dir $(pwd) is not maven-project, file 'pom.xml' not found"; exit; }
+        { echo "ERROR: dir $(pwd) is not maven-project, file 'pom.xml' not found"; exit 1; }
 
     #check actual maven-project signature
     prjGroup=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
@@ -20,24 +24,25 @@ check () {
     [ "${prjGroup}" = "org.xdef" -a "${prjArtifact}" = "xdef-parent" ] || \
         {   echo "ERROR: maven-project $(pwd) is not org.xdef:xdef-parent," \
                  "actual signature: ${prjGroup}:${prjArtifact}"
-            exit
+            exit 1
         }
 
-    #git-pull
     set -x
-    git pull
+    #git: fetch-prune, pull-fastforward-only
+    git fetch --prune --prune-tags --force
+    git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed"
     set +x
     
     #check git status up-to-date and clean
     gitStatus="$(unset LANG; git status;)"
     echo "${gitStatus}" | grep -z 'Your branch is up to date with' > /dev/null || \
-        { echo "ERROR: git-repo $(pwd) is not up-to-date"; set -x; git status; set +x; exit; }
+        { echo "ERROR: git-repo $(pwd) is not up-to-date"; set -x; git status; set +x; exit 1; }
 
     #check git status clean, if required
     if [ ! "$1" = "dirty" ]
     then
         echo "${gitStatus}" | grep -z 'nothing to commit, working tree clean' > /dev/null || \
-            { echo "ERROR: git-repo $(pwd) is not up-to-date and clean"; set -x; git status; set +x; exit; }
+            { echo "ERROR: git-repo $(pwd) is not up-to-date and clean"; set -x; git status; set +x; exit 1; }
     fi
 }
 
@@ -46,36 +51,33 @@ echo '===================='
 echo 'Check git-repository'
 echo '===================='
 
-#check repo/project in actual dir
+#check repo in actual dir
 check $1
 
-#check secondary repo of main-branch if required
+#check secondary repo of branch-main if required
 if [ "$1" = "main" ]
 then
-    #check main-branch name
-    [ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
-
     if [ -d "../xdef-${mainBranchName}" ]
     then
         cd "../xdef-${mainBranchName}"
     else
         cd ..
-        #clone git-repo "xdef" main-branche
         set -x
+        #clone git-repo "xdef" branche-main
         git clone --branch "${mainBranchName}" git@github.com:Syntea/xdef.git "xdef-${mainBranchName}"
         set +x
         cd "xdef-${mainBranchName}"
     fi
 
-    #check repo/project
+    #check repo-main
     check
-    
+
     #check branch-name
     branchCurrentName="$(git branch --show-current)"
     [ "${branchCurrentName}" = "${mainBranchName}" ] || \
         {   echo "ERROR: git-repo $(pwd) branch name is not '${mainBranchName}'," \
                  "branch name: ${branchCurrentName}"
-            exit
+            exit 1
         }
 
     cd ${pwd}

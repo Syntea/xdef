@@ -1,11 +1,12 @@
 #!/bin/bash
 #do merge main-branch into actual branch
+#run from root-repo-dir
 set -e
 
 branchCurrent="$(git branch --show-current)"
 
-#check main-branch name
-[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit; }
+#check variable main-branch name
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
 
 echo '=========================='
 echo 'Merge branch main into dev'
