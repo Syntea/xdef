@@ -58,10 +58,11 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("a.b@a.b-c1.c-z", "", "a.b@a.b-c1.c-z"));
 		assertTrue(parseEmail("a-b-d@z.t", "", "a-b-d@z.t"));
 		assertTrue(parseEmail("a--b-d@z.t", "", "a--b-d@z.t")); // '--' in local part is OK!
+		assertTrue(parseEmail("a.-b@z.t", "", "a.-b@z.t")); // ".-" in local part is OK!
 		assertTrue(parseEmail("E.F@z--c-x.cz", "", "E.F@z--c-x.cz")); // '--' in domain is OK!
-		assertTrue(parseEmail("a.b-c1.č-z@a.b-c1.č-z.t", "", "a.b-c1.č-z@a.b-c1.č-z.t"));
+		assertTrue(parseEmail("ä.b-c1.č-ř@ä.b-c1.ĺ-ů.t", "", "ä.b-c1.č-ř@ä.b-c1.ĺ-ů.t"));
 		assertTrue(parseEmail("a@b.t(Jo Do)", "Jo Do", "a@b.t"));
-		assertTrue(parseEmail("ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.c.t", "", "ěščřžýáůú.ĚŠČŘŽÝÁÚŹĹ@a.b-c1.c.t"));
+		assertTrue(parseEmail("ěščřžýáůú.ĚŠČŘŽÝÁÚŮŹĹ@a.b-c1.c.t", "", "ěščřžýáůú.ĚŠČŘŽÝÁÚŮŹĹ@a.b-c1.c.t"));
 		assertTrue(parseEmail("s-e_.z.cz@a.s-e.z.cz.t", "", "s-e_.z.cz@a.s-e.z.cz.t"));
 		assertTrue(parseEmail("<1E.a-J@s-e.z.cz>", "", "1E.a-J@s-e.z.cz"));
 		assertTrue(parseEmail("jíř.Ký@abc", "", "jíř.Ký@abc"));
@@ -101,8 +102,9 @@ public class TestEmailAddr extends XDTester {
 		assertTrue(parseEmail("Joe.\\ Blow@example.com.t", "", "Joe.\\Blow@example.com.t"));
 		assertFalse(parseEmail("!\\\\@@example.com.t", null, null));
 		assertTrue(parseEmail("!\\@+@example.com.t", "", "!\\@+@example.com.t"));
-		assertTrue(parseEmail("_test@[IPv6:2001:0db8:85a3:0000:0000:8a2e:0370:7334]",
-			"", "_test@[IPv6:2001:0db8:85a3:0000:0000:8a2e:0370:7334]"));
+		assertTrue(parseEmail("js@[192.168.2.1]", "", "js@[192.168.2.1]")); // IP address
+		assertTrue(parseEmail("test@[IPv6:2001:0db8:85a3:0:0000:8a2e:0370:7334]",  // IPV6 address
+			"", "test@[IPv6:2001:0db8:85a3:0:0000:8a2e:0370:7334]"));
 
 		//invalid
 		assertFalse(parseEmail("1.2", null, null)); //missing '@'
@@ -121,7 +123,7 @@ public class TestEmailAddr extends XDTester {
 		assertFalse(parseEmail("-Joe.Blow@example.com", null, null)); // local part starts with '-'
 		assertFalse(parseEmail("Joe.Blow-@example.com", null, null)); // local part ends with '-'
 		assertFalse(parseEmail("Joe..Blow@example.com", null, null)); // '..' in local part
-		assertFalse(parseEmail("Joe.-Blow@example.com", null, null)); // '.-' in local part
+//		assertFalse(parseEmail("Joe.-Blow@example.com", null, null)); // '.-' in local part
 		assertFalse(parseEmail("E.F@z..cz", null, null)); // '..' in domain
 		assertFalse(parseEmail("E.F@-z.cz", null, null)); // domain starts with '-'
 		assertFalse(parseEmail("E.F@z.cz-", null, null)); // domain ends with '-'

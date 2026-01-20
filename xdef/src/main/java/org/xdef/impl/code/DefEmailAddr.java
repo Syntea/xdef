@@ -51,7 +51,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "address::=       '[' ( IPv4_addr | IPv6_addr | General_addr ) ']'\n" +  // See Section 4.1.3
 "atext::=         ( $letter | ('\\' ('[' | ']' | [\\\"@/ ()<>,;.:])) | [0-9_!#$%&'*+/=?^`{|}~] )+\n"+
 "Atom::=          atext ('-'+ atext)*\n" +
-"Dot_string::=    Atom ('.'  Atom)*\n" +
+"Dot_string::=    Atom ('.' '-'* Atom)*\n" +
 "qtextSMTP::=     [ !#-Z^-~] | '[' | ']'\n" +
 	// i.e., within a quoted string, any ASCII graphic or space is permitted without
 	// blackslash-quoting except double-quote and the backslash itself.
