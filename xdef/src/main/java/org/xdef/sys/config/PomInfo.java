@@ -88,7 +88,7 @@ public class PomInfo {
 	 */
 	public String getProductIdentifier() {
 		return
-		    groupId + ":" + artifactId + ":" + version + " (" +
+			groupId + ":" + artifactId + ":" + version + " (" +
 			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
 			(gitCommitIdAbbrev.isEmpty() ? "" :
 				", commit " + gitCommitIdAbbrev + " " + gitCommitTime +

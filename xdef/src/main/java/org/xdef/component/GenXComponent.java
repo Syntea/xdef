@@ -228,8 +228,12 @@ LN+(genJavadoc ?
 					} else {
 						interfaceName = className.substring(ndx + 11);
 						className = "";
-						ndx = interfaceName.lastIndexOf('.');
-						if (ndx > 0) {
+						if ((ndx = interfaceName.indexOf(' ')) > 0) {
+							packageName = interfaceName.substring(0, ndx);
+							if ((ndx = interfaceName.lastIndexOf('.')) > 0) {
+								packageName = interfaceName.substring(0, ndx);
+							}
+						} else if ((ndx = interfaceName.lastIndexOf('.')) > 0) {
 							packageName = interfaceName.substring(0, ndx);
 						}
 					}
@@ -258,6 +262,14 @@ LN+(genJavadoc ?
 					packageName = className.substring(0, ndx);
 					className = className.substring(ndx + 1);
 				}
+				String extClass = "";
+if ((ndx = interfaceName.indexOf(" extends ")) > 0) {
+	extClass = interfaceName.substring(ndx+9);
+	interfaceName = interfaceName.substring(0, ndx);
+}
+if ((ndx = packageName.indexOf(" extends ")) > 0) {
+	packageName = packageName.substring(ndx + 9);
+}
 				if (packageName.isEmpty()) {
 					fparent = fdir;
 				} else {
@@ -269,10 +281,11 @@ LN+(genJavadoc ?
 					fName = className.substring(0 , ndx);
 				}
 				className = className + extName;
-				String extClass = "";
 				if ((ndx = className.indexOf(" extends ")) > 0) {
-					extClass = " extends " + className.substring(ndx+8).trim();
-					className = className.substring(0,ndx).trim();
+					if (className.indexOf(" implements") < 0 || className.indexOf(" implements") > ndx) {
+						extClass = " extends " + className.substring(ndx+8).trim();
+						className = className.substring(0,ndx).trim();
+					}
 				} else if ((ndx = className.indexOf(" implements")) > 0) {
 					extClass = " implements "+className.substring(ndx+11).trim();
 					className = className.substring(0,ndx).trim();

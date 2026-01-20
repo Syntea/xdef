@@ -566,7 +566,11 @@ final class XCGenerator extends XCGeneratorXON {
 			if (packageName1 != null && !packageName1.isEmpty()) {
 				s += "package " + packageName1 + ";"+LN;
 			}
-			s += LN + "public interface " + interfaceName1 + " extends org.xdef.component.XComponent {" + LN;
+			String ext = " extends ";;
+			if (!extClass.isEmpty()) {
+				ext += extClass + ",";
+			}
+			s += LN + "public interface " + interfaceName1 + ext + "org.xdef.component.XComponent {" + LN;
 			_interfaces.insert(0, s).append("}");
 		}
 		if (className.isEmpty()) {

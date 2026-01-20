@@ -94,32 +94,49 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		final Map<String, String> atttab,
 		final Map<String, String> txttab,
 		final Map<String, String> xctab) {
-		String s = clazz, exts = "", impls = "";
+		String s, cls = clazz, exts = "", impls = "";
 		int ndx;
-		if ((ndx = clazz.indexOf(" implements ")) > 0) {
-			s = clazz.substring(0, ndx);
-			impls = clazz.substring(ndx + 12);
-		}
-		if ((ndx = clazz.indexOf(" extends ")) > 0) {
-			s = clazz.substring(0, ndx);
+		if ((ndx = clazz.indexOf(" extends ")) == 0) {
+			cls = cls.substring(0, ndx);
 			exts = clazz.substring(ndx);
 		}
-		if ((ndx = extClazz.indexOf(" extends ")) >= 0) {
-			exts = extClazz.substring(ndx);
-			if (ndx == 0)
-				if ((ndx = extClazz.indexOf(" implements ")) >= 0) {
-					exts = extClazz.substring(0, ndx);
-					if (!impls.isEmpty()) {
-						impls += ',';
-					}
-					impls += extClazz.substring(ndx + 12);
-				}
+		if ((ndx = clazz.indexOf(" implements ")) > 0) {
+			cls = clazz.substring(0, ndx);
+			impls = clazz.substring(ndx + 12);
+			if ((ndx = impls.indexOf(" extends ")) > 0) {
+				impls = impls.substring(0, ndx);
+			}
 		}
-		if ((ndx = extClazz.indexOf(" implements ")) >= 0) {
-			if (impls.isEmpty()) {
-				impls = extClazz.substring(ndx + 12);
-			} else if (!impls.contains(extClazz.substring(ndx + 12))) { // prevent implement duplicity
-				impls += ',' + extClazz.substring(ndx + 12);
+		if (extClazz.contains(" extends ") || extClazz.contains(" implements ")) {
+			ndx = extClazz.indexOf(" extends ");
+			int ndx1 = extClazz.indexOf(" implements ");
+			if (ndx1 == 0) {
+				if (!impls.isEmpty()) {
+					impls += ',';
+				}
+				impls += ndx > 0 ? extClazz.substring(ndx1 + 12, ndx) : extClazz.substring(ndx1 + 12);
+			} else {
+				if (ndx == 0) {
+					if (!exts.isEmpty()) {
+						exts += ",";
+					}
+					if (ndx1 > 0) {
+						exts = extClazz.substring(0, ndx1);
+						if (!impls.isEmpty()) {
+							impls += ',';
+						}
+						ndx = extClazz.indexOf(" extends ", ndx1 + 12);
+						impls += ndx > 0 ? extClazz.substring(ndx1 + 12, ndx) : extClazz.substring(ndx1 + 12);
+					} else {
+						exts += extClazz;
+					}
+				} else if (ndx > 0) {
+					if (impls.isEmpty()) {
+						impls = extClazz.substring(ndx1 + 12);
+					} else if (!impls.contains(extClazz.substring(ndx1 + 12))) { // prevent implement duplicity
+						impls += ',' + extClazz.substring(ndx1 + 12);
+					}
+				}
 			}
 		}
 		if (!interfcName.isEmpty()) {
@@ -135,7 +152,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 (_genJavadoc ?
 "/** Object of XModel \""+model+"\" from X-definition \""+xdname+"\".*/"+LN : "") +
 "@SuppressWarnings(\"unchecked\")"+LN+
-"public "+(isRoot?"":"static ")+"class "+s+exts+" implements "+impls+"org.xdef.component.XComponent {"+LN +
+"public "+(isRoot?"":"static ")+"class "+cls+exts+" implements "+impls+"org.xdef.component.XComponent {"+LN+
 			genSeparator("Getters", _genJavadoc & getters.length() > 0)
 			+ getters
 			+ genSeparator("Setters", _genJavadoc & setters.length() > 0)
@@ -299,7 +316,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		}
 		result +=
 (_genJavadoc ? "\t/** Create an empty object.*/"+LN : "")+
-"\tpublic "+clazz+"() {}"+LN+
+"\tpublic "+cls+"() {}"+LN+
 (_genJavadoc ? "\t/** Create XComponent."+LN+
 "\t * @param p parent component."+LN+
 "\t * @param name name of element."+LN+
@@ -307,7 +324,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @param xPos XPOS of actual element."+LN+
 "\t * @param XDPos XDposition of element model."+LN+
 "\t */"+LN : "")+
-"\tpublic " + clazz +
+"\tpublic "+cls+
 "(org.xdef.component.XComponent p,"+LN+
 "\t\tString name, String ns, String xPos, String XDPos) {"+LN+
 "\t\tXD_NodeName=name; XD_NamespaceURI=ns;"+LN+
@@ -319,7 +336,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @param p parent component."+LN+
 "\t * @param x XXNode object."+LN+
 "\t */"+LN : "") +
-"\tpublic " + clazz +
+"\tpublic "+cls+
 "(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {"+LN+
 "\t\torg.w3c.dom.Element el=x.getElement();"+LN+
 "\t\tXD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();"+LN+

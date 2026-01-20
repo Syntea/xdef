@@ -384,10 +384,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							error(spos, XDEF.XDEF351, "interface;"+model);//Duplicate declaration of &{0}
 						} else {
 							t += ' ' + result.substring(1);
-							ndx = t.indexOf(" extends ");
-							if (ndx > 0) {
-								t = t.substring(0, ndx);// remove extension from interface!
-							}
 							s = new SBuffer(t, s);
 							_codeGenerator._components.put(model, s);
 						}
@@ -440,6 +436,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 			}
 		}
+/*#if XCOMPONENT*#/
+		for(Entry<String, SBuffer> e: _codeGenerator._components.entrySet()) {
+			System.out.println("%class: " + e.getKey() + ": " + e.getValue().getString());
+		}
+		for(Entry<String, SBuffer> e: _codeGenerator._binds.entrySet()) {
+			System.out.println("%bind: " + e.getKey() + ": " + e.getValue().getString());
+		}
+/*#end*/
 	}
 
 	private void compileMethodsAndClassesAttrs() {

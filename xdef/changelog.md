@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.37, release-date 2026-01-19
-.
+ * Corrected email address syntax: a period followed by a hyphen is allowed in the local part
+   (e.g., `Joe.-Blow@example.com` is OK).
+ * Fixed generation of XComponents containing the keyword `extends` in `%class` or `%interface` commands.
 
 # Version 42.2.36, release-date 2025-12-26
   * Fixed a bug when generating an XComponent interface with an internal map when importing more than one

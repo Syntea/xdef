@@ -8,7 +8,6 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.sys.SUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import static test.XDTester.chkCompoinentSerializable;
@@ -26,6 +25,7 @@ public class Lubor1 extends XDTester {
 	/** Run test and display error information. */
 	@Override
 	public void test() {
+		boolean T = false;
 		System.out.println("TempDir: " + getTempDir());
 		System.out.println("SourceDir: " + getSourceDir());
 ////////////////////////////////////////////////////////////////////////////////
@@ -34,11 +34,52 @@ public class Lubor1 extends XDTester {
 //		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
+		Object o;
 		String xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+/**/
+		try {
+			test.xdef.TestXComponents_G.class.getClass();
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' name='G' root='G'>\n" +
+"  <xd:declaration scope=\"local\">\n" +
+"     external method void test.xdef.TestXComponents_G.genXC(XXNode);\n" +
+"  </xd:declaration>\n" +
+"  <xd:component>\n" +
+"   %bind g %with test.xdef.TestXComponents_G %link G#G/@g;\n" +
+"   %bind YYY %with test.xdef.TestXComponents_G %link G#G/YYY;\n" +
+"   %bind XXX %with test.xdef.TestXComponents_G %link G#G/XXX;\n" +
+"   %class test.xdef.component.G extends test.xdef.TestXComponents_G %link G\n" +
+"  </xd:component>\n" +
+"\n" +
+"  <G xd:script = 'finally ;' g = 'string'>\n" +
+"    <XXX x = 'string; finally genXC()'/>\n" +
+"    <YYY xd:script = '+' y = 'string; finally genXC()'/>\n" +
+"  </G>\n" +
+"\n" +
+"</xd:def>";
+			xp = org.xdef.XDFactory.compileXD(null, xdef);
+			genXComponent(xp);
+			xml = "<G g='g'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>";
+			xd = xp.createXDDocument("G");
+			o = org.xdef.sys.SUtils.getNewInstance("test.xdef.component.G");
+			xd.setUserObject(o);
+			xc = parseXC(xd, xml, null, null);
+			assertEq("", chkCompoinentSerializable(xc));
+			assertEq("<G g='g_'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>", xc.toXml());
+			assertEq("x", XComponentUtil.get((XComponent) org.xdef.sys.SUtils.getObjectField(o, "_X"), "x"));
+			assertEq("z",
+				XComponentUtil.getVariable((XComponent) org.xdef.sys.SUtils.getObjectField(o, "_Y"),"y"));
+			assertEq("g_", XComponentUtil.get(xc, "g"));
+			assertEq("x", XComponentUtil.get((XComponent) XComponentUtil.get(xc, "XXX"), "x"));
+			assertEq("y", XComponentUtil.get((XComponent) XComponentUtil.listOf(xc, "YYY").get(0), "y"));
+			XComponentUtil.set(xc, "XX", "abc");
+			assertEq("abc", XComponentUtil.get(xc, "XX"));
+		} catch (Exception ex) {fail(ex);}
+if (T) return;
 /**/
 		try {
 			test.xdef.TestXComponents_bindAbstract.class.getClass(); //force compilation
@@ -49,7 +90,7 @@ public class Lubor1 extends XDTester {
 "          Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
 "          Sex   = \"enum('M', 'W', 'X')\"/>\n" +
 "  <xd:component>\n" +
-"    %class test.xdef.Lubor1_XCPerson\n" +
+"    %class "+_package+".Lubor1_XCPerson\n" +
 "        extends test.xdef.TestXComponents_bindAbstract\n" +
 "        implements test.xdef.TestXComponents_bindInterface\n" +
 "        %link XPerson#Person;\n" +
@@ -58,12 +99,19 @@ public class Lubor1 extends XDTester {
 "    %bind SexString %with test.xdef.TestXComponents_bindAbstract %link XPerson#Person/@Sex;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
-			genXComponentAndCopySources(xp = org.xdef.XDFactory.compileXD(null, xdef));
-			xc = (XComponent) SUtils.getNewInstance(_package+".Lubor1_XCPerson");
+			xp = org.xdef.XDFactory.compileXD(null, xdef);
+			genXComponent(xp);
+//			genXComponentAndCopySources(xp);
+			xc = (XComponent) org.xdef.sys.SUtils.getNewInstance(_package+".Lubor1_XCPerson");
 			XComponentUtil.set(xc, "Name", "John Brown");
 			XComponentUtil.set(xc, "Birth", new java.sql.Timestamp(new java.util.Date(0).getTime()));
 			XComponentUtil.set(xc, "Sex", test.xdef.TestXComponents_bindEnum.M);
 			xml = "<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>";
+			assertEq(xml, xc.toXml());
+			xc = (XComponent) org.xdef.sys.SUtils.getNewInstance(_package+".Lubor1_XCPerson");
+			XComponentUtil.set(xc, "Name", "John Brown");
+			XComponentUtil.set(xc, "SBirth", new org.xdef.sys.SDatetime(new java.util.Date(0)));
+			XComponentUtil.set(xc, "SexString", "M");
 			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument("XPerson");
 			xd.setXDContext(xml);
@@ -74,8 +122,8 @@ public class Lubor1 extends XDTester {
 			assertEq("M", ((test.xdef.TestXComponents_bindAbstract) xc).getSexString());
 		} catch (RuntimeException ex) {fail(ex);}
 deleteCreatedSources();
-if(true)return;
-/**
+if (T) return;
+/**/
 		try { // the command %interface with extension
 			xp = org.xdef.XDFactory.compileXD(null,
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"A | B\">\n" +
@@ -83,14 +131,14 @@ if(true)return;
 "  <B xd:script =\"ref A\" b=\"string()\" />\n" +
 "<xd:component>\n" +
 "%class "+_package+".LA_1 %link #A;\n" +
-//"%class "+_package+".LB_1 extends LA_I %link #B;\n" +
 "%class "+_package+".LB_1 %link #B;\n" +
+//"%class "+_package+".LB_1 extends LA_1 %link #B;\n" +
 "%interface "+_package+".LA_1_I %link #A;\n" +
 "%interface "+_package+".LB_1_I extends "+_package+".LA_1_I %link #B;\n" + // kasle na extends!!!!
 "</xd:component>\n" +
 "</xd:def>");
-//			genXComponent(xp);
-			genXComponentAndCopySources(xp);
+			genXComponent(xp);
+//			genXComponentAndCopySources(xp);
 			xd = xp.createXDDocument();
 			xml = "<A a=\"1\" />";
 			parse(xd, xml, reporter);
@@ -98,18 +146,21 @@ if(true)return;
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq(1, XComponentUtil.get(xc, "a")); //	assertEq(1, ((L_I_1) xc).geta());
+			assertEq(1, XComponentUtil.get(xc, "a"));
+//			assertEq(1, ((LA_1_I) xc).geta());
 			xml = "<B a=\"2\" b=\"c d\" />";
 			parse(xd, xml, reporter);
 			assertNoErrorsAndClear(reporter);
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq(2, ((bugreports.LB_1_I) xc).geta());
+			try {
+//				assertEq(2, ((mytests.LA_1_I) xc).geta());
+			} catch (Exception ex) {fail(ex);}
 		} catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
-if(true)return;
-/**
+deleteCreatedSources();
+if (T) return;
+/**/
 		try {
 			xp = org.xdef.XDFactory.compileXD(null, new String[] { // nested declaration of type
 "<xd:def xmlns:xd='"+_xdNS+"' name='D7_xc'>\n" +
@@ -134,7 +185,8 @@ if(true)return;
 "    type  gamDate  xdatetime('yyyyMMdd');\n" +
 "  </xd:declaration>\n" +
 "</xd:def>"});
-			genXComponentAndCopySources(xp);
+			genXComponent(xp);
+//			genXComponentAndCopySources(xp);
 			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
 			assertEq(xml, parse(xp, "D7_", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
@@ -157,8 +209,8 @@ if(true)return;
 			assertEq(new org.xdef.sys.SDatetime("2021-05-24"), XComponentUtil.get(xc,"P"));
 			assertEq(xml, xc.toXml());
 		} catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
-if(true)return;
+deleteCreatedSources();
+if (T) return;
 		try {
 			xp = org.xdef.XDFactory.compileXD(null, new String[] { // nested declaration of type
 "<xd:def xmlns:xd='"+_xdNS+"' name='D7_xc'>\n" +
@@ -185,7 +237,8 @@ if(true)return;
 "    type  gamDate  xdatetime('yyyyMMdd');\n" +
 "  </xd:declaration>\n" +
 "</xd:def>"});
-			genXComponentAndCopySources(xp);
+			genXComponent(xp);
+//			genXComponentAndCopySources(xp);
 			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
 			assertEq(xml, parse(xp, "D7_", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
@@ -207,9 +260,9 @@ if(true)return;
 			assertEq("x", XComponentUtil.get(xc,"C"));
 			assertEq(new org.xdef.sys.SDatetime("2021-05-24"), XComponentUtil.get(xc,"P"));
 		} catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
-if(true)return;
-/**
+deleteCreatedSources();
+if (T) return;
+/**/
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneOdDo' name='PIS_iop_common'>\n" +
@@ -229,7 +282,8 @@ if(true)return;
 "</xd:component>\n" +
 "</xd:def>";
 			xp = org.xdef.XDFactory.compileXD(null, xdef);
-			genXComponentAndCopySources(xp);
+			genXComponent(xp);
+//			genXComponentAndCopySources(xp);
 			xd = xp.createXDDocument("");
 			xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
@@ -248,8 +302,8 @@ if(true)return;
 //			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 		} catch (RuntimeException ex) {fail(ex);}
 deleteCreatedSources();
-if(true)return;
-/**
+if (T) return;
+/**/
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneOdDo' name='PIS_iop_common'>\n" +
@@ -269,6 +323,7 @@ if(true)return;
 "</xd:component>\n" +
 "</xd:def>";
 			xp = org.xdef.XDFactory.compileXD(null, xdef);
+			genXComponent(xp);
 //			genXComponentAndCopySources(xp);
 			xd = xp.createXDDocument("");
 			xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
@@ -278,7 +333,6 @@ if(true)return;
 			assertNoErrorsAndClear(reporter);
 //			assertEq("2025-01-01", ((bugreports.Lubor1_IOd) xc).getPlatnostOd().toString());
 //			assertEq("2025-01-01", ((bugreports.Lubor1Od) xc).getPlatnostOd().toString());
-
 			xml = "<PlatneOdDo PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -291,8 +345,8 @@ if(true)return;
 ////			assertEq("2025-01-01", ((bugreports.Lubor1_IOd) xc).getPlatnostOd().toString());
 //			assertEq("2025-01-01", ((bugreports.Lubor1Od) xc).getPlatnostOd().toString());
 		} catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
-//if(true)return;
+deleteCreatedSources();
+if (T) return;
 /**/
 		clearTempDir(); // delete temporary files.
 	}
