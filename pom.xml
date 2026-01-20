@@ -62,7 +62,7 @@
         <!-- update after release version, may change by:
             > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
         -->
-        <revision>42.2.37</revision>
+        <revision>42.2.38</revision>
         <!-- use profile "release" for build release-version -->
         <changelist>-SNAPSHOT</changelist>
         <!-- update before release version, may change by:
