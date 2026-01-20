@@ -92,9 +92,9 @@ public class PomInfo {
 			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
 			(gitCommitIdAbbrev.isEmpty() ? "" :
 				", commit " + gitCommitIdAbbrev + " " + gitCommitTime +
-				(gitTags  .isEmpty()     ? "" : ", tags: "   + gitTags) +
-				(gitBranch.isEmpty()     ? "" : ", branch: " + gitBranch) +
-				("true".equals(gitDirty) ? "" : ", dirty-commit")
+				(gitTags  .isEmpty()      ? "" : ", tags: "   + gitTags) +
+				(gitBranch.isEmpty()      ? "" : ", branch: " + gitBranch) +
+				(!"true".equals(gitDirty) ? "" : ", dirty-commit")
 			) +
 			")"
 		;
