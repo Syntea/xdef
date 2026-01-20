@@ -570,8 +570,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
 				}
 				try {
 					if (_xclass == null) {
-						_xclass = Class.forName(className,
-							false, Thread.currentThread().getContextClassLoader());
+						_xclass =
+							Class.forName(className, false, Thread.currentThread().getContextClassLoader());
 					}
 					if (xe.getXDPosition().contains("#" + JSON_ANYOBJECT + "/$choice")) {
 						String y = xe.getName();

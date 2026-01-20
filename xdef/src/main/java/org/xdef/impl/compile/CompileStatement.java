@@ -537,7 +537,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					error(XDEF.XDEF443, err); //Unknown method: '&{0}'
 				}
 			}
-			if ("ListOf".equals(name)) {
+			if ("ListOf".equals(name)) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 				_g.reportDeprecated(name,"list(type)");
 			}
 		}
@@ -3954,7 +3954,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		initCompilation(TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
 			if (_xdVersion >= XConstants.XD31) {
-				//&{0}" is deprecated. Please use "&{1}" instead
+				//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 				_g.reportDeprecated("explicit validation code", "declaration of validation type");
 			}
 			// generate call of following method

@@ -1741,7 +1741,7 @@ public final class CompileCode extends CompileBase {
 	 * @param replace text to be deprecated/
 	 */
 	final void reportDeprecated(final String old, final String replace) {
-		if (_chkWarnings) {
+		if (_chkWarnings) { //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 			_parser.warning(XDEF.XDEF998, '"' + old + '"', '"' + replace + '"');
 		}
 	}
@@ -1755,7 +1755,7 @@ public final class CompileCode extends CompileBase {
 		if (imethod == null) {
 			return false;
 		}
-		if (imethod.isDeprecated()) {
+		if (imethod.isDeprecated()) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 			reportDeprecated(name, imethod.getRecommendedName());
 		}
 		genInternalMethod(name, numPar, imethod);
@@ -1773,7 +1773,7 @@ public final class CompileCode extends CompileBase {
 		if (imethod == null) {
 			return false;
 		}
-		if (imethod.isDeprecated()) {
+		if (imethod.isDeprecated()) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 			reportDeprecated(getTypeName(type), imethod.getRecommendedName());
 		}
 		genInternalMethod(getTypeName(type), numPar, imethod);
@@ -1811,7 +1811,7 @@ public final class CompileCode extends CompileBase {
 			imethod = getTypeMethod(xType, name);
 		}
 		if (imethod != null) {
-			if (imethod.isDeprecated()) {
+			if (imethod.isDeprecated()) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 				reportDeprecated(name, imethod.getRecommendedName());
 			}
 			genInternalMethod(name, numPar + 1, imethod);
@@ -1913,7 +1913,8 @@ public final class CompileCode extends CompileBase {
 		short resultType = method.getResultType();
 		XDValue operator = null;
 		switch (code) {
-			case FROM_ELEMENT: reportDeprecated("fromElement", "from"); break;//deprecated
+			case FROM_ELEMENT: //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+				reportDeprecated("fromElement", "from"); break;//deprecated
 			case LD_CONST: {
 				if (resultType != XD_PARSER) { // this should never happen!
 					_parser.error(XDEF.XDEF202,"const type: "+resultType); //Internal error: &{0}
@@ -1932,7 +1933,7 @@ public final class CompileCode extends CompileBase {
 					return;
 				} else if ("list".equals(name) && //deprecated!
 					par1typ != XD_CONTAINER && par1typ != XD_PARSER) {
-					reportDeprecated("list", "enum");
+					reportDeprecated("list", "enum");//XDEF998=&{0} is deprecated.&{1}{Please use }{ instead.}
 					genInternalMethod("enum", npar, getTypeMethod(X_NOTYPE_VALUE, "enum"));
 					return;
 				}

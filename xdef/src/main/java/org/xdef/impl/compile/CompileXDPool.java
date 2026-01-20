@@ -275,8 +275,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * @param replace what should be done.
 	 */
 	private void reportDeprecated(final SPosition spos, final String old, final String replace) {
-		if (_precomp.isChkWarnings()) {
-			//&{0} is deprecated.&{1}{ Please use }{ instead.}
+		if (_precomp.isChkWarnings()) { //&{0} is deprecated.&{1}{ Please use }{ instead.}
 			_precomp.warning(spos, XDEF.XDEF998, old, replace);
 		}
 	}
@@ -448,15 +447,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	private void compileMethodsAndClassesAttrs() {
 		if (getExternals() != null && getExternals().length > 0) {
-			reportDeprecated(new SPosition(),
+			reportDeprecated(new SPosition(), //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 				"Class parameter of compileXD method", "<xd:declaration> external method { ... } ...");
 		}
 		for (PNode pnode : _xdefPNodes) {
 			PAttr pa = _precomp.getXdefAttr(pnode, "methods", false, true);
 			if (pa!= null) {
 				if (pnode._xdVersion > XConstants.XD31) {
-					reportDeprecated(pa._value,
-						"Attribute \"methods\"", "<xd:declaration> external method { ... } ...");
+					reportDeprecated(//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+						pa._value, "Attribute \"methods\"", "<xd:declaration> external method { ... } ...");
 				}
 				if (!_codeGenerator._ignoreUnresolvedExternals) {
 					_scriptCompiler.setSource(pa._value,
@@ -471,7 +470,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			pa = _precomp.getXdefAttr(pnode, "classes", false, true);
 			if (pa != null) {
 				if (pnode._xdVersion > XConstants.XD31) {
-					reportDeprecated(pa._value,
+					reportDeprecated(pa._value,//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 						"Attribute \"classes\"", "<xd:declaration> external method ...");
 				}
 				if (!_codeGenerator._ignoreUnresolvedExternals) {
@@ -775,7 +774,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				String nodeName = nodei._localName;
 				switch (nodeName) {
 					case "lexicon": _lexicon.add(nodei); break;
-					case "thesaurus":
+					case "thesaurus": //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 						reportDeprecated(nodei._name, "\"thesaurus\"","\"lexicon\"");
 						_lexicon.add(nodei);
 						break;
@@ -1010,7 +1009,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				pa = _precomp.getXdefAttr(pn, "occurs", false, true);
 				if (pa != null) {
 					SBuffer sval = pa._value;
-					if (kind == XMMIXED) {
+					if (kind == XMMIXED) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 						reportDeprecated(pn._name, "attribute \"occurs\"", "attribute \"script\"");
 					}
 					XOccurrence occ = new XOccurrence();
@@ -1343,7 +1342,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			return;
 		} else if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 			switch (pnode._localName) {
-				case "data": reportDeprecated(pnode._name, "\"data\"", "\"text\"");
+				case "data"://XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+					reportDeprecated(pnode._name, "\"data\"", "\"text\"");
 				case "text":
 					_precomp.chkNestedElements(pnode);
 					XData xtext = new XData("$text", null, xdef.getXDPool(), XMTEXT);
@@ -1351,7 +1351,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					newNode = xtext;
 					PAttr pa = _precomp.getXdefAttr(pnode, "script", false, true);
 					sval = pa == null ? null : pa._value;
-					if (sval != null) {
+					if (sval != null) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 						reportDeprecated(sval, "<xd:text xd:script=...","declaration of text value of model");
 						_scriptCompiler.setSource(sval,
 							_scriptCompiler._actDefName,
@@ -1379,7 +1379,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 					_precomp.reportNotAllowedAttrs(pnode);
 					break;
-				case "includeChildNodes": reportDeprecated(pnode._name, "\"includeChildNodes\"", "\"list\"");
+				case "includeChildNodes"://XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+					reportDeprecated(pnode._name, "\"includeChildNodes\"", "\"list\"");
 				case "list":
 					_precomp.chkNestedElements(pnode);
 					if (level == 1) {

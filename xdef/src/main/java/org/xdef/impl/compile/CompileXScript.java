@@ -1022,7 +1022,10 @@ final class CompileXScript extends CompileStatement {
 	 * @param sym deprecated symbol.
 	 * @param advise what should be done.
 	 */
-	private void reportDeprecated(final String sym,final String advise) {_g.reportDeprecated(sym, advise);}
+	private void reportDeprecated(
+		//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+		final String sym,final String advise) {_g.reportDeprecated(sym, advise);
+	}
 
 	/** Read list of options.
 	 * @param result The object with script code.
@@ -1059,7 +1062,7 @@ final class CompileXScript extends CompileStatement {
 			if (_sym == FORGET_SYM) {
 				if (kind != XMELEMENT) {
 					error(XDEF.XDEF411, symToName(FORGET_SYM)); //The token '&{0}' is not allowed here
-				} else {
+				} else {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 					reportDeprecated("option forget", "forget (action)");
 					if (forget) {
 						error(XDEF.XDEF432,_idName);//Option &{0} redefinition
@@ -1072,7 +1075,7 @@ final class CompileXScript extends CompileStatement {
 				}
 				if (kind != XMELEMENT) {
 					error(XDEF.XDEF411, "notForget"); //The token '&{0}' is not allowed here
-				} else {
+				} else {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 					reportDeprecated("option notForget", "forget (action)");
 					if (forget) {
 						error(XDEF.XDEF432,_idName);//Option &{0} redefinition
@@ -1091,6 +1094,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("copyAttrWhiteSpaces".equals(_idName) || "preserveAttrWhiteSpaces".equals(_idName)
 				|| "ignoreAttrWhiteSpaces".equals(_idName)) {
 				if("copyAttrWhiteSpaces".equals(_idName)) {
+					//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 					reportDeprecated(_idName, "preserveAttrWhiteSpaces");
 				}
 				if (attrWhiteSpaces) {
@@ -1101,6 +1105,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("copyTextWhiteSpaces".equals(_idName) || "preserveTextWhiteSpaces".equals(_idName)
 				|| "ignoreTextWhiteSpaces".equals(_idName)) {
 				if("copyTextWhiteSpaces".equals(_idName)) {
+					//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 					reportDeprecated(_idName, "preserveTextWhiteSpaces");
 				}
 				if (textWhiteSpaces) {
@@ -1115,7 +1120,7 @@ final class CompileXScript extends CompileStatement {
 				ignoreComments = true;
 				result._ignoreComments = 'T';
 			} else if ("copyComments".equals(_idName) || "preserveComments".equals(_idName)) {
-				if ("copyComments".equals(_idName)) {
+				if ("copyComments".equals(_idName)) {//XDEF998=&{0} is deprecated.&{1}{Please use }{ instead.}
 					reportDeprecated(_idName,"preserveComments");
 				}
 				if (ignoreComments) {
@@ -1126,6 +1131,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("copyEmptyAttributes".equals(_idName) || "acceptEmptyAttributes".equals(_idName)
 				|| "preserveEmptyAttributes".equals(_idName) || "ignoreEmptyAttributes".equals(_idName)) {
 				if("copyEmptyAttributes".equals(_idName)) {
+					//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
 					reportDeprecated(_idName, "acceptEmptyAttributes");
 				}
 				if (ignoreEmptyAttributes) {

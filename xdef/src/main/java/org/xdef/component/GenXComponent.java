@@ -263,13 +263,13 @@ LN+(genJavadoc ?
 					className = className.substring(ndx + 1);
 				}
 				String extClass = "";
-if ((ndx = interfaceName.indexOf(" extends ")) > 0) {
-	extClass = interfaceName.substring(ndx+9);
-	interfaceName = interfaceName.substring(0, ndx);
-}
-if ((ndx = packageName.indexOf(" extends ")) > 0) {
-	packageName = packageName.substring(ndx + 9);
-}
+				if ((ndx = interfaceName.indexOf(" extends ")) > 0) {
+					extClass = interfaceName.substring(ndx+9);
+					interfaceName = interfaceName.substring(0, ndx);
+				}
+				if ((ndx = packageName.indexOf(" extends ")) > 0) {
+					packageName = packageName.substring(ndx + 9);
+				}
 				if (packageName.isEmpty()) {
 					fparent = fdir;
 				} else {

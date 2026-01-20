@@ -15,12 +15,10 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 
 	/** Create new instance of XCGeneratorBase1.
 	 * @param xp compiled XDPool.
-	 * @param reporter reporter where to write reports.
-	 * @param genJavadoc if true the Javadoc source is generated.
+	 * @param ar ArrayReporter where to write reports.
+	 * @param gendoc if true the Javadoc source is generated.
 	 */
-	XCGeneratorBase1(final XDPool xp, final ArrayReporter reporter, final boolean genJavadoc) {
-		super(xp, reporter, genJavadoc);
-	}
+	XCGeneratorBase1(final XDPool xp, final ArrayReporter ar, final boolean gendoc) {super(xp, ar, gendoc); }
 
 	/** Generate toXml method.
 	 * @param xe model from which to generate.
