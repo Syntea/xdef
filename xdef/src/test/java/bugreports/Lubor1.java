@@ -269,39 +269,34 @@ if (T) return;
 "<PlatneOd PlatnostOd='date()'/>\n" +
 "<PlatneOdDo xd:script='ref PlatneOd' PlatnostDo='date()'/>\n" +
 "<xd:component>\n" +
-"%class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
-"%class bugreports.PlatneOdDo\n" +
-"       extends bugreports.PlatneOd\n" +
-"       %link PIS_iop_common#PlatneOdDo;\n" +
-//"\n" +
-//" %interface bugreports.subelem.PlatneOd\n" +
-//"   %link PIS_iop_common#PlatneOd;\n" +
-//"%interface bugreports.subelem.PlatneOdDo\n" +
-//"   extends bugreports.subelem.PlatneOd\n" +
-//"   %link PIS_iop_common#PlatneOdDo;\n" +
+" %class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
+" %class bugreports.PlatneOdDo extends bugreports.PlatneOd %link PIS_iop_common#PlatneOdDo;\n" +
+" %interface bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
+" %interface bugreports.subelem.PlatneOdDo extends bugreports.subelem.PlatneOd\n" +
+"   %link PIS_iop_common#PlatneOdDo;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 			xp = org.xdef.XDFactory.compileXD(null, xdef);
-			genXComponent(xp);
-//			genXComponentAndCopySources(xp);
+//			genXComponent(xp);
+			genXComponentAndCopySources(xp);
 			xd = xp.createXDDocument("");
 			xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, (xc = xd.xparseXComponent(xml, null, reporter)).toXml());
 			assertNoErrorsAndClear(reporter);
-//			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
+			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 
 			xml = "<PlatneOdDo PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, (xc = xd.xparseXComponent(xml, null, reporter)).toXml());
 			assertNoErrorsAndClear(reporter);
-//			assertEq("2025-01-01", ((bugreports.PlatneOdDo) xc).getPlatnostOd().toString());
-//			assertEq("2025-02-01", ((bugreports.PlatneOdDo) xc).getPlatnostDo().toString());
-//			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
+			assertEq("2025-01-01", ((bugreports.PlatneOdDo) xc).getPlatnostOd().toString());
+			assertEq("2025-02-01", ((bugreports.PlatneOdDo) xc).getPlatnostDo().toString());
+			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 		} catch (RuntimeException ex) {fail(ex);}
-deleteCreatedSources();
+//deleteCreatedSources();
 if (T) return;
 /**/
 		try {
