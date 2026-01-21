@@ -1,6 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.37, release-date 2026-01-20
+# Version 42.2.38, release-date 2026-01-20
+  * .
 
 # Version 42.2.37, release-date 2026-01-19
   * Corrected email address syntax: a period followed by a hyphen is allowed in the local part of
