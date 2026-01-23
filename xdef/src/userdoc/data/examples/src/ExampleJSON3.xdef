@@ -1,0 +1,27 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="ExampleJSON3" root="a" >
+
+<xd:json name="a" >
+{ "personnel": { "person": 
+      [ "%script: occurs 1..*",
+        { "%script: occurs 1..*; ref B" }
+      ]
+  }
+}
+</xd:json>
+
+<xd:json name="B" >
+{ "id": "string()",
+   "name": { "family": "jstring()", "given": "optional jstring()" },
+   "email": "emailAddr();",
+   "link": { "%script: ref C" }
+}
+</xd:json>
+
+<xd:json name="C" >
+{  "%oneOf: optional;",
+   "manager": "jstring()",
+   "subordinates":[ "* jstring();" ]
+}
+</xd:json>
+
+</xd:def>

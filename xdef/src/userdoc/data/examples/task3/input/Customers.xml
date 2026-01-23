@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<Customers>
+  <Customer CustomerCode="ALFA">
+     <Company Name="ALFA S.R.O." ID="1234578"/>
+     <Address Street="KLADENSKÁ" House="5" City="KLADNO" ZIP="54321"/>
+  </Customer>
+  <Customer CustomerCode="BETA">
+     <Company Name="BETA A.S" ID="1234580"/>
+     <Address Street="MĚLNICKÁ" House="5" City="MĚLNÍK" ZIP="45321"/>
+  </Customer>
+</Customers>

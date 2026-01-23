@@ -1,0 +1,18 @@
+Town:
+  Name: Nonehill
+  Streets:
+  - Name: Long
+    Houses:
+    - Num: !!float '1'
+      Persons:
+      - {FirstName: John, LastName: Smith}
+      - {FirstName: Jane, LastName: Smith}
+    - Num: !!float '2'
+    - Num: !!float '3'
+      Persons:
+      - {FirstName: James, LastName: Smith}
+  - Name: Short
+    Houses:
+    - Num: !!float '1'
+      Persons:
+      - {FirstName: Jeremy, LastName: Smith}

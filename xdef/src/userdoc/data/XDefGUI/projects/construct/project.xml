@@ -1,0 +1,11 @@
+<Project>
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <XDefinition>projects/construct/xdef.xml</XDefinition>
+  <Execute XDName="test" Mode="construct" DataType="XML" DisplayResult="true">
+    <Context>projects/construct/data.xml</Context>
+    <SaveResult File="temp/result1.html" />
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>

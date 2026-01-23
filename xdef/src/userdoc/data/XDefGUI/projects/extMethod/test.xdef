@@ -1,0 +1,14 @@
+<xd:def name="test"
+  root="A"
+  xmlns:xd="http://www.xdef.org/xdef/4.2">
+
+  <xd:declaration>
+     external method String MyClass.hello();
+  </xd:declaration>
+
+  <A xd:script="finally outln(hello());" a="required int();">
+    <B b="optional string();" xd:script="occurs +;">
+      optional string();
+    </B>
+  </A>
+</xd:def>

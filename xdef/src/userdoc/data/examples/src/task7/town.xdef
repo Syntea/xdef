@@ -1,0 +1,43 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="Town" name="town">
+
+  <Town Name="string">
+     <Street xd:script="*;" Name="string">
+        <House xd:script="*; ref _house"/>
+     </Street>
+  </Town>
+
+  <_house Num="int" Address="optional string;">
+     <Person xd:script="*; ref _person" />
+  </_house>
+
+  <_person FirstName="string" LastName="string();"/>
+
+  <xd:lexicon language="eng" default="yes"/>
+
+  <xd:lexicon language="deu">
+    town#Town =                 Stadt
+    town#Town/@Name =           Name
+    town#Town/Street =          Straße
+    town#Town/Street/@Name =    Name
+    town#Town/Street/House =    Haus
+    town#_house/@Num =          Nummer
+    town#_house/@Address =      Adresse
+    town#_house/Person =        Person
+    town#_person/@FirstName =   Vorname
+    town#_person/@LastName =    Nachname
+  </xd:lexicon>
+
+  <xd:lexicon language="ces">
+    town#Town =                 Město
+    town#Town/@Name =           Jméno
+    town#Town/Street =          Ulice
+    town#Town/Street/@Name =    Jméno
+    town#Town/Street/House =    Dům
+    town#_house/@Num =          Číslo
+    town#_house/@Address =      Adresa
+    town#_house/Person =        Osoba
+    town#_person/@FirstName =   Jméno
+    town#_person/@LastName =    Příjmení
+  </xd:lexicon>
+
+</xd:def>

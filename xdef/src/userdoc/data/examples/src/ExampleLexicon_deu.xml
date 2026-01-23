@@ -1,0 +1,5 @@
+<Vertrag Numer = "123"
+         Datum   = "2019-11-05" >
+   <Inhaber Name    = "John Smith"
+            Firma = "ABC Ltd." />
+</Vertrag>

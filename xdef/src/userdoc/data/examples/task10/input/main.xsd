@@ -1,0 +1,48 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="Town_Name_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Town_Street_House_Person_FirstName_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Town_Street_House_Person_LastName_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Town_Street_Name_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Town" type="Town_Type"/>
+  <xs:complexType name="Town_Street_House_Person_Type">
+    <xs:attribute name="FirstName" type="Town_Street_House_Person_FirstName_Type" use="required"/>
+    <xs:attribute name="LastName" type="Town_Street_House_Person_LastName_Type" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Town_Street_House_Type">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0"
+        name="Person"
+        type="Town_Street_House_Person_Type"/>
+    </xs:sequence>
+    <xs:attribute name="Num" type="xs:int" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Town_Street_Type">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="House" type="Town_Street_House_Type"/>
+    </xs:sequence>
+    <xs:attribute name="Name" type="Town_Street_Name_Type" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Town_Type">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="Street" type="Town_Street_Type"/>
+    </xs:sequence>
+    <xs:attribute name="Name" type="Town_Name_Type" use="required"/>
+  </xs:complexType>
+</xs:schema>

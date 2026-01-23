@@ -86,6 +86,7 @@
 
         <saxon-he.version>9.7.0-18</saxon-he.version>
         <derby.version>10.12.1.1</derby.version>
+        <snakeyaml.version>1.29</snakeyaml.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit5-jupiter.version>5.11.3</junit5-jupiter.version>
@@ -105,7 +106,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- auxiliary xdef-modules -->
+            <!-- this project -->
             <dependency>
                 <groupId>org.xdef</groupId>
                 <artifactId>xdef</artifactId>
@@ -137,7 +138,7 @@
             <dependency>
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
-                <version>1.29</version>
+                <version>${snakeyaml.version}</version>
             </dependency>
 
             <!-- test-phase -->

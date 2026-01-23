@@ -1,0 +1,12 @@
+<xd:def name="XdefFromJSON"
+        root="model"
+        xmlns:xd="http://www.xdef.org/xdef/4.2">
+  <xd:json xd:name="model">
+    { Town: { Name: "jstring();", Streets: [ { Name: "jstring();", Houses: [ {
+    Num: "integer();", Persons: [ { "%script:occurs 2;", FirstName: "jstring();",
+    LastName: "jstring();" } ] }, { Num: "integer();" }, { Num: "integer();", Persons:
+    [ { FirstName: "jstring();", LastName: "jstring();" } ] } ] }, { Name: "jstring();",
+    Houses: [ { Num: "integer();", Persons: [ { FirstName: "jstring();", LastName:
+    "jstring();" } ] } ] } ] } }
+  </xd:json>
+</xd:def>

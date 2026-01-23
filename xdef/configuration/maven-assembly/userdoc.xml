@@ -3,12 +3,18 @@
     xmlns:xsi         ="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd"
 >
-    <id>userdoc</id>
+    <id>userdoc-en</id>
     <formats>
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
+        <fileSet>
+            <includes>
+                <include>changelog.md</include>
+            </includes>
+            <filtered>true</filtered>
+        </fileSet>
         <fileSet>
             <directory>src/documentation</directory>
             <excludes>
@@ -17,12 +23,44 @@
             </excludes>
             <outputDirectory>documentation</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>src/userdoc/data</directory>
+            <outputDirectory>.</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/userdoc/data-filter</directory>
+            <outputDirectory>.</outputDirectory>
+            <filtered>true</filtered>
+        </fileSet>
     </fileSets>
     <files>
         <file>
-            <source>.flattened-pom.xml</source>
-            <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
-            <destName>pom.xml</destName>
+            <source>root-symlink-README.md</source>
+            <destName>README-project.md</destName>
+        </file>
+        <file>
+            <source>root-symlink-apache-license-2.0.md</source>
+            <destName>apache-license-2.0.md</destName>
         </file>
     </files>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <useProjectAttachments>true</useProjectAttachments>
+            <includes>
+                <include>org.xdef:xdef</include>
+            </includes>
+            <outputDirectory>.</outputDirectory>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>test</scope>
+            <includes>
+                <include>org.apache.derby:derby</include>
+                <include>org.yaml:snakeyaml</include>
+                <include>net.sf.saxon:Saxon-HE</include>
+            </includes>
+            <outputDirectory>examples/lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
 </assembly>
