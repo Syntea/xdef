@@ -1,5 +1,5 @@
 The included software and documentation corresponds to the version:
-   ${version} (${release.date})
+   ${version} (release-date ${release.date})
 
 The project X-definition information:   "README-project.md"
 This software is licensed under:        "apache-license-2.0.md"
