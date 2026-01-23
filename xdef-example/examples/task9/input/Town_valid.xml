@@ -1,7 +1,0 @@
-<Town Name="NewTown">
-    <Street Name="short">
-      <House Num="1">
-        <Person FirstName="Bill"  LastName="Willis"/>
-      </House>
-    </Street>
-</Town>

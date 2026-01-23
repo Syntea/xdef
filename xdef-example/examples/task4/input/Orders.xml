@@ -1,9 +1,0 @@
-<Orders id="123456789">
-  <Order Number="123" CustomerCode="ALFA">
-    <Item ProductCode="0002" Quantity="2"/>
-    <Item ProductCode="0003" Quantity="1"/>
-  </Order>
-  <Order Number="124" CustomerCode="BETA">
-    <Item ProductCode="0001" Quantity="5"/>
-  </Order>
-</Orders>
