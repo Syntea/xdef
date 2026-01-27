@@ -120,15 +120,15 @@ final class XCGenerator extends XCGeneratorXON {
 				ndx = name.indexOf(" %with ");
 				if (ndx > 0) {
 					if (extClazz.startsWith(" extends ")) {
-						int ndx1 = extClazz.indexOf(' ', 9);
-						String t = ndx1 > 0 ? extClazz.substring(9, ndx1) : extClazz.substring(9);
-						ndx1 = name.indexOf(' ', ndx + 7);
-						String u = ndx1 > 0 ? name.substring(ndx + 7, ndx1) : name.substring(ndx + 7);
-						if (!t.equals(u)) {
-							//The %with parameter "&{0}" in the %bind command does not correspond to the
-							//extends parameter "&{1}" in the command %class "&{2}"&{#SYS000}
-							_reporter.error(XDEF.XDEF386, u, t, className);
-						}
+//						int ndx1 = extClazz.indexOf(' ', 9);
+//						String t = ndx1 > 0 ? extClazz.substring(9, ndx1) : extClazz.substring(9);
+//						ndx1 = name.indexOf(' ', ndx + 7);
+//						String u = ndx1 > 0 ? name.substring(ndx + 7, ndx1) : name.substring(ndx + 7);
+//						if (!t.equals(u)) {
+//							//The %with parameter "&{0}" in the %bind command does not correspond to the
+//							//extends parameter "&{1}" in the command %class "&{2}"&{#SYS000}
+//							_reporter.error(XDEF.XDEF386, u, t, className);
+//						}
 						ext = true;
 						name = name.substring(0, ndx);
 					} else {

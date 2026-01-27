@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.38, release-date 2026-01-21
-  * .
+# Version 42.2.38, release-date 2026-01-27
+  * Fixed incorrect error reporting in the `%bind` command and `%with` parameter.
 
 # Version 42.2.37, release-date 2026-01-19
   * Corrected email address syntax: a period followed by a hyphen is allowed in the local part of
