@@ -3,7 +3,7 @@ exName="$1"
 
 if [ -z "${exName}" ]; then 
     echo "parameter with the name of example is missing"
-    exit
+    exit 1
 fi
 
 mkdir -p temp/classes temp/test
@@ -12,15 +12,15 @@ cp="-classpath temp/classes:../xdef-${version}.jar:lib/derby-${derby.version}.ja
 copts="${cp} -encoding UTF8 -d temp/classes"
 
 if [ "${exName}" = "task6/Town1" -o "${exName}" = "task6/Town2" ]
-  then
+then
     echo "${exName}: Generating X-components ..."
     echo
     if [ "${exName}" = "task6/Town1" ]
-      then
+    then
         javac ${copts} src/task6/GenComponents1.java
         java ${cp} task6.GenComponents1
         javac ${copts} src/task6/components1/*.java
-      else 
+    else 
         javac ${copts} src/task6/GenComponents2.java
         java ${cp} task6.GenComponents2
         javac ${copts} src/task6/components2/*.java
@@ -29,13 +29,13 @@ if [ "${exName}" = "task6/Town1" -o "${exName}" = "task6/Town2" ]
     echo
     javac ${copts} src/${exName}.java
     java ${cp} ${exName}
-  else 
+else 
     echo "${exName}: Compile and run ..."
     echo
     javac ${copts} src/data/MyClass.java src/GenDerby.java src/${exName}*.java
     java ${cp} ${exName}
 fi
 
-if  [ -e derby.log ]; then
+if [ -e derby.log ]; then
     rm derby.log
 fi
