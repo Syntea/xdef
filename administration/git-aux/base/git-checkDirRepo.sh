@@ -32,7 +32,11 @@ check () {
     git fetch --prune --prune-tags --force
     git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed"
     set +x
-    
+
+    #push unpushed this branch commits that are ahead of the remote ref-branch
+    ( unset LANG; git status; ) | grep -Ez "Your branch is ahead of '[^']*' by [0-9]+ commit" > /dev/null && \
+        { set -x; git push; set +x; }
+
     #check git status up-to-date and clean
     gitStatus="$(unset LANG; git status;)"
     echo "${gitStatus}" | grep -z 'Your branch is up to date with' > /dev/null || \
