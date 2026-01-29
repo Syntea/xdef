@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="windows-1250" ?>
+<Orders id="123456789"><Order CustomerCode="ALFA" Number="123"><DeliveryPlace><Address City="LIBEREC" House="5" Street="LIBERECKA" ZIP="32321"/></DeliveryPlace><Item ProductCode="0002" Quantity="2"/><Item ProductCode="0003" Quantity="1"/></Order><Order CustomerCode="BETA" Number="456"><DeliveryPlace><Address City="PRAHA" House="9" Street="NA SLUPI" ZIP="11000"/></DeliveryPlace><Item ProductCode="0019" Quantity="50"/></Order></Orders>

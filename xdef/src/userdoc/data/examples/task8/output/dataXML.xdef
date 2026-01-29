@@ -1,0 +1,11 @@
+<xd:def name="XdefFromXML" root="Town" xmlns:xd="http://www.xdef.org/xdef/4.2">
+  <Town Name="required string();">
+    <Street Name="required string();" xd:script="occurs +;">
+      <House Num="required int();" xd:script="occurs *;">
+        <Person FirstName="required string();"
+                LastName="required string();"
+                xd:script="occurs *;"/>
+      </House>
+    </Street>
+  </Town>
+</xd:def>

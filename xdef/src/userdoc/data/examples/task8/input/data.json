@@ -1,0 +1,22 @@
+{ "Town": { "Name": "Nonehill",
+     "Streets": [
+       { "Name": "Long",
+         "Houses": [
+            { "Num": 1,
+              "Persons": [
+                { "FirstName": "John", "LastName": "Smith" },
+                { "FirstName": "Jane", "LastName": "Smith" }
+              ]
+            },
+            { "Num": 2 },
+            { "Num": 3, "Persons": [ {"FirstName": "James", "LastName": "Smith" } ] }
+         ]
+       },
+       { "Name": "Short",
+         "Houses": [
+           { "Num": 1, "Persons": [ { "FirstName": "Jeremy", "LastName": "Smith" } ] }
+         ]
+       }
+    ]
+  }
+}

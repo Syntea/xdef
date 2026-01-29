@@ -14,26 +14,19 @@
                 <include>changelog.md</include>
             </includes>
             <outputDirectory>META-INF</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <!-- FIXME: files are not included -->
-            <includes>
-                <include>../README.md</include>
-                <include>../apache-license-2.0.md</include>
-            </includes>
-            <outputDirectory>META-INF/maven</outputDirectory>
+            <filtered>true</filtered>
         </fileSet>
         <fileSet>
             <directory>src/main/java</directory>
-            <outputDirectory></outputDirectory>
+            <outputDirectory>.</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/resources</directory>
-            <outputDirectory></outputDirectory>
+            <outputDirectory>.</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/main/resources-filters</directory>
-            <outputDirectory></outputDirectory>
+            <outputDirectory>.</outputDirectory>
             <filtered>true</filtered>
         </fileSet>
     </fileSets>
@@ -42,6 +35,16 @@
             <source>.flattened-pom.xml</source>
             <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
             <destName>pom.xml</destName>
+        </file>
+        <file>
+            <source>root-symlink-README.md</source>
+            <outputDirectory>META-INF</outputDirectory>
+            <destName>README.md</destName>
+        </file>
+        <file>
+            <source>root-symlink-apache-license-2.0.md</source>
+            <outputDirectory>META-INF</outputDirectory>
+            <destName>apache-license-2.0.md</destName>
         </file>
     </files>
 </assembly>

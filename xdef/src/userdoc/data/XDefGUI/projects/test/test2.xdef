@@ -1,0 +1,5 @@
+<x:def xmlns:x='http://www.xdef.org/xdef/4.2' name = 'a'>
+<x:declaration>
+   String xxxx = '??????';
+</x:declaration>
+</x:def>

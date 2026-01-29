@@ -1,0 +1,11 @@
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <External>projects/extMethod/lib/myJar.jar</External>
+  <XDefinition>projects/extMethod/test.xdef</XDefinition>
+  <Execute DisplayResult="true" Mode="validate" DataType="XML">
+    <Input>projects/extMethod/test.xml</Input>
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>

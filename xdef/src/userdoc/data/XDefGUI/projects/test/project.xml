@@ -1,0 +1,19 @@
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display"  Value="true"/>
+  <Property Name="xdef.debug"    Value="true"/>
+  <XDefinition>projects/test/test1.xdef</XDefinition>
+  <XDefinition>projects/test/test2.xdef</XDefinition>
+  <Execute XDName = "test" Mode = "validate">
+    <Var Name="xyz">Toto je test</Var>
+    <Input>projects/test/data.xml</Input>
+    <SaveResult File="temp/result1.xml" />
+  </Execute>
+  <Execute XDName="test" Mode="validate" DisplayResult="true" DataType="XML" >
+    <Var Name="xyz">Toto je druhy test</Var>
+    <Context>projects/test/context.xml</Context>
+    <Input>projects/test/data.xml</Input>
+    <SaveResult Indent="true" Encoding="windows-1250" File="temp/test.xml"/>
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>
