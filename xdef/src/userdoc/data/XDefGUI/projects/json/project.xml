@@ -1,0 +1,11 @@
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <XDefinition>projects/json/xdef*.xml</XDefinition>
+  <Execute DisplayResult="true" DataType="JSON" Mode="validate" XDName="test">
+    <Input Edit="true">projects/json/data.json</Input>
+    <SaveResult File="temp/json.json"/>
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>

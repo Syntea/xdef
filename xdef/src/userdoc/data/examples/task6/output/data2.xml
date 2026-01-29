@@ -1,0 +1,6 @@
+<Residents>
+  <Resident Address="Nonehill, Long 1" FamilyName="Smith" GivenName="John"/>
+  <Resident Address="Nonehill, Long 1" FamilyName="Smith" GivenName="Jane"/>
+  <Resident Address="Nonehill, Long 3" FamilyName="Smith" GivenName="James"/>
+  <Resident Address="Nonehill, Short 1" FamilyName="Smith" GivenName="Jeremy"/>
+</Residents>

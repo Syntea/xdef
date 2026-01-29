@@ -1,0 +1,12 @@
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <XDefinition>projects/validate/xdef*.xml</XDefinition>
+  <Execute DisplayResult="true" Mode="validate" DataType="XML" XDName="test1">
+    <Var Name="xyz">Toto je test</Var>
+    <Input Edit="true">projects/validate/data.xml</Input>
+    <SaveResult File="temp/validate.xml"/>
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>

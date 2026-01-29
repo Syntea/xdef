@@ -1,7 +1,0 @@
-<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1'>
-  <anthill name='string; create xquery(&apos;
-    for $i in (//anthill)
-      return $i[count(//insect[caste/text() = "soldier" and
-                 @anthill = $i/@name]) > 2]/@name
-               &apos;)' />
-</xd:def>

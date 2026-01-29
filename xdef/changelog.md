@@ -6,7 +6,7 @@
 # Version 42.2.38, release-date 2026-01-27
   * Fixed incorrect error reporting in the `%bind` command and `%with` parameter.
 
-# Version 42.2.37, release-date 2026-01-19
+# Version 42.2.37, release-date 2026-01-20
   * Corrected email address syntax: a period followed by a hyphen is allowed in the local part of
     the email address (e.g., `Joe.-Blow@example.com` is OK).
   * Fixed generation of XComponents containing the keyword `extends` in `%class` or `%interface` commands.
