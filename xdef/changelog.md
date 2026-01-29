@@ -1,8 +1,5 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.39, release-date 2026-01-27
-  * .
-
 # Version 42.2.38, release-date 2026-01-27
   * Fixed incorrect error reporting in the `%bind` command and `%with` parameter.
 
