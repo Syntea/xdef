@@ -5,7 +5,7 @@ echo "==========================================================================
 cat "$(readlink -f "$0")"
 exit
 
-#sloucit rozdelenou vetev, tj. byla vytvorena druha varianta vetve
+#sloucit rozeslou vetev, tj. byla vytvorena druha varianta vetve
 git pull
 
 #reset changes in actual branch
@@ -21,3 +21,12 @@ git branch -f origin/main
 
 #smazat repo-main, scripty si je pripadne znovu stahnou z GitHub-u samy ciste
 rm -rf .../project/xdef-main
+
+#stahnout projekt Syntea/xdef z GitHub.com (vetve "main", do adresare "xdef-main")
+git clone --branch main git@github.com:Syntea/xdef.git xdef-main
+
+#fetch a reset vzdalenych vetvi a tagu
+git fetch --prune --prune-tags --force
+
+#vypis commit-u v podobe grafu
+git log --graph --all
