@@ -211,7 +211,7 @@
         </profile>
         <profile>
             <id>dm-central</id>
-            <!-- activation of profiles sign, sources, javadoc are required by this profile.
+            <!-- activation of profiles sign, doc are required by this profile.
                 The profile "sign" is required to publish release-artifacts (not snapshot-artifacts) only
             -->
             <build>

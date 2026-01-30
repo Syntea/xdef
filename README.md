@@ -198,11 +198,8 @@ containing the code of X‑definition language.
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
 
-You can try your examples at following **online playgrounds**:
-  * validation mode: <http://xdef.syntea.cz/tutorial/examples/validate.html>
-  * construction mode: <http://xdef.syntea.cz/tutorial/examples/compose.html>
-  * BNF-grammar: <http://xdef.syntea.cz/tutorial/examples/BNF.html>
-  * template: <http://xdef.syntea.cz/tutorial/examples/template.html>
+You can try your X-definition examples at following **online playgrounds**:
+  * guidepost of online playgrounds: <https://xdef.syntea.cz/tutorial/examples/online.html>
 
 
 
@@ -219,7 +216,7 @@ Links:
 
 List of file assets:
   * _xdef-{version}.jar_            - the java-library X-definition
-  * _xdef-{version}-userdoc.zip_    - complete user documentation
+  * _xdef-{version}-userdoc-en.zip_ - complete user documentation and tutorial examples
   * _xdef-{version}-javadoc.jar_    - html-documentation of java source code generated from the java source code
   * _xdef-{version}-sources.jar_    - origin java source code
   * _xdef-{version}-src.zip_        - java source code insertable directly into your source code,
@@ -280,7 +277,7 @@ Prerequisities:
     * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
       * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
-      * see the template-file [administration/configuration-templates/maven/toolchains.xml](administration/configuration-templates/maven/toolchains.xml)
+      * see the template-file [administration/configuration-templates/maven/toolchains.xml](administration/      configuration-templates/maven/toolchains.xml)
 
 Frequent building operations:
   * cleaning before any compiling, building, deploying, etc.:
@@ -298,10 +295,10 @@ Frequent building operations:
     ```shell
     mvn package
     ```
-  * build the snapshot package including javadoc, sources, documentation:
+  * build the snapshot package including documentation, javadoc, sources:
 
     ```shell
-    mvn package -Pjavadoc,sources
+    mvn package -Pdoc
     ```
   * using the profile "skipTests", avoid junit-tests:
 
@@ -322,10 +319,10 @@ Frequent building operations:
     ```shell  
     mvn package -Prelease
     ```
-  * build the release package including javadoc, sources, documentation:
+  * build the release package including documentation, javadoc, sources:
 
     ```shell
-    mvn package -Prelease,javadoc,sources
+    mvn package -Prelease,doc
     ```
 
 
@@ -351,7 +348,7 @@ Deploying:
     (immediate deploy without processes validation and publishing):
 
     ```shell
-    mvn deploy -Pjavadoc,sources,dm-central
+    mvn deploy -Pdoc,dm-central
     ```
   * build and deploy the X-definition release package to the central maven repository
     * you can watch processes uploading, validation and publishing in
@@ -360,5 +357,5 @@ Deploying:
       (on the other hand, the repository doesn't require to sign deploying snapshot-artifacts)
 
     ```shell
-    mvn deploy -Prelease,javadoc,sources,dm-central,sign
+    mvn deploy -Prelease,doc,dm-central,sign
     ```

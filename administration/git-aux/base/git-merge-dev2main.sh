@@ -23,7 +23,7 @@ echo '==============================='
 echo 'Verifying snapshot-build: start'
 echo '==============================='
 set -x
-{   mvn clean package -Pjavadoc,sources &&
+{   mvn clean package -Pdoc &&
     mvn clean
 } || {
     set +x

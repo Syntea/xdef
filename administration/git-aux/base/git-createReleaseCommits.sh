@@ -70,7 +70,7 @@ echo '=============================='
 echo 'Verifying release-build: start'
 echo '=============================='
 set -x
-{   mvn clean package -Prelease,javadoc,sources &&
+{   mvn clean package -Prelease,doc &&
     mvn clean
 } || {
     set +x
