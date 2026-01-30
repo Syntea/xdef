@@ -1,6 +1,6 @@
 @ECHO off
 if %1. == . goto noparams
-java.exe -cp ../xdef.jar;%2 org.xdef.util.GUIEditor -p projects/%1/project.xml
+java.exe -cp ../xdef-${version}.jar;%2 org.xdef.util.GUIEditor -p projects/%1/project.xml
 goto end
 :noparams
 @ECHO ***********************

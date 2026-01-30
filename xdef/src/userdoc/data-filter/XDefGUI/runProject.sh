@@ -1,20 +1,20 @@
 #!/bin/bash
-args=("$@")
+project="$1"
 
-if [ x${args[0]} = x ]
-  then 
+if [ -z "${project}" ]
+then 
     echo ***********************
     echo * Missing parameters! *
     echo ***********************
     echo The first parameter is name of directory in projects, it must contain the file project.xml
-    echo The second parameter is optional. It is a list jar files added to classpath separatoe is ";"
+    echo The second parameter is optional. It is a list jar files added to classpath (separator is ":")
     echo .
-    exit
+    exit 1
 fi  
-echo Execute project: ${args[0]}
-if [ x${args[1]} = x ]
+echo "Execute project: ${project}"
+if [ -z "$2" ]
   then
-    java -cp "../xdef.jar" org.xdef.util.GUIEditor -p projects/${args[0]}/project.xml
+    java -cp "../xdef-${version}.jar" org.xdef.util.GUIEditor -p projects/${project}/project.xml
   else 
-    java -cp "../xdef.jar:${args[1]}" org.xdef.util.GUIEditor -p projects/${args[0]}/project.xml
+    java -cp "../xdef-${version}.jar:$2" org.xdef.util.GUIEditor -p projects/${project}/project.xml
 fi

@@ -32,7 +32,7 @@ then
 else 
     echo "${exName}: Compile and run ..."
     echo
-    javac ${copts} src/data/MyClass.java src/GenDerby.java src/${exName}*.java
+    javac ${copts} src/data/MyClass.java src/GenDerby.java src/${exName}.java
     java ${cp} ${exName}
 fi
 

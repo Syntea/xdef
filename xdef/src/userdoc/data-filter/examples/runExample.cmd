@@ -8,31 +8,34 @@ IF NOT EXIST temp\nul MD temp > nul
 IF NOT EXIST temp\classes\nul MD temp\classes > nul
 IF NOT EXIST temp\test\nul MD temp\test > nul
 
+set cp="-classpath temp/classes;../xdef-${version}.jar;lib/derby-${derby.version}.jar;lib/SaxonHE-${saxon-he.version}-xqj.jar;lib/SaxonHE-${saxon-he.version}.jar;lib/snakeyaml-${snakeyaml.version}.jar"
+set copts="%cp% -encoding UTF8 -d temp/classes"
+
 IF %1 == task6/Town1 GOTO component1
 IF %1 == task6/Town2 GOTO component2
 
 IF EXIST src\components\nul RD src\components /S /Q > nul
-javac -encoding UTF8 -classpath ../xdef.jar;lib/derby.jar;lib/saxon9-xqj.jar;lib/saxon9he.jar;lib/snakeyaml-1.9.jar -d temp\classes src/GenDerby.java src/%1*.java
-java -classpath temp/classes;../xdef.jar;lib/derby.jar;lib/saxon9-xqj.jar;lib/saxon9he.jar;lib/snakeyaml-1.9.jar %1
+javac %copts% src/GenDerby.java src/%1*.java
+java %cp% %1
 GOTO end
 
 :component1
 IF EXIST src\task6\components\nul RD src\task6\components1 /S /Q > nul
-javac -encoding UTF8 -classpath temp/classes;../xdef.jar -d temp\classes src/task6/GenComponents1.java
-java -classpath temp/classes;../xdef.jar task6.GenComponents1
-javac -encoding UTF8 -classpath temp/classes;../xdef.jar -d temp\classes src/task6/components1/*.java
-javac -encoding UTF8 -classpath temp/classes;../xdef.jar -d temp\classes src/task6/Town1.java
-java -classpath temp/classes;../xdef.jar task6.Town1
+javac %copts% src/task6/GenComponents1.java
+java %cp% task6.GenComponents1
+javac %copts% src/task6/components1/*.java
+javac %copts% src/task6/Town1.java
+java %cp% task6.Town1
 GOTO end
 
 :component2
 IF EXIST src\task6\components\nul RD src\task6\components2 /S /Q > nul
-javac -encoding UTF8 -classpath temp/classes;../xdef.jar -d temp\classes src/task6/GenComponents2.java
-java -classpath temp/classes;../xdef.jar task6.GenComponents2
+javac %copts% src/task6/GenComponents2.java
+java %cp% task6.GenComponents2
 
-javac -encoding UTF8 -classpath temp/classes;../xdef.jar -d temp\classes src/task6/components2/*.java
-javac -encoding UTF8 -classpath temp/classes;../xdef.jar -d temp\classes src/task6/Town2.java
-java -classpath temp/classes;../xdef.jar task6.Town2
+javac %copts% src/task6/components2/*.java
+javac %copts% src/task6/Town2.java
+java %cp% task6.Town2
 GOTO end
 
 :paramMissing

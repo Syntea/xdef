@@ -6,12 +6,12 @@ with the Xdefinition below):
 
 Projects in stored the directory "projects":
 
-construct    compile Xdefinition and run construction mode of XML data
+construct    compile X-definition and run construction mode of XML data
 extMethod    example with external method
-json         compile Xdefinition and run validation mode with JSON data
+json         compile X-definition and run validation mode with JSON data
 test         example more executios of Xdefinition, setting external
              valiable
-validate     compile Xdefinition and run validation mode with XML data
+validate     compile X-definition and run validation mode with XML data
 
 You can run the project by executing the following command "runProject"
 (the file "runProject.cmd" for Windows and "runProject.sh" for UNIX)
@@ -19,7 +19,7 @@ with the parameter containing the name of project subdirectory
 mentioned above.
 
 =======================================================================
-Xdefinition describing project.xml data:
+X-definition describing project.xml data:
 =======================================================================
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.1"
   root="Project"
@@ -29,9 +29,9 @@ Xdefinition describing project.xml data:
                                      displayed and editable. */">
 
     <xd:mixed>
-<!-- "XDefinition" - items with the sources of Xdefinitions -->
+<!-- "XDefinition" - items with the sources of X-definition -->
       <XDefinition xd:script="+">
-        string(); /* a file, url or XML with Xdefinition source */
+        string(); /* a file, url or XML with X-definition source */
       </XDefinition>
 
 <!-- "External" - items to be added to the classpath -->
@@ -48,7 +48,7 @@ Xdefinition describing project.xml data:
 <!-- "Execute" items are used to specify the compiled XDPool
   is executed according to the specified parameters -->
       <Execute xd:script="*;"
-        XDName="? string(1, 1000); /* root Xdefinition name (may be
+        XDName="? string(1, 1000); /* root X-definition name (may be
                                       missing) */"
         DataType="? enum('XML', 'JSON', 'INI'); /* type of processed
                                                    data */"
@@ -57,7 +57,7 @@ Xdefinition describing project.xml data:
                                            of process is displayed */" >
 
         <xd:mixed>
-<!-- "Var" items are used to set variables to the Xdefinition
+<!-- "Var" items are used to set variables to the X-definition
   processor -->
           <Var xd:script="*" Name="string(); /*name of variable*/">
             string(); /*value of variable*/
@@ -108,18 +108,18 @@ with following parameters:
    | -g [xml source] [switches]
 
  -p run a project file
- -v compile Xdefinition and runs validation mode
- -c compile Xdefinition and runs construction mode
- -g generate Xdefinition and project from input data (see switch -data)
+ -v compile X-definition and runs validation mode
+ -c compile X-definition and runs construction mode
+ -g generate X-definition and project from input data (see switch -data)
 
 Switches:
- -xdef source with Xdefinition (input file or data; it may be
+ -xdef source with X-definition (input file or data; it may be
   specified more times)
  -external ist of classpath items with external resources (may be
   filenames or urls).
  -format specification of data format (XML or JSON; default XML)
  -data source (input file or data used for validation mode and as
-  the context for construction mode or for generation of Xdefinition).
+  the context for construction mode or for generation of X-definition).
  -debug sets debugging mode when project is executed
  -editInput enables to edit input data before execution
  -displayResult displays result data
