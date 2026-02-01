@@ -126,7 +126,7 @@ final class XCGenerator extends XCGeneratorXON {
 //						String u = ndx1 > 0 ? name.substring(ndx + 7, ndx1) : name.substring(ndx + 7);
 //						if (!t.equals(u)) {
 //							//The %with parameter "&{0}" in the %bind command does not correspond to the
-//							//extends parameter "&{1}" in the command %class "&{2}"&{#SYS000}
+//							//extends parameter "&{1}" in the command %class "&{2}"
 //							_reporter.error(XDEF.XDEF386, u, t, className);
 //						}
 						ext = true;
@@ -135,8 +135,8 @@ final class XCGenerator extends XCGeneratorXON {
 						if (isRoot) {
 							ext = true;
 							extClazz = " extends " + name.substring(ndx+7) + extClazz;
-							//In command "%class &amp;{0}" is missing parameter "extends". In command
-							// "%bind &amp;{2}" is parameter "%with &amp;{1}"!
+							//In command "%class &{0}" is missing parameter "extends". In command
+							// "%bind &{2}" is parameter "%with &{1}"
 							_reporter.error(XDEF.XDEF375,
 								className, name.substring(ndx+7), name.substring(0, ndx));
 							name = name.substring(0, ndx);
