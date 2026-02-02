@@ -920,8 +920,7 @@ public abstract class STester {
 		ar.add("-encoding");
 		ar.add(getEncoding());
 		ar.add("-classpath");
-		ar.add((classpath.isEmpty() ? "" : classpath + File.pathSeparatorChar)
-			+ classDir); // classpath
+		ar.add((classpath.isEmpty() ? "" : classpath + File.pathSeparatorChar) + classDir); // classpath
 		ar.add("-d");
 		ar.add(classDir); // where to write compiled classes
 		// source files
