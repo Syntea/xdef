@@ -80,8 +80,7 @@
         <jdk.version>1.8</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
 
-        <!-- default skip install and deploy -->
-        <maven.install.skip>true</maven.install.skip>
+        <!-- default skip deploy -->
         <maven.deploy.skip>true</maven.deploy.skip>
 
         <saxon-he.version>9.7.0-18</saxon-he.version>
@@ -97,6 +96,9 @@
     <modules>
         <!-- main module X-definition -->
         <module>xdef</module>
+
+        <!-- tutorial web -->
+        <module>xdef-tutorialweb</module>
 
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
