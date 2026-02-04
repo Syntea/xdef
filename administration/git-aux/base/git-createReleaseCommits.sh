@@ -70,9 +70,7 @@ echo '=============================='
 echo 'Verifying release-build: start'
 echo '=============================='
 set -x
-{   mvn clean package -Prelease,doc &&
-    mvn clean
-} || {
+mvn clean package -Prelease,doc || {
     set +x
     echo "ERROR: Verifying release-build: failed - reset branch-main"
     branchCurrentName="$(git branch --show-current)"
