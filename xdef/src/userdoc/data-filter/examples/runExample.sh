@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 exName="$1"
 
 if [ -z "${exName}" ]; then 

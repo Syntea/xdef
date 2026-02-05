@@ -5,8 +5,8 @@ IF NOT EXIST temp\nul MD temp > nul
 IF NOT EXIST temp\classes\nul MD temp\classes > nul
 IF NOT EXIST temp\test\nul MD temp\test > nul
 
-set cp="-classpath temp/classes;../xdef-${version}.jar;lib/derby-${derby.version}.jar;lib/SaxonHE-${saxon-he.version}-xqj.jar;lib/SaxonHE-${saxon-he.version}.jar;lib/snakeyaml-${snakeyaml.version}.jar"
-set copts="%cp% -encoding UTF8 -d temp/classes"
+set cp=-classpath temp/classes;../xdef-${version}.jar;lib/derby-${derby.version}.jar;lib/SaxonHE-${saxon-he.version}-xqj.jar;lib/SaxonHE-${saxon-he.version}.jar;lib/snakeyaml-${snakeyaml.version}.jar
+set copts=%cp% -encoding UTF8 -d temp/classes
 
 IF EXIST src\components\nul RD src\components /S /Q > nul
 javac %copts% src/RunAll_prepare.java src/task6/GenComponents*.java
