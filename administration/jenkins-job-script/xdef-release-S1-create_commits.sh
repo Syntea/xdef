@@ -4,6 +4,7 @@
 #and also do verifying release-build
 #parameters: [ <versionNext> ]
 # - <versionNext>: next development version, optional, if not entered it's entered during script from std-input
+#based on the script administration/git-aux/base/git-createReleaseCommits.sh
 set -e
 
 #set and check new parameters

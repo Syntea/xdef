@@ -23,11 +23,8 @@
     </scm>
 
     <properties>
-        <!-- do install and deploy -->
-        <maven.install.skip>false</maven.install.skip>
+        <!-- do deploy -->
         <maven.deploy.skip>false</maven.deploy.skip>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>

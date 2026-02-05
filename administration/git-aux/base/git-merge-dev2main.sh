@@ -23,9 +23,7 @@ echo '==============================='
 echo 'Verifying snapshot-build: start'
 echo '==============================='
 set -x
-{   mvn clean package -Pdoc &&
-    mvn clean
-} || {
+mvn clean package -Pdoc || {
     set +x
     echo "ERROR: Verifying snapshot-build: failed - reset branch-main"
     branchCurrentName="$(git branch --show-current)"
