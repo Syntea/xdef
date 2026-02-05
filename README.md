@@ -197,8 +197,9 @@ containing the code of X‑definition language.
 # Documentation and online playground
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
+For the **change-log** see file [xdef/changelog.md](/xdef/changelog.md).
 
-You can try your X-definition examples at following **online playgrounds**:
+You can try your X-definition examples at the following **online playgrounds**:
   * guidepost of online playgrounds: <https://xdef.syntea.cz/tutorial/examples/online.html>
 
 
