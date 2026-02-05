@@ -349,7 +349,7 @@ public final class Test000 extends XDTester {
 "  <x>test1</x>\n"+
 "</Complex>\n";
 			el = create(compile(xdef), "", "Complex", reporter, xml);
-			assertEq("< Complex ver='1.0'><inside Kanal='22'" /*XXXX*/
+			assertEq("<Complex ver='1.0'><inside Kanal='22'"
 				+ " IdProces='123' Verze='2.0'/><x>test</x></Complex>", el);
 			assertNoErrorwarnings(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
