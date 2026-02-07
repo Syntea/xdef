@@ -3,7 +3,8 @@
 // Any modifications to this file will be lost upon recompilation.
 package bugreports;
 @SuppressWarnings("unchecked")
-public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subelem.X,bugreports.subelem.PlatneOd,org.xdef.component.XComponent {
+public class PlatneX2 implements bugreports.subelem.X,bugreports.subelem.PlatneX,org.xdef.component.XComponent {
+  public Integer getHodnota() {return _Hodnota;}
   public org.xdef.sys.SDatetime getPlatnostDo() {return _PlatnostDo;}
   public java.util.Date dateOfPlatnostDo(){return org.xdef.sys.SDatetime.getDate(_PlatnostDo);}
   public java.sql.Timestamp timestampOfPlatnostDo(){return org.xdef.sys.SDatetime.getTimestamp(_PlatnostDo);}
@@ -12,6 +13,7 @@ public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subele
   public java.util.Date dateOfPlatnostOd(){return org.xdef.sys.SDatetime.getDate(_PlatnostOd);}
   public java.sql.Timestamp timestampOfPlatnostOd(){return org.xdef.sys.SDatetime.getTimestamp(_PlatnostOd);}
   public java.util.Calendar calendarOfPlatnostOd(){return org.xdef.sys.SDatetime.getCalendar(_PlatnostOd);}
+  public void setHodnota(Integer x) {_Hodnota=x;}
   public void setPlatnostDo(org.xdef.sys.SDatetime x) {_PlatnostDo=x;}
   public void setPlatnostDo(java.util.Date x) {_PlatnostDo=org.xdef.sys.SDatetime.createFrom(x);}
   public void setPlatnostDo(java.sql.Timestamp x) {_PlatnostDo=org.xdef.sys.SDatetime.createFrom(x);}
@@ -20,9 +22,12 @@ public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subele
   public void setPlatnostOd(java.util.Date x) {_PlatnostOd=org.xdef.sys.SDatetime.createFrom(x);}
   public void setPlatnostOd(java.sql.Timestamp x) {_PlatnostOd=org.xdef.sys.SDatetime.createFrom(x);}
   public void setPlatnostOd(java.util.Calendar x) {_PlatnostOd=org.xdef.sys.SDatetime.createFrom(x);}
+  public String xposOfHodnota(){return XD_XPos+"/@Hodnota";}
   public String xposOfPlatnostDo(){return XD_XPos+"/@PlatnostDo";}
   public String xposOfPlatnostOd(){return XD_XPos+"/@PlatnostOd";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
+  private String XD_Name_Hodnota="Hodnota";
+  private Integer _Hodnota;
   private String XD_Name_PlatnostDo="PlatnostDo";
   private org.xdef.sys.SDatetime _PlatnostDo;
   private String XD_Name_PlatnostOd="PlatnostOd";
@@ -76,6 +81,8 @@ public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subele
 	  el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
 	  if (doc.getDocumentElement()==null) doc.appendChild(el);
 	}
+	if (getHodnota() != null)
+	  el.setAttribute(XD_Name_Hodnota, getHodnota().toString());
 	if (getPlatnostDo() != null)
 	  el.setAttribute(XD_Name_PlatnostDo, getPlatnostDo().formatDate("yyyy-MM-dd[Z]"));
 	if (getPlatnostOd() != null)
@@ -96,7 +103,7 @@ public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subele
 	XD_XPos=x.getXPos();
 	XD_Model=x.getXMElement().getXDPosition();
 	XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
-	if (!"828870C0C296EC55AF974D34F412D734499E322904EBE77A2A8540FF0729D16A".equals(
+	if (!"CD984B6E8D094FE0A00E7EA0BF8C6D0A96D508B47140468A3627343120C343C6".equals(
 	  x.getXMElement().getDigest())) { //incompatible element model
 	  throw new org.xdef.sys.SRuntimeException(
 		org.xdef.msg.XDEF.XDEF374);
@@ -114,7 +121,10 @@ public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subele
   public void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {
-	if (x.getXMNode().getXDPosition().endsWith("/@PlatnostDo")) {
+	if (x.getXMNode().getXDPosition().endsWith("/@Hodnota")) {
+	  XD_Name_Hodnota = x.getNodeName();
+	  setHodnota(value.getParsedValue().isNull()? null: value.getParsedValue().intValue());
+	} else if (x.getXMNode().getXDPosition().endsWith("/@PlatnostDo")) {
 	  XD_Name_PlatnostDo = x.getNodeName();
 	  setPlatnostDo(value.getParsedValue().isNull()? null: value.getParsedValue().datetimeValue());
 	} else {

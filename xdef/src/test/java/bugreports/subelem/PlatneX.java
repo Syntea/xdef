@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package bugreports.subelem;
 
-public interface PlatneX extends bugreports.subelem.PlatneOd,org.xdef.component.XComponent {
+public interface PlatneX extends bugreports.subelem.PlatneOdDo,org.xdef.component.XComponent {
   public Integer getHodnota();
   public void setHodnota(Integer x);
   public String xposOfHodnota();
