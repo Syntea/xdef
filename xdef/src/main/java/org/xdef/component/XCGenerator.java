@@ -475,23 +475,23 @@ final class XCGenerator extends XCGeneratorXON {
 		if (clazz.isEmpty()) {
 			return null;
 		}
-		if (xe.isReference()) {
-			XComponentInfo x = _components.get(xe.getReferencePos());
-			String xpos = x != null ? x.getName() : null;
-			if (xpos != null && xpos.startsWith("interface ")) {
-				xpos = xpos.substring(10);
-				if (!xpos.equals(interfcName)) {
-					ndx = extClazz.indexOf("implements ");
-					if (ndx >= 0) {
-						if (!extClazz.contains(xpos)) {
-							extClazz = extClazz.substring(0, ndx+11)+ xpos +","+ extClazz.substring(ndx+11);
-						}
-					} else {
-						extClazz += " implements " + xpos;
-					}
-				}
-			}
-		}
+//		if (xe.isReference()) { //XXXX
+//			XComponentInfo x = _components.get(xe.getReferencePos());
+//			String xpos = x != null ? x.getName() : null;
+//			if (xpos != null && xpos.startsWith("interface ")) {
+//				xpos = xpos.substring(10);
+//				if (!xpos.equals(interfcName)) {
+//					ndx = extClazz.indexOf("implements ");
+//					if (ndx >= 0) {
+//						if (!extClazz.contains(xpos)) {
+//							extClazz = extClazz.substring(0, ndx+11)+ xpos +","+ extClazz.substring(ndx+11);
+//						}
+//					} else {
+//						extClazz += " implements " + xpos;
+//					}
+//				}
+//			}
+//		}
 		_interfaces = sbi;
 		// generate Java source
 		return genSource(xe,
@@ -566,7 +566,7 @@ final class XCGenerator extends XCGeneratorXON {
 			if (packageName1 != null && !packageName1.isEmpty()) {
 				s += "package " + packageName1 + ";"+LN;
 			}
-			String ext = " extends ";;
+			String ext = " extends ";
 			if (!extClass.isEmpty()) {
 				ext += extClass + ",";
 			}

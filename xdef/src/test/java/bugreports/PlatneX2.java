@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package bugreports;
 @SuppressWarnings("unchecked")
-public class PlatneX2 implements bugreports.subelem.PlatneOdDo,bugreports.subelem.X,bugreports.subelem.PlatneOd,org.xdef.component.XComponent {
+public class PlatneX2 implements bugreports.subelem.X,bugreports.subelem.PlatneX,org.xdef.component.XComponent {
   public org.xdef.sys.SDatetime getPlatnostDo() {return _PlatnostDo;}
   public java.util.Date dateOfPlatnostDo(){return org.xdef.sys.SDatetime.getDate(_PlatnostDo);}
   public java.sql.Timestamp timestampOfPlatnostDo(){return org.xdef.sys.SDatetime.getTimestamp(_PlatnostDo);}

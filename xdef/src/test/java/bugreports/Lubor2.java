@@ -2,6 +2,7 @@ package bugreports;
 
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
@@ -14,24 +15,17 @@ import test.XDTester;
  */
 public class Lubor2 extends XDTester {
 
-	public Lubor2() {
-		super();
-		setChkSyntax(false); // here it MUST be false!
-	}
+	public Lubor2() {super();}
 
 	/** Run test and display error information. */
 	@Override
 	public void test() {
 		boolean T = false;
-		System.out.println("TempDir: " + getTempDir());
-		System.out.println("SourceDir: " + getSourceDir());
 ////////////////////////////////////////////////////////////////////////////////
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
-//		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
-		Object o;
 		String xdef, xml;
 		XDDocument xd;
 		XDPool xp;
@@ -39,6 +33,7 @@ public class Lubor2 extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 /**/
 		try { //TEST1
+			System.out.println("[INFO] Xdefinition version: " + XDFactory.getXDVersion());
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneX' name='PIS_iop_common'>\n" +
 "<PlatneOd PlatnostOd='date()'/>\n" +
@@ -47,12 +42,15 @@ public class Lubor2 extends XDTester {
 "<xd:component>\n" +
 " %class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %class bugreports.PlatneX1\n" +
-"   implements bugreports.subelem.X, bugreports.subelem.PlatneOd\n" +
+"   implements bugreports.subelem.X\n" +
 "   %link PIS_iop_common#PlatneX;\n" +
 " %interface bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %interface bugreports.subelem.PlatneOdDo\n" +
 "   extends bugreports.subelem.PlatneOd\n" +
 "   %link PIS_iop_common#PlatneOdDo;\n" +
+" %interface bugreports.subelem.PlatneX\n" +
+"   extends bugreports.subelem.PlatneOdDo\n" +
+"   %link PIS_iop_common#PlatneX;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 			xp = org.xdef.XDFactory.compileXD(null, xdef);
@@ -89,12 +87,15 @@ if (T) return;
 "<xd:component>\n" +
 " %class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %class bugreports.PlatneX2\n" +
-"   implements bugreports.subelem.X, bugreports.subelem.PlatneOd\n" +
+"   implements bugreports.subelem.X\n" +
 "   %link PIS_iop_common#PlatneX;\n" +
 " %interface bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %interface bugreports.subelem.PlatneOdDo\n" +
-//"   extends bugreports.subelem.PlatneOd\n" +
+"   extends bugreports.subelem.PlatneOd\n" +
 "   %link PIS_iop_common#PlatneOdDo;\n" +
+" %interface bugreports.subelem.PlatneX\n" +
+"   extends bugreports.subelem.PlatneOdDo\n" +
+"   %link PIS_iop_common#PlatneX;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 			xp = org.xdef.XDFactory.compileXD(null, xdef);
@@ -132,11 +133,12 @@ if (T) return;
 " %class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %class bugreports.PlatneX3\n" +
 "   implements bugreports.subelem.X\n" +
-//"     bugreports.subelem.PlatneOdDo, bugreports.subelem.PlatneOd\n" +
 "   %link PIS_iop_common#PlatneX;\n" +
 " %interface bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %interface bugreports.subelem.PlatneOdDo\n" +
 "   %link PIS_iop_common#PlatneOdDo;\n" +
+" %interface bugreports.subelem.PlatneX\n" +
+"   %link PIS_iop_common#PlatneX;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 			xp = org.xdef.XDFactory.compileXD(null, xdef);
@@ -180,7 +182,7 @@ if (T) return;
 "   extends bugreports.subelem.PlatneOd\n" +
 "   %link PIS_iop_common#PlatneOdDo;\n" +
 " %interface bugreports.subelem.PlatneX\n" +
-"   extends bugreports.subelem.PlatneOd\n" +
+"   extends bugreports.subelem.PlatneOdDo\n" +
 "   %link PIS_iop_common#PlatneX;\n" +
 "</xd:component>\n" +
 "</xd:def>";
