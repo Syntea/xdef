@@ -134,10 +134,10 @@
   * Added parsing method `ydatetime` for special use in Syntea software group.
   * Corrected bug in the method `org.xdef.sys.SDatetine.setTZ(TimeZone)`.
 
-# Version 42.2.11, release-date 2024-11-06
+# ~~Version 42.2.11~~, release-date 2024-11-06 (incorrect version)
   * Incorrect version, DO NOT USE IT!
 
-# Version 42.2.10, release-date 2024-11-06
+# ~~Version 42.2.10~~, release-date 2024-11-06 (incorrect version)
   * Incorrect version, DO NOT USE IT!
 
 # Version 42.2.9, release-date 2024-11-01
