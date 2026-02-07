@@ -38,7 +38,7 @@ public class Lubor2 extends XDTester {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneX' name='PIS_iop_common'>\n" +
 "<PlatneOd PlatnostOd='date()'/>\n" +
 "<PlatneOdDo xd:script='ref PlatneOd' PlatnostDo='date()'/>\n" +
-"<PlatneX xd:script='ref PlatneOdDo' />\n" +
+"<PlatneX xd:script='ref PlatneOdDo' Hodnota = '? int()'/>\n" +
 "<xd:component>\n" +
 " %class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %class bugreports.PlatneX1\n" +
@@ -83,7 +83,7 @@ if (T) return;
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneX' name='PIS_iop_common'>\n" +
 "<PlatneOd PlatnostOd='date()'/>\n" +
 "<PlatneOdDo xd:script='ref PlatneOd' PlatnostDo='date()'/>\n" +
-"<PlatneX xd:script='ref PlatneOdDo' />\n" +
+"<PlatneX xd:script='ref PlatneOdDo' Hodnota = '? int()'/>\n" +
 "<xd:component>\n" +
 " %class bugreports.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
 " %class bugreports.PlatneX2\n" +
