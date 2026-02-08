@@ -1,5 +1,6 @@
 # Version ${version}, release-date ${release.date}
-  *.
+  * Fixed a bug when generating Xcomponents with `extends` and `implements` specifications in a class
+    referencing an implementation using the `%bind` and `%with` commands.
 
 # Version 42.2.38, release-date 2026-01-27
   * Fixed incorrect error reporting in the `%bind` command and `%with` parameter.
