@@ -85,6 +85,7 @@ public class RunAll {
 		runExample(task6.Town1.class);
 		runExample(task6.GenComponents2.class);
 		runExample(task6.Town2.class);
+		runExample(task6.BindWith.class);
 //////////////// task7 ////////////////
 		runExample(task7.Town.class);
 //////////////// task8 ////////////////
