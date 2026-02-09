@@ -64,7 +64,6 @@ public class Lubor2 extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
-
 			xml = "<PlatneX PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -74,6 +73,7 @@ public class Lubor2 extends XDTester {
 			assertEq("2025-02-01", ((bugreports.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
 			assertEq("2025-01-01", ((bugreports.PlatneX1) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
+			assertNull(((bugreports.PlatneX1 ) xc).getHodnota());
 		} catch (RuntimeException ex) {fail(ex);}
 //deleteCreatedSources();
 if (T) return;
@@ -109,7 +109,6 @@ if (T) return;
 			assertNoErrorsAndClear(reporter);
 			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
-
 			xml = "<PlatneX PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -119,6 +118,7 @@ if (T) return;
 			assertEq("2025-02-01", ((bugreports.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
 			assertEq("2025-01-01", ((bugreports.PlatneX2) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
+			assertNull(((bugreports.PlatneX2 ) xc).getHodnota());
 		} catch (RuntimeException ex) {fail(ex);}
 //deleteCreatedSources();
 if (T) return;
@@ -152,16 +152,16 @@ if (T) return;
 			assertNoErrorsAndClear(reporter);
 			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
-
 			xml = "<PlatneX PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, (xc = xd.xparseXComponent(xml, null, reporter)).toXml());
 			assertNoErrorsAndClear(reporter);
 			assertEq("2025-01-01", ((bugreports.PlatneX3) xc).getPlatnostOd().toString());
-//			assertEq("2025-02-01", ((bugreports.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
+			assertEq("2025-02-01", ((bugreports.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
 			assertEq("2025-01-01", ((bugreports.PlatneX3) xc).getPlatnostOd().toString());
-//			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
+			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
+			assertNull(((bugreports.PlatneX3 ) xc).getHodnota());
 		} catch (RuntimeException ex) {fail(ex);}
 //deleteCreatedSources();
 if (T) return;
@@ -197,7 +197,6 @@ if (T) return;
 			assertNoErrorsAndClear(reporter);
 			assertEq("2025-01-01", ((bugreports.PlatneOd) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
-
 			xml = "<PlatneX PlatnostOd='2025-01-01' PlatnostDo='2025-02-01'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorsAndClear(reporter);
@@ -207,6 +206,7 @@ if (T) return;
 			assertEq("2025-02-01", ((bugreports.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
 			assertEq("2025-01-01", ((bugreports.PlatneX4 ) xc).getPlatnostOd().toString());
 			assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
+			assertNull(((bugreports.PlatneX4 ) xc).getHodnota());
 		} catch (RuntimeException ex) {fail(ex);}
 //deleteCreatedSources();
 if (T) return;
