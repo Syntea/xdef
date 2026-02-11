@@ -12,7 +12,9 @@ branchCurrent="$(git branch --show-current)"
 #enter into main-repo
 cd "../xdef-${mainBranchName}"
 
-{   echo '=========================='
+set +e
+(   set -e
+    echo '=========================='
     echo 'Merge branch dev into main'
     echo '=========================='
     set -x
@@ -32,16 +34,17 @@ cd "../xdef-${mainBranchName}"
     set -x
     git push
     set +x
-
-} || {
-    set +x
-    echo "ERROR: failure, I will reset branch-main" >&2
+)
+[ $? -eq 0 ] || {
+    set -e +x
+    echo "ERROR: any previous failure, I will reset branch-main" >&2
     branchCurrentName="$(git branch --show-current)"
     set -x
     git checkout -B "${branchCurrentName}" "origin/${branchCurrentName}"
     set +x
     exit 1
 }
+set -e
 
 #reenter back and fetch
 cd ${pwd}

@@ -46,7 +46,9 @@ echo "check previous settings, press Ctrl+C to interrupt this, after 10s it will
 for i in $(seq 10 -1 1); do echo -n "$i . "; sleep 1; done; echo "0"
 
 
-{   echo '====================='
+set +e
+(   set -e
+    echo '====================='
     echo 'Create release commit'
     echo '====================='
     set -x
@@ -111,13 +113,14 @@ for i in $(seq 10 -1 1); do echo -n "$i . "; sleep 1; done; echo "0"
     git push
     git push origin "${tag}"
     set +x
-
-} || {
-    set +x
-    echo "ERROR: failure, I will reset current branch" >&2
+)
+[ $? -eq 0 ] || {
+    set -e +x
+    echo "ERROR: any previous failure, I will reset current branch" >&2
     branchCurrentName="$(git branch --show-current)"
     set -x
     git checkout -B "${branchCurrentName}" "origin/${branchCurrentName}"
     set +x
     exit 1
 }
+set -e

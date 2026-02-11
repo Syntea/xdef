@@ -15,9 +15,9 @@ cd "../xdef-${mainBranchName}"
 
 "${scriptDir}"/git-createReleaseCommits.sh $@
 
-#reenter back and pull
+#reenter back and fetch
 cd "${pwd}"
-echo "git-repo $(pwd): pull"
+echo "git-repo $(pwd): fetch"
 set -x
-git pull
+git fetch
 set +x
