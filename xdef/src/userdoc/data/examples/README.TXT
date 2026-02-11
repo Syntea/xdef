@@ -1,12 +1,12 @@
 The X-definition source and the XML data files are available in the directory
 "src". To run an example set the classpath parameter as follows:
-      ..\xdef-*.jar;lib/derby-*.jar
+  ..\xdef-*.jar;lib/derby-*.jar
 (the "derby-*.jar" is required to run the database examples)
 
 You can run any example from the cmd file (Windows):
-    > runExample.cmd name
+  > runExample.cmd name
 or bash file (Unix):
-    > runExample.sh name
+  > runExample.sh name
 where the parameter "name" is  one of:
   Example1
   Example2
@@ -26,8 +26,8 @@ Example with Lexicon:
   ExampleLexicon
 
 The exammples with X-components you should run in following sequence:
-1.  ExampleXC1 (this example generates X-components used in ExampleXC2)
-2.  ExampleXC2
+1. ExampleXC1 (this example generates X-components used in ExampleXC2)
+2. ExampleXC2
 
 The examples with database you should run in following sequence:
 1. ExampleDBCreate  (prepare and create database, must be invoked first)
@@ -46,11 +46,11 @@ Windows: runExample.cmd task1/Order1
 Unix: runExample.sh task1/Order1
 
 The documentation with X-components is available in
-   "xdef-*_X-component.pdf".
+  "xdef-*_X-component.pdf".
 
-In the directories "task1" .. "task7" there are data files of tasks from
-   "xdef-*_Programming.pdf".
-In the directories "src/task1" .. "src/task7" there are Java source codes
- of tasks from this book.
+In the directories "task1" .. "task10" there are data files of tasks from
+"xdef-*_Programming.pdf".
+In the directories "src/task1" .. "src/task10" there are Java source codes
+of tasks from this book.
 
 Try it and enjoy it!
