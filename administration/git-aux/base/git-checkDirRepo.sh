@@ -16,21 +16,21 @@ check () {
 
     #check actual dir is maven-project
     [ -f "pom.xml" ] || \
-        { echo "ERROR: dir $(pwd) is not maven-project, file 'pom.xml' not found"; exit 1; }
+        { echo "ERROR: dir $(pwd) is not maven-project, file 'pom.xml' not found" >&2; exit 1; }
 
     #check actual maven-project signature
     prjGroup=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
     prjArtifact=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
     [ "${prjGroup}" = "org.xdef" -a "${prjArtifact}" = "xdef-parent" ] || \
         {   echo "ERROR: maven-project $(pwd) is not org.xdef:xdef-parent," \
-                 "actual signature: ${prjGroup}:${prjArtifact}"
+                 "actual signature: ${prjGroup}:${prjArtifact}" >&2
             exit 1
         }
 
     set -x
     #git: fetch-prune, pull-fastforward-only
     git fetch --prune --prune-tags --force
-    git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed"
+    git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed" >&2
     set +x
 
     #push unpushed this branch commits that are ahead of the remote ref-branch
@@ -40,13 +40,13 @@ check () {
     #check git status up-to-date and clean
     gitStatus="$(unset LANG; git status;)"
     echo "${gitStatus}" | grep -z 'Your branch is up to date with' > /dev/null || \
-        { echo "ERROR: git-repo $(pwd) is not up-to-date"; set -x; git status; set +x; exit 1; }
+        { echo "ERROR: git-repo $(pwd) is not up-to-date" >&2; set -x; git status; set +x; exit 1; }
 
     #check git status clean, if required
     if [ ! "$1" = "dirty" ]
     then
         echo "${gitStatus}" | grep -z 'nothing to commit, working tree clean' > /dev/null || \
-            { echo "ERROR: git-repo $(pwd) is not up-to-date and clean"; set -x; git status; set +x; exit 1; }
+            { echo "ERROR: git-repo $(pwd) is not clean" >&2; set -x; git status; set +x; exit 1; }
     fi
 }
 
@@ -80,7 +80,7 @@ then
     branchCurrentName="$(git branch --show-current)"
     [ "${branchCurrentName}" = "${mainBranchName}" ] || \
         {   echo "ERROR: git-repo $(pwd) branch name is not '${mainBranchName}'," \
-                 "branch name: ${branchCurrentName}"
+                 "branch name: ${branchCurrentName}" >&2
             exit 1
         }
 

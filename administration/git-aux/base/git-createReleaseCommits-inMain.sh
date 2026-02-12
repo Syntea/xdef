@@ -5,23 +5,19 @@
 #run from root-repo-dir
 set -e
 
-#constants
-nl='
-'
-
 pwd="$(pwd)"
 scriptDir="$(dirname $(readlink -f "$0"))"
 #check variable main-branch name
-[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty"; exit 1; }
+[ -n "${mainBranchName}" ] || { echo "ERROR: var 'mainBranchName' is empty" >&2; exit 1; }
 
 #enter into main-repo
 cd "../xdef-${mainBranchName}"
 
 "${scriptDir}"/git-createReleaseCommits.sh $@
 
-#reenter back and pull
+#reenter back and fetch
 cd "${pwd}"
-echo "git-repo $(pwd): pull"
+echo "git-repo $(pwd): fetch"
 set -x
-git pull
+git fetch
 set +x

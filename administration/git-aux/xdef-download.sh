@@ -13,3 +13,4 @@ mvn dependency:copy -Dartifact=org.xdef:xdef:${version}:zip:userdoc-en -DoutputD
 mvn dependency:copy -Dartifact=org.xdef:xdef:${version}:jar:javadoc    -DoutputDirectory=${dir}
 mvn dependency:copy -Dartifact=org.xdef:xdef:${version}:jar:sources    -DoutputDirectory=${dir}
 mvn dependency:copy -Dartifact=org.xdef:xdef:${version}:zip:src        -DoutputDirectory=${dir}
+mvn dependency:copy -Dartifact=org.xdef:xdef:${version}:pom            -DoutputDirectory=${dir}

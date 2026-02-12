@@ -12,38 +12,43 @@ branchCurrent="$(git branch --show-current)"
 #enter into main-repo
 cd "../xdef-${mainBranchName}"
 
-echo '=========================='
-echo 'Merge branch dev into main'
-echo '=========================='
-set -x
-git merge --no-ff -m "Merge remote-tracking branch 'origin/${branchCurrent}' into '${mainBranchName}'" "origin/${branchCurrent}"
-set +x
-
-echo '==============================='
-echo 'Verifying snapshot-build: start'
-echo '==============================='
-set -x
-mvn clean package -Pdoc || {
+set +e
+(   set -e
+    echo '=========================='
+    echo 'Merge branch dev into main'
+    echo '=========================='
+    set -x
+    git merge --no-ff -m "Merge remote-tracking branch 'origin/${branchCurrent}' into '${mainBranchName}'" "origin/${branchCurrent}"
     set +x
-    echo "ERROR: Verifying snapshot-build: failed - reset branch-main"
+    
+    echo '==============================='
+    echo 'Verifying snapshot-build: start'
+    echo '==============================='
+    set -x
+    mvn clean package -Pdoc
+    set +x
+    echo '===================================='
+    echo 'Verifying snapshot-build: successful'
+    echo '===================================='
+    
+    set -x
+    git push
+    set +x
+)
+[ $? -eq 0 ] || {
+    set -e +x
+    echo "ERROR: any previous failure, I will reset branch-main" >&2
     branchCurrentName="$(git branch --show-current)"
     set -x
     git checkout -B "${branchCurrentName}" "origin/${branchCurrentName}"
     set +x
     exit 1
 }
-set +x
-echo '===================================='
-echo 'Verifying snapshot-build: successful'
-echo '===================================='
+set -e
 
-set -x
-git push
-set +x
-
-#reenter back and pull
+#reenter back and fetch
 cd ${pwd}
-echo "git-repo $(pwd): pull"
+echo "git-repo $(pwd): fetch"
 set -x
-git pull
+git fetch
 set +x
