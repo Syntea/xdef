@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Online create X-definition from data (XML, JSON, YAML, XON)" />
+    <meta name="keywords" content="XML, JSON, YAML , X-definition, Xdefinition, XDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:35rem;max-height:35rem;display:flex;overflow:hidden;}</style>    
+    <title>Create X-definition from data (JSON, YAML, XON, or XML)</title>
+  </head>
+  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/GenXdef">
+      <b>Write here your data (JSON, YAML, or XML) from which the X-definition will be created:</b>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="data">
+{ Contract: 123456789, 
+  Date: d2011-12-13,
+  Description: "Lorem ipsum dolor sit amet.",
+  Clients: [
+    { Type: c"A",
+      Name: "Company LTD",
+      ID: "12345678"
+    },
+    { Type: c"B",
+      Name: "John Smith",
+      email: e"info@company.com",
+      ID: "111050/1234"
+    },
+    { Type: c"C",
+      Name: "George White",
+      ID: "87654321"
+    }
+  ],
+}
+</textarea>
+      </div>        
+      <input name="genXdef" value="Create X-definition" type="submit"/>
+    </form>
+  </body>
+</html>

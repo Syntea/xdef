@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="text/html; charset=UTF-8"/>
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:35rem;max-height:35rem;display:flex;overflow:hidden;}</style>    
+    <title>X-definition - the construction mode</title>
+  </head>
+  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples" >
+      <input type="hidden" name="mode" value="compose" />
+      <b>X-definition</b><br/>
+      <div class="A">
+        <div id="line-numbers"> </div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root="Item">
+
+&lt;xd:declaration>
+&lt;![CDATA[
+  String data = 
+"&lt;Item id='0123456789'>
+  &lt;Client role='1' company='NSomeCompany Ltd' cId = '12345678' />
+  &lt;Client role='2' name='Peter' surname= 'Brown' pId = '700231/1234' />
+  &lt;Client role='3' name='John' surname='Smith' pId='551204/2345' cId='87654321' />
+&lt;/Item>";
+  Element source = xparse(data, "*");
+]]>
+&lt;/xd:declaration>
+
+&lt;Contract xd:script = "create source"
+    date = "required dateTime(); create now()"
+    number = "required num(10); create from('@id')" >
+   &lt;Owner xd:script   = "create from('Client[@role=\'1\']')"
+      cId     = "required num(8)"
+      company = "required string(1,30)" />	
+   &lt;Holder xd:script = "create from('Client[@role=\'2\']')"
+      pId     = "required string(10,11) "
+      name    = "required string(1,30)"
+      surname = "required string(1,30)" />
+   &lt;Policyholder xd:script = "create from('Client[@role=\'3\']')"
+      name = "required string(1,30); create from('@name') + ' ' + from('@surname')"
+      cId   = "required num(8)" />
+&lt;/Contract>
+
+&lt;Item id='num(10)'>
+  &lt;Client role = 'int()' company = 'string()' cId = 'num(8)' />
+  &lt;Client role = 'int()' name = 'string()' surname = 'string()' pId = 'string()' />
+  &lt;Client role = 'int()' name = 'string()' surname ='string()' pId = 'string()' cId = 'string()' />
+&lt;/Item>
+
+&lt;/xd:def></textarea>
+      </div>
+      <input name="submit" value="Execute" type="submit"/>
+      <font style="background-color: lightgrey">
+        <i>&nbsp;(You can edit the X-definition above)</i>
+      </font>
+    </form>
+  </body>
+</html>

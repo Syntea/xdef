@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Online validate/describe JSON, YAML, XON data with X-definition " />
+    <meta name="keywords" content="XML, JSON, YAML, XON validation, Properties, X-definition, Xdefinition, XDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:21rem; max-height:21rem; display:flex; overflow:hidden;}</style>    
+    <style>.B{min-height:14rem; max-height:14rem; display:flex; overflow:hidden;}</style>
+    <title>X-definition JSON, XON, YAML data</title>
+  </head>
+  <body style="background: #EAFFFD">
+    <form method="post" action="/tutorial/Examples">
+       <b>X-definition</b>
+      <i>If you have a collection with more
+        X-definitions enter the name of X-definition with root JSON data:
+      </i>
+      <div class="A">
+        <div id="line-numbers"> </div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" name = "Example" root = "test">
+   &lt;xd:json name = "test">
+[
+  { "Date": "date(); finally outln('City distances. Measurement taken on: ' + getText());"},
+  { "%script": "occurs 1..*;",
+    "%anyName": [ "%script: occurs 1..*; init printf('Distance from %s to%n', getXonKey());",
+      { "%script": "var String to, dist; occurs 1..*; finally printf('  %s: %s (km)%n', to, dist);",
+        "to": "required string(); onTrue to = getText();"
+        "distance": "required int(); onTrue dist = getText();",
+      }
+    ]
+  }
+]
+   &lt;/xd:json>
+&lt;/xd:def>
+</textarea>
+      </div>        
+      <b>Input data</b> <i>(can be YAML, JSON, XON or XML format)</i>
+      <div class="B">
+        <div id="line-numbers_1"> </div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+[
+  { "Date": "2020-02-22"},
+  { "Brussels": [
+      {"to": "London", "distance": 322},
+      {"to": "Paris", "distance": 265}
+    ]
+  },
+  { "London": [
+      {"to": "Brussels", "distance": 322},
+      {"to": "Paris", "distance": 344},
+      {"to": "Amsterdam", "distance": 358}
+    ]
+  }
+]
+</textarea>
+      </div>        
+      <input type="hidden" name="json" value="json" />
+      <input name="view" value="Display as JSON" type="submit"/>
+      <input name="view" value="Display as YAML" type="submit"/>
+      <input name="view" value="Display as XON" type="submit"/>
+      <input name="view" value="Display as XML" type="submit"/>
+      <font style="background-color: lightgrey">
+        <i>&nbsp;You can edit <b>X-definition</b> or <b>Input</b> window</i>
+      </font>
+    </form>
+  </body>
+</html>

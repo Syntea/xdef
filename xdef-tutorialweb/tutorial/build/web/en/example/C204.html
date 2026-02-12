@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="text/html; charset=UTF-8"/>
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:35rem;max-height:35rem;display:flex;overflow:hidden;}</style>    
+    <title>X-definition - the construction mode</title>
+  </head>
+  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples" >
+      <input type="hidden" name="mode" value="compose" />
+      <b>X-definition</b><br/>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'>
+   &lt;A xd:script ="create true">
+      &lt;B xd:script ="occurs *; create [true, 0, 'abc']"/>
+   &lt;/A>
+&lt;/xd:def></textarea>
+      </div>
+      <input name="submit" value="Execute" type="submit"/>
+      <font style="background-color: lightgrey">
+        <i>&nbsp;(You can edit the X-definition above)</i>
+      </font>
+    </form>
+  </body>
+</html>
