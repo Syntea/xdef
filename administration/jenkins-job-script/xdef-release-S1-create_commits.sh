@@ -2,17 +2,16 @@
 # - new release-version commit - update pom.xml, changelog.md,create git-tag
 # - and commit with shifted version to the next development version (entered by user, without postfix '-SNAPSHOT')
 #and also do verifying release-build
-#parameters: [ <versionNext> ]
-# - <versionNext>: next development version, optional, if not entered it's entered during script from std-input
+#input variables:
+# - <BRANCH>:       branch to process
+# - <VERSION_NEXT>: next development version
 #based on the script administration/git-aux/base/git-createReleaseCommits.sh
 set -e
 
-#set and check new parameters
-versionNext="${VERSION_NEXT}"
-
+#set git properties
 git config --global user.email "it@syntea.cz"
 git config --global user.name "syntea-cz-builder"
-git checkout main
+git checkout ${BRANCH}
 git pull
 
 #constants
@@ -27,8 +26,11 @@ version="$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceSt
 releaseDate="$(date +'%Y-%m-%d')"
 changelog="$(awk -v RS='(\r?\n){2,}' 'NR == 1' xdef/changelog.md)"
 
+#set and check parameters
+versionNext="${VERSION_NEXT}"
+
 echo "${versionNext}" | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' > /dev/null || \
-    { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}"; exit 1; }
+    { echo "ERROR: required version format 'Major.Minor.Revision', entered: ${versionNext}" >&2; exit 1; }
 
 echo "========================================="
 echo "actual version to release: ${version}"
@@ -37,7 +39,8 @@ echo "next development version:  ${versionNext}-SNAPSHOT"
 echo "changelog:${nl}------------------${nl}${changelog}${nl}------------------"
 echo "========================================="
 
-sleep 10
+echo "check previous settings, press Ctrl+C to interrupt this, after 10s it will create commits related to release version ..."
+for i in $(seq 10 -1 1); do echo -n "$i . "; sleep 1; done; echo "0"
 
 
 echo '====================='
@@ -54,7 +57,7 @@ tagDesc="Version ${version}, release-date ${releaseDate}${nl}${nl}${changelog}"
 
 #commit and create release-tag
 git add pom.xml xdef/changelog.md
-git commit -m "update pom.xml:release.date and xdef/changelog.md as for release-version ${version}"
+git commit -m "update pom.xml:release.date and xdef/changelog.md for release-version ${version}"
 git tag "${tag}" -m "${tagDesc}"
 
 
@@ -65,7 +68,7 @@ echo '=============================='
 mvn versions:set-property -Dproperty=revision -DnewVersion="${versionNext}" > /dev/null
 versionNextSet="$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceStdout)"
 [ "${versionNextSet}" = "${versionNext}" ] || \
-    { echo "ERROR: next development version set incorrectly: ${versionNextSet}"; exit; }
+    { echo "ERROR: next development version set incorrectly: ${versionNextSet}" >&2; exit 1; }
 
 #update xdef/changelog.md - add section for new development version
 sed -i '1i # Version ${version}, release-date ${release.date}\n' xdef/changelog.md

@@ -20,7 +20,7 @@ version="$(mvn help:evaluate -Prelease -Dexpression=project.version -q -DforceSt
 releaseDate="$(date +'%Y-%m-%d')"
 changelog="$(awk -v RS='(\r?\n){2,}' 'NR == 1' xdef/changelog.md)"
 
-#set a check new parameters
+#set and check parameters
 if [ $# -eq 0 ]
 then
     echo "actual version to release: ${version} (Major.Minor.Revision)"
