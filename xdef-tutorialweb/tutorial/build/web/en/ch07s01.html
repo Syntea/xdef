@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="X-definition: What is X-component?" />
+    <meta name="keywords" content="X-component, Java, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>7.1. What is X-component?</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css" />
+    <script type="text/javascript" src="/tutorial/highlighter/shCore.js"> </script>
+    <script type="text/javascript" src="/tutorial/highlighter/shBrushXml.js"> </script>
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch0l"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch07.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch07s02.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a><img src="/tutorial/images/last0.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2>7.1. What is X-component?</h2>
+      From compiled X-definitions, you can generate Java source code of
+      X-components. The classes of X-components contain getters and setters
+      so can this way access data declared in the model. Let's have a simple
+      X-definition:
+<pre class="xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Book" >
+  &lt;Book ISBN="int(100000000, 9999999999);"
+      year = "gYear();"
+      title = "string();" >
+      &lt;author xd:script="occurs *"> string(); &lt;/author>
+  &lt;/Book>
+  &lt;xd:component>
+    %class test.book.Book %link Test#Book;
+  &lt;/xd:component>
+&lt;/xd:def></pre>
+	  <i>Note in the example was declared component "Book", which will be generated to
+	    the package "test.book".<br/>
+	    It contains the following getters and setters in the Java source code:</i>
+  <pre class="printing">
+package test.book;
+public class Book implements org.xdef.component.XComponent{
+  public <b>String getISBN()</b> {...}
+  public <b>setISBN(String x)</b> {...}
+  public <b>org.xdef.sys.SDatetime getyear()</b> {...}
+  public <b>setyear(org.xdef.sys.SDatetime x)</b> {...}
+  public <b>String gettitle()</b> {...}
+  public <b>void settitle(String x)</b> {...}
+  public <b>java.util.List&lt;Book.author> listOfauthor()</b> {...}
+  public <b>void addauthor(Book.author x)</b> {...}
+  ...
+</pre>
+      <i>Note that the instances of X-component class implements the interface java.io.Serializable, so
+        it is possible to write them to a stream and to get them back. This makes X-component usefull
+        as a general form of XML, JSON, or INI data.</i>
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>

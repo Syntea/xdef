@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="X-definition designed to combine construction and validation" />
+    <meta name="keywords" content="construction, validation, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>3.5. X-definition designed to combine both modes</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
+    <script src="/tutorial/highlighter/shCore.js"> </script>
+    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch03.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch03s04.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch04.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a href="ch04.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2>3.5. X-definition designed to combine both modes</h2>
+<pre class="xml">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"
+        xd:name="WeatherDisplay" xd:root="Weather" >
+
+  &lt;xd:declaration> float sum = 0; int num = 0; &lt;/xd:declaration>
+
+  &lt;Weather xd:script="finally returnElement(xcreate('html'));"
+           date="optional date();" >
+    &lt;Measurement xd:script="occurs *;" 
+       temperature="float(-30.0, +50.0); /*limits of values*/ onTrue {num++; sum = parseFloat(getText());}"
+       wind       ="float();"
+       time       = "time();" />
+  &lt;/Weather>
+
+  &lt;html>
+    &lt;h2> create 'Weather on ' + from('@date'); &lt;/h2>
+    /* Note all elements "li" are created from elements "Measurement" */
+    &lt;li xd:script="occurs *; create from('Measurement');" >
+      create 'Time: ' + from('@time')‏ + ', wind: ' + from('@wind')‏ + ', temperature: ' + from('@temperature')‏;
+    &lt;/li>
+    &lt;h3> /* Create the text with number of measurements and the average of measured temperatures */
+      create num == 0 ? 'No measurements' : format('Average temperature: %2.1f', sum/num));
+    &lt;/h3>
+  &lt;/html>
+
+&lt;/xd:def>
+</pre>
+      You can try it <a href="ch03s05e00.html"><b>HERE</b></a>
+      <!--a href="ch03s05e00.html" target="_BLANK"><b>HERE</b></a-->
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>

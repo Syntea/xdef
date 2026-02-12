@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:22rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
+    <style>.B{min-height:11rem;max-height:11rem;display:flex;overflow:hidden;}</style>
+    <title>Example of X-definition with groups</title>
+  </head>
+  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples">
+      <p style="font: Tahoma; font-size: 13px;">
+        The example of X-definition with groups and "Family" version of data.
+      </p>
+      <b>X-definition</b>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="Family | Owner">  
+  &lt;Family>  
+    &lt;Father   xd:script="optional; ref Person;" />  
+    &lt;Mother   xd:script="required; ref Person;" />  
+    &lt;xd:mixed>
+      &lt;Son      xd:script="occurs *; ref Person;" />
+      &lt;Daughter xd:script="occurs *; ref Person;" />
+    &lt;/xd:mixed>
+    &lt;Address xd:script="ref Address;" />
+  &lt;/Family>
+
+  &lt;Owner>
+    &lt;xd:choice>
+      &lt;Person xd:script="ref Person;" />
+      &lt;Company name="string();" />  
+    &lt;/xd:choice>
+    &lt;Address xd:script="ref Address;" />
+  &lt;/Owner>
+
+  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" />  
+  &lt;Address Street = "string(1,30)" Number = "optional int()" City = "string()" />
+&lt;/xd:def>
+</textarea>
+      </div>
+      <b>Input data</b>
+      <div class="B">
+        <div id="line-numbers_1"></div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;Family>  
+   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" />  
+   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" />  
+   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" />  
+   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" />  
+   &lt;Address Street="Downing" Number="10" City="London"/>
+&lt;/Family>
+</textarea>
+      </div>
+      <input name="submit" value="Execute" type="submit" />
+      <Font style="background-color: lightgrey">
+          <i>
+            &nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b>
+          </i>
+      </Font>
+    </form>
+  </body>
+</html>

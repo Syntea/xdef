@@ -1,0 +1,241 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:18rem; max-height:18rem;display:flex;overflow:hidden;}</style>    
+    <style>.B{min-height:18rem; max-height:18rem;display:flex;overflow:hidden;}</style>    
+    <title>X-definition: BNF</title>
+  </head>
+  <body style="background: #EAFFFD">
+    <form method="post" action="/tutorial/Examples">
+      <b>X-definition</b>
+      <i>If you have a collection with more X-definitions enter the name of X-definition with root INI data:
+      </i><input name="xdname" value="" type="text"/>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
+  &lt;root>
+    &lt;sql xd:script="*">SQL.rule('Statement'); options noTrimText&lt;/sql>
+  &lt;/root>
+
+  &lt;xd:BNFGrammar name="SQL">&lt;![CDATA[
+/********************/
+Statement::= S? ( AlterIndex | AlterTable | Constraint | Create | CreateIndex
+   | Delete | DropIndex | DropSchema | DropTable | Explain
+   | InsertSelect | InsertValues | Select | Update) (S? ';')? S?
+
+/********************/
+S::= ([#9#10#13 ]+ | Comment)+ /* white spaces and comments */
+Comment::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
+   | ('--' | '//') $skipToNextLine
+QuotedName::= '"' ('""' | [^"])+ '"'
+Keywords::= 'ALL'% | 'AS'% | 'ASC'% | 'BETWEEN'% | 'BY'%
+   | 'CASE'% | 'DESC'% | 'DISTINCT'% | 'ELSE'% | 'END'% | 'EXISTS'%
+   | 'FALSE'% | 'FIRST'% | 'FROM'% | 'GROUP'% | 'HAVING' | 'IN'% | 'IS'%
+   | 'LAST'% | 'LIKE'% | 'LIMIT'% | 'NOT'% | 'NULL'% | 'OR'%
+   | 'ORDER'% | 'SELECT'% | 'THAN'% | 'TRUE'% | 'WHERE'% | 'WHEN'%
+Name::= (([a-zA-Z] | '_') ([a-zA-Z0-9] | '_')*) - Keywords | QuotedName
+String::= "'" ("''" | [^'])+ "'"
+Numeric::= ('-' S?)? [0-9]+ ('.' [0-9]+)?
+Boolean::= 'TRUE'% | 'FALSE'%
+Constant::= String | Numeric | Boolean
+Comma::= S? ',' S? /* comma separator */
+Hint::= [#9#10#13 ]* '/*+' S? (Name | Function) S? '*/' S?
+SelectExpression::= S? ('*' | Name '.' S? '*' | Term (S? 'AS'% S? Name)?)
+Order::= Expression (S? ('ASC'% | 'DESC'%)? S? )
+   ( S? 'NULLS'% S? ('FIRST'% | 'LAST'%) S? )?
+Value::= String | Numeric | Boolean | 'NULL'% | (Name S? '.' S?)? Name
+BindParameter::= '?' | ':' S? Numeric
+RowValueConstructor::= S? '(' S? Term (Comma Term)* S? ')' S?
+Case::= S? 'CASE'% S  Term 'WHEN'% S Expression
+   S? 'THEN'% Term (S? 'ELSE'% Expression)? S? 'END'%
+CaseWhen::= S? 'CASE'% S 'WHEN'% S Expression
+   S? 'THEN'% Term (S? 'ELSE'% Term)? S? 'END'%
+Expression::= AndCondition (S? 'OR'% S AndCondition)*
+AndCondition::= Condition (S? 'AND'% S Condition)*
+Factor::= Term (S? ('*' | '/') S? Term)*
+Summand::= Factor (S? ('+' | '-') S? Factor)*
+Term::= Name (S? '.' S? Name){0, 2} | BindParameter | Value | Function
+   | Case | CaseWhen | '(' S? Operand S? ')' | RowValueConstructor
+Operand::= Summand (S? '|' S? '|' S? Summand)*
+Condition::= (Operand (
+   (Compare Operand)
+   | (S? 'NOT'% S?)? S? 'IN'% S? '(' S? Operand (Comma Operand)* S? ')'
+   | (S? 'NOT'% S?)? S? 'LIKE'% S? Operand
+   | (S? 'NOT'% S?)? S? 'BETWEEN'% S? Operand S? 'AND'% S? Operand
+   | S? 'IS'% S? ('NOT'% S?)? S? 'NULL')? )
+   | S? 'NOT'% S? Expression 
+   | S? '(' S? Expression S? ')'?
+Compare::= S? ('&lt;'S?'>' | '&lt;'S?'=' | '>'S?'=' | '=' | '&lt;' | '>' | '!'S?'=') S?
+TableExpressionItem ::= S? Name (S? '.' S? Name)? (S? 'AS'% S? Name)?
+TableExpression::= TableExpressionItem (Comma TableExpressionItem)*
+ColumnRef::= (Name S? '.' S?)? Name
+TableRef::= (Name S? '.' S?)? Name
+ColumnDef::= ColumnRef (S DataType)?
+   ((S? 'NOT'%)? S? 'NULL'%)? (S? 'PRIMARY'% S 'KEY'% (S? ('ASC'%|'DESC'%))?)?
+DataType::= 'BINARY'% S? '(' S? Numeric S? ')'
+   | 'CHAR'% S? '(' S? Numeric S? ')'
+   | 'VARCHAR'% S? '(' S? Numeric S? ')'
+   | 'BIGINT'% | 'DECIMAL'% | 'DATE'% | 'DOUBLE'% | 'FLOAT'% | 'INTEGER'%
+   | 'SMALLINT'% | 'TIME'% | 'TIMESTAMP'% | 'TINYINT'%
+   | 'UNSIGNED_DOUBLE'% | 'UNSIGNED_FLOAT'% | 'UNSIGNED_INT'% | 'UNSIGNED_LONG'%
+   | 'UNSIGNED_SMALLINT'% | 'UNSIGNED_TINYINT'% | 'VARBINARY'%
+Options::= (Name S? '.' S?)? Name S? '=' S? SplitPoint (Comma SplitPoint)*
+SplitPoint::= Value | BindParameter
+Function::= 'COUNT'% S? '(' S? ('DISTINCT'% S?)? ('*' | Term) S? ')'
+   | ('PERCENTILE_CONT'% | 'PERCENTILE_DISC'% | 'PERCENT_RANK '%) S?
+      '(' S? Numeric S? ')' S? 'WITHIN'% S 'GROUP'% S?
+      '(' S? 'ORDER'% S 'BY' S? Term S?
+      ('ASC%'|'DESC%') S? ')'
+   | ('CURRENT_DATE'% | 'CURRENT_TIME') S? '(' S? ')'%
+   | 'TO_NUMBER'% S? '(' ? Term (Comma String)? S? ')'
+   | 'COALESCE'% S? '(' ? Term (Comma Term)? S? ')'
+   | 'SUBSTR'% S? '(' ? Term (Comma Term){1, 2} S? ')'
+   | 'REGEXP_SUBSTR'% S? '(' ? Term Comma String (Comma Numeric)? S? ')'
+   | 'REGEXP_REPLACE'% S? '(' ? Term Comma String (Comma String)? S? ')'
+   | ('ROUND'% | 'TRUNC'%) S? '(' S?
+      "'" S? ('DAY'% | 'HOUR'% | 'MINUTE'% | 'SECOND'% | 'MILLISECOND'%) S? "'"
+      Comma Numeric S? ')'
+   | 'TO_CHAR'% S? '(' ? Term (Comma String)? S? ')'
+   | 'TO_DATE'% S? '(' ? Term (Comma String)? S? ')'
+   | ('AVG'% | 'MAX'% | 'MIN'% | 'SUM'% | 'STDDEV_POP'% | 'STDDEV_SAMP'%
+      | 'MD5'% | 'INVERT'% | 'TRIM'% | 'LTRIM'% | 'RTRIM'% | 'LENGTH'%
+      | 'UPPER'% | 'LOWER'% | 'REVERSE'% | 'TO_NUMBER'%)
+      S? '(' ? Term S? ')'
+ConstraintColumn::= 'PRIMARY'% S 'KEY'% S? '(' S? Name S? ('ASC'% | 'DESC'%)?
+   (Comma Name S? ('ASC'% | 'DESC'%)?)* S? ')'
+
+/**** Statements ****/
+AlterIndex::= 'ALTER'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S?
+   'ON'% S? TableRef S? ('DISABLE'% | 'REBUILD'% | 'UNUSABLE'% | 'USABLE'%)
+AlterTable::= 'ALTER'%S'TABLE'% S? TableRef (
+   (S 'ADD'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? ColumnDef (S? Options)?)
+   | (S 'DROP'% S 'COLUMN'% (S 'IF'% S 'EXISTS'%)? S? ColumnRef)
+   | (S 'SET'% S? Options) )
+Constraint::= 'CONSTRAINT'% S? Name S? 'PRIMARY'% S 'KEY'% S?
+   '(' S? Name S? (('ASC'%|'DESC'%) S?)? (Comma Name S? ('ASC'%|'DESC'%)?)* ')'
+Create::= 'CREATE'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'NOT'% S 'EXISTS'%)?
+    S? TableRef S? '(' S? CreateDef (Comma CreateDef)* S? ')' S?
+    Options? ('SPLIT'% S 'ON'% S? '(' S? SplitPoint (Comma SplitPoint)* S? ')')?
+CreateDef::= (('PRIMARY'% S 'KEY'% S?) | 'UNIQUE'%)?
+   S? '(' S? ColumnDef (Comma ColumnDef)* S? ')' S?
+   | 'FOREIGN'% S 'KEY' S? '(' S? ColumnDef (Comma ColumnDef)* S? ')' S?
+      (S? 'REFERENCES' S? ColumnRef S? '(' S? Name (Comma Name)*  S? ')')?
+   | ColumnDef
+CreateIndex::= 'CREATE'% S 'INDEX'% (S 'IF'% S 'NOT'% S 'EXISTS'%)? S? Name
+   S? 'ON'% S? TableRef S? '(' S? ColumnRef (S? ('ASC'% | 'DESC'%))?
+      (Comma ColumnRef (S? ('ASC'% | 'DESC'%)?))* S? ')'
+   (S? 'INCLUDE'% S?'(' S? ColumnRef (Comma ColumnRef)* S? ')')?
+   (S? Options? (S? 'SPLIT'%S'ON'% S?
+      '(' S? SplitPoint (Comma SplitPoint)* S?')')?)?
+Delete::= 'DELETE'% Hint? S? 'FROM'% S? TableExpression?
+   ( S? 'WHERE'% S? Expression )?
+   ( S? 'ORDER'% S 'BY'% S? Order (Comma Order)* )?
+   ( S? 'LIMIT'% S? (Numeric | BindParameter) )?
+DropIndex::= 'DROP'% S 'INDEX'% (S 'IF'% S 'EXISTS'%)? S? Name S? 'ON'% S? TableRef
+DropSchema::= 'DROP'% S 'SCHEMA'% (S ('IF'% S 'EXISTS'%))? S? TableRef (S? 'RESTRICT'%)?
+DropTable::= 'DROP'% S ('TABLE'% | 'VIEW'%) S? ('IF'% S 'EXISTS'%)? TableRef
+Explain::= 'EXPLAIN'% S? (Select | InsertSelect | Delete)
+InsertSelect::= ('UPSERT'% | 'INSERT'%) Hint? S? 'INTO'% S? TableExpression S?
+   ('(' S? (ColumnRef|ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
+   Select
+InsertValues::= ('UPSERT'% | 'INSERT'%) S 'INTO'% S? TableRef S?
+   ('(' S? (ColumnRef | ColumnDef) (Comma (ColumnRef|ColumnDef))* S? ')' S?)?
+   'VALUES'% S? '(' S? ('(' S? Select S?')'|Term) (Comma ('(' S? Select S?')'|Term))* S? ')'
+Select::= 'SELECT'% Hint? S? (('DISTINCT'% | 'ALL'%) S?)?
+   SelectExpression (Comma SelectExpression)*
+   S? 'FROM'% S? TableExpression S? ( '(' S? ColumnDef S? ')')?
+   (S? 'WHERE'% S? Expression)?
+   (S? 'GROUP'% S 'BY'% S? Expression (Comma Expression)*)?
+   (S? 'HAVING'% S? Expression)?
+   (S? 'ORDER'% S 'BY'% S? Order (Comma Order)* )?
+   (S? 'LIMIT'% S? (Numeric | BindParameter))?
+Update::= 'UPDATE'% S? ColumnRef S?
+  'SET'% S? Name '=' S? Value (Comma Name S? '=' S? Value)*
+   (S? 'WHERE'% S? Condition)?
+]]&gt;&lt;/xd:BNFGrammar>
+&lt;/xd:def></textarea>
+      </div>
+      <b>Input data</b>
+      <div class="B">
+        <div id="line-numbers_1"></div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;root>
+&lt;sql>SELECT * /* Comment */ FROM // Comment
+    test
+&lt;/sql>
+&lt;sql>SELECT a.* FROM test&lt;/sql>
+&lt;sql>SELECT /*+ SKIP_SC */ ALL AVG(c_n) FROM t_n&lt;/sql>
+&lt;sql>SELECT DISTINCT NAME FROM TEST&lt;/sql>
+&lt;sql>SELECT ID, COUNT(1) FROM TEST GROUP BY ID&lt;/sql>
+&lt;sql>SELECT NAME, SUM(VAL) FROM TEST GROUP BY NAME HAVING COUNT(1) > 2&lt;/sql>
+&lt;sql>SELECT 'ID', COL, MAX('ID') AS MAX FROM TEST&lt;/sql>
+&lt;sql>SELECT * FROM TEST LIMIT 1000&lt;/sql>
+&lt;sql>SELECT col3, col4 FROM test WHERE col5 > 100&lt;/sql>
+&lt;sql>INSERT INTO TEST VALUES('foo','bar',3)&lt;/sql>
+&lt;sql>INSERT INTO TEST(NAME, ID) VALUES('foo',123)&lt;/sql>
+&lt;sql>INSERT INTO foo SELECT * FROM bar&lt;/sql>
+&lt;sql>INSERT INTO table.targetTable(col1, col2) SELECT col3, col4
+    FROM table.sourceTable WHERE col5 > 100&lt;/sql>
+&lt;sql>DELETE FROM TEST&lt;/sql>
+&lt;sql>DELETE FROM TEST WHERE ID=123&lt;/sql>
+&lt;sql>DELETE FROM TEST WHERE NAME LIKE 'foo%'&lt;/sql>
+&lt;sql>CREATE TABLE my_schema.my_table ( id BIGINT PRIMARY KEY)&lt;/sql>
+&lt;sql>CREATE TABLE my_table ( id INTEGER not null primary key desc, date DATE not null,
+    m.db_utilization DECIMAL, i.db_utilization)
+    m.DATA_BLOCK_ENCODING='DIFF'&lt;/sql>
+&lt;sql>CREATE TABLE BOOKS.TITLE (IDTITLE INTEGER NOT NULL,
+    TITLE VARCHAR(100) NOT NULL,
+    ISSUED INTEGER,
+    ISBN VARCHAR(10) NOT NULL,
+    PRIMARY KEY(IDTITLE),
+    UNIQUE (TITLE, ISBN))
+&lt;/sql>
+&lt;sql>CREATE TABLE BOOKS.TITLE_AUTHOR (IDTITLE_AUTHOR INTEGER NOT NULL,
+   IDAUTHOR INTEGER NOT NULL,
+   IDTITLE INTEGER NOT NULL,
+   PRIMARY KEY(IDTITLE_AUTHOR),
+   UNIQUE (IDAUTHOR, IDTITLE),
+   FOREIGN KEY (IDAUTHOR) REFERENCES BOOKS.AUTHOR(IDAUTHOR),
+   FOREIGN KEY (IDTITLE) REFERENCES BOOKS.TITLE(IDTITLE))
+&lt;/sql>
+&lt;sql>CONSTRAINT my_pk PRIMARY KEY (host)&lt;/sql>
+&lt;sql>CONSTRAINT my_pk PRIMARY KEY (host ASC,created_date DESC)&lt;/sql>
+&lt;sql>DROP TABLE my_schema.my_table&lt;/sql>
+&lt;sql>DROP VIEW my_view&lt;/sql>
+&lt;sql>ALTER TABLE my_schema.my_table ADD d.dept_id char(10) VERSIONS=10&lt;/sql>
+&lt;sql>ALTER TABLE my_table ADD dept_name char(50)&lt;/sql>
+&lt;sql>ALTER TABLE my_table ADD parent_id char(15) null primary key&lt;/sql>
+&lt;sql>ALTER TABLE my_table DROP COLUMN d.dept_id&lt;/sql>
+&lt;sql>ALTER TABLE my_table DROP COLUMN dept_name&lt;/sql>
+&lt;sql>ALTER TABLE my_table DROP COLUMN parent_id&lt;/sql>
+&lt;sql>ALTER TABLE my_table SET IMMUTABLE_ROWS=true&lt;/sql>
+&lt;sql>CREATE INDEX my_idx ON sales.opportunity(last_updated_date DESC)&lt;/sql>
+&lt;sql>CREATE INDEX my_idx ON log.event(created_date DESC)
+   INCLUDE (name, payload) SALT_BUCKETS=10&lt;/sql>
+&lt;sql>CREATE INDEX IF NOT EXISTS my_comp_idx
+   ON server_metrics ( gc_time DESC, created_date DESC )&lt;/sql>
+&lt;sql>DROP INDEX my_idx ON sales.opportunity&lt;/sql>
+&lt;sql>DROP INDEX IF EXISTS my_idx ON server_metrics&lt;/sql>
+&lt;sql>ALTER INDEX my_idx ON sales.opportunity DISABLE&lt;/sql>
+&lt;sql>ALTER INDEX IF EXISTS my_idx ON server_metrics REBUILD&lt;/sql>
+&lt;sql>EXPLAIN SELECT NAME, COUNT(*)
+   FROM TEST GROUP BY NAME HAVING COUNT(*) > 2&lt;/sql>
+&lt;sql>EXPLAIN SELECT entity_id FROM CORE.CUSTOM_ENTITY_DATA
+   WHERE organization_id='00D300000000XHP' AND SUBSTR(entity_id,1,3) = '002'
+      AND created_date > CURRENT_DATE()-1
+&lt;/sql>
+&lt;sql>UPDATE Customers SET ContactName='Alfred Schmidt', City='Frankfurt'
+   WHERE CustomerID = 1
+&lt;/sql>
+&lt;/root></textarea>
+      </div>        
+      <input name="submit" value="Execute" type="submit"/>
+      <input name="view" value="Display result as html" type="submit"/>
+      <i>&nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b></i>
+      </div>
+    </form>
+  </body>
+</html>

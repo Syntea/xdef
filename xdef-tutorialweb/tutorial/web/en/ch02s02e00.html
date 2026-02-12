@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Example of namespace in X-definition" />
+    <meta name="keywords" content="example, XML namespace, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:23rem;max-height:23rem;display:flex;overflow:hidden;}</style>    
+    <style>.B{min-height:10rem;max-height:10rem;display:flex;overflow:hidden;}</style>
+    <title>Using namespaces</title>
+  </head>
+  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples">
+      <p style="font: Tahoma; font-size: 13px;">
+        Using namespace in X-definition. Note that the prefix "bk" is used in
+        the X-definition below. However, the prefix "books" is used in the input
+        data.Using namespace in X-definition. Note that the prefix "bk" is used
+        in the X-definition below. However, the prefix "books" is used in the
+        input data.
+      </p>
+      <b>X-definition</b><br/>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
+        xmlns:bk = "http://www.book.com"
+        xd:name = "Books" 
+        xd:root = "bk:Inventory" >
+				
+  &lt;bk:Inventory>
+     &lt;bk:book xd:script = "occurs *"
+              bk:ISBN="num(10);" >
+        &lt;bk:publisher> string();  &lt;/bk:publisher>
+        &lt;bk:year>      gYear();   &lt;/bk:year>
+        &lt;bk:price>     decimal(); &lt;/bk:price>
+        &lt;bk:author xd:script="occurs *"> string(); &lt;/bk:author>
+        &lt;bk:title>     string();  &lt;/bk:title>
+     &lt;/bk:book>    
+  &lt;/bk:Inventory>
+
+&lt;/xd:def>
+</textarea>
+      </div>
+      <b>Input data</b>
+      <div class="B">
+        <div id="line-numbers_1"></div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;books:Inventory xmlns:books = "http://www.book.com">
+   &lt;books:book books:ISBN = "0553380958">
+        &lt;books:publisher>Spectra&lt;/books:publisher>
+        &lt;books:year>1992&lt;/books:year>
+        &lt;books:price>14.95&lt;/books:price>
+        &lt;books:author>Neal Stephenson&lt;/books:author>
+        &lt;books:title>Snow Crash&lt;/books:title>
+  &lt;/books:book>
+&lt;/books:Inventory>
+</textarea>
+      </div>
+      <input name="submit" value="Execute" type="submit" />
+      <Font style="background-color: lightgrey">
+          <i>
+            &nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b>
+          </i>
+      </Font>
+    </form>
+  </body>
+</html>

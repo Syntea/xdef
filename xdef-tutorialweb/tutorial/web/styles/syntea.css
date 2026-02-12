@@ -1,0 +1,389 @@
+body {
+   text-align: left;
+   font-family: corbel, trebuchet , geneva , sans-serif;
+   /*Verdana, Geneva, Arial, Helvetica, sans-serif;*/
+   font-size:99.01%;
+   line-height: 1em;
+}
+
+/*
+set font size for all divs,
+this overrides some body rules
+*/
+div {
+   font-size:1em;
+}
+
+.table { width: 100%; }
+.bottom-l { width: 40%; float: left }
+.bottom-c { width: 20%; alignment-adjust: middle }
+.bottom-r { width: 40%; float: right }
+
+/*
+if img is inside "a" it would have 
+borders, we don\'t want that
+*/
+img {
+   border: 0;
+}
+
+/*default link styles*/
+/* set all links to have underline and bluish color */
+a, a:link 
+
+a:active {
+   text-decoration: underline;
+/* css validation will give a warning if color is set without background color. this will explicitly tell this element to inherit bg colour from parent element */
+   background-color: inherit; 
+   color: #ca0383;/*#18507C; */
+}
+
+a:visited {
+   text-decoration: underline;
+   background-color: inherit;
+   color: #ca0383;/*#18507C; a different color can be used for visited links */
+}
+
+/* remove underline on hover and change color */
+a:hover {
+   text-decoration: none;
+   background-color: #e0e0e0;/*#C3D4DF;*/
+   color: #000;/*#385C72;*/
+}
+
+/*background-color:#e0e0e0; color:#000*/
+body {
+   background-color: #fff; /*#ccc;*/
+   color: #333;
+   margin:0em;/*1em;*/    /* gives some air for the pagewrapper */
+}
+
+/* center wrapper, min max width */
+div#body {
+   border: 0px solid black;
+   margin: 0 auto;       /* this centers wrapper */
+   max-width: 65em;/*85em;*/   /* IE wont understand these, so we will use javascript magick */
+   min-width: 60em;
+   background-color: #fff;;
+   color: black;
+}
+
+div#header {
+   height: 230px; /*80px; */   /* adjust according your image size */
+   background: #fff; /*#385C72;  */
+/*moj doplnok*/
+    display:block;
+    position:relative;
+    top:1.2em; left:0;
+/*--*/
+}
+
+div#header h1 a {
+/* you can set your own image here */
+   background:  url("/tutorial/back_top.jpg") no-repeat 0 10px ;
+   display: block;
+   height: 230px;             /* adjust according your image size */
+   text-indent: -999em;  /* this hides the text */
+   text-decoration:none; /* old firefox would have shown underline for the link, this explicitly hides it */
+}
+
+div.breadcrumbs {
+   padding: 1em 0em 0.8em 0; /* CSS short hand rule first value is top then right, bottom and left */
+   font-size: 90%;        /* its good to set fontsizes to be relative, this way viewer can change his/her fontsize */
+   margin: 0.4em 1em 0 1em;        /* css shorthand rule will be opened to be "0 1em 0 1em" */
+   /*border-bottom: 1px dotted #000;*/
+}
+
+div.breadcrumbs a, div.breadcrumbs a:link {
+   border:0 !important;  
+   color:#808080 !important; 
+   text-decoration:underline;
+}
+
+div.breadcrumbs a:hover {
+   color:#404040 !important;
+   background: transparent;
+}
+
+div.breadcrumbs span.lastitem { 
+   font-weight:bold; 
+} 
+
+div#content {
+   margin: 1.5em auto 2em 0;   /* some air above and under menu and content */
+}
+
+div#main {
+   margin-left:28%; /*29%;*/ /* this will give room for sidebar to be on the left side, make sure this space is bigger than sidebar width */
+   margin-right: 2%; /* and some air on the right */
+}
+
+div#sidebar {
+   float: left;        /* set sidebar on the left side. Change to right to float it right instead. */
+   width: 25%;/*26%;*/     /* sidebar width, if you change this please also change #main margins */
+   display: inline;  /* FIX IE double margin bug */
+   margin-left: 0;
+}
+
+div#footer {
+   clear: both;       /* keep footer below content and menu */
+   color: #fff;
+   background-color: #fff;/*#385C72; *//* same bg color as in header */
+}
+
+div#footer p {
+   font-size: 0.8em;
+   padding: 1.5em;       /* some air for footer */
+   text-align: center;  /* centered text */
+   margin: 0;
+}
+
+div#footer p a {
+   color: #fff; /* needed becouse footer link would be same color as background otherwise */
+}
+
+/* as we hid all hr for accessibility we create new hr with extra div element */
+div.hr {
+   height: 1px;
+   padding: 1em;
+   border-bottom: 1px dotted black;
+   margin: 1em;
+}
+
+/* relational links under content */
+div.left49 {
+  width: 49%; /* 50% for both left and right might lead to rounding error on some browser */
+}
+div.right49 {
+  float: right;
+  width: 49%;
+  text-align: right;
+}
+
+/********************
+CONTENT STYLING
+*********************/
+div#content {
+}
+
+/* HEADINGS */
+div#content h1 {
+   font-size: 2em; /* font size for h1 */
+   line-height: 1em;
+   margin: 0;
+}
+
+div#content h2 {
+	color: #ca0383;/*#294B5F;*/ 
+	font-size: 1.5em; 
+	text-align: left; 
+/* some air around the text */
+	padding-left: 0em;
+	padding-bottom: 1px;
+/* set borders around header */
+	border-bottom: 0px solid #ca0383;/*#e7ab0b;*/ 
+	border-left: 0em solid #ca0383;/*#e7ab0b;*/ 
+    line-height: 1.5em;
+/* and some air under the border */
+    margin: 0 0 0.5em 0;
+}
+
+div#content h3 {
+   color: #ca0383;/*#294B5F;*/ 
+   font-size: 1.3em;
+   line-height: 1.3em;
+   margin: 0 0 0.5em 0;
+}
+
+div#content h4 {
+   color: #ca0383;/*#294B5F;*/ 
+   font-size: 1.2em;
+   line-height: 1.3em;
+   margin: 0 0 0.25em 0;
+}
+
+div#content h5 {
+   color: #ca0383;/*#294B5F;*/ 
+   font-size: 1.1em;
+   line-height: 1.3em;
+   margin: 0 0 0.25em 0;
+}
+
+h6 {
+   color: #ca0383;/*#294B5F;*/ 
+   font-size: 1em;
+   line-height: 1.3em;
+   margin: 0 0 0.25em 0;
+}
+/* END HEADINGS */
+
+/* TEXT */
+p {
+   font-size: 1em;
+   margin: 0 0 1.5em 0; /* some air around p elements */
+   line-height: 1.4em;
+   padding: 0;
+}
+
+blockquote {
+   border-left: 10px solid #ddd;
+   margin-left: 10px;
+}
+
+strong, b {
+/* explicit setting for these */
+   font-weight: bold;
+}
+
+em, i {
+/* explicit setting for these */
+   font-style:italic;
+}
+
+/* Wrapping text in <code> tags. Makes CSS not validate */
+code, pre {
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1em;
+}
+
+pre {
+   border: 1px solid #000;  /* black border for pre blocks */
+   background-color: #ddd;
+   margin: 0 1em 1em 1em;
+   padding: 0.5em;
+   line-height: 1.5em;
+   font-size: 90%;
+}
+
+/* Separating the divs on the template explanation page, with some bottom-border */
+div.templatecode {
+  margin: 0 0 2.5em;
+}
+/* END TEXT */
+
+/* LISTS */
+/* lists in content need some margins to look nice */
+div#main ul,
+div#main ol,
+div#main dl {
+   font-size: 1.0em;
+   line-height: 1.4em;
+   margin: 0 0 1.5em 0;
+}
+
+div#main ul li,
+div#main ol li {
+   margin: 0 0 0.25em 3em;
+}
+
+/* definition lists topics on bold */
+
+div#main dl dt {
+   font-weight: bold;
+   margin: 0 0 0 1em;
+}
+
+div#main dl dd {
+   margin: 0 0 1em 1em;
+}
+
+div#main dl {
+  margin-bottom: 2em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #c0c0c0;
+}
+/* END LISTS */
+
+/*INE*/
+/* position for the search box */
+div#search {
+   /*float: right;*/
+   display:block;
+   width: 27em;    /* enough width for the search input box */
+   text-align: right;
+   padding: 0.6em 0 0.2em 0;
+   margin: 0 1em;
+/*moj doplnok*/
+   position:relative; top:9.4em;left:34em;
+   z-index:10;
+/*--*/
+}
+
+.slogan{
+   display:block;
+   position:relative;
+   top:-3.7em;/*-5.1em;*/
+   left:1.4em;
+   background: transparent;
+   color:#fff;
+   font-size: 1.7em;
+   font-weight:bold;
+}
+
+.logo{
+   display:block;
+   position:absolute;
+   background: transparent  url(/tutorial/logo.gif) no-repeat 0 0;
+   width: 120px;
+   height: 120px;
+   margin-left: 2em;
+   top:-3.3em;
+   /*left:20px;*/
+}
+
+#zahlavi {
+   display:block;
+   position:absolute;
+   /*position:relative;*/
+   width:45em;
+   top: 1em;/*-16.4em;*/
+   left: 27em;
+   z-index:10;
+}
+/*end INE*/
+
+#zahlavi p {
+   font-size:  0.9em;
+   margin-bottom: 10px;
+}
+
+#zahlavi span {color:#ca0383;}
+#zahlavi a{color:#000;text-decoration:none;font-size: 10pt;} /*0.9em;} */
+#zahlavi a:hover{background-color: #fff;color:#ca0383;}
+#zahlavi a.active {text-decoration:underline;}
+
+.blok{
+   float:right;
+   cursor:hand;
+   margin: 5px 0px 5px 10px;
+}
+
+#footer {clear:both; margin-top:40px; padding-bottom:50px; font-size:1em;color:#ca0383;}
+#footer .f-left, #footer .f-left a, #footer .f-right span {color:#ca0383;}
+#footer .f-left span {color:#000;}
+#footer .f-right a {color:#000;}
+#footer .f-right a:hover {color:#ca0383;background-color:transparent ;}
+
+.box {min-height:1px;}
+
+.box:after {display:block; visibility:hidden; clear:both; line-height:0; font-size:0; content:".";}
+
+.f-left {float:left !important;}
+
+.f-right {float:right !important;}
+
+#kontakt span {margin:0 3px; color:#ca0383;}
+
+.panthaRhei {color:#ca0383;}
+
+div.navheader {
+}
+
+div#content {
+}
+/* End of \'Layout: Left sidebar + 1 column\' */
