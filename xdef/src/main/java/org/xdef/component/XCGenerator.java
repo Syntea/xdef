@@ -137,14 +137,11 @@ final class XCGenerator extends XCGeneratorXON {
 							extClazz = " extends " + name.substring(ndx+7) + extClazz;
 							//In command "%class &{0}" is missing parameter "extends". In command
 							// "%bind &{2}" is parameter "%with &{1}"
-							_reporter.error(XDEF.XDEF375,
-								className, name.substring(ndx+7), name.substring(0, ndx));
+							_reporter.error(XDEF.XDEF375, className, name.substring(ndx+7), name.substring(0, ndx));
 							name = name.substring(0, ndx);
 						} else {
-							//Class &{0} is not root. It can't be extended to &{1} according to command
-							// %bind &{2}
-							_reporter.error(XDEF.XDEF376,
-								className, name.substring(ndx+7), name.substring(0, ndx));
+							//Class &{0} is not root. It can't be extended to &{1} according to command %bind &{2}
+							_reporter.error(XDEF.XDEF376, className, name.substring(ndx+7), name.substring(0, ndx));
 						}
 					}
 				}
@@ -255,8 +252,8 @@ final class XCGenerator extends XCGeneratorXON {
 								if (isRoot) {
 									ext = true;
 									extClazz = " extends " + name.substring(ndx+7) + extClazz;
-									//"In command "%class &{0}" is missing parameter "extends".
-									//In command "%bind &{2}" is parameter "%with &{1}!
+									//"In command "%class &{0}" is missing parameter "extends". In command "%bind &{2}"
+									// is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
@@ -294,8 +291,7 @@ final class XCGenerator extends XCGeneratorXON {
 						(groupMax == 1 ? "1" : "2") + "," + getParsedResultGetter(xdata) + ";" + name);
 					if (isRoot && nodes.length==1 && xe.getAttrs().length==0) {
 						 // no attrs,only text; direct getters/setters for text child
-						genDirectSetterAndGetter(xe,
-							xmlToJavaName(xe.getName()), null, true, setters, getters, sbi);
+						genDirectSetterAndGetter(xe, xmlToJavaName(xe.getName()), null, true, setters, getters, sbi);
 					}
 					continue;
 				}
@@ -328,8 +324,7 @@ final class XCGenerator extends XCGeneratorXON {
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
 								} else {
-									//Class &{0} is not root. It can't extend to &{1} according to command
-									//%bind &{2}
+									//Class &{0} is not root. It can't extend to &{1} according to command %bind &{2}
 									_reporter.error(XDEF.XDEF376,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 								}
@@ -339,9 +334,9 @@ final class XCGenerator extends XCGeneratorXON {
 					} else {
 						newClassName = name = xmlToJavaName(xe1.getName());
 					}
-					//if this element is not processed by user XComponent and if it is unique and if the only
-					// child node of this node is text node and if it has no attributes then process
-					//it is processed same way as an attribute of parent class.
+					//if this element is not processed by user XComponent and if it is unique and if the only child node
+					// of this node is text node and if it has no attributes then process it is processed same way
+					// as an attribute of parent class.
 					final String xcClass0 = isRecurseRef ? name : getXDPosition(xe1, interfcName.length()>0);
 					String xcClass = xcClass0;
 					if (xcClass0 != null) {
@@ -376,8 +371,7 @@ final class XCGenerator extends XCGeneratorXON {
 					iname = getUniqueName(iname, varNames);
 					if (!name.equals(iname)) {
 						if (ext) {
-							//Getter/setter name &{0} in &{1} can't be used.
-							// Please change name by command %bind
+							//Getter/setter name &{0} in &{1} can't be used. Please change name by command %bind
 							_reporter.error(XDEF.XDEF371, name, node.getXDPosition());
 						} else {
 							//Getter/setter name &{0} in &{1} was changed to &{2}.
@@ -389,8 +383,7 @@ final class XCGenerator extends XCGeneratorXON {
 					String typeName;
 					if (xcClass != null) {
 						typeName = xcClass;
-						if ((ndx = xcClass.lastIndexOf('.')) > 0
-							&& (xcClass.substring(ndx + 1)).equals(className)) {
+						if ((ndx = xcClass.lastIndexOf('.')) > 0 && (xcClass.substring(ndx + 1)).equals(className)) {
 							typeName = xcClass.substring(ndx + 1);
 						}
 					} else {
@@ -420,8 +413,7 @@ final class XCGenerator extends XCGeneratorXON {
 							genDirectSetterAndGetter(xe1, iname, typeName, false, setters, getters, sbi);
 						}
 						if (groupKind != XMCHOICE){
-							genChildElementGetterSetter(xe1,
-								typeName, iname, max, "element", getters, setters, sbi,"");
+							genChildElementGetterSetter(xe1, typeName, iname, max, "element", getters, setters, sbi,"");
 						}
 					}
 					genChildElementCreator(iname,  listNodes, max > 1);
@@ -429,7 +421,7 @@ final class XCGenerator extends XCGeneratorXON {
 						if (XON_NS_URI_W.equals(xe1.getNSUri())) {
 							if (groupKind != XMCHOICE) {
 								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
-									genXonItemGetterAndSetter(xe1,
+									genXonItemGetterAndSetter(xe1, 
 										typeName, iname, max, setters, getters, sbi, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
 									genXonEntryMethod(xe1, typeName, iname, max, getters, sbi, varNames);
@@ -437,8 +429,7 @@ final class XCGenerator extends XCGeneratorXON {
 							}
 						} else { // XON map items
 							if (groupKind != XMCHOICE) {
-								genXonItemGetterAndSetter(xe1,
-									typeName, iname, max, setters, getters, sbi, varNames);
+								genXonItemGetterAndSetter(xe1, typeName, iname, max, setters, getters, sbi, varNames);
 							}
 						}
 					}
@@ -475,23 +466,6 @@ final class XCGenerator extends XCGeneratorXON {
 		if (clazz.isEmpty()) {
 			return null;
 		}
-//		if (xe.isReference()) { //XXXX
-//			XComponentInfo x = _components.get(xe.getReferencePos());
-//			String xpos = x != null ? x.getName() : null;
-//			if (xpos != null && xpos.startsWith("interface ")) {
-//				xpos = xpos.substring(10);
-//				if (!xpos.equals(interfcName)) {
-//					ndx = extClazz.indexOf("implements ");
-//					if (ndx >= 0) {
-//						if (!extClazz.contains(xpos)) {
-//							extClazz = extClazz.substring(0, ndx+11)+ xpos +","+ extClazz.substring(ndx+11);
-//						}
-//					} else {
-//						extClazz += " implements " + xpos;
-//					}
-//				}
-//			}
-//		}
 		_interfaces = sbi;
 		// generate Java source
 		return genSource(xe,
