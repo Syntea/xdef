@@ -974,7 +974,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
 				SBuffer s = _scriptCompiler.compileGroupScript(newNode);
 				if (s != null) {
-					if (ref != null) {						
+					if (ref != null) {
 						error(ref, XDEF.XDEF117);//Reference can't be specified both in attributes 'ref' and 'script'
 					}
 					ref = s;
@@ -1346,7 +1346,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					break;
 				case "any":
 					newNode = new XElement("$any", null, xdef);
-					_scriptCompiler._g._varBlock = 
+					_scriptCompiler._g._varBlock =
 						new XVariableTable(_scriptCompiler._g._varBlock, ((XElement)newNode).getSqId());
 					((XElement) newNode).setSPosition(copySPosition(pn._name));
 					if (level == 1) {
@@ -1380,7 +1380,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		} else {
 			XElement x = new XElement(xchildName, pn._nsURI, xdef);
 			newNode = x;
-			_scriptCompiler._g._varBlock = 
+			_scriptCompiler._g._varBlock =
 				new XVariableTable(_scriptCompiler._g._varBlock, ((XElement)newNode).getSqId());
 			x.setSPosition(copySPosition(pn._name));
 			if (parentKind != XMDEFINITION) {

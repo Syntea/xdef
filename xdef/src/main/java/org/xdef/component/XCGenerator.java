@@ -421,7 +421,7 @@ final class XCGenerator extends XCGeneratorXON {
 						if (XON_NS_URI_W.equals(xe1.getNSUri())) {
 							if (groupKind != XMCHOICE) {
 								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
-									genXonItemGetterAndSetter(xe1, 
+									genXonItemGetterAndSetter(xe1,
 										typeName, iname, max, setters, getters, sbi, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
 									genXonEntryMethod(xe1, typeName, iname, max, getters, sbi, varNames);
