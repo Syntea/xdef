@@ -21,14 +21,13 @@ import org.xdef.sys.ReportWriter;
 import javax.xml.namespace.QName;
 import org.xdef.impl.XDefinition;
 
-/** Provides processing of given X-definition. For processing of X-definition you must create and instance
- * of XDDocument created from XDPool with given X-definition in which is defined root (starting point)
- * for next processing. Before starting of process you can set parameters of processing (variables,
- * properties, standard input and output streams, user objects). The document can be used for validation and
- * processing of the input XML data ("xparse" methods) or for construction of a XML object (methods
- * "xcreate"). Note that XDDocument is the root node of processing and it is the extension of the interface
- * {@link org.xdef.proc.XXNode}. You can read of or set to variables of a XDPool by methods of
- * {@link org.xdef.proc.XXNode}:
+/** Provides processing of given X-definition. For processing of X-definition you must create and instance of XDDocument
+ * created from XDPool with given X-definition in which is defined root (starting point) for next processing.
+ * Before starting of process you can set parameters of processing (variables,properties, standard input and output
+ * streams, user objects). The document can be used for validation and processing of the input XML data ("xparse"
+ * methods) or for construction of a XML object (methods "xcreate"). Note that XDDocument is the root node of processing
+ * and it is the extension of the interface {@link org.xdef.proc.XXNode}. You can read of or set to variables of
+ * an XDPool by methods of {@link org.xdef.proc.XXNode}:
  * <p>{@link org.xdef.proc.XXNode#getVariable(String)},
  * {@link org.xdef.proc.XXNode#setVariable(String, Object)},
  * {@link org.xdef.proc.XXNode#setUserObject(Object)},
@@ -185,16 +184,16 @@ public interface XDDocument extends XXNode {
 	/** Create root check element with namespace with given name.
 	 * @param nsURI Namespace URI of the element.
 	 * @param qname Qualified name of the element.
-	 * @param checkRoot If value of this argument is true then the root element is checked* against the root
-	 * list, otherwise it is found as XElement on the base level.
+	 * @param checkRoot If value of this argument is true then the root element is checked* against the root list,
+	 * otherwise it is found as XElement on the base level.
 	 * @return ChkElement object.
 	 */
 	public XXElement prepareRootXXElementNS(String nsURI, String qname, boolean checkRoot);
 
 	/** Create root check element with given name.
 	 * @param name Tag name of the root element.
-	 * @param checkRoot If value of this argument is true then the root element is checked against the root
-	 * list, otherwise it is found as XElement on the base level.
+	 * @param checkRoot If value of this argument is true then the root element is checked against the root list,
+	 * otherwise it is found as XElement on the base level.
 	 * @return ChkElement object.
 	 */
 	public XXElement prepareRootXXElement(String name, boolean checkRoot);
@@ -210,8 +209,8 @@ public interface XDDocument extends XXNode {
 	 */
 	public String getImplProperty(String name);
 
-	/** Check value of datetime. Check if the year of date in the interval (YEAR_MIN .. YEAR_MAX) or the value
-	 * of date is one of UNDEF_YEAR[] values.
+	/** Check value of datetime. Check if the year of date in the interval (YEAR_MIN .. YEAR_MAX) or the value of date
+	 * is one of UNDEF_YEAR[] values.
 	 * @param date value to be checked.
 	 * @return true if date is legal.
 	 */
@@ -258,8 +257,7 @@ public interface XDDocument extends XXNode {
 	public void printReports(PrintStream out);
 
 	/** Get actual source language used for lexicon.
-	 * @return string with actual language or return null if lexicon is not specified  or if language is
-	 * not specified.
+	 * @return string with actual language or return null if lexicon is not specified  or if language is not specified.
 	 */
 	public String getLexiconLanguage();
 
@@ -277,10 +275,8 @@ public interface XDDocument extends XXNode {
 	 * @return element converted to the destination language.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public Element xtranslate(String elem,
-		String sourceLanguage,
-		String destLanguage,
-		ReportWriter reporter) throws SRuntimeException;
+	public Element xtranslate(String elem, String sourceLanguage, String destLanguage, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Translate the input element from the source language to the destination language according to lexicon.
 	 * @param elem the element in the source language.
@@ -290,10 +286,8 @@ public interface XDDocument extends XXNode {
 	 * @return element converted to the destination language.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public Element xtranslate(Element elem,
-		String sourceLanguage,
-		String destLanguage,
-		ReportWriter reporter) throws SRuntimeException;
+	public Element xtranslate(Element elem, String sourceLanguage, String destLanguage, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse a string with a type declared in X-definition.
 	 * @param typeName name of type in X-definition.
@@ -329,11 +323,8 @@ public interface XDDocument extends XXNode {
 	 * @return List with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public List<Object> cparse(Reader data,
-		char separator,
-		boolean skipHeader,
-		String sourceId,
-		ReportWriter reporter) throws SRuntimeException;
+	public List<Object> cparse(Reader data, char separator, boolean skipHeader, String sourceId, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data string with INI/Propertie data or pathname or file or a stream INI/Propertie source data.
@@ -350,8 +341,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent iparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent iparseXComponent(Object data, Class<?> xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source INI/Properties and return XComponent as result.
 	 * @param ini string with pathname of INI/Properties file or INI/Properties source data.
@@ -387,8 +377,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with created data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent jcreateXComponent(String name, Class xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent jcreateXComponent(String name, Class xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process XON/JSON data and return processed XON object.
 	 * @param data string with JSON/XON data or pathname or file or a stream JSON/XON source data.
@@ -405,8 +394,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent jparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent jparseXComponent(Object data, Class<?> xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source JSON/XON and return XComponent as result.
 	 * @param data string with pathname of XON/JSON source data.
@@ -478,8 +466,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent xparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent xparseXComponent(Object data, Class<?> xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
 	 * @param data string with pathname of XML file or a stream with XML source data.
@@ -512,8 +499,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with created data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent xcreateXComponent(String name, Class xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent xcreateXComponent(String name, Class xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create mode - create XComponent according to the X-definition model.
 	 * @param qname the QName of model of required element.
@@ -522,8 +508,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with created data.
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error was reported.
 	 */
-	public XComponent xcreateXComponent(QName qname, Class xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent xcreateXComponent(QName qname, Class xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create XAML according to the X-definition XON model.
 	 * @param name name of XON model.
@@ -548,8 +533,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent yparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent yparseXComponent(Object data, Class<?> xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source YAML and return XComponent as result.
 	 * @param data string with pathname of YAML file or YAML source data.
@@ -585,8 +569,7 @@ public interface XDDocument extends XXNode {
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	@Deprecated
-	public XComponent parseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
-		throws SRuntimeException;
+	public XComponent parseXComponent(Object data, Class<?> xClass, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
 	 * @deprecated please use xparseXComponent instead

@@ -96,7 +96,7 @@ public interface XDParser extends XDValue {
 	 */
 	public void check(XXNode xnode, XDParseResult p);
 
-	/** Parse source and create XDParseResult object. Does not skip white spaces after parsing and does
+	/** Parse source and create XDParseResult object. Does not skip white spaces after parsing and do
 	 * not execute final check.
 	 * @param p Parse result containing the position of the source.
 	 * @param xnode actual XXNode object or null.
@@ -137,9 +137,8 @@ public interface XDParser extends XDValue {
 	 */
 	public short parsedType();
 
-	/** *  In union, list, sequence and other complex types if arsed result type of all items is equal,
-	 * the result is the type of items, if not, it is XD_ANY (Object).For other parse methods it is result
-	 * of parsedType().
+	/** *  In union, list, sequence and other complex types if arsed result type of all items is equal, the result is
+	 * the type of items, if not, it is XD_ANY (Object).For other parse methods it is result of parsedType().
 	 * @return result type of parsed item.
 	 */
 	public short getAlltemsType();

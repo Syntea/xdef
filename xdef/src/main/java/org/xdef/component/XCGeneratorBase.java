@@ -195,8 +195,8 @@ class XCGeneratorBase {
 	 */
 	final static String modify(final String origin, final String... replace) {
 		if (replace.length % 2 != 0) {
-			throw new SIllegalArgumentException(SYS.SYS066,  //Internal error&{0}{: }
-				"Length of array of keys and replacemetns differs");
+			 //Internal error&{0}{: }
+			throw new SIllegalArgumentException(SYS.SYS066, "Length of array of keys and replacemetns differs");
 		}
 		String result = origin;
 		for (int i = 0; i < replace.length; i+=2) {
@@ -653,22 +653,21 @@ class XCGeneratorBase {
 				x = LN +
 "\t\tif (x!=null) {"+LN +
 "\t\t\t\tif (x.xGetXPos()==null)"+LN +
-"\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
-				+ (modelURI != null ? '"' + modelURI + '"' : "null") + ", \"" + modelXDPos + "\");"+LN
-				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+'\t';
+"\t\t\t\t\tx.xInit(this, \""+modelName+"\", " +
+	(modelURI != null ? '"' + modelURI + '"' : "null") + ", \"" + modelXDPos + "\");"+LN+
+"\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+'\t';
 			} else {
 				x = LN+"\t\tif (x!=null) _&{name}.add(x);"+LN+'\t';
 			}
 		} else {
 			if (modelName != null) {
-				x = LN + (clearChoice.isEmpty() ? "" : clearChoice + LN) +
-"\t\tif (x!=null && x.xGetXPos() == null)"+LN +
-"\t\t\tx.xInit(this, \""+modelName+"\", " + (modelURI != null ? '"' + modelURI + '"' : "null")
-				+ ", \"" + modelXDPos + "\");"+LN
-				+ "\t\t_&{name}=x;"+LN+"\t";
+				x = LN + (clearChoice.isEmpty() ? "" : clearChoice + LN)+
+"\t\tif (x!=null && x.xGetXPos() == null)"+LN+
+"\t\t\tx.xInit(this, \""+modelName+"\", " + (modelURI != null ? '"' + modelURI + '"' : "null") +
+	", \"" + modelXDPos + "\");"+LN+
+"\t\t_&{name}=x;"+LN+"\t";
 			} else {
-				x = (clearChoice.isEmpty() ? "_&{name}=x;"
-					: (LN + clearChoice + LN+"\t\t_&{name}=x;"+LN + "\t"));
+				x = (clearChoice.isEmpty() ? "_&{name}=x;" : (LN + clearChoice + LN+"\t\t_&{name}=x;"+LN + "\t"));
 			}
 		}
 		if (sbi != null) {
@@ -874,12 +873,10 @@ class XCGeneratorBase {
 	 * @param max of occurrences (in sequences).
 	 * @param sb String builder where code is generated.
 	 */
-	final void genTextNodeCreator(final XMData xdata,
-		final String name, final int max,
-		final StringBuilder sb) {
+	final void genTextNodeCreator(final XMData xdata, final String name, final int max, final StringBuilder sb) {
 		if (sb.length() == 0) {
-			sb.append("java.util.List<org.xdef.component.XComponent> a=");
-			sb.append("new java.util.ArrayList<>();").append(LN);
+			sb.append("java.util.List<org.xdef.component.XComponent> a=")
+				.append("new java.util.ArrayList<>();").append(LN);
 		}
 		String x;
 		final String y = max > 1? ".get(i)" : "";
@@ -907,8 +904,7 @@ class XCGeneratorBase {
 				break;
 			}
 			case XD_BYTES:
-				x = ("base64Binary".equals(xdata.getParserName())
-					? "encodeBase64(" : "encodeHex(") + z + y + ")";
+				x = ("base64Binary".equals(xdata.getParserName()) ? "encodeBase64(" : "encodeHex(") + z + y + ")";
 				break;
 			case XD_NULL: x = "\"null\""; break; //jnull
 			case XD_ANY: //jvalue
@@ -1056,15 +1052,13 @@ class XCGeneratorBase {
 
 	/** Return correct name of inner class in the X-component.
 	 * @param className the class name to be corrected.
-	 * @param classNameBase base to chich tne new inner class is added.
+	 * @param classBase base to chich tne new inner class is added.
 	 * @param classNames set with class names.
 	 * @return correct class name.
 	 */
-	final static String correctClassName(final String className,
-		final String classNameBase,
-		final Set<String> classNames) {
-		int ndx = classNameBase.lastIndexOf('.');
-		String s = ndx >= 0 ? classNameBase.substring(ndx + 1) : classNameBase;
+	final static String correctClassName(final String className, final String classBase, final Set<String> classNames) {
+		int ndx = classBase.lastIndexOf('.');
+		String s = ndx >= 0 ? classBase.substring(ndx + 1) : classBase;
 		String[] ss = s.split("#");
 		String t = className;
 		int x = 0;
@@ -1094,10 +1088,7 @@ class XCGeneratorBase {
 	 * @param ext it it is external name.
 	 * @return the unique name.
 	 */
-	final String addVarName(final Set<String> varNames,
-		final String name,
-		final String xPos,
-		final boolean ext) {
+	final String addVarName(final Set<String> varNames, final String name, final String xPos, final boolean ext) {
 		String iname = getUniqueName(name, varNames); //get unique variable name
 		varNames.add(iname);
 		if (iname.equals(name)) {

@@ -9,8 +9,8 @@ import org.xdef.sys.SRuntimeException;
  */
 public interface XDResultSet extends XDValue {
 
-	/** Get next item of this iterator or null. If the object has to be closed then if no more values are
-	 * available the close() method must be invoked.
+	/** Get next item of this iterator or null. If the object has to be closed then if no more values are available
+	 * the close() method must be invoked.
 	 * @param xnode XXnode from which this method was called (may be null).
 	 * @return the next value of this iterator or return null.
 	 * @throws SRuntimeException id an error occurs.
@@ -42,8 +42,7 @@ public interface XDResultSet extends XDValue {
 	 */
 	public int getCount();
 
-	/** Return value of iterated object as string if it has a string value (text of element),
-	 * otherwise return null.
+	/** Return value of iterated object as string if it has a string value (text of element), otherwise return null.
 	 * @return value of iterated object as string or return null.
 	 */
 	public String itemAsString();

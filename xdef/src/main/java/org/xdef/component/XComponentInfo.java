@@ -17,7 +17,7 @@ final class XComponentInfo {
 	 * @param name name of XComponent model.
 	 * @param ns namespace URI of XComponent model.
 	 */
-	XComponentInfo(final String name,final String ns){_name = name;_ns = ns;}
+	XComponentInfo(final String name, final String ns){_name = name;_ns = ns;}
 
 	/** Get name of XComponent model.
 	 * @return name of XComponent model.

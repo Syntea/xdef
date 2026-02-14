@@ -31,8 +31,8 @@ public final class XDRegex extends XDValueAbstract {
 
 	/** Creates new instance of XDRegex.
 	 * @param s The string with regular expression source.
-	 * @param mode if true, then it is a regular expression in XML Schema (XSD) format, otherwise it is
-	 * a regular expression in Java format.
+	 * @param mode if true, then it is a regular expression in XML Schema (XSD) format, otherwise it is regular
+	 * expression in Java format.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public XDRegex(final String s, final boolean mode) {
@@ -105,6 +105,7 @@ public final class XDRegex extends XDValueAbstract {
 	public final String stringValue() {return _source;}
 
 	/** Check whether some other XDValue object is "equal to" this one.
+	 * @param arg argument to bo compared.
 	 * @return true if and only if the argument is equal to this one.
 	 */
 	@Override
@@ -344,8 +345,7 @@ public final class XDRegex extends XDValueAbstract {
 					_result.append(')');
 					return true;
 				}
-				//regex: expected "&{0}" near position &{1}
-				throw new SRuntimeException(XDEF654, ")", getIndex());
+				throw new SRuntimeException(XDEF654, ")", getIndex());//regex: expected "&{0}" near position &{1}
 			}
 			return false;
 		}
@@ -370,8 +370,7 @@ public final class XDRegex extends XDValueAbstract {
 						if (isInteger()) {
 							int j = getParsedInt();
 							if (i > j) {
-								//Regex: lower bound of quantifier is greater than upper bound near
-								// position &{0}
+								//Regex: lower bound of quantifier is greater than upper bound near position &{0}
 								throw new SRuntimeException(XDEF658, pos);
 							}
 						}
@@ -383,8 +382,7 @@ public final class XDRegex extends XDValueAbstract {
 					_result.append(getBufferPart(pos, getIndex()));
 					return true;
 				} else {
-					//Regex: expected a digit near position &{0}
-					throw new SRuntimeException(XDEF655, getIndex());
+					throw new SRuntimeException(XDEF655, getIndex());//Regex: expected a digit near position &{0}
 				}
 			}
 			return false;
@@ -440,9 +438,7 @@ public final class XDRegex extends XDValueAbstract {
 		/** charClass::= singleCharEsc|charClassEsc|charClassExpr|wildcardEsc
 .		 * @return true if a charclass parsed.
 		 */
-		private boolean charClass() {
-			return singleCharEsc() || charClassEsc() || charClassExpr() || wildcardEsc();
-		}
+		private boolean charClass() {return singleCharEsc() || charClassEsc() || charClassExpr() || wildcardEsc();}
 
 		/** charClassEsc::= ( multiCharEsc | catEsc | complEsc )
 		 * 	multiCharEsc::= '\' [sSiIcCdDwW]
@@ -472,8 +468,7 @@ public final class XDRegex extends XDValueAbstract {
 			}
 			if (escChar == 'p' || escChar == 'P') {
 				if (!isChar('{')) {
-					//regex: expected "&{0}" near position &{1}
-					throw new SRuntimeException(XDEF654, '{', getIndex());
+					throw new SRuntimeException(XDEF654, '{', getIndex());//regex: expected "&{0}" near position &{1}
 				}
 				char c = isLetter();
 				if (c == NOCHAR) {
@@ -491,16 +486,14 @@ public final class XDRegex extends XDValueAbstract {
 					}
 				}
 				if (!isChar('}')) {
-					//regex: expected "&{0}" near position &{1}
-					throw new SRuntimeException(XDEF654, '}', getIndex()-1);
+					throw new SRuntimeException(XDEF654, '}', getIndex()-1);//regex: expected "&{0}" near position &{1}
 				}
 				if (name.length() > 2 && name.startsWith("Is")) {
 					name = name.substring(2);
 					// isBlock
 					for (String blockNameParent : BLOCKNAMESNOTDIFFERENT) {
 						if (name.equals(blockNameParent)) {
-							_result.append("\\").append(escChar).append('{').append("In").append(name)
-								.append('}');
+							_result.append("\\").append(escChar).append('{').append("In").append(name).append('}');
 							return true;
 						}
 					}
@@ -512,8 +505,7 @@ public final class XDRegex extends XDValueAbstract {
 								s = p == null ? "\\"+escChar+"(In"+name+')' : p;
 							} else {
 								String q = BLOCKNAMESDIFFERENT[i + 2];
-								s = q == null ? "\\"+escChar+"{In"+name+'}'
-									: "^".equals(q) ? "[^"+p.substring(1) : q;
+								s = q == null ? "\\"+escChar+"{In"+name+'}' : "^".equals(q) ? "[^"+p.substring(1) : q;
 							}
 							_result.append(s);
 							return true;
@@ -536,8 +528,7 @@ public final class XDRegex extends XDValueAbstract {
 								s = p == null ? "\\"+escChar+"{"+name+"}" : p;
 							} else {
 								String q = CATEGORIESDIFFERENT[i + 2];
-								s = q == null ? "\\"+escChar+"("+name+")"
-									: "^".equals(q) ? "[^"+p.substring(1) : q;
+								s = q == null ? "\\"+escChar+"("+name+")" : "^".equals(q) ? "[^"+p.substring(1) : q;
 							}
 							_result.append(s);
 						}

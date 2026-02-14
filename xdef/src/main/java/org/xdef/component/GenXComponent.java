@@ -282,12 +282,12 @@ LN+(genJavadoc ?
 				}
 				className = className + extName;
 				if ((ndx = className.indexOf(" extends ")) > 0) {
-					if (className.indexOf(" implements") < 0 || className.indexOf(" implements") > ndx) {
+					if (!className.contains(" implements") || className.indexOf(" implements") > ndx) {
 						extClass = " extends " + className.substring(ndx+8).trim();
 						className = className.substring(0,ndx).trim();
 					}
 				} else if ((ndx = className.indexOf(" implements")) > 0) {
-					extClass = " implements "+className.substring(ndx+11).trim();
+					extClass = " implements " + className.substring(ndx+11).trim();
 					className = className.substring(0,ndx).trim();
 				}
 				XMNode xn = xdpool.findModel(model);
@@ -451,15 +451,13 @@ LN+(genJavadoc ?
 							xpFile = new FileOutputStream(f);
 							continue;
 						} catch (FileNotFoundException ex) {
-							throw new RuntimeException(
-								"Can't write to the file from tne key \"-p\"\n" + info, ex);
+							throw new RuntimeException("Can't write to the file from tne key \"-p\"\n" + info, ex);
 						}
 					} else {
 						throw new RuntimeException("Parameter '-p' is not file\n" + info);
 					}
 				default:
-					throw new RuntimeException(
-						"Incorrect parameter \"" + arg + "\" on position " + (i+1) + ".\n" + info);
+					throw new RuntimeException("Incorrect parameter \"" + arg + "\" on position " + (i+1) +".\n"+ info);
 			}
 		}
 		if (sources.isEmpty()) {
