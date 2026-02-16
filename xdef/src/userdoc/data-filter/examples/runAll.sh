@@ -2,7 +2,7 @@
 
 mkdir -p temp/classes temp/test
 
-cp="-classpath temp/classes:../xdef-${version}.jar:lib/derby-${derby.version}.jar:lib/SaxonHE-${saxon-he.version}-xqj.jar:lib/SaxonHE-${saxon-he.version}.jar:lib/snakeyaml-${snakeyaml.version}.jar"
+cp="-classpath temp/classes:../xdef-${version}.jar:lib/derby-${derby.version}.jar:lib/Saxon-HE-${saxon-he.version}-xqj.jar:lib/Saxon-HE-${saxon-he.version}.jar:lib/snakeyaml-${snakeyaml.version}.jar"
 copts="${cp} -encoding UTF8 -d temp/classes"
 
 echo "Compile and run ..."
