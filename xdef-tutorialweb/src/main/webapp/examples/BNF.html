@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Online data validation with BNF grammar with X-definition" />
+    <meta name="keywords" content="XML, BNF, BNF grammar, validation, X-definition, Xdefinition, XDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:24rem; max-height:24rem; display:flex; overflow:hidden;}</style>    
+    <style>.B{min-height:11rem; max-height:11rem; display:flex; overflow:hidden;}</style>    
+    <title>X-definition BNF grammar specification</title>
+  </head>
+  <body style="background: #EAFFFD">
+    <form method="post" action="/tutorial/Examples">
+      <b>X-definition</b>
+      <i>If you have a collection with more X-definitions enter the name of X-definition with root INI data:
+      </i>
+      <input name="xdname" value="" type="text"/>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
+  &lt;xd:BNFGrammar name = "base">
+    S ::= [#9#10#13 ]+ /* white spaces */
+    sign ::= [-+] /* sign or unary operator */
+    number ::= [0-9]+ ("." [0-9]+)? (("E"|"e") (sign)? [0-9]+)?
+    identifier ::= [a-zA-Z] [a-zA-Z0-9]*
+  &lt;/xd:BNFGrammar>
+
+  &lt;xd:BNFGrammar name = "expr" extends = "base">
+    value ::= (sign S?)? (number | identifier | "(" S? expression S? ")")
+    term ::= value (S? [*|/%] S? term)?
+    expression ::= term (S? [-+] S? expression)?
+    assignment ::= identifier S? "=" S? expression /* assignment statement */
+  &lt;/xd:BNFGrammar>
+
+  &lt;xd:declaration>
+     type assignment expr.rule("assignment");
+  &lt;/xd:declaration>
+
+  &lt;root>
+    assignment;
+  &lt;/root>
+&lt;/xd:def>
+</textarea>
+      </div>
+      <b>Input data</b>
+      <div class="B">
+        <div id="line-numbers_1"></div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;root>
+  x = - abc + 3.14159 * - ( 2.3 - 3e-2 ) / 2 * 10e5
+&lt;/root>
+</textarea>
+      </div>        
+        <input name="submit" value="Execute" type="submit"/>
+        <i>&nbsp;You can edit <b>X-definition</b> or <b>Input</b> window</i>
+    </form>
+  </body>
+</html>

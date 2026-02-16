@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Example of construction mode in X-definition" />
+    <meta name="keywords" content="Example, construction mode, compose, create, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>3.2. Construction of data from the previous slide</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
+    <script src="/tutorial/highlighter/shCore.js"> </script>
+    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch03.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch03s01.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch03s03.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a href="ch04.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2>3.2. Construction of data from previous slide</h2>
+      <p>&nbsp;&nbsp;&nbsp;You will notice that the X definition describes the document model to be created.
+		The result is created from the input data as described in the "create" section of the X script.<br/>
+        &nbsp;&nbsp;&nbsp;Note the example below plots a trace of the input data according to the codel in
+		the X-definition:</p>			
+<pre class="xml">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" >
+  &lt;Contract ProcessedDate="required; create toString(now(),'yyyy-MM-dd HH:mm');"
+      ConractId="required num(10); create from('@num');" >
+    &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');" 
+        CompanyId="required num(8); create from('@cId');"
+        Name     ="required string(1,30); create from('@name');" />
+    &lt;Holder xd:script="occurs 1; create from('Client[@role=\'2\']');" 
+        PersonalId="required string(10,11); create from('@personalId');"
+        Firstname ="required string(1,30); create from('@firstname');"
+        Lastname  ="required string(1,30); create from('@lastname');" />
+    &lt;Policyholder xd:script="occurs 1; create from('client[@role=\'3\']');"
+        CompanyId="required num(8); create from('@cId');"
+        Name     ="required string(1,30); create from('@firstname') + ' ' + from('@lastname');"/>
+  &lt;/Contract>
+&lt;/xd:def>
+</pre>
+      Input data:
+<pre class="xml">&lt;Contract num="0123456789">
+  &lt;Client role="1" name="Some Company Ltd" cId="12345678" />
+  &lt;Client role="2" firstname="John" familyname="Smith" pId="311270/1234" />
+  &lt;Client role="3" firstname="Fred" familyname="Brown" personalId="311270/1234" cId="87654321" />
+&lt;/Contract></pre>
+      You can try it <a href="ch03s02e00.html"><b>HERE</b></a>
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>

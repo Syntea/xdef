@@ -1,0 +1,683 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:21rem; max-height:21rem; display:flex; overflow:hidden;}</style>    
+    <style>.B{min-height:14rem; max-height:14rem; display:flex; overflow:hidden;}</style>
+    <title>X-definition - compose mode</title>
+  </head>
+  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF"
+        alink="#808080">
+    <form method="post" action="/tutorial/Examples" >
+      <input type="hidden" name="mode" value="compose" />
+      <b>X-definice</b>
+      (pokud použijete collection s více X-definicemi,
+      musí mít použitá X-definice jméno "<b>Example</b>").
+      <div class="A">
+        <div id="line-numbers"> </div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xmlns='http://www.w3.org/1999/xhtml' name = 'Example' root = 'html'>
+&lt;html xmlns='http://www.w3.org/1999/xhtml'>
+   &lt;head xd:script='template'>&lt;title>Panovníci českých zemí&lt;/title>&lt;/head>
+   &lt;body>
+     &lt;table border="create 'border'">
+       &lt;tr xd:script='template'>
+         &lt;td bgcolor="fixed '#FFFF00'">Panovník&lt;/td>
+         &lt;td bgcolor="fixed '#00FFFF'">Titul&lt;/td>
+         &lt;td bgcolor="fixed '#FF8000'">Vládl od&lt;/td>
+         &lt;td bgcolor="fixed '#80FF00'">Vládl do&lt;/td>
+         &lt;td bgcolor="fixed '#00FF80'">Po dobu&lt;/td>
+       &lt;/tr>
+       &lt;tr xd:script='*; create from("//panovnik").sort("panoval/od/text()")'>
+         &lt;td bgcolor="fixed '#FFFF00'">create from('jmeno/text()')&lt;/td>
+         &lt;td bgcolor="fixed '#00FFFF'">create from('panoval/@titul')&lt;/td>
+         &lt;td bgcolor="fixed '#FF8000'">create from('panoval/od/text()')&lt;/td>
+         &lt;td bgcolor="fixed '#80FF00'">optional string(); create from('panoval/do/text()')&lt;/td>
+         &lt;td bgcolor="fixed '#FF8080'">optional string(); create from('panoval/do/text()').isEmpty()
+             ? null : from('number(panoval/do/text()) - number(panoval/od/text())')
+         &lt;/td>
+       &lt;/tr>
+     &lt;/table>
+   &lt;/body>
+&lt;/html>
+&lt;/xd:def>
+</textarea>
+      </div>
+      <b>Vstupní data</b>
+      <div class="B">
+        <div id="line-numbers_1"> </div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;panovnici>
+  &lt;!-- Prezidenti -->
+  &lt;panovnik>
+    &lt;jmeno>Tomáš Garrigue Masaryk&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1918&lt;/od>
+      &lt;do>1935&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Edvard Beneš&lt;/jmeno>
+    &lt;panoval titul="prezident">
+      &lt;od>1935&lt;/od>
+      &lt;do>1939&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Emil Hácha&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1939&lt;/od>
+      &lt;do>1945&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Edvard Beneš&lt;/jmeno>
+    &lt;panoval titul="prezident">
+      &lt;od>1945&lt;/od>
+      &lt;do>1948&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Klement Gottwald&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1948&lt;/od>
+      &lt;do>1953&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Antonín Zápotocký&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1953&lt;/od>
+      &lt;do>1957&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Antonín Novotný&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1957&lt;/od>
+      &lt;do>1968&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Gustav Husák&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1975&lt;/od>
+      &lt;do>1989&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Václav Havel&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1989&lt;/od>
+      &lt;do>2003&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Václav Klaus&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>2003&lt;/od>
+      &lt;do>2013&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Miloš Zeman&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>2013&lt;/od>
+      &lt;do>2023&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Petr Pavel&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>2023&lt;/od>
+      &lt;do>&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;!-- Králové -->
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Václav I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1230&lt;/od>
+      &lt;do>1253&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="branibor">
+    &lt;jmeno>Ota Braniborský V.&lt;/jmeno>
+    &lt;panoval titul="poručník">
+      &lt;od>1278&lt;/od>
+      &lt;do>1283&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Václav II.&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1283&lt;/od>
+      &lt;do>1305&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Václav III.&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1305&lt;/od>
+      &lt;do>1306&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Rudolf Habsburský&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1306&lt;/od>
+      &lt;do>1307&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="neuvedeno">
+    &lt;jmeno>Jindřich Korutanský&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1307&lt;/od>
+      &lt;do>1310&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="lucemburk">
+    &lt;jmeno>Jan Lucemburský&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1310&lt;/od>
+      &lt;do>1346&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="lucemburk">
+    &lt;jmeno>Karel IV.&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1346&lt;/od>
+      &lt;do>1378&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="lucemburk">
+    &lt;jmeno>Václav IV.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1378&lt;/od>
+      &lt;do>1419&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="lucemburk">
+    &lt;jmeno>Zikmund Lucemburský&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1436&lt;/od>
+      &lt;do>1437&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Albrecht Rakouský&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1437&lt;/od>
+      &lt;do>1439&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Ladislav Pohrobek&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1453&lt;/od>
+      &lt;do>1457&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="">
+    &lt;jmeno>Jiří z Poděbrad&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1458&lt;/od>
+      &lt;do>1471&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="">
+    &lt;jmeno>Matyáš Korvín&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1469&lt;/od>
+      &lt;do>1490&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="jagellonec">
+    &lt;jmeno>Vladislav Jagellonký&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1471&lt;/od>
+      &lt;do>1516&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="jagellonec">
+    &lt;jmeno>Ludvík Jagellonský&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1516&lt;/od>
+      &lt;do>1526&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Ferdinad I.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1526&lt;/od>
+      &lt;do>1564&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Maximiliaán II.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1564&lt;/od>
+      &lt;do>1576&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Rudolf II.&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1576&lt;/od>
+      &lt;do>1611&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Matyáš&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1611&lt;/od>
+      &lt;do>1619&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Friedrich Falcký&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1619&lt;/od>
+      &lt;do>1620&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Ferdinand II.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1620&lt;/od>
+      &lt;do>1637&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Ferdinand III.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1637&lt;/od>
+      &lt;do>1657&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Leopold I.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1657&lt;/od>
+      &lt;do>1705&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Josef I.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1705&lt;/od>
+      &lt;do>1711&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Karel VI.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1711&lt;/od>
+      &lt;do>1740&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Marie Terezie&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1740&lt;/od>
+      &lt;do>1780&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Josef II.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1780&lt;/od>
+      &lt;do>1790&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Leopold II.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1790&lt;/od>
+      &lt;do>1792&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>František I.&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1792&lt;/od>
+      &lt;do>1835&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Ferdinand V. Dobrotivý&lt;/jmeno>
+   &lt;panoval titul="král český">
+      &lt;od>1835&lt;/od>
+      &lt;do>1848&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>František Josef I.&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1848&lt;/od>
+      &lt;do>1916&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Vratislav II&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1061&lt;/od>
+      &lt;do>1092&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik>
+    &lt;jmeno>Ludvík Svoboda&lt;/jmeno>
+   &lt;panoval titul="prezident">
+      &lt;od>1968&lt;/od>
+      &lt;do>1975&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="habsburk">
+    &lt;jmeno>Karel I.&lt;/jmeno>
+    &lt;panoval titul="král český">
+      &lt;od>1916&lt;/od>
+      &lt;do>1918&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Přemysl Otakar I.&lt;/jmeno>
+   &lt;panoval titul="kníže">
+      &lt;od>1192&lt;/od>
+      &lt;do>1193&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Přemysl Otakar II.&lt;/jmeno>
+   &lt;panoval titul="kníže">
+      &lt;od>1253&lt;/od>
+      &lt;do>1278&lt;/do>
+    &lt;/panoval>
+    &lt;smrt>V bitvě na Moravském poli&lt;/smrt>
+  &lt;/panovnik>
+  &lt;!-- ************************************************************** -->
+  &lt;panovnik>
+    &lt;jmeno>Sámo&lt;/jmeno>
+    &lt;panoval titul="Rex sclavorum">
+      &lt;od>0623&lt;/od>
+      &lt;do>0658&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="mojmírovec">
+    &lt;jmeno>Mojmír I.&lt;/jmeno>
+    &lt;panoval titul="moravský vládce">
+      &lt;od>0830&lt;/od>
+      &lt;do>0846&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="mojmírovec">
+    &lt;jmeno>Rostislav&lt;/jmeno>
+    &lt;panoval titul="velkomoravský kníže">
+      &lt;od>0846&lt;/od>
+      &lt;do>0870&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="vilémovec">
+    &lt;jmeno>Engilšalk&lt;/jmeno>
+    &lt;panoval titul="markrabě Panonské marky">
+      &lt;od>0870&lt;/od>
+      &lt;do>0871&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="vilémovec">
+    &lt;jmeno>Vilém&lt;/jmeno>
+    &lt;panoval titul="velkomoravský kníže">
+      &lt;od>0870&lt;/od>
+      &lt;do>0871&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="mojmírovec">
+    &lt;jmeno>Slavomír&lt;/jmeno>
+    &lt;panoval titul="velkomoravský kníže">
+      &lt;od>0871&lt;/od>
+      &lt;do>0871&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="mojmírovec">
+    &lt;jmeno>Svatopluk&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0871&lt;/od>
+      &lt;do>0894&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="mojmírovec">
+    &lt;jmeno>Mojmír II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0894&lt;/od>
+      &lt;do>0906&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Bořivoj I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0872&lt;/od>
+      &lt;do>0883&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Strojmír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0883&lt;/od>
+      &lt;do>0885&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Bořivoj I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0885&lt;/od>
+      &lt;do>0890&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="mojmírovec">
+    &lt;jmeno>Svatopluk I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0890&lt;/od>
+      &lt;do>0894&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Spytihněv&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0894&lt;/od>
+      &lt;do>0915&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Václav I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0921&lt;/od>
+      &lt;do>0935&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Boleslav I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0935&lt;/od>
+      &lt;do>0972&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Boleslav II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0972&lt;/od>
+      &lt;do>0999&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Boleslav III.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>0999&lt;/od>
+      &lt;do>1002&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="piastovec">
+    &lt;jmeno>Vladivoj&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1002&lt;/od>
+      &lt;do>1003&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1003&lt;/od>
+      &lt;do>1003&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Boleslav III.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1003&lt;/od>
+      &lt;do>1003&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="piastovec">
+    &lt;jmeno>Boleslav VI.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1003&lt;/od>
+      &lt;do>1004&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1004&lt;/od>
+      &lt;do>1012&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Oldřich&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1012&lt;/od>
+      &lt;do>1033&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1033&lt;/od>
+      &lt;do>1034&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Oldřich&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1034&lt;/od>
+      &lt;do>1034&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1034&lt;/od>
+      &lt;do>1035&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Břetislav I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1035&lt;/od>
+      &lt;do>1055&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Spytihněv II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1055&lt;/od>
+      &lt;do>1061&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Vratislav II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1061&lt;/od>
+      &lt;do>1085&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Vratislav II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1085&lt;/od>
+      &lt;do>1092&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="piastovec">
+    &lt;jmeno>Boleslav IV.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1003&lt;/od>
+      &lt;do>1004&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1004&lt;/od>
+      &lt;do>1012&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Oldřich&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1012&lt;/od>
+      &lt;do>1033&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1033&lt;/od>
+      &lt;do>1034&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Oldřich&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1034&lt;/od>
+      &lt;do>1034&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Jaromír&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1034&lt;/od>
+      &lt;do>1035&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Břetislav I.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1035&lt;/od>
+      &lt;do>1055&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Spytihněv II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1055&lt;/od>
+      &lt;do>1061&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;panovnik rod="přemyslovec">
+    &lt;jmeno>Vratislav II.&lt;/jmeno>
+    &lt;panoval titul="kníže">
+      &lt;od>1061&lt;/od>
+      &lt;do>1092&lt;/do>
+    &lt;/panoval>
+  &lt;/panovnik>
+  &lt;!-- ************************************************************** -->
+&lt;/panovnici>
+</textarea>
+      </div>
+      <input name="submit" value="Spustit" type="submit"/>
+      <input name="view" value="Zobrazit jako html" type="submit"/>
+      <font style="background-color: lightgrey">
+        <i>&nbsp;(You can edit both X-definition and input data windows)</i>
+      </font>
+    </form>
+  </body>
+</html>
