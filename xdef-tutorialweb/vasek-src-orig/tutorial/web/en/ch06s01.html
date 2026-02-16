@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="X-definition: Java programming" />
+    <meta name="keywords" content="compile, XDPool, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>6.1. JAVA programming</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css" />
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch05.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch06.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch07.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a href="ch07.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2>6.1. JAVA programming</h2>
+	  In Java, you must first compile the source files with X-definitions.  The first parameter of the method
+	  is the Properties for compilation (this parameter can be null or an empty Properties object - then
+	  the compilation defaults are used). The result of the compilation is an XDPool object:
+<pre>
+  File xdef1, xdef2; // files with X-definition source code
+  Properties props = new Properties();
+  props.setProperty(XDConstants.XDPROPERTY_WARNINGS, "true"); // set compiler to report both warnings and errors
+  XDPool xpool = XDFactory.compileXD(props, xdef1, xdef2); // compile X-definitions and create XDPool object
+</pre>
+	  From the XDPool object it is possible to create the XDDocument object,
+	  in which the X-definition name is entered, which contains the data model to be worked with:
+<pre>
+  XDDocument xdoc = xpool.createXDDocument("d1"); //create XDDocument from the X-definition with the name "d1"
+</pre>
+	  Before work, it is advisable to prepare a reporter in which information
+	  about the process will be recorded. Then it is possible to start the
+	  validation or construction mode of processing:
+<pre>
+  ArrayReporter reporter = new ArrayReporter(); // create empty reporter
+  xdoc.xparse(data, reporter); // run validate mode with data source (or you can run xcreate - construction mode)
+)
+  // errors in reporter?
+  if (reporter.errors()) { 
+    reporter.printReports(System.err); // print reported messages
+  } else { // no error has been reported
+    ...
+  }
+</pre>
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>

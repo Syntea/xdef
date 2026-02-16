@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Online template model (construction) with X-definition " />
+    <meta name="keywords" content="XML, template model, construction, X-definition, Xdefinition, XDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:22rem; max-height:22rem; display:flex; overflow:hidden;}</style>    
+    <style>.B{min-height:13rem; max-height:14rem; display:flex; overflow:hidden;}</style>
+    <title>X-definition example of template model (construction mode)</title>
+  </head>
+  <body style="background: #EAFFFD">
+    <form method="post" action="/tutorial/Examples">
+      <b>X-definition</b>&nbsp;If you have a collection with more
+      X-definitions specify the name of root X-definition:
+      <input name="xdname" value="" type="text"/>
+      <div class="A">
+        <div id="line-numbers"> </div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="html" name="Example">
+  &lt;!-- Note the value of the attribute script below is "template"
+     so following element a template model. -->
+  &lt;html xd:script="template" >
+    &lt;head>
+      &lt;title>Example of template model&lt;/title>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    &lt;/head>
+    &lt;body bgcolor="lightblue">
+      &lt;h1>&lt;Font color="red">Today date:&lt;/Font>&lt;/h1>
+      &lt;h2>$$$script: create now().toString("{L(en,US)}EEEE, d. MMMM yyyy GG, hh:mm a");
+        /* If the script starts with "$$$script" it is processed normally,
+           otherwise all text values are generated as string constants. */
+      &lt;/h2>
+      &lt;h3>This is the example of template model in the construction mode.&lt;/h3>
+      &lt;i> This text is taken from the text value of the element &amp;lt;Input&amp;gt;: &lt;/i>
+      &lt;h1> $$$script: create from("/Input/text()"); &lt;/h1>    
+    &lt;/body>
+  &lt;/html>
+&lt;/xd:def>
+</textarea>
+      </div>        
+      <b>Input data</b>&nbsp;
+      <i>If necessary please specify the name of the model:</i>
+      <input name="mName" value="" type="text"/>&nbsp; namespace:
+      <input name="mURI" value="" type="text"/>
+      <input type="hidden" name="mode" value="compose" />
+      <div class="B">
+        <div id="line-numbers_1"> </div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;Input>
+  Hello world!
+&lt;/Input>
+</textarea>
+      </div>        
+      <input name="submit" value="execute" type="submit"/>
+      <input name="view" value="Display as html" type="submit"/>
+      <i>&nbsp;You can edit <b>X-definition</b> or <b>Input</b> window</i>
+    </form>
+  </body>
+</html>

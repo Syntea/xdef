@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Example of X-definition" />
+    <meta name="keywords" content="example, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>2.1. Example of complete X-definition</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
+    <script src="/tutorial/highlighter/shCore.js"> </script>
+    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch02.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch02.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch02s02.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a href="ch03.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2 style="clear: both">2.1. Example of complete X-definition</h2>
+      <p>Note that the X-definition in the example below has the attributes "name" and "root" (see line 1).
+		The attribute "root" specifies which model (or models) from the X-definition can be used as the root
+		elements of the input data. The attribute "name" contains the name of X-definition (it is required
+		if the project is composed from more X-definitions). Note also that the element "xd:declaration"
+		has the attribute scope="global", which specifies that the contents of the declaration are "visible"
+		from all X-definitions (the attribute is optional and the default value is "local"
+		- i.e. the declaration is visibble only from the this X-definition).
+      </p>
+<pre class="xml">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
+  &lt;xd:declaration scope="global">
+    void message(String s) {
+      outln(s);
+    }
+    int count = 0;
+    type isbn int(10000000, 999999999);
+  &lt;/xd:declaration>
+
+  &lt;Inventory xd:script="init message('Created ' + now()); finally message('Processed ' + count + ' books');">
+    &lt;Book xd:script="occurs +; onAbsence error('No books!'); finally {count++; outln('ISBN code: " ' + @ISBN)};"
+          ISBN="isbn;"
+          published="optional gYear();" >
+      &lt;Author xd:script="occurs *" >
+        string()
+      &lt;/Author>
+      &lt;Title>
+        string();
+      &lt;/Title>
+    &lt;/Book>
+  &lt;/Inventory>
+ 
+&lt;/xd:def>
+</pre>
+      You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>

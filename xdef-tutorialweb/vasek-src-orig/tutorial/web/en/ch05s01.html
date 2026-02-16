@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="What is X-lexicon?" />
+    <meta name="keywords" content="X-lexicon, X-position, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>5.1. What is X-lexicon?</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
+    <script src="/tutorial/highlighter/shCore.js"> </script>
+    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch05.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch05.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch06.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a href="ch06.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2>5.1. What is X-lexicon?</h2>
+      X-definitions allow you to work with language mutations of XML objects.
+      In the X-lexicon section it is possible to describe how to translate
+      attribute and element names in different language versions. Sample:
+<pre class="xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Book" >
+  &lt;Book ISBN="int(10000000, 999999999);"
+      year = "gYear();"
+      title = "string();" >
+      &lt;Author xd:script="occurs *"> string(); &lt;/Author>
+  &lt;/Book>
+&lt;xd:lexicon language='eng' default='yes'>
+/* All items in the model of Book are in English version. */
+&lt;/xd:lexicon>
+&lt;xd:lexicon language='deu'>
+/* German version */
+    Test#Book        = Buch
+    Test#Book/@year  = Jahr
+    Test#Book/@title = Titel
+    Test#Book/Author = Autor
+&lt;/xd:lexicon>
+&lt;xd:lexicon language='fra'>
+/* French version */
+    Test#Book        = Livre
+    Test#Book/@year  = année
+    Test#Book/@title = titre
+    Test#Book/Author = Auteur
+  &lt;/xd:lexicon>
+&lt;/xd:def></pre>
+      You can try it
+      <a href="ch05s01e00.html"><b>HERE</b></a>
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>
