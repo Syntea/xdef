@@ -34,7 +34,7 @@
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
         </dependency>
-        
+
         <!-- third parties -->
         <dependency>
             <groupId>javax.servlet</groupId>
