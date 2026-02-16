@@ -140,7 +140,8 @@ final class XCGenerator extends XCGeneratorXON {
 							_reporter.error(XDEF.XDEF375, className, name.substring(ndx+7), name.substring(0, ndx));
 							name = name.substring(0, ndx);
 						} else {
-							//Class &{0} is not root. It can't be extended to &{1} according to command %bind &{2}
+							//Class &{0} is not root. It can't be used as a extension of &{1} according
+							// to command %bind &{2}
 							_reporter.error(XDEF.XDEF376, className, name.substring(ndx+7), name.substring(0, ndx));
 						}
 					}
@@ -199,8 +200,8 @@ final class XCGenerator extends XCGeneratorXON {
 					if (groupKind == XMCHOICE) {
 						String xclear = "";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
-							xclear += (String) choiceStack.get(j-1)/*iname*/ +((Integer)choiceStack.get(j) > 1
-								?".clear();"/*it is final List so clear it!*/ : "=null;");//othrewise set null
+							xclear += (String) choiceStack.get(j-1)/*iname*/ + ((Integer)choiceStack.get(j) > 1
+								? ".clear();"/*it is final List so clear it!*/ : "=null;");//otherwise set to null
 							if ((Integer) choiceStack.get(j-3) == groupFirst) {
 								break; // index == first, finish;
 							}
@@ -258,8 +259,8 @@ final class XCGenerator extends XCGeneratorXON {
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
 								} else {
-									//Class &{0} is not root. It can't be extended to &{1} according
-									//to command %bind &{2}
+									//Class &{0} is not root. It can't be used as a extension of &{1} according
+									// to command %bind &{2}
 									_reporter.error(XDEF.XDEF376,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 								}
@@ -318,13 +319,14 @@ final class XCGenerator extends XCGeneratorXON {
 								if (isRoot) {
 									ext = true;
 									extClazz = " extends " + name.substring(ndx+7) + extClazz;
-									//"In command "%class &{0}" is missing parameter "extends". In command
-									// "%bind &{2}" is parameter "%with &{1}!
+									//"In command "%class &{0}" is missing parameter "extends". In command "%bind &{2}"
+									// is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
 								} else {
-									//Class &{0} is not root. It can't extend to &{1} according to command %bind &{2}
+									//Class &{0} is not root. It can't be used as a extension of &{1} according
+									//to command %bind &{2}
 									_reporter.error(XDEF.XDEF376,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 								}
@@ -374,8 +376,8 @@ final class XCGenerator extends XCGeneratorXON {
 							//Getter/setter name &{0} in &{1} can't be used. Please change name by command %bind
 							_reporter.error(XDEF.XDEF371, name, node.getXDPosition());
 						} else {
-							//Getter/setter name &{0} in &{1} was changed to &{2}.
-							// You can define other name by command %bind
+							//Getter/setter name &{0} in &{1} was changed to &{2}. You can define other name
+							// by command %bind
 							_reporter.warning(XDEF.XDEF360, name, node.getXDPosition(), iname);
 						}
 					}
@@ -389,8 +391,8 @@ final class XCGenerator extends XCGeneratorXON {
 					} else {
 						typeName = classNameBase + '#' + newClassName;
 						_components.put(xe1.getXDPosition(),
-							new XComponentInfo(packageName.length() > 0
-								? packageName+'.'+typeName : typeName, xe1.getNSUri()));
+							new XComponentInfo(
+								packageName.length() > 0 ? packageName+'.'+typeName : typeName, xe1.getNSUri()));
 					}
 					ndx = typeName.lastIndexOf('.');
 					if (ndx > 0 && packageName.equals(typeName.substring(0, ndx))) {
@@ -421,8 +423,7 @@ final class XCGenerator extends XCGeneratorXON {
 						if (XON_NS_URI_W.equals(xe1.getNSUri())) {
 							if (groupKind != XMCHOICE) {
 								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
-									genXonItemGetterAndSetter(xe1,
-										typeName, iname, max, setters, getters, sbi, varNames);
+									genXonItemGetterAndSetter(xe1, typeName, iname, max, setters, getters,sbi,varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
 									genXonEntryMethod(xe1, typeName, iname, max, getters, sbi, varNames);
 								}

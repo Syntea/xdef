@@ -160,8 +160,8 @@ public interface XDValue extends Comparable<XDValue>, XDValueID, Serializable {
 	 */
 	public boolean isNull();
 
-	/** Get code of operation. This method is used internally only in the code interpreter. Any user
-	 * implementation of this interface MUST return 0!
+	/** Get code of operation. This method is used internally only in the code interpreter. Any user implementation
+	 * of this interface MUST return 0!
 	 * @return code of operation.
 	 */
 	public short getCode();

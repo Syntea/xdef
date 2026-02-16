@@ -46,17 +46,15 @@ public final class XDReport extends XDValueAbstract {
 
 	/** Set modification parameter.
 	 * @param name name of the parameter.
-	 * @param value value of the parameter. If the parameter exists, then  if this argument is null, the
-	 * original value of message modification is removed or if the argument is not null the original value
-	 * is replaced.
+	 * @param value value of the parameter. If the parameter exists, then  if this argument is null, the original value
+	 * of message modification is removed or if the argument is not null the original value is replaced.
 	 * @return new report with modified parameters.
 	 */
 	public final XDReport setParameter(final String name, final String value) {
 		if (_value == null) {
 			return new XDReport();
 		}
-		Report result =
-			new Report(_value.getType(), _value.getMsgID(), _value.getText(), _value.getModification());
+		Report result = new Report(_value.getType(), _value.getMsgID(), _value.getText(), _value.getModification());
 		result.setParameter(name, value);
 		return new XDReport(result);
 	}
@@ -65,17 +63,13 @@ public final class XDReport extends XDValueAbstract {
 	 * @param name parameter name.
 	 * @return value of the parameter or <i>null</i>.
 	 */
-	public final String getParameter(final String name) {
-		return _value == null ? null : _value.getParameter(name);
-	}
+	public final String getParameter(final String name) {return _value == null ? null : _value.getParameter(name);}
 
 	/** Get text created in the specified language from the report.
 	 * @param language language ID.
 	 * @return text created in the specified language from the report.
 	 */
-	public final String toString(final String language) {
-		return _value == null ? "null" : _value.toString(language);
-	}
+	public final String toString(final String language) {return _value == null ? "null" : _value.toString(language);}
 
 	/** Get report ID.
 	 * @return report ID or <i>null</i>.
@@ -109,7 +103,6 @@ public final class XDReport extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
@@ -153,8 +146,8 @@ public final class XDReport extends XDValueAbstract {
 
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value of the object is comparable and
-	 * equals to this one.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable and equals
+	 * to this one.
 	 */
 	@Override
 	public final boolean equals(final XDValue arg) {

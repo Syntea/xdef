@@ -21,8 +21,8 @@ public abstract class XDResultSetAbstract extends XDValueAbstract implements XDR
 	@Override
 	public XDValueType getItemType() {return RESULTSET;}
 
-	/** Get next item of this iterator or null. If the object has to be closed then if no more values are
-	 * available the close() method must be invoked.
+	/** Get next item of this iterator or null. If the object has to be closed then if no more values are available
+	 * a close() method must be invoked.
 	 * @param xnode XXnode from which this method was called.
 	 * @return the next value of this iterator or return null.
 	 * @throws SRuntimeException id an error occurs.
@@ -54,8 +54,7 @@ public abstract class XDResultSetAbstract extends XDValueAbstract implements XDR
 	@Override
 	abstract public int getCount();
 
-	/** Return value of iterated object as string if it has a string value (text of element) otherwise
-	 * return null.
+	/** Return value of iterated object as string if it has a string value (text of element) otherwise return null.
 	 * @return value of iterated object as string or return null.
 	 */
 	@Override
@@ -68,8 +67,7 @@ public abstract class XDResultSetAbstract extends XDValueAbstract implements XDR
 	@Override
 	public String itemAsString(final int index) {return null;}
 
-	/** If the iterated object has named items then return relevant item value as string, otherwise
-	 * return null.
+	/** If the iterated object has named items then return relevant item value as string, otherwise return null.
 	 * @param name name of map item.
 	 * @return value of map item as a string or return null.
 	 */

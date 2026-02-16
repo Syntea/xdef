@@ -31,8 +31,8 @@ public class XDPoolFromClass {
 				}
 			} catch (ClassNotFoundException ex) {
 				try {
-					return (XDPool) new ObjectInputStream(// all internal class processed, read XDPool
-						new ByteArrayInputStream(baos.toByteArray())).readObject();
+					// all internal class processed, read XDPool
+					return (XDPool) new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();
 				} catch (ClassNotFoundException | IOException ex1) {
 					throw new RuntimeException("Can't create XDPool", ex1);
 				}
