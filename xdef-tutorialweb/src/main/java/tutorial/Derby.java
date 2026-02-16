@@ -1,5 +1,7 @@
 package tutorial;
 
+import static org.xdef.sys.SUtils.modifyFirst;
+
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,10 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
+
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.w3c.dom.Element;
 import org.xdef.XDBuilder;
@@ -29,17 +33,14 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
-import static org.xdef.sys.SUtils.modifyFirst;
 import org.xdef.xml.KXmlUtils;
-import static tutorial.AbstractMyServlet.getParam;
-import static tutorial.AbstractMyServlet.printReports;
-import static tutorial.AbstractMyServlet.stringToHTml;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
 public final class Derby extends AbstractMyServlet {
-	private final static Map<String, Long> DBMAP = new HashMap<>();
+	private static final long serialVersionUID = -6985097379384362122L;
+    private final static Map<String, Long> DBMAP = new HashMap<>();
 	private final static String DBPASSW = "blabla"; // password for database.
 	private final static String DBUSER = "myself";
 ////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +227,7 @@ public final class Derby extends AbstractMyServlet {
 "  <body>\n" +
 "    <div align='right'>\n" +
 "      <font size=1><i style='test-align:right'>\n" +
-"        (X-definition version: <b>" + (XDConstants.BUILD_VERSION.endsWith("-SNAPSHOT") 
+"        (X-definition version: <b>" + (XDConstants.BUILD_VERSION.endsWith("-SNAPSHOT")
 					? XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME.substring(0, 16)
 					: XDConstants.BUILD_VERSION) +
 		"</b>)</i>\n" +
@@ -306,13 +307,13 @@ public final class Derby extends AbstractMyServlet {
 					dbSource.setUser(DBUSER);
 					dbSource.setPassword(DBPASSW);
 					// create a new database
-					dbSource.setCreateDatabase("create");					
+					dbSource.setCreateDatabase("create");
 					Connection con = dbSource.getConnection( DBUSER, DBPASSW);
 					con.close();
 					DBMAP.put(database, time);
 				} catch (SQLException ex) {
 					displayMsg(out,
-						"Error", 
+						"Error",
 						"Database creation error<br/>"+
 							stringToHTml(STester.printThrowable(ex),true));
 					return;

@@ -5,22 +5,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SException;
-import static tutorial.AbstractMyServlet.MANAGER;
-import static tutorial.AbstractMyServlet._baseDir;
-import static tutorial.AbstractMyServlet._dataDir;
-import static tutorial.AbstractMyServlet._tempDir100MB;
-import static tutorial.AbstractMyServlet._tempDir400MB;
-import static tutorial.AbstractMyServlet.getParam;
 
 /** The servlet for execution of server service commands.
  * @author Vaclav Trojan
@@ -28,7 +24,9 @@ import static tutorial.AbstractMyServlet.getParam;
 @MultipartConfig
 public final class Service extends AbstractMyServlet {
 
-	private static String getDirInfo(final File dir) {
+	private static final long serialVersionUID = 8846128427001680285L;
+
+    private static String getDirInfo(final File dir) {
 		if (dir == null) {
 			return "directory parameter is null<br/>\n";
 		}
@@ -43,7 +41,7 @@ public final class Service extends AbstractMyServlet {
 				result += "- " + getDirInfo(x);
 			} else {
 				result += "- " + x.getName() + " , size = " + x.length() + ", date: ";
-				SDatetime date = new SDatetime(new Date(x.lastModified())); 
+				SDatetime date = new SDatetime(new Date(x.lastModified()));
 				result += date.formatDate("yyyy-MM-dd HH:mm") + "<br/>\n";
 			}
 		}
@@ -58,7 +56,7 @@ public final class Service extends AbstractMyServlet {
 		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head><title>"
 			+ title + "</title></head>\n<body>\n");
 	}
-	
+
 	/** Processes requests with respect to required language. The Language is set according to request
 	 * parameter "submit".
 	 * @param req servlet request.
@@ -71,7 +69,7 @@ public final class Service extends AbstractMyServlet {
 		throws ServletException,IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("text/html;charset=UTF-8");
-		resp.setCharacterEncoding("UTF-8");		
+		resp.setCharacterEncoding("UTF-8");
 		// This part we must synchronize to keep language settings for whole process of the X-definition.
 		synchronized(MANAGER) {
 			Report.setLanguage("eng");
@@ -83,7 +81,7 @@ public final class Service extends AbstractMyServlet {
 					resp.getWriter().println("File " + s + " not exists");
 				} else if (f.length() > 100000000) { // 100MB max
 					resp.getWriter().println("File "+s+" is longer then 100MB");
-				} else {					
+				} else {
 					synchronized (MANAGER) {
 						byte[] bytes;
 						try {
@@ -111,7 +109,7 @@ public final class Service extends AbstractMyServlet {
 					}
 				}
 				return;
-			} 
+			}
 			PrintWriter out = resp.getWriter();
 			if (null != req.getParameter("fileDelete")) {
 				String s = getParam(req, "fileDelete");
@@ -132,12 +130,12 @@ public final class Service extends AbstractMyServlet {
 							File[] ff = new File[] {f};
 							deleteFiles(ff);
 							out.println(f.exists() ? "ERROR: Directory " + s + " can't delete"
-								: ("Directory " + s + " was deleted"));
+								: "Directory " + s + " was deleted");
 						}
 					} else {
 						out.println(f.isFile() ? f.delete()
-							? "File " + s + " deleted" : ("ERROR: " + s + " can't delete")
-							: ("ERROR: " + s + " is not not file"));
+							? "File " + s + " deleted" : "ERROR: " + s + " can't delete"
+							: "ERROR: " + s + " is not not file");
 					}
 				} else {
 					out.println("File " + s + " not exists");
@@ -214,7 +212,7 @@ public final class Service extends AbstractMyServlet {
 				} else {
 					out.println("Unknown command");
 				}
-				out.print("    </form>\n  </body>\n</html>");			
+				out.print("    </form>\n  </body>\n</html>");
 			}
 		}
 	}
@@ -223,5 +221,5 @@ public final class Service extends AbstractMyServlet {
 	 * @return short description of this servlet.
 	 */
 	@Override
-	public final String getServletInfo() {return "This servlet supports service commands on server";}	
+	public final String getServletInfo() {return "This servlet supports service commands on server";}
 }

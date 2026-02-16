@@ -3,24 +3,25 @@ package tutorial;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.w3c.dom.Element;
 import org.xdef.sys.Report;
 import org.xdef.sys.STester;
 import org.xdef.util.GenXDefinition;
 import org.xdef.xml.KXmlUtils;
-import static tutorial.AbstractMyServlet.MANAGER;
-import static tutorial.AbstractMyServlet.getParam;
-import static tutorial.AbstractMyServlet.stringToHTml;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
 public final class GenXdef extends AbstractMyServlet {
-	
-	/** Generate X-definition and run validation of given object with created X-definition.
+
+	private static final long serialVersionUID = -815756752335589510L;
+
+    /** Generate X-definition and run validation of given object with created X-definition.
 	 * @param req servlet request object.
 	 * @param resp servlet response object.
 	 * @throws IOException if an error occurs.
@@ -58,7 +59,7 @@ public final class GenXdef extends AbstractMyServlet {
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
 "        <textarea id='textarea' style='width: 100%;' name='xdef'>\n" +
-				stringToHTml(xdef, true)+				
+				stringToHTml(xdef, true)+
 "</textarea>\n" +
 "      </div>\n"+
 "      <b>Input data</b>\n" +

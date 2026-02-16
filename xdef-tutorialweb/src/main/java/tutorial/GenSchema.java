@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -23,16 +25,15 @@ import org.xdef.sys.STester;
 import org.xdef.util.XdefToXsd;
 import org.xdef.xml.KXmlUtils;
 import org.xml.sax.SAXException;
-import static tutorial.AbstractMyServlet.MANAGER;
-import static tutorial.AbstractMyServlet.getParam;
-import static tutorial.AbstractMyServlet.stringToHTml;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
 public final class GenSchema extends AbstractMyServlet {
-	
-	/** Generate X-definition and run validation of given object with created X-definition.
+
+	private static final long serialVersionUID = -7389516366202036753L;
+
+    /** Generate X-definition and run validation of given object with created X-definition.
 	 * @param req servlet request object.
 	 * @param resp servlet response object.
 	 * @throws IOException if an error occurs.
@@ -55,11 +56,11 @@ public final class GenSchema extends AbstractMyServlet {
 			PrintWriter out = resp.getWriter();
 			try {
 				if ("toSchema".equals(schema)) {
-					XDPool xp = XDFactory.compileXD(null, xdef);					
+					XDPool xp = XDFactory.compileXD(null, xdef);
 					Map<String, Element> map = XdefToXsd.genSchema(xp, null, null, null, null, true, true);
-					String xd = "";				
+					String xd = "";
 					for (Entry<String, Element> x : map.entrySet()) {
-						if (map.entrySet().size() > 1) { 
+						if (map.entrySet().size() > 1) {
 							xd += "==========  Name: " + x.getKey() + "  ==========\n";
 						}
 						xd += KXmlUtils.nodeToString(x.getValue(), true, true, true, 110);
@@ -105,7 +106,7 @@ public final class GenSchema extends AbstractMyServlet {
 									xdoc = xp.createXDDocument();
 								} catch (RuntimeException ex) {
 									xdoc = xp.createXDDocument("Example");
-								}							
+								}
 							} else {
 								xdoc = xp.createXDDocument(xdName);
 							}
@@ -131,7 +132,7 @@ public final class GenSchema extends AbstractMyServlet {
 							+ stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
 						return;
 					}
-					try {//check by XML schema					
+					try {//check by XML schema
 						validator.validate(new StreamSource(new StringReader(data)));
 						out.print("<html><body><h1>OK</h1></body></html>");
 					} catch (IOException | SAXException ex) {

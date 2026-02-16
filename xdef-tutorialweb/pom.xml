@@ -29,6 +29,7 @@
     </properties>
 
     <dependencies>
+        <!-- this project -->
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
@@ -38,7 +39,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
@@ -52,5 +53,9 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>tutorial</finalName>
+    </build>
 
 </project>

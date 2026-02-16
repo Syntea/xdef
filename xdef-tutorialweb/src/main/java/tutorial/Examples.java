@@ -1,5 +1,7 @@
 package tutorial;
 
+import static org.xdef.sys.SUtils.modifyFirst;
+
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,10 +12,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
+
 import org.w3c.dom.Element;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
@@ -23,25 +27,21 @@ import org.xdef.XDOutput;
 import org.xdef.XDPool;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
-import org.xdef.msg.XDEF;
 import org.xdef.msg.XML;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
-import static org.xdef.sys.SUtils.modifyFirst;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
-import static tutorial.AbstractMyServlet.MANAGER;
-import static tutorial.AbstractMyServlet.getParam;
-import static tutorial.AbstractMyServlet.stringToHTml;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
 public final class Examples extends AbstractMyServlet {
-	private static final String HTML_RESULT =
+	private static final long serialVersionUID = 2277695929503402350L;
+    private static final String HTML_RESULT =
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n" +
 "  <head>\n" +
 "     <meta http-equiv='content-type' content='text/html; charset=UTF-8'/>\n"+
@@ -50,7 +50,7 @@ public final class Examples extends AbstractMyServlet {
 "  <body>\n" +
 "    <div align=\"right\">\n" +
 "      <font size=1><i style=\"test-align:right\"><b>X-definition version: "
-			+ (XDConstants.BUILD_VERSION.endsWith("-SNAPSHOT") 
+			+ (XDConstants.BUILD_VERSION.endsWith("-SNAPSHOT")
 				? XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME.substring(0, 16)
 				: XDConstants.BUILD_VERSION)
 			+ "</b></i>\n" +
@@ -59,7 +59,7 @@ public final class Examples extends AbstractMyServlet {
 "    <p><font size=4><b>&{result-title}</b></font></p>\n" +
 "    <pre><tt>&{result}</tt></pre>&{stdout}"+
 "  </body>\n" +
-"</html>";	
+"</html>";
 
 	/** Convert result of YAML parser to JSON.
 	 * @param o result of YAML parser.
@@ -72,7 +72,7 @@ public final class Examples extends AbstractMyServlet {
 			for (Object x : ((Map) o).entrySet()) {
 				Map.Entry en = (Map.Entry) x;
 				Object y = en.getKey();
-				String key = (y instanceof byte[]) ? new String((byte[])y, StandardCharsets.UTF_8): (String)y;
+				String key = y instanceof byte[] ? new String((byte[])y, StandardCharsets.UTF_8): (String)y;
 				result.put(key, yamlToJson(en.getValue()));
 			}
 			return result;
@@ -117,7 +117,7 @@ public final class Examples extends AbstractMyServlet {
 			String csvMode = getParam(req, "csvMode");
 			String inLex = getParam(req, "inLex");
 			String outLex = getParam(req, "outLex");
-			
+
 			String outHtml = HTML_RESULT;
 			String result;
 			String stdOutput = "";
@@ -222,7 +222,7 @@ public final class Examples extends AbstractMyServlet {
 								null, // source name
 								reporter);
 						} else {
-							if ((inLex.isEmpty() && outLex.isEmpty()) || inLex.equals(resultXon)) {
+							if (inLex.isEmpty() && outLex.isEmpty() || inLex.equals(resultXon)) {
 								resultElement = xd.xparse(data, reporter);
 							} else {
 								if (inLex.equals(resultXon)|| outLex.isEmpty()) {
@@ -231,7 +231,7 @@ public final class Examples extends AbstractMyServlet {
 								} else {
 									resultElement = xd.xtranslate(data, inLex, outLex, reporter);
 								}
-							}							
+							}
 						}
 					}
 					caw.close();
@@ -250,7 +250,7 @@ public final class Examples extends AbstractMyServlet {
 						} else {
 							if (null!=view && view.isEmpty()) {
 								view = !ini.isEmpty() ? "INI" : !csv.isEmpty() ? "CSV" : "JSON";
-							}						
+							}
 							if (null!=view && view.contains("YAML")) {
 								outHtml = modifyFirst(outHtml, "&{result-title}", "YAML result:");
 								Yaml yaml = new Yaml();
@@ -264,7 +264,7 @@ public final class Examples extends AbstractMyServlet {
 									result = KXmlUtils.nodeToString(XonUtils.csvToXml(resultCsv));
 								} else if (!ini.isEmpty() && resultIni != null) {
 									result = KXmlUtils.nodeToString(XonUtils.iniToXml(
-										XonUtils.xonToJson(resultXon)), true, false, true, 110);					
+										XonUtils.xonToJson(resultXon)), true, false, true, 110);
 								} else {
 									result = KXmlUtils.nodeToString(XonUtils.xonToXml(
 										XonUtils.xonToJson(resultXon)), true, false, true, 110);

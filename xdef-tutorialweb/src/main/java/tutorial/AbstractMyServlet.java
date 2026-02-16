@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.SManager;
@@ -20,7 +22,8 @@ import org.xdef.sys.SManager;
  */
 @MultipartConfig
 public abstract class AbstractMyServlet extends HttpServlet {
-	/** Base directory. */
+	private static final long serialVersionUID = -8154631839408075000L;
+    /** Base directory. */
 	protected static File _baseDir = null;
 	/** Temporary directory for 100MB. */
 	protected static File _tempDir100MB = null;
@@ -42,7 +45,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 		ReportPrinter.printListing(writer,car,reporter,null,90,false,"eng");
 		return writer.toString();
 	}
-	
+
 	/** Create string from data which can be part of HTML.
 	 * @param data string to be converted.
 	 * @param pre if true new lines are converted to "&amp;br/>".
@@ -98,7 +101,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 	public static final void clearDirectory(final File dir) {
 		if (dir != null && dir.isDirectory()) {
 			deleteFiles(dir.listFiles());
-		}		
+		}
 	}
 
 	/** Delete all files and subdirectories from argument.
@@ -134,7 +137,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 			_x = x;
 			setPriority(Thread.MAX_PRIORITY);
 		}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 // implementation of HttpServlet methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +158,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 			}
 		}
 		synchronized boolean isFinished() {return _finished;}
-		synchronized Exception getException() {return _exception;}		
+		synchronized Exception getException() {return _exception;}
 	}
 
 	/** Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -201,7 +204,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 		throws ServletException, IOException {
 		processRequest(request, response);
 	}
-	
+
 	/** Handles the HTTP <code>POST</code> method.
 	 * @param request servlet request
 	 * @param response servlet response
@@ -213,7 +216,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 		throws ServletException, IOException {
 		processRequest(request, response);
 	}
-	
+
 	/** Init this servlet. Set directories for temporary data. */
 	@Override
 	public void init() {
@@ -238,7 +241,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 		}
 		_dataDir = f;
 	}
-	
+
 	public final static String genHtmlMessage(final String title, final String body) {
 		return "<html xmlns='http://www.w3.org/1999/xhtml'>\n" +
 "  <head>\n" +
@@ -249,7 +252,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 "    <h1>" + title + "</h1>\n" + body +
 "  </body>\n" +
 "</html>";
-	}	
+	}
 ////////////////////////////////////////////////////////////////////////////////
 // Abstract methods
 ////////////////////////////////////////////////////////////////////////////////
