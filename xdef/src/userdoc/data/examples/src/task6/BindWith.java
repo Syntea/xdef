@@ -18,6 +18,7 @@ import static org.xdef.sys.STester.getClassSource;
  */
 public class BindWith extends STester {
 	Integer vin;
+	// setVIN is called from the nenerated XComponen TestWith
 	public void setVIN(Integer x) { vin = x; }
 	public Integer getVIN() { return vin; }
 	
@@ -25,21 +26,14 @@ public class BindWith extends STester {
 	public void test() {
 		try {
 			XDPool xp = XDFactory.compileXD(null, "src/task6/BindWith.xdef");
-			File dir = clearTempDir();
-			// create XComponents to the directory dir
-			ArrayReporter reporter = xp.genXComponent(dir, null, false, true);
-			if (reporter.errorWarnings()) { // roperted errors?
-				reporter.checkAndThrowErrors(); // throw exception
-			}
 			XDDocument xd = xp.createXDDocument("");
 			File xml = new File("task6/input/Truck1.xml");
+			ArrayReporter reporter = new ArrayReporter();
+
 			Element el = xd.xparse(xml, reporter);
 			assertEq("1234", el.getAttribute("MaxWeight"));
 			assertNoErrorsAndClear(reporter);
 			// compile sources with XComponents
-			String classDir = getClassSource(BindWith.class); // actual directory with compiled classes
-			String classpath = getClassSource(XDConstants.class) +";"+ classDir; //classpath for execution
-			compileSources(classpath, classDir, dir); //compile sources with XComponents
 			// parse datata with the XComponent
 			XComponent xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -51,7 +45,7 @@ public class BindWith extends STester {
 			XComponentUtil.set(xc, "VIN", null); // try setter created from %bind command.
 			assertEq("<Truck />", xc.toXml());
 			assertEq(null, XComponentUtil.get(xc, "VIN")); // try getter created from %bind command.
-		} catch (IOException | RuntimeException ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 	
 	/** @param args parameter not used */

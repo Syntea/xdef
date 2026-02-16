@@ -248,7 +248,7 @@ public interface XDEF {
 	public static final long XDEF374 = 31159025784L;
 	/** In command "%class &amp;{0}" is missing parameter "extends". In command "%bind &amp;{2}" is parameter "%with &amp;{1}"! */
 	public static final long XDEF375 = 31159025785L;
-	/** Class &amp;{0} is not root. It can't be extension of &amp;{1} according to command %bind &amp;{2} */
+	/** Class &amp;{0} is not root. It can't be used as a extension of &amp;{1} according to command %bind &amp;{2} */
 	public static final long XDEF376 = 31159025786L;
 	/** The name of the inner class of the X-component &amp;{0} has been changed to &amp;{1} */
 	public static final long XDEF377 = 31159025787L;

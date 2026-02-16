@@ -105,6 +105,7 @@ public final class XDRegexResult extends XDValueAbstract {
 	public String stringValue() {return String.valueOf(matches());}
 
 	/** Check whether some other XDValue object is "equal to" this one.
+	 * @param arg object to be compared.
 	 * @return true if and only if the argument is equal to this one.
 	 */
 	@Override

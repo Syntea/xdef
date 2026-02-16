@@ -26,12 +26,16 @@ public class GenComponents1 {
 			"src/task6/townA.xdef",  // X-definition files
 			"src/task6/townB.xdef"); 
 
-		// 3. generate X-components
+		// 3. generate X-components City and House
 		xPool.genXComponent(new File("src/"), "UTF-8", false, false);
 		try ( // 4. save XDPool to the file "src/task6/components/Town1.xp"
 			ObjectOutputStream os =
 				new ObjectOutputStream(new FileOutputStream(new File(components, "Town1.xp")))) {
 			os.writeObject(xPool);
 		}
+		
+		// 4. Generate xcomponent BindWith 
+		xPool = XDFactory.compileXD(null, "src/task6/BindWith.xdef");
+		xPool.genXComponent(new File("src/"), "UTF-8", false, false);
 	}
 }

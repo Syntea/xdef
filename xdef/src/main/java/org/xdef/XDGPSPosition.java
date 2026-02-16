@@ -27,14 +27,12 @@ public final class XDGPSPosition extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get latitude of this position.
-	 * @return latitude latitude of the location; range from -90.0 to 90.0
-	 * or MIN_VALUE if unknown.
+	 * @return latitude latitude of the location; range from -90.0 to 90.0 or MIN_VALUE if unknown.
 	 */
 	public final double latitude() {return _position.latitude();}
 
 	/** Get longitude of this position.
-	 * @return longitude of the location; range from -180.0 to 180.0
-	 * or MIN_VALUE if unknown.
+	 * @return longitude of the location; range from -180.0 to 180.0 or MIN_VALUE if unknown.
 	 */
 	public final double longitude() {return _position.longitude();}
 
@@ -49,9 +47,7 @@ public final class XDGPSPosition extends XDValueAbstract {
 	 * @return distance from this position to given position (note the Earth radius used in Haversine formula
 	 * is 6376500 m).
 	 */
-	public final double distanceTo(final XDGPSPosition x) {
-		return _position.distanceTo((GPSPosition) x.getObject());
-	}
+	public final double distanceTo(final XDGPSPosition x) {return _position.distanceTo((GPSPosition) x.getObject());}
 
 	/** Get name of this position.
 	 * @return name of the position or null.
@@ -73,10 +69,8 @@ public final class XDGPSPosition extends XDValueAbstract {
 
 	@Override
 	public final int compareTo(final XDValue arg) throws IllegalArgumentException {
-		if (arg instanceof XDGPSPosition) {
-			if (this.equals((XDGPSPosition) arg)) {
-				return 0;
-			}
+		if (arg instanceof XDGPSPosition && this.equals((XDGPSPosition) arg)) {
+			return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
