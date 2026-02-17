@@ -37,6 +37,7 @@ public class Town {
 		if (reporter.errors()) {
 			System.err.println("Error on English version");
 		} else {
+			KXmlUtils.writeXml("task7/output/town_eng.xml", el, true, false);
 			System.out.println("English version parsed");
 		}
 
