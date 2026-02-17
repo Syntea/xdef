@@ -2,6 +2,6 @@
     <Truck MaxWeight = "optional int()" />
     <xd:component>
         %bind VIN %with task6.BindWith %link #Truck/@MaxWeight;
-        %class task6.XComponentBindWith extends task6.BindWith %link #Truck;
+        %class task6.components1.XCBindWith extends task6.BindWith %link #Truck;
     </xd:component>
 </xd:def>

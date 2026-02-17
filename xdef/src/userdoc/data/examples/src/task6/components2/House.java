@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components2;
 @SuppressWarnings("unchecked")
-public class House implements org.xdef.component.XComponent{
+public class House implements org.xdef.component.XComponent {
   public Integer getNum() {return _Num;}
   public String getAddress() {return _Address;}
   public java.util.List<Person> listOfPerson() {

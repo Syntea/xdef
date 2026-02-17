@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components2;
 @SuppressWarnings("unchecked")
-public class Tenants implements org.xdef.component.XComponent{
+public class Tenants implements org.xdef.component.XComponent {
   public java.util.List<Tenants.Resident> listOfResident() {
     return _Resident;
   }
@@ -111,7 +111,7 @@ public class Tenants implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 @SuppressWarnings("unchecked")
-public static class Resident implements org.xdef.component.XComponent{
+public static class Resident implements org.xdef.component.XComponent {
   public String getFirstName() {return _FirstName;}
   public String getLastName() {return _LastName;}
   public String getAddress() {return _Address;}

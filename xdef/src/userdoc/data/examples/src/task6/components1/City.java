@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components1;
 @SuppressWarnings("unchecked")
-public class City implements org.xdef.component.XComponent{
+public class City implements org.xdef.component.XComponent {
   public String getName() {return _Name;}
   public java.util.List<City.Street> listOfStreet() {
     return _Street;
@@ -121,7 +121,7 @@ public class City implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 @SuppressWarnings("unchecked")
-public static class Street implements org.xdef.component.XComponent{
+public static class Street implements org.xdef.component.XComponent {
   public String getName() {return _Name;}
   public java.util.List<task6.components1.House> listOfHouse() {
     return _House;
