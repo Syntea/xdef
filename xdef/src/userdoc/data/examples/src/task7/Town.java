@@ -37,7 +37,7 @@ public class Town {
 		if (reporter.errors()) {
 			System.err.println("Error on English version");
 		} else {
-			System.out.println("OK, Task 7, eng");
+			System.out.println("English version parsed");
 		}
 
 		// 4. Create XDDOcument, set language, and process the localized version
@@ -49,7 +49,8 @@ public class Town {
 		if (reporter.errors()) {
 			System.err.println("Error on German version");
 		} else {
-			System.out.println("OK, Task7.Town, deu)");
+			KXmlUtils.writeXml("task7/output/town_deu.xml", el, true, false);
+			System.out.println("town_eng translated to German (see task7/output/town_deu.xml))");
 		}
 
 		// 5. Create XDDOcument and translate the localized version to Czech.
@@ -62,7 +63,7 @@ public class Town {
 			System.err.println("Error on translation from 'deu' to 'ces'");
 		} else {
 			KXmlUtils.writeXml("task7/output/town_ces.xml", el, true, false);
-			System.out.println("town_deu transated to ces (see task7/output/town_ces.xml)");
+			System.out.println("town_deu translated to Czech (see task7/output/town_ces.xml)");
 		}
 
 		// 6. Check translated Czech version
@@ -72,6 +73,8 @@ public class Town {
 		xd.xparse("task7/output/town_ces.xml", reporter);
 		if (reporter.errors()) {
 			System.err.println("task7.Town errors in translation");
+		} else {
+			System.out.println("OK, task7.Town");
 		}
 	}
 }
