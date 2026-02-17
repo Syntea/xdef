@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components2;
 @SuppressWarnings("unchecked")
-public class Person implements task6.components2.Citizen,org.xdef.component.XComponent{
+public class Person implements task6.components2.Citizen,org.xdef.component.XComponent {
   public String getFirstName() {return _FirstName;}
   public String getLastName() {return _LastName;}
   public void setFirstName(String x) {_FirstName=x;}

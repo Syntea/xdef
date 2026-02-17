@@ -28,11 +28,14 @@ public class GenComponents2 {
 
 		// 3. generate X-components
 		xPool.genXComponent(new File("src/"), "UTF-8", false, false);
+		System.out.println("XComponents Citizen, City, House, Preson and Tebabts are created to src/task6/components2");
 	
-		try ( // 4. save XDPool to the file "src/task6/components1/Town2.xp"
-			ObjectOutputStream os = 
-				new ObjectOutputStream(new FileOutputStream(new File(components1, "Town2.xp")))) {
+		// 4. save XDPool to the file "src/task6/components2/Town2.xp"
+		try (
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(new File(components1, "Town2.xp")))) {
 			os.writeObject(xPool);
+			System.out.println("XDPool saved to src/task6/components2/Town2.xp ");
 		}
+		System.out.println("OK, task6.GenComponents2");
 	}
 }

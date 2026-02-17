@@ -18,8 +18,7 @@ public class Town2 {
 		new File("task6/output").mkdirs(); // ensure output directory exists
 		XDPool xpool;
 		try ( // 1. Get compiled XDPool from the file
-			ObjectInputStream ois =
-				new ObjectInputStream(new FileInputStream("src/task6/components2/Town2.xp"))) {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/task6/components2/Town2.xp"))) {
 			xpool = (XDPool) ois.readObject();
 		}
 
@@ -46,6 +45,6 @@ public class Town2 {
 		for (Tenants.Resident x: tenants.listOfResident()) {
 			System.out.println(x.getFirstName()  + " " + x.getLastName() + "; " + x.getAddress());
 		}
-		System.out.println("OK task6.Town2 see task6/output/data2.xml");
+		System.out.println("OK, task6.Town2 see task6/output/data2.xml");
 	}
 }
