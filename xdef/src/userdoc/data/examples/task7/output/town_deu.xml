@@ -1,0 +1,17 @@
+<Stadt Name="Nonehill">
+  <Straße Name="Long">
+    <Haus Nummer="1">
+      <Person Nachname="Smith" Vorname="John"/>
+      <Person Nachname="Smith" Vorname="Jane"/>
+    </Haus>
+    <Haus Nummer="2"/>
+    <Haus Nummer="3">
+      <Person Nachname="Smith" Vorname="James"/>
+    </Haus>
+  </Straße>
+  <Straße Name="Short">
+    <Haus Nummer="1">
+      <Person Nachname="Smith" Vorname="Jeremy"/>
+    </Haus>
+  </Straße>
+</Stadt>
