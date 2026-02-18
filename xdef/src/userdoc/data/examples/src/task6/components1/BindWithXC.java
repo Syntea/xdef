@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components1;
 @SuppressWarnings("unchecked")
-public class XCBindWith extends task6.BindWith implements org.xdef.component.XComponent {
+public class BindWithXC extends task6.BindWithVIN implements org.xdef.component.XComponent {
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_VIN="MaxWeight";
   @Override
@@ -59,15 +59,15 @@ public class XCBindWith extends task6.BindWith implements org.xdef.component.XCo
       el.setAttribute(XD_Name_VIN, getVIN().toString());
     return el;
   }
-  public XCBindWith() {}
-  public XCBindWith(org.xdef.component.XComponent p,
+  public BindWithXC() {}
+  public BindWithXC(org.xdef.component.XComponent p,
     String name, String ns, String xPos, String XDPos) {
     XD_NodeName=name; XD_NamespaceURI=ns;
     XD_XPos=xPos;
     XD_Model=XDPos;
     XD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;
   }
-  public XCBindWith(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
+  public BindWithXC(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {
     org.w3c.dom.Element el=x.getElement();
     XD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();
     XD_XPos=x.getXPos();

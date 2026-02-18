@@ -227,6 +227,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 				case XD_PARSERESULT: {
 					XDParseResult y = (XDParseResult) x;
 					return new XDParserAbstract() {
+
 						@Override
 						public void parseObject(XXNode xnode, XDParseResult p) {
 							XDParseResult y = (XDParseResult) x;
@@ -285,8 +286,8 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		return -1;
 	}
 
-	/** Find first index of type int the array of types and if it was found then find index of newType in the array
-	 * and return corrected type.
+	/** Find first index of type int the array of types and if it was found
+	 * then find index of newType in the array and return corrected type.
 	 * @param name name to be found.
 	 * @param newType newName to be found.
 	 * @param types array of names.

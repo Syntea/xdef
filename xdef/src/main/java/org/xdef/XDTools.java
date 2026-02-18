@@ -38,7 +38,7 @@ public class XDTools {
 	/** Get version of this implementation of X-definition.
 	 * @return version of this implementation of X-definition.
 	 */
-	public static final String getXDVersion() {return BUILD_VERSION + " (" + BUILD_DATETIME + ")";}
+	public static final String getXDVersion() {	return BUILD_VERSION + " (" + BUILD_DATETIME + ")";}
 
 	/** Creates XDInput from InputStream.
 	 * @param value the stream.
@@ -75,7 +75,9 @@ public class XDTools {
 	 * @param isxml if true the output will be in XML format, otherwise in string format.
 	 * @return the XDOutput object.
 	 */
-	public static final XDOutput createXDOutput(final Writer w, final boolean isxml){return new DefOutStream(w, isxml);}
+	public static final XDOutput createXDOutput(final Writer w, final boolean isxml) {
+		return new DefOutStream(w, isxml);
+	}
 
 	/** Creates XDOutput from PrintStream.
 	 * @param ps PrintStream object.
@@ -133,7 +135,8 @@ public class XDTools {
 	 */
 	public static final XDResultSet createXDResultSet(final ResultSet x) {return new DefSQLResultSet(x);}
 
-	/** Creates XDResultSet object from java.sql.ResultSet extracting value of specified column from each raw.
+	/** Creates XDResultSet object from java.sql.ResultSet extracting value of
+	 * specified column from each raw.
 	 * @param itemName name of column.
 	 * @param sqlResultSet the ResultSet object.
 	 * @return XDResultSet object.
@@ -201,7 +204,7 @@ public class XDTools {
 	 * @param pckg package of created class.
 	 * @param xp XDPool to be written to class.
 	 */
-	public static void writeXDPoolClass(final Writer w, final String cls, final String pckg, final XDPool xp) {
+	public static void writeXDPoolClass(final Writer w, final String cls, final String pckg, final XDPool xp){
 		PrintWriter pw = new PrintWriter(w);
 		if (pckg != null && !pckg.trim().isEmpty()) {
 			pw.println("package " + pckg + ";");

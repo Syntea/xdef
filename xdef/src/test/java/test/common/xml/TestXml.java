@@ -50,10 +50,9 @@ public class TestXml extends STester  {
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 			transformer.transform(new DOMSource(el), new StreamResult(buffer));
 			s = buffer.toString().trim();
+			//ignore case if there is hexacecimal reprezentation
 			if (!("<root atr=\"Kůň &#9;&#13; úpěl\">Kůň " + (char)9 + "&#13; úpěl</root>").equals(s)
-				//ignore case if there is hexacecimal reprezentation
-				&& !("<root atr=\"kůň &#x9;&#xd; úpěl\">kůň "+(char)9+"&#xd; úpěl</root>")
-					.equals(s.toLowerCase())) {
+				&& !("<root atr=\"kůň &#x9;&#xd; úpěl\">kůň "+(char)9+"&#xd; úpěl</root>").equals(s.toLowerCase())) {
 				fail(s);
 			}
 		} catch (IllegalArgumentException | ParserConfigurationException | TransformerException

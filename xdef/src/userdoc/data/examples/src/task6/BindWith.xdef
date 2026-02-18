@@ -1,7 +1,0 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Truck">
-    <Truck MaxWeight = "optional int()" />
-    <xd:component>
-        %bind VIN %with task6.BindWith %link #Truck/@MaxWeight;
-        %class task6.components1.XCBindWith extends task6.BindWith %link #Truck;
-    </xd:component>
-</xd:def>

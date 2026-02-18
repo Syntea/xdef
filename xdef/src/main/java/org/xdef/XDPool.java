@@ -55,7 +55,8 @@ public interface XDPool extends Serializable {
 	public XDDocument createXDDocument();
 
 	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or either null or empty string if X-definition without name is checked).
+	 * @param name the name of X-definition (or either null or empty string if X-definition without name
+	 * is checked).
 	 * @return true if and only if the X-definition of given name exists in the XDPool.
 	 */
 	boolean exists(String name);
@@ -147,7 +148,8 @@ public interface XDPool extends Serializable {
 	public boolean isLocationsdetails();
 
 	/** Get switch if the parser do not allow DOCTYPE.
-	 * @return true if the parser do not allow DOCTYPE or return false if DOCTYPE is processed.
+	 * @return true if the parser do not allow DOCTYPE or return false
+	 * if DOCTYPE is processed.
 	 */
 	public boolean isIllegalDoctype();
 

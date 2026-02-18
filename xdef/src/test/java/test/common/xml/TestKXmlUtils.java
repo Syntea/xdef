@@ -103,8 +103,7 @@ public class TestKXmlUtils extends STester {
 			}
 			source =
 "<root atr=\"atr1\" xmlns=\"a\">\n" +
-"  <child xmlns:u=\"uu\" childAtr1='atr1' u:childAtr2='atr3'\n"+
-"         v:childAtr2=\"atr2\" xmlns:v=\"vv\">\n"+
+"  <child xmlns:u=\"uu\" childAtr1='atr1' u:childAtr2='atr3' v:childAtr2=\"atr2\" xmlns:v=\"vv\">\n"+
 "    This is text1...\n"+
 "  </child>\n"+
 " This is text2...\n"+
@@ -142,16 +141,14 @@ public class TestKXmlUtils extends STester {
 			}
 		}
 		try {
-			ByteArrayInputStream bais =
-				new ByteArrayInputStream("<?xml version=\"1.0\" ?>\n<Envelope/>".getBytes());
+			ByteArrayInputStream bais = new ByteArrayInputStream("<?xml version=\"1.0\" ?>\n<Envelope/>".getBytes());
 			doc = KXmlUtils.parseXml(bais);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter out = new OutputStreamWriter(baos, "Cp1252");
 			KXmlUtils.writeXml(out, doc.getDocumentElement());
 		} catch (IOException ex) {fail(ex);}
 		try {
-			ByteArrayInputStream bais =
-				new ByteArrayInputStream("<?xml version=\"1.0\" ?>\n<Envelope/>".getBytes());
+			ByteArrayInputStream bais = new ByteArrayInputStream("<?xml version=\"1.0\" ?>\n<Envelope/>".getBytes());
 			doc = KXmlUtils.parseXml(bais);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter out = new OutputStreamWriter(baos, "Cp1254");
@@ -262,20 +259,17 @@ public class TestKXmlUtils extends STester {
 			assertEq("<a>\nxxx\n  yy  y\n</a>", baos.toString());
 		} catch (IOException ex) {fail(ex);}
 		try {
-			s = "<a><b a='a\"' b=\"b'\">\n\nxxx\n yy   y\n\n</b></a>";
+			s = "<a><b a='a\"' b=\"b'\">\n\nxxx\n yy  y\n\n</b></a>";
 			el = KXmlUtils.parseXml(s).getDocumentElement();
 			assertEq(KXmlUtils.nodeToString(el, false), s);
-			assertEq(KXmlUtils.nodeToString(el, true),
-				"<a>\n  <b a='a\"' b=\"b'\">\n    xxx yy y\n  </b>\n</a>");
-			assertEq(KXmlUtils.nodeToString(el, true, false, true),
-				"<a>\n  <b a='a\"' b=\"b'\">xxx\n yy   y</b>\n</a>");
+			assertEq(KXmlUtils.nodeToString(el, true), "<a>\n  <b a='a\"' b=\"b'\">\n    xxx yy y\n  </b>\n</a>");
+			assertEq(KXmlUtils.nodeToString(el, true, false, true), "<a>\n  <b a='a\"' b=\"b'\">xxx\n yy  y</b>\n</a>");
 			s = "<x a=\"A\nB\"><y/>text<z/></x>";
 			el = KXmlUtils.parseXml(s).getDocumentElement();
 			assertEq(KXmlUtils.nodeToString(el), "<x a=\"A B\"><y/>text<z/></x>");
 			assertEq(KXmlUtils.nodeToString(el, false), "<x a=\"A B\"><y/>text<z/></x>");
 			assertEq(KXmlUtils.nodeToString(el, true), "<x a=\"A B\">\n  <y/>\n  text\n  <z/>\n</x>");
-			assertEq(KXmlUtils.nodeToString(el, true, false, true),
-				"<x a=\"A B\">\n  <y/>\ntext\n  <z/>\n</x>");
+			assertEq(KXmlUtils.nodeToString(el, true, false, true), "<x a=\"A B\">\n  <y/>\ntext\n  <z/>\n</x>");
 			assertEq(KXmlUtils.nodeToString(el, true, false, false), "<x a=\"A B\"><y/>text<z/></x>");
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -289,8 +283,7 @@ public class TestKXmlUtils extends STester {
 			assertNull(((String) KXpathExpr.evaluate(el,XPathConstants.STRING, "@b", null, null, null)));
 			assertEq(0, ((NodeList) KXpathExpr.evaluate(el,
 				XPathConstants.NODESET, "@b", null, null, null)).getLength());
-			assertEq(0, ((Number) KXpathExpr.evaluate(el,
-				XPathConstants.NUMBER, "@b", null, null, null)).intValue());
+			assertEq(0, ((Number) KXpathExpr.evaluate(el, XPathConstants.NUMBER, "@b", null, null, null)).intValue());
 			assertFalse(((Boolean) KXpathExpr.evaluate(el, XPathConstants.BOOLEAN, "@b", null, null, null)));
 		} catch (DOMException ex) {fail(ex);}
 		try {

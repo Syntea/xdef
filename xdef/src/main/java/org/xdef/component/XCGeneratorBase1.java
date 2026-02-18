@@ -465,8 +465,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		} else {
 			boolean dflt = false;
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){"+LN+
-"\t\tswitch(x.getXMElement().getXDPosition()) {"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){"+LN;
+			result += "\t\tswitch(x.getXMElement().getXDPosition()) {"+LN;
 			for (Iterator<Map.Entry<String, String>> it = xctab.entrySet().iterator(); it.hasNext();) {
 				Map.Entry<String, String> e = it.next();
 				s = e.getValue().replace('#', '.');
