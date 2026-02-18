@@ -39,9 +39,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	/** Create instance of the class XCGeneratorXON.
 	 * @param xp XDPool from which to generate X-components.
 	 * @param reporter Reporter where to write error and warning messages.
-	 * @param gendoc if true generate Javadoc to X-definition source.
+	 * @param genJavadoc if true generate Javadoc to X-definition source.
 	 */
-	XCGeneratorXON(final XDPool xp, final ArrayReporter reporter, final boolean gendoc) {super(xp, reporter, gendoc);}
+	XCGeneratorXON(final XDPool xp, final ArrayReporter reporter, final boolean genJavadoc) {
+		super(xp, reporter, genJavadoc);
+	}
 
 	/** Generate direct getters/seters for value of the text child node.
 	 * @param xel model of element (has only a text child and no attributes).
@@ -348,7 +350,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	 * @param varNames set with variable names.
 	 * @param getters where to generate getters.
 	 */
-	final void genNamedValueGetters(final List<String> keys, final Set<String> varNames, final StringBuilder getters) {
+	final void genNamedValueGetters(final List<String> keys,
+		final Set<String> varNames,
+		final StringBuilder getters) {
 		String key = keys.get(0);
 		String name = xmlToJavaName("get$" + XonTools.toXmlName(key));
 		name = getUniqueName(getUniqueName(name, RESERVED_NAMES), varNames);
@@ -521,8 +525,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				}
 			}
 			// setter
-			jSet = xe.getXonMode() == 0 ? "x"
-				: "String".equals(typ) ? "org.xdef.xon.XonUtils.toJsonString(x,false)" : "x";
+			if (xe.getXonMode() == 0) {
+				jSet = "x";
+			} else {
+				jSet = "String".equals(typ) ? "org.xdef.xon.XonUtils.toJsonString(x,false)" : "x";
+			}
 			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
 "\tpublic void add&{name}(&{typ} x)";
@@ -779,6 +786,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					}
 					break;
 				case X_MAP:
+					//X_MAP
 					typ = "java.util.Map<String, Object>";
 					template +=
 "\tpublic java.util.Map<String, &{typ}> get$&{name}() {"+LN+
@@ -903,7 +911,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\t\t: ";
 				switch (typ) {
 					case "String": s += "(String) org.xdef.xon.XonTools.xmlToJValue((String)o);"; break;
-					case "Object": s += "o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;"; break;
+					case "Object":
+						s += "o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;"; break;
 					default: s += "("+typ+")o;";
 				}
 				s += LN+"\t}"+LN;

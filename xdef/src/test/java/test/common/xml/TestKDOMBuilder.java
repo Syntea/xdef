@@ -54,8 +54,7 @@ public class TestKDOMBuilder extends XDTester {
 		}
 		System.out.print("level: " + level + ", " + node.getNodeName() + ", ");
 		switch (node.getNodeType()) {
-			case Node.ATTRIBUTE_NODE:
-				System.out.println("(ATTRIBUTE) value: '" + node.getNodeValue() + "'"); return;
+			case Node.ATTRIBUTE_NODE: System.out.println("(ATTRIBUTE) value: '" + node.getNodeValue() + "'"); return;
 			case Node.CDATA_SECTION_NODE:
 				System.out.println("(CDATA_SECTION) value: '" + node.getNodeValue() + "'"); return;
 			case Node.COMMENT_NODE: System.out.println("(COMMENT)"); return;
@@ -623,8 +622,7 @@ public class TestKDOMBuilder extends XDTester {
 				e.setPrefix("p");
 				fail("rror not thrown");
 			} catch (DOMException ex) {
-				assertTrue(ex.code == DOMException.NAMESPACE_ERR
-					|| ex.code == DOMException.NO_MODIFICATION_ALLOWED_ERR, ex);
+				assertTrue(ex.code==DOMException.NAMESPACE_ERR || ex.code==DOMException.NO_MODIFICATION_ALLOWED_ERR,ex);
 			}
 			try {
 				e.appendChild(doc.createTextNode("a"));
@@ -765,11 +763,7 @@ public class TestKDOMBuilder extends XDTester {
 				 * <code>null</code>.
 				 */
 				@Override
-				public void handle(short operation,
-					String key,
-					Object data,
-					Node src,
-					Node dst) {
+				public void handle(short operation, String key, Object data, Node src, Node dst) {
 					_operation = operation;
 					_key = key;
 					_data = data;
@@ -946,28 +940,17 @@ public class TestKDOMBuilder extends XDTester {
 			if (nl.getLength() != 11) {
 				fail("number of elements 'image': " + nl.getLength());
 			} else {
-				el = (Element) nl.item(0);
-				assertEq("B1", el.getAttribute("key"));
-				el = (Element) nl.item(1);
-				assertEq("B2", el.getAttribute("key"));
-				el = (Element) nl.item(2);
-				assertEq("B1", el.getAttribute("ref"));
-				el = (Element) nl.item(3);
-				assertEq("B1 B2", el.getAttribute("ref")) ;
-				el = (Element) nl.item(4);
-				assertEq("A1" , el.getAttribute("name"));
-				el = (Element) nl.item(5);
-				assertEq("A1", el.getAttribute("names"));
-				el = (Element) nl.item(6);
-				assertEq("A1 A2 A3", el.getAttribute("names"));
-				el = (Element) nl.item(7);
-				assertEq("N1", el.getAttribute("notation"));
-				el = (Element) nl.item(8);
-				assertEq("N2", el.getAttribute("notation"));
-				el = (Element) nl.item(9);
-				assertEq("N2", el.getAttribute("notation"));
-				el = (Element) nl.item(10);
-				assertEq("N3", el.getAttribute("notation"));
+				assertEq("B1", ((Element) nl.item(0)).getAttribute("key"));
+				assertEq("B2", ((Element) nl.item(1)).getAttribute("key"));
+				assertEq("B1", ((Element) nl.item(2)).getAttribute("ref"));
+				assertEq("B1 B2", ((Element) nl.item(3)).getAttribute("ref")) ;
+				assertEq("A1" , ((Element) nl.item(4)).getAttribute("name"));
+				assertEq("A1", ((Element) nl.item(5)).getAttribute("names"));
+				assertEq("A1 A2 A3", ((Element) nl.item(6)).getAttribute("names"));
+				assertEq("N1", ((Element) nl.item(7)).getAttribute("notation"));
+				assertEq("N2", ((Element) nl.item(8)).getAttribute("notation"));
+				assertEq("N2", ((Element) nl.item(9)).getAttribute("notation"));
+				assertEq("N3", ((Element) nl.item(10)).getAttribute("notation"));
 			}
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -1482,8 +1465,7 @@ public class TestKDOMBuilder extends XDTester {
 							fail("second node is not root element");
 						}
 						break;
-					default:
-						fail("too many nodes");
+					default: fail("too many nodes");
 
 				}
 			}
@@ -1547,10 +1529,8 @@ public class TestKDOMBuilder extends XDTester {
 			}
 			assertEq("http://www.w3.org/2000/xmlns/", el.getAttributeNode("xmlns").getNamespaceURI());
 			assertEq("http://www.w3.org/2000/xmlns/", el.getAttributeNode("xmlns:b").getNamespaceURI());
-			assertEq("http://www.w3.org/XML/1998/namespace",
-				el.getAttributeNode("xml:space").getNamespaceURI());
-			assertEq("http://www.w3.org/XML/1998/namespace",
-				el.getAttributeNode("xml:lang").getNamespaceURI());
+			assertEq("http://www.w3.org/XML/1998/namespace", el.getAttributeNode("xml:space").getNamespaceURI());
+			assertEq("http://www.w3.org/XML/1998/namespace", el.getAttributeNode("xml:lang").getNamespaceURI());
 			el1 = (Element) el.getFirstChild();
 			assertEq("b", el1.getNamespaceURI());
 			if ((s = el1.getAttributeNode("b").getNamespaceURI()) != null) {
@@ -1562,16 +1542,13 @@ public class TestKDOMBuilder extends XDTester {
 			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:space='xyz' xml:lang='en' a='a' >"
 				+ "<b:b b='b' b:b='c' /></a>\n");
 			el = doc.getDocumentElement();
-			assertEq("http://www.w3.org/XML/1998/namespace",
-				el.getAttributeNode("xml:space").getNamespaceURI());
+			assertEq("http://www.w3.org/XML/1998/namespace", el.getAttributeNode("xml:space").getNamespaceURI());
 			assertEq("xyz", el.getAttribute("xml:space"));
 			doc = builder.parse("<a xmlns='a' xmlns:b='b' xml:SPACE='preserve' xml:LANG='en' a='a' >"
 				+ "<b:b b='b' b:b='c' /></a>\n");
 			el = doc.getDocumentElement();
-			assertEq("http://www.w3.org/XML/1998/namespace",
-				el.getAttributeNode("xml:SPACE").getNamespaceURI());
-			assertEq("http://www.w3.org/XML/1998/namespace",
-				el.getAttributeNode("xml:LANG").getNamespaceURI());
+			assertEq("http://www.w3.org/XML/1998/namespace", el.getAttributeNode("xml:SPACE").getNamespaceURI());
+			assertEq("http://www.w3.org/XML/1998/namespace", el.getAttributeNode("xml:LANG").getNamespaceURI());
 			try {
 				builder.parse("<a XMLNS='a' XMLNS:b='b' XML:space='preserve' XML:lang='en' a='a' >"
 					+ "<b:b b='b' b:b='c' /></a>\n");
@@ -1761,10 +1738,10 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setExpandEntityReferences(true);
 			builder.setValidating(false);
 			builder.setIgnoringComments(false);
-			builder.parse("<root atr=\"atr1\" xmlns=\"a\">\n" +
-				"<child xmlns:u=\"t\" xmlns:v=\"t\"\n" +
-				" childAtr1='atr1' u:childAtr2='atr3' v:childAtr2=\"atr2\"/>\n"+
-				"</root>\n");
+			builder.parse(
+"<root atr='atr1' xmlns='a'>\n" +
+"  <child xmlns:u='t' xmlns:v='t' childAtr1='atr1' u:childAtr2='atr3' v:childAtr2='atr2'/>\n"+
+"</root>\n");
 			fail("Error not thrown");
 		} catch (Exception ex) {
 			if (!ex.getMessage().contains("childAtr2")) {
@@ -1794,8 +1771,7 @@ public class TestKDOMBuilder extends XDTester {
 			el = doc.getDocumentElement();
 			assertEq("a", el.getNodeName());
 			nl = el.getChildNodes();
-			assertTrue(nl != null && nl.getLength() == 1
-				&& "\n  <b>txt</b>\n".equals(el.getFirstChild().getNodeValue()));
+			assertTrue(nl!=null && nl.getLength()==1 && "\n  <b>txt</b>\n".equals(el.getFirstChild().getNodeValue()));
 			//test include - href not exists (no fallback)
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);
@@ -1885,8 +1861,7 @@ public class TestKDOMBuilder extends XDTester {
 			builder.setIgnoringComments(false);
 			builder.setXIncludeAware(false);
 			doc = builder.parse(data);
-			assertEq("This sample shows a error-prone method.",
-				KXmlUtils.getTextContent(doc.getDocumentElement()));
+			assertEq("This sample shows a error-prone method.", KXmlUtils.getTextContent(doc.getDocumentElement()));
 			data =
 "<!DOCTYPE test [\n"+
 "<!ELEMENT test (#PCDATA)* >\n"+

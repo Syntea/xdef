@@ -30,7 +30,8 @@ public final class XDCurrency extends XDValueAbstract {
 	public XDCurrency(final String code) {
 		_value = Currency.getInstance(code);
 		if (_value == null) {
-			throw new SRuntimeException(XDEF.XDEF809, "Currency", code);//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
+			//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
+			throw new SRuntimeException(XDEF.XDEF809, "Currency", code);
 		}
 	}
 

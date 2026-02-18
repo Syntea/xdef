@@ -2,7 +2,8 @@ package org.xdef;
 
 import org.w3c.dom.Element;
 
-/** Map of named items and sequence items in X-script. Contains both, the table of named items and sequence of items.
+/** Map of named items and sequence items in X-script. Contains both, the table of named items and
+ * sequence of items.
  * @author Vaclav Trojan
  */
 public interface XDContainer extends XDValue {
@@ -28,7 +29,8 @@ public interface XDContainer extends XDValue {
 	 */
 	public void addXDItem(Element value);
 	/** Set item at position given by index.
-	 * @param index index of item item. If index is out of range of items this method does nothing.
+	 * @param index index of item item. If index is out of range of items this
+	 * method does nothing.
 	 * @param value of item.
 	 * @return original value or null;
 	 */
@@ -169,15 +171,17 @@ public interface XDContainer extends XDValue {
 	 */
 	public boolean isEmpty();
 
-	/** Sorts this XDContainer. If an item is org.w3c.Node object then as a key it is used the text value of an item).
+	/** Sorts this XDContainer.
+	 * If an item is an org.w3c.Node object then as a key it is used the text value of an item).
 	 * @param asc if true the XDContainer will be sorted ascendant, otherwise descendant.
 	 * @return this XDContainer sorted.
 	 */
 	public XDContainer sortXD(boolean asc);
 
 	/** Sorts this XDContainer.
-	 * @param key String with xpath expression or null (if null or empty string then for org.w3c.Node items it is used
-	 * as a key the text value of an item). For items other then  org.w3c.Node objects this parameter is ignored.
+	 * @param key String with xpath expression or null (if null or empty string then for org.w3c.Node items
+	 * it is used as a key the text value of an item). For items other then  org.w3c.Node objects this
+	 * parameter is ignored.
 	 * @param asc if true the XDContainer will be sorted ascendant, otherwise descendant.
 	 * @return this XDContainer sorted.
 	 */

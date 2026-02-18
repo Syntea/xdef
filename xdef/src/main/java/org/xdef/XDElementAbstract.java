@@ -37,6 +37,7 @@ import org.xdef.xml.KXmlUtils;
 public abstract class XDElementAbstract extends XDValueAbstract implements Element, XDElement, NamedNodeMap {
 
 	private final static NodeList EMPTYNODELIST = new NodeList() {
+
 		@Override
 		public Node item(int index) {return null;}
 
@@ -290,13 +291,19 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 	public Node setNamedItem(final Node arg) throws DOMException {throw new SUnsupportedOperationException();}
 
 	@Override
-	public Node removeNamedItem(final String name) throws DOMException {throw new SUnsupportedOperationException();}
+	public Node removeNamedItem(final String name) throws DOMException {
+		throw new SUnsupportedOperationException();
+	}
 
 	@Override
-	public Node getNamedItemNS(final String nsURI, final String localName){return getAttributeNodeNS(nsURI, localName);}
+	public Node getNamedItemNS(final String nsURI, final String localName) {
+		return getAttributeNodeNS(nsURI, localName);
+	}
 
 	@Override
-	public Node setNamedItemNS(final Node arg) throws DOMException {throw new SUnsupportedOperationException();}
+	public Node setNamedItemNS(final Node arg) throws DOMException {
+		throw new SUnsupportedOperationException();
+	}
 
 	@Override
 	public Node removeNamedItemNS(final String nsURI, final String localName) {
@@ -335,10 +342,14 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 	public void addXDItem(final Element value) {throw new SUnsupportedOperationException();}
 
 	@Override
-	public XDValue replaceXDItem(final int index, final XDValue value) {throw new SUnsupportedOperationException();}
+	public XDValue replaceXDItem(final int index, final XDValue value) {
+		throw new SUnsupportedOperationException();
+	}
 
 	@Override
-	public void insertXDItemBefore(final int index, final XDValue value) {throw new SUnsupportedOperationException();}
+	public void insertXDItemBefore(final int index, final XDValue value) {
+		throw new SUnsupportedOperationException();
+	}
 
 	@Override
 	public XDValue removeXDItem(final int index) {throw new SUnsupportedOperationException();}
@@ -353,14 +364,16 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 	public XDValue setXDNamedItem(final XDNamedValue item) {throw new SUnsupportedOperationException();}
 
 	@Override
-	public XDValue setXDNamedItem(final String name, final XDValue value) {throw new SUnsupportedOperationException();}
+	public XDValue setXDNamedItem(final String name, final XDValue value) {
+		throw new SUnsupportedOperationException();
+	}
 
 	@Override
 	public boolean hasXDNamedItem(final String name) {return hasAttribute(name);}
 
 	@Override
 	public XDNamedValue getXDNamedItem(final String name) {
-		return hasAttribute(name) ? new DefNamedValue(name, new DefString(getAttribute(name))) : null;
+		return hasAttribute(name)? new DefNamedValue(name,new DefString(getAttribute(name))) : null;
 	}
 
 	@Override
@@ -416,6 +429,7 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 	////////////////////////////////////////////////////////////////////////////
 
 	private final class MyDocument implements Document {
+
 		private final XDElementAbstract _elem;
 
 		MyDocument(final XDElementAbstract elem) {_elem = elem;}
@@ -444,10 +458,12 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 		public final Comment createComment(final String data) {throw new SUnsupportedOperationException();}
 
 		@Override
-		public final CDATASection createCDATASection(final String data) {throw new SUnsupportedOperationException();}
+		public final CDATASection createCDATASection(final String data) {
+			throw new SUnsupportedOperationException();
+		}
 
 		@Override
-		public final ProcessingInstruction createProcessingInstruction(final String target, final String data) {
+		public final ProcessingInstruction createProcessingInstruction(final String target,final String data){
 			throw new SUnsupportedOperationException();
 		}
 
@@ -460,7 +476,9 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 		}
 
 		@Override
-		public final NodeList getElementsByTagName(final String tagname) {throw new SUnsupportedOperationException();}
+		public final NodeList getElementsByTagName(final String tagname) {
+			throw new SUnsupportedOperationException();
+		}
 
 		@Override
 		public final Node importNode(final Node importedNode, final boolean deep) {
@@ -479,7 +497,8 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 
 		@Override
 		public final NodeList getElementsByTagNameNS(final String uri, final String localName) {
-			if (localName.equals(_name) && (uri==null && _uri==null ||	uri!=null && uri.equals(_uri))) {
+			if (localName.equals(_name) &&
+				(uri==null && _uri==null ||	uri!=null && uri.equals(_uri))) {
 				return getChildNodes();
 			}
 			return EMPTYNODELIST;
@@ -552,6 +571,7 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 		@Override
 		public final NodeList getChildNodes() {
 			return new NodeList() {
+
 				@Override
 				public final Node item(final int index) {
 					return index == 0 ? _elem : null;
@@ -645,7 +665,9 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 		public final boolean isDefaultNamespace(final String s) {throw new SUnsupportedOperationException();}
 
 		@Override
-		public final String lookupNamespaceURI(final String prefix) {throw new SUnsupportedOperationException();}
+		public final String lookupNamespaceURI(final String prefix) {
+			throw new SUnsupportedOperationException();
+		}
 
 		@Override
 		public final boolean isEqualNode(final Node arg) {return arg == this;}
@@ -672,9 +694,10 @@ public abstract class XDElementAbstract extends XDValueAbstract implements Eleme
 		}
 	}
 
-	protected Attr createAttr(final String name, final String val) {return new MyAttr(name, val, this);}
+	protected Attr createAttr(final String name,final  String val) {return new MyAttr(name, val, this);}
 
 	final class MyAttr implements Attr {
+
 		private final String _name;
 		private final String _value;
 		private final Element _elem;
