@@ -46,7 +46,8 @@ public class Canonize {
 			if (home.endsWith("/data/")) {
 				return; //do not process data directories
 			}
-
+            System.out.println("HOME: " + home);
+            
 			String hdrtext = null;
 			String tailtext = null;
 			System.out.println("Directory: " + home);
