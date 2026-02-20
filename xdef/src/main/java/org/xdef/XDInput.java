@@ -9,36 +9,36 @@ import org.xdef.sys.ReportReader;
  */
 public interface XDInput extends XDValue {
 
-	/** Reset input stream.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public void reset() throws SRuntimeException;
+    /** Reset input stream.
+     * @throws SRuntimeException if an error occurs.
+     */
+    public void reset() throws SRuntimeException;
 
-	/** Get actual report.
-	 * @return actual report.
-	 */
-	public Report getReport();
+    /** Get actual report.
+     * @return actual report.
+     */
+    public Report getReport();
 
-	/** Read actual report as string.
-	 * @return read data or null.
-	 */
-	public String readString();
+    /** Read actual report as string.
+     * @return read data or null.
+     */
+    public String readString();
 
-	/** Read reports from actual position as string.
-	 * @return reports from actual position or an empty string.
-	 */
-	public String readStream();
+    /** Read reports from actual position as string.
+     * @return reports from actual position or an empty string.
+     */
+    public String readStream();
 
-	/** Close input. */
-	public void close();
+    /** Close input. */
+    public void close();
 
-	/** Check if input is in the state open.
-	 * @return true if this input is opened.
-	 */
-	public boolean isOpened();
+    /** Check if input is in the state open.
+     * @return true if this input is opened.
+     */
+    public boolean isOpened();
 
-	/** Get reader.
-	 * @return report reader.
-	 */
-	public ReportReader getReader();
+    /** Get reader.
+     * @return report reader.
+     */
+    public ReportReader getReader();
 }

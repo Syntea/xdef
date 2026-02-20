@@ -72,1165 +72,1165 @@ import org.xdef.xon.XonTools.JValue;
  */
 public final class CompileXonXdef extends XScriptParser {
 
-	/** Prefix of X-definition namespace. */
-	private final String _xdPrefix;
-	/** Index of X-definition namespace. */
-	private final int _xdIndex;
-	/** Namespace of X-definition.*/
-	private final String _xdNamespace;
-	/** XPath position of XON/JSON description.*/
-	private final String _basePos;
-	/** PNode with generated model.*/
-	private final PNode _xonModel;
-	/** X-position of generated %any model.*/
-	private String _anyXPos;
+    /** Prefix of X-definition namespace. */
+    private final String _xdPrefix;
+    /** Index of X-definition namespace. */
+    private final int _xdIndex;
+    /** Namespace of X-definition.*/
+    private final String _xdNamespace;
+    /** XPath position of XON/JSON description.*/
+    private final String _basePos;
+    /** PNode with generated model.*/
+    private final PNode _xonModel;
+    /** X-position of generated %any model.*/
+    private String _anyXPos;
 /*#if DEBUG*#/
-	// debugging switches; from properties.
-	private final String _dbgSwitches; // remove this code in future
+    // debugging switches; from properties.
+    private final String _dbgSwitches; // remove this code in future
 /*#end*/
 
-	/** Prepare instance of CompileXonXdef. */
-	CompileXonXdef(final PNode pn, final SBuffer name, final ReportWriter reporter) {
-		super(StringParser.XMLVER1_0);
-		_xdNamespace = pn._nsURI;
-		_xdPrefix = pn.getPrefix();
-		_xdIndex = pn._nsPrefixes.get(_xdPrefix);
-		_basePos = pn._xpathPos + "/text()";
-		setReportWriter(reporter);
-		_xonModel = pn;
-		_anyXPos = null;
+    /** Prepare instance of CompileXonXdef. */
+    CompileXonXdef(final PNode pn, final SBuffer name, final ReportWriter reporter) {
+        super(StringParser.XMLVER1_0);
+        _xdNamespace = pn._nsURI;
+        _xdPrefix = pn.getPrefix();
+        _xdIndex = pn._nsPrefixes.get(_xdPrefix);
+        _basePos = pn._xpathPos + "/text()";
+        setReportWriter(reporter);
+        _xonModel = pn;
+        _anyXPos = null;
 /*#if DEBUG*#/
-		// read swithes from properties. Remove this code in future.
-		String s = System.getProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES);
-		_dbgSwitches = s == null ? "" : s.trim();
+        // read swithes from properties. Remove this code in future.
+        String s = System.getProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES);
+        _dbgSwitches = s == null ? "" : s.trim();
 /*#end*/
-	}
+    }
 
-	/** Set attribute to PNode.
-	 * @param pn PNode where to set an attribute.
-	 * @param name name of attribute.
-	 * @param val SBuffer with the value of attribute.
-	 * @return created PAttr.
-	 */
-	private PAttr setAttr(final PNode pn, final String name, final SBuffer val) {
-		PAttr pa = new PAttr(name, val, null, -1);
-		pa._localName = name;
-		pn.setAttr(pa);
-		pa._xpathPos = _basePos;
-		return pa;
-	}
+    /** Set attribute to PNode.
+     * @param pn PNode where to set an attribute.
+     * @param name name of attribute.
+     * @param val SBuffer with the value of attribute.
+     * @return created PAttr.
+     */
+    private PAttr setAttr(final PNode pn, final String name, final SBuffer val) {
+        PAttr pa = new PAttr(name, val, null, -1);
+        pa._localName = name;
+        pn.setAttr(pa);
+        pa._xpathPos = _basePos;
+        return pa;
+    }
 
-	/** Get Xdef attribute.
-	 * @param pn PNode where to set attribute.
-	 * @param name local name of attribute.
-	 * @return PAttr or null.
-	 */
-	private PAttr getXDAttr(final PNode pn, final String name) {
-		return pn.getAttrNS(name, pn._nsPrefixes.get(_xdPrefix));
-	}
+    /** Get Xdef attribute.
+     * @param pn PNode where to set attribute.
+     * @param name local name of attribute.
+     * @return PAttr or null.
+     */
+    private PAttr getXDAttr(final PNode pn, final String name) {
+        return pn.getAttrNS(name, pn._nsPrefixes.get(_xdPrefix));
+    }
 
-	/** Set Xdef attribute.
-	 * @param pn PNode where to set attribute.
-	 * @param name local name of attribute.
-	 * @param val SBuffer with value of attribute.
-	 * @return created PAttr.
-	 */
-	private PAttr setXDAttr(final PNode pn, final String name, final SBuffer val) {
-		int nsindex;
-		if (pn._nsPrefixes.containsKey(_xdPrefix)) {
-			nsindex = pn._nsPrefixes.get(_xdPrefix);
-		} else {
-			nsindex = pn._nsPrefixes.size();
-			pn._nsPrefixes.put(_xdPrefix, nsindex);
-		}
-		PAttr pa = new PAttr(_xdPrefix+":"+name, val, _xdNamespace, nsindex);
-		pa._localName = name;
-		pn.removeAttr(pa._name);
-		pn.setAttr(pa);
-		pa._xpathPos = _basePos;
-		return pa;
-	}
+    /** Set Xdef attribute.
+     * @param pn PNode where to set attribute.
+     * @param name local name of attribute.
+     * @param val SBuffer with value of attribute.
+     * @return created PAttr.
+     */
+    private PAttr setXDAttr(final PNode pn, final String name, final SBuffer val) {
+        int nsindex;
+        if (pn._nsPrefixes.containsKey(_xdPrefix)) {
+            nsindex = pn._nsPrefixes.get(_xdPrefix);
+        } else {
+            nsindex = pn._nsPrefixes.size();
+            pn._nsPrefixes.put(_xdPrefix, nsindex);
+        }
+        PAttr pa = new PAttr(_xdPrefix+":"+name, val, _xdNamespace, nsindex);
+        pa._localName = name;
+        pn.removeAttr(pa._name);
+        pn.setAttr(pa);
+        pa._xpathPos = _basePos;
+        return pa;
+    }
 
-	/** Skip white space separators and comments. Note: line comments are not
-	 * allowed in X-script.
-	 */
-	private void skipSpacesAndComments() {
-		isSpaces();
-		while(isToken("/*") ) {
-			if (!findTokenAndSkip("*/")) {
-				error(JSON.JSON015); //Unclosed comment
-				setEos();
-				return;
-			}
-			isSpaces();
-		}
-	}
+    /** Skip white space separators and comments. Note: line comments are not
+     * allowed in X-script.
+     */
+    private void skipSpacesAndComments() {
+        isSpaces();
+        while(isToken("/*") ) {
+            if (!findTokenAndSkip("*/")) {
+                error(JSON.JSON015); //Unclosed comment
+                setEos();
+                return;
+            }
+            isSpaces();
+        }
+    }
 
-	/** Skip all blanks, comments and semicolons. */
-	private void skipSemiconsBlanksAndComments() {
-		for(;;) {
-			skipSpacesAndComments();
-			if (!isChar(';')) {
-				return;
-			}
-		}
-	}
+    /** Skip all blanks, comments and semicolons. */
+    private void skipSemiconsBlanksAndComments() {
+        for(;;) {
+            skipSpacesAndComments();
+            if (!isChar(';')) {
+                return;
+            }
+        }
+    }
 
-	/** Parse X-script and return occurrence and executive part (type declaration) in separate fields.
-	 * @param sbuf source text with X-script
-	 * @return array with SBuffer items (item 0 is occurrence specification) and item 1 is composed
-	 * form remaining X-script parts).
-	 */
-	private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
-		SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
-		if (sbuf == null) {
-			return result;
-		}
-		List<Object> sectionList = parseXscript(sbuf);
-		SBuffer occ = removeSection("occurs", sectionList);
-		if (occ != null) {
-			result[0] = occ;
-		}
-		result[1] = xsToString(sectionList);
-		setPosition((SBuffer) result[1]);
-		return result;
-	}
+    /** Parse X-script and return occurrence and executive part (type declaration) in separate fields.
+     * @param sbuf source text with X-script
+     * @return array with SBuffer items (item 0 is occurrence specification) and item 1 is composed
+     * form remaining X-script parts).
+     */
+    private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
+        SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
+        if (sbuf == null) {
+            return result;
+        }
+        List<Object> sectionList = parseXscript(sbuf);
+        SBuffer occ = removeSection("occurs", sectionList);
+        if (occ != null) {
+            result[0] = occ;
+        }
+        result[1] = xsToString(sectionList);
+        setPosition((SBuffer) result[1]);
+        return result;
+    }
 
-	/** Create PNode.
-	 * @param parent parent node.
-	 * @param nsURI namespace URI.
-	 * @param name qualified name of PNode.
-	 * @param pos source position.
-	 * @return created PNode.
-	 */
-	private PNode genPElement(final PNode parent, final String nsURI, final String name, final SPosition pos){
-		PNode result = new PNode(name, pos, parent, parent._xdVersion, parent._xmlVersion);
-		int nsindex;
-		String localName;
-		if (nsURI != null) {
-			int ndx = name.indexOf(':');
-			String prefix = ndx >= 0 ? name.substring(0, ndx) : "";
-			localName = ndx >= 0 ? name.substring(ndx + 1) : name;
-			if (result._nsPrefixes.containsKey(prefix)) {
-				nsindex = result._nsPrefixes.get(prefix);
-			} else {
-				nsindex = parent._nsPrefixes.size();// add namespace to the list
-				result._nsPrefixes.put(_xdPrefix, nsindex);
-			}
-		} else {
-			nsindex = -1; // no namespace
-			localName = name;
-		}
-		result._nsindex = nsindex;
-		result._nsURI = nsURI;
-		result._localName = localName;
-		result._xpathPos = _basePos;
-		return result;
-	}
+    /** Create PNode.
+     * @param parent parent node.
+     * @param nsURI namespace URI.
+     * @param name qualified name of PNode.
+     * @param pos source position.
+     * @return created PNode.
+     */
+    private PNode genPElement(final PNode parent, final String nsURI, final String name, final SPosition pos){
+        PNode result = new PNode(name, pos, parent, parent._xdVersion, parent._xmlVersion);
+        int nsindex;
+        String localName;
+        if (nsURI != null) {
+            int ndx = name.indexOf(':');
+            String prefix = ndx >= 0 ? name.substring(0, ndx) : "";
+            localName = ndx >= 0 ? name.substring(ndx + 1) : name;
+            if (result._nsPrefixes.containsKey(prefix)) {
+                nsindex = result._nsPrefixes.get(prefix);
+            } else {
+                nsindex = parent._nsPrefixes.size();// add namespace to the list
+                result._nsPrefixes.put(_xdPrefix, nsindex);
+            }
+        } else {
+            nsindex = -1; // no namespace
+            localName = name;
+        }
+        result._nsindex = nsindex;
+        result._nsURI = nsURI;
+        result._localName = localName;
+        result._xpathPos = _basePos;
+        return result;
+    }
 
-	/** Create PNode as XON/JSON element with given position,
-	 * @param parent parent PNode.
-	 * @param name local name of XON/JSON element.
-	 * @param pos source position
-	 * @return created PNode,
-	 */
-	private PNode genJElement(final PNode parent, final String name, final SPosition pos) {
-		return genPElement(parent, XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + name, pos);
-	}
+    /** Create PNode as XON/JSON element with given position,
+     * @param parent parent PNode.
+     * @param name local name of XON/JSON element.
+     * @param pos source position
+     * @return created PNode,
+     */
+    private PNode genJElement(final PNode parent, final String name, final SPosition pos) {
+        return genPElement(parent, XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + name, pos);
+    }
 
-	/** Create PNode as XDef element with given position,
-	 * @param parent parent PNode.
-	 * @param name local name of XDef element.
-	 * @param spos pos position
-	 * @return created PNode,
-	 */
-	private PNode genXDElement(final PNode parent, final String name, final SPosition pos) {
-		return genPElement(parent, _xdNamespace, _xdPrefix + ":" + name, pos);
-	}
+    /** Create PNode as XDef element with given position,
+     * @param parent parent PNode.
+     * @param name local name of XDef element.
+     * @param spos pos position
+     * @return created PNode,
+     */
+    private PNode genXDElement(final PNode parent, final String name, final SPosition pos) {
+        return genPElement(parent, _xdNamespace, _xdPrefix + ":" + name, pos);
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create X-definition model from xd:json/xon (use W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Add match section to xd:script attribute. If match section already in this attribute exists then
-	 * add the argument to the expression with the operator "AAND".
-	 * @param pn PNode where to set or update the xd:script attribute.
-	 * @param matchexpr the match expression.
-	 */
-	private void addMatchExpression(final PNode pn, final String matchexpr) {
-		PAttr attr = getXDAttr(pn, "script");
-		SBuffer val;
-		if (attr != null) {
-			val = attr._value;
-			List<Object> sections = parseXscript(val);
-			SBuffer matchItem = findSection("match", sections);
-			if (matchItem == null) {
-				matchItem = new SBuffer(matchexpr, sections.isEmpty() ? pn._name : (SBuffer) sections.get(1));
-				sections.add("match");
-				sections.add(matchItem);
-			} else {
-				String s = matchItem.getString();
-				matchItem.setString(s.startsWith("{")
-					? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AAND " + s);
-			}
-			val = xsToString(sections);
-		} else {
-			val = new SBuffer("match " + matchexpr + ';', pn._name);
-		}
-		setXDAttr(pn, "script", val);
-	}
+    /** Add match section to xd:script attribute. If match section already in this attribute exists then
+     * add the argument to the expression with the operator "AAND".
+     * @param pn PNode where to set or update the xd:script attribute.
+     * @param matchexpr the match expression.
+     */
+    private void addMatchExpression(final PNode pn, final String matchexpr) {
+        PAttr attr = getXDAttr(pn, "script");
+        SBuffer val;
+        if (attr != null) {
+            val = attr._value;
+            List<Object> sections = parseXscript(val);
+            SBuffer matchItem = findSection("match", sections);
+            if (matchItem == null) {
+                matchItem = new SBuffer(matchexpr, sections.isEmpty() ? pn._name : (SBuffer) sections.get(1));
+                sections.add("match");
+                sections.add(matchItem);
+            } else {
+                String s = matchItem.getString();
+                matchItem.setString(s.startsWith("{")
+                    ? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AAND " + s);
+            }
+            val = xsToString(sections);
+        } else {
+            val = new SBuffer("match " + matchexpr + ';', pn._name);
+        }
+        setXDAttr(pn, "script", val);
+    }
 
-	/** Update key information to xd:script attribute.
-	 * @param pn PNode where to update.
-	 * @param key value of key.
-	 */
-	private void updateKeyInfo(final PNode pn, final String key) {
-		if (ANY_NAME.equals(key)) {
-			setAttr(pn,X_KEYATTR, new SBuffer("string(0,*);", pn._name));
-		} else { // ANY name
-			addMatchExpression(pn, '@' + X_KEYATTR + "=='"+ key +"'");
-			setAttr(pn, X_KEYATTR, new SBuffer("fixed('" + key + "');",pn._name));
-		}
-	}
+    /** Update key information to xd:script attribute.
+     * @param pn PNode where to update.
+     * @param key value of key.
+     */
+    private void updateKeyInfo(final PNode pn, final String key) {
+        if (ANY_NAME.equals(key)) {
+            setAttr(pn,X_KEYATTR, new SBuffer("string(0,*);", pn._name));
+        } else { // ANY name
+            addMatchExpression(pn, '@' + X_KEYATTR + "=='"+ key +"'");
+            setAttr(pn, X_KEYATTR, new SBuffer("fixed('" + key + "');",pn._name));
+        }
+    }
 
-	private PNode genXonValue(final String name, final JValue jo, final PNode parent) {
-		SBuffer sbf, sbocc;
-		PNode pn = genJElement(parent, X_VALUE, jo.getPosition());
-		if (jo.getValue() != null) {
-			if (jo.toString().trim().isEmpty()) {
-				sbf = new SBuffer("jvalue()", jo.getPosition());
-				sbocc = new SBuffer("?", jo.getPosition());
-			} else {
-				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
-				if ((sbocc = parsedScript[0]) != null) { // occurrence
-					if (!ANY_NAME.equals(name) && !X_ARRAY.equals(parent.getLocalName())) {
-						setSourceBuffer(sbocc); // read occurrence
-						nextSymbol();
-						XOccurrence xocc = new XOccurrence();
-						isOccurrence(xocc);
-						if (xocc.maxOccurs() != 1) {
-							//Maximum occurrence of item "&{0}" can not be higher then 1
-							error(XDEF.XDEF535, XonTools.xmlToJName(name));
-						}
-					}
-				}
-				if (parsedScript[1].getString().isEmpty()) {//no validation etc
-					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
-				}
-				sbf = parsedScript[1];
-			}
-			if (sbocc != null) { // occurrence
-				setXDAttr(pn, "script", sbocc);
-			}
-			setAttr(pn, X_VALATTR, sbf);
-		}
-		if (name != null) {
-			if (pn._nsPrefixes.containsKey(_xdPrefix) && "choice".equals(pn.getLocalName())) {
-				for (PNode p: pn.getChildNodes()) {
-					setName(p, name);
-				}
-			} else {
-				setName(pn, name);
-			}
-		}
-		return pn;
-	}
+    private PNode genXonValue(final String name, final JValue jo, final PNode parent) {
+        SBuffer sbf, sbocc;
+        PNode pn = genJElement(parent, X_VALUE, jo.getPosition());
+        if (jo.getValue() != null) {
+            if (jo.toString().trim().isEmpty()) {
+                sbf = new SBuffer("jvalue()", jo.getPosition());
+                sbocc = new SBuffer("?", jo.getPosition());
+            } else {
+                SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
+                if ((sbocc = parsedScript[0]) != null) { // occurrence
+                    if (!ANY_NAME.equals(name) && !X_ARRAY.equals(parent.getLocalName())) {
+                        setSourceBuffer(sbocc); // read occurrence
+                        nextSymbol();
+                        XOccurrence xocc = new XOccurrence();
+                        isOccurrence(xocc);
+                        if (xocc.maxOccurs() != 1) {
+                            //Maximum occurrence of item "&{0}" can not be higher then 1
+                            error(XDEF.XDEF535, XonTools.xmlToJName(name));
+                        }
+                    }
+                }
+                if (parsedScript[1].getString().isEmpty()) {//no validation etc
+                    parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
+                }
+                sbf = parsedScript[1];
+            }
+            if (sbocc != null) { // occurrence
+                setXDAttr(pn, "script", sbocc);
+            }
+            setAttr(pn, X_VALATTR, sbf);
+        }
+        if (name != null) {
+            if (pn._nsPrefixes.containsKey(_xdPrefix) && "choice".equals(pn.getLocalName())) {
+                for (PNode p: pn.getChildNodes()) {
+                    setName(p, name);
+                }
+            } else {
+                setName(pn, name);
+            }
+        }
+        return pn;
+    }
 
-	private void setName(final PNode pn, final String name) {
-		if (ANY_NAME.equals(name)) {
-			setAttr(pn, X_KEYATTR, new SBuffer("string();", pn._name));
-		} else {
-			addMatchExpression(pn, '@' + X_KEYATTR + "=='"+ name +"'");
-			setAttr(pn, X_KEYATTR, new SBuffer("fixed('"+name+ "');", pn._name));
-		}
-	}
+    private void setName(final PNode pn, final String name) {
+        if (ANY_NAME.equals(name)) {
+            setAttr(pn, X_KEYATTR, new SBuffer("string();", pn._name));
+        } else {
+            addMatchExpression(pn, '@' + X_KEYATTR + "=='"+ name +"'");
+            setAttr(pn, X_KEYATTR, new SBuffer("fixed('"+name+ "');", pn._name));
+        }
+    }
 
-	private PNode genXonMap(final JMap map, final PNode parent) {
-		Object val;
-		List<String> oneOfList = new ArrayList<>();
-		List<Object> sections;
-		SBuffer sbf;
-		if ((val = map.remove(X_ONEOF_DIRECTIVE)) != null && val instanceof JValue) {
-			String[] list = ((JValue) val).toString().split(X_ONEOF_DIRECTIVE);
-			for (int i = 1; i < list.length; i++) {
-				String x = list[i];
-				if (map.containsKey(x)) {
-					oneOfList.add(x);
-				} else {
-					SPosition spos = ((JValue)val).getPosition();
-					error(spos, XDEF.XDEF122, "'"+x+"'"); //Referred object not exists: &{0}
-				}
-			}
-			if (oneOfList.size() == 1) {
-				oneOfList.clear();
-			}
-		}
-		PNode pn2, pn1 = genJElement(parent, X_MAP, map.getPosition());
-		if ((val = map.remove(X_SCRIPT_DIRECTIVE)) != null && val instanceof JValue) {
-			JValue jv = (JValue) val;
-			setSourceBuffer(jv.getSBuffer());
-			skipSpacesAndComments();
-			if (isToken(X_ONEOF_DIRECTIVE)) {
-				pn2 = genXDElement(pn1, "choice", getPosition());
-				pn1.addChildNode(pn2);
-				skipSemiconsBlanksAndComments();
-				if (!eos()) {
-					setXDAttr(pn2, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
-					sections = parseXscript();
-					SBuffer item = removeSection("occurs", sections);
-					if (item != null) {
-						XOccurrence occ = new XOccurrence();
-						setSourceBuffer(item);
-						setSourceBuffer(item);
-						nextSymbol();
-						isOccurrence(occ);
-						if (occ.maxOccurs() > 1) {
-							//Specification of occurence of &{0} group can not be higher then 1
-							error(XDEF.XDEF252, ONEOF_DIRECTIVE);
-						}
-					}
-					eos();
-				}
-			} else if (map.size() <= 1) {
-				pn2 = pn1; // less then 2 items or parent is a json model => do not add "xd:mixed" element
-			} else { // more then 1 items and parent is not json model => add "xd:mixed" element
-				pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
-				pn1.addChildNode(pn2);
-			}
-			if (!eos()) { // set xd:script attribute
-				setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
-			}
-		} else if (map.size() <= 1) { // less then 2 items
-			pn2 = pn1; // no "xd:mixed" node!
-		} else { // more then 1 items
-			pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
-			pn1.addChildNode(pn2);
-		}
-		Object anyItem = null;
-		boolean allOneOfRequired = true;
-		for (Map.Entry<Object, Object> entry: map.entrySet()) {
-			String key = (String) entry.getKey();
-			Object o = entry.getValue();
-			if (key == null) { // ANY_NAME ... || ANY_NAME.equals(key)
-				anyItem = o;
-			} else {
-				boolean maxOccursErrorReported = false;
-				PNode pn3;
-				String keyXmlName = XonTools.toXmlName(key);
-				if (o instanceof Map || o instanceof List) {
-					pn3 = genXonModel(o, pn2);
-					if (!(_xdPrefix.equals(pn3.getPrefix()) && "choice".equals(pn3.getLocalName()))) {
-						updateKeyInfo(pn3, keyXmlName);
-					}
-				} else {
-					pn3 = genXonValue(keyXmlName, (JValue) o, pn2);
-					pn2.addChildNode(pn3);
-					maxOccursErrorReported = true;
-				}
-				PAttr xscr = getXDAttr(pn3, "script");
-				if (xscr != null) {
-					sbf = removeSection("occurs", parseXscript(xscr._value));
-					if (sbf != null) {
-						XOccurrence occ = new XOccurrence();
-						setSourceBuffer(sbf);
-						nextSymbol();
-						isOccurrence(occ);
-						if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
-							//Maximum occurrence of item "&{0}" can not be higher then 1
-							error(XDEF.XDEF535, key);
-							maxOccursErrorReported = true;
-						}
-					}
-					if (findSection("ref", parseXscript(xscr._value)) != null
-						&& "array".equals(pn3.getLocalName())) {
-						error(XDEF.XDEF311); //Incorrect reference to an array or map
-					}
-				}
-				if (o != null && (o instanceof Map || o instanceof List)) {
-					xscr = getXDAttr(pn3, "script");
-					if (xscr != null) {
-						sbf = removeSection("occurs", parseXscript(xscr._value));
-						if (sbf != null) {
-							XOccurrence occ = new XOccurrence();
-							setSourceBuffer(sbf);
-							nextSymbol();
-							isOccurrence(occ);
-							if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
-								//Maximum occurrence of item "&{0}" can not be higher then 1
-								error(XDEF.XDEF535, key);
-							}
-						}
-						if (findSection("ref", parseXscript(xscr._value)) != null
-							&& "array".equals(pn3.getLocalName())) {
-							error(XDEF.XDEF311); //Incorrect reference to an array or map
-						}
-					}
-					if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
-						for (PNode x : pn3.getChildNodes()) {
-							updateKeyInfo(x, keyXmlName);
-						}
-					} else {
-						updateKeyInfo(pn3, keyXmlName);
-					}
-				}
-				if (oneOfList.contains(key)) {
-					SBuffer sbf1;
-					if (xscr == null) {
-						sbf1 = new SBuffer("?;", pn3._name);
-					} else {
-						sbf1 = removeSection("occurs", sections = parseXscript(xscr._value));
-						if (sbf1 != null) {
-							XOccurrence occ = new XOccurrence();
-							setSourceBuffer(sbf1);
-							nextSymbol();
-							isOccurrence(occ);
-							if (!occ.isRequired()) {
-								allOneOfRequired = false;
-							}
-						}
-						sections.add(0, "occurs");
-						sections.add(1, new SBuffer("occurs ?;", xscr._value));
-						sbf1 = xsToString(sections);
-					}
-					setXDAttr(pn3, "script", sbf1);
-					xscr = getXDAttr(pn3, "script");
-					sections = parseXscript(xscr._value);
-					sbf = removeSection("match", sections);
-					String t;
-					if (sbf != null && !(t=sbf.getString().trim()).isEmpty()) {
-						while (t.endsWith(";")) { // remove trailing semicolons
-							t = t.substring(t.length() - 1);
-						}
-						t += " AAND ($oneOf++)==0;";
-					} else {
-						t = "($oneOf++)==0;";
-					}
-					sections.add("match");
-					sections.add(new SBuffer(t, xscr._value));
-					setXDAttr(pn3, "script", xsToString(sections));
-				}
-			}
-		}
-		if (anyItem != null) {
-			if (anyItem instanceof Map || anyItem instanceof List) {
-				PNode pn3 = genXonModel(anyItem, pn2);
-				if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
-					for (PNode pn : pn3.getChildNodes()) {
-						updateKeyInfo(pn, ANY_NAME);
-					}
-				} else {
-					updateKeyInfo(pn3, ANY_NAME);
-				}
-				setAnyOccurrence(pn3);
-			} else {
-				if (anyItem instanceof JAny) {
-					genXonAny((JAny) anyItem, pn2);
-				} else  {
-					PNode pn3 = genXonValue(ANY_NAME, (JValue) anyItem,pn2);
-					setAttr(pn3, X_KEYATTR, new SBuffer("string()", getPosition()));
-					pn2.addChildNode(pn3);
-				}
-			}
-		}
-		if (!oneOfList.isEmpty()) {
-			PAttr xscr = getXDAttr(pn1, "script");
-			if (xscr != null && xscr._value != null) {
-				sections = parseXscript(xscr._value);
-			} else {
-				sections = new ArrayList<>();
-			}
-			if ((sbf = findSection("var", sections)) == null) {
-				sections.add("var");
-				sections.add(new SBuffer("int $oneOf = 0;", pn1._name));
-			} else {
-				String s =  sbf.getString().trim();
-				if (s.endsWith(";")) {
-					s += ';';
-				}
-				s += "int $oneOf = 0;";
-				sbf.setString(s);
-			}
-			if (allOneOfRequired) {
-				sbf = findSection("finally", sections);
-				if (sbf == null) {
-					sections.add("finally");
-					sections.add(new SBuffer("if($oneOf==0) error("
-						+ "'XDEF241','Required oneOf item is missing in the map');", pn1._name));
-				} else {
-					String s = sbf.getString();
-					if (!s.endsWith(";")) {
-						s += ';';
-					}
-					sbf.setString(s);
-				}
-			}
-			sbf = xsToString(sections);
-			setXDAttr(pn1, "script", sbf);
-		}
-		return pn1;
-	}
+    private PNode genXonMap(final JMap map, final PNode parent) {
+        Object val;
+        List<String> oneOfList = new ArrayList<>();
+        List<Object> sections;
+        SBuffer sbf;
+        if ((val = map.remove(X_ONEOF_DIRECTIVE)) != null && val instanceof JValue) {
+            String[] list = ((JValue) val).toString().split(X_ONEOF_DIRECTIVE);
+            for (int i = 1; i < list.length; i++) {
+                String x = list[i];
+                if (map.containsKey(x)) {
+                    oneOfList.add(x);
+                } else {
+                    SPosition spos = ((JValue)val).getPosition();
+                    error(spos, XDEF.XDEF122, "'"+x+"'"); //Referred object not exists: &{0}
+                }
+            }
+            if (oneOfList.size() == 1) {
+                oneOfList.clear();
+            }
+        }
+        PNode pn2, pn1 = genJElement(parent, X_MAP, map.getPosition());
+        if ((val = map.remove(X_SCRIPT_DIRECTIVE)) != null && val instanceof JValue) {
+            JValue jv = (JValue) val;
+            setSourceBuffer(jv.getSBuffer());
+            skipSpacesAndComments();
+            if (isToken(X_ONEOF_DIRECTIVE)) {
+                pn2 = genXDElement(pn1, "choice", getPosition());
+                pn1.addChildNode(pn2);
+                skipSemiconsBlanksAndComments();
+                if (!eos()) {
+                    setXDAttr(pn2, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
+                    sections = parseXscript();
+                    SBuffer item = removeSection("occurs", sections);
+                    if (item != null) {
+                        XOccurrence occ = new XOccurrence();
+                        setSourceBuffer(item);
+                        setSourceBuffer(item);
+                        nextSymbol();
+                        isOccurrence(occ);
+                        if (occ.maxOccurs() > 1) {
+                            //Specification of occurence of &{0} group can not be higher then 1
+                            error(XDEF.XDEF252, ONEOF_DIRECTIVE);
+                        }
+                    }
+                    eos();
+                }
+            } else if (map.size() <= 1) {
+                pn2 = pn1; // less then 2 items or parent is a json model => do not add "xd:mixed" element
+            } else { // more then 1 items and parent is not json model => add "xd:mixed" element
+                pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
+                pn1.addChildNode(pn2);
+            }
+            if (!eos()) { // set xd:script attribute
+                setXDAttr(pn1, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
+            }
+        } else if (map.size() <= 1) { // less then 2 items
+            pn2 = pn1; // no "xd:mixed" node!
+        } else { // more then 1 items
+            pn2 = genXDElement(pn1, "mixed", map.getPosition()); // add "xd:mixed" element
+            pn1.addChildNode(pn2);
+        }
+        Object anyItem = null;
+        boolean allOneOfRequired = true;
+        for (Map.Entry<Object, Object> entry: map.entrySet()) {
+            String key = (String) entry.getKey();
+            Object o = entry.getValue();
+            if (key == null) { // ANY_NAME ... || ANY_NAME.equals(key)
+                anyItem = o;
+            } else {
+                boolean maxOccursErrorReported = false;
+                PNode pn3;
+                String keyXmlName = XonTools.toXmlName(key);
+                if (o instanceof Map || o instanceof List) {
+                    pn3 = genXonModel(o, pn2);
+                    if (!(_xdPrefix.equals(pn3.getPrefix()) && "choice".equals(pn3.getLocalName()))) {
+                        updateKeyInfo(pn3, keyXmlName);
+                    }
+                } else {
+                    pn3 = genXonValue(keyXmlName, (JValue) o, pn2);
+                    pn2.addChildNode(pn3);
+                    maxOccursErrorReported = true;
+                }
+                PAttr xscr = getXDAttr(pn3, "script");
+                if (xscr != null) {
+                    sbf = removeSection("occurs", parseXscript(xscr._value));
+                    if (sbf != null) {
+                        XOccurrence occ = new XOccurrence();
+                        setSourceBuffer(sbf);
+                        nextSymbol();
+                        isOccurrence(occ);
+                        if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
+                            //Maximum occurrence of item "&{0}" can not be higher then 1
+                            error(XDEF.XDEF535, key);
+                            maxOccursErrorReported = true;
+                        }
+                    }
+                    if (findSection("ref", parseXscript(xscr._value)) != null
+                        && "array".equals(pn3.getLocalName())) {
+                        error(XDEF.XDEF311); //Incorrect reference to an array or map
+                    }
+                }
+                if (o != null && (o instanceof Map || o instanceof List)) {
+                    xscr = getXDAttr(pn3, "script");
+                    if (xscr != null) {
+                        sbf = removeSection("occurs", parseXscript(xscr._value));
+                        if (sbf != null) {
+                            XOccurrence occ = new XOccurrence();
+                            setSourceBuffer(sbf);
+                            nextSymbol();
+                            isOccurrence(occ);
+                            if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
+                                //Maximum occurrence of item "&{0}" can not be higher then 1
+                                error(XDEF.XDEF535, key);
+                            }
+                        }
+                        if (findSection("ref", parseXscript(xscr._value)) != null
+                            && "array".equals(pn3.getLocalName())) {
+                            error(XDEF.XDEF311); //Incorrect reference to an array or map
+                        }
+                    }
+                    if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
+                        for (PNode x : pn3.getChildNodes()) {
+                            updateKeyInfo(x, keyXmlName);
+                        }
+                    } else {
+                        updateKeyInfo(pn3, keyXmlName);
+                    }
+                }
+                if (oneOfList.contains(key)) {
+                    SBuffer sbf1;
+                    if (xscr == null) {
+                        sbf1 = new SBuffer("?;", pn3._name);
+                    } else {
+                        sbf1 = removeSection("occurs", sections = parseXscript(xscr._value));
+                        if (sbf1 != null) {
+                            XOccurrence occ = new XOccurrence();
+                            setSourceBuffer(sbf1);
+                            nextSymbol();
+                            isOccurrence(occ);
+                            if (!occ.isRequired()) {
+                                allOneOfRequired = false;
+                            }
+                        }
+                        sections.add(0, "occurs");
+                        sections.add(1, new SBuffer("occurs ?;", xscr._value));
+                        sbf1 = xsToString(sections);
+                    }
+                    setXDAttr(pn3, "script", sbf1);
+                    xscr = getXDAttr(pn3, "script");
+                    sections = parseXscript(xscr._value);
+                    sbf = removeSection("match", sections);
+                    String t;
+                    if (sbf != null && !(t=sbf.getString().trim()).isEmpty()) {
+                        while (t.endsWith(";")) { // remove trailing semicolons
+                            t = t.substring(t.length() - 1);
+                        }
+                        t += " AAND ($oneOf++)==0;";
+                    } else {
+                        t = "($oneOf++)==0;";
+                    }
+                    sections.add("match");
+                    sections.add(new SBuffer(t, xscr._value));
+                    setXDAttr(pn3, "script", xsToString(sections));
+                }
+            }
+        }
+        if (anyItem != null) {
+            if (anyItem instanceof Map || anyItem instanceof List) {
+                PNode pn3 = genXonModel(anyItem, pn2);
+                if (_xdNamespace.equals(pn3._nsURI) && "choice".equals(pn3._localName)) {
+                    for (PNode pn : pn3.getChildNodes()) {
+                        updateKeyInfo(pn, ANY_NAME);
+                    }
+                } else {
+                    updateKeyInfo(pn3, ANY_NAME);
+                }
+                setAnyOccurrence(pn3);
+            } else {
+                if (anyItem instanceof JAny) {
+                    genXonAny((JAny) anyItem, pn2);
+                } else  {
+                    PNode pn3 = genXonValue(ANY_NAME, (JValue) anyItem,pn2);
+                    setAttr(pn3, X_KEYATTR, new SBuffer("string()", getPosition()));
+                    pn2.addChildNode(pn3);
+                }
+            }
+        }
+        if (!oneOfList.isEmpty()) {
+            PAttr xscr = getXDAttr(pn1, "script");
+            if (xscr != null && xscr._value != null) {
+                sections = parseXscript(xscr._value);
+            } else {
+                sections = new ArrayList<>();
+            }
+            if ((sbf = findSection("var", sections)) == null) {
+                sections.add("var");
+                sections.add(new SBuffer("int $oneOf = 0;", pn1._name));
+            } else {
+                String s =  sbf.getString().trim();
+                if (s.endsWith(";")) {
+                    s += ';';
+                }
+                s += "int $oneOf = 0;";
+                sbf.setString(s);
+            }
+            if (allOneOfRequired) {
+                sbf = findSection("finally", sections);
+                if (sbf == null) {
+                    sections.add("finally");
+                    sections.add(new SBuffer("if($oneOf==0) error("
+                        + "'XDEF241','Required oneOf item is missing in the map');", pn1._name));
+                } else {
+                    String s = sbf.getString();
+                    if (!s.endsWith(";")) {
+                        s += ';';
+                    }
+                    sbf.setString(s);
+                }
+            }
+            sbf = xsToString(sections);
+            setXDAttr(pn1, "script", sbf);
+        }
+        return pn1;
+    }
 
-	private void setAnyOccurrence(final PNode pn) {
-		PAttr patt = getXDAttr(pn, "script");
-		SBuffer val;
-		if (patt != null) {
-			SBuffer[] sbx = parseTypeDeclaration(patt.getValue());
-			String s = sbx[1] == null ? "" : "+;" + sbx[1].getString();
-			val = new SBuffer(s, patt._value);
-		} else {
-			val = new SBuffer("*");
-		}
-		setXDAttr(pn, "script", val);
-	}
+    private void setAnyOccurrence(final PNode pn) {
+        PAttr patt = getXDAttr(pn, "script");
+        SBuffer val;
+        if (patt != null) {
+            SBuffer[] sbx = parseTypeDeclaration(patt.getValue());
+            String s = sbx[1] == null ? "" : "+;" + sbx[1].getString();
+            val = new SBuffer(s, patt._value);
+        } else {
+            val = new SBuffer("*");
+        }
+        setXDAttr(pn, "script", val);
+    }
 
-	private PNode genXonArray(final JArray array, final PNode parent) {
-		PNode pn = genJElement(parent, X_ARRAY, array.getPosition());
-		int index = 0;
-		int len = array.size();
-		if (len > 0) {
-			Object jo = array.get(0);
-			Object o = jo == null ? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
-			if (jo != null && o instanceof JValue) {
-				setSourceBuffer(((JValue) o).getSBuffer());
-				skipSpacesAndComments();
-				if (isToken(X_ONEOF_DIRECTIVE)) {
-					String s = getUnparsedBufferPart().trim();
-					pn = genXDElement(parent, "choice", ((JValue) jo).getPosition());
-					skipSemiconsBlanksAndComments();
-					if (!s.isEmpty()) {
-						int ndx = s.indexOf("ref ");
-						if (ndx >= 0) {
-							setXDAttr(pn,"script",new SBuffer(s,getPosition()));
-							s = s.substring(0, ndx).trim();
-						}
-					}
-					if (!s.isEmpty()) {
-						if (!s.endsWith(";")) {
-							s += ";";
-						}
-						SPosition spos = getPosition();
-						List<Object> sectionList = parseXscript(new SBuffer(s));
-						SBuffer item = removeSection("occurs", sectionList);
-						if (item != null) {
-							XOccurrence occ = new XOccurrence();
-							setSourceBuffer(item);
-							nextSymbol();
-							isOccurrence(occ);
-							if (occ.minOccurs() == 0 && (X_MAP.equals(parent.getLocalName())
-								|| "mixed".equals(parent.getLocalName()))) {
-								setXDAttr(pn, "script",new SBuffer("?", spos));
-							}
-						}
-						if (!s.isEmpty()) {
-							setXDAttr(parent, "script", new SBuffer(s, spos));
-						}
-					}
-				} else {
-					String s = getUnparsedBufferPart().trim();
-					if (!s.isEmpty()) {
-						setXDAttr(pn, "script", new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
-					}
-				}
-				index = 1;
-			}
-			for(; index < len; index++) {
-				PNode pn1 = genXonModel(array.get(index), pn);
-				PAttr val;
-				// if it is not the last and it has xd:script attribute where the min occurrence differs from
-				// max occurrence and it has the attribute with a value description
-				if (X_VALUE.equals(pn1._localName) && XDConstants.XON_NS_URI_W.equals(pn1._nsURI)
-					&& (val = pn1.getAttrNS(X_VALATTR, -1)) != null) {
-					PAttr script = getXDAttr(pn1, "script");
-					XOccurrence occ = null;
-					if (script != null) {
-						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
-						if (sbs[0] != null) {
-							occ = new XOccurrence();
-							setSourceBuffer(sbs[0]);
-							isOccurrence(occ);
-						}
-					}
-					if (index < len-1 && pn.getNSIndex() == _xdIndex //xdef
-						&& ("mixed".equals(pn.getLocalName()) || "choice".equals(pn.getLocalName()))
-						|| occ != null && occ.minOccurs() != occ.maxOccurs()) {
-						SBuffer[] sbs = parseTypeDeclaration(val.getValue());
-						String s = sbs[1].getString();
-						int i;
-						while ((i = s.indexOf("/*")) >= 0) { // remove comments!
-							int j = s.indexOf("*/", i);
-							if (j > i) {
-								s = s.substring(0, i) + s.substring(j+2) + ' ';
-							}
-						}
-						if ((i = s.indexOf(';')) > 0) { // remove ";" at end
-							s = s.substring(0, i);
-						}
-						s = s.trim();
-						if (s.isEmpty()) { //type not specified
-							s = "jvalue()";
-						} else if (!s.endsWith(")")) {
-							s += "()"; // add brackets
-						}
-						addMatchExpression(pn1, s + ".parse((String)@" + X_VALATTR + ").matches()");
-					}
-				}
-			}
-		}
-		return pn;
-	}
+    private PNode genXonArray(final JArray array, final PNode parent) {
+        PNode pn = genJElement(parent, X_ARRAY, array.getPosition());
+        int index = 0;
+        int len = array.size();
+        if (len > 0) {
+            Object jo = array.get(0);
+            Object o = jo == null ? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
+            if (jo != null && o instanceof JValue) {
+                setSourceBuffer(((JValue) o).getSBuffer());
+                skipSpacesAndComments();
+                if (isToken(X_ONEOF_DIRECTIVE)) {
+                    String s = getUnparsedBufferPart().trim();
+                    pn = genXDElement(parent, "choice", ((JValue) jo).getPosition());
+                    skipSemiconsBlanksAndComments();
+                    if (!s.isEmpty()) {
+                        int ndx = s.indexOf("ref ");
+                        if (ndx >= 0) {
+                            setXDAttr(pn,"script",new SBuffer(s,getPosition()));
+                            s = s.substring(0, ndx).trim();
+                        }
+                    }
+                    if (!s.isEmpty()) {
+                        if (!s.endsWith(";")) {
+                            s += ";";
+                        }
+                        SPosition spos = getPosition();
+                        List<Object> sectionList = parseXscript(new SBuffer(s));
+                        SBuffer item = removeSection("occurs", sectionList);
+                        if (item != null) {
+                            XOccurrence occ = new XOccurrence();
+                            setSourceBuffer(item);
+                            nextSymbol();
+                            isOccurrence(occ);
+                            if (occ.minOccurs() == 0 && (X_MAP.equals(parent.getLocalName())
+                                || "mixed".equals(parent.getLocalName()))) {
+                                setXDAttr(pn, "script",new SBuffer("?", spos));
+                            }
+                        }
+                        if (!s.isEmpty()) {
+                            setXDAttr(parent, "script", new SBuffer(s, spos));
+                        }
+                    }
+                } else {
+                    String s = getUnparsedBufferPart().trim();
+                    if (!s.isEmpty()) {
+                        setXDAttr(pn, "script", new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+                    }
+                }
+                index = 1;
+            }
+            for(; index < len; index++) {
+                PNode pn1 = genXonModel(array.get(index), pn);
+                PAttr val;
+                // if it is not the last and it has xd:script attribute where the min occurrence differs from
+                // max occurrence and it has the attribute with a value description
+                if (X_VALUE.equals(pn1._localName) && XDConstants.XON_NS_URI_W.equals(pn1._nsURI)
+                    && (val = pn1.getAttrNS(X_VALATTR, -1)) != null) {
+                    PAttr script = getXDAttr(pn1, "script");
+                    XOccurrence occ = null;
+                    if (script != null) {
+                        SBuffer[] sbs = parseTypeDeclaration(script.getValue());
+                        if (sbs[0] != null) {
+                            occ = new XOccurrence();
+                            setSourceBuffer(sbs[0]);
+                            isOccurrence(occ);
+                        }
+                    }
+                    if (index < len-1 && pn.getNSIndex() == _xdIndex //xdef
+                        && ("mixed".equals(pn.getLocalName()) || "choice".equals(pn.getLocalName()))
+                        || occ != null && occ.minOccurs() != occ.maxOccurs()) {
+                        SBuffer[] sbs = parseTypeDeclaration(val.getValue());
+                        String s = sbs[1].getString();
+                        int i;
+                        while ((i = s.indexOf("/*")) >= 0) { // remove comments!
+                            int j = s.indexOf("*/", i);
+                            if (j > i) {
+                                s = s.substring(0, i) + s.substring(j+2) + ' ';
+                            }
+                        }
+                        if ((i = s.indexOf(';')) > 0) { // remove ";" at end
+                            s = s.substring(0, i);
+                        }
+                        s = s.trim();
+                        if (s.isEmpty()) { //type not specified
+                            s = "jvalue()";
+                        } else if (!s.endsWith(")")) {
+                            s += "()"; // add brackets
+                        }
+                        addMatchExpression(pn1, s + ".parse((String)@" + X_VALATTR + ").matches()");
+                    }
+                }
+            }
+        }
+        return pn;
+    }
 
-	/** Create PNode with XON/JSON model from XON/JSON parsed data.
-	 * @param xon XON/JSON parsed data.
-	 * @param parent parent PNode,
-	 * @return created PNode.
-	 */
-	private PNode genXonModel(final Object xon, final PNode parent) {
-		// set fields _jsprefix and _jsNamespace
-		String s = XDConstants.XON_NS_PREFIX; // default namespace prefix
-		for (int i = 1; ;i++) {
-			Integer x;
-			if ((x = parent._nsPrefixes.get(s)) == null) {
-				parent._nsPrefixes.put(s, XPreCompiler.NS_XON_INDEX);
-				break;
-			} else if (x.equals(XPreCompiler.NS_XON_INDEX)) {
-				break; // prefix is already set
-			} else { // the prefix is already used
-				s = XDConstants.XON_NS_PREFIX + i; // change prefix
-			}
-		}
-		PNode pn;
-		if (xon instanceof JMap) {
-			pn = genXonMap((JMap) xon, parent);
-		} else if (xon instanceof JArray) {
-			pn = genXonArray((JArray) xon, parent);
-		} else if (xon instanceof JValue && ((JValue) xon).getValue() instanceof String) {
-			pn = genXonValue(null, (JValue) xon, parent);
-		} else if (xon instanceof JAny) {
-			genXonAny((JAny) xon, parent);
-			return parent;
-		} else {
-			error(JSON.JSON011); //Not XON/JSON object&{0}
-			return parent;
-		}
-		parent.addChildNode(pn);
-		return pn;
-	}
+    /** Create PNode with XON/JSON model from XON/JSON parsed data.
+     * @param xon XON/JSON parsed data.
+     * @param parent parent PNode,
+     * @return created PNode.
+     */
+    private PNode genXonModel(final Object xon, final PNode parent) {
+        // set fields _jsprefix and _jsNamespace
+        String s = XDConstants.XON_NS_PREFIX; // default namespace prefix
+        for (int i = 1; ;i++) {
+            Integer x;
+            if ((x = parent._nsPrefixes.get(s)) == null) {
+                parent._nsPrefixes.put(s, XPreCompiler.NS_XON_INDEX);
+                break;
+            } else if (x.equals(XPreCompiler.NS_XON_INDEX)) {
+                break; // prefix is already set
+            } else { // the prefix is already used
+                s = XDConstants.XON_NS_PREFIX + i; // change prefix
+            }
+        }
+        PNode pn;
+        if (xon instanceof JMap) {
+            pn = genXonMap((JMap) xon, parent);
+        } else if (xon instanceof JArray) {
+            pn = genXonArray((JArray) xon, parent);
+        } else if (xon instanceof JValue && ((JValue) xon).getValue() instanceof String) {
+            pn = genXonValue(null, (JValue) xon, parent);
+        } else if (xon instanceof JAny) {
+            genXonAny((JAny) xon, parent);
+            return parent;
+        } else {
+            error(JSON.JSON011); //Not XON/JSON object&{0}
+            return parent;
+        }
+        parent.addChildNode(pn);
+        return pn;
+    }
 
-	/** Create PNode for %any.
-	 * @param xon XON/JSON parsed data.
-	 * @param parent parent PNode,
-	 */
-	private void genXonAny(final JAny jo, final PNode parent) {
-		if (_anyXPos == null) {
-			_anyXPos = _xonModel._parent._xdef.getName() + "#" + XConstants.JSON_ANYOBJECT;
-		}
-		PNode pn, pn1, pn2;
-		pn = genXDElement(parent, "choice", parent.getName());
-		pn._xonMode = XConstants.XON_MODE_W;
-		parent.addChildNode(pn);
-		SBuffer val = jo != null && jo.getSBuffer() != null ? jo.getSBuffer() : new SBuffer("", parent._name);
-		String s = val.getString().trim();
-		val = s.isEmpty() ? null : new SBuffer(s, parent.getName());
-		if (val != null) {
-			setXDAttr(pn, "script", val);
-		}
-		SPosition spos = parent._name;
-		pn1 = genJElement(pn, X_VALUE, spos);
-		pn1._xonMode = XConstants.XON_MODE_W;
-		boolean isMap = X_MAP.equals(parent._localName) && XDConstants.XON_NS_URI_W.equals(parent._nsURI);
-		if (isMap) {
-			setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
-		}
-		setAttr(pn1, X_VALATTR, new SBuffer("jvalue();", spos));
-		pn.addChildNode(pn1);
-		pn1 = genJElement(pn, X_ARRAY, spos);
-		pn1._xonMode = XConstants.XON_MODE_W;
-		if (isMap) {
-			setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
-		}
-		pn2 = genXDElement(pn1, "choice", spos);
-		pn2._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pn2, "script", new SBuffer("*; ref " + _anyXPos, spos));
-		pn1.addChildNode(pn2);
-		pn.addChildNode(pn1);
-		pn1 = genJElement(pn, X_MAP, spos);
-		pn1._xonMode = XConstants.XON_MODE_W;
-		if (isMap) {
-			setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
-		}
-		pn2 = genXDElement(pn1, "choice", spos);
-		pn2._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pn2, "script", new SBuffer("*; ref " + _anyXPos, spos));
-		pn1.addChildNode(pn2);
-		pn.addChildNode(pn1);
-	}
+    /** Create PNode for %any.
+     * @param xon XON/JSON parsed data.
+     * @param parent parent PNode,
+     */
+    private void genXonAny(final JAny jo, final PNode parent) {
+        if (_anyXPos == null) {
+            _anyXPos = _xonModel._parent._xdef.getName() + "#" + XConstants.JSON_ANYOBJECT;
+        }
+        PNode pn, pn1, pn2;
+        pn = genXDElement(parent, "choice", parent.getName());
+        pn._xonMode = XConstants.XON_MODE_W;
+        parent.addChildNode(pn);
+        SBuffer val = jo != null && jo.getSBuffer() != null ? jo.getSBuffer() : new SBuffer("", parent._name);
+        String s = val.getString().trim();
+        val = s.isEmpty() ? null : new SBuffer(s, parent.getName());
+        if (val != null) {
+            setXDAttr(pn, "script", val);
+        }
+        SPosition spos = parent._name;
+        pn1 = genJElement(pn, X_VALUE, spos);
+        pn1._xonMode = XConstants.XON_MODE_W;
+        boolean isMap = X_MAP.equals(parent._localName) && XDConstants.XON_NS_URI_W.equals(parent._nsURI);
+        if (isMap) {
+            setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
+        }
+        setAttr(pn1, X_VALATTR, new SBuffer("jvalue();", spos));
+        pn.addChildNode(pn1);
+        pn1 = genJElement(pn, X_ARRAY, spos);
+        pn1._xonMode = XConstants.XON_MODE_W;
+        if (isMap) {
+            setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
+        }
+        pn2 = genXDElement(pn1, "choice", spos);
+        pn2._xonMode = XConstants.XON_MODE_W;
+        setXDAttr(pn2, "script", new SBuffer("*; ref " + _anyXPos, spos));
+        pn1.addChildNode(pn2);
+        pn.addChildNode(pn1);
+        pn1 = genJElement(pn, X_MAP, spos);
+        pn1._xonMode = XConstants.XON_MODE_W;
+        if (isMap) {
+            setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
+        }
+        pn2 = genXDElement(pn1, "choice", spos);
+        pn2._xonMode = XConstants.XON_MODE_W;
+        setXDAttr(pn2, "script", new SBuffer("*; ref " + _anyXPos, spos));
+        pn1.addChildNode(pn2);
+        pn.addChildNode(pn1);
+    }
 
-	/** Generate models for %anyObj.
-	 * @param actNode actual PNode.
-	 * @param anyName name used for models of %anyObj.
-	 */
-	void genXonAnyModels(final PNode actNode, final String anyName) {
-		SPosition spos = actNode._name; // just to get position
-		PNode pn, pn1, pn2;
-		pn = genXDElement(actNode._parent, "choice", spos);
-		pn._nsPrefixes.put(XDConstants.XON_NS_PREFIX,XPreCompiler.NS_XON_INDEX);
-		pn._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pn, "name", new SBuffer(anyName, spos));
-		actNode._parent.addChildNode(pn);
-		pn1 = genJElement(pn, X_VALUE, spos);
-		pn1._xonMode = XConstants.XON_MODE_W;
-		setAttr(pn1, X_KEYATTR, new SBuffer("? string();", spos));
-		setAttr(pn1, X_VALATTR, new SBuffer("jvalue();", spos));
-		pn.addChildNode(pn1);
-		pn1 = genJElement(pn, X_ARRAY, spos);
-		pn1._xonMode = XConstants.XON_MODE_W;
-		setAttr(pn1, X_KEYATTR, new SBuffer("? string();",spos));
-		pn2 = genXDElement(pn1, "choice", spos);
-		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName, spos));
-		pn1.addChildNode(pn2);
-		pn.addChildNode(pn1);
-		pn1 = genJElement(pn, X_MAP, spos);
-		pn1._xonMode = XConstants.XON_MODE_W;
-		setAttr(pn1, X_KEYATTR, new SBuffer("? string();", spos));
-		pn2 = genXDElement(pn1, "choice", spos);
-		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName, spos));
-		pn1.addChildNode(pn2);
-		pn.addChildNode(pn1);
+    /** Generate models for %anyObj.
+     * @param actNode actual PNode.
+     * @param anyName name used for models of %anyObj.
+     */
+    void genXonAnyModels(final PNode actNode, final String anyName) {
+        SPosition spos = actNode._name; // just to get position
+        PNode pn, pn1, pn2;
+        pn = genXDElement(actNode._parent, "choice", spos);
+        pn._nsPrefixes.put(XDConstants.XON_NS_PREFIX,XPreCompiler.NS_XON_INDEX);
+        pn._xonMode = XConstants.XON_MODE_W;
+        setXDAttr(pn, "name", new SBuffer(anyName, spos));
+        actNode._parent.addChildNode(pn);
+        pn1 = genJElement(pn, X_VALUE, spos);
+        pn1._xonMode = XConstants.XON_MODE_W;
+        setAttr(pn1, X_KEYATTR, new SBuffer("? string();", spos));
+        setAttr(pn1, X_VALATTR, new SBuffer("jvalue();", spos));
+        pn.addChildNode(pn1);
+        pn1 = genJElement(pn, X_ARRAY, spos);
+        pn1._xonMode = XConstants.XON_MODE_W;
+        setAttr(pn1, X_KEYATTR, new SBuffer("? string();",spos));
+        pn2 = genXDElement(pn1, "choice", spos);
+        setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName, spos));
+        pn1.addChildNode(pn2);
+        pn.addChildNode(pn1);
+        pn1 = genJElement(pn, X_MAP, spos);
+        pn1._xonMode = XConstants.XON_MODE_W;
+        setAttr(pn1, X_KEYATTR, new SBuffer("? string();", spos));
+        pn2 = genXDElement(pn1, "choice", spos);
+        setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName, spos));
+        pn1.addChildNode(pn2);
+        pn.addChildNode(pn1);
 /*#if DEBUG*#/
-		displayModel(pn, anyName); // remove this code in future
+        displayModel(pn, anyName); // remove this code in future
 /*#end*/
-	}
+    }
 
 /*#if DEBUG*#/
-	// Display the compiled model in debug mode. Remove this code method in the future.
-	// @param pn model to be displayed
-	private void displayModel(final PNode pn, final String modelName) {
-		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)) {
-			System.out.flush();
-			System.err.flush();
-			System.out.println("*** xdef: \"" + (pn._parent._xdef!=null ? pn._parent._xdef.getName() : "???")
-				+ "\", JSON model: \"" + modelName + "\"");
-			System.out.println("* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
-			System.out.flush();
-		}
-	}
+    // Display the compiled model in debug mode. Remove this code method in the future.
+    // @param pn model to be displayed
+    private void displayModel(final PNode pn, final String modelName) {
+        if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)) {
+            System.out.flush();
+            System.err.flush();
+            System.out.println("*** xdef: \"" + (pn._parent._xdef!=null ? pn._parent._xdef.getName() : "???")
+                + "\", JSON model: \"" + modelName + "\"");
+            System.out.println("* "+org.xdef.xml.KXmlUtils.nodeToString(pn.toXML(),true)+" *");
+            System.out.flush();
+        }
+    }
 /*#end*/
 
-	/** Create X-definition model from PNode with XON/JSON description.
-	 * @param pn PNode with XON/JSON script.
-	 * @param format "xon" or "ini".
-	 * @param name name of XON/JSON model in X-definition.
-	 * @param reporter report writer
-	 */
-	final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
-		XonModelParser jp = new XonModelParser(this);
-		XonParsers xp = format.equals("xon") ? new XonReader(pn._value, jp) : new IniReader(pn._value, jp);
-		xp.setReportWriter(reporter);
-		xp.setXdefMode();
-		xp.parse();
-		genXonModel(jp.getResult(), pn);
-		pn._value = null;
+    /** Create X-definition model from PNode with XON/JSON description.
+     * @param pn PNode with XON/JSON script.
+     * @param format "xon" or "ini".
+     * @param name name of XON/JSON model in X-definition.
+     * @param reporter report writer
+     */
+    final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
+        XonModelParser jp = new XonModelParser(this);
+        XonParsers xp = format.equals("xon") ? new XonReader(pn._value, jp) : new IniReader(pn._value, jp);
+        xp.setReportWriter(reporter);
+        xp.setXdefMode();
+        xp.parse();
+        genXonModel(jp.getResult(), pn);
+        pn._value = null;
 /*#if DEBUG*#/
-		displayModel(pn, name.getString()); // remove this code in future
+        displayModel(pn, name.getString()); // remove this code in future
 /*#end*/
-		return _anyXPos;
-	}
+        return _anyXPos;
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 // X-script parser
 ////////////////////////////////////////////////////////////////////////////////
-	/** Check if id of parsed section name is a section name.
-	 * @param sym ID of parsed section name.
-	 * @return true if it is a section name.
-	 */
-	private static boolean isSectionCommand(final char sym) {
-		return sym==VAR_SYM||sym==FINALLY_SYM||sym==CREATE_SYM||sym==ON_TRUE_SYM||sym==ON_FALSE_SYM
-			||sym==ON_ABSENCE_SYM||sym==ON_ILLEGAL_ATTR_SYM||sym==CREATE_SYM||sym==MATCH_SYM
-			||sym==ON_START_ELEMENT_SYM||sym==FINALLY_SYM||sym==FORGET_SYM||sym==INIT_SYM||sym==DEFAULT_SYM
-			||sym==FIXED_SYM||sym==REF_SYM||sym==ON_EXCESS_SYM||sym==OPTION_SYM||sym==OPTIONS_SYM;
-	}
+    /** Check if id of parsed section name is a section name.
+     * @param sym ID of parsed section name.
+     * @return true if it is a section name.
+     */
+    private static boolean isSectionCommand(final char sym) {
+        return sym==VAR_SYM||sym==FINALLY_SYM||sym==CREATE_SYM||sym==ON_TRUE_SYM||sym==ON_FALSE_SYM
+            ||sym==ON_ABSENCE_SYM||sym==ON_ILLEGAL_ATTR_SYM||sym==CREATE_SYM||sym==MATCH_SYM
+            ||sym==ON_START_ELEMENT_SYM||sym==FINALLY_SYM||sym==FORGET_SYM||sym==INIT_SYM||sym==DEFAULT_SYM
+            ||sym==FIXED_SYM||sym==REF_SYM||sym==ON_EXCESS_SYM||sym==OPTION_SYM||sym==OPTIONS_SYM;
+    }
 
-	/** Parse command which follows section.
-	 * @return true if section command was parsed.
-	 */
-	private boolean readSectionCommand() {
-		if (_sym == BEG_SYM) {
-			int n = 1;
-			do {
-				if (nextSymbol() == END_SYM) {
-					if (--n == 0) {
-						return true;
-					}
-				} else if (_sym == BEG_SYM) {
-					n++;
-				}
-			} while(!eos());
-		} else if (_sym != SEMICOLON_SYM && _sym!= NOCHAR) {
-			if (nextSymbol() == UNDEF_SYM) {
-				setEos();
-				return false;
-			}
-			while(_sym != SEMICOLON_SYM && _sym!= NOCHAR){
-				if (nextSymbol() == UNDEF_SYM) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
+    /** Parse command which follows section.
+     * @return true if section command was parsed.
+     */
+    private boolean readSectionCommand() {
+        if (_sym == BEG_SYM) {
+            int n = 1;
+            do {
+                if (nextSymbol() == END_SYM) {
+                    if (--n == 0) {
+                        return true;
+                    }
+                } else if (_sym == BEG_SYM) {
+                    n++;
+                }
+            } while(!eos());
+        } else if (_sym != SEMICOLON_SYM && _sym!= NOCHAR) {
+            if (nextSymbol() == UNDEF_SYM) {
+                setEos();
+                return false;
+            }
+            while(_sym != SEMICOLON_SYM && _sym!= NOCHAR){
+                if (nextSymbol() == UNDEF_SYM) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
-	/** Check if it is an occurrence specification.
-	 * @return SPosition of parsed occurrence specification or null
-	 */
-	private SPosition isOccurrence() {
-		SPosition spos = getLastPosition();
-		if ((_sym == OCCURS_SYM)) {
-			nextSymbol();
-		}
-		switch (_sym) {
-			case MUL_SYM:
-			case PLUS_SYM:
-			case REQUIRED_SYM:
-			case ASK_SYM:
-			case OPTIONAL_SYM:
-			case IGNORE_SYM:
-			case ILLEGAL_SYM: return spos;
-			case CONSTANT_SYM:
-				int pos = getIndex();
-				char sym = _sym;
-				if (nextSymbol() != DDOT_SYM) {
-					setIndex(pos); // reset position
-					_sym = sym;
-				} else {
-					sym = _sym;
-					pos = getIndex();
-					if (nextSymbol() != CONSTANT_SYM && _sym != MUL_SYM) {
-						setIndex(pos);  // reset position
-						_sym = sym;
-					}
-				}
-				return spos;
-			default: return null;
-		}
-	}
+    /** Check if it is an occurrence specification.
+     * @return SPosition of parsed occurrence specification or null
+     */
+    private SPosition isOccurrence() {
+        SPosition spos = getLastPosition();
+        if ((_sym == OCCURS_SYM)) {
+            nextSymbol();
+        }
+        switch (_sym) {
+            case MUL_SYM:
+            case PLUS_SYM:
+            case REQUIRED_SYM:
+            case ASK_SYM:
+            case OPTIONAL_SYM:
+            case IGNORE_SYM:
+            case ILLEGAL_SYM: return spos;
+            case CONSTANT_SYM:
+                int pos = getIndex();
+                char sym = _sym;
+                if (nextSymbol() != DDOT_SYM) {
+                    setIndex(pos); // reset position
+                    _sym = sym;
+                } else {
+                    sym = _sym;
+                    pos = getIndex();
+                    if (nextSymbol() != CONSTANT_SYM && _sym != MUL_SYM) {
+                        setIndex(pos);  // reset position
+                        _sym = sym;
+                    }
+                }
+                return spos;
+            default: return null;
+        }
+    }
 
-	/** Add section item to the list.
-	 * @param sectionName section name,
-	 * @param sectionList where to add.
-	 * @param pos SPosition of the section.
-	 */
-	private void addSection(final String sectionName, final List<Object> sectionList, final SPosition pos) {
-		sectionList.add(sectionName);
-		String s = getParsedBufferPartFrom(pos.getIndex()).trim();
-		while (s.endsWith(";")) {
-			s = s.substring(0, s.length() - 1).trim();
-		}
-		sectionList.add(new SBuffer(s, pos));
-	}
+    /** Add section item to the list.
+     * @param sectionName section name,
+     * @param sectionList where to add.
+     * @param pos SPosition of the section.
+     */
+    private void addSection(final String sectionName, final List<Object> sectionList, final SPosition pos) {
+        sectionList.add(sectionName);
+        String s = getParsedBufferPartFrom(pos.getIndex()).trim();
+        while (s.endsWith(";")) {
+            s = s.substring(0, s.length() - 1).trim();
+        }
+        sectionList.add(new SBuffer(s, pos));
+    }
 
-	/** Parse X-script and return the section list.
-	 * @param source Source text with X-script.
-	 * @return section list. Each section is composed of two items: the first item is id of section
-	 * (a character) and the following item is a SBuffer with the source of the section command.
-	 */
-	private List<Object> parseXscript(SBuffer source) {
-		setSourceBuffer(source);
-		return parseXscript();
-	}
+    /** Parse X-script and return the section list.
+     * @param source Source text with X-script.
+     * @return section list. Each section is composed of two items: the first item is id of section
+     * (a character) and the following item is a SBuffer with the source of the section command.
+     */
+    private List<Object> parseXscript(SBuffer source) {
+        setSourceBuffer(source);
+        return parseXscript();
+    }
 
-	/** Parse X-script and return the section list.
-	 * @return section list. Each section is composed of two items: the first
-	 * item is id of section (a character) and the following item is a SBuffer with the source
-	 * of the section command.
-	 */
-	private List<Object> parseXscript() {
-		List<Object> sectionList = new ArrayList<>();
-		SPosition spos;
-		nextSymbol();
-		char sym;
-		for (;;) {
-			while (_sym == SEMICOLON_SYM || _sym == END_SYM) {
-				nextSymbol();
-			}
-			if (_sym == NOCHAR) {
-				break;
-			}
-			if ((spos = isOccurrence()) != null) {
-				addSection("occurs", sectionList, spos);
-				if (_sym == SEMICOLON_SYM) {
-					continue;
-				}
-				if (!isSectionCommand(_sym)) {
-					spos = getPosition();
-					if (readSectionCommand()) {
-						String s = getParsedBufferPartFrom(spos.getIndex());
-						if (!s.trim().equals(";")) { //it is not only ";"!
-							addSection("", sectionList, spos);
-						}
-					}
-				}
-			} else if (!isSectionCommand(sym = _sym)) {
-				spos = getLastPosition();
-				if (!readSectionCommand()) {// this never should not happeh
-					error(XDEF.XDEF425); //Script error&{#SYS000}
-					break; // do not continue parsing, return sectionList;
-				}
-				addSection("", sectionList, spos);
-			} else {
-				spos = getPosition();
-				String sectionName = getParsedString();
-				nextSymbol();
-				if (sym != FORGET_SYM && readSectionCommand()) {
-					addSection(sectionName, sectionList, spos);
-				} else {  // here should be only "forget"
-					addSection(sectionName, sectionList, getPosition());
-				}
-			}
-		}
-		return sectionList;
-	}
+    /** Parse X-script and return the section list.
+     * @return section list. Each section is composed of two items: the first
+     * item is id of section (a character) and the following item is a SBuffer with the source
+     * of the section command.
+     */
+    private List<Object> parseXscript() {
+        List<Object> sectionList = new ArrayList<>();
+        SPosition spos;
+        nextSymbol();
+        char sym;
+        for (;;) {
+            while (_sym == SEMICOLON_SYM || _sym == END_SYM) {
+                nextSymbol();
+            }
+            if (_sym == NOCHAR) {
+                break;
+            }
+            if ((spos = isOccurrence()) != null) {
+                addSection("occurs", sectionList, spos);
+                if (_sym == SEMICOLON_SYM) {
+                    continue;
+                }
+                if (!isSectionCommand(_sym)) {
+                    spos = getPosition();
+                    if (readSectionCommand()) {
+                        String s = getParsedBufferPartFrom(spos.getIndex());
+                        if (!s.trim().equals(";")) { //it is not only ";"!
+                            addSection("", sectionList, spos);
+                        }
+                    }
+                }
+            } else if (!isSectionCommand(sym = _sym)) {
+                spos = getLastPosition();
+                if (!readSectionCommand()) {// this never should not happeh
+                    error(XDEF.XDEF425); //Script error&{#SYS000}
+                    break; // do not continue parsing, return sectionList;
+                }
+                addSection("", sectionList, spos);
+            } else {
+                spos = getPosition();
+                String sectionName = getParsedString();
+                nextSymbol();
+                if (sym != FORGET_SYM && readSectionCommand()) {
+                    addSection(sectionName, sectionList, spos);
+                } else {  // here should be only "forget"
+                    addSection(sectionName, sectionList, getPosition());
+                }
+            }
+        }
+        return sectionList;
+    }
 
-	/** Create X-script string from the list of sections.
-	 * @param sectionList list of sections.
-	 * @return string with X-script source.
-	 */
-	private static SBuffer xsToString(final List<Object> sectionList) {
-		String result = "";
-		boolean wasOccurs = false;
-		for (int i = 0; i < sectionList.size(); i++) {
-			Object o = sectionList.get(i);
-			if (o instanceof String) {
-				String sectionName = (String) o;
-				if (++i >= sectionList.size()) {
-					result += sectionName;
-					break;
-				}
-				o = sectionList.get(i);
-				if ("occurs".equals(sectionName)) {
-					if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
-						result += ';';
-					}
-					result += ((SBuffer) o).getString();
-					wasOccurs = true;
-				} else if (sectionName.isEmpty()) { // type validation
-					if (wasOccurs) {
-						if (!result.isEmpty()) {
-							result += ' ';
-						}
-						result += ((SBuffer) o).getString();
-					} else {
-						if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
-							result += ';';
-						}
-						result += ((SBuffer) o).getString();
-					}
-					wasOccurs = false;
-				} else {
-					if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
-						result += ';';
-					}
-					String s = ((SBuffer) o).getString();
-					if (s.isEmpty()) {
-						result += sectionName;
-					} else {
-						result += sectionName + ' ' + s;
-					}
-					wasOccurs = false;
-				}
-			}
-		}
-		if (result.isEmpty()) {
-			return new SBuffer("");
-		}
-		if (!result.endsWith(";")) {
-			result += ';';
-		}
-		return new SBuffer(result, (SBuffer) sectionList.get(1));
-	}
+    /** Create X-script string from the list of sections.
+     * @param sectionList list of sections.
+     * @return string with X-script source.
+     */
+    private static SBuffer xsToString(final List<Object> sectionList) {
+        String result = "";
+        boolean wasOccurs = false;
+        for (int i = 0; i < sectionList.size(); i++) {
+            Object o = sectionList.get(i);
+            if (o instanceof String) {
+                String sectionName = (String) o;
+                if (++i >= sectionList.size()) {
+                    result += sectionName;
+                    break;
+                }
+                o = sectionList.get(i);
+                if ("occurs".equals(sectionName)) {
+                    if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
+                        result += ';';
+                    }
+                    result += ((SBuffer) o).getString();
+                    wasOccurs = true;
+                } else if (sectionName.isEmpty()) { // type validation
+                    if (wasOccurs) {
+                        if (!result.isEmpty()) {
+                            result += ' ';
+                        }
+                        result += ((SBuffer) o).getString();
+                    } else {
+                        if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
+                            result += ';';
+                        }
+                        result += ((SBuffer) o).getString();
+                    }
+                    wasOccurs = false;
+                } else {
+                    if (!result.isEmpty() && !result.endsWith(";") && !result.endsWith("}")) {
+                        result += ';';
+                    }
+                    String s = ((SBuffer) o).getString();
+                    if (s.isEmpty()) {
+                        result += sectionName;
+                    } else {
+                        result += sectionName + ' ' + s;
+                    }
+                    wasOccurs = false;
+                }
+            }
+        }
+        if (result.isEmpty()) {
+            return new SBuffer("");
+        }
+        if (!result.endsWith(";")) {
+            result += ';';
+        }
+        return new SBuffer(result, (SBuffer) sectionList.get(1));
+    }
 
-	/** Find given section in section list.
-	 * @param name name of section or emptyString if it is validation method.
-	 * @param list list of section.
-	 * @return SBuffer with the section or null.
-	 */
-	private static SBuffer findSection(final String name, final List<Object> list) {
-		for (int i = 0; i < list.size(); i+=2) {
-			if (name.equals(list.get(i))) {
-				return (SBuffer) list.get(i + 1);
-			}
-		}
-		return null;
-	}
+    /** Find given section in section list.
+     * @param name name of section or emptyString if it is validation method.
+     * @param list list of section.
+     * @return SBuffer with the section or null.
+     */
+    private static SBuffer findSection(final String name, final List<Object> list) {
+        for (int i = 0; i < list.size(); i+=2) {
+            if (name.equals(list.get(i))) {
+                return (SBuffer) list.get(i + 1);
+            }
+        }
+        return null;
+    }
 
-	/** Remove given section from section list.
-	 * @param name name of section (or emptyString for a validation method).
-	 * @param list list of section.
-	 * @return removed section.
-	 */
-	private static SBuffer removeSection(final String name, final List<Object> list) {
-		for (int i = 0; i < list.size(); i+=2) {
-			if (name.equals(list.get(i))) {
-				list.remove(i);
-				SBuffer result = (SBuffer) list.get(i);
-				list.remove(i);
-				return result;
-			}
-		}
-		return null;
-	}
+    /** Remove given section from section list.
+     * @param name name of section (or emptyString for a validation method).
+     * @param list list of section.
+     * @return removed section.
+     */
+    private static SBuffer removeSection(final String name, final List<Object> list) {
+        for (int i = 0; i < list.size(); i+=2) {
+            if (name.equals(list.get(i))) {
+                list.remove(i);
+                SBuffer result = (SBuffer) list.get(i);
+                list.remove(i);
+                return result;
+            }
+        }
+        return null;
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 // XonModelParser - implementation of XonParser
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** This class provides parsing of XON/JSON source and creates the XON structure composed from JObjets
-	 * used for compilation of XON/JSON model in X-definition.
-	 */
-	private final static class XonModelParser implements XonParser {
-		/** kind = value */
-		private final int VALUE = 0;
-		/** kind = array */
-		private final int ARRAY = 1;
-		/** kind = map */
-		private final int MAP = 2;
+    /** This class provides parsing of XON/JSON source and creates the XON structure composed from JObjets
+     * used for compilation of XON/JSON model in X-definition.
+     */
+    private final static class XonModelParser implements XonParser {
+        /** kind = value */
+        private final int VALUE = 0;
+        /** kind = array */
+        private final int ARRAY = 1;
+        /** kind = map */
+        private final int MAP = 2;
 
-		/** stack with kinds of nested items. */
-		private final Stack<Integer> _kinds = new Stack<>();
-		/** stack with kinds of arrays. */
-		private final Stack<JArray> _arrays = new Stack<>();
-		/** stack with kinds of maps. */
-		private final Stack<JMap> _maps = new Stack<>();
-		/** stack of names in map. */
-		private final Stack<SBuffer> _names = new Stack<>();
-		/** actual kind (VALUE, ARRAY or MAP). */
-		private int _kind; // ARRAY, MAP, or VALUE
-		/** parsed value. */
-		private JObject _value;
+        /** stack with kinds of nested items. */
+        private final Stack<Integer> _kinds = new Stack<>();
+        /** stack with kinds of arrays. */
+        private final Stack<JArray> _arrays = new Stack<>();
+        /** stack with kinds of maps. */
+        private final Stack<JMap> _maps = new Stack<>();
+        /** stack of names in map. */
+        private final Stack<SBuffer> _names = new Stack<>();
+        /** actual kind (VALUE, ARRAY or MAP). */
+        private int _kind; // ARRAY, MAP, or VALUE
+        /** parsed value. */
+        private JObject _value;
 
-		/** Create new instance of XonModelParser. */
-		XonModelParser(final CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
+        /** Create new instance of XonModelParser. */
+        XonModelParser(final CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
 
-		////////////////////////////////////////////////////////////////////////
-		// Implementation of JParser interface
-		////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // Implementation of JParser interface
+        ////////////////////////////////////////////////////////////////////////
 
-		/** Put value to result.
-		 * @param value JValue to be added to result object.
-		 */
-		@Override
-		public final void putValue(final JValue value) {
-			switch (_kind) {
-				case ARRAY: _arrays.peek().add(value); return;
-				case MAP: _maps.peek().put(_names.pop().getString(), value); return;
-			}
-			_value = value; // it is VALUE
-		}
+        /** Put value to result.
+         * @param value JValue to be added to result object.
+         */
+        @Override
+        public final void putValue(final JValue value) {
+            switch (_kind) {
+                case ARRAY: _arrays.peek().add(value); return;
+                case MAP: _maps.peek().put(_names.pop().getString(), value); return;
+            }
+            _value = value; // it is VALUE
+        }
 
-		/** Set name of value pair.
-		 * @param name value name.
-		 * @return true if the name of pair already exists.
-		 */
-		@Override
-		public final boolean namedValue(final SBuffer name) {
-			String s = name.getString();
-			boolean result = false;
-			for (SBuffer x: _names) {
-				if (s != null && s.equals(x.getString()) || s == null && x.getString() == null) {
-					result = true;
-					break;
-				}
-			}
-			_names.push(name);
-			return result;
-		}
+        /** Set name of value pair.
+         * @param name value name.
+         * @return true if the name of pair already exists.
+         */
+        @Override
+        public final boolean namedValue(final SBuffer name) {
+            String s = name.getString();
+            boolean result = false;
+            for (SBuffer x: _names) {
+                if (s != null && s.equals(x.getString()) || s == null && x.getString() == null) {
+                    result = true;
+                    break;
+                }
+            }
+            _names.push(name);
+            return result;
+        }
 
-		/** Array started.
-		 * @param pos source position.
-		 */
-		@Override
-		public final void arrayStart(final SPosition pos) {
-			 //add ARRAY to kins stack and set it to kind
-			_kinds.push(_kind = ARRAY);
-			_arrays.push(new JArray(pos));  // new item to array stack
-		}
+        /** Array started.
+         * @param pos source position.
+         */
+        @Override
+        public final void arrayStart(final SPosition pos) {
+             //add ARRAY to kins stack and set it to kind
+            _kinds.push(_kind = ARRAY);
+            _arrays.push(new JArray(pos));  // new item to array stack
+        }
 
-		/** Array ended.
-		 * @param pos source position.
-		 */
-		@Override
-		public final void arrayEnd(final SPosition pos) {
-			_kinds.pop();
-			_kind = _kinds.peek();
-			_value = _arrays.peek();
-			_arrays.pop();
-			if (_kind == MAP) {
-				_maps.peek().put(_names.pop().getString(), _value);
-			} else if (_kind == ARRAY) {
-				_arrays.peek().add(_value);
-			} // else it is VALUE
-		}
+        /** Array ended.
+         * @param pos source position.
+         */
+        @Override
+        public final void arrayEnd(final SPosition pos) {
+            _kinds.pop();
+            _kind = _kinds.peek();
+            _value = _arrays.peek();
+            _arrays.pop();
+            if (_kind == MAP) {
+                _maps.peek().put(_names.pop().getString(), _value);
+            } else if (_kind == ARRAY) {
+                _arrays.peek().add(_value);
+            } // else it is VALUE
+        }
 
-		/** Map started.
-		 * @param pos source position.
-		 */
-		@Override
-		public final void mapStart(final SPosition pos) {
-			//add MAP to kins stack and set it to kind
-			_kinds.push(_kind = MAP);
-			_maps.push(new JMap(pos)); // new item to map stack
-		}
+        /** Map started.
+         * @param pos source position.
+         */
+        @Override
+        public final void mapStart(final SPosition pos) {
+            //add MAP to kins stack and set it to kind
+            _kinds.push(_kind = MAP);
+            _maps.push(new JMap(pos)); // new item to map stack
+        }
 
-		/** Map ended.
-		 * @param pos source position.
-		 */
-		@Override
-		public final void mapEnd(final SPosition pos) {
-			_kinds.pop();
-			_kind = _kinds.peek();
-			_value = (JObject)_maps.peek();
-			_maps.pop();
-			if (_kind == MAP) { // parent is map
-				_maps.peek().put(_names.pop().getString(), _value);
-			} else if (_kind == ARRAY) { // parent array
-				_arrays.peek().add(_value);
-			} // parent is value
-		}
+        /** Map ended.
+         * @param pos source position.
+         */
+        @Override
+        public final void mapEnd(final SPosition pos) {
+            _kinds.pop();
+            _kind = _kinds.peek();
+            _value = (JObject)_maps.peek();
+            _maps.pop();
+            if (_kind == MAP) { // parent is map
+                _maps.peek().put(_names.pop().getString(), _value);
+            } else if (_kind == ARRAY) { // parent array
+                _arrays.peek().add(_value);
+            } // parent is value
+        }
 
-		/** Processed comment.
-		 * @param value SBuffer with the value of comment.
-		 */
-		@Override
-		public final void comment(final SBuffer value){/*we ingore it here*/}
+        /** Processed comment.
+         * @param value SBuffer with the value of comment.
+         */
+        @Override
+        public final void comment(final SBuffer value){/*we ingore it here*/}
 
-		/** X-script item parsed, not used methods for JSON/XON parsing (used in X-definition compiler).
-		 * @param name name of item.
-		 * @param value value of item.
-		 */
-		@Override
-		public final void xdScript(final SBuffer name, final SBuffer value) {
-			SPosition spos = value == null ? name : value;
-			JValue jv;
-			String s = name.getString();
-			switch (s) {
-				case X_ANY_NAME: namedValue(new SBuffer(null, name)); return;
-				case ANY_OBJ: putValue(new JAny((SPosition)name, value)); return;
-				case X_ONEOF_DIRECTIVE:
-					jv = new JValue(name, new JValue(spos, s + (value == null ? "" : value.getString())));
-					break;
-				default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
-			}
-			if (_kind == 1) { // array
-				_arrays.peek().add(jv);
-			} else if (_kind == 2) { // map
-				_maps.peek().put(s, jv);
-			}
-		}
+        /** X-script item parsed, not used methods for JSON/XON parsing (used in X-definition compiler).
+         * @param name name of item.
+         * @param value value of item.
+         */
+        @Override
+        public final void xdScript(final SBuffer name, final SBuffer value) {
+            SPosition spos = value == null ? name : value;
+            JValue jv;
+            String s = name.getString();
+            switch (s) {
+                case X_ANY_NAME: namedValue(new SBuffer(null, name)); return;
+                case ANY_OBJ: putValue(new JAny((SPosition)name, value)); return;
+                case X_ONEOF_DIRECTIVE:
+                    jv = new JValue(name, new JValue(spos, s + (value == null ? "" : value.getString())));
+                    break;
+                default: jv = new JValue(name, new JValue(spos, value == null ? "" : value.getString()));
+            }
+            if (_kind == 1) { // array
+                _arrays.peek().add(jv);
+            } else if (_kind == 2) { // map
+                _maps.peek().put(s, jv);
+            }
+        }
 
-		/** Get result of parser.
-		 * @return parsed object.
-		 */
-		@Override
-		public final Object getResult() {return _value;}
-	}
+        /** Get result of parser.
+         * @return parsed object.
+         */
+        @Override
+        public final Object getResult() {return _value;}
+    }
 }

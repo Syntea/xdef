@@ -20,20 +20,20 @@ import static test.XDTester._xdNS;
  */
 public final class TestXmlWriter extends XDTester {
 
-	public TestXmlWriter() {super();}
+    public TestXmlWriter() {super();}
 
-	@Override
-	public void test() {
-		ByteArrayOutputStream bos;
-		ByteArrayInputStream bis;
-		XDPool xp;
-		String xdef;
-		String xml;
-		ArrayReporter reporter = new ArrayReporter();
-		XDDocument xd;
-		Element el;
-		try {
-			xdef =
+    @Override
+    public void test() {
+        ByteArrayOutputStream bos;
+        ByteArrayInputStream bis;
+        XDPool xp;
+        String xdef;
+        String xml;
+        ArrayReporter reporter = new ArrayReporter();
+        XDDocument xd;
+        Element el;
+        try {
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='books'>\n"+
 "  <books>\n"+
 "    <book xd:script='+; forget' ISBN='int'>\n"+
@@ -43,7 +43,7 @@ public final class TestXmlWriter extends XDTester {
 "    </book>\n"+
 "  </books>\n"+
 "</xd:def>";
-			xml =
+            xml =
 "<books>\n"+
 "  <book ISBN='123456789'>\n"+
 "     <title>Tutorial</title>\n"+
@@ -55,20 +55,20 @@ public final class TestXmlWriter extends XDTester {
 "     <title>The Bible</title>\n"+
 "  </book>\n"+
 "</books>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			bos = new ByteArrayOutputStream();
-			XDXmlOutStream xmlWriter =
-				XDFactory.createXDXmlOutStream(bos, null, true);
-			xd.setStreamWriter(xmlWriter);
-			el = parse(xd, xml, reporter);
-			xmlWriter.closeStream();
-			assertNoErrorwarnings(reporter);
-			bis = new ByteArrayInputStream(bos.toByteArray());
-			assertEq(xml, KXmlUtils.parseXml(bis).getDocumentElement());
-			assertEq("<books/>", el);
+            xp = compile(xdef);
+            xd = xp.createXDDocument();
+            bos = new ByteArrayOutputStream();
+            XDXmlOutStream xmlWriter =
+                XDFactory.createXDXmlOutStream(bos, null, true);
+            xd.setStreamWriter(xmlWriter);
+            el = parse(xd, xml, reporter);
+            xmlWriter.closeStream();
+            assertNoErrorwarnings(reporter);
+            bis = new ByteArrayInputStream(bos.toByteArray());
+            assertEq(xml, KXmlUtils.parseXml(bis).getDocumentElement());
+            assertEq("<books/>", el);
 
-			xdef = // Test XmlOutStream methods
+            xdef = // Test XmlOutStream methods
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external String xmlFile;\n"+
@@ -84,21 +84,21 @@ public final class TestXmlWriter extends XDTester {
 "    </b>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			xml =
+            xp = compile(xdef);
+            xml =
 "<a x='_'>" +
 "<b x='a'><c>x</c><c>y</c></b>" +
 "<b x='b'/>" +
 "<b x='c'><c>z</c></b>" +
 "</a>";
-			xd = xp.createXDDocument();
-			File xmlFile = new File(clearTempDir(), "x.xml");
-			xd.setVariable("xmlFile", xmlFile.getCanonicalPath());
-			assertEq("<a x='_'/>", parse(xd, xml, reporter));
-			assertNoErrorwarnings(reporter);
-			el = KXmlUtils.parseXml(xmlFile).getDocumentElement();
-			assertEq(xml, el);
-			xdef = // Test XmlOutStream methods
+            xd = xp.createXDDocument();
+            File xmlFile = new File(clearTempDir(), "x.xml");
+            xd.setVariable("xmlFile", xmlFile.getCanonicalPath());
+            assertEq("<a x='_'/>", parse(xd, xml, reporter));
+            assertNoErrorwarnings(reporter);
+            el = KXmlUtils.parseXml(xmlFile).getDocumentElement();
+            assertEq(xml, el);
+            xdef = // Test XmlOutStream methods
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> external XmlOutStream x; </xd:declaration>\n"+
 "  <a x='' xd:script='onStartElement x.writeElementStart();\n"+
@@ -109,11 +109,11 @@ public final class TestXmlWriter extends XDTester {
 "    <d y='?' xd:script='*; finally x.writeElement(); forget'/>\n"+
 "  </a>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			bos = new ByteArrayOutputStream();
-			xd.setVariable("x", XDFactory.createXDXmlOutStream(bos,"UTF-8",true));
-			xml =
+            xp = compile(xdef);
+            xd = xp.createXDDocument();
+            bos = new ByteArrayOutputStream();
+            xd.setVariable("x", XDFactory.createXDXmlOutStream(bos,"UTF-8",true));
+            xml =
 "<a x='_'>" +
 "<b x='a'><c>x</c><c>y</c></b>" +
 "<b x='b'/>" +
@@ -121,22 +121,22 @@ public final class TestXmlWriter extends XDTester {
 "<d y='1'/>" +
 "<d y='2'/>" +
 "</a>";
-			assertEq("<a x='_'/>", parse(xd, xml, reporter));
-			assertNoErrorwarnings(reporter);
-			bis = new ByteArrayInputStream(bos.toByteArray());
-			el = KXmlUtils.parseXml(bis).getDocumentElement();
-			assertEq(xml, el);
-		} catch (IOException ex) {fail(ex);}
+            assertEq("<a x='_'/>", parse(xd, xml, reporter));
+            assertNoErrorwarnings(reporter);
+            bis = new ByteArrayInputStream(bos.toByteArray());
+            el = KXmlUtils.parseXml(bis).getDocumentElement();
+            assertEq(xml, el);
+        } catch (IOException ex) {fail(ex);}
 
-		resetTester();
-		clearTempDir(); // delete created temporary files
-	}
+        resetTester();
+        clearTempDir(); // delete created temporary files
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
-		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        XDTester.setFulltestMode(true);
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }

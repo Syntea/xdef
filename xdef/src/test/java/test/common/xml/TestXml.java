@@ -25,58 +25,58 @@ import org.xml.sax.SAXException;
  */
 public class TestXml extends STester  {
 
-	/** Creates a new instance of TestXml */
-	public TestXml() {}
+    /** Creates a new instance of TestXml */
+    public TestXml() {}
 
-	/** Run test and print error information. */
-	@Override
-	public void test() {
-		String s = "Kůň " + (char)9 + (char)13 + " úpěl";
-		DOMImplementation di;
-		Document doc;
-		Element el;
-		try {
-			DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = bf.newDocumentBuilder();
-			di = db.getDOMImplementation();
-			doc = di.createDocument(null, "root", null);
-			el = doc.getDocumentElement();
-			el.setAttribute("atr", s);
-			el.appendChild(doc.createTextNode(s));
-			TransformerFactory transFactory = TransformerFactory.newInstance();
-			Transformer transformer = transFactory.newTransformer();
-			StringWriter buffer = new StringWriter();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-			transformer.transform(new DOMSource(el), new StreamResult(buffer));
-			s = buffer.toString().trim();
-			//ignore case if there is hexacecimal reprezentation
-			if (!("<root atr=\"Kůň &#9;&#13; úpěl\">Kůň " + (char)9 + "&#13; úpěl</root>").equals(s)
-				&& !("<root atr=\"kůň &#x9;&#xd; úpěl\">kůň "+(char)9+"&#xd; úpěl</root>").equals(s.toLowerCase())) {
-				fail(s);
-			}
-		} catch (IllegalArgumentException | ParserConfigurationException | TransformerException
-			| DOMException ex) {
-			fail(ex);
-		}
-		try {
-			DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = bf.newDocumentBuilder();
-			InputStream is = new ByteArrayInputStream(s.getBytes("UTF-8"));
-			doc = db.parse(is);
-			el = doc.getDocumentElement();
-			assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getAttribute("atr"));
-			assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getChildNodes().item(0).getNodeValue());
-		} catch (IOException | ParserConfigurationException | DOMException | SAXException ex) {
-			fail(ex);
-		}
-	}
+    /** Run test and print error information. */
+    @Override
+    public void test() {
+        String s = "Kůň " + (char)9 + (char)13 + " úpěl";
+        DOMImplementation di;
+        Document doc;
+        Element el;
+        try {
+            DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = bf.newDocumentBuilder();
+            di = db.getDOMImplementation();
+            doc = di.createDocument(null, "root", null);
+            el = doc.getDocumentElement();
+            el.setAttribute("atr", s);
+            el.appendChild(doc.createTextNode(s));
+            TransformerFactory transFactory = TransformerFactory.newInstance();
+            Transformer transformer = transFactory.newTransformer();
+            StringWriter buffer = new StringWriter();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.transform(new DOMSource(el), new StreamResult(buffer));
+            s = buffer.toString().trim();
+            //ignore case if there is hexacecimal reprezentation
+            if (!("<root atr=\"Kůň &#9;&#13; úpěl\">Kůň " + (char)9 + "&#13; úpěl</root>").equals(s)
+                && !("<root atr=\"kůň &#x9;&#xd; úpěl\">kůň "+(char)9+"&#xd; úpěl</root>").equals(s.toLowerCase())) {
+                fail(s);
+            }
+        } catch (IllegalArgumentException | ParserConfigurationException | TransformerException
+            | DOMException ex) {
+            fail(ex);
+        }
+        try {
+            DocumentBuilderFactory bf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = bf.newDocumentBuilder();
+            InputStream is = new ByteArrayInputStream(s.getBytes("UTF-8"));
+            doc = db.parse(is);
+            el = doc.getDocumentElement();
+            assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getAttribute("atr"));
+            assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getChildNodes().item(0).getNodeValue());
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException ex) {
+            fail(ex);
+        }
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 * @throws Exception if an error occurs.
-	 */
-	public static void main(String... args) throws Exception {
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     * @throws Exception if an error occurs.
+     */
+    public static void main(String... args) throws Exception {
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }

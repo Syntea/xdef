@@ -7,10 +7,10 @@ import org.xdef.proc.XXNode;
  */
 public interface XDConstructor {
 
-	/** Construct XDValue from an object.
-	 * @param resultSet object from which result will be created (may be null).
-	 * @param xNode XXnode from which this method was called.
-	 * @return created XDObject or null.
-	 */
-	public XDValue construct(XDResultSet resultSet, XXNode xNode);
+    /** Construct XDValue from an object.
+     * @param resultSet object from which result will be created (may be null).
+     * @param xNode XXnode from which this method was called.
+     * @return created XDObject or null.
+     */
+    public XDValue construct(XDResultSet resultSet, XXNode xNode);
 }

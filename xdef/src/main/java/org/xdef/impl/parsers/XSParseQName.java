@@ -4,10 +4,10 @@ package org.xdef.impl.parsers;
  * @author Vaclav Trojan
  */
 public class XSParseQName extends XSParseName {
-	private static final String ROOTBASENAME = "QName";
+    private static final String ROOTBASENAME = "QName";
 
-	public XSParseQName() {super();}
+    public XSParseQName() {super();}
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 }
