@@ -9,13 +9,13 @@ import java.util.Properties;
 
 public class Order1a_gen {
 
-	public static void main(String... args) throws IOException {
-		// Compile the XDPool from the X-definition source file
-		Properties props = new Properties();
-		XDPool xpool = XDFactory.compileXD(props, "src/task1/Order1.xdef");
-		try ( // Write the XDPool object to the file
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("task1/output/Order1a.xp"))){
-			out.writeObject(xpool);
-		}
-	}
+    public static void main(String... args) throws IOException {
+        // Compile the XDPool from the X-definition source file
+        Properties props = new Properties();
+        XDPool xpool = XDFactory.compileXD(props, "src/task1/Order1.xdef");
+        try ( // Write the XDPool object to the file
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("task1/output/Order1a.xp"))){
+            out.writeObject(xpool);
+        }
+    }
 }
