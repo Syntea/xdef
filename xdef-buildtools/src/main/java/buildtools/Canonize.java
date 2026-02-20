@@ -107,13 +107,14 @@ public class Canonize {
 		if (i < 0) {
 			throw new RuntimeException("Unknown build structure");
 		}
-		// Canonize sources: replace leading spaces with tabs and remove trailing white spaces.
+
+        // register report messages
+		GenReportTables.main(projectBase);
+
+        // Canonize sources: replace leading spaces with tabs and remove trailing white spaces.
 		doSources(projectBase, "/src/main/java", true);
 		doSources(projectBase, "/src/main/resources/org", true);
 		doSources(projectBase, "/src/test/java", true);
-
-		// register report messages
-		GenReportTables.main(projectBase);
 
 //		// update date in files changelog.md and in pom.xml
 //		String date = String.format("%tF", new Date()); // actual date
