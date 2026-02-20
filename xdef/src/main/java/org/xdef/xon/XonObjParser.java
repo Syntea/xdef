@@ -13,120 +13,120 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class XonObjParser implements XonParser {
-	private final Stack<Integer> _kinds;
-	private final Stack<List<Object>> _arrays;
-	private final Stack<Map<String, Object>> _maps;
-	private int _kind; // 0..value, 1..array, 2..map
-	private final Stack<String> _names;
-	private Object _value;
-	private final boolean _convertXDBytes; // if XDBytes are conterted to byte[]
+    private final Stack<Integer> _kinds;
+    private final Stack<List<Object>> _arrays;
+    private final Stack<Map<String, Object>> _maps;
+    private int _kind; // 0..value, 1..array, 2..map
+    private final Stack<String> _names;
+    private Object _value;
+    private final boolean _convertXDBytes; // if XDBytes are conterted to byte[]
 
-	/** Create new instance of XonObjParser.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
-	 */
-	public XonObjParser(final boolean convertXDBytes) {
-		_kinds = new Stack<>();
-		_arrays = new Stack<>();
-		_maps = new Stack<>();
-		_names = new Stack<>();
-		_kinds.push(_kind = 0);
-		_convertXDBytes = convertXDBytes;
-	}
+    /** Create new instance of XonObjParser.
+     * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+     */
+    public XonObjParser(final boolean convertXDBytes) {
+        _kinds = new Stack<>();
+        _arrays = new Stack<>();
+        _maps = new Stack<>();
+        _names = new Stack<>();
+        _kinds.push(_kind = 0);
+        _convertXDBytes = convertXDBytes;
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 // XonParser interface
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Put value to result.
-	 * @param value X_Value to be added to result object.
-	 */
-	@Override
-	public void putValue(XonTools.JValue value) {
-		Object o = value.getValue();
-		if (_convertXDBytes && o instanceof XDBytes) {
-			o = ((XDBytes) o).getBytes();
-		}
-		switch (_kind) {
-			case 1: _arrays.peek().add(o);break;
-			case 2:
-				String name = _names.pop();
-				_maps.peek().put(name, o);
-				break;
-			default:
-				_value = o;
-		}
-	}
+    /** Put value to result.
+     * @param value X_Value to be added to result object.
+     */
+    @Override
+    public void putValue(XonTools.JValue value) {
+        Object o = value.getValue();
+        if (_convertXDBytes && o instanceof XDBytes) {
+            o = ((XDBytes) o).getBytes();
+        }
+        switch (_kind) {
+            case 1: _arrays.peek().add(o);break;
+            case 2:
+                String name = _names.pop();
+                _maps.peek().put(name, o);
+                break;
+            default:
+                _value = o;
+        }
+    }
 
-	/** Set name of value pair.
-	 * @param name value name.
-	 * @return true if the name of pair already exists, otherwise return false.
-	 */
-	@Override
-	public boolean namedValue(SBuffer name) {
-		_names.push(name.getString());
-		return _maps.peek().containsKey(name.getString());
-	}
+    /** Set name of value pair.
+     * @param name value name.
+     * @return true if the name of pair already exists, otherwise return false.
+     */
+    @Override
+    public boolean namedValue(SBuffer name) {
+        _names.push(name.getString());
+        return _maps.peek().containsKey(name.getString());
+    }
 
-	/** Array started.
-	 * @param pos source position.
-	 */
-	@Override
-	public void arrayStart(SPosition pos) {_kinds.push(_kind = 1); _arrays.push(new ArrayList<>());}
+    /** Array started.
+     * @param pos source position.
+     */
+    @Override
+    public void arrayStart(SPosition pos) {_kinds.push(_kind = 1); _arrays.push(new ArrayList<>());}
 
-	/** Array ended.
-	 * @param pos source position.
-	 */
-	@Override
-	public void arrayEnd(SPosition pos) {
-		_kinds.pop();
-		_kind = _kinds.peek();
-		_value = _arrays.peek();
-		_arrays.pop();
-		if (_kind == 2) {
-			_maps.peek().put(_names.pop(), _value);
-		} else if (_kind == 1) {
-			_arrays.peek().add(_value);
-		}
-	}
+    /** Array ended.
+     * @param pos source position.
+     */
+    @Override
+    public void arrayEnd(SPosition pos) {
+        _kinds.pop();
+        _kind = _kinds.peek();
+        _value = _arrays.peek();
+        _arrays.pop();
+        if (_kind == 2) {
+            _maps.peek().put(_names.pop(), _value);
+        } else if (_kind == 1) {
+            _arrays.peek().add(_value);
+        }
+    }
 
-	/** Map started.
-	 * @param pos source position.
-	 */
-	@Override
-	public void mapStart(SPosition pos) {_kinds.push(_kind = 2); _maps.push(new LinkedHashMap<>());}
+    /** Map started.
+     * @param pos source position.
+     */
+    @Override
+    public void mapStart(SPosition pos) {_kinds.push(_kind = 2); _maps.push(new LinkedHashMap<>());}
 
-	/** Map ended.
-	 * @param pos source position.
-	 */
-	@Override
-	public void mapEnd(SPosition pos) {
-		_kinds.pop();
-		_kind = _kinds.peek();
-		_value = _maps.peek();
-		_maps.pop();
-		if (_kind == 2) {
-			_maps.peek().put(_names.pop(), _value);
-		} else if (_kind == 1) {
-			_arrays.peek().add(_value);
-		}
-	}
+    /** Map ended.
+     * @param pos source position.
+     */
+    @Override
+    public void mapEnd(SPosition pos) {
+        _kinds.pop();
+        _kind = _kinds.peek();
+        _value = _maps.peek();
+        _maps.pop();
+        if (_kind == 2) {
+            _maps.peek().put(_names.pop(), _value);
+        } else if (_kind == 1) {
+            _arrays.peek().add(_value);
+        }
+    }
 
-	/** Processed comment.
-	 * @param value SBuffer with the value of comment.
-	 */
-	@Override
-	public void comment(SBuffer value){/*we ingore it here*/}
+    /** Processed comment.
+     * @param value SBuffer with the value of comment.
+     */
+    @Override
+    public void comment(SBuffer value){/*we ingore it here*/}
 
-	/** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
-	 * @param name name of item.
-	 * @param value value of item.
-	 */
-	@Override
-	public void xdScript(SBuffer name, SBuffer value) {}
+    /** X-script item parsed, not used methods for XON/JSON parsing (used in X-definition compiler).
+     * @param name name of item.
+     * @param value value of item.
+     */
+    @Override
+    public void xdScript(SBuffer name, SBuffer value) {}
 
-	/** Get result of parser.
-	 * @return parsed object.
-	 */
-	@Override
-	public final Object getResult() {return _value;}
+    /** Get result of parser.
+     * @return parsed object.
+     */
+    @Override
+    public final Object getResult() {return _value;}
 }

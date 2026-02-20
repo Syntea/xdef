@@ -6,14 +6,14 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XSParseGMonthDay extends XSParseDate {
-	private static final String ROOTBASENAME = "gMonthDay";
+    private static final String ROOTBASENAME = "gMonthDay";
 
-	public XSParseGMonthDay() {super();}
+    public XSParseGMonthDay() {super();}
 
-	@Override
-	boolean parse(final StringParser parser) {return parser.isXMLMonthDay();}
+    @Override
+    boolean parse(final StringParser parser) {return parser.isXMLMonthDay();}
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 
 }

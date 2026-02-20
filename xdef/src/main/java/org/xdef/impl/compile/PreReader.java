@@ -7,10 +7,10 @@ import java.io.InputStream;
  */
 public interface PreReader {
 
-	/** Parse source input stream.
-	 * @param in input stream with source data.
-	 * @param sysId system ID of source data.
-	 * @throws Exception if an error occurs.
-	 */
-	public void doParse(final InputStream in, final String sysId) throws Exception;
+    /** Parse source input stream.
+     * @param in input stream with source data.
+     * @param sysId system ID of source data.
+     * @throws Exception if an error occurs.
+     */
+    public void doParse(final InputStream in, final String sysId) throws Exception;
 }

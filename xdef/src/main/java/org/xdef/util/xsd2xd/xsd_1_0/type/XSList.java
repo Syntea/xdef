@@ -11,40 +11,40 @@ import org.w3c.dom.*;
  */
 public class XSList extends Specification {
 
-	/** Type of list items. */
-	private final Type _itemType;
+    /** Type of list items. */
+    private final Type _itemType;
 
-	/** Creates instance of XML schema list construction.
-	 * @param listElement list declaration element.
-	 * @param schemaURL URL of schema containing list.
-	 * @param schemaElements all schema elements.
-	 */
-	public XSList(Element listElement, URL schemaURL,
-		Map<URL, Element> schemaElements) {
-		String itemType = listElement.getAttribute("itemType");
-		if (!"".equals(itemType)) {
-			_itemType = Type.getType(
-				itemType, listElement, schemaURL, schemaElements);
-		} else {
-			Element simpleTypeElement = KDOMUtils.firstElementChildNS(
-				listElement, Utils.NSURI_SCHEMA, "simpleType");
-			_itemType =
-				new SimpleType(simpleTypeElement, schemaURL, schemaElements);
-		}
-	}
+    /** Creates instance of XML schema list construction.
+     * @param listElement list declaration element.
+     * @param schemaURL URL of schema containing list.
+     * @param schemaElements all schema elements.
+     */
+    public XSList(Element listElement, URL schemaURL,
+        Map<URL, Element> schemaElements) {
+        String itemType = listElement.getAttribute("itemType");
+        if (!"".equals(itemType)) {
+            _itemType = Type.getType(
+                itemType, listElement, schemaURL, schemaElements);
+        } else {
+            Element simpleTypeElement = KDOMUtils.firstElementChildNS(
+                listElement, Utils.NSURI_SCHEMA, "simpleType");
+            _itemType =
+                new SimpleType(simpleTypeElement, schemaURL, schemaElements);
+        }
+    }
 
-	/** Item type getter.
-	 * @return  list item type.
-	 */
-	public Type getItemType() {return _itemType;}
+    /** Item type getter.
+     * @return  list item type.
+     */
+    public Type getItemType() {return _itemType;}
 
-	@Override
-	public String getTypeMethod() {
-		return "list(%item=" + _itemType.getTypeMethod() + ")";
-	}
+    @Override
+    public String getTypeMethod() {
+        return "list(%item=" + _itemType.getTypeMethod() + ")";
+    }
 
-	@Override
-	public String toString() {
-		return "List [itemtype=" + _itemType.toString() + "]";
-	}
+    @Override
+    public String toString() {
+        return "List [itemtype=" + _itemType.toString() + "]";
+    }
 }

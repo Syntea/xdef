@@ -4,39 +4,39 @@ package org.xdef.impl.parsers;
  * @author Vaclav Trojan
  */
 public class XDParseSHA1 extends XSParseHexBinary {
-	private static final String ROOTBASENAME = "SHA1";
+    private static final String ROOTBASENAME = "SHA1";
 
-	public XDParseSHA1() {super(); _minLength = _maxLength = 20;}
+    public XDParseSHA1() {super(); _minLength = _maxLength = 20;}
 
-	@Override
-	public void initParams() {
-		_whiteSpace = WS_COLLAPSE;
-		_patterns = null;
-		_enumeration = null;
-		_minLength = _maxLength = 20;
-	}
+    @Override
+    public void initParams() {
+        _whiteSpace = WS_COLLAPSE;
+        _patterns = null;
+        _enumeration = null;
+        _minLength = _maxLength = 20;
+    }
 
-	@Override
-	public int getLegalKeys() {
-		return PATTERN +
-			ENUMERATION +
-			WHITESPACE + //fixed collapse
+    @Override
+    public int getLegalKeys() {
+        return PATTERN +
+            ENUMERATION +
+            WHITESPACE + //fixed collapse
 //			MAXINCLUSIVE +
 //			MAXEXCLUSIVE +
 //			MININCLUSIVE +
 //			MINEXCLUSIVE +
 //			TOTALDIGITS +
 //			FRACTIONDIGITS +
-			LENGTH + //fixed to 20
+            LENGTH + //fixed to 20
 //			MAXLENGTH +
 //			MINLENGTH +
 //			NORMALIZE +
 //			SEPARATOR +
 //			ITEM +
 //			BASE +
-			0;
-	}
+            0;
+    }
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 }

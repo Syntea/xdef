@@ -8,16 +8,16 @@ import org.xdef.sys.SReporter;
  */
 interface XParser {
 
-	/** Parse source.
-	 * @param chkDoc The ChkDocument object.
-	 */
-	public void xparse(final XDDocument chkDoc);
+    /** Parse source.
+     * @param chkDoc The ChkDocument object.
+     */
+    public void xparse(final XDDocument chkDoc);
 
-	/** Get connected reporter.
-	 * @return connected SReporter.
-	 */
-	public SReporter getReporter();
+    /** Get connected reporter.
+     * @return connected SReporter.
+     */
+    public SReporter getReporter();
 
-	/** Close reader of parsed data. */
-	public void closeReader();
+    /** Close reader of parsed data. */
+    public void closeReader();
 }

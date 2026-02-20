@@ -115,269 +115,269 @@ import org.xdef.sys.SObjectReader;
  */
 public final class XDReader extends SObjectReader {
 
-	/** Creates a new instance of XDReader.
-	 * @param in Input stream with data of XD objects
-	 */
-	public XDReader(InputStream in) {super(in);}
+    /** Creates a new instance of XDReader.
+     * @param in Input stream with data of XD objects
+     */
+    public XDReader(InputStream in) {super(in);}
 
-	private static Class<?> getClassForName(final String name) throws IOException {
-		switch(name) { //first check primitive type names
-			case "boolean": return java.lang.Boolean.TYPE;
-			case "byte": return java.lang.Byte.TYPE;
-			case "short": return java.lang.Short.TYPE;
-			case "int": return java.lang.Integer.TYPE;
-			case "long": return java.lang.Long.TYPE;
-			case "char": return java.lang.Character.TYPE;
-			case "float": return java.lang.Float.TYPE;
-			case "double": return java.lang.Double.TYPE;
-		}
-		try { //return class
-			return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
-		} catch (ClassNotFoundException ex) {
-			throw new SIOException(SYS.SYS066,"Class not found: "+name+"; "+ex); //Internal error&{0}{: }
-		}
-	}
+    private static Class<?> getClassForName(final String name) throws IOException {
+        switch(name) { //first check primitive type names
+            case "boolean": return java.lang.Boolean.TYPE;
+            case "byte": return java.lang.Byte.TYPE;
+            case "short": return java.lang.Short.TYPE;
+            case "int": return java.lang.Integer.TYPE;
+            case "long": return java.lang.Long.TYPE;
+            case "char": return java.lang.Character.TYPE;
+            case "float": return java.lang.Float.TYPE;
+            case "double": return java.lang.Double.TYPE;
+        }
+        try { //return class
+            return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException ex) {
+            throw new SIOException(SYS.SYS066,"Class not found: "+name+"; "+ex); //Internal error&{0}{: }
+        }
+    }
 
-	private XDValue readBNF() throws IOException {
-		int extVar = readInt();
-		String source = readString();
-		if (extVar == -1) {
-			return new DefBNFGrammar(source, null);
-		}
-		DefBNFGrammar y = new DefBNFGrammar();
-		y.setParam(extVar);
-		y.setSource(source);
-		return y;
-	}
+    private XDValue readBNF() throws IOException {
+        int extVar = readInt();
+        String source = readString();
+        if (extVar == -1) {
+            return new DefBNFGrammar(source, null);
+        }
+        DefBNFGrammar y = new DefBNFGrammar();
+        y.setParam(extVar);
+        y.setSource(source);
+        return y;
+    }
 
-	private XDValue readXPath() throws IOException {
-		int len = readLength();
-		KNamespace nc = new KNamespace();
-		if (len > 0) {
-			for (int i = 0; i < len; i++) {
-				String prefix = readString();
-				String uri = readString();
-				if (!prefix.startsWith("xml")) {
-					nc.setPrefix(prefix, uri);
-				}
-			}
-		}
-		String xpath = readString();
-		return new DefXPathExpr(xpath, nc, null, null);
-	}
+    private XDValue readXPath() throws IOException {
+        int len = readLength();
+        KNamespace nc = new KNamespace();
+        if (len > 0) {
+            for (int i = 0; i < len; i++) {
+                String prefix = readString();
+                String uri = readString();
+                if (!prefix.startsWith("xml")) {
+                    nc.setPrefix(prefix, uri);
+                }
+            }
+        }
+        String xpath = readString();
+        return new DefXPathExpr(xpath, nc, null, null);
+    }
 
-	/** Read XD object.
-	 * @return the XD object constructed from input stream.
-	 * @throws IOException if an error occurs.
-	 */
-	public final XDValue readXD() throws IOException {
-		short code = readShort();
-		if (code < 0) {
-			if (code == -1) {
-				return null;
-			}
-			throw new SIOException(SYS.SYS066, "Illegal code: " + code); //Internal error&{}{: }
-		}
-		short type = readShort();
-		switch (code) {
-			case COMPILE_BNF:
-				return readBNF();
-			case COMPILE_XPATH:
-				return readXPath();
-			case LD_CONST: {
-				switch (type) {
-					case XD_BNFGRAMMAR: return readBNF();
-					case XD_BNFRULE:
-						readString(); // ???
-						return new DefBNFRule(null);
-					case XD_BOOLEAN: return new DefBoolean(readBoolean());
-					case XD_BYTES: return new DefBytes(readBytes(), readBoolean());
-					case XD_DATETIME: {
-						SDatetime x = readSDatetime();
-						return x == null ? new DefDate() : new DefDate(x);
-					}
-					case XD_DECIMAL: return new DefDecimal(readBigDecimal());
-					case XD_BIGINTEGER: return new DefBigInteger(readBigInteger());
-					case XD_DURATION: {
-						SDuration x = readSDuration();
-						return x==null ? new DefDuration() : new DefDuration(x);
-					}
-					case XD_ANYURI: return new DefURI(readString());
-					case XD_EMAIL: return new DefEmailAddr(readString());
-					case XD_ELEMENT: return new DefElement();
-					case XD_EXCEPTION: return new DefException(readReport(), readString(), readInt());
-					case XD_DOUBLE: return new DefDouble(readDouble());
-					case XD_LONG: return new DefLong(readLong());
-					case XD_CONTAINER: {
-						int len = readInt();
-						if (len == -1) {
-							return new DefContainer((Object) null);
-						}
-						DefContainer y = new DefContainer();
-						for (int i = 0; i < len; i++) {
-							y.addXDItem(readXD());
-						}
-						len = readLength();
-						for (int i = 0; i < len; i++) {
-							y.setXDNamedItem((XDNamedValue) readXD());
-						}
-						return y;
-					}
-					case XD_GPSPOSITION:
-						return new XDGPSPosition(
-							new GPSPosition(readDouble(), readDouble(), readDouble(), readString()));
-					case XD_PRICE: return new XDPrice(new Price(readBigDecimal(), readString()));
-					case XD_LOCALE: return new DefLocale(readString(), readString(), readString());
-					case XD_NAMEDVALUE:return new DefNamedValue(readString(), readXD());
-					case XD_OBJECT:return new DefObject();
-					case XD_OUTPUT:return new DefOutStream();
-					case XD_PARSERESULT: {
-						DefParseResult y = new DefParseResult();
-						String s = readString();
-						if (s != null) {
-							y.setSourceBuffer(s);
-						}
-						XDValue v = readXD();
-						if (v != null) {
-							y.setParsedValue(v);
-						}
-						return y;
-					}
-					case XD_PARSER: {//STRING_PARSER
-						String declaredName = readString();
-						String name = readString();
-						if (declaredName == null && name == null) {
-							return new DefNull(XD_PARSER);
-						}
-						XDContainer pars = (XDContainer) readXD();
-						XDParser y = getParser(name);
-						try {
-							y.setNamedParams(null, pars);
-						} catch (SException ex) {
-							throw new SIOException(ex.getReport());
-						}
-						y.setDeclaredName(declaredName);
-						return y;
-					}
-					case XD_REGEX:return new XDRegex(readString(), readBoolean());
-					case XD_STRING: return new DefString(readString());
-					case XD_XQUERY: return new DefXQueryExpr(readString());
-					case XD_XPATH: return readXPath();
-					case X_UNIQUESET:
-					case X_UNIQUESET_M: {
-						int len = readLength();
-						ParseItem[] keys = new ParseItem[len];
-						if (len > 0) {
-							for (int i = 0; i < len; i++) {
-								keys[i] = new ParseItem(readString(), //key name
-									readString(), // reference type name
-									readInt(), // address of validation method
-									readInt(), // key index
-									readShort(), // parsed type
-									readBoolean()); // optional flag
-							}
-						}
-						len = readLength();
-						String[] varNames = new String[len];
-						if (len > 0) {
-							for (int i = 0; i < len; i++) {
-								varNames[i] = readString();
-							}
-						}
-						return new CodeUniqueset(keys, varNames, readString());
-					}
-					case XD_SERVICE: return new DefSQLService();
-					case XD_STATEMENT: return new DefSQLStatement();
-					case XD_RESULTSET: return new DefSQLResultSet();
-					case XD_UNIQUESET_KEY:
-					case X_PARSEITEM: // TODO ???
-					case XD_NULL: return new DefNull(type);
-					default:
-						throw new SIOException(SYS.SYS066, "Illegal type: "+type); //Internal error&{0}{: }
-				}
-			}
-			default: {
-				// 01ILSXMPVWT
-				byte c = readByte();
-				switch (c) {
-					case ID_CODEOP: return new CodeOp(type, code);
-					case ID_CODEI1: return new CodeI1(type, code, readInt());
-					case ID_CODEI2: return new CodeI2(type, code, readInt(), readInt());
-					case ID_CODEL2: return new CodeL2(type, code, readInt(), readLong());
-					case ID_CODES1: return new CodeS1(type, code, readInt(), readString());
-					case ID_CODEXD: return new CodeXD(type, code, readInt(), readXD());
-					case ID_CODEEXT: {
-						int p1 = readInt();
-						String name = readString();
-						String methodName = readString();
-						String className = readString();
-						Class<?> declaringClass = getClassForName(className);
-						int len = readLength();
-						Class<?>[] pars = new Class<?>[len];
-						for (int i = 0; i < len; i++) {
-							pars[i] = getClassForName(readString());
-						}
-						try {
-							Method method = declaringClass.getMethod(methodName, pars);
-							return new CodeExtMethod(name, type, code, p1, method);
-						} catch (NoSuchMethodException ex) {
-							//Internal error&{0}{: }
-							throw new SIOException(SYS.SYS066, "No such method: "+name+"/"+methodName);
-						}
-					}
-					case ID_CODEPARSER: {
-						int p1 = readInt();
-						String name = readString();
-						int len = readInt();
-						String [] sqParamNames;
-						if (len < 0) {
-							sqParamNames = null;
-						} else {
-							sqParamNames = new String[len];
-							for (int i = 0; i < len; i++) {
-								sqParamNames[i] = readString();
-							}
-						}
-						return new CodeParser(type, code, p1, name, sqParamNames);
-					}
-					case ID_CODESLIST: {
-						int p1 = readInt();
-						String[] pars = new String[p1];
-						for (int i = 0; i < p1; i++) {
-							pars[i] = readString();
-						}
-						return new CodeStringList(type, code, pars);
-					}
-					case ID_CODESWTABI: {
-						CodeSWTableInt y = new CodeSWTableInt();
-						int p1 = readInt();
-						y.setParam(p1);
-						int len = readLength();
-						y._adrs = new int[len];
-						y._list = new long[len];
-						for (int i = 0; i < len; i++) {
-							y._adrs[i] = readInt();
-							y._list[i] = readLong();
-						}
-						return y;
-					}
-					case ID_CODESWTABS: {
-						CodeSWTableStr y = new CodeSWTableStr();
-						int p1 = readInt();
-						y.setParam(p1);
-						int len = readLength();
-						y._adrs = new int[len];
-						y._list = new String[len];
-						for (int i = 0; i < len; i++) {
-							y._adrs[i] = readInt();
-							y._list[i] = readString();
-						}
-						return y;
-					}
-					default:
-						throw new SIOException(SYS.SYS066, "Illegal ID:"+type+"/"+c);//Internal error&{0}{: }
-				}
-			}
-		}
-	}
+    /** Read XD object.
+     * @return the XD object constructed from input stream.
+     * @throws IOException if an error occurs.
+     */
+    public final XDValue readXD() throws IOException {
+        short code = readShort();
+        if (code < 0) {
+            if (code == -1) {
+                return null;
+            }
+            throw new SIOException(SYS.SYS066, "Illegal code: " + code); //Internal error&{}{: }
+        }
+        short type = readShort();
+        switch (code) {
+            case COMPILE_BNF:
+                return readBNF();
+            case COMPILE_XPATH:
+                return readXPath();
+            case LD_CONST: {
+                switch (type) {
+                    case XD_BNFGRAMMAR: return readBNF();
+                    case XD_BNFRULE:
+                        readString(); // ???
+                        return new DefBNFRule(null);
+                    case XD_BOOLEAN: return new DefBoolean(readBoolean());
+                    case XD_BYTES: return new DefBytes(readBytes(), readBoolean());
+                    case XD_DATETIME: {
+                        SDatetime x = readSDatetime();
+                        return x == null ? new DefDate() : new DefDate(x);
+                    }
+                    case XD_DECIMAL: return new DefDecimal(readBigDecimal());
+                    case XD_BIGINTEGER: return new DefBigInteger(readBigInteger());
+                    case XD_DURATION: {
+                        SDuration x = readSDuration();
+                        return x==null ? new DefDuration() : new DefDuration(x);
+                    }
+                    case XD_ANYURI: return new DefURI(readString());
+                    case XD_EMAIL: return new DefEmailAddr(readString());
+                    case XD_ELEMENT: return new DefElement();
+                    case XD_EXCEPTION: return new DefException(readReport(), readString(), readInt());
+                    case XD_DOUBLE: return new DefDouble(readDouble());
+                    case XD_LONG: return new DefLong(readLong());
+                    case XD_CONTAINER: {
+                        int len = readInt();
+                        if (len == -1) {
+                            return new DefContainer((Object) null);
+                        }
+                        DefContainer y = new DefContainer();
+                        for (int i = 0; i < len; i++) {
+                            y.addXDItem(readXD());
+                        }
+                        len = readLength();
+                        for (int i = 0; i < len; i++) {
+                            y.setXDNamedItem((XDNamedValue) readXD());
+                        }
+                        return y;
+                    }
+                    case XD_GPSPOSITION:
+                        return new XDGPSPosition(
+                            new GPSPosition(readDouble(), readDouble(), readDouble(), readString()));
+                    case XD_PRICE: return new XDPrice(new Price(readBigDecimal(), readString()));
+                    case XD_LOCALE: return new DefLocale(readString(), readString(), readString());
+                    case XD_NAMEDVALUE:return new DefNamedValue(readString(), readXD());
+                    case XD_OBJECT:return new DefObject();
+                    case XD_OUTPUT:return new DefOutStream();
+                    case XD_PARSERESULT: {
+                        DefParseResult y = new DefParseResult();
+                        String s = readString();
+                        if (s != null) {
+                            y.setSourceBuffer(s);
+                        }
+                        XDValue v = readXD();
+                        if (v != null) {
+                            y.setParsedValue(v);
+                        }
+                        return y;
+                    }
+                    case XD_PARSER: {//STRING_PARSER
+                        String declaredName = readString();
+                        String name = readString();
+                        if (declaredName == null && name == null) {
+                            return new DefNull(XD_PARSER);
+                        }
+                        XDContainer pars = (XDContainer) readXD();
+                        XDParser y = getParser(name);
+                        try {
+                            y.setNamedParams(null, pars);
+                        } catch (SException ex) {
+                            throw new SIOException(ex.getReport());
+                        }
+                        y.setDeclaredName(declaredName);
+                        return y;
+                    }
+                    case XD_REGEX:return new XDRegex(readString(), readBoolean());
+                    case XD_STRING: return new DefString(readString());
+                    case XD_XQUERY: return new DefXQueryExpr(readString());
+                    case XD_XPATH: return readXPath();
+                    case X_UNIQUESET:
+                    case X_UNIQUESET_M: {
+                        int len = readLength();
+                        ParseItem[] keys = new ParseItem[len];
+                        if (len > 0) {
+                            for (int i = 0; i < len; i++) {
+                                keys[i] = new ParseItem(readString(), //key name
+                                    readString(), // reference type name
+                                    readInt(), // address of validation method
+                                    readInt(), // key index
+                                    readShort(), // parsed type
+                                    readBoolean()); // optional flag
+                            }
+                        }
+                        len = readLength();
+                        String[] varNames = new String[len];
+                        if (len > 0) {
+                            for (int i = 0; i < len; i++) {
+                                varNames[i] = readString();
+                            }
+                        }
+                        return new CodeUniqueset(keys, varNames, readString());
+                    }
+                    case XD_SERVICE: return new DefSQLService();
+                    case XD_STATEMENT: return new DefSQLStatement();
+                    case XD_RESULTSET: return new DefSQLResultSet();
+                    case XD_UNIQUESET_KEY:
+                    case X_PARSEITEM: // TODO ???
+                    case XD_NULL: return new DefNull(type);
+                    default:
+                        throw new SIOException(SYS.SYS066, "Illegal type: "+type); //Internal error&{0}{: }
+                }
+            }
+            default: {
+                // 01ILSXMPVWT
+                byte c = readByte();
+                switch (c) {
+                    case ID_CODEOP: return new CodeOp(type, code);
+                    case ID_CODEI1: return new CodeI1(type, code, readInt());
+                    case ID_CODEI2: return new CodeI2(type, code, readInt(), readInt());
+                    case ID_CODEL2: return new CodeL2(type, code, readInt(), readLong());
+                    case ID_CODES1: return new CodeS1(type, code, readInt(), readString());
+                    case ID_CODEXD: return new CodeXD(type, code, readInt(), readXD());
+                    case ID_CODEEXT: {
+                        int p1 = readInt();
+                        String name = readString();
+                        String methodName = readString();
+                        String className = readString();
+                        Class<?> declaringClass = getClassForName(className);
+                        int len = readLength();
+                        Class<?>[] pars = new Class<?>[len];
+                        for (int i = 0; i < len; i++) {
+                            pars[i] = getClassForName(readString());
+                        }
+                        try {
+                            Method method = declaringClass.getMethod(methodName, pars);
+                            return new CodeExtMethod(name, type, code, p1, method);
+                        } catch (NoSuchMethodException ex) {
+                            //Internal error&{0}{: }
+                            throw new SIOException(SYS.SYS066, "No such method: "+name+"/"+methodName);
+                        }
+                    }
+                    case ID_CODEPARSER: {
+                        int p1 = readInt();
+                        String name = readString();
+                        int len = readInt();
+                        String [] sqParamNames;
+                        if (len < 0) {
+                            sqParamNames = null;
+                        } else {
+                            sqParamNames = new String[len];
+                            for (int i = 0; i < len; i++) {
+                                sqParamNames[i] = readString();
+                            }
+                        }
+                        return new CodeParser(type, code, p1, name, sqParamNames);
+                    }
+                    case ID_CODESLIST: {
+                        int p1 = readInt();
+                        String[] pars = new String[p1];
+                        for (int i = 0; i < p1; i++) {
+                            pars[i] = readString();
+                        }
+                        return new CodeStringList(type, code, pars);
+                    }
+                    case ID_CODESWTABI: {
+                        CodeSWTableInt y = new CodeSWTableInt();
+                        int p1 = readInt();
+                        y.setParam(p1);
+                        int len = readLength();
+                        y._adrs = new int[len];
+                        y._list = new long[len];
+                        for (int i = 0; i < len; i++) {
+                            y._adrs[i] = readInt();
+                            y._list[i] = readLong();
+                        }
+                        return y;
+                    }
+                    case ID_CODESWTABS: {
+                        CodeSWTableStr y = new CodeSWTableStr();
+                        int p1 = readInt();
+                        y.setParam(p1);
+                        int len = readLength();
+                        y._adrs = new int[len];
+                        y._list = new String[len];
+                        for (int i = 0; i < len; i++) {
+                            y._adrs[i] = readInt();
+                            y._list[i] = readString();
+                        }
+                        return y;
+                    }
+                    default:
+                        throw new SIOException(SYS.SYS066, "Illegal ID:"+type+"/"+c);//Internal error&{0}{: }
+                }
+            }
+        }
+    }
 }

@@ -10,11 +10,11 @@ import org.w3c.dom.Node;
  */
 public interface XQueryImpl {
 
-	/** Execute XQuery expression and return result.
-	 * @param x XQuery expression object.
-	 * @param node node or null.
-	 * @param xNode node model or null.
-	 * @return result of execution of XQuery expression.
-	 */
-	public XDContainer exec(KXqueryExpr x, Node node, XXNode xNode);
+    /** Execute XQuery expression and return result.
+     * @param x XQuery expression object.
+     * @param node node or null.
+     * @param xNode node model or null.
+     * @return result of execution of XQuery expression.
+     */
+    public XDContainer exec(KXqueryExpr x, Node node, XXNode xNode);
 }

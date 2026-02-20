@@ -12,52 +12,52 @@ import org.xdef.XDPool;
  */
 public final class TestImplementsAndUses extends XDTester {
 
-	public TestImplementsAndUses() {super();}
+    public TestImplementsAndUses() {super();}
 
-	final public static boolean x() {return true;}
-	final public static boolean y() {return true;}
+    final public static boolean x() {return true;}
+    final public static boolean y() {return true;}
 
-	/** Run test and print error information.*/
-	@Override
-	public void test() {
-		String xdef;
-		String xml;
-		String s;
-		XDPool xp;
-		XDDocument xd;
-		StringWriter swr;
-		ArrayReporter reporter = new ArrayReporter();
-		boolean	chkSyntax = getChkSyntax();
-		setChkSyntax(false);
+    /** Run test and print error information.*/
+    @Override
+    public void test() {
+        String xdef;
+        String xml;
+        String s;
+        XDPool xp;
+        XDDocument xd;
+        StringWriter swr;
+        ArrayReporter reporter = new ArrayReporter();
+        boolean	chkSyntax = getChkSyntax();
+        setChkSyntax(false);
 // test error reporting
-		try {
-			xdef =
+        try {
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <B a='int(1,2);'/>\n"+
 "  <A xd:script=\"implements B\" a='float'></A>\n"+
 "</xd:def>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !(s.contains("XDEF289") || s.contains("XDEF282"))) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !(s.contains("XDEF289") || s.contains("XDEF282"))) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <B a='int(1,2);'/>\n"+
 "  <A xd:script=\"implements B\" a='xxx'></A>\n"+ // this is error
 "</xd:def>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !ex.getMessage().contains("XDEF229")) { // comparing skipped
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !ex.getMessage().contains("XDEF229")) { // comparing skipped
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='b'>\n"+
 "  <A a=\"fixed 'a'\"/>\n"+
@@ -66,15 +66,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements b#A\" a=\"fixed 'b'\"></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF286") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF286") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -89,15 +89,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='y(); finally outln()'/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -112,16 +112,16 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\">y(); finally outln()</A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            s = ex.getMessage();
+            if (!s.contains("XDEF285") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def>\n"+
 "  <A a='int(1,2);'/>\n"+
@@ -130,15 +130,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script='implements #A' a='float'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -150,15 +150,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='a(2)'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <A a='int(1,2);'/>\n"+
@@ -167,15 +167,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='int(1,2); finally outln()'><B/></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF283") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try { //check "implements" XDefinifion
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF283") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try { //check "implements" XDefinifion
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <A a='int(1,2);'><B/></A>\n"+
@@ -184,16 +184,16 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='int(1,2); finally outln()'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (!s.contains("XDEF283") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            s = ex.getMessage();
+            if (!s.contains("XDEF283") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <A a='int(1,2);'/>\n"+
@@ -202,15 +202,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='int(1,3); finally outln()'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef =
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='b'>\n"+
 "  <A a=\"int; default 'a'\"/>\n"+
@@ -219,15 +219,15 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements b#A\" a=\"int; default 'b'\"></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF286") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
-		try {
-			xdef = //this is a question
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF286") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
+        try {
+            xdef = //this is a question
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -240,17 +240,17 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='b()'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
-				fail(ex);
-			}
-		}
+            compile(xdef);
+            fail("error not reported");
+        } catch (Exception ex) {
+            if ((s = ex.getMessage()) == null || !s.contains("XDEF285") || !s.contains("XDEF282")) {
+                fail(ex);
+            }
+        }
 // test no errors
-		setChkSyntax(chkSyntax);
-		try {
-			xdef =
+        setChkSyntax(chkSyntax);
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='b'>\n"+
 "  <A a=\"int; default '123'\"/>\n"+
@@ -259,18 +259,18 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements b#A\" a=\"int; default '123'\"></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			xp = compile(xdef);
-			xml = "<A a='1'/>";
-			assertEq(xml, parse(xp, "Y", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			assertEq("<A a='123'/>",parse(xp, "Y", "<A/>", reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<A a='x'/>";
-			assertEq(xml, parse(xp, "Y", xml, reporter));
-			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef =
+            xp = compile(xdef);
+            xml = "<A a='1'/>";
+            assertEq(xml, parse(xp, "Y", xml, reporter));
+            assertNoErrorwarnings(reporter);
+            assertEq("<A a='123'/>",parse(xp, "Y", "<A/>", reporter));
+            assertNoErrorwarnings(reporter);
+            xml = "<A a='x'/>";
+            assertEq(xml, parse(xp, "Y", xml, reporter));
+            assertErrors(reporter);
+        } catch (Exception ex) {fail(ex);}
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='b'>\n"+
 "  <A a=\"fixed 'a'\"/>\n"+
@@ -279,17 +279,17 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements b#A\" a=\"fixed 'a'\"></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			xp = compile(xdef);
-			xml = "<A a='a'/>";
-			assertEq(xml, parse(xp, "Y", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			assertEq(xml, parse(xp, "Y", "<A/>", reporter));
-			assertNoErrorwarnings(reporter);
-			assertEq(xml, parse(xp, "Y", "<A a='x'/>", reporter));
-			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef =
+            xp = compile(xdef);
+            xml = "<A a='a'/>";
+            assertEq(xml, parse(xp, "Y", xml, reporter));
+            assertNoErrorwarnings(reporter);
+            assertEq(xml, parse(xp, "Y", "<A/>", reporter));
+            assertNoErrorwarnings(reporter);
+            assertEq(xml, parse(xp, "Y", "<A a='x'/>", reporter));
+            assertErrors(reporter);
+        } catch (Exception ex) {fail(ex);}
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <A a='int(1,2);'/>\n"+
@@ -298,8 +298,8 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"implements X#A\" a='int(1,2); finally outln()'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -311,8 +311,8 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script='implements #A' a='a(01)'></A>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <A xd:script='ref X' a='int(1,2); onTrue outln()'/>\n"+
@@ -333,8 +333,8 @@ public final class TestImplementsAndUses extends XDTester {
 "  <boot xd:script=\"finally outln('y'); uses Y#root; ref root\"/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X'>\n"+
 "  <A xd:script='ref X' a='int(1,2); onTrue out(1);'/>\n"+
@@ -356,28 +356,28 @@ public final class TestImplementsAndUses extends XDTester {
 "  <Z xd:script=\"finally out('z'); uses Y#root; ref root\"/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("Y");
-			xml = "<A a='1'><B/>A<C/></A>";
-			swr = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrorwarnings(reporter);
-			assertEq("a", swr.toString());
-			xd = xp.createXDDocument("Y");
-			xml = "<Z><A a='2'><B/>A<C/></A></Z>";
-			swr = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrorwarnings(reporter);
-			assertEq("xz", swr.toString());
-			xdef =
+            xp = compile(xdef);
+            xd = xp.createXDDocument("Y");
+            xml = "<A a='1'><B/>A<C/></A>";
+            swr = new StringWriter();
+            xd.setStdOut(XDFactory.createXDOutput(swr, false));
+            assertEq(xml, parse(xd, xml, reporter));
+            assertNoErrorwarnings(reporter);
+            assertEq("a", swr.toString());
+            xd = xp.createXDDocument("Y");
+            xml = "<Z><A a='2'><B/>A<C/></A></Z>";
+            swr = new StringWriter();
+            xd.setStdOut(XDFactory.createXDOutput(swr, false));
+            assertEq(xml, parse(xd, xml, reporter));
+            assertNoErrorwarnings(reporter);
+            assertEq("xz", swr.toString());
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='P'>\n"+
 "  <P xd:script='uses A' a='required '><B/>required <C xd:script='+'/></P>\n"+
 "  <A a='required int'> <B/> required float <C xd:script='+'/> </A>\n"+
 "</xd:def>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='root'>\n"+
 "  <P a='required int'>\n"+
 "    <B/>\n"+
@@ -392,10 +392,10 @@ public final class TestImplementsAndUses extends XDTester {
 "    </A>\n"+
 "  </root>\n"+
 "</xd:def>";
-			compile(xdef);
+            compile(xdef);
 // external method
-			setChkSyntax(false); // follows comparing of external method
-			xdef =
+            setChkSyntax(false); // follows comparing of external method
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:declaration>\n"+
 "  external method boolean test.xdef.TestImplementsAndUses.x();\n"+
@@ -408,9 +408,9 @@ public final class TestImplementsAndUses extends XDTester {
 "    a='x(); finally outln()'/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			setChkSyntax(chkSyntax);
-			xdef =
+            compile(xdef);
+            setChkSyntax(chkSyntax);
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.TestImplementsAndUses.x();\n"+
@@ -419,9 +419,9 @@ public final class TestImplementsAndUses extends XDTester {
 "  <A xd:script=\"uses B; finally outln()\"\n"+
 "     a='required; finally outln()'/>\n"+
 "</xd:def>";
-			compile(xdef);
+            compile(xdef);
 //REGEX
-			xdef =
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='A'>\n"+
 "  <X a=\"required string(%pattern='[A-Z]');\" />\n"+
@@ -430,20 +430,20 @@ public final class TestImplementsAndUses extends XDTester {
 "  <X xd:script='uses A#X' a=\"required string(%pattern='[A-Z]')\" />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <X xd:script='uses Y' a=\"required string(%pattern='[A-Z]')\" />\n"+
 "  <Y a=\"required string(%pattern='[A-Z]');\" />\n"+
 "</xd:def>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <X xd:script='uses Y' a=\"required\" />\n"+
 "  <Y a=\"required string(%pattern=' [A-Z]\n ');\" />\n"+
 "</xd:def>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:collection xmlns:xd = '"+_xdNS+"'>\n"+
 "<xd:def xd:name = \"A\" > \n"+
 "  <Firma xd:script = \"implements B#Firma\" \n"+
@@ -467,8 +467,8 @@ public final class TestImplementsAndUses extends XDTester {
 "  />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-			xdef =
+            compile(xdef);
+            xdef =
 "<xd:collection xmlns:xd = '"+_xdNS+"' >\n"+
 "<xd:def xd:name = \"A\" > \n"+
 "  <Firma xd:script = \"uses B#Object\" \n"+
@@ -492,9 +492,9 @@ public final class TestImplementsAndUses extends XDTester {
 "  />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
+            compile(xdef);
 //BNF
-			xdef =
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def>\n"+
 "  <B a=\"x.parse('X');\"/>\n"+
@@ -505,70 +505,70 @@ public final class TestImplementsAndUses extends XDTester {
 "  </xd:BNFGrammar>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-			compile(xdef);
-		} catch (Exception ex) {fail(ex);}
-		try {
-			String xdef1 =
+            compile(xdef);
+        } catch (Exception ex) {fail(ex);}
+        try {
+            String xdef1 =
 "<xd:def  xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
 "  <s:A><B/><C/></s:A>\n" +
 "</xd:def>";
-			String xdef2 =
+            String xdef2 =
 "<xd:def  xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='B' root='s:A'>\n" +
 "  <s:A xd:script='implements A#s:A'><B/><C/></s:A>\n" +
 "</xd:def>";
-			compile(new String[]{xdef1, xdef2});
-		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			String xdef1 =
+            compile(new String[]{xdef1, xdef2});
+        } catch (RuntimeException ex) {fail(ex);}
+        try {
+            String xdef1 =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
 "  <s:A><B/><C/></s:A>\n" +
 "</xd:def>";
-			String xdef2 =
+            String xdef2 =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:t='a.b' name='B' root='t:A'>\n" +
 "  <t:A xd:script='implements A#t:A'><B/><C/></t:A>\n" +
 "</xd:def>";
-			compile(new String[]{xdef1, xdef2});
-		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			String xdef1 =
+            compile(new String[]{xdef1, xdef2});
+        } catch (RuntimeException ex) {fail(ex);}
+        try {
+            String xdef1 =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
 "  <s:A><B/><C/></s:A>\n" +
 "</xd:def>";
-			String xdef2 =
+            String xdef2 =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='b.c' name='B' root='s:A'>\n" +
 "  <s:A xd:script='implements A#s:A'><B/><C/></s:A>\n" +
 "</xd:def>";
-			compile(new String[]{xdef1, xdef2});
-		} catch (RuntimeException ex) {
-			if (!ex.getMessage().contains("XDEF122")) { // comparing skipped
-				fail(ex);
-			}
-		}
-		try {
-			String xdef1 =
+            compile(new String[]{xdef1, xdef2});
+        } catch (RuntimeException ex) {
+            if (!ex.getMessage().contains("XDEF122")) { // comparing skipped
+                fail(ex);
+            }
+        }
+        try {
+            String xdef1 =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
 "  <s:A><B/><C/></s:A>\n" +
 "</xd:def>";
-			String xdef2 =
+            String xdef2 =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='b.c' name='B' root='s:A'\n" +
 "        xmlns:t='a.b'>\n" +
 "  <s:A xd:script='implements A#t:A'><B/><C/></s:A>\n" +
 "</xd:def>";
-			compile(new String[]{xdef1, xdef2});
-		} catch (RuntimeException ex) {
-			if (!ex.getMessage().contains("XDEF122")) { // comparing skipped
-				fail(ex);
-			}
-		}
+            compile(new String[]{xdef1, xdef2});
+        } catch (RuntimeException ex) {
+            if (!ex.getMessage().contains("XDEF122")) { // comparing skipped
+                fail(ex);
+            }
+        }
 
-		resetTester();
-	}
+        resetTester();
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String... args) {
-		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String... args) {
+        XDTester.setFulltestMode(true);
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }

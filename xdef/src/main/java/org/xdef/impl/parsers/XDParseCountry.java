@@ -9,30 +9,30 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 public class XDParseCountry extends XSAbstractParseToken {
-	private static final String ROOTBASENAME = "country";
+    private static final String ROOTBASENAME = "country";
 
-	public XDParseCountry() {super();}
+    public XDParseCountry() {super();}
 
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		while(p.getCurrentChar() > ' '){p.nextChar();}
-		String s = p.getParsedString();
-		p.isSpaces();
-		try {
-			SUtils.getISO3Country(s);
-		} catch (Exception ex) {
-			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-			return;
-		}
-		p.setParsedValue(s);
-		p.isSpaces();
-		p.replaceParsedBufferFrom(pos0, s);
-		p.setParsedValue(s);
-		checkItem(p);
-	}
+    @Override
+    public void parseObject(final XXNode xnode, final XDParseResult p){
+        int pos0 = p.getIndex();
+        p.isSpaces();
+        while(p.getCurrentChar() > ' '){p.nextChar();}
+        String s = p.getParsedString();
+        p.isSpaces();
+        try {
+            SUtils.getISO3Country(s);
+        } catch (Exception ex) {
+            p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
+            return;
+        }
+        p.setParsedValue(s);
+        p.isSpaces();
+        p.replaceParsedBufferFrom(pos0, s);
+        p.setParsedValue(s);
+        checkItem(p);
+    }
 
-	@Override
-	public final String parserName() {return ROOTBASENAME;}
+    @Override
+    public final String parserName() {return ROOTBASENAME;}
 }

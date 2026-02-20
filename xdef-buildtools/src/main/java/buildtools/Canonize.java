@@ -50,11 +50,38 @@ public class Canonize {
 			String hdrtext = null;
 			String tailtext = null;
 			System.out.println("Directory: " + home);
-			CanonizeSource.canonize(home + "*.java", dirTree, true, 4, hdrtext, tailtext, CHARSET, true);
-//			CanonizeSource.canonize(home + "*.xml", dirTree, false, -1, null, null, SOURCE_CHARSET, true);
-//			CanonizeSource.canonize(home + "*.html", dirTree, false, -1, null, null, SOURCE_CHARSET, true);
-//			CanonizeSource.canonize(home + "*.xdef", dirTree, false, -1, null, null, SOURCE_CHARSET,true);
-			CanonizeSource.canonize(home + "*.properties", dirTree, false, -1, null, null, CHARSET, true);
+			CanonizeSource.canonize(home + "*.java",
+                dirTree,
+//				true, //leading spaces to tabs
+                false, //leading tabs expand to spaces
+                4,
+                hdrtext,
+                tailtext,
+                CHARSET,
+                true);
+//			CanonizeSource.canonize(home + "*.xml",
+//				dirTree,
+//				false,
+//				-1,
+//				null, null, CHARSET);
+//			CanonizeSource.canonize(home + "*.html",
+//				dirTree,
+//				false,
+//				-1,
+//				null, null, CHARSET);
+//			CanonizeSource.canonize(home + "*.xdef",
+//				dirTree,
+//				false,
+//				-1,
+//				null, null, CHARSET);
+			CanonizeSource.canonize(home + "*.properties",
+                dirTree,
+                false,
+                -1,
+                null,
+                null,
+                CHARSET,
+                true);
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
