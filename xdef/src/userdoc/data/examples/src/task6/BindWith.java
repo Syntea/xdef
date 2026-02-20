@@ -23,7 +23,7 @@ public class BindWith {
             System.err.println("ERROR xparseXComponent:\n" +reporter);
             return;
         }
- 
+
         String s = xc.toXml().getAttribute("MaxWeight");
         if (!"1234".equals(s)) {
             System.err.println("ERROR MaxWeight: " + s);
@@ -45,5 +45,5 @@ public class BindWith {
         }
         System.out.println("OK, Task6.BindWith");
     }
-	
+
 }

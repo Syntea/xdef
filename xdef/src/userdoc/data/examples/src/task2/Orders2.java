@@ -6,31 +6,31 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 
 public class Orders2 {
-	public static void main(String... args) {
-		// Compile X-definition to XDPool
-		XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders2.xdef");
+    public static void main(String... args) {
+        // Compile X-definition to XDPool
+        XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders2.xdef");
 
-		// Create an instance of the XDDocument object (from XDPool)
-		XDDocument xdoc = xpool.createXDDocument("Orders");
+        // Create an instance of the XDDocument object (from XDPool)
+        XDDocument xdoc = xpool.createXDDocument("Orders");
 
-		// Set external variables
-		xdoc.setVariable("outFile", "task2/output/Orders.xml");
-		xdoc.setVariable("errFile", "task2/errors/Orders_err.xml");
+        // Set external variables
+        xdoc.setVariable("outFile", "task2/output/Orders.xml");
+        xdoc.setVariable("errFile", "task2/errors/Orders_err.xml");
 
-		// Prepare the error reporter
-		ArrayReporter reporter = new ArrayReporter();
+        // Prepare the error reporter
+        ArrayReporter reporter = new ArrayReporter();
 
-		// Run validation mode (you can also try task2/input/Order_err.xml)
-		xdoc.xparse("task2/input/Orders.xml", reporter);
+        // Run validation mode (you can also try task2/input/Order_err.xml)
+        xdoc.xparse("task2/input/Orders.xml", reporter);
 
-		// Throw an exception if unexpected errors detected
-		reporter.checkAndThrowErrors();
+        // Throw an exception if unexpected errors detected
+        reporter.checkAndThrowErrors();
 
-		// Check reported errors
-		if (xdoc.getVariable("errCount").intValue() != 0) {
-			System.err.println("Task2.Orders2 Incorrect input data");
-		} else {
-			System.out.println("OK, Task2.Order2");
-		}
-	}
+        // Check reported errors
+        if (xdoc.getVariable("errCount").intValue() != 0) {
+            System.err.println("Task2.Orders2 Incorrect input data");
+        } else {
+            System.out.println("OK, Task2.Order2");
+        }
+    }
 }
