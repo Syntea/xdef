@@ -7,8 +7,8 @@ import org.xdef.sys.SDuration;
  */
 public interface XDDuration extends XDValue {
 
-	/** Set duration.
-	 * @param value SDuration object.
-	 */
-	public void setDuration(SDuration value);
+    /** Set duration.
+     * @param value SDuration object.
+     */
+    public void setDuration(SDuration value);
 }

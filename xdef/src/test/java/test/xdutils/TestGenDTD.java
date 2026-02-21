@@ -18,30 +18,30 @@ import test.XDTester;
  */
 public class TestGenDTD extends XDTester {
 
-	MyHandler _handler;
+    MyHandler _handler;
 
-	public TestGenDTD() {super(); _handler = new MyHandler();}
+    public TestGenDTD() {super(); _handler = new MyHandler();}
 
-	/** Run test and print error information. */
-	@Override
-	public void test() {
-		XMLReader reader = null;
-		String xdef;
-		String xml;
-		String s;
-		ByteArrayOutputStream bos;
-		OutputStreamWriter wr;
-		try {
-			reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-			reader.setFeature( //validace pres DTD
-				"http://xml.org/sax/features/validation", //FeatureURI
-				true);
-			reader.setEntityResolver(_handler); // Register entity resolver
-		} catch (ParserConfigurationException | SAXException ex) {
-			fail(ex);
-		}
-		try {
-			xdef =
+    /** Run test and print error information. */
+    @Override
+    public void test() {
+        XMLReader reader = null;
+        String xdef;
+        String xml;
+        String s;
+        ByteArrayOutputStream bos;
+        OutputStreamWriter wr;
+        try {
+            reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            reader.setFeature( //validace pres DTD
+                "http://xml.org/sax/features/validation", //FeatureURI
+                true);
+            reader.setEntityResolver(_handler); // Register entity resolver
+        } catch (ParserConfigurationException | SAXException ex) {
+            fail(ex);
+        }
+        try {
+            xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def xd:name=\"a\" xd:root=\"aaa#log | bbb#mog | *\">\n" +
 "</xd:def>\n" +
@@ -93,7 +93,7 @@ public class TestGenDTD extends XDTester {
 "</xd:def>\n" +
 "</xd:collection>\n" +
 "";
-			xml =
+            xml =
 "<?xml version=\"1.0\"?>\n" +
 "<!DOCTYPE Data SYSTEM \"Data.dtd\">\n" +
 "<Data Verze=\"2.0\"\n" +
@@ -118,46 +118,46 @@ public class TestGenDTD extends XDTester {
 "   <log cttr=\"xxx\" />\n" +
 "</Data>\n" +
 "";
-			InputStream[] streams = new InputStream[]
-				{new java.io.ByteArrayInputStream(xdef.getBytes())};
-			bos = new ByteArrayOutputStream();
-			wr = new OutputStreamWriter(bos, "UTF-8");
-			GenDTD.genDTD(streams, "abc#Data", wr);
-			wr.close();
-			bos.close();
-			s = bos.toString();
-			 // Parse
-			InputSource inputSource = new InputSource(
-				new java.io.ByteArrayInputStream(xml.getBytes()));
-			inputSource.setSystemId("Data.xml");
-			inputSource.setEncoding("UTF-8");
-			_handler._dtdInput = new InputSource(
-				new java.io.ByteArrayInputStream(s.getBytes()));
-			_handler._dtdInput.setSystemId("Data.dtd");
-			_handler._dtdInput.setEncoding("UTF-8");
-			reader.parse(inputSource);
-		} catch (IOException | SAXException ex) {
-			fail(ex);
-		}
-	}
+            InputStream[] streams = new InputStream[]
+                {new java.io.ByteArrayInputStream(xdef.getBytes())};
+            bos = new ByteArrayOutputStream();
+            wr = new OutputStreamWriter(bos, "UTF-8");
+            GenDTD.genDTD(streams, "abc#Data", wr);
+            wr.close();
+            bos.close();
+            s = bos.toString();
+             // Parse
+            InputSource inputSource = new InputSource(
+                new java.io.ByteArrayInputStream(xml.getBytes()));
+            inputSource.setSystemId("Data.xml");
+            inputSource.setEncoding("UTF-8");
+            _handler._dtdInput = new InputSource(
+                new java.io.ByteArrayInputStream(s.getBytes()));
+            _handler._dtdInput.setSystemId("Data.dtd");
+            _handler._dtdInput.setEncoding("UTF-8");
+            reader.parse(inputSource);
+        } catch (IOException | SAXException ex) {
+            fail(ex);
+        }
+    }
 
-	private class MyHandler implements EntityResolver {
+    private class MyHandler implements EntityResolver {
 
-		InputSource _dtdInput = null;
+        InputSource _dtdInput = null;
 
-		MyHandler() {}
+        MyHandler() {}
 
-		@Override
-		public InputSource resolveEntity(String publicID, String systemID) throws IOException, SAXException {
-			return _dtdInput;
-		}
-	}
+        @Override
+        public InputSource resolveEntity(String publicID, String systemID) throws IOException, SAXException {
+            return _dtdInput;
+        }
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String... args) {
-		XDTester.setFulltestMode(true);
-		runTest();
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String... args) {
+        XDTester.setFulltestMode(true);
+        runTest();
+    }
 }

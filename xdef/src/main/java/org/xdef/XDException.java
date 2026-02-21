@@ -7,18 +7,18 @@ import org.xdef.sys.Report;
  */
 public interface XDException extends XDValue {
 
-	/** Return assigned Report.
-	 * @return the value of assigned Report.
-	 */
-	public Report reportValue();
+    /** Return assigned Report.
+     * @return the value of assigned Report.
+     */
+    public Report reportValue();
 
-	/** Get script code address.
-	 * @return script code address.
-	 */
-	public int getCodeAddr();
+    /** Get script code address.
+     * @return script code address.
+     */
+    public int getCodeAddr();
 
-	/** Get position of actual XML node.
-	 * @return position of actual XML node.
-	 */
-	public String getXPos();
+    /** Get position of actual XML node.
+     * @return position of actual XML node.
+     */
+    public String getXPos();
 }

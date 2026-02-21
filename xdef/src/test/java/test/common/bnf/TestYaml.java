@@ -10,50 +10,50 @@ import org.xdef.sys.STester;
  */
 public class TestYaml extends STester {
 
-	public TestYaml() {super();}
+    public TestYaml() {super();}
 
-	private String parse(BNFGrammar grammar, String name, String source) {
-		try {
-			StringParser p = new StringParser(source);
-			grammar.setUserObject(this);
-			if (grammar.parse(p, name)) {
-				if (grammar.getParser().errorWarnings()) {
-					return grammar.getParser().getReportWriter().
-						getReportReader().printToString();
-				}
-				return grammar.getParsedString();
-			} else {
-				return name + " failed, " + (p.eos()?
-					"eos" : p.getPosition().toString()) + "; ";
-			}
-		} catch (Exception ex) {
-			return printThrowable(ex);
-		}
-	}
+    private String parse(BNFGrammar grammar, String name, String source) {
+        try {
+            StringParser p = new StringParser(source);
+            grammar.setUserObject(this);
+            if (grammar.parse(p, name)) {
+                if (grammar.getParser().errorWarnings()) {
+                    return grammar.getParser().getReportWriter().
+                        getReportReader().printToString();
+                }
+                return grammar.getParsedString();
+            } else {
+                return name + " failed, " + (p.eos()?
+                    "eos" : p.getPosition().toString()) + "; ";
+            }
+        } catch (Exception ex) {
+            return printThrowable(ex);
+        }
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
-	yaml.org/spec/1.2/spec.html#YAML 1.1 processing//
-	https://learnxinyminutes.com/docs/yaml/
+    yaml.org/spec/1.2/spec.html#YAML 1.1 processing//
+    https://learnxinyminutes.com/docs/yaml/
 */
-	@Override
-	public void test() {
-		String s;
-		BNFGrammar g;
-		try {
-			g = BNFGrammar.compile(new File(getDataDir() + "TestYaml.bnf"));
+    @Override
+    public void test() {
+        String s;
+        BNFGrammar g;
+        try {
+            g = BNFGrammar.compile(new File(getDataDir() + "TestYaml.bnf"));
 //System.out.println(g);
-			s = "%TAG !e! !e!foo \"bar\"\n";
+            s = "%TAG !e! !e!foo \"bar\"\n";
 //			g.trace(System.err);
-			assertEq(s, parse(g, "l_directive", s));
+            assertEq(s, parse(g, "l_directive", s));
 //if(true) return;
-			s =
+            s =
 "%TAG !e! tag:example.com,2000:app/\n"+
 "# This stream contains no\n" +
 "# documents, only comments.\n";
 //			g.trace(System.err);
-			assertEq(s, parse(g, "l_directive", s));
+            assertEq(s, parse(g, "l_directive", s));
 //if(true) return;
 //			s =
 //"%TAG !e! tag:example.com,2000:app/\n" +
@@ -99,14 +99,14 @@ public class TestYaml extends STester {
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
 //if(true) return;
-		} catch (RuntimeException ex) {fail(ex);}
-	}
+        } catch (RuntimeException ex) {fail(ex);}
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String... args) {
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String... args) {
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 
 }

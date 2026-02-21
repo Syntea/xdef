@@ -33,19 +33,19 @@ import org.xdef.XDValueType;
  */
 public final class TestXDService extends XDTester {
 
-	public TestXDService() {super();}
+    public TestXDService() {super();}
 
-	/** Run test and print error information. */
-	@Override
-	public void test() {
-		try {
-			//Create object with database connection
-			String url = "jdbc:derby://localhost:1527/sample;";
-			String user = "app";
-			String password = "app";
-			MyService service = new MyService(url, user, password);
-			//Generate XDPool
-			String xdef =
+    /** Run test and print error information. */
+    @Override
+    public void test() {
+        try {
+            //Create object with database connection
+            String url = "jdbc:derby://localhost:1527/sample;";
+            String user = "app";
+            String password = "app";
+            MyService service = new MyService(url, user, password);
+            //Generate XDPool
+            String xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='query'>\n"+
 "  <xd:declaration>\n"+
 "    external final Service ser.vice;\n"+
@@ -64,387 +64,387 @@ public final class TestXDService extends XDTester {
 "    </Book>\n"+
 "  </Books>\n"+
 "</xd:def>";
-			XDPool xp = XDFactory.compileXD(System.getProperties(), xdef);
-			// Create XDDocument
-			XDDocument xd = xp.createXDDocument();
-			// Set external variable with database connection to XDDocument
-			xd.setVariable("ser.vice", service); //set connection to XDefinition
-			// Construct element with books
-			Element el = xd.xcreate("Books", null); //execute construction
-			assertEq(el, service._data);
-			//close database connection
-			service.close();
-			// Print created element
-		} catch (RuntimeException ex) {fail(ex);}
+            XDPool xp = XDFactory.compileXD(System.getProperties(), xdef);
+            // Create XDDocument
+            XDDocument xd = xp.createXDDocument();
+            // Set external variable with database connection to XDDocument
+            xd.setVariable("ser.vice", service); //set connection to XDefinition
+            // Construct element with books
+            Element el = xd.xcreate("Books", null); //execute construction
+            assertEq(el, service._data);
+            //close database connection
+            service.close();
+            // Print created element
+        } catch (RuntimeException ex) {fail(ex);}
 
-		resetTester();
-	}
+        resetTester();
+    }
 
-	class MyService extends XDValueAbstract implements XDService {
+    class MyService extends XDValueAbstract implements XDService {
 
-		private String _url;
-		private String _user;
-		Element _data;
+        private String _url;
+        private String _user;
+        Element _data;
 
-		/** Create new ExtExistsService.
-		 * @param query db query statement.
-		 * @param params array of parameters or <tt>null</tt>.
-		 */
-		public MyService(String url, String user, String password)
-			throws SRuntimeException {
-			_url = url;
-			_user = user;
-			_data = KXmlUtils.parseXml(
+        /** Create new ExtExistsService.
+         * @param query db query statement.
+         * @param params array of parameters or <tt>null</tt>.
+         */
+        public MyService(String url, String user, String password)
+            throws SRuntimeException {
+            _url = url;
+            _user = user;
+            _data = KXmlUtils.parseXml(
 "<Books>"+
-	"<Book ISBN='234567819' ISSUED='1968' TITLE='2001: A Space Odyssey'>"+
-		"<Author>Arthur C. Clarke</Author>"+
-	"</Book>"+
-	"<Book ISBN='9345678199' TITLE='Bible'/>"+
-	"<Book ISBN='9345478191' TITLE='Koran'/>"+
-	"<Book ISBN='230567819' ISSUED='1935' TITLE='Krakatit'>"+
-		"<Author>Karel Čapek</Author>"+
-	"</Book>"+
-	"<Book EDITOR='XML Prague' ISBN='8345678191' ISSUED='2007'\n"+
-		"TITLE='Proč svět nemluví esperantem'>"+
-		"<Author>Jiří Kamenický</Author>"+
-		"<Author>Jiří Měska</Author>"+
-		"<Author>Václav Trojan</Author>"+
-	"</Book>"+
-	"<Book EDITOR='HarperCollins Publishers' ISBN='12345678' ISSUED='2008'\n"+
-		"TITLE=\"The Last Theorem\">"+
-		"<Author>Arthur C. Clarke</Author>"+
-	"</Book>"+
+    "<Book ISBN='234567819' ISSUED='1968' TITLE='2001: A Space Odyssey'>"+
+        "<Author>Arthur C. Clarke</Author>"+
+    "</Book>"+
+    "<Book ISBN='9345678199' TITLE='Bible'/>"+
+    "<Book ISBN='9345478191' TITLE='Koran'/>"+
+    "<Book ISBN='230567819' ISSUED='1935' TITLE='Krakatit'>"+
+        "<Author>Karel Čapek</Author>"+
+    "</Book>"+
+    "<Book EDITOR='XML Prague' ISBN='8345678191' ISSUED='2007'\n"+
+        "TITLE='Proč svět nemluví esperantem'>"+
+        "<Author>Jiří Kamenický</Author>"+
+        "<Author>Jiří Měska</Author>"+
+        "<Author>Václav Trojan</Author>"+
+    "</Book>"+
+    "<Book EDITOR='HarperCollins Publishers' ISBN='12345678' ISSUED='2008'\n"+
+        "TITLE=\"The Last Theorem\">"+
+        "<Author>Arthur C. Clarke</Author>"+
+    "</Book>"+
 "</Books>").getDocumentElement();
-		}
+        }
 
-		@Override
-		public XDService serviceValue(){return this;}
+        @Override
+        public XDService serviceValue(){return this;}
 
-		@Override
-		public XDStatement prepareStatement(String statement) {
-			return new MyStatement(statement, _data);
-		}
+        @Override
+        public XDStatement prepareStatement(String statement) {
+            return new MyStatement(statement, _data);
+        }
 
-		@Override
-		public XDResultSet query(String statement, XDValue params)
-			throws SRuntimeException {
-			return prepareStatement(statement).query(params);
-		}
+        @Override
+        public XDResultSet query(String statement, XDValue params)
+            throws SRuntimeException {
+            return prepareStatement(statement).query(params);
+        }
 
-		@Override
-		public XDResultSet queryItems(String statement,
-			String itemName,
-			XDValue params) throws SRuntimeException {
-			return prepareStatement(statement).queryItems(itemName, params);
-		}
+        @Override
+        public XDResultSet queryItems(String statement,
+            String itemName,
+            XDValue params) throws SRuntimeException {
+            return prepareStatement(statement).queryItems(itemName, params);
+        }
 
-		@Override
-		public XDValue execute(String statement, XDValue params)
-			throws SRuntimeException {
-			return prepareStatement(statement).execute(params);
-		}
+        @Override
+        public XDValue execute(String statement, XDValue params)
+            throws SRuntimeException {
+            return prepareStatement(statement).execute(params);
+        }
 
-		@Override
-		public void close() {_data = null;}
+        @Override
+        public void close() {_data = null;}
 
-		/** Check if the object is <tt>null</tt>.
-		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise return <tt>false</tt>.
-		 */
-		@Override
-		public boolean isNull() { return _data == null;}
+        /** Check if the object is <tt>null</tt>.
+         * @return <tt>true</tt> if the object is <tt>null</tt> otherwise return <tt>false</tt>.
+         */
+        @Override
+        public boolean isNull() { return _data == null;}
 
-	   /** Check if this object is closed.
-		* @return true if and only if this object is closed.
-		*/
-	   @Override
-		public boolean isClosed() {return _data == null;}
+       /** Check if this object is closed.
+        * @return true if and only if this object is closed.
+        */
+       @Override
+        public boolean isClosed() {return _data == null;}
 
-		@Override
-		public void commit() throws SRuntimeException {
-			throw new SUnsupportedOperationException("Not supported yet.");
-		}
+        @Override
+        public void commit() throws SRuntimeException {
+            throw new SUnsupportedOperationException("Not supported yet.");
+        }
 
-		@Override
-		public void rollback() throws SRuntimeException {
-			throw new SUnsupportedOperationException("Not supported yet.");
-		}
+        @Override
+        public void rollback() throws SRuntimeException {
+            throw new SUnsupportedOperationException("Not supported yet.");
+        }
 
-		@Override
-		public void setProperty(String name, String value)
-			throws SRuntimeException{
-			//Database statement error&{msg}{: }
-			throw new SRuntimeException(XDEF.XDEF568, "&{msg}Unknown property: " + name);
-		}
+        @Override
+        public void setProperty(String name, String value)
+            throws SRuntimeException{
+            //Database statement error&{msg}{: }
+            throw new SRuntimeException(XDEF.XDEF568, "&{msg}Unknown property: " + name);
+        }
 
-		@Override
-		public String getProperty(String name) {return null;}
+        @Override
+        public String getProperty(String name) {return null;}
 
-		@Override
-		public String getServiceName() {return "xmldb:exist";}
+        @Override
+        public String getServiceName() {return "xmldb:exist";}
 
-		@Override
-		public short getItemId() {return XDValueID.XD_SERVICE;}
+        @Override
+        public short getItemId() {return XDValueID.XD_SERVICE;}
 
-		@Override
-		public XDValueType getItemType() {return XDValueType.SERVICE;}
+        @Override
+        public XDValueType getItemType() {return XDValueType.SERVICE;}
 
-		@Override
-		public String stringValue() {return "eXist user:"+_user+"; url:"+_url;}
+        @Override
+        public String stringValue() {return "eXist user:"+_user+"; url:"+_url;}
 
-	}
+    }
 
-	class MyStatement extends XDValueAbstract implements XDStatement {
-		private String _source;
-		private XDConstructor _constructor;
-		private Element _rs;
+    class MyStatement extends XDValueAbstract implements XDStatement {
+        private String _source;
+        private XDConstructor _constructor;
+        private Element _rs;
 
-		public MyStatement(String statement, Element rs) {
-			_source = statement;
-			_rs = rs;
-		}
+        public MyStatement(String statement, Element rs) {
+            _source = statement;
+            _rs = rs;
+        }
 
-		@Override
-		public XDStatement statementValue(){return this;}
+        @Override
+        public XDStatement statementValue(){return this;}
 
-		@Override
-		public boolean bind(XDValue params) throws SRuntimeException {
-			if (params == null) {
-				return true;
-			}
-			throw new SUnsupportedOperationException("Not supported yet.");
-		}
+        @Override
+        public boolean bind(XDValue params) throws SRuntimeException {
+            if (params == null) {
+                return true;
+            }
+            throw new SUnsupportedOperationException("Not supported yet.");
+        }
 
-		@Override
-		public XDValue execute(XDValue params) throws SRuntimeException {return query(params);}
+        @Override
+        public XDValue execute(XDValue params) throws SRuntimeException {return query(params);}
 
-		@Override
-		public XDResultSet query(XDValue params) {
-			try {
-				String source = _source;
-				if (params != null) {
-					source = SUtils.modifyString(source, "?", '"' + params.toString() + '"');
-				}
-				return new MyResultSet(new MyIterator((NodeList)KXpathExpr.evaluate(_rs, source)));
-			} catch (Exception ex) {
-				//Database statement error&{msg}{: }
-				throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
-			}
-		}
+        @Override
+        public XDResultSet query(XDValue params) {
+            try {
+                String source = _source;
+                if (params != null) {
+                    source = SUtils.modifyString(source, "?", '"' + params.toString() + '"');
+                }
+                return new MyResultSet(new MyIterator((NodeList)KXpathExpr.evaluate(_rs, source)));
+            } catch (Exception ex) {
+                //Database statement error&{msg}{: }
+                throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
+            }
+        }
 
-		@Override
-		public XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException {
-			try {
-				String source = _source;
-				if (params != null) {
-					source = SUtils.modifyString(source, "?", '"' + params.toString() + '"');
-				}
-				return new MyResultSet(
-					new MyIterator((NodeList) KXpathExpr.evaluate(_rs, source)),
-					itemName);
-			} catch (Exception ex) {
-				//Database statement error&{msg}{: }
-				throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
-			}
-		}
+        @Override
+        public XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException {
+            try {
+                String source = _source;
+                if (params != null) {
+                    source = SUtils.modifyString(source, "?", '"' + params.toString() + '"');
+                }
+                return new MyResultSet(
+                    new MyIterator((NodeList) KXpathExpr.evaluate(_rs, source)),
+                    itemName);
+            } catch (Exception ex) {
+                //Database statement error&{msg}{: }
+                throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
+            }
+        }
 
-		@Override
-		public void close() {_rs = null;}
+        @Override
+        public void close() {_rs = null;}
 
-		/** Check if the object is <tt>null</tt>.
-		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns <tt>false</tt>.
-		 */
-		@Override
-		public boolean isNull() { return _rs == null;}
+        /** Check if the object is <tt>null</tt>.
+         * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns <tt>false</tt>.
+         */
+        @Override
+        public boolean isNull() { return _rs == null;}
 
-	   /** Check if this object is closed.
-		* @return true if and only if this object is closed.
-		*/
-	   @Override
-		public boolean isClosed() {return _rs == null;}
+       /** Check if this object is closed.
+        * @return true if and only if this object is closed.
+        */
+       @Override
+        public boolean isClosed() {return _rs == null;}
 
-		@Override
-		public short getItemId() {return XDValueID.XD_STATEMENT;}
+        @Override
+        public short getItemId() {return XDValueID.XD_STATEMENT;}
 
-		@Override
-		public XDValueType getItemType() {return XDValueType.STATEMENT;}
+        @Override
+        public XDValueType getItemType() {return XDValueType.STATEMENT;}
 
-		@Override
-		public String stringValue() {return _source;}
+        @Override
+        public String stringValue() {return _source;}
 
-		@Override
-		public void setXDConstructor(XDConstructor c) {_constructor = c;}
+        @Override
+        public void setXDConstructor(XDConstructor c) {_constructor = c;}
 
-		@Override
-		public XDConstructor getXDConstructor() {return _constructor;}
+        @Override
+        public XDConstructor getXDConstructor() {return _constructor;}
 
-	}
+    }
 
-	private static class MyResultSet extends XDValueAbstract implements XDResultSet {
-		private MyIterator _ri;
-		private int _count;
-		private XDValue _item;
-		private String _itemName;
-		private XDConstructor _constructor;
-		private final Document DOC = KXmlUtils.newDocument(null, "x", null);
+    private static class MyResultSet extends XDValueAbstract implements XDResultSet {
+        private MyIterator _ri;
+        private int _count;
+        private XDValue _item;
+        private String _itemName;
+        private XDConstructor _constructor;
+        private final Document DOC = KXmlUtils.newDocument(null, "x", null);
 
-		MyResultSet(MyIterator ri) {_ri = ri;}
+        MyResultSet(MyIterator ri) {_ri = ri;}
 
-		MyResultSet(MyIterator ri, String itemName) {
-			_ri = ri;
-			_itemName = itemName;
-		}
+        MyResultSet(MyIterator ri, String itemName) {
+            _ri = ri;
+            _itemName = itemName;
+        }
 
-		@Override
-		public XDResultSet resultSetValue() {return this;}
+        @Override
+        public XDResultSet resultSetValue() {return this;}
 
-		@Override
-		public XDValue nextXDItem(XXNode xnode) throws SRuntimeException {
-			try {
-				if (_ri.hasNext()) {
-					_count++;
-					Object o = _ri.next();
-					if (o instanceof Element) {
-						Element e = (Element) o;
-						if (_itemName != null) {
-							_item = e.hasAttribute(_itemName) ?
-								new DefString(e.getAttribute(_itemName)) :
-								new DefString();
-						} else {
-							if (_constructor == null) {
-								return _item = new DefElement(e);
-							} else {
-								XDValue v = _constructor.construct(this, xnode);
-								return _item = v!=null ? v : new DefElement(e);
-							}
-						}
-					} else if (o instanceof Node) {
-						return _item = new DefString(((Node) o).getNodeValue());
-					}
-				}
-				close();
-				_ri = null;
-				return null;
-			} catch(DOMException ex) {
-				close();
-				//Database statement error&{msg}{: }
-				throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
-			}
-		}
+        @Override
+        public XDValue nextXDItem(XXNode xnode) throws SRuntimeException {
+            try {
+                if (_ri.hasNext()) {
+                    _count++;
+                    Object o = _ri.next();
+                    if (o instanceof Element) {
+                        Element e = (Element) o;
+                        if (_itemName != null) {
+                            _item = e.hasAttribute(_itemName) ?
+                                new DefString(e.getAttribute(_itemName)) :
+                                new DefString();
+                        } else {
+                            if (_constructor == null) {
+                                return _item = new DefElement(e);
+                            } else {
+                                XDValue v = _constructor.construct(this, xnode);
+                                return _item = v!=null ? v : new DefElement(e);
+                            }
+                        }
+                    } else if (o instanceof Node) {
+                        return _item = new DefString(((Node) o).getNodeValue());
+                    }
+                }
+                close();
+                _ri = null;
+                return null;
+            } catch(DOMException ex) {
+                close();
+                //Database statement error&{msg}{: }
+                throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);
+            }
+        }
 
-		@Override
-		public XDValue lastXDItem() {return _item;}
+        @Override
+        public XDValue lastXDItem() {return _item;}
 
-		@Override
-		public int getCount() {return _count;}
+        @Override
+        public int getCount() {return _count;}
 
-		@Override
-		public String itemAsString() {
-			try {
-				if (_item.getItemId() == XDValueID.XD_ELEMENT) {
-					return KXmlUtils.getTextValue(_item.getElement());
-				}
-			} catch (Exception ex) {}
-			return null;
-		}
+        @Override
+        public String itemAsString() {
+            try {
+                if (_item.getItemId() == XDValueID.XD_ELEMENT) {
+                    return KXmlUtils.getTextValue(_item.getElement());
+                }
+            } catch (Exception ex) {}
+            return null;
+        }
 
-		@Override
-		public String itemAsString(int index) {return null;}
+        @Override
+        public String itemAsString(int index) {return null;}
 
 
-		@Override
-		public String itemAsString(String name) {
-			try {
-				if (_item.getItemId() == XDValueID.XD_ELEMENT) {
-					return _item.getElement().getAttribute(name);
-				}
-			} catch (Exception ex) {}
-			return null;
-		}
+        @Override
+        public String itemAsString(String name) {
+            try {
+                if (_item.getItemId() == XDValueID.XD_ELEMENT) {
+                    return _item.getElement().getAttribute(name);
+                }
+            } catch (Exception ex) {}
+            return null;
+        }
 
-		@Override
-		public boolean hasItem(String name) {return itemAsString(name) != null;}
+        @Override
+        public boolean hasItem(String name) {return itemAsString(name) != null;}
 
-		@Override
-		public int getSize() {return -1;}
+        @Override
+        public int getSize() {return -1;}
 
-		@Override
-		public void close() {_item = null;}
+        @Override
+        public void close() {_item = null;}
 
-		@Override
-		public void closeStatement() {
-			_ri = null;
-			_item = null;
-		}
+        @Override
+        public void closeStatement() {
+            _ri = null;
+            _item = null;
+        }
 
-		/** Check if the object is <tt>null</tt>.
-		 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns <tt>false</tt>.
-		 */
-		@Override
-		public boolean isNull() { return _ri == null;}
+        /** Check if the object is <tt>null</tt>.
+         * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns <tt>false</tt>.
+         */
+        @Override
+        public boolean isNull() { return _ri == null;}
 
-	   /** Check if this object is closed.
-		* @return true if and only if this object is closed.
-		*/
-	   @Override
-		public boolean isClosed() {return _ri == null;}
+       /** Check if this object is closed.
+        * @return true if and only if this object is closed.
+        */
+       @Override
+        public boolean isClosed() {return _ri == null;}
 
-		@Override
-		public short getItemId() {return XDValueID.XD_RESULTSET;}
+        @Override
+        public short getItemId() {return XDValueID.XD_RESULTSET;}
 
-		@Override
-		public XDValueType getItemType() {return XDValueType.RESULTSET;}
+        @Override
+        public XDValueType getItemType() {return XDValueType.RESULTSET;}
 
-		@Override
-		public Element getElement() {
-			if (_item != null) {
-				if (_item.getItemId() == XDValueID.XD_ELEMENT) {
-					return _item.getElement();
-				}
-				Element el = DOC.createElement("_");
-				el.appendChild(DOC.createTextNode(_item.toString()));
-				return el;
-			}
-			return null;
-		}
+        @Override
+        public Element getElement() {
+            if (_item != null) {
+                if (_item.getItemId() == XDValueID.XD_ELEMENT) {
+                    return _item.getElement();
+                }
+                Element el = DOC.createElement("_");
+                el.appendChild(DOC.createTextNode(_item.toString()));
+                return el;
+            }
+            return null;
+        }
 
-		/** Get statement from which ResultSet was created.
-		 * @return null here.
-		 */
-		@Override
-		public XDStatement getStatement() {return null;}
+        /** Get statement from which ResultSet was created.
+         * @return null here.
+         */
+        @Override
+        public XDStatement getStatement() {return null;}
 
-		/** Get constructor for creation of item.
-		 * @return constructor for creation of item.
-		 */
-		@Override
-		public XDConstructor getXDConstructor() {return _constructor;}
+        /** Get constructor for creation of item.
+         * @return constructor for creation of item.
+         */
+        @Override
+        public XDConstructor getXDConstructor() {return _constructor;}
 
-		@Override
-		public void setXDConstructor(XDConstructor c) {_constructor = c;}
+        @Override
+        public void setXDConstructor(XDConstructor c) {_constructor = c;}
 
-	}
+    }
 
-	class MyIterator implements java.util.Iterator {
-		private final NodeList _nl;
-		private int _ndx;
+    class MyIterator implements java.util.Iterator {
+        private final NodeList _nl;
+        private int _ndx;
 
-		MyIterator(NodeList nl) { _nl = nl;	_ndx = 0; }
+        MyIterator(NodeList nl) { _nl = nl;	_ndx = 0; }
 
-		@Override
-		public boolean hasNext() {return _ndx < _nl.getLength();}
+        @Override
+        public boolean hasNext() {return _ndx < _nl.getLength();}
 
-		@Override
-		public Object next() {return hasNext() ? _nl.item(_ndx++) : null;}
+        @Override
+        public Object next() {return hasNext() ? _nl.item(_ndx++) : null;}
 
-		@Override
-		public void remove() {throw new UnsupportedOperationException("Not supported.");}
-	}
+        @Override
+        public void remove() {throw new UnsupportedOperationException("Not supported.");}
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
-		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        XDTester.setFulltestMode(true);
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }
