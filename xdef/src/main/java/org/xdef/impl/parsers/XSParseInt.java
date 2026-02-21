@@ -10,32 +10,32 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XSParseInt extends XSParseLong {
-    private static final String ROOTBASENAME = "int";
+	private static final String ROOTBASENAME = "int";
 
-    public XSParseInt() {super();}
+	public XSParseInt() {super();}
 
-    @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
-        super.parseObject(xnode, p);
-        if(p.matches()) {
-            long val =  p.getParsedValue().longValue();
-            if (val < Integer.MIN_VALUE || val > Integer.MAX_VALUE) {
-                p.error(XDEF.XDEF806, parserName(), val); //Value of '&{0}' is out of range&{1}{: }
-            }
-        }
-    }
+	@Override
+	public void parseObject(final XXNode xnode, final XDParseResult p){
+		super.parseObject(xnode, p);
+		if(p.matches()) {
+			long val =  p.getParsedValue().longValue();
+			if (val < Integer.MIN_VALUE || val > Integer.MAX_VALUE) {
+				p.error(XDEF.XDEF806, parserName(), val); //Value of '&{0}' is out of range&{1}{: }
+			}
+		}
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 
-    @Override
-    public void checkValue(final XDValue x) {
-        if (x.longValue() < Integer.MIN_VALUE || x.longValue() > Integer.MAX_VALUE) {
-            //Incorrect range specification of &{0}
-            throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
-        }
-    }
+	@Override
+	public void checkValue(final XDValue x) {
+		if (x.longValue() < Integer.MIN_VALUE || x.longValue() > Integer.MAX_VALUE) {
+			//Incorrect range specification of &{0}
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+		}
+	}
 
-    @Override
-    public short parsedType() {return XD_INT;}
+	@Override
+	public short parsedType() {return XD_INT;}
 }

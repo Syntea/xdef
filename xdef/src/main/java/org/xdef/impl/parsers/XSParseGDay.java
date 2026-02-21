@@ -6,13 +6,13 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XSParseGDay extends XSParseDate {
-    private static final String ROOTBASENAME = "gDay";
+	private static final String ROOTBASENAME = "gDay";
 
-    public XSParseGDay() {super();}
+	public XSParseGDay() {super();}
 
-    @Override
-    boolean parse(final StringParser parser) {return parser.isXMLDay();}
+	@Override
+	boolean parse(final StringParser parser) {return parser.isXMLDay();}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

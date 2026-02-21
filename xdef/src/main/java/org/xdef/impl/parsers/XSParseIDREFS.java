@@ -12,34 +12,34 @@ import org.xdef.impl.code.DefContainer;
  * @author Vaclav Trojan
  */
 public class XSParseIDREFS extends XSParseENTITIES {
-    private static final String ROOTBASENAME = "IDREFS";
+	private static final String ROOTBASENAME = "IDREFS";
 
-    public XSParseIDREFS() {super();}
+	public XSParseIDREFS() {super();}
 
-    @Override
-    public void finalCheck(final XXNode xnode, final XDParseResult result) {
-        if (xnode == null) {
-            //The validation method &{0} can be called only from the X-script of attribute or text node
-            result.error(XDEF.XDEF574, ROOTBASENAME);
-            return;
-        }
-        CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
-        DefContainer val = (DefContainer) result.getParsedValue();
-        for (int i = 0; i < val.getXDItemsNumber(); i++) {
-            tab.getParsedItems()[0].setParsedObject(val.getXDItem(i));
-            ArrayReporter a = tab.chkId();
-            if (a != null) {
-                a.error(XDEF.XDEF522, result.getParsedValue()); //Unique value "&{0}" was not set
-            }
-        }
-    }
+	@Override
+	public void finalCheck(final XXNode xnode, final XDParseResult result) {
+		if (xnode == null) {
+			//The validation method &{0} can be called only from the X-script of attribute or text node
+			result.error(XDEF.XDEF574, ROOTBASENAME);
+			return;
+		}
+		CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
+		DefContainer val = (DefContainer) result.getParsedValue();
+		for (int i = 0; i < val.getXDItemsNumber(); i++) {
+			tab.getParsedItems()[0].setParsedObject(val.getXDItem(i));
+			ArrayReporter a = tab.chkId();
+			if (a != null) {
+				a.error(XDEF.XDEF522, result.getParsedValue()); //Unique value "&{0}" was not set
+			}
+		}
+	}
 
-    @Override
-    public short parsedType() {return XD_CONTAINER;}
+	@Override
+	public short parsedType() {return XD_CONTAINER;}
 
-    @Override
-    public short getAlltemsType() {return XD_OBJECT;}
+	@Override
+	public short getAlltemsType() {return XD_OBJECT;}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

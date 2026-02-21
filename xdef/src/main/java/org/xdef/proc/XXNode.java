@@ -27,329 +27,329 @@ import org.xdef.sys.SRuntimeException;
  */
 public interface XXNode extends XDValue {
 
-    /** Get name of the model.
-     * @return The name of node.
-     */
-    public String getXXName();
+	/** Get name of the model.
+	 * @return The name of node.
+	 */
+	public String getXXName();
 
-    /** Get namespace URI of the model.
-     * @return namespace URI or null.
-     */
-    public String getXXNSURI();
+	/** Get namespace URI of the model.
+	 * @return namespace URI or null.
+	 */
+	public String getXXNSURI();
 
-    /** Get name of actual node.
-     * @return The name of node.
-     */
-    public String getNodeName();
+	/** Get name of actual node.
+	 * @return The name of node.
+	 */
+	public String getNodeName();
 
-    /** Get namespace URI of actual node.
-     * @return namespace URI or null.
-     */
-    public String getNodeURI();
+	/** Get namespace URI of actual node.
+	 * @return namespace URI or null.
+	 */
+	public String getNodeURI();
 
-    /** Get User object.
-     * @return The user object.
-     */
-    public Object getUserObject();
+	/** Get User object.
+	 * @return The user object.
+	 */
+	public Object getUserObject();
 
-    /** Set User object.
-     * @param obj The user object.
-     */
-    public void setUserObject(Object obj);
+	/** Set User object.
+	 * @param obj The user object.
+	 */
+	public void setUserObject(Object obj);
 
-    /** Set named user object.
-     * @param id identifier of the object.
-     * @param obj user object.
-     * @return previous value of the object or null.
-     */
-    public Object setUserObject(String id, Object obj);
+	/** Set named user object.
+	 * @param id identifier of the object.
+	 * @param obj user object.
+	 * @return previous value of the object or null.
+	 */
+	public Object setUserObject(String id, Object obj);
 
-    /** Remove named user object.
-     * @param id identifier of the object.
-     * @return value of the object or null.
-     */
-    public Object removeUserObject(String id);
+	/** Remove named user object.
+	 * @param id identifier of the object.
+	 * @return value of the object or null.
+	 */
+	public Object removeUserObject(String id);
 
-    /** Get named user object.
-     * @param id identifier of the object.
-     * @return value of the object or null.
-     */
-    public Object getUserObject(String id);
+	/** Get named user object.
+	 * @param id identifier of the object.
+	 * @return value of the object or null.
+	 */
+	public Object getUserObject(String id);
 
-    /** Get position of the node as a XPath expression string.
-     * @return position of the node as a XPath expression string.
-     */
-    public String getXPos();
+	/** Get position of the node as a XPath expression string.
+	 * @return position of the node as a XPath expression string.
+	 */
+	public String getXPos();
 
-    /** Get source position of this model in X-definition.
-     * @return SPosition or null if position is not available.
-     */
-    public SPosition getSPosition();
+	/** Get source position of this model in X-definition.
+	 * @return SPosition or null if position is not available.
+	 */
+	public SPosition getSPosition();
 
-    /** Return parent node.
-     * @return The parent node.
-     */
-    public XXNode getParent();
+	/** Return parent node.
+	 * @return The parent node.
+	 */
+	public XXNode getParent();
 
-    /** Get array of XXNodes or null.
-     * @return array of XXNodes or null.
-     */
-    public XXNode[] getChildXXNodes();
+	/** Get array of XXNodes or null.
+	 * @return array of XXNodes or null.
+	 */
+	public XXNode[] getChildXXNodes();
 
-    /** Get XDDocument.
-     * @return XDDocument.
-     */
-    public XDDocument getXDDocument();
+	/** Get XDDocument.
+	 * @return XDDocument.
+	 */
+	public XDDocument getXDDocument();
 
-    /** Get XDPool.
-     * @return XDPool.
-     */
-    public XDPool getXDPool();
+	/** Get XDPool.
+	 * @return XDPool.
+	 */
+	public XDPool getXDPool();
 
-    /** Get root XXElement.
-     * @return root XXElement node.
-     */
-    public XXElement getRootXXElement();
+	/** Get root XXElement.
+	 * @return root XXElement node.
+	 */
+	public XXElement getRootXXElement();
 
-    /** Get actual associated XXElement.
-     * @return root XXElement node.
-     */
-    public XXElement getXXElement();
+	/** Get actual associated XXElement.
+	 * @return root XXElement node.
+	 */
+	public XXElement getXXElement();
 
-    /** Get model of the processed element.
-     * @return model of the processed element.
-     */
-    public XMElement getXMElement();
+	/** Get model of the processed element.
+	 * @return model of the processed element.
+	 */
+	public XMElement getXMElement();
 
-    /** Get XDPosition of the processed element.
-     * @return XDPosition of the processed element.
-     */
-    public String getXDPosition();
+	/** Get XDPosition of the processed element.
+	 * @return XDPosition of the processed element.
+	 */
+	public String getXDPosition();
 
-    /** Get XMDefinition.
-     * @return X-definition of this document.
-     */
-    public XMDefinition getXMDefinition();
+	/** Get XMDefinition.
+	 * @return X-definition of this document.
+	 */
+	public XMDefinition getXMDefinition();
 
-    /** Get names of global variables.
-     * @return array of names of variables.
-     */
-    public String[] getVariableNames();
+	/** Get names of global variables.
+	 * @return array of names of variables.
+	 */
+	public String[] getVariableNames();
 
-    /** Get value of variable from X-definition.
-     * @param name name of variable.
-     * @return XDValue object or null if variable with the name not exists.
-     */
-    public XDValue getVariable(String name);
+	/** Get value of variable from X-definition.
+	 * @param name name of variable.
+	 * @return XDValue object or null if variable with the name not exists.
+	 */
+	public XDValue getVariable(String name);
 
-    /** Set variable.
-     * @param name name name of variable.
-     * @param value value to be set to the variable.
-     */
-    public void setVariable(String name, long value);
+	/** Set variable.
+	 * @param name name name of variable.
+	 * @param value value to be set to the variable.
+	 */
+	public void setVariable(String name, long value);
 
-    /** Set integer variable.
-     * @param name name name of variable.
-     * @param value value to be set to the variable.
-     */
-    public void setVariable(String name, double value);
+	/** Set integer variable.
+	 * @param name name name of variable.
+	 * @param value value to be set to the variable.
+	 */
+	public void setVariable(String name, double value);
 
-    /** Set boolean variable.
-     * @param name name name of variable.
-     * @param value value to be set to the variable.
-     */
-    public void setVariable(String name, boolean value);
+	/** Set boolean variable.
+	 * @param name name name of variable.
+	 * @param value value to be set to the variable.
+	 */
+	public void setVariable(String name, boolean value);
 
-    /** Set boolean variable.
-     * @param name name name of variable.
-     * @param value value to be set to the variable.
-     */
-    public void setVariable(String name, Object value);
+	/** Set boolean variable.
+	 * @param name name name of variable.
+	 * @param value value to be set to the variable.
+	 */
+	public void setVariable(String name, Object value);
 
-    /** Get SReporter of XDDocument.
-     * @return SReporter of XDDocument..
-     */
-    public SReporter getReporter();
+	/** Get SReporter of XDDocument.
+	 * @return SReporter of XDDocument..
+	 */
+	public SReporter getReporter();
 
-    /** Get report reader created from the reporter assigned to XDDocument.
-     * @return report reader.
-     */
-    public ReportWriter getReportWriter();
+	/** Get report reader created from the reporter assigned to XDDocument.
+	 * @return report reader.
+	 */
+	public ReportWriter getReportWriter();
 
-    /** Check if errors, fatal errors, light errors or warnings were reported.
-     * @return true if and only if errors, fatal errors, light errors or warnings were reported.
-     */
-    public boolean errorWarnings();
+	/** Check if errors, fatal errors, light errors or warnings were reported.
+	 * @return true if and only if errors, fatal errors, light errors or warnings were reported.
+	 */
+	public boolean errorWarnings();
 
-    /** Check if errors, fatal errors or light errors were reported.
-     * @return true if and only if errors, fatal errors or light errors were reported.
-     */
-    public boolean errors();
+	/** Check if errors, fatal errors or light errors were reported.
+	 * @return true if and only if errors, fatal errors or light errors were reported.
+	 */
+	public boolean errors();
 
-    /** Get temporary reporter used by XD processor.
-     * @return ArrayReporter used as temporary reporter.
-     */
-    public ArrayReporter getTemporaryReporter();
+	/** Get temporary reporter used by XD processor.
+	 * @return ArrayReporter used as temporary reporter.
+	 */
+	public ArrayReporter getTemporaryReporter();
 
-    /** Set new temporary reporter.
-     * @param reporter new temporary reporter.
-     * @return ArrayReporter old temporary reporter.
-     */
-    public ArrayReporter setTemporaryReporter(ArrayReporter reporter);
+	/** Set new temporary reporter.
+	 * @param reporter new temporary reporter.
+	 * @return ArrayReporter old temporary reporter.
+	 */
+	public ArrayReporter setTemporaryReporter(ArrayReporter reporter);
 
-    /** Clear temporary reporter. */
-    public void clearTemporaryReporter();
+	/** Clear temporary reporter. */
+	public void clearTemporaryReporter();
 
-    /** Remove report from temporary reporter.
-     * @param rep report to be removed.
-     * @return true if report was found and removed.
-     */
-    public boolean removeTemporaryReport(final Report rep);
+	/** Remove report from temporary reporter.
+	 * @param rep report to be removed.
+	 * @return true if report was found and removed.
+	 */
+	public boolean removeTemporaryReport(final Report rep);
 
-    /** Copy temporary reports to global reporter.
-     * @return true if and only if temporary reporter contained errors before it was cleared.
-     */
-    public boolean copyTemporaryReports();
+	/** Copy temporary reports to global reporter.
+	 * @return true if and only if temporary reporter contained errors before it was cleared.
+	 */
+	public boolean copyTemporaryReports();
 
-    /** Put message to temporary reporter.
-     * @param message report to be added to the temporary reporter.
-     */
-    public void putTemporaryReport(Report message);
+	/** Put message to temporary reporter.
+	 * @param message report to be added to the temporary reporter.
+	 */
+	public void putTemporaryReport(Report message);
 
-    /** Check if temporary reporter has errors.
-     * @return true if temporary reporter has errors.
-     */
-    public boolean chkTemporaryErrors();
+	/** Check if temporary reporter has errors.
+	 * @return true if temporary reporter has errors.
+	 */
+	public boolean chkTemporaryErrors();
 
-    /** Put fatal error message with modification parameters.
-     * @param id The message id or null.
-     * @param msg The message text.
-     * @param mod Message modification parameters.
-     */
-    public void fatal(final String id, final String msg, final Object... mod);
+	/** Put fatal error message with modification parameters.
+	 * @param id The message id or null.
+	 * @param msg The message text.
+	 * @param mod Message modification parameters.
+	 */
+	public void fatal(final String id, final String msg, final Object... mod);
 
-    /** Put error message with modification parameters.
-     * @param id The message id or null.
-     * @param msg The message text.
-     * @param mod Message modification parameters.
-     */
-    public void error(final String id, final String msg, final Object... mod);
+	/** Put error message with modification parameters.
+	 * @param id The message id or null.
+	 * @param msg The message text.
+	 * @param mod Message modification parameters.
+	 */
+	public void error(final String id, final String msg, final Object... mod);
 
-    /** Put warning message with modification parameters.
-     * @param id The message id or null.
-     * @param msg The message text.
-     * @param mod Message modification parameters.
-     */
-    public void warning(final String id, final String msg, final Object... mod);
+	/** Put warning message with modification parameters.
+	 * @param id The message id or null.
+	 * @param msg The message text.
+	 * @param mod Message modification parameters.
+	 */
+	public void warning(final String id, final String msg, final Object... mod);
 
-    /** Put fatal error message with modification parameters.
-     * @param id registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void fatal(final long id, final Object... mod);
+	/** Put fatal error message with modification parameters.
+	 * @param id registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void fatal(final long id, final Object... mod);
 
-    /** Put error message with modification parameters.
-     * @param id registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void error(final long id, final Object... mod);
+	/** Put error message with modification parameters.
+	 * @param id registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void error(final long id, final Object... mod);
 
-    /** Put warning message with modification parameters.
-     * @param id registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void warning(final long id, final Object... mod);
+	/** Put warning message with modification parameters.
+	 * @param id registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void warning(final long id, final Object... mod);
 
-    /** Put report.
-     * @param report The report.
-     */
-    public void putReport(final Report report);
+	/** Put report.
+	 * @param report The report.
+	 */
+	public void putReport(final Report report);
 
-    /** Get nameSpace context of this XXnode.
-     * @return nameSpace context.
-     */
-    public KNamespace getXXNamespaceContext();
+	/** Get nameSpace context of this XXnode.
+	 * @return nameSpace context.
+	 */
+	public KNamespace getXXNamespaceContext();
 
-    /** Get assigned XPathFunctionResolver.
-     * @return XPathFunctionResolver.
-     */
-    public XPathFunctionResolver getXXFunctionResolver();
+	/** Get assigned XPathFunctionResolver.
+	 * @return XPathFunctionResolver.
+	 */
+	public XPathFunctionResolver getXXFunctionResolver();
 
-    /** Get assigned XPathVariableResolver.
-     * @return XPathVariableResolver.
-     */
-    public XPathVariableResolver getXXVariableResolver();
+	/** Get assigned XPathVariableResolver.
+	 * @return XPathVariableResolver.
+	 */
+	public XPathVariableResolver getXXVariableResolver();
 
-    /** Get parsed result of an attribute or text node.
-     * @return parsed result of an attribute or text node.
-     */
-    public XDParseResult getParseResult();
+	/** Get parsed result of an attribute or text node.
+	 * @return parsed result of an attribute or text node.
+	 */
+	public XDParseResult getParseResult();
 
-    /** Get actual creation context (XDResultSet).
-     * @return the XDResultSet or null if it is not available.
-     */
-    public XDValue getXDContext();
+	/** Get actual creation context (XDResultSet).
+	 * @return the XDResultSet or null if it is not available.
+	 */
+	public XDValue getXDContext();
 
-    /** Set value from argument as context for create mode.
-     * @param xdc context to be set (create mode).
-     */
-    public void setXDContext(XDContainer xdc);
+	/** Set value from argument as context for create mode.
+	 * @param xdc context to be set (create mode).
+	 */
+	public void setXDContext(XDContainer xdc);
 
-    /** Set source element as context for create mode.
-     * @param xdc context to be set (create mode).
-     */
-    public void setXDContext(XDResultSet xdc);
+	/** Set source element as context for create mode.
+	 * @param xdc context to be set (create mode).
+	 */
+	public void setXDContext(XDResultSet xdc);
 
-    /** Set source element as context for create mode.
-     * @param node XML node.
-     */
-    public void setXDContext(Node node);
+	/** Set source element as context for create mode.
+	 * @param node XML node.
+	 */
+	public void setXDContext(Node node);
 
-    /** Set source element as context for create mode.
-     * @param source string with pathname, URL or source of XML node.
-     */
-    public void setXDContext(String source);
+	/** Set source element as context for create mode.
+	 * @param source string with pathname, URL or source of XML node.
+	 */
+	public void setXDContext(String source);
 
-    /** Set XON/JSON data as context for create mode.
-     * @param data the XON/JSON data. It can be either pathname or URL.
-     * @throws SRuntimeException if data is incorrect or if model is not found.
-     */
-    public void setXONContext(String data) throws SRuntimeException;
+	/** Set XON/JSON data as context for create mode.
+	 * @param data the XON/JSON data. It can be either pathname or URL.
+	 * @throws SRuntimeException if data is incorrect or if model is not found.
+	 */
+	public void setXONContext(String data) throws SRuntimeException;
 
-    /** Set XON/JSON data as context for create mode.
-     * @param data the JSON data. It can be either XON/JSON object or File, URL or InputStream with
-     * XON/JSON data or XDResultSet or XML data to be converted to XON/JSON.
-     * @throws SRuntimeException if data is incorrect or if model is not found.
-     */
-    public void setXONContext(Object data) throws SRuntimeException;
+	/** Set XON/JSON data as context for create mode.
+	 * @param data the JSON data. It can be either XON/JSON object or File, URL or InputStream with
+	 * XON/JSON data or XDResultSet or XML data to be converted to XON/JSON.
+	 * @throws SRuntimeException if data is incorrect or if model is not found.
+	 */
+	public void setXONContext(Object data) throws SRuntimeException;
 
-    /** Get actual model.
-     * @return actual model.
-     */
-    public XMNode getXMNode();
+	/** Get actual model.
+	 * @return actual model.
+	 */
+	public XMNode getXMNode();
 
-    /** Get XComponent.
-     * @return The XComponent object (may be null).
-     */
-    public XComponent getXComponent();
+	/** Get XComponent.
+	 * @return The XComponent object (may be null).
+	 */
+	public XComponent getXComponent();
 
-    /** Set XComponent.
-     * @param x XComponent object.
-     */
-    public void setXComponent(XComponent x);
+	/** Set XComponent.
+	 * @param x XComponent object.
+	 */
+	public void setXComponent(XComponent x);
 
-    /** Get XON mode.
-     * @return 0 or XON mode.
-     */
-    public byte getXonMode();
+	/** Get XON mode.
+	 * @return 0 or XON mode.
+	 */
+	public byte getXonMode();
 
-    /** Get actual value of default time zone.
-     * @return actual value of default time zone.
-     */
-    public TimeZone getDefaultZone();
+	/** Get actual value of default time zone.
+	 * @return actual value of default time zone.
+	 */
+	public TimeZone getDefaultZone();
 
-    /** Get XON result of processed document or element.
-     * @return result of JSON/XON parsing or return null.
-     */
-    public Object getXon();
+	/** Get XON result of processed document or element.
+	 * @return result of JSON/XON parsing or return null.
+	 */
+	public Object getXon();
 }

@@ -6,16 +6,16 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XDParsePrintableDate extends XDParseDateYMDhms {
-    private static final String ROOTBASENAME = "printableDate";
+	private static final String ROOTBASENAME = "printableDate";
 
-    public XDParsePrintableDate() {super();}
+	public XDParsePrintableDate() {super();}
 
-    @Override
-    boolean parse(final StringParser parser) {return parser.isPrintableDatetime();}
+	@Override
+	boolean parse(final StringParser parser) {return parser.isPrintableDatetime();}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 
-    @Override
-    public short parsedType() {return XD_DATETIME;}
+	@Override
+	public short parsedType() {return XD_DATETIME;}
 }

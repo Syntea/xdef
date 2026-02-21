@@ -11,37 +11,37 @@ import java.net.URL;
  */
 public class XDParseUrl extends XDParserAbstract {
 
-    private static final String ROOTBASENAME = "url";
+	private static final String ROOTBASENAME = "url";
 
-    @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
-        p.isSpaces();
-        String s = p.getUnparsedBufferPart().trim();
-        if (chkUrl(p, s, ROOTBASENAME)) {
-            p.setParsedValue(s);
-            checkCharset(xnode, p);
-            p.setEos();
-        }
-    }
-    /** Check if the argument contains correct URL.
-     * @param p XDParseResult where to set en error information.
-     * @param s string with URL.
-     * @return true if the string contains correct URL.
-     */
-    final static boolean chkUrl(final XDParseResult p,
-        final String s,
-        final String paserName) {
-        try {
-            if (!s.isEmpty()) {
-                new URL(s);
-                return true;
-            }
-        } catch (Exception ex) {}
-        //Incorrect value of '&{0}'&{1}{: }
-        p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
-        return false;
-    }
+	@Override
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
+		p.isSpaces();
+		String s = p.getUnparsedBufferPart().trim();
+		if (chkUrl(p, s, ROOTBASENAME)) {
+			p.setParsedValue(s);
+			checkCharset(xnode, p);
+			p.setEos();
+		}
+	}
+	/** Check if the argument contains correct URL.
+	 * @param p XDParseResult where to set en error information.
+	 * @param s string with URL.
+	 * @return true if the string contains correct URL.
+	 */
+	final static boolean chkUrl(final XDParseResult p,
+		final String s,
+		final String paserName) {
+		try {
+			if (!s.isEmpty()) {
+				new URL(s);
+				return true;
+			}
+		} catch (Exception ex) {}
+		//Incorrect value of '&{0}'&{1}{: }
+		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
+		return false;
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

@@ -5,18 +5,18 @@ package org.xdef;
  */
 public interface XDCallItem {
 
-    /** Get parent call item.
-     * @return parent CallItemInterface
-     */
-    XDCallItem getParentCallItem();
+	/** Get parent call item.
+	 * @return parent CallItemInterface
+	 */
+	XDCallItem getParentCallItem();
 
-    /** Get return code address.
-     * @return index to code array.
-     */
-    int getReturnAddr();
+	/** Get return code address.
+	 * @return index to code array.
+	 */
+	int getReturnAddr();
 
-    /** Get debug mode (see constants in org.xdef.XXDebug).
-     * @return debug mode (see constants in org.xdef.XXDebug).
-     */
-    public int getDebugMode();
+	/** Get debug mode (see constants in org.xdef.XXDebug).
+	 * @return debug mode (see constants in org.xdef.XXDebug).
+	 */
+	public int getDebugMode();
 }

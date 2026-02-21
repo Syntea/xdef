@@ -14,19 +14,19 @@ import org.xdef.component.XComponentUtil;
  */
 public final class TestLexicon extends XDTester {
 
-    public TestLexicon() {super();}
+	public TestLexicon() {super();}
 
-    /** Run test and print error information. */
-    @Override
-    public void test() {
-        String xdef;
-        String xml;
-        Element el;
-        ArrayReporter reporter = new ArrayReporter();
-        XDPool xp;
-        XDDocument xd;
-        try {
-            xdef =
+	/** Run test and print error information. */
+	@Override
+	public void test() {
+		String xdef;
+		String xml;
+		Element el;
+		ArrayReporter reporter = new ArrayReporter();
+		XDPool xp;
+		XDDocument xd;
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Contract' name='contract'>\n"+
 "\n"+
 "<Contract Number=\"num()\">\n"+
@@ -58,7 +58,7 @@ public final class TestLexicon extends XDTester {
 "  %class "+_package+".component.L_Contract %link contract#Contract;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-            String lexicon1 =
+			String lexicon1 =
 "<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng'>\n"+
 "contract#Contract =                         Contract\n"+
 "contract#Contract/@Number =                 Number\n"+
@@ -83,7 +83,7 @@ public final class TestLexicon extends XDTester {
 "contract#Agreement/Mediator/@ID =           ID\n"+
 "contract#Agreement/Mediator/@Name =         Name\n"+
 "</xd:lexicon>";
-            String lexicon2 =
+			String lexicon2 =
 "<xd:lexicon xmlns:xd='"+_xdNS+"' language='ces'>\n"+
 "contract#Contract =                         Smlouva\n"+
 "contract#Contract/@Number =                 Číslo\n"+
@@ -108,9 +108,9 @@ public final class TestLexicon extends XDTester {
 "contract#Agreement/Mediator/@ID =           IČO\n"+
 "contract#Agreement/Mediator/@Name =         Název\n"+
 "</xd:lexicon>";
-            xp = compile(new String[]{xdef, lexicon1, lexicon2});
-            xd = xp.createXDDocument("contract");
-            xml =
+			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+			xd = xp.createXDDocument("contract");
+			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
 "  <Klient Role       = \"1\"\n"+
 "          Název      = \"Nějaká Firma s.r.o.\"\n"+
@@ -125,13 +125,13 @@ public final class TestLexicon extends XDTester {
 "          RodnéČíslo = \"311270/1234\"\n"+
 "          IČO        = \"87654321\" />\n"+
 "</Smlouva>";
-            xd.setLexiconLanguage("ces");
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            xd = xp.createXDDocument("contract");
-            xd.setLexiconLanguage("ces");
-            xml =
+			xd.setLexiconLanguage("ces");
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			xd = xp.createXDDocument("contract");
+			xd.setLexiconLanguage("ces");
+			xml =
 "<Contract Number = \"0123456789\">\n"+
 "  <Client Typ  = \"1\"\n"+
 "          Name = \"Nějaká Firma s.r.o.\"\n"+
@@ -146,13 +146,13 @@ public final class TestLexicon extends XDTester {
 "          PersonalID = \"311270/1234\"\n"+
 "          ID         = \"87654321\" />\n"+
 "</Contract>";
-            xd.setLexiconLanguage("eng");
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            xp = compile(new String[]{xdef, lexicon1, lexicon2});
-            xd = xp.createXDDocument("contract");
-            xml =
+			xd.setLexiconLanguage("eng");
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+			xd = xp.createXDDocument("contract");
+			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
 "  <Klient Role       = \"1\"\n"+
 "          Název      = \"Nějaká Firma s.r.o.\"\n"+
@@ -167,17 +167,17 @@ public final class TestLexicon extends XDTester {
 "          RodnéČíslo = \"311270/1234\"\n"+
 "          IČO        = \"87654321\" />\n"+
 "</Smlouva>";
-            xd.setLexiconLanguage("ces");
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            lexicon1 =
+			xd.setLexiconLanguage("ces");
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			lexicon1 =
 "<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng' default='yes'>\n"+
 "/* this is just a comment */\n"+
 "</xd:lexicon>";
-            xp = compile(new String[]{xdef, lexicon1, lexicon2});
-            xd = xp.createXDDocument("contract");
-            xml =
+			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+			xd = xp.createXDDocument("contract");
+			xml =
 "<Contract Number = \"0123456789\">\n"+
 "  <Client Typ  = \"1\"\n"+
 "          Name = \"Nějaká Firma s.r.o.\"\n"+
@@ -192,16 +192,16 @@ public final class TestLexicon extends XDTester {
 "          PersonalID = \"311270/1234\"\n"+
 "          ID         = \"87654321\" />\n"+
 "</Contract>";
-            xd.setLexiconLanguage("eng");
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            lexicon1 =
+			xd.setLexiconLanguage("eng");
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			lexicon1 =
 "<xd:lexicon xmlns:xd='"+_xdNS+"' language='eng' default='yes'>\n"+
 "</xd:lexicon>";
-            xp = compile(new String[]{xdef, lexicon1, lexicon2});
-            xd = xp.createXDDocument("contract");
-            xml =
+			xp = compile(new String[]{xdef, lexicon1, lexicon2});
+			xd = xp.createXDDocument("contract");
+			xml =
 "<Contract Number = \"0123456789\">\n"+
 "  <Client Typ  = \"1\"\n"+
 "          Name = \"Nějaká Firma s.r.o.\"\n"+
@@ -216,14 +216,14 @@ public final class TestLexicon extends XDTester {
 "          PersonalID = \"311270/1234\"\n"+
 "          ID         = \"87654321\" />\n"+
 "</Contract>";
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            xd.setLexiconLanguage("eng");
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            xml =
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			xd.setLexiconLanguage("eng");
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
 "  <Klient Role       = \"1\"\n"+
 "          Název      = \"Nějaká Firma s.r.o.\"\n"+
@@ -238,24 +238,24 @@ public final class TestLexicon extends XDTester {
 "          RodnéČíslo = \"311270/1234\"\n"+
 "          IČO        = \"87654321\" />\n"+
 "</Smlouva>";
-            xd.setLexiconLanguage("ces");
-            el = parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            // try X-component
-            genXComponent(xp); // create and compile X-components
-            Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
-            XComponent xc = parseXC(xd, xml, clazz, reporter);
-            assertEq("", chkCompoinentSerializable(xc));
-            assertNoErrorwarnings(reporter);
-            el = xc.toXml();
-            assertEq(xml, el);
-            assertEq("0123456789", XComponentUtil.get(xc,"Number"));
-            List l = (List) XComponentUtil.getx(xc, "listOfClient");
-            assertEq(3, l.size());
-        } catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
-        try {
-            xdef =
+			xd.setLexiconLanguage("ces");
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			// try X-component
+			genXComponent(xp); // create and compile X-components
+			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
+			XComponent xc = parseXC(xd, xml, clazz, reporter);
+			assertEq("", chkCompoinentSerializable(xc));
+			assertNoErrorwarnings(reporter);
+			el = xc.toXml();
+			assertEq(xml, el);
+			assertEq("0123456789", XComponentUtil.get(xc,"Number"));
+			List l = (List) XComponentUtil.getx(xc, "listOfClient");
+			assertEq(3, l.size());
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Town' name='town'>\n"+
 "  <Town Name=\"string\">\n" +
 "     <Street xd:script=\"*;\" Name=\"string\">\n" +
@@ -296,9 +296,9 @@ public final class TestLexicon extends XDTester {
 "    %class "+_package+".component.Town %link town#Town;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
-            genXComponent(xp = compile(xdef));
-            xd = xp.createXDDocument("town");
-            String xml_eng =
+			genXComponent(xp = compile(xdef));
+			xd = xp.createXDDocument("town");
+			String xml_eng =
 "<Town Name='Nonehill'>\n" +
 "  <Street Name='Long'>\n" +
 "    <House Num='1'>\n" +
@@ -316,13 +316,13 @@ public final class TestLexicon extends XDTester {
 "    </House>\n" +
 "  </Street>\n" +
 "</Town>";
-            xd.setLexiconLanguage("eng");
-            el = parse(xd, xml_eng, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml_eng, el);
-            xd = xp.createXDDocument("town");
-            xd.setLexiconLanguage("deu");
-            String xml_deu =
+			xd.setLexiconLanguage("eng");
+			el = parse(xd, xml_eng, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml_eng, el);
+			xd = xp.createXDDocument("town");
+			xd.setLexiconLanguage("deu");
+			String xml_deu =
 "<Stadt Name='Nonehill'>\n" +
 "  <Straße Name='Long'>\n" +
 "    <Haus Nummer='1'>\n" +
@@ -340,30 +340,30 @@ public final class TestLexicon extends XDTester {
 "    </Haus>\n" +
 "  </Straße>\n" +
 "</Stadt>";
-            el = parse(xd, xml_deu, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml_deu, el);
-            reporter.clear();
-            assertEq(xml_eng, xd.xtranslate(xml_deu, "deu", "eng", reporter));
-            assertNoErrorwarnings(reporter);
-            xd = xp.createXDDocument("town");
-            xd.setLexiconLanguage("deu");
-            XComponent xc = parseXC(xd, xml_deu, null, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq("", chkCompoinentSerializable(xc));
-            assertEq(xml_deu, xc.toXml());
-            assertEq("Nonehill", XComponentUtil.get(xc,"Name"));
-        } catch (RuntimeException ex) {fail(ex);}
+			el = parse(xd, xml_deu, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml_deu, el);
+			reporter.clear();
+			assertEq(xml_eng, xd.xtranslate(xml_deu, "deu", "eng", reporter));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument("town");
+			xd.setLexiconLanguage("deu");
+			XComponent xc = parseXC(xd, xml_deu, null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq("", chkCompoinentSerializable(xc));
+			assertEq(xml_deu, xc.toXml());
+			assertEq("Nonehill", XComponentUtil.get(xc,"Name"));
+		} catch (RuntimeException ex) {fail(ex);}
 
-        clearTempDir(); // delete temporary files.
-        resetTester();
-    }
+		clearTempDir(); // delete temporary files.
+		resetTester();
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest() != 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest() != 0) {System.exit(1);}
+	}
 }

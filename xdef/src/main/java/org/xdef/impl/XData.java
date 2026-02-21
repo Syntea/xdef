@@ -60,541 +60,541 @@ import org.xdef.impl.parsers.XSParseIDREFS;
  * @author Vaclav Trojan
  */
 public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTable {
-    /** Type ID of value of data. */
-    short _valueType;
-    /** Type name of value of data. */
-    private String _valueTypeName;
-    /** Referenced type (null if not reference). */
-    private String _refTypeName;
+	/** Type ID of value of data. */
+	short _valueType;
+	/** Type name of value of data. */
+	private String _valueTypeName;
+	/** Referenced type (null if not reference). */
+	private String _refTypeName;
 
-    /** Creates a new instance of XData.
-     * @param name The name of attribute ("$text" if the type is text node).
-     * @param nsUri NameSpace URI.
-     * @param xp Refers to the XDefPool object.
-     * @param kind <code>ATTRIBUTE</code> or <code>TEXT</code>.
-     */
-    public XData(final String name, final String nsUri, final XDPool xp, final short kind) {
-        super(name, nsUri, xp, kind);
-        setOccurrence(1,1); // required ???
-        _valueType = XD_STRING;
-    }
+	/** Creates a new instance of XData.
+	 * @param name The name of attribute ("$text" if the type is text node).
+	 * @param nsUri NameSpace URI.
+	 * @param xp Refers to the XDefPool object.
+	 * @param kind <code>ATTRIBUTE</code> or <code>TEXT</code>.
+	 */
+	public XData(final String name, final String nsUri, final XDPool xp, final short kind) {
+		super(name, nsUri, xp, kind);
+		setOccurrence(1,1); // required ???
+		_valueType = XD_STRING;
+	}
 
-    public XData(final XData x) {
-        super(x);
-        setOccurrence(x.minOccurs(), x.maxOccurs());
-        _valueType = x._valueType;
-        _valueTypeName = x._valueTypeName;
-        _refTypeName = x._refTypeName;
-    }
+	public XData(final XData x) {
+		super(x);
+		setOccurrence(x.minOccurs(), x.maxOccurs());
+		_valueType = x._valueType;
+		_valueTypeName = x._valueTypeName;
+		_refTypeName = x._refTypeName;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // impemetation of method from interfaces.
 ////////////////////////////////////////////////////////////////////////////////
 
-    // This method can't be final, it can be overwritten!
-    /** Write this XDATA to XDWriter.
-     @param xw where to write.
-     @param list list of XNodes.
-     */
-    @Override
-    public void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
-        writeXCodeDescriptor(xw);
-        xw.writeShort(_valueType);
-        xw.writeString(_valueTypeName);
-        xw.writeString(_refTypeName);
-    }
+	// This method can't be final, it can be overwritten!
+	/** Write this XDATA to XDWriter.
+	 @param xw where to write.
+	 @param list list of XNodes.
+	 */
+	@Override
+	public void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
+		writeXCodeDescriptor(xw);
+		xw.writeShort(_valueType);
+		xw.writeString(_valueTypeName);
+		xw.writeString(_refTypeName);
+	}
 
-    /** Get value specified as default.
-     * @return value specified as default or return null if there was not specified a default value.
-     */
-    @Override
-    public final XDValue getDefaultValue() {
-        if (_deflt < 0) {
-            return null;
-        }
-        XDValue[] code = ((XPool) getXDPool()).getCode();
-        XDValue x = code[_deflt];
-        if (x.getCode() != LD_CONST || _deflt + 1 >= code.length || code[_deflt + 1].getCode() != STOP_OP) {
-            return null;
-        }
-        return x;
-    }
+	/** Get value specified as default.
+	 * @return value specified as default or return null if there was not specified a default value.
+	 */
+	@Override
+	public final XDValue getDefaultValue() {
+		if (_deflt < 0) {
+			return null;
+		}
+		XDValue[] code = ((XPool) getXDPool()).getCode();
+		XDValue x = code[_deflt];
+		if (x.getCode() != LD_CONST || _deflt + 1 >= code.length || code[_deflt + 1].getCode() != STOP_OP) {
+			return null;
+		}
+		return x;
+	}
 
-    /** Get value specified as fixed.
-     * @return value specified as fixed or return null if there was not specified a default value.
-     */
-    @Override
-    public final XDValue getFixedValue() {
-        if (_onAbsence < 0) {
-            return null;
-        }
-        // find code of value parser
-        XDValue[] code = ((XPool) getXDPool()).getCode();
-        XDValue x = code[_onAbsence];
-        if (x.getCode() != CALL_OP || _onAbsence + 2 >= code.length) {
-            return null;
-        }
-        int j = x.getParam();
-        if (j < 0 || j + 2 >= code.length || code[j].getCode() != INIT_NOPARAMS_OP
-            || code[j + 1].getCode() != LD_CONST || code[j + 2].getCode() != RETV_OP) {
-            return null;
-        }
-        if (code[_onAbsence + 1].getCode() != SET_TEXT || code[_onAbsence + 2].getCode() != STOP_OP) {
-            return null;
-        }
-        return code[j + 1];
-    }
+	/** Get value specified as fixed.
+	 * @return value specified as fixed or return null if there was not specified a default value.
+	 */
+	@Override
+	public final XDValue getFixedValue() {
+		if (_onAbsence < 0) {
+			return null;
+		}
+		// find code of value parser
+		XDValue[] code = ((XPool) getXDPool()).getCode();
+		XDValue x = code[_onAbsence];
+		if (x.getCode() != CALL_OP || _onAbsence + 2 >= code.length) {
+			return null;
+		}
+		int j = x.getParam();
+		if (j < 0 || j + 2 >= code.length || code[j].getCode() != INIT_NOPARAMS_OP
+			|| code[j + 1].getCode() != LD_CONST || code[j + 2].getCode() != RETV_OP) {
+			return null;
+		}
+		if (code[_onAbsence + 1].getCode() != SET_TEXT || code[_onAbsence + 2].getCode() != STOP_OP) {
+			return null;
+		}
+		return code[j + 1];
+	}
 
-    /** Get type name of value.
-     * @return type name of data value.
-     */
-    @Override
-    public final String getValueTypeName() {
-        int xs = _check; //start of code of parse method.
-        if (xs >= 0) {
-            if (_valueTypeName.indexOf('.') < 0 || _valueTypeName.endsWith("ID")
-                || _valueTypeName.endsWith("IDREF") || _valueTypeName.endsWith("IDREFS")
-                || _valueTypeName.endsWith("CHKID") || _valueTypeName.endsWith("CHKIDS")
-                || _valueTypeName.endsWith("SET")) {
-                return _valueTypeName;
-            }
-            final XDValue[] xv = ((XPool) getXDPool()).getCode();
-            XDValue y = xv[xs];
-            if (y.getCode() == JMP_OP || (xs + 1 < xv.length && y.getCode() == CALL_OP
-                && xv[xs+1].getCode() == STOP_OP)) {
-            } else if (xs + 2 < xv.length && (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)) {
-                String uniquesetName = "";
-                switch (xv[xs+1].getCode()) {
-                    case UNIQUESET_KEY_SET:
-                    case UNIQUESET_SET: uniquesetName = ".SET"; break;
-                    case UNIQUESET_KEY_ID:
-                    case UNIQUESET_ID: uniquesetName = ".ID"; break;
-                    case UNIQUESET_KEY_IDREF:
-                    case UNIQUESET_IDREF: uniquesetName = ".IDREF"; break;
-                    case UNIQUESET_IDREFS: uniquesetName = ".IDREFS"; break;
-                    case UNIQUESET_KEY_CHKID:
-                    case UNIQUESET_CHKID: uniquesetName = ".CHKID"; break;
-                    case UNIQUESET_CHKIDS: uniquesetName = ".CHKIDS"; break;
-                }
-                return _valueTypeName + uniquesetName;
-            }
-        }
-        return _valueTypeName;
-    }
+	/** Get type name of value.
+	 * @return type name of data value.
+	 */
+	@Override
+	public final String getValueTypeName() {
+		int xs = _check; //start of code of parse method.
+		if (xs >= 0) {
+			if (_valueTypeName.indexOf('.') < 0 || _valueTypeName.endsWith("ID")
+				|| _valueTypeName.endsWith("IDREF") || _valueTypeName.endsWith("IDREFS")
+				|| _valueTypeName.endsWith("CHKID") || _valueTypeName.endsWith("CHKIDS")
+				|| _valueTypeName.endsWith("SET")) {
+				return _valueTypeName;
+			}
+			final XDValue[] xv = ((XPool) getXDPool()).getCode();
+			XDValue y = xv[xs];
+			if (y.getCode() == JMP_OP || (xs + 1 < xv.length && y.getCode() == CALL_OP
+				&& xv[xs+1].getCode() == STOP_OP)) {
+			} else if (xs + 2 < xv.length && (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)) {
+				String uniquesetName = "";
+				switch (xv[xs+1].getCode()) {
+					case UNIQUESET_KEY_SET:
+					case UNIQUESET_SET: uniquesetName = ".SET"; break;
+					case UNIQUESET_KEY_ID:
+					case UNIQUESET_ID: uniquesetName = ".ID"; break;
+					case UNIQUESET_KEY_IDREF:
+					case UNIQUESET_IDREF: uniquesetName = ".IDREF"; break;
+					case UNIQUESET_IDREFS: uniquesetName = ".IDREFS"; break;
+					case UNIQUESET_KEY_CHKID:
+					case UNIQUESET_CHKID: uniquesetName = ".CHKID"; break;
+					case UNIQUESET_CHKIDS: uniquesetName = ".CHKIDS"; break;
+				}
+				return _valueTypeName + uniquesetName;
+			}
+		}
+		return _valueTypeName;
+	}
 
-    /** Get reference name to declared type.
-     * @return reference name to declared type or null if not reference.
-     */
-    @Override
-    public final String getRefTypeName() {return _refTypeName;}
+	/** Get reference name to declared type.
+	 * @return reference name to declared type or null if not reference.
+	 */
+	@Override
+	public final String getRefTypeName() {return _refTypeName;}
 
-    /** Check if the value type is declared as local within the X-definition.
-     * @return true if the value type is declared as local within the X-definition.
-     */
-    @Override
-    public final boolean isLocalType() {return getXMDefinition().isLocalName(_refTypeName);}
+	/** Check if the value type is declared as local within the X-definition.
+	 * @return true if the value type is declared as local within the X-definition.
+	 */
+	@Override
+	public final boolean isLocalType() {return getXMDefinition().isLocalName(_refTypeName);}
 
-    /** Get parser used for parsing of value.
-     * @return XDParser or XDValue of executed code.
-     */
-    @Override
-    public final XDValue getParseMethod() {return getParseMethod(_check, ((XPool) getXDPool()).getCode());}
+	/** Get parser used for parsing of value.
+	 * @return XDParser or XDValue of executed code.
+	 */
+	@Override
+	public final XDValue getParseMethod() {return getParseMethod(_check, ((XPool) getXDPool()).getCode());}
 
-    /** Get parameters of parsing method.
-     * @return XDParser or null if parser is not available.
-     */
-    @Override
-    public final XDContainer getParseParams() {
-        XDValue p = getParseMethod();
-        return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
-            ? ((XDParser) p).getNamedParams() : new DefContainer();
-    }
+	/** Get parameters of parsing method.
+	 * @return XDParser or null if parser is not available.
+	 */
+	@Override
+	public final XDContainer getParseParams() {
+		XDValue p = getParseMethod();
+		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
+			? ((XDParser) p).getNamedParams() : new DefContainer();
+	}
 
-    /** Get type of parsed value.
-     * @return value from org.xdef.XDValueTypes.
-     */
-    @Override
-    public final short getParserType() {
-        XDValue p = getParseMethod();
-        return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
-            ? ((XDParser) p).parsedType() : XD_STRING;
-    }
+	/** Get type of parsed value.
+	 * @return value from org.xdef.XDValueTypes.
+	 */
+	@Override
+	public final short getParserType() {
+		XDValue p = getParseMethod();
+		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
+			? ((XDParser) p).parsedType() : XD_STRING;
+	}
 
-    /** Get type of parsed value or items of parsed list or union.
-     * @return value from org.xdef.XDValueTypes.
-     */
-    @Override
-    public short getAlltemsType() {
-        XDValue p = getParseMethod();
-        return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
-            ? ((XDParser) p).getAlltemsType(): XD_STRING;
-    }
+	/** Get type of parsed value or items of parsed list or union.
+	 * @return value from org.xdef.XDValueTypes.
+	 */
+	@Override
+	public short getAlltemsType() {
+		XDValue p = getParseMethod();
+		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
+			? ((XDParser) p).getAlltemsType(): XD_STRING;
+	}
 
-    /** Get datetime mask from the model parser.
-     * @return mask of datetime type or <i>null</i>.
-     */
-    @Override
-    public final String getDateMask() {
-        XDValue p = getParseMethod();
-        if (p != null && p.getItemId()==XD_PARSER && p instanceof XDParser) {
-            XDParser y = (XDParser) p;
-            switch (y.parserName()) {
-                case "xdatetime":
-                case "ydatetime": {
-                    XDContainer c = y.getNamedParams();
-                    for (XDNamedValue item: c.getXDNamedItems()) {
-                        if ("format".equals(item.getName())) {
-                            return '"' + item.getValue().toString() + '"';
-                        }
-                    }
-                    return null;
-                }
-                case "dateTime": return null;
-                case "date": return "\"yyyy-MM-dd[Z]\"";
-                case "gDay": return "\"---dd[Z]\"";
-                case "gMonth": return "\"--MM[Z]\"";
-                case "gMonthDay": return "\"--MM-dd[Z]\"";
-                case "gYear": return "\"yyyy[Z]\"";
-                case "ISOyear": return "\"yyyy[Z]\"";
-                case "gYearMonth": return "\"yyyy-MM[Z]\"";
-                case "ISOyearMonth": return "\"yyyy-MM[Z]\"";
-                case "dateYMDhms": return "\"yyyyMMddHHmmss\"";
-                case "ISOdate": return "\"yyyy-MM-dd[Z]\"";
-                case "time": return "\"HH:mm:ss[.S][Z]\"";
-                case "emailDate": return "\"EEE, d MMM yyyy HH:mm:ss[ ZZZZZ][ (z)]\"";
-            }
-        }
-        return null;
-    }
+	/** Get datetime mask from the model parser.
+	 * @return mask of datetime type or <i>null</i>.
+	 */
+	@Override
+	public final String getDateMask() {
+		XDValue p = getParseMethod();
+		if (p != null && p.getItemId()==XD_PARSER && p instanceof XDParser) {
+			XDParser y = (XDParser) p;
+			switch (y.parserName()) {
+				case "xdatetime":
+				case "ydatetime": {
+					XDContainer c = y.getNamedParams();
+					for (XDNamedValue item: c.getXDNamedItems()) {
+						if ("format".equals(item.getName())) {
+							return '"' + item.getValue().toString() + '"';
+						}
+					}
+					return null;
+				}
+				case "dateTime": return null;
+				case "date": return "\"yyyy-MM-dd[Z]\"";
+				case "gDay": return "\"---dd[Z]\"";
+				case "gMonth": return "\"--MM[Z]\"";
+				case "gMonthDay": return "\"--MM-dd[Z]\"";
+				case "gYear": return "\"yyyy[Z]\"";
+				case "ISOyear": return "\"yyyy[Z]\"";
+				case "gYearMonth": return "\"yyyy-MM[Z]\"";
+				case "ISOyearMonth": return "\"yyyy-MM[Z]\"";
+				case "dateYMDhms": return "\"yyyyMMddHHmmss\"";
+				case "ISOdate": return "\"yyyy-MM-dd[Z]\"";
+				case "time": return "\"HH:mm:ss[.S][Z]\"";
+				case "emailDate": return "\"EEE, d MMM yyyy HH:mm:ss[ ZZZZZ][ (z)]\"";
+			}
+		}
+		return null;
+	}
 
-    /** Get name parser (i.e. "base64Binary" or "hexBinary").
-     * @return name of parser or empty string.
-     */
-    @Override
-    public final String getParserName() {
-        XDValue p = getParseMethod();
-        return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
-            ? ((XDParser) p).parserName() : "string";
-    }
+	/** Get name parser (i.e. "base64Binary" or "hexBinary").
+	 * @return name of parser or empty string.
+	 */
+	@Override
+	public final String getParserName() {
+		XDValue p = getParseMethod();
+		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
+			? ((XDParser) p).parserName() : "string";
+	}
 
-    @Override
-    public String toString() {
-        String result = getName() + ": type=" + getTypeName(getParserType());
-        String s = getRefTypeName();
-        if (s != null) {
-            result += ", refType=" + s;
-        }
-        result += ", method=" + getParseMethod();
-        XDContainer params = getParseParams();
-        if (params != null && params.getXDNamedItemsNumber() > 0) {
-            s = "";
-            for (XDNamedValue x : params.getXDNamedItems()) {
-                if (!s.isEmpty()) {
-                    s += ",";
-                }
-                if (x.getValue()!=null && x.getValue() instanceof XDContainer) {
-                    s += '%' + x.getName() + '=';
-                    String t = "";
-                    for (XDValue y: ((XDContainer) x.getValue()).getXDItems()) {
-                        if (!t.isEmpty()) {
-                            t += ',';
-                        }
-                        t += y;
-                    }
-                    s += '[' + t + ']';
+	@Override
+	public String toString() {
+		String result = getName() + ": type=" + getTypeName(getParserType());
+		String s = getRefTypeName();
+		if (s != null) {
+			result += ", refType=" + s;
+		}
+		result += ", method=" + getParseMethod();
+		XDContainer params = getParseParams();
+		if (params != null && params.getXDNamedItemsNumber() > 0) {
+			s = "";
+			for (XDNamedValue x : params.getXDNamedItems()) {
+				if (!s.isEmpty()) {
+					s += ",";
+				}
+				if (x.getValue()!=null && x.getValue() instanceof XDContainer) {
+					s += '%' + x.getName() + '=';
+					String t = "";
+					for (XDValue y: ((XDContainer) x.getValue()).getXDItems()) {
+						if (!t.isEmpty()) {
+							t += ',';
+						}
+						t += y;
+					}
+					s += '[' + t + ']';
 
-                } else {
-                    s += x;
-                }
-            }
-            result += '[' + s + ']';
-        }
-        s = getDateMask();
-        if (s != null) {
-            result += ", date mask=" + s;
-        }
-        return result;
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-    /** Set type of value.
-     * @param valType ID of data value type.
-     * @param valName Name of data value type.
-     */
-    public final void setValueType(final short valType, final String valName) {
-        _valueType = valType;
-        _valueTypeName = valName;
-    }
-
-    /** Set reference name to declared type.
-     * @param x reference name to declared type or null if not reference.
-     */
-    public final void setRefTypeName(final String x) {_refTypeName = x;}
-
-    /** Get XMDefinition assigned to this node.
-     * @return XMDefintion node.
-     */
-    @Override
-    public final XMDefinition getXMDefinition() {
-        String s = getXDPosition();
-        int ndx = s == null ? -1 : s.indexOf("#");
-        return getXDPool().getXMDefinition(ndx >= 0 ? s.substring(0, ndx) : s);
-    }
-
-    // can't be final, can be overwritten!
-    static XData readXData(final XDReader xr, final short kind, final XDefinition xd) throws IOException {
-        String name = xr.readString();
-        String uri = xr.readString();
-        XData x = new XData(name, uri, xd.getXDPool(), kind);
-        x.readXCodeDescriptor(xr);
-        x._valueType = xr.readShort();
-        x._valueTypeName = xr.readString();
-        x._refTypeName = xr.readString();
-        return x;
-    }
-
-    /** Check compatibility of this object and XDData.
-     * @param y XDData object to be compared.
-     * @param rep Reporter where to put errors.
-     * @param full of all must be tested (implements/uses).
-     * @return true if the XDData object from argument is compatible.
-     */
-    protected final boolean compareData(final XData y, final ArrayReporter rep, final boolean full) {
-        boolean result = compareNameAndNS(y, rep) && compareOccurrence(y, rep);
-        if ("$text".equals(getName())) {
-            if (_textValuesCase != y._textValuesCase || _textWhiteSpaces != y._textWhiteSpaces
-                || _textValuesCase != y._textValuesCase || _trimText != y._trimText) {
-                rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
-                result = false;
-            }
-        } else {
-            if (_attrValuesCase != y._attrValuesCase || _acceptQualifiedAttr != y._acceptQualifiedAttr
-                || _ignoreEmptyAttributes != y._ignoreEmptyAttributes || _attrValuesCase != y._attrValuesCase
-                || _attrWhiteSpaces != y._attrWhiteSpaces || _trimAttr != y._trimAttr) {
-                rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
-                result = false;
-            }
-        }
-        XDValue[] cx = ((XPool) getXDPool()).getCode();
-        XDValue[] cy = ((XPool) y.getXDPool()).getCode();
-        if (isFixed()) {
-            if (!y.isFixed()) {
-                if (y._check>=0||y._onAbsence>=0||y._onFalse>=0) {
-                    //Default or fixed values differs: &{0} and &{1}
-                    rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
-                    return false;
-                }
-                if (full || cx != cy) {
-                    return false;
-                } else {
-                    y._check = _check;
-                    y._onAbsence = _onAbsence;
-                    y._onFalse = _onFalse;
-                    return result;
-                }
-            }
-            if (cx == cy && _check == y._check && _onAbsence == y._onAbsence && _onFalse == y._onFalse) {
-                return result;
-            } else {
-                if (compareCode(cx, cy, _check, y._check, false)
-                    && compareCode(cx, cy, _onAbsence, y._onAbsence, false)
-                    && compareCode(cx, cy, _onFalse, y._onFalse, false)) {
-                    return result;
-                }
-            }
-            //Default or fixed values differs: &{0} and &{1}
-            rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
-            return false;
-        } else if (y.isFixed()) {
-            //Default or fixed values differs: &{0} and &{1}
-            rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
-            return false;
-        }
-        XDValue vx, vy;
-        if ((vx = getDefaultValue()) != null) {
-            if ((vy = y.getDefaultValue()) == null) {
-                if (full || cx != cy) {
-                    result = false;
-                } else {
-                    y._deflt = _deflt;
-                }
-            } else if (cx != cy || y._deflt != _deflt) {
-                if (vx == null || vy == null || !vx.equals(vy)) {
-                    //Default or fixed values differs: &{0} and &{1}
-                    rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
-                    result = false;
-                }
-            }
-        }
-        if ((vx = getFixedValue()) != null) {
-            if ((vy = y.getFixedValue()) == null) {
-                if (full || cx != cy) {
-                    result = false;
-                } else {
-                    y._onAbsence = _onAbsence;
-                }
-            } else if (cx != cy || y._onAbsence != _onAbsence) {
-                if (vx == null || vy == null || !vx.equals(vy)) {
-                    //Default or fixed values differs: &{0} and &{1}
-                    rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
-                    result = false;
-                }
-            }
-        }
-        int ix = _check;
-        int iy = y._check;
-        if (ix == iy) {
-            return result;
-        }
-        if (ix < 0) {
-            return iy < 0 && result;
-        } else {
-            if (iy < 0) {
-                if (full || cx != cy) {
-                    return false;
-                }
-                y._check = _check;
-                return result;
-            } else {
-                if (compareCode(cx, cy, ix,	iy, full)) {
-                    return result;
-                }
-            }
-            //Type of value differs: &{0} and &{1}
-            rep.error(XDEF.XDEF285, getXDPosition(), y.getXDPosition());
-            return false;
-        }
-    }
-
-    /** Compare code of actions in two nodes.
-     * @param cx code of XDPool x.
-     * @param cy code of XDPool y.
-     * @param x address to code of XDPool x.
-     * @param y address to code of XDPool y.
-     * @param full of all must be tested (implements/uses).
-     * @return true if cods in both objects are compatible. Otherwise return false.
-     */
-    private static boolean compareCode(final XDValue[] cx,
-        final XDValue[] cy,
-        final int x,
-        final int y,
-        final boolean full) {
-        if (x == y && (x == -1 || cx == cy)) {
-            return true;
-        }
-        int p;
-        int ix = x, iy = y;
-        XDValue xx,xy;
-        while (ix < cx.length && iy < cx.length && (p = (xx = cx[ix]).getCode()) == (xy = cy[iy]).getCode()) {
-            switch (p) {
-                case STOP_OP: return true;
-                case CALL_OP: {
-                    if (cx==cy && xx.getParam()==xy.getParam()
-                        || !full && compareCode(cx, cy, xx.getParam(), xy.getParam(), full)) {
-                        ix++;
-                        iy++;
-                        continue;
-                    } else {
-                        return false;
-                    }
-                }
-                case PARSEANDSTOP: return ix+1 < cx.length && iy+1 < cx.length && cx[x+1].equals(cy[y+1]);
-                case JMPEQ:
-                case JMPNE:
-                case JMPLE:
-                case JMPGE:
-                case JMPLT:
-                case JMPGT:
-                case JMP_OP:
-                case JMPF_OP:
-                case JMPT_OP: {
-                    if (xx.getParam() - ix == xy.getParam() - iy) {
-                        ix++;
-                        iy++;
-                    } else {
-                        ix = Integer.MAX_VALUE;
-                    }
-                    continue;
-                }
-                default:
-                    if (!xx.equals(xy)) {
-                        return false;
-                    }
-                    ix++;
-                    iy++;
-            }
-        }
-        return false;
-    }
+				} else {
+					s += x;
+				}
+			}
+			result += '[' + s + ']';
+		}
+		s = getDateMask();
+		if (s != null) {
+			result += ", date mask=" + s;
+		}
+		return result;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Get parser used for parsing of value.
-     * @param check address of check section or -1.
-     * @param xv array with code.
-     * @return XDParser or XDValue of executed code.
-     */
-    private static XDValue getParseMethod(final int check,
-        final XDValue[] xv) {
-        if (check < 0) {
-            return new XDParseCDATA(); // default parser
-        }
-        int xi = check; //start of code of parse method.
-        XDValue y = xv[xi];
-        short c; //code id
-        if (y.getCode()==PARSEANDSTOP) {
-            return xv[++xi]; // it is Parser
-        } else if (y.getCode()==JMP_OP || (xi+1 < xv.length
-            && y.getCode()==CALL_OP && xv[xi+1].getCode()==STOP_OP)) {
-            y = xv[xi = y.getParam()];
-        } else if (xi + 2 < xv.length && (y.getCode()==LD_GLOBAL || y.getCode()==LD_XMODEL)
-            && ((c=xv[xi+1].getCode())==UNIQUESET_KEY_SETKEY || c==UNIQUESET_KEY_ID || c==UNIQUESET_KEY_SET
-                || c==UNIQUESET_KEY_IDREF || c==UNIQUESET_KEY_CHKID || c==UNIQUESET_ID || c==UNIQUESET_SET
-                || c==UNIQUESET_IDREF || c==UNIQUESET_IDREFS || c==UNIQUESET_CHKID || c==UNIQUESET_CHKIDS)
-            && xv[xi+2].getCode()==STOP_OP) {
-            if (c==UNIQUESET_IDREFS) {
-                return new XSParseIDREFS();
-            } else if (c==UNIQUESET_CHKIDS) {
-                return new XDParseCHKIDS();
-            }
-            y = xv[xi = xv[xi+1].intValue()];
-        }
-        for (;;) {
-            switch (y.getCode()) {
-                case JMP_OP: y = xv[xi = xv[xi].getParam()]; continue;
-                case LD_CODE: y = xv[y.getParam()]; continue;
-                case CALL_OP:
-                    if (y.getParam()>=0 && xi+3 < xv.length && xv[xi+1].getCode()==NEW_PARSER
-                        && "eq".equals(xv[xi+1].stringValue()) && xv[xi+2].getCode()==PARSE_OP
-                        && xv[xi+3].getCode()==STOP_OP) {
-                        return ((CodeParser) xv[xi+1]).getParser(); // fixed
-                    } else {
-                        y = xv[xi = y.getParam()];
-                        if (xi+1<xv.length && y.getCode()==PARSEANDSTOP
-                            && xv[xi+1].getCode()==LD_CONST && xv[xi+1].getItemId()==XD_PARSER) {
-                            return xv[xi+1];
-                        }
-                        if (xi+2<xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER
-                            && xv[xi+1].getCode()==PARSE_OP && xv[xi+2].getCode() == STOP_OP) {
-                            return y;
-                        }
-                    }
-                    return new XDParseCDATA(); // return XDParseCDATA parser
-                default:
-                    if (xi+2< xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
-                        if (xv[xi+1].getCode()==PARSE_OP) {
-                            if (xv[xi+2].getCode()==STOP_OP) {
-                                return y;
-                            } else if (xi+4<xv.length && xv[xi+2].getCode()==STACK_DUP
-                                && xi+4<xv.length && xv[xi+3].getCode()==PARSERESULT_MATCH
-                                && xv[xi+4].getCode()==JMPF_OP && xv[xv[xi+4].getParam()].getCode()==STOP_OP){
-                                return y; // parser with CHECK operand
-                            }
-                        }
-                    }
-            }
-            return new XDParseCDATA(); // return XDParseCDATA parser
-        }
-    }
+	/** Set type of value.
+	 * @param valType ID of data value type.
+	 * @param valName Name of data value type.
+	 */
+	public final void setValueType(final short valType, final String valName) {
+		_valueType = valType;
+		_valueTypeName = valName;
+	}
+
+	/** Set reference name to declared type.
+	 * @param x reference name to declared type or null if not reference.
+	 */
+	public final void setRefTypeName(final String x) {_refTypeName = x;}
+
+	/** Get XMDefinition assigned to this node.
+	 * @return XMDefintion node.
+	 */
+	@Override
+	public final XMDefinition getXMDefinition() {
+		String s = getXDPosition();
+		int ndx = s == null ? -1 : s.indexOf("#");
+		return getXDPool().getXMDefinition(ndx >= 0 ? s.substring(0, ndx) : s);
+	}
+
+	// can't be final, can be overwritten!
+	static XData readXData(final XDReader xr, final short kind, final XDefinition xd) throws IOException {
+		String name = xr.readString();
+		String uri = xr.readString();
+		XData x = new XData(name, uri, xd.getXDPool(), kind);
+		x.readXCodeDescriptor(xr);
+		x._valueType = xr.readShort();
+		x._valueTypeName = xr.readString();
+		x._refTypeName = xr.readString();
+		return x;
+	}
+
+	/** Check compatibility of this object and XDData.
+	 * @param y XDData object to be compared.
+	 * @param rep Reporter where to put errors.
+	 * @param full of all must be tested (implements/uses).
+	 * @return true if the XDData object from argument is compatible.
+	 */
+	protected final boolean compareData(final XData y, final ArrayReporter rep, final boolean full) {
+		boolean result = compareNameAndNS(y, rep) && compareOccurrence(y, rep);
+		if ("$text".equals(getName())) {
+			if (_textValuesCase != y._textValuesCase || _textWhiteSpaces != y._textWhiteSpaces
+				|| _textValuesCase != y._textValuesCase || _trimText != y._trimText) {
+				rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
+				result = false;
+			}
+		} else {
+			if (_attrValuesCase != y._attrValuesCase || _acceptQualifiedAttr != y._acceptQualifiedAttr
+				|| _ignoreEmptyAttributes != y._ignoreEmptyAttributes || _attrValuesCase != y._attrValuesCase
+				|| _attrWhiteSpaces != y._attrWhiteSpaces || _trimAttr != y._trimAttr) {
+				rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
+				result = false;
+			}
+		}
+		XDValue[] cx = ((XPool) getXDPool()).getCode();
+		XDValue[] cy = ((XPool) y.getXDPool()).getCode();
+		if (isFixed()) {
+			if (!y.isFixed()) {
+				if (y._check>=0||y._onAbsence>=0||y._onFalse>=0) {
+					//Default or fixed values differs: &{0} and &{1}
+					rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
+					return false;
+				}
+				if (full || cx != cy) {
+					return false;
+				} else {
+					y._check = _check;
+					y._onAbsence = _onAbsence;
+					y._onFalse = _onFalse;
+					return result;
+				}
+			}
+			if (cx == cy && _check == y._check && _onAbsence == y._onAbsence && _onFalse == y._onFalse) {
+				return result;
+			} else {
+				if (compareCode(cx, cy, _check, y._check, false)
+					&& compareCode(cx, cy, _onAbsence, y._onAbsence, false)
+					&& compareCode(cx, cy, _onFalse, y._onFalse, false)) {
+					return result;
+				}
+			}
+			//Default or fixed values differs: &{0} and &{1}
+			rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
+			return false;
+		} else if (y.isFixed()) {
+			//Default or fixed values differs: &{0} and &{1}
+			rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
+			return false;
+		}
+		XDValue vx, vy;
+		if ((vx = getDefaultValue()) != null) {
+			if ((vy = y.getDefaultValue()) == null) {
+				if (full || cx != cy) {
+					result = false;
+				} else {
+					y._deflt = _deflt;
+				}
+			} else if (cx != cy || y._deflt != _deflt) {
+				if (vx == null || vy == null || !vx.equals(vy)) {
+					//Default or fixed values differs: &{0} and &{1}
+					rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
+					result = false;
+				}
+			}
+		}
+		if ((vx = getFixedValue()) != null) {
+			if ((vy = y.getFixedValue()) == null) {
+				if (full || cx != cy) {
+					result = false;
+				} else {
+					y._onAbsence = _onAbsence;
+				}
+			} else if (cx != cy || y._onAbsence != _onAbsence) {
+				if (vx == null || vy == null || !vx.equals(vy)) {
+					//Default or fixed values differs: &{0} and &{1}
+					rep.error(XDEF.XDEF286, getXDPosition(), y.getXDPosition());
+					result = false;
+				}
+			}
+		}
+		int ix = _check;
+		int iy = y._check;
+		if (ix == iy) {
+			return result;
+		}
+		if (ix < 0) {
+			return iy < 0 && result;
+		} else {
+			if (iy < 0) {
+				if (full || cx != cy) {
+					return false;
+				}
+				y._check = _check;
+				return result;
+			} else {
+				if (compareCode(cx, cy, ix,	iy, full)) {
+					return result;
+				}
+			}
+			//Type of value differs: &{0} and &{1}
+			rep.error(XDEF.XDEF285, getXDPosition(), y.getXDPosition());
+			return false;
+		}
+	}
+
+	/** Compare code of actions in two nodes.
+	 * @param cx code of XDPool x.
+	 * @param cy code of XDPool y.
+	 * @param x address to code of XDPool x.
+	 * @param y address to code of XDPool y.
+	 * @param full of all must be tested (implements/uses).
+	 * @return true if cods in both objects are compatible. Otherwise return false.
+	 */
+	private static boolean compareCode(final XDValue[] cx,
+		final XDValue[] cy,
+		final int x,
+		final int y,
+		final boolean full) {
+		if (x == y && (x == -1 || cx == cy)) {
+			return true;
+		}
+		int p;
+		int ix = x, iy = y;
+		XDValue xx,xy;
+		while (ix < cx.length && iy < cx.length && (p = (xx = cx[ix]).getCode()) == (xy = cy[iy]).getCode()) {
+			switch (p) {
+				case STOP_OP: return true;
+				case CALL_OP: {
+					if (cx==cy && xx.getParam()==xy.getParam()
+						|| !full && compareCode(cx, cy, xx.getParam(), xy.getParam(), full)) {
+						ix++;
+						iy++;
+						continue;
+					} else {
+						return false;
+					}
+				}
+				case PARSEANDSTOP: return ix+1 < cx.length && iy+1 < cx.length && cx[x+1].equals(cy[y+1]);
+				case JMPEQ:
+				case JMPNE:
+				case JMPLE:
+				case JMPGE:
+				case JMPLT:
+				case JMPGT:
+				case JMP_OP:
+				case JMPF_OP:
+				case JMPT_OP: {
+					if (xx.getParam() - ix == xy.getParam() - iy) {
+						ix++;
+						iy++;
+					} else {
+						ix = Integer.MAX_VALUE;
+					}
+					continue;
+				}
+				default:
+					if (!xx.equals(xy)) {
+						return false;
+					}
+					ix++;
+					iy++;
+			}
+		}
+		return false;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Get parser used for parsing of value.
+	 * @param check address of check section or -1.
+	 * @param xv array with code.
+	 * @return XDParser or XDValue of executed code.
+	 */
+	private static XDValue getParseMethod(final int check,
+		final XDValue[] xv) {
+		if (check < 0) {
+			return new XDParseCDATA(); // default parser
+		}
+		int xi = check; //start of code of parse method.
+		XDValue y = xv[xi];
+		short c; //code id
+		if (y.getCode()==PARSEANDSTOP) {
+			return xv[++xi]; // it is Parser
+		} else if (y.getCode()==JMP_OP || (xi+1 < xv.length
+			&& y.getCode()==CALL_OP && xv[xi+1].getCode()==STOP_OP)) {
+			y = xv[xi = y.getParam()];
+		} else if (xi + 2 < xv.length && (y.getCode()==LD_GLOBAL || y.getCode()==LD_XMODEL)
+			&& ((c=xv[xi+1].getCode())==UNIQUESET_KEY_SETKEY || c==UNIQUESET_KEY_ID || c==UNIQUESET_KEY_SET
+				|| c==UNIQUESET_KEY_IDREF || c==UNIQUESET_KEY_CHKID || c==UNIQUESET_ID || c==UNIQUESET_SET
+				|| c==UNIQUESET_IDREF || c==UNIQUESET_IDREFS || c==UNIQUESET_CHKID || c==UNIQUESET_CHKIDS)
+			&& xv[xi+2].getCode()==STOP_OP) {
+			if (c==UNIQUESET_IDREFS) {
+				return new XSParseIDREFS();
+			} else if (c==UNIQUESET_CHKIDS) {
+				return new XDParseCHKIDS();
+			}
+			y = xv[xi = xv[xi+1].intValue()];
+		}
+		for (;;) {
+			switch (y.getCode()) {
+				case JMP_OP: y = xv[xi = xv[xi].getParam()]; continue;
+				case LD_CODE: y = xv[y.getParam()]; continue;
+				case CALL_OP:
+					if (y.getParam()>=0 && xi+3 < xv.length && xv[xi+1].getCode()==NEW_PARSER
+						&& "eq".equals(xv[xi+1].stringValue()) && xv[xi+2].getCode()==PARSE_OP
+						&& xv[xi+3].getCode()==STOP_OP) {
+						return ((CodeParser) xv[xi+1]).getParser(); // fixed
+					} else {
+						y = xv[xi = y.getParam()];
+						if (xi+1<xv.length && y.getCode()==PARSEANDSTOP
+							&& xv[xi+1].getCode()==LD_CONST && xv[xi+1].getItemId()==XD_PARSER) {
+							return xv[xi+1];
+						}
+						if (xi+2<xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER
+							&& xv[xi+1].getCode()==PARSE_OP && xv[xi+2].getCode() == STOP_OP) {
+							return y;
+						}
+					}
+					return new XDParseCDATA(); // return XDParseCDATA parser
+				default:
+					if (xi+2< xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
+						if (xv[xi+1].getCode()==PARSE_OP) {
+							if (xv[xi+2].getCode()==STOP_OP) {
+								return y;
+							} else if (xi+4<xv.length && xv[xi+2].getCode()==STACK_DUP
+								&& xi+4<xv.length && xv[xi+3].getCode()==PARSERESULT_MATCH
+								&& xv[xi+4].getCode()==JMPF_OP && xv[xv[xi+4].getParam()].getCode()==STOP_OP){
+								return y; // parser with CHECK operand
+							}
+						}
+					}
+			}
+			return new XDParseCDATA(); // return XDParseCDATA parser
+		}
+	}
 }

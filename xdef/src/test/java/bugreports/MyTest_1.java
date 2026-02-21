@@ -14,21 +14,21 @@ import test.XDTester;
  */
 public class MyTest_1 extends XDTester {
 
-    public MyTest_1() {super();}
+	public MyTest_1() {super();}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Run test and print error information. */
-    @Override
-    public void test() {
-        System.out.println("X-definition version: " + XDFactory.getXDVersion());
-        String dataDir = getDataDir() + "test/";
-        if (dataDir == null) {
-            fail("Data directory is missing, test canceled");
-            return;
-        }
-        ArrayReporter reporter = new ArrayReporter();
-        for (String xml: new String[] {
+	/** Run test and print error information. */
+	@Override
+	public void test() {
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		String dataDir = getDataDir() + "test/";
+		if (dataDir == null) {
+			fail("Data directory is missing, test canceled");
+			return;
+		}
+		ArrayReporter reporter = new ArrayReporter();
+		for (String xml: new String[] {
 "<a>\n"+
 " <b a='b807728f081d7ca61a282d9377bd'/>\n"+
 " <b a='8bd9b807728f081d7ca61a282d9377bd'/>\n"+
@@ -146,31 +146,31 @@ public class MyTest_1 extends XDTester {
 //"   <y><fff attr=\"???\"/></y>\n"+
 //"   <log cttr=\"xxx\" />\n"+
 //"</Values>",
-        }) {
-            String xdef = null;
-            try {
-                Element el = GenXDefinition.genXdef(xml);
-                xdef = KXmlUtils.nodeToString(el, true);
+		}) {
+			String xdef = null;
+			try {
+				Element el = GenXDefinition.genXdef(xml);
+				xdef = KXmlUtils.nodeToString(el, true);
 System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml),true));
 System.out.println("xdef:\n"+ xdef);
 System.out.println("===========");
-                XDPool xp = compile(xdef);
-                assertEq(xml, parse(xp, "", xml, reporter));
-                assertNoErrorwarnings(reporter);
-            } catch (Exception ex) {
+				XDPool xp = compile(xdef);
+				assertEq(xml, parse(xp, "", xml, reporter));
+				assertNoErrorwarnings(reporter);
+			} catch (Exception ex) {
 System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml), true));
 System.out.println("xdef:\n" + xdef);
 System.out.println("===========");
-                fail(ex);
-            }
-        }
-    }
+				fail(ex);
+			}
+		}
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 }

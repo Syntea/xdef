@@ -10,510 +10,510 @@ import java.util.List;
  * @author Vaclav Trojan
  */
 public abstract class XAbstractReader extends Reader {
-    /** Gen detailed position flag. */
-    private boolean _genPositions = true;
-    XHandler _handler; // handler connected to reader
-    boolean _closed; // flag if reader is closed
-    private String _sysId; //  system ID name
-    private String _encoding; // encoding name
-    private String _xinclude;
+	/** Gen detailed position flag. */
+	private boolean _genPositions = true;
+	XHandler _handler; // handler connected to reader
+	boolean _closed; // flag if reader is closed
+	private String _sysId; //  system ID name
+	private String _encoding; // encoding name
+	private String _xinclude;
 
-    ////////////////////////////////////////////////////////////////////////////
-    // fields used in parser
-    ////////////////////////////////////////////////////////////////////////////
-    private final StringBuilder _bf = new StringBuilder(8192);
-    private int _len = 0;
-    private int _pos = 0;
-    private long _line = 1;
-    private long _filePos = 0;
-    private long _startLine = 0;
-    private boolean _prologParsed = false;
-    private boolean _wasEndTag = false;
-    private boolean _includedText = false;
-    private boolean _unresolved = false;
+	////////////////////////////////////////////////////////////////////////////
+	// fields used in parser
+	////////////////////////////////////////////////////////////////////////////
+	private final StringBuilder _bf = new StringBuilder(8192);
+	private int _len = 0;
+	private int _pos = 0;
+	private long _line = 1;
+	private long _filePos = 0;
+	private long _startLine = 0;
+	private boolean _prologParsed = false;
+	private boolean _wasEndTag = false;
+	private boolean _includedText = false;
+	private boolean _unresolved = false;
 
-    public final void setEncoding(final String x) {_encoding = x;}
+	public final void setEncoding(final String x) {_encoding = x;}
 
-    public final String getEncoding() {return _encoding;}
+	public final String getEncoding() {return _encoding;}
 
-    public final void setHandler(final XHandler x) {_handler = x;}
+	public final void setHandler(final XHandler x) {_handler = x;}
 
-    public final String getXInclude() {return _xinclude;}
+	public final String getXInclude() {return _xinclude;}
 
-    public final void setXInclude(final String x) {_xinclude = x;}
+	public final void setXInclude(final String x) {_xinclude = x;}
 
-    public final Object getHandler() {return _handler;}
+	public final Object getHandler() {return _handler;}
 
-    public final void setSysId(final String x) {_sysId = x;}
+	public final void setSysId(final String x) {_sysId = x;}
 
-    public final String getSysId() {return _sysId;}
+	public final String getSysId() {return _sysId;}
 
-    public final boolean isClosed() {return _closed;}
+	public final boolean isClosed() {return _closed;}
 
-    public final void stopGenPositions() {
-        if (_genPositions) {
-            _bf.setLength(0);
-            _filePos = 0;
-            _len = 0;
-            _pos = 0;
-            _genPositions = false;
-            stopScanning();
-        }
-    }
+	public final void stopGenPositions() {
+		if (_genPositions) {
+			_bf.setLength(0);
+			_filePos = 0;
+			_len = 0;
+			_pos = 0;
+			_genPositions = false;
+			stopScanning();
+		}
+	}
 
-    abstract public void stopScanning();
+	abstract public void stopScanning();
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Implementation of methods from Reader
-    ////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Implementation of methods from Reader
+	////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    abstract public int read() throws IOException;
+	@Override
+	abstract public int read() throws IOException;
 
-    @Override
-    abstract public int read(char[] cbuf) throws IOException;
+	@Override
+	abstract public int read(char[] cbuf) throws IOException;
 
-    @Override
-    abstract public int read(char[] cbuf, int off, int len) throws IOException;
+	@Override
+	abstract public int read(char[] cbuf, int off, int len) throws IOException;
 
-    @Override
-    abstract public void close() throws IOException;
+	@Override
+	abstract public void close() throws IOException;
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Methods used for parsing of character buffer
-    ////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Methods used for parsing of character buffer
+	////////////////////////////////////////////////////////////////////////////
 
-    public final int getPos() {return _pos;}
+	public final int getPos() {return _pos;}
 
-    public final String getBufPart(final int start, final int end) {return _bf.substring(start, end);}
+	public final String getBufPart(final int start, final int end) {return _bf.substring(start, end);}
 
-    public final boolean wasEndTag() {return _wasEndTag;}
+	public final boolean wasEndTag() {return _wasEndTag;}
 
-    public final void setWasEndTag(final boolean x) {_wasEndTag = x;}
+	public final void setWasEndTag(final boolean x) {_wasEndTag = x;}
 
-    public final boolean prologParsed() {return _prologParsed;}
+	public final boolean prologParsed() {return _prologParsed;}
 
-    public final boolean includedText() {return _includedText;}
+	public final boolean includedText() {return _includedText;}
 
-    public final void setIncludedText(final boolean x) {_includedText = x;}
+	public final void setIncludedText(final boolean x) {_includedText = x;}
 
-    public final boolean unresolved() {return _unresolved;}
+	public final boolean unresolved() {return _unresolved;}
 
-    public final void setUnresolved(final boolean x) {_unresolved = x;}
+	public final void setUnresolved(final boolean x) {_unresolved = x;}
 
-    public final String getProlog() {
-        int start = _pos;
-        scanXMLDecl();
-        scanMisc();
-        scanDoctype();
-        scanMisc();
-        return _pos > start ? _bf.substring(start, _pos) : "";
-    }
+	public final String getProlog() {
+		int start = _pos;
+		scanXMLDecl();
+		scanMisc();
+		scanDoctype();
+		scanMisc();
+		return _pos > start ? _bf.substring(start, _pos) : "";
+	}
 
-    final int scanMisc() {
-        int start = _pos;
-        scanSpaces();
-        while (scanComment() >= 0 || scanPI() >= 0) {
-            scanSpaces();
-        }
-        return start == _pos ? -1 : start;
-    }
+	final int scanMisc() {
+		int start = _pos;
+		scanSpaces();
+		while (scanComment() >= 0 || scanPI() >= 0) {
+			scanSpaces();
+		}
+		return start == _pos ? -1 : start;
+	}
 
-    final void addBuf(final char c) {
-        if (_genPositions) {
-            _bf.append(c);
-            _len++;
-        }
-    }
+	final void addBuf(final char c) {
+		if (_genPositions) {
+			_bf.append(c);
+			_len++;
+		}
+	}
 
-    final void addBuf(final char[] buf) {
-        if (_genPositions) {
-            _bf.append(buf);
-            _len += buf.length;
-        }
-    }
+	final void addBuf(final char[] buf) {
+		if (_genPositions) {
+			_bf.append(buf);
+			_len += buf.length;
+		}
+	}
 
-    final void addBuf(final char[] buf, final int off, final int len) {
-        if (_genPositions) {
-            _bf.append(buf, off, len);
-            _len += len;
-        }
-    }
+	final void addBuf(final char[] buf, final int off, final int len) {
+		if (_genPositions) {
+			_bf.append(buf, off, len);
+			_len += len;
+		}
+	}
 
-    public final void releaseScanned() {
-        if (_pos > 512) { // do it only if it makes sense
-            _bf.delete(0, _pos);
-            _filePos +=  _pos;
-            _len = _bf.length();
-            _pos = 0;
-        }
-    }
+	public final void releaseScanned() {
+		if (_pos > 512) { // do it only if it makes sense
+			_bf.delete(0, _pos);
+			_filePos +=  _pos;
+			_len = _bf.length();
+			_pos = 0;
+		}
+	}
 
-    public final char nextChar() {
-        if (_pos < _len) {
-            char ch = _bf.charAt(_pos++);
-            if (ch == '\r') {
-                if (_pos < _len && _bf.charAt(_pos) == '\n') {
-                    ch = '\n';
-                    _pos++;
-                }
-            }
-            if (ch == '\n') {
-                _line++;
-                _startLine = _filePos + _pos;
-            }
-            return ch;
-        }
-        return 0;
-    }
+	public final char nextChar() {
+		if (_pos < _len) {
+			char ch = _bf.charAt(_pos++);
+			if (ch == '\r') {
+				if (_pos < _len && _bf.charAt(_pos) == '\n') {
+					ch = '\n';
+					_pos++;
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
+			}
+			return ch;
+		}
+		return 0;
+	}
 
-    public final boolean isToken(final String s) {
-        int len = s.length();
-        if (_pos + len < _len + 1 && s.equals(_bf.substring(_pos, _pos+len))) {
-            _pos += len;
-            return true;
-        }
-        return false;
-    }
+	public final boolean isToken(final String s) {
+		int len = s.length();
+		if (_pos + len < _len + 1 && s.equals(_bf.substring(_pos, _pos+len))) {
+			_pos += len;
+			return true;
+		}
+		return false;
+	}
 
-    public final boolean isChar(final char c) {
-        if (_pos < _len && (c == _bf.charAt(_pos))) {
-            _pos++;
-            return true;
-        }
-        return false;
-    }
+	public final boolean isChar(final char c) {
+		if (_pos < _len && (c == _bf.charAt(_pos))) {
+			_pos++;
+			return true;
+		}
+		return false;
+	}
 
-    public final boolean chkChar(final char c) {
-        return _pos < _len && c == _bf.charAt(_pos);
-    }
+	public final boolean chkChar(final char c) {
+		return _pos < _len && c == _bf.charAt(_pos);
+	}
 
-    public final int scanSpaces() {
-        int start = _pos;
-        while (_pos < _len) {
-            switch (_bf.charAt(_pos)) {
-                case '\n':
-                    _line++;
-                    _startLine = ++_pos + _filePos;
-                    continue;
-                case '\t':
-                case ' ':
-                case '\f':
-                case '\r':
-                    break;
-                default:
-                    return start == _pos ? -1 : start;
-            }
-            _pos++;
-        }
-        return -1;
-    }
+	public final int scanSpaces() {
+		int start = _pos;
+		while (_pos < _len) {
+			switch (_bf.charAt(_pos)) {
+				case '\n':
+					_line++;
+					_startLine = ++_pos + _filePos;
+					continue;
+				case '\t':
+				case ' ':
+				case '\f':
+				case '\r':
+					break;
+				default:
+					return start == _pos ? -1 : start;
+			}
+			_pos++;
+		}
+		return -1;
+	}
 
-    public final int scanName() {
-        int start = _pos;
-        while (_pos < _len) {
-            char ch = _bf.charAt(_pos);
-            if (_pos == start && ((ch >= '0' && ch <= '9')
-                || ch == '-' || ch == '.')) {
-                return -1; // name can't start with digit, "-", "."
-            }
-            if (" \n\t\r\f~@#$%^&*()+=``{}[]=/\\;,\"'!?><|".indexOf(ch) >= 0) {
-                break; // not name character
-            }
-            _pos++;
-        }
-        return start == _pos ? -1 : start;
-    }
+	public final int scanName() {
+		int start = _pos;
+		while (_pos < _len) {
+			char ch = _bf.charAt(_pos);
+			if (_pos == start && ((ch >= '0' && ch <= '9')
+				|| ch == '-' || ch == '.')) {
+				return -1; // name can't start with digit, "-", "."
+			}
+			if (" \n\t\r\f~@#$%^&*()+=``{}[]=/\\;,\"'!?><|".indexOf(ch) >= 0) {
+				break; // not name character
+			}
+			_pos++;
+		}
+		return start == _pos ? -1 : start;
+	}
 
-    public final int scanStringToChar(final char x) {
-        int pos = _pos;
-        long line = _line;
-        long startLine = _startLine;
-        char ch;
-        while ((ch = nextChar()) != 0 && ch != x) {}
-        if (ch != 0) {
-            return pos;
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanStringToChar(final char x) {
+		int pos = _pos;
+		long line = _line;
+		long startLine = _startLine;
+		char ch;
+		while ((ch = nextChar()) != 0 && ch != x) {}
+		if (ch != 0) {
+			return pos;
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final int scanLiteral() {
-        int pos = _pos;
-        long line = _line;
-        long startLine = _startLine;
-        char quote;
-        if (_pos >= _len || ((quote=_bf.charAt(_pos)) != '\'' && quote != '"')){
-            return -1;
-        }
-        while (_pos + 1 < _len) {
-            char ch = _bf.charAt(++_pos);
-            if (ch == quote) {
-                _pos++;
-                return pos;
-            }
-            if (ch == '\r') {
-                if (_pos < _len && _bf.charAt(_pos) == '\n') {
-                    ch = '\n';
-                    _pos++;
-                }
-            }
-            if (ch == '\n') {
-                _line++;
-                _startLine = _filePos + _pos;
-            }
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanLiteral() {
+		int pos = _pos;
+		long line = _line;
+		long startLine = _startLine;
+		char quote;
+		if (_pos >= _len || ((quote=_bf.charAt(_pos)) != '\'' && quote != '"')){
+			return -1;
+		}
+		while (_pos + 1 < _len) {
+			char ch = _bf.charAt(++_pos);
+			if (ch == quote) {
+				_pos++;
+				return pos;
+			}
+			if (ch == '\r') {
+				if (_pos < _len && _bf.charAt(_pos) == '\n') {
+					ch = '\n';
+					_pos++;
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
+			}
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    private long skipTo(final char x) {
-        int pos = _pos;
-        long line = _line;
-        long startLine = _startLine;
-        while (_pos < _len) {
-            char ch = _bf.charAt(_pos++);
-            if (ch == x) {
-                return pos;
-            }
-            if (ch == '\r') {
-                if (_pos < _len && _bf.charAt(_pos) == '\n') {
-                    ch = '\n';
-                    _pos++;
-                }
-            }
-            if (ch == '\n') {
-                _line++;
-                _startLine = _filePos + _pos;
-            }
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	private long skipTo(final char x) {
+		int pos = _pos;
+		long line = _line;
+		long startLine = _startLine;
+		while (_pos < _len) {
+			char ch = _bf.charAt(_pos++);
+			if (ch == x) {
+				return pos;
+			}
+			if (ch == '\r') {
+				if (_pos < _len && _bf.charAt(_pos) == '\n') {
+					ch = '\n';
+					_pos++;
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
+			}
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    private int skipTo(final String s) {
-        int pos = _pos;
-        long line = _line;
-        long startLine = _startLine;
-        int len = s.length();
-        char c = s.charAt(0);
-        while (_pos + len < _len) {
-            if (_bf.charAt(_pos) == c
-                && s.equals(_bf.substring(_pos, _pos+len))) {
-                _pos += len;
-                return pos;
-            }
-            char ch = _bf.charAt(++_pos);
-            if (ch == '\r') {
-                if (_pos + 1 < _len && _bf.charAt(++_pos) == '\n') {
-                    ch = '\n';
-                }
-            }
-            if (ch == '\n') {
-                _line++;
-                _startLine = _filePos + _pos;
-            }
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	private int skipTo(final String s) {
+		int pos = _pos;
+		long line = _line;
+		long startLine = _startLine;
+		int len = s.length();
+		char c = s.charAt(0);
+		while (_pos + len < _len) {
+			if (_bf.charAt(_pos) == c
+				&& s.equals(_bf.substring(_pos, _pos+len))) {
+				_pos += len;
+				return pos;
+			}
+			char ch = _bf.charAt(++_pos);
+			if (ch == '\r') {
+				if (_pos + 1 < _len && _bf.charAt(++_pos) == '\n') {
+					ch = '\n';
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
+			}
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final int scanPI() {
-        if (!isToken("<?")) {
-            return -1;
-        }
-        int pos = _pos - 2;
-        long line = _line;
-        long startLine = _startLine;
-        if (skipTo("?>") >= 0) {
-            return pos;
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanPI() {
+		if (!isToken("<?")) {
+			return -1;
+		}
+		int pos = _pos - 2;
+		long line = _line;
+		long startLine = _startLine;
+		if (skipTo("?>") >= 0) {
+			return pos;
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    private int scanPEReference() {
-        if (!isChar('%')) {
-            return -1;
-        }
-        int pos = _pos - 1;
-        long line = _line;
-        if (scanName() > 0 && isChar(';')) {
-            return pos;
-        }
-        _pos = pos;
-        _line = line;
-        return -1;
-    }
+	private int scanPEReference() {
+		if (!isChar('%')) {
+			return -1;
+		}
+		int pos = _pos - 1;
+		long line = _line;
+		if (scanName() > 0 && isChar(';')) {
+			return pos;
+		}
+		_pos = pos;
+		_line = line;
+		return -1;
+	}
 
-    private int scanElementdecl() {
-        if (!isToken("<!ELEMENT")) {
-            return -1;
-        }
-        int pos = _pos - 9;
-        long line = _line;
-        if (skipTo('>') >= 0) {
-            return pos;
-        }
-        _pos = pos;
-        _line = line;
-        return -1;
-    }
+	private int scanElementdecl() {
+		if (!isToken("<!ELEMENT")) {
+			return -1;
+		}
+		int pos = _pos - 9;
+		long line = _line;
+		if (skipTo('>') >= 0) {
+			return pos;
+		}
+		_pos = pos;
+		_line = line;
+		return -1;
+	}
 
-    private int scanAttlistDecl() {
-        if (!isToken("<!ATTLIST")) {
-            return -1;
-        }
-        int pos = _pos - 9;
-        long line = _line;
-        long startLine = _startLine;
-        for (;;) {
-            scanSpaces();
-            if (scanName() >= 0) {
-                continue;
-            }
-            if (scanLiteral() >= 0) {
-                continue;
-            }
-            break;
-        }
-        if (skipTo('>') >= 0) {
-            return _pos;
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	private int scanAttlistDecl() {
+		if (!isToken("<!ATTLIST")) {
+			return -1;
+		}
+		int pos = _pos - 9;
+		long line = _line;
+		long startLine = _startLine;
+		for (;;) {
+			scanSpaces();
+			if (scanName() >= 0) {
+				continue;
+			}
+			if (scanLiteral() >= 0) {
+				continue;
+			}
+			break;
+		}
+		if (skipTo('>') >= 0) {
+			return _pos;
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
 /*
  GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
  PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
  PEDef ::= EntityValue | ExternalID
  EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-             |  "'" ([^%&'] | PEReference | Reference)* "'"
+			 |  "'" ([^%&'] | PEReference | Reference)* "'"
  PEReference ::= '%' Name ';'
  ExternalID ::= 'SYSTEM' S SystemLiteral
-            | 'PUBLIC' S PubidLiteral S SystemLiteral
+			| 'PUBLIC' S PubidLiteral S SystemLiteral
  SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
  PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
  PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
  EntityDef ::= EntityValue | (ExternalID NDataDecl?)
  NDataDecl ::= S 'NDATA' S Name
 */
-    private int scanEntityDecl() {
-        if (!isToken("<!ENTITY")) {
-            return -1;
-        }
-        int pos = _pos - 8;
-        long line = _line;
-        long startLine = _startLine;
-        scanSpaces();
-        boolean isPEDecl = isChar('%');
-        if (isPEDecl) {
-            scanSpaces();
-        }
-        scanName();
-        for (;;) {
-            scanSpaces();
-            if (scanName() >= 0) {
-                continue;
-            }
-            if (scanPEReference() >= 0) {
-                continue;
-            }
-            if (scanLiteral() >= 0) {
-                continue;
-            }
-            if (isChar('>')) {
-                return pos;
-            }
-            if (nextChar() == 0) {
-                break;
-            }
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	private int scanEntityDecl() {
+		if (!isToken("<!ENTITY")) {
+			return -1;
+		}
+		int pos = _pos - 8;
+		long line = _line;
+		long startLine = _startLine;
+		scanSpaces();
+		boolean isPEDecl = isChar('%');
+		if (isPEDecl) {
+			scanSpaces();
+		}
+		scanName();
+		for (;;) {
+			scanSpaces();
+			if (scanName() >= 0) {
+				continue;
+			}
+			if (scanPEReference() >= 0) {
+				continue;
+			}
+			if (scanLiteral() >= 0) {
+				continue;
+			}
+			if (isChar('>')) {
+				return pos;
+			}
+			if (nextChar() == 0) {
+				break;
+			}
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
 /* NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'.*/
-    private int scanNotationDecl() {
-        if (!isToken("<!NOTATION")) {
-            return -1;
-        }
-        int pos = _pos - 10;
-        long line = _line;
-        long startLine = _startLine;
-        for (;;) {
-            if (isChar('>')) {
-                return pos;
-            }
-            if (nextChar() == 0) {
-                break;
-            }
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	private int scanNotationDecl() {
+		if (!isToken("<!NOTATION")) {
+			return -1;
+		}
+		int pos = _pos - 10;
+		long line = _line;
+		long startLine = _startLine;
+		for (;;) {
+			if (isChar('>')) {
+				return pos;
+			}
+			if (nextChar() == 0) {
+				break;
+			}
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final SPosition getSPosition() {return new SPosition(0, _line, _startLine, _filePos+_pos, _sysId);}
+	public final SPosition getSPosition() {return new SPosition(0, _line, _startLine, _filePos+_pos, _sysId);}
 
-    public final void setSPosition(SPosition p) {
-        _pos = p.getIndex();
-        _line = p.getLineNumber();
-        _startLine = p.getStartLine();
-        _filePos = p.getFilePos();
-        _sysId = p.getSysId();
-    }
+	public final void setSPosition(SPosition p) {
+		_pos = p.getIndex();
+		_line = p.getLineNumber();
+		_startLine = p.getStartLine();
+		_filePos = p.getFilePos();
+		_sysId = p.getSysId();
+	}
 
 /* markupdecl ::= elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment */
-    private int scanMarkupDecl() {
-        int result;
-        if ((result = scanPEReference()) >= 0 || (result = scanElementdecl()) >= 0
-            || (result = scanAttlistDecl()) >= 0 || (result = scanEntityDecl()) >= 0
-            || (result = scanNotationDecl()) >= 0
-            || (result = scanPI()) >= 0 || (result = scanComment()) >= 0) {
-            return result;
-        }
-        return -1;
-    }
+	private int scanMarkupDecl() {
+		int result;
+		if ((result = scanPEReference()) >= 0 || (result = scanElementdecl()) >= 0
+			|| (result = scanAttlistDecl()) >= 0 || (result = scanEntityDecl()) >= 0
+			|| (result = scanNotationDecl()) >= 0
+			|| (result = scanPI()) >= 0 || (result = scanComment()) >= 0) {
+			return result;
+		}
+		return -1;
+	}
 
-    public final int scanXMLDecl() {
-        if (!isToken("<?xml")) {
-            return -1;
-        }
-        int pos = _pos - 5;
-        long line = _line;
-        long startLine = _startLine;
-        if (skipTo("?>") >= 0) {
-            return pos;
-        }
-        _pos = pos;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanXMLDecl() {
+		if (!isToken("<?xml")) {
+			return -1;
+		}
+		int pos = _pos - 5;
+		long line = _line;
+		long startLine = _startLine;
+		if (skipTo("?>") >= 0) {
+			return pos;
+		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
 /*
    document ::= prolog element Misc*
    EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-               |  "'" ([^%&'] | PEReference | Reference)* "'"
+			   |  "'" ([^%&'] | PEReference | Reference)* "'"
    AttValue ::= '"' ([^<&"] | Reference)* '"'
-            |  "'" ([^<&'] | Reference)* "'"
+			|  "'" ([^<&'] | Reference)* "'"
    SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
    PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
    PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
@@ -529,21 +529,21 @@ public abstract class XAbstractReader extends Reader {
    EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
    Misc ::= Comment | PI | S
    doctypedecl ::= '<!DOCTYPE' S Name
-               (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
+			   (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
    DeclSep ::= PEReference | S
    PEReference ::= '%' Name ';'
    intSubset ::= (markupdecl | DeclSep)*
    markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-              | NotationDecl | PI | Comment
+			  | NotationDecl | PI | Comment
    extSubset ::= TextDecl? extSubsetDecl
    extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
    SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
-          | ('"' ('yes' | 'no') '"'))
+		  | ('"' ('yes' | 'no') '"'))
    STag ::= '<' Name (S Attribute)* S? '>'
    Attribute ::= Name Eq AttValue
    ETag ::= '</' Name S? '>'
    content ::= CharData? ((element | Reference | CDSect
-           | PI | Comment) CharData?)*
+		   | PI | Comment) CharData?)*
    EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
    elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
    contentspec ::= 'EMPTY' | 'ANY' | Mixed | children
@@ -552,13 +552,13 @@ public abstract class XAbstractReader extends Reader {
    choice ::= '(' S? cp ( S? '|' S? cp )+ S? ')'
    seq ::= '(' S? cp ( S? ',' S? cp )* S? ')'
    Mixed ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
-         | | '(' S? '#PCDATA' S? ')'
+		 | | '(' S? '#PCDATA' S? ')'
    AttlistDecl ::= '<!ATTLIST' S Name AttDef* S? '>'
    AttDef ::= S Name S AttType S DefaultDecl
    AttType ::= StringType | TokenizedType | EnumeratedType
    StringType ::= 'CDATA'
    TokenizedType ::= 'ID' | 'IDREF' | 'IDREFS' | 'ENTITY' | 'ENTITIES'
-                 | 'NMTOKEN' | 'NMTOKENS'
+				 | 'NMTOKEN' | 'NMTOKENS'
    EnumeratedType ::= NotationType | Enumeration
    NotationType ::= 'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
    Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
@@ -578,7 +578,7 @@ public abstract class XAbstractReader extends Reader {
    EntityDef ::= EntityValue | (ExternalID NDataDecl?)
    PEDef ::= EntityValue | ExternalID
    ExternalID ::= 'SYSTEM' S SystemLiteral
-              | 'PUBLIC' S PubidLiteral S SystemLiteral
+			  | 'PUBLIC' S PubidLiteral S SystemLiteral
    NDataDecl ::= S 'NDATA' S Name
    TextDecl ::= '<?xml' VersionInfo? EncodingDecl S? '?>'
    extParsedEnt ::= TextDecl? content
@@ -587,200 +587,200 @@ public abstract class XAbstractReader extends Reader {
    NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
    PublicID ::= 'PUBLIC' S PubidLiteral
  */
-    public final int scanDoctype() {
-        scanSpaces();
-        if (!isToken("<!DOCTYPE")) {
-            return -1;
-        }
-        int start = _pos - 9;
-        long startLine = _startLine;
-        scanSpaces();
-        scanName();
-        scanSpaces();
-        if (isToken("SYSTEM")) {
-            scanSpaces();
-            scanLiteral();
-        } else if (isToken("PUBLIC")) {
-            scanSpaces();
-            if (scanLiteral() >= 0) {
-                scanSpaces();
-            }
-            scanLiteral();
-        }
-        scanSpaces();
-        if (isChar('[')) {
-            scanSpaces();
-            // intSubset ::= (markupdecl | DeclSep)*
-            // DeclSep ::= PEReference | S
-            while(scanMarkupDecl() >= 0 || scanPEReference() >= 0) {
-                scanSpaces();
-            }
-            scanStringToChar(']');
-            scanSpaces();
-        }
-        if (isChar('>')) {
-            scanSpaces();
-            return start;
-        }
-        scanMisc();
-        _pos = start;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanDoctype() {
+		scanSpaces();
+		if (!isToken("<!DOCTYPE")) {
+			return -1;
+		}
+		int start = _pos - 9;
+		long startLine = _startLine;
+		scanSpaces();
+		scanName();
+		scanSpaces();
+		if (isToken("SYSTEM")) {
+			scanSpaces();
+			scanLiteral();
+		} else if (isToken("PUBLIC")) {
+			scanSpaces();
+			if (scanLiteral() >= 0) {
+				scanSpaces();
+			}
+			scanLiteral();
+		}
+		scanSpaces();
+		if (isChar('[')) {
+			scanSpaces();
+			// intSubset ::= (markupdecl | DeclSep)*
+			// DeclSep ::= PEReference | S
+			while(scanMarkupDecl() >= 0 || scanPEReference() >= 0) {
+				scanSpaces();
+			}
+			scanStringToChar(']');
+			scanSpaces();
+		}
+		if (isChar('>')) {
+			scanSpaces();
+			return start;
+		}
+		scanMisc();
+		_pos = start;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final int scanComment() {
-        if (!isToken("<!--")) {
-            return -1;
-        }
-        int start = _pos - 4;
-        long startLine = _startLine;
-        do {
-            if (isToken("-->")) {
-                return start;
-            }
-        } while (nextChar() != 0);
-        _pos = start;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanComment() {
+		if (!isToken("<!--")) {
+			return -1;
+		}
+		int start = _pos - 4;
+		long startLine = _startLine;
+		do {
+			if (isToken("-->")) {
+				return start;
+			}
+		} while (nextChar() != 0);
+		_pos = start;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final int scanCDATA() {
-        if (!isToken("<![CDATA[")) {
-            return -1;
-        }
-        int start = _pos - 9;
-        long startLine = _startLine;
-        do {
-            if (isToken("]]>")) {
-                return start;
-            }
-        } while (nextChar() != 0);
-        _pos = start;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanCDATA() {
+		if (!isToken("<![CDATA[")) {
+			return -1;
+		}
+		int start = _pos - 9;
+		long startLine = _startLine;
+		do {
+			if (isToken("]]>")) {
+				return start;
+			}
+		} while (nextChar() != 0);
+		_pos = start;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final int scanText() {
-        int start = _pos;
-        while(!chkChar('<') && _pos < _len) {
-            if (chkChar('&')) {
-                if (!isToken("&#")) {
-                    break;
-                }
-                continue;
-            }
-            nextChar();
-        }
-        return _pos > start ? start : -1;
-    }
+	public final int scanText() {
+		int start = _pos;
+		while(!chkChar('<') && _pos < _len) {
+			if (chkChar('&')) {
+				if (!isToken("&#")) {
+					break;
+				}
+				continue;
+			}
+			nextChar();
+		}
+		return _pos > start ? start : -1;
+	}
 
-    public final int scanEntity() {
-        if (!isChar('&')) {
-            return -1;
-        }
-        int start = _pos - 1;
-        if (scanName() > 0 && isChar(';')) {
-            return start;
-        }
-        _pos = start;
-        return -1;
-    }
+	public final int scanEntity() {
+		if (!isChar('&')) {
+			return -1;
+		}
+		int start = _pos - 1;
+		if (scanName() > 0 && isChar(';')) {
+			return start;
+		}
+		_pos = start;
+		return -1;
+	}
 
-    public final int scanEndElement() {
-        if (!isToken("</")) {
-            return -1;
-        }
-        int start = _pos - 2;
-        if (scanName() < 0) {
-            _pos = start;
-            return -1;
-        }
-        long line = _line;
-        long startLine = _startLine;
-        scanSpaces();
-        if (isChar('>')) {
-            return start;
-        }
-        _pos = start;
-        _line = line;
-        _startLine = startLine;
-        return -1;
-    }
+	public final int scanEndElement() {
+		if (!isToken("</")) {
+			return -1;
+		}
+		int start = _pos - 2;
+		if (scanName() < 0) {
+			_pos = start;
+			return -1;
+		}
+		long line = _line;
+		long startLine = _startLine;
+		scanSpaces();
+		if (isChar('>')) {
+			return start;
+		}
+		_pos = start;
+		_line = line;
+		_startLine = startLine;
+		return -1;
+	}
 
-    public final void scanProlog() {
-        if (scanPI() >= 0) { // <?xml ... ?>
-            scanSpaces();
-        }
-        scanMisc();
-        scanDoctype();
-        _prologParsed = true;
-    }
+	public final void scanProlog() {
+		if (scanPI() >= 0) { // <?xml ... ?>
+			scanSpaces();
+		}
+		scanMisc();
+		scanDoctype();
+		_prologParsed = true;
+	}
 
-    private SPosition getBufferPosition1() {
-        return new SPosition(0, _line, _startLine, _filePos + _pos + 1, _sysId);
-    }
+	private SPosition getBufferPosition1() {
+		return new SPosition(0, _line, _startLine, _filePos + _pos + 1, _sysId);
+	}
 
-    public final List<Object[]> getElementPositions(final String qName) {
-        if (!_prologParsed) {
-            scanProlog();
-            releaseScanned();
-        }
-        // skip to the start of element
-        while (scanComment() > 0 || scanPI() > 0 || scanCDATA() >= 0
-            || scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {
-        }
-        List<Object[]> result = new ArrayList<>();
-        String name;
-        SPosition spos = getBufferPosition1();
-        if ("*".equals(qName)) {
-            int i = -1;
-            if (!isChar('<') || (i = scanName()) < 0) {
-                return result;
-            }
-            name = _bf.substring(i, _pos);
-        } else if (!isToken("<" + qName)) {
-            return result;
-        } else {
-            name = qName;
-        }
-        releaseScanned();
-        result.add(new Object[]{name, spos});
-        while(_pos < _len) {
-            int scanned = scanSpaces();
-            boolean wasEndTag = false;
-            if (isChar('>') || (wasEndTag = isToken("/>"))) { // attrs end
-                _wasEndTag = wasEndTag;
-                if (!"*".equals(qName)) {
-                    releaseScanned();
-                }
-                return result;
-            }
-            if (scanned < 0 || (scanned = scanName()) < 0) {
-                break;  //error - no attr name
-            }
-            Object[] item = new Object[3];
-            item[0] = _bf.substring(scanned, _pos); //name
-            // is EQ
-            scanSpaces();
-            if (!isChar('=')) {
-                break; //error - no eq
-            }
-            scanSpaces();
-            item[1] = getBufferPosition1();
-            if ((scanned = scanLiteral()) < 0) {
-                break; // error no quoted literal
-            }
-            item[2] = _pos-1 > scanned +1
-                ? _bf.substring(scanned +1, _pos-1) : "";
-            result.add(item);
-            if (!"*".equals(qName)) {
-                releaseScanned();
-            }
-        }
-        // never should happen!
-        if (!"*".equals(qName)) {
-            releaseScanned();
-        }
-        return result;
-    }
+	public final List<Object[]> getElementPositions(final String qName) {
+		if (!_prologParsed) {
+			scanProlog();
+			releaseScanned();
+		}
+		// skip to the start of element
+		while (scanComment() > 0 || scanPI() > 0 || scanCDATA() >= 0
+			|| scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {
+		}
+		List<Object[]> result = new ArrayList<>();
+		String name;
+		SPosition spos = getBufferPosition1();
+		if ("*".equals(qName)) {
+			int i = -1;
+			if (!isChar('<') || (i = scanName()) < 0) {
+				return result;
+			}
+			name = _bf.substring(i, _pos);
+		} else if (!isToken("<" + qName)) {
+			return result;
+		} else {
+			name = qName;
+		}
+		releaseScanned();
+		result.add(new Object[]{name, spos});
+		while(_pos < _len) {
+			int scanned = scanSpaces();
+			boolean wasEndTag = false;
+			if (isChar('>') || (wasEndTag = isToken("/>"))) { // attrs end
+				_wasEndTag = wasEndTag;
+				if (!"*".equals(qName)) {
+					releaseScanned();
+				}
+				return result;
+			}
+			if (scanned < 0 || (scanned = scanName()) < 0) {
+				break;  //error - no attr name
+			}
+			Object[] item = new Object[3];
+			item[0] = _bf.substring(scanned, _pos); //name
+			// is EQ
+			scanSpaces();
+			if (!isChar('=')) {
+				break; //error - no eq
+			}
+			scanSpaces();
+			item[1] = getBufferPosition1();
+			if ((scanned = scanLiteral()) < 0) {
+				break; // error no quoted literal
+			}
+			item[2] = _pos-1 > scanned +1
+				? _bf.substring(scanned +1, _pos-1) : "";
+			result.add(item);
+			if (!"*".equals(qName)) {
+				releaseScanned();
+			}
+		}
+		// never should happen!
+		if (!"*".equals(qName)) {
+			releaseScanned();
+		}
+		return result;
+	}
 }

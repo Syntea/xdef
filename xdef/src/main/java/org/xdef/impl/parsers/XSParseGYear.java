@@ -6,13 +6,13 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XSParseGYear extends XSParseDate {
-    private static final String ROOTBASENAME = "gYear";
+	private static final String ROOTBASENAME = "gYear";
 
-    public XSParseGYear() {super();}
+	public XSParseGYear() {super();}
 
-    @Override
-    boolean parse(final StringParser parser) {return parser.isXMLYear();}
+	@Override
+	boolean parse(final StringParser parser) {return parser.isXMLYear();}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

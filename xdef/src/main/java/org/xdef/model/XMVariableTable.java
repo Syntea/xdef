@@ -5,24 +5,24 @@ package org.xdef.model;
  */
 public interface XMVariableTable {
 
-    /** Get names of variables.
-     * @return array of names of variables.
-     */
-    public String[] getVariableNames();
+	/** Get names of variables.
+	 * @return array of names of variables.
+	 */
+	public String[] getVariableNames();
 
-    /** Get variable.
-     * @param name the name of variable.
-     * @return XMvariable or null.
-     */
-    public XMVariable getVariable(final String name);
+	/** Get variable.
+	 * @param name the name of variable.
+	 * @return XMvariable or null.
+	 */
+	public XMVariable getVariable(final String name);
 
-    /** Get array with variables.
-     * @return array with variables.
-     */
-    public XMVariable[] toArray();
+	/** Get array with variables.
+	 * @return array with variables.
+	 */
+	public XMVariable[] toArray();
 
-    /** Get number of items.
-     * @return number of items.
-     */
-    public int size();
+	/** Get number of items.
+	 * @return number of items.
+	 */
+	public int size();
 }

@@ -9,41 +9,41 @@ import test.XDTester;
 import static test.XDTester._xdNS;
 
 public class X extends XDTester {
-    public X() {}
+	public X() {}
 
-    /** Run test and display error info. */
-    @Override
-    public void test() {
-        System.out.println("X-definition version: " + XDFactory.getXDVersion());
-        System.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-        XDDocument xd;
-        StringWriter swr;
-        try {
-            Properties props = new Properties();
-            props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
-            ArrayReporter reporter = new ArrayReporter();
-            xd = XDFactory.compileXD(props, //moreAttributes
+	/** Run test and display error info. */
+	@Override
+	public void test() {
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
+		System.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+		XDDocument xd;
+		StringWriter swr;
+		try {
+			Properties props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
+			ArrayReporter reporter = new ArrayReporter();
+			xd = XDFactory.compileXD(props, //moreAttributes
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A xd:script='option moreAttributes'/>\n" +
 "</xd:def>").createXDDocument();
-            parse(xd, "<A a='Таблица' />", reporter);
-            assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
-            xd = XDFactory.compileXD(props, //moreAttributes
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
+			xd = XDFactory.compileXD(props, //moreAttributes
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a=';'/>\n" +
 "</xd:def>").createXDDocument();
-            parse(xd, "<A a='Таблица' />", reporter);
-            assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
-            xd = XDFactory.compileXD(props, //moreAttributes
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
+			xd = XDFactory.compileXD(props, //moreAttributes
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A a='string();'/>\n" +
 "</xd:def>").createXDDocument();
-            parse(xd, "<A a='Таблица' />", reporter);
-            assertTrue(reporter.toString().contains("XDEF823")); // chaset is checked
-        } catch (RuntimeException ex) {fail(ex);}
+			parse(xd, "<A a='Таблица' />", reporter);
+			assertTrue(reporter.toString().contains("XDEF823")); // chaset is checked
+		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
-        try {
-            xd = compile(
+		try {
+			xd = compile(
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +
 "	/* BNF grammar rules of email address according to RFC 5321. */\n"+
 "  <xd:BNFGrammar name='EMAILADDR'>\n" +
@@ -129,46 +129,46 @@ public class X extends XDTester {
 "  <Z> required; string(1); onFalse out('error: ' + getText()); </Z>\n" +
 "</xd:def>").createXDDocument();
 
-            xd.setStdOut(swr = new StringWriter());
-            xd.xparse("<A><B a='a--b@b--c'/><B a='&lt;a@b>'/><B a='\"a b\"&lt;a@b>'/><B a='JS--N@S.CZ'/></A>",
-                null);
-            try {
-                xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
-                assertTrue("0.5;USD\n1.2;CZK\n".equals(swr.toString()), swr.toString());
-            } catch (RuntimeException ex) {
-                if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
-                    fail(ex);
-                }
-            }
-            try {
-                xd.setStdOut(swr = new StringWriter());
-                xd.xparse("<Y> <Z a='--'/> </Y>", null);
-                assertTrue(xd.getVariable("date").isNull());
-                assertTrue("x, y, false, 2025-04-21\n".equals(swr.toString()), swr.toString());
-            } catch (RuntimeException ex) {
-                if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
-                    fail(ex);
-                }
-            }
-            try {
-                xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
-                assertEq("2025-04-03", xd.getVariable("date").toString());
-            } catch (RuntimeException ex) {
-                if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
-                    fail(ex);
-                }
-            }
-            xd.setStdOut(swr = new StringWriter());
-            xd.xparse("<Z>xx</Z>", null);
-            assertEq("error: xx", swr.toString());
-        } catch (RuntimeException ex) {fail(ex);}
-    }
+			xd.setStdOut(swr = new StringWriter());
+			xd.xparse("<A><B a='a--b@b--c'/><B a='&lt;a@b>'/><B a='\"a b\"&lt;a@b>'/><B a='JS--N@S.CZ'/></A>",
+				null);
+			try {
+				xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
+				assertTrue("0.5;USD\n1.2;CZK\n".equals(swr.toString()), swr.toString());
+			} catch (RuntimeException ex) {
+				if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
+					fail(ex);
+				}
+			}
+			try {
+				xd.setStdOut(swr = new StringWriter());
+				xd.xparse("<Y> <Z a='--'/> </Y>", null);
+				assertTrue(xd.getVariable("date").isNull());
+				assertTrue("x, y, false, 2025-04-21\n".equals(swr.toString()), swr.toString());
+			} catch (RuntimeException ex) {
+				if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
+					fail(ex);
+				}
+			}
+			try {
+				xd.xparse("<Y> <Z a='2025-04-03'/> </Y>", null);
+				assertEq("2025-04-03", xd.getVariable("date").toString());
+			} catch (RuntimeException ex) {
+				if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
+					fail(ex);
+				}
+			}
+			xd.setStdOut(swr = new StringWriter());
+			xd.xparse("<Z>xx</Z>", null);
+			assertEq("error: xx", swr.toString());
+		} catch (RuntimeException ex) {fail(ex);}
+	}
 
-    /** Run test.
-     * @param args the command line arguments.
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test.
+	 * @param args the command line arguments.
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 }

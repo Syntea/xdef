@@ -6,13 +6,13 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XSParseTime extends XSParseDate {
-    private static final String ROOTBASENAME = "time";
+	private static final String ROOTBASENAME = "time";
 
-    public XSParseTime() {super();}
+	public XSParseTime() {super();}
 
-    @Override
-    boolean parse(final StringParser parser) {return parser.isXMLTime();}
+	@Override
+	boolean parse(final StringParser parser) {return parser.isXMLTime();}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

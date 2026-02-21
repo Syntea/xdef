@@ -5,7 +5,7 @@ package org.xdef.impl;
  */
 public final class XMixed extends XSelector {
 
-    /** Creates a new instance of XMixed as the item of XElement body. */
-    public XMixed() {super(XMMIXED);}
+	/** Creates a new instance of XMixed as the item of XElement body. */
+	public XMixed() {super(XMMIXED);}
 
 }

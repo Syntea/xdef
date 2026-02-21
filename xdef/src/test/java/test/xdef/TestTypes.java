@@ -42,20 +42,20 @@ import static test.XDTester._xdNS;
  */
 public final class TestTypes extends XDTester {
 
-    public TestTypes() {super();}
+	public TestTypes() {super();}
 
-    /** Run test and print error information. */
-    @Override
-    public void test() {
-        XDPool xp;
-        XDDocument xd;
-        Element el;
-        String xdef, xml, s;
-        ArrayReporter reporter = new ArrayReporter();
-        StringWriter swr;
-        String oldProp = getProperty(XDConstants.XDPROPERTY_WARNINGS);
-        try {
-            xd = compile(
+	/** Run test and print error information. */
+	@Override
+	public void test() {
+		XDPool xp;
+		XDDocument xd;
+		Element el;
+		String xdef, xml, s;
+		ArrayReporter reporter = new ArrayReporter();
+		StringWriter swr;
+		String oldProp = getProperty(XDConstants.XDPROPERTY_WARNINGS);
+		try {
+			xd = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'a'>\n"+
 "  <xd:declaration>\n"+
 "    String s = null;\n"+
@@ -89,12 +89,12 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a xd:script='finally {x(%a=11); y([\"A\"])}'/>"+
 "</xd:def>").createXDDocument();
-            xd.xparse("<a/>", reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq("tuID1111OK1OK2OK3OK4!===truetrueA", xd.getVariable("t").toString());
-            assertTrue(xd.getVariable("u").isNull());
-            assertTrue(xd.getVariable("u").stringValue() == null);
-            xd = compile(
+			xd.xparse("<a/>", reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq("tuID1111OK1OK2OK3OK4!===truetrueA", xd.getVariable("t").toString());
+			assertTrue(xd.getVariable("u").isNull());
+			assertTrue(xd.getVariable("u").stringValue() == null);
+			xd = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'a'>\n"+
 "  <xd:declaration>\n"+
 "    Decimal dc = null;\n"+
@@ -118,10 +118,10 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a xd:script='finally x();'/>"+
 "</xd:def>").createXDDocument();
-            xd.xparse("<a/>", reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq("truetruetruetrueElementintfloat", xd.getVariable("t").toString());
-            xd = compile(
+			xd.xparse("<a/>", reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq("truetruetruetrueElementintfloat", xd.getVariable("t").toString());
+			xd = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'a'>\n"+
 "  <xd:declaration>\n"+
 "    AnyValue a = null;\n"+
@@ -140,15 +140,15 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a xd:script='finally x();'/>"+
 "</xd:def>\n").createXDDocument();
-            xd.xparse("<a/>", reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq("", xd.getVariable("t").toString());
+			xd.xparse("<a/>", reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq("", xd.getVariable("t").toString());
 ///////////// Check date limits ////////////////////////////////////////////////
-            setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
-            setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
-            setProperty(XDConstants.XDPROPERTY_SPECDATES,
-                "3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-            xp = compile( //test limits in datetime
+			setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
+			setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
+			setProperty(XDConstants.XDPROPERTY_SPECDATES,
+				"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+			xp = compile( //test limits in datetime
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a>\n"+
 "   <b xd:script='+'\n"+
@@ -156,65 +156,65 @@ public final class TestTypes extends XDTester {
 "     b=\"xdatetime('yyyyMMddHHmmss')\" />\n"+
 "  </a>\n"+
 "</xd:def>");
-            assertEq("<a><b a=\"1.12.2215\" b=\"22151201235959\"/></a>",
-                parse(xp, null, "<a><b a='22151201' b='22151201235959'/></a>", reporter));
-            assertNoErrorwarnings(reporter);
-            parse(xp, null, "<a><b a='25001231' b='25001231235959'/></a>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            el = parse(xp, null, "<a><b a='30001231' b='30001231235959'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(el, "<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>");
-            assertEq("<a><b a=\"31.12.3000\" b=\"30001231000000\"/></a>",
-                parse(xp, null, "<a><b a='30001231' b='30001231000000'/></a>", reporter));
-            assertNoErrorwarnings(reporter);
-            assertEq("<a><b a=\"31.12.3000\" b=\"30001231100000\"/></a>",
-                parse(xp, null, "<a><b a='30001231' b='30001231100000'/></a>", reporter));
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            resetProperties();
+			assertEq("<a><b a=\"1.12.2215\" b=\"22151201235959\"/></a>",
+				parse(xp, null, "<a><b a='22151201' b='22151201235959'/></a>", reporter));
+			assertNoErrorwarnings(reporter);
+			parse(xp, null, "<a><b a='25001231' b='25001231235959'/></a>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			el = parse(xp, null, "<a><b a='30001231' b='30001231235959'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(el, "<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>");
+			assertEq("<a><b a=\"31.12.3000\" b=\"30001231000000\"/></a>",
+				parse(xp, null, "<a><b a='30001231' b='30001231000000'/></a>", reporter));
+			assertNoErrorwarnings(reporter);
+			assertEq("<a><b a=\"31.12.3000\" b=\"30001231100000\"/></a>",
+				parse(xp, null, "<a><b a='30001231' b='30001231100000'/></a>", reporter));
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			resetProperties();
 ////////////////////////////////////////////////////////////////////////////////
-            xd = xp.createXDDocument();
-            xd.checkDateLegal(false);
-            xml = "<a><b a='20151201' b='20151201235959'/></a>";
-            assertEq("<a><b a=\"1.12.2015\" b=\"20151201235959\"/></a>", parse(xd, xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xml = "<a><b a='25001231' b='25001231235959'/></a>";
-            xd = xp.createXDDocument();
-            xd.checkDateLegal(false);
-            parse(xd, xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a><b a='30001231' b='30001231235959'/></a>";
-            xd = xp.createXDDocument();
-            xd.checkDateLegal(false);
-            assertEq("<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>", parse(xd, xml, reporter));
-            assertNoErrorwarnings(reporter);
-            assertEq("<a><b a='1.12.2015' b='20151201235959'/></a>",
-                parse(xp, null, "<a><b a='20151201' b='20151201235959'/></a>", reporter));
-            assertNoErrorwarnings(reporter);
-            assertEq("<a><b a='31.12.3000' b='30001231235959'/></a>",
-                parse(xp, null, "<a><b a='30001231' b='30001231235959'/></a>", reporter));
-            assertNoErrorwarnings(reporter);
-            xd = compile( // test 12 hour with AM/PM
+			xd = xp.createXDDocument();
+			xd.checkDateLegal(false);
+			xml = "<a><b a='20151201' b='20151201235959'/></a>";
+			assertEq("<a><b a=\"1.12.2015\" b=\"20151201235959\"/></a>", parse(xd, xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<a><b a='25001231' b='25001231235959'/></a>";
+			xd = xp.createXDDocument();
+			xd.checkDateLegal(false);
+			parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a><b a='30001231' b='30001231235959'/></a>";
+			xd = xp.createXDDocument();
+			xd.checkDateLegal(false);
+			assertEq("<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>", parse(xd, xml, reporter));
+			assertNoErrorwarnings(reporter);
+			assertEq("<a><b a='1.12.2015' b='20151201235959'/></a>",
+				parse(xp, null, "<a><b a='20151201' b='20151201235959'/></a>", reporter));
+			assertNoErrorwarnings(reporter);
+			assertEq("<a><b a='31.12.3000' b='30001231235959'/></a>",
+				parse(xp, null, "<a><b a='30001231' b='30001231235959'/></a>", reporter));
+			assertNoErrorwarnings(reporter);
+			xd = compile( // test 12 hour with AM/PM
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
 "  <a b=\"xdatetime('yyyy-MM-ddThh:mm:ssa', 'dd.MM.yyyy HH:mm:ss');\" />\n" +
 "</xd:def>").createXDDocument();
-            parse(xd, "<a b='2025-01-12T06:15:52'/>", reporter); //error: AM/PM missing
-            assertErrorsAndClear(reporter);
-            parse(xd, "<a b='2025-01-12T15:15:52PM'/>", reporter); //error: hour > 12
-            assertErrorsAndClear(reporter);
-            assertEq("<a b='12.01.2025 17:15:52'/>", parse(xd, "<a b='2025-01-12T05:15:52PM'/>", reporter));
-            assertNoErrorsAndClear(reporter);
-            xp = compile(
+			parse(xd, "<a b='2025-01-12T06:15:52'/>", reporter); //error: AM/PM missing
+			assertErrorsAndClear(reporter);
+			parse(xd, "<a b='2025-01-12T15:15:52PM'/>", reporter); //error: hour > 12
+			assertErrorsAndClear(reporter);
+			assertEq("<a b='12.01.2025 17:15:52'/>", parse(xd, "<a b='2025-01-12T05:15:52PM'/>", reporter));
+			assertNoErrorsAndClear(reporter);
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> type int string(1,2); int i; </xd:declaration>\n"+
 "  <a x='required int'>required int;</a>\n"+
 "</xd:def>");
-            xml = "<a x='x'>x</a>";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a x='xxx'>xxx</a>";
-            parse(xp, "", xml, reporter);
-            assertErrors(reporter);
-            xdef =
+			xml = "<a x='x'>x</a>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='xxx'>xxx</a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration scope='local'>\n" +
 "    type Test_enum enum(\"A\", \"B\", \"C\");\n" +
@@ -232,7 +232,7 @@ public final class TestTypes extends XDTester {
 "    </xd:choice>\n" +
 "  </A>\n" +
 "</xd:def>";
-            xml =
+			xml =
 "<A>\n" +
 "    <Test1>1</Test1>\n" +
 "    <Test1>1 2 3 4 5 6 7 8 9 10</Test1>\n" +
@@ -245,47 +245,47 @@ public final class TestTypes extends XDTester {
 "    <Test6>3</Test6>\n" +
 "    <Test7>1false221truefalse</Test7>\n" +
 "</A>";
-            assertEq(xml, parse(compile(xdef).createXDDocument(), xml, reporter));
-            assertNoErrorwarnings(reporter);
-        } catch (SRuntimeException ex) {fail(ex);}
-        try { // name of type equals to name of predefined validation method
-            xp = compile(
+			assertEq(xml, parse(compile(xdef).createXDDocument(), xml, reporter));
+			assertNoErrorwarnings(reporter);
+		} catch (SRuntimeException ex) {fail(ex);}
+		try { // name of type equals to name of predefined validation method
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
 "  <a x='required string'>\n"+
 "    required string;\n"+
 "  </a>\n"+
 "</xd:def>");
-            fail("Not reported Error XDEF384 No parameter is allowed here");
-            xml = "<a x='x'>x</a>";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a x='xxx'>xxx</a>";
-            parse(xp, "", xml, reporter);
-            assertErrors(reporter);
-        } catch (SRuntimeException ex) {
-            // check error XDEF385: equal type name and referenced type name
-            if (!ex.getMessage().contains("XDEF385")) fail(ex);
-        }
-        try { // name of type equals to name of predefined validation method
-            xp = compile(
+			fail("Not reported Error XDEF384 No parameter is allowed here");
+			xml = "<a x='x'>x</a>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='xxx'>xxx</a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (SRuntimeException ex) {
+			// check error XDEF385: equal type name and referenced type name
+			if (!ex.getMessage().contains("XDEF385")) fail(ex);
+		}
+		try { // name of type equals to name of predefined validation method
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration scope='local'> type string string; </xd:declaration>\n"+
 "  <a x='required string'>\n"+
 "    required string;\n"+
 "  </a>\n"+
 "</xd:def>");
-            fail("Not reported Error XDEF384 No parameter is allowed here");
-            parse(xp, "", "<a x='x'>x</a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a x='xxx'>xxx</a>", reporter);
-            assertErrors(reporter);
-        } catch (SRuntimeException ex) {
-            // check error XDEF385: equal type name and referenced type name
-            if (!ex.getMessage().contains("XDEF385")) fail(ex);
-        }
-        try { //element type
-            xdef =
+			fail("Not reported Error XDEF384 No parameter is allowed here");
+			parse(xp, "", "<a x='x'>x</a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a x='xxx'>xxx</a>", reporter);
+			assertErrors(reporter);
+		} catch (SRuntimeException ex) {
+			// check error XDEF385: equal type name and referenced type name
+			if (!ex.getMessage().contains("XDEF385")) fail(ex);
+		}
+		try { //element type
+			xdef =
 "<xd:def root='a' xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration><![CDATA[\n"+
 "    void x() {\n"+
@@ -303,12 +303,12 @@ public final class TestTypes extends XDTester {
 "  ]]></xd:declaration>\n"+
 "  <a xd:script='finally x();'/>\n"+
 "</xd:def>";
-            swr = new StringWriter();
-            parse(xdef, "", "<a/>", reporter, swr, null, null);
-            swr.close();
-            assertNoErrorwarnings(reporter);
-            assertEq("A\nxA\nxA\nt1t2\n", swr.toString());
-            xdef =
+			swr = new StringWriter();
+			parse(xdef, "", "<a/>", reporter, swr, null, null);
+			swr.close();
+			assertNoErrorwarnings(reporter);
+			assertEq("A\nxA\nxA\nt1t2\n", swr.toString());
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "   <![CDATA[\n"+
@@ -331,22 +331,22 @@ public final class TestTypes extends XDTester {
 "    <b/>\n"+
 "  </a>\n"+
 "</xd:def>";
-            swr = new StringWriter();
-            parse(xdef, "", "<a><b/></a>", reporter, swr, null, null);
-            assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "<a/>\n"+
-                "<x a=\"A B\"><y/>text<z/></x>\n"+
-                "<x a=\"A B\">\n"+
-                "  <y/>\n"+
-                "  text\n"+
-                "  <z/>\n"+
-                "</x>\n"+
-                "text\n"+
-                "<e1/>\n"+
-                "<e2 xmlns=\"nsuri\"/>\n"+
-                "<x:e2 xmlns:x=\"nsuri\"/>\n");
-            xdef = // Parse, ParseResult
+			swr = new StringWriter();
+			parse(xdef, "", "<a><b/></a>", reporter, swr, null, null);
+			assertNoErrorwarnings(reporter);
+			assertEq(swr.toString(),
+				"<a/>\n"+
+				"<x a=\"A B\"><y/>text<z/></x>\n"+
+				"<x a=\"A B\">\n"+
+				"  <y/>\n"+
+				"  text\n"+
+				"  <z/>\n"+
+				"</x>\n"+
+				"text\n"+
+				"<e1/>\n"+
+				"<e2 xmlns=\"nsuri\"/>\n"+
+				"<x:e2 xmlns:x=\"nsuri\"/>\n");
+			xdef = // Parse, ParseResult
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'A'>\n"+
 "  <xd:declaration>\n"+
 "    void x() {\n"+
@@ -388,76 +388,76 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <A xd:script='finally x()'/>\n"+
 "</xd:def>";
-            parse(xdef, "", "<A/>", reporter);
-            assertNoErrorwarnings(reporter);
-            xdef = //uniqueSet
+			parse(xdef, "", "<A/>", reporter);
+			assertNoErrorwarnings(reporter);
+			xdef = //uniqueSet
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> uniqueSet id1 {key:int()}; </xd:declaration>\n"+
 "  <a x='id1.key.ID' y='id1.key.ID'>\n"+
 "    <b xd:script='+'>required id1.key.IDREF</b>\n"+
 "  </a>\n"+
 "</xd:def>";
-            parse(xdef, "", "<a x='1' y='23'><b>1</b><b>23</b></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            xp = compile( // test getParserParams
+			parse(xdef, "", "<a x='1' y='23'><b>1</b><b>23</b></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			xp = compile( // test getParserParams
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a='string(2,3)' b='int(2,3)' c='date(\"2000-01-01\",\"2010-01-01\")'>\n"+
 "    xdatetime('y-M-d','d.M.y')\n"+
 "  </a>\n"+
 "</xd:def>");
-            XDContainer c = ((XMData) xp.findModel("#a/@a")).getParseParams();
-            assertEq(2, c.getXDNamedItemValue("minLength").intValue());
-            assertEq(3, c.getXDNamedItemValue("maxLength").intValue());
-            c = ((XMData) xp.findModel("#a/@b")).getParseParams();
-            assertEq(2, c.getXDNamedItemValue("minInclusive").intValue());
-            assertEq(3, c.getXDNamedItemValue("maxInclusive").intValue());
-            c = ((XMData) xp.findModel("#a/@c")).getParseParams();
-            assertEq("2000-01-01", c.getXDNamedItemValue("minInclusive").toString());
-            assertEq("2010-01-01", c.getXDNamedItemValue("maxInclusive").toString());
-            c = ((XMData) xp.findModel("#a/text()")).getParseParams();
-            assertEq("y-M-d", c.getXDNamedItemValue("format").stringValue());
-            assertEq("d.M.y", c.getXDNamedItemValue("outFormat").stringValue());
-            xp = compile(// external method with key params
+			XDContainer c = ((XMData) xp.findModel("#a/@a")).getParseParams();
+			assertEq(2, c.getXDNamedItemValue("minLength").intValue());
+			assertEq(3, c.getXDNamedItemValue("maxLength").intValue());
+			c = ((XMData) xp.findModel("#a/@b")).getParseParams();
+			assertEq(2, c.getXDNamedItemValue("minInclusive").intValue());
+			assertEq(3, c.getXDNamedItemValue("maxInclusive").intValue());
+			c = ((XMData) xp.findModel("#a/@c")).getParseParams();
+			assertEq("2000-01-01", c.getXDNamedItemValue("minInclusive").toString());
+			assertEq("2010-01-01", c.getXDNamedItemValue("maxInclusive").toString());
+			c = ((XMData) xp.findModel("#a/text()")).getParseParams();
+			assertEq("y-M-d", c.getXDNamedItemValue("format").stringValue());
+			assertEq("d.M.y", c.getXDNamedItemValue("outFormat").stringValue());
+			xp = compile(// external method with key params
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.TestTypes.kp(XXNode, XDValue[]);"+
 "  </xd:declaration>\n"+
 "  <a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='1'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='decimal(0,1)'/></xd:def>");
-            parse(xp, "", "<a a='1'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// decimal, base decimal
+			parse(xp, "", "<a a='1'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='decimal(0,1)'/></xd:def>");
+			parse(xp, "", "<a a='1'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// decimal, base decimal
 "<xd:def xmlns:xd='"+_xdNS+"' name = 'test' root='a'>\n"+
 "  <a a='decimal(%base=decimal(%minInclusive=0),%minInclusive=1," +
 "        %maxInclusive=5,%totalDigits=1,%fractionDigits=0," +
 "        %enumeration=[1,3],%pattern=[\"\\\\d\"])' />\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='1'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union - declared type parser
+			parse(xp, "", "<a a='1'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union - declared type parser
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> type t union(%item=[decimal,boolean]);</xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='true' />", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2' />", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='xyz' />", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a=' 1 2' />";
-            parse(compile(xdef), "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union - declared simplified version
+			parse(xp, "", "<a a='true' />", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2' />", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='xyz' />", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a=' 1 2' />";
+			parse(compile(xdef), "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union - declared simplified version
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    type x union(%item = [int(1, 2), boolean]);\n"+
@@ -465,17 +465,17 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='true'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='3'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            parse(xp, "", "<a a='xyz'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            parse(xp, "", "<a a=' 1 2'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union - declared parser
+			parse(xp, "", "<a a='true'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='3'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			parse(xp, "", "<a a='xyz'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			parse(xp, "", "<a a=' 1 2'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union - declared parser
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    boolean x() {if (int(1, 2)) return true; return boolean();}\n"+
@@ -483,26 +483,26 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='true'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='3'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union - declared parser
+			parse(xp, "", "<a a='true'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='3'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union - declared parser
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    boolean t() { if (int(1, 2)) return true; return boolean(); }\n"+
 "  </xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='true'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='2'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='3'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union, declared items, base.
+			parse(xp, "", "<a a='true'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='2'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='3'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union, declared items, base.
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser s = string(%enumeration=['true', '2', 'xyz']); \n"+
@@ -510,22 +510,22 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            xml = "<a a='true' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='2' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='xyz' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a=' 1 2' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a=' 1 2' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union with base
+			xml = "<a a='true' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='2' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='xyz' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a=' 1 2' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a=' 1 2' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union with base
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser s = string(%enumeration='xyz'); \n"+
@@ -533,65 +533,65 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            xml = "<a a='true' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='2' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='xyz' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' 1 2' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile( // model variable.
+			xml = "<a a='true' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='2' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='xyz' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 1 2' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile( // model variable.
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A xd:script='var type p union(%item = [int(1, 3), boolean]);'>\n"+
 "    <a xd:script='occurs *;'><b x='p'/></a>\n"+
 "  </A>\n"+
 "</xd:def>");
-            xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xp = compile( // model variable.
+			xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xp = compile( // model variable.
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A xd:script='var {Parser p = union(%item = [int(1, 3), boolean]);}'>\n"+
 "    <a xd:script='occurs *;'><b x='p'/></a>\n"+
 "  </A>\n"+
 "</xd:def>");
-            xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xp = compile( // union with the a list of same items
+			xml = "<A><a><b x='1'/></a><a><b x='3'/></a></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xp = compile( // union with the a list of same items
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser s = list(%item=eq('abc'), %minLength=1, %maxLength=2); \n"+
 "  </xd:declaration>\n"+
 "  <a a='required s'/>\n"+
 "</xd:def>");
-            xml = "<a a='abc' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' abc' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' abc ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' abc abc ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' abc abc abc' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), reporter.printToString());
-            xml = "<a a=' efg ' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a='' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile( //union with the a list item
+			xml = "<a a='abc' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' abc' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' abc ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' abc abc ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' abc abc abc' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), reporter.printToString());
+			xml = "<a a=' efg ' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a='' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile( //union with the a list item
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser s = list(%item=decimal, %enumeration=[1,2,[3,4]]); \n"+
@@ -599,25 +599,25 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='required t'/>\n"+
 "</xd:def>");
-            xml = "<a a=' true' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' 1' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' 2 ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='3 4' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' 7 ' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a=' true 1 ' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile(// union with the sequence item
+			xml = "<a a=' true' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 1' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 2 ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='3 4' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 7 ' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a=' true 1 ' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile(// union with the sequence item
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser s = sequence(%item=[boolean,decimal],\n"+
@@ -626,25 +626,25 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='required t; options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
 "</xd:def>");
-            xml = "<a a=' true ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' 2 ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='   true        1    ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='   true        2    ' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a=' xyz ' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xml = "<a a=' 1 2' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xp = compile( // sequence with enumeration
+			xml = "<a a=' true ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 2 ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='   true        1    ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='   true        2    ' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a=' xyz ' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xml = "<a a=' 1 2' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xp = compile( // sequence with enumeration
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser s = sequence(%item=[boolean,decimal],\n"+
@@ -652,77 +652,77 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 " <a a='required s'/>\n"+
 "</xd:def>");
-            xml = "<a a='true 1' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='false 2' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='false 1' />";
-            parse(xp, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xdef = // gYear - invoked in if command (see method "check")
+			xml = "<a a='true 1' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='false 2' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='false 1' />";
+			parse(xp, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xdef = // gYear - invoked in if command (see method "check")
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a = \"required gYear(%minInclusive='1999', %maxInclusive='2000');\"/>\n"+
 "</xd:def>";
-            xml = "<a a='1999'/>";
-            parse(xdef, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='2000'/>";
-            parse(xdef, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='2010'/>";
-            parse(xdef, "", xml, reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            xdef = // sequence
+			xml = "<a a='1999'/>";
+			parse(xdef, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='2000'/>";
+			parse(xdef, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='2010'/>";
+			parse(xdef, "", xml, reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xdef = // sequence
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=' sequence ( %item = [ decimal ( %maxInclusive = 5 ) ] ) '/>\n"+
 "</xd:def>";
-            parse(xdef, "", "<a a=' 1' />", reporter);
-            assertNoErrorwarnings(reporter);
-            xp = compile( // sequence
+			parse(xdef, "", "<a a=' 1' />", reporter);
+			assertNoErrorwarnings(reporter);
+			xp = compile( // sequence
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a='sequence(%item=[decimal(%maxInclusive=5), int(%minInclusive=0)])'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='' />", reporter);
-            assertErrors(reporter); // no item
-            parse(xp, "", "<a a='1' />", reporter);
-            assertNoErrorwarnings(reporter);
-            xml = "<a a=' 1 2 3 ' />";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            xdef =  // string whiteSpace=preserve (option trimAttr)
+			parse(xp, "", "<a a='' />", reporter);
+			assertErrors(reporter); // no item
+			parse(xp, "", "<a a='1' />", reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 1 2 3 ' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xdef =  // string whiteSpace=preserve (option trimAttr)
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    Parser p = string(%minLength=1, %whiteSpace='preserve');\n"+
 "  </xd:declaration>\n"+
 "  <a a=\"optional p;\" b=\"optional string(0,100);\"/>\n"+
 "</xd:def>";
-            xml = "<a a=' ' b=' '/>";
-            el = parse(xdef, "", xml, reporter);
-            assertErrors(reporter);
-            assertEq(el, "<a a='' b=''/>");
-            xdef = // string whiteSpace=preserve (option noTrimAttr)
+			xml = "<a a=' ' b=' '/>";
+			el = parse(xdef, "", xml, reporter);
+			assertErrors(reporter);
+			assertEq(el, "<a a='' b=''/>");
+			xdef = // string whiteSpace=preserve (option noTrimAttr)
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' xd:script='options noTrimAttr'>\n"+
 "  <xd:declaration>\n"+
 "    Parser p = string(%minLength=1, %whiteSpace='preserve');\n"+
 "  </xd:declaration>\n"+
 "  <a a=\"optional p;\" b=\"optional string(0,100);\"/>\n"+
 "</xd:def>";
-            el = parse(xdef, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(el, "<a a=' ' b=' '/>");
-            xdef =
+			el = parse(xdef, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(el, "<a a=' ' b=' '/>");
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' xd:script='options noTrimAttr'>\n"+
 "  <xd:declaration>\n"+
 "    Parser p = string(%minLength=0, %whiteSpace='collapse');\n"+
 "  </xd:declaration>\n"+
 "  <a a=\"optional p;\" b=\"optional string(0,100);\"/>\n"+
 "</xd:def>";
-            el = parse(xdef, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(el, "<a a='' b=' '/>");
-            xp = compile( // Test of methods NCname(), QName(), QnameURI()
+			el = parse(xdef, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(el, "<a a='' b=' '/>");
+			xp = compile( // Test of methods NCname(), QName(), QnameURI()
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:ws='abc' root='ws:message'>\n"+
 "  <xd:declaration>\n"+
 "    external method String test.xdef.TestTypes.tst(XXElement, String);\n"+
@@ -745,40 +745,40 @@ public final class TestTypes extends XDTester {
 "     </xd:choice>" +
 "  </ws:message>" +
 "</xd:def>\n");
-            swr = new StringWriter();
-            xml =
+			swr = new StringWriter();
+			xml =
 "<message name=\"GetEndorsingBoarderRequest\"\n"+
 "  xmlns='abc'\n"+
 "  xmlns:esxsd =\"http://schemas.snowboard-info.com/EndorsementSearch.xsd\">" +
 "  <part name=\"body\" element=\"esxsdX:GetEndorsingBoarder\"/>" +
 "</message>";
-            parse(xp, "", xml, reporter, swr, null, null);
-            s = swr.toString();
-            assertFalse(!s.contains("/body/abc;abc;abc") || !s.contains("/abc;abc;abc"), s);
-            if (reporter.getErrorCount() == 0) {
-                fail("error not reported");
-            } else if (reporter.getErrorCount() != 1) {
-                fail(reporter.printToString());
-            } else if (!"XDEF554".equals(
-                reporter.getReport().getMsgID()) && !"XDEF515".equals(reporter.getReport().getMsgID())) {
-                fail(reporter.getReport().toString());
-            }
-            swr = new StringWriter();
-            xml =
+			parse(xp, "", xml, reporter, swr, null, null);
+			s = swr.toString();
+			assertFalse(!s.contains("/body/abc;abc;abc") || !s.contains("/abc;abc;abc"), s);
+			if (reporter.getErrorCount() == 0) {
+				fail("error not reported");
+			} else if (reporter.getErrorCount() != 1) {
+				fail(reporter.printToString());
+			} else if (!"XDEF554".equals(
+				reporter.getReport().getMsgID()) && !"XDEF515".equals(reporter.getReport().getMsgID())) {
+				fail(reporter.getReport().toString());
+			}
+			swr = new StringWriter();
+			xml =
 "<message name=\"GetEndorsingBoarderRequest\"" +
 "  xmlns='abc'" +
 "  xmlns:esxsd =\"http://schemas.snowboard-info.com/EndorsementSearch.xsd\">" +
 "  <part   name=\"body\" element=\"esxsd:GetEndorsingBoarder\"/>" +
 "</message>";
-            parse(xp, "", xml, reporter, swr, null, null);
-            s = swr.toString();
-            assertFalse(!s.contains("/body/abc;abc;abc") || !s.contains("esxsd/GetEndorsingBoarder/" +
-                    "http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-                    "http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-                    "http://schemas.snowboard-info.com/EndorsementSearch.xsd"), s);
-                assertNoErrorwarnings(reporter);
-                setChkSyntax(false);
-            xd = compile( // test GPS type
+			parse(xp, "", xml, reporter, swr, null, null);
+			s = swr.toString();
+			assertFalse(!s.contains("/body/abc;abc;abc") || !s.contains("esxsd/GetEndorsingBoarder/" +
+					"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
+					"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
+					"http://schemas.snowboard-info.com/EndorsementSearch.xsd"), s);
+				assertNoErrorwarnings(reporter);
+				setChkSyntax(false);
+			xd = compile( // test GPS type
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n" +
 "    GPSPosition base = new GPSPosition(50.08, 14.42, 399.0, 'Prague');\n" +
@@ -795,20 +795,20 @@ public final class TestTypes extends XDTester {
 "          GPS_position=\"gps(); onTrue town = getParsedValue();\"/>\n" +
 "  </a>\n" +
 "</xd:def>").createXDDocument();;
-            xml =
+			xml =
 "<a>\n" +
 "  <town GPS_position=\"g(48.2,16.37,151.0,Wien)\"/>\n" +
 "  <town GPS_position=\"g(51.52,-0.09,London)\"/>\n" +
 "</a>";
-            swr = new StringWriter();
-            assertEq(xml, parse(xd, xml, reporter, swr, null, null));
-            assertNoErrorwarnings(reporter);
-            swr.close();
-            assertEq(swr.toString(),
+			swr = new StringWriter();
+			assertEq(xml, parse(xd, xml, reporter, swr, null, null));
+			assertNoErrorwarnings(reporter);
+			swr.close();
+			assertEq(swr.toString(),
 "Prague (50.08,14.42) distance to Wien (48.20,16.37): 252.5 km\n" +
 "Prague (50.08,14.42) distance to London (51.52,-0.09): 1029.9 km\n");
-            assertEq("Prague", ((XDGPSPosition) xd.getVariable("base")).name());
-            xd = compile( // test Price type
+			assertEq("Prague", ((XDGPSPosition) xd.getVariable("base")).name());
+			xd = compile( // test Price type
 "<xd:def xmlns:xd='"+_xdNS+"' root='root'>\n"+
 "  <xd:declaration>\n" +
 "    final Container c = new Container();\n"+
@@ -826,21 +826,21 @@ public final class TestTypes extends XDTester {
 "   </item>\n"+
 "  </root>\n"+
 "</xd:def>").createXDDocument();;
-            xml =
+			xml =
 "<root>\n"+
 "  <item>p(1.5 CZK)</item>\n"+
 "  <item>p(12.657 USD)</item>\n"+
 "  <item>p(0.657 XAU)</item>\n"+
 "</root>";
-            swr = new StringWriter();
-            assertEq(xml, parse(xd, xml, reporter, swr, null, null));
-            assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(), "1.50 CZK\n12.66 USD\n0.657 XAU\nextValue: null\n");
-            assertEq("null", ((XDPrice) xd.getVariable("extValue")).display());
-            xd.setVariable("extValue", new Price(new BigDecimal(2.3),"CZK"));
-            assertEq("2.30 CZK", ((XDPrice) xd.getVariable("extValue")).display());
-            assertEq(2, ((XDPrice) xd.getVariable("extValue")).fractionDigits());
-            xd = compile( // test IPAddr type
+			swr = new StringWriter();
+			assertEq(xml, parse(xd, xml, reporter, swr, null, null));
+			assertNoErrorwarnings(reporter);
+			assertEq(swr.toString(), "1.50 CZK\n12.66 USD\n0.657 XAU\nextValue: null\n");
+			assertEq("null", ((XDPrice) xd.getVariable("extValue")).display());
+			xd.setVariable("extValue", new Price(new BigDecimal(2.3),"CZK"));
+			assertEq("2.30 CZK", ((XDPrice) xd.getVariable("extValue")).display());
+			assertEq(2, ((XDPrice) xd.getVariable("extValue")).fractionDigits());
+			xd = compile( // test IPAddr type
 "<xd:def xmlns:xd='"+_xdNS+"' root='root'>\n"+
 "  <xd:declaration>\n" +
 "    final Container c = new Container();\n"+
@@ -859,69 +859,69 @@ public final class TestTypes extends XDTester {
 "   </item>\n"+
 "  </root>\n"+
 "</xd:def>").createXDDocument();
-            xml =
+			xml =
 "<root>\n"+
 "  <item>/129.144.52.38</item>\n"+
 "  <item>/1080:0:0:0:8:800:200C:417A</item>\n"+
 "</root>";
-            swr = new StringWriter();
-            xd.setVariable("x", InetAddress.getByName("123.45.6.7"));
-            assertEq(xml, parse(xd, xml, reporter, swr, null, null));
-            assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "129.144.52.38,1080:0:0:0:8:800:200c:417a,x: 123.45.6.7;true");
-            xp = compile( // expression in type validation
+			swr = new StringWriter();
+			xd.setVariable("x", InetAddress.getByName("123.45.6.7"));
+			assertEq(xml, parse(xd, xml, reporter, swr, null, null));
+			assertNoErrorwarnings(reporter);
+			assertEq(swr.toString(),
+				"129.144.52.38,1080:0:0:0:8:800:200c:417a,x: 123.45.6.7;true");
+			xp = compile( // expression in type validation
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    boolean x(){return int | string;}\n"+
 "  </xd:declaration>\n"+
 "  <a a='x(); finally out(x());'/>\n"+
 "</xd:def>");
-            xml = "<a a='1'/>";
-            swr = new StringWriter();
-            parse(xp, null, xml, reporter, swr, null, null);
-            assertEq("true", swr.toString());
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='x'/>";
-            swr = new StringWriter();
-            parse(xp, null, xml, reporter, swr, null, null);
-            assertEq("true", swr.toString());
-            assertNoErrorwarnings(reporter);
-            xp = compile(
+			xml = "<a a='1'/>";
+			swr = new StringWriter();
+			parse(xp, null, xml, reporter, swr, null, null);
+			assertEq("true", swr.toString());
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='x'/>";
+			swr = new StringWriter();
+			parse(xp, null, xml, reporter, swr, null, null);
+			assertEq("true", swr.toString());
+			assertNoErrorwarnings(reporter);
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    boolean x(){return int AND string;}\n"+
 "  </xd:declaration>\n"+
 "  <a a='x(); finally out(x());'/>\n"+
 "</xd:def>");
-            xml = "<a a='1'/>";
-            swr = new StringWriter();
-            parse(xp, null, xml, reporter, swr, null, null);
-            assertEq("true", swr.toString());
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='x'/>";
-            swr = new StringWriter();
-            parse(xp, null, xml, reporter, swr, null, null);
-            assertEq("false", swr.toString());
-            assertErrors(reporter);
-            xp = compile(
+			xml = "<a a='1'/>";
+			swr = new StringWriter();
+			parse(xp, null, xml, reporter, swr, null, null);
+			assertEq("true", swr.toString());
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='x'/>";
+			swr = new StringWriter();
+			parse(xp, null, xml, reporter, swr, null, null);
+			assertEq("false", swr.toString());
+			assertErrors(reporter);
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    boolean x(){return int AAND string;}\n"+
 "  </xd:declaration>\n"+
 "  <a a='x(); finally out(x());'/>\n"+
 "</xd:def>");
-            xml = "<a a='1'/>";
-            swr = new StringWriter();
-            parse(xp, null, xml, reporter, swr, null, null);
-            assertEq("true", swr.toString());
-            assertNoErrorwarnings(reporter);
-            xml = "<a a='x'/>";
-            swr = new StringWriter();
-            parse(xp, null, xml, reporter, swr, null, null);
-            assertEq("false", swr.toString());
-            assertErrors(reporter);
-            xp = compile( // test enum
+			xml = "<a a='1'/>";
+			swr = new StringWriter();
+			parse(xp, null, xml, reporter, swr, null, null);
+			assertEq("true", swr.toString());
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='x'/>";
+			swr = new StringWriter();
+			parse(xp, null, xml, reporter, swr, null, null);
+			assertEq("false", swr.toString());
+			assertErrors(reporter);
+			xp = compile( // test enum
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n"+
 "    type x enum('123', '456', '678');\n" +
@@ -929,174 +929,174 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <A a='x();'>y();</A>\n"+
 "</xd:def>");
-            xml = "<A a='456'>123</A>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrors(reporter);
-            xp = compile( // test output format of xdatetime
+			xml = "<A a='456'>123</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xp = compile( // test output format of xdatetime
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a=\"xdatetime('y-M-d','yyyyMMdd');\">xdatetime('y-M-d','yyyyMMdd')</A>\n"+
 "</xd:def>");
-            xml = "<A a='2022-5-8'>2022-5-8</A>";
-            assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
-            assertNoErrors(reporter);
-            xdef = // test output format of xdatetime in list
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xdef = // test output format of xdatetime in list
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n"+
 "    type x list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "  </xd:declaration>\n"+
 "  <A a='? x();'>? x()</A>\n"+
 "</xd:def>";
-            xml = "<A a='2022-5-8'>2022-5-8</A>";
-            assertEq("<A a='20220508'>20220508</A>", parse(xdef,"",xml,reporter));
-            assertNoErrors(reporter);
-            xp = compile( // test output format of xdatetime in union
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xdef,"",xml,reporter));
+			assertNoErrors(reporter);
+			xp = compile( // test output format of xdatetime in union
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n"+
 "    type x union(%item=[xdatetime('y-M-d', 'yyyyMMdd'), boolean()]);\n" +
 "  </xd:declaration>\n"+
 "  <A a='? x();'>? x()</A>\n"+
 "</xd:def>");
-            xml = "<A a='2022-5-8'>2022-5-8</A>";
-            assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
-            assertNoErrors(reporter);
-            xml = "<A a='true'>false</A>";
-            assertEq(xml, parse(xp,"",xml,reporter));
-            assertNoErrors(reporter);
-            xdef = // test asterisk as minimum and maximum
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xml = "<A a='true'>false</A>";
+			assertEq(xml, parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xdef = // test asterisk as minimum and maximum
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a='string(*,3);'>string(1,*);</A>\n"+
 "</xd:def>";
-            xml = "<A a='abc'>def</A>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrors(reporter);
-            xdef = // test asterisk as minimum and maximum
+			xml = "<A a='abc'>def</A>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef = // test asterisk as minimum and maximum
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a='string(*,3);'>string(1,*);</A>\n"+
 "</xd:def>";
-            xml = "<A a='abc'>def</A>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrors(reporter);
-            xdef = // test asterisk as minimum and maximum
+			xml = "<A a='abc'>def</A>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef = // test asterisk as minimum and maximum
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a='int(*,123);'>int(123,*);</A>\n"+
 "</xd:def>";
-            xml = "<A a='123'>123</A>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrors(reporter);
-            xp = compile( // asterisk and variable
+			xml = "<A a='123'>123</A>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrors(reporter);
+			xp = compile( // asterisk and variable
 "<xd:def xmlns:xd ='"+_xdNS+"' name='a' root='a'>"+
 "  <xd:declaration>Datetime d=new Datetime(\"2021-06-10\");</xd:declaration>\n"+
 "  <a a=\"date(d, *)\"/>\n"+
 "</xd:def>\n");
-            xml = "<a a='2021-06-11'></a>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrors(reporter);
-            xml = "<a a='2021-06-09'></a>";
-            parse(xp, "", xml, reporter);
-            assertErrors(reporter);
-            xp = compile( // asterisk and variable
+			xml = "<a a='2021-06-11'></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a a='2021-06-09'></a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			xp = compile( // asterisk and variable
 "<xd:def xmlns:xd ='"+_xdNS+"' name='a' root='a'>"+
 " <xd:declaration>Datetime d=new Datetime(\"2021-06-10\");</xd:declaration>\n"+
 "  <a a=\"date(*, d)\"/>\n"+
 "</xd:def>\n");
-            xml = "<a a='2021-06-09'></a>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrors(reporter);
-            xml = "<a a='2021-06-11'></a>";
-            parse(xp, "", xml, reporter);
-            assertErrors(reporter);
-            xp = compile( // test combine seq and key params
+			xml = "<a a='2021-06-09'></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a a='2021-06-11'></a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			xp = compile( // test combine seq and key params
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"string(3,%pattern=['[a-d]+'])\"/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='abc'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='abcd'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            try {// test error of combination of seq and key params
-                compile(
+			parse(xp, "", "<a a='abc'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='abcd'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			try {// test error of combination of seq and key params
+				compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"xdatetime('yyyy-MM-ddThh:mm:ss');\" />\n" +
 "</xd:def>");
-                fail("error not reported");
-            } catch (Exception ex) {
-                if (!ex.getMessage().contains("SYS058")) {fail(ex);}
-            }
-            try { // test error of combination of seq and key params
-                compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='int(3, %minInclusive=3)'/></xd:def>");
-                fail("error not reported");
-            } catch (Exception ex) {
-                if (!ex.getMessage().contains("XDEF442")) {fail(ex);}
-            }
-            try { // test error of combination of seq and key params
-                compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='uri(*, 3)'/></xd:def>");
-                fail("error not reported");
-            } catch (Exception ex) {
-                if (!ex.getMessage().contains("XDEF216")) {fail(ex);}
-            }
-        } catch (IOException | SRuntimeException ex) {fail(ex);}
-        try {//test ListOf with XDEF_3.1
-            setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
-            xdef = // check Parser-combination of sequential and key parameters
+				fail("error not reported");
+			} catch (Exception ex) {
+				if (!ex.getMessage().contains("SYS058")) {fail(ex);}
+			}
+			try { // test error of combination of seq and key params
+				compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='int(3, %minInclusive=3)'/></xd:def>");
+				fail("error not reported");
+			} catch (Exception ex) {
+				if (!ex.getMessage().contains("XDEF442")) {fail(ex);}
+			}
+			try { // test error of combination of seq and key params
+				compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='uri(*, 3)'/></xd:def>");
+				fail("error not reported");
+			} catch (Exception ex) {
+				if (!ex.getMessage().contains("XDEF216")) {fail(ex);}
+			}
+		} catch (IOException | SRuntimeException ex) {fail(ex);}
+		try {//test ListOf with XDEF_3.1
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+			xdef = // check Parser-combination of sequential and key parameters
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a='decimal(0,2,%totalDigits=3,%fractionDigits=2,%enumeration=[1.21])'\n"+
 "     b='decimal(-2,2,%totalDigits=3,%fractionDigits=2)' c='dec(3,2)'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a a='+3.21' b='-1.21' c='+0.00'/>", reporter);
-            assertTrue(reporter.errorWarnings());
-            parse(xp, "", "<a a='+1.21' b='-3.21' c='+0.00'/>", reporter);
-            assertTrue(reporter.errorWarnings());
-            parse(xp, "", "<a a='+1.21' b='-1.21' c='+12.45'/>", reporter);
-            assertTrue(reporter.errorWarnings());
-            parse(xp, "", "<a a='+1.21' b='-1.21' c='+0.0'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='+1.21' b='-1.21' c='+1.21'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='+1.21' b='-1.21' c='-1.21'/>", reporter);
-            assertNoErrorwarnings(reporter);
-        } catch (Exception ex) {fail(ex);}
-        setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
-        try{
-            xp = compile(
+			xp = compile(xdef);
+			parse(xp, "", "<a a='+3.21' b='-1.21' c='+0.00'/>", reporter);
+			assertTrue(reporter.errorWarnings());
+			parse(xp, "", "<a a='+1.21' b='-3.21' c='+0.00'/>", reporter);
+			assertTrue(reporter.errorWarnings());
+			parse(xp, "", "<a a='+1.21' b='-1.21' c='+12.45'/>", reporter);
+			assertTrue(reporter.errorWarnings());
+			parse(xp, "", "<a a='+1.21' b='-1.21' c='+0.0'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='+1.21' b='-1.21' c='+1.21'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='+1.21' b='-1.21' c='-1.21'/>", reporter);
+			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
+		try{
+			xp = compile(
 "<xd:def xmlns:xd = '"+_xdNS+"' root='a'>\n"+
 "  <a x=\"list(string, %length = 2);\"/>\n"+
 "</xd:def>");
-            xml = "<a x='1 2'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xml = "<a x='1'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertTrue(reporter.errorWarnings());
-            xml = "<a x='1 2 3'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertTrue(reporter.errorWarnings());
-            xp = compile(
+			xml = "<a x='1 2'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='1'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.errorWarnings());
+			xml = "<a x='1 2 3'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.errorWarnings());
+			xp = compile(
 "<xd:def xmlns:xd = '"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration> Parser p = string; </xd:declaration>\n"+
 "  <a x=\"list(p, %minLength = 2, %maxLength = 3);\"/>\n"+
 "</xd:def>");
-            xml = "<a x='1 2'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xml = "<a x='1'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertTrue(reporter.errorWarnings());
-            xp = compile(
+			xml = "<a x='1 2'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='1'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.errorWarnings());
+			xp = compile(
 "<xd:def xmlns:xd = '"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>int i = 1, j = 2; Parser p = int(i,j);</xd:declaration>\n"+
 "  <a x=\"list(p, %minLength = 2, %maxLength = 3);\"/>\n"+
 "</xd:def>");
-            xml = "<a x='1 2'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xml = "<a x='1'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertTrue(reporter.errorWarnings());
-            xml = "<a x='1 9'/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertTrue(reporter.errorWarnings());
-            xdef = // check element variable
+			xml = "<a x='1 2'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='1'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.errorWarnings());
+			xml = "<a x='1 9'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.errorWarnings());
+			xdef = // check element variable
 "<xd:def xmlns:xd = '"+_xdNS+"' root='a'>\n"+
 " <a xd:script=\"var {String x;}\">\n"+
 "   <b xd:script='+'"+
@@ -1112,10 +1112,10 @@ public final class TestTypes extends XDTester {
 "   </b>\n"+
 " </a>\n"+
 "</xd:def>";
-            xml = "<a><b x=''></b></a>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xdef =
+			xml = "<a><b x=''></b></a>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script=\"var final String z='1999';\">\n"+
 "    <b>\n"+
@@ -1132,21 +1132,21 @@ public final class TestTypes extends XDTester {
 "    </b>\n"+
 "  </a>\n"+
 "</xd:def>";
-            xml = "<a><b><c x=''/></b></a>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xp = compile( // parser type
+			xml = "<a><b><c x=''/></b></a>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xp = compile( // parser type
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <xd:declaration>\n"+
 "    external method XDParser test.xdef.TestTypes.getMyParser();\n"+
 "  </xd:declaration>\n"+
 "  <a a='getMyParser()'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='abc'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='cde'/>", reporter);
-            assertTrue(reporter.errorWarnings());
-            xp = compile(
+			parse(xp, "", "<a a='abc'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='cde'/>", reporter);
+			assertTrue(reporter.errorWarnings());
+			xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <xd:declaration>\n"+
 "    external method XDParser test.xdef.TestTypes.getMyParser();\n"+
@@ -1154,62 +1154,62 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <a a='p'/>\n"+
 "</xd:def>");
-            parse(xp, "", "<a a='abc'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a='cde'/>", reporter);
-            assertTrue(reporter.errorWarnings());
-            xp = compile( // external variable
+			parse(xp, "", "<a a='abc'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a='cde'/>", reporter);
+			assertTrue(reporter.errorWarnings());
+			xp = compile( // external variable
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <xd:declaration> external Parser p; </xd:declaration>\n"+
 "  <a a='p'/>\n"+
 "</xd:def>");
-            xd = xp.createXDDocument();
-            xd.setVariable("p", getMyParser());
-            parse(xd, "<a a='abc'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            xd = xp.createXDDocument();
-            xd.setVariable("p", getMyParser());
-            parse(xd, "<a a='cde'/>", reporter);
-            assertTrue(reporter.errorWarnings());
-            int year = new GregorianCalendar().get(Calendar.YEAR);
-            setProperty("xdef.minyear", String.valueOf(year - 200));
-            setProperty("xdef.maxyear", String.valueOf(year + 200));
-            setProperty("xdef.specdates", "3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-            xdef = // imt - max values
+			xd = xp.createXDDocument();
+			xd.setVariable("p", getMyParser());
+			parse(xd, "<a a='abc'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xd.setVariable("p", getMyParser());
+			parse(xd, "<a a='cde'/>", reporter);
+			assertTrue(reporter.errorWarnings());
+			int year = new GregorianCalendar().get(Calendar.YEAR);
+			setProperty("xdef.minyear", String.valueOf(year - 200));
+			setProperty("xdef.maxyear", String.valueOf(year + 200));
+			setProperty("xdef.specdates", "3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+			xdef = // imt - max values
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='int()' b='int()'/></xd:def>";
-            xml ="<a a='2147483647' b='-2147483648' />";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xml ="<a a='2147483648' b='-2147483649' />";
-            parse(xp, "", xml, reporter);
-            assertEq(2, reporter.getErrorCount());
-            xdef = // jlist
+			xml ="<a a='2147483647' b='-2147483648' />";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml ="<a a='2147483648' b='-2147483649' />";
+			parse(xp, "", xml, reporter);
+			assertEq(2, reporter.getErrorCount());
+			xdef = // jlist
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a>jlist(%item=gps());</a>\n"+
 "</xd:def>";
-            xml = "<a>[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]</a>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='a'><a>jlist(%item=price());</a></xd:def>";
-            xml = "<a>[ p(12.50 CZK), p(2.5 USD) ]</a>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xdef =
+			xml = "<a>[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]</a>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='a'><a>jlist(%item=price());</a></xd:def>";
+			xml = "<a>[ p(12.50 CZK), p(2.5 USD) ]</a>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'><a>jlist(%item=union(%item=[gps(), price()]));</a></xd:def>";
-            xml = "<a>[ g(2.5, 3.5, -0.1, xxx), p(12.50 CZK), p(2.5 USD) ]</a>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=\"string(%base=true);\"/></xd:def>";
-            xml = "<A a='a'/>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=\"string(%base=false);\"/></xd:def>";
-            xml = "<A a='a'/>";
-            assertEq(xml, parse(xdef, "", xml, reporter));
-            if (!reporter.errors()) {
-                fail("Error expected");
-            }
-            xd = (xp = compile(
+			xml = "<a>[ g(2.5, 3.5, -0.1, xxx), p(12.50 CZK), p(2.5 USD) ]</a>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=\"string(%base=true);\"/></xd:def>";
+			xml = "<A a='a'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=\"string(%base=false);\"/></xd:def>";
+			xml = "<A a='a'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			if (!reporter.errors()) {
+				fail("Error expected");
+			}
+			xd = (xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|C|D'>\n"+
 "  <xd:declaration>\n"+
 "   external method boolean test.xdef.TestTypes.tab0(XXNode,String,String);\n" +
@@ -1222,31 +1222,31 @@ public final class TestTypes extends XDTester {
 "  <C a=\"string(%base=tab1('a', 'b'));\"/>\n" +
 "  <D a=\"union(%item=[b, string(%base=b), true]);\"/>\n" +
 "</xd:def>")).createXDDocument();
-            xd.setVariable("parser", new BoolParser());
-            xml = "<A a='a'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xd = xp.createXDDocument();
-            xml = "<B a='a'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xd = xp.createXDDocument();
-            xml = "<C a='a'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xd = xp.createXDDocument();
-            xml = "<D a='a'/>";
-            assertEq(xml, parse(xd, xml, reporter));
-            assertNoErrorwarnings(reporter);
-            xdef = // country, countries
+			xd.setVariable("parser", new BoolParser());
+			xml = "<A a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xml = "<B a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xml = "<C a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xml = "<D a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = // country, countries
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a=\"country()\" b=\"countries()\"/>\n"+
 "</xd:def>";
-            xml = "<A a='cz' b='CZE gb US CA SK RUS IT LY GE FRA SE usa IL' />";
-            el = parse(xdef, "", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(xml, el);
-            xdef = // test emailAddr
+			xml = "<A a='cz' b='CZE gb US CA SK RUS IT LY GE FRA SE usa IL' />";
+			el = parse(xdef, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			xdef = // test emailAddr
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    final EmailAddr x = new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
@@ -1261,14 +1261,14 @@ public final class TestTypes extends XDTester {
 "              outln(getEmailAddr(x));\n"+
 "            }' />\n"+
 "</xd:def>";
-            xml = "<a email='(T. tr) a@b'/>";
-            swr = new StringWriter();
-            assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
-            swr.close();
-            assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "T. tr\na\nb\n(T. tr) a@b\nPavel Býk\n=?UTF-8?Q?Pavel B=C3=BDk?= <p@s>\n");
-            xdef = // check xml schema types
+			xml = "<a email='(T. tr) a@b'/>";
+			swr = new StringWriter();
+			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			swr.close();
+			assertNoErrorwarnings(reporter);
+			assertEq(swr.toString(),
+				"T. tr\na\nb\n(T. tr) a@b\nPavel Býk\n=?UTF-8?Q?Pavel B=C3=BDk?= <p@s>\n");
+			xdef = // check xml schema types
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name='SchemaTypes'>\n"+
 " <xd:declaration scope='global'>\n"+
@@ -1312,7 +1312,7 @@ public final class TestTypes extends XDTester {
 "  />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-            xml =
+			xml =
 "<a\n"+
 " string = ' a		 b c   '\n"+
 " normalizedString = ' a		 b c   '\n"+
@@ -1338,21 +1338,21 @@ public final class TestTypes extends XDTester {
 " hexBinary = '01abcd'\n"+
 " float = '1.5e-7'\n"+
 "/>\n";
-            el = parse(xdef, "a", xml, reporter);
-            assertNoErrorwarnings(reporter);
-            assertEq(el.getAttribute("string"), " a   b c   ");
-            assertEq(el.getAttribute("normalizedString"), " a   b c   ");
-            assertEq(el.getAttribute("tokens"), "a b c");
-            assertEq(el.getAttribute("language"), "cs");
-            assertEq(el.getAttribute("Qname"), "cs");
-            assertEq(el.getAttribute("NCName"), "cs");
-            assertEq(el.getAttribute("ID"), "cs");
-            assertEq(el.getAttribute("ID1"), "cs1");
-            assertEq(el.getAttribute("IDREF"), "cs");
-            assertEq("cs cs1", el.getAttribute("IDREFS"));
-            assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
+			el = parse(xdef, "a", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(el.getAttribute("string"), " a   b c   ");
+			assertEq(el.getAttribute("normalizedString"), " a   b c   ");
+			assertEq(el.getAttribute("tokens"), "a b c");
+			assertEq(el.getAttribute("language"), "cs");
+			assertEq(el.getAttribute("Qname"), "cs");
+			assertEq(el.getAttribute("NCName"), "cs");
+			assertEq(el.getAttribute("ID"), "cs");
+			assertEq(el.getAttribute("ID1"), "cs1");
+			assertEq(el.getAttribute("IDREF"), "cs");
+			assertEq("cs cs1", el.getAttribute("IDREFS"));
+			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
 ///////////// TEST JSON string and XML ////////////////////////////////////////////////
-            xd = compile(
+			xd = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|J'>\n" +
 "  <xd:json name='J'>\n" +
 "	[\n" +
@@ -1369,91 +1369,91 @@ public final class TestTypes extends XDTester {
 "    <D xd:script='*'> ? string(%whiteSpace='collapse', %pattern='[ ]*[0-9]*') </D>\n" +
 "  </A>\n" +
 "</xd:def>").createXDDocument();
-            assertEq("<A><B></B><B>1</B><B> 1</B><C></C><C>1</C><C> 1</C><D></D><D>1</D><D> 1</D></A>",
-                xd.xparse("<A><B></B><B>1</B><B> 1</B><C></C><C>1</C><C> 1</C><D></D><D>1</D><D> 1</D></A>",
-                    null));
-            Map m =(Map)((List) xd.jparse("[{\"a\":\"\",\"b\":\"\",\"c\":\"\"}]", null)).get(0);
-            assertEq("", m.get("a"));
-            assertEq("", m.get("b"));
-            assertEq("", m.get("c"));
-            m =(Map)((List) xd.jparse("[{\"a\":\"1\",\"b\":\"1\",\"c\":\"1\"}]", null)).get(0);
-            assertEq("1", m.get("a"));
-            assertEq("1", m.get("b"));
-            assertEq("1", m.get("c"));
-            m =(Map)((List) xd.jparse("[{\"a\":\" 1\",\"b\":\" 1\",\"c\":\" 1\"}]", null)).get(0);
-            assertEq(" 1", m.get("a"));
-            assertEq(" 1", m.get("b"));
-            assertEq(" 1", m.get("b"));
-        } catch (IOException ex) {fail(ex);}
-        resetTester();
-    }
+			assertEq("<A><B></B><B>1</B><B> 1</B><C></C><C>1</C><C> 1</C><D></D><D>1</D><D> 1</D></A>",
+				xd.xparse("<A><B></B><B>1</B><B> 1</B><C></C><C>1</C><C> 1</C><D></D><D>1</D><D> 1</D></A>",
+					null));
+			Map m =(Map)((List) xd.jparse("[{\"a\":\"\",\"b\":\"\",\"c\":\"\"}]", null)).get(0);
+			assertEq("", m.get("a"));
+			assertEq("", m.get("b"));
+			assertEq("", m.get("c"));
+			m =(Map)((List) xd.jparse("[{\"a\":\"1\",\"b\":\"1\",\"c\":\"1\"}]", null)).get(0);
+			assertEq("1", m.get("a"));
+			assertEq("1", m.get("b"));
+			assertEq("1", m.get("c"));
+			m =(Map)((List) xd.jparse("[{\"a\":\" 1\",\"b\":\" 1\",\"c\":\" 1\"}]", null)).get(0);
+			assertEq(" 1", m.get("a"));
+			assertEq(" 1", m.get("b"));
+			assertEq(" 1", m.get("b"));
+		} catch (IOException ex) {fail(ex);}
+		resetTester();
+	}
 
-    public static String tst(XXElement xe, String s) {
-        return KXmlUtils.getNSURI(KXmlUtils.getQNamePrefix(s), xe.getElement());
-    }
+	public static String tst(XXElement xe, String s) {
+		return KXmlUtils.getNSURI(KXmlUtils.getQNamePrefix(s), xe.getElement());
+	}
 
-    public static boolean kp(XXNode chkel, XDValue[] params) {
-        XDContainer c = XDFactory.createXDContainer((XDContainer) params[2]);
-        c.setXDNamedItem("minInclusive", params[0]);
-        c.setXDNamedItem("maxInclusive", params[1]);
-        try {
-            XSAbstractParser d = new XSParseDecimal();
-            d.setNamedParams(null, c);
-            return !d.check(null, chkel.getXMLNode().getNodeValue()).errors();
-        } catch (DOMException | SException ex) {
-            chkel.error("", ex.getMessage());
-            return false;
-        }
-    }
+	public static boolean kp(XXNode chkel, XDValue[] params) {
+		XDContainer c = XDFactory.createXDContainer((XDContainer) params[2]);
+		c.setXDNamedItem("minInclusive", params[0]);
+		c.setXDNamedItem("maxInclusive", params[1]);
+		try {
+			XSAbstractParser d = new XSParseDecimal();
+			d.setNamedParams(null, c);
+			return !d.check(null, chkel.getXMLNode().getNodeValue()).errors();
+		} catch (DOMException | SException ex) {
+			chkel.error("", ex.getMessage());
+			return false;
+		}
+	}
 
-    public static XDParser getMyParser() {
-        return new XDParserAbstract() {
+	public static XDParser getMyParser() {
+		return new XDParserAbstract() {
 
-            @Override
-            public int getLegalKeys() {return 0;}
+			@Override
+			public int getLegalKeys() {return 0;}
 
-            @Override
-            public void parseObject(XXNode xnode, XDParseResult p) {
-                p.isSpaces();
-                if (!p.isToken("abc")) {
-                    p.error("E000", "Chyba");
-                }
-                p.isSpaces();
-                if (!p.eos()) {
-                    p.error("E000", "Chyba");
-                }
-            }
+			@Override
+			public void parseObject(XXNode xnode, XDParseResult p) {
+				p.isSpaces();
+				if (!p.isToken("abc")) {
+					p.error("E000", "Chyba");
+				}
+				p.isSpaces();
+				if (!p.eos()) {
+					p.error("E000", "Chyba");
+				}
+			}
 
-            @Override
-            public String parserName() {return "myParser";}
-        };
-    }
+			@Override
+			public String parserName() {return "myParser";}
+		};
+	}
 
-    private class BoolParser extends XDParserAbstract {
+	private class BoolParser extends XDParserAbstract {
 
-        BoolParser() {}
+		BoolParser() {}
 
-        @Override
-        public void parseObject(XXNode xnode, XDParseResult p) {
-            p.setEos();
-            if (tab0((XXData) xnode, "a", "b")) {
-                return;
-            }
-            //Inorrect value&{0}{ of '}{'}&{1}{: '}{'}&{#SYS000}
-            p.error(XDEF.XDEF809, parserName());
-        }
+		@Override
+		public void parseObject(XXNode xnode, XDParseResult p) {
+			p.setEos();
+			if (tab0((XXData) xnode, "a", "b")) {
+				return;
+			}
+			//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}&{#SYS000}
+			p.error(XDEF.XDEF809, parserName());
+		}
 
-        @Override
-        public String parserName() {return "tab";}
-    }
+		@Override
+		public String parserName() {return "tab";}
+	}
 
-    public static boolean tab0(XXNode xnode, String a, String b) {return true;}
+	public static boolean tab0(XXNode xnode, String a, String b) {return true;}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        XDTester.setFulltestMode(true);
-        if (runTest() != 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
+		if (runTest() != 0) {System.exit(1);}
+	}
 }

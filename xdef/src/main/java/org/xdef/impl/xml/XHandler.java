@@ -7,12 +7,12 @@ import org.xml.sax.InputSource;
  */
 public interface XHandler {
 
-    /** Pop reader in the stack of readers. */
-    public void popReader();
+	/** Pop reader in the stack of readers. */
+	public void popReader();
 
-    /** Push reader the the stack of readers.
-     * @param mr reader to be pushed.
-     * @return reader on the tom of the stack befor pushing.
-     */
-    public InputSource pushReader(final XAbstractReader mr);
+	/** Push reader the the stack of readers.
+	 * @param mr reader to be pushed.
+	 * @return reader on the tom of the stack befor pushing.
+	 */
+	public InputSource pushReader(final XAbstractReader mr);
 }
