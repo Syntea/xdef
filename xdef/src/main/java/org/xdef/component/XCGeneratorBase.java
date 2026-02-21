@@ -469,8 +469,7 @@ class XCGeneratorBase {
             mURI = xel.getNSUri();
             mXDPos = xel.getXDPosition();
         }
-        genSetterMethodOfChildElement(
-            className, name, max, mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
+        genSetterMethodOfChildElement(className, name, max, mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
     }
 
     /** Generate java code of getter method for child element classes.
@@ -494,8 +493,7 @@ class XCGeneratorBase {
         String publ = "public";
         final int ndx = typeName.lastIndexOf('.');
         if (ndx == 0) {
-            throw new SRuntimeException(SYS.SYS066,// Internal error&{0}{: }
-                "Error in getter: " + xn.getXDPosition());
+            throw new SRuntimeException(SYS.SYS066, "Error in getter: " + xn.getXDPosition());// Internal error&{0}{: }
         }
         String d = descr;
         String typ = typeName;
@@ -586,8 +584,7 @@ class XCGeneratorBase {
                 "&{d}" , d,
                 "&{name}", name,
                 "&{typ}", typ));
-            if (typeName.contains("org.xdef.sys.SDatetime")) {
-                // datetime getters
+            if (typeName.contains("org.xdef.sys.SDatetime")) {// datetime getters
                 sb.append(modify(
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
@@ -667,8 +664,7 @@ class XCGeneratorBase {
                 + ", \"" + modelXDPos + "\");"+LN
                 + "\t\t_&{name}=x;"+LN+"\t";
             } else {
-                x = (clearChoice.isEmpty() ? "_&{name}=x;"
-                    : (LN + clearChoice + LN+"\t\t_&{name}=x;"+LN + "\t"));
+                x = (clearChoice.isEmpty() ? "_&{name}=x;" : (LN + clearChoice + LN+"\t\t_&{name}=x;"+LN + "\t"));
             }
         }
         if (sbi != null) {
@@ -896,8 +892,7 @@ class XCGeneratorBase {
             case XD_DOUBLE:
             case XD_DECIMAL:
             case XD_NUMBER:
-            case XD_DURATION:
-                x = z+y+".toString()"; break;
+            case XD_DURATION: x = z+y+".toString()"; break;
             case XD_CHAR: x = "org.xdef.xon.XonTools.genXMLValue(" + z + y +")"; break;
             case XD_IPADDR: x = "get&{name}().toString().substring(1)"; break;
             case XD_DATETIME: {
@@ -907,8 +902,7 @@ class XCGeneratorBase {
                 break;
             }
             case XD_BYTES:
-                x = ("base64Binary".equals(xdata.getParserName())
-                    ? "encodeBase64(" : "encodeHex(") + z + y + ")";
+                x = ("base64Binary".equals(xdata.getParserName()) ? "encodeBase64(" : "encodeHex(") + z + y + ")";
                 break;
             case XD_NULL: x = "\"null\""; break; //jnull
             case XD_ANY: //jvalue
@@ -984,8 +978,7 @@ class XCGeneratorBase {
                         QName u2 = x == null
                             ? ((XElement) n).getQName() : new QName(x.getNS(),((XElement)n).getLocalName());
                         if (u1 == null ? u2 == null : u1.equals(u2)) {
-                            t = x != null ? x.getName() : null;
-                            return t;
+                            return x != null ? x.getName() : null;
                         } else {
                             return null;
                         }
@@ -1008,10 +1001,9 @@ class XCGeneratorBase {
                     // if the reference class is not declarted
                     return u.getName(); // we return class of model
                 }
-                // Now we know there are declarations both of model and of ref. Check if the model inplements
-                // a class and if the reference implements an interface. If the model implements the same
-                // interface as the refernced model then return the model declaration otherwise return
-                // the reference declaration
+                // Now we know there are declarations both of model and of ref. Check if the model inplements a class
+                // and if the reference implements an interface. If the model implements the same interface as the
+                // refernced model then return the model declaration otherwise return the reference declaration.
                 final int ndxu, ndxv;
                 String uu = u.getName();
                 String vv = v.getName();

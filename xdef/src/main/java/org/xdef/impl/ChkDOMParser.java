@@ -104,8 +104,7 @@ class ChkDOMParser extends SReporter {
                         String systemLiteral;
                         int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
                         switch (i) {
-                            case 0:
-                                //SYSTEM
+                            case 0: //SYSTEM
                                 if (!p.isSpaces()) {
                                     error(XML.XML014, "PUBLIC"); //Whitespace expected after '&{0}'
                                 }
@@ -114,8 +113,7 @@ class ChkDOMParser extends SReporter {
                                     return;
                                 }
                                 break;
-                            case 1:
-                                //PUBLIC
+                            case 1: //PUBLIC
                                 if (!p.isSpaces()) {
                                     error(XML.XML014, "PUBLIC"); //Whitespace expected after '&{0}'
                                 }	if (p.readString() != null) {
@@ -132,8 +130,7 @@ class ChkDOMParser extends SReporter {
                                     return;
                                 }
                                 break;
-                            default:
-                                systemLiteral = p.getSourceBuffer().trim();
+                            default: systemLiteral = p.getSourceBuffer().trim();
                         }
                         URL u;
                         try {
@@ -245,9 +242,7 @@ class ChkDOMParser extends SReporter {
                         chkEl.addComment(item.getNodeValue());
                         continue;
                     case Node.CDATA_SECTION_NODE:
-                    case Node.TEXT_NODE:
-                        _text.append(item.getNodeValue());
-                        continue;
+                    case Node.TEXT_NODE: _text.append(item.getNodeValue()); continue;
                     case Node.ENTITY_REFERENCE_NODE:
                         _text.append(KXmlUtils.nodeToString(item, false, false, false));
                         continue;
@@ -257,8 +252,7 @@ class ChkDOMParser extends SReporter {
                         continue;
                     case Node.PROCESSING_INSTRUCTION_NODE:
                         addText(chkEl);
-                        chkEl.addPI(((ProcessingInstruction) item).getTarget(),
-                            ((ProcessingInstruction) item).getData());
+                        chkEl.addPI(((ProcessingInstruction)item).getTarget(), ((ProcessingInstruction)item).getData());
                 }
             }
             addText(chkEl);
@@ -281,10 +275,7 @@ class ChkDOMParser extends SReporter {
             Properties props = scp.getProperties();
             _chkDoc._scp = null;
             _chkDoc.init((XDefinition) chkDoc.getXMDefinition(),
-                (Document) _chkDoc.getDocument().cloneNode(false),
-                chkDoc.getReporter(),
-                props,
-                chkDoc._userObject);
+                (Document) _chkDoc.getDocument().cloneNode(false), chkDoc.getReporter(), props, chkDoc._userObject);
             _chkDoc.startDocument();
             _chkDoc._scp = scp;
             _doc = _chkDoc.getDocument();

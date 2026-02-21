@@ -30,9 +30,7 @@ final class XComponentInfo {
     public final String getNS() {return _ns;}
 
     @Override
-    public final int hashCode() {
-        return _name.hashCode() * 3 + _ns == null ? 0 : _ns.hashCode();
-    }
+    public final int hashCode() {return _name.hashCode() * 3 + _ns == null ? 0 : _ns.hashCode();}
 
     @Override
     public final boolean equals(final Object o) {
@@ -44,7 +42,5 @@ final class XComponentInfo {
     }
 
     @Override
-    public final String toString() {
-        return _ns != null ? "{" + _ns + "}" + _name : _name;
-    }
+    public final String toString() {return _ns != null ? "{" + _ns + "}" + _name : _name;}
 }

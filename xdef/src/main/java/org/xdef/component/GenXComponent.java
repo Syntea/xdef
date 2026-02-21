@@ -282,7 +282,7 @@ LN+(genJavadoc ?
                 }
                 className = className + extName;
                 if ((ndx = className.indexOf(" extends ")) > 0) {
-                    if (className.indexOf(" implements") < 0 || className.indexOf(" implements") > ndx) {
+                    if (!className.contains(" implements") || className.indexOf(" implements") > ndx) {
                         extClass = " extends " + className.substring(ndx+8).trim();
                         className = className.substring(0,ndx).trim();
                     }

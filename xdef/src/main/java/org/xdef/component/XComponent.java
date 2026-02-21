@@ -14,15 +14,15 @@ import org.w3c.dom.Node;
  */
 public interface XComponent extends Serializable {
 
-    /** Create XML element from this XComponent (marshal). If the argument is null null then document
-     * is created with created document element.
+    /** Create XML element from this XComponent (marshal). If the argument is null null then document is created
+     * with created document element.
      * @return XML element created from this object.
      */
     public Element toXml();
 
     /** Create XML element or text node from default model as element created from given document.
-     * @param doc XML Document or null. If the argument is null null then document is created
-     * with created document element.
+     * @param doc XML Document or null. If the argument is null null then document is created with created
+     * document element.
      * @return XML node belonging to given document from this XComponent.
      */
     public Node toXml(Document doc);
@@ -127,5 +127,4 @@ public interface XComponent extends Serializable {
      * @return XON object if this X-component is created from JSON/XON/INI/CSV. Otherwise return null.
      */
     public Object toXon();
-
 }

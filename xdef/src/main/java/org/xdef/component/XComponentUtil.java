@@ -52,7 +52,7 @@ public class XComponentUtil {
      * @return object with value of variable.
      * @throws Exception if variable not exists.
      */
-    public static final Object getVariable(final XComponent xc, final String name) throws Exception{
+    public static final Object getVariable(final XComponent xc, final String name) throws Exception {
         Class<?> clazz = xc.getClass();
         final Method method = clazz.getDeclaredMethod("get" + name);
         method.setAccessible(true);
@@ -65,8 +65,7 @@ public class XComponentUtil {
      * @param value value of variable.
      * @throws Exception if variable not exists.
      */
-    public static final void setVariable(final XComponent xc, final String name, final Object value)
-        throws Exception {
+    public static final void setVariable(final XComponent xc, final String name, final Object value) throws Exception {
         final Class<?> clazz = xc.getClass();
         Method method = clazz.getDeclaredMethod("get" + name);
         method.setAccessible(true);
@@ -82,7 +81,7 @@ public class XComponentUtil {
      * @param xdPos XDPosition of model in XDPool.
      * @return created XComponent.
      */
-    public static final XComponent toXComponent(final XComponent xc, final XDPool xp,final String xdPos) {
+    public static final XComponent toXComponent(final XComponent xc, final XDPool xp, final String xdPos) {
         XMNode xm = xp.findModel(xdPos);
         if (xm.getKind() != XMELEMENT) {
             throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition()); //Argument is not model of element: &{0}
@@ -146,9 +145,7 @@ public class XComponentUtil {
      * @param model name of model to be created.
      * @return new XComponent.
      */
-    public static final XComponent toXComponent(final XComponent xc,
-        final XDDocument xd,
-        final String model) {
+    public static final XComponent toXComponent(final XComponent xc, final XDDocument xd, final String model) {
         xd.setXDContext(xc.toXml());
         Element el = xd.xcreate(model, null);
         XDDocument xd1 = xd.getXDPool().createXDDocument(model);
@@ -461,14 +458,9 @@ public class XComponentUtil {
                 sb.append("null");
             } else {
                 switch (y.getItemId()) {
-                    case XD_STRING:
-                        sb.append(y.toString());
-                        break;
-                    case XD_CONTAINER:
-                        sb.append(containerToJlist((XDContainer) y));
-                        break;
-                    default:
-                        sb.append(y.toString());
+                    case XD_STRING: sb.append(y.toString()); break;
+                    case XD_CONTAINER: sb.append(containerToJlist((XDContainer) y)); break;
+                    default: sb.append(y.toString());
                 }
             }
         }
@@ -551,9 +543,7 @@ public class XComponentUtil {
      * @param methods array with methods.
      * @param result the map where put items.
      */
-    private static void toXonMap(final XComponent xc,
-        final Method[] methods,
-        final Map<String, Object> result) {
+    private static void toXonMap(final XComponent xc, final Method[] methods, final Map<String, Object> result) {
         for (Method x: methods) {
             String methodName = x.getName();
             Object o;
@@ -676,8 +666,7 @@ public class XComponentUtil {
                             }
                         }
                         o = z.get(key);
-                        if (o instanceof List && ((List) o).size()==1
-                            && ((List) o).get(0) instanceof String) {
+                        if (o instanceof List && ((List) o).size() == 1 && ((List) o).get(0) instanceof String) {
                             o = XonTools.xmlToJValue((String)((List) o).get(0));
                         }
                         result.put(XonTools.xmlToJName(key), o);
@@ -772,9 +761,7 @@ public class XComponentUtil {
      * @param nsStack namespace prefixes stack.
      * @return object with XON.
      */
-    private static void getXonBody(final XComponent xc,
-        final List body,
-        final KNamespace nsStack){
+    private static void getXonBody(final XComponent xc, final List body, final KNamespace nsStack) {
         List<XComponent> components = xc.xGetNodeList();
         if (components != null) {
             int textIndex = 0;
@@ -904,9 +891,7 @@ public class XComponentUtil {
      * @param name name of listOf getter.
      * @return list returned by getter.
      */
-    public static final List listOf(final XComponent xc, final String name){
-        return (List) getx(xc, "listOf"+name);
-    }
+    public static final List listOf(final XComponent xc, final String name) {return (List) getx(xc, "listOf"+name);}
 
     /** Get value of XComponent as the java.util.Map.
      * @param xc the XComponent.
@@ -938,8 +923,7 @@ public class XComponentUtil {
                 break;
             }
         }
-        //Setter &{0} not found in class &{1}
-        throw new SRuntimeException(SYS.SYS105, name, xc.getClass().getName());
+        throw new SRuntimeException(SYS.SYS105, name, xc.getClass().getName());//Setter &{0} not found in class &{1}
     }
 
     /** Invoke setter from XComponent with given value.
@@ -947,16 +931,12 @@ public class XComponentUtil {
      * @param name name of setter.
      * @param v value to be set.
      */
-    public static final void set(final XComponent xc, final String name, final Object v) {
-        setx(xc, "set"+name, v);
-    }
+    public static final void set(final XComponent xc, final String name, final Object v) {setx(xc, "set"+name, v);}
 
     /** Add value from argument to the list of given name from XComponent.
      * @param xc XComponent with the list.
      * @param name name of list in the XComponent.
      * @param v value to be added.
      */
-    public static final void add(final XComponent xc, final String name, final Object v) {
-        setx(xc, "add"+name, v);
-    }
+    public static final void add(final XComponent xc, final String name, final Object v) {setx(xc, "add"+name, v);}
 }
