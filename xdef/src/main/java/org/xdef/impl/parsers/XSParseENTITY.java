@@ -12,49 +12,49 @@ import org.w3c.dom.NamedNodeMap;
  * @author Vaclav Trojan
  */
 public class XSParseENTITY extends XSParseQName {
-	private static final String ROOTBASENAME = "ENTITY";
+    private static final String ROOTBASENAME = "ENTITY";
 
-	public XSParseENTITY() {super();}
+    public XSParseENTITY() {super();}
 
-	@Override
-	public void finalCheck(final XXNode xnode, XDParseResult p) {
-		if (xnode == null) {
-			//The validation method &{0} can be called only from the X-script
-			//of attribute or text node
-			p.error(XDEF.XDEF574, ROOTBASENAME);
-			return;
-		}
-		String id = p.getSourceBuffer();
-		if (!chkEntity(id, xnode.getElement())) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.error(XDEF.XDEF809, parserName(), id);
-		}
-	}
+    @Override
+    public void finalCheck(final XXNode xnode, XDParseResult p) {
+        if (xnode == null) {
+            //The validation method &{0} can be called only from the X-script
+            //of attribute or text node
+            p.error(XDEF.XDEF574, ROOTBASENAME);
+            return;
+        }
+        String id = p.getSourceBuffer();
+        if (!chkEntity(id, xnode.getElement())) {
+            //Incorrect value of '&{0}'&{1}{: }
+            p.error(XDEF.XDEF809, parserName(), id);
+        }
+    }
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 
-	/** Check if exists an entity with given name in given element.
-	 * @param id name of entity
-	 * @param el element
-	 * @return true if entity exists.
-	 */
-	static boolean chkEntity(final String id, final Element el) {
-		DocumentType dt = el.getOwnerDocument().getDoctype();
-		if (dt == null) {
-			return false;
-		}
-		NamedNodeMap nm = dt.getEntities();
-		if (nm == null || nm.getLength() == 0) {
-			return false;
-		}
-		String nsURI = XExtUtils.getQnameNSUri(id, el);
-		if (nsURI.length() > 0) {
-			int ndx = id.indexOf(':');
-			String localName = ndx < 0 ? id : id.substring(ndx + 1);
-			return nm.getNamedItemNS(nsURI, localName) != null;
-		} else {
-			return nm.getNamedItem(id) != null;
-		}
-	}
+    /** Check if exists an entity with given name in given element.
+     * @param id name of entity
+     * @param el element
+     * @return true if entity exists.
+     */
+    static boolean chkEntity(final String id, final Element el) {
+        DocumentType dt = el.getOwnerDocument().getDoctype();
+        if (dt == null) {
+            return false;
+        }
+        NamedNodeMap nm = dt.getEntities();
+        if (nm == null || nm.getLength() == 0) {
+            return false;
+        }
+        String nsURI = XExtUtils.getQnameNSUri(id, el);
+        if (nsURI.length() > 0) {
+            int ndx = id.indexOf(':');
+            String localName = ndx < 0 ? id : id.substring(ndx + 1);
+            return nm.getNamedItemNS(nsURI, localName) != null;
+        } else {
+            return nm.getNamedItem(id) != null;
+        }
+    }
 }

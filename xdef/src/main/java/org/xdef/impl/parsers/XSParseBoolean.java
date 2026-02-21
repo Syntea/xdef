@@ -9,18 +9,18 @@ import org.xdef.impl.code.DefBoolean;
  * @author Vaclav Trojan
  */
 public class XSParseBoolean extends XSAbstractParser {
-	private static final String ROOTBASENAME = "boolean";
+    private static final String ROOTBASENAME = "boolean";
 
-	public XSParseBoolean() {super(); _whiteSpace = WS_COLLAPSE;}
+    public XSParseBoolean() {super(); _whiteSpace = WS_COLLAPSE;}
 
-	@Override
-	public void initParams() {_whiteSpace = WS_COLLAPSE;}
+    @Override
+    public void initParams() {_whiteSpace = WS_COLLAPSE;}
 
-	@Override
-	public int getLegalKeys() {
-		return PATTERN +
+    @Override
+    public int getLegalKeys() {
+        return PATTERN +
 //			ENUMERATION +
-			WHITESPACE + //fixed collapse
+            WHITESPACE + //fixed collapse
 //			MAXINCLUSIVE +
 //			MAXEXCLUSIVE +
 //			MININCLUSIVE +
@@ -33,33 +33,33 @@ public class XSParseBoolean extends XSAbstractParser {
 //			NORMALIZE +
 //			SEPARATOR +
 //			ITEM +
-			BASE +
-			0;
-	}
+            BASE +
+            0;
+    }
 
-	@Override
-	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+    @Override
+    public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		int pos = p.getIndex();
-		int i = p.isOneOfTokens("false", "0", "true", "1");
-		if (i < 0) {
-			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-		} else {
-			String s = p.getParsedBufferPartFrom(pos);
-			p.isSpaces();
-			p.replaceParsedBufferFrom(pos0, s);
-			p.setParsedValue(new DefBoolean(i > 1));
-			checkPatterns(p);
-		}
-	}
+    @Override
+    public void parseObject(final XXNode xnode, final XDParseResult p){
+        int pos0 = p.getIndex();
+        p.isSpaces();
+        int pos = p.getIndex();
+        int i = p.isOneOfTokens("false", "0", "true", "1");
+        if (i < 0) {
+            p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
+        } else {
+            String s = p.getParsedBufferPartFrom(pos);
+            p.isSpaces();
+            p.replaceParsedBufferFrom(pos0, s);
+            p.setParsedValue(new DefBoolean(i > 1));
+            checkPatterns(p);
+        }
+    }
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 
-	@Override
-	public short parsedType() {return XD_BOOLEAN;}
+    @Override
+    public short parsedType() {return XD_BOOLEAN;}
 }

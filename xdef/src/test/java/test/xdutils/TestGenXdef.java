@@ -20,77 +20,77 @@ import test.XDTester;
  * @author Vaclav Trojan
  */
 public class TestGenXdef extends XDTester {
-	public TestGenXdef() {super();}
+    public TestGenXdef() {super();}
 
-	private void test(File[] files, String id) {
-		ArrayReporter reporter = new ArrayReporter();
-		String fname;
-		String xname;
-		XDPool xp;
-		XDDocument xd;
-		Object o,x;
-		String tempDir = getTempDir();
-		File f = null;
-		try {
-			for (int i = 0; i < files.length; i++) {
-				fname = tempDir + id + i + ".xdef";
-				xname = "Example";
-				f = files[i];
-				GenXDefinition.genXdef(f, fname, "UTF-8", xname);
-				xp = XDFactory.compileXD(null, new File(fname));
-				xd = xp.createXDDocument(xname);
-				o = XonUtils.parseXON(files[i]);
-				x = xd.jparse(f, reporter);
-				if (reporter.errorWarnings()) {
-					fail(id + ", " + f + ":\n" + reporter.printToString() + '\n'
-						+ SUtils.readString(f) + '\n' + SUtils.readString(new File(fname)));
-					reporter.clear();
-				}
-				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f + '\n'
-					+ XonUtils.toXonString(o, true) + '\n' + XonUtils.toXonString(x, true) + '\n'
-					+ SUtils.readString(new File(fname)));
-			}
-		} catch (IOException | SException | RuntimeException ex) {
-			fail(f.getAbsolutePath());
-			fail(ex);
-		}
-	}
-	private void test(String data, String id) {
-		ArrayReporter reporter = new ArrayReporter();
-		String fname;
-		String xname;
-		XDPool xp;
-		String tempDir = getTempDir();
-		try {
-			data = "<A a='1f' b='b'><B>true</B><B/></A>";
-			fname = tempDir + "A.xdef";
-			xname = "Example";
-			GenXDefinition.genXdef(data, fname, "UTF-8", xname);
-			xp = XDFactory.compileXD(null, new File(fname));
-			assertEq(data, parse(xp, xname, data, reporter), id);
-			if (reporter.errorWarnings()) {
-				fail(id + ":\n" +reporter.printToString());
-			}
-		} catch (IOException | RuntimeException ex) {
-			fail(id + ":");
-			fail(ex);
-		}
-	}
+    private void test(File[] files, String id) {
+        ArrayReporter reporter = new ArrayReporter();
+        String fname;
+        String xname;
+        XDPool xp;
+        XDDocument xd;
+        Object o,x;
+        String tempDir = getTempDir();
+        File f = null;
+        try {
+            for (int i = 0; i < files.length; i++) {
+                fname = tempDir + id + i + ".xdef";
+                xname = "Example";
+                f = files[i];
+                GenXDefinition.genXdef(f, fname, "UTF-8", xname);
+                xp = XDFactory.compileXD(null, new File(fname));
+                xd = xp.createXDDocument(xname);
+                o = XonUtils.parseXON(files[i]);
+                x = xd.jparse(f, reporter);
+                if (reporter.errorWarnings()) {
+                    fail(id + ", " + f + ":\n" + reporter.printToString() + '\n'
+                        + SUtils.readString(f) + '\n' + SUtils.readString(new File(fname)));
+                    reporter.clear();
+                }
+                assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f + '\n'
+                    + XonUtils.toXonString(o, true) + '\n' + XonUtils.toXonString(x, true) + '\n'
+                    + SUtils.readString(new File(fname)));
+            }
+        } catch (IOException | SException | RuntimeException ex) {
+            fail(f.getAbsolutePath());
+            fail(ex);
+        }
+    }
+    private void test(String data, String id) {
+        ArrayReporter reporter = new ArrayReporter();
+        String fname;
+        String xname;
+        XDPool xp;
+        String tempDir = getTempDir();
+        try {
+            data = "<A a='1f' b='b'><B>true</B><B/></A>";
+            fname = tempDir + "A.xdef";
+            xname = "Example";
+            GenXDefinition.genXdef(data, fname, "UTF-8", xname);
+            xp = XDFactory.compileXD(null, new File(fname));
+            assertEq(data, parse(xp, xname, data, reporter), id);
+            if (reporter.errorWarnings()) {
+                fail(id + ":\n" +reporter.printToString());
+            }
+        } catch (IOException | RuntimeException ex) {
+            fail(id + ":");
+            fail(ex);
+        }
+    }
 
-	/** Run test and print error information. */
-	@Override
-	public void test() {
-		String dataDir = getDataDir() + "test/";
-		if (dataDir == null) {
-			fail("Data directory is missing, test canceled");
-			return;
-		}
-		Element el;
-		String xdef;
-		String xml;
-		XDPool xp;
-		ArrayReporter reporter = new ArrayReporter();
-		for (String x: new String[] {
+    /** Run test and print error information. */
+    @Override
+    public void test() {
+        String dataDir = getDataDir() + "test/";
+        if (dataDir == null) {
+            fail("Data directory is missing, test canceled");
+            return;
+        }
+        Element el;
+        String xdef;
+        String xml;
+        XDPool xp;
+        ArrayReporter reporter = new ArrayReporter();
+        for (String x: new String[] {
 "<a/>\n",
 "<a>\n"+
 "  <b c='20190521214531'/>\n"+
@@ -190,48 +190,48 @@ public class TestGenXdef extends XDTester {
 "</Values>",
 dataDir + "Matej3_out.xml",
 dataDir + "TestValidate2.xml",
-		}) {
-			try {
-				el = GenXDefinition.genXdef(x);
-				xdef = KXmlUtils.nodeToString(el, true);
-				xp = compile(xdef);
-				assertEq(x, parse(xp, "", x, reporter));
-				assertNoErrorwarnings(reporter);
-			} catch (Exception ex) {fail(ex);}
-		}
-		try {
-			xml =
+        }) {
+            try {
+                el = GenXDefinition.genXdef(x);
+                xdef = KXmlUtils.nodeToString(el, true);
+                xp = compile(xdef);
+                assertEq(x, parse(xp, "", x, reporter));
+                assertNoErrorwarnings(reporter);
+            } catch (Exception ex) {fail(ex);}
+        }
+        try {
+            xml =
 "<xd:X xmlns:xd=\"a.b.c\" xd:x=\"123\">\n"+
 "  <xd:Y xd:y=\"z\"> x </xd:Y>\n"+
 "  <xd:Y y=\"z\"/>\n"+
 "  <xd:Y/>\n"+
 "</xd:X>";
-			GenXDefinition.genXdef(xml);
-			fail("Exception not thrown");
-		} catch (Exception ex) {
-			if (!ex.getMessage().contains("XDEF881")) {
-				fail(ex);
-			}
-		}
-		try {
-			xml =
+            GenXDefinition.genXdef(xml);
+            fail("Exception not thrown");
+        } catch (Exception ex) {
+            if (!ex.getMessage().contains("XDEF881")) {
+                fail(ex);
+            }
+        }
+        try {
+            xml =
 "<d:X xmlns:d=\""+ XDConstants.XDEF31_NS_URI + "\" d:x=\"123\">\n"+
 "  <d:Y d:y=\"z\"> x </d:Y>\n"+
 "  <d:Y y=\"z\"/>\n"+
 "  <d:Y/>\n"+
 "</d:X>";
-			GenXDefinition.genXdef(xml);
-			fail("Exception not thrown");
-		} catch (Exception ex) {
-			if (!ex.getMessage().contains("XDEF882")) {
-				fail(ex);
-			}
-		}
-		try {
-			test("<A a='1f' b='b'><B>true</B><B/></A>", "A");
-			test("{a:1,b:true,c:[1,true,null,\"null\",\"\",null],d:{x:-9}}", "B");
-			test("t\"+420 234 567 890\"", "C");
-			test(
+            GenXDefinition.genXdef(xml);
+            fail("Exception not thrown");
+        } catch (Exception ex) {
+            if (!ex.getMessage().contains("XDEF882")) {
+                fail(ex);
+            }
+        }
+        try {
+            test("<A a='1f' b='b'><B>true</B><B/></A>", "A");
+            test("{a:1,b:true,c:[1,true,null,\"null\",\"\",null],d:{x:-9}}", "B");
+            test("t\"+420 234 567 890\"", "C");
+            test(
 "{ \"desc\" : \"Distances\", \"updated\" : \"02014\",\n" +
 "  \"cities\" : { \"Brussels\": [\n" +
 "      {\"to\": \"London\", \"distance\": 322},\n" +
@@ -243,18 +243,18 @@ dataDir + "TestValidate2.xml",
 "    ]\n" +
 "  }\n" +
 "}", "D");
-			test(SUtils.getFileGroup("src/test/resources/test/common/xon/data/*.json"), "F");
-			test(SUtils.getFileGroup("src/test/resources/test/xdef/data/json/*.json"), "G");
-		} catch (Exception ex) {fail(ex);}
+            test(SUtils.getFileGroup("src/test/resources/test/common/xon/data/*.json"), "F");
+            test(SUtils.getFileGroup("src/test/resources/test/xdef/data/json/*.json"), "G");
+        } catch (Exception ex) {fail(ex);}
 
-		clearTempDir(); // delete temporary files.
-	}
+        clearTempDir(); // delete temporary files.
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String... args) {
-		XDTester.setFulltestMode(true);
-		runTest();
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String... args) {
+        XDTester.setFulltestMode(true);
+        runTest();
+    }
 }

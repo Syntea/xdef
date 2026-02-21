@@ -22,19 +22,19 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XSParseDatetime extends XSAbstractParseComparable {
-	private static final String ROOTBASENAME = "dateTime";
+    private static final String ROOTBASENAME = "dateTime";
 
-	public XSParseDatetime() {super();}
+    public XSParseDatetime() {super();}
 
-	@Override
-	public int getLegalKeys() {
-		return PATTERN +
-			ENUMERATION +
-			WHITESPACE + //fixed to collapse
-			MAXINCLUSIVE +
-			MAXEXCLUSIVE +
-			MININCLUSIVE +
-			MINEXCLUSIVE +
+    @Override
+    public int getLegalKeys() {
+        return PATTERN +
+            ENUMERATION +
+            WHITESPACE + //fixed to collapse
+            MAXINCLUSIVE +
+            MAXEXCLUSIVE +
+            MININCLUSIVE +
+            MINEXCLUSIVE +
 //			TOTALDIGITS +
 //			FRACTIONDIGITS +
 //			LENGTH +
@@ -43,40 +43,40 @@ public class XSParseDatetime extends XSAbstractParseComparable {
 //			NORMALIZE +
 //			SEPARATOR +
 //			ITEM +
-			BASE +
-			0;
-	}
+            BASE +
+            0;
+    }
 
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		int pos = p.getIndex();
-		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parse(parser)) {
-			p.errorWithString(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'&{1}{: }
-			return;
-		}
-		SDatetime d = parser.getParsedSDatetime();
-		TimeZone defaulttz;
-		if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
-			d.setTZ(defaulttz);
-		}
-		p.setParsedValue(new DefDate(d));
-		p.setIndex(parser.getIndex());
-		String s = p.getParsedBufferPartFrom(pos);
-		p.isSpaces();
-		p.replaceParsedBufferFrom(pos0, s);
-		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
-		checkDate(xnode, p);
-	}
+    @Override
+    public void parseObject(final XXNode xnode, final XDParseResult p){
+        int pos0 = p.getIndex();
+        p.isSpaces();
+        int pos = p.getIndex();
+        StringParser parser = new StringParser(p.getSourceBuffer(), pos);
+        if (!parse(parser)) {
+            p.errorWithString(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'&{1}{: }
+            return;
+        }
+        SDatetime d = parser.getParsedSDatetime();
+        TimeZone defaulttz;
+        if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
+            d.setTZ(defaulttz);
+        }
+        p.setParsedValue(new DefDate(d));
+        p.setIndex(parser.getIndex());
+        String s = p.getParsedBufferPartFrom(pos);
+        p.isSpaces();
+        p.replaceParsedBufferFrom(pos0, s);
+        p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
+        checkDate(xnode, p);
+    }
 
-	// This method is overwritten in different date/time parsers
-	boolean parse(final StringParser parser) {return parser.isXMLDatetime();}
+    // This method is overwritten in different date/time parsers
+    boolean parse(final StringParser parser) {return parser.isXMLDatetime();}
 
-	@Override
-	public short parsedType() {return XD_DATETIME;}
+    @Override
+    public short parsedType() {return XD_DATETIME;}
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 }

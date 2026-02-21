@@ -23,35 +23,35 @@ import static test.XDTester._xdNS;
  */
 public final class TestGUIDebuger extends XDTester {
 
-	public TestGUIDebuger() {super(); setChkSyntax(false);}
+    public TestGUIDebuger() {super(); setChkSyntax(false);}
 
-	@Override
-	public void test() {
-		String xdef;
-		XDPool xp;
-		ArrayReporter reporter = new ArrayReporter();
-		String xml;
-		XDDocument xd;
-		ByteArrayOutputStream baos;
-		XDOutput out;
-		Element el;
-		String s;
-		String json;
-		// set external editor
+    @Override
+    public void test() {
+        String xdef;
+        XDPool xp;
+        ArrayReporter reporter = new ArrayReporter();
+        String xml;
+        XDDocument xd;
+        ByteArrayOutputStream baos;
+        XDOutput out;
+        Element el;
+        String s;
+        String json;
+        // set external editor
 //		setProperty(XDConstants.XDPROPERTY_XDEF_EDITOR,
 //"xdplugin.XdPlugin; C:/Program Files/Oxygen XML Editor 20/oxygen20.1.exe");
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef_display
+        setProperty(XDConstants.XDPROPERTY_DISPLAY, //xdef_display
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); //false
-			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
+            XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); //true
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS); //errors
-		setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef_debug
+        setProperty(XDConstants.XDPROPERTY_DEBUG, //xdef_debug
 //			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE); //false
-			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
+            XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); //true
+        setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef_warnings
+            XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
 //			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
-		try { // XScript breakpoints
-			xdef =
+        try { // XScript breakpoints
+            xdef =
 "<x:collection xmlns:x='"+_xdNS+"'>\n"+                 	//01
 "<x:def name = 'a' root = 'a'>\n"+								//02
 "  <a a = \"required eq('a');\n"+								//03
@@ -75,61 +75,61 @@ public final class TestGUIDebuger extends XDTester {
 "  String s = 'a';\n"+											//21
 "</x:declaration>\n"+											//22
 "</x:collection>";												//23
-			xp = compile(xdef);
-			XMDebugInfo xm = xp.getDebugInfo();
-			// create mode
-			xd = xp.createXDDocument("a");
-			XMStatementInfo[] si = xm.getStatementInfo(4, "a");
-			for (XMStatementInfo si1 : si) {
-				xd.getDebugger().setStopAddr(si1.getAddr());
-			}
-			si = xm.getStatementInfo(6, "a");
-			for (XMStatementInfo si1 : si) {
-				System.out.println(si1);
-				xd.getDebugger().setStopAddr(si1.getAddr());
-			}
-			xml = "<a a='a'/>";
-			xd.setXDContext(xml);
-			create(xd, "a", reporter);
-			// processing mode
-			xd = xp.createXDDocument("a");
-			xm = xp.getDebugInfo();
-			si = xm.getStatementInfo(3, "a");
-			for (XMStatementInfo si1 : si) {
-				xd.getDebugger().setStopAddr(si1.getAddr());
-			}
-			si = xm.getStatementInfo(16, "");
-			for (XMStatementInfo si1 : si) {
-				xd.getDebugger().setStopAddr(si1.getAddr());
-			}
-			si = xm.getStatementInfo(18, "");
-			for (XMStatementInfo si1 : si) {
-				xd.getDebugger().setStopAddr(si1.getAddr());
-			}
-			parse(xd, xml, reporter);
-		} catch (Exception ex) {fail(ex);}
-		try { // XPos breakpoints
-			xdef =
+            xp = compile(xdef);
+            XMDebugInfo xm = xp.getDebugInfo();
+            // create mode
+            xd = xp.createXDDocument("a");
+            XMStatementInfo[] si = xm.getStatementInfo(4, "a");
+            for (XMStatementInfo si1 : si) {
+                xd.getDebugger().setStopAddr(si1.getAddr());
+            }
+            si = xm.getStatementInfo(6, "a");
+            for (XMStatementInfo si1 : si) {
+                System.out.println(si1);
+                xd.getDebugger().setStopAddr(si1.getAddr());
+            }
+            xml = "<a a='a'/>";
+            xd.setXDContext(xml);
+            create(xd, "a", reporter);
+            // processing mode
+            xd = xp.createXDDocument("a");
+            xm = xp.getDebugInfo();
+            si = xm.getStatementInfo(3, "a");
+            for (XMStatementInfo si1 : si) {
+                xd.getDebugger().setStopAddr(si1.getAddr());
+            }
+            si = xm.getStatementInfo(16, "");
+            for (XMStatementInfo si1 : si) {
+                xd.getDebugger().setStopAddr(si1.getAddr());
+            }
+            si = xm.getStatementInfo(18, "");
+            for (XMStatementInfo si1 : si) {
+                xd.getDebugger().setStopAddr(si1.getAddr());
+            }
+            parse(xd, xml, reporter);
+        } catch (Exception ex) {fail(ex);}
+        try { // XPos breakpoints
+            xdef =
 "<x:def xmlns:x='"+_xdNS+"' root='a'>\n"+
 "  <a a = \"required;\">\n"+
 "    <b x:script='*'/>\n"+
 "  </a>\n"+
 "  <x:declaration> String s = 'a'; </x:declaration>\n"+
 "</x:def>";
-			xp = compile(xdef);
-			// create mode
-			xd = xp.createXDDocument();
-			xd.getDebugger().setXpos(XDDebug.CREATE + "/a");
-			xd.getDebugger().setXpos(XDDebug.CREATE + "/a/@a");
-			xd.getDebugger().setXpos(XDDebug.FINALLY + "/a/b[2]");
-			xml = "<a a = 'a'><b/><b/><b/><b/><b/></a>";
-			xd.setXDContext(xml);
-			create(xd, "a", reporter);
-			// processing mode
-			parse(xd, xml, reporter);
-		} catch (Exception ex) {fail(ex);}
-		try { // trace, pause
-			xdef =
+            xp = compile(xdef);
+            // create mode
+            xd = xp.createXDDocument();
+            xd.getDebugger().setXpos(XDDebug.CREATE + "/a");
+            xd.getDebugger().setXpos(XDDebug.CREATE + "/a/@a");
+            xd.getDebugger().setXpos(XDDebug.FINALLY + "/a/b[2]");
+            xml = "<a a = 'a'><b/><b/><b/><b/><b/></a>";
+            xd.setXDContext(xml);
+            create(xd, "a", reporter);
+            // processing mode
+            parse(xd, xml, reporter);
+        } catch (Exception ex) {fail(ex);}
+        try { // trace, pause
+            xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"' root = 'a'>\n"+
 " <a a='required'>\n"+
 "   <b xd:script = \"finally {\n"+
@@ -143,18 +143,18 @@ public final class TestGUIDebuger extends XDTester {
 "     }\" />\n"+
 " </a>\n"+
 "</xd:def>";
-			xml = "<a a='1'> <b/></a>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			baos = new ByteArrayOutputStream();
-			out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);
-			xd.setStdOut(out);
-			xd.xparse(xml, null);
-			out.close();
-			assertEq("", baos.toString());
-		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			xdef =
+            xml = "<a a='1'> <b/></a>";
+            xp = compile(xdef);
+            xd = xp.createXDDocument();
+            baos = new ByteArrayOutputStream();
+            out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);
+            xd.setStdOut(out);
+            xd.xparse(xml, null);
+            out.close();
+            assertEq("", baos.toString());
+        } catch (RuntimeException ex) {fail(ex);}
+        try {
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='SouborY1A'>\n"+
 " <SouborY1A\n"+
 "    Davka        = \"required\"\n"+
@@ -175,17 +175,17 @@ public final class TestGUIDebuger extends XDTester {
 "   string();\n"+
 " </SouborY1A>\n"+
 "</xd:def>";
-			xml =
+            xml =
 "<SouborY1A Davka='davka' ZeDne='1.1.99'><a/>text</SouborY1A>";
-			xd = compile(xdef).createXDDocument();
-			baos = new ByteArrayOutputStream();
-			out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);
-			xd.setStdOut(out);
-			xd.xparse(xml, null);
-			out.close();
-		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			xdef =
+            xd = compile(xdef).createXDDocument();
+            baos = new ByteArrayOutputStream();
+            out = XDFactory.createXDOutput(new OutputStreamWriter(baos), false);
+            xd.setStdOut(out);
+            xd.xparse(xml, null);
+            out.close();
+        } catch (RuntimeException ex) {fail(ex);}
+        try {
+            xdef =
 "<x:collection xmlns:x='"+_xdNS+"'>\n"+
 "<x:def name='a' root='a|*' impl-version='1' impl-date='1.11.2000' script='options ignoreEmptyAttributes'>\n"+
 "  <x:declaration>\n"+
@@ -202,22 +202,22 @@ public final class TestGUIDebuger extends XDTester {
 "           finally {\n"+
 "             String s = getImplProperty('version');\n"+
 "             trace('getImplProperty(\\'version\\'): ' + s);\n"+
-	"       }\" />\n"+
+    "       }\" />\n"+
 "  </a>\n"+
 "</x:def>\n"+
 "<x:def name='b' root='B' impl-version = '2' impl-date='2.11.2000'> <B/> </x:def>\n"+
 "</x:collection>";
-			xp = compile(xdef);
-			xml = "<a><b a = 'b' /><b a = 'c' /></a>";
-			xd = xp.createXDDocument("a");
-			parse(xd, xml, reporter);
-			if (KXmlUtils.compareElements(
-				"<a><b a='b'/><b a='c'/></a>",xd.getElement()).errorWarnings()){
-				fail(KXmlUtils.nodeToString(xd.getElement()));
-			}
-		} catch (Exception ex) {fail(ex);}
-		try {// check impl properties and "*" in the root selection
-			xdef =
+            xp = compile(xdef);
+            xml = "<a><b a = 'b' /><b a = 'c' /></a>";
+            xd = xp.createXDDocument("a");
+            parse(xd, xml, reporter);
+            if (KXmlUtils.compareElements(
+                "<a><b a='b'/><b a='c'/></a>",xd.getElement()).errorWarnings()){
+                fail(KXmlUtils.nodeToString(xd.getElement()));
+            }
+        } catch (Exception ex) {fail(ex);}
+        try {// check impl properties and "*" in the root selection
+            xdef =
 "<x:collection xmlns:x='"+_xdNS+"'>\n"+
 "<x:def name='a' root='a|*' impl-version='1' impl-date='1.11.2000' script='options ignoreEmptyAttributes'>\n"+
 "  <a a = \"required eq('a');\n"+
@@ -250,33 +250,33 @@ public final class TestGUIDebuger extends XDTester {
 "</x:def>\n"+
 "<x:def name='b' root='B' impl-version='2' impl-date='2.11.2000'> <B/> </x:def>\n"+
 "</x:collection>";
-			xp = compile(xdef);
-			xml = "<a a = 'b' />";
-			xd = xp.createXDDocument("a");
-			parse(xd, xml, reporter);
-			if (reporter.errors()) {
-				s = reporter.getReport().getMsgID();
-				assertTrue("XDEF515".equals(s) || "XDEF809".equals(s), s);
-			} else {
-				fail();
-			}
-			// here runs as "*" - any
-			xml = "<b a='b' b='a'>x<a/><a x='y'><a y='x'/></a>y</b>";
-			xd = xp.createXDDocument("a");
-			parse(xd, xml, reporter);
-			if (reporter.errorWarnings()) {
-				fail("\n" + ReportPrinter.printListing(xml, reporter));
-				reporter.checkAndThrowErrorWarnings();
-			} else {
-				el = xd.getDocument().getDocumentElement();
-				if (KXmlUtils.compareElements(xml, el).errorWarnings()) {
-					fail(KXmlUtils.nodeToString(
-						xd.getDocument().getDocumentElement()));
-				}
-			}
-		} catch (RuntimeException ex) {fail(ex);}
-		try {// JSON
-			xdef =
+            xp = compile(xdef);
+            xml = "<a a = 'b' />";
+            xd = xp.createXDDocument("a");
+            parse(xd, xml, reporter);
+            if (reporter.errors()) {
+                s = reporter.getReport().getMsgID();
+                assertTrue("XDEF515".equals(s) || "XDEF809".equals(s), s);
+            } else {
+                fail();
+            }
+            // here runs as "*" - any
+            xml = "<b a='b' b='a'>x<a/><a x='y'><a y='x'/></a>y</b>";
+            xd = xp.createXDDocument("a");
+            parse(xd, xml, reporter);
+            if (reporter.errorWarnings()) {
+                fail("\n" + ReportPrinter.printListing(xml, reporter));
+                reporter.checkAndThrowErrorWarnings();
+            } else {
+                el = xd.getDocument().getDocumentElement();
+                if (KXmlUtils.compareElements(xml, el).errorWarnings()) {
+                    fail(KXmlUtils.nodeToString(
+                        xd.getDocument().getDocumentElement()));
+                }
+            }
+        } catch (RuntimeException ex) {fail(ex);}
+        try {// JSON
+            xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"JSON\" root=\"a\">\n"+
 "<xd:json name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
@@ -300,9 +300,9 @@ public final class TestGUIDebuger extends XDTester {
 "}\n" +
 "</xd:json>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("JSON");
-			json =
+            xp = compile(xdef);
+            xd = xp.createXDDocument("JSON");
+            json =
 "{ \"personnel\": { \"person\":\n" +
 "    [\n" +
 "      { \"id\": \"Big.Boss\",\n" +
@@ -324,20 +324,20 @@ public final class TestGUIDebuger extends XDTester {
 "    ]\n" +
 "  }\n" +
 "}";
-			xd.jparse(json, reporter);
-			if (reporter.errors()) {
-				System.out.println(reporter);
-			}
-		} catch (RuntimeException ex) {fail(ex);}
-		clearTempDir(); // clear temporary directory
-		resetTester();
-	}
+            xd.jparse(json, reporter);
+            if (reporter.errors()) {
+                System.out.println(reporter);
+            }
+        } catch (RuntimeException ex) {fail(ex);}
+        clearTempDir(); // clear temporary directory
+        resetTester();
+    }
 
-	/** Start test from command line. Print results on system output.
-	 * @param args The parameter is ignored.
-	 */
-	final public static void main(final String[] args) {
-		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Start test from command line. Print results on system output.
+     * @param args The parameter is ignored.
+     */
+    final public static void main(final String[] args) {
+        XDTester.setFulltestMode(true);
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }

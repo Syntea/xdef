@@ -5,7 +5,7 @@ package org.xdef.impl;
  */
 public final class XSequence extends XSelector {
 
-	/** Creates a new instance of XSequence as the item of XElement body. */
-	public XSequence() {super(XMSEQUENCE);}
+    /** Creates a new instance of XSequence as the item of XElement body. */
+    public XSequence() {super(XMSEQUENCE);}
 
 }

@@ -9,21 +9,21 @@ import org.xdef.impl.code.DefLong;
  * @author Vaclav Trojan
  */
 public class XSParseLong extends XSAbstractParseComparable {
-	private static final String ROOTBASENAME = "long";
-	private long _totalDigits;
+    private static final String ROOTBASENAME = "long";
+    private long _totalDigits;
 
-	public XSParseLong() {super(); _totalDigits = -1;}
+    public XSParseLong() {super(); _totalDigits = -1;}
 
-	@Override
-	public int getLegalKeys() {
-		return PATTERN +
-			ENUMERATION +
-			WHITESPACE + //fixed to collapse
-			MAXINCLUSIVE +
-			MAXEXCLUSIVE +
-			MININCLUSIVE +
-			MINEXCLUSIVE +
-			TOTALDIGITS +
+    @Override
+    public int getLegalKeys() {
+        return PATTERN +
+            ENUMERATION +
+            WHITESPACE + //fixed to collapse
+            MAXINCLUSIVE +
+            MAXEXCLUSIVE +
+            MININCLUSIVE +
+            MINEXCLUSIVE +
+            TOTALDIGITS +
 //			FRACTIONDIGITS +
 //			LENGTH +
 //			MAXLENGTH +
@@ -31,59 +31,59 @@ public class XSParseLong extends XSAbstractParseComparable {
 //			NORMALIZE +
 //			SEPARATOR +
 //			ITEM +
-			BASE +
-			0;
-	}
+            BASE +
+            0;
+    }
 
-	@Override
-	public void setTotalDigits(final long x) { _totalDigits = x; }
+    @Override
+    public void setTotalDigits(final long x) { _totalDigits = x; }
 
-	@Override
-	public long getTotalDigits() { return _totalDigits; }
+    @Override
+    public long getTotalDigits() { return _totalDigits; }
 
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		int pos = p.getIndex();
-		char sign = p.isOneOfChars("+-");
-		int totalDigits = 0;
-		int i;
-		if ((i = p.isDigit()) < 0) {
-			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
-			return;
-		} else if (i > 0) {
-			totalDigits++;
-		}
-		while ((i = p.isDigit()) >= 0) {
-			if (i > 0 || totalDigits > 0) {
-				totalDigits++;
-			}
-		}
-		String s = p.getParsedBufferPartFrom(pos);
-		p.isSpaces();
-		p.replaceParsedBufferFrom(pos0, s);
-		long val;
-		try {
-			val = Long.parseLong(s = sign == '+' ? s.substring(1) : s);
-		} catch (Exception ex) {
-			p.error(XDEF.XDEF806, parserName(), s);//Value of '&{0}' is out of range&{1}{: }
-			return;
-		}
-		p.setParsedValue(new DefLong(val));
-		if (_totalDigits >= 0) {
-			if (totalDigits > _totalDigits) {
-				p.error(XDEF.XDEF813, s, "totalDigits", val);//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-				return;
-			}
-		}
-		checkPatterns(p);
-		checkComparable(p);
-	}
+    @Override
+    public void parseObject(final XXNode xnode, final XDParseResult p){
+        int pos0 = p.getIndex();
+        p.isSpaces();
+        int pos = p.getIndex();
+        char sign = p.isOneOfChars("+-");
+        int totalDigits = 0;
+        int i;
+        if ((i = p.isDigit()) < 0) {
+            p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
+            return;
+        } else if (i > 0) {
+            totalDigits++;
+        }
+        while ((i = p.isDigit()) >= 0) {
+            if (i > 0 || totalDigits > 0) {
+                totalDigits++;
+            }
+        }
+        String s = p.getParsedBufferPartFrom(pos);
+        p.isSpaces();
+        p.replaceParsedBufferFrom(pos0, s);
+        long val;
+        try {
+            val = Long.parseLong(s = sign == '+' ? s.substring(1) : s);
+        } catch (Exception ex) {
+            p.error(XDEF.XDEF806, parserName(), s);//Value of '&{0}' is out of range&{1}{: }
+            return;
+        }
+        p.setParsedValue(new DefLong(val));
+        if (_totalDigits >= 0) {
+            if (totalDigits > _totalDigits) {
+                p.error(XDEF.XDEF813, s, "totalDigits", val);//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+                return;
+            }
+        }
+        checkPatterns(p);
+        checkComparable(p);
+    }
 
-	@Override
-	public String parserName() {return ROOTBASENAME;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 
-	@Override
-	public short parsedType() {return XD_LONG;}
+    @Override
+    public short parsedType() {return XD_LONG;}
 }

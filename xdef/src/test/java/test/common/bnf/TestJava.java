@@ -10,38 +10,38 @@ import java.io.File;
  */
 public class TestJava extends STester {
 
-	public TestJava() {super();}
+    public TestJava() {super();}
 
-	private String parse(BNFGrammar grammar, String name, String source) {
-		try {
-			StringParser p = new StringParser(source);
-			if (grammar.parse(p, name)) {
-				if (grammar.getParser().errorWarnings()) {
-					return grammar.getParser().getReportWriter().
-						getReportReader().printToString();
-				}
-				return grammar.getParsedString();
-			} else {
-				return name + " failed, " + (p.eos()?
-					"eos" : p.getPosition().toString()) + "; ";
-			}
-		} catch (Exception ex) {
-			return printThrowable(ex);
-		}
-	}
+    private String parse(BNFGrammar grammar, String name, String source) {
+        try {
+            StringParser p = new StringParser(source);
+            if (grammar.parse(p, name)) {
+                if (grammar.getParser().errorWarnings()) {
+                    return grammar.getParser().getReportWriter().
+                        getReportReader().printToString();
+                }
+                return grammar.getParsedString();
+            } else {
+                return name + " failed, " + (p.eos()?
+                    "eos" : p.getPosition().toString()) + "; ";
+            }
+        } catch (Exception ex) {
+            return printThrowable(ex);
+        }
+    }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public void test() {
-		String s;
-		BNFGrammar g;
-		try {
-			g = BNFGrammar.compile(
-				null, new File(getDataDir() + "JavaSyntax.bnf"), null);
-			s = "i+1";
-			assertEq(s, parse(g, "expression", s));
+    @Override
+    public void test() {
+        String s;
+        BNFGrammar g;
+        try {
+            g = BNFGrammar.compile(
+                null, new File(getDataDir() + "JavaSyntax.bnf"), null);
+            s = "i+1";
+            assertEq(s, parse(g, "expression", s));
 //			s =
 //"/*soubor LICENSE.TXT.*/\n"+
 //"package test.common.bnf;\n" +
@@ -53,14 +53,14 @@ public class TestJava extends STester {
 //"\n" +
 //"";
 //			assertEq(s, parse(g, "java_source", s));
-		} catch (RuntimeException ex) {fail(ex);}
-	}
+        } catch (RuntimeException ex) {fail(ex);}
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String... args) {
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String... args) {
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 
 }
