@@ -496,16 +496,19 @@ public class RegisterReportTables {
      * @param dir directory where java source is stored.
      * @param pckg name of package or null (i.e. org.xdef.msg).
      * @param encoding character encoding of source file or null (then
+     * @param tabs if true the indentation character is tabelator, otherwise, 4 spaces are used.
      * @param crlf if true end line will generated CR and LF, otherwise the system encoding is used.
      * @param reporter where error reports are written.
      */
     private static void genRegIDsInterface(final ReportTableImpl table,
         final File dir,
         final String pckg,
-        String encoding,
-        boolean crlf,
-        ReportWriter reporter) {
+        final String encoding,
+        final boolean tabs,
+        final boolean crlf,
+        final ReportWriter reporter) {
         String LN = crlf ? "\r\n" : "\n";
+        String indent = tabs ? "\t" : "    ";
         String prefix = table.getPrefix();
         int prefixLen = prefix.length();
         List<String> ar = new ArrayList<>();
@@ -542,11 +545,11 @@ public class RegisterReportTables {
                         s = s.replace("<", "&lt;");
                         s = s.replace(">", "&gt;");
                         s = s.replace("*/", "*&#47;");
-                        out.write("\t/** " + s + " */"+LN);
+                        out.write(indent + "/** " + s + " */"+LN);
                     }
                     // generate the field with the value of the registered item
                     long regID = ReportTable.getRegisteredReportId(table, i);
-                    out.write("\tpublic static final long " + id + " = " + regID + "L;"+LN);
+                    out.write(indent + "public static final long " + id + " = " + regID + "L;"+LN);
                 }
                 // identifier which is equal to the prefix contans default language
 //			out.write(
@@ -566,6 +569,7 @@ out.write("}");
      * "org.xdef.msg").
      * @param encoding character set encoding of output file or null.
      * If the argument is null it is used the default system character set from Java VM.
+     * @param tabs if true the indentation character is tabelator, otherwise, 4 spaces are used.
      * @param crlf if true end line will generated CR and LF, otherwise only LF.
      * @param registeredTable the registered report table.
      * @param reporter where error reports are written.
@@ -574,6 +578,7 @@ out.write("}");
         final File dir,
         final String pckg,
         final String encoding,
+        final boolean tabs,
         final boolean crlf,
         final ReportTableImpl registeredTable,
         final ReportWriter reporter) {
@@ -585,7 +590,7 @@ out.write("}");
         }
         if (registeredTable == table) {
             //generate registration java source
-            genRegIDsInterface(table, dir, pckg, encoding, crlf, reporter);
+            genRegIDsInterface(table, dir, pckg, encoding, tabs, crlf, reporter);
         }
         try {
             if (table != registeredTable) {
@@ -709,6 +714,7 @@ out.write("}");
      * @param tables array with message tables.
      * @param outDir directory where to generate.
      * @param encoding required code table name for generated Java code. If null use the actual system code.
+     * @param tabs if true the indentation character is tabelator, otherwise, 4 spaces are used.
      * @param crlf if true end line will generated CR and LF, otherwise only LF.
      * @param pckg package name of generated classes. If null the package name will be org.common.msg.
      * @param reporter ArrqayReporter where to put error messages.
@@ -716,6 +722,7 @@ out.write("}");
     private static void genRegisteredJavaTables(final ReportTableImpl[] tables,
         final File outDir,
         final String encoding,
+        final boolean tabs,
         final boolean crlf,
         final String pckg,
         ArrayReporter reporter) {
@@ -732,7 +739,7 @@ out.write("}");
                         }
                     }
                 }
-                genJavaSource(table, outDir, pckg, encoding, crlf, table, reporter);
+                genJavaSource(table, outDir, pckg, encoding, tabs, crlf, table, reporter);
             }
         }
         for (int j = 0; j < tables.length; j++) {
@@ -764,7 +771,7 @@ out.write("}");
                     table1 = t;
                 }
             }
-            genJavaSource(x, outDir, pckg, encoding, crlf, table1,reporter);
+            genJavaSource(x, outDir, pckg, encoding, tabs, crlf, table1,reporter);
         }
         reporter.checkAndThrowErrors();
         if (reporter.errorWarnings()) {
@@ -932,6 +939,7 @@ out.write("}");
 "-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
 "-c endoding: character set name of output file (default is the system\n"+
 "   character set).\n"+
+"-t as indentation character is used TAB (if not specified 4 spaces).\n"+
 "-l lines are separated by the couple of CR LF (if not specified only LF).\n"+
 "-h: help.";
         if (args == null || args.length == 0) {
@@ -941,6 +949,7 @@ out.write("}");
         String pckg = null;
         String encoding = null;
         File outDir = null;
+        boolean tabs = false;
         boolean crlf = false;
         int len = args.length - 1;
         StringWriter errWriter = new StringWriter();
@@ -957,6 +966,12 @@ out.write("}");
                                     errors.println("Duplicated parameter -l");
                                 }
                                 crlf = true;
+                                continue;
+                            case 't':
+                                if (tabs) {
+                                    errors.println("Duplicated parameter -t");
+                                }
+                                tabs = true;
                                 continue;
                             case 'i':
                                 List<String> ar = new ArrayList<>();
@@ -1055,7 +1070,7 @@ out.write("}");
         ArrayReporter reporter = new ArrayReporter();
         ReportTableImpl[] msgTables = (ReportTableImpl[]) readReporTables(files, reporter);
         if (msgTables != null) {
-            genRegisteredJavaTables(msgTables, outDir, encoding, crlf, pckg, reporter);
+            genRegisteredJavaTables(msgTables, outDir, encoding, tabs, crlf, pckg, reporter);
         } else {
             throw new SRuntimeException(SYS.SYS223); //No report tables generated
         }
