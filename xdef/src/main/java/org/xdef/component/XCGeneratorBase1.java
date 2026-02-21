@@ -252,8 +252,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 (_genJavadoc ? "\t/** Create list of XComponents for creation of XML."+LN+
 "\t * @return list of XComponents.*/"+LN : "") +
 "\t@Override"+LN+
-"\tpublic java.util.List<org.xdef.component.XComponent> xGetNodeList() {"
-            +LN;
+"\tpublic java.util.List<org.xdef.component.XComponent> xGetNodeList() {"+LN;
         if (listNodes.length() == 0) {
             result +=
 "\t\treturn new java.util.ArrayList<>();"+LN+
@@ -385,16 +384,14 @@ class XCGeneratorBase1 extends XCGeneratorBase {
             ndx = val.indexOf(';');
             String name = val.substring(ndx + 1);
             String getter = val.substring(2, ndx);
-            s = val.startsWith("1")
-                ? "\t\tset" + name +"("+getter+")" : "\t\tlistOf" + name + "().add("+getter+")";
+            s = val.startsWith("1") ? "\t\tset" + name +"("+getter+")" : "\t\tlistOf" + name + "().add("+getter+")";
             result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN+
 (val.startsWith("1") ?
 "\t\t_$" + name + "=(char) XD_ndx++;"+LN+ s + ";"+LN+"\t}"+LN
 :"\t\t_$" + name + ".append((char) XD_ndx++);"+LN+ s + ";"+LN+"\t}"+LN);
         } else {
-            result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN;
+            result += "\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN;
             s = "";
             for(Map.Entry<String, String> e: txttab.entrySet()) {
                 s += (s.isEmpty() ? "\t\t" : "\t\t} else ")
@@ -427,8 +424,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\tXD_Name_" + varName + " = x.getNodeName();"+LN+
 "\t\tset" + varName + "(" + getter + ");"+LN+"\t}"+LN;
         } else {
-            result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {"+LN;
+            result += "\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {"+LN;
             s = "";
             for (Iterator<Map.Entry<String, String>> it = atttab.entrySet().iterator(); it.hasNext();) {
                 Map.Entry<String, String> en = it.next();

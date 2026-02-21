@@ -786,7 +786,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
                     }
                     break;
                 case X_MAP:
-                    //X_MAP
                     typ = "java.util.Map<String, Object>";
                     template +=
 "\tpublic java.util.Map<String, &{typ}> get$&{name}() {"+LN+
@@ -804,8 +803,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\t}"+LN;
                     }
                     break;
-                default:
-                    return;
+                default: return;
             }
             template +=
 "\t\treturn x;"+LN+
@@ -911,8 +909,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\t\t: ";
                 switch (typ) {
                     case "String": s += "(String) org.xdef.xon.XonTools.xmlToJValue((String)o);"; break;
-                    case "Object":
-                        s += "o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;"; break;
+                    case "Object": s += "o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;"; break;
                     default: s += "("+typ+")o;";
                 }
                 s += LN+"\t}"+LN;

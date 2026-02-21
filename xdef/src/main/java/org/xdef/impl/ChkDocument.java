@@ -409,8 +409,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      */
     private boolean createXComponent(final String clsName) {
         try {
-            return createXComponent(
-                Class.forName(clsName, false, Thread.currentThread().getContextClassLoader()));
+            return createXComponent(Class.forName(clsName, false, Thread.currentThread().getContextClassLoader()));
         } catch (ClassNotFoundException ex) {
             return false;
         }
@@ -788,13 +787,13 @@ final class ChkDocument extends ChkNode implements XDDocument {
     private XParser createXonParser(final Object x, final ReportWriter reporter, final String sysId) {
         XonSourceParser result;
         Object o = getSource(x);
-        result = o instanceof String ?
-            new XonSourceParser(new StringReader((String) o), sysId == null ? "STRING" : sysId)
-        : o instanceof File ? new XonSourceParser((File) o)
-        : o instanceof URL ? new XonSourceParser((URL) o)
-        : o instanceof Reader ?  new XonSourceParser((Reader) o, sysId)
-        : o instanceof InputStream ? new XonSourceParser((InputStream) o, sysId)
-        : new XonSourceParser(o);// XON object: Map, List, simplevalue...
+        result = o instanceof String
+            ? new XonSourceParser(new StringReader((String) o), sysId == null ? "STRING" : sysId)
+            : o instanceof File ? new XonSourceParser((File) o)
+            : o instanceof URL ? new XonSourceParser((URL) o)
+            : o instanceof Reader ?  new XonSourceParser((Reader) o, sysId)
+            : o instanceof InputStream ? new XonSourceParser((InputStream) o, sysId)
+            : new XonSourceParser(o);// XON object: Map, List, simplevalue...
         _reporter = new SReporter(reporter);
         _scp.setStdErr(new DefOutStream(reporter));
         _refNum = 0; // we must clear counter!
@@ -978,6 +977,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      */
     @Override
     public final String getNodeURI() {return null;}
+
     /** Get text value of this node.
      * @return The name of node.
      */
@@ -1029,8 +1029,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
     public final boolean isLegalDate(final SDatetime date) {
         int i;
         if (_stopCheckDateLegal || date == null || (i = date.getYear()) == Integer.MIN_VALUE
-            || ((_minYear == Integer.MIN_VALUE || i >= _minYear)
-            && (_maxYear == Integer.MIN_VALUE || i <= _maxYear))) {
+            || ((_minYear == Integer.MIN_VALUE || i >= _minYear) && (_maxYear == Integer.MIN_VALUE || i <= _maxYear))) {
             return true; // not illlegal value or year not defined
         }
         if (_specialDates != null) { // check special dates
@@ -1095,8 +1094,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
     }
 
     /** Get actual source language used for lexicon.
-     * @return string with actual language or return null if lexicon is not specified
-     * or if language is not specified.
+     * @return string with actual language or return null if lexicon is not specified or if language is not specified.
      */
     @Override
     public final String getLexiconLanguage() {
@@ -1186,7 +1184,6 @@ final class ChkDocument extends ChkNode implements XDDocument {
         return (_destLanguageID < 0) ? null : ((XPool) getXDPool())._lexicon.getLanguages()[_destLanguageID];
     }
 
-
     /** Set actual destination language used for lexicon.
      * @param language string with language or null.
      * @throws SRuntimeException if lexicon is not specified or if language is not specified.
@@ -1248,9 +1245,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      * @return result of JSON/XON parsing or return null.
      */
     @Override
-    public final Object getXon() {
-        return _xon != null ? _xon : _element != null ? XonUtils.xmlToXon(_element) : null;
-    }
+    public final Object getXon() {return _xon != null ? _xon : _element != null ? XonUtils.xmlToXon(_element) : null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1289,13 +1284,12 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 sourceId = null;
                 r = (Reader) o;
             } else if (o instanceof String) {
-                r = new StringReader((String) o);
                 sourceId = "STRING";
+                r = new StringReader((String) o);
             } else {
                 //Unsupported type of argument &{0}: &{1}
                 throw new SRuntimeException(SYS.SYS037, "source", data.getClass());
             }
-
             return cparse(r, ',', false, sourceId, reporter);
         } catch (RuntimeException ex) {
             throw ex;
@@ -1341,7 +1335,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
 
     /** Parse source INI/Properties and return XComponent as result.
      * @param data string with pathname of XON/JSON source data.
-     *  @param cls XComponent class (if null, then XComponent class is searched in XDPool).
+     * @param cls XComponent class (if null, then XComponent class is searched in XDPool).
      * @param reporter report writer. If it is null and error reports occurs then throw a SRuntimeException.
      * @return XComponent with parsed data.
      * @throws SRuntimeException if reporter is null and an error is reported.
@@ -1479,8 +1473,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
         return (_xon = _chkRoot.getXon()); //prepare XON
     }
 
-    /** Create XComponent from XON/JSON according to the X-definition model.
-     * NOTE this method is experimental.
+    /** Create XComponent from XON/JSON according to the X-definition model. NOTE this method is experimental.
      * @param name the name of required model.
      * @param cls XComponent class (if null, then XComponent class
      * @param reporter report writer. If it is null and error reports occurs then throw a SRuntimeException.
@@ -1514,8 +1507,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
     }
 
     /** Parse source XON/JSON and return XComponent as result.
-     * @param data string with pathname of XON/JSON source data, file name, URL, InputStream, Reader,
-     * or JSON object.
+     * @param data string with pathname of XON/JSON source data, file name, URL, InputStream, Reader, or JSON object.
      * @param cls XComponent class (if null, then XComponent class is searched in XDPool).
      * @param reporter report writer. If it is null and error reports occurs then throw a SRuntimeException.
      * @return root element of parsed data.
@@ -1604,9 +1596,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Run create mode - create element according to the X-definition model. If the parameter nsUri is not
-     * null then its assigned the model with given namespaceURI; in this case the parameter qname may be
-     * qualified with a prefix.
+    /** Run create mode - create element according to the X-definition model. If the parameter nsUri is not null then
+     * its assigned the model with given namespaceURI; in this case the parameter qname may be qualified with a prefix.
      * @param nsUri namespace URI of result element (may be null).
      * @param name name of model of required element (may contain prefix).
      * @param reporter report writer. If it is null and error reports occurs then throw a SRuntimeException.
@@ -1738,16 +1729,12 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 } else {
                     debugger.closeDebugger("Process finished with exception:\n" + ex);
                 }
-                if (parser != null) {
-                    parser.closeReader();
-                }
+                parser.closeReader();
                 endDocument();
                 return null;
             }
             endDocument();
-            if (parser != null) {
-                parser.closeReader();
-            }
+            parser.closeReader();
             if (ex instanceof RuntimeException) {
                 throw (RuntimeException) ex;
             }
@@ -1758,9 +1745,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
             if (rep == null || !"XDEF906".equals(rep.getMsgID())) { //X-definition canceled
                 throw e;
             }
-            if (parser != null) {
-                parser.closeReader();
-            }
+            parser.closeReader();
             fatal(rep.getMsgID(), rep.getText(), rep.getModification());
             return null;
         }
@@ -1832,17 +1817,17 @@ final class ChkDocument extends ChkNode implements XDDocument {
     /** Parse source XML and return XCpomonent as result.
      * @param source string with pathname of XML file orthe stream with XML source data.
      * @param cls XComponent class (if null, then XComponent class is searched in XDPool).
-     * @param rep report writer or null. If this argument is null and error reports occurs then
+     * @param reporter ReportWriter or null. If this argument is null and error reports occurs then
      * SRuntimeException is thrown.
      * @return root element of parsed data.
      * @throws SRuntimeException if reporter is null and an error was reported.
      */
     @Override
-    public final XComponent xparseXComponent(final Object data, final Class<?> cls, final ReportWriter rep)
+    public final XComponent xparseXComponent(final Object data, final Class<?> cls, final ReportWriter reporter)
         throws SRuntimeException {
         _genXComponent = true;
         _xclass = cls;
-        xparse(getSource(data), rep);
+        xparse(getSource(data), reporter);
         return getParsedComponent();
     }
 

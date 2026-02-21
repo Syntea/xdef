@@ -42,8 +42,7 @@ public class XCTextComponent implements XComponent {
     public Element toXml() {return null;}
 
     /** Create XML element or text node from default model as element created from given document.
-     * @param doc XML Document or null. If the argument is null then document is created with created
-     * document element.
+     * @param doc XML Document or null. If the argument is null then document is created with created document element.
      * @return XML node belonging to given document from default model.
      */
     @Override

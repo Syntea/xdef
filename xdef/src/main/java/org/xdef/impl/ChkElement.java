@@ -1043,8 +1043,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     }
 
     /** Search XNode in the list of nodes.<p/>
-     * This is very tricky method. It is necessary to know that it is invoked
-     * when a child node occurs. There are important variables:<p/>
+     * This is very tricky method. It is necessary to know that it is invoked when a child node occurs. There are
+     * important variables:<p/>
      * _defList .. array of XNodes<br/>
      * _counters .. array of occurrence counters<br/>
      * _actDefIndex .. -1 or index to actually processed XNode item<br/>
@@ -1217,10 +1217,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 }
                 case XMSEQUENCE:
                 case XMMIXED:
-                case XMCHOICE: {
-                    createGroup((XSelector) xn);
-                    continue;
-                }
+                case XMCHOICE: createGroup((XSelector) xn); continue;
                 default: //error - unknown kind
                     throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
                         "Xdefinifion - ChkElement, unknown item: "+kind+" "+xn);
@@ -1446,9 +1443,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         return xatt;
     }
 
-    private XData getXAttr(final String name) {
-        return _xElement.getDefAttr(name, _rootChkDocument.getSourceLanguageID());
-    }
+    private XData getXAttr(final String name){return _xElement.getDefAttr(name,_rootChkDocument.getSourceLanguageID());}
 
     /** Execute validation method and if putTempErrors is true then put errors to reporter.
      * @param xdata model of data.
@@ -1484,7 +1479,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             _parseResult = new DefParseResult(_data);
             _parseResult.setEos();
             _parseResult.setParsedValue(_data);
-//			org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
+//            org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
             if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
                 _parseResult.setParsedValue(_data);
                 _xComponent.xSetAttr(this, _parseResult);
@@ -1737,11 +1732,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                     if (_selector != null && _selector._selective) {
                         if ((_selector.maxOccurs() <= 1 || !_selector._occur)
                             && _selector._count <= _selector.minOccurs()) {
-                            if (_selector._prev == null
-                                || _selector._prev._count+1 <= _selector._prev.minOccurs()) {
+                            if (_selector._prev == null || _selector._prev._count+1 <= _selector._prev.minOccurs()) {
                                 XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
-                                if (xsel._onAbsence>=0
-                                    && (_selector._count==0 || _selector._count<_selector.minOccurs())) {
+                                if (xsel._onAbsence >= 0
+                                    && (_selector._count == 0 || _selector._count < _selector.minOccurs())) {
                                     debugXPos(XDDebug.ONABSENCE);
                                     exec(xsel._onAbsence, (byte)'U');
                                 } else if (_selector._count <_selector.minOccurs()) {
@@ -1916,8 +1910,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             xd._textWhiteSpaces  == 'T' : _xElement._textWhiteSpaces == 'T') {
             result = SUtils.trimAndRemoveMultipleWhiteSpaces(data);
         } else if ((xd != null && xd._trimText != 0) ? xd._trimText != 'F'
-            : (_xElement._trimText != 0) ? _xElement._trimText != 'F'
-            : _rootChkDocument._trimText != 'F') {
+            : (_xElement._trimText != 0) ? _xElement._trimText != 'F' : _rootChkDocument._trimText != 'F') {
             result = data.trim();
         } else {
             result = data;
@@ -1949,21 +1942,18 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             }
         }
         if (_xComponent != null) {
-            if (_xComponent.xGetModelPosition().indexOf("/$any") > 0
-                || _xComponent.xGetModelPosition().endsWith("#*")) {
+            if (_xComponent.xGetModelPosition().indexOf("/$any") > 0 || _xComponent.xGetModelPosition().endsWith("#*")){
                 if (!(_forget || _xElement._forget == 'T')) { // not forget
                     _xComponent.xSetAny(_element);
                 }
             }
-            if (_xComponent.xGetParent() != null
-                && _xComponent != getParent().getXComponent()) {
+            if (_xComponent.xGetParent() != null && _xComponent != getParent().getXComponent()) {
                 if (!(_forget || _xElement._forget == 'T')) { // not forget
                     _xComponent.xGetParent().xAddXChild(_xComponent);
                 }
             }
         }
-        if (!getXDDocument().isCreateMode()
-            && (_forget || _xElement._forget == 'T' || _xComponent != null)) {
+        if (!getXDDocument().isCreateMode() && (_forget || _xElement._forget == 'T' || _xComponent != null)) {
             // create mode is not set and forget or _xComponent != null
             updateElement(null);
             _parent.getChkChildNodes().remove(this);
@@ -1979,7 +1969,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         if (_variables != null) {
             for(int i = 0; i < _variables.length; i++) {
                 XDValue x = _variables[i];
-                if (x!=null && !x.isNull() && (x.getItemId()==X_UNIQUESET || x.getItemId() == X_UNIQUESET_M)){
+                if (x!=null && !x.isNull() && (x.getItemId()==X_UNIQUESET || x.getItemId() == X_UNIQUESET_M)) {
                     CodeUniqueset y = (CodeUniqueset)x;
                     y.checkAndClear(_scp.getTemporaryReporter());
                 }
@@ -2025,8 +2015,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
     /** Look up for the X-position (XPos) of the element set by xPath. For look up is used the hash table with
      * the XPaths and their occurrences.
-     * @param xPath the XPath to the current ChkElement (Element from the source XML document that is
-     * actually processed).
+     * @param xPath XPath to the current ChkElement (Element from the source XML document that is actually processed).
      * @return the position of this element in the source XML document to complete XPath identifier.
      */
     private int getElemXPos(Map<String, XPosInfo> xPosOccur, String xPath) {
@@ -2040,8 +2029,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             }
         }
         // Never should happen - internal error
-        //Fatal error&{0}{: }
-        throw new SRuntimeException(XDEF.XDEF569, "ChkElement:getElemXPos: _xPathOccur == null");
+        throw new SRuntimeException(XDEF.XDEF569, "ChkElement:getElemXPos: _xPathOccur == null");//Fatal error&{0}{: }
     }
 
     /** Saved counter object.*/
@@ -2060,9 +2048,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         /** Field to count the amount of the same XPaths. */
         private int _counter;
 
-        /** Creates info object in case of first occurrence of this XPath
-         * in the input XML source.
-         */
+        /** Creates info object in case of first occurrence of this XPath in the input XML source. */
         XPosInfo() {_counter = 1;}
 
         /** Increase counter of occurrence of XPath .
@@ -2090,8 +2076,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             return _ignoreAll;
         }
         if ("xmlns".equals(qname) || qname.startsWith("xmlns:") || qname.startsWith("xml:")) {
-            String uri = qname.startsWith("xml:")
-                ? XMLConstants.XML_NS_URI : XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+            String uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI : XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
             _element.setAttributeNS(uri, qname, data);
             return true;
         }
@@ -2133,8 +2118,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 removeAttr(nsURI, qname);
                 if (xatt.minOccurs() != XOccurrence.IGNORE) {
                     if (xatt.minOccurs() != XOccurrence.ILLEGAL) {
-                        putTemporaryReport(Report.error(XDEF.XDEF525, //Attribute not allowed
-                            qname, getPosMod(getXDPosition(), _xPos)));
+                        //Attribute not allowed
+                        putTemporaryReport(Report.error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
                     }
                     if (xatt._onIllegalAttr >= 0) {
                         if (_clearReports) {
@@ -2497,9 +2482,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      * @return true if attribute was created according to X-definition.
      */
     @Override
-    public final boolean addAttribute(final String name, final String data) {
-        return addAttributeNS(null, name, data);
-    }
+    public final boolean addAttribute(final String name, final String data) {return addAttributeNS(null, name, data);}
 
     /** This method is called when the end of the current element attribute list was parsed. The
      * implementation may check the list of attributes and may invoke appropriate actions.
@@ -2879,8 +2862,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                         if (!orig.equals(_data)) {
                             for (Node n=_element.getLastChild(); n != null;) {
                                 Node m = n = n.getPreviousSibling();
-                                if (n.getNodeType() == Node.TEXT_NODE
-                                    || n.getNodeType() == Node.CDATA_SECTION_NODE) {
+                                if (n.getNodeType() == Node.TEXT_NODE || n.getNodeType() == Node.CDATA_SECTION_NODE) {
                                     _element.removeChild(n);
                                 }
                                 n = m;
@@ -3169,7 +3151,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                         _parseResult = new DefParseResult(_data);
                         _parseResult.setEos();
                         _parseResult.setParsedValue(_data);
-//						org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
+//                        org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
                         if (!_parseResult.matches()) { //Charset error detected, put error
                             putTemporaryReport(_parseResult.getReporter().getReport());
                             if (xtxt1._onFalse >= 0) {
@@ -3288,8 +3270,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     /** Get attribute with namespace from XXElement.
      * @param uri The namespace of attribute.
      * @param name The local name of attribute.
-     * @return value of attribute or the empty string if the attribute is legal otherwise throws the
-     * SRuntimeException.
+     * @return value of attribute or the empty string if the attribute is legal otherwise throws SRuntimeException.
      * @throws SRuntimeException if the attribute is not legal in actual model.
      */
     @Override
@@ -3317,9 +3298,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
     /** Get attribute from the XXElement object.
      * @param name The name of attribute.
-     * @return The value of attribute or the empty string if the value
-     * doesn't exist or return null if required attribute is defined in the XXElement, however it does not
-     * exist in the actual element.
+     * @return The value of attribute or the empty string if the value doesn't exist or return null if required
+     * attribute is defined in the XXElement, however it does not exist in the actual element.
      * @throws SRuntimeException if required attribute is not defined in the X-definition.
      */
     @Override
@@ -3406,7 +3386,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      */
     @Override
     public final XMNode getXMNode() {
-        /** mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
+        /* mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
         * 'D' - document, 'P' - processing instruction,'U' undefined. */
         return (_mode == (byte) 'A' || _mode == (byte) 'T') ? (XMNode) _xdata : (XMNode) _xElement;
     }
