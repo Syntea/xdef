@@ -6,15 +6,15 @@ import org.xdef.sys.StringParser;
  * @author Vaclav Trojan
  */
 public class XDParseDateYMDhms extends XSParseDatetime {
-    private static final String ROOTBASENAME = "dateYMDhms";
+	private static final String ROOTBASENAME = "dateYMDhms";
 
-    public XDParseDateYMDhms() {super();}
+	public XDParseDateYMDhms() {super();}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 
-    @Override
-    boolean parse(final StringParser parser) {
-        return parser.isDatetime("yyyyMMddHHmmss");
-    }
+	@Override
+	boolean parse(final StringParser parser) {
+		return parser.isDatetime("yyyyMMddHHmmss");
+	}
 }

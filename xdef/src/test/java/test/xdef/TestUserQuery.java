@@ -14,20 +14,20 @@ import org.xdef.proc.XXElement;
  */
 public final class TestUserQuery extends XDTester {
 
-    public TestUserQuery() {super();}
+	public TestUserQuery() {super();}
 
-    /** Run test and print error information. */
-    @Override
-    public void test() {
-        XDPool xp;
-        XDDocument xd;
-        String xdef;
-        Element el;
-        String s;
-        //Here the user object is assigned at root element (by the external
-        // userQuery method)
-        try {
-            xdef =
+	/** Run test and print error information. */
+	@Override
+	public void test() {
+		XDPool xp;
+		XDDocument xd;
+		String xdef;
+		Element el;
+		String s;
+		//Here the user object is assigned at root element (by the external
+		// userQuery method)
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -45,24 +45,24 @@ public final class TestUserQuery extends XDTester {
 "    </firma>\n"+
 "  </root>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            el = create(xp, "Example", (Element) null, "root");
-            assertEq(el,
-                "<root>" +
-                    "<firma name=\"Dreams Ltd\">" +
-                        "<employee lastName=\"Young\" firstName=\"Michael\"/>" +
-                        "<employee lastName=\"Brown\" firstName=\"John\"/>" +
-                    "</firma>" +
-                    "<firma name=\"Synthetic food\">" +
-                        "<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
-                    "</firma>" +
-                "</root>");
-        } catch (Exception ex) {fail(ex);}
+			xp = compile(xdef);
+			el = create(xp, "Example", (Element) null, "root");
+			assertEq(el,
+				"<root>" +
+					"<firma name=\"Dreams Ltd\">" +
+						"<employee lastName=\"Young\" firstName=\"Michael\"/>" +
+						"<employee lastName=\"Brown\" firstName=\"John\"/>" +
+					"</firma>" +
+					"<firma name=\"Synthetic food\">" +
+						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
+					"</firma>" +
+				"</root>");
+		} catch (Exception ex) {fail(ex);}
 
-        //Here the user object is passed to create process from outside by the
-        // parameter new UserTable().
-        try {
-            xdef =
+		//Here the user object is passed to create process from outside by the
+		// parameter new UserTable().
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -79,25 +79,25 @@ public final class TestUserQuery extends XDTester {
 "    </firma>\n"+
 "  </root>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("Example");
-            xd.setUserObject(new UserTable());
-            el = xd.xcreate("root", null);
-            assertEq(el,
-                "<root>" +
-                    "<firma name=\"Dreams Ltd\">" +
-                        "<employee lastName=\"Young\" firstName=\"Michael\"/>" +
-                        "<employee lastName=\"Brown\" firstName=\"John\"/>" +
-                    "</firma>" +
-                    "<firma name=\"Synthetic food\">" +
-                        "<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
-                    "</firma>" +
-                "</root>");
-        } catch (RuntimeException ex) {fail(ex);}
-        //Here the user object is assigned at root element and create method
-        // is called in element
-        try {
-            xdef =
+			xp = compile(xdef);
+			xd = xp.createXDDocument("Example");
+			xd.setUserObject(new UserTable());
+			el = xd.xcreate("root", null);
+			assertEq(el,
+				"<root>" +
+					"<firma name=\"Dreams Ltd\">" +
+						"<employee lastName=\"Young\" firstName=\"Michael\"/>" +
+						"<employee lastName=\"Brown\" firstName=\"John\"/>" +
+					"</firma>" +
+					"<firma name=\"Synthetic food\">" +
+						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
+					"</firma>" +
+				"</root>");
+		} catch (RuntimeException ex) {fail(ex);}
+		//Here the user object is assigned at root element and create method
+		// is called in element
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -115,25 +115,25 @@ public final class TestUserQuery extends XDTester {
 "    </firma>\n"+
 "  </root>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("Example");
-            xd.setUserObject(new UserTable());
-            el = xd.xcreate("root", null);
-            assertEq(el,
-                "<root>" +
-                    "<firma name=\"Dreams Ltd\">" +
-                        "<employee lastName=\"Young\" firstName=\"Michael\"/>" +
-                        "<employee lastName=\"Brown\" firstName=\"John\"/>" +
-                    "</firma>" +
-                    "<firma name=\"Synthetic food\">" +
-                        "<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
-                    "</firma>" +
-                "</root>");
-        } catch (RuntimeException ex) {fail(ex);}
-        //Here the user object is assigned at root element and create method
-        // is called from sequence item
-        try {
-            xdef =
+			xp = compile(xdef);
+			xd = xp.createXDDocument("Example");
+			xd.setUserObject(new UserTable());
+			el = xd.xcreate("root", null);
+			assertEq(el,
+				"<root>" +
+					"<firma name=\"Dreams Ltd\">" +
+						"<employee lastName=\"Young\" firstName=\"Michael\"/>" +
+						"<employee lastName=\"Brown\" firstName=\"John\"/>" +
+					"</firma>" +
+					"<firma name=\"Synthetic food\">" +
+						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
+					"</firma>" +
+				"</root>");
+		} catch (RuntimeException ex) {fail(ex);}
+		//Here the user object is assigned at root element and create method
+		// is called from sequence item
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -153,25 +153,25 @@ public final class TestUserQuery extends XDTester {
 "    </xd:sequence>\n"+
 "  </root>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("Example");
-            xd.setUserObject(new UserTable());
-            el = xd.xcreate("root", null);
-            assertEq(el,
-                "<root>" +
-                    "<firma name=\"Dreams Ltd\">" +
-                        "<employee lastName=\"Young\" firstName=\"Michael\"/>" +
-                        "<employee lastName=\"Brown\" firstName=\"John\"/>" +
-                    "</firma>" +
-                    "<firma name=\"Synthetic food\">" +
-                        "<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
-                    "</firma>" +
-                "</root>");
-        } catch (RuntimeException ex) {fail(ex);}
-        //Here the user object passed as parameter and items are generated
-        // inside of sequence block. User method is called inside of sequence.
-        try {
-            xdef =
+			xp = compile(xdef);
+			xd = xp.createXDDocument("Example");
+			xd.setUserObject(new UserTable());
+			el = xd.xcreate("root", null);
+			assertEq(el,
+				"<root>" +
+					"<firma name=\"Dreams Ltd\">" +
+						"<employee lastName=\"Young\" firstName=\"Michael\"/>" +
+						"<employee lastName=\"Brown\" firstName=\"John\"/>" +
+					"</firma>" +
+					"<firma name=\"Synthetic food\">" +
+						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
+					"</firma>" +
+				"</root>");
+		} catch (RuntimeException ex) {fail(ex);}
+		//Here the user object passed as parameter and items are generated
+		// inside of sequence block. User method is called inside of sequence.
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -190,23 +190,23 @@ public final class TestUserQuery extends XDTester {
 "    </xd:sequence>\n"+
 "  </root>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("Example");
-            xd.setUserObject(new UserTable());
-            el = xd.xcreate("root", null);
-            assertEq(el,
-                "<root>" +
-                    "<firma name=\"Dreams Ltd\">" +
-                        "<employee lastName=\"Young\" firstName=\"Michael\"/>" +
-                        "<employee lastName=\"Brown\" firstName=\"John\"/>" +
-                    "</firma>" +
-                    "<firma name=\"Synthetic food\">" +
-                        "<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
-                    "</firma>" +
-                "</root>");
-        } catch (RuntimeException ex) {fail(ex);}
-        try {
-            xdef =
+			xp = compile(xdef);
+			xd = xp.createXDDocument("Example");
+			xd.setUserObject(new UserTable());
+			el = xd.xcreate("root", null);
+			assertEq(el,
+				"<root>" +
+					"<firma name=\"Dreams Ltd\">" +
+						"<employee lastName=\"Young\" firstName=\"Michael\"/>" +
+						"<employee lastName=\"Brown\" firstName=\"John\"/>" +
+					"</firma>" +
+					"<firma name=\"Synthetic food\">" +
+						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
+					"</firma>" +
+				"</root>");
+		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -231,38 +231,38 @@ public final class TestUserQuery extends XDTester {
 "    </firma>\n"+
 "  </root>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("Example");
-            xd.setUserObject(new UserTable());
-            el = xd.xcreate("root", null);
-            assertEq(el,
-                "<root>" +
-                    "<firma name=\"Dreams Ltd\">" +
-                        "<employee>" +
-                            "<personaldata>" +
-                                "<firstName>Michael</firstName>" +
-                                "<lastName>Young</lastName>" +
-                            "</personaldata>" +
-                        "</employee>" +
-                        "<employee>" +
-                            "<personaldata>" +
-                                "<firstName>John</firstName>" +
-                                "<lastName>Brown</lastName>" +
-                            "</personaldata>" +
-                        "</employee>" +
-                    "</firma>" +
-                    "<firma name=\"Synthetic food\">" +
-                        "<employee>" +
-                            "<personaldata>" +
-                                "<firstName>Ulrich</firstName>" +
-                                "<lastName>Todt</lastName>" +
-                            "</personaldata>" +
-                        "</employee>" +
-                    "</firma>" +
-                "</root>");
-        } catch (RuntimeException ex) {fail(ex);}
-        try {//create books from simulated select (with element qualifier "*")
-            xdef =
+			xp = compile(xdef);
+			xd = xp.createXDDocument("Example");
+			xd.setUserObject(new UserTable());
+			el = xd.xcreate("root", null);
+			assertEq(el,
+				"<root>" +
+					"<firma name=\"Dreams Ltd\">" +
+						"<employee>" +
+							"<personaldata>" +
+								"<firstName>Michael</firstName>" +
+								"<lastName>Young</lastName>" +
+							"</personaldata>" +
+						"</employee>" +
+						"<employee>" +
+							"<personaldata>" +
+								"<firstName>John</firstName>" +
+								"<lastName>Brown</lastName>" +
+							"</personaldata>" +
+						"</employee>" +
+					"</firma>" +
+					"<firma name=\"Synthetic food\">" +
+						"<employee>" +
+							"<personaldata>" +
+								"<firstName>Ulrich</firstName>" +
+								"<lastName>Todt</lastName>" +
+							"</personaldata>" +
+						"</employee>" +
+					"</firma>" +
+				"</root>");
+		} catch (RuntimeException ex) {fail(ex);}
+		try {//create books from simulated select (with element qualifier "*")
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='test' root='test'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -277,16 +277,16 @@ public final class TestUserQuery extends XDTester {
 "    </book>\n"+
 "  </test>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument("test");
-            s = KXmlUtils.nodeToString(xd.xcreate("test", null));
-            assertEq("<test>" +
-                "<book cover=\"paperback\"><title>Svejk</title></book>" +
-                "<book cover=\"gold\"><title>Klaus</title></book>" +
-                "</test>", s);
-        } catch (RuntimeException ex) {fail(ex);}
-        try {// the same with sequence (qualifier "*")
-            xdef =
+			xp = compile(xdef);
+			xd = xp.createXDDocument("test");
+			s = KXmlUtils.nodeToString(xd.xcreate("test", null));
+			assertEq("<test>" +
+				"<book cover=\"paperback\"><title>Svejk</title></book>" +
+				"<book cover=\"gold\"><title>Klaus</title></book>" +
+				"</test>", s);
+		} catch (RuntimeException ex) {fail(ex);}
+		try {// the same with sequence (qualifier "*")
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='test' root='test'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -302,19 +302,19 @@ public final class TestUserQuery extends XDTester {
 "    </xd:sequence>\n"+
 "  </test>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            Object userObj = new SelectResult();
-            xd = xp.createXDDocument("test");
-            xd.setUserObject(userObj);
-            el = xd.xcreate("test", null);
-            assertEq("<test>" +
-                "<book cover=\"paperback\"><title>Svejk</title></book>" +
-                "<book cover=\"gold\"><title>Klaus</title></book>" +
-                "</test>", KXmlUtils.nodeToString(el));
+			xp = compile(xdef);
+			Object userObj = new SelectResult();
+			xd = xp.createXDDocument("test");
+			xd.setUserObject(userObj);
+			el = xd.xcreate("test", null);
+			assertEq("<test>" +
+				"<book cover=\"paperback\"><title>Svejk</title></book>" +
+				"<book cover=\"gold\"><title>Klaus</title></book>" +
+				"</test>", KXmlUtils.nodeToString(el));
 
-        } catch (RuntimeException ex) {fail(ex);}
-        try {//this is the example of an external user object passed to creator
-            xdef =
+		} catch (RuntimeException ex) {fail(ex);}
+		try {//this is the example of an external user object passed to creator
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='test' root='test'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -329,300 +329,300 @@ public final class TestUserQuery extends XDTester {
 "    </book>\n"+
 "  </test>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            Object userObj = new SelectResult();
-            xd = xp.createXDDocument("test");
-            xd.setUserObject(userObj);
-            el = xd.xcreate("test", null);
-            assertEq("<test>" +
-                "<book cover=\"paperback\"><title>Svejk</title></book>" +
-                "<book cover=\"gold\"><title>Klaus</title></book>" +
-                "</test>", KXmlUtils.nodeToString(el));
-        } catch (RuntimeException ex) {fail(ex);}
+			xp = compile(xdef);
+			Object userObj = new SelectResult();
+			xd = xp.createXDDocument("test");
+			xd.setUserObject(userObj);
+			el = xd.xcreate("test", null);
+			assertEq("<test>" +
+				"<book cover=\"paperback\"><title>Svejk</title></book>" +
+				"<book cover=\"gold\"><title>Klaus</title></book>" +
+				"</test>", KXmlUtils.nodeToString(el));
+		} catch (RuntimeException ex) {fail(ex);}
 
-        resetTester();
-    }
+		resetTester();
+	}
 
-    //Note query is here ignored (simulated). It is just created an
-    // context looking as a result of query
-    public static boolean select(XXElement chkEl, final String query) {
-        Object obj;
-        if ((obj = chkEl.getXDDocument().getUserObject()) == null) {
-            SelectResult sr = new SelectResult();
-            chkEl.getXDDocument().setUserObject(sr);
-            return sr.hasNext();
-        } else {
-            return ((SelectResult) obj).hasNext();
-        }
-    }
+	//Note query is here ignored (simulated). It is just created an
+	// context looking as a result of query
+	public static boolean select(XXElement chkEl, final String query) {
+		Object obj;
+		if ((obj = chkEl.getXDDocument().getUserObject()) == null) {
+			SelectResult sr = new SelectResult();
+			chkEl.getXDDocument().setUserObject(sr);
+			return sr.hasNext();
+		} else {
+			return ((SelectResult) obj).hasNext();
+		}
+	}
 
-    //This simulates how to get a column from a line of table.
-    public static String getColumn(XXElement chkEl, String columnName) {
-        Object obj = chkEl.getXDDocument().getUserObject();
-        if (obj instanceof SelectResult) {
-            return ((SelectResult) obj).getColumn(columnName);
-        }
-        return ""; //Item not available
-    }
+	//This simulates how to get a column from a line of table.
+	public static String getColumn(XXElement chkEl, String columnName) {
+		Object obj = chkEl.getXDDocument().getUserObject();
+		if (obj instanceof SelectResult) {
+			return ((SelectResult) obj).getColumn(columnName);
+		}
+		return ""; //Item not available
+	}
 
-    // This class simulates an object retrieved from a database select.
-    private static class SelectResult {
+	// This class simulates an object retrieved from a database select.
+	private static class SelectResult {
 
-        int _index; //index of iterator
+		int _index; //index of iterator
 
-        ArrayList<HashMap<String, String>> _lines;
+		ArrayList<HashMap<String, String>> _lines;
 
-        SelectResult() {_index = -1;
-            _lines = new ArrayList<>();
-            HashMap<String, String> ht = new HashMap<>();
-            ht.put("cover", "paperback");
-            ht.put("title", "Svejk");
-            _lines.add(ht);
-            ht = new HashMap<>();
-            ht.put("cover", "gold");
-            ht.put("title", "Klaus");
-            _lines.add(ht);
-        }
+		SelectResult() {_index = -1;
+			_lines = new ArrayList<>();
+			HashMap<String, String> ht = new HashMap<>();
+			ht.put("cover", "paperback");
+			ht.put("title", "Svejk");
+			_lines.add(ht);
+			ht = new HashMap<>();
+			ht.put("cover", "gold");
+			ht.put("title", "Klaus");
+			_lines.add(ht);
+		}
 
-        // This metnod returnes true if next line is available and prepares
-        // the line.
-        public boolean hasNext() {return ++_index < _lines.size();}
+		// This metnod returnes true if next line is available and prepares
+		// the line.
+		public boolean hasNext() {return ++_index < _lines.size();}
 
-        // return value of the column.
-        public String getColumn(String key) {
-            if (_index < _lines.size()) { //has next item?
-                String result;
-                if ((result = _lines.get(_index).get(key)) != null) {
-                    return result;
-                }
-            }
-            return "";
-        }
-    }
+		// return value of the column.
+		public String getColumn(String key) {
+			if (_index < _lines.size()) { //has next item?
+				String result;
+				if ((result = _lines.get(_index).get(key)) != null) {
+					return result;
+				}
+			}
+			return "";
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // External methods called from XDefinition
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** This method prepares the user object and assigns it to the engine.
-     * @param chkEl the actually processed chkElement object.
-     * @param query string with query expression (ignored in this example).
-     * @return true if query result is available (always true here).
-     */
-    public static boolean userQuery(XXElement chkEl, String query) {
-        chkEl.setUserObject(new UserTable()); //set user query object
-        return true;
-    }
+	/** This method prepares the user object and assigns it to the engine.
+	 * @param chkEl the actually processed chkElement object.
+	 * @param query string with query expression (ignored in this example).
+	 * @return true if query result is available (always true here).
+	 */
+	public static boolean userQuery(XXElement chkEl, String query) {
+		chkEl.setUserObject(new UserTable()); //set user query object
+		return true;
+	}
 
-    /** Take next item from the parent user context and sets the current
-     * raw of the table (as a current user object).
-     * @param chkEl the actualy processed chkElement object.
-     * @return if child context exists it returns true and sets the value
-     * of the child context to the chkElement object. If no child is
-     * available it returns false.
-     */
-    public static boolean getNext(XXElement chkEl) {
-        Object obj;
-        if ((obj = chkEl.getUserObject()) != null &&
-            (obj instanceof UserQuery)) {
-            return ((UserQuery) obj).next(chkEl);
-        }
-        return false;
-    }
+	/** Take next item from the parent user context and sets the current
+	 * raw of the table (as a current user object).
+	 * @param chkEl the actualy processed chkElement object.
+	 * @return if child context exists it returns true and sets the value
+	 * of the child context to the chkElement object. If no child is
+	 * available it returns false.
+	 */
+	public static boolean getNext(XXElement chkEl) {
+		Object obj;
+		if ((obj = chkEl.getUserObject()) != null &&
+			(obj instanceof UserQuery)) {
+			return ((UserQuery) obj).next(chkEl);
+		}
+		return false;
+	}
 
-    public static String getValue(XXElement chkEl, String name) {
-    /** Get value of column from actual raw.
-     * @param chkEl the actually processed chkElement object.
-     * @param name of required column.
-     * @return value of column item or an empty string.
-     */
-        Object obj;
-        if ((obj = chkEl.getUserObject()) != null &&
-            (obj instanceof UserQuery)) {
-            return ((UserQuery) obj).value(chkEl, name);
-        }
-        return "";
-    }
+	public static String getValue(XXElement chkEl, String name) {
+	/** Get value of column from actual raw.
+	 * @param chkEl the actually processed chkElement object.
+	 * @param name of required column.
+	 * @return value of column item or an empty string.
+	 */
+		Object obj;
+		if ((obj = chkEl.getUserObject()) != null &&
+			(obj instanceof UserQuery)) {
+			return ((UserQuery) obj).value(chkEl, name);
+		}
+		return "";
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Object simulating a query (where the user context interface is implemented).
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** This is the interface implemented for each "user" query object. */
-    private interface UserQuery {
-        public boolean next(XXElement chkEl);
-        public UserQuery newContext(XXElement chkEl);
-        public String value(XXElement chkEl, String name);
-    }
+	/** This is the interface implemented for each "user" query object. */
+	private interface UserQuery {
+		public boolean next(XXElement chkEl);
+		public UserQuery newContext(XXElement chkEl);
+		public String value(XXElement chkEl, String name);
+	}
 
-    /** Implementation of an object a table, contains raws and each raw
-     * (describing a company) contains a table (of employees).
-     * For each item it is implemented the UserQuery interface. */
-    private static class UserTable implements UserQuery {
-        ArrayList<Firma> _firmas = new ArrayList<>();
-        int _index = 0; //the iterator index.
-        /** This simulates a query. */
-        UserTable() {
-            Firma firma = new Firma("Dreams Ltd", 1);
-            firma.addEmployee("Michael", "Young");
-            firma.addEmployee("John", "Brown");
-            _firmas.add(firma);
-            firma = new Firma("Synthetic food", 2);
-            firma.addEmployee("Ulrich", "Todt");
-            _firmas.add(firma);
-        }
+	/** Implementation of an object a table, contains raws and each raw
+	 * (describing a company) contains a table (of employees).
+	 * For each item it is implemented the UserQuery interface. */
+	private static class UserTable implements UserQuery {
+		ArrayList<Firma> _firmas = new ArrayList<>();
+		int _index = 0; //the iterator index.
+		/** This simulates a query. */
+		UserTable() {
+			Firma firma = new Firma("Dreams Ltd", 1);
+			firma.addEmployee("Michael", "Young");
+			firma.addEmployee("John", "Brown");
+			_firmas.add(firma);
+			firma = new Firma("Synthetic food", 2);
+			firma.addEmployee("Ulrich", "Todt");
+			_firmas.add(firma);
+		}
 
-        /** Implementation of the interface UserQuery on the table.
-         * @param chkEl the actually processed chkElement object.
-         * @return if child context exists it returns true and sets the value
-         * of the child context to the chkElement object. If no child is
-         * available it returns false.
-         */
-        @Override
-        public boolean next(XXElement chkEl) {
-            if (_index < _firmas.size()) {
-                chkEl.setUserObject(_firmas.get(_index++));
-                return true;
-            }
-            return false;
-        }
+		/** Implementation of the interface UserQuery on the table.
+		 * @param chkEl the actually processed chkElement object.
+		 * @return if child context exists it returns true and sets the value
+		 * of the child context to the chkElement object. If no child is
+		 * available it returns false.
+		 */
+		@Override
+		public boolean next(XXElement chkEl) {
+			if (_index < _firmas.size()) {
+				chkEl.setUserObject(_firmas.get(_index++));
+				return true;
+			}
+			return false;
+		}
 
-        /** Implementation of the interface UserQuery. Since the table itself
-         * has no values it does nothing here and it returns the empty string.
-         * @param chkEl the actually processed chkElement object.
-         * @param name of required column.
-         * @return since no columns are here it returns an empty string.
-         */
-        @Override
-        public String value(XXElement chkEl, String name) {return "";}
+		/** Implementation of the interface UserQuery. Since the table itself
+		 * has no values it does nothing here and it returns the empty string.
+		 * @param chkEl the actually processed chkElement object.
+		 * @param name of required column.
+		 * @return since no columns are here it returns an empty string.
+		 */
+		@Override
+		public String value(XXElement chkEl, String name) {return "";}
 
-        @Override
-        public UserQuery newContext(XXElement chkEl) {
-            return new UserQuery() {
+		@Override
+		public UserQuery newContext(XXElement chkEl) {
+			return new UserQuery() {
 
-                @Override
-                public boolean next(XXElement chkEl) {return false;}
+				@Override
+				public boolean next(XXElement chkEl) {return false;}
 
-                @Override
-                public UserQuery newContext(XXElement chkEl) {return this;}
+				@Override
+				public UserQuery newContext(XXElement chkEl) {return this;}
 
-                @Override
-                public String value(XXElement chkEl, String name) {return "";}
-            };
-        }
+				@Override
+				public String value(XXElement chkEl, String name) {return "";}
+			};
+		}
 
-        /** Object describing "Firma". */
-        private class Firma implements UserQuery {
-            String _name;
-            int _id;
-            private int _index = 0;
-            ArrayList<Employee> _persons = new ArrayList<>();
-            Firma(String name, int id) {_name = name; _id = id;}
+		/** Object describing "Firma". */
+		private class Firma implements UserQuery {
+			String _name;
+			int _id;
+			private int _index = 0;
+			ArrayList<Employee> _persons = new ArrayList<>();
+			Firma(String name, int id) {_name = name; _id = id;}
 
-            void addEmployee(String firstName, String lastName) {
-                _persons.add(new Employee(firstName, lastName));
-            }
+			void addEmployee(String firstName, String lastName) {
+				_persons.add(new Employee(firstName, lastName));
+			}
 
-            /** Implementation of the interface UserQuery on the table. The method takes the next raw from
-             * the table and sets it as the context for further processing.
-             * @param chkEl the actually processed chkElement object.
-             * @return if child context exists it returns true and sets the value of the child context
-             * t to the chkElement object. If no child is available it returns false.
-             */
-            @Override
-            public boolean next(XXElement chkEl) {
-                if (_index < _persons.size()) {
-                    chkEl.setUserObject(_persons.get(_index++));
-                    return true;
-                }
-                return false;
-            }
+			/** Implementation of the interface UserQuery on the table. The method takes the next raw from
+			 * the table and sets it as the context for further processing.
+			 * @param chkEl the actually processed chkElement object.
+			 * @return if child context exists it returns true and sets the value of the child context
+			 * t to the chkElement object. If no child is available it returns false.
+			 */
+			@Override
+			public boolean next(XXElement chkEl) {
+				if (_index < _persons.size()) {
+					chkEl.setUserObject(_persons.get(_index++));
+					return true;
+				}
+				return false;
+			}
 
-            /** Implementation of the interface UserQuery. Returns here the name or the id of Firma.
-             * @param chkEl the actually processed chkElement object.
-             * @param name of required column.
-             * @return value of column item or the empty string.
-             */
-            @Override
-            public String value(XXElement chkEl, String name) {
-                if ("name".equals(name)) {
-                    return _name;
-                } else if ("id".equals(name)) {
-                    return String.valueOf(_id);
-                }
-                return "";
-            }
+			/** Implementation of the interface UserQuery. Returns here the name or the id of Firma.
+			 * @param chkEl the actually processed chkElement object.
+			 * @param name of required column.
+			 * @return value of column item or the empty string.
+			 */
+			@Override
+			public String value(XXElement chkEl, String name) {
+				if ("name".equals(name)) {
+					return _name;
+				} else if ("id".equals(name)) {
+					return String.valueOf(_id);
+				}
+				return "";
+			}
 
-            @Override
-            public UserQuery newContext(XXElement chkEl) {
-                return new UserQuery() {
+			@Override
+			public UserQuery newContext(XXElement chkEl) {
+				return new UserQuery() {
 
-                    @Override
-                    public boolean next(XXElement chkEl) {return false;}
+					@Override
+					public boolean next(XXElement chkEl) {return false;}
 
-                    @Override
-                    public UserQuery newContext(XXElement chkEl) {return this;}
+					@Override
+					public UserQuery newContext(XXElement chkEl) {return this;}
 
-                    @Override
-                    public String value(XXElement chkEl, String name) {return "";}
-                };
-            }
+					@Override
+					public String value(XXElement chkEl, String name) {return "";}
+				};
+			}
 
-            /** Object describing "Employee". */
-            private class Employee implements UserQuery {
-                HashMap<String,String> _columns = new HashMap<>();
-                Employee(String firstName, String lastName) {
-                    _columns.put("firstName", firstName);
-                    _columns.put("lastName", lastName);
-                }
+			/** Object describing "Employee". */
+			private class Employee implements UserQuery {
+				HashMap<String,String> _columns = new HashMap<>();
+				Employee(String firstName, String lastName) {
+					_columns.put("firstName", firstName);
+					_columns.put("lastName", lastName);
+				}
 
-                /** Implementation of the interface UserQuery on the table. Since Employe is a raw
-                 * of the table it has no raw and so it does nothing and returns always false.
-                 * @param chkEl the actually processed chkElement object.
-                 * @return always false - has no children.
-                 */
-                @Override
-                public boolean next(XXElement chkEl) {
-                    return false; //has no children
-                }
+				/** Implementation of the interface UserQuery on the table. Since Employe is a raw
+				 * of the table it has no raw and so it does nothing and returns always false.
+				 * @param chkEl the actually processed chkElement object.
+				 * @return always false - has no children.
+				 */
+				@Override
+				public boolean next(XXElement chkEl) {
+					return false; //has no children
+				}
 
-                /** Implementation of the interface UserQuery. Returns the value
-                 * of specified column of the actual raw of the table. If
-                 * required value doesn't exist it returns the empty string.
-                 * @param chkEl the actually processed chkElement object.
-                 * @param name of required column.
-                 * @return value of column item or the empty string.
-                 */
-                @Override
-                public String value(XXElement chkEl, String name) {
-                    if (_columns.containsKey(name)) {
-                        return _columns.get(name);
-                    }
-                    return "";
-                }
+				/** Implementation of the interface UserQuery. Returns the value
+				 * of specified column of the actual raw of the table. If
+				 * required value doesn't exist it returns the empty string.
+				 * @param chkEl the actually processed chkElement object.
+				 * @param name of required column.
+				 * @return value of column item or the empty string.
+				 */
+				@Override
+				public String value(XXElement chkEl, String name) {
+					if (_columns.containsKey(name)) {
+						return _columns.get(name);
+					}
+					return "";
+				}
 
-                @Override
-                public UserQuery newContext(XXElement chkEl) {
-                    return new UserQuery() {
+				@Override
+				public UserQuery newContext(XXElement chkEl) {
+					return new UserQuery() {
 
-                        @Override
-                        public boolean next(XXElement chkEl) {return false;}
+						@Override
+						public boolean next(XXElement chkEl) {return false;}
 
-                        @Override
-                        public UserQuery newContext(XXElement chkEl) {return this;}
-                        @Override
-                        public String value(XXElement chkEl, String name) {return "";}
-                    };
-                }
-            }// end of class Employee
-        }// end of class Firma
-    }// end of class UserTable
+						@Override
+						public UserQuery newContext(XXElement chkEl) {return this;}
+						@Override
+						public String value(XXElement chkEl, String name) {return "";}
+					};
+				}
+			}// end of class Employee
+		}// end of class Firma
+	}// end of class UserTable
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        XDTester.setFulltestMode(true);
-        if (runTest() != 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
+		if (runTest() != 0) {System.exit(1);}
+	}
 }

@@ -8,10 +8,10 @@ import org.w3c.dom.Node;
  */
 public interface XDXQueryExpr extends XDValue {
 
-    /** Execute XQuery expression and return result.
-     * @param node node or null.
-     * @param xNode node model or null.
-     * @return result of execution of this object.
-     */
-    public XDContainer exec(Node node, XXNode xNode);
+	/** Execute XQuery expression and return result.
+	 * @param node node or null.
+	 * @param xNode node model or null.
+	 * @return result of execution of this object.
+	 */
+	public XDContainer exec(Node node, XXNode xNode);
 }

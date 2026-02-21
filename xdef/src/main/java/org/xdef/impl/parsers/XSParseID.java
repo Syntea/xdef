@@ -11,25 +11,25 @@ import org.xdef.sys.Report;
  * @author Vaclav Trojan
  */
 public class XSParseID extends XSParseQName {
-    private static final String ROOTBASENAME = "ID";
+	private static final String ROOTBASENAME = "ID";
 
-    public XSParseID() {super();}
+	public XSParseID() {super();}
 
-    @Override
-    public void finalCheck(final XXNode xnode, final XDParseResult result) {
-        if (xnode == null) {
-            //The validation method &{0} can be called only from the X-script of attribute or text node
-            result.error(XDEF.XDEF574, ROOTBASENAME);
-            return;
-        }
-        CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
-        tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
-        Report rep = tab.setId();
-        if (rep != null) {
-            result.error(rep.getMsgID(), rep.getText(), rep.getModification());
-        }
-    }
+	@Override
+	public void finalCheck(final XXNode xnode, final XDParseResult result) {
+		if (xnode == null) {
+			//The validation method &{0} can be called only from the X-script of attribute or text node
+			result.error(XDEF.XDEF574, ROOTBASENAME);
+			return;
+		}
+		CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
+		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
+		Report rep = tab.setId();
+		if (rep != null) {
+			result.error(rep.getMsgID(), rep.getText(), rep.getModification());
+		}
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

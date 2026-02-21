@@ -10,36 +10,36 @@ import java.io.File;
  */
 public class TestSQL extends STester {
 
-    public TestSQL() {super();}
+	public TestSQL() {super();}
 
 
-    private String parse(BNFGrammar grammar, String name, String source) {
-        try {
-            StringParser p = new StringParser(source);
-            grammar.setUserObject(this);
-            if (grammar.parse(p, name)) {
-                if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
-                }
-                return grammar.getParsedString();
-            } else {
-                return name + " failed, " + (p.eos()?
-                    "eos" : p.getPosition().toString()) + "; ";
-            }
-        } catch (Exception ex) {
-            return printThrowable(ex);
-        }
-    }
+	private String parse(BNFGrammar grammar, String name, String source) {
+		try {
+			StringParser p = new StringParser(source);
+			grammar.setUserObject(this);
+			if (grammar.parse(p, name)) {
+				if (grammar.getParser().errorWarnings()) {
+					return grammar.getParser().getReportWriter().
+						getReportReader().printToString();
+				}
+				return grammar.getParsedString();
+			} else {
+				return name + " failed, " + (p.eos()?
+					"eos" : p.getPosition().toString()) + "; ";
+			}
+		} catch (Exception ex) {
+			return printThrowable(ex);
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void test() {
-        try {
-            BNFGrammar g = BNFGrammar.compile(
-                null, new File(getDataDir() + "TestSQL.bnf"), null);
-            String s =
+	@Override
+	public void test() {
+		try {
+			BNFGrammar g = BNFGrammar.compile(
+				null, new File(getDataDir() + "TestSQL.bnf"), null);
+			String s =
 "select * /* Comment*/ from // Comment\n"+
 "   -- Comment\n"+
 "   xxx;\n"+
@@ -127,14 +127,14 @@ public class TestSQL extends STester {
 "  WHERE CustomerID = 1;\n"+
 //"  ;\n"+
 "";
-            assertEq(s, parse(g, "StatementList", s));
-        } catch (RuntimeException ex) {fail(ex);}
-    }
+			assertEq(s, parse(g, "StatementList", s));
+		} catch (RuntimeException ex) {fail(ex);}
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 }

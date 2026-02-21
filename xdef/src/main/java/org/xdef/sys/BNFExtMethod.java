@@ -34,69 +34,69 @@ package org.xdef.sys;
  */
 public interface BNFExtMethod {
 
-    /** Get name of external method.
-     * @return name of external method.
-     */
-    public String getMethodName();
+	/** Get name of external method.
+	 * @return name of external method.
+	 */
+	public String getMethodName();
 
-    /** Get parsed part of string by this rule.
-     * @return parsed part of string by this rule.
-     */
-    public String getParsedString();
+	/** Get parsed part of string by this rule.
+	 * @return parsed part of string by this rule.
+	 */
+	public String getParsedString();
 
-    /** Get SParser used for parsing.
-     * @return SParser.
-     */
-    public StringParser getParser();
+	/** Get SParser used for parsing.
+	 * @return SParser.
+	 */
+	public StringParser getParser();
 
-    /** Get objects from internal stack.
-     * @return objects from  internal stack.
-     */
-    public Object[] getParsedStack();
+	/** Get objects from internal stack.
+	 * @return objects from  internal stack.
+	 */
+	public Object[] getParsedStack();
 
-    /** Pop value from parsed stack.
-     * @return the top of parsed stack or null.
-     */
-    public Object popParsedObject();
+	/** Pop value from parsed stack.
+	 * @return the top of parsed stack or null.
+	 */
+	public Object popParsedObject();
 
-    /** Get the value of the top of parsed stack.
-     * @return the top of parsed stack or null.
-     */
-    public Object peekParsedObject();
+	/** Get the value of the top of parsed stack.
+	 * @return the top of parsed stack or null.
+	 */
+	public Object peekParsedObject();
 
-    /** Push object to parsed stack.
-     * @param o object to be pushed.
-     */
-    public void pushParsedObject(Object o);
+	/** Push object to parsed stack.
+	 * @param o object to be pushed.
+	 */
+	public void pushParsedObject(Object o);
 
-    /** Get root BNF rule.
-     * @return root BNF rule.
-     */
-    public BNFRule getRootRule();
+	/** Get root BNF rule.
+	 * @return root BNF rule.
+	 */
+	public BNFRule getRootRule();
 
-    /** Get actual BNF rule.
-     * @return actual BNF rule.
-     */
-    public BNFRule getRule();
+	/** Get actual BNF rule.
+	 * @return actual BNF rule.
+	 */
+	public BNFRule getRule();
 
-    /** Get actual rule name.
-     * @return actual rule name.
-     */
-    public String getRuleName();
+	/** Get actual rule name.
+	 * @return actual rule name.
+	 */
+	public String getRuleName();
 
-    /** Get actual source position.
-     * @return SPosition object with actual source position.
-     */
-    public SPosition getSPosition();
+	/** Get actual source position.
+	 * @return SPosition object with actual source position.
+	 */
+	public SPosition getSPosition();
 
-    /** Get associated user object.
-     * @return associated user object.
-     */
-    public Object getUserObject();
+	/** Get associated user object.
+	 * @return associated user object.
+	 */
+	public Object getUserObject();
 
-    /** Set user object.
-     * @param obj new value of user object.
-     * @return old value of user object.
-     */
-    public Object setUserObject(Object obj);
+	/** Set user object.
+	 * @param obj new value of user object.
+	 * @return old value of user object.
+	 */
+	public Object setUserObject(Object obj);
 }

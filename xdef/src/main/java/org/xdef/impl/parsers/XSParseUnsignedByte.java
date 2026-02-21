@@ -10,33 +10,33 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XSParseUnsignedByte extends XSParseLong {
-    private static final String ROOTBASENAME = "unsignedByte";
+	private static final String ROOTBASENAME = "unsignedByte";
 
-    public XSParseUnsignedByte() {super();}
+	public XSParseUnsignedByte() {super();}
 
-    @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
-        super.parseObject(xnode, p);
-        if(p.errors()) {
-            return;
-        }
-        long val = p.getParsedValue().longValue();
-        if (val < 0 || val > 255) {
-            p.error(XDEF.XDEF806, parserName(), val);//Value of '&{0}' is out of range&{1}{: }
-        }
-    }
+	@Override
+	public void parseObject(final XXNode xnode, final XDParseResult p){
+		super.parseObject(xnode, p);
+		if(p.errors()) {
+			return;
+		}
+		long val = p.getParsedValue().longValue();
+		if (val < 0 || val > 255) {
+			p.error(XDEF.XDEF806, parserName(), val);//Value of '&{0}' is out of range&{1}{: }
+		}
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 
-    @Override
-    public void checkValue(final XDValue x) {
-        long val =  x.longValue();
-        if (val < 0 || val > 255) {
-            throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
-        }
-    }
+	@Override
+	public void checkValue(final XDValue x) {
+		long val =  x.longValue();
+		if (val < 0 || val > 255) {
+			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);//Incorrect range specification of &{0}
+		}
+	}
 
-    @Override
-    public short parsedType() {return XD_INT;}
+	@Override
+	public short parsedType() {return XD_INT;}
 }

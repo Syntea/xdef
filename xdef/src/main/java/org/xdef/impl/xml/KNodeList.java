@@ -10,62 +10,62 @@ import org.w3c.dom.NodeList;
  */
 public class KNodeList extends ArrayList<Node> implements NodeList {
 
-    /** Create empty list. */
-    public KNodeList() {super();}
+	/** Create empty list. */
+	public KNodeList() {super();}
 
-    /** Create list with one node from the argument.
-     * @param x node which will be in the created list.
-     */
-    public KNodeList(final Node x) {
-        super();
-        if (x != null){
-            add(x);
-        }
-    }
+	/** Create list with one node from the argument.
+	 * @param x node which will be in the created list.
+	 */
+	public KNodeList(final Node x) {
+		super();
+		if (x != null){
+			add(x);
+		}
+	}
 
-    /** Construct list with items from the list from argument.
-     * @param x the list with items which will be in the created list.
-     */
-    public KNodeList(final NodeList x) {
-        this();
-        if (x != null) {
-            for (int i = 0; i < x.getLength(); i++) {
-                add(x.item(i));
-            }
-        }
-    }
+	/** Construct list with items from the list from argument.
+	 * @param x the list with items which will be in the created list.
+	 */
+	public KNodeList(final NodeList x) {
+		this();
+		if (x != null) {
+			for (int i = 0; i < x.getLength(); i++) {
+				add(x.item(i));
+			}
+		}
+	}
 
-    /** Get number of items in this list. */
-    @Override
-    public final int getLength() {return size();}
+	/** Get number of items in this list. */
+	@Override
+	public final int getLength() {return size();}
 
-    /** Get node from the index in this list.
-     * @param index index of item.
-     * @return node from the index in this list.
-     */
-    @Override
-    public final Node item(final int index) {return get(index);}
+	/** Get node from the index in this list.
+	 * @param index index of item.
+	 * @return node from the index in this list.
+	 */
+	@Override
+	public final Node item(final int index) {return get(index);}
 
-    /** Add node to the position given by argument index.
-     * @param index index of item.
-     * @param node node to be added.
-     */
-    public final void addItem(final int index, final Node node) {add(index, node);}
+	/** Add node to the position given by argument index.
+	 * @param index index of item.
+	 * @param node node to be added.
+	 */
+	public final void addItem(final int index, final Node node) {add(index, node);}
 
-    /** Add an item to the end of list..
-     * @param node the item to be added.
-     */
-    public final void addItem(final Node node) {add(node);}
+	/** Add an item to the end of list..
+	 * @param node the item to be added.
+	 */
+	public final void addItem(final Node node) {add(node);}
 
-    /** Delete all items in this list. */
-    public final void clearItems() {clear();}
+	/** Delete all items in this list. */
+	public final void clearItems() {clear();}
 
-    /** Add items from NodeList to this list.
-     * @param nl list with items to be added.
-     */
-    public final void addAllItems(final NodeList nl) {
-        for (int i = 0; i < nl.getLength(); i++) {
-            add(nl.item(i));
-        }
-    }
+	/** Add items from NodeList to this list.
+	 * @param nl list with items to be added.
+	 */
+	public final void addAllItems(final NodeList nl) {
+		for (int i = 0; i < nl.getLength(); i++) {
+			add(nl.item(i));
+		}
+	}
 }

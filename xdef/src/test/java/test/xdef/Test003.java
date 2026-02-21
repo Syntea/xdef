@@ -33,111 +33,111 @@ import static test.XDTester.getFulltestMode;
  * @author Vaclav Trojan
  */
 public final class Test003 extends XDTester {
-    public Test003() {super();}
+	public Test003() {super();}
 
-    /** Run tests. */
-    @Override
-    public void test() {
-        String xdef;
-        String xml;
-        XDPool xp;
-        XDDocument xd;
-        ArrayReporter reporter = new ArrayReporter();
-        FileOutputStream fw;
-        ReportWriter rw;
-        InputStreamReader isr;
-        Element el;
-        final String dataDir = getDataDir() + "test/";
-        try {
-            reporter.clear();
-            xd = compile(dataDir + "TestChkParser1_1.xdef").createXDDocument("CKP");
-            xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
-            assertNoErrorwarnings(reporter);
-        } catch(RuntimeException ex) {fail(ex);}
-        try {// Xdefinition referred from XML
-            reporter.clear();
-            XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
-            assertNoErrorwarnings(reporter);
-        } catch(RuntimeException ex) {fail(ex);}
-        try {
-            String defFile = dataDir + "SouborD1A_.xdef";
-            setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
-            xp = compile(defFile);
-            File tmp1 = File.createTempFile("SouborD1A", "err");
-            tmp1.deleteOnExit();
-            fw = new FileOutputStream(tmp1);
-            rw = new FileReportWriter(fw);
-            xd = xp.createXDDocument("SouborD1A");
-            if (!"29.5.2003".equals(xd.getImplProperty("date"))) {
-                fail(xd.getImplProperty("date"));
-            }
-            if (!"1.0.0".equals(xd.getImplProperty("version"))) {
-                fail(xd.getImplProperty("version"));
-            }
-            xd.setUserObject(this);
-            el = xd.xparse(dataDir + "SouborD1D.xml", rw);
-            if (null != xd.getDocument().getXmlEncoding()
-                && !"UTF-8".equalsIgnoreCase(el.getOwnerDocument().getXmlEncoding())) {
-                fail("encoding: " + xd.getDocument().getXmlEncoding());
-            }
-            isr = new InputStreamReader(new FileInputStream(dataDir + "SouborD1B.xml"));
-            fw.close();
-            OutputStreamWriter lst;
-            FileReader fr;
-            ReportReader rr;
-            File tmp2 = File.createTempFile("SouborD1A", "err");
-            tmp2.deleteOnExit();
-            fr = new FileReader(tmp2);
-            rr = new FileReportReader(fr, true);
-            File tmp3 = File.createTempFile("SouborD1A", "lst");
-            tmp3.deleteOnExit();
-            lst = new OutputStreamWriter(new FileOutputStream(tmp3));
-            ReportPrinter.printListing(lst, isr, rr, null, 80, false, null);
-            fr.close();
-            isr.close();
-            lst.close();
-        } catch (IOException | RuntimeException ex) {fail(ex);}
-        try {// check compiling if source items have assignment of sourceId
-            Object[] p1 = new Object[] { // sources
+	/** Run tests. */
+	@Override
+	public void test() {
+		String xdef;
+		String xml;
+		XDPool xp;
+		XDDocument xd;
+		ArrayReporter reporter = new ArrayReporter();
+		FileOutputStream fw;
+		ReportWriter rw;
+		InputStreamReader isr;
+		Element el;
+		final String dataDir = getDataDir() + "test/";
+		try {
+			reporter.clear();
+			xd = compile(dataDir + "TestChkParser1_1.xdef").createXDDocument("CKP");
+			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
+			assertNoErrorwarnings(reporter);
+		} catch(RuntimeException ex) {fail(ex);}
+		try {// Xdefinition referred from XML
+			reporter.clear();
+			XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
+			assertNoErrorwarnings(reporter);
+		} catch(RuntimeException ex) {fail(ex);}
+		try {
+			String defFile = dataDir + "SouborD1A_.xdef";
+			setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
+			xp = compile(defFile);
+			File tmp1 = File.createTempFile("SouborD1A", "err");
+			tmp1.deleteOnExit();
+			fw = new FileOutputStream(tmp1);
+			rw = new FileReportWriter(fw);
+			xd = xp.createXDDocument("SouborD1A");
+			if (!"29.5.2003".equals(xd.getImplProperty("date"))) {
+				fail(xd.getImplProperty("date"));
+			}
+			if (!"1.0.0".equals(xd.getImplProperty("version"))) {
+				fail(xd.getImplProperty("version"));
+			}
+			xd.setUserObject(this);
+			el = xd.xparse(dataDir + "SouborD1D.xml", rw);
+			if (null != xd.getDocument().getXmlEncoding()
+				&& !"UTF-8".equalsIgnoreCase(el.getOwnerDocument().getXmlEncoding())) {
+				fail("encoding: " + xd.getDocument().getXmlEncoding());
+			}
+			isr = new InputStreamReader(new FileInputStream(dataDir + "SouborD1B.xml"));
+			fw.close();
+			OutputStreamWriter lst;
+			FileReader fr;
+			ReportReader rr;
+			File tmp2 = File.createTempFile("SouborD1A", "err");
+			tmp2.deleteOnExit();
+			fr = new FileReader(tmp2);
+			rr = new FileReportReader(fr, true);
+			File tmp3 = File.createTempFile("SouborD1A", "lst");
+			tmp3.deleteOnExit();
+			lst = new OutputStreamWriter(new FileOutputStream(tmp3));
+			ReportPrinter.printListing(lst, isr, rr, null, 80, false, null);
+			fr.close();
+			isr.close();
+			lst.close();
+		} catch (IOException | RuntimeException ex) {fail(ex);}
+		try {// check compiling if source items have assignment of sourceId
+			Object[] p1 = new Object[] { // sources
 "<xd:def  xmlns:xd='"+_xdNS+"' root='A' name='A' ><A/></xd:def>",
 "<xd:def xmlns:xd='"+_xdNS+"' root='B' name='B' ><B/></xd:def>",new ByteArrayInputStream((
 "<xd:def xmlns:xd='"+_xdNS+"' root='C' name='C' ><C/></xd:def>").getBytes("UTF-8"))};
-            String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
-            xp = XDFactory.compileXD(null, p1, p2);
-            assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            assertEq(xml = "<B/>", parse(xp, "B", xml, reporter));
-            assertNoErrorwarnings(reporter);
-            assertEq(xml = "<C/>", parse(xp, "C", xml, reporter));
-            assertNoErrorwarnings(reporter);
-        } catch (UnsupportedEncodingException | RuntimeException ex) {fail(ex);}
-        try {// test URL with encoded chracters.
-            File f = new File(clearTempDir(), "/aa bb");
-            f.mkdirs();
-            f = new File(f, "čé řž.xdef");
-            Writer wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
-            wr.write("<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\"><test a='int()'/></xd:def>");
-            wr.close();
-            URL u = f.toURI().toURL();
-            XDFactory.compileXD(null, u);
-            xdef = "<xd:collection xmlns:xd='"+_xdNS+"' include='"+u.toExternalForm()+"' />";
-            xp = compile(xdef);
-            xml = "<test a='123'/>";
-            f = new File(clearTempDir(), "/aa bb");
-            f.mkdirs();
-            f = new File(f, "čé řž.xml");
-            wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
-            wr.write(xml);
-            wr.close();
-            xp.createXDDocument("A");
-            assertEq(xml, parse(xp,"A",xml, reporter));
-            assertNoErrorsAndClear(reporter);
-            xd = xp.createXDDocument("A");
-            assertEq(xml, xd.xparse(f.toURI().toURL(), reporter));
-            assertNoErrorsAndClear(reporter);
-        } catch (IOException | RuntimeException ex) {fail(ex);}
-        try {// join elements "B" which can be joined.
-            xdef =
+			String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
+			xp = XDFactory.compileXD(null, p1, p2);
+			assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			assertEq(xml = "<B/>", parse(xp, "B", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			assertEq(xml = "<C/>", parse(xp, "C", xml, reporter));
+			assertNoErrorwarnings(reporter);
+		} catch (UnsupportedEncodingException | RuntimeException ex) {fail(ex);}
+		try {// test URL with encoded chracters.
+			File f = new File(clearTempDir(), "/aa bb");
+			f.mkdirs();
+			f = new File(f, "čé řž.xdef");
+			Writer wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
+			wr.write("<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\"><test a='int()'/></xd:def>");
+			wr.close();
+			URL u = f.toURI().toURL();
+			XDFactory.compileXD(null, u);
+			xdef = "<xd:collection xmlns:xd='"+_xdNS+"' include='"+u.toExternalForm()+"' />";
+			xp = compile(xdef);
+			xml = "<test a='123'/>";
+			f = new File(clearTempDir(), "/aa bb");
+			f.mkdirs();
+			f = new File(f, "čé řž.xml");
+			wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
+			wr.write(xml);
+			wr.close();
+			xp.createXDDocument("A");
+			assertEq(xml, parse(xp,"A",xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xd = xp.createXDDocument("A");
+			assertEq(xml, xd.xparse(f.toURI().toURL(), reporter));
+			assertNoErrorsAndClear(reporter);
+		} catch (IOException | RuntimeException ex) {fail(ex);}
+		try {// join elements "B" which can be joined.
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'A'>\n"+
 "<xd:declaration>\n"+
 "  /** Test if the element f can be joined with the element e. */\n" +
@@ -189,7 +189,7 @@ public final class Test003 extends XDTester {
 "    a='string' b='string' x=\"xdatetime('yyyy-MM-dd')\" y=\"xdatetime('yyyy-MM-dd')\"/>\n"+
 "</A>\n"+
 "</xd:def>";
-        xml =
+		xml =
 "<A>\n"+
 "  <B a='a' b='b' x='2023-12-08' y='2023-12-31'/>\n"+
 "  <B a='a' b='b' x='2024-01-01' y='2024-09-11'/>\n"+
@@ -197,24 +197,24 @@ public final class Test003 extends XDTester {
 "  <B a='a' b='b' x='2024-09-20' y='2024-09-30'/>\n"+
 "  <B a='a' b='b' x='2024-10-01' y='2024-10-02'/>\n"+
 "</A>";
-            xd = compile(xdef).createXDDocument();
-            xd.setXDContext(xml);
-            el = xd.xcreate("A", null);
-            KXmlUtils.compareElements(el,
+			xd = compile(xdef).createXDDocument();
+			xd.setXDContext(xml);
+			el = xd.xcreate("A", null);
+			KXmlUtils.compareElements(el,
 "<A>" +
 "<B a=\"a\" b=\"b\" x=\"2023-12-08\" y=\"2024-09-13\"/>" +
 "<B a=\"a\" b=\"b\" x=\"2024-09-20\" y=\"2024-10-02\"/>" +
 "</A>").checkAndThrowErrorWarnings();
-            assertEq(el,
+			assertEq(el,
 "<A>\n" +
 "  <B a=\"a\" b=\"b\" x=\"2023-12-08\" y=\"2024-09-13\"/>\n" +
 "  <B a=\"a\" b=\"b\" x=\"2024-09-20\" y=\"2024-10-02\"/>\n" +
 "</A>");
-        } catch (RuntimeException ex) {fail(ex);}
-         // test big XML
-        if (getFulltestMode()) {
-            try {
-                xdef =
+		} catch (RuntimeException ex) {fail(ex);}
+		 // test big XML
+		if (getFulltestMode()) {
+			try {
+				xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"koně\">\n"+
 "  <koně>\n"+
 "    <kůň xd:script = '*; forget'\n" +
@@ -229,8 +229,8 @@ public final class Test003 extends XDTester {
 "    </kůň>\n"+
 "  </koně>\n"+
 "</xd:def>";
-                xp = compile(xdef);
-                byte[] child = (
+				xp = compile(xdef);
+				byte[] child = (
 "  <kůň jaký = \"úplně šílený nóbl žluťoučký kůň\"\r\n" +
 "    kde = \"louže\"\r\n" +
 "    barva = \"žluťoučký\"\r\n" +
@@ -240,37 +240,37 @@ public final class Test003 extends XDTester {
 "     skákal přes louže\n " +
 "     <proč>jen tak</proč>\n " +
 " </kůň>\r\n").getBytes("UTF-8");
-                // Create big XML file. Parse created file and get time of processing
-                xd = xp.createXDDocument();
-                File tempfile = File.createTempFile("bigxml", "xml");
-                tempfile.deleteOnExit();
-                xml = tempfile.getAbsolutePath();
-                try (FileOutputStream longfile = new FileOutputStream(xml)) {
-                    longfile.write("<koně>\r\n".getBytes("UTF-8"));
-                    long num = 60000; // 15 Mbytes
-                    for (int i = 0; i < num; i++) {
-                        longfile.write(child);
-                    }
-                    longfile.write("</koně>\r\n".getBytes("UTF-8"));
-                }
-                long datalen = tempfile.length();
-                long t = System.currentTimeMillis();
-                xd.xparse(xml, null);
-                float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
-                DecimalFormat df = new DecimalFormat("0.00");
-                setResultInfo("Big XML: " + df.format(((float) datalen / 1000.0)) + "KB/" +df.format(duration)
-                    + "s (" + df.format((datalen / 1000.0)/duration)+"KB/s);");
-            } catch (IOException | RuntimeException ex) {fail(ex);}
-        }
+				// Create big XML file. Parse created file and get time of processing
+				xd = xp.createXDDocument();
+				File tempfile = File.createTempFile("bigxml", "xml");
+				tempfile.deleteOnExit();
+				xml = tempfile.getAbsolutePath();
+				try (FileOutputStream longfile = new FileOutputStream(xml)) {
+					longfile.write("<koně>\r\n".getBytes("UTF-8"));
+					long num = 60000; // 15 Mbytes
+					for (int i = 0; i < num; i++) {
+						longfile.write(child);
+					}
+					longfile.write("</koně>\r\n".getBytes("UTF-8"));
+				}
+				long datalen = tempfile.length();
+				long t = System.currentTimeMillis();
+				xd.xparse(xml, null);
+				float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
+				DecimalFormat df = new DecimalFormat("0.00");
+				setResultInfo("Big XML: " + df.format(((float) datalen / 1000.0)) + "KB/" +df.format(duration)
+					+ "s (" + df.format((datalen / 1000.0)/duration)+"KB/s);");
+			} catch (IOException | RuntimeException ex) {fail(ex);}
+		}
 
-        resetTester();
-    }
+		resetTester();
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 }

@@ -13,197 +13,197 @@ import java.util.List;
  */
 public interface PreCompiler {
 
-    /** Parse string and addAttr it to the set of definitions.
-     * @param source The source string with definitions.
-     */
-    public void parseString(final String source);
+	/** Parse string and addAttr it to the set of definitions.
+	 * @param source The source string with definitions.
+	 */
+	public void parseString(final String source);
 
-    /** Parse string and addAttr it to the set of X-definitions.
-     * @param source source string with X-definitions.
-     * @param srcName pathname of source (URL or an identifying name or null).
-     */
-    public void parseString(final String source, final String srcName);
+	/** Parse string and addAttr it to the set of X-definitions.
+	 * @param source source string with X-definitions.
+	 * @param srcName pathname of source (URL or an identifying name or null).
+	 */
+	public void parseString(final String source, final String srcName);
 
-    /** Parse file with source X-definition and addAttr it to the set of definitions.
-     * @param file The file with with X-definitions.
-     */
-    public void parseFile(final File file);
+	/** Parse file with source X-definition and addAttr it to the set of definitions.
+	 * @param file The file with with X-definitions.
+	 */
+	public void parseFile(final File file);
 
-    /** Parse InputStream source X-definition and addAttr it to the set of definitions.
-     * @param in input stream with the X-definition.
-     * @param srcName name of source data used in reporting (SysId) or null.
-     */
-    public void parseStream(final InputStream in, final String srcName);
+	/** Parse InputStream source X-definition and addAttr it to the set of definitions.
+	 * @param in input stream with the X-definition.
+	 * @param srcName name of source data used in reporting (SysId) or null.
+	 */
+	public void parseStream(final InputStream in, final String srcName);
 
-    /** Parse data with source X-definition given by URL and addAttr it to the set of X-definitions.
-     * @param url URL of the file with the X-definition.
-     */
-    public void parseURL(final URL url);
+	/** Parse data with source X-definition given by URL and addAttr it to the set of X-definitions.
+	 * @param url URL of the file with the X-definition.
+	 */
+	public void parseURL(final URL url);
 
-    /** Parse file with source X-definition and addAttr it to the set of X-definitions.
-     * @param fileName pathname of file with with X-definitions.
-     */
-    public void parseFile(final String fileName);
+	/** Parse file with source X-definition and addAttr it to the set of X-definitions.
+	 * @param fileName pathname of file with with X-definitions.
+	 */
+	public void parseFile(final String fileName);
 
-    /** Get code generator.
-     * @return the code generator.
-     */
-    public CompileCode getCodeGenerator();
+	/** Get code generator.
+	 * @return the code generator.
+	 */
+	public CompileCode getCodeGenerator();
 
-    /** Get sources of X-definitions.
-     * @return array with sources of X-definitions.
-     */
-    public List<Object> getSources();
+	/** Get sources of X-definitions.
+	 * @return array with sources of X-definitions.
+	 */
+	public List<Object> getSources();
 
-    /** Get list with included sources of X-definitions (URL or File).
-     * @return list with included sources of X-definitions (URL or File).
-     */
-    public List<Object> getIncluded();
+	/** Get list with included sources of X-definitions (URL or File).
+	 * @return list with included sources of X-definitions (URL or File).
+	 */
+	public List<Object> getIncluded();
 
-    /** Get precompiled sources (PNodes) of X-definition items.
-     * @return array with PNodes with X-definitions.
-     */
-    public List<PNode> getPXDefs();
+	/** Get precompiled sources (PNodes) of X-definition items.
+	 * @return array with PNodes with X-definitions.
+	 */
+	public List<PNode> getPXDefs();
 
-    /** Get precompiled sources (PNodes) of Lexicon items.
-     * @return array with PNodes.
-     */
-    public List<PNode> getPLexiconList();
+	/** Get precompiled sources (PNodes) of Lexicon items.
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPLexiconList();
 
-    /** Get precompiled sources (PNodes) of collection items.
-     * @return array with PNodes.
-     */
-    public List<PNode> getPCollections();
+	/** Get precompiled sources (PNodes) of collection items.
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPCollections();
 
-    /** Get precompiled sources (PNodes) of declaration items.
-     * @return array with PNodes.
-     */
-    public List<PNode> getPDeclarations();
+	/** Get precompiled sources (PNodes) of declaration items.
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPDeclarations();
 
-    /** Get precompiled sources (PNodes) of components items.
-     * @return array with PNodes.
-     */
-    public List<PNode> getPComponents();
+	/** Get precompiled sources (PNodes) of components items.
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPComponents();
 
-    /** Get precompiled sources (PNodes) of BNF Grammar items.
-     * @return array with PNodes.
-     */
-    public List<PNode> getPBNFs();
+	/** Get precompiled sources (PNodes) of BNF Grammar items.
+	 * @return array with PNodes.
+	 */
+	public List<PNode> getPBNFs();
 
-    /** Check if the node has no nested child nodes.
-     * @param pnode PNode to be tested.
-     */
-    public void chkNestedElements(final PNode pnode);
+	/** Check if the node has no nested child nodes.
+	 * @param pnode PNode to be tested.
+	 */
+	public void chkNestedElements(final PNode pnode);
 
-    /** Get namespace URI on given position.
-     * @param i position
-     * @return uri on this position or null.
-     */
-    public String getNSURI(final int i);
+	/** Get namespace URI on given position.
+	 * @param i position
+	 * @return uri on this position or null.
+	 */
+	public String getNSURI(final int i);
 
-    /** Get namespace URI index of given uri.
-     * @param uri uri to he found.
-     * @return index of uri from argument.
-     */
-    public int getNSURIIndex(final String uri);
+	/** Get namespace URI index of given uri.
+	 * @param uri uri to he found.
+	 * @return index of uri from argument.
+	 */
+	public int getNSURIIndex(final String uri);
 
-    /** Set URI on given index.
-     * @param i index where to set.
-     * @param uri URI to set.
-     * @return original URI or null.
-     */
-    public String setURIOnIndex(final int i, final String uri);
+	/** Set URI on given index.
+	 * @param i index where to set.
+	 * @param uri URI to set.
+	 * @return original URI or null.
+	 */
+	public String setURIOnIndex(final int i, final String uri);
 
-    /** Set URI. If the URI already exists just return the index
-     * @param uri URI to be set.
-     * @return index of uri.
-     */
-    public int setNSURI(final String uri);
+	/** Set URI. If the URI already exists just return the index
+	 * @param uri URI to be set.
+	 * @return index of uri.
+	 */
+	public int setNSURI(final String uri);
 
-    /** Report not legal attributes. All allowed attributes should be processed and removed. Not legal
-     * attribute generates an error message.
-     * @param pnode node to be checked.
-     */
-    public void reportNotAllowedAttrs(final PNode pnode);
+	/** Report not legal attributes. All allowed attributes should be processed and removed. Not legal
+	 * attribute generates an error message.
+	 * @param pnode node to be checked.
+	 */
+	public void reportNotAllowedAttrs(final PNode pnode);
 
-    /** Get attribute of given name with or without namespace prefix from node. The attribute is removed from
-     * the list. If the argument required is set to true put error message that required attribute is missing.
-     * @param pnode where to find attribute.
-     * @param localName The local name of attribute.
-     * @param required if true the attribute is required.
-     * @param remove if true the attribute is removed.
-     * @return PAttr object or null.
-     */
-    public PAttr getXdefAttr(final PNode pnode,
-        final String localName,
-        final boolean required,
-        final boolean remove);
+	/** Get attribute of given name with or without namespace prefix from node. The attribute is removed from
+	 * the list. If the argument required is set to true put error message that required attribute is missing.
+	 * @param pnode where to find attribute.
+	 * @param localName The local name of attribute.
+	 * @param required if true the attribute is required.
+	 * @param remove if true the attribute is removed.
+	 * @return PAttr object or null.
+	 */
+	public PAttr getXdefAttr(final PNode pnode,
+		final String localName,
+		final boolean required,
+		final boolean remove);
 
-    /** Prepare list of declared macros and expand macro references. */
-    public void prepareMacros();
+	/** Prepare list of declared macros and expand macro references. */
+	public void prepareMacros();
 
-    /** Set System ID for error reporting.
-     * @param sysId System id.
-     */
-    public void setSystemId(final String sysId);
+	/** Set System ID for error reporting.
+	 * @param sysId System id.
+	 */
+	public void setSystemId(final String sysId);
 
-    /** Get report writer.
-     * @return the report writer.
-     */
-    public ReportWriter getReportWriter();
+	/** Get report writer.
+	 * @return the report writer.
+	 */
+	public ReportWriter getReportWriter();
 
-    /** Set report writer.
-     * @param x the report writer to be set.
-     */
-    public void setReportWriter(final ReportWriter x);
+	/** Set report writer.
+	 * @param x the report writer to be set.
+	 */
+	public void setReportWriter(final ReportWriter x);
 
-    /** Put fatal error message.
-     * @param pos SPosition
-     * @param registeredID registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void fatal(final SPosition pos, final long registeredID, final Object... mod);
+	/** Put fatal error message.
+	 * @param pos SPosition
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void fatal(final SPosition pos, final long registeredID, final Object... mod);
 
-    /** Put error message.
-     * @param pos SPosition
-     * @param registeredID registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void error(final SPosition pos, final long registeredID, final Object... mod);
+	/** Put error message.
+	 * @param pos SPosition
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void error(final SPosition pos, final long registeredID, final Object... mod);
 
-    /** Put ligthError message.
-     * @param pos SPosition
-     * @param registeredID registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void lightError(final SPosition pos, final long registeredID, final Object... mod);
+	/** Put ligthError message.
+	 * @param pos SPosition
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void lightError(final SPosition pos, final long registeredID, final Object... mod);
 
-    /** Put error message.
-     * @param pos SPosition
-     * @param registeredID registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void warning(final SPosition pos, final long registeredID, final Object... mod);
+	/** Put error message.
+	 * @param pos SPosition
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void warning(final SPosition pos, final long registeredID, final Object... mod);
 
-    /** Put report to reporter.
-     * @param pos SPosition
-     * @param rep Report.
-     */
-    public void putReport(final SPosition pos, final Report rep);
+	/** Put report to reporter.
+	 * @param pos SPosition
+	 * @param rep Report.
+	 */
+	public void putReport(final SPosition pos, final Report rep);
 
-    /** Put error to compiler reporter.
-     * @param registeredID registered report id.
-     * @param mod Message modification parameters.
-     */
-    public void error(final long registeredID, final Object... mod);
+	/** Put error to compiler reporter.
+	 * @param registeredID registered report id.
+	 * @param mod Message modification parameters.
+	 */
+	public void error(final long registeredID, final Object... mod);
 
-    /** Put report to compiler reporter.
-     * @param rep Report.
-     */
-    public void putReport(final Report rep);
+	/** Put report to compiler reporter.
+	 * @param rep Report.
+	 */
+	public void putReport(final Report rep);
 
-    /** Get switch if the parser will check warnings as errors.
-     * @return true if the parser checks warnings as errors.
-     */
-    public boolean isChkWarnings();
+	/** Get switch if the parser will check warnings as errors.
+	 * @return true if the parser checks warnings as errors.
+	 */
+	public boolean isChkWarnings();
 }

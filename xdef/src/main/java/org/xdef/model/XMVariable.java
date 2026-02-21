@@ -5,38 +5,38 @@ package org.xdef.model;
  */
 public interface XMVariable {
 
-    /** Get name of variable.
-     * @return name of variable.
-     */
-    public String getName();
+	/** Get name of variable.
+	 * @return name of variable.
+	 */
+	public String getName();
 
-    /** Get type of variable (see org.xdef.XDValueTypes).
-     * @return type of variable.
-     */
-    public short getType();
+	/** Get type of variable (see org.xdef.XDValueTypes).
+	 * @return type of variable.
+	 */
+	public short getType();
 
-    /** Get kind of variable (global, local, XModel).
-     * @return 'G' .. global, 'L' .. local, 'X' .. XModel.
-     */
-    public byte getKind();
+	/** Get kind of variable (global, local, XModel).
+	 * @return 'G' .. global, 'L' .. local, 'X' .. XModel.
+	 */
+	public byte getKind();
 
-    /** Get "final" flag.
-     * @return true if and only if variable is declared as final.
-     */
-    public boolean isFinal();
+	/** Get "final" flag.
+	 * @return true if and only if variable is declared as final.
+	 */
+	public boolean isFinal();
 
-    /** Get "external" flag (true if variable was specified as external).
-     * @return true if and only if variable is declared as external.
-     */
-    public boolean isExternal();
+	/** Get "external" flag (true if variable was specified as external).
+	 * @return true if and only if variable is declared as external.
+	 */
+	public boolean isExternal();
 
-    /** Check if this field is initialized.
-     * @return true if variable is initialized.
-     */
-    public boolean isInitialized();
+	/** Check if this field is initialized.
+	 * @return true if variable is initialized.
+	 */
+	public boolean isInitialized();
 
-    /** Get offset (address) of variable to the variables table.
-     * @return offset of variable.
-     */
-    public int getOffset();
+	/** Get offset (address) of variable to the variables table.
+	 * @return offset of variable.
+	 */
+	public int getOffset();
 }

@@ -22,8 +22,8 @@ import org.xdef.sys.SException;
  * @author Vaclav Trojan
  */
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
-    /** BNF grammar rules of email address according to RFC 5321. */
-    private static final BNFGrammar BNF = BNFGrammar.compile(
+	/** BNF grammar rules of email address according to RFC 5321. */
+	private static final BNFGrammar BNF = BNFGrammar.compile(
 "FWS::=           [ #9]+\n"+ // Folding white space
 "ASCIICHAR::=     [ -~]\n"+ // Printable ASCII character
 "Let_dig::=       [0-9] | $letter\n" +
@@ -36,13 +36,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "IPv6_hex::=      [0-9a-fA-F]{1,4}\n" +
 "IPv6_full::=     IPv6_hex ( ':' IPv6_hex ){7}\n" +
 "IPv6_comp::=     ( IPv6_hex ( ':' IPv6_hex ){0,5} )? '::' ( IPv6_hex (':' IPv6_hex){0,5} )?\n" +
-    // The '::' represents at least 2 16-bit groups of zeros.
-    // No more than 6 groups in addition to the '::' may be present.
+	// The '::' represents at least 2 16-bit groups of zeros.
+	// No more than 6 groups in addition to the '::' may be present.
 "IPv6v4_full::=   IPv6_hex ( ':' IPv6_hex ){5} ':' IPv4_addr\n" +
 "IPv6v4_comp::=   ( IPv6_hex (':' IPv6_hex){0,3} )? '::'\n" +
 "                 ( IPv6_hex (':' IPv6_hex){0,3} ':' )? IPv4_addr\n" +
-    // The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
-    // addition to the '::' and IPv4-address-literal may be present.
+	// The '::' represents at least 2 16-bit groups of zeros.  No more than 4 groups in
+	// addition to the '::' and IPv4-address-literal may be present.
 "IPv4_addr::=     IPv4\n"+
 "IPv6_addr::=     'IPv6:' IPv6\n"+
 "Std_tag::=       Ldh_str\n"+ // Std-tag MUST be specified in a Standards-Track RFC and registered with IANA
@@ -53,10 +53,10 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "Atom::=          atext ('-'+ atext)*\n" +
 "Dot_string::=    Atom ('.' '-'* Atom)*\n" +
 "qtextSMTP::=     [ !#-Z^-~] | '[' | ']'\n" +
-    // i.e., within a quoted string, any ASCII graphic or space is permitted without
-    // blackslash-quoting except double-quote and the backslash itself.
+	// i.e., within a quoted string, any ASCII graphic or space is permitted without
+	// blackslash-quoting except double-quote and the backslash itself.
 "quoted_pair::=   '\\' ASCIICHAR\n" + // %d92 %d32-126
-    // i.e., backslash followed by any ASCII graphic (including itself) or SPace
+	// i.e., backslash followed by any ASCII graphic (including itself) or SPace
 "QcontentSMTP::=  quoted_pair | qtextSMTP\n" +
 "Quoted_string::= '\"' QcontentSMTP* '\"'\n" +
 "Local_part::=    Dot_string | Quoted_string\n" + // MAY be case-sensitive
@@ -72,293 +72,293 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "hexOctet::=      '=' [0-9A-F] [0-9A-F]\n"+
 "btext::=         [a-zA-Z0-9+/]+ '='? '='? $rule\n"+ // Base64 text
 "emailAddr::=     ( text? FWS? '<' Mailbox '>' | comment* Mailbox ) comment*");
-    /** Email source value. */
-    private final String _value;
-    /** Email domain. */
-    private final String _domain;
-    /** Email user. */
-    private final String _localPart;
-    /** Email user name. */
-    private final String _userName;
+	/** Email source value. */
+	private final String _value;
+	/** Email domain. */
+	private final String _domain;
+	/** Email user. */
+	private final String _localPart;
+	/** Email user name. */
+	private final String _userName;
 
-    /** Creates a new instance of DefEmail as null.*/
-    public DefEmailAddr() {this((String) null);}
+	/** Creates a new instance of DefEmail as null.*/
+	public DefEmailAddr() {this((String) null);}
 
-    /** Creates a new instance of DefEmail.
-     * @param value string with email address.
-     */
-    public DefEmailAddr(final String value) {
-        if (value == null || value.isEmpty()) {
-            _value = _localPart = _domain = _userName = null;
-            return;
-        }
-        StringParser p = new StringParser(value);
-        String[] result = parseEmail(p);
-        if (result == null || !p.eos()) {
-            throw new SRuntimeException(XDEF.XDEF809, "email"); //Incorrect value of &{0}&{1}&{: }
-        }
-        _value = result[0];
-        _localPart = result[1];
-        _domain = result[2];
-        _userName = result[3];
-    }
+	/** Creates a new instance of DefEmail.
+	 * @param value string with email address.
+	 */
+	public DefEmailAddr(final String value) {
+		if (value == null || value.isEmpty()) {
+			_value = _localPart = _domain = _userName = null;
+			return;
+		}
+		StringParser p = new StringParser(value);
+		String[] result = parseEmail(p);
+		if (result == null || !p.eos()) {
+			throw new SRuntimeException(XDEF.XDEF809, "email"); //Incorrect value of &{0}&{1}&{: }
+		}
+		_value = result[0];
+		_localPart = result[1];
+		_domain = result[2];
+		_userName = result[3];
+	}
 
-    public DefEmailAddr(StringParser p) {
-        String[] result = parseEmail(p);
-        if (result == null) {
-            throw new SRuntimeException(XDEF.XDEF809, "email"); //Incorrect value of &{0}&{1}&{: }
-        }
-        _value = result[0];
-        _localPart = result[1];
-        _domain = result[2];
-        _userName = result[3];
-    }
+	public DefEmailAddr(StringParser p) {
+		String[] result = parseEmail(p);
+		if (result == null) {
+			throw new SRuntimeException(XDEF.XDEF809, "email"); //Incorrect value of &{0}&{1}&{: }
+		}
+		_value = result[0];
+		_localPart = result[1];
+		_domain = result[2];
+		_userName = result[3];
+	}
 
-    /** Parse source data with email address.
-     * @param p parser with source data.
-     * @return null if not correct or array of strings where the items are:<p>
-     * [0] .. text of parsed email source.<p>
-     * [1] .. local part of internet address.<p>
-     * [2] .. domain part of internet address.<p>
-     * [3] .. string with personal information.
-     */
-    public static final String[] parseEmail(final StringParser p) {
-        p.isSpaces();
-        Object[] code;
-        String parsedString;
-        synchronized (BNF) {
-            if (!BNF.parse(p, "emailAddr")) {
-                return null;
-            }
-            parsedString = BNF.getParsedString();
-            code = BNF.getParsedObjects();
-        }
-        String domain; // Email domain
-        String localPart; // Email user
-        String charsetName; // name of text charset name
-        domain = localPart = charsetName = null;
-        String userName = ""; // Email user name
-        String s = p.getParsedBufferPart();
-        if (code != null) {
-            for (Object code1 : code) {
-                StringParser q = new StringParser((String) code1);
-                String t;
-                if ((t = readStackItem(q, "Mailbox", s)) != null) {
-                    int ndx = t.indexOf('@');
-                    localPart = t.substring(0, ndx);
-                    domain = t.substring(ndx + 1);
-                } else if ((t = readStackItem(q, "commentPart", s)) != null) {
-                    userName += t;
-                } else if ((t = readStackItem(q, "charsetName", s)) != null) {
-                    charsetName = t;
-                } else if ((t = readStackItem(q, "qtext", s)) != null) {
-                    t = readQtext(t, charsetName);
-                    userName += t;
-                } else if ((t = readStackItem(q, "btext", s)) != null) {
-                    t = readBtext(t, charsetName);
-                    userName += t;
-                } else if ((t = readStackItem(q, "ptext", s)) != null) {
-                    userName += t.trim();
-                }
-            }
-            p.isSpaces();
-            if (localPart != null && domain != null) {
-                localPart = removeWS(localPart);
-                int ndx = localPart.lastIndexOf('(');
-                if (ndx > 0 && localPart.endsWith(")")) { // remove comment from local part
-                    localPart = localPart.substring(0, ndx);
-                }
-                domain = removeWS(domain);
-                if (domain.indexOf('(') == 0 && (ndx = domain.indexOf(')')) > 0 && ndx + 1 < domain.length()){
-                    domain = domain.substring(ndx + 1); //remove comment from domain
-                }
-                if (localPart.length() <= 64 && domain.length() <= 256) {
-                    return new String[] {parsedString, localPart, domain, userName};
-                }
-            }
-        }
-        return null;
-    }
+	/** Parse source data with email address.
+	 * @param p parser with source data.
+	 * @return null if not correct or array of strings where the items are:<p>
+	 * [0] .. text of parsed email source.<p>
+	 * [1] .. local part of internet address.<p>
+	 * [2] .. domain part of internet address.<p>
+	 * [3] .. string with personal information.
+	 */
+	public static final String[] parseEmail(final StringParser p) {
+		p.isSpaces();
+		Object[] code;
+		String parsedString;
+		synchronized (BNF) {
+			if (!BNF.parse(p, "emailAddr")) {
+				return null;
+			}
+			parsedString = BNF.getParsedString();
+			code = BNF.getParsedObjects();
+		}
+		String domain; // Email domain
+		String localPart; // Email user
+		String charsetName; // name of text charset name
+		domain = localPart = charsetName = null;
+		String userName = ""; // Email user name
+		String s = p.getParsedBufferPart();
+		if (code != null) {
+			for (Object code1 : code) {
+				StringParser q = new StringParser((String) code1);
+				String t;
+				if ((t = readStackItem(q, "Mailbox", s)) != null) {
+					int ndx = t.indexOf('@');
+					localPart = t.substring(0, ndx);
+					domain = t.substring(ndx + 1);
+				} else if ((t = readStackItem(q, "commentPart", s)) != null) {
+					userName += t;
+				} else if ((t = readStackItem(q, "charsetName", s)) != null) {
+					charsetName = t;
+				} else if ((t = readStackItem(q, "qtext", s)) != null) {
+					t = readQtext(t, charsetName);
+					userName += t;
+				} else if ((t = readStackItem(q, "btext", s)) != null) {
+					t = readBtext(t, charsetName);
+					userName += t;
+				} else if ((t = readStackItem(q, "ptext", s)) != null) {
+					userName += t.trim();
+				}
+			}
+			p.isSpaces();
+			if (localPart != null && domain != null) {
+				localPart = removeWS(localPart);
+				int ndx = localPart.lastIndexOf('(');
+				if (ndx > 0 && localPart.endsWith(")")) { // remove comment from local part
+					localPart = localPart.substring(0, ndx);
+				}
+				domain = removeWS(domain);
+				if (domain.indexOf('(') == 0 && (ndx = domain.indexOf(')')) > 0 && ndx + 1 < domain.length()){
+					domain = domain.substring(ndx + 1); //remove comment from domain
+				}
+				if (localPart.length() <= 64 && domain.length() <= 256) {
+					return new String[] {parsedString, localPart, domain, userName};
+				}
+			}
+		}
+		return null;
+	}
 
-    /** Read string from stack item.
-     * @param q StringParser starting with name of item.
-     * @param rule name of rule
-     * @param src parsed source data.
-     * @return part of parsed source data.
-     */
-    private static String readStackItem(final StringParser q, final String s, final String src) {
-        if (q.isToken(s) && q.isSpaces()) {
-            if (q.isInteger()) {
-                int i = q.getParsedInt();
-                q.isSpaces();
-                if (q.isInteger()) {
-                    return src.substring(i, q.getParsedInt());
-                }
-            }
-        }
-        return null;
-    }
+	/** Read string from stack item.
+	 * @param q StringParser starting with name of item.
+	 * @param rule name of rule
+	 * @param src parsed source data.
+	 * @return part of parsed source data.
+	 */
+	private static String readStackItem(final StringParser q, final String s, final String src) {
+		if (q.isToken(s) && q.isSpaces()) {
+			if (q.isInteger()) {
+				int i = q.getParsedInt();
+				q.isSpaces();
+				if (q.isInteger()) {
+					return src.substring(i, q.getParsedInt());
+				}
+			}
+		}
+		return null;
+	}
 
-    /** Get decoded base64 text.
-     * @param s base64 text.
-     * @param charsetName name of charset.
-     * @return decoded base64 text.
-     */
-    private static String readBtext(final String s, final String charsetName) {
-        try {
-            return new String(SUtils.decodeBase64(s), charsetName);
-        } catch (SException ex) {
-            throw new SRuntimeException(ex.getReport());
-        } catch (UnsupportedEncodingException ex) {
-            //Incorrect value of &{0}&{1}&{: }
-            throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
-        }
-    }
+	/** Get decoded base64 text.
+	 * @param s base64 text.
+	 * @param charsetName name of charset.
+	 * @return decoded base64 text.
+	 */
+	private static String readBtext(final String s, final String charsetName) {
+		try {
+			return new String(SUtils.decodeBase64(s), charsetName);
+		} catch (SException ex) {
+			throw new SRuntimeException(ex.getReport());
+		} catch (UnsupportedEncodingException ex) {
+			//Incorrect value of &{0}&{1}&{: }
+			throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
+		}
+	}
 
-    /** Get quoted part of source data with given charset.
-     * @param s extracted quoted part
-     * @param charsetName name of charset.
-     * @return quoted part of source data (decode given charset).
-     */
-    private static String readQtext(final String s, final String charsetName) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if (ch == '=' && i + 2 < s.length()) {
-                String hexMask = "0123456789ABCDEF";
-                ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4) + hexMask.indexOf(s.charAt(++i)));
-            }
-            b.write((byte) ch);
-        }
-        try {
-            return new String(b.toByteArray(), charsetName);
-        } catch (UnsupportedEncodingException ex) {
-            //Incorrect value of &{0}&{1}&{: }
-            throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
-        }
-    }
+	/** Get quoted part of source data with given charset.
+	 * @param s extracted quoted part
+	 * @param charsetName name of charset.
+	 * @return quoted part of source data (decode given charset).
+	 */
+	private static String readQtext(final String s, final String charsetName) {
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == '=' && i + 2 < s.length()) {
+				String hexMask = "0123456789ABCDEF";
+				ch = (char) ((hexMask.indexOf(s.charAt(++i)) << 4) + hexMask.indexOf(s.charAt(++i)));
+			}
+			b.write((byte) ch);
+		}
+		try {
+			return new String(b.toByteArray(), charsetName);
+		} catch (UnsupportedEncodingException ex) {
+			//Incorrect value of &{0}&{1}&{: }
+			throw new SRuntimeException(XDEF.XDEF809, "email", ex.toString());
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Remove white spaces from argument.
-     * @param s string where remove white spaces.
-     * @return string with removed white spaces.
-     */
-    private static String removeWS(final String s) {
-        String result = s;
-        int i;
-        while ((i = result.indexOf(' ')) >= 0 || (i = result.indexOf('\t')) >=0) {
-            result = result.substring(0,i) + result.substring(i + 1);
-        }
-        return result;
-    }
+	/** Remove white spaces from argument.
+	 * @param s string where remove white spaces.
+	 * @return string with removed white spaces.
+	 */
+	private static String removeWS(final String s) {
+		String result = s;
+		int i;
+		while ((i = result.indexOf(' ')) >= 0 || (i = result.indexOf('\t')) >=0) {
+			result = result.substring(0,i) + result.substring(i + 1);
+		}
+		return result;
+	}
 
-    /** Get associated object.
-     * @return the associated object or null.
-     */
-    @Override
-    public Object getObject() {return this;}
+	/** Get associated object.
+	 * @return the associated object or null.
+	 */
+	@Override
+	public Object getObject() {return this;}
 
-    /** Get type of value.
-     * @return The id of item type.
-     */
-    @Override
-    public short getItemId() {return XD_EMAIL;}
+	/** Get type of value.
+	 * @return The id of item type.
+	 */
+	@Override
+	public short getItemId() {return XD_EMAIL;}
 
-    /** Get ID of the type of value
-     * @return enumeration item of this type.
-     */
-    @Override
-    public XDValueType getItemType() {return EMAIL;}
+	/** Get ID of the type of value
+	 * @return enumeration item of this type.
+	 */
+	@Override
+	public XDValueType getItemType() {return EMAIL;}
 
-    /** Get value as String.
-     * @return The string from value.
-     */
-    @Override
-    public String toString() {return stringValue();}
+	/** Get value as String.
+	 * @return The string from value.
+	 */
+	@Override
+	public String toString() {return stringValue();}
 
-    /** Get string value of this object.
-     * @return string value of this object.
-     */
-    @Override
-    public String stringValue() {return isNull() ? "" : _value;}
+	/** Get string value of this object.
+	 * @return string value of this object.
+	 */
+	@Override
+	public String stringValue() {return isNull() ? "" : _value;}
 
-    /** Clone the item.
-     * @return the object with the copy of this one.
-     */
-    @Override
-    public XDValue cloneItem() {return new DefEmailAddr(_value);}
+	/** Clone the item.
+	 * @return the object with the copy of this one.
+	 */
+	@Override
+	public XDValue cloneItem() {return new DefEmailAddr(_value);}
 
-    @Override
-    public int hashCode() {return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;}
+	@Override
+	public int hashCode() {return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;}
 
-    @Override
-    public boolean equals(final Object arg) {return arg instanceof XDValue ?  equals((XDValue) arg) : false;}
+	@Override
+	public boolean equals(final Object arg) {return arg instanceof XDValue ?  equals((XDValue) arg) : false;}
 
-    /** Check whether some other XDValue object is "equal to" this one.
-     * @param arg other XDValue object to which is to be compared.
-     * @return true if argument is same type as this XDValue and the value of the object is comparable
-     * and equals to this one.
-     */
-    @Override
-    public boolean equals(final XDValue arg) {
-        if (isNull()) {
-            return arg == null || arg.isNull();
-        } else if (arg == null || arg.isNull()) {
-            return false;
-        } else if (arg instanceof XDEmailAddr) {
-            return _localPart.equals(((XDEmailAddr)arg).getLocalPart())
-                && _domain.equals(((XDEmailAddr)arg).getDomain());
-        }
-        return false;
-    }
+	/** Check whether some other XDValue object is "equal to" this one.
+	 * @param arg other XDValue object to which is to be compared.
+	 * @return true if argument is same type as this XDValue and the value of the object is comparable
+	 * and equals to this one.
+	 */
+	@Override
+	public boolean equals(final XDValue arg) {
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		} else if (arg == null || arg.isNull()) {
+			return false;
+		} else if (arg instanceof XDEmailAddr) {
+			return _localPart.equals(((XDEmailAddr)arg).getLocalPart())
+				&& _domain.equals(((XDEmailAddr)arg).getDomain());
+		}
+		return false;
+	}
 
-    /** Compares this object with the other DefEmail object.
-     * @param arg other DefEmail object to which is to be compared.
-     * @return returns 0 if this object is equal to the specified object.
-     * @throws SIllegalArgumentException if arguments are not comparable.
-     */
-    @Override
-    public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-        if (arg.getItemId() == XD_BOOLEAN) {
-            if (equals(arg)) return 0;
-        }
-        throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
-    }
+	/** Compares this object with the other DefEmail object.
+	 * @param arg other DefEmail object to which is to be compared.
+	 * @return returns 0 if this object is equal to the specified object.
+	 * @throws SIllegalArgumentException if arguments are not comparable.
+	 */
+	@Override
+	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
+		if (arg.getItemId() == XD_BOOLEAN) {
+			if (equals(arg)) return 0;
+		}
+		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+	}
 
-    /** Check if the object is null.
-     * @return true if the object is null otherwise return false.
-     */
-    @Override
-    public boolean isNull() {return _value == null;}
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise return false.
+	 */
+	@Override
+	public boolean isNull() {return _value == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDEmailAddr interface
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Get domain part of this email address.
-     * @return string with domain part of this email address.
-     */
-    @Override
-    public String getDomain() {return _domain;}
+	/** Get domain part of this email address.
+	 * @return string with domain part of this email address.
+	 */
+	@Override
+	public String getDomain() {return _domain;}
 
-    /** Get local part of email this address (user).
-     * @return string with local part of this email address.
-     */
-    @Override
-    public String getLocalPart() {return _localPart;}
+	/** Get local part of email this address (user).
+	 * @return string with local part of this email address.
+	 */
+	@Override
+	public String getLocalPart() {return _localPart;}
 
-    /** Get user name (display form) of this email address.
-     * @return string with user name of email this address (or an empty string).
-     */
-    @Override
-    public String getUserName() {return _userName;}
+	/** Get user name (display form) of this email address.
+	 * @return string with user name of email this address (or an empty string).
+	 */
+	@Override
+	public String getUserName() {return _userName;}
 
-    /** Get source form of this email address.
-     * @return source form of this email address.
-     */
-    @Override
-    public String getEmailAddr() {return _value;}
+	/** Get source form of this email address.
+	 * @return source form of this email address.
+	 */
+	@Override
+	public String getEmailAddr() {return _value;}
 }

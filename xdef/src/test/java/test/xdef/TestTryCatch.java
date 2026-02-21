@@ -11,20 +11,20 @@ import java.io.StringWriter;
  */
 public final class TestTryCatch extends XDTester {
 
-    public TestTryCatch() {super();}
+	public TestTryCatch() {super();}
 
-    /** Run test and print error information. */
-    @Override
-    public void test() {
-        XDPool xp;
-        String xdef;
-        String xml;
-        ArrayReporter reporter = new ArrayReporter();
-        StringWriter swr;
-        String s;
+	/** Run test and print error information. */
+	@Override
+	public void test() {
+		XDPool xp;
+		String xdef;
+		String xml;
+		ArrayReporter reporter = new ArrayReporter();
+		StringWriter swr;
+		String s;
 
-        try {
-            xdef =
+		try {
+			xdef =
 "<xd:def xd:name='test' root='a' xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>\n"+
 "    boolean mytype() {\n"+
@@ -45,23 +45,23 @@ public final class TestTryCatch extends XDTester {
 "  </xd:declaration>\n"+
 "  <a att='required mytype'/>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xml = "<a att='xx'/>";
-            swr = new StringWriter();
-            parse(xp, "test", xml, reporter, swr, null, null);
-            assertNoErrorwarnings(reporter);
-            assertTrue((s = swr.toString()).contains("E: Hi"), s);
-        } catch (Exception ex) {fail(ex);}
+			xp = compile(xdef);
+			xml = "<a att='xx'/>";
+			swr = new StringWriter();
+			parse(xp, "test", xml, reporter, swr, null, null);
+			assertNoErrorwarnings(reporter);
+			assertTrue((s = swr.toString()).contains("E: Hi"), s);
+		} catch (Exception ex) {fail(ex);}
 
-        resetTester();
-    }
+		resetTester();
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        XDTester.setFulltestMode(true);
-        if (runTest() != 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
+		if (runTest() != 0) {System.exit(1);}
+	}
 
 }

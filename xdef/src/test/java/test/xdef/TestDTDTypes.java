@@ -12,432 +12,432 @@ import static test.XDTester._xdNS;
  */
 public final class TestDTDTypes extends XDTester {
 
-    public TestDTDTypes() {super();}
+	public TestDTDTypes() {super();}
 
-    @Override
-    public void test() {
-        String xdef, xml;
-        XDPool	xp;
-        ArrayReporter reporter = new ArrayReporter();
-        Report rep;
-        try {
+	@Override
+	public void test() {
+		String xdef, xml;
+		XDPool	xp;
+		ArrayReporter reporter = new ArrayReporter();
+		Report rep;
+		try {
 //CDATA
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required CDATA'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF814".equals(rep.getMsgID()), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a a = 'X'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF814".equals(rep.getMsgID()), rep.toString());
+			}
 //ID
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF523", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF523", rep.getMsgID(), rep.toString());
+			}
 //ID
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF523", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF523", rep.getMsgID(), rep.toString());
+			}
 //IDREF
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREF'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
 //IDREF
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREF'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
 //CHKID
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
 //IDREFS
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREFS'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            xdef =
+			xp = compile(xdef);
+			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <a xd:script='*' a='required IDREFS'/>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            xdef =
+			xp = compile(xdef);
+			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a><a a='a1 a2'/><b a='a1'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A | X'>\n"+
 "  <xd:declaration> type t1 string(); uniqueSet u{t:t1}; uniqueSet v{t: int()}; </xd:declaration>\n"+
 "  <A> <B xd:script='*' a='? u.t.ID' b='? u.t.IDREFS()'/> </A>\n"+
 "  <X> <B xd:script='*' a='? v.t.ID' b='? v.t.IDREFS()'/> </X>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            parse(xp, "", "<A><B b=\"ALPHA BETA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
-            assertNoErrorwarningsAndClear(reporter);
-            // string
-            parse(xp, "", "<A><B b=\"ALPHA GAMA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#u GAMA"));
-            }
-            parse(xp, "", "<A><B b=\"'a''c'\"/><B b=\"'a''c' 'd'\"/><B a=\"a'c\"/><B a='d'/></A>", reporter);
-            assertNoErrorwarningsAndClear(reporter);
-            // int
-            parse(xp, "", "<X><B b=\"01\"/><B b='2'/><B b=\"1 02\"/><B a=\"1\"/><B a='2'/></X>", reporter);
-            assertNoErrorwarningsAndClear(reporter);
-            parse(xp, "", "<X><B b=\"123 0124\"/><B a='0123'/><B a='125'/></X>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#v 0124"));
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<A><B b=\"ALPHA BETA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			// string
+			parse(xp, "", "<A><B b=\"ALPHA GAMA\"/><B a='ALPHA'/><B a='BETA'/></A>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#u GAMA"));
+			}
+			parse(xp, "", "<A><B b=\"'a''c'\"/><B b=\"'a''c' 'd'\"/><B a=\"a'c\"/><B a='d'/></A>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			// int
+			parse(xp, "", "<X><B b=\"01\"/><B b='2'/><B b=\"1 02\"/><B a=\"1\"/><B a='2'/></X>", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			parse(xp, "", "<X><B b=\"123 0124\"/><B a='0123'/><B a='125'/></X>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#v 0124"));
+			}
 //CHKIDS
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            xdef =
+			xp = compile(xdef);
+			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a>\n"+
 "    <b xd:script='*' a='required ID'/>\n"+
 "    <a xd:script='*' a='required CHKIDS'/>\n"+
 "  </a>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF522", rep.getMsgID(), rep.toString());
-            }
-            xdef =
+			xp = compile(xdef);
+			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a><b a='a1'/><a a='a1 a2'/></a>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF522", rep.getMsgID(), rep.toString());
+			}
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:component>%class " + _package + ".D_idref1 %link A</xd:component>\n" +
 "  <xd:declaration scope='local'> uniqueSet u{t: string()}; </xd:declaration>\n"+
 "  <A> <B xd:script='*' b='? u.t.CHKIDS();' a='? u.t.ID'/> </A>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
-            parse(xp, "", xml, reporter);
-            assertNoErrorwarningsAndClear(reporter);
+			xp = compile(xdef);
+			xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarningsAndClear(reporter);
 //NMTOKEN
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a a = 'X'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
+			}
 //NMTOKEN
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKEN'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF809", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF809", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF804", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a a = 'X'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF809", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF809", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF804", rep.getMsgID(), rep.toString());
+			}
 //NMTOKENS
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a a = 'X'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
 //NMTOKENS
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NMTOKENS'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "", "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF809", rep.getMsgID(), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertEq("XDEF809", rep.getMsgID(), rep.toString());
-            }
+			xp = compile(xdef);
+			parse(xp, "", "<a a = 'X'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF809", rep.getMsgID(), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertEq("XDEF809", rep.getMsgID(), rep.toString());
+			}
 //ENTITY
 //			if (hasDatatype) {
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "",
+			xp = compile(xdef);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
 "<!ATTLIST a a CDATA #IMPLIED>\n"+
 "<!ENTITY X SYSTEM '003-2.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = 'X X'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
-            }
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = 'X X'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
+			}
 //			}
 //ENTITY
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITY'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "",
+			xp = compile(xdef);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
 "<!ATTLIST a a CDATA #IMPLIED>\n"+
 "<!ENTITY X SYSTEM '003-2.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = 'X X'/>", reporter);
-            assertTrue(reporter.errorWarnings(), "Error not reported");
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = 'X Y'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
-            }
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = 'X X'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = 'X Y'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF804".equals(rep.getMsgID()), rep.toString());
+			}
 //ENTITIES
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "",
+			xp = compile(xdef);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
 "<!ATTLIST a a CDATA #IMPLIED>\n"+
 "<!ENTITY X '003-2.ent'>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "",
+			assertNoErrorwarnings(reporter);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
 "<!ATTLIST a a CDATA #IMPLIED>\n"+
@@ -445,34 +445,34 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY Y SYSTEM '003-3.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X Y'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
 //ENTITIES
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required ENTITIES'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "",
+			xp = compile(xdef);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
 "<!ATTLIST a a CDATA #IMPLIED>\n"+
 "<!ENTITY X '003-2.ent'>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "",
+			assertNoErrorwarnings(reporter);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
 "<!ATTLIST a a CDATA #IMPLIED>\n"+
@@ -480,40 +480,40 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY Y SYSTEM '003-3.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X Y'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "", "<a a = '?'/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
-            parse(xp, "", "<a a = ''/>", reporter);
-            if ((rep = reporter.getReport()) == null) {
-                fail("Error not reported");
-            } else {
-                assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
-            }
+			assertNoErrorwarnings(reporter);
+			parse(xp, "", "<a a = '?'/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
+			parse(xp, "", "<a a = ''/>", reporter);
+			if ((rep = reporter.getReport()) == null) {
+				fail("Error not reported");
+			} else {
+				assertTrue("XDEF809".equals(rep.getMsgID()), rep.toString());
+			}
 //Test NOTATION
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "  <a a = 'required NOTATION'/>\n"+
 "</xd:def>\n";
-            xp = compile(xdef);
-            parse(xp, "",
+			xp = compile(xdef);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!NOTATION n PUBLIC 'http://xdef.syntea.cz/x'>\n"+
 "]>\n"+
 "<a a = 'n'/>", reporter);
-            assertNoErrorwarnings(reporter);
-            parse(xp, "",
+			assertNoErrorwarnings(reporter);
+			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!NOTATION n PUBLIC 'http://xdef.syntea.cz/x'>\n"+
 "]>\n"+
 "<a a = 'x'/>", reporter);
-            assertErrors(reporter);
+			assertErrors(reporter);
 
 //Test of ID, IDREF, IDREFS
-            xdef =
+			xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def xd:name=\"test1\">\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -545,8 +545,8 @@ public final class TestDTDTypes extends XDTester {
 "  </a>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
-            xp = compile(xdef);
-            xml =
+			xp = compile(xdef);
+			xml =
 "<a>\n"+                                                    // 01
 "  <b a = \"b1\" b = \"123\" c = \"15. 3. 2007\"/>\n"+      // 02
 "  <c stamp = \"20070101000000\" a = \"3\">\n"+             // 03
@@ -569,10 +569,10 @@ public final class TestDTDTypes extends XDTester {
 "  </c>\n"+                                                 // 20
 "   <f a4 = \"h1\" a5 = \"20070101000001\"/>\n"+            // 21
 "</a>";                                                      // 22
-            parse(xp, "test", xml, reporter);
-            assertNoErrorwarnings(reporter);
+			parse(xp, "test", xml, reporter);
+			assertNoErrorwarnings(reporter);
 // Test error reporting
-            xml =
+			xml =
 "<a>\n"+                                                    // 01
 "  <b a = \"c1\" b = \"123\" c = \"15. 3. 2007\"/>\n"+      // 02
 "  <c stamp = \"20070101000000\">\n"+                       // 03
@@ -595,51 +595,51 @@ public final class TestDTDTypes extends XDTester {
 "  </c>\n"+                                                 // 20
 "   <f a4 = \"xx\" a5 = \"20070101000001\"/>\n"+            // 21
 "</a>";                                                      // 22
-            parse(xp, "test", xml, reporter);
-            if (reporter.errors()) {
-                String[] reports = new String[] {
-                "XDEF523",
-                "&{xpath}/a/c[1]/d[3]/@a1&{pos}150&{line}6&{column}14",
-                "XDEF523",
-                "&{xpath}/a/c[2]/d[3]/@a2&{pos}311&{line}12&{column}24",
-                "XDEF522",
-                "&{id}3&{xpath}/a/c[2]/@a&{pos}226&{line}9&{column}36",
-                "XDEF522",
-                "&{id}3&{xpath}/a/c[2]/e[1]/@a3&{pos}330&{line}13&{column}14",
-                "XDEF522",
-                "&{id}xx&{xpath}/a/f[1]/@a4&{pos}497&{line}21&{column}13",
-                "XDEF522",
-                "&{id}c1&{xpath}/a/b[1]/@a&{pos}14&{line}2&{column}11"
-                };
-            loop: for (int i = 0; i < reports.length; i+=2) {
-                    if ((rep = reporter.getReport()) != null) {
-                        for (int j = 0; j < reports.length; j+=2) {
-                            if (reports[j].equals(rep.getMsgID()) &&
-                                reports[j + 1].equals(rep.getModification())) {
-                                continue loop;
-                            }
-                        }
-                    } else {
-                        fail("Missing report " + (1 + i/2));
-                        break;
-                    }
-                }
-                while((rep = reporter.getReport()) != null) {
-                    fail(rep.toString());
-                }
-            } else {
-                fail("Error not reported");
-            }
-        } catch (Exception ex) {fail(ex);}
+			parse(xp, "test", xml, reporter);
+			if (reporter.errors()) {
+				String[] reports = new String[] {
+				"XDEF523",
+				"&{xpath}/a/c[1]/d[3]/@a1&{pos}150&{line}6&{column}14",
+				"XDEF523",
+				"&{xpath}/a/c[2]/d[3]/@a2&{pos}311&{line}12&{column}24",
+				"XDEF522",
+				"&{id}3&{xpath}/a/c[2]/@a&{pos}226&{line}9&{column}36",
+				"XDEF522",
+				"&{id}3&{xpath}/a/c[2]/e[1]/@a3&{pos}330&{line}13&{column}14",
+				"XDEF522",
+				"&{id}xx&{xpath}/a/f[1]/@a4&{pos}497&{line}21&{column}13",
+				"XDEF522",
+				"&{id}c1&{xpath}/a/b[1]/@a&{pos}14&{line}2&{column}11"
+				};
+			loop: for (int i = 0; i < reports.length; i+=2) {
+					if ((rep = reporter.getReport()) != null) {
+						for (int j = 0; j < reports.length; j+=2) {
+							if (reports[j].equals(rep.getMsgID()) &&
+								reports[j + 1].equals(rep.getModification())) {
+								continue loop;
+							}
+						}
+					} else {
+						fail("Missing report " + (1 + i/2));
+						break;
+					}
+				}
+				while((rep = reporter.getReport()) != null) {
+					fail(rep.toString());
+				}
+			} else {
+				fail("Error not reported");
+			}
+		} catch (Exception ex) {fail(ex);}
 
-        resetTester();
-    }
+		resetTester();
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 }

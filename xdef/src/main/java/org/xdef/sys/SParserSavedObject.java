@@ -4,6 +4,6 @@ package org.xdef.sys;
  * @author Vaclav Trojan
  */
 public interface SParserSavedObject {
-    /** Reset parser saved object. */
-    public void reset();
+	/** Reset parser saved object. */
+	public void reset();
 }

@@ -5,46 +5,46 @@ package org.xdef.util.xsd2xd.xsd_1_0.domain;
  */
 public final class XsdSType extends XsdModel {
 
-    /** Hashcode. */
-    private int _hashCode = 0;
+	/** Hashcode. */
+	private int _hashCode = 0;
 
-    /** Creates instance of simple type model.
-     * @param schema model schema.
-     * @param name simple type name.
-     * @throws NullPointerException if model schema or simple type name is null.
-     * @throws IllegalArgumentException if given simple type name is empty.
-     */
-    public XsdSType(XsdSchema schema, String name) {
-        super(schema, name);
-    }
+	/** Creates instance of simple type model.
+	 * @param schema model schema.
+	 * @param name simple type name.
+	 * @throws NullPointerException if model schema or simple type name is null.
+	 * @throws IllegalArgumentException if given simple type name is empty.
+	 */
+	public XsdSType(XsdSchema schema, String name) {
+		super(schema, name);
+	}
 
-    @Override
-    public int getType() {return Type.SIMPLE_TYPE;}
+	@Override
+	public int getType() {return Type.SIMPLE_TYPE;}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof XsdSType)) {
-            return false;
-        }
-        XsdSType s = (XsdSType) obj;
-        if (!_schema.equals(s._schema)) {
-            return false;
-        }
-        return _name.equals(s._name);
-    }
-    @Override
-    public int hashCode() {
-        if (_hashCode == 0) {
-            _hashCode = 53 * _schema.hashCode() + _name.hashCode();
-        }
-        return _hashCode;
-    }
-    @Override
-    public String toString() {
-        return "XsdSType[schema='" + _schema.toString() + "', "
-                + "name='" + _name + "']";
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof XsdSType)) {
+			return false;
+		}
+		XsdSType s = (XsdSType) obj;
+		if (!_schema.equals(s._schema)) {
+			return false;
+		}
+		return _name.equals(s._name);
+	}
+	@Override
+	public int hashCode() {
+		if (_hashCode == 0) {
+			_hashCode = 53 * _schema.hashCode() + _name.hashCode();
+		}
+		return _hashCode;
+	}
+	@Override
+	public String toString() {
+		return "XsdSType[schema='" + _schema.toString() + "', "
+				+ "name='" + _name + "']";
+	}
 }

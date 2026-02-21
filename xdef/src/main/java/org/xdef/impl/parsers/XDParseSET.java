@@ -10,22 +10,22 @@ import org.xdef.proc.XXNode;
  * @author Vaclav Trojan
  */
 public class XDParseSET extends XSParseQName {
-    private static final String ROOTBASENAME = "SET";
+	private static final String ROOTBASENAME = "SET";
 
-    public XDParseSET() {super();}
+	public XDParseSET() {super();}
 
-    @Override
-    public void finalCheck(final XXNode xnode, final XDParseResult result) {
-        if (xnode == null) {
-            //The validation method &{0} can be called only from the X-script of attribute or text node
-            result.error(XDEF.XDEF574, ROOTBASENAME);
-            return;
-        }
-        CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
-        tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
-        tab.setId();
-    }
+	@Override
+	public void finalCheck(final XXNode xnode, final XDParseResult result) {
+		if (xnode == null) {
+			//The validation method &{0} can be called only from the X-script of attribute or text node
+			result.error(XDEF.XDEF574, ROOTBASENAME);
+			return;
+		}
+		CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
+		tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
+		tab.setId();
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

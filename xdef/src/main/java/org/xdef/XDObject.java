@@ -5,9 +5,9 @@ package org.xdef;
  */
 public interface XDObject extends XDValue {
 
-    /** Set object value.
-     * @param obj object to be set as value.
-     */
-    public void setObject(final Object obj);
+	/** Set object value.
+	 * @param obj object to be set as value.
+	 */
+	public void setObject(final Object obj);
 
 }

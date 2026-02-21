@@ -8,14 +8,14 @@ import org.xdef.proc.XXNode;
  * @author Vaclav Trojan
  */
 public class XDParseTrue extends XDParserAbstract {
-    private static final String ROOTBASENAME = "true_parser";
+	private static final String ROOTBASENAME = "true_parser";
 
-    @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
-        p.setParsedValue(p.getSourceBuffer());
-        p.setEos();
-    }
+	@Override
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
+		p.setParsedValue(p.getSourceBuffer());
+		p.setEos();
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 }

@@ -10,52 +10,52 @@ import org.w3c.dom.Node;
  */
 public interface KXquery {
 
-    /** Get implicit time zone.
-     * @return implicit time zone.
-     * @throws SRuntimeException if an error occurs.
-     */
-    public TimeZone getImplicitTimeZone() throws SRuntimeException;
+	/** Get implicit time zone.
+	 * @return implicit time zone.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public TimeZone getImplicitTimeZone() throws SRuntimeException;
 
-    /** Set implicit time zone.
-     * @param tz time zone to be set as implicit.
-     * @throws SRuntimeException if an error occurs.
-     */
-    public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException;
+	/** Set implicit time zone.
+	 * @param tz time zone to be set as implicit.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException;
 
-    /** Get array with QNames of external variables
-     * @return array with QNames of external variables or null.
-     */
-    public QName[] getAllExternalVariables();
+	/** Get array with QNames of external variables
+	 * @return array with QNames of external variables or null.
+	 */
+	public QName[] getAllExternalVariables();
 
-    /** Get array with QNames of unbound external variables
-     * @return array with QNames of unbound external variables or null.
-     */
-    public QName[] getAllUnboundExternalVariables();
+	/** Get array with QNames of unbound external variables
+	 * @return array with QNames of unbound external variables or null.
+	 */
+	public QName[] getAllUnboundExternalVariables();
 
-    /** Bind variable to XQuery expression.
-     * @param qname QName of variable.
-     * @param value object to be bound.
-     * @throws SRuntimeException if an error occurs.
-     */
-    public void bindValue(final QName qname, final Object value);
+	/** Bind variable to XQuery expression.
+	 * @param qname QName of variable.
+	 * @param value object to be bound.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public void bindValue(final QName qname, final Object value);
 
-    /** Execute precompiled XQuery expression and return result.
-     * @param node node or null.
-     * @return object with result of XQuery expression.
-     * @throws SRuntimeException if an error occurs.
-     */
-    public Object evaluate(final Node node) throws SRuntimeException;
+	/** Execute precompiled XQuery expression and return result.
+	 * @param node node or null.
+	 * @return object with result of XQuery expression.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public Object evaluate(final Node node) throws SRuntimeException;
 
-    /** Execute XQuery expression and return result. If result type is null then result types are checked in
-     * following sequence:
-     * @return object with result of XQuery expression.
-     */
-    public Object evaluate() throws SRuntimeException;
+	/** Execute XQuery expression and return result. If result type is null then result types are checked in
+	 * following sequence:
+	 * @return object with result of XQuery expression.
+	 */
+	public Object evaluate() throws SRuntimeException;
 
-    /** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
-     * The namespace context, functions and variables are retrieved  from the argument.
-     * @param source String with XQuery expression.
-     * @return the KXqueryExpr object.
-     */
-    public KXquery newExpression(final String source);
+	/** Creates a new instance of KXQueryExpr from other expression with compiled new expression.
+	 * The namespace context, functions and variables are retrieved  from the argument.
+	 * @param source String with XQuery expression.
+	 * @return the KXqueryExpr object.
+	 */
+	public KXquery newExpression(final String source);
 }

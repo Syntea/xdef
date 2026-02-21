@@ -10,54 +10,54 @@ import org.xdef.sys.STester;
  */
 public class TestXML extends STester {
 
-    public TestXML() {super();}
+	public TestXML() {super();}
 
-    private String parse(BNFGrammar grammar, String name, String source) {
-        try {
-            if (grammar.parse(new StringParser(source), name)) {
-                if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
-                }
-                return grammar.getParsedString();
-            } else {
-                return name + " failed, " + (grammar.getParser().eos()?
-                    "eos" : grammar.getParser().getPosition().toString()) +"; ";
-            }
-        } catch (Exception ex) {
-            return printThrowable(ex);
-        }
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void test() {
-        try {
-            BNFGrammar grammar;
-            String s;
+	private String parse(BNFGrammar grammar, String name, String source) {
+		try {
+			if (grammar.parse(new StringParser(source), name)) {
+				if (grammar.getParser().errorWarnings()) {
+					return grammar.getParser().getReportWriter().
+						getReportReader().printToString();
+				}
+				return grammar.getParsedString();
+			} else {
+				return name + " failed, " + (grammar.getParser().eos()?
+					"eos" : grammar.getParser().getPosition().toString()) +"; ";
+			}
+		} catch (Exception ex) {
+			return printThrowable(ex);
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
-            grammar = BNFGrammar.compile(null,
-                new File(getDataDir() + "TestXML.bnf"), null);
+
+	@Override
+	public void test() {
+		try {
+			BNFGrammar grammar;
+			String s;
+
+////////////////////////////////////////////////////////////////////////////////
+			grammar = BNFGrammar.compile(null,
+				new File(getDataDir() + "TestXML.bnf"), null);
 //			grammar.display(System.out, true);
 
 ////////////////////////////////////////////////////////////////////////////////
-            s = "<!--c-o-m-m-e-n-t-->";
-            assertEq(s, parse(grammar, "Comment", s));
-            s = "xx]] >";
-            assertEq(s, parse(grammar, "CData", s));
-            s = "<![CDATA[x]<x>]] >x]]>";
-            assertEq(s, parse(grammar, "CDSect", s));
-            s = "<A/>";
-            assertEq(s, parse(grammar, "document", s));
-            s = "<A></A>";
-            assertEq(s, parse(grammar, "document", s));
-            s = "<A>test<B/></A>";
-            assertEq(s, parse(grammar, "document", s));
-            s = "<A x=\"x\"  \n y = 'y' >test<B  /></A>";
-            assertEq(s, parse(grammar, "document", s));
-            s =
+			s = "<!--c-o-m-m-e-n-t-->";
+			assertEq(s, parse(grammar, "Comment", s));
+			s = "xx]] >";
+			assertEq(s, parse(grammar, "CData", s));
+			s = "<![CDATA[x]<x>]] >x]]>";
+			assertEq(s, parse(grammar, "CDSect", s));
+			s = "<A/>";
+			assertEq(s, parse(grammar, "document", s));
+			s = "<A></A>";
+			assertEq(s, parse(grammar, "document", s));
+			s = "<A>test<B/></A>";
+			assertEq(s, parse(grammar, "document", s));
+			s = "<A x=\"x\"  \n y = 'y' >test<B  /></A>";
+			assertEq(s, parse(grammar, "document", s));
+			s =
 "<?xml version = \"1.0\" encoding='UTF-8'?>\n"+
 "<!-- comment -->\n"+
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.2' root='Misto|Udaj|Base'>\n"+
@@ -112,15 +112,15 @@ public class TestXML extends STester {
 "  </Misto>\n"+
 "</Base>\n"+
 "</xd:def>";
-            assertEq(s, parse(grammar, "document", s));
-        } catch (RuntimeException ex) {fail(ex);}
-    }
+			assertEq(s, parse(grammar, "document", s));
+		} catch (RuntimeException ex) {fail(ex);}
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 
 }

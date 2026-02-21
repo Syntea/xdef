@@ -27,135 +27,135 @@ import static test.XDTester._xdNS;
  */
 public final class TestExtenalMethods extends XDTester {
 
-    public TestExtenalMethods() {super();}
+	public TestExtenalMethods() {super();}
 
-    private int _m1 = 0;
-    private long _m2 = 0;
-    private int _m7 = 0;
-    private int _m8 = 0;
-    private int _m9 = 0;
-    private int _m10 = 0;
+	private int _m1 = 0;
+	private long _m2 = 0;
+	private int _m7 = 0;
+	private int _m8 = 0;
+	private int _m9 = 0;
+	private int _m10 = 0;
 
-    final public static void m1(final XXNode x) {
-        ((TestExtenalMethods) x.getUserObject())._m1 = 1;
-    }
-    final public static void m2(final XXNode x, final long i) {
-        ((TestExtenalMethods) x.getUserObject())._m2 = i;
-    }
-    final public static long m3(final XXNode x) {
-        return ((TestExtenalMethods) x.getUserObject())._m1;
-    }
-    final public static long m4(final XXNode x) {
-        return ((TestExtenalMethods) x.getUserObject())._m2;
-    }
-    final public static void m5(final XXNode x, final long i) {
-        ((TestExtenalMethods) x.getUserObject())._m1 = (int) i;
-    }
-    final public static void m6(final XXNode x, final long i) {
-        ((TestExtenalMethods) x.getUserObject())._m2 = i;
-    }
-    final public static void m7(final XXNode x, final XDValue[] p) {
-        ((TestExtenalMethods) x.getUserObject())._m7 =
-            p[0].intValue() + p[1].intValue();
-    }
-    final public static void m8(final XXNode x, final long i,final XDContainer p){
-        ((TestExtenalMethods) x.getUserObject())._m8 =
-            (int) i + p.getXDNamedItem("a").getValue().intValue();
-    }
-    final public static void m9(final XXNode x, final long i,final XDContainer p){
-        ((TestExtenalMethods) x.getUserObject())._m9 = (int) i;
-    }
-    final public static void m10(final XXNode x, final XDValue[] p) {
-        ((TestExtenalMethods) x.getUserObject())._m10 = p[0].intValue() +
-            ((XDContainer) p[1]).getXDNamedItem("a").getValue().intValue();
-    }
+	final public static void m1(final XXNode x) {
+		((TestExtenalMethods) x.getUserObject())._m1 = 1;
+	}
+	final public static void m2(final XXNode x, final long i) {
+		((TestExtenalMethods) x.getUserObject())._m2 = i;
+	}
+	final public static long m3(final XXNode x) {
+		return ((TestExtenalMethods) x.getUserObject())._m1;
+	}
+	final public static long m4(final XXNode x) {
+		return ((TestExtenalMethods) x.getUserObject())._m2;
+	}
+	final public static void m5(final XXNode x, final long i) {
+		((TestExtenalMethods) x.getUserObject())._m1 = (int) i;
+	}
+	final public static void m6(final XXNode x, final long i) {
+		((TestExtenalMethods) x.getUserObject())._m2 = i;
+	}
+	final public static void m7(final XXNode x, final XDValue[] p) {
+		((TestExtenalMethods) x.getUserObject())._m7 =
+			p[0].intValue() + p[1].intValue();
+	}
+	final public static void m8(final XXNode x, final long i,final XDContainer p){
+		((TestExtenalMethods) x.getUserObject())._m8 =
+			(int) i + p.getXDNamedItem("a").getValue().intValue();
+	}
+	final public static void m9(final XXNode x, final long i,final XDContainer p){
+		((TestExtenalMethods) x.getUserObject())._m9 = (int) i;
+	}
+	final public static void m10(final XXNode x, final XDValue[] p) {
+		((TestExtenalMethods) x.getUserObject())._m10 = p[0].intValue() +
+			((XDContainer) p[1]).getXDNamedItem("a").getValue().intValue();
+	}
 
-    final public static void x(final XXElement x) {x.error("x0", "");}
-    final public static void x(final XXElement x, final XDContainer a) {
-        x.error("x1", "");
-    }
-    final public static void x(XXElement x, XDContainer a, XDContainer b) {
-        x.error("x2", "");
-    }
+	final public static void x(final XXElement x) {x.error("x0", "");}
+	final public static void x(final XXElement x, final XDContainer a) {
+		x.error("x1", "");
+	}
+	final public static void x(XXElement x, XDContainer a, XDContainer b) {
+		x.error("x2", "");
+	}
 
-    final public static XDValue y() {return null;}
-    final public static XDValue z() {return XDFactory.createXDValue("z");}
+	final public static XDValue y() {return null;}
+	final public static XDValue z() {return XDFactory.createXDValue("z");}
 
-    final public static XDParseResult p2(XXNode xn, String s, long x) {
-        return new XSParseInt().check(xn, s + x);
-    }
-    final public static int p3(final XDValue[] p) {return p.length;}
-    final public static int p4(final long x) {return (int) x;}
-    final public static String p5(final XXNode xn, final long x) {
-        String result = String.valueOf(x);
-        if (!"a".equals(xn.getElement().getNodeName())) {
-             result += "E1:" + xn.getElement().getNodeName() + ";";
-        } else if (xn.getItemId() != XDValueID.XX_ELEMENT) {
-            result += "E2:" + xn.getItemId() + ";";
-        }
-        return result;
-    }
-    final public static void p6(final XXNode xn, final XDValue x) {
-        XDOutput out = xn.getXDDocument().getStdOut();
-        out.writeString(x.toString());
-        if (!"a".equals(xn.getElement().getNodeName())) {
-            out.writeString("E1:" + xn.getElement().getNodeName() + ";");
-        }
-        if (xn.getItemId() != XDValueID.XX_ELEMENT) {
-            out.writeString( "E2:" + xn.getItemId() + ";");
-        }
-    }
-    final public static void p7(final XXElement xe, final XDValue[] p) {
-        xe.getXDDocument().getStdOut().writeString(String.valueOf(p.length));
-    }
-    final public static int p8(final byte[] p) {return p.length;}
-    final public static byte[] p9() {return new byte[] {1,2,3};}
-    final public static XDParseResult p1(final XXData xd, final String x) {
-        return new XSParseName().check(xd, x);
-    }
-    final public static void g1(final String s) {};
-    final public static void t1(final XDContainer s) {};
-    final public static void t2(final String s) {};
-    final public static void t3(final XDContainer s) {};
+	final public static XDParseResult p2(XXNode xn, String s, long x) {
+		return new XSParseInt().check(xn, s + x);
+	}
+	final public static int p3(final XDValue[] p) {return p.length;}
+	final public static int p4(final long x) {return (int) x;}
+	final public static String p5(final XXNode xn, final long x) {
+		String result = String.valueOf(x);
+		if (!"a".equals(xn.getElement().getNodeName())) {
+			 result += "E1:" + xn.getElement().getNodeName() + ";";
+		} else if (xn.getItemId() != XDValueID.XX_ELEMENT) {
+			result += "E2:" + xn.getItemId() + ";";
+		}
+		return result;
+	}
+	final public static void p6(final XXNode xn, final XDValue x) {
+		XDOutput out = xn.getXDDocument().getStdOut();
+		out.writeString(x.toString());
+		if (!"a".equals(xn.getElement().getNodeName())) {
+			out.writeString("E1:" + xn.getElement().getNodeName() + ";");
+		}
+		if (xn.getItemId() != XDValueID.XX_ELEMENT) {
+			out.writeString( "E2:" + xn.getItemId() + ";");
+		}
+	}
+	final public static void p7(final XXElement xe, final XDValue[] p) {
+		xe.getXDDocument().getStdOut().writeString(String.valueOf(p.length));
+	}
+	final public static int p8(final byte[] p) {return p.length;}
+	final public static byte[] p9() {return new byte[] {1,2,3};}
+	final public static XDParseResult p1(final XXData xd, final String x) {
+		return new XSParseName().check(xd, x);
+	}
+	final public static void g1(final String s) {};
+	final public static void t1(final XDContainer s) {};
+	final public static void t2(final String s) {};
+	final public static void t3(final XDContainer s) {};
 
-    /** Simple user defined class loader. */
-    private static class TestClassLoader extends ClassLoader {
+	/** Simple user defined class loader. */
+	private static class TestClassLoader extends ClassLoader {
 
-        @Override
-        final public Class<?> loadClass(final String name)
-            throws ClassNotFoundException {
-            // use super (Java default) implementation
-            return super.loadClass(name);
-        }
-    }
+		@Override
+		final public Class<?> loadClass(final String name)
+			throws ClassNotFoundException {
+			// use super (Java default) implementation
+			return super.loadClass(name);
+		}
+	}
 
-    /** Simple incorrect user defined class loader. */
-    private class TestFailClassLoader extends ClassLoader {
+	/** Simple incorrect user defined class loader. */
+	private class TestFailClassLoader extends ClassLoader {
 
-        @Override
-        final public Class<?> loadClass(final String name)
-            throws ClassNotFoundException {
-            // this class loader doesn't find (and return) any Java class
-            return null;
-        }
-    }
+		@Override
+		final public Class<?> loadClass(final String name)
+			throws ClassNotFoundException {
+			// this class loader doesn't find (and return) any Java class
+			return null;
+		}
+	}
 
-    /** Run tests and print error information. */
-    @Override
-    public void test() {
-        test.xdef.TestExtenalMethods_1.class.getClass(); //force compilation
-        test.xdef.TestExtenalMethods_2.class.getClass(); //force compilation
-        XDPool xp;
-        XDDocument xd;
-        String xdef, xml;
-        ArrayReporter reporter = new ArrayReporter();
-        StringWriter swr;
-        String s;
-        Properties props = new Properties();
-        props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-            XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
-        try {
-            xdef =
+	/** Run tests and print error information. */
+	@Override
+	public void test() {
+		test.xdef.TestExtenalMethods_1.class.getClass(); //force compilation
+		test.xdef.TestExtenalMethods_2.class.getClass(); //force compilation
+		XDPool xp;
+		XDDocument xd;
+		String xdef, xml;
+		ArrayReporter reporter = new ArrayReporter();
+		StringWriter swr;
+		String s;
+		Properties props = new Properties();
+		props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
+			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "external method void test.xdef.TestExtenalMethods_1.m00() as m;\n"+
@@ -241,18 +241,18 @@ public final class TestExtenalMethods extends XDTester {
 "    m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
 "  />\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xml = "<a"
-                + " m00='x' m01='x' m02='x' m03='x' m04='x' m05='x'"
-                + " m06='x' m07='x' m08='x' m09='x'"
-                + " m11='x' m12='x' m13='x' m14='x' m15='x' m16='x'"
-                + " m20='x'" + " m21='x'" + " m22='x'"
-                + " m30='x' m31='x' m32='x' m33='x' m34='x' m35='x'"
-                + "/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
+			xp = compile(xdef);
+			xml = "<a"
+				+ " m00='x' m01='x' m02='x' m03='x' m04='x' m05='x'"
+				+ " m06='x' m07='x' m08='x' m09='x'"
+				+ " m11='x' m12='x' m13='x' m14='x' m15='x' m16='x'"
+				+ " m20='x'" + " m21='x'" + " m22='x'"
+				+ " m30='x' m31='x' m32='x' m33='x' m34='x' m35='x'"
+				+ "/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
 
-            xdef =
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration scope='local'>\n"+
 "external method {\n"+
@@ -336,49 +336,49 @@ public final class TestExtenalMethods extends XDTester {
 "  m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
 " />\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarnings(reporter);
-        } catch (Exception ex) {fail(ex);}
-        try { // using of user defined ClassLoader (fail state)
-            XDBuilder xdb = XDFactory.getXDBuilder(null);
-            xdb.setSource(
+			xp = compile(xdef);
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try { // using of user defined ClassLoader (fail state)
+			XDBuilder xdb = XDFactory.getXDBuilder(null);
+			xdb.setSource(
 "<xd:def xmlns:xd='"+_xdNS+"' name='Test' root='Test'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
 "</xd:declaration>\n"+
 "  <Test xd:script=\"finally g1('Hello...')\" />\n"+
 "</xd:def>");
-            xdb.setClassLoader(new TestFailClassLoader());
-            xdb.compileXD();
-            fail("TestFailClassLoader had to cause an error that external "
-                + "method 'g1' wasn't found.");
-        } catch (Exception ex) {
-            // fail state is correct, because the TestFailClassLoader hasn't
-            // found the class test.xdef.TestExtenalMethods
-            if ((s = ex.getMessage()) == null
-                || !s.contains("XDEF228") 				// unknown class
-                || !s.contains("XDEF443")) {// unknown method
-                fail(ex);
-            }
-        }
-        try { // using of user defined ClassLoader (correct state)
-            XDBuilder xdb = XDFactory.getXDBuilder(null);
-            xdb.setSource(
+			xdb.setClassLoader(new TestFailClassLoader());
+			xdb.compileXD();
+			fail("TestFailClassLoader had to cause an error that external "
+				+ "method 'g1' wasn't found.");
+		} catch (Exception ex) {
+			// fail state is correct, because the TestFailClassLoader hasn't
+			// found the class test.xdef.TestExtenalMethods
+			if ((s = ex.getMessage()) == null
+				|| !s.contains("XDEF228") 				// unknown class
+				|| !s.contains("XDEF443")) {// unknown method
+				fail(ex);
+			}
+		}
+		try { // using of user defined ClassLoader (correct state)
+			XDBuilder xdb = XDFactory.getXDBuilder(null);
+			xdb.setSource(
 "<xd:def xmlns:xd='"+_xdNS+"' name='Test' root='Test'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
 "</xd:declaration>\n"+
 "  <Test xd:script=\"finally g1('Hello...')\" />\n"+
 "</xd:def>"
-            );
-            xdb.setClassLoader(new TestClassLoader());
-            xp = xdb.compileXD();
-            parse(xp, "Test", "<Test/>", reporter);
-            assertNoErrorwarnings(reporter);
-        } catch (Exception ex) {fail(ex);}
-        try {
-            xdef =
+			);
+			xdb.setClassLoader(new TestClassLoader());
+			xp = xdb.compileXD();
+			parse(xp, "Test", "<Test/>", reporter);
+			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <xd:declaration>\n"+
 "    external method void test.xdef.TestExtenalMethods.g1(String);\n"+
@@ -400,11 +400,11 @@ public final class TestExtenalMethods extends XDTester {
 "    }\n"+
 "  </xd:declaration>\n"+
 "</xd:def>";
-            parse(xdef, null, "<A a='a'/>", reporter);
-            assertNoErrorwarnings(reporter);
-        } catch (Exception ex) {fail(ex);}
-        try {
-            xdef =
+			parse(xdef, null, "<A a='a'/>", reporter);
+			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'a'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -426,19 +426,19 @@ public final class TestExtenalMethods extends XDTester {
 "     p5(5)+q()+q(1,'x',2,true)+ p8(b) + b.size());\n"+
 "     p6(a); Q(); Q(1,'x',2,true);}\"/>\n"+
 "</xd:def>\n";
-            xml ="<a/>";
-            xp = compile(xdef);
-            swr = new StringWriter();
-            assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
-            assertNoErrorwarnings(reporter);
-            assertEq("p12103450433604", swr.toString());
-            swr = new StringWriter();
-            assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
-            assertNoErrorwarnings(reporter);
-            assertEq("p12103450433604", swr.toString());
-        } catch (Exception ex) {fail(ex);}
-        try {
-            xdef =
+			xml ="<a/>";
+			xp = compile(xdef);
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
+			assertNoErrorwarnings(reporter);
+			assertEq("p12103450433604", swr.toString());
+			swr = new StringWriter();
+			assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
+			assertNoErrorwarnings(reporter);
+			assertEq("p12103450433604", swr.toString());
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method XDValue test.xdef.TestExtenalMethods.y();\n"+
@@ -447,12 +447,12 @@ public final class TestExtenalMethods extends XDTester {
 "  <a a=\"string;\n"+
 "        onTrue{if (y()==null) error('y'); error(z().toString());}\"/>\n"+
 "</xd:def>";
-            parse(xdef, null, "<a a = 'a'></a>", reporter);
-            s = reporter.printToString();
-            assertTrue(s.indexOf("y") > 0 && s.indexOf("z") > 0, s);
-        } catch (Exception ex) {fail(ex);}
-        try {
-            xdef =
+			parse(xdef, null, "<a a = 'a'></a>", reporter);
+			s = reporter.printToString();
+			assertTrue(s.indexOf("y") > 0 && s.indexOf("z") > 0, s);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -465,13 +465,13 @@ public final class TestExtenalMethods extends XDTester {
   "</xd:declaration>\n"+
 "  <a a = \"string; finally {x();x(p);x(p,q);}\"/>\n"+
 "</xd:def>";
-            parse(xdef, null, "<a a = 'a'></a>", reporter);
-            s = reporter.printToString();
-            assertTrue(s.indexOf("x0") > 0 &&
-                s.indexOf("x1") > 0 && s.indexOf("x2") > 0, s);
-        } catch (Exception ex) {fail(ex);}
-        try {
-            xdef =
+			parse(xdef, null, "<a a = 'a'></a>", reporter);
+			s = reporter.printToString();
+			assertTrue(s.indexOf("x0") > 0 &&
+				s.indexOf("x1") > 0 && s.indexOf("x2") > 0, s);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root = 'a'>\n"+
 "  <xd:declaration>\n"+
 "    external method {\n"+
@@ -490,20 +490,20 @@ public final class TestExtenalMethods extends XDTester {
 "  <a a='string; finally {m1();m2(2); m5(m3()); m6(m4()); m7(7,8);\n"+
 "        m8(1, %a = 2); m9(9, []); m10(1, %a = 2);}' />\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xml = "<a a = 'a'/>";
-            xd = xp.createXDDocument();
-            xd.setUserObject(this);
-            xd.xparse(xml, null);
-            assertEq(_m1, 1);
-            assertEq(_m2, 2);
-            assertEq(_m7, 15);
-            assertEq(_m8, 3);
-            assertEq(_m9, 9);
-            assertEq(_m10, 3);
-        } catch (RuntimeException ex) {fail(ex);}
-        try {
-            xdef =
+			xp = compile(xdef);
+			xml = "<a a = 'a'/>";
+			xd = xp.createXDDocument();
+			xd.setUserObject(this);
+			xd.xparse(xml, null);
+			assertEq(_m1, 1);
+			assertEq(_m2, 2);
+			assertEq(_m7, 15);
+			assertEq(_m8, 3);
+			assertEq(_m9, 9);
+			assertEq(_m10, 3);
+		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method {\n"+ //*
@@ -516,11 +516,11 @@ public final class TestExtenalMethods extends XDTester {
 "        t3(from('/a'));}\">\n"+
 "  </a>\n"+
 "</xd:def>";
-            xml = "<a a='a'/>";
-            parse(xdef, "", xml, reporter);
-        } catch (Exception ex) {fail(ex);}
-        try {// test declarations scope local and global
-            xp = compile(new String[] {
+			xml = "<a a='a'/>";
+			parse(xdef, "", xml, reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {// test declarations scope local and global
+			xp = compile(new String[] {
 "<xd:def xmlns:xd='"+_xdNS+"' name='A' root='a'>\n"+
 "<xd:declaration scope='local'>\n"+
 "  external method {\n"+
@@ -551,26 +551,26 @@ public final class TestExtenalMethods extends XDTester {
 "    b=\"?string; onTrue{m();m(1); e(); e(e1); e(e2);}\"\n"+
 "  />\n"+
 "</xd:def>"});
-            xd = xp.createXDDocument("A");
-            xd.setVariable("e1", 3);
-            xd.setVariable("e2", 4);
-            swr = new StringWriter();
-            xd.setStdOut(swr);
-            parse(xd, "<a m00='a' m01='b'/>", reporter);
-            assertEq("e(99); e1=3, e2=2\ne(2); e1=3, e2=2\n", swr.toString());
-            xd = xp.createXDDocument("B");
-            swr = new StringWriter();
-            xd.setStdOut(swr);
-            parse(xd, "<b b='a'/>", reporter);
-            assertEq("e(); e1=, e2=2\ne(2); e1=, e2=2\n", swr.toString());
-        } catch (Exception ex) {fail(ex);}
-    }
+			xd = xp.createXDDocument("A");
+			xd.setVariable("e1", 3);
+			xd.setVariable("e2", 4);
+			swr = new StringWriter();
+			xd.setStdOut(swr);
+			parse(xd, "<a m00='a' m01='b'/>", reporter);
+			assertEq("e(99); e1=3, e2=2\ne(2); e1=3, e2=2\n", swr.toString());
+			xd = xp.createXDDocument("B");
+			swr = new StringWriter();
+			xd.setStdOut(swr);
+			parse(xd, "<b b='a'/>", reporter);
+			assertEq("e(); e1=, e2=2\ne(2); e1=, e2=2\n", swr.toString());
+		} catch (Exception ex) {fail(ex);}
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest() != 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest() != 0) {System.exit(1);}
+	}
 }

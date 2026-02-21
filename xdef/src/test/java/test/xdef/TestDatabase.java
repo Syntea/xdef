@@ -24,197 +24,197 @@ import static test.XDTester._xdNS;
  */
 public final class TestDatabase extends XDTester {
 
-    public TestDatabase() {super();}
+	public TestDatabase() {super();}
 
-    private static final String TABLE_A = "TA";
-    private static final String TABLE_B = "TB";
-    private static final String ATTR_A = "A";
-    private static final String ATTR_B = "B";
-    private static final String ATTR_C = "C";
-    private static final String ATTR_A_INT = ATTR_A + " INT";
-    private static final String ATTR_B_VARCHAR = ATTR_B + " VARCHAR(256)";
-    private static final String ATTR_C_VARCHAR = ATTR_C + " VARCHAR(256)";
-    /** Number of rows in the table A. */
-    private static final int ROWS_A = 10;
-    /** Number of rows in the table B. */
-    private static final int ROWS_B = 10;
-    /** Number of total ResultSet made during test is given as ROWS_B multiple
-     * by RESULT_SET_NUM.
-     */
-    private static final int RESULT_SET_NUM = 10;
-    /** Directory name for the test database. */
-    private static final String DERBY_STORE = "derby-store";
-    /** User DB login for test purpose. */
-    private static final String TEST_USER = "usr123";
-    /** User DB password for test purpose. */
-    private static final String TEST_PWD = "--*..-*";
-    /** Test DB schema. */
-    private static final String SCHEMA = "CREATE";
+	private static final String TABLE_A = "TA";
+	private static final String TABLE_B = "TB";
+	private static final String ATTR_A = "A";
+	private static final String ATTR_B = "B";
+	private static final String ATTR_C = "C";
+	private static final String ATTR_A_INT = ATTR_A + " INT";
+	private static final String ATTR_B_VARCHAR = ATTR_B + " VARCHAR(256)";
+	private static final String ATTR_C_VARCHAR = ATTR_C + " VARCHAR(256)";
+	/** Number of rows in the table A. */
+	private static final int ROWS_A = 10;
+	/** Number of rows in the table B. */
+	private static final int ROWS_B = 10;
+	/** Number of total ResultSet made during test is given as ROWS_B multiple
+	 * by RESULT_SET_NUM.
+	 */
+	private static final int RESULT_SET_NUM = 10;
+	/** Directory name for the test database. */
+	private static final String DERBY_STORE = "derby-store";
+	/** User DB login for test purpose. */
+	private static final String TEST_USER = "usr123";
+	/** User DB password for test purpose. */
+	private static final String TEST_PWD = "--*..-*";
+	/** Test DB schema. */
+	private static final String SCHEMA = "CREATE";
 
-    /** The database engine. */
-    private EmbeddedDataSource _ds = null;
-    /** Shared connection into the test relational database Derby. */
-    private Connection _con = null;
+	/** The database engine. */
+	private EmbeddedDataSource _ds = null;
+	/** Shared connection into the test relational database Derby. */
+	private Connection _con = null;
 
-    /** Creates database environment for database testing. */
-    private void createDBEnv(final String tempDir) {
-        // configure and start database engine
-        _ds = new EmbeddedDataSource();
-        // path to store data for database schema "test"
-        _ds.setDatabaseName(tempDir + File.separatorChar + DERBY_STORE + File.separatorChar + "test");
-        // for security reason restrict access to the test database for
-        // the specific user identified by the password
-        _ds.setUser(TEST_USER);
-        _ds.setPassword(TEST_PWD);
-        // create a new database (or use the existing one)
-        _ds.setCreateDatabase(SCHEMA);
-        // retreive connection to the Derby database
-        try {
-            _con = _ds.getConnection();
-        } catch (SQLException ex) {
-            fail(ex);
-        }
-        // prepare test data
-        fillDB();
-    }
+	/** Creates database environment for database testing. */
+	private void createDBEnv(final String tempDir) {
+		// configure and start database engine
+		_ds = new EmbeddedDataSource();
+		// path to store data for database schema "test"
+		_ds.setDatabaseName(tempDir + File.separatorChar + DERBY_STORE + File.separatorChar + "test");
+		// for security reason restrict access to the test database for
+		// the specific user identified by the password
+		_ds.setUser(TEST_USER);
+		_ds.setPassword(TEST_PWD);
+		// create a new database (or use the existing one)
+		_ds.setCreateDatabase(SCHEMA);
+		// retreive connection to the Derby database
+		try {
+			_con = _ds.getConnection();
+		} catch (SQLException ex) {
+			fail(ex);
+		}
+		// prepare test data
+		fillDB();
+	}
 
-    /** Creates a new connection to the test database.
-     * @return new connection to the database.
-     */
-    private Connection getConnection() {
-        try {
-            // if the shared connection is opend return it
-            if(_con != null && !_con.isClosed()) {
-                return _con;
-            }
-        } catch (SQLException ex) {
-            fail(ex);
-        }
-        if (_ds != null) {
-            // create a new connection
-            try {
-                return _ds.getConnection();
-            } catch (SQLException ex) {
-                fail(ex);
-            }
-        } else {
-            fail("EmbeddedDataSource is null.");
-        }
-        return null;
-    }
+	/** Creates a new connection to the test database.
+	 * @return new connection to the database.
+	 */
+	private Connection getConnection() {
+		try {
+			// if the shared connection is opend return it
+			if(_con != null && !_con.isClosed()) {
+				return _con;
+			}
+		} catch (SQLException ex) {
+			fail(ex);
+		}
+		if (_ds != null) {
+			// create a new connection
+			try {
+				return _ds.getConnection();
+			} catch (SQLException ex) {
+				fail(ex);
+			}
+		} else {
+			fail("EmbeddedDataSource is null.");
+		}
+		return null;
+	}
 
-    /** Recursively delete all files and directories created in the database
-     * store during the database testing.
-     * @param f file or directory has to be deleted.
-     */
-    private void deleteStore(final File f) {
-        if(f.isDirectory()) {
-            for(File file : f.listFiles()) {
-                deleteStore(file);
-            }
-        }
-        if(!f.delete()) {
-            fail("File or directory '" + f.getAbsolutePath() + "' cannot be deleted.");
-        }
-    }
+	/** Recursively delete all files and directories created in the database
+	 * store during the database testing.
+	 * @param f file or directory has to be deleted.
+	 */
+	private void deleteStore(final File f) {
+		if(f.isDirectory()) {
+			for(File file : f.listFiles()) {
+				deleteStore(file);
+			}
+		}
+		if(!f.delete()) {
+			fail("File or directory '" + f.getAbsolutePath() + "' cannot be deleted.");
+		}
+	}
 
-    /** Fill in the test database by the test data. */
-    private void fillDB() {
-        Statement st = null;
-        try {
-            st = _con.createStatement();
-            // table A
-            String sql = "CREATE TABLE " + TABLE_A + "(" + ATTR_A_INT +
-                    "," + ATTR_B_VARCHAR + "," + ATTR_C_VARCHAR + ")";
-            st.executeUpdate(sql);
-            for(int i=1; i <= ROWS_A; i++) {
-                sql = "INSERT INTO " + TABLE_A + " (" + ATTR_A + "," + ATTR_B + "," + ATTR_C + ") VALUES (" +
-                    i + ",'" + (ATTR_B+i) + "','" + (ATTR_C+i) + "')";
-                st.executeUpdate(sql);
-            }
-            // table B (big table)
-            sql = "CREATE TABLE " + TABLE_B + "(" + ATTR_A_INT + "," + ATTR_B_VARCHAR + ")";
-            st.executeUpdate(sql);
-            for(int i=1; i <= ROWS_B; i++) {
-                sql = "INSERT INTO " + TABLE_B + " (" + ATTR_A + ","
-                        + ATTR_B + ") VALUES (" + i + ",'" + (ATTR_B+i)  + "')";
-                st.executeUpdate(sql);
-            }
-        } catch (SQLException ex) {
-            fail(ex);
-        } finally {
-            try {
-                st.close();
-            } catch (SQLException ex) {
-                fail(ex);
-            }
-        }
-    }
+	/** Fill in the test database by the test data. */
+	private void fillDB() {
+		Statement st = null;
+		try {
+			st = _con.createStatement();
+			// table A
+			String sql = "CREATE TABLE " + TABLE_A + "(" + ATTR_A_INT +
+					"," + ATTR_B_VARCHAR + "," + ATTR_C_VARCHAR + ")";
+			st.executeUpdate(sql);
+			for(int i=1; i <= ROWS_A; i++) {
+				sql = "INSERT INTO " + TABLE_A + " (" + ATTR_A + "," + ATTR_B + "," + ATTR_C + ") VALUES (" +
+					i + ",'" + (ATTR_B+i) + "','" + (ATTR_C+i) + "')";
+				st.executeUpdate(sql);
+			}
+			// table B (big table)
+			sql = "CREATE TABLE " + TABLE_B + "(" + ATTR_A_INT + "," + ATTR_B_VARCHAR + ")";
+			st.executeUpdate(sql);
+			for(int i=1; i <= ROWS_B; i++) {
+				sql = "INSERT INTO " + TABLE_B + " (" + ATTR_A + ","
+						+ ATTR_B + ") VALUES (" + i + ",'" + (ATTR_B+i)  + "')";
+				st.executeUpdate(sql);
+			}
+		} catch (SQLException ex) {
+			fail(ex);
+		} finally {
+			try {
+				st.close();
+			} catch (SQLException ex) {
+				fail(ex);
+			}
+		}
+	}
 
-    @Override
-    public void test() {
-        XDPool xp;
-        XDDocument xd;
-        String xml;
-        String xdef;
-        ArrayReporter reporter = new ArrayReporter();
-        Element el;
-        NodeList nl;
-        String s;
-        String tempDir;
+	@Override
+	public void test() {
+		XDPool xp;
+		XDDocument xd;
+		String xml;
+		String xdef;
+		ArrayReporter reporter = new ArrayReporter();
+		Element el;
+		NodeList nl;
+		String s;
+		String tempDir;
 
-        // prepare temporary diredtory for data
-        try {
-            tempDir = clearTempDir().getCanonicalPath().replace('\'', '/');
-            if (!tempDir.endsWith("/")) {
-                tempDir += '/';
-            }
-        } catch (IOException ex) {
-            fail(ex);
-            return;
-        }
+		// prepare temporary diredtory for data
+		try {
+			tempDir = clearTempDir().getCanonicalPath().replace('\'', '/');
+			if (!tempDir.endsWith("/")) {
+				tempDir += '/';
+			}
+		} catch (IOException ex) {
+			fail(ex);
+			return;
+		}
 
-        ////////////////////////////////////////////////////////////////////////
-        // Primary tests: test DB environment
-        ////////////////////////////////////////////////////////////////////////
-        Statement st = null;
-        ResultSet rs = null;
-        try {
-            // creates DB environment
-            createDBEnv(tempDir);
-            st = _con.createStatement();
-            st.executeUpdate("CREATE TABLE ABC(ID INT)");
-            st.executeUpdate("INSERT INTO ABC(ID) VALUES(1)");
-            st.executeUpdate("INSERT INTO ABC(ID) VALUES(2)");
-            rs = st.executeQuery("SELECT * FROM ABC");
-            rs.next();
-            assertEq(1, rs.getInt(1));
-            rs.next();
-            assertEq(2, rs.getInt(1));
-            rs.next();
-            rs.getInt(1);
-            fail("In the resultset was no data and no SQLException was "
-                    + "generated.");
-        } catch (SQLException ex) {
-            // espected: Invalid cursor state - no current row
-        } finally {
-            try {
-                rs.close();
-                st.executeUpdate("DROP TABLE ABC");
-                st.close();
-                _con.close();
-            } catch (SQLException ex) {
-                fail(ex);
-            }
-        }
+		////////////////////////////////////////////////////////////////////////
+		// Primary tests: test DB environment
+		////////////////////////////////////////////////////////////////////////
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			// creates DB environment
+			createDBEnv(tempDir);
+			st = _con.createStatement();
+			st.executeUpdate("CREATE TABLE ABC(ID INT)");
+			st.executeUpdate("INSERT INTO ABC(ID) VALUES(1)");
+			st.executeUpdate("INSERT INTO ABC(ID) VALUES(2)");
+			rs = st.executeQuery("SELECT * FROM ABC");
+			rs.next();
+			assertEq(1, rs.getInt(1));
+			rs.next();
+			assertEq(2, rs.getInt(1));
+			rs.next();
+			rs.getInt(1);
+			fail("In the resultset was no data and no SQLException was "
+					+ "generated.");
+		} catch (SQLException ex) {
+			// espected: Invalid cursor state - no current row
+		} finally {
+			try {
+				rs.close();
+				st.executeUpdate("DROP TABLE ABC");
+				st.close();
+				_con.close();
+			} catch (SQLException ex) {
+				fail(ex);
+			}
+		}
 
-        ////////////////////////////////////////////////////////////////////////
-        // Tests in the Xdefinitions
-        ////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
+		// Tests in the Xdefinitions
+		////////////////////////////////////////////////////////////////////////
 
-        // Use non-external connection
-        try {
-            xdef =
+		// Use non-external connection
+		try {
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    Service service;\n"+
@@ -230,29 +230,29 @@ public final class TestDatabase extends XDTester {
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
 "</xd:def>";
-            _con = getConnection();
-            el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
-            if(reporter.errorWarnings()) {
-                fail(reporter.getReport());
-            }
-            // check the data equality
-            nl = el.getChildNodes();
-            assertEq(nl.getLength(), ROWS_A);
-            for(int i=1; i<=nl.getLength(); i++) {
-                Element ele = (Element)nl.item(i-1);
-                assertEq(Integer.valueOf(ele.getAttribute("a")), i);
-                assertEq(ATTR_B+i, ele.getAttribute("b"));
-                assertEq(ATTR_C+i, ((Element)ele.getChildNodes().item(0)).getTextContent());
-            }
+			_con = getConnection();
+			el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
+			if(reporter.errorWarnings()) {
+				fail(reporter.getReport());
+			}
+			// check the data equality
+			nl = el.getChildNodes();
+			assertEq(nl.getLength(), ROWS_A);
+			for(int i=1; i<=nl.getLength(); i++) {
+				Element ele = (Element)nl.item(i-1);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
+				assertEq(ATTR_B+i, ele.getAttribute("b"));
+				assertEq(ATTR_C+i, ((Element)ele.getChildNodes().item(0)).getTextContent());
+			}
 
-            // check implicit closing of the Service
-            if(!_con.isClosed()) {
-                fail("Xdefinition hasn't closed the Service object.");
-            } else {
-                _con.close();
-            }
-        // Use external connection
-            xdef =
+			// check implicit closing of the Service
+			if(!_con.isClosed()) {
+				fail("Xdefinition hasn't closed the Service object.");
+			} else {
+				_con.close();
+			}
+		// Use external connection
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
@@ -268,29 +268,29 @@ public final class TestDatabase extends XDTester {
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
 "</xd:def>";
-            _con = getConnection();
-            el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
-            if(reporter.errorWarnings()) {
-                fail(reporter.getReport());
-            }
-            // check the data equality
-            nl = el.getChildNodes();
-            assertEq(nl.getLength(), ROWS_A);
-            for(int i=1; i<=nl.getLength(); i++) {
-                Element ele = (Element)nl.item(i-1);
-                assertEq(Integer.valueOf(ele.getAttribute("a")), i);
-                assertEq(ATTR_B+i, ele.getAttribute("b"));
-                assertEq(ATTR_C+i, ((Element)ele.getChildNodes().item(0)).getTextContent());
-            }
+			_con = getConnection();
+			el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
+			if(reporter.errorWarnings()) {
+				fail(reporter.getReport());
+			}
+			// check the data equality
+			nl = el.getChildNodes();
+			assertEq(nl.getLength(), ROWS_A);
+			for(int i=1; i<=nl.getLength(); i++) {
+				Element ele = (Element)nl.item(i-1);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
+				assertEq(ATTR_B+i, ele.getAttribute("b"));
+				assertEq(ATTR_C+i, ((Element)ele.getChildNodes().item(0)).getTextContent());
+			}
 
-            // check that external Service wasn't closed
-            if(_con.isClosed()) {
-                fail("Xdefinition has closed the Service object.");
-            } else {
-                _con.close();
-            }
-            // using ResultSet created implicitly
-            xdef =
+			// check that external Service wasn't closed
+			if(_con.isClosed()) {
+				fail("Xdefinition has closed the Service object.");
+			} else {
+				_con.close();
+			}
+			// using ResultSet created implicitly
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>external Service service;</xd:declaration>\n"+
 "  <A xd:script= \"create 1\">\n"+
@@ -300,28 +300,28 @@ public final class TestDatabase extends XDTester {
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
 "</xd:def>";
-            _con = getConnection();
-            el = create(xdef, null, null, "A", "#service",
-                XDFactory.createSQLService(_con), reporter);
-            if(reporter.errorWarnings()) {
-                fail(reporter.getReport());
-            }
-            // check the data equality
-            nl = el.getChildNodes();
-            assertEq(nl.getLength(), ROWS_A);
-            for(int i=1; i<=nl.getLength(); i++) {
-                Element ele = (Element)nl.item(i-1);
-                assertEq(Integer.valueOf(ele.getAttribute("a")), i);
-                assertEq(ele.getAttribute("b"), ATTR_B+i);
-            }
-            // check that external Service wasn't closed
-            if(_con.isClosed()) {
-                fail("Xdefinition has closed the Service object.");
-            } else {
-                _con.close();
-            }
-        // using macro
-            xdef =
+			_con = getConnection();
+			el = create(xdef, null, null, "A", "#service",
+				XDFactory.createSQLService(_con), reporter);
+			if(reporter.errorWarnings()) {
+				fail(reporter.getReport());
+			}
+			// check the data equality
+			nl = el.getChildNodes();
+			assertEq(nl.getLength(), ROWS_A);
+			for(int i=1; i<=nl.getLength(); i++) {
+				Element ele = (Element)nl.item(i-1);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
+				assertEq(ele.getAttribute("b"), ATTR_B+i);
+			}
+			// check that external Service wasn't closed
+			if(_con.isClosed()) {
+				fail("Xdefinition has closed the Service object.");
+			} else {
+				_con.close();
+			}
+		// using macro
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
@@ -339,29 +339,29 @@ public final class TestDatabase extends XDTester {
 "    service.query('SELECT * FROM " + TABLE_A + "')\n"+
 "  </xd:macro>\n"+
 "</xd:def>";
-            _con = getConnection();
-            el = create(xdef, null, null, "A", "#service",
-                XDFactory.createSQLService(_con), reporter);
-            if(reporter.errorWarnings()) {
-                fail(reporter.getReport());
-            }
-            // check the data equality
-            nl = el.getChildNodes();
-            assertEq(nl.getLength(), ROWS_A);
-            for(int i=1; i<=nl.getLength(); i++) {
-                Element ele = (Element)nl.item(i-1);
-                assertEq(Integer.valueOf(ele.getAttribute("a")), i);
-                assertEq(ele.getAttribute("b"), ATTR_B+i);
-            }
+			_con = getConnection();
+			el = create(xdef, null, null, "A", "#service",
+				XDFactory.createSQLService(_con), reporter);
+			if(reporter.errorWarnings()) {
+				fail(reporter.getReport());
+			}
+			// check the data equality
+			nl = el.getChildNodes();
+			assertEq(nl.getLength(), ROWS_A);
+			for(int i=1; i<=nl.getLength(); i++) {
+				Element ele = (Element)nl.item(i-1);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
+				assertEq(ele.getAttribute("b"), ATTR_B+i);
+			}
 
-            // check that external Service wasn't closed
-            if(_con.isClosed()) {
-                fail("Xdefinition has closed the Service object.");
-            } else {
-                _con.close();
-            }
+			// check that external Service wasn't closed
+			if(_con.isClosed()) {
+				fail("Xdefinition has closed the Service object.");
+			} else {
+				_con.close();
+			}
 // test "boolean ResultSet.next()" and "boolean ResultSet.hasNext()" method
-            xdef =
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
@@ -383,29 +383,29 @@ public final class TestDatabase extends XDTester {
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
 "</xd:def>";
-            _con = getConnection();
-            el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
-            if(reporter.errorWarnings()) {
-                fail(reporter.getReport());
-            }
-            // check the data equality
-            nl = el.getChildNodes();
-            assertEq(nl.getLength(), ROWS_A);
-            for(int i=1; i<=nl.getLength(); i++) {
-                Element ele = (Element)nl.item(i-1);
-                assertEq(Integer.valueOf(ele.getAttribute("a")), i);
-                assertEq(ele.getAttribute("b"), ATTR_B+i);
-            }
+			_con = getConnection();
+			el = create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
+			if(reporter.errorWarnings()) {
+				fail(reporter.getReport());
+			}
+			// check the data equality
+			nl = el.getChildNodes();
+			assertEq(nl.getLength(), ROWS_A);
+			for(int i=1; i<=nl.getLength(); i++) {
+				Element ele = (Element)nl.item(i-1);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
+				assertEq(ele.getAttribute("b"), ATTR_B+i);
+			}
 
-            // check that external Service wasn't closed
-            if(_con.isClosed()) {
-                fail("Xdefinition has closed the Service object.");
-            } else {
-                _con.close();
-            }
-            XDService service = XDFactory.createSQLService(getConnection());
-            //create database
-            xdef =
+			// check that external Service wasn't closed
+			if(_con.isClosed()) {
+				fail("Xdefinition has closed the Service object.");
+			} else {
+				_con.close();
+			}
+			XDService service = XDFactory.createSQLService(getConnection());
+			//create database
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='schema'>\n"+
 "  <xd:declaration scope='local'>external Service con;</xd:declaration>\n"+
 "  <schema name=\"string; onTrue con.execute('CREATE SCHEMA '+ getText())\">\n"+
@@ -420,10 +420,10 @@ public final class TestDatabase extends XDTester {
 "    </table>\n"+
 "  </schema>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument();
-            xd.setVariable("#con", service);
-            xml =
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("#con", service);
+			xml =
 "<schema name=\"MYTEST\">\n"+
 "  <table name=\"AUTHOR\">\n"+
 "    IDAUTHOR INTEGER NOT NULL GENERATED BY DEFAULT AS IDENTITY,\n"+
@@ -450,9 +450,9 @@ public final class TestDatabase extends XDTester {
 "    FOREIGN KEY (IDTITLE) REFERENCES MYTEST.TITLE(IDTITLE)\n"+
 "  </table>\n"+
 "</schema>";
-            xd.xparse(xml, null);
-            //insert 1
-            xdef =
+			xd.xparse(xml, null);
+			//insert 1
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"Books|Book\">\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
@@ -503,10 +503,10 @@ public final class TestDatabase extends XDTester {
 "     </Author>\n"+
 "  </item>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument();
-            xd.setVariable("#service", service); //set connection
-            xml =
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("#service", service); //set connection
+			xml =
 "<Books>\n"+
 "  <Book ISSUED='2008' ISBN='12345678'\n"+
 "    EDITOR='HarperCollins Publishers'\n"+
@@ -526,11 +526,11 @@ public final class TestDatabase extends XDTester {
 "  </Book>\n"+
 "  <Book TITLE='Koran' ISBN='9345478191'/>\n"+
 "</Books>";
-            parse(xd, xml, reporter); //process data
-            assertNoErrorwarnings(reporter);
-            assertEq(5, xd.getVariable("#inserted").intValue());
-            // insert 2
-            xdef =
+			parse(xd, xml, reporter); //process data
+			assertNoErrorwarnings(reporter);
+			assertEq(5, xd.getVariable("#inserted").intValue());
+			// insert 2
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"Books\">\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
@@ -581,10 +581,10 @@ public final class TestDatabase extends XDTester {
 "     </Author>\n"+
 "  </item>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument();
-            xd.setVariable("#service", service);
-            xml =
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("#service", service);
+			xml =
 "<Books>\n"+
 "  <Book ISSUED='1935' TITLE='Krakatit'  ISBN='230567819'>\n"+
 "    <Author>Karel Capek</Author>\n"+
@@ -593,13 +593,13 @@ public final class TestDatabase extends XDTester {
 "    <Author>Arthur C. Clarke</Author>\n"+
 "  </Book>\n"+
 "</Books>";
-            parse(xd, xml, reporter);
-            assertEq(1, xd.getVariable("#inserted").intValue());
-            s = reporter.printToString();
-            assertTrue(s.contains("TEST001: Book \"2001: A Space Odyssey\""),s);
+			parse(xd, xml, reporter);
+			assertEq(1, xd.getVariable("#inserted").intValue());
+			s = reporter.printToString();
+			assertTrue(s.contains("TEST001: Book \"2001: A Space Odyssey\""),s);
 
-            // read 1
-            xdef =
+			// read 1
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
@@ -624,30 +624,30 @@ public final class TestDatabase extends XDTester {
 "    </Book>\n"+
 "  </Books>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument();
-            xd.setVariable("#service", service); //set connection
-            assertEq(create(xd, "Books", reporter),
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("#service", service); //set connection
+			assertEq(create(xd, "Books", reporter),
 "<Books>"+
-    "<Book TITLE=\"2001: A Space Odyssey\" ISBN=\"234567819\" ISSUED=\"1968\">"+
-        "<Author>Arthur C. Clarke</Author></Book>"+
-    "<Book TITLE=\"Bible\" ISBN=\"9345678199\"/>"+
-    "<Book TITLE=\"Koran\" ISBN=\"9345478191\"/>"+
-    "<Book TITLE=\"Krakatit\" ISBN=\"230567819\" ISSUED=\"1935\">"+
-    "<Author>Karel Capek</Author></Book>"+
-    "<Book TITLE=\"Proc svet nemluvi esperantem\"\n"+
-    "ISBN=\"8345678191\" EDITOR=\"XML Prague\" ISSUED=\"2007\">"+
-    "<Author>Jiri Kamenicky˝</Author>"+
-    "<Author>Jiri Meska</Author>"+
-    "<Author>Vaclav Trojan</Author>"+
-    "</Book>"+
-    "<Book TITLE=\"The Last Theorem\" ISBN=\"12345678\"\n"+
-    "EDITOR=\"HarperCollins Publishers\" ISSUED=\"2008\">"+
-    "<Author>Arthur C. Clarke</Author>"+
-    "</Book>"+
+	"<Book TITLE=\"2001: A Space Odyssey\" ISBN=\"234567819\" ISSUED=\"1968\">"+
+		"<Author>Arthur C. Clarke</Author></Book>"+
+	"<Book TITLE=\"Bible\" ISBN=\"9345678199\"/>"+
+	"<Book TITLE=\"Koran\" ISBN=\"9345478191\"/>"+
+	"<Book TITLE=\"Krakatit\" ISBN=\"230567819\" ISSUED=\"1935\">"+
+	"<Author>Karel Capek</Author></Book>"+
+	"<Book TITLE=\"Proc svet nemluvi esperantem\"\n"+
+	"ISBN=\"8345678191\" EDITOR=\"XML Prague\" ISSUED=\"2007\">"+
+	"<Author>Jiri Kamenicky˝</Author>"+
+	"<Author>Jiri Meska</Author>"+
+	"<Author>Vaclav Trojan</Author>"+
+	"</Book>"+
+	"<Book TITLE=\"The Last Theorem\" ISBN=\"12345678\"\n"+
+	"EDITOR=\"HarperCollins Publishers\" ISSUED=\"2008\">"+
+	"<Author>Arthur C. Clarke</Author>"+
+	"</Book>"+
 "</Books>");
-            // read 2
-            xdef =
+			// read 2
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"query\" >\n"+
 "  <xd:declaration scope='global'>\n"+
 "    external String url;\n"+
@@ -665,13 +665,13 @@ public final class TestDatabase extends XDTester {
 "    </Book>\n"+
 "  </Books>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument();
-            xd.setVariable("url",
-                "jdbc:derby:" +	tempDir + File.separatorChar + DERBY_STORE + File.separatorChar + "test");
-            xd.setVariable("usr", TEST_USER);
-            xd.setVariable("passw", TEST_PWD);
-            assertEq(xd.xcreate("Books", null), //execute construction,
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("url",
+				"jdbc:derby:" +	tempDir + File.separatorChar + DERBY_STORE + File.separatorChar + "test");
+			xd.setVariable("usr", TEST_USER);
+			xd.setVariable("passw", TEST_PWD);
+			assertEq(xd.xcreate("Books", null), //execute construction,
 "<Books>"+
 "<Book TITLE=\"2001: A Space Odyssey\"/>"+
 "<Book TITLE=\"Bible\"/>"+
@@ -680,8 +680,8 @@ public final class TestDatabase extends XDTester {
 "<Book TITLE=\"Proc svet nemluvi esperantem\"/>"+
 "<Book TITLE=\"The Last Theorem\"/>"+
 "</Books>");
-            //Drop database
-            xdef =
+			//Drop database
+			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"dropSchema\">\n"+
 "  <xd:declaration scope='local'> external Service con; </xd:declaration>\n"+
 "  <dropSchema name=\"string; finally con.execute('DROP SCHEMA '+ getText() + ' RESTRICT');\" >\n"+
@@ -689,21 +689,21 @@ public final class TestDatabase extends XDTester {
 "      name = \"string; onTrue con.execute('DROP TABLE ' + xpath('../../@name') + '.' + getText());\" />\n"+
 "  </dropSchema>\n"+
 "</xd:def>";
-            xp = compile(xdef);
-            xd = xp.createXDDocument();
-            xd.setVariable("#con", service); //set connection
-            xml =
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("#con", service); //set connection
+			xml =
 "<dropSchema name = \"MYTEST\">\n"+
 "  <table name = \"TITLE_AUTHOR\"/>\n"+
 "  <table name = \"TITLE\"/>\n"+
 "  <table name = \"AUTHOR\"/>\n"+
 "</dropSchema>";
-            xd.xparse(xml, null); //process data (insert to database)
-            //close database connection
-            service.close();
-        // multiple query with a big amout of ResultSet cursors
-        // test implicitly and manually closing of cursors
-            xdef =
+			xd.xparse(xml, null); //process data (insert to database)
+			//close database connection
+			service.close();
+		// multiple query with a big amout of ResultSet cursors
+		// test implicitly and manually closing of cursors
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    ResultSet rs;\n"+
@@ -734,17 +734,17 @@ public final class TestDatabase extends XDTester {
 "    </B>\n"+
 "  </C>"+
 "</xd:def>";
-            _con = getConnection();
-            create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
-            assertNoErrorwarnings(reporter);
-            // check that external Service wasn't closed
-            if(_con.isClosed()) {
-                fail("Xdefinition has closed the Service object.");
-            } else {
-                _con.close();
-            }
-        // test close(), isClosed() and closeStatement() function
-            xdef =
+			_con = getConnection();
+			create(xdef, null, null, "A", "#service", XDFactory.createSQLService(_con), reporter);
+			assertNoErrorwarnings(reporter);
+			// check that external Service wasn't closed
+			if(_con.isClosed()) {
+				fail("Xdefinition has closed the Service object.");
+			} else {
+				_con.close();
+			}
+		// test close(), isClosed() and closeStatement() function
+			xdef =
 "<xd:def xmlns:xd = '"+_xdNS+"'>\n"+
 "  <xd:declaration scope='local'>  \n"+
 "    external Service service;\n"+
@@ -778,58 +778,58 @@ public final class TestDatabase extends XDTester {
 "  </xd:declaration>\n"+
 "  <A xd:script=\"finally doA()\"/>\n"+
 "</xd:def>";
-            _con = getConnection();
-            create(xdef, null, null, "A", "#service",
-                XDFactory.createSQLService(_con), reporter);
-            assertNoErrorwarnings(reporter);
-            // check that external Service wasn't closed
-            if(!_con.isClosed()) {
-                fail("Xdefinition has't closed the Service object by close() "
-                        + "script method.");
-            }
-        } catch (Exception ex) {fail(ex);}
+			_con = getConnection();
+			create(xdef, null, null, "A", "#service",
+				XDFactory.createSQLService(_con), reporter);
+			assertNoErrorwarnings(reporter);
+			// check that external Service wasn't closed
+			if(!_con.isClosed()) {
+				fail("Xdefinition has't closed the Service object by close() "
+						+ "script method.");
+			}
+		} catch (Exception ex) {fail(ex);}
 
-        ////////////////////////////////////////////////////////////////////////
-        // Close database and clear data
-        ////////////////////////////////////////////////////////////////////////
-        /* NOTE:
-         * - For ResultSet, Statement a Service are implemented the methods
-         *   void close() and boolean isClosed().
-         * - If the Statement, Service, or ResultSet is not declared as
-         *   "external", the close method is authomatically invoked
-         *   For all such objects at the end of processing of XDefinition.
-         *   However, for the external data the user must invoke closr
-         *   in the programm!
-         */
-        // close shared connection
-        if(_con != null) {
-            try {
-                if(!_con.isClosed()) {
-                    _con.close();
-                }
-            } catch (SQLException ex) {
-                fail(ex);
-            }
-        }
-        // database shutdown. */
-        try {
-            DriverManager.getConnection("jdbc:derby:;shutdown=true", null,null);
-            fail("Derby database cannot be halted.");
-        } catch (SQLException ex) {
-            // accept exception: database Derby is shutdown
-        }
-        // remove directory used for database data
-        deleteStore(new File(tempDir + File.separatorChar + DERBY_STORE));
-        clearTempDir(); // delete temporary files.
+		////////////////////////////////////////////////////////////////////////
+		// Close database and clear data
+		////////////////////////////////////////////////////////////////////////
+		/* NOTE:
+		 * - For ResultSet, Statement a Service are implemented the methods
+		 *   void close() and boolean isClosed().
+		 * - If the Statement, Service, or ResultSet is not declared as
+		 *   "external", the close method is authomatically invoked
+		 *   For all such objects at the end of processing of XDefinition.
+		 *   However, for the external data the user must invoke closr
+		 *   in the programm!
+		 */
+		// close shared connection
+		if(_con != null) {
+			try {
+				if(!_con.isClosed()) {
+					_con.close();
+				}
+			} catch (SQLException ex) {
+				fail(ex);
+			}
+		}
+		// database shutdown. */
+		try {
+			DriverManager.getConnection("jdbc:derby:;shutdown=true", null,null);
+			fail("Derby database cannot be halted.");
+		} catch (SQLException ex) {
+			// accept exception: database Derby is shutdown
+		}
+		// remove directory used for database data
+		deleteStore(new File(tempDir + File.separatorChar + DERBY_STORE));
+		clearTempDir(); // delete temporary files.
 
-        resetTester();
-    }
+		resetTester();
+	}
 
-    /** Run test
-     * @param args the command line arguments
-     */
-    public static void main(String... args) {
-        XDTester.setFulltestMode(true);
-        if (runTest(args) > 0) {System.exit(1);}
-    }
+	/** Run test
+	 * @param args the command line arguments
+	 */
+	public static void main(String... args) {
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
+	}
 }

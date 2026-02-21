@@ -14,48 +14,48 @@ import org.xdef.xon.XonTools;
  * @author Vaclav Trojan
  */
 public class XDParseIPAddr extends XDParserAbstract {
-    private static final String ROOTBASENAME = "ipAddr";
+	private static final String ROOTBASENAME = "ipAddr";
 
-    public XDParseIPAddr() {super();}
+	public XDParseIPAddr() {super();}
 
-    @Override
-    public void parseObject(final XXNode xn, final XDParseResult p) {
-        int pos = p.getIndex();
-        p.isSpaces();
-        boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-        XDParseResult q = quoted?new DefParseResult(XonTools.readJString(p)):p;
-        q.isChar('/');
-        int pos1 = q.getIndex();
-        int parts = 0;
-        while ("0123456789abcdefABCDEF".indexOf(p.getCurrentChar()) >= 0) {
-            q.nextChar();
-            char ch = q.isOneOfChars(":.");
-            if (ch != SParser.NOCHAR) {
-                parts++;
-                if(ch == ':') {
-                    while(q.isChar(':')){}
-                }
-            }
-        }
-        String s = q.getBufferPart(pos1, q.getIndex());
-        q.isSpaces();
-        if (q.eos()) {
-            if (parts > 1) {
-                try {
-                    p.setParsedValue(new DefIPAddr(s));
-                    p.setEos();
-                    return;
-                } catch (Exception ex) {} //inet addr error
-            }
-        }
-        p.setIndex(pos);
-        p.setParsedValue(new DefIPAddr()); //null IPAddr
-        p.errorWithString(XDEF.XDEF809,parserName(), s); //Incorrect value of '&{0}'&{1}{: }
-    }
+	@Override
+	public void parseObject(final XXNode xn, final XDParseResult p) {
+		int pos = p.getIndex();
+		p.isSpaces();
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		XDParseResult q = quoted?new DefParseResult(XonTools.readJString(p)):p;
+		q.isChar('/');
+		int pos1 = q.getIndex();
+		int parts = 0;
+		while ("0123456789abcdefABCDEF".indexOf(p.getCurrentChar()) >= 0) {
+			q.nextChar();
+			char ch = q.isOneOfChars(":.");
+			if (ch != SParser.NOCHAR) {
+				parts++;
+				if(ch == ':') {
+					while(q.isChar(':')){}
+				}
+			}
+		}
+		String s = q.getBufferPart(pos1, q.getIndex());
+		q.isSpaces();
+		if (q.eos()) {
+			if (parts > 1) {
+				try {
+					p.setParsedValue(new DefIPAddr(s));
+					p.setEos();
+					return;
+				} catch (Exception ex) {} //inet addr error
+			}
+		}
+		p.setIndex(pos);
+		p.setParsedValue(new DefIPAddr()); //null IPAddr
+		p.errorWithString(XDEF.XDEF809,parserName(), s); //Incorrect value of '&{0}'&{1}{: }
+	}
 
-    @Override
-    public String parserName() {return ROOTBASENAME;}
+	@Override
+	public String parserName() {return ROOTBASENAME;}
 
-    @Override
-    public short parsedType() {return XD_IPADDR;}
+	@Override
+	public short parsedType() {return XD_IPADDR;}
 }

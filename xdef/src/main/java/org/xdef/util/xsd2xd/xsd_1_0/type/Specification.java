@@ -5,8 +5,8 @@ package org.xdef.util.xsd2xd.xsd_1_0.type;
  */
 public abstract class Specification {
 
-    /** Returns method of type.
-     * @return method of type.
-     */
-    public abstract String getTypeMethod();
+	/** Returns method of type.
+	 * @return method of type.
+	 */
+	public abstract String getTypeMethod();
 }
