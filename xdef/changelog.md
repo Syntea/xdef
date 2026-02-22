@@ -1,5 +1,5 @@
 # Version ${version}, release-date ${release.date}
-  * .
+  * Fixed generation of `xposOf...()` methods in XComponents.
 
 # Version 42.2.39, release-date 2026-02-09
   * Fixed a bug when generating Xcomponents with `extends` and `implements` specifications in a class
