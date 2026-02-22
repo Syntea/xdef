@@ -24,25 +24,32 @@ public class BindWith {
             return;
         }
 
-        String s = xc.toXml().getAttribute("MaxWeight");
+        String s = xc.toXml().getAttribute("MaxWeight");  // value from XML data
         if (!"1234".equals(s)) {
             System.err.println("ERROR MaxWeight: " + s);
             return;
         }
-        if (1234 != ((Integer) XComponentUtil.get(xc, "VIN"))) {
-            System.err.println("ERROR MaxWeight: " + s);
+        
+        if (1234 != ((Integer) XComponentUtil.get(xc, "Mass"))) { // value from Xcomponenet from getter
+            System.err.println("ERROR Mass: " + s);
             return;
         }
-        XComponentUtil.set(xc, "VIN", 456789); // try setter created from %bind command.
-        if (456789 != ((Integer) XComponentUtil.get(xc, "VIN"))) {
+
+        XComponentUtil.set(xc, "Mass", 456789); // use setter to set value
+        if (456789 != ((Integer) XComponentUtil.get(xc, "Mass"))) {
             System.err.println("ERROR MaxWeight (set new value): " + s);
             return;
         }
-        XComponentUtil.set(xc, "VIN", null); // try setter created from %bind command.
-        if (XComponentUtil.get(xc, "VIN") != null) {
+
+        XComponentUtil.set(xc, "Mass", null); // set null.
+        if (XComponentUtil.get(xc, "Mass") != null) {
             System.err.println("Expected null!");
             return;
+        }        
+        if (xc.toXml().getAttributeNode("MaxWeight") != null) {
+            System.err.println("ERROR MaxWeight sould be null");
         }
+        
         System.out.println("OK, Task6.BindWith");
     }
 

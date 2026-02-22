@@ -3,9 +3,10 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components1;
 @SuppressWarnings("unchecked")
-public class BindWithXC extends task6.BindWithVIN implements org.xdef.component.XComponent {
+public class BindWithXC extends task6.BindWithMass implements org.xdef.component.XComponent {
+  public String xposOfMaxWeight(){return XD_XPos+"/@MaxWeight";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
-  private String XD_Name_VIN="MaxWeight";
+  private String XD_Name_Mass="MaxWeight";
   @Override
   public Object toXon() {return org.xdef.component.XComponentUtil.toXon(this);}
   @Override
@@ -55,8 +56,8 @@ public class BindWithXC extends task6.BindWithVIN implements org.xdef.component.
       el = doc.createElementNS(XD_NamespaceURI, XD_NodeName);
       if (doc.getDocumentElement()==null) doc.appendChild(el);
     }
-    if (getVIN() != null)
-      el.setAttribute(XD_Name_VIN, getVIN().toString());
+    if (getMass() != null)
+      el.setAttribute(XD_Name_Mass, getMass().toString());
     return el;
   }
   public BindWithXC() {}
@@ -91,8 +92,8 @@ public class BindWithXC extends task6.BindWithVIN implements org.xdef.component.
   public void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}
   @Override
   public void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){
-    XD_Name_VIN = x.getNodeName();
-    setVIN(value.getParsedValue().isNull()? null: value.getParsedValue().intValue());
+    XD_Name_Mass = x.getNodeName();
+    setMass(value.getParsedValue().isNull()? null: value.getParsedValue().intValue());
   }
   @Override
   public org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){return null;}
