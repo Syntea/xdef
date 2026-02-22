@@ -418,7 +418,19 @@ class XCGeneratorBase {
         genVariableFromModel(xdata,typ,name,max,descr,vars);
         genGetterMethodFromChildElement(xdata, typ, name, max, descr, getters, sbi);
         genSetterMethodOfChildElement(typ, name, max, null, null, null, descr, setters, sbi, "");
-        // gen "xposOf" method
+    }
+
+    /** Generate xposOf method.
+     * @param name name of XML value.
+     * @param descr Description text.
+     * @param xpathes where to generate paths.
+     * @param sbi String builder where the code is generated for interface.
+     */
+    final void genXpos(final String name,
+        final String posName,
+        final String descr,
+        final StringBuilder xpathes,
+        final StringBuilder sbi) {
         if (sbi != null) {
             xpathes.append("\t@Override").append(LN);
             sbi.append(modify(
@@ -427,9 +439,10 @@ class XCGeneratorBase {
 "\t */"+LN) : "")+
 "\tpublic String xposOf&{name}();"+LN,
                 "&{name}", name,
+                "&{posName}", posName,
                 "&{descr}", descr));
         }
-        final String x = "attribute".equals(descr) ? "@" + name : "$text";
+        final String x = "attribute".equals(descr) ? "@" + posName : "$text";
         xpathes.append(modify(
 (_genJavadoc ? ("\t/** Get XPath position of &{descr} \"&{name}\"."+LN+
 "\t* @return string with XPath position."+LN+

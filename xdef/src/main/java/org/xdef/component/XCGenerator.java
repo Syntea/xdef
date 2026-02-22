@@ -115,6 +115,7 @@ final class XCGenerator extends XCGeneratorXON {
             XData xdata = (XData) xmdata;
             addNSUri(nsmap, xdata);
             String name = checkBind(xe, xdata);
+            String namePos = xmlToJavaName(xdata.getName());
             boolean ext = false;
             if (name != null) {
                 ndx = name.indexOf(" %with ");
@@ -156,6 +157,7 @@ final class XCGenerator extends XCGeneratorXON {
             if (!ext) {
                 genBaseVarsGettersSetters(xdata, name, 1, "attribute", vars, getters, setters, xpathes, sbi);
             }
+            genXpos(name, namePos, "attribute", xpathes, sbi);
             genCreatorOfAttribute(xdata, name, creators);
             atttab.put(xdata.getXDPosition(), getParsedResultGetter(xdata) + ";" + name);
         }
@@ -283,6 +285,7 @@ final class XCGenerator extends XCGeneratorXON {
                         genBaseVarsGettersSetters(xdata,
                             name, groupMax, "text node", vars, getters, setters, xpathes, sbi);
                     }
+                    genXpos(name, "$value", "text node", xpathes, sbi);
                     String s =
 ((_genJavadoc ? "\t/** Indexes of values of &{d} \""+name.replace('$', ':')+
 "\".*/"+LN : "")+
