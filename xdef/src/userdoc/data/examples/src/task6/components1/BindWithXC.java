@@ -4,7 +4,7 @@
 package task6.components1;
 @SuppressWarnings("unchecked")
 public class BindWithXC extends task6.BindWithMass implements org.xdef.component.XComponent {
-  public String xposOfMaxWeight(){return XD_XPos+"/@MaxWeight";}
+  public String xposOfMass(){return XD_XPos+"/@MaxWeight";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_Mass="MaxWeight";
   @Override

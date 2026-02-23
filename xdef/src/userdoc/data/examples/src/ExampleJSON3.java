@@ -9,24 +9,24 @@ import org.xdef.xon.XonUtils;
  */
 public class ExampleJSON3 {
 
-	public static void main(String[] args) {
-		// Prepare source path to X-definition and JSON data.
-		String xdef = "./src/ExampleJSON3.xdef";
-		String data = "./src/ExampleJSON3.json";
+    public static void main(String[] args) {
+        // Prepare source path to X-definition and JSON data.
+        String xdef = "./src/ExampleJSON3.xdef";
+        String data = "./src/ExampleJSON3.json";
 
-		// 1. Create XDPool
-		Properties props = System.getProperties();
-		XDPool xpool = XDFactory.compileXD(props, xdef);
+        // 1. Create XDPool
+        Properties props = System.getProperties();
+        XDPool xpool = XDFactory.compileXD(props, xdef);
 
-		// 2. Create XDDocument
-		XDDocument xdoc = xpool.createXDDocument("ExampleJSON3");
+        // 2. Create XDDocument
+        XDDocument xdoc = xpool.createXDDocument("ExampleJSON3");
 
-		// 4. parse JSON data; if an error occurs the RuntimeException is thrown
-		Object json = xdoc.jparse(data, null); // 
+        // 4. parse JSON data; if an error occurs the RuntimeException is thrown
+        Object json = xdoc.jparse(data, null); //
 
-		// 5. Print parsed result 
-		System.out.println("Parsed JSON result:");
-		System.out.println(XonUtils.toJsonString(json, true));
-		System.out.println("ExampleJSON3 OK");
-	}	
+        // 5. Print parsed result
+        System.out.println("Parsed JSON result:");
+        System.out.println(XonUtils.toJsonString(json, true));
+        System.out.println("ExampleJSON3 OK");
+    }
 }

@@ -118,8 +118,8 @@ public static class Resident implements org.xdef.component.XComponent {
   public void setFirstName(String x) {_FirstName=x;}
   public void setLastName(String x) {_LastName=x;}
   public void setAddress(String x) {_Address=x;}
-  public String xposOfGivenName(){return XD_XPos+"/@GivenName";}
-  public String xposOfFamilyName(){return XD_XPos+"/@FamilyName";}
+  public String xposOfFirstName(){return XD_XPos+"/@GivenName";}
+  public String xposOfLastName(){return XD_XPos+"/@FamilyName";}
   public String xposOfAddress(){return XD_XPos+"/@Address";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_FirstName="GivenName";
