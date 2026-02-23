@@ -37,7 +37,7 @@ public class GenComponents1 {
         System.out.println("XDPool saved to src/task6/components1/Town1.xp");
 
         // 4. Generate xcomponent XCBindWith
-        xPool = XDFactory.compileXD(null, "src/task6/BindWith.xdef");
+        xPool = XDFactory.compileXD(null, "src/task6/bindWith.xdef");
         xPool.genXComponent(new File("src/"), "UTF-8", false, false);
         System.out.println("XComponent XCBindWith is created to src/task6/components1");
 
