@@ -12,16 +12,16 @@ import static test.XDTester._xdNS;
  */
 public final class TestConstruct extends XDTester {
 
-	public TestConstruct() {super();}
+    public TestConstruct() {super();}
 
-	@Override
-	public void test() {
-		XDPool xp;
-		XDDocument xd;
-		String xdef;
-		XXElement rootChkel, chkel;
-		try {
-			xdef =
+    @Override
+    public void test() {
+        XDPool xp;
+        XDDocument xd;
+        String xdef;
+        XXElement rootChkel, chkel;
+        try {
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='messages'>\n"+
 "  <messages>\n"+
 "    <child/>\n"+
@@ -32,30 +32,30 @@ public final class TestConstruct extends XDTester {
 "              + '(eng) ' + getText())\" />\n"+
 "  </messages>\n"+
 "</xd:def>\n";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			//Create root check element with given name.
-			rootChkel = xd.prepareRootXXElement("messages", true);
-			if (rootChkel.errors()) {
-				fail(rootChkel.getXPos());
-			}
-			chkel = rootChkel.prepareXXElementNS(null, "child");
-			assertFalse(chkel.errors(), chkel.getXPos());
-			assertTrue(chkel.addElement(), chkel.getXPos());
-			chkel = rootChkel.prepareXXElementNS(null, "A000");
-			assertFalse(chkel.errors(), chkel.getXPos());
-			assertTrue(chkel.addAttribute("ces", "Toto je zprava"),
-				chkel.getXPos());
-			assertTrue(chkel.addAttribute("eng", "This is message"),
-				chkel.getXPos());
-			assertFalse(chkel.addAttribute("rom", "messagos"), chkel.getXPos());
-			assertTrue(chkel.addElement(), chkel.getXPos());
-			assertTrue(rootChkel.addElement(), rootChkel.getXPos());
-			assertEq(xd.getElement(),
-				"<messages><child/><A000"
-				+ " ces=\"Toto je zprava\" eng=\"This is message\"/>"
-				+ "</messages>");
-			xdef =
+            xp = compile(xdef);
+            xd = xp.createXDDocument();
+            //Create root check element with given name.
+            rootChkel = xd.prepareRootXXElement("messages", true);
+            if (rootChkel.errors()) {
+                fail(rootChkel.getXPos());
+            }
+            chkel = rootChkel.prepareXXElementNS(null, "child");
+            assertFalse(chkel.errors(), chkel.getXPos());
+            assertTrue(chkel.addElement(), chkel.getXPos());
+            chkel = rootChkel.prepareXXElementNS(null, "A000");
+            assertFalse(chkel.errors(), chkel.getXPos());
+            assertTrue(chkel.addAttribute("ces", "Toto je zprava"),
+                chkel.getXPos());
+            assertTrue(chkel.addAttribute("eng", "This is message"),
+                chkel.getXPos());
+            assertFalse(chkel.addAttribute("rom", "messagos"), chkel.getXPos());
+            assertTrue(chkel.addElement(), chkel.getXPos());
+            assertTrue(rootChkel.addElement(), rootChkel.getXPos());
+            assertEq(xd.getElement(),
+                "<messages><child/><A000"
+                + " ces=\"Toto je zprava\" eng=\"This is message\"/>"
+                + "</messages>");
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xmlns:a=\"a.a\" xmlns:b=\"b.b\"\n"+
 "        xd:name=\"test\" xd:root=\"a:root\">\n"+
 "  <a:root>\n"+
@@ -65,38 +65,38 @@ public final class TestConstruct extends XDTester {
 "        b:b=\"optional string()\" />\n"+
 "  </a:root>\n"+
 "</xd:def>\n";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("test");
-			rootChkel = xd.prepareRootXXElementNS("a.a", "x:root", true);
-			assertFalse(rootChkel.errors(), rootChkel.getXPos());
-			chkel = rootChkel.prepareXXElementNS("b.b", "y:child");
-			assertFalse(chkel.errors(), chkel.getXPos());
-			assertTrue(chkel.addElement(), chkel.getXPos());
-			chkel = rootChkel.prepareXXElementNS("b.b", "y:A000");
-			assertFalse(chkel.errors(), chkel.getXPos());
-			assertTrue(chkel.addAttributeNS("a.a", "x:a", "Toto je zprava"),
-				chkel.getXPos());
-			assertTrue(chkel.addAttributeNS("b.b", "y:b", "This is message"),
-				chkel.getXPos());
-			assertFalse(chkel.addAttribute("z0", "messagos"), chkel.getXPos());
-			assertFalse(chkel.addAttribute("z1", "os"), chkel.getXPos());
-			assertTrue(chkel.addElement(), chkel.getXPos());
-			assertTrue(rootChkel.addElement(), rootChkel.getXPos());
-			assertEq(xd.getElement(),
+            xp = compile(xdef);
+            xd = xp.createXDDocument("test");
+            rootChkel = xd.prepareRootXXElementNS("a.a", "x:root", true);
+            assertFalse(rootChkel.errors(), rootChkel.getXPos());
+            chkel = rootChkel.prepareXXElementNS("b.b", "y:child");
+            assertFalse(chkel.errors(), chkel.getXPos());
+            assertTrue(chkel.addElement(), chkel.getXPos());
+            chkel = rootChkel.prepareXXElementNS("b.b", "y:A000");
+            assertFalse(chkel.errors(), chkel.getXPos());
+            assertTrue(chkel.addAttributeNS("a.a", "x:a", "Toto je zprava"),
+                chkel.getXPos());
+            assertTrue(chkel.addAttributeNS("b.b", "y:b", "This is message"),
+                chkel.getXPos());
+            assertFalse(chkel.addAttribute("z0", "messagos"), chkel.getXPos());
+            assertFalse(chkel.addAttribute("z1", "os"), chkel.getXPos());
+            assertTrue(chkel.addElement(), chkel.getXPos());
+            assertTrue(rootChkel.addElement(), rootChkel.getXPos());
+            assertEq(xd.getElement(),
 "<x:root xmlns:x=\"a.a\" xmlns:y=\"b.b\">" +
 "<y:child/>" +
 "<y:A000 x:a=\"Toto je zprava\" y:b=\"This is message\"/>"+
 "</x:root>");
-		} catch (Exception ex) {fail(ex);}
+        } catch (Exception ex) {fail(ex);}
 
-		resetTester();
-	}
+        resetTester();
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String... args) {
-		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String... args) {
+        XDTester.setFulltestMode(true);
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }

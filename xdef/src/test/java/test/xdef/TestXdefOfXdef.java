@@ -15,39 +15,39 @@ import static test.XDTester.getFulltestMode;
  */
 public final class TestXdefOfXdef extends XDTester {
 
-	private final XDPool _xp;
+    private final XDPool _xp;
 
-	public TestXdefOfXdef() {
-		super();
-		setChkSyntax(false); // here it MUST be false!
-		_xp = compile("classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-	}
+    public TestXdefOfXdef() {
+        super();
+        setChkSyntax(false); // here it MUST be false!
+        _xp = compile("classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
+    }
 
-	private ArrayReporter parse(final String xml) {
-		ArrayReporter reporter = new ArrayReporter();
-		_xp.createXDDocument().xparse(xml, reporter);
-		return reporter;
-	}
+    private ArrayReporter parse(final String xml) {
+        ArrayReporter reporter = new ArrayReporter();
+        _xp.createXDDocument().xparse(xml, reporter);
+        return reporter;
+    }
 
-	private static String genCollection(final String... sources) {
-		try {
-			Element el = XDGenCollection.genCollection(sources,
-				true, //resolvemacros
-				false, // do not removeActions
-				false);
-			return KXmlUtils.nodeToString(el, true);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    private static String genCollection(final String... sources) {
+        try {
+            Element el = XDGenCollection.genCollection(sources,
+                true, //resolvemacros
+                false, // do not removeActions
+                false);
+            return KXmlUtils.nodeToString(el, true);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** Run test and print error information. */
-	@Override
-	public void test() {
-		String xml;
-		final String dataDir = getDataDir() + "test/";
-		try { //check xdefinition of xdefinitions
-			xml = genCollection(new String[] {
+    /** Run test and print error information. */
+    @Override
+    public void test() {
+        String xml;
+        final String dataDir = getDataDir() + "test/";
+        try { //check xdefinition of xdefinitions
+            xml = genCollection(new String[] {
 "<xd:declaration xmlns:xd='"+_xdNS+"'>\n" +
 "  <xd:macro name='a'>'aaa'</xd:macro>\n"+
 "  String s = ${a};\n"+
@@ -55,26 +55,26 @@ public final class TestXdefOfXdef extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script=\"finally outln(${a})\"/>\n"+
 "</xd:def>"});
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			String xdns = KXmlUtils.parseXml(dataDir + "TestInclude_1.xdef")
-				.getDocumentElement().getNamespaceURI();
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            String xdns = KXmlUtils.parseXml(dataDir + "TestInclude_1.xdef")
+                .getDocumentElement().getNamespaceURI();
+            xml = genCollection(
 "<xd:def xmlns:xd='" + xdns + "' name = 'a' root = 'foo'"+
 "        xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
 "  </foo>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"A\">\n" +
 "  <A b='onStartElement out(@b)'/>\n" +
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a xd:script = \"\n" +
 "       var { int i = 1;\n" +
@@ -98,23 +98,23 @@ public final class TestXdefOfXdef extends XDTester {
 "    <f a4 = \"required id1.t.IDREF()\" a5 = \"optional id3.t.IDREF()\"/>\n" +
 "  </a>\n" +
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' root = \"#A\">\n"+
 "  <A><B xd:script='occurs 2 /*intentionaly no parse method*/'/></A>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
 "    uniqueSet id2 string\n"+
 "  </xd:declaration>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
 "  <xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
 "    boolean x() {\n"+
@@ -128,22 +128,22 @@ public final class TestXdefOfXdef extends XDTester {
 "  </xd:declaration>\n"+
 "  <a b=\"optional x(); default 'abc'; finally outln();\"/>\n" +
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml =
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml =
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration> String t = ((String)1.5).substring(1);</xd:declaration>\n"+
 "  <a xd:script=\"*; create getElementName()=='B' ? null : null;\"/>\n"+
 "</xd:def>";
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n"+
 "  <a xd:script=\"match @x=='';options acceptEmptyAttributes\" x=''/>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def root='a'><a a='myType'/></xd:def>\n"+
 "<xd:def xd:name='a'>\n"+
@@ -159,10 +159,10 @@ public final class TestXdefOfXdef extends XDTester {
 "  </xd:BNFGrammar>\n"+
 "</xd:def>\n"+
 "</xd:collection>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
 
-			xml = genCollection(new String[] {
+            xml = genCollection(new String[] {
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='myType'/></xd:def>",
 "<xd:BNFGrammar xmlns:xd='"+_xdNS+"' name='base'>\n"+
 "    integer  ::= [0-9]+\n"+
@@ -176,16 +176,16 @@ public final class TestXdefOfXdef extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name='a'>\n"+
 "  <xd:declaration>type myType r.parse('intList');</xd:declaration>\n"+
 "</xd:def>"});
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
 
-			xml = genCollection(
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' name='XDDecl'>  \n"+
 "  <xd:BNFGrammar name=\"xscript\"><![CDATA[L::='a'/*E*/]]></xd:BNFGrammar>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean a.b.a(int);\n"+
@@ -193,49 +193,49 @@ public final class TestXdefOfXdef extends XDTester {
 "  </xd:declaration>\n"+
 "  <A a='required an();'/>\n"+
 "</xd:def>");
-			assertNoErrorwarnings(parse(xml), xml);
-			assertNoErrorwarnings(parse(xml), genCollection(xml));
-			if (getFulltestMode()) {xml = genCollection(
+            assertNoErrorwarnings(parse(xml), xml);
+            assertNoErrorwarnings(parse(xml), genCollection(xml));
+            if (getFulltestMode()) {xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' root ='a'>\n"+
 "  <a a=\"fixed {return 'abc';}\" />\n"+
 "</xd:def>");
-				assertNoErrorwarnings(parse(xml), xml);
-				assertNoErrorwarnings(parse(xml), genCollection(xml));
-				xml = genCollection(
+                assertNoErrorwarnings(parse(xml), xml);
+                assertNoErrorwarnings(parse(xml), genCollection(xml));
+                xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.TestTypes.kp(XXNode, XDValue[]);"+
 "  </xd:declaration>\n"+
 "  <a a='kp(1,5,%totalDigits=1,%enumeration=1,%pattern=\"\\\\d\")'/>\n"+
 "</xd:def>");
-				assertNoErrorwarnings(parse(xml), xml);
-				assertNoErrorwarnings(parse(xml), genCollection(xml));
-				xml = genCollection(
+                assertNoErrorwarnings(parse(xml), xml);
+                assertNoErrorwarnings(parse(xml), genCollection(xml));
+                xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a | b | m/n | m/o | x'>\n"+
 "   <xd:any xd:name='x' b='int()' />\n"+
 "   <xd:mixed xd:name='m'> <n/> <o/> </xd:mixed>\n"+
 "   <a> <xd:mixed xd:script='ref m' /> </a>\n"+
 "   <b><xd:any xd:script='ref x' b='int()' /></b>\n"+
 "</xd:def>");
-				assertNoErrorwarnings(parse(xml), genCollection(xml));
-			}
-		} catch (Exception ex) {fail(ex);}
-		try {
-			 compile(
+                assertNoErrorwarnings(parse(xml), genCollection(xml));
+            }
+        } catch (Exception ex) {fail(ex);}
+        try {
+             compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:declaration> String x() {return 'a'}; </xd:declaration>\n" +
 "  <A a=\"? string(); onTrue{ x().equals('a'); }\"/>\n" +
 "</xd:def>");
-		} catch (Exception ex) {fail(ex);}
+        } catch (Exception ex) {fail(ex);}
 
-		resetTester();
-	}
+        resetTester();
+    }
 
-	/** Run test
-	 * @param args the command line arguments
-	 */
-	public static void main(String[] args) {
-		XDTester.setFulltestMode(true);
-		if (runTest() != 0) {System.exit(1);}
-	}
+    /** Run test
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        XDTester.setFulltestMode(true);
+        if (runTest() != 0) {System.exit(1);}
+    }
 }

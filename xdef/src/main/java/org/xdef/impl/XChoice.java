@@ -5,6 +5,6 @@ package org.xdef.impl;
  */
 public final class XChoice extends XSelector {
 
-	/** Creates a new instance of DefSelector as the item of XElement body. */
-	public XChoice() {super(XMCHOICE);}
+    /** Creates a new instance of DefSelector as the item of XElement body. */
+    public XChoice() {super(XMCHOICE);}
 }

@@ -30,7 +30,7 @@ check () {
     set -x
     #git: fetch-prune, pull-fastforward-only
     git fetch --prune --prune-tags --force
-    git pull --ff-only || echo "ERROR: git-pull-fastforward-only failed" >&2
+    git pull --ff-only || { set +x; echo "ERROR: git-pull-fastforward-only failed" >&2; set -x; }
     set +x
 
     #push unpushed this branch commits that are ahead of the remote ref-branch

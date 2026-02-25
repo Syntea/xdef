@@ -9,27 +9,27 @@ import org.w3c.dom.Element;
 /** Read data from database, another example. */
 public class ExampleDBRead1 {
 
-	public static void main(String[] args) {
-		//Generate XDPool
-		String xdef = "./src/ExampleDBRead1.xdef";
-		Properties props = System.getProperties();
-		XDPool xp = XDFactory.compileXD(props, xdef);
+    public static void main(String[] args) {
+        //Generate XDPool
+        String xdef = "./src/ExampleDBRead1.xdef";
+        Properties props = System.getProperties();
+        XDPool xp = XDFactory.compileXD(props, xdef);
 
-		// Create XDDocument
-		XDDocument xd = xp.createXDDocument();
-		// Create database connection
-		String url = GenDerby.DB_URL;
-		String user = "myself";
-		String password = "blabla";
-		XDService service = XDFactory.createSQLService(url, user, password);
+        // Create XDDocument
+        XDDocument xd = xp.createXDDocument();
+        // Create database connection
+        String url = GenDerby.DB_URL;
+        String user = "myself";
+        String password = "blabla";
+        XDService service = XDFactory.createSQLService(url, user, password);
 
-		// Set external variable with database connection to XDDocument
-		xd.setVariable("service", service);
+        // Set external variable with database connection to XDDocument
+        xd.setVariable("service", service);
 
-		// Construct element with books
-		Element el = xd.xcreate("Inventory", null); //execute construction
-		// Print created element
-		System.out.println(KXmlUtils.nodeToString(el, true));
-	}
+        // Construct element with books
+        Element el = xd.xcreate("Inventory", null); //execute construction
+        // Print created element
+        System.out.println(KXmlUtils.nodeToString(el, true));
+    }
 
 }

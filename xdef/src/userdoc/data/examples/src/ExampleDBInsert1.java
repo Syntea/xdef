@@ -8,44 +8,44 @@ import java.util.Properties;
 /** Insert books to database (declared procedures). */
 public class ExampleDBInsert1 {
 
-	public static void main(String[] args) {
-		// Generate XDPool
-		String xdef = "./src/ExampleDBInsert.xdef";
-		Properties props = System.getProperties();
-		XDPool xp = XDFactory.compileXD(props, xdef);
+    public static void main(String[] args) {
+        // Generate XDPool
+        String xdef = "./src/ExampleDBInsert.xdef";
+        Properties props = System.getProperties();
+        XDPool xp = XDFactory.compileXD(props, xdef);
 
-		// Create XDDocument
-		XDDocument xd = xp.createXDDocument();
+        // Create XDDocument
+        XDDocument xd = xp.createXDDocument();
 
-		// Create database connection
-		String url = GenDerby.DB_URL;
-		String user = "myself";
-		String password = "blabla";
-		XDService service = XDFactory.createSQLService(url, user, password);
+        // Create database connection
+        String url = GenDerby.DB_URL;
+        String user = "myself";
+        String password = "blabla";
+        XDService service = XDFactory.createSQLService(url, user, password);
 
-		// Set external variable with database connection to XDDocument
-		xd.setVariable("service", service);
+        // Set external variable with database connection to XDDocument
+        xd.setVariable("service", service);
 
-		// Execute processing of XML data with XDefinition
-		String xml = "./src/ExampleDBInsert1.xml";
-		ArrayReporter reporter = new ArrayReporter(); //prepare reporter
-		xd.xparse(xml, reporter);
-		//close database connection
-		service.close();
+        // Execute processing of XML data with XDefinition
+        String xml = "./src/ExampleDBInsert1.xml";
+        ArrayReporter reporter = new ArrayReporter(); //prepare reporter
+        xd.xparse(xml, reporter);
+        //close database connection
+        service.close();
 
-		// Get nubmer of inserted books from XDDocument
-		int i = xd.getVariable("inserted").intValue();
+        // Get nubmer of inserted books from XDDocument
+        int i = xd.getVariable("inserted").intValue();
 
-		// Print number of inserted books.
-		System.out.println("Inserted " + i + " books");
-		if (reporter.errors()) {
-			reporter.printReports(System.out);
-			if (reporter.printToString().contains("already exists")) {
-				System.out.println("ExampleDBInsert1 OK");
-			} else {
-				System.err.println("Error in ExampleDBInsert1\n" + reporter.printToString());				
-			}
-		}
+        // Print number of inserted books.
+        System.out.println("Inserted " + i + " books");
+        if (reporter.errors()) {
+            reporter.printReports(System.out);
+            if (reporter.printToString().contains("already exists")) {
+                System.out.println("ExampleDBInsert1 OK");
+            } else {
+                System.err.println("Error in ExampleDBInsert1\n" + reporter.printToString());
+            }
+        }
     }
 
 }

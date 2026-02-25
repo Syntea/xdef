@@ -6,80 +6,80 @@ import java.util.Arrays;
 
 /** Represents type method */
 public class TypeMethod {
-	/** Name of method. */
-	private final String _methodName;
-	/** List of parameters of method. */
-	private final java.util.List<String> _parameters = new ArrayList<String>();
-	/** Type of value ('B' boolean, 'D' date/time), 'N' numeric,
-	 * 'U' duration, 'X' hex, base64).*/
-	private final char _valueType; /*VT1*/
+    /** Name of method. */
+    private final String _methodName;
+    /** List of parameters of method. */
+    private final java.util.List<String> _parameters = new ArrayList<String>();
+    /** Type of value ('B' boolean, 'D' date/time), 'N' numeric,
+     * 'U' duration, 'X' hex, base64).*/
+    private final char _valueType; /*VT1*/
 
-	/** Creates instance of method with given name and parameters.
-	 * @param methodName    name of method.
-	 * @param parameters    list of parameters.
-	 * @param valueType     Type of value ('B' boolean, 'D' date/time),
-	 * 'N' numeric, 'U' duration, 'X' hex, base64).
-	 */
-	public TypeMethod(String methodName,
-		char valueType,
-		String[] parameters) {
-		_methodName = methodName;
-		_valueType = valueType;
-		_parameters.addAll(Arrays.asList(parameters));
-	}
+    /** Creates instance of method with given name and parameters.
+     * @param methodName    name of method.
+     * @param parameters    list of parameters.
+     * @param valueType     Type of value ('B' boolean, 'D' date/time),
+     * 'N' numeric, 'U' duration, 'X' hex, base64).
+     */
+    public TypeMethod(String methodName,
+        char valueType,
+        String[] parameters) {
+        _methodName = methodName;
+        _valueType = valueType;
+        _parameters.addAll(Arrays.asList(parameters));
+    }
 
-	/** Gets method name.
-	 * @return  name of method.
-	 */
-	public String getMethodName() {return _methodName;}
+    /** Gets method name.
+     * @return  name of method.
+     */
+    public String getMethodName() {return _methodName;}
 
-	/** Gets method parameter at given position or null if position
-	 * is not in bounds of parameters list.
-	 * @param position  position of parameter.
-	 * @return          parameter value.
-	 */
-	public String getParameter(int position) {
-		position--;
-		return position < _parameters.size() ? _parameters.get(position ): null;
-	}
+    /** Gets method parameter at given position or null if position
+     * is not in bounds of parameters list.
+     * @param position  position of parameter.
+     * @return          parameter value.
+     */
+    public String getParameter(int position) {
+        position--;
+        return position < _parameters.size() ? _parameters.get(position ): null;
+    }
 
-	/** Sets parameter to current method at given position with given value.
-	 * @param position  position of parameter.
-	 * @param value     parameter value.
-	 */
-	public void setParameter(int position, String value) {
-		position--;
-		if (position < _parameters.size()) {
-			_parameters.set(position, value);
-			return;
-		}
-		throw new RuntimeException("Parameter error: index out of bounds: "
-			+ _methodName + "; " + position + ", value=" + value);
-	}
+    /** Sets parameter to current method at given position with given value.
+     * @param position  position of parameter.
+     * @param value     parameter value.
+     */
+    public void setParameter(int position, String value) {
+        position--;
+        if (position < _parameters.size()) {
+            _parameters.set(position, value);
+            return;
+        }
+        throw new RuntimeException("Parameter error: index out of bounds: "
+            + _methodName + "; " + position + ", value=" + value);
+    }
 
 /*VT1*/
-	/** Get type of value.
-	 * @return 'N' if parsed value is numeric or  otherwise 'A'.
-	 */
-	public char getValueType() {return _valueType;}
+    /** Get type of value.
+     * @return 'N' if parsed value is numeric or  otherwise 'A'.
+     */
+    public char getValueType() {return _valueType;}
 /*VT1*/
 
-	/** Adds parameter with given value at the end of parameters list.
-	 * @param value parameter value.
-	 */
-	public void addParameter(String value) {_parameters.add(value);}
+    /** Adds parameter with given value at the end of parameters list.
+     * @param value parameter value.
+     */
+    public void addParameter(String value) {_parameters.add(value);}
 
-	@Override
-	public String toString() {
-		String ret = _methodName + "(";
-		for (int i = 0; i < _parameters.size(); i++) {
-			String parameter = _parameters.get(i);
-			if (parameter.contains("\\")) {
-				parameter = SUtils.modifyString(parameter, "\\", "\\\\");
-			}
-			ret += (i == 0 ? "" : ", ") + parameter;
-		}
-		ret += ")";
-		return ret;
-	}
+    @Override
+    public String toString() {
+        String ret = _methodName + "(";
+        for (int i = 0; i < _parameters.size(); i++) {
+            String parameter = _parameters.get(i);
+            if (parameter.contains("\\")) {
+                parameter = SUtils.modifyString(parameter, "\\", "\\\\");
+            }
+            ret += (i == 0 ? "" : ", ") + parameter;
+        }
+        ret += ")";
+        return ret;
+    }
 }

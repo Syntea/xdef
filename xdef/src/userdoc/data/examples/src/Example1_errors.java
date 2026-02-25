@@ -7,32 +7,31 @@ import java.util.Properties;
 /** Validate XML with X-definition (print errors from input data) */
 public class Example1_errors {
 
-	public static void main(String... args) {
-		// Prepare path to X-definition and XML data.
-		String xdef = "./src/Example1.xdef";
-		String xmlData = "./src/Example1_errors.xml";
+    public static void main(String... args) {
+        // Prepare path to X-definition and XML data.
+        String xdef = "./src/Example1.xdef";
+        String xmlData = "./src/Example1_errors.xml";
 
-		// 1. Create XDPool.
-		Properties props = System.getProperties();
-		XDPool xp = XDFactory.compileXD(props, xdef);
+        // 1. Create XDPool.
+        Properties props = System.getProperties();
+        XDPool xp = XDFactory.compileXD(props, xdef);
 
-		// 2. Create XDDocument.
-		XDDocument xdoc = xp.createXDDocument();
+        // 2. Create XDDocument.
+        XDDocument xdoc = xp.createXDDocument();
 
-		// 3. Validate and process XML data.
-		//reports will be recorded to the ArrayReporter.
-		xdoc.xparse(xmlData, new ArrayReporter());//validate and process data
+        // 3. Validate and process XML data.
+        //reports will be recorded to the ArrayReporter.
+        xdoc.xparse(xmlData, new ArrayReporter());//validate and process data
 
-		// 4. test if an error was reported
-		if (xdoc.errors()) {
-			System.out.println("Detected errors:");
-			// print error messages
-			xdoc.printReports(System.out);
-			System.out.println("OK, Example1_errors printed.");
-		} else { // no errors
-			System.err.println("Errors not detected in Example1_errors");
-		}
-	}
+        // 4. test if an error was reported
+        if (xdoc.errors()) {
+            System.out.println("Detected errors:");
+            // print error messages
+            xdoc.printReports(System.out);
+            System.out.println("OK, Example1_errors printed.");
+        } else { // no errors
+            System.err.println("Errors not detected in Example1_errors");
+        }
+    }
 
 }
-

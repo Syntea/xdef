@@ -3,7 +3,7 @@
         xmlns:xd="http://www.xdef.org/xdef/4.2">
   <xd:json xd:name="model">
     { Town: { Name: "jstring();", Streets: [ { Name: "jstring();", Houses: [ {
-    Num: "jnumber();", Persons: [ { "%script:occurs 2;", FirstName: "jstring();",
+    Num: "jnumber();", Persons: [ { "%script": "occurs 2;", FirstName: "jstring();",
     LastName: "jstring();" } ] }, { Num: "jnumber();" }, { Num: "jnumber();", Persons:
     [ { FirstName: "jstring();", LastName: "jstring();" } ] } ] }, { Name: "jstring();",
     Houses: [ { Num: "jnumber();", Persons: [ { FirstName: "jstring();", LastName:

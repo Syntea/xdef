@@ -18,25 +18,25 @@ import static test.XDTester._xdNS;
  */
 public class TestX extends XDTester {
 
-	public TestX() {super();}
+    public TestX() {super();}
 
-	public static boolean x(XXData x) {return true;}
+    public static boolean x(XXData x) {return true;}
 
-	/** Run test and display error information. */
-	@Override
-	public void test() {
-		System.out.println("X-definition version: " + XDFactory.getXDVersion());
-		String json;
-		Object o;
-		Properties props = new Properties();
-		ArrayReporter reporter = new ArrayReporter();
-		XDPool xp;
-		XComponent xc;
-		XDDocument xd;
-		String xdef;
-		try {
-			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
-			xdef =
+    /** Run test and display error information. */
+    @Override
+    public void test() {
+        System.out.println("X-definition version: " + XDFactory.getXDVersion());
+        String json;
+        Object o;
+        Properties props = new Properties();
+        ArrayReporter reporter = new ArrayReporter();
+        XDPool xp;
+        XComponent xc;
+        XDDocument xd;
+        String xdef;
+        try {
+            System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+            xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
@@ -50,9 +50,9 @@ public class TestX extends XDTester {
 "]\n" +
 " </xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-			xd = xp.createXDDocument();
-			json = "[\n" +
+            xp = XDFactory.compileXD(props, xdef); // no property
+            xd = xp.createXDDocument();
+            json = "[\n" +
 "  {\n" +
 "    Name: \"A\",\n" +
 "    Genre: [\"A1\"]\n" +
@@ -66,10 +66,10 @@ public class TestX extends XDTester {
 "    Genre: \"C1\"\n" +
 "  }\n" +
 "]";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			xdef =
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "{ \"%oneOf\": [\"manager\", \"subordinates\"],\n" +
@@ -78,25 +78,25 @@ public class TestX extends XDTester {
 "}\n" +
 " </xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-			xd = xp.createXDDocument();
-			json = "{manager: \"BigBoss\"}";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			json = "{subordinates: []}";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			json = "{subordinates: [\"first\", \"second\"]}";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			json = "{}";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			xdef =
+            xp = XDFactory.compileXD(props, xdef); // no property
+            xd = xp.createXDDocument();
+            json = "{manager: \"BigBoss\"}";
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            json = "{subordinates: []}";
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            json = "{subordinates: [\"first\", \"second\"]}";
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            json = "{}";
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
@@ -106,21 +106,21 @@ public class TestX extends XDTester {
 "]\n" +
 " </xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-			xd = xp.createXDDocument();
-			json = "[\n" +
+            xp = XDFactory.compileXD(props, xdef); // no property
+            xd = xp.createXDDocument();
+            json = "[\n" +
 "  {A: [\"A1\"]},\n" +
 "  {A: [\"B1\", \"B2\"]},\n" +
 "  {A: \"C1\"}\n" +
 "]";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			json = "[]";
-			reporter.clear();
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			xdef =
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            json = "[]";
+            reporter.clear();
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "   { date : \"date()\",\n" +
@@ -135,9 +135,9 @@ public class TestX extends XDTester {
 "  }\n" +
 " </xd:json>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-			xd = xp.createXDDocument();
-			json =
+            xp = XDFactory.compileXD(props, xdef); // no property
+            xd = xp.createXDDocument();
+            json =
 "{ date : \"2020-02-22\",\n" +
 "  cities : [ \n" +
 " { from: [\"Brussels\",\n" +
@@ -150,34 +150,34 @@ public class TestX extends XDTester {
 " }\n" +
 "]\n" +
 "}";
-			xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-		} catch (RuntimeException ex) {fail(ex);}
-		try {
-			xdef =
+            xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+        } catch (RuntimeException ex) {fail(ex);}
+        try {
+            xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 "  <xd:json name='a'>\n"+
 "    { \"A\": \"string()\", \"B\": \"string()\" }\n" +
 "  </xd:json>\n"+
 "  <xd:component> %class " +_package+ ".TestX_X %link X#a; </xd:component>\n" +
 "</xd:def>";
-			genXComponent(xp = XDFactory.compileXD(props, xdef)); // no property
-			xd = xp.createXDDocument("X");
-			json = "{ \"A\": \"a\", \"B\": \"b\" }";
-			reporter.clear();
-			o = xd.jparse(json, reporter);
-			assertNoErrorwarnings(reporter);
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-		} catch (RuntimeException ex) {fail(ex);}
-	}
+            genXComponent(xp = XDFactory.compileXD(props, xdef)); // no property
+            xd = xp.createXDDocument("X");
+            json = "{ \"A\": \"a\", \"B\": \"b\" }";
+            reporter.clear();
+            o = xd.jparse(json, reporter);
+            assertNoErrorwarnings(reporter);
+            xc = xd.jparseXComponent(json, null, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+        } catch (RuntimeException ex) {fail(ex);}
+    }
 
-	/** Run test.
-	 * @param args not used.
-	 */
-	public static void main(String[] args) {
-		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
-	}
+    /** Run test.
+     * @param args not used.
+     */
+    public static void main(String[] args) {
+        XDTester.setFulltestMode(true);
+        if (runTest(args) > 0) {System.exit(1);}
+    }
 }

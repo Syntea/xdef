@@ -3,7 +3,7 @@
 // Any modifications to this file will be lost upon recompilation.
 package task6.components2;
 @SuppressWarnings("unchecked")
-public class Tenants implements org.xdef.component.XComponent{
+public class Tenants implements org.xdef.component.XComponent {
   public java.util.List<Tenants.Resident> listOfResident() {
     return _Resident;
   }
@@ -111,15 +111,15 @@ public class Tenants implements org.xdef.component.XComponent{
   public void xSetAny(org.w3c.dom.Element el) {}
 // </editor-fold>
 @SuppressWarnings("unchecked")
-public static class Resident implements org.xdef.component.XComponent{
+public static class Resident implements org.xdef.component.XComponent {
   public String getFirstName() {return _FirstName;}
   public String getLastName() {return _LastName;}
   public String getAddress() {return _Address;}
   public void setFirstName(String x) {_FirstName=x;}
   public void setLastName(String x) {_LastName=x;}
   public void setAddress(String x) {_Address=x;}
-  public String xposOfFirstName(){return XD_XPos+"/@FirstName";}
-  public String xposOfLastName(){return XD_XPos+"/@LastName";}
+  public String xposOfFirstName(){return XD_XPos+"/@GivenName";}
+  public String xposOfLastName(){return XD_XPos+"/@FamilyName";}
   public String xposOfAddress(){return XD_XPos+"/@Address";}
 //<editor-fold defaultstate="collapsed" desc="Implementation of XComponent interface">
   private String XD_Name_FirstName="GivenName";
