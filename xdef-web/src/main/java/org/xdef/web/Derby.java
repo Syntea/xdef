@@ -1,4 +1,4 @@
-package tutorial;
+package org.xdef.web;
 
 import static org.xdef.sys.SUtils.modifyFirst;
 

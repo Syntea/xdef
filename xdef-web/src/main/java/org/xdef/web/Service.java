@@ -1,4 +1,4 @@
-package tutorial;
+package org.xdef.web;
 
 import java.io.File;
 import java.io.IOException;

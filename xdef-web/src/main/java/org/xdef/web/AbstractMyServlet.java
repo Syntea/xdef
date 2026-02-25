@@ -1,4 +1,4 @@
-package tutorial;
+package org.xdef.web;
 
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;

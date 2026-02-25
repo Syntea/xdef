@@ -12,11 +12,11 @@
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>xdef-tutorialweb</artifactId>
+    <artifactId>xdef-web</artifactId>
     <packaging>war</packaging>
 
-    <name>xdef-tutorialweb</name>
-    <description>tutorial web</description>
+    <name>xdef-web</name>
+    <description>web - info, tutorial, playground etc.</description>
     <url>http://www.xdef.org</url>
     <scm>
         <url>https://github.com/Syntea/xdef</url>
@@ -56,7 +56,7 @@
     </dependencies>
 
     <build>
-        <finalName>tutorial</finalName>
+        <finalName>xdef-web</finalName>
     </build>
 
 </project>

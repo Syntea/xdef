@@ -1,4 +1,4 @@
-package tutorial;
+package org.xdef.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;

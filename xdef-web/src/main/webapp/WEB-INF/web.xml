@@ -12,23 +12,23 @@
 
     <servlet>
         <servlet-name>Examples</servlet-name>
-        <servlet-class>tutorial.Examples</servlet-class>
+        <servlet-class>org.xdef.web.Examples</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GenXdef</servlet-name>
-        <servlet-class>tutorial.GenXdef</servlet-class>
+        <servlet-class>org.xdef.web.GenXdef</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GenSchema</servlet-name>
-        <servlet-class>tutorial.GenSchema</servlet-class>
+        <servlet-class>org.xdef.web.GenSchema</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Derby</servlet-name>
-        <servlet-class>tutorial.Derby</servlet-class>
+        <servlet-class>org.xdef.web.Derby</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Service</servlet-name>
-        <servlet-class>tutorial.Service</servlet-class>
+        <servlet-class>org.xdef.web.Service</servlet-class>
     </servlet>
 
     <servlet-mapping>
