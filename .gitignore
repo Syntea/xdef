@@ -12,6 +12,8 @@ target/
 nbproject/
 local/
 temp/
+/xdef/src/userdoc/data/examples/task*/output/
+/xdef/src/userdoc/data/examples/task*/errors/
 nbactions.xml
 .classpath
 .project

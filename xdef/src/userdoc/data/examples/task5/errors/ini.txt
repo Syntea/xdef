@@ -1,2 +1,0 @@
-E XDEF539: Required element 'map' is missing; path=$; X-position=iniExample#TRSconfig/$.['Server_x3b__x20__x25_script_x20__x3d__x20_optional']
-E XDEF507: Not allowed item "Server" in map; path=$; X-position=iniExample#TRSconfig/$
