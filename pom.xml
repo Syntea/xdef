@@ -97,8 +97,8 @@
         <!-- main module X-definition -->
         <module>xdef</module>
 
-        <!-- tutorial web -->
-        <module>xdef-tutorialweb</module>
+        <!-- web -->
+        <module>xdef-web</module>
 
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
