@@ -1,4 +1,0 @@
-%Customer=ALFA
-%ErrorCode=25
-%Line=6
-%Column=38
