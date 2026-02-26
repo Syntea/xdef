@@ -29,24 +29,24 @@ X-definition describing project.xml data:
                                      displayed and editable. */">
 
     <xd:mixed>
-<!-- "XDefinition" - items with the sources of X-definition -->
+      <!-- "XDefinition" - items with the sources of X-definition -->
       <XDefinition xd:script="+">
         string(); /* a file, url or XML with X-definition source */
       </XDefinition>
 
-<!-- "External" - items to be added to the classpath -->
+      <!-- "External" - items to be added to the classpath -->
       <External xd:script="*">
         file() || url(); /* classpath item (url or pathname) */
       </External>
 
-<!-- "Property" items are used to set properties for compiling
-  and executing the project -->
+      <!-- "Property" items are used to set properties for compiling
+        and executing the project -->
       <Property xd:script="*"
         Name="string();  /*property name*/"
         Value="string(); /*property value*/" />
 
-<!-- "Execute" items are used to specify the compiled XDPool
-  is executed according to the specified parameters -->
+      <!-- "Execute" items are used to specify the compiled XDPool
+        is executed according to the specified parameters -->
       <Execute xd:script="*;"
         XDName="? string(1, 1000); /* root X-definition name (may be
                                       missing) */"
@@ -57,42 +57,42 @@ X-definition describing project.xml data:
                                            of process is displayed */" >
 
         <xd:mixed>
-<!-- "Var" items are used to set variables to the X-definition
-  processor -->
+          <!-- "Var" items are used to set variables to the X-definition
+            processor -->
           <Var xd:script="*" Name="string(); /*name of variable*/">
             string(); /*value of variable*/
           </Var>
 
-<!-- "Context" item is used to specify a context in the construction
-  mode -->
+          <!-- "Context" item is used to specify a context in the construction
+            mode -->
           <Context xd:script="?"
             Edit="? enum('true', 'false'); /* if true the context
-                                              can be edited */" >
+                                        can be edited */" >
             string(); /* the file or XML data used as a context */
           </Context>
 
-<!-- "Input" item is used to specify the input data in the
-  validation mode -->
+          <!-- "Input" item is used to specify the input data in the
+            validation mode -->
           <Input xd:script="?"
             Edit="? enum('true', 'false'); /* true if input data can
-                                              be edited */">
+                                                be edited */">
             string(); /* file with data */
           </Input>
 
-<!-- "SaveResult" item is used to specify if the result is saved
-  to the specified file -->
+          <!-- "SaveResult" item is used to specify if the result is saved
+            to the specified file -->
           <SaveResult xd:script="?"
             Indent="? enum('true', 'false'); /* if true the result is
-                                                indented */"
+                                          indented */"
             Encoding="? string(); /* name of char encoding */"
             File="string(); /* where to store result of process */" />
         </xd:mixed>
       </Execute>
-<!-- \"WorkDir\" item is used to specify the directory where are
-  stored the temporary files. If it is not specified a working
-  directory is created and deleted on exit of GUI editor. -->
+      <!-- \"WorkDir\" item is used to specify the directory where are
+        stored the temporary files. If it is not specified a working
+        directory is created and deleted on exit of GUI editor. -->
       <WorkDir xd:script=\"?;\">
-          file(); /* Directory where to store temporary data. */
+        file(); /* Directory where to store temporary data. */
       </WorkDir>
     </xd:mixed>
   </Project>

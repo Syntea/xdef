@@ -217,7 +217,7 @@ Links:
 
 List of file assets:
   * _xdef-{version}.jar_            - the java-library X-definition
-  * _xdef-{version}-userdoc-en.zip_ - complete user documentation and tutorial examples
+  * _xdef-{version}-userdoc.zip_    - complete user documentation and tutorial examples
   * _xdef-{version}-javadoc.jar_    - html-documentation of java source code generated from the java source code
   * _xdef-{version}-sources.jar_    - origin java source code
   * _xdef-{version}-src.zip_        - java source code insertable directly into your source code,
