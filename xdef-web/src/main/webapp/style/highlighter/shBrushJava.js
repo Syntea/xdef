@@ -22,5 +22,5 @@ dp.sh.Brushes.Java = function()
     this.CssClass = 'dp-j';
 }
 
-dp.sh.Brushes.Java.prototype    = new dp.sh.Highlighter();
-dp.sh.Brushes.Java.Aliases      = ['java'];
+dp.sh.Brushes.Java.prototype = new dp.sh.Highlighter();
+dp.sh.Brushes.Java.Aliases   = ['java'];
