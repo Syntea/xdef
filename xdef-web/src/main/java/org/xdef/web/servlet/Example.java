@@ -39,7 +39,7 @@ import org.yaml.snakeyaml.Yaml;
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
-public final class Examples extends AbstractMyServlet {
+public final class Example extends AbstractMyServlet {
 	private static final long serialVersionUID = 2277695929503402350L;
     private static final String HTML_RESULT =
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n" +

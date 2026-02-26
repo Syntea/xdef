@@ -53,8 +53,8 @@ public final class GenXdef extends AbstractMyServlet {
 "    <title>Validate data witn created X-definition</title>\n" +
 "  </head>\n" +
 "  <body style='background: #EAFFFD'>\n" +
-//"    <form method='post' action='/tutorial/Examples' target=\"_blank\">\n" +
-"    <form method='post' action='/tutorial/Examples'>\n" +
+//"    <form method='post' action='/tutorial/Example' target=\"_blank\">\n" +
+"    <form method='post' action='/tutorial/Example'>\n" +
 "      <b>Created X-definition</b>\n" +
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +

@@ -12,7 +12,7 @@
 
     <servlet>
         <servlet-name>Examples</servlet-name>
-        <servlet-class>org.xdef.web.servlet.Examples</servlet-class>
+        <servlet-class>org.xdef.web.servlet.Example</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GenXdef</servlet-name>
