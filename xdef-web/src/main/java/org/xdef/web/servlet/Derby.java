@@ -1,4 +1,4 @@
-package org.xdef.web;
+package org.xdef.web.servlet;
 
 import static org.xdef.sys.SUtils.modifyFirst;
 
