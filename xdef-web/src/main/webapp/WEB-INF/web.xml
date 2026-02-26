@@ -11,7 +11,7 @@
     </context-param>
 
     <servlet>
-        <servlet-name>Examples</servlet-name>
+        <servlet-name>Example</servlet-name>
         <servlet-class>org.xdef.web.servlet.Example</servlet-class>
     </servlet>
     <servlet>
@@ -32,8 +32,8 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Examples</servlet-name>
-        <url-pattern>/Examples</url-pattern>
+        <servlet-name>Example</servlet-name>
+        <url-pattern>/Example</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GenXdef</servlet-name>
