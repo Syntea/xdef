@@ -11,10 +11,7 @@ then
     echo "."
     exit 1
 fi
+
 echo "Execute project: ${project}"
-if [ -z "$2" ]
-  then
-    java -cp "../xdef-${version}.jar" org.xdef.util.GUIEditor -p projects/${project}/project.xml
-  else 
-    java -cp "../xdef-${version}.jar:$2" org.xdef.util.GUIEditor -p projects/${project}/project.xml
-fi
+
+java -cp "../xdef-${version}.jar:$2" org.xdef.util.GUIEditor -p projects/${project}/project.xml

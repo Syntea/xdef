@@ -36,6 +36,4 @@ else
     java ${cp} ${exName}
 fi
 
-if [ -e derby.log ]; then
-    rm derby.log
-fi
+rm -f derby.log
