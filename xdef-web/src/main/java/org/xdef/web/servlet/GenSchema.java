@@ -31,42 +31,42 @@ import org.xml.sax.SAXException;
  */
 public final class GenSchema extends AbstractMyServlet {
 
-	private static final long serialVersionUID = -7389516366202036753L;
+    private static final long serialVersionUID = -7389516366202036753L;
 
     /** Generate X-definition and run validation of given object with created X-definition.
-	 * @param req servlet request object.
-	 * @param resp servlet response object.
-	 * @throws IOException if an error occurs.
-	 */
-	@Override
-	public void procReq(final HttpServletRequest req, final HttpServletResponse resp)
-		throws ServletException,IOException{
-		req.setCharacterEncoding("UTF-8");
-		resp.setContentType("text/html;charset=UTF-8");
-		resp.setCharacterEncoding("UTF-8");
-		// This part we must synchronize to keep language settings for whole process of the X-definition.
-		synchronized(MANAGER) {
-			Report.setLanguage("eng");
-			String view = getParam(req, "view");
-			String xdName = getParam(req, "xdName");
-			String xdef = getParam(req, "xdef");
-			String data = getParam(req, "data");
-			String schemaResult = getParam(req, "schemaResult");
-			String schema = getParam(req, "schema");
-			PrintWriter out = resp.getWriter();
-			try {
-				if ("toSchema".equals(schema)) {
-					XDPool xp = XDFactory.compileXD(null, xdef);
-					Map<String, Element> map = XdefToXsd.genSchema(xp, null, null, null, null, true, true);
-					String xd = "";
-					for (Entry<String, Element> x : map.entrySet()) {
-						if (map.entrySet().size() > 1) {
-							xd += "==========  Name: " + x.getKey() + "  ==========\n";
-						}
-						xd += KXmlUtils.nodeToString(x.getValue(), true, true, true, 110);
-					}
-					if ("Generate XML schema".equals(view)) {
-						out.print(
+     * @param req servlet request object.
+     * @param resp servlet response object.
+     * @throws IOException if an error occurs.
+     */
+    @Override
+    public void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+        throws ServletException,IOException{
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html;charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        // This part we must synchronize to keep language settings for whole process of the X-definition.
+        synchronized(MANAGER) {
+            Report.setLanguage("eng");
+            String view = getParam(req, "view");
+            String xdName = getParam(req, "xdName");
+            String xdef = getParam(req, "xdef");
+            String data = getParam(req, "data");
+            String schemaResult = getParam(req, "schemaResult");
+            String schema = getParam(req, "schema");
+            PrintWriter out = resp.getWriter();
+            try {
+                if ("toSchema".equals(schema)) {
+                    XDPool xp = XDFactory.compileXD(null, xdef);
+                    Map<String, Element> map = XdefToXsd.genSchema(xp, null, null, null, null, true, true);
+                    String xd = "";
+                    for (Entry<String, Element> x : map.entrySet()) {
+                        if (map.entrySet().size() > 1) {
+                            xd += "==========  Name: " + x.getKey() + "  ==========\n";
+                        }
+                        xd += KXmlUtils.nodeToString(x.getValue(), true, true, true, 110);
+                    }
+                    if ("Generate XML schema".equals(view)) {
+                        out.print(
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "  <head>\n"+
 "    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n"+
@@ -82,14 +82,14 @@ public final class GenSchema extends AbstractMyServlet {
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
 "        <textarea id='textarea' style='width: 100%;' name='schemaResult'>\n" +
-					stringToHTml(xd, true) + "\n" +
+                    stringToHTml(xd, true) + "\n" +
 "</textarea>\n" +
 "      </div>\n"+
 "      <b>XML data</b>\n" +
 "      <div class=\"container\">\n" +
 "        <div id=\"line-numbers_1\" class=\"container_1\"></div>\n" +
 "        <textarea id=\"textarea_1\" style=\"width: 100%;\" name=\"data\">\n" +
-				stringToHTml(data, true) + "\n" +
+                stringToHTml(data, true) + "\n" +
 "</textarea>\n" +
 "      </div>\n" +
 "      <input type='hidden' name='schema' value='checkSchema' />\n" +
@@ -98,57 +98,57 @@ public final class GenSchema extends AbstractMyServlet {
 "    </form>\n" +
 "  </body>\n" +
 "</html>");
-					} else if ("Check XML data with X-definition".equals(view)){
-						try {
-							XDDocument xdoc;
-							if (xdName.isEmpty()) {
-								try {
-									xdoc = xp.createXDDocument();
-								} catch (RuntimeException ex) {
-									xdoc = xp.createXDDocument("Example");
-								}
-							} else {
-								xdoc = xp.createXDDocument(xdName);
-							}
-							xdoc.xparse(data.trim(), null);
-							out.print("<html><body><h1>OK</h1></body></html>");
-						} catch (RuntimeException ex) {
-							out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
-								+ stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
-						}
-					} else {
-						out.print("<html><body><h1>Exception</h1>"
-							+ "<b>Error:UNKNOWN COMMAND</b></body></html>");
-					}
-				} else {
-					Validator validator;
-					try {// create validator
-						SchemaFactory sFactory= SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-						Source schemaSource = new StreamSource(new StringReader(schemaResult));
-						Schema nschema =  sFactory.newSchema(schemaSource);
-						validator = nschema.newValidator();
-					} catch (SAXException ex) {
-						out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
-							+ stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
-						return;
-					}
-					try {//check by XML schema
-						validator.validate(new StreamSource(new StringReader(data)));
-						out.print("<html><body><h1>OK</h1></body></html>");
-					} catch (IOException | SAXException ex) {
-						out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
-							+ stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
-					}
-				}
-			} catch (RuntimeException ex) {
-				out.print("<html><body><h1>Exception</h1><pre><tt><b>"
-					+ stringToHTml(STester.printThrowable(ex),true) + "</b></tt></pre></body></html>");
-			}
-		}
-	}
+                    } else if ("Check XML data with X-definition".equals(view)){
+                        try {
+                            XDDocument xdoc;
+                            if (xdName.isEmpty()) {
+                                try {
+                                    xdoc = xp.createXDDocument();
+                                } catch (RuntimeException ex) {
+                                    xdoc = xp.createXDDocument("Example");
+                                }
+                            } else {
+                                xdoc = xp.createXDDocument(xdName);
+                            }
+                            xdoc.xparse(data.trim(), null);
+                            out.print("<html><body><h1>OK</h1></body></html>");
+                        } catch (RuntimeException ex) {
+                            out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
+                                + stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
+                        }
+                    } else {
+                        out.print("<html><body><h1>Exception</h1>"
+                            + "<b>Error:UNKNOWN COMMAND</b></body></html>");
+                    }
+                } else {
+                    Validator validator;
+                    try {// create validator
+                        SchemaFactory sFactory= SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                        Source schemaSource = new StreamSource(new StringReader(schemaResult));
+                        Schema nschema =  sFactory.newSchema(schemaSource);
+                        validator = nschema.newValidator();
+                    } catch (SAXException ex) {
+                        out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
+                            + stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
+                        return;
+                    }
+                    try {//check by XML schema
+                        validator.validate(new StreamSource(new StringReader(data)));
+                        out.print("<html><body><h1>OK</h1></body></html>");
+                    } catch (IOException | SAXException ex) {
+                        out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
+                            + stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
+                    }
+                }
+            } catch (RuntimeException ex) {
+                out.print("<html><body><h1>Exception</h1><pre><tt><b>"
+                    + stringToHTml(STester.printThrowable(ex),true) + "</b></tt></pre></body></html>");
+            }
+        }
+    }
 
-	/** Returns a short description of this servlet.
-	 * @return short description of this servlet.	 */
-	@Override
-	public final String getServletInfo() {return "This servlet creates an X-definition from given XML";}
+    /** Returns a short description of this servlet.
+     * @return short description of this servlet.     */
+    @Override
+    public final String getServletInfo() {return "This servlet creates an X-definition from given XML";}
 }

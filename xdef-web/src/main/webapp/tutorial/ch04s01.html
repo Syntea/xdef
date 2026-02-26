@@ -24,7 +24,7 @@
       written in place of the corresponding data value. The X-script for maps
       and arrays is written as the value of "%script".<br/>
       JSON data:
-	  <font size="1">
+      <font size="1">
 <pre>{ "cities" : [
     { "from": ["Brussels",
         {"to": "London", "distance": 322},
@@ -38,7 +38,7 @@
     }
   ]
 }</pre></font>
-	  The X-definition will be:
+      The X-definition will be:
 <pre class="xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies" >
   &lt;xd:json name="test">
     { "cities"  : [
@@ -47,7 +47,7 @@
             { %script = "occurs 1..*;",
               "to": "jstring();",  "distance": "int();"
             }
-    	  ]
+          ]
         }
       ]
     }

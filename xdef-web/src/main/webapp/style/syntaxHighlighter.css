@@ -2,129 +2,129 @@
 
 .dp-highlighter
 {
-	font-family: "Courier New" , Courier, mono;
-	font-size: 12px;
-	border: 1px solid #2B91AF;
-	background-color: #fff;
-	width: 97%;
-	overflow: auto;
-	margin: 18px 0px 18px 0px;
+    font-family: "Courier New" , Courier, mono;
+    font-size: 12px;
+    border: 1px solid #2B91AF;
+    background-color: #fff;
+    width: 97%;
+    overflow: auto;
+    margin: 18px 0px 18px 0px;
 }
 
 .dp-highlighter .bar
 {
-	padding-left: 45px;
+    padding-left: 45px;
 }
 
 .dp-highlighter.collapsed .bar, .dp-highlighter.nogutter .bar
 {
-	padding-left: 0px;
+    padding-left: 0px;
 }
 
 .dp-highlighter ol
 {
-	margin: 0px 0px 1px 45px; /* 1px bottom margin seems to fix occasional Firefox scrolling */
-	padding: 0px;
-	color: #2B91AF;
+    margin: 0px 0px 1px 45px; /* 1px bottom margin seems to fix occasional Firefox scrolling */
+    padding: 0px;
+    color: #2B91AF;
 }
 
 .dp-highlighter.nogutter ol
 {
-	list-style-type: none;
-	margin-left: 0px;
+    list-style-type: none;
+    margin-left: 0px;
 }
 
 .dp-highlighter ol li, .dp-highlighter .columns div
 {
-	border-left: 3px solid #6CE26C;
-	background-color: #fff;
-	padding-left: 10px;
-	line-height: 14px;
+    border-left: 3px solid #6CE26C;
+    background-color: #fff;
+    padding-left: 10px;
+    line-height: 14px;
 }
 
 .dp-highlighter.nogutter ol li, .dp-highlighter.nogutter .columns div
 {
-	border: 0;
+    border: 0;
 }
 
 .dp-highlighter .columns
 {
-	color: gray;
-	overflow: hidden;
-	width: 100%;
+    color: gray;
+    overflow: hidden;
+    width: 100%;
 }
 
 .dp-highlighter .columns div
 {
-	padding-bottom: 5px;
+    padding-bottom: 5px;
 }
 
 .dp-highlighter ol li.alt
 {
-	background-color: #f8f8f8;
+    background-color: #f8f8f8;
 }
 
 .dp-highlighter ol li span
 {
-	color: Black;
+    color: Black;
 }
 
 /* Adjust some properties when collapsed */
 
 .dp-highlighter.collapsed ol
 {
-	margin: 0px;
+    margin: 0px;
 }
 
 .dp-highlighter.collapsed ol li
 {
-	display: none;
+    display: none;
 }
 
 /* Additional modifications when in print-view */
 
 .dp-highlighter.printing 
 {
-	border: none;
+    border: none;
 }
 
 .dp-highlighter.printing .tools
 {
-	display: none !important;
+    display: none !important;
 }
 
 .dp-highlighter.printing li
 {
-	display: list-item !important;
+    display: list-item !important;
 }
 
 /* Styles for the tools */
 
 .dp-highlighter .tools
 {
-	padding: 3px 8px 3px 10px;
-	border-bottom: 1px solid #2B91AF;
-	font: 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
-	color: silver;
+    padding: 3px 8px 3px 10px;
+    border-bottom: 1px solid #2B91AF;
+    font: 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
+    color: silver;
 }
 
 .dp-highlighter.collapsed .tools
 {
-	border-bottom: 0;
+    border-bottom: 0;
 }
 
 .dp-highlighter .tools a
 {
-	font-size: 9px;
-	color: gray;
-	text-decoration: none;
-	margin-right: 10px;
+    font-size: 9px;
+    color: gray;
+    text-decoration: none;
+    margin-right: 10px;
 }
 
 .dp-highlighter .tools a:hover
 {
-	color: red;
-	text-decoration: underline;
+    color: red;
+    text-decoration: underline;
 }
 
 /* About dialog styles */

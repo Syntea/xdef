@@ -21,14 +21,14 @@
       <p>
         &nbsp;&nbsp;&nbsp;
         Now we will show how to specify child nodes of an element and how to write the X-script of XML element
-		models. The X-script of an XML element model must be written in the special attribute "xd:script"
-		(the prefix "xd" must match the namespace of the X-definition).<br/>
-		&nbsp;&nbsp;&nbsp;
+        models. The X-script of an XML element model must be written in the special attribute "xd:script"
+        (the prefix "xd" must match the namespace of the X-definition).<br/>
+        &nbsp;&nbsp;&nbsp;
         In the example below, we have added child elements "Title" and "Author". Both child elements contain
-		a mandatory text node. The X-script of the XML text node is written as the value of the text node
-		(similar to attributes). Consider that there are books with one author, multiple authors or even no
-		author. Therefore, the quantifier of the "Author" element is specified as "occurs *" (i.e., no or
-		multiple occurrences). However, the child element "Title" must be just one (i.e., it is mandatory): 
+        a mandatory text node. The X-script of the XML text node is written as the value of the text node
+        (similar to attributes). Consider that there are books with one author, multiple authors or even no
+        author. Therefore, the quantifier of the "Author" element is specified as "occurs *" (i.e., no or
+        multiple occurrences). However, the child element "Title" must be just one (i.e., it is mandatory): 
       </p>
 <pre class="xml">
 &lt;Book ISBN="required int(10000000, 999999999);"

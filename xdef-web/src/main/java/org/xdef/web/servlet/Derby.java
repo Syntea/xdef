@@ -39,14 +39,14 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 public final class Derby extends AbstractMyServlet {
-	private static final long serialVersionUID = -6985097379384362122L;
+    private static final long serialVersionUID = -6985097379384362122L;
     private final static Map<String, Long> DBMAP = new HashMap<>();
-	private final static String DBPASSW = "blabla"; // password for database.
-	private final static String DBUSER = "myself";
+    private final static String DBPASSW = "blabla"; // password for database.
+    private final static String DBUSER = "myself";
 ////////////////////////////////////////////////////////////////////////////////
 // HTML template sources
 ////////////////////////////////////////////////////////////////////////////////
-	private static final String ADD_ITEMS =
+    private static final String ADD_ITEMS =
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "  <head>\n"+
 "    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n"+
@@ -115,7 +115,7 @@ public final class Derby extends AbstractMyServlet {
 "  </body>\n"+
 "</html>";
 
-	private static final String DISPLAY =
+    private static final String DISPLAY =
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "  <head>\n"+
 "    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n"+
@@ -167,7 +167,7 @@ public final class Derby extends AbstractMyServlet {
 "  </body>\n"+
 "</html>";
 
-	private static final String DROP =
+    private static final String DROP =
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "  <head>\n"+
 "    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n"+
@@ -218,7 +218,7 @@ public final class Derby extends AbstractMyServlet {
 "  </body>\n"+
 "</html>";
 
-	private static final String HTML_RESULT =
+    private static final String HTML_RESULT =
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n" +
 "  <head>\n" +
 "     <meta http-equiv='content-type' content='text/html; charset=UTF-8'/>\n"+
@@ -228,9 +228,9 @@ public final class Derby extends AbstractMyServlet {
 "    <div align='right'>\n" +
 "      <font size=1><i style='test-align:right'>\n" +
 "        (X-definition version: <b>" + (XDConstants.BUILD_VERSION.endsWith("-SNAPSHOT")
-					? XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME.substring(0, 16)
-					: XDConstants.BUILD_VERSION) +
-		"</b>)</i>\n" +
+                    ? XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME.substring(0, 16)
+                    : XDConstants.BUILD_VERSION) +
+        "</b>)</i>\n" +
 "      </font>\n" +
 "    </div>\n" +
 "    <p><font size=4><b>&{result-title}</b></font></p>\n" +
@@ -239,228 +239,228 @@ public final class Derby extends AbstractMyServlet {
 "</html>";
 ////////////////////////////////////////////////////////////////////////////////
 
-	private static String genDatabaseURL(final String dbname) {
-		return "jdbc:derby:memory:"+ dbname + ";create=true";
-	}
+    private static String genDatabaseURL(final String dbname) {
+        return "jdbc:derby:memory:"+ dbname + ";create=true";
+    }
 
-	/** Display error to reponse writer.
-	 * @param out reponse writer.
-	 * @param title title of message header.
-	 * @param msg message to be displayed.
-	 */
-	private void displayMsg(final PrintWriter out, final String title, final String msg) {
-		out.print(genHtmlMessage(title, "<h3>" + msg + "</h3>"));
-	}
+    /** Display error to reponse writer.
+     * @param out reponse writer.
+     * @param title title of message header.
+     * @param msg message to be displayed.
+     */
+    private void displayMsg(final PrintWriter out, final String title, final String msg) {
+        out.print(genHtmlMessage(title, "<h3>" + msg + "</h3>"));
+    }
 
-	/** Processes requests with respect to required language.
-	 * methods. The Language is set according to request parameter "submit".
-	 * @param req servlet-request object.
-	 * @param resp servlet-response object.
-	 * @throws IOException if a IO error occurs.
-	 */
-	@Override
-	public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
-		throws ServletException,IOException{
-		// This part we must synchronize to keep language settings etc
-		// for whole process of the X-definition.
-		synchronized(MANAGER) {
-			resp.setContentType("text/html;charset=UTF-8");
-			resp.setCharacterEncoding("UTF-8");
-			PrintWriter out = resp.getWriter();
-			req.setCharacterEncoding("UTF-8");
-			String database = getParam(req, "database");
-			String task = getParam(req, "task");
-			String mode = getParam(req, "mode");
-			String outHtml;
-			if (database.isEmpty()) { // new database
-				if (!task.equals("Create database")) { // incorrect task
-					displayMsg(out, "Internal error",  "Incorrect Expected task: "+ task);
-					return;
-				}
-				long time = System.currentTimeMillis();
-				for (;;) {
-					boolean wasRemoved = false;
-					for (Entry<String, Long> x : DBMAP.entrySet()) {
-						long dif = time - x.getValue();
-						if (dif < 0) {
-							dif = -dif;
-						}
-						if (dif > 24*3600*1000) { //older then 1 day
-							wasRemoved = true;
-							DBMAP.remove(x.getKey());
-						}
-						if (wasRemoved) {
-							break;
-						}
-					}
-					if (!wasRemoved) {
-						break;
-					}
-				}
-				long x = time;
-				while (DBMAP.containsKey(database="DB"+Long.toHexString(x))){
-					x++;
-				}
-				try {
-					EmbeddedDataSource dbSource = new EmbeddedDataSource();
-					dbSource.setDatabaseName("memory:"+ database);
-					dbSource.setUser(DBUSER);
-					dbSource.setPassword(DBPASSW);
-					// create a new database
-					dbSource.setCreateDatabase("create");
-					Connection con = dbSource.getConnection( DBUSER, DBPASSW);
-					con.close();
-					DBMAP.put(database, time);
-				} catch (SQLException ex) {
-					displayMsg(out,
-						"Error",
-						"Database creation error<br/>"+
-							stringToHTml(STester.printThrowable(ex),true));
-					return;
-				}
-			} else {
-				if (!DBMAP.containsKey(database)) {
-					displayMsg(out, "Error", "Database is not available (was dropped or deleted).");
-					return;
-				}
-				if (!"finished".equals(task)) {
-					switch (task) {
-						case "Add items":
-							outHtml = ADD_ITEMS;
-							break;
-						case "Display database":
-							outHtml = DISPLAY;
-							break;
-						case "Drop database":
-							outHtml = DROP;
-							break;
-						default:
-							out.print("ERROR unsuppoeted task: "+ task);
-							return;
-					}
-					out.print(modifyFirst(outHtml,"&{database}",database));
-					return;
-				}
-			}
-			Report.setLanguage("eng");
-			ArrayReporter reporter = new ArrayReporter();
-			String xdef = getParam(req, "xdef");
-			String data = getParam(req, "data");
-			String xdName = getParam(req, "xdname");
-			String result;
-			String stdOutput = "";
-			XDPool xp = null;
-			Properties props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
-				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-			try {
-				XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
-				xb.setSource(xdef);
-				xp = xb.compileXD();
-			} catch (Throwable ex) {
-				if (null == xp || !reporter.errorWarnings()) {
-					out.print("<html xmlns='http://www.w3.org/1999/xhtml'>"
-						+ "<body><h1>Exception</h1><pre><tt><b>"
-						+ stringToHTml(STester.printThrowable(ex), true)
-						+ "</b></tt></pre></body></html>");
-					return;
-				} else {
-					reporter.reset();
-				}
-			}
-			try {
-				if (reporter.errorWarnings()) {//incorrect xdef
-					Report rep = reporter.getReport();
-					if (null != rep && "XDEF903".equals(rep.getMsgID())
-						&& null != rep.getModification()
-						&& !rep.getModification().startsWith("&{0}<")) {
-					} else {
-						reporter.reset();
-					}
-					result = printReports(reporter, xdef);
-					outHtml = modifyFirst(modifyFirst(HTML_RESULT, "&{title}", "Error"),
-						"&{result-title}", "X-definition error(s):");
-				} else {
-					Element resultElement;
-					reporter.clear();
-					try (CharArrayWriter caw = new CharArrayWriter()) {
-						XDOutput stdout = XDFactory.createXDOutput(caw, false);
-						XDDocument xd;
-						try {
-							xd = xp.createXDDocument(xdName);
-						} catch (RuntimeException ex) {
-							xd = xp.createXDDocument("Example");
-						}
-						xd.setProperties(props);
-						xd.setStdOut(stdout);
-						//Set external variable with database connection
-						String url = genDatabaseURL(database);
-						String user = DBUSER;
-						String password = DBPASSW;
-						XDService service = XDFactory.createSQLService(url, user, password);
-						xd.setVariable("service", service);
-						if ("compose".equals(mode)) {
-							String name;
-							String uri;
-							XMDefinition def =  xd.getXMDefinition();
-							String mName = getParam(req, "mName");
-							if (null!=mName&&!(mName = mName.trim()).isEmpty()){
-								name = mName;
-								String mURI = getParam(req, "mURI");
-								uri = null != mURI && !(mURI= mURI.trim()).isEmpty() ? mURI : null;
-							} else {
-								XMElement[] x =xd.getXMDefinition().getModels();
-								name = x[0].getName();
-								uri = x[0].getNSUri();
-								if (null != data && data.trim().length() > 0) {
-									Element el = KXmlUtils.parseXml(data).getDocumentElement();
-									xd.setXDContext(el);
-									String n = el.getLocalName();
-									String u = el.getNamespaceURI();
-									if (null!=def && null!=def.getModel(u, n)) {
-										uri = u;
-										name = n;
-									}
-								}
-							}
-							resultElement = xd.xcreate(new QName(uri, name), reporter);
-						} else {
-							resultElement = xd.xparse(data, reporter);
-						}
-						try {
-							service.commit();
-						} catch (Exception ex) {
-							System.out.println("commit: "+ ex);
-						}
-						service.close();
-						if (caw.size() > 0) {
-							stdOutput = "<h3>Output stream (System.out):</h3><pre><tt>"
-								+ stringToHTml(caw.toString(), true) + "</tt></pre>";
-						}
-					}
-					if (reporter.errors()) {
-						outHtml = modifyFirst(modifyFirst(HTML_RESULT, "&{title}", "Error"),
-							"&{result-title}", "Input data error(s):");
-						result = printReports(reporter, data);
-					} else {
-						String title = "Task finished";
-						if (mode.equals("compose")) {
-							title = "Display database";
-							result = "<h3>Database as XML:</h3><pre><tt>"
-								+ stringToHTml(KXmlUtils.nodeToString(
-									resultElement,true,false,true,110), true)
-								+ "</tt></pre>\n";
-						} else if (task.equals("finished")) {
-							if ("Drop database".equals(getParam(req,"submit"))){
-								DBMAP.remove(database);
-								displayMsg(out, "Database removed",
-									"Database has been cleaned and removed from database list.");
-								return;
-							}
-							result = stdOutput;
-						} else {
-							title = "Database created";
-							result =
+    /** Processes requests with respect to required language.
+     * methods. The Language is set according to request parameter "submit".
+     * @param req servlet-request object.
+     * @param resp servlet-response object.
+     * @throws IOException if a IO error occurs.
+     */
+    @Override
+    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+        throws ServletException,IOException{
+        // This part we must synchronize to keep language settings etc
+        // for whole process of the X-definition.
+        synchronized(MANAGER) {
+            resp.setContentType("text/html;charset=UTF-8");
+            resp.setCharacterEncoding("UTF-8");
+            PrintWriter out = resp.getWriter();
+            req.setCharacterEncoding("UTF-8");
+            String database = getParam(req, "database");
+            String task = getParam(req, "task");
+            String mode = getParam(req, "mode");
+            String outHtml;
+            if (database.isEmpty()) { // new database
+                if (!task.equals("Create database")) { // incorrect task
+                    displayMsg(out, "Internal error",  "Incorrect Expected task: "+ task);
+                    return;
+                }
+                long time = System.currentTimeMillis();
+                for (;;) {
+                    boolean wasRemoved = false;
+                    for (Entry<String, Long> x : DBMAP.entrySet()) {
+                        long dif = time - x.getValue();
+                        if (dif < 0) {
+                            dif = -dif;
+                        }
+                        if (dif > 24*3600*1000) { //older then 1 day
+                            wasRemoved = true;
+                            DBMAP.remove(x.getKey());
+                        }
+                        if (wasRemoved) {
+                            break;
+                        }
+                    }
+                    if (!wasRemoved) {
+                        break;
+                    }
+                }
+                long x = time;
+                while (DBMAP.containsKey(database="DB"+Long.toHexString(x))){
+                    x++;
+                }
+                try {
+                    EmbeddedDataSource dbSource = new EmbeddedDataSource();
+                    dbSource.setDatabaseName("memory:"+ database);
+                    dbSource.setUser(DBUSER);
+                    dbSource.setPassword(DBPASSW);
+                    // create a new database
+                    dbSource.setCreateDatabase("create");
+                    Connection con = dbSource.getConnection( DBUSER, DBPASSW);
+                    con.close();
+                    DBMAP.put(database, time);
+                } catch (SQLException ex) {
+                    displayMsg(out,
+                        "Error",
+                        "Database creation error<br/>"+
+                            stringToHTml(STester.printThrowable(ex),true));
+                    return;
+                }
+            } else {
+                if (!DBMAP.containsKey(database)) {
+                    displayMsg(out, "Error", "Database is not available (was dropped or deleted).");
+                    return;
+                }
+                if (!"finished".equals(task)) {
+                    switch (task) {
+                        case "Add items":
+                            outHtml = ADD_ITEMS;
+                            break;
+                        case "Display database":
+                            outHtml = DISPLAY;
+                            break;
+                        case "Drop database":
+                            outHtml = DROP;
+                            break;
+                        default:
+                            out.print("ERROR unsuppoeted task: "+ task);
+                            return;
+                    }
+                    out.print(modifyFirst(outHtml,"&{database}",database));
+                    return;
+                }
+            }
+            Report.setLanguage("eng");
+            ArrayReporter reporter = new ArrayReporter();
+            String xdef = getParam(req, "xdef");
+            String data = getParam(req, "data");
+            String xdName = getParam(req, "xdname");
+            String result;
+            String stdOutput = "";
+            XDPool xp = null;
+            Properties props = new Properties();
+            props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
+                XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+            try {
+                XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
+                xb.setSource(xdef);
+                xp = xb.compileXD();
+            } catch (Throwable ex) {
+                if (null == xp || !reporter.errorWarnings()) {
+                    out.print("<html xmlns='http://www.w3.org/1999/xhtml'>"
+                        + "<body><h1>Exception</h1><pre><tt><b>"
+                        + stringToHTml(STester.printThrowable(ex), true)
+                        + "</b></tt></pre></body></html>");
+                    return;
+                } else {
+                    reporter.reset();
+                }
+            }
+            try {
+                if (reporter.errorWarnings()) {//incorrect xdef
+                    Report rep = reporter.getReport();
+                    if (null != rep && "XDEF903".equals(rep.getMsgID())
+                        && null != rep.getModification()
+                        && !rep.getModification().startsWith("&{0}<")) {
+                    } else {
+                        reporter.reset();
+                    }
+                    result = printReports(reporter, xdef);
+                    outHtml = modifyFirst(modifyFirst(HTML_RESULT, "&{title}", "Error"),
+                        "&{result-title}", "X-definition error(s):");
+                } else {
+                    Element resultElement;
+                    reporter.clear();
+                    try (CharArrayWriter caw = new CharArrayWriter()) {
+                        XDOutput stdout = XDFactory.createXDOutput(caw, false);
+                        XDDocument xd;
+                        try {
+                            xd = xp.createXDDocument(xdName);
+                        } catch (RuntimeException ex) {
+                            xd = xp.createXDDocument("Example");
+                        }
+                        xd.setProperties(props);
+                        xd.setStdOut(stdout);
+                        //Set external variable with database connection
+                        String url = genDatabaseURL(database);
+                        String user = DBUSER;
+                        String password = DBPASSW;
+                        XDService service = XDFactory.createSQLService(url, user, password);
+                        xd.setVariable("service", service);
+                        if ("compose".equals(mode)) {
+                            String name;
+                            String uri;
+                            XMDefinition def =  xd.getXMDefinition();
+                            String mName = getParam(req, "mName");
+                            if (null!=mName&&!(mName = mName.trim()).isEmpty()){
+                                name = mName;
+                                String mURI = getParam(req, "mURI");
+                                uri = null != mURI && !(mURI= mURI.trim()).isEmpty() ? mURI : null;
+                            } else {
+                                XMElement[] x =xd.getXMDefinition().getModels();
+                                name = x[0].getName();
+                                uri = x[0].getNSUri();
+                                if (null != data && data.trim().length() > 0) {
+                                    Element el = KXmlUtils.parseXml(data).getDocumentElement();
+                                    xd.setXDContext(el);
+                                    String n = el.getLocalName();
+                                    String u = el.getNamespaceURI();
+                                    if (null!=def && null!=def.getModel(u, n)) {
+                                        uri = u;
+                                        name = n;
+                                    }
+                                }
+                            }
+                            resultElement = xd.xcreate(new QName(uri, name), reporter);
+                        } else {
+                            resultElement = xd.xparse(data, reporter);
+                        }
+                        try {
+                            service.commit();
+                        } catch (Exception ex) {
+                            System.out.println("commit: "+ ex);
+                        }
+                        service.close();
+                        if (caw.size() > 0) {
+                            stdOutput = "<h3>Output stream (System.out):</h3><pre><tt>"
+                                + stringToHTml(caw.toString(), true) + "</tt></pre>";
+                        }
+                    }
+                    if (reporter.errors()) {
+                        outHtml = modifyFirst(modifyFirst(HTML_RESULT, "&{title}", "Error"),
+                            "&{result-title}", "Input data error(s):");
+                        result = printReports(reporter, data);
+                    } else {
+                        String title = "Task finished";
+                        if (mode.equals("compose")) {
+                            title = "Display database";
+                            result = "<h3>Database as XML:</h3><pre><tt>"
+                                + stringToHTml(KXmlUtils.nodeToString(
+                                    resultElement,true,false,true,110), true)
+                                + "</tt></pre>\n";
+                        } else if (task.equals("finished")) {
+                            if ("Drop database".equals(getParam(req,"submit"))){
+                                DBMAP.remove(database);
+                                displayMsg(out, "Database removed",
+                                    "Database has been cleaned and removed from database list.");
+                                return;
+                            }
+                            result = stdOutput;
+                        } else {
+                            title = "Database created";
+                            result =
 "<form style='background: #EAFFFD' method='post' action='/tutorial/Derby' >\n"+
 "<h2>Select task:</h2>\n"+
 "<input name='task' value='Add items' type='submit'/>\n"+
@@ -468,30 +468,30 @@ public final class Derby extends AbstractMyServlet {
 "<input name='task' value='Drop database' type='submit'/>\n"+
 "<input name='database' value='"+ database +"' type='hidden'/>\n"+
 "</form>";
-						}
-						displayMsg(out, title, result);
-						return;
-					}
-				}
-				result = stringToHTml(result, true);
-			} catch (SRuntimeException ex) {
-				if ("SYS024".equals(ex.getMsgID())) {
-					reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
-						"The XML document must start with '<'", "&{line}1&{column}1"));
-				} else if (!reporter.errorWarnings()) {
-					reporter.putReport(Report.fatal(ex.getMsgID(),
-						ex.getReport().getText(), ex.getReport().getModification()));
-				}
-				displayMsg(out, "Input data error", stringToHTml(printReports(reporter,data),true));
-				reporter.reset();
-				return;
-			}
-			out.print(modifyFirst(modifyFirst(outHtml,"&{result}",result),"&{stdout}",stdOutput));
-		}
-	}
+                        }
+                        displayMsg(out, title, result);
+                        return;
+                    }
+                }
+                result = stringToHTml(result, true);
+            } catch (SRuntimeException ex) {
+                if ("SYS024".equals(ex.getMsgID())) {
+                    reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
+                        "The XML document must start with '<'", "&{line}1&{column}1"));
+                } else if (!reporter.errorWarnings()) {
+                    reporter.putReport(Report.fatal(ex.getMsgID(),
+                        ex.getReport().getText(), ex.getReport().getModification()));
+                }
+                displayMsg(out, "Input data error", stringToHTml(printReports(reporter,data),true));
+                reporter.reset();
+                return;
+            }
+            out.print(modifyFirst(modifyFirst(outHtml,"&{result}",result),"&{stdout}",stdOutput));
+        }
+    }
 
-	/** Returns a short description of this servlet.
-	 * @return short description of this servlet.	 */
-	@Override
-	public final String getServletInfo() {return "This servlet executes a X-definition with database.";}
+    /** Returns a short description of this servlet.
+     * @return short description of this servlet.     */
+    @Override
+    public final String getServletInfo() {return "This servlet executes a X-definition with database.";}
 }

@@ -174,15 +174,15 @@ div#content h1 {
 }
 
 div#content h2 {
-	color: #ca0383;/*#294B5F;*/ 
-	font-size: 1.5em; 
-	text-align: left; 
+    color: #ca0383;/*#294B5F;*/ 
+    font-size: 1.5em; 
+    text-align: left; 
 /* some air around the text */
-	padding-left: 0em;
-	padding-bottom: 1px;
+    padding-left: 0em;
+    padding-bottom: 1px;
 /* set borders around header */
-	border-bottom: 0px solid #ca0383;/*#e7ab0b;*/ 
-	border-left: 0em solid #ca0383;/*#e7ab0b;*/ 
+    border-bottom: 0px solid #ca0383;/*#e7ab0b;*/ 
+    border-left: 0em solid #ca0383;/*#e7ab0b;*/ 
     line-height: 1.5em;
 /* and some air under the border */
     margin: 0 0 0.5em 0;

@@ -19,31 +19,31 @@ import org.xdef.xml.KXmlUtils;
  */
 public final class GenXdef extends AbstractMyServlet {
 
-	private static final long serialVersionUID = -815756752335589510L;
+    private static final long serialVersionUID = -815756752335589510L;
 
     /** Generate X-definition and run validation of given object with created X-definition.
-	 * @param req servlet request object.
-	 * @param resp servlet response object.
-	 * @throws IOException if an error occurs.
-	 */
-	@Override
-	public void procReq(final HttpServletRequest req, final HttpServletResponse resp)
-		throws ServletException,IOException {
-		req.setCharacterEncoding("UTF-8");
-		resp.setContentType("text/html;charset=UTF-8");
-		resp.setCharacterEncoding("UTF-8");
-		// This part we must synchronize to keep language settings for whole process of the X-definition.
-		synchronized(MANAGER) {
-			Report.setLanguage("eng");
-			String data = getParam(req, "data");
-			PrintWriter out = resp.getWriter();
-			try {
-				Element el = GenXDefinition.genXdef(data.trim(), "Example");
-				StringWriter swr = new StringWriter();
-				KXmlUtils.writeXml(swr, "UTF-8", el, " ", false, false, true);
-				swr.close();
-				String xdef = '\n' + swr.toString().trim() + '\n';
-				out.print(
+     * @param req servlet request object.
+     * @param resp servlet response object.
+     * @throws IOException if an error occurs.
+     */
+    @Override
+    public void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+        throws ServletException,IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html;charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        // This part we must synchronize to keep language settings for whole process of the X-definition.
+        synchronized(MANAGER) {
+            Report.setLanguage("eng");
+            String data = getParam(req, "data");
+            PrintWriter out = resp.getWriter();
+            try {
+                Element el = GenXDefinition.genXdef(data.trim(), "Example");
+                StringWriter swr = new StringWriter();
+                KXmlUtils.writeXml(swr, "UTF-8", el, " ", false, false, true);
+                swr.close();
+                String xdef = '\n' + swr.toString().trim() + '\n';
+                out.print(
 "<html xmlns='http://www.w3.org/1999/xhtml'>\n"+
 "  <head>\n"+
 "    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n"+
@@ -59,44 +59,44 @@ public final class GenXdef extends AbstractMyServlet {
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
 "        <textarea id='textarea' style='width: 100%;' name='xdef'>\n" +
-				stringToHTml(xdef, true)+
+                stringToHTml(xdef, true)+
 "</textarea>\n" +
 "      </div>\n"+
 "      <b>Input data</b>\n" +
 "      <div class=\"container\">\n" +
 "        <div id=\"line-numbers_1\" class=\"container_1\"></div>\n" +
 "        <textarea id=\"textarea_1\" style=\"width: 100%;\" name=\"data\">\n" +
-				stringToHTml(data, true).trim()+
+                stringToHTml(data, true).trim()+
 "</textarea>\n" +
 "      </div>\n");
-				if (data.startsWith("<")) { //data is XML format
-					out.print(
+                if (data.startsWith("<")) { //data is XML format
+                    out.print(
 "      <input name='submit' value='Execute' type='submit' />\n");
-				} else {  // data is JSON format (??? - TODO other formats)
-					out.print(
+                } else {  // data is JSON format (??? - TODO other formats)
+                    out.print(
 "      <input type='hidden' name='json' value='json' />\n" +
 "      <input name='view' value='Display result as JSON' type='submit'/>\n" +
 "      <input name='view' value='Display result as YAML' type='submit'/>\n" +
 "      <input name='view' value='Display result as XON' type='submit'/>\n" +
 "      <input name='view' value='Display result as XML' type='submit'/>\n");
-				}
-				out.print(
+                }
+                out.print(
 "      <i>&nbsp;\n" +
 "        You can edit <b>Created X-definition</b> or <b>Input</b> window\n" +
 "      </i>\n" +
 "    </form>\n" +
 "  </body>\n" +
 "</html>");
-			} catch (IOException | RuntimeException ex) {
-				out.print("<html><body><h1>Exception</h1>" +
-					"<pre><tt><b>"+stringToHTml(STester.printThrowable(ex),true)
-					+ "</b></tt></pre></body></html>");
-			}
-		}
-	}
+            } catch (IOException | RuntimeException ex) {
+                out.print("<html><body><h1>Exception</h1>" +
+                    "<pre><tt><b>"+stringToHTml(STester.printThrowable(ex),true)
+                    + "</b></tt></pre></body></html>");
+            }
+        }
+    }
 
-	/** Returns a short description of this servlet.
-	 * @return short description of this servlet.	 */
-	@Override
-	public final String getServletInfo() {return "This servlet creates an X-definition from given XML";}
+    /** Returns a short description of this servlet.
+     * @return short description of this servlet.     */
+    @Override
+    public final String getServletInfo() {return "This servlet creates an X-definition from given XML";}
 }

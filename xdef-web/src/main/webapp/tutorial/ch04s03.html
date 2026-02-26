@@ -21,7 +21,7 @@
       Since the Properties format is syntactically a subset of the Windows INI
       format, our example will be in the Windows INI format. Let's have the
       following Windows INI data:
-	  <font size="1">
+      <font size="1">
 <pre>
 TRSUser = John Smith
 [User]
@@ -32,9 +32,9 @@ Authority=CLIENT
 RemoteServerURL=http://localhost:8080/TRS/TRSServer
 SeverIP = 123.45.67.8
 Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c</pre></font>
-	  The description of values of items in the data is specified as values of
-	  data items in the X-script language. Note that items "ReceiverSleep" and the
-	  section "Server" are optional:
+      The description of values of items in the data is specified as values of
+      data items in the X-script language. Note that items "ReceiverSleep" and the
+      section "Server" are optional:
 <pre class="xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS" >
   &lt;xd:ini name="TRS">
     TRSUser = string(); /* user name */
