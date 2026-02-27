@@ -68,22 +68,27 @@ public final class Example extends AbstractMyServlet {
     private static Object yamlToJson(final Object o) {
         if (null == o) return null;
         if (o instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<Object, Object> om     = (Map<Object, Object>)o;
             Map<String, Object> result = new LinkedHashMap<>();
-            for (Object x : ((Map) o).entrySet()) {
-                Map.Entry en = (Map.Entry) x;
-                Object y = en.getKey();
-                String key = y instanceof byte[] ? new String((byte[])y, StandardCharsets.UTF_8): (String)y;
-                result.put(key, yamlToJson(en.getValue()));
+            for (Map.Entry<Object, Object> en : om.entrySet()) {
+                result.put(
+                    (String)yamlToJson(en.getKey()),
+                    yamlToJson(en.getValue())
+                );
             }
             return result;
         } else if (o instanceof List) {
+            @SuppressWarnings("unchecked")
+            List<Object> ol     = (List<Object>)o;
             List<Object> result = new ArrayList<>();
-            for (int i=0; i < ((List) o).size(); i++ ) {
-                result.add(yamlToJson(((List) o).get(i)));
+            for (int i=0; i < ol.size(); i++ ) {
+                result.add(yamlToJson(ol.get(i)));
             }
             return result;
         } else if (o instanceof byte[]) {
-            return new String((byte[]) o, StandardCharsets.UTF_8);
+            byte[] oba = (byte[])o;
+            return new String(oba, StandardCharsets.UTF_8);
         }
         return o;
     }
