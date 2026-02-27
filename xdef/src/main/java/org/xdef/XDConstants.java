@@ -146,6 +146,8 @@ public interface XDConstants {
     public static final String BUILD_VERSION = PomInfo.POMINFO.getVersion();
     /** Datetime of build version from pom.xml */
     public static final String BUILD_DATETIME = PomInfo.POMINFO.getBuildTimestamp();
+    /** Detailed identifier of the build, see {@link PomInfo#getBuildIdentifier()} */
+    public static final String BUILD_IDENTIFIER = PomInfo.POMINFO.getBuildIdentifier();
 
 ////////////////////////////////////////////////////////////////////////////////
 // Platform dependent constants.

@@ -19,4 +19,5 @@ nbactions.xml
 .wtpmodules/
 nb-configuration.xml
 pom.xml.versionsBackup
-
+/xdef/src/userdoc/data/examples/task*/output/
+/xdef/src/userdoc/data/examples/task*/errors/
