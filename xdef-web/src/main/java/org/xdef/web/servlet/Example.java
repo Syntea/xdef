@@ -50,9 +50,7 @@ public final class Example extends AbstractMyServlet {
 "  <body>\n" +
 "    <div align=\"right\">\n" +
 "      <font size=1><i style=\"test-align:right\"><b>X-definition version: "
-            + (XDConstants.BUILD_VERSION.endsWith("-SNAPSHOT")
-                ? XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME.substring(0, 16)
-                : XDConstants.BUILD_VERSION)
+            + XDConstants.BUILD_IDENTIFIER
             + "</b></i>\n" +
 "      </font>\n" +
 "    </div>\n" +
