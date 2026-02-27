@@ -83,9 +83,7 @@ public class PomInfo {
         return version.endsWith("-SNAPSHOT");
     }
 
-    /** Get identifier of product.
-     * @return detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values)
-     */
+    /** @return detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values) */
     public String getBuildIdentifier() {
         boolean tagOK    = ("version/" + getVersion()).equals(gitTags);
         boolean branchOK = "main".equals(gitBranch);
