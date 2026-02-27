@@ -84,17 +84,19 @@ public class PomInfo {
     }
 
     /** Get identifier of product.
-     * @return product-identifier
+     * @return detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values)
      */
-    public String getProductIdentifier() {
+    public String getBuildIdentifier() {
+        boolean tagOK    = ("version/" + getVersion()).equals(gitTags);
+        boolean branchOK = "main".equals(gitBranch);
         return
             groupId + ":" + artifactId + ":" + version + " (" +
             (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
             (gitCommitIdAbbrev.isEmpty() ? "" :
-                ", commit " + gitCommitIdAbbrev + " " + gitCommitTime +
-                (gitTags  .isEmpty()      ? "" : ", tags: "   + gitTags) +
-                (gitBranch.isEmpty()      ? "" : ", branch: " + gitBranch) +
-                (!"true".equals(gitDirty) ? "" : ", dirty-commit")
+                (tagOK || gitTags.isEmpty()      ? "" : ", tags: " + gitTags) +
+                (tagOK || !gitTags.isEmpty()     ? "" : ", commit " + gitCommitIdAbbrev + " " + gitCommitTime) +
+                (branchOK || gitBranch.isEmpty() ? "" : ", branch: " + gitBranch) +
+                (!"true".equals(gitDirty)        ? "" : ", dirty-commit")
             ) +
             ")"
         ;
