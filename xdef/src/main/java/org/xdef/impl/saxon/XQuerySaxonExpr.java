@@ -137,20 +137,24 @@ public class XQuerySaxonExpr implements KXquery {
                 _value.bindDouble(qname, ((Double) val), null);
             } else if (val instanceof Node) {
                 _value.bindNode(qname, (Node) val, null);
-            } else {
-                if (val instanceof SDatetime) {
-                    _value.bindAtomicValue(qname,
-                        ((SDatetime) val).toISO8601(), _conn.createAtomicType(XQItemType.XQBASETYPE_DATETIME));
-                } else if (val instanceof SDuration) {
-                    _value.bindAtomicValue(qname,
-                        val.toString(), _conn.createAtomicType(XQItemType.XQBASETYPE_DURATION));
-                } else if (val instanceof byte[]) {
-                    _value.bindAtomicValue(qname,
-                        new String(org.xdef.sys.SUtils.encodeBase64((byte[]) val)),
-                        _conn.createAtomicType(XQItemType.XQBASETYPE_BASE64BINARY));
+            } else if (val instanceof SDatetime) {
+                String s = ((SDatetime) val).toISO8601();
+                if (s.indexOf('T') > 0) {
+                  _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_DATETIME));
+                } else if (s.indexOf(':') > 0) {
+                    _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_TIME));
                 } else {
-                    _value.bindString(qname, val.toString(), null);
+                    _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_DATE));
                 }
+            } else if (val instanceof SDuration) {
+                _value.bindAtomicValue(qname,
+                    val.toString(), _conn.createAtomicType(XQItemType.XQBASETYPE_DURATION));
+            } else if (val instanceof byte[]) {
+                _value.bindAtomicValue(qname,
+                    new String(org.xdef.sys.SUtils.encodeBase64((byte[]) val)),
+                    _conn.createAtomicType(XQItemType.XQBASETYPE_BASE64BINARY));
+            } else {
+                _value.bindString(qname, val.toString(), null);
             }
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&amp;{0}{: }
