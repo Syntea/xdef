@@ -508,6 +508,8 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
             setVariable(name, (new DefQName((javax.xml.namespace.QName) value)));
         } else if (value instanceof Price) {
             setVariable(name, (new XDPrice((Price) value)));
+        } else if (value instanceof javax.xml.datatype.Duration) {
+            setVariable(name, (new DefDuration(value.toString())));
         } else if (value instanceof InetAddress) {
             setVariable(name, (new DefIPAddr((InetAddress) value)));
         } else if (value instanceof Currency) {

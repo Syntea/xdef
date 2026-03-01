@@ -1,6 +1,7 @@
 # Version ${version}, release-date ${release.date}
   * Fixed generation of `xposOf...()` methods in XComponents.
   * Fixed binding variables in Saxon XQuery.
+  * Fixed error in `XDDocoment.setVeriable method` for `Duration` value.
   * The new value type `QName` is added to X-definition X/script value types.
 
 # Version 42.2.39, release-date 2026-02-09
