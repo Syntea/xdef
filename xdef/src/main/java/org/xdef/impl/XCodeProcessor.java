@@ -367,6 +367,7 @@ import static org.xdef.impl.code.CodeTable.NEW_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.NEW_OUTSTREAM;
 import static org.xdef.impl.code.CodeTable.NEW_PARSER;
 import static org.xdef.impl.code.CodeTable.NEW_PARSERESULT;
+import static org.xdef.impl.code.CodeTable.NEW_QNAME;
 import static org.xdef.impl.code.CodeTable.NEW_REPORT;
 import static org.xdef.impl.code.CodeTable.NEW_SERVICE;
 import static org.xdef.impl.code.CodeTable.NEW_TELEPHONE;
@@ -524,6 +525,7 @@ import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefTelephone;
@@ -3186,6 +3188,15 @@ public final class XCodeProcessor {
                         _stack[++sp] = new DefBytes(new byte[0]);
                     } else {
                         _stack[sp] = new DefBytes(new byte[_stack[sp].intValue()]);
+                    }
+                    continue;
+                case NEW_QNAME:
+                    if (item.getParam() == 1) {
+                        _stack[sp] = new DefQName(_stack[sp].stringValue());
+                    } else if (item.getParam() == 3) {
+                        _stack[sp-2] = new DefQName(_stack[sp-2].stringValue(),
+                            _stack[sp-1].stringValue(), _stack[sp].stringValue());
+                        sp -= 2;
                     }
                     continue;
                 case NEW_INSTREAM:

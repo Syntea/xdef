@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +47,7 @@ import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
@@ -58,7 +60,9 @@ import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefURI;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
@@ -358,9 +362,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
      * @return array of names of variables.
      */
     @Override
-    public final String[] getVariableNames() {
-        return _rootChkDocument.getXDPool().getVariableTable().getVariableNames();
-    }
+    public final String[] getVariableNames(){return _rootChkDocument.getXDPool().getVariableTable().getVariableNames();}
 
     /** Get XDDocument.
      * @return XDDocument.
@@ -485,6 +487,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
             setVariable(name, (Long) value);
         } else if (value instanceof Integer) {
             setVariable(name, ((Integer) value).longValue());
+        } else if (value instanceof Short) {
+            setVariable(name, ((Short) value).longValue());
+        } else if (value instanceof Byte) {
+            setVariable(name, ((Byte) value).longValue());
         } else if (value instanceof Double) {setVariable(name, (Double) value);
         } else if (value instanceof Float) {
             setVariable(name, ((Float) value).doubleValue());
@@ -496,12 +502,20 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
             setVariable(name, (new DefLocale((Locale) value)));
         } else if (value instanceof GPSPosition) {
             setVariable(name, (new XDGPSPosition((GPSPosition) value)));
+        } else if (value instanceof URI) {
+            setVariable(name, (new DefURI((URI) value)));
+        } else if (value instanceof javax.xml.namespace.QName) {
+            setVariable(name, (new DefQName((javax.xml.namespace.QName) value)));
         } else if (value instanceof Price) {
             setVariable(name, (new XDPrice((Price) value)));
         } else if (value instanceof InetAddress) {
             setVariable(name, (new DefIPAddr((InetAddress) value)));
         } else if (value instanceof Currency) {
             setVariable(name, new XDCurrency(((Currency) value).getCurrencyCode()));
+        } else if (value instanceof javax.xml.namespace.QName) {
+            setVariable(name, new DefQName((javax.xml.namespace.QName) value));
+        } else if (value instanceof byte[]) {
+            setVariable(name, new DefBytes((byte[]) value));
         } else {
             //Value is not compatible with the type of variable '&{0}'
             throw new SRuntimeException(XDEF.XDEF564, name);

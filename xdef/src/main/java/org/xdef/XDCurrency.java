@@ -52,9 +52,7 @@ public final class XDCurrency extends XDValueAbstract {
     public final int hashCode() {return _value == null ? 0 : _value.hashCode();}
 
     @Override
-    public final boolean equals(final Object arg) {
-        return arg instanceof XDValue ? equals((XDValue) arg) : false;
-    }
+    public final boolean equals(final Object arg) {return arg instanceof XDValue ? equals((XDValue) arg) : false;}
 
     @Override
     public final boolean equals(final XDValue arg) {

@@ -786,8 +786,10 @@ public interface CodeTable {
     static final short NEW_INSTREAM = NEW_GPSPOSITION + 1;
     /** Create XML writer. */
     static final short NEW_LOCALE = NEW_INSTREAM + 1;
+    /** Create QName. */
+    static final short NEW_QNAME = NEW_LOCALE + 1;
     /** Create named value. */
-    static final short NEW_NAMEDVALUE = NEW_LOCALE + 1;
+    static final short NEW_NAMEDVALUE = NEW_QNAME + 1;
     /** Create output stream. */
     static final short NEW_OUTSTREAM = NEW_NAMEDVALUE + 1;
     /** Create parser. */

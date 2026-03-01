@@ -1,57 +1,75 @@
 package org.xdef.impl.code;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import org.xdef.XDURI;
+import javax.xml.namespace.QName;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import static org.xdef.XDValueID.XD_ANYURI;
 import org.xdef.XDValueType;
-import static org.xdef.XDValueType.ANYURI;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.XDQName;
+import static org.xdef.XDValueID.XD_QNAME;
+import static org.xdef.XDValueType.QNAME;
 
-/** Implements the internal object with URI value.
+/** Implements the internal object with QName value.
  * @author Vaclav Trojan
  */
-public final class DefURI extends XDValueAbstract implements XDURI {
+public class DefQName extends XDValueAbstract implements XDQName {
 
-    /** The URI value. */
-    private final URI _value;
+    /** The QName value. */
+    private final QName _value;
 
-    /** Creates a new instance of DefURI as null.*/
-    public DefURI() {_value = null;}
+    /** Creates a new instance of DefQName as null.*/
+    public DefQName() {_value = null;}
 
-    /** Creates a new instance of DefURI
+    /** Creates a new instance of DefQName
      * @param value The initial value of object.
      */
-    public DefURI(final URI value) {_value = value;}
+    public DefQName(final QName value) {_value = value;}
 
-    /** Creates a new instance of DefURI
-     * @param value The string with initial value of object ("true" or "false").
+    /** Creates a new instance of DefQName (prefix and namespace are null)
+     * @param name locla name .
      */
-    public DefURI(final String value) {
-        try {
-            _value = new URI(value);
-        } catch (URISyntaxException ex) {
-            throw new RuntimeException(ex);
+    public DefQName(final String name) {_value = new QName(name);}
+
+    /** Creates a new instance of DefQName (prefix and namespace are null)
+     * @param namespace String with namespace URI or null.
+     * @param localName String with local name.
+     * @param prefix String with prefix name or null.
+     */
+    public DefQName(final String namespace, final String localName, final String prefix) {
+        if (localName == null || localName.isEmpty()) {
+            throw new RuntimeException("Local name must be a name");
         }
+        _value = new QName(namespace, localName, prefix);
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of XDURI interface
+// Implementation of XDQName interface
 ////////////////////////////////////////////////////////////////////////////////
-    /** Get URI value from this object.
+
+    /** Get QName value from this object.
      * @return the associated object, or return null.
      */
     @Override
-    public java.net.URI getURI() {return _value;}
+    public javax.xml.namespace.QName getQName() {return _value;}
 
-    /** Get the content of this URI as a US-ASCII string.
-     * @return the content of this URI as a US-ASCII string.
+    /** Get local name from QName value.
+     * @return local name from this QName value, or return null.
      */
     @Override
-    public String toASCIIString() {return _value != null ? _value.toASCIIString() : null;}
+    public String getLocalName() {return _value != null ? _value.getLocalPart() : null;}
+
+    /** Get prefix from QName value.
+     * @return local name from this QName value, or return null.
+     */
+    @Override
+    public String getPrefix() {return _value != null ? _value.getPrefix(): null;}
+
+    /** Get namespace URI from QName value.
+     * @return namespace URI from this QName value, or return null.
+     */
+    @Override
+    public String getNamespace() {return _value != null ? _value.getNamespaceURI(): null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -67,13 +85,13 @@ public final class DefURI extends XDValueAbstract implements XDURI {
      * @return The id of item type.
      */
     @Override
-    public short getItemId() {return XD_ANYURI;}
+    public short getItemId() {return XD_QNAME;}
 
     /** Get ID of the type of value
      * @return enumeration item of this type.
      */
     @Override
-    public XDValueType getItemType() {return ANYURI;}
+    public XDValueType getItemType() {return QNAME;}
 
     /** Get value as String.
      * @return The string from value.
@@ -91,7 +109,7 @@ public final class DefURI extends XDValueAbstract implements XDURI {
      * @return the object with the copy of this one.
      */
     @Override
-    public XDValue cloneItem() {return new DefURI(_value);}
+    public XDValue cloneItem() {return new DefQName(_value);}
 
     @Override
     public int hashCode() {return _value == null ? 1 : _value.hashCode();}
@@ -122,7 +140,7 @@ public final class DefURI extends XDValueAbstract implements XDURI {
      */
     @Override
     public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-        if (arg.getItemId() == XD_ANYURI) {
+        if (arg.getItemId() == XD_QNAME) {
             if (equals(arg)) return 0;
         }
         throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
@@ -133,5 +151,4 @@ public final class DefURI extends XDValueAbstract implements XDURI {
      */
     @Override
     public boolean isNull() {return _value == null;}
-
 }
