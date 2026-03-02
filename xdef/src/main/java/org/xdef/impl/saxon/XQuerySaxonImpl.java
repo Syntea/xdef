@@ -23,6 +23,7 @@ import static org.xdef.XDValueID.XD_DURATION;
 import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XD_INT;
 import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_QNAME;
 import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
@@ -34,6 +35,7 @@ import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.code.XQueryImpl;
@@ -91,12 +93,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
                     switch (var.getItemId()) {
                         case XD_ATTR:
                         case XD_ELEMENT:
-                        case XD_TEXT:
-                            Node n = (Node) var.getXMLNode();
-                            if (n != null) {
-                                x.bindValue(qname, n);
-                            }
-                            break;
+                        case XD_TEXT: x.bindValue(qname, var.getXMLNode()); break;
                         case XD_BOOLEAN: x.bindValue(qname, var.booleanValue()); break;
                         case XD_LONG: x.bindValue(qname, var.longValue()); break;
                         case XD_INT: x.bindValue(qname, var.intValue()); break;
@@ -105,10 +102,9 @@ public class XQuerySaxonImpl implements XQueryImpl {
                         case XD_CHAR: x.bindValue(qname, var.charValue()); break;
                         case XD_BYTES: x.bindValue(qname, ((DefBytes) var).getBytes()); break;
                         case XD_DATETIME: x.bindValue(qname, var.datetimeValue()); break;
-                        case XD_DURATION: x.bindValue(qname, ((DefDuration) var).toString()); break;
-                        case XD_ANYURI: x.bindValue(qname, (java.net.URI) ((DefURI) var).getObject()); break;
-
-//                        case org.xdef.XDValueID.XD_BYTE
+                        case XD_DURATION: x.bindValue(qname, ((DefDuration) var).durationValue()); break;
+                        case XD_QNAME: x.bindValue(qname, ((DefQName) var).getQName()); break;
+                        case XD_ANYURI: x.bindValue(qname, ((DefURI) var).getURI()); break;
                         default: x.bindValue(qname, var.toString());
                     }
                 }
@@ -128,6 +124,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
                 switch (item.getItemType().getItemKind()) {
                     case XQItemType.XQITEMKIND_ATOMIC: {
                         switch (item.getItemType().getBaseType()) {
+                            case XQItemType.XQBASETYPE_ANYURI:
+                                result.addXDItem(new DefURI(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_BOOLEAN:
                                 result.addXDItem(new DefBoolean(item.getBoolean())); continue;
                             case XQItemType.XQBASETYPE_BYTE:
@@ -155,6 +153,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
                                 result.addXDItem(new DefDecimal(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_UNSIGNED_LONG:
                                 result.addXDItem(new DefBigInteger(item.getAtomicValue())); continue;
+                            case XQItemType.XQBASETYPE_QNAME:
+                                result.addXDItem(new DefQName(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_DURATION:
                             case XQItemType.XQBASETYPE_DAYTIMEDURATION:
                             case XQItemType.XQBASETYPE_YEARMONTHDURATION:
@@ -168,12 +168,10 @@ public class XQuerySaxonImpl implements XQueryImpl {
                             case XQItemType.XQBASETYPE_GYEARMONTH:
                                 result.addXDItem(new DefDate(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_BASE64BINARY:
-                                result.addXDItem(DefBytes.parseBase64(item.getAtomicValue())); continue;                            case XQItemType.XQBASETYPE_HEXBINARY:
+                                result.addXDItem(DefBytes.parseBase64(item.getAtomicValue())); continue;
+                            case XQItemType.XQBASETYPE_HEXBINARY:
                                 result.addXDItem(DefBytes.parseHex(item.getAtomicValue())); continue;
-                            default:
-                                XQItemType xtyp = item.getItemType();
-                                System.out.println(xtyp.getTypeName() + "; " + xtyp.getTypeName());
-                                result.addXDItem(new DefString(item.getAtomicValue()));
+                            default: result.addXDItem(new DefString(item.getAtomicValue()));
                         }
                         continue;
                     }
@@ -192,8 +190,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
                     case XQItemType.XQITEMKIND_SCHEMA_ELEMENT: continue;
                     case XQItemType.XQITEMKIND_ITEM:
                         result.addXDItem(new DefString(item.getItemAsString(null))); continue;
-                    default: throw new SRuntimeException(
-                        "Unknown type of item[" + count + "]: " + item.getItemType().getClass());
+                    default: result.addXDItem(new DefString(item.getAtomicValue()));
                 }
             }
             return result;
