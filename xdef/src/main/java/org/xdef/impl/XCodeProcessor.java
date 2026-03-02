@@ -3193,6 +3193,9 @@ public final class XCodeProcessor {
                 case NEW_QNAME:
                     if (item.getParam() == 1) {
                         _stack[sp] = new DefQName(_stack[sp].stringValue());
+                    } else if (item.getParam() == 2) {
+                        _stack[sp-1] = new DefQName(_stack[sp-1].stringValue(), _stack[sp].stringValue());
+                        sp--;
                     } else if (item.getParam() == 3) {
                         _stack[sp-2] = new DefQName(_stack[sp-2].stringValue(),
                             _stack[sp-1].stringValue(), _stack[sp].stringValue());

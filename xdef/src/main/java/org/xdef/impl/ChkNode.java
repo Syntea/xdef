@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
@@ -482,36 +483,39 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
             }
         }
         if (value instanceof String) {
-            setVariable(name, (String) value);
+            setVariable(name, new DefString((String) value));
         } else if (value instanceof Long) {
-            setVariable(name, (Long) value);
+            setVariable(name, new DefLong((Long) value));
         } else if (value instanceof Integer) {
-            setVariable(name, ((Integer) value).longValue());
+            setVariable(name, new DefLong((Integer) value));
         } else if (value instanceof Short) {
-            setVariable(name, ((Short) value).longValue());
+            setVariable(name, new DefLong((Short) value));
         } else if (value instanceof Byte) {
-            setVariable(name, ((Byte) value).longValue());
-        } else if (value instanceof Double) {setVariable(name, (Double) value);
+            setVariable(name, new DefLong((Short) value));
+        } else if (value instanceof Double) {
+            setVariable(name, new DefDouble((Double) value));
         } else if (value instanceof Float) {
-            setVariable(name, ((Float) value).doubleValue());
+            setVariable(name, new DefDouble((Float) value));
         } else if (value instanceof Boolean) {
-            setVariable(name, ((Boolean) value).booleanValue());
+            setVariable(name, new DefBoolean((Boolean) value));
+        } else if (value instanceof BigInteger) {
+            setVariable(name, new DefBigInteger((BigInteger) value));
         } else if (value instanceof BigDecimal) {
-            setVariable(name, ((BigDecimal) value));
+            setVariable(name, new DefBigInteger(((BigDecimal) value).toBigInteger()));
         } else if (value instanceof Locale) {
-            setVariable(name, (new DefLocale((Locale) value)));
+            setVariable(name, new DefLocale((Locale) value));
         } else if (value instanceof GPSPosition) {
-            setVariable(name, (new XDGPSPosition((GPSPosition) value)));
+            setVariable(name, new XDGPSPosition((GPSPosition) value));
         } else if (value instanceof URI) {
-            setVariable(name, (new DefURI((URI) value)));
+            setVariable(name, new DefURI((URI) value));
         } else if (value instanceof javax.xml.namespace.QName) {
-            setVariable(name, (new DefQName((javax.xml.namespace.QName) value)));
+            setVariable(name, new DefQName((javax.xml.namespace.QName) value));
         } else if (value instanceof Price) {
-            setVariable(name, (new XDPrice((Price) value)));
+            setVariable(name, new XDPrice((Price) value));
         } else if (value instanceof javax.xml.datatype.Duration) {
-            setVariable(name, (new DefDuration(value.toString())));
+            setVariable(name, new DefDuration(value.toString()));
         } else if (value instanceof InetAddress) {
-            setVariable(name, (new DefIPAddr((InetAddress) value)));
+            setVariable(name, new DefIPAddr((InetAddress) value));
         } else if (value instanceof Currency) {
             setVariable(name, new XDCurrency(((Currency) value).getCurrencyCode()));
         } else if (value instanceof javax.xml.namespace.QName) {

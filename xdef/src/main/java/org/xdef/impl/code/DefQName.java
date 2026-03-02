@@ -31,7 +31,13 @@ public class DefQName extends XDValueAbstract implements XDQName {
      */
     public DefQName(final String name) {_value = new QName(name);}
 
-    /** Creates a new instance of DefQName (prefix and namespace are null)
+    /** Creates a new instance of DefQName with namespace.
+     * @param namespace String with namespace URI or null.
+     * @param name String with name.
+     */
+    public DefQName(final String namespace, final String name) {_value = new QName(namespace, name);}
+
+    /** Creates a new instance of DefQName with prefix and namespace.
      * @param namespace String with namespace URI or null.
      * @param localName String with local name.
      * @param prefix String with prefix name or null.
