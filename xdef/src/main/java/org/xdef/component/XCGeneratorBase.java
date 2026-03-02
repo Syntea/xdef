@@ -33,6 +33,7 @@ import static org.xdef.XDValueID.XD_NUMBER;
 import static org.xdef.XDValueID.XD_OBJECT;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PRICE;
+import static org.xdef.XDValueID.XD_QNAME;
 import static org.xdef.XDValueID.XD_SHORT;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_TELEPHONE;
@@ -254,6 +255,7 @@ class XCGeneratorBase {
             case XD_GPSPOSITION: return "org.xdef.sys.GPSPosition";
             case XD_PRICE: return "org.xdef.sys.Price";
             case XD_ANYURI: return "java.net.URI";
+            case XD_QNAME: return "javax.xml.namespace.QName";
             case XD_EMAIL: return "org.xdef.XDEmailAddr";
             case XD_CURRENCY: return "java.util.Currency";
             case XD_IPADDR: return "java.net.InetAddress";
@@ -328,6 +330,7 @@ class XCGeneratorBase {
             case XD_GPSPOSITION: return "(org.xdef.sys.GPSPosition)(" + result + "getObject())";
             case XD_PRICE: return "(org.xdef.sys.Price)(" + result + "getObject())";
             case XD_ANYURI: return "(java.net.URI)(" + result + "getObject())";
+            case XD_QNAME:  return "(javax.xml.namespace.QName)(" + result + "getObject())";
             case XD_EMAIL: return "(org.xdef.XDEmailAddr)(" + result + "getObject())";
             case XD_CURRENCY: return "(java.util.Currency)(" + result + "getObject())";
             case XD_IPADDR: return "(java.net.InetAddress)(" + result + "getObject())";

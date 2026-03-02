@@ -11,11 +11,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_ANYURI;
 import static org.xdef.XDValueID.XD_ATTR;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTE;
+import static org.xdef.XDValueID.XD_BYTES;
+import static org.xdef.XDValueID.XD_CHAR;
 import static org.xdef.XDValueID.XD_DATETIME;
 import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_DURATION;
 import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_INT;
 import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_QNAME;
 import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
@@ -27,7 +35,9 @@ import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefURI;
 import org.xdef.impl.code.XQueryImpl;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SException;
@@ -73,7 +83,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
                     if (var == null) {
                         continue;
                     }
-                    if (s.charAt(0) == '$') {
+                    if (s.charAt(0) == '#') {
                         s = s.substring(1);
                     }
                     QName qname = new QName(s);
@@ -83,15 +93,18 @@ public class XQuerySaxonImpl implements XQueryImpl {
                     switch (var.getItemId()) {
                         case XD_ATTR:
                         case XD_ELEMENT:
-                        case XD_TEXT:
-                            Node n = (Node) var.getXMLNode();
-                            if (n != null) {
-                                x.bindValue(qname, n);
-                            }
-                            break;
-                        case XD_DATETIME: x.bindValue(qname, var.datetimeValue()); break;
+                        case XD_TEXT: x.bindValue(qname, var.getXMLNode()); break;
+                        case XD_BOOLEAN: x.bindValue(qname, var.booleanValue()); break;
                         case XD_LONG: x.bindValue(qname, var.longValue()); break;
+                        case XD_INT: x.bindValue(qname, var.intValue()); break;
                         case XD_DOUBLE: x.bindValue(qname, var.doubleValue()); break;
+                        case XD_BYTE: x.bindValue(qname, var.byteValue()); break;
+                        case XD_CHAR: x.bindValue(qname, var.charValue()); break;
+                        case XD_BYTES: x.bindValue(qname, ((DefBytes) var).getBytes()); break;
+                        case XD_DATETIME: x.bindValue(qname, var.datetimeValue()); break;
+                        case XD_DURATION: x.bindValue(qname, ((DefDuration) var).durationValue()); break;
+                        case XD_QNAME: x.bindValue(qname, ((DefQName) var).getQName()); break;
+                        case XD_ANYURI: x.bindValue(qname, ((DefURI) var).getURI()); break;
                         default: x.bindValue(qname, var.toString());
                     }
                 }
@@ -111,27 +124,37 @@ public class XQuerySaxonImpl implements XQueryImpl {
                 switch (item.getItemType().getItemKind()) {
                     case XQItemType.XQITEMKIND_ATOMIC: {
                         switch (item.getItemType().getBaseType()) {
+                            case XQItemType.XQBASETYPE_ANYURI:
+                                result.addXDItem(new DefURI(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_BOOLEAN:
                                 result.addXDItem(new DefBoolean(item.getBoolean())); continue;
                             case XQItemType.XQBASETYPE_BYTE:
+                                result.addXDItem(new DefLong(item.getByte())); continue;
                             case XQItemType.XQBASETYPE_INT:
                             case XQItemType.XQBASETYPE_INTEGER:
+                                result.addXDItem(new DefLong(item.getInt())); continue;
+                            case XQItemType.XQBASETYPE_SHORT:
+                            case XQItemType.XQBASETYPE_UNSIGNED_BYTE:
+                                result.addXDItem(new DefLong(item.getShort())); continue;
+                            case XQItemType.XQBASETYPE_UNSIGNED_SHORT:
+                                result.addXDItem(new DefLong(item.getInt())); continue;
                             case XQItemType.XQBASETYPE_LONG:
+                            case XQItemType.XQBASETYPE_UNSIGNED_INT:
                             case XQItemType.XQBASETYPE_POSITIVE_INTEGER:
                             case XQItemType.XQBASETYPE_NEGATIVE_INTEGER:
-                            case XQItemType.XQBASETYPE_UNSIGNED_BYTE:
-                            case XQItemType.XQBASETYPE_UNSIGNED_INT:
-                            case XQItemType.XQBASETYPE_UNSIGNED_SHORT:
                             case XQItemType.XQBASETYPE_NONNEGATIVE_INTEGER:
                             case XQItemType.XQBASETYPE_NONPOSITIVE_INTEGER:
                                 result.addXDItem(new DefLong(item.getLong())); continue;
                             case XQItemType.XQBASETYPE_FLOAT:
+                                result.addXDItem(new DefDouble(item.getFloat())); continue;
                             case XQItemType.XQBASETYPE_DOUBLE:
                                 result.addXDItem(new DefDouble(item.getDouble())); continue;
                             case XQItemType.XQBASETYPE_DECIMAL:
                                 result.addXDItem(new DefDecimal(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_UNSIGNED_LONG:
                                 result.addXDItem(new DefBigInteger(item.getAtomicValue())); continue;
+                            case XQItemType.XQBASETYPE_QNAME:
+                                result.addXDItem(new DefQName(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_DURATION:
                             case XQItemType.XQBASETYPE_DAYTIMEDURATION:
                             case XQItemType.XQBASETYPE_YEARMONTHDURATION:
@@ -148,8 +171,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
                                 result.addXDItem(DefBytes.parseBase64(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_HEXBINARY:
                                 result.addXDItem(DefBytes.parseHex(item.getAtomicValue())); continue;
-                            default:
-                                result.addXDItem(new DefString(item.getAtomicValue()));
+                            default: result.addXDItem(new DefString(item.getAtomicValue()));
                         }
                         continue;
                     }
@@ -160,18 +182,15 @@ public class XQuerySaxonImpl implements XQueryImpl {
                         result.addXDItem(new DefString(item.getNode().getNodeValue())); continue;
                     case XQItemType.XQITEMKIND_DOCUMENT:
                     case XQItemType.XQITEMKIND_DOCUMENT_ELEMENT:
-                        result.addXDItem(new DefElement(((Document) item.getNode()).getDocumentElement()));
-                        continue;
+                        result.addXDItem(new DefElement(((Document) item.getNode()).getDocumentElement())); continue;
                     case XQItemType.XQITEMKIND_ELEMENT:
                         result.addXDItem(new DefElement((Element) item.getNode())); continue;
                     case XQItemType.XQITEMKIND_DOCUMENT_SCHEMA_ELEMENT:
                     case XQItemType.XQITEMKIND_SCHEMA_ATTRIBUTE:
                     case XQItemType.XQITEMKIND_SCHEMA_ELEMENT: continue;
-                    case XQItemType.XQITEMKIND_ITEM: {
+                    case XQItemType.XQITEMKIND_ITEM:
                         result.addXDItem(new DefString(item.getItemAsString(null))); continue;
-                    }
-                    default: throw new SRuntimeException("UNKNOWN RESULT TYPE OF ITEM [" + count + "]: "
-                        + item.getItemType().getClass());
+                    default: result.addXDItem(new DefString(item.getAtomicValue()));
                 }
             }
             return result;

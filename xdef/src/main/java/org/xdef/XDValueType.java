@@ -40,6 +40,8 @@ public enum XDValueType {
     DATETIME,
     /**  Uniform resource identifier (URI). */
     ANYURI,
+    /** QName value. */
+    QNAME,
     /** Container value. */
     CONTAINER,
     /** Currency value. */
