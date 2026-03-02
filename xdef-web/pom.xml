@@ -24,6 +24,13 @@
     </scm>
 
     <properties>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.testTarget>21</maven.compiler.testTarget>
+        <maven.compiler.testSource>21</maven.compiler.testSource>
+        <jdk.version>21</jdk.version>
+        <jdk.vendor>sun</jdk.vendor>
+
         <!-- do deploy -->
         <!--<maven.deploy.skip>false</maven.deploy.skip>-->
     </properties>
@@ -37,8 +44,8 @@
 
         <!-- third parties -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
