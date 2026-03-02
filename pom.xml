@@ -86,8 +86,8 @@
         <saxon-he.version>12.9</saxon-he.version>
         <derby.version>10.12.1.1</derby.version>
         <snakeyaml.version>1.29</snakeyaml.version>
-        <slf4j.version>2.0.7</slf4j.version>
-        <logback.version>1.2.3</logback.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <logback.version>1.3.16</logback.version>
         <junit5-jupiter.version>5.11.3</junit5-jupiter.version>
 
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
