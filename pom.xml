@@ -83,10 +83,10 @@
         <!-- default skip deploy -->
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <saxon-he.version>9.7.0-18</saxon-he.version>
+        <saxon-he.version>12.9</saxon-he.version>
         <derby.version>10.12.1.1</derby.version>
         <snakeyaml.version>1.29</snakeyaml.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit5-jupiter.version>5.11.3</junit5-jupiter.version>
 
