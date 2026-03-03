@@ -196,7 +196,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws javax.servlet.ServletException if servlet error occurs.
+     * @throws ServletException if servlet error occurs.
      * @throws java.io.IOException if IO error occurs.
      */
     @Override
@@ -208,7 +208,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
     /** Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws javax.servlet.ServletException if servlet error occurs.
+     * @throws ServletException if servlet error occurs.
      * @throws java.io.IOException if IO error occurs.
      */
     @Override
@@ -266,7 +266,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
     /** Processes requests.
      * @param req servlet request.
      * @param resp servlet response.
-     * @throws javax.servlet.ServletException if servlet error occurs.
+     * @throws ServletException if servlet error occurs.
      * @throws IOException if a IO error occurs.
      */
     public abstract void procReq(final HttpServletRequest req, final HttpServletResponse resp)
