@@ -3,7 +3,6 @@ package org.xdef.impl.code;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.XDElement;
 import org.xdef.XDNamedValue;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
@@ -14,6 +13,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
+import org.xdef.XDElement;
+import static org.xdef.XDValueID.XD_ELEMENT;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.ELEMENT;
 
@@ -22,7 +23,7 @@ import static org.xdef.XDValueType.ELEMENT;
  */
 public final class DefElement extends XDValueAbstract implements XDElement {
 
-    /** The element as value of this item. */
+    /** org.w3c.xml.Element value of this item. */
     private final Element _value;
 
     /** Creates a new instance of DefElement. */
@@ -329,12 +330,25 @@ public final class DefElement extends XDValueAbstract implements XDElement {
         return new DefContainer(_value.getChildNodes()).sortXD(key, asc);
     }
 
+    /** Check if the object is empty.
+     * @return true if the object is empty; otherwise return false.
+     */
+    @Override
+    public boolean isEmpty() {
+        NodeList nl = _value.getChildNodes();
+        NamedNodeMap nnm = _value.getAttributes();
+        return nl.getLength() == 0 && (nnm == null || nnm.getLength() == 0);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // Implementation of XDValue interface
     ////////////////////////////////////////////////////////////////////////////
-
+    @Override
+    public Object getObject() {return _value;}
     @Override
     public Element getElement() {return _value;}
+    @Override
+    public boolean isNull() { return _value == null;}
 
     /** Get type of value.
      * @return The id of item type.
@@ -414,21 +428,5 @@ public final class DefElement extends XDValueAbstract implements XDElement {
             return 0;
         }
         throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
-    }
-
-    /** Check if the object is null.
-     * @return true if the object is null otherwise return false.
-     */
-    @Override
-    public boolean isNull() { return _value == null;}
-
-    /** Check if the object is empty.
-     * @return true if the object is empty; otherwise return false.
-     */
-    @Override
-    public boolean isEmpty() {
-        NodeList nl = _value.getChildNodes();
-        NamedNodeMap nnm = _value.getAttributes();
-        return nl.getLength() == 0 && (nnm == null || nnm.getLength() == 0);
     }
 }

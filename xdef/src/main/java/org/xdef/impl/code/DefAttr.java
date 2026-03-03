@@ -1,18 +1,18 @@
 package org.xdef.impl.code;
 
-import org.xdef.XDNamedValue;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.xdef.XDAttr;
+import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueType.ATTR;
 
 /** Implementation of script value with org.w3c.dom.Attr.
  * @author  Vaclav Trojan
  */
-class DefAttr extends XDValueAbstract implements XDNamedValue {
-
+public class DefAttr extends XDValueAbstract implements XDAttr {
     /** The attribute as value of this item. */
     private final Attr _value;
 
@@ -38,11 +38,16 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
     /** Return the value of org.w3c.dom.Attr object.
      * @return the value of the node as org.w3c.dom.Attr object.
      */
+    @Override
     public Attr attrValue() {return _value;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public Object getObject() {return  _value;}
+    @Override
+    public boolean isNull() {return  _value == null;}
 
     /** Get type of value.
      * @return The id of item type.
@@ -67,7 +72,7 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
      * string value.
      */
     @Override
-    public String stringValue() {return isNull() ? null : _value.getValue();}
+    public String stringValue() {return isNull() ? null  : _value.getValue();}
 
     @Override
     public boolean booleanValue() {return !isNull();}
