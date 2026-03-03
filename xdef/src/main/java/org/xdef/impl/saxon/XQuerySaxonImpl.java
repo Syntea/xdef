@@ -9,7 +9,9 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.XDAttr;
 import org.xdef.XDContainer;
+import org.xdef.XDText;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANYURI;
 import static org.xdef.XDValueID.XD_ATTR;
@@ -91,9 +93,9 @@ public class XQuerySaxonImpl implements XQueryImpl {
                         continue;
                     }
                     switch (var.getItemId()) {
-                        case XD_ATTR:
-                        case XD_ELEMENT:
-                        case XD_TEXT: x.bindValue(qname, var.getXMLNode()); break;
+                        case XD_ELEMENT: x.bindValue(qname, var.getElement()); break;
+                        case XD_ATTR: x.bindValue(qname, ((XDAttr) var).attrValue()); break;
+                        case XD_TEXT: x.bindValue(qname, ((XDText) var).characterDataValue()); break;
                         case XD_BOOLEAN: x.bindValue(qname, var.booleanValue()); break;
                         case XD_LONG: x.bindValue(qname, var.longValue()); break;
                         case XD_INT: x.bindValue(qname, var.intValue()); break;

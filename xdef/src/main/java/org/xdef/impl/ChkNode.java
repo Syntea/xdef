@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.TimeZone;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
+import org.w3c.dom.Attr;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +36,7 @@ import org.xdef.XDPrice;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
+import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_CONTAINER;
@@ -45,7 +48,10 @@ import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.impl.code.DefAttr;
+import org.xdef.impl.code.DefAttr;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
@@ -63,6 +69,7 @@ import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefText;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMData;
@@ -85,8 +92,8 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_MAP;
-import org.xdef.xon.XonUtils;
 import static org.xdef.xon.XonNames.X_VALUE;
+import org.xdef.xon.XonUtils;
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan
@@ -447,6 +454,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
                 }
                 break;
             }
+            case XD_ATTR: {
+                _scp.setVariable(xv, new DefAttr((Attr) value));
+                return;
+            }
+            case XD_TEXT: {
+                _scp.setVariable(xv, new DefText((CharacterData) value));
+                return;
+            }
             case XD_ELEMENT: {
                 Element e;
                 if (value instanceof Node) {
@@ -627,22 +642,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
             case XD_BIGINTEGER: _scp.setVariable(xv, new DefBigInteger(value)); return;
             case XD_ELEMENT:
                 _scp.setVariable(xv, new DefElement(KXmlUtils.parseXml(value).getDocumentElement())); return;
-        }
-        //Value is not compatible with the type of variable '&{0}'
-        throw new SRuntimeException(XDEF.XDEF564, name);
-    }
-
-    /** Set variable.
-     * @param name name name of variable.
-     * @param value value to be set to the variable.
-     */
-    private void setVariable(final String name, final BigDecimal value) {
-        XVariable xv = findVariable(name);
-        switch (xv.getType()) {
-            case XD_LONG: _scp.setVariable(xv, new DefLong(value.longValue())); return;
-            case XD_DOUBLE: _scp.setVariable(xv, new DefDouble(value.doubleValue())); return;
-            case XD_DECIMAL: _scp.setVariable(xv, new DefDecimal(value)); return;
-            case XD_STRING: _scp.setVariable(xv, new DefString(value.toString())); return;
         }
         //Value is not compatible with the type of variable '&{0}'
         throw new SRuntimeException(XDEF.XDEF564, name);

@@ -13,6 +13,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_ANYURI;
+import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import static org.xdef.XDValueID.XD_BNFRULE;
@@ -43,6 +44,7 @@ import static org.xdef.XDValueID.XD_OUTPUT;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_PRICE;
+import static org.xdef.XDValueID.XD_QNAME;
 import static org.xdef.XDValueID.XD_REGEX;
 import static org.xdef.XDValueID.XD_REGEXRESULT;
 import static org.xdef.XDValueID.XD_REPORT;
@@ -52,6 +54,7 @@ import static org.xdef.XDValueID.XD_SHORT;
 import static org.xdef.XDValueID.XD_STATEMENT;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_TELEPHONE;
+import static org.xdef.XDValueID.XD_TEXT;
 import static org.xdef.XDValueID.XD_UNDEF;
 import static org.xdef.XDValueID.XD_UNIQUESET_KEY;
 import static org.xdef.XDValueID.XD_VOID;
@@ -97,12 +100,12 @@ import static org.xdef.impl.code.CodeTable.CONTEXT_ADDITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENTS;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENT_X;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETLENGTH;
+import static org.xdef.impl.code.CodeTable.CONTEXT_GETTEXT;
+import static org.xdef.impl.code.CodeTable.CONTEXT_ITEM;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
-import static org.xdef.impl.code.CodeTable.CONTEXT_GETTEXT;
-import static org.xdef.impl.code.CodeTable.CONTEXT_ITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ITEMTYPE;
 import static org.xdef.impl.code.CodeTable.CONTEXT_REMOVEITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_REPLACEITEM;
@@ -194,6 +197,7 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_DOUBLE;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_DURATION;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_ERROR;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_LONG;
+import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_QNAMEURI;
@@ -258,6 +262,7 @@ import static org.xdef.impl.code.CodeTable.NEW_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.NEW_OUTSTREAM;
 import static org.xdef.impl.code.CodeTable.NEW_PARSERESULT;
 import static org.xdef.impl.code.CodeTable.NEW_PRICE;
+import static org.xdef.impl.code.CodeTable.NEW_QNAME;
 import static org.xdef.impl.code.CodeTable.NEW_REPORT;
 import static org.xdef.impl.code.CodeTable.NEW_SERVICE;
 import static org.xdef.impl.code.CodeTable.NEW_TELEPHONE;
@@ -438,6 +443,8 @@ public class CompileBase implements CodeTable, XDValueID {
         setType(XX_ELEMENT, "", org.xdef.proc.XXElement.class);
         setType(XX_DATA, "", org.xdef.proc.XXData.class);
         setType(XD_ELEMENT, "Element", org.w3c.dom.Element.class);
+        setType(XD_ATTR, "Attr", org.w3c.dom.Attr.class);
+        setType(XD_TEXT, "Text", org.w3c.dom.CharacterData.class);
         setType(XD_EXCEPTION, "Exception", org.xdef.XDException.class);
         setType(XD_REPORT, "Report", org.xdef.sys.Report.class);
         setType(XD_XPATH, "XpathExpr", org.xdef.xml.KXpathExpr.class);
@@ -941,7 +948,7 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // ATTR REFERENCE (reference to direct attribute of the processed element)
 ////////////////////////////////////////////////////////////////////////////////
-//		ti = X_ATTR_REF;
+        ti = XD_ATTR;
 ////////////////////////////////////////////////////////////////////////////////
 // ANY VALUE (touple name, value)
 ////////////////////////////////////////////////////////////////////////////////
