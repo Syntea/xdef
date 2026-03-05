@@ -63,7 +63,23 @@
     </dependencies>
 
     <build>
-        <finalName>xdef-web</finalName>
+        <finalName>${project.artifactId}</finalName>
+        
+        <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warSourceDirectory>${basedir}/src/main/webapp/content</warSourceDirectory>
+					<webResources>
+						<resource>
+							<directory>../xdef/target/reports/apidocs</directory>
+							<targetPath>javadoc</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>        
+        </plugins>
     </build>
 
 </project>
