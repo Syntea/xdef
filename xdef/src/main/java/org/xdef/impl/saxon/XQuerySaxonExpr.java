@@ -27,7 +27,7 @@ import org.xdef.xml.KXquery;
 public class XQuerySaxonExpr implements KXquery {
     private static final XQDataSource XDS;
     private XQConnection _conn;
-    private XQPreparedExpression _value;
+    private XQPreparedExpression _expr;
 
     static {
         Object x;
@@ -50,7 +50,7 @@ public class XQuerySaxonExpr implements KXquery {
     private XQuerySaxonExpr(String source) {
         try {
             _conn = XDS.getConnection();
-            _value = _conn.prepareExpression(source);
+            _expr = _conn.prepareExpression(source);
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
         }
@@ -71,7 +71,7 @@ public class XQuerySaxonExpr implements KXquery {
     @Override
     public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException{
         try {
-            _value.setImplicitTimeZone(tz);
+            _expr.setImplicitTimeZone(tz);
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
         }
@@ -84,7 +84,7 @@ public class XQuerySaxonExpr implements KXquery {
     @Override
     public TimeZone getImplicitTimeZone() throws SRuntimeException {
         try {
-            return _value.getImplicitTimeZone();
+            return _expr.getImplicitTimeZone();
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
         }
@@ -96,7 +96,7 @@ public class XQuerySaxonExpr implements KXquery {
     @Override
     public QName[] getAllExternalVariables() {
         try {
-            return _value.getAllExternalVariables();
+            return _expr.getAllExternalVariables();
         } catch (XQException ex) {
             return null;
         }
@@ -108,7 +108,7 @@ public class XQuerySaxonExpr implements KXquery {
     @Override
     public QName[] getAllUnboundExternalVariables() {
         try {
-            return _value.getAllUnboundExternalVariables();
+            return _expr.getAllUnboundExternalVariables();
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
         }
@@ -124,42 +124,42 @@ public class XQuerySaxonExpr implements KXquery {
         StringParser p = new StringParser(s);
         SPosition spos = p.getPosition();
         if (p.isXMLDatetime() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_DATETIME));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_DATETIME));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLDate() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_DATE));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_DATE));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLTime() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_TIME));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_TIME));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLDay() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GDAY));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GDAY));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLMonth() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GMONTH));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GMONTH));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLYear() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GYEAR));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GYEAR));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLMonthDay()&& p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GMONTHDAY));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GMONTHDAY));
             return;
         }
         p.resetPosition(spos);
         if (p.isXMLYearMonth() && p.eos()) {
-            _value.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GYEARMONTH));
+            _expr.bindAtomicValue(qname, s,  _conn.createAtomicType(XQItemType.XQBASETYPE_GYEARMONTH));
             return;
         }
         throw new SRuntimeException(XML.XML506, "unknown datetime value");
@@ -188,37 +188,37 @@ public class XQuerySaxonExpr implements KXquery {
         }
         try {
             if (val instanceof Boolean) {
-                _value.bindBoolean(qname, ((Boolean)val), null);
+                _expr.bindBoolean(qname, ((Boolean)val), null);
             } else if (val instanceof Byte) {
-                _value.bindByte(qname, ((Byte)val), null);
+                _expr.bindByte(qname, ((Byte)val), null);
             } else if (val instanceof Short) {
-                _value.bindShort(qname, ((Short)val), null);
+                _expr.bindShort(qname, ((Short)val), null);
             } else if (val instanceof Integer) {
-                _value.bindInt(qname, ((Integer)val), null);
+                _expr.bindInt(qname, ((Integer)val), null);
             } else if (val instanceof Long) {
-                _value.bindLong(qname, ((Long)val), null);
+                _expr.bindLong(qname, ((Long)val), null);
             } else if (val instanceof Float) {
-                _value.bindFloat(qname, ((Float) val), null);
+                _expr.bindFloat(qname, ((Float) val), null);
             } else if (val instanceof Double) {
-                _value.bindDouble(qname, ((Double) val), null);
+                _expr.bindDouble(qname, ((Double) val), null);
             } else if (val instanceof Node) {
-                _value.bindNode(qname, (Node) val, null);
+                _expr.bindNode(qname, (Node) val, null);
             } else if (val instanceof javax.xml.namespace.QName) {
-                _value.bindObject(qname, (javax.xml.namespace.QName) val, null);
+                _expr.bindObject(qname, (javax.xml.namespace.QName) val, null);
             } else if (val instanceof java.net.URI) {
-                _value.bindAtomicValue(qname,
+                _expr.bindAtomicValue(qname,
                     val.toString(), _conn.createAtomicType(XQItemType.XQBASETYPE_ANYURI));
             } else if (val instanceof SDuration || val instanceof javax.xml.datatype.Duration) {
-                _value.bindAtomicValue(qname,
+                _expr.bindAtomicValue(qname,
                     val.toString(), _conn.createAtomicType(XQItemType.XQBASETYPE_DURATION));
             } else if (val instanceof byte[]) {
-                _value.bindAtomicValue(qname,
+                _expr.bindAtomicValue(qname,
                     new String(org.xdef.sys.SUtils.encodeBase64((byte[]) val)),
                     _conn.createAtomicType(XQItemType.XQBASETYPE_BASE64BINARY));
             } else if (val instanceof SDatetime) {
                 bindDate(qname, (SDatetime) val);
             } else {
-                _value.bindString(qname, val.toString(), null);
+                _expr.bindString(qname, val.toString(), null);
             }
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&amp;{0}{: }
@@ -234,32 +234,33 @@ public class XQuerySaxonExpr implements KXquery {
     public Object evaluate(final Node node) throws SRuntimeException {
         try {
             if (node == null) {
-                return _value.executeQuery();
+                return _expr.executeQuery();
             } else if (node.getNodeType() == Node.DOCUMENT_NODE) {
-                _value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node, _conn.createDocumentType()));
-                return _value.executeQuery();
+                _expr.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node, _conn.createDocumentType()));
+                return _expr.executeQuery();
             } else if (node.getNodeType() == Node.ELEMENT_NODE) {
-                _value.bindItem(XQConstants.CONTEXT_ITEM,
+                _expr.bindItem(XQConstants.CONTEXT_ITEM,
                     _conn.createItemFromNode(node,
                         _conn.createElementType(KXmlUtils.getQName(node), XQItemType.XQBASETYPE_ANYTYPE)));
-                return _value.executeQuery();
+                return _expr.executeQuery();
             } else if (node.getNodeType() == Node.TEXT_NODE) {
-                _value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node, _conn.createTextType()));
-                return _value.executeQuery();
+                _expr.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node, _conn.createTextType()));
+                return _expr.executeQuery();
             } else if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
-                _value.bindItem(XQConstants.CONTEXT_ITEM,
+                _expr.bindItem(XQConstants.CONTEXT_ITEM,
                     _conn.createItemFromNode(node,_conn.createProcessingInstructionType(node.getNodeValue())));
-                return _value.executeQuery();
+                return _expr.executeQuery();
             } else if (node.getNodeType() == Node.COMMENT_NODE) {
-                _value.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node, _conn.createCommentType()));
-                return _value.executeQuery();
+                _expr.bindItem(XQConstants.CONTEXT_ITEM, _conn.createItemFromNode(node, _conn.createCommentType()));
+                return _expr.executeQuery();
             } else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-                _value.bindItem(XQConstants.CONTEXT_ITEM,
+                _expr.bindItem(XQConstants.CONTEXT_ITEM,
                     _conn.createItemFromNode(node,
                     _conn.createAttributeType(KXmlUtils.getQName(node),XQItemType.XQBASETYPE_ANYATOMICTYPE)));
-                return _value.executeQuery();
+                return _expr.executeQuery();
             } else {
-                throw new SRuntimeException(XML.XML506, "Unknown argument type");//XQuery expression error&{0}{: }
+                //XQuery expression error&{0}{: }
+                throw new SRuntimeException(XML.XML506, "Unknown type of value: " + node.getClass());
             }
         } catch (XQException | DOMException | SRuntimeException ex) {
             if (ex instanceof SRuntimeException) {
@@ -278,7 +279,7 @@ public class XQuerySaxonExpr implements KXquery {
     @Override
     public Object evaluate() {
         try {
-            return _value.executeQuery();
+            return _expr.executeQuery();
         } catch (XQException ex) {
             throw new SRuntimeException(XML.XML506, ex); //XQuery expression error&{0}{: }
         }

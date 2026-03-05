@@ -130,11 +130,9 @@ public class XQuerySaxonImpl implements XQueryImpl {
                                 result.addXDItem(new DefURI(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_BOOLEAN:
                                 result.addXDItem(new DefBoolean(item.getBoolean())); continue;
-                            case XQItemType.XQBASETYPE_BYTE:
-                                result.addXDItem(new DefLong(item.getByte())); continue;
+                            case XQItemType.XQBASETYPE_BYTE: result.addXDItem(new DefLong(item.getByte())); continue;
                             case XQItemType.XQBASETYPE_INT:
-                            case XQItemType.XQBASETYPE_INTEGER:
-                                result.addXDItem(new DefLong(item.getInt())); continue;
+                            case XQItemType.XQBASETYPE_INTEGER: result.addXDItem(new DefLong(item.getInt())); continue;
                             case XQItemType.XQBASETYPE_SHORT:
                             case XQItemType.XQBASETYPE_UNSIGNED_BYTE:
                                 result.addXDItem(new DefLong(item.getShort())); continue;
@@ -198,7 +196,9 @@ public class XQuerySaxonImpl implements XQueryImpl {
             return result;
         } catch (SRuntimeException ex) {
             throw ex;
-        } catch (XQException | DOMException | SException ex) {
+        } catch (SException ex) {
+            throw new SRuntimeException(((SException) ex).getReport(), ex);
+        } catch (XQException | DOMException ex) {
             throw new SRuntimeException(ex.toString());
         }
     }
