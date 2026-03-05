@@ -1,5 +1,6 @@
 package org.xdef.impl.saxon;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.TimeZone;
 import javax.xml.namespace.QName;
 import javax.xml.xquery.XQConnection;
@@ -22,13 +23,23 @@ import org.xdef.xml.KXquery;
 /** XQuery expression container.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("unchecked")
 public class XQuerySaxonExpr implements KXquery {
-    private final static XQDataSource XDS = new com.saxonica.xqj.SaxonXQDataSource();
-    /** XQuery engine. */
-    private XQConnection _conn;
-    XQPreparedExpression _value;
+    private final static XQDataSource XDS;
+    private final XQConnection _conn;
+    private final XQPreparedExpression _value;
 
-    public XQuerySaxonExpr() {}
+    static {
+        Object x;
+        try {
+            Class cls = Class.forName("com.saxonica.xqj.SaxonXQDataSource");
+            x = cls.getConstructor().newInstance();
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException
+            | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
+            x = null;
+        }
+        XDS = (XQDataSource) x;
+    }
 
     /** Creates a new instance of KXqueryExpr from other expression with compiled new expression.
      * The namespace context, functions and variables are retrieved  from the argument.
