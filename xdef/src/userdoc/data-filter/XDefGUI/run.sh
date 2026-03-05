@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp "../xdef-${version}.jar" org.xdef.util.GUIEditor $@
+java -cp "../xdef-${project.version}.jar" org.xdef.util.GUIEditor $@
