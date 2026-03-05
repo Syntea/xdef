@@ -25,9 +25,9 @@ import org.xdef.xml.KXquery;
  */
 @SuppressWarnings("unchecked")
 public class XQuerySaxonExpr implements KXquery {
-    private final static XQDataSource XDS;
-    private final XQConnection _conn;
-    private final XQPreparedExpression _value;
+    private static final XQDataSource XDS;
+    private XQConnection _conn;
+    private XQPreparedExpression _value;
 
     static {
         Object x;
@@ -40,6 +40,8 @@ public class XQuerySaxonExpr implements KXquery {
         }
         XDS = (XQDataSource) x;
     }
+
+    public XQuerySaxonExpr() {}
 
     /** Creates a new instance of KXqueryExpr from other expression with compiled new expression.
      * The namespace context, functions and variables are retrieved  from the argument.
