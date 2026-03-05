@@ -14,4 +14,4 @@ fi
 
 echo "Execute project: ${project}"
 
-java -cp "../xdef-${version}.jar:$2" org.xdef.util.GUIEditor -p projects/${project}/project.xml
+java -cp "../xdef-${project.version}.jar:$2" org.xdef.util.GUIEditor -p projects/${project}/project.xml

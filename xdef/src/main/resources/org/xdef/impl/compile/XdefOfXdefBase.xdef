@@ -1,6 +1,5 @@
 <!--
- Common base types and BNF grammar of X-script.
- Meta namespace of X-definition is "METAXD".
+ Common base types and BNF grammar of X-script. Meta namespace of X-definition is "METAXD".
 -->
 
 <xd:def xmlns:xd  = "METAXD"
@@ -231,13 +230,13 @@ CastRequest ::= S? "(" S? $rule TypeIdentifier S? ")" S?
 UnaryOperator ::= "+" | ("-" | "!" | "NOT" | "~") $rule
 
 TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "char" | "Datetime" | "Decimal" | "Duration"
-  | "Exception" | "Container" | "Element" | "Message" | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule"
-  | "Parser" | "Service" | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey" | "AnyValue"
-  | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition" | "Price" | "Telephone" | "URI" | "EmailAddr")
-  $rule
+  | "Exception" | "Container" | "Element" | "Message" | "Bytes" | "XmlOutStream" | "BNFGrammar"
+  | "BNFRule" | "Parser" | "Service" | "ResultSet" | "Statement" | "ParseResult" | "Locale"
+  | "uniqueSetKey" | "AnyValue" | "Output" | "Input" | "Attr" | "NamedValue" | "Regex" | "GPSPosition"
+  | "Price" | "Telephone" | "URI" | "EmailAddr" | "QName" | "Text") $rule
 
-Value ::= (Constructor | PredefinedConstant | Increment | Method | VariableReference | KeyParameterReference
-  | Literal | AttributeName | $rule AssignmentStatement) (S? "." S? Method)?
+Value ::= (Constructor | PredefinedConstant | Increment | Method | VariableReference
+  | KeyParameterReference | Literal | AttributeName | $rule AssignmentStatement) (S? "." S? Method)?
 
 NewValue ::= "new" S $rule TypeIdentifier S? ParameterList
 
@@ -466,10 +465,11 @@ ValueOptions ::= ("options" | "option") S? ValueOptionsList
 ValueOptionsList ::= ValueOption (S? "," S? ValueOption)*
   /* Each option can be specified only once. */
 
-ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces" | "setTextUpperCase" | "setTextLowerCase"
-  | "trimText" | "noTrimText" | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "cdata"
-  | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr" | "ignoreEmptyAttributes"
-  | "acceptEmptyAttributes" | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "preserveTextCase"
+ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces" | "setTextUpperCase"
+  | "setTextLowerCase" | "trimText" | "noTrimText" | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces"
+  | "cdata" | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr"
+  | "ignoreEmptyAttributes" | "acceptEmptyAttributes" | "acceptQualifiedAttr" | "notAcceptQualifiedAttr"
+  | "preserveTextCase"
 
 Reference ::= "ref" S XPosition
 
@@ -712,6 +712,7 @@ JSONScriptValue ::= JSONSP? ( "%any" | JSONString | JSONArray | JSONObject) JSON
 JSONScript ::= JSONSP? (JSONArray | JSONObject | JSONString)
 
 ]]>
+
   </xd:BNFGrammar>
 
 </xd:def>

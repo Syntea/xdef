@@ -4,14 +4,16 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
+import org.w3c.dom.CharacterData;
+import org.xdef.XDText;
+import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.XDValueType;
 
-/** Implementation of script value with org.w3c.dom.CharacterData node.
+/** Implementation of script value with org.w3c.dom.Text node.
  * @author  Vaclav Trojan
  */
-public final class DefText extends XDValueAbstract {
+public final class DefText extends XDValueAbstract implements XDText {
     /** CharacterData value of this item. */
     private final CharacterData _value;
 
@@ -29,9 +31,19 @@ public final class DefText extends XDValueAbstract {
      */
     public DefText(final Document doc, final String value) {_value = doc.createTextNode(value);}
 
+    /** Return the value of text node
+     * @return the value of the node as org.w3c.dom.CharacterData.
+     */
+    @Override
+    public CharacterData characterDataValue() {return _value;}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public boolean isNull() {return _value == null;}
+    @Override
+    public Object getObject() {return  _value;}
 
     /** Get type of value.
      * @return The id of item type.

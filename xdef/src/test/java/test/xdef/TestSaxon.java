@@ -1,6 +1,7 @@
 package test.xdef;
 
 import java.io.StringWriter;
+import org.w3c.dom.Document;
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -8,6 +9,8 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
 import org.xdef.XDFactory;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
@@ -33,12 +36,39 @@ public class TestSaxon extends XDTester {
         } catch (Exception ex) {fail(ex);}
     }
 
+    /** Test binding of a value to the external XQuery varialb;e.
+     * @param typ name of value type.
+     * @param val value to bind witn the external Variable $doc in the XQuery.
+     * @return string created from the variable $doc.
+     * @throws Exception
+     */
+    public String testBind(final String typ, final Object val) throws Exception {
+        XDPool xp = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n" +
+"  <xd:declaration>\n" +
+"    external " + typ + " doc;\n" +
+"    external Container result;\n" +
+"    String query = 'declare variable $doc external; $doc';\n" +
+"  </xd:declaration>\n" +
+"  <X xd:script='finally out(result = xquery(query));'/>\n" +
+"</xd:def>");
+        XDDocument xd = xp.createXDDocument();
+        xd.setVariable("doc", val);
+        StringWriter swr = new StringWriter();
+        xd.setStdOut(XDFactory.createXDOutput(swr, false));
+        ArrayReporter reporter = new ArrayReporter();
+        parse(xd, "<X/>", reporter);
+        assertNoErrors(reporter);
+        return swr.toString();
+    }
+
     private void testSaxon() {
         String xdef, xml;
+        Document doc;
         Element el;
-        XDPool xp;
         StringWriter swr;
         XDDocument xd;
+        XDPool xp;
         ArrayReporter reporter = new ArrayReporter();
         try {//xquery in declaration part (without XML context)
             xdef = // test xquery
@@ -238,7 +268,7 @@ public class TestSaxon extends XDTester {
             xml = "<d/>";
             assertEq(xml, parse(xp, "", xml, reporter));
             assertErrors(reporter);
-            xdef = //an anthill with more than two soldiers
+            xdef = // Find anthill with more than two soldiers and use XQuery result for construction of element.
 "<xd:def xmlns:xd='"+ _xdNS + "'>\n"+
 "  <anthill name='string; create xquery(&apos;\n"+
 "    for $i in (//anthill)\n"+
@@ -356,6 +386,31 @@ public class TestSaxon extends XDTester {
             assertEq(3, el.getElementsByTagName("Office").item(0).getChildNodes().getLength());
             assertEq(2, el.getElementsByTagName("Home").item(0).getChildNodes().getLength());
         } catch (RuntimeException ex) {fail(ex);}
+        try {
+            assertEq("true", testBind("boolean", true));
+            assertEq("http://example.com/ns", testBind("URI", new java.net.URI("http://example.com/ns")));
+            assertEq("myElement", testBind("QName", new javax.xml.namespace.QName("myElement")));
+            assertEq("ex:myElem", testBind("QName", new javax.xml.namespace.QName("http://org.xdef/ns","myElem","ex")));
+            assertEq("ISIjeA==", testBind("Bytes", new byte[] {33, 34, 35, 120}));
+            assertEq("P2Y3M5DT4H30M", testBind("Duration", new SDuration(("P2Y3M5DT4H30M"))));
+            assertEq("2026-03-02T00:39:15",testBind("Datetime", new SDatetime("2026-03-02T00:39:15")));
+            assertEq("2026-03-02", testBind("Datetime", new SDatetime("2026-03-02"))); //date
+            assertEq("00:39:15", testBind("Datetime", new SDatetime("00:39:15"))); // time
+            assertEq("---02", testBind("Datetime", new SDatetime("---02"))); //GDay
+            assertEq("--02", testBind("Datetime", new SDatetime("--02"))); //GMonth
+            assertEq("--02-01", testBind("Datetime", new SDatetime("--02-01"))); ; //GMonthDay
+            assertEq("-2026", testBind("Datetime", new SDatetime("-2026")));  //GYear
+            assertEq("-2026-01", testBind("Datetime", new SDatetime("-2026-01")));  //GYearMonth
+            // testBind org.w3c.dom (Document, Element, Attr, Text)
+            doc = KXmlUtils.parseXml("<root><item a='Hi'>Hello</item></root>");
+            assertEq("<root><item a=\"Hi\">Hello</item></root>", testBind("Element", doc)); //document
+            assertEq("<root><item a=\"Hi\">Hello</item></root>", testBind("Element",
+                doc.getDocumentElement())); //Element
+            assertEq("Hi", testBind("Attr",
+                ((Element) doc.getDocumentElement().getChildNodes().item(0)).getAttributeNode("a"))); //Attr
+            assertEq("Hello", testBind("Text",
+                ((Element) doc.getDocumentElement().getChildNodes().item(0)).getChildNodes().item(0))); //Text
+        } catch (Exception ex) {fail(ex);}
     }
 
     @Override
