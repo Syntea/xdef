@@ -1,14 +1,14 @@
 The included software and documentation corresponds to the version:
-   ${version} (release-date ${release.date})
+   ${project.version} (release-date ${release.date})
 
 The project X-definition information:   "README-project.md"
 This software is licensed under:        "apache-license-2.0.md"
 Release information:                    "changelog.md"
 
-JAR file with compiled X-definition:    "xdef-${version}.jar"
-Original java source code:              "xdef-${version}-sources.jar"
-Directly insertable java source code:   "xdef-${version}-src.zip"
-JavaDoc documentation:                  "xdef-${version}-javadoc.zip"
+JAR file with compiled X-definition:    "xdef-${project.version}.jar"
+Original java source code:              "xdef-${project.version}-sources.jar"
+Directly insertable java source code:   "xdef-${project.version}-src.zip"
+JavaDoc documentation:                  "xdef-${project.version}-javadoc.zip"
 
 In the directory "documentation" is:
   "xdef-${specification.version}.pdf"                    X-definition language description
