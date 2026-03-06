@@ -728,22 +728,22 @@ public final class TestTypes extends XDTester {
 "    external method String test.xdef.TestTypes.tst(XXElement, String);\n"+
 "  </xd:declaration>\n"+
 "  <ws:message xd:script='occurs 0..'\n"+
-"     name='required NCName()'>" +
-"     <xd:choice>" +
-"       <ws:part xd:script=\"occurs 0..; match @element\"" +
-"          name =\"required NCName();" +
-"          finally {String t, s=getText(); t = getQnamePrefix(s); out(t+'/' +" +
-"          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +" +
-"          getQnameURI(s) + ';' + tst(s));}\"" +
-"          element             =\"required QNameURI();" +
-"          finally {String t, s=getText(); t=getQnamePrefix(s); out(t+'/' +" +
-"          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +" +
-"          getQnameURI(s) + ';' + tst(s));}\"/>" +
-"       <ws:part xd:script=\"occurs 0..; match @type\"" +
-"          name=\"required NCName();\"" +
-"          type=\"required QName();\"/>" +
-"     </xd:choice>" +
-"  </ws:message>" +
+"     name='required NCName()'>\n" +
+"     <xd:choice>\n" +
+"       <ws:part xd:script=\"occurs 0..; match @element\"\n" +
+"          name =\"required NCName();\n" +
+"          finally {String t, s=getText(); t = getQnamePrefix(s); out(t+'/' +\n" +
+"          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +\n" +
+"          getQnameURI(s) + ';' + tst(s));}\"\n" +
+"          element             =\"required QNameURI();\n" +
+"          finally {String t, s=getText(); t=getQnamePrefix(s); out(t+'/' +\n" +
+"          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +\n" +
+"          getQnameURI(s) + ';' + tst(s));}\"/>\n" +
+"       <ws:part xd:script=\"occurs 0..; match @type\"\n" +
+"          name=\"required NCName();\"\n" +
+"          type=\"required QName();\"/>\n" +
+"     </xd:choice>\n" +
+"  </ws:message>\n" +
 "</xd:def>\n");
             swr = new StringWriter();
             xml =
