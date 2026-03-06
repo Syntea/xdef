@@ -42,8 +42,7 @@
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <optional>true</optional>
-            <!--<scope>test</scope>-->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
