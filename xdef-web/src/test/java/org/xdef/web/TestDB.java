@@ -1,3 +1,5 @@
+package org.xdef.web;
+
 import java.io.File;
 import java.sql.Connection;
 import org.apache.derby.jdbc.EmbeddedDataSource;
