@@ -573,10 +573,19 @@ public interface CodeTable {
     /** get the ISO 4217 currency code. */
     static final short CURRENCYCODE = CONTEXT_ITEMTYPE + 1;
     ////////////////////////////////////////////////////////////////////////////
+    // QName
+    ////////////////////////////////////////////////////////////////////////////
+    /** get prefix of QName. */
+    static final short GET_QNAME_PREFIX = CURRENCYCODE + 1;
+    /** get local name of QName. */
+    static final short GET_QNAME_LOCALNAME = GET_QNAME_PREFIX + 1;
+    /** get namespace from Element connected with this QName prefix. */
+    static final short GET_QNAME_NAMESPACE = GET_QNAME_LOCALNAME + 1;
+    ////////////////////////////////////////////////////////////////////////////
     // Regex
     ////////////////////////////////////////////////////////////////////////////
     /** get result of regular expression. */
-    static final short GET_REGEX_RESULT = CURRENCYCODE + 1;
+    static final short GET_REGEX_RESULT = GET_QNAME_NAMESPACE + 1;
     /** check if result of regular expression matches. */
     static final short MATCHES_REGEX = GET_REGEX_RESULT + 1;
     /** get group of result of regular expression. */

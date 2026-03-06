@@ -1923,11 +1923,19 @@ public final class TestXdef extends XDTester {
         } catch (Exception ex) {fail(ex);}
         setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProperty);
         try {
-            xdef = // optional
-"<xd:def xmlns:xd='"+_xdNS+"' root='a'> <a a='? string(0,10);'/> </xd:def>";
-            xml = "<a a=''/>";
+            xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='a'> <a a='? string(0,10);'/> </xd:def>";
+            xml = "<a />"; //a is optional
             assertEq(xml, parse(xdef, "", xml, reporter));
             assertNoErrorwarningsAndClear(reporter);
+            xml = "<a a=''/>"; //a is empty
+            assertEq(xml, parse(xdef, "", xml, reporter));
+            assertNoErrorwarningsAndClear(reporter);
+            xml = "<a a='abc'/>"; //a is a string
+            assertEq(xml, parse(xdef, "", xml, reporter));
+            assertNoErrorwarningsAndClear(reporter);
+            xml = "<a a='abcdefghijklmnopqrstuvwxyz'/>"; //a is too loing string
+            assertEq(xml, parse(xdef, "", xml, reporter));
+            assertErrorsAndClear(reporter);
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>" +
 "  <a xd:script='options acceptEmptyAttributes' t='string'/>" +

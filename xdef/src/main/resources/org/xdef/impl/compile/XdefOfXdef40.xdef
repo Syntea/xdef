@@ -19,10 +19,10 @@
 /******************************************************************************/
 
     <XD4.0:collection xd:script = "options moreAttributes;
-      init NS = @metaNamespace ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.0'"
-    include       = "optional uriList; options acceptQualifiedAttr"
-    metaNamespace = "optional uri; options acceptQualifiedAttr"
-    xd:attr        = "occurs * xdHeaderAttr;" >
+                                   init NS = @metaNamespace ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.0'"
+                      include       = "optional urlList; options acceptQualifiedAttr"
+                      metaNamespace = "optional url; options acceptQualifiedAttr"
+                      xd:attr        = "occurs * xdHeaderAttr;" >
     <!-- Other attribute names (xd:attr) must begin with the prefix "impl-" -->
 
     <xd:mixed>
@@ -48,9 +48,9 @@
   <XD4.0:def xd:script = "options moreAttributes;
       init NS = @metaNamespace ? (String) @metaNamespace : 'http://www.xdef.org/xdef/4.0'"
     name          = "optional QName; options acceptQualifiedAttr"
-    metaNamespace = "optional uri; options acceptQualifiedAttr"
+    metaNamespace = "optional url; options acceptQualifiedAttr"
     root          = "optional rootList; options acceptQualifiedAttr"
-    include       = "optional uriList; options acceptQualifiedAttr"
+    include       = "optional urlList; options acceptQualifiedAttr"
     script        = "optional xdefScript; options acceptQualifiedAttr"
     importLocal   = "optional importLocal; options acceptQualifiedAttr"
     xd:attr        = "occurs * xdHeaderAttr;" >

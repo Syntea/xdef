@@ -95,7 +95,7 @@ import org.xdef.impl.code.DefSQLResultSet;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefSQLStatement;
 import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefUri;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
 import org.xdef.impl.code.ParseItem;
@@ -202,7 +202,7 @@ public final class XDReader extends SObjectReader {
                         SDuration x = readSDuration();
                         return x==null ? new DefDuration() : new DefDuration(x);
                     }
-                    case XD_ANYURI: return new DefURI(readString());
+                    case XD_ANYURI: return new DefUri(readString());
                     case XD_EMAIL: return new DefEmailAddr(readString());
                     case XD_ELEMENT: return new DefElement();
                     case XD_EXCEPTION: return new DefException(readReport(), readString(), readInt());

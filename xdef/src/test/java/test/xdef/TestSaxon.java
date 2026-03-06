@@ -351,9 +351,9 @@ public class TestSaxon extends XDTester {
         } catch (RuntimeException ex) {fail(ex);}
         try {
             assertEq("true", testBind("boolean", true));
-            assertEq("http://example.com/ns", testBind("URI", new java.net.URI("http://example.com/ns")));
-            assertEq("myElement", testBind("QName", new javax.xml.namespace.QName("myElement")));
-            assertEq("ex:myElem", testBind("QName", new javax.xml.namespace.QName("http://org.xdef/ns","myElem","ex")));
+            assertEq("http://example.com/ns", testBind("XDUri", new java.net.URI("http://example.com/ns")));
+            assertEq("myElement", testBind("XDQName", new javax.xml.namespace.QName("myElement")));
+            assertEq("ex:myElem",testBind("XDQName",new javax.xml.namespace.QName("http://org.xdef/ns","myElem","ex")));
             assertEq("ISIjeA==", testBind("Bytes", new byte[] {33, 34, 35, 120}));
             assertEq("P2Y3M5DT4H30M", testBind("Duration", new SDuration(("P2Y3M5DT4H30M"))));
             assertEq("2026-03-02T00:39:15",testBind("Datetime", new SDatetime("2026-03-02T00:39:15")));
@@ -367,8 +367,7 @@ public class TestSaxon extends XDTester {
             // testBind org.w3c.dom (Document, Element, Attr, Text)
             doc = KXmlUtils.parseXml("<root><item a='Hi'>Hello</item></root>");
             assertEq("<root><item a=\"Hi\">Hello</item></root>", testBind("Element", doc)); //document
-            assertEq("<root><item a=\"Hi\">Hello</item></root>", testBind("Element",
-                doc.getDocumentElement())); //Element
+            assertEq("<root><item a=\"Hi\">Hello</item></root>", testBind("Element",doc.getDocumentElement()));
             assertEq("Hi", testBind("Attr",
                 ((Element) doc.getDocumentElement().getChildNodes().item(0)).getAttributeNode("a"))); //Attr
             assertEq("Hello", testBind("Text",

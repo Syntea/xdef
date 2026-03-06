@@ -70,7 +70,7 @@ import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefText;
-import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefUri;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
@@ -522,7 +522,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
         } else if (value instanceof GPSPosition) {
             setVariable(name, new XDGPSPosition((GPSPosition) value));
         } else if (value instanceof URI) {
-            setVariable(name, new DefURI((URI) value));
+            setVariable(name, new DefUri((URI) value));
         } else if (value instanceof javax.xml.namespace.QName) {
             setVariable(name, new DefQName((javax.xml.namespace.QName) value));
         } else if (value instanceof Price) {

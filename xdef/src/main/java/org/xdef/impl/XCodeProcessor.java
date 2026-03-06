@@ -47,6 +47,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDPrice;
+import org.xdef.XDQName;
 import org.xdef.XDRegex;
 import org.xdef.XDRegexResult;
 import org.xdef.XDReport;
@@ -278,6 +279,9 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_QNAMEURI;
+import static org.xdef.impl.code.CodeTable.GET_QNAME_LOCALNAME;
+import static org.xdef.impl.code.CodeTable.GET_QNAME_NAMESPACE;
+import static org.xdef.impl.code.CodeTable.GET_QNAME_PREFIX;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_END;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_NUM;
@@ -529,7 +533,7 @@ import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefTelephone;
-import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefUri;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
 import org.xdef.impl.code.DefXmlWriter;
@@ -2380,6 +2384,9 @@ public final class XCodeProcessor {
                     _stack[sp] = new DefLong(((XDContainer)_stack[sp]).getXDItem(index).getItemId());
                     continue;
                 }
+                case GET_QNAME_PREFIX: _stack[sp] = new DefString(((XDQName) _stack[sp]).getPrefix()); continue;
+                case GET_QNAME_LOCALNAME: _stack[sp] = new DefString(((XDQName) _stack[sp]).getLocalName()); continue;
+                case GET_QNAME_NAMESPACE: _stack[sp] = new DefString(((XDQName) _stack[sp]).getNamespace()); continue;
                 case GET_RESULTSET_ITEM: {
                     String s = _stack[sp--].stringValue();
                     XDResultSet it = (XDResultSet) _stack[sp];
@@ -3118,7 +3125,7 @@ public final class XCodeProcessor {
                 case NEW_CURRENCY: _stack[sp] = new XDCurrency(_stack[sp].toString()); continue;
                 case NEW_EMAIL: _stack[sp] = new DefEmailAddr(_stack[sp].toString()); continue;
                 case NEW_IPADDR: _stack[sp] = new DefIPAddr(_stack[sp].toString()); continue;
-                case NEW_URI: _stack[sp] = new DefURI(_stack[sp].toString()); continue;
+                case NEW_URI: _stack[sp] = new DefUri(_stack[sp].toString()); continue;
                 case NEW_PARSER: {
                     XDParser p = getParser(item.stringValue());
                     int np = item.getParam();

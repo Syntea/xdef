@@ -225,7 +225,7 @@ public final class DefNull extends XDValueAbstract {
             case XD_INPUT: return new DefInStream();
             case XD_IPADDR: return new DefIPAddr();
             case XD_LONG: return new DefLong();
-            case XD_ANYURI: return new DefURI();
+            case XD_ANYURI: return new DefUri();
             case XD_QNAME: return new DefQName();
             case XD_OUTPUT: return new DefOutStream();
             case XD_PARSERESULT: return new DefParseResult();

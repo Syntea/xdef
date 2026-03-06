@@ -50,9 +50,9 @@
    <!--======================================-->
 <Example name                = "required NCName ()"
          xd:script = "onStartElement outln('Example - start'); finally  outln('Example - end');"
-         targetNamespace     = "required uri()"
-         queryLanguage       = "optional uri()"
-         expressionLanguage  = "optional uri()"
+         targetNamespace     = "required anyURI()"
+         queryLanguage       = "optional anyURI()"
+         expressionLanguage  = "optional anyURI()"
          suppressJoinFailure = "optional enum('yes','no')"
          exitOnStandardFault = "optional enum('yes','no')">
 
@@ -82,12 +82,12 @@
    <!--======================================-->
    <!-- Std Modely                           -->
    <!--======================================-->
-<condition       expressionLanguage = "optional uri()"
+<condition       expressionLanguage = "optional anyURI()"
                  xd:script = "onStartElement out('('); finally out(')');">
                  required ${BooleanExpr}; finally out(getText());
 </condition>
 
-<CounterValue    expressionLanguage = "optional uri()">
+<CounterValue    expressionLanguage = "optional anyURI()">
                  required ${IntExpr}
 </CounterValue>
 
@@ -224,12 +224,12 @@
          <scope               xd:script = "occurs 1 ;    ref scope" />
 </forEach>
 
-<finalCounterValue   expressionLanguage = "optional uri()">
-                     required ${IntegerUnsignedExpr}
+<finalCounterValue   expressionLanguage = "optional anyURI()">
+  required ${IntegerUnsignedExpr}
 </finalCounterValue>
 
-<startCounterValue   expressionLanguage = "optional uri()">
-                     required ${IntegerUnsignedExpr}
+<startCounterValue expressionLanguage = "optional anyURI()">
+  required ${IntegerUnsignedExpr}
 </startCounterValue>
 
 <completionCondition>
@@ -237,9 +237,8 @@
 </completionCondition>
 
 
-<branches expressionLanguage = "optional uri()"
-          countCompletedBranchesOnly = "optional enum('yes','no')">
-                  required ${IntegerUnsignedExpr}
+<branches expressionLanguage = "optional anyURI()" countCompletedBranchesOnly = "optional enum('yes','no')">
+  required ${IntegerUnsignedExpr}
 </branches>
    <!--======================================-->
    <!-- wait                                 -->
@@ -257,23 +256,21 @@
       </xd:choice>
 </ForOrUntil>
 
-<for         expressionLanguage = "optional uri()">
-             required ${DurationExpr}
+<for         expressionLanguage = "optional anyURI()">
+  required ${DurationExpr}
 </for>
 
-<until       expressionLanguage = "optional uri()">
-             required ${DeadlineExpr}
+<until       expressionLanguage = "optional anyURI()">
+  required ${DeadlineExpr}
 </until>
 
-<repeatEvery expressionLanguage = "optional uri()">
-             required ${DurationExpr}
+<repeatEvery expressionLanguage = "optional anyURI()">
+  required ${DurationExpr}
 </repeatEvery>
    <!--======================================-->
    <!-- pick                                 -->
    <!--======================================-->
-<pick   xd:script = "ref StdActivity"
-        createInstance = "optional enum('yes','no')">
-
+<pick   xd:script = "ref StdActivity" createInstance = "optional enum('yes','no')">
     <onMessage    xd:script="occurs 1.. ; ref onMessage" />
     <onAlarm      xd:script="occurs 0.. ; ref OnAlarmActivity" />
 </pick>
@@ -489,7 +486,7 @@
    <!--======================================-->
    <!-- from-spec   to-spec                  -->
    <!--======================================-->
-<query   queryLanguage = "optional uri()">required ${QueryExpr}</query>
+<query   queryLanguage = "optional anyURI()">required ${QueryExpr}</query>
 
 <FromSpec>
   <xd:choice>
@@ -500,20 +497,18 @@
            variable = "required ${BPELVariableName}"
            property = "optional NCName ()"/>
      <from xd:script="match(@variable)"
-           variable = "required ${BPELVariableName}"
-           part  = "optional NCName ()">
-             <query xd:script = "occurs 0..1; ref query" />
-          </from>
-     <from xd:script="match(@expressionLanguage)"
-                  expressionLanguage = "optional uri()">
-             required ${Expression}
-          </from>
+           variable = "required ${BPELVariableName}" part  = "optional NCName ()">
+       <query xd:script = "occurs 0..1; ref query" />
+     </from>
+     <from xd:script="match(@expressionLanguage)" expressionLanguage = "optional anyURI()">
+       required ${Expression}
+     </from>
      <from>
-             <xd:choice>
-                <literal>required ${Literal}</literal>
-                required ${Expression}
-            </xd:choice>
-          </from>
+       <xd:choice>
+         <literal>required ${Literal}</literal>
+         required ${Expression}
+       </xd:choice>
+     </from>
   </xd:choice>
 </FromSpec>
 
@@ -530,9 +525,9 @@
              <query xd:script = "occurs 0..1; ref query" />
           </to>
 
-     <to      xd:script = "match(NOT @partnerLink AND NOT@variable AND NOT@property AND NOT@part)"
-              queryLanguage = "optional uri()">
-              required ${QueryExpr}
+     <to xd:script = "match(NOT @partnerLink AND NOT@variable AND NOT@property AND NOT@part)"
+         queryLanguage = "optional anyURI()">
+       required ${QueryExpr}
      </to>
   </xd:choice>
 </ToSpec>
@@ -624,12 +619,9 @@
       <extension  xd:script="occurs 0..;  ref extension" />
 </extensions>
 
-<extension namespace = "optional uri()"
-           mustUnderstand = "optional enum('yes','no')" />
+<extension namespace = "optional anyURI()" mustUnderstand = "optional enum('yes','no')" />
    <!--======================================-->
    <!-- import                               -->
    <!--======================================-->
-<import     namespace = "optional uri()"
-            location = "optional uri()"
-            importType = "optional uri()"/>
+<import namespace = "optional anyURI()" location = "optional anyURI()" importType = "optional anyURI()"/>
 </xd:def>
