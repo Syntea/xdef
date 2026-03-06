@@ -428,8 +428,8 @@ public class CompileBase implements CodeTable, XDValueID {
         setType(XD_CURRENCY, "Currency", java.util.Currency.class);
         setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
         setType(XD_PRICE, "Price",org.xdef.XDPrice.class);
-        setType(XD_ANYURI, "URI", java.net.URI.class);
-        setType(XD_QNAME, "QName", javax.xml.namespace.QName.class);
+        setType(XD_ANYURI, "XDUri", java.net.URI.class);
+        setType(XD_QNAME, "XDQName", javax.xml.namespace.QName.class);
         setType(XD_EMAIL, "EmailAddr", org.xdef.XDEmailAddr.class);
         setType(XD_IPADDR, "IPAddr", java.net.InetAddress.class);
         setType(XD_TELEPHONE, "Telephone", org.xdef.XDTelephone.class);
@@ -639,7 +639,7 @@ public class CompileBase implements CodeTable, XDValueID {
             keyParam("pattern",XD_STRING,true,-1,false),
             keyParam("whiteSpace", XD_STRING, false, -1, true, new DefString("collapse"))};
         im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG}, XD_ANYURI, keyPars);
-        parser(im, org.xdef.impl.parsers.XSParseAnyURI.class, "anyURI", "?xs:anyURI");
+        parser(im, org.xdef.impl.parsers.XSParseAnyURI.class, "anyURI", "?xs:anyURI", "?uri" );
         parser(im, org.xdef.impl.parsers.XSParseName.class, "Name", "?xs:Name");
         im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING, keyPars);
         parser(im, org.xdef.impl.parsers.XSParseID.class, "ID", "?xs:ID");
@@ -740,16 +740,16 @@ public class CompileBase implements CodeTable, XDValueID {
         parser(im, org.xdef.impl.parsers.XDParseQNameList.class, "QNameList", "?QnameList");
         parser(im, org.xdef.impl.parsers.XDParseLanguages.class, "languages", "?ISOlanguages");
         parser(im, org.xdef.impl.parsers.XDParseCountries.class, "countries");
-        im = genParserMetnod(0, 1, new short[] {XD_STRING}, XD_CONTAINER,
-            keyParam("argument", XD_ANY, true, 1,false),
-                keyParam("enumeration", XD_STRING, true, -1,false),
-                keyParam("length", XD_LONG, false, -1,false),
-                keyParam("maxLength", XD_LONG, false, -1,false),
-                keyParam("minLength", XD_LONG, false, -1,false),
-                keyParam("pattern",XD_STRING,true,-1,false),
-                keyParam("separator", XD_STRING, true,  0, false),
-                keyParam("whiteSpace", XD_STRING, false, -1, true, new DefString("collapse")));
-        parser(im, org.xdef.impl.parsers.XDParseQNameURIList.class,"QNameURIList", "?QnameListURI");
+//        im = genParserMetnod(0, 1, new short[] {XD_STRING}, XD_CONTAINER,
+//            keyParam("argument", XD_ANY, true, 1,false),
+//                keyParam("enumeration", XD_STRING, true, -1,false),
+//                keyParam("length", XD_LONG, false, -1,false),
+//                keyParam("maxLength", XD_LONG, false, -1,false),
+//                keyParam("minLength", XD_LONG, false, -1,false),
+//                keyParam("pattern",XD_STRING,true,-1,false),
+//                keyParam("separator", XD_STRING, true,  0, false),
+//                keyParam("whiteSpace", XD_STRING, false, -1, true, new DefString("collapse")));
+//        parser(im, org.xdef.impl.parsers.XDParseQNameURIList.class,"QNameURIList", "?QnameListURI");
         im = genParserMetnod(0, 2, new short[] {XD_DURATION,XD_DURATION}, XD_DURATION,
             keyParam("base", XD_STRING, true, -1,false),
             keyParam("enumeration", XD_DURATION, true,-1,false),
@@ -850,8 +850,8 @@ public class CompileBase implements CodeTable, XDValueID {
         parser(im,org.xdef.impl.parsers.XDParseFile.class, "file");
         parser(im,org.xdef.impl.parsers.XDParseFileList.class,"fileList");
         parser(im,org.xdef.impl.parsers.XDParseXDType.class, "xdType");
-        parser(im,org.xdef.impl.parsers.XDParseUri.class, "uri");
-        parser(im,org.xdef.impl.parsers.XDParseUriList.class, "uriList");
+//        parser(im,org.xdef.impl.parsers.XDParseUri.class, "uri");
+//        parser(im,org.xdef.impl.parsers.XDParseUriList.class, "uriList");
         parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
         parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
         parser(im,org.xdef.impl.parsers.XDParseDomainAddr.class, "domainAddr");
@@ -1173,8 +1173,7 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(GET_REPORT, XD_REPORT, ANY_MODE, 1, 1, XD_OUTPUT), "getLastError");
         method(ti, genInternalMethod(OUT1_STREAM, XD_VOID, ANY_MODE, 2, 2, XD_OUTPUT, XD_STRING), "out");
         method(ti, genInternalMethod(OUTLN1_STREAM, XD_VOID, ANY_MODE, 1, 2, XD_OUTPUT, XD_STRING), "outln");
-        method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,
-            ANY_MODE, 2, Integer.MAX_VALUE, XD_OUTPUT, XD_ANY), "printf");
+        method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID, ANY_MODE, 2, Integer.MAX_VALUE,XD_OUTPUT,XD_ANY),"printf");
         method(ti, genInternalMethod(PUT_REPORT, XD_VOID, ANY_MODE, 2, 2, XD_OUTPUT, XD_REPORT), "putReport");
 ////////////////////////////////////////////////////////////////////////////////
 // PARSER
@@ -1186,6 +1185,9 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_QNAME;
         method(ti, genInternalMethod(NEW_QNAME, XD_QNAME, ANY_MODE, 1, 3, XD_STRING,XD_STRING,XD_STRING), "#");
+        method(ti, genInternalMethod(GET_QNAME_PREFIX, XD_STRING, ANY_MODE, 1, 1, XD_QNAME), "getPrefix");
+        method(ti, genInternalMethod(GET_QNAME_LOCALNAME, XD_STRING, ANY_MODE, 1, 1, XD_QNAME), "getLocalName");
+        method(ti, genInternalMethod(GET_QNAME_NAMESPACE, XD_STRING, ANY_MODE, 1, 1, XD_STRING), "getNamespace");
 ////////////////////////////////////////////////////////////////////////////////
 // PARSERESULT (result of parsing by parsers)
 ////////////////////////////////////////////////////////////////////////////////

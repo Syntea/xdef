@@ -732,7 +732,7 @@ public final class TestTypes extends XDTester {
 "     <xd:choice>" +
 "       <ws:part xd:script=\"occurs 0..; match @element\"" +
 "          name =\"required NCName();" +
-"          finally {String t, s=getText(); t=getQnamePrefix(s); out(t+'/' +" +
+"          finally {String t, s=getText(); t = getQnamePrefix(s); out(t+'/' +" +
 "          getQnameLocalpart(s) + '/' + getNamespaceURI(t) + ';' +" +
 "          getQnameURI(s) + ';' + tst(s));}\"" +
 "          element             =\"required QNameURI();" +
@@ -1029,7 +1029,7 @@ public final class TestTypes extends XDTester {
                 if (!ex.getMessage().contains("XDEF442")) {fail(ex);}
             }
             try { // test error of combination of seq and key params
-                compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='uri(*, 3)'/></xd:def>");
+                compile("<xd:def xmlns:xd='"+_xdNS+"' root='a'><a a='url(*, 3)'/></xd:def>");
                 fail("error not reported");
             } catch (Exception ex) {
                 if (!ex.getMessage().contains("XDEF216")) {fail(ex);}

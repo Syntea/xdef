@@ -184,7 +184,7 @@ public final class DefContainer extends XDValueAbstract implements XDContainer, 
             _array = new XDValue[] {
                 new XDGPSPosition((org.xdef.sys.GPSPosition) obj)};
         } else if (obj instanceof java.net.URI) {
-            _array = new XDValue[] {new DefURI((java.net.URI) obj)};
+            _array = new XDValue[] {new DefUri((java.net.URI) obj)};
         } else {
             _array = new XDValue[]{new DefString("")};
             //Illegal argument in method: &{0}

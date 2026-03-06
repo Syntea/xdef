@@ -13,7 +13,7 @@ import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_COLLAPSE;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANYURI;
-import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefUri;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
@@ -25,7 +25,7 @@ public class XSParseAnyURI extends XSAbstractParser {
     private static final String ROOTBASENAME = "anyURI";
     protected long _minLength;
     protected long _maxLength;
-    protected DefURI[] _enumeration;
+    protected DefUri[] _enumeration;
 
     public XSParseAnyURI() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
 
@@ -66,7 +66,7 @@ public class XSParseAnyURI extends XSAbstractParser {
         p.isSpaces();
         String s = p.nextToken();
         try {
-            p.setParsedValue(new DefURI(new URI(s)));
+            p.setParsedValue(new DefUri(new URI(s)));
         } catch (URISyntaxException ex) {
             p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
             return;
@@ -120,21 +120,21 @@ public class XSParseAnyURI extends XSAbstractParser {
         if (o == null || o.length == 0) {
             return;
         }
-        DefURI[] e = null;
+        DefUri[] e = null;
         //the list of strings must be sorted by length down
     loop:
         for (int i = 0; i < o.length; i++) {
-            DefURI x = (DefURI) iObject(null, o[i]);
+            DefUri x = (DefUri) iObject(null, o[i]);
             if (e == null) {
-                e = new DefURI[]{x};
+                e = new DefUri[]{x};
             } else {
                 for (int j = 0; j < e.length; j++) {
                     if (e[j].equals(x)) {//already is in enumeration
                         continue loop;
                     }
                 }
-                DefURI[] old = e;
-                e = new DefURI[old.length + 1];
+                DefUri[] old = e;
+                e = new DefUri[old.length + 1];
                 System.arraycopy(old, 0, e, 0, old.length);
                 e[old.length] = x;
             }
@@ -160,8 +160,8 @@ public class XSParseAnyURI extends XSAbstractParser {
             if (_enumeration == null || _enumeration.length == 0) {
                 return;
             }
-            DefURI u = (DefURI) p.getParsedValue();
-            for (DefURI x : _enumeration) {
+            DefUri u = (DefUri) p.getParsedValue();
+            for (DefUri x : _enumeration) {
                 if (x.equals(u)) {
                     return;
                 }

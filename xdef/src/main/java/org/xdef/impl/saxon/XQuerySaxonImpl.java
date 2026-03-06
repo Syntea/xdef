@@ -39,7 +39,7 @@ import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefQName;
 import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefUri;
 import org.xdef.impl.code.XQueryImpl;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SException;
@@ -106,7 +106,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
                         case XD_DATETIME: x.bindValue(qname, var.datetimeValue()); break;
                         case XD_DURATION: x.bindValue(qname, ((DefDuration) var).durationValue()); break;
                         case XD_QNAME: x.bindValue(qname, ((DefQName) var).getQName()); break;
-                        case XD_ANYURI: x.bindValue(qname, ((DefURI) var).getURI()); break;
+                        case XD_ANYURI: x.bindValue(qname, ((DefUri) var).getURI()); break;
                         default: x.bindValue(qname, var.toString());
                     }
                 }
@@ -127,7 +127,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
                     case XQItemType.XQITEMKIND_ATOMIC: {
                         switch (item.getItemType().getBaseType()) {
                             case XQItemType.XQBASETYPE_ANYURI:
-                                result.addXDItem(new DefURI(item.getAtomicValue())); continue;
+                                result.addXDItem(new DefUri(item.getAtomicValue())); continue;
                             case XQItemType.XQBASETYPE_BOOLEAN:
                                 result.addXDItem(new DefBoolean(item.getBoolean())); continue;
                             case XQItemType.XQBASETYPE_BYTE: result.addXDItem(new DefLong(item.getByte())); continue;

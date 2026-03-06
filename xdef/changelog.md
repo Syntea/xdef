@@ -6,7 +6,9 @@
   * Fixed error in `XDDocoment.setVeriable method` for `URI` value.
   * Fixed error in `XDDocoment.setVeriable method` for `Date` value.
   * Fixed error in `XDDocoment.setVeriable method` for `Time` value.
-  * The new value type `QName` is added to X-definition X/script value types.
+  * The type method `uri()` is deprecated, use 'anyURI()' instead.
+  * The new value type `XDQName` is added to X-definition X/script value types.
+  * The new value type `XDUri` is added to X-definition X/script value types.
 
 # Version 42.2.39, release-date 2026-02-09
   * Fixed a bug when generating Xcomponents with `extends` and `implements` specifications in a class

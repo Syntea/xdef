@@ -22,7 +22,7 @@ import org.xdef.XDTelephone;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefTelephone;
-import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefUri;
 import org.xdef.impl.parsers.XDParseChar;
 import org.xdef.impl.parsers.XDParseCurrency;
 import org.xdef.msg.JSON;
@@ -280,7 +280,7 @@ public class XonTools {
             switch (ch) {
                 case 'T': return new DefTelephone(s);
                 case 'e': return new DefEmailAddr(s);
-                case 'u': return new DefURI(s);
+                case 'u': return new DefUri(s);
                 case 'C':
                     if ((r = chkValue(s, new XDParseCurrency())).matches()){
                         return r.getParsedValue().getObject();

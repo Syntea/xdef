@@ -233,7 +233,7 @@ TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "char" | "Datetime"
   | "Exception" | "Container" | "Element" | "Message" | "Bytes" | "XmlOutStream" | "BNFGrammar"
   | "BNFRule" | "Parser" | "Service" | "ResultSet" | "Statement" | "ParseResult" | "Locale"
   | "uniqueSetKey" | "AnyValue" | "Output" | "Input" | "Attr" | "NamedValue" | "Regex" | "GPSPosition"
-  | "Price" | "Telephone" | "URI" | "EmailAddr" | "QName" | "Text") $rule
+  | "Price" | "Telephone" | "XDUri" | "EmailAddr" | "XDQName" | "Text") $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment | Method | VariableReference
   | KeyParameterReference | Literal | AttributeName | $rule AssignmentStatement) (S? "." S? Method)?
