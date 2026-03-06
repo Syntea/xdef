@@ -126,15 +126,9 @@ public class TestSaxon extends XDTester {
 "  </root>\n"+
 "</xd:def>";
             xml =
-"<x>" +
-"<a A=\"A\"><B c=\"c\" d=\"d\"/><B c=\"C\" d=\"D\"/></a>" +
-"<a A=\"B\"><B c=\"e\" d=\"f\"/></a>" +
-"</x>";
+"<x><a A=\"A\"><B c=\"c\" d=\"d\"/><B c=\"C\" d=\"D\"/></a><a A=\"B\"><B c=\"e\" d=\"f\"/></a></x>";
             assertEq(create(xdef, "", "root", reporter, xml),
-                "<root>" +
-                "<a a=\"A\"><b x=\"c\" y=\"d\"/><b x=\"C\" y=\"D\"/></a>" +
-                "<a a=\"B\"><b x=\"e\" y=\"f\"/></a>" +
-                "</root>");
+"<root><a a=\"A\"><b x=\"c\" y=\"d\"/><b x=\"C\" y=\"D\"/></a><a a=\"B\"><b x=\"e\" y=\"f\"/></a></root>");
             assertNoErrorwarnings(reporter);
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
@@ -151,12 +145,11 @@ public class TestSaxon extends XDTester {
 "    <j xd:script=\"occurs *; create xpath('preceding-sibling::sod:e')\"/>\n"+
 "  </a>\n"+
 "</xd:def>";
-            assertEq(create(xdef, "", "a", reporter, xml),
-"<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>");
+            assertEq(create(xdef,
+                "", "a", reporter, xml), "<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>");
             assertNoErrorwarnings(reporter);
             xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
-"        xmlns='N' xmlns:sod='N'\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a' xmlns='N' xmlns:sod='N'\n"+
 "        script='options ignoreAttrWhiteSpaces,ignoreTextWhiteSpaces'>\n"+
 "  <a>\n"+
 "    <e f=\"fixed '1'\"/>\n"+
@@ -166,16 +159,15 @@ public class TestSaxon extends XDTester {
 "    <h xd:script=\"occurs *; create xpath('preceding-sibling::sod:e')\"/>\n"+
 "  </a>\n"+
 "</xd:def>";
-            assertEq(create(xdef, "", "a", reporter, xml),
-                "<a xmlns='N'><e f='1'/><e f='2'/><f/><f/><g/><g/><h/><h/></a>");
+            assertEq(create(xdef,
+                "", "a", reporter, xml), "<a xmlns='N'><e f='1'/><e f='2'/><f/><f/><g/><g/><h/><h/></a>");
             assertNoErrorwarnings(reporter);
         } catch (RuntimeException ex) {fail(ex);}
         try {//test of xquery
             xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+
 "   <a C='required num(1,9);'>\n"+
-"      <O J='optional string(1,36);\n"+
-"            finally setText(xquery(\".\") + \"d\");' />\n"+
+"      <O J='optional string(1,36); finally setText(xquery(\".\") + \"d\");' />\n"+
 "   </a>\n"+
 "</xd:def>");
             xml = "<a C='5'><O J='Abc'/></a>";
@@ -207,8 +199,7 @@ public class TestSaxon extends XDTester {
 "<d\n"+
 "  a=\"optional int\"\n"+
 "  b=\"optional int\"\n"+
-"  xd:script=\"finally if (!(xquery('@a') XOR xpath('@b')))\n"+
-"     error('EE', '@a, @b must be excluzive');\"/>\n"+
+"  xd:script=\"finally if (!(xquery('@a') XOR xpath('@b'))) error('EE', '@a, @b must be excluzive');\"/>\n"+
 "</xd:def>";
             xp = compile(xdef);
             xml = "<a typ='1'><b/></a>";
@@ -242,7 +233,6 @@ public class TestSaxon extends XDTester {
             xml = "<b typ='1'><c/></b>";
             parse(xp, "", xml, reporter);
             assertErrors(reporter);
-
             xml = "<c typ='1'><b/></c>";
             assertEq(xml, parse(xp, "", xml, reporter));
             assertNoErrorwarnings(reporter);
@@ -255,7 +245,6 @@ public class TestSaxon extends XDTester {
             xml = "<c typ='1'><c/></c>";
             parse(xp, "", xml, reporter);
             assertErrors(reporter);
-
             xml = "<d a='1'/>";
             assertEq(xml, parse(xp, "", xml, reporter));
             assertNoErrorwarnings(reporter);
@@ -270,48 +259,23 @@ public class TestSaxon extends XDTester {
             assertErrors(reporter);
             xdef = // Find anthill with more than two soldiers and use XQuery result for construction of element.
 "<xd:def xmlns:xd='"+ _xdNS + "'>\n"+
-"  <anthill name='string; create xquery(&apos;\n"+
-"    for $i in (//anthill)\n"+
-"      return $i[count(//insect[caste/text() = \"soldier\" and\n"+
-"                 @anthill = $i/@name]) > 2]/@name\n"+
-"               &apos;)' />\n"+
+"<xd:declaration>\n"+
+"String x='for $i in(//anthill) return $i[count(//insect[caste/text()=\"soldier\" and @anthill=$i/@name])>1]/@name';\n"+
+"</xd:declaration>\n"+
+"  <anthill name='string; create xquery(x);' />\n"+
 "</xd:def>";
             xd = compile(xdef).createXDDocument();
             xml =
 "<forest>\n"+
 "  <animals>\n"+
-"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>queen</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>male</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>male</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>soldier</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>queen</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>soldier</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>soldier</caste>\n"+
-"    </insect>\n"+
-"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
-"      <genus>ant</genus>\n"+
-"      <caste>soldier</caste>\n"+
-"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\"> <genus>ant</genus> <caste>queen</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\"> <genus>ant</genus> <caste>male</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\"> <genus>ant</genus> <caste>male</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\"> <genus>ant</genus> <caste>soldier</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\"> <genus>ant</genus> <caste>queen</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\"> <genus>ant</genus> <caste>soldier</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\"> <genus>ant</genus> <caste>male</caste> </insect>\n" +
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\"> <genus>ant</genus> <caste>soldier</caste> </insect>\n" +
 "  </animals>\n"+
 "  <objects>\n"+
 "    <anthill name=\"nexToStrawberry\" />\n"+
@@ -332,8 +296,7 @@ public class TestSaxon extends XDTester {
 "<Persons xd:script=\"create xquery(source, '.')\"\n" +
 "         firma=\"create xquery('@name')\">\n" +
 "  <Office>\n" +
-"    <Kontakt xd:script=\n" +
-"         \"*; create xquery('Person[Telefon/@typ=\\'office\\']')\">\n" +
+"    <Kontakt xd:script= \"*; create xquery('Person[Telefon/@typ=\\'office\\']')\">\n" +
 "      <Name xd:script=\"create xquery('Name')\">\n" +
 "        string; create xquery('text()')\n" +
 "      </Name>\n" +
