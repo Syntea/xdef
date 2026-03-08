@@ -3305,6 +3305,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
                         paramType = XD_BYTES;
                         s += "[]";
                     } else {
+                        if ("XDBNFGrammar".equals(s) || "XDBNFRule".equals(s)) {
+                            s = s.substring(2);
+                        }
                         paramType = getClassTypeID(s, cl);
                     }
                     if (paramType == XD_UNDEF) {
@@ -3348,6 +3351,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
                         paramType = XD_BYTES;
                         s += "[]";
                     } else {
+                        if ("XDBNFGrammar".equals(s) || "XDBNFRule".equals(s)) {
+                            s = s.substring(2);
+                        }
                         paramType = getClassTypeID(s, cl);
                     }
                     if (paramType == XD_UNDEF) {

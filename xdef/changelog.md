@@ -9,6 +9,7 @@
   * The type method `uri()` is deprecated, use 'anyURI()' instead.
   * The new value type `XDQName` is added to X-definition X/script value types.
   * The new value type `XDUri` is added to X-definition X/script value types.
+  * Fixed a bug in declaration of external methods with the XDBNFGrammar and XDBNFRule parameters.
 
 # Version 42.2.39, release-date 2026-02-09
   * Fixed a bug when generating Xcomponents with `extends` and `implements` specifications in a class

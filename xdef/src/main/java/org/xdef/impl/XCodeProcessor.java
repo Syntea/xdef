@@ -60,6 +60,8 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.XDValueID.XD_BNFRULE;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_BYTES;
 import static org.xdef.XDValueID.XD_CONTAINER;
@@ -4109,6 +4111,8 @@ public final class XCodeProcessor {
                                         case XD_XPATH: pars[j + k] = _stack[i].stringValue(); break;
                                         case XD_IPADDR:
                                         case XD_CURRENCY: pars[j + k] = _stack[i].getObject(); break;
+                                        case XD_BNFGRAMMAR:
+                                        case XD_BNFRULE:
                                         case XD_REGEX:
                                         case XD_REGEXRESULT:
                                         case XD_INPUT:
