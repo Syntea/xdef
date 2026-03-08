@@ -102,15 +102,15 @@ import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENT_X;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETLENGTH;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETTEXT;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ITEM;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ITEMTYPE;
 import static org.xdef.impl.code.CodeTable.CONTEXT_REMOVEITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_REPLACEITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_SORT;
 import static org.xdef.impl.code.CodeTable.CONTEXT_TO_ELEMENT;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.CREATE_ELEMENT;
 import static org.xdef.impl.code.CodeTable.CREATE_ELEMENTS;
 import static org.xdef.impl.code.CodeTable.CURRENCYCODE;
@@ -201,6 +201,9 @@ import static org.xdef.impl.code.CodeTable.GET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.GET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.GET_QNAMEURI;
+import static org.xdef.impl.code.CodeTable.GET_QNAME_LOCALNAME;
+import static org.xdef.impl.code.CodeTable.GET_QNAME_NAMESPACE;
+import static org.xdef.impl.code.CodeTable.GET_QNAME_PREFIX;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_END;
 import static org.xdef.impl.code.CodeTable.GET_REGEX_GROUP_NUM;
@@ -486,7 +489,8 @@ public class CompileBase implements CodeTable, XDValueID {
             ((char) XD_EMAIL) + ";EmailAddr;" +
             ((char) XD_IPADDR) + ";IPAddr;" +
             ((char) XD_TELEPHONE) + ";Telephone;" +
-            ((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
+            ((char) XD_BNFGRAMMAR) + ";BNFGrammar;" +
+            ((char) XD_BNFRULE) + ";BNFRule;" +
             ((char) XD_LOCALE) + ";Locale;" +
             ((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
             ((char) XD_ANY) + ";XDValue;" +
@@ -967,12 +971,12 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(NEW_BNFGRAMAR, XD_BNFGRAMMAR, ANY_MODE,1,2,XD_STRING,XD_BNFGRAMMAR),"#");
         method(ti, genInternalMethod(BNF_PARSE, XD_PARSERESULT,
             ANY_MODE, 2, 3, XD_BNFGRAMMAR, XD_STRING, XD_STRING), "parse", "?check");
-        method(ti, genInternalMethod(GET_BNFRULE, XD_BNFRULE, ANY_MODE, 2,2, XD_BNFGRAMMAR,XD_STRING),"rule");
+        method(ti, genInternalMethod(GET_BNFRULE, XD_BNFRULE, ANY_MODE, 2,2, XD_BNFGRAMMAR,XD_STRING), "rule");
 ////////////////////////////////////////////////////////////////////////////////
 // BNF RULE
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_BNFRULE;
-        method(ti, genInternalMethod(BNFRULE_PARSE, XD_PARSERESULT,ANY_MODE, 1, 2,XD_BNFRULE,XD_ANY),"parse","?check");
+        method(ti, genInternalMethod(BNFRULE_PARSE, XD_PARSERESULT,ANY_MODE, 1, 2,XD_BNFRULE,XD_ANY), "parse","?check");
         method(ti, genInternalMethod(BNFRULE_VALIDATE, XD_BOOLEAN, ANY_MODE, 1, 2, XD_BNFRULE, XD_ANY), "validate");
 ////////////////////////////////////////////////////////////////////////////////
 // BYTES (array)
