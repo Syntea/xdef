@@ -286,11 +286,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
         }
     }
 
-    /** Get actual source context for create mode.
+    /** Get actual source context for create mode (can't be final since this node overrides ChkElement).
      * @return source context or <i>null</i> if not available.
      */
     @Override
-    public final XDValue getXDContext() {return _sourceElem != null ? new DefElement(_sourceElem) : null;}
+    public XDValue getXDContext() {return _sourceElem != null ? new DefElement(_sourceElem) : null;}
 
     /** Set value from argument as context for create mode.
      * @param xdc context to be set (create mode).
