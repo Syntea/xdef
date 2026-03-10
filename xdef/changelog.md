@@ -1,4 +1,5 @@
 # Version ${version}, release-date ${release.date}
+.
 
 # Version 42.2.41, release-date 2026-03-10
   * Fixed generation of `xposOf...()` methods in XComponents.
