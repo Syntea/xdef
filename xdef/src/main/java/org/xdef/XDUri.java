@@ -3,7 +3,7 @@ package org.xdef;
 /**
  * @author trojan
  */
-public interface XDURI extends XDValue {
+public interface XDUri extends XDValue {
     /** Get URI value from this object.
      * @return the associated object, or return null.
      */

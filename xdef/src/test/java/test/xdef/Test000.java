@@ -149,7 +149,7 @@ public final class Test000 extends XDTester {
 "  </xd:declaration>\n"+
 "  <a>\n"+
 "    <meta xd:script=\"init {targetNS=@targetNS;unq=' ';} finally out(unq)\"\n"+
-"          targetNS=\"required uri()\" >\n"+
+"          targetNS=\"required anyURI()\" >\n"+
 "      <msg xd:script=\"occurs 1..\" name=\"required chkUnique()\" />\n"+
 "      <input>\n"+
 "        <msg xd:script=\"occurs 1..\" name=\"required chkRef()\" />\n"+

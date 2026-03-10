@@ -89,7 +89,6 @@
     <Qname>ns:ncname</Qname>
     <QnameURI>ns:name</QnameURI>
     <QnameList_1>ns:name ns:anotherName</QnameList_1>
-    <QnameListURI>ns:name ns:anotherName</QnameListURI>
     <regex_1>aaa</regex_1>
     <starts_1>abcde</starts_1>
     <startsi_1>ABCDE</startsi_1>
@@ -97,12 +96,6 @@
     <string_1>abcde</string_1>
     <string_2>ab</string_2>
     <string_2>abcd</string_2>
-    <uri>../text/text.txt</uri>
-    <!--
-    <uriList>text.txt ../../text.txt</uriList>
-    -->
     <url>file:C://text.txt:4568</url>
-    <!--
-    <urlList>file:C://text.txt:4568 http://:file.bat:6958</urlList>
-    -->
+    <urlList>file:C://text.txt:4568 http://file.xyz</urlList>
 </Types>

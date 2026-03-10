@@ -71,15 +71,12 @@
             <Qname xd:script="occurs *">QName</Qname>
             <QnameURI xd:script="occurs *">QNameURI</QnameURI>
             <QnameList_1 xd:script="occurs *">QNameList(' ')</QnameList_1>
-            <QnameListURI xd:script="occurs *">QNameURIList</QnameListURI>
             <regex_1 xd:script="occurs *">regex('[a]{3}')</regex_1>
             <starts_1 xd:script="occurs *">starts('abc')</starts_1>
             <startsi_1 xd:script="occurs *">startsi('AbC')</startsi_1>
             <string xd:script="occurs *">string</string>
             <string_1 xd:script="occurs *">string(5)</string_1>
             <string_2 xd:script="occurs *">string(2,4)</string_2>
-            <uri xd:script="occurs *">uri</uri>
-            <uriList xd:script="occurs *">uriList</uriList>
             <url xd:script="occurs *">url</url>
             <urlList xd:script="occurs *">urlList</urlList>
         </xd:mixed>

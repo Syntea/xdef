@@ -2,7 +2,6 @@ package org.xdef.impl.code;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.xdef.XDURI;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import static org.xdef.XDValueID.XD_ANYURI;
@@ -10,27 +9,28 @@ import org.xdef.XDValueType;
 import static org.xdef.XDValueType.ANYURI;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.XDUri;
 
 /** Implements the internal object with URI value.
  * @author Vaclav Trojan
  */
-public final class DefURI extends XDValueAbstract implements XDURI {
+public final class DefUri extends XDValueAbstract implements XDUri {
 
     /** The URI value. */
     private final URI _value;
 
     /** Creates a new instance of DefURI as null.*/
-    public DefURI() {_value = null;}
+    public DefUri() {_value = null;}
 
     /** Creates a new instance of DefURI
      * @param value The initial value of object.
      */
-    public DefURI(final URI value) {_value = value;}
+    public DefUri(final URI value) {_value = value;}
 
     /** Creates a new instance of DefURI
      * @param value The string with initial value of object ("true" or "false").
      */
-    public DefURI(final String value) {
+    public DefUri(final String value) {
         try {
             _value = new URI(value);
         } catch (URISyntaxException ex) {
@@ -39,7 +39,7 @@ public final class DefURI extends XDValueAbstract implements XDURI {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of XDURI interface
+// Implementation of XDUri interface
 ////////////////////////////////////////////////////////////////////////////////
     /** Get URI value from this object.
      * @return the associated object, or return null.
@@ -91,7 +91,7 @@ public final class DefURI extends XDValueAbstract implements XDURI {
      * @return the object with the copy of this one.
      */
     @Override
-    public XDValue cloneItem() {return new DefURI(_value);}
+    public XDValue cloneItem() {return new DefUri(_value);}
 
     @Override
     public int hashCode() {return _value == null ? 1 : _value.hashCode();}
@@ -115,8 +115,8 @@ public final class DefURI extends XDValueAbstract implements XDURI {
         return _value.equals(arg.getObject());
     }
 
-    /** Compares this object with the other DefURI object.
-     * @param arg other DefURI object to which is to be compared.
+    /** Compares this object with the other DefUri object.
+     * @param arg other DefUri object to which is to be compared.
      * @return returns 0 if this object is equal to the specified object.
      * @throws SIllegalArgumentException if arguments are not comparable.
      */

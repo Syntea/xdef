@@ -81,8 +81,7 @@ public final class Test001  extends XDTester {
 "            part  = \"optional NCName ()\">\n"+
 "        <query xd:script = \"occurs 0..1; ref query\" />\n"+
 "      </from>\n"+
-"      <from xd:script=\"match(@expressionLanguage)\"\n"+
-"     		 expressionLanguage = \"optional uri()\">\n"+
+"      <from xd:script=\"match(@expressionLanguage)\" expressionLanguage = \"optional NCName()\">\n"+
 "        required string()\n"+
 "       </from>\n"+
 "       <from>\n"+
@@ -93,7 +92,7 @@ public final class Test001  extends XDTester {
 "       </from>\n"+
 "    </xd:choice>\n"+
 "  </a>\n"+
-"  <query queryLanguage=\"optional uri()\">required string()</query>\n"+
+"  <query queryLanguage=\"optional NCName()\">required string()</query>\n"+
 "</xd:def>\n";
             xml = "<a><from variable='a'><query>this is query</query></from></a>";
             assertFalse(test(xdef, xml, "",'P'));

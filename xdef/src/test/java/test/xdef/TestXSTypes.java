@@ -560,8 +560,8 @@ public final class TestXSTypes extends XDTester {
         _msg = "";
         _result = true;
         _xml = data == null ? null :
-("<a xmlns:xsi=\""+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI+"\""+
-" xsi:noNamespaceSchemaLocation=\"dummy\" a=\""+data+"\"\n>"+data+"</a>");
+("<a xmlns:xsi=\"" + XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI + "\" xmlns:ab=\"x.yz\""+
+" xsi:noNamespaceSchemaLocation=\"dummy\" a=\"" + data + "\"\n>" + data + "</a>");
         return XDTester.getFulltestMode() ? chkSchema(result) & chkXDef(result) : chkXDef(result);
     }
 
@@ -2983,6 +2983,51 @@ public final class TestXSTypes extends XDTester {
         assertTrue(checkFail("NOTATION(%totalDigits='2')"), _msg);
         assertTrue(checkFail("NOTATION(%fractionDigits='2')"), _msg);
 
+
+//------------------------------------------------------------------------------
+//                          TESTING NCname
+//------------------------------------------------------------------------------
+        // testing illegal facets
+//        assertTrue(checkFail("NCName%totalDigits='2')"), _msg);
+//        assertTrue(checkFail("NCName(%fractionDigits='2')"), _msg);
+        assertTrue(checkFail("NCName(%whiteSpace='preserve')"), _msg);
+        assertTrue(checkFail("NCname(%whiteSpace='replace')"), _msg);
+        assertTrue(checkFail("NCName(%minInclusive='1')"), _msg);
+        assertTrue(checkFail("NCName(%maxInclusive='1')"), _msg);
+//        assertTrue(checkFail("NCName(%whiteSpace='collapse')"), _msg);
+
+        // testing fixed facets
+        assertTrue(prepare("NCName(%whiteSpace='collapse')"), _msg);
+
+        // testing correct values
+        assertTrue(prepare("NCName"), _msg);
+
+        assertTrue(parse("a.b-c"), _msg);
+        assertTrue(parseFail(""), _msg);
+        assertTrue(parseFail("pq:a.b-c"), _msg);
+        assertTrue(parseFail("{P547D}"), _msg);
+
+//------------------------------------------------------------------------------
+//                          TESTING QName
+//------------------------------------------------------------------------------
+        // testing illegal facets
+        assertTrue(checkFail("QName(%totalDigits='2')"), _msg);
+        assertTrue(checkFail("QName(%fractionDigits='2')"), _msg);
+        assertTrue(checkFail("QName(%whiteSpace='preserve')"), _msg);
+        assertTrue(checkFail("QName(%whiteSpace='replace')"), _msg);
+        assertTrue(checkFail("QName(%minInclusive='1')"), _msg);
+        assertTrue(checkFail("QName(%maxInclusive='1')"), _msg);
+
+        // testing fixed facets
+        assertTrue(prepare("QName(%whiteSpace='collapse')"), _msg);
+
+        // testing correct values
+        assertTrue(prepare("QName"), _msg);
+
+        assertTrue(parse("ab:a.b-c"), _msg);
+        assertTrue(parseFail(""), _msg);
+        assertTrue(parseFail("{P547D}"), _msg);
+//        assertTrue(parseFail("pq:abc"), _msg);
 
 //------------------------------------------------------------------------------
 //                          TESTING token

@@ -3769,6 +3769,43 @@ public class StringParser extends SReporter implements SParser {
         return true;
     }
 
+    private boolean isQNamePart(final byte xmlVersion) {
+        if (getXmlCharType(xmlVersion) != XML_CHAR_NAME_START || _ch == ':') {
+            return false;
+        }
+        while (!eos() || increaseBuffer()) {
+            _ch = _source.charAt(getIndex());
+            int x = getXmlCharType(xmlVersion); //8
+            if (x < XML_CHAR_NAME_START) {
+                break;
+            }
+            incIndex();
+        }
+        return true;
+    }
+
+    /** Parse XML name and save result to _parsedString.
+     * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
+     * @return true if XMLName was parsed.
+     */
+    public final boolean isXMLQName(final byte xmlVersion) {
+        int pos = getIndex();
+        if (isQNamePart(xmlVersion)) {
+            if (!isChar(':')) {
+                _parsedString = _source.substring(pos, getIndex());
+                return true;
+            }
+            String s = _source.substring(pos, getIndex());
+            pos = getIndex();
+            if (!isQNamePart(xmlVersion)) {
+                return false;
+            }
+            _parsedString = s + _source.substring(pos, getIndex());;
+            return true;
+        }
+        return false;
+    }
+
     /** Parse valid XML character.
      * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
      * @return parsed character or NOCHAR.

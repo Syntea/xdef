@@ -41,12 +41,12 @@ public interface XdNames {
     /** X-definition <code>text</code> attribute local name.*/
     public static final String TEXT = "text";
     //--------------------------------------------------------------------------
-    //                          X-DEFINITION TYPE NAMES
+    //                          X-DEFINITION TYPE METHOD NAMES
     //--------------------------------------------------------------------------
-    /** X-definition <code>an</code> type name.*/
-    public static final String ALFA_NUMERIC = "an";
-    /** X-definition <code>base64</code> type name.*/
-    public static final String BASE_64 = "base64Binary";
+//    /** X-definition <code>an</code> type name.*/
+//    public static final String ALFA_NUMERIC = "an";
+//    /** X-definition <code>base64</code> type name.*/
+//    public static final String BASE_64 = "base64Binary";
     /** X-definition <code>boolean</code> type name.*/
     public static final String BOOLEAN = "boolean";
     //** X-definition <code>BNF</code> type name.*/
@@ -145,8 +145,8 @@ public interface XdNames {
     public static final String Q_NAME = "QName";
     /** X-definition <code>QnameList</code> type name.*/
     public static final String Q_NAME_LIST = "QnameList";
-    /** X-definition <code>QnameListURI</code> type name.*/
-    public static final String Q_NAME_LIST_URI = "QNameURIList";
+//    /** X-definition <code>QnameListURI</code> type name.*/
+//    public static final String Q_NAME_LIST_URI = "QNameURIList";
     /** X-definition <code>QnameURI</code> type name.*/
     public static final String Q_NAME_URI = "QnameURI";
     /** X-definition <code>regex</code> type name.*/
@@ -161,10 +161,6 @@ public interface XdNames {
     public static final String TOKENS = "tokens";
     /** X-definition <code>tokensi</code> type name.*/
     public static final String TOKENS_I = "tokensi";
-    /** X-definition <code>uri</code> type name.*/
-    public static final String URI = "uri";
-    /** X-definition <code>uriList</code> type name.*/
-    public static final String URI_LIST = "uriList";
     /** X-definition <code>url</code> type name.*/
     public static final String URL = "url";
     /** X-definition <code>urlList</code> type name.*/

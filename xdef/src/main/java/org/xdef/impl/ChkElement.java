@@ -132,13 +132,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      * @param element element with attributes.
      * @param ignoreAll if true ignore this and all child nodes.
      */
-    ChkElement(final ChkNode parent,
-        Element element,
-        final XElement xelem,
-        boolean ignoreAll) {
+    ChkElement(final ChkNode parent, final Element element, final XElement xelem, boolean ignoreAll) {
         super(element==null ? xelem.getName(): element.getNodeName(),parent);
-        _clearReports = xelem._clearReports != 0
-            ? xelem._clearReports == (byte) 'T' : xelem.getXDPool().isClearReports();
+        _clearReports = xelem._clearReports != 0 ? xelem._clearReports==(byte) 'T' : xelem.getXDPool().isClearReports();
         _element = element;
         _ignoreAll = ignoreAll || xelem.isIgnore() || xelem.isIllegal();
         if (xelem.isIgnore() || xelem.isIllegal()) {
@@ -172,7 +168,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 el.appendChild(_element);
             }
             if (_xElement._nillable == 'T'
-                && "true".equals(_element.getAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI,"nil"))){
+                && "true".equals(_element.getAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI,"nil"))) {
                 _nil = true;
             }
             if (_xElement._xon > 0) { //XON
@@ -195,10 +191,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      * @param addr address of script.
      * @param type type of model ('E' - element, 'A' - attribute, 'T' text, otherwise 'U').
      */
-    final XDValue exec(final int addr, final byte type) {
-        _mode = type;
-        return addr < 0 ? null : _scp.exec(addr, this);
-    }
+    final XDValue exec(final int addr, final byte type) {_mode = type; return addr < 0 ? null : _scp.exec(addr, this);}
 
      /** Set mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
      * 'D' - document, 'P' - processing instruction,'U' undefined. */
@@ -402,7 +395,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     }
 
     /** Check absence of a text node in model. */
-    final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter c){
+    final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter c) {
         if (_counters[index] != 0 || txt.minOccurs() <= XOccurrence.IGNORE) {
             return; //exists or IGNORED
         }
@@ -478,10 +471,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 case XMCHOICE:
                 case XMMIXED:
                 case XMSELECTOR_END: continue;
-                default:
-                    if (_counters[i] != 0) {
-                        return false;
-                    }
+                default: if (_counters[i] != 0) {
+                    return false;
+                }
             }
         }
         return true;
@@ -529,10 +521,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 case XMMIXED:
                                 case XMSEQUENCE:
                                 case XMSELECTOR_END: continue;
-                                default:
-                                    if (c != null) {
-                                        c._itemIdex += _counters[i];
-                                    }
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
                             }
                         }
                     } else {
@@ -551,10 +542,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 case XMMIXED:
                                 case XMSEQUENCE:
                                 case XMSELECTOR_END: continue;
-                                default:
-                                    if (c != null) {
-                                        c._itemIdex += _counters[i];
-                                    }
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
                             }
                         }
                     } else {
@@ -564,11 +554,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                         i = s._endIndex;
                     }
                     continue;
-                case XMSELECTOR_END:
-                    if (skip) {
-                        continue;
+                case XMSELECTOR_END: if (!skip) {
+                        return required;
                     }
-                    return required;
                 default:
             }
         }
@@ -655,10 +643,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                     case XMMIXED:
                                     case XMSEQUENCE:
                                     case XMSELECTOR_END: continue;
-                                    default:
-                                        if (c != null) {
-                                            c._itemIdex += _counters[i];
-                                        }
+                                    default: if (c != null) {
+                                        c._itemIdex += _counters[i];
+                                    }
                                 }
                             }
                         } else {
@@ -677,10 +664,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                     case XMMIXED:
                                     case XMSEQUENCE:
                                     case XMSELECTOR_END: continue;
-                                    default:
-                                        if (c != null) {
-                                            c._itemIdex += _counters[i];
-                                        }
+                                    default: if (c != null) {
+                                        c._itemIdex += _counters[i];
+                                    }
                                 }
                             }
                         } else {
@@ -761,10 +747,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 case XMMIXED:
                                 case XMSEQUENCE:
                                 case XMSELECTOR_END: continue;
-                                default:
-                                    if (c != null) {
-                                        c._itemIdex += _counters[i];
-                                    }
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
                             }
                         }
                     } else {
@@ -783,10 +768,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 case XMMIXED:
                                 case XMSEQUENCE:
                                 case XMSELECTOR_END: continue;
-                                default:
-                                    if (c != null) {
-                                        c._itemIdex += _counters[i];
-                                    }
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
                             }
                         }
                     } else {
@@ -796,11 +780,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                         i = s._endIndex;
                     }
                     continue;
-                case XMSELECTOR_END:
-                    if (skip) {
-                        continue;
+                case XMSELECTOR_END: if (!skip) {
+                        return required;
                     }
-                    return required;
                 default:
             }
         }
@@ -1012,8 +994,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      * then then the counter of occurrences of the sequence is increased.
      */
     private void checkMixedAll() {
-        if (_selector._prev != null && _childList[_selector._prev._begIndex].maxOccurs() > 0
-            && _selector._kind == XMMIXED) {
+        if (_selector._prev!=null && _childList[_selector._prev._begIndex].maxOccurs() > 0 && _selector._kind==XMMIXED){
             for (int i = _selector._begIndex + 1; i < _selector._endIndex; i++) {
                 if (_counters[i] < _childList[i].maxOccurs()) {
                     return;
@@ -1171,7 +1152,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                             while (_nextDefIndex + 1 < _childList.length) {
                                 XNode x = _childList[_nextDefIndex + 1];
                                 if (x.getKind()==XMELEMENT && el!=null) {
-                                    if ((result=chkElem((XElement)x,el))!=null){
+                                    if ((result=chkElem((XElement)x,el))!=null) {
                                         chkElementAbsence(index, xel, null);
                                         //following element is OK
                                         _nextDefIndex++;
@@ -1218,9 +1199,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 case XMSEQUENCE:
                 case XMMIXED:
                 case XMCHOICE: createGroup((XSelector) xn); continue;
-                default: //error - unknown kind
-                    throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
-                        "Xdefinifion - ChkElement, unknown item: "+kind+" "+xn);
+                default: throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
+                            "Xdefinifion - ChkElement, unknown item: "+kind+" "+xn);
             }
         }
         return null;
@@ -1479,7 +1459,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             _parseResult = new DefParseResult(_data);
             _parseResult.setEos();
             _parseResult.setParsedValue(_data);
-//            org.xdef.XDParserAbstract.checkCharset(this, _parseResult); // check charset
             if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
                 _parseResult.setParsedValue(_data);
                 _xComponent.xSetAttr(this, _parseResult);
@@ -1558,7 +1537,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      * @param nsURI namespace URI of attribute.
      * @param qname qualified name of attribute.
      */
-    private void updateAttrValue(final XData xatt, final String orig, final String nsURI, final String qname){
+    private void updateAttrValue(final XData xatt, final String orig, final String nsURI, final String qname) {
         copyTemporaryReports();
         if (_data != orig) { // _data was changed, even may be equal
             if (_data == null) {
@@ -1681,8 +1660,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             }
             //check absence within a group. If actual node is the end of a group
             // then set "skipselector" to true, othewise to false.
-            checkAbsence(_selector, null,
-                _nextDefIndex<_childList.length&&_childList[_nextDefIndex].getKind()==XMSELECTOR_END&&nested);
+            checkAbsence(_selector,
+                null, _nextDefIndex<_childList.length && _childList[_nextDefIndex].getKind() == XMSELECTOR_END&&nested);
             if (_selector._kind == XMSEQUENCE && _selector._count <_selector.minOccurs()) {
                 error(XDEF.XDEF555, "sequence"); //Minimum occurrence not reached for &{0}
             }
@@ -1934,8 +1913,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             }
         }
         if (_scp.getXmlStreamWriter() != null) {
-            //write the end of element if XML stream writer exists.
-            try {
+            try { //write the end of element if XML stream writer exists.
                 _scp.getXmlStreamWriter().writeElementEnd();
             } catch (SRuntimeException ex) {
                 putReport(ex.getReport());
@@ -1969,7 +1947,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         if (_variables != null) {
             for(int i = 0; i < _variables.length; i++) {
                 XDValue x = _variables[i];
-                if (x!=null && !x.isNull() && (x.getItemId()==X_UNIQUESET || x.getItemId() == X_UNIQUESET_M)) {
+                if (x != null && !x.isNull() && (x.getItemId() == X_UNIQUESET || x.getItemId() == X_UNIQUESET_M)) {
                     CodeUniqueset y = (CodeUniqueset)x;
                     y.checkAndClear(_scp.getTemporaryReporter());
                 }
@@ -2004,10 +1982,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     /** Mark unique set with this instance of ChkElement.
      * @param us unique set.
      */
-    public final void addMarkedUniqueset(CodeUniqueset us) {
-        _markedUniqueSets.add(us);
-        us.setMarker(this);
-    }
+    public final void addMarkedUniqueset(CodeUniqueset us) { _markedUniqueSets.add(us); us.setMarker(this);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods to retrieve values from checked tree.
@@ -2063,6 +2038,22 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+//    /** Get actual source context for create mode.
+//     * @return source context or <i>null</i> if not available.
+//     */
+//    @Override
+//    public XDValue getXDContext() {
+//       if (_sourceElem == null) {
+//            DefContainer xdc = new DefContainer(); //create default context
+//            ChkComposer.getChildElementsByName(xdc, this, null, null);
+//            if (xdc.getXDItemsNumber() > 0) {
+//                return xdc;
+//            }
+//        }
+//        return _sourceElem != null ? new DefElement(_sourceElem) : null;
+//    }
 
     /** Add the new attribute to the current XXElement.
      * @param qname The qualified name of attribute (including prefix).
@@ -3003,8 +2994,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 _actDefIndex = actDefIndex;
                 xtxt1 = _xElement.getDefAttr("$text", -1);
             } else if (_xElement._moreElements != 'T' && _xElement._moreElements != 'I'
-                && !_xElement.hasDefAttr("$textcontent") && _xElement._moreText != 'T'
-                && _xElement._moreText != 'I') {
+                && !_xElement.hasDefAttr("$textcontent") && _xElement._moreText != 'T' && _xElement._moreText != 'I') {
                 debugXPos(XDDebug.ONILLEGALTEXT);
                 if (_xElement._onIllegalText >= 0) {
                     _elemValue = _element;
@@ -3285,15 +3275,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         //prepare path for error message
         if (xatt != null) {
             if (xatt.isIllegal()) {
-                //Attempt to get illegal item
-                throw new SRuntimeException(XDEF.XDEF582, getXPos() + "/@" + name);
+                throw new SRuntimeException(XDEF.XDEF582, getXPos() + "/@" + name); //Attempt to get illegal item
             }
             return null; //attribute is defined but not exists
         } else if (xel.hasOtherAttrs()) {
             return null; //If X-definition has a VARIABLE_PART it makes no sense to check it more.
         }
-        //Attempt to get undeclared item
-        throw new SRuntimeException(XDEF.XDEF581, getXPos() + "/@" + name);
+        throw new SRuntimeException(XDEF.XDEF581, getXPos() + "/@" + name); //Attempt to get undeclared item
     }
 
     /** Get attribute from the XXElement object.

@@ -1,5 +1,6 @@
 package org.xdef.impl.parsers;
 
+import org.xdef.XDBNFRule;
 import org.xdef.msg.BNF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SException;
@@ -11,7 +12,6 @@ import org.xdef.XDParserAbstract;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBNFGrammar;
-import org.xdef.impl.code.DefBNFRule;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
 import static org.xdef.XDParserAbstract.checkCharset;
@@ -26,14 +26,14 @@ import org.xdef.xon.XonTools;
  */
 public class XDParseBNF extends XDParserAbstract {
     private static final String ROOTBASENAME = "BNF";
-    private DefBNFRule _rule;
+    private XDBNFRule _rule;
 
     public XDParseBNF() {super(); _rule = null;} // dummy
 
     /** Get BNF rule of the BNF grammar.
      * @return BNF rule of the BNF grammar.
      */
-    public DefBNFRule getBNFRule() { return _rule; }
+    public XDBNFRule getBNFRule() { return _rule; }
 
     @Override
     public void parseObject(final XXNode xn, final XDParseResult p) {
@@ -63,7 +63,7 @@ public class XDParseBNF extends XDParserAbstract {
             XDValue x = items[i].getValue();
             if ("a1".equals(name)) {
                 if (x.getItemId() == XD_BNFRULE) {
-                    _rule = (DefBNFRule) x;
+                    _rule = (XDBNFRule) x;
                 } else if (x.getItemId() != XD_BNFGRAMMAR) {
                     throw new SException(BNF.BNF014); //Incorrect method parameter
                 } else {
