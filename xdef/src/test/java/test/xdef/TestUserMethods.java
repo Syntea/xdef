@@ -4,6 +4,8 @@ import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDPool;
 import java.io.StringWriter;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of user methods, process mode, create mode, groups.
  * @author Vaclav Trojan
@@ -34,8 +36,7 @@ public final class TestUserMethods extends XDTester {
             assertNoErrorwarnings(reporter);
             assertEq(swr.toString(), "AB");
             swr = new StringWriter();
-            assertEq(xml,
-                create(xp,null,"a",reporter,"<X><A a='x'/></X>",swr,null));
+            assertEq(xml, create(xp,null,"a",reporter,"<X><A a='x'/></X>",swr,null));
             assertNoErrorwarnings(reporter);
             assertEq(swr.toString(), "AB");
             xdef =
@@ -60,14 +61,11 @@ public final class TestUserMethods extends XDTester {
             swr = new StringWriter();
             assertEq(xml, parse(xp, "", xml, reporter, swr, null,null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ma ia sa mCH iCH mb ib sb fb fCH mc ic sc fc fa ");
+            assertEq(swr.toString(), "ma ia sa mCH iCH mb ib sb fb fCH mc ic sc fc fa ");
             swr = new StringWriter();
-            assertEq("<a><b/><c/></a>",
-                create(xp, null, "a", reporter, xml, swr, null));
+            assertEq("<a><b/><c/></a>", create(xp, null, "a", reporter, xml, swr, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ia sa iCH mb ib sb fb fCH mc ic sc fc fa ");
+            assertEq(swr.toString(), "ia sa iCH mb ib sb fb fCH mc ic sc fc fa ");
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:macro name='m' p='?'>\n"+
@@ -90,25 +88,20 @@ public final class TestUserMethods extends XDTester {
             swr = new StringWriter();
             assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ma ia sa mMX iMX mb ib sb fb fMX mc ic sc fc fa ");
+            assertEq(swr.toString(), "ma ia sa mMX iMX mb ib sb fb fMX mc ic sc fc fa ");
             swr = new StringWriter();
-            assertEq("<a><b/><c/></a>",
-                create(xp, null, "a", reporter, xml, swr, null));
+            assertEq("<a><b/><c/></a>", create(xp, null, "a", reporter, xml, swr, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ia sa iMX mb ib sb fb fMX mc ic sc fc fa ");
+            assertEq(swr.toString(), "ia sa iMX mb ib sb fb fMX mc ic sc fc fa ");
             xml = "<a><b/><x/><c/></a>";
             swr = new StringWriter();
             assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ma ia sa mMX iMX mb ib sb fb mx ix sx fx fMX mc ic sc fc fa ");
+            assertEq(swr.toString(), "ma ia sa mMX iMX mb ib sb fb mx ix sx fx fMX mc ic sc fc fa ");
             swr = new StringWriter();
             assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ia sa iMX mb ib sb fb ix sx fx fMX mc ic sc fc fa ");
+            assertEq(swr.toString(), "ia sa iMX mb ib sb fb ix sx fx fMX mc ic sc fc fa ");
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:macro name='m' p='?'>\n"+
@@ -132,26 +125,20 @@ public final class TestUserMethods extends XDTester {
             swr = new StringWriter();
             assertEq(xml, parse(xp, "", xml, reporter, swr,null, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ma ia sa mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
+            assertEq(swr.toString(), "ma ia sa mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
             swr = new StringWriter();
-            assertEq("<a><x/><c/></a>",
-                create(xp, null, "a", reporter, xml, swr, null));
+            assertEq("<a><x/><c/></a>", create(xp, null, "a", reporter, xml, swr, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ia sa iCH ix sx fx fCH mc ic sc fc fa ");
+            assertEq(swr.toString(), "ia sa iCH ix sx fx fCH mc ic sc fc fa ");
             xml = "<a><p/><x/><c/></a>";
             swr = new StringWriter();
             assertEq(xml, parse(xp, "", xml, reporter, swr,null, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ma ia sa mp ip sp fp mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
+            assertEq(swr.toString(), "ma ia sa mp ip sp fp mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
             swr = new StringWriter();
-            assertEq("<a><p/><x/><c/></a>",
-                create(xp, null, "a", reporter, xml, swr, null));
+            assertEq("<a><p/><x/><c/></a>", create(xp, null, "a", reporter, xml, swr, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ia sa mp ip sp fp iCH ix sx fx fCH mc ic sc fc fa ");
+            assertEq(swr.toString(), "ia sa mp ip sp fp iCH ix sx fx fCH mc ic sc fc fa ");
 
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
@@ -175,13 +162,11 @@ public final class TestUserMethods extends XDTester {
             swr = new StringWriter();
             assertEq(xml, parse(xp, "", xml, reporter, swr,null, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ma ia sa mSQ iSQ mb ib sb fb mx ix sx fx fSQ md id sd fd fa ");
+            assertEq(swr.toString(), "ma ia sa mSQ iSQ mb ib sb fb mx ix sx fx fSQ md id sd fd fa ");
             swr = new StringWriter();
             assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
             assertNoErrorwarnings(reporter);
-            assertEq(swr.toString(),
-                "ia sa iSQ ib sb fb ix sx fx fSQ id sd fd fa ");
+            assertEq(swr.toString(), "ia sa iSQ ib sb fb ix sx fx fSQ id sd fd fa ");
         } catch (Exception ex) {fail(ex);}
 
         resetTester();
@@ -194,5 +179,4 @@ public final class TestUserMethods extends XDTester {
         XDTester.setFulltestMode(true);
         if (runTest() != 0) {System.exit(1);}
     }
-
 }

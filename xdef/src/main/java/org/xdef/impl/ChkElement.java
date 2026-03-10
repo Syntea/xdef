@@ -187,806 +187,57 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
     }
 
-    /** Execute X-script from given address (with given type).
-     * @param addr address of script.
-     * @param type type of model ('E' - element, 'A' - attribute, 'T' text, otherwise 'U').
+////////////////////////////////////////////////////////////////////////////////
+// Private Methods and objects.
+////////////////////////////////////////////////////////////////////////////////
+
+    /** Saved counter object.*/
+    private static final class Counter {
+        int _itemIdex;
+        Counter(final int counter) {_itemIdex = counter;}
+    }
+
+    /** Look up for the X-position (XPos) of the element set by xPath. For look up is used the hash table with
+     * the XPaths and their occurrences.
+     * @param xPath XPath to the current ChkElement (Element from the source XML document that is actually processed).
+     * @return the position of this element in the source XML document to complete XPath identifier.
      */
-    final XDValue exec(final int addr, final byte type) {_mode = type; return addr < 0 ? null : _scp.exec(addr, this);}
+    private int getElemXPos(Map<String, XPosInfo> xPosOccur, String xPath) {
+        if(xPosOccur != null) { // never should happen!!
+            XPosInfo xPathInfo;
+            if ((xPathInfo = xPosOccur.get(xPath)) == null) { // first occurrence of the xPath
+                xPosOccur.put(xPath, new XPosInfo());
+                return 1;
+            } else { // another (second and more) occurrence of the xPath
+                return xPathInfo.addCount();
+            }
+        }
+        // Never should happen - internal error
+        throw new SRuntimeException(XDEF.XDEF569, "ChkElement:getElemXPos: _xPathOccur == null");//Fatal error&{0}{: }
+    }
 
-     /** Set mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
-     * 'D' - document, 'P' - processing instruction,'U' undefined. */
-    final void setXXType(final byte mode) {_mode = mode;}
-
-     /** Get mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
-     * 'D' - document, 'P' - processing instruction,'U' undefined.
-     * @return mode.
+    /** Class to represent short information about XPaths for all elements present in the input XML source.
+     * This class is not deleted after element processing when "forget" option is specified !!!
+     * This class is deleted (nulled) when the end of parent element is reached in the XML source.
+     * Maximum recommended size of object created from this class is 8 kB to avoid OutOfMemory exception
+     * by processing very large XML sources.
      */
-    public final byte getXXType() {return _mode;}
+    private static final class XPosInfo {
+        /** Field to count the amount of the same XPaths. */
+        private int _counter;
 
-    /** Set name of the actually processed attribute or Text node.
-     * @param name The name of the actually processed attribute or text node.
-     */
-    final void setProcessedAttrName(final String name) {_attName = name;}
+        /** Creates info object in case of first occurrence of this XPath in the input XML source. */
+        XPosInfo() {_counter = 1;}
 
-    /** Set name of the actually processed attribute or Text node.
-     * @param name The name of the actually processed attribute or text node.
-     */
-    final void setProcessedAttrURI(final String uri) {_attURI = uri;}
+        /** Increase counter of occurrence of XPath .
+         * @return increased occurrence of this XPath .
+         */
+        int addCount() {return ++_counter;}
 
-    /** Get offset of model variable.
-     * @param name name of model variable.
-     * @return offset of model variable or -1 if variable is not declared.
-     */
-    private int findModelVariableOffset(final String name) {
-        if (_xElement._vartable == null) {
-            return -1;
-        }
-        XVariable v = _xElement._vartable.getXVariable(name);
-        return v == null || !v.isInitialized() ? -1 : v.getOffset();
-    }
-
-    /** Create check element object.
-     * @param element The element with attributes.
-     * @return created check element object.
-     */
-    final ChkElement createChkElement(final Element element) {
-        _data = null;
-        _parseResult = null;
-        if (_nil) {
-            error(XDEF.XDEF501, element.getNodeName()); //Not allowed element '&{0}'
-            ChkElement result = new ChkElement(this, element, _xElement.createAnyDefElement(), true);
-            _chkChildNodes.add(result);
-            return result;
-        }
-        boolean appended = false;
-        Element el;
-        if ((el = getElement()) != null) {
-            //let's append it for a while to be able to execute XPath
-            el.appendChild(element);
-            appended = true;
-        }
-        int nextDefIndex = _nextDefIndex; //save index for moreElement case
-        int actDefIndex = _actDefIndex;
-        ChkElement result = (ChkElement) findXNode(element);
-        XMData textcontent =_xElement.getDefAttr("$textcontent",-1);
-        if (appended && result == null && textcontent == null) {
-            el.removeChild(element);
-        } else if (result != null && (result.getXMElement().isIgnore() || result.getXMElement().isIllegal())){
-            if (result.getXMElement().isIllegal()) {
-                putTemporaryReport(Report.error(XDEF.XDEF557, element.getNodeName()));//Illegal element '&{0}'
-                if (_xElement._onIllegalElement >= 0) {
-                    if (_clearReports) {
-                        clearTemporaryReporter();
-                    }
-                    exec(_xElement._onIllegalElement, (byte) 'E');
-                    copyTemporaryReports();
-                }
-            }
-            result = new ChkElement(this, el, _xElement.createAnyDefElement(), true);
-            if (el != null) {
-                el.removeChild(element);
-            }
-        }
-        if (result == null) {
-            if (_xElement._moreElements!='T' && _xElement._moreElements!='I') {
-                // Illegal element
-                debugXPos(XDDebug.ONILLEGALELEMENT);
-                if (_xElement._onIllegalElement >= 0) {
-                    _elemValue = _element;
-                    //Not allowed element '&{0}'
-                    putTemporaryReport(Report.error(XDEF.XDEF501, element.getNodeName()));
-                    if (_clearReports) {
-                        clearTemporaryReporter();
-                    }
-                    exec(_xElement._onIllegalElement, (byte) 'E');
-                    copyTemporaryReports();
-                } else if (textcontent == null) {
-                    if (_xElement._xon > 0) {
-                        Node n = element.getAttributeNode(X_KEYATTR);
-                        //Not allowed item&{1}{ "}{"} in &{0}
-                        error(XDEF.XDEF507, _xElement.getLocalName(), n==null ? null : n.getNodeValue());
-                    } else {
-                        error(XDEF.XDEF501, element.getNodeName()); //Not allowed element '&{0}'
-                    }
-                }
-                result = new ChkElement(this, element, _xElement.createAnyDefElement(), true);
-            } else {//moreElements || ignoreOther
-                _nextDefIndex = nextDefIndex;
-                _actDefIndex = actDefIndex;
-                result = new ChkElement(this,
-                    element, _xElement.createAnyDefElement(), _ignoreAll || _xElement._moreElements == 'I');
-            }
-        }
-        _chkChildNodes.add(result);
-        return result;
-    }
-
-    /** Check absence of an element node in model. */
-    final void chkElementAbsence(final int index, final XElement xelem, final Counter c) {
-        if ( _nil) {
-            return;
-        }
-        if (_counters[index] >= xelem.minOccurs()) {
-            if (_counters[index] == 0 && xelem._onAbsence >= 0) {
-                ChkElement chkElem = new ChkElement(this, null, xelem, true);
-                if (_clearReports) {
-                    clearTemporaryReporter();
-                }
-                _scp.exec(xelem._onAbsence, chkElem);
-            }
-            return;
-        }
-        if (xelem._onAbsence >= 0) {
-            //we call the onAbsence method for all required items.
-            _actDefIndex = index;
-            for (int j = _counters[index]; j < xelem.minOccurs(); j++) {
-                _elemValue = _element;
-                //create "Pseudo" ChkElement
-                ChkElement chkElem = new ChkElement(this, null, xelem, true);
-                chkElem.setXXType((byte) 'E');
-                if (_clearReports) {
-                    clearTemporaryReporter();
-                }
-                _scp.exec(xelem._onAbsence, chkElem);
-                if (chkElem._element != null) {
-                    //save original reports and set clear new reporter
-                    ArrayReporter arep = getTemporaryReporter();
-                    setTemporaryReporter(new ArrayReporter());
-                    chkElem._ignoreAll = false; //set real mode
-                    if (c == null) {
-                        _element.appendChild(chkElem._element);
-                    } else {
-                        Node n = _element.getChildNodes().item(c._itemIdex);
-                        if (n == null) {
-                            _element.appendChild(chkElem._element);
-                        } else {
-                            _element.insertBefore(chkElem._element, n);
-                        }
-                    }
-                    _chkChildNodes.add(chkElem);
-                    chkElem.checkElement();
-                    chkElem.addElement();
-                    setTemporaryReporter(arep);//restore reporter
-                }
-            }
-            _actDefIndex = -1;
-        } else {
-            String name = xelem.getName();
-            if (xelem._xon > 0 && X_VALUE.equals(name = xelem.getLocalName())) {
-                String[] x = getPosInfo(xelem.getXDPosition(), null);
-                int ndx = (x[0].lastIndexOf("['"));
-                if (ndx >= 0) {
-                    int ndx1 = x[0].indexOf("']", ndx);
-                    if (ndx1 > 0) {
-                        XMData keyAttr = xelem.getAttr("key");
-                        if (keyAttr == null || (name = keyAttr.getFixedValue().stringValue()) == null) {
-                            name = x[0].substring(ndx + 2, ndx1);
-                        }
-                    }
-                }
-            }
-            putTemporaryReport(_counters[index] == 0
-                ? Report.error(XDEF.XDEF539, //Required element '&{0}' is missing
-                    name + getPosMod(xelem.getXDPosition(), null))
-                : Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
-                    name + getPosMod(xelem.getXDPosition(), _xPos + "/" + name)));
-        }
-        copyTemporaryReports();
-    }
-
-    private String getTextPathIndex(final int index) {
-        int counter = 0;
-        for (int i = 0; i < index; i++) {
-            if (_childList[i].getKind() == XMTEXT) {
-                counter++;
-            }
-        }
-        return (counter > 0) ? "[" + (counter+1) + "]" : "";
-    }
-
-    private Node getNodeByIndex(final int index) {
-        Node n = _element.getFirstChild();
-        for (int i = 0; n != null; n = n.getNextSibling()) {
-            if (i++ == index) {
-                return n;
-            }
-        }
-        return null;
-    }
-
-    /** Check absence of a text node in model. */
-    final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter c) {
-        if (_counters[index] != 0 || txt.minOccurs() <= XOccurrence.IGNORE) {
-            return; //exists or IGNORED
-        }
-        _xdata = txt;
-        String orig = _data = null;
-        _parseResult = null;
-        String xPos = _xPos;
-        String txtname = getTextPathIndex(index); // index or ""
-        _xPos += "/text()" + txtname;
-        txtname = "$text" + txtname;
-        if (!_attNames.contains(txtname) && txt._onAbsence >= 0) {
-            _attNames.add(txtname);
-            _elemValue = _element;
-            if (_clearReports) {
-                clearTemporaryReporter();
-            }
-            exec(txt._onAbsence, (byte) 'T'); //exec onAbsence
-            if (_data != null) {
-                checkDatatype(txt, true);
-            }
-            copyTemporaryReports();
-        } else if (!ignoreAbsence && _data == null && txt.minOccurs() >= XData.REQUIRED && !_nil) {
-            error(XDEF.XDEF527); //Missing required text
-        }
-        if (_data == null && txt._deflt >= 0) {//exec default
-            _data = null;
-            _parseResult = null;
-            _elemValue = _element;
-            XDValue value = exec(txt._deflt, (byte) 'T');
-            if (value != null) {
-                _data = value.toString();
-                checkDatatype(txt, true);
-            }
-            copyTemporaryReports();
-        }
-        debugXPos(XDDebug.FINALLY);
-        if (txt._finaly >= 0) {
-            _elemValue = _element;
-            exec(txt._finaly, (byte) 'T');
-            copyTemporaryReports();
-        }
-        if (_data != null) {
-            if (!_data.equals(orig)) {
-                Node txt1 = txt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
-                    : _rootChkDocument.getDocument().createTextNode(_data);
-                if (orig == null) {
-                    if (c == null) {
-                        _element.appendChild(txt1);
-                    } else {
-                        _element.insertBefore(txt1, getNodeByIndex(c._itemIdex));
-                        c._itemIdex++;
-                    }
-                    incRefNum();
-                } else {
-                    _element.replaceChild(txt1, getNodeByIndex(c._itemIdex));
-                }
-            }
-        } else if (orig != null) {
-            _element.removeChild(getNodeByIndex(c._itemIdex));
-            c._itemIdex--;
-            decRefNum();
-            _data = null;
-        }
-        _xPos = xPos;
-        _xdata = null;
-        _parseResult = null;
-    }
-
-    private boolean isEmptyGroup(final int begIndex, final int endIndex) {
-        for (int i = begIndex; i <= endIndex; i++) {
-            switch (_childList[i].getKind()) {
-                case XMSEQUENCE:
-                case XMCHOICE:
-                case XMMIXED:
-                case XMSELECTOR_END: continue;
-                default: if (_counters[i] != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /** Check occurrences in a selector of sequence.
-     * @param selector Selector of group to be investigated.
-     * @param c Counter (index) of first item of the group.
-     * @param skip if true the internal selectors are skipped.
-     * @return true if nonempty content is required.
-     */
-    private boolean checkSequenceAbsence(final SelectorState selector, final Counter c, final boolean skip) {
-        boolean required = selector.minOccurs() > 0;
-        if (selector._selective || !required && !selector._occur) {
-            return false;
-        }
-        int endIndex = selector._endIndex;
-        for (int i = selector._begIndex + 1; i < endIndex; i++) {
-            XNode xnode;
-            switch ((xnode = _childList[i]).getKind()) {
-                case XMTEXT: {
-                    chkTextAbsence(i, (XData) xnode, false, c);
-                    required &= ((XData) xnode).minOccurs() > 0;
-                    if (c != null) {
-                        c._itemIdex += _counters[i];
-                    }
-                    continue;
-                }
-                case XMELEMENT: {
-                    chkElementAbsence(i, (XElement) xnode, c);
-                    required &= ((XElement) xnode).minOccurs() > 0;
-                    if (c != null) {
-                        c._itemIdex += _counters[i];
-                    }
-                    continue;
-                }
-                case XMSEQUENCE:
-                case XMCHOICE:
-                    required &= ((XSelector) xnode).minOccurs() > 0;
-                    if (skip) {
-                        int j = ((XSelector) xnode)._endIndex;
-                        while (++i < j) {
-                            switch ((_childList[i]).getKind()) {
-                                case XMCHOICE:
-                                case XMMIXED:
-                                case XMSEQUENCE:
-                                case XMSELECTOR_END: continue;
-                                default: if (c != null) {
-                                    c._itemIdex += _counters[i];
-                                }
-                            }
-                        }
-                    } else {
-                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
-                        required = s._kind == XMCHOICE && s.minOccurs() > 0;
-                        required &= checkAbsence(s, c, skip);
-                        i = s._endIndex;
-                    }
-                    continue;
-                case XMMIXED:
-                    if (skip) {
-                        int j = ((XSelector) xnode)._endIndex;
-                        while (++i < j) {
-                            switch ((_childList[i]).getKind()) {
-                                case XMCHOICE:
-                                case XMMIXED:
-                                case XMSEQUENCE:
-                                case XMSELECTOR_END: continue;
-                                default: if (c != null) {
-                                    c._itemIdex += _counters[i];
-                                }
-                            }
-                        }
-                    } else {
-                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
-                        required = (s._kind==XMCHOICE) && s.minOccurs()>0;
-                        required &= checkAbsence(s, c, skip);
-                        i = s._endIndex;
-                    }
-                    continue;
-                case XMSELECTOR_END: if (!skip) {
-                        return required;
-                    }
-                default:
-            }
-        }
-        return required;
-    }
-
-    /** Check occurrences in a selector of mixed.
-     * @param selector Selector of group to be investigated.
-     * @param c Counter (index) of first item of the group.
-     * @param skip if skip the internal selectors are skipped.
-     * @return true if nonempty content is required.
-     */
-    private boolean checkMixedAbsence(final SelectorState selector, final Counter c, final boolean skip) {
-        int endIndex = selector._endIndex;
-        int begIndex = selector._begIndex + 1;
-        boolean required = selector.minOccurs() > 0;
-        boolean empty = isEmptyGroup(begIndex, endIndex);
-        if (empty) {
-            XSelector xs = (XSelector) _childList[selector._begIndex];
-            if (xs._onAbsence >= 0) {
-                if (skip || !required) {
-                    if (_clearReports) {
-                        clearTemporaryReporter();
-                    }
-                    exec(xs._onAbsence, (byte) 'U');
-                }
-                return false;
-            }
-            if (!required) {
-                return false;
-            }
-        }
-        if (!required && selector._selective) {
-            return false;
-        }
-        if (!empty) {
-            for (int i = begIndex; i < endIndex; i++) {
-                XNode xnode;
-                switch ((xnode = _childList[i]).getKind()) {
-                    case XMTEXT: {
-                        chkTextAbsence(i, (XData) xnode, false, c);
-                        required &= ((XData) xnode).minOccurs() > 0;
-                        if (c != null) {
-                            c._itemIdex += _counters[i];
-                        }
-                        continue;
-                    }
-                    case XMELEMENT: {
-                        chkElementAbsence(i, (XElement) xnode, c);
-                        required &= ((XElement) xnode).minOccurs() > 0;
-                        if (c != null) {
-                            c._itemIdex += _counters[i];
-                        }
-                        continue;
-                    }
-                    case XMCHOICE: {
-                        XChoice xch = (XChoice) xnode;
-                        required &= xch.minOccurs() > 0;
-                        int j = xch._endIndex;
-                        int k = 0; // number of occurrences
-                        for (int n = xch._begIndex; n <= j; n++) {
-                            k += _counters[n];
-                        }
-                        if (k < xch.minOccurs()) {
-                            //Minimum occurrence not reached for &{0}
-                            putTemporaryReport(Report.error(XDEF.XDEF555, "choice"));
-                            if (xch._onAbsence >= 0) {
-                                if (_clearReports) {
-                                    clearTemporaryReporter();
-                                }
-                                exec(xch._onAbsence, (byte)'U');
-                            }
-                        }
-                        i = j;
-                        continue;
-                    }
-                    case XMSEQUENCE:
-                        required &= ((XSelector) xnode).minOccurs() > 0;
-                        if (skip) {
-                            int j = ((XSelector) xnode)._endIndex;
-                            while (++i < j) {
-                                switch ((_childList[i]).getKind()) {
-                                    case XMCHOICE:
-                                    case XMMIXED:
-                                    case XMSEQUENCE:
-                                    case XMSELECTOR_END: continue;
-                                    default: if (c != null) {
-                                        c._itemIdex += _counters[i];
-                                    }
-                                }
-                            }
-                        } else {
-                            SelectorState s = new SelectorState(selector, (XSelector) xnode);
-                            required = s._kind == XMCHOICE && s.minOccurs() > 0;
-                            required &= checkAbsence(s, c, skip);
-                            i = s._endIndex;
-                        }
-                        continue;
-                    case XMMIXED:
-                        if (skip) {
-                            int j = ((XSelector) xnode)._endIndex;
-                            while (++i < j) {
-                                switch ((_childList[i]).getKind()) {
-                                    case XMCHOICE:
-                                    case XMMIXED:
-                                    case XMSEQUENCE:
-                                    case XMSELECTOR_END: continue;
-                                    default: if (c != null) {
-                                        c._itemIdex += _counters[i];
-                                    }
-                                }
-                            }
-                        } else {
-                            SelectorState s = new SelectorState(selector, (XSelector) xnode);
-                            required = (s._kind==XMCHOICE) && s.minOccurs() > 0;
-                            required &= checkAbsence(s, c, skip);
-                            i = s._endIndex;
-                        }
-                        continue;
-                    case XMSELECTOR_END:
-                        if (skip) {
-                            continue;
-                        }
-                        return required;
-                    default:
-                }
-            }
-        }
-        if (required &&	!selector._occur &&	selector._count == 0) {
-            if (!empty && selector._prev != null && selector._prev._count >= selector._prev.minOccurs()) {
-                return required;
-            }
-            if (_xElement._xon > 0) {
-                error(XDEF.XDEF541, _xElement.getLocalName()); //Missing required item(s) in &{0}
-            } else {
-                //Sequence "xd:mixed" has no required item
-                error(XDEF.XDEF520, getPosMod(_childList[selector._begIndex].getXDPosition(), _xPos));
-            }
-        }
-        return required;
-    }
-
-    /** Check occurrences in a selector of choice.
-     * @param selector Selector of group to be investigated.
-     * @param c Counter (index) of first item of the group.
-     * @param skip if true the internal selectors are skipped.
-     * @return true if nonempty content is required.
-     */
-    private boolean checkChoiceAbsence(final SelectorState selector, final Counter c, final boolean skip) {
-        if (selector.minOccurs() <= 0) {
-            return false; // not required
-        }
-        boolean required = selector.minOccurs() > 0;
-        int endIndex = selector._endIndex;
-        for (int i = selector._begIndex + 1; i < endIndex; i++) {
-            XNode xnode;
-            switch ((xnode = _childList[i]).getKind()) {
-                case XMTEXT: {
-                    XData xtxt = (XData) xnode;
-                    if (_counters[i] == 0) {
-                        if (xtxt.minOccurs() == 0) {
-                            return false; //optional variant
-                        }
-                        continue;
-                    }
-                    chkTextAbsence(i, xtxt, false, c);
-                    return false;
-                }
-                case XMELEMENT: {
-                    XElement xelem = (XElement) xnode;
-                    if (_counters[i] == 0) {
-                        if (xelem.minOccurs() == 0) {
-                            return false; //optional variant
-                        }
-                        continue;
-                    }
-                    chkElementAbsence(i, xelem, c);
-                    return false;
-                }
-                case XMSEQUENCE:
-                case XMCHOICE:
-                    required &= ((XSelector) xnode).minOccurs() > 0;
-                    if (skip) {
-                        int j = ((XSelector) xnode)._endIndex;
-                        while (++i < j) {
-                            switch ((_childList[i]).getKind()) {
-                                case XMCHOICE:
-                                case XMMIXED:
-                                case XMSEQUENCE:
-                                case XMSELECTOR_END: continue;
-                                default: if (c != null) {
-                                    c._itemIdex += _counters[i];
-                                }
-                            }
-                        }
-                    } else {
-                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
-                        required = s._kind == XMCHOICE && s.minOccurs() > 0;
-                        required &= checkAbsence(s, c, skip);
-                        i = s._endIndex;
-                    }
-                    continue;
-                case XMMIXED:
-                    if (skip) {
-                        int j = ((XSelector) xnode)._endIndex;
-                        while (++i < j) {
-                            switch ((_childList[i]).getKind()) {
-                                case XMCHOICE:
-                                case XMMIXED:
-                                case XMSEQUENCE:
-                                case XMSELECTOR_END: continue;
-                                default: if (c != null) {
-                                    c._itemIdex += _counters[i];
-                                }
-                            }
-                        }
-                    } else {
-                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
-                        required = (s._kind == XMCHOICE) && s.minOccurs() > 0;
-                        required &= checkAbsence(s, c, skip);
-                        i = s._endIndex;
-                    }
-                    continue;
-                case XMSELECTOR_END: if (!skip) {
-                        return required;
-                    }
-                default:
-            }
-        }
-        if (!skip && selector._occur == false && selector._count == 0 && required) {
-            // do not report error if onAbsence
-            if (((XSelector) _childList[selector._begIndex])._onAbsence < 0) {
-                //Missing required item(s0 in &{0}
-                error(XDEF.XDEF541, getPosMod(getXDPosition()+"/#choice",_xPos));
-            }
-        }
-        return required;
-    }
-
-    /** Check occurrences in a selector.
-     * @param selector Selector of group to be investigated.
-     * @param c Counter (index) of first item of the group.
-     * @param skip if true the internal selectors are skipped.
-     * @return true if nonempty content is required.
-     */
-    final boolean checkAbsence(final SelectorState selector, final Counter c, final boolean skip) {
-        switch (selector._kind) {
-            case XMCHOICE: return checkChoiceAbsence(selector, c, skip);
-            case XMMIXED: return checkMixedAbsence(selector, c, skip);
-        }
-        return checkSequenceAbsence(selector, c, skip);
-    }
-
-    /** Finish processing of a group. */
-    final void finishGroup() {
-        _actDefIndex = -1;
-        int finaly = _selector._finallyCode;
-        debugXPos(XDDebug.SELECTORCREATE);
-        if (_selector._kind == XMMIXED) {
-            if (!_selector._occur) {//no variant reached
-                if (_selector._count == 0) {
-                    if (_selector.minOccurs() > 0) {
-                        if (_selector._prev == null || _selector._prev._kind == XMSEQUENCE) {
-                            checkAbsence(_selector, null, true);
-                        }
-                    }
-                } else {
-                    checkAbsence(_selector, null, true);
-                }
-                if (_selector._prev != null) {
-                    _selector._prev._occur |= _selector._count > 0;
-                }
-                _selector = _selector._prev;
-                _nextDefIndex++;
-                if (finaly >= 0) {
-                    exec(finaly, (byte)'U');
-                }
-                return;
-            }
-            if (_selector._occur) {
-                _selector._occur = false;
-                _counters[_nextDefIndex] = ++_selector._count;
-                _nextDefIndex = _selector._begIndex + 1;
-            } else {
-                if (_selector._prev != null) {
-                    _selector._prev._occur |= _selector._count > 0;
-                }
-                _selector = _selector._prev;
-                _nextDefIndex++;
-            }
-            return;
-        }
-        if (_selector._kind == XMCHOICE) {
-            if (_selector._occur) {
-                _selector._count = ++_counters[_nextDefIndex];
-            }
-            if (_selector.maxOccurs() <= 1 || !_selector._occur) {
-                if (_selector._count < _selector.minOccurs() && (_selector._prev == null
-                    || _selector._prev.minOccurs() > _selector._prev._count
-                    && _selector._prev._begIndex == _selector._begIndex + 1
-                    && _selector._prev._endIndex == _selector._endIndex - 1)) {
-                    putReport(Report.error(XDEF.XDEF555, "choice")); //Minimum occurrence not reached for &{0}
-                    XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
-                    if (xsel._onAbsence >= 0) {
-                        if (_clearReports) {
-                            clearTemporaryReporter();
-                        }
-                        exec(xsel._onAbsence, (byte)'U');
-                    }
-                }
-                _selector.updateCounters();
-                if (_selector._prev != null) {
-                    _selector._prev._occur |= _selector._count > 0;
-                    _selector = _selector._prev;
-                } else {
-                    _selector = null;
-                }
-                _nextDefIndex++;
-                if (finaly >= 0) {
-                    exec(finaly, (byte)'U');
-                }
-            } else {
-                checkAbsence(_selector, new Counter(_selector._firstChild), true);
-                if (_selector.maxOccurs() <= 1) {
-                    if (finaly >= 0) {
-                        exec(finaly, (byte) 'U');
-                    }
-                    _nextDefIndex++;
-                    return;
-                }
-                // Choice was not finished, will continue
-                if (_selector.saveAndClearCounters()) {
-                    _selector._count++;
-                    _selector._occur = false;
-                }
-                _nextDefIndex = _selector._begIndex + 1;
-            }
-        } else {// _selector._kind == XNode.X_SEQUENCE
-            if (_selector._occur) {
-                checkAbsence(_selector,new Counter(_selector._firstChild),true);
-                if (_selector._count >= _selector.maxOccurs() -1) {
-                    _selector._count++;
-                    if (_selector.minOccurs() >  _selector._count) {
-                        error(XDEF.XDEF558, "sequence"); //Maximum occurrence limit of &{0} exceeded
-                    }
-                    _selector.updateCounters(); //maximum reached
-                    _nextDefIndex++;
-                    if (_selector._prev != null) {
-                        _selector._prev._occur = true;
-                    }
-                    _selector = _selector._prev;
-                    if (finaly >= 0) {
-                        exec(finaly, (byte)'U');
-                    }
-                    return;
-                }
-            }
-            if (_selector.maxOccurs() <= 1 || !_selector._occur) {
-                if (_selector._prev == null) {
-                    if (!_selector._ignorable && _selector.minOccurs() > 0) {
-                        if (!_selector._occur) {//was not checked
-                            checkAbsence(_selector, new Counter(_selector._firstChild), true);
-                        }
-                    }
-                    if (finaly >= 0) {
-                        exec(finaly, (byte) 'U');
-                    }
-                    _selector = null;
-                    _nextDefIndex++;
-                } else {
-                    _selector._prev._occur |= _selector._occur || _selector._count > 0;
-                    if (_selector._prev._kind != XMSEQUENCE && _selector._count > 0) {
-                        _selector._prev._occur = true;
-                        _nextDefIndex = _selector._prev._begIndex + 1;
-                    } else {
-                        if (finaly >= 0) {
-                            exec(finaly, (byte) 'U');
-                        }
-                        _nextDefIndex++;
-                    }
-                    _selector.updateCounters();
-                    _selector = _selector._prev;
-                }
-                if (finaly >= 0) {
-                    exec(finaly, (byte)'U');
-                }
-            } else {
-                checkAbsence(_selector,new Counter(_selector._firstChild),true);
-                if (_selector.saveAndClearCounters()) {
-                    _selector._count++;
-                    _selector._occur = false;
-                }
-                _nextDefIndex = _selector._begIndex + 1;
-                if (finaly >= 0) {
-                    exec(finaly, (byte)'U');
-                }
-            }
-        }
-    }
-
-    final boolean createGroup(final XSelector xs) {
-        _actDefIndex = -1;
-        if (xs.minOccurs() < 0) { //ignore, illegal
-            _nextDefIndex = xs._endIndex + 1;
-            return false;
-        }
-        if (xs._match >= 0 && !getXDDocument().isCreateMode()) {
-            _elemValue = _element;
-            XDValue value = exec(xs._match, (byte) 'U');
-            if (xs._match >= 0) {
-                if (value != null && !value.isNull() && !value.booleanValue()) {
-                    _nextDefIndex = xs._endIndex + 1;
-                    return false; // not match
-                }
-            }
-        }
-        if (_selector == null || _selector._begIndex != _nextDefIndex) {
-            _selector =	new SelectorState(_selector, xs);
-            debugXPos(XDDebug.SELECTORINIT);
-            if (xs._init >= 0) {
-                exec(xs._init, (byte) 'U');
-            }
-        }
-        _nextDefIndex++;
-        if (xs.getKind() == XMCHOICE) {
-            if (_counters[_selector._endIndex] >= _selector.maxOccurs()) {
-                _nextDefIndex = _selector._endIndex + 1;
-            }
-        }
-        return true;
+        /** Decrease counter of occurrence of XPath.
+         * @return decreased occurrence of this XPath .
+         */
+        int subCount() {return --_counter;}
     }
 
     /** Checks if all items of a mixed group are filled. If yes, call the method finishGroup() and
@@ -1332,43 +583,368 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         return chkEl;
     }
 
-    /** Prepare variables and execute the init section of X-script. */
-    final void initElem() {
-        // prepare variables declared in the script (do not make it twice)
-        if (_xElement._varinit >= 0 && _variables == null) {
-            _variables = new XDValue[_xElement._varsize];
-            exec(_xElement._varinit, (byte) 'E');
-            copyTemporaryReports();
+    private boolean isEmptyGroup(final int begIndex, final int endIndex) {
+        for (int i = begIndex; i <= endIndex; i++) {
+            switch (_childList[i].getKind()) {
+                case XMSEQUENCE:
+                case XMCHOICE:
+                case XMMIXED:
+                case XMSELECTOR_END: continue;
+                default: if (_counters[i] != 0) {
+                    return false;
+                }
+            }
         }
-        debugXPos(XDDebug.INIT);
-        if (_xElement._init >= 0) {
-            _elemValue = _element;
-            exec(_xElement._init, (byte) 'E');
-            copyTemporaryReports();
-            _elemValue = null;
-        }
+        return true;
     }
 
-    /** Get actual X-definition assigned to node.
-     * @param i The index of X-definition.
-     * @return The actual definition or null.
-     */
-    public final XNode getDefElement(final int i) {return i < _childList.length ? _childList[i] : null;}
+    private String getTextPathIndex(final int index) {
+        int counter = 0;
+        for (int i = 0; i < index; i++) {
+            if (_childList[i].getKind() == XMTEXT) {
+                counter++;
+            }
+        }
+        return (counter > 0) ? "[" + (counter+1) + "]" : "";
+    }
 
-    /** Get maximal index of X-definition in the list.
-     * @return Max index of definition list.
-     */
-    final int getDefinitionMaxIndex() {return _childList.length;}
+    private Node getNodeByIndex(final int index) {
+        Node n = _element.getFirstChild();
+        for (int i = 0; n != null; n = n.getNextSibling()) {
+            if (i++ == index) {
+                return n;
+            }
+        }
+        return null;
+    }
 
-    /** Add the new attribute to the current element.
-     * @param att The object with attribute.
-     * @return true if attribute was created according to X-definition.
+    /** Get offset of model variable.
+     * @param name name of model variable.
+     * @return offset of model variable or -1 if variable is not declared.
      */
-    final boolean newAttribute(final Attr att) {
-        _node = att;
-        boolean result = addAttributeNS(att.getNamespaceURI(), att.getName(), att.getValue());
-        _node = null;
-        return result;
+    private int findModelVariableOffset(final String name) {
+        if (_xElement._vartable == null) {
+            return -1;
+        }
+        XVariable v = _xElement._vartable.getXVariable(name);
+        return v == null || !v.isInitialized() ? -1 : v.getOffset();
+    }
+
+    /** Check occurrences in a selector of sequence.
+     * @param selector Selector of group to be investigated.
+     * @param c Counter (index) of first item of the group.
+     * @param skip if true the internal selectors are skipped.
+     * @return true if nonempty content is required.
+     */
+    private boolean checkSequenceAbsence(final SelectorState selector, final Counter c, final boolean skip) {
+        boolean required = selector.minOccurs() > 0;
+        if (selector._selective || !required && !selector._occur) {
+            return false;
+        }
+        int endIndex = selector._endIndex;
+        for (int i = selector._begIndex + 1; i < endIndex; i++) {
+            XNode xnode;
+            switch ((xnode = _childList[i]).getKind()) {
+                case XMTEXT: {
+                    chkTextAbsence(i, (XData) xnode, false, c);
+                    required &= ((XData) xnode).minOccurs() > 0;
+                    if (c != null) {
+                        c._itemIdex += _counters[i];
+                    }
+                    continue;
+                }
+                case XMELEMENT: {
+                    chkElementAbsence(i, (XElement) xnode, c);
+                    required &= ((XElement) xnode).minOccurs() > 0;
+                    if (c != null) {
+                        c._itemIdex += _counters[i];
+                    }
+                    continue;
+                }
+                case XMSEQUENCE:
+                case XMCHOICE:
+                    required &= ((XSelector) xnode).minOccurs() > 0;
+                    if (skip) {
+                        int j = ((XSelector) xnode)._endIndex;
+                        while (++i < j) {
+                            switch ((_childList[i]).getKind()) {
+                                case XMCHOICE:
+                                case XMMIXED:
+                                case XMSEQUENCE:
+                                case XMSELECTOR_END: continue;
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
+                            }
+                        }
+                    } else {
+                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
+                        required = s._kind == XMCHOICE && s.minOccurs() > 0;
+                        required &= checkAbsence(s, c, skip);
+                        i = s._endIndex;
+                    }
+                    continue;
+                case XMMIXED:
+                    if (skip) {
+                        int j = ((XSelector) xnode)._endIndex;
+                        while (++i < j) {
+                            switch ((_childList[i]).getKind()) {
+                                case XMCHOICE:
+                                case XMMIXED:
+                                case XMSEQUENCE:
+                                case XMSELECTOR_END: continue;
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
+                            }
+                        }
+                    } else {
+                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
+                        required = (s._kind==XMCHOICE) && s.minOccurs()>0;
+                        required &= checkAbsence(s, c, skip);
+                        i = s._endIndex;
+                    }
+                    continue;
+                case XMSELECTOR_END: if (!skip) {
+                        return required;
+                    }
+                default:
+            }
+        }
+        return required;
+    }
+
+    /** Check occurrences in a selector of mixed.
+     * @param selector Selector of group to be investigated.
+     * @param c Counter (index) of first item of the group.
+     * @param skip if skip the internal selectors are skipped.
+     * @return true if nonempty content is required.
+     */
+    private boolean checkMixedAbsence(final SelectorState selector, final Counter c, final boolean skip) {
+        int endIndex = selector._endIndex;
+        int begIndex = selector._begIndex + 1;
+        boolean required = selector.minOccurs() > 0;
+        boolean empty = isEmptyGroup(begIndex, endIndex);
+        if (empty) {
+            XSelector xs = (XSelector) _childList[selector._begIndex];
+            if (xs._onAbsence >= 0) {
+                if (skip || !required) {
+                    if (_clearReports) {
+                        clearTemporaryReporter();
+                    }
+                    exec(xs._onAbsence, (byte) 'U');
+                }
+                return false;
+            }
+            if (!required) {
+                return false;
+            }
+        }
+        if (!required && selector._selective) {
+            return false;
+        }
+        if (!empty) {
+            for (int i = begIndex; i < endIndex; i++) {
+                XNode xnode;
+                switch ((xnode = _childList[i]).getKind()) {
+                    case XMTEXT: {
+                        chkTextAbsence(i, (XData) xnode, false, c);
+                        required &= ((XData) xnode).minOccurs() > 0;
+                        if (c != null) {
+                            c._itemIdex += _counters[i];
+                        }
+                        continue;
+                    }
+                    case XMELEMENT: {
+                        chkElementAbsence(i, (XElement) xnode, c);
+                        required &= ((XElement) xnode).minOccurs() > 0;
+                        if (c != null) {
+                            c._itemIdex += _counters[i];
+                        }
+                        continue;
+                    }
+                    case XMCHOICE: {
+                        XChoice xch = (XChoice) xnode;
+                        required &= xch.minOccurs() > 0;
+                        int j = xch._endIndex;
+                        int k = 0; // number of occurrences
+                        for (int n = xch._begIndex; n <= j; n++) {
+                            k += _counters[n];
+                        }
+                        if (k < xch.minOccurs()) {
+                            //Minimum occurrence not reached for &{0}
+                            putTemporaryReport(Report.error(XDEF.XDEF555, "choice"));
+                            if (xch._onAbsence >= 0) {
+                                if (_clearReports) {
+                                    clearTemporaryReporter();
+                                }
+                                exec(xch._onAbsence, (byte)'U');
+                            }
+                        }
+                        i = j;
+                        continue;
+                    }
+                    case XMSEQUENCE:
+                        required &= ((XSelector) xnode).minOccurs() > 0;
+                        if (skip) {
+                            int j = ((XSelector) xnode)._endIndex;
+                            while (++i < j) {
+                                switch ((_childList[i]).getKind()) {
+                                    case XMCHOICE:
+                                    case XMMIXED:
+                                    case XMSEQUENCE:
+                                    case XMSELECTOR_END: continue;
+                                    default: if (c != null) {
+                                        c._itemIdex += _counters[i];
+                                    }
+                                }
+                            }
+                        } else {
+                            SelectorState s = new SelectorState(selector, (XSelector) xnode);
+                            required = s._kind == XMCHOICE && s.minOccurs() > 0;
+                            required &= checkAbsence(s, c, skip);
+                            i = s._endIndex;
+                        }
+                        continue;
+                    case XMMIXED:
+                        if (skip) {
+                            int j = ((XSelector) xnode)._endIndex;
+                            while (++i < j) {
+                                switch ((_childList[i]).getKind()) {
+                                    case XMCHOICE:
+                                    case XMMIXED:
+                                    case XMSEQUENCE:
+                                    case XMSELECTOR_END: continue;
+                                    default: if (c != null) {
+                                        c._itemIdex += _counters[i];
+                                    }
+                                }
+                            }
+                        } else {
+                            SelectorState s = new SelectorState(selector, (XSelector) xnode);
+                            required = (s._kind==XMCHOICE) && s.minOccurs() > 0;
+                            required &= checkAbsence(s, c, skip);
+                            i = s._endIndex;
+                        }
+                        continue;
+                    case XMSELECTOR_END:
+                        if (skip) {
+                            continue;
+                        }
+                        return required;
+                    default:
+                }
+            }
+        }
+        if (required &&	!selector._occur &&	selector._count == 0) {
+            if (!empty && selector._prev != null && selector._prev._count >= selector._prev.minOccurs()) {
+                return required;
+            }
+            if (_xElement._xon > 0) {
+                error(XDEF.XDEF541, _xElement.getLocalName()); //Missing required item(s) in &{0}
+            } else {
+                //Sequence "xd:mixed" has no required item
+                error(XDEF.XDEF520, getPosMod(_childList[selector._begIndex].getXDPosition(), _xPos));
+            }
+        }
+        return required;
+    }
+
+    /** Check occurrences in a selector of choice.
+     * @param selector Selector of group to be investigated.
+     * @param c Counter (index) of first item of the group.
+     * @param skip if true the internal selectors are skipped.
+     * @return true if nonempty content is required.
+     */
+    private boolean checkChoiceAbsence(final SelectorState selector, final Counter c, final boolean skip) {
+        if (selector.minOccurs() <= 0) {
+            return false; // not required
+        }
+        boolean required = selector.minOccurs() > 0;
+        int endIndex = selector._endIndex;
+        for (int i = selector._begIndex + 1; i < endIndex; i++) {
+            XNode xnode;
+            switch ((xnode = _childList[i]).getKind()) {
+                case XMTEXT: {
+                    XData xtxt = (XData) xnode;
+                    if (_counters[i] == 0) {
+                        if (xtxt.minOccurs() == 0) {
+                            return false; //optional variant
+                        }
+                        continue;
+                    }
+                    chkTextAbsence(i, xtxt, false, c);
+                    return false;
+                }
+                case XMELEMENT: {
+                    XElement xelem = (XElement) xnode;
+                    if (_counters[i] == 0) {
+                        if (xelem.minOccurs() == 0) {
+                            return false; //optional variant
+                        }
+                        continue;
+                    }
+                    chkElementAbsence(i, xelem, c);
+                    return false;
+                }
+                case XMSEQUENCE:
+                case XMCHOICE:
+                    required &= ((XSelector) xnode).minOccurs() > 0;
+                    if (skip) {
+                        int j = ((XSelector) xnode)._endIndex;
+                        while (++i < j) {
+                            switch ((_childList[i]).getKind()) {
+                                case XMCHOICE:
+                                case XMMIXED:
+                                case XMSEQUENCE:
+                                case XMSELECTOR_END: continue;
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
+                            }
+                        }
+                    } else {
+                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
+                        required = s._kind == XMCHOICE && s.minOccurs() > 0;
+                        required &= checkAbsence(s, c, skip);
+                        i = s._endIndex;
+                    }
+                    continue;
+                case XMMIXED:
+                    if (skip) {
+                        int j = ((XSelector) xnode)._endIndex;
+                        while (++i < j) {
+                            switch ((_childList[i]).getKind()) {
+                                case XMCHOICE:
+                                case XMMIXED:
+                                case XMSEQUENCE:
+                                case XMSELECTOR_END: continue;
+                                default: if (c != null) {
+                                    c._itemIdex += _counters[i];
+                                }
+                            }
+                        }
+                    } else {
+                        SelectorState s = new SelectorState(selector, (XSelector) xnode);
+                        required = (s._kind == XMCHOICE) && s.minOccurs() > 0;
+                        required &= checkAbsence(s, c, skip);
+                        i = s._endIndex;
+                    }
+                    continue;
+                case XMSELECTOR_END: if (!skip) {
+                        return required;
+                    }
+                default:
+            }
+        }
+        if (!skip && selector._occur == false && selector._count == 0 && required) {
+            // do not report error if onAbsence
+            if (((XSelector) _childList[selector._begIndex])._onAbsence < 0) {
+                //Missing required item(s0 in &{0}
+                error(XDEF.XDEF541, getPosMod(getXDPosition()+"/#choice",_xPos));
+            }
+        }
+        return required;
     }
 
     /** Process attribute white spaces.
@@ -1549,134 +1125,484 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-    /** Get reference counter of given node (with an index).
-     * @param index the index of inspected node.
-     * @return The reference number.
-     */
-    public final int getRefNum(final int index) {return _counters[index];}
+// Methods used in org.xdef.impl package.
+////////////////////////////////////////////////////////////////////////////////
 
-    /** Set attribute to the current element. First remove the original attribute if exists to prevent report
-     * about attribute redefinition.
-     * @param name The name of attribute.
-     * @param value The value of attribute.
-     * @return true if attribute was created according to X-definition.
+    /** Execute X-script from given address (with given type).
+     * @param addr address of script.
+     * @param type type of model ('E' - element, 'A' - attribute, 'T' text, otherwise 'U').
      */
-    public final boolean setAttribute(final String name, final String value) {
-        _element.setAttribute(name, value);
-        return newAttribute(_element.getAttributeNode(name));
-    }
+    final XDValue exec(final int addr, final byte type) {_mode = type; return addr < 0 ? null : _scp.exec(addr, this);}
 
-    /** Set attribute to the current element. First remove the original attribute if exists to prevent report
-     * about attribute redefinition.
-     * @param name The name of attribute.
-     * @param data The value of attribute.
-     * @param nsURI The value of namespace URI.
-     * @return true if attribute was created according to X-definition.
+     /** Set mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
+     * 'D' - document, 'P' - processing instruction,'U' undefined. */
+    final void setXXType(final byte mode) {_mode = mode;}
+
+     /** Get mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
+     * 'D' - document, 'P' - processing instruction,'U' undefined.
+     * @return mode.
      */
-    public final boolean setAttribute(final String name, final String data, final String nsURI) {
-        if (nsURI == null) {
-            return setAttribute(name, data);
+    public final byte getXXType() {return _mode;}
+
+    /** Set name of the actually processed attribute or Text node.
+     * @param name The name of the actually processed attribute or text node.
+     */
+    final void setProcessedAttrName(final String name) {_attName = name;}
+
+    /** Set name of the actually processed attribute or Text node.
+     * @param name The name of the actually processed attribute or text node.
+     */
+    final void setProcessedAttrURI(final String uri) {_attURI = uri;}
+
+    /** Create check element object.
+     * @param element The element with attributes.
+     * @return created check element object.
+     */
+    final ChkElement createChkElement(final Element element) {
+        _data = null;
+        _parseResult = null;
+        if (_nil) {
+            error(XDEF.XDEF501, element.getNodeName()); //Not allowed element '&{0}'
+            ChkElement result = new ChkElement(this, element, _xElement.createAnyDefElement(), true);
+            _chkChildNodes.add(result);
+            return result;
         }
-        _element.setAttributeNS(nsURI, name, data);
-        return newAttribute(_element.getAttributeNode(name));
-    }
-
-    /** Update actual element in the tree. If argument is null actual element will be removed from the tree.
-     * @param el The element which will replace the actual one.
-     */
-    public final void updateElement(final Element el) {
-        Element el1, el2;
-        if ((el2 = el) == null) { //remove child
-            if (_element != null) {
-                if (_parent._parent == null) { // root element
-                    try {
-                        ((ChkDocument) _parent).getDocument().removeChild(_element);
-                    } catch (DOMException ex) {}
-                    ((ChkDocument) _parent)._element = null;
-                } else if ((el1 = _parent.getElement()) != null ) {
-                    el1.removeChild(_element);
-                }
-                _element = null;
-            }
-        } else if (el2 != _element) {
-            //update child
-            if (_element == null) {
-                if (_parent._parent == null) { // root element
-                    ((ChkDocument) _parent).getDocument().appendChild(el2);
-                } else {
-                    if ((el1 = _parent.getElement()) != null) {
-                        el1.appendChild(el2);
+        boolean appended = false;
+        Element el;
+        if ((el = getElement()) != null) {
+            //let's append it for a while to be able to execute XPath
+            el.appendChild(element);
+            appended = true;
+        }
+        int nextDefIndex = _nextDefIndex; //save index for moreElement case
+        int actDefIndex = _actDefIndex;
+        ChkElement result = (ChkElement) findXNode(element);
+        XMData textcontent =_xElement.getDefAttr("$textcontent",-1);
+        if (appended && result == null && textcontent == null) {
+            el.removeChild(element);
+        } else if (result != null && (result.getXMElement().isIgnore() || result.getXMElement().isIllegal())){
+            if (result.getXMElement().isIllegal()) {
+                putTemporaryReport(Report.error(XDEF.XDEF557, element.getNodeName()));//Illegal element '&{0}'
+                if (_xElement._onIllegalElement >= 0) {
+                    if (_clearReports) {
+                        clearTemporaryReporter();
                     }
-                }
-            } else {
-                if (_parent._parent == null) { // root  element
-                    ChkDocument root = ((ChkDocument) _parent);
-                    root.getDocument().replaceChild(el2, _element);
-                    root._element = el2;
-                } else if ((el1 = _parent.getElement()) != null) {
-                    Document doc = _element.getOwnerDocument();
-                    Document doc1 = el1.getOwnerDocument();
-                    if (doc != doc1) {
-                        el1 = (Element) doc.importNode(el1, true);
-                    }
-                    if (el2 != doc1.getDocumentElement()) {
-                        Document doc2 = el2.getOwnerDocument();
-                        if (doc != doc2) {
-                            el2 = (Element) doc.importNode(el2, true);
-                        }
-                        if (el2 != doc1.getDocumentElement()) {
-                            el1.replaceChild(el2, _element);
-                        }
-                    }
+                    exec(_xElement._onIllegalElement, (byte) 'E');
+                    copyTemporaryReports();
                 }
             }
-            _element = el2;
+            result = new ChkElement(this, el, _xElement.createAnyDefElement(), true);
+            if (el != null) {
+                el.removeChild(element);
+            }
         }
+        if (result == null) {
+            if (_xElement._moreElements!='T' && _xElement._moreElements!='I') {
+                // Illegal element
+                debugXPos(XDDebug.ONILLEGALELEMENT);
+                if (_xElement._onIllegalElement >= 0) {
+                    _elemValue = _element;
+                    //Not allowed element '&{0}'
+                    putTemporaryReport(Report.error(XDEF.XDEF501, element.getNodeName()));
+                    if (_clearReports) {
+                        clearTemporaryReporter();
+                    }
+                    exec(_xElement._onIllegalElement, (byte) 'E');
+                    copyTemporaryReports();
+                } else if (textcontent == null) {
+                    if (_xElement._xon > 0) {
+                        Node n = element.getAttributeNode(X_KEYATTR);
+                        //Not allowed item&{1}{ "}{"} in &{0}
+                        error(XDEF.XDEF507, _xElement.getLocalName(), n==null ? null : n.getNodeValue());
+                    } else {
+                        error(XDEF.XDEF501, element.getNodeName()); //Not allowed element '&{0}'
+                    }
+                }
+                result = new ChkElement(this, element, _xElement.createAnyDefElement(), true);
+            } else {//moreElements || ignoreOther
+                _nextDefIndex = nextDefIndex;
+                _actDefIndex = actDefIndex;
+                result = new ChkElement(this,
+                    element, _xElement.createAnyDefElement(), _ignoreAll || _xElement._moreElements == 'I');
+            }
+        }
+        _chkChildNodes.add(result);
+        return result;
     }
 
-    final void finishSelector() {
-        if (_selector == null) {
+    /** Check absence of an element node in model. */
+    final void chkElementAbsence(final int index, final XElement xelem, final Counter c) {
+        if ( _nil) {
             return;
         }
-        // ckeck if there is list of pending selector
-        if (!_selector._ignorable && _selector.minOccurs() > 0 && _selector.minOccurs() > (
-            _selector._occur ? _selector._kind == XMMIXED ? 1 : ++_selector._count : _selector._count)) {
-            XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
-            error(XDEF.XDEF555, xsel.getName().substring(1)); //Minimum occurrence not reached for &{0}
-            debugXPos(XDDebug.ONABSENCE);
-            if (xsel._onAbsence>= 0) {
-                exec(xsel._onAbsence, (byte)'U');
-            }
-        }
-        boolean nested = false;
-        while (_selector != null) {
-            if (_selector._kind == XMCHOICE) {
-                nested = true;
-                if (_selector._occur && _nextDefIndex == _selector._endIndex) {
-                    _selector._count = ++_counters[_nextDefIndex];
+        if (_counters[index] >= xelem.minOccurs()) {
+            if (_counters[index] == 0 && xelem._onAbsence >= 0) {
+                ChkElement chkElem = new ChkElement(this, null, xelem, true);
+                if (_clearReports) {
+                    clearTemporaryReporter();
                 }
-            } else if (_selector._occur) {
-                _selector._count++;
+                _scp.exec(xelem._onAbsence, chkElem);
             }
-            //check absence within a group. If actual node is the end of a group
-            // then set "skipselector" to true, othewise to false.
-            checkAbsence(_selector,
-                null, _nextDefIndex<_childList.length && _childList[_nextDefIndex].getKind() == XMSELECTOR_END&&nested);
-            if (_selector._kind == XMSEQUENCE && _selector._count <_selector.minOccurs()) {
-                error(XDEF.XDEF555, "sequence"); //Minimum occurrence not reached for &{0}
-            }
-            nested = true;
-            _actDefIndex = -1;
-            _nextDefIndex = _selector._endIndex + 1;
-            debugXPos(XDDebug.SELECTORFINALLY);
-            if (_selector._finallyCode >= 0) {
-                exec(_selector._finallyCode, (byte) 'U');
-            }
-            if (_selector._prev != null) {
-                _selector._prev._count++;
-            }
-            _selector = _selector._prev;
+            return;
         }
+        if (xelem._onAbsence >= 0) {
+            //we call the onAbsence method for all required items.
+            _actDefIndex = index;
+            for (int j = _counters[index]; j < xelem.minOccurs(); j++) {
+                _elemValue = _element;
+                //create "Pseudo" ChkElement
+                ChkElement chkElem = new ChkElement(this, null, xelem, true);
+                chkElem.setXXType((byte) 'E');
+                if (_clearReports) {
+                    clearTemporaryReporter();
+                }
+                _scp.exec(xelem._onAbsence, chkElem);
+                if (chkElem._element != null) {
+                    //save original reports and set clear new reporter
+                    ArrayReporter arep = getTemporaryReporter();
+                    setTemporaryReporter(new ArrayReporter());
+                    chkElem._ignoreAll = false; //set real mode
+                    if (c == null) {
+                        _element.appendChild(chkElem._element);
+                    } else {
+                        Node n = _element.getChildNodes().item(c._itemIdex);
+                        if (n == null) {
+                            _element.appendChild(chkElem._element);
+                        } else {
+                            _element.insertBefore(chkElem._element, n);
+                        }
+                    }
+                    _chkChildNodes.add(chkElem);
+                    chkElem.checkElement();
+                    chkElem.addElement();
+                    setTemporaryReporter(arep);//restore reporter
+                }
+            }
+            _actDefIndex = -1;
+        } else {
+            String name = xelem.getName();
+            if (xelem._xon > 0 && X_VALUE.equals(name = xelem.getLocalName())) {
+                String[] x = getPosInfo(xelem.getXDPosition(), null);
+                int ndx = (x[0].lastIndexOf("['"));
+                if (ndx >= 0) {
+                    int ndx1 = x[0].indexOf("']", ndx);
+                    if (ndx1 > 0) {
+                        XMData keyAttr = xelem.getAttr("key");
+                        if (keyAttr == null || (name = keyAttr.getFixedValue().stringValue()) == null) {
+                            name = x[0].substring(ndx + 2, ndx1);
+                        }
+                    }
+                }
+            }
+            putTemporaryReport(_counters[index] == 0
+                ? Report.error(XDEF.XDEF539, //Required element '&{0}' is missing
+                    name + getPosMod(xelem.getXDPosition(), null))
+                : Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
+                    name + getPosMod(xelem.getXDPosition(), _xPos + "/" + name)));
+        }
+        copyTemporaryReports();
+    }
+
+    /** Check absence of a text node in model. */
+    final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter c) {
+        if (_counters[index] != 0 || txt.minOccurs() <= XOccurrence.IGNORE) {
+            return; //exists or IGNORED
+        }
+        _xdata = txt;
+        String orig = _data = null;
+        _parseResult = null;
+        String xPos = _xPos;
+        String txtname = getTextPathIndex(index); // index or ""
+        _xPos += "/text()" + txtname;
+        txtname = "$text" + txtname;
+        if (!_attNames.contains(txtname) && txt._onAbsence >= 0) {
+            _attNames.add(txtname);
+            _elemValue = _element;
+            if (_clearReports) {
+                clearTemporaryReporter();
+            }
+            exec(txt._onAbsence, (byte) 'T'); //exec onAbsence
+            if (_data != null) {
+                checkDatatype(txt, true);
+            }
+            copyTemporaryReports();
+        } else if (!ignoreAbsence && _data == null && txt.minOccurs() >= XData.REQUIRED && !_nil) {
+            error(XDEF.XDEF527); //Missing required text
+        }
+        if (_data == null && txt._deflt >= 0) {//exec default
+            _data = null;
+            _parseResult = null;
+            _elemValue = _element;
+            XDValue value = exec(txt._deflt, (byte) 'T');
+            if (value != null) {
+                _data = value.toString();
+                checkDatatype(txt, true);
+            }
+            copyTemporaryReports();
+        }
+        debugXPos(XDDebug.FINALLY);
+        if (txt._finaly >= 0) {
+            _elemValue = _element;
+            exec(txt._finaly, (byte) 'T');
+            copyTemporaryReports();
+        }
+        if (_data != null) {
+            if (!_data.equals(orig)) {
+                Node txt1 = txt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
+                    : _rootChkDocument.getDocument().createTextNode(_data);
+                if (orig == null) {
+                    if (c == null) {
+                        _element.appendChild(txt1);
+                    } else {
+                        _element.insertBefore(txt1, getNodeByIndex(c._itemIdex));
+                        c._itemIdex++;
+                    }
+                    incRefNum();
+                } else {
+                    _element.replaceChild(txt1, getNodeByIndex(c._itemIdex));
+                }
+            }
+        } else if (orig != null) {
+            _element.removeChild(getNodeByIndex(c._itemIdex));
+            c._itemIdex--;
+            decRefNum();
+            _data = null;
+        }
+        _xPos = xPos;
+        _xdata = null;
+        _parseResult = null;
+    }
+
+    /** Check occurrences in a selector.
+     * @param selector Selector of group to be investigated.
+     * @param c Counter (index) of first item of the group.
+     * @param skip if true the internal selectors are skipped.
+     * @return true if nonempty content is required.
+     */
+    final boolean checkAbsence(final SelectorState selector, final Counter c, final boolean skip) {
+        switch (selector._kind) {
+            case XMCHOICE: return checkChoiceAbsence(selector, c, skip);
+            case XMMIXED: return checkMixedAbsence(selector, c, skip);
+        }
+        return checkSequenceAbsence(selector, c, skip);
+    }
+
+    /** Finish processing of a group. */
+    final void finishGroup() {
+        _actDefIndex = -1;
+        int finaly = _selector._finallyCode;
+        debugXPos(XDDebug.SELECTORCREATE);
+        if (_selector._kind == XMMIXED) {
+            if (!_selector._occur) {//no variant reached
+                if (_selector._count == 0) {
+                    if (_selector.minOccurs() > 0) {
+                        if (_selector._prev == null || _selector._prev._kind == XMSEQUENCE) {
+                            checkAbsence(_selector, null, true);
+                        }
+                    }
+                } else {
+                    checkAbsence(_selector, null, true);
+                }
+                if (_selector._prev != null) {
+                    _selector._prev._occur |= _selector._count > 0;
+                }
+                _selector = _selector._prev;
+                _nextDefIndex++;
+                if (finaly >= 0) {
+                    exec(finaly, (byte)'U');
+                }
+                return;
+            }
+            if (_selector._occur) {
+                _selector._occur = false;
+                _counters[_nextDefIndex] = ++_selector._count;
+                _nextDefIndex = _selector._begIndex + 1;
+            } else {
+                if (_selector._prev != null) {
+                    _selector._prev._occur |= _selector._count > 0;
+                }
+                _selector = _selector._prev;
+                _nextDefIndex++;
+            }
+            return;
+        }
+        if (_selector._kind == XMCHOICE) {
+            if (_selector._occur) {
+                _selector._count = ++_counters[_nextDefIndex];
+            }
+            if (_selector.maxOccurs() <= 1 || !_selector._occur) {
+                if (_selector._count < _selector.minOccurs() && (_selector._prev == null
+                    || _selector._prev.minOccurs() > _selector._prev._count
+                    && _selector._prev._begIndex == _selector._begIndex + 1
+                    && _selector._prev._endIndex == _selector._endIndex - 1)) {
+                    putReport(Report.error(XDEF.XDEF555, "choice")); //Minimum occurrence not reached for &{0}
+                    XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
+                    if (xsel._onAbsence >= 0) {
+                        if (_clearReports) {
+                            clearTemporaryReporter();
+                        }
+                        exec(xsel._onAbsence, (byte)'U');
+                    }
+                }
+                _selector.updateCounters();
+                if (_selector._prev != null) {
+                    _selector._prev._occur |= _selector._count > 0;
+                    _selector = _selector._prev;
+                } else {
+                    _selector = null;
+                }
+                _nextDefIndex++;
+                if (finaly >= 0) {
+                    exec(finaly, (byte)'U');
+                }
+            } else {
+                checkAbsence(_selector, new Counter(_selector._firstChild), true);
+                if (_selector.maxOccurs() <= 1) {
+                    if (finaly >= 0) {
+                        exec(finaly, (byte) 'U');
+                    }
+                    _nextDefIndex++;
+                    return;
+                }
+                // Choice was not finished, will continue
+                if (_selector.saveAndClearCounters()) {
+                    _selector._count++;
+                    _selector._occur = false;
+                }
+                _nextDefIndex = _selector._begIndex + 1;
+            }
+        } else {// _selector._kind == XNode.X_SEQUENCE
+            if (_selector._occur) {
+                checkAbsence(_selector,new Counter(_selector._firstChild),true);
+                if (_selector._count >= _selector.maxOccurs() -1) {
+                    _selector._count++;
+                    if (_selector.minOccurs() >  _selector._count) {
+                        error(XDEF.XDEF558, "sequence"); //Maximum occurrence limit of &{0} exceeded
+                    }
+                    _selector.updateCounters(); //maximum reached
+                    _nextDefIndex++;
+                    if (_selector._prev != null) {
+                        _selector._prev._occur = true;
+                    }
+                    _selector = _selector._prev;
+                    if (finaly >= 0) {
+                        exec(finaly, (byte)'U');
+                    }
+                    return;
+                }
+            }
+            if (_selector.maxOccurs() <= 1 || !_selector._occur) {
+                if (_selector._prev == null) {
+                    if (!_selector._ignorable && _selector.minOccurs() > 0) {
+                        if (!_selector._occur) {//was not checked
+                            checkAbsence(_selector, new Counter(_selector._firstChild), true);
+                        }
+                    }
+                    if (finaly >= 0) {
+                        exec(finaly, (byte) 'U');
+                    }
+                    _selector = null;
+                    _nextDefIndex++;
+                } else {
+                    _selector._prev._occur |= _selector._occur || _selector._count > 0;
+                    if (_selector._prev._kind != XMSEQUENCE && _selector._count > 0) {
+                        _selector._prev._occur = true;
+                        _nextDefIndex = _selector._prev._begIndex + 1;
+                    } else {
+                        if (finaly >= 0) {
+                            exec(finaly, (byte) 'U');
+                        }
+                        _nextDefIndex++;
+                    }
+                    _selector.updateCounters();
+                    _selector = _selector._prev;
+                }
+                if (finaly >= 0) {
+                    exec(finaly, (byte)'U');
+                }
+            } else {
+                checkAbsence(_selector,new Counter(_selector._firstChild),true);
+                if (_selector.saveAndClearCounters()) {
+                    _selector._count++;
+                    _selector._occur = false;
+                }
+                _nextDefIndex = _selector._begIndex + 1;
+                if (finaly >= 0) {
+                    exec(finaly, (byte)'U');
+                }
+            }
+        }
+    }
+
+    final boolean createGroup(final XSelector xs) {
+        _actDefIndex = -1;
+        if (xs.minOccurs() < 0) { //ignore, illegal
+            _nextDefIndex = xs._endIndex + 1;
+            return false;
+        }
+        if (xs._match >= 0 && !getXDDocument().isCreateMode()) {
+            _elemValue = _element;
+            XDValue value = exec(xs._match, (byte) 'U');
+            if (xs._match >= 0) {
+                if (value != null && !value.isNull() && !value.booleanValue()) {
+                    _nextDefIndex = xs._endIndex + 1;
+                    return false; // not match
+                }
+            }
+        }
+        if (_selector == null || _selector._begIndex != _nextDefIndex) {
+            _selector =	new SelectorState(_selector, xs);
+            debugXPos(XDDebug.SELECTORINIT);
+            if (xs._init >= 0) {
+                exec(xs._init, (byte) 'U');
+            }
+        }
+        _nextDefIndex++;
+        if (xs.getKind() == XMCHOICE) {
+            if (_counters[_selector._endIndex] >= _selector.maxOccurs()) {
+                _nextDefIndex = _selector._endIndex + 1;
+            }
+        }
+        return true;
+    }
+
+    /** Prepare variables and execute the init section of X-script. */
+    final void initElem() {
+        // prepare variables declared in the script (do not make it twice)
+        if (_xElement._varinit >= 0 && _variables == null) {
+            _variables = new XDValue[_xElement._varsize];
+            exec(_xElement._varinit, (byte) 'E');
+            copyTemporaryReports();
+        }
+        debugXPos(XDDebug.INIT);
+        if (_xElement._init >= 0) {
+            _elemValue = _element;
+            exec(_xElement._init, (byte) 'E');
+            copyTemporaryReports();
+            _elemValue = null;
+        }
+    }
+
+    /** Get actual X-definition assigned to node.
+     * @param i The index of X-definition.
+     * @return The actual definition or null.
+     */
+    public final XNode getDefElement(final int i) {return i < _childList.length ? _childList[i] : null;}
+
+    /** Get maximal index of X-definition in the list.
+     * @return Max index of definition list.
+     */
+    final int getDefinitionMaxIndex() {return _childList.length;}
+
+    /** Add the new attribute to the current element.
+     * @param att The object with attribute.
+     * @return true if attribute was created according to X-definition.
+     */
+    final boolean newAttribute(final Attr att) {
+        _node = att;
+        boolean result = addAttributeNS(att.getNamespaceURI(), att.getName(), att.getValue());
+        _node = null;
+        return result;
     }
 
     /** Finish checking of model.
@@ -1878,6 +1804,137 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
     }
 
+////////////////////////////////////////////////////////////////////////////////
+    /** Get reference counter of given node (with an index).
+     * @param index the index of inspected node.
+     * @return The reference number.
+     */
+    public final int getRefNum(final int index) {return _counters[index];}
+
+    /** Set attribute to the current element. First remove the original attribute if exists to prevent report
+     * about attribute redefinition.
+     * @param name The name of attribute.
+     * @param value The value of attribute.
+     * @return true if attribute was created according to X-definition.
+     */
+    public final boolean setAttribute(final String name, final String value) {
+        _element.setAttribute(name, value);
+        return newAttribute(_element.getAttributeNode(name));
+    }
+
+    /** Set attribute to the current element. First remove the original attribute if exists to prevent report
+     * about attribute redefinition.
+     * @param name The name of attribute.
+     * @param data The value of attribute.
+     * @param nsURI The value of namespace URI.
+     * @return true if attribute was created according to X-definition.
+     */
+    public final boolean setAttribute(final String name, final String data, final String nsURI) {
+        if (nsURI == null) {
+            return setAttribute(name, data);
+        }
+        _element.setAttributeNS(nsURI, name, data);
+        return newAttribute(_element.getAttributeNode(name));
+    }
+
+    /** Update actual element in the tree. If argument is null actual element will be removed from the tree.
+     * @param el The element which will replace the actual one.
+     */
+    public final void updateElement(final Element el) {
+        Element el1, el2;
+        if ((el2 = el) == null) { //remove child
+            if (_element != null) {
+                if (_parent._parent == null) { // root element
+                    try {
+                        ((ChkDocument) _parent).getDocument().removeChild(_element);
+                    } catch (DOMException ex) {}
+                    ((ChkDocument) _parent)._element = null;
+                } else if ((el1 = _parent.getElement()) != null ) {
+                    el1.removeChild(_element);
+                }
+                _element = null;
+            }
+        } else if (el2 != _element) {
+            //update child
+            if (_element == null) {
+                if (_parent._parent == null) { // root element
+                    ((ChkDocument) _parent).getDocument().appendChild(el2);
+                } else {
+                    if ((el1 = _parent.getElement()) != null) {
+                        el1.appendChild(el2);
+                    }
+                }
+            } else {
+                if (_parent._parent == null) { // root  element
+                    ChkDocument root = ((ChkDocument) _parent);
+                    root.getDocument().replaceChild(el2, _element);
+                    root._element = el2;
+                } else if ((el1 = _parent.getElement()) != null) {
+                    Document doc = _element.getOwnerDocument();
+                    Document doc1 = el1.getOwnerDocument();
+                    if (doc != doc1) {
+                        el1 = (Element) doc.importNode(el1, true);
+                    }
+                    if (el2 != doc1.getDocumentElement()) {
+                        Document doc2 = el2.getOwnerDocument();
+                        if (doc != doc2) {
+                            el2 = (Element) doc.importNode(el2, true);
+                        }
+                        if (el2 != doc1.getDocumentElement()) {
+                            el1.replaceChild(el2, _element);
+                        }
+                    }
+                }
+            }
+            _element = el2;
+        }
+    }
+
+    final void finishSelector() {
+        if (_selector == null) {
+            return;
+        }
+        // ckeck if there is list of pending selector
+        if (!_selector._ignorable && _selector.minOccurs() > 0 && _selector.minOccurs() > (
+            _selector._occur ? _selector._kind == XMMIXED ? 1 : ++_selector._count : _selector._count)) {
+            XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
+            error(XDEF.XDEF555, xsel.getName().substring(1)); //Minimum occurrence not reached for &{0}
+            debugXPos(XDDebug.ONABSENCE);
+            if (xsel._onAbsence>= 0) {
+                exec(xsel._onAbsence, (byte)'U');
+            }
+        }
+        boolean nested = false;
+        while (_selector != null) {
+            if (_selector._kind == XMCHOICE) {
+                nested = true;
+                if (_selector._occur && _nextDefIndex == _selector._endIndex) {
+                    _selector._count = ++_counters[_nextDefIndex];
+                }
+            } else if (_selector._occur) {
+                _selector._count++;
+            }
+            //check absence within a group. If actual node is the end of a group
+            // then set "skipselector" to true, othewise to false.
+            checkAbsence(_selector,
+                null, _nextDefIndex<_childList.length && _childList[_nextDefIndex].getKind() == XMSELECTOR_END&&nested);
+            if (_selector._kind == XMSEQUENCE && _selector._count <_selector.minOccurs()) {
+                error(XDEF.XDEF555, "sequence"); //Minimum occurrence not reached for &{0}
+            }
+            nested = true;
+            _actDefIndex = -1;
+            _nextDefIndex = _selector._endIndex + 1;
+            debugXPos(XDDebug.SELECTORFINALLY);
+            if (_selector._finallyCode >= 0) {
+                exec(_selector._finallyCode, (byte) 'U');
+            }
+            if (_selector._prev != null) {
+                _selector._prev._count++;
+            }
+            _selector = _selector._prev;
+        }
+    }
+
     /** Process text white spaces before processing.
      * @param xd XData model or null.
      * @param data String to be processed.
@@ -1984,457 +2041,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      */
     public final void addMarkedUniqueset(CodeUniqueset us) { _markedUniqueSets.add(us); us.setMarker(this);}
 
-////////////////////////////////////////////////////////////////////////////////
-// Methods to retrieve values from checked tree.
-////////////////////////////////////////////////////////////////////////////////
-
-    /** Look up for the X-position (XPos) of the element set by xPath. For look up is used the hash table with
-     * the XPaths and their occurrences.
-     * @param xPath XPath to the current ChkElement (Element from the source XML document that is actually processed).
-     * @return the position of this element in the source XML document to complete XPath identifier.
-     */
-    private int getElemXPos(Map<String, XPosInfo> xPosOccur, String xPath) {
-        if(xPosOccur != null) { // never should happen!!
-            XPosInfo xPathInfo;
-            if ((xPathInfo = xPosOccur.get(xPath)) == null) { // first occurrence of the xPath
-                xPosOccur.put(xPath, new XPosInfo());
-                return 1;
-            } else { // another (second and more) occurrence of the xPath
-                return xPathInfo.addCount();
-            }
-        }
-        // Never should happen - internal error
-        throw new SRuntimeException(XDEF.XDEF569, "ChkElement:getElemXPos: _xPathOccur == null");//Fatal error&{0}{: }
-    }
-
-    /** Saved counter object.*/
-    private static final class Counter {
-        int _itemIdex;
-        Counter(final int counter) {_itemIdex = counter;}
-    }
-
-    /** Class to represent short information about XPaths for all elements present in the input XML source.
-     * This class is not deleted after element processing when "forget" option is specified !!!
-     * This class is deleted (nulled) when the end of parent element is reached in the XML source.
-     * Maximum recommended size of object created from this class is 8 kB to avoid OutOfMemory exception
-     * by processing very large XML sources.
-     */
-    private static final class XPosInfo {
-        /** Field to count the amount of the same XPaths. */
-        private int _counter;
-
-        /** Creates info object in case of first occurrence of this XPath in the input XML source. */
-        XPosInfo() {_counter = 1;}
-
-        /** Increase counter of occurrence of XPath .
-         * @return increased occurrence of this XPath .
-         */
-        int addCount() {return ++_counter;}
-
-        /** Decrease counter of occurrence of XPath.
-         * @return decreased occurrence of this XPath .
-         */
-        int subCount() {return --_counter;}
-    }
 
 ////////////////////////////////////////////////////////////////////////////////
+// implementation of XXElement
 ////////////////////////////////////////////////////////////////////////////////
-
-//    /** Get actual source context for create mode.
-//     * @return source context or <i>null</i> if not available.
-//     */
-//    @Override
-//    public XDValue getXDContext() {
-//       if (_sourceElem == null) {
-//            DefContainer xdc = new DefContainer(); //create default context
-//            ChkComposer.getChildElementsByName(xdc, this, null, null);
-//            if (xdc.getXDItemsNumber() > 0) {
-//                return xdc;
-//            }
-//        }
-//        return _sourceElem != null ? new DefElement(_sourceElem) : null;
-//    }
-
-    /** Add the new attribute to the current XXElement.
-     * @param qname The qualified name of attribute (including prefix).
-     * @param data The value of attribute.
-     * @param nsURI The value of namespace URI.
-     * @return true if attribute was created according to X-definition.
-     */
-    @Override
-    public final boolean addAttributeNS(final String nsURI, final String qname, final String data) {
-        if (_element == null) {
-            return _ignoreAll;
-        }
-        if ("xmlns".equals(qname) || qname.startsWith("xmlns:") || qname.startsWith("xml:")) {
-            String uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI : XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-            _element.setAttributeNS(uri, qname, data);
-            return true;
-        }
-        if (_ignoreAll) {
-            return true; //all checks areignored (undef element)
-        }
-        if (XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI.equals(nsURI)) {
-            return false;
-        }
-        if (_nil) {// XML schema; xsi:nil & options nillable
-            error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos));//Attribute not allowed
-            return false;
-        }
-        XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
-        if (xatt == null) {
-            xatt = _xElement.getDefAttr("$attr", -1); // any attr
-            if (xatt == null && _xElement._moreAttributes == 'T') { // more attributes
-                xatt = new XData(qname, nsURI, getXDPool(), XD_ATTR); // check not declared attributes
-            }
-        }
-        String adata;
-        if ((adata = attrWhitespaces(xatt, data)) == null) {
-            removeAttr(nsURI, qname);
-            return true;
-        }
-        String xPos = _xPos;
-        _xPos += "/@" + qname;
-        _attName = qname;
-        _attURI = nsURI;
-        _xdata = xatt;
-        if (xatt!=null && xatt._match >=0 && !getXDDocument().isCreateMode()) {
-            _elemValue = _element;
-            _data = adata;
-            XDValue item = exec(xatt._match, (byte) 'A');
-            _elemValue = null;
-            _data = null;
-            _parseResult = null;
-            if (item != null && !item.booleanValue()) {//delete it
-                removeAttr(nsURI, qname);
-                if (xatt.minOccurs() != XOccurrence.IGNORE) {
-                    if (xatt.minOccurs() != XOccurrence.ILLEGAL) {
-                        //Attribute not allowed
-                        putTemporaryReport(Report.error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
-                    }
-                    if (xatt._onIllegalAttr >= 0) {
-                        if (_clearReports) {
-                            clearTemporaryReporter();
-                        }
-                        exec(xatt._onIllegalAttr, (byte) 'A');
-                    }
-                }
-                copyTemporaryReports();
-                _xdata = null;
-                _parseResult = null;
-                _xPos = xPos;
-                return false;
-            }
-            copyTemporaryReports();
-        }
-        _parseResult = null;
-        if (xatt != null) {
-            String xname = xatt.getName();
-            //let's register that we processed this attribute
-            if (_attNames.contains(xatt.getName()) && !"$attr".equals(xname)
-                && xatt._acceptQualifiedAttr == 'T') {
-                //Both, the qualified and unqualified attributes are not allowed with the option
-                // acceptQualifiedAttr: &{0}
-                error(XDEF.XDEF559, qname);
-            }
-            if ("$attr".equals(xname)) {
-                if (!_attNames.contains("$attr")) {
-                    _attNames.add(xname);
-                }
-                xname += qname;
-            }
-            boolean result = true;
-            switch (xatt.minOccurs()) {
-                case XOccurrence.ILLEGAL:  break; // report as it is undefined
-                case XOccurrence.IGNORE: // ignore
-                    _attName = null;
-                    _attURI = null;
-                    removeAttr(nsURI, qname);
-                    _attNames.add(xname);
-                    _xdata = null;
-                    _xPos = xPos;
-                    return true;
-                default : {// required(1) or optional(0)
-                    _data = adata;
-                    debugXPos(XDDebug.INIT);
-                    if (xatt._init >= 0) {// execute "onInit" action
-                        _elemValue = _element;
-                        exec(xatt._init, (byte) 'A');
-                        copyTemporaryReports();
-                    }
-                    if (_data == null) { // value not exist
-                        if (xatt._onFalse >= 0) {
-                            String x = _data;
-                            _elemValue = _element;
-                            if (_clearReports) {
-                                clearTemporaryReporter();
-                            }
-                            exec(xatt._onFalse, (byte) 'A');
-                            updateAttrValue(xatt, x, nsURI, qname);
-                        }
-                        _attNames.add(xname);
-                        _parseResult = new DefParseResult(_data);
-                    } else {
-                        _elemValue = _element;
-                        // if the value is an ampty string and the option is set to "acceptEmptyAttributes"
-                        // at any level then set the result of the check method to "true" (do NOT
-                        // report and/or process an error)!
-                        if (_data.isEmpty()
-                            && ((xatt._ignoreEmptyAttributes == 'A' || xatt._ignoreEmptyAttributes == 'P'
-                            && xatt.isOptional()) || xatt._ignoreEmptyAttributes == 0
-                            && (_xElement._ignoreEmptyAttributes=='A' ||_xElement._ignoreEmptyAttributes=='P'
-                            && xatt.isOptional()) || _xElement._ignoreEmptyAttributes == 0
-                            && (_rootChkDocument._ignoreEmptyAttributes=='A'
-                                || _rootChkDocument._ignoreEmptyAttributes=='P' && xatt.isOptional()))) {
-                            //accept empty attributes
-                            _attNames.add(xname);
-                            _parseResult = new DefParseResult(""); // empty attr
-                        } else {
-                            debugXPos(XDDebug.PARSE);
-                            // now we are sure the length is > 0 because if the option was not set to
-                            // "acceptEmptyAttributes" then an empty attribute value was set to null and
-                            // the attribute had been ignored in attrWhitespaces!
-                            _attNames.add(xname);
-                            checkDatatype(xatt, false);
-                        }
-                        if (_parseResult.matches()) { // true
-                            clearTemporaryReporter();
-                            if (_data != null) {
-                                if (!_data.equals(adata)) {
-                                    if (nsURI != null) {
-                                        _element.setAttributeNS(nsURI, qname, _data);
-                                    } else {
-                                        _element.setAttribute(qname, _data);
-                                    }
-                                }
-                            } else {
-                                removeAttr(nsURI, qname);
-                            }
-                            debugXPos(XDDebug.ONTRUE);
-                            if (xatt._onTrue >= 0) {
-                                String x = _data;
-                                exec(xatt._onTrue, (byte) 'A');
-                                updateAttrValue(xatt, x, nsURI, qname);
-                            }
-                        } else { // _parseResult.matches() == false
-                            // put error reports to chkElement
-                            debugXPos(XDDebug.ONFALSE);
-                            if (xatt._onFalse >= 0) {
-                                String x = _data;
-                                if (_clearReports) {
-                                    clearTemporaryReporter();
-                                }
-                                exec(xatt._onFalse, (byte) 'A');
-                                if (x != data) { // data changed, even may be equal
-                                    updateAttrValue(xatt, x, nsURI, qname);
-                                }
-                            } else {
-                                result = false; // an error found
-                                //copy reports from parsed result to the temporary reporter.
-                                _scp.getTemporaryReporter().addReports(_parseResult.getReporter());
-                                if (!chkTemporaryErrors()) {
-                                    putTemporaryReport(Report.error(XDEF.XDEF515));//Incorrect value&{0}
-                                }
-                            }
-                            copyTemporaryReports();
-                        }
-                    }
-                    if (_data != null && !_data.equals(adata)) {
-                        if ((adata = attrWhitespaces(xatt, adata)) == null) {
-                            removeAttr(nsURI, qname);
-                            _attName = null;
-                            _attURI = null;
-                            _data = null;
-                            _parseResult = null;
-                            _attNames.add(xname);
-                            _xdata = null;
-                            _xPos = xPos;
-                            return result; // ignore empty attributes
-                        }
-                    } else {
-                        adata = _data;
-                    }
-                    if (_data != null && !_data.equals(adata)) {
-                        adata = attrWhitespaces(xatt, _data);
-                    }
-                    _attName = null;
-                    _attURI = null;
-                    _data = null;
-                    if (adata == null) {
-                        removeAttr(nsURI, qname);
-                        _xdata = null;
-                        _parseResult = null;
-                        _xPos = xPos;
-                        return !xatt.isRequired();
-                    }
-                    if (nsURI != null) {
-                        _element.setAttributeNS(nsURI, qname, adata);
-                    } else {
-                        _element.setAttribute(qname, adata);
-                    }
-                    _attNames.add(xname);
-                    _xdata = null;
-                    _xPos = xPos;
-                    return result;
-                }
-            }
-        }
-        if ((_xElement._moreAttributes == 'T' || _xElement._moreAttributes == 'I')
-            && (xatt == null || !xatt.isIllegal())) {
-            //more attributes allowed, add attribute as it is no X-definition for this attribute
-            if (nsURI != null) {
-                if (_xElement._moreAttributes == 'I') {
-                    _element.removeAttributeNS(nsURI, qname);
-                } else {
-                    _element.setAttributeNS(nsURI, qname, adata);
-                    if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
-                        _xComponent.xSetAttr(this, _parseResult);
-                    }
-                }
-            } else {
-                if (_xElement._moreAttributes == 'I') {
-                    _element.removeAttribute(qname);
-                } else {
-                    _element.setAttribute(qname, adata);
-                    if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
-                        _xComponent.xSetAttr(this, _parseResult);
-                    }
-                }
-            }
-            _attName = null;
-            _attURI = null;
-            _xdata = null;
-            _xPos = xPos;
-            return true;
-        }
-        debugXPos(XDDebug.ONILLEGALATTR);
-        _data = adata = null;
-        //Attribute "&amp;{0}" not allowed
-        putTemporaryReport(Report.error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
-        if (xatt != null && xatt._onIllegalAttr >= 0) {
-            if (_clearReports) {
-                clearTemporaryReporter();
-            }
-            exec(xatt._onIllegalAttr, (byte) 'T');
-            _parseResult = null;
-        } else if (_xElement._onIllegalAttr >= 0) {
-            if (_clearReports) {
-                clearTemporaryReporter();
-            }
-            _elemValue = _element;
-            _data = adata;
-            exec(_xElement._onIllegalAttr, (byte) 'E');
-        }
-        copyTemporaryReports();
-        if (_data != null) {
-            if (nsURI != null) {
-                _element.setAttributeNS(nsURI, qname, adata);
-                if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
-                    _xComponent.xSetAttr(this, _parseResult);
-                }
-            } else {
-                _element.setAttribute(qname, adata);
-                if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
-                    _xComponent.xSetAttr(this, _parseResult);
-                }
-            }
-        } else {
-            if (nsURI != null) {
-                _element.removeAttributeNS(nsURI, qname);
-            } else {
-                _element.removeAttribute(qname);
-            }
-        }
-        _attName = null;
-        _attURI = null;
-        _data = null;
-        _parseResult = null;
-        _xdata = null;
-        _xPos = xPos;
-        return false;
-    }
-
-    /** Get name of actual node.
-     * @return The name of node.
-     */
-    @Override
-    public final String getNodeName() {
-        if (getItemId() != XX_ELEMENT) {
-            return _attName;
-        } else {
-            if (_element != null) {
-                String s = _element.getLocalName();
-                return s == null ? _element.getNodeName() : s;
-            }
-            return null;
-        }
-    }
-
-    /** Get namespace URI of actual node.
-     * @return namespace URI or null.
-     */
-    @Override
-    public final String getNodeURI() {
-        return (getItemId() != XX_ELEMENT) ? _attURI : _element != null ? _element.getNamespaceURI() : null;
-    }
-
-    /** Store model variable.
-     * @param name name of variable.
-     * @param val value to be stored.
-     */
-    @Override
-    final void storeModelVariable(final String name, final XDValue val) {
-        int addr = findModelVariableOffset(name);
-        if (addr < 0) {
-            _parent.storeModelVariable(name, val);
-        } else {
-            _variables[addr] = val;
-        }
-    }
-
-    /** Load model variable.
-     * @param name name of variable.
-     * @return loaded value.
-     */
-    @Override
-    public final XDValue loadModelVariable(final String name) {
-        int addr = findModelVariableOffset(name);
-        return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
-    }
 
     /** Set this element will be forgotten after being processed.*/
     @Override
     public final void forgetElement() {_forget = true;}
-
-    /** Increase reference counter by one.
-     * @return The increased reference number.
-     */
-    @Override
-    final int incRefNum() {return _actDefIndex < 0 ? 0 : ++_counters[_actDefIndex];}
-
-    /** Decrease reference counter by one.
-     * @return The increased reference number.
-     */
-    @Override
-    final int decRefNum() {return _actDefIndex < 0 ? 0 : --_counters[_actDefIndex];}
-
-    /** Get reference counter of actual node
-     * @return The reference number.
-     */
-    @Override
-    public final int getRefNum() {return _actDefIndex < 0 ? 0 : _counters[_actDefIndex];}
-
-    /** Get occurrence of actual element
-     * @return The reference number.
-     */
-    @Override
-    final int getOccurrence() {return _parent.getRefNum();}
-
-    /** Get ChkElement assigned to this node.
-     * @return ChkElement assigned to this node.
-     */
-    @Override
-    final ChkElement getChkElement() {return this;}
 
     /** Prepare construction of the new element according to X-definition.
      * @param qname qualified name of the element (prefixed).
@@ -2465,156 +2079,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         Element el = ns == null ? _rootChkDocument.getDocument().createElement(qname)
             : _rootChkDocument.getDocument().createElementNS(ns, qname);
         return chkElem((XElement) model, el);
-    }
-
-    /** Add the new attribute to the current XXElement.
-     * @param name name of attribute.
-     * @param data value of attribute.
-     * @return true if attribute was created according to X-definition.
-     */
-    @Override
-    public final boolean addAttribute(final String name, final String data) {return addAttributeNS(null, name, data);}
-
-    /** This method is called when the end of the current element attribute list was parsed. The
-     * implementation may check the list of attributes and may invoke appropriate actions.
-     * @return true if element is compliant with X-definition.
-     */
-    @Override
-    public final boolean checkElement() {
-        _parseResult = null;
-        if (_attsChecked) {
-            return true;
-        }
-        _attsChecked = true;
-        if (_ignoreAll) { // all checks are ignored (undef element)
-            return true;
-        }
-        boolean result = true;
-        //check if there are missing required attributes
-        XData[] xattrs = (XData[]) _xElement.getAttrs();
-        String xPos = _xPos;
-        for (int i = 0; i < xattrs.length && ! _nil; i++) {
-            XData xatt = xattrs[i];
-            _xdata = xatt;
-            String xname = xatt.getName();
-            if (xname.charAt(0) == '$') {//service attrs text, attr, textcontent
-                continue; // TODO
-            }
-            boolean processed = false; // true if attribute was processed
-            if (xatt.getNSUri() != null) {
-                if (_element.hasAttributeNS(xatt.getNSUri(),
-                    xname.substring(xname.indexOf(':') + 1))) {
-                    processed = true;
-                }
-            } else if (_element.hasAttribute(xname)) {
-                processed = true;
-            } else if (_attNames.contains(xname)) {
-                processed = true;
-            }
-            if (!processed) {
-                _xPos = xPos + "/@" + xname;
-                if (xatt._deflt >= 0) {// exec default method
-                    _data = null;
-                    _parseResult = null;
-                    _attName = xname;
-                    _elemValue = _element;
-                    XDValue value = exec(xatt._deflt, (byte) 'A');
-                    if (value != null) {
-                        _data = value.toString();
-                        checkDatatype(xatt, true);
-                        if (xatt.getNSUri() == null) {
-                            _element.setAttribute(xname, _data);
-                        } else {
-                            _element.setAttributeNS(xatt.getNSUri(), xname, _data);
-                        }
-                    }
-                    copyTemporaryReports();
-                    if (xatt.getNSUri() == null) {
-                        if (_element.hasAttribute(xname)) {
-                            continue;
-                        }
-                    } else {
-                        if (_element.hasAttributeNS(xatt.getNSUri(),
-                            xname.substring(xname.indexOf(':') + 1))) {
-                            continue;
-                        }
-                    }
-                }
-                //missing attribute
-                debugXPos(XDDebug.ONABSENCE);
-                if (xatt._onAbsence >= 0) {
-                    // onAbsence method
-                    _data = null;
-                    _parseResult = null;
-                    _attName = xname;
-                    _elemValue = _element;
-                    Report rep = null;
-                    if (xatt.minOccurs() == XData.REQUIRED) {
-                        rep = Report.error(XDEF.XDEF526, xname); //Missing required attribute &{0}
-                        putTemporaryReport(rep);
-                    }
-                    if (!_attNames.contains(xatt.getName())) {
-                        String uri = xatt.getNSUri(); // was not processed
-                        _xPos = xPos +"/@" + xname;
-                        exec(xatt._onAbsence, (byte) 'A');
-                        if (_data != null) {
-                            checkDatatype(xatt, true);
-                            if (uri == null) {
-                                _element.setAttribute(xname, _data);
-                            } else {
-                                _element.setAttributeNS(uri, xname, _data);
-                            }
-                            _attNames.add(xname);
-                        }
-                        if (uri == null && _element.hasAttribute(xname) || uri != null
-                            && _element.hasAttributeNS(uri, xname.substring(xname.indexOf(':') + 1))) {
-                            //remove the message "missing"
-                            removeTemporaryReport(rep);
-                            continue; // attribute exists, don't invoke default
-                        }
-                    }
-                    if (xatt._deflt < 0) {
-                        copyTemporaryReports();
-                        continue; // skip default method
-                    }
-                    removeTemporaryReport(rep); // don't report "missing" twice
-                    copyTemporaryReports();
-                }
-                if (xatt.minOccurs() == XData.REQUIRED) { //no method called; put error
-                    error(XDEF.XDEF526, xname);//Missing required attribute &{0}
-                    result = false;
-                }
-            }
-            _parseResult = null;
-            if (xatt._onStartElement >= 0) { // execute onStartElement action
-                _data = null;
-                _attName = xname;
-                _elemValue = _element;
-                exec(xatt._onStartElement, (byte) 'A');
-            }
-        }
-        _xPos = xPos;
-        _parseResult = null;
-        debugXPos(XDDebug.ONSTARTELEMENT);
-        if (_xElement._onStartElement >= 0) {// exec on end of attr list
-            _elemValue = _element;
-            exec(_xElement._onStartElement, (byte) 'E');
-            copyTemporaryReports();
-            updateElement(_elemValue);
-            if (_elemValue == null) {
-                result = false;
-            }
-        }
-        if (_scp.getXmlStreamWriter() != null) {
-            try {
-                _scp.getXmlStreamWriter().writeElementStart(_element);
-            } catch (SRuntimeException ex) {
-                putReport(ex.getReport());
-            }
-        }
-        _xdata = null;
-        _parseResult = null;
-        return result;
     }
 
     /** Add new element as a child of the current element.
@@ -2902,6 +2366,148 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
         closeChkElement();
         return !error;
+    }
+
+    /** This method is called when the end of the current element attribute list was parsed. The
+     * implementation may check the list of attributes and may invoke appropriate actions.
+     * @return true if element is compliant with X-definition.
+     */
+    @Override
+    public final boolean checkElement() {
+        _parseResult = null;
+        if (_attsChecked) {
+            return true;
+        }
+        _attsChecked = true;
+        if (_ignoreAll) { // all checks are ignored (undef element)
+            return true;
+        }
+        boolean result = true;
+        //check if there are missing required attributes
+        XData[] xattrs = (XData[]) _xElement.getAttrs();
+        String xPos = _xPos;
+        for (int i = 0; i < xattrs.length && ! _nil; i++) {
+            XData xatt = xattrs[i];
+            _xdata = xatt;
+            String xname = xatt.getName();
+            if (xname.charAt(0) == '$') {//service attrs text, attr, textcontent
+                continue; // TODO
+            }
+            boolean processed = false; // true if attribute was processed
+            if (xatt.getNSUri() != null) {
+                if (_element.hasAttributeNS(xatt.getNSUri(),
+                    xname.substring(xname.indexOf(':') + 1))) {
+                    processed = true;
+                }
+            } else if (_element.hasAttribute(xname)) {
+                processed = true;
+            } else if (_attNames.contains(xname)) {
+                processed = true;
+            }
+            if (!processed) {
+                _xPos = xPos + "/@" + xname;
+                if (xatt._deflt >= 0) {// exec default method
+                    _data = null;
+                    _parseResult = null;
+                    _attName = xname;
+                    _elemValue = _element;
+                    XDValue value = exec(xatt._deflt, (byte) 'A');
+                    if (value != null) {
+                        _data = value.toString();
+                        checkDatatype(xatt, true);
+                        if (xatt.getNSUri() == null) {
+                            _element.setAttribute(xname, _data);
+                        } else {
+                            _element.setAttributeNS(xatt.getNSUri(), xname, _data);
+                        }
+                    }
+                    copyTemporaryReports();
+                    if (xatt.getNSUri() == null) {
+                        if (_element.hasAttribute(xname)) {
+                            continue;
+                        }
+                    } else {
+                        if (_element.hasAttributeNS(xatt.getNSUri(),
+                            xname.substring(xname.indexOf(':') + 1))) {
+                            continue;
+                        }
+                    }
+                }
+                //missing attribute
+                debugXPos(XDDebug.ONABSENCE);
+                if (xatt._onAbsence >= 0) {
+                    // onAbsence method
+                    _data = null;
+                    _parseResult = null;
+                    _attName = xname;
+                    _elemValue = _element;
+                    Report rep = null;
+                    if (xatt.minOccurs() == XData.REQUIRED) {
+                        rep = Report.error(XDEF.XDEF526, xname); //Missing required attribute &{0}
+                        putTemporaryReport(rep);
+                    }
+                    if (!_attNames.contains(xatt.getName())) {
+                        String uri = xatt.getNSUri(); // was not processed
+                        _xPos = xPos +"/@" + xname;
+                        exec(xatt._onAbsence, (byte) 'A');
+                        if (_data != null) {
+                            checkDatatype(xatt, true);
+                            if (uri == null) {
+                                _element.setAttribute(xname, _data);
+                            } else {
+                                _element.setAttributeNS(uri, xname, _data);
+                            }
+                            _attNames.add(xname);
+                        }
+                        if (uri == null && _element.hasAttribute(xname) || uri != null
+                            && _element.hasAttributeNS(uri, xname.substring(xname.indexOf(':') + 1))) {
+                            //remove the message "missing"
+                            removeTemporaryReport(rep);
+                            continue; // attribute exists, don't invoke default
+                        }
+                    }
+                    if (xatt._deflt < 0) {
+                        copyTemporaryReports();
+                        continue; // skip default method
+                    }
+                    removeTemporaryReport(rep); // don't report "missing" twice
+                    copyTemporaryReports();
+                }
+                if (xatt.minOccurs() == XData.REQUIRED) { //no method called; put error
+                    error(XDEF.XDEF526, xname);//Missing required attribute &{0}
+                    result = false;
+                }
+            }
+            _parseResult = null;
+            if (xatt._onStartElement >= 0) { // execute onStartElement action
+                _data = null;
+                _attName = xname;
+                _elemValue = _element;
+                exec(xatt._onStartElement, (byte) 'A');
+            }
+        }
+        _xPos = xPos;
+        _parseResult = null;
+        debugXPos(XDDebug.ONSTARTELEMENT);
+        if (_xElement._onStartElement >= 0) {// exec on end of attr list
+            _elemValue = _element;
+            exec(_xElement._onStartElement, (byte) 'E');
+            copyTemporaryReports();
+            updateElement(_elemValue);
+            if (_elemValue == null) {
+                result = false;
+            }
+        }
+        if (_scp.getXmlStreamWriter() != null) {
+            try {
+                _scp.getXmlStreamWriter().writeElementStart(_element);
+            } catch (SRuntimeException ex) {
+                putReport(ex.getReport());
+            }
+        }
+        _xdata = null;
+        _parseResult = null;
+        return result;
     }
 
     /** Add new Text node to current element.
@@ -3229,33 +2835,332 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     @Override
     public final boolean addPI(final String name, final String x) {return true;} //TODO
 
-    /** Get text value of this node.
-     * @return The string with value of node.
+    /** Add the new attribute to the current XXElement.
+     * @param qname The qualified name of attribute (including prefix).
+     * @param data The value of attribute.
+     * @param nsURI The value of namespace URI.
+     * @return true if attribute was created according to X-definition.
      */
     @Override
-    public final String getTextValue() {return (getItemId() != XX_ELEMENT) ? _data : null;}
-
-    /** Set text value to this node.
-     * @param data the text value to be set.
-     */
-    @Override
-    public final void setTextValue(final String data) {
-        if (getItemId() != XX_ELEMENT) {
-            _data = data;
-        } else {
-            //Illegal use of method: &{0}
-            throw new SRuntimeException(SYS.SYS083, "setText");
+    public final boolean addAttributeNS(final String nsURI, final String qname, final String data) {
+        if (_element == null) {
+            return _ignoreAll;
         }
+        if ("xmlns".equals(qname) || qname.startsWith("xmlns:") || qname.startsWith("xml:")) {
+            String uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI : XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+            _element.setAttributeNS(uri, qname, data);
+            return true;
+        }
+        if (_ignoreAll) {
+            return true; //all checks areignored (undef element)
+        }
+        if (XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI.equals(nsURI)) {
+            return false;
+        }
+        if (_nil) {// XML schema; xsi:nil & options nillable
+            error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos));//Attribute not allowed
+            return false;
+        }
+        XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
+        if (xatt == null) {
+            xatt = _xElement.getDefAttr("$attr", -1); // any attr
+            if (xatt == null && _xElement._moreAttributes == 'T') { // more attributes
+                xatt = new XData(qname, nsURI, getXDPool(), XD_ATTR); // check not declared attributes
+            }
+        }
+        String adata;
+        if ((adata = attrWhitespaces(xatt, data)) == null) {
+            removeAttr(nsURI, qname);
+            return true;
+        }
+        String xPos = _xPos;
+        _xPos += "/@" + qname;
+        _attName = qname;
+        _attURI = nsURI;
+        _xdata = xatt;
+        if (xatt!=null && xatt._match >=0 && !getXDDocument().isCreateMode()) {
+            _elemValue = _element;
+            _data = adata;
+            XDValue item = exec(xatt._match, (byte) 'A');
+            _elemValue = null;
+            _data = null;
+            _parseResult = null;
+            if (item != null && !item.booleanValue()) {//delete it
+                removeAttr(nsURI, qname);
+                if (xatt.minOccurs() != XOccurrence.IGNORE) {
+                    if (xatt.minOccurs() != XOccurrence.ILLEGAL) {
+                        //Attribute not allowed
+                        putTemporaryReport(Report.error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
+                    }
+                    if (xatt._onIllegalAttr >= 0) {
+                        if (_clearReports) {
+                            clearTemporaryReporter();
+                        }
+                        exec(xatt._onIllegalAttr, (byte) 'A');
+                    }
+                }
+                copyTemporaryReports();
+                _xdata = null;
+                _parseResult = null;
+                _xPos = xPos;
+                return false;
+            }
+            copyTemporaryReports();
+        }
+        _parseResult = null;
+        if (xatt != null) {
+            String xname = xatt.getName();
+            //let's register that we processed this attribute
+            if (_attNames.contains(xatt.getName()) && !"$attr".equals(xname)
+                && xatt._acceptQualifiedAttr == 'T') {
+                //Both, the qualified and unqualified attributes are not allowed with the option
+                // acceptQualifiedAttr: &{0}
+                error(XDEF.XDEF559, qname);
+            }
+            if ("$attr".equals(xname)) {
+                if (!_attNames.contains("$attr")) {
+                    _attNames.add(xname);
+                }
+                xname += qname;
+            }
+            boolean result = true;
+            switch (xatt.minOccurs()) {
+                case XOccurrence.ILLEGAL:  break; // report as it is undefined
+                case XOccurrence.IGNORE: // ignore
+                    _attName = null;
+                    _attURI = null;
+                    removeAttr(nsURI, qname);
+                    _attNames.add(xname);
+                    _xdata = null;
+                    _xPos = xPos;
+                    return true;
+                default : {// required(1) or optional(0)
+                    _data = adata;
+                    debugXPos(XDDebug.INIT);
+                    if (xatt._init >= 0) {// execute "onInit" action
+                        _elemValue = _element;
+                        exec(xatt._init, (byte) 'A');
+                        copyTemporaryReports();
+                    }
+                    if (_data == null) { // value not exist
+                        if (xatt._onFalse >= 0) {
+                            String x = _data;
+                            _elemValue = _element;
+                            if (_clearReports) {
+                                clearTemporaryReporter();
+                            }
+                            exec(xatt._onFalse, (byte) 'A');
+                            updateAttrValue(xatt, x, nsURI, qname);
+                        }
+                        _attNames.add(xname);
+                        _parseResult = new DefParseResult(_data);
+                    } else {
+                        _elemValue = _element;
+                        // if the value is an ampty string and the option is set to "acceptEmptyAttributes"
+                        // at any level then set the result of the check method to "true" (do NOT
+                        // report and/or process an error)!
+                        if (_data.isEmpty()
+                            && ((xatt._ignoreEmptyAttributes == 'A' || xatt._ignoreEmptyAttributes == 'P'
+                            && xatt.isOptional()) || xatt._ignoreEmptyAttributes == 0
+                            && (_xElement._ignoreEmptyAttributes=='A' ||_xElement._ignoreEmptyAttributes=='P'
+                            && xatt.isOptional()) || _xElement._ignoreEmptyAttributes == 0
+                            && (_rootChkDocument._ignoreEmptyAttributes=='A'
+                                || _rootChkDocument._ignoreEmptyAttributes=='P' && xatt.isOptional()))) {
+                            //accept empty attributes
+                            _attNames.add(xname);
+                            _parseResult = new DefParseResult(""); // empty attr
+                        } else {
+                            debugXPos(XDDebug.PARSE);
+                            // now we are sure the length is > 0 because if the option was not set to
+                            // "acceptEmptyAttributes" then an empty attribute value was set to null and
+                            // the attribute had been ignored in attrWhitespaces!
+                            _attNames.add(xname);
+                            checkDatatype(xatt, false);
+                        }
+                        if (_parseResult.matches()) { // true
+                            clearTemporaryReporter();
+                            if (_data != null) {
+                                if (!_data.equals(adata)) {
+                                    if (nsURI != null) {
+                                        _element.setAttributeNS(nsURI, qname, _data);
+                                    } else {
+                                        _element.setAttribute(qname, _data);
+                                    }
+                                }
+                            } else {
+                                removeAttr(nsURI, qname);
+                            }
+                            debugXPos(XDDebug.ONTRUE);
+                            if (xatt._onTrue >= 0) {
+                                String x = _data;
+                                exec(xatt._onTrue, (byte) 'A');
+                                updateAttrValue(xatt, x, nsURI, qname);
+                            }
+                        } else { // _parseResult.matches() == false
+                            // put error reports to chkElement
+                            debugXPos(XDDebug.ONFALSE);
+                            if (xatt._onFalse >= 0) {
+                                String x = _data;
+                                if (_clearReports) {
+                                    clearTemporaryReporter();
+                                }
+                                exec(xatt._onFalse, (byte) 'A');
+                                if (x != data) { // data changed, even may be equal
+                                    updateAttrValue(xatt, x, nsURI, qname);
+                                }
+                            } else {
+                                result = false; // an error found
+                                //copy reports from parsed result to the temporary reporter.
+                                _scp.getTemporaryReporter().addReports(_parseResult.getReporter());
+                                if (!chkTemporaryErrors()) {
+                                    putTemporaryReport(Report.error(XDEF.XDEF515));//Incorrect value&{0}
+                                }
+                            }
+                            copyTemporaryReports();
+                        }
+                    }
+                    if (_data != null && !_data.equals(adata)) {
+                        if ((adata = attrWhitespaces(xatt, adata)) == null) {
+                            removeAttr(nsURI, qname);
+                            _attName = null;
+                            _attURI = null;
+                            _data = null;
+                            _parseResult = null;
+                            _attNames.add(xname);
+                            _xdata = null;
+                            _xPos = xPos;
+                            return result; // ignore empty attributes
+                        }
+                    } else {
+                        adata = _data;
+                    }
+                    if (_data != null && !_data.equals(adata)) {
+                        adata = attrWhitespaces(xatt, _data);
+                    }
+                    _attName = null;
+                    _attURI = null;
+                    _data = null;
+                    if (adata == null) {
+                        removeAttr(nsURI, qname);
+                        _xdata = null;
+                        _parseResult = null;
+                        _xPos = xPos;
+                        return !xatt.isRequired();
+                    }
+                    if (nsURI != null) {
+                        _element.setAttributeNS(nsURI, qname, adata);
+                    } else {
+                        _element.setAttribute(qname, adata);
+                    }
+                    _attNames.add(xname);
+                    _xdata = null;
+                    _xPos = xPos;
+                    return result;
+                }
+            }
+        }
+        if ((_xElement._moreAttributes == 'T' || _xElement._moreAttributes == 'I')
+            && (xatt == null || !xatt.isIllegal())) {
+            //more attributes allowed, add attribute as it is no X-definition for this attribute
+            if (nsURI != null) {
+                if (_xElement._moreAttributes == 'I') {
+                    _element.removeAttributeNS(nsURI, qname);
+                } else {
+                    _element.setAttributeNS(nsURI, qname, adata);
+                    if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
+                        _xComponent.xSetAttr(this, _parseResult);
+                    }
+                }
+            } else {
+                if (_xElement._moreAttributes == 'I') {
+                    _element.removeAttribute(qname);
+                } else {
+                    _element.setAttribute(qname, adata);
+                    if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
+                        _xComponent.xSetAttr(this, _parseResult);
+                    }
+                }
+            }
+            _attName = null;
+            _attURI = null;
+            _xdata = null;
+            _xPos = xPos;
+            return true;
+        }
+        debugXPos(XDDebug.ONILLEGALATTR);
+        _data = adata = null;
+        //Attribute "&amp;{0}" not allowed
+        putTemporaryReport(Report.error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
+        if (xatt != null && xatt._onIllegalAttr >= 0) {
+            if (_clearReports) {
+                clearTemporaryReporter();
+            }
+            exec(xatt._onIllegalAttr, (byte) 'T');
+            _parseResult = null;
+        } else if (_xElement._onIllegalAttr >= 0) {
+            if (_clearReports) {
+                clearTemporaryReporter();
+            }
+            _elemValue = _element;
+            _data = adata;
+            exec(_xElement._onIllegalAttr, (byte) 'E');
+        }
+        copyTemporaryReports();
+        if (_data != null) {
+            if (nsURI != null) {
+                _element.setAttributeNS(nsURI, qname, adata);
+                if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
+                    _xComponent.xSetAttr(this, _parseResult);
+                }
+            } else {
+                _element.setAttribute(qname, adata);
+                if (_xComponent != null && getXMNode() != null && getXMNode().getXDPosition() != null) {
+                    _xComponent.xSetAttr(this, _parseResult);
+                }
+            }
+        } else {
+            if (nsURI != null) {
+                _element.removeAttributeNS(nsURI, qname);
+            } else {
+                _element.removeAttribute(qname);
+            }
+        }
+        _attName = null;
+        _attURI = null;
+        _data = null;
+        _parseResult = null;
+        _xdata = null;
+        _xPos = xPos;
+        return false;
     }
 
-    @Override
-    public final short getItemId() {return _mode == 'T' ? XX_TEXT : _mode == 'A'? XX_ATTR : XX_ELEMENT;}
-
-    /** Get ID of the type of value
-     * @return enumeration item of this type.
+    /** Add the new attribute to the current XXElement.
+     * @param name name of attribute.
+     * @param data value of attribute.
+     * @return true if attribute was created according to X-definition.
      */
     @Override
-    public final XDValueType getItemType() {return _mode == 'T' ? XXTEXT : _mode == 'A'? XXATTR : XXELEMENT;}
+    public final boolean addAttribute(final String name, final String data) {return addAttributeNS(null, name, data);}
+
+    /** Get attribute from the XXElement object.
+     * @param name The name of attribute.
+     * @return The value of attribute or the empty string if the value doesn't exist or return null if required
+     * attribute is defined in the XXElement, however it does not exist in the actual element.
+     * @throws SRuntimeException if required attribute is not defined in the X-definition.
+     */
+    @Override
+    public final String getAttribute(final String name) {return getAttributeNS(null, name);}
+
+    /** Check if attribute with given namespace is legal in the XXElement.
+     * @param uri namespace URI.
+     * @param name name of attribute (optionally with prefix).
+     * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
+     */
+    @Override
+    public final boolean checkAttributeNSLegal(final String uri, final String name) {
+        XData xatt = uri == null || uri.isEmpty() ? getXAttr(name) : getXAttr(uri, name);
+        return xatt != null && !xatt.isIllegal();
+    }
 
     /** Get attribute with namespace from XXElement.
      * @param uri The namespace of attribute.
@@ -3284,26 +3189,43 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         throw new SRuntimeException(XDEF.XDEF581, getXPos() + "/@" + name); //Attempt to get undeclared item
     }
 
-    /** Get attribute from the XXElement object.
+    /** Check if attribute is legal in the XXElement.
      * @param name The name of attribute.
-     * @return The value of attribute or the empty string if the value doesn't exist or return null if required
-     * attribute is defined in the XXElement, however it does not exist in the actual element.
-     * @throws SRuntimeException if required attribute is not defined in the X-definition.
+     * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
      */
     @Override
-    public final String getAttribute(final String name) {return getAttributeNS(null, name);}
+    public final boolean checkAttributeLegal(final String name) {
+        XData xatt = getXAttr(name);
+        return xatt != null && !xatt.isIllegal();
+    }
 
-    /** Get work element value.
-     * @return work element value.
-     */
-    @Override
-    public final Element getElemValue() {return _elemValue;}
+////////////////////////////////////////////////////////////////////////////////
+// implementation of XXNode
+////////////////////////////////////////////////////////////////////////////////
 
-    /** Set work element value.
-     * @param e The element.
+    /** Get name of actual node.
+     * @return The name of node.
      */
     @Override
-    final void setElemValue(final Element e) {_elemValue = e;}
+    public final String getNodeName() {
+        if (getItemId() != XX_ELEMENT) {
+            return _attName;
+        } else {
+            if (_element != null) {
+                String s = _element.getLocalName();
+                return s == null ? _element.getNodeName() : s;
+            }
+            return null;
+        }
+    }
+
+    /** Get namespace URI of actual node.
+     * @return namespace URI or null.
+     */
+    @Override
+    public final String getNodeURI() {
+        return (getItemId() != XX_ELEMENT) ? _attURI : _element != null ? _element.getNamespaceURI() : null;
+    }
 
     /** Get root XXElement.
      * @return root XXElement node.
@@ -3316,58 +3238,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      */
     @Override
     public final XXElement getXXElement() {return this;}
-
-    /** Get associated XML node.
-     * @return the associated XML node.
-     */
-    @Override
-    public final Node getXMLNode() {return _node;}
-
-    /** Get namespace context of corresponding XElement.
-     * @return namespace context of the parent element.
-     */
-    @Override
-    public final KNamespace getXXNamespaceContext() {return _xElement.getXDNamespaceContext();}
-
-    /** Check if attribute is legal in the XXElement.
-     * @param name The name of attribute.
-     * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
-     */
-    @Override
-    public final boolean checkAttributeLegal(final String name) {
-        XData xatt = getXAttr(name);
-        return xatt != null && !xatt.isIllegal();
-    }
-
-    /** Check if attribute with given namespace is legal in the XXElement.
-     * @param uri namespace URI.
-     * @param name name of attribute (optionally with prefix).
-     * @return true if and only if the attribute is legal in the XXElement, otherwise return false.
-     */
-    @Override
-    public final boolean checkAttributeNSLegal(final String uri, final String name) {
-        XData xatt = uri == null || uri.isEmpty() ? getXAttr(name) : getXAttr(uri, name);
-        return xatt != null && !xatt.isIllegal();
-    }
-
-    /** Get array of XXNodes or null.
-     * @return array of XXNodes or null.
-     */
-    @Override
-    public final XXNode[] getChildXXNodes() {
-        XXNode[] result = new XXNode[_chkChildNodes.size()];
-        _chkChildNodes.toArray(result);
-        return result;
-    }
-
-    @Override
-    final List<ChkElement> getChkChildNodes() {return _chkChildNodes;}
-
-    /** Get model of the processed data object.
-     * @return model of the processed data object.
-     */
-    @Override
-    public final XMData getXMData() {return _xdata;}
 
     /** Get actual model.
      * @return actual model.
@@ -3396,6 +3266,143 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
      */
     @Override
     public Object getXon() {return _xonArray != null ? _xonArray : _xonMap != null ?_xonMap : _xonValue;}
+
+////////////////////////////////////////////////////////////////////////////////
+// implementation of ChkNode abstract methods
+////////////////////////////////////////////////////////////////////////////////
+
+    /** Store model variable.
+     * @param name name of variable.
+     * @param val value to be stored.
+     */
+    @Override
+    final void storeModelVariable(final String name, final XDValue val) {
+        int addr = findModelVariableOffset(name);
+        if (addr < 0) {
+            _parent.storeModelVariable(name, val);
+        } else {
+            _variables[addr] = val;
+        }
+    }
+
+    /** Load model variable.
+     * @param name name of variable.
+     * @return loaded value.
+     */
+    @Override
+    public final XDValue loadModelVariable(final String name) {
+        int addr = findModelVariableOffset(name);
+        return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
+    }
+
+    /** Get namespace context of corresponding XElement.
+     * @return namespace context of the parent element.
+     */
+    @Override
+    public final KNamespace getXXNamespaceContext() {return _xElement.getXDNamespaceContext();}
+
+    /** Increase reference counter by one.
+     * @return The increased reference number.
+     */
+    @Override
+    final int incRefNum() {return _actDefIndex < 0 ? 0 : ++_counters[_actDefIndex];}
+
+    /** Get occurrence of actual element
+     * @return The reference number.
+     */
+    @Override
+    final int getOccurrence() {return _parent.getRefNum();}
+
+    /** Decrease reference counter by one.
+     * @return The increased reference number.
+     */
+    @Override
+    final int decRefNum() {return _actDefIndex < 0 ? 0 : --_counters[_actDefIndex];}
+
+    /** Get reference counter of actual node
+     * @return The reference number.
+     */
+    @Override
+    public final int getRefNum() {return _actDefIndex < 0 ? 0 : _counters[_actDefIndex];}
+    /** Get ChkElement assigned to this node.
+     * @return ChkElement assigned to this node.
+     */
+    @Override
+    final ChkElement getChkElement() {return this;}
+
+    /** Get work element value.
+     * @return work element value.
+     */
+    @Override
+    public final Element getElemValue() {return _elemValue;}
+
+    /** Set work element value.
+     * @param e The element.
+     */
+    @Override
+    final void setElemValue(final Element e) {_elemValue = e;}
+
+    /** Get array of XXNodes or null.
+     * @return array of XXNodes or null.
+     */
+    @Override
+    public final XXNode[] getChildXXNodes() {
+        XXNode[] result = new XXNode[_chkChildNodes.size()];
+        _chkChildNodes.toArray(result);
+        return result;
+    }
+
+    @Override
+    final List<ChkElement> getChkChildNodes() {return _chkChildNodes;}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// implementation of XXData methods
+////////////////////////////////////////////////////////////////////////////////
+
+    /** Get model of the processed data object.
+     * @return model of the processed data object.
+     */
+    @Override
+    public final XMData getXMData() {return _xdata;}
+
+    /** Get text value of this node.
+     * @return The string with value of node.
+     */
+    @Override
+    public final String getTextValue() {return (getItemId() != XX_ELEMENT) ? _data : null;}
+
+    /** Set text value to this node.
+     * @param data the text value to be set.
+     */
+    @Override
+    public final void setTextValue(final String data) {
+        if (getItemId() != XX_ELEMENT) {
+            _data = data;
+        } else {
+            //Illegal use of method: &{0}
+            throw new SRuntimeException(SYS.SYS083, "setText");
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+// implementation of XDValue methods
+////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public final short getItemId() {return _mode == 'T' ? XX_TEXT : _mode == 'A'? XX_ATTR : XX_ELEMENT;}
+
+    /** Get ID of the type of value
+     * @return enumeration item of this type.
+     */
+    @Override
+    public final XDValueType getItemType() {return _mode == 'T' ? XXTEXT : _mode == 'A'? XXATTR : XXELEMENT;}
+
+    /** Get associated XML node.
+     * @return the associated XML node.
+     */
+    @Override
+    public final Node getXMLNode() {return _node;}
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -714,15 +714,6 @@ final class ChkComposer extends SReporter {
         if (chkEl._xElement._compose >= 0) {
             chkEl.debugXPos(XDDebug.CREATE);
             chkEl.setElemValue(sourceEl);
-//            if (sourceEl != null && chkEl._sourceElem == null) {
-//                DefContainer xdc = new DefContainer(); //create default context
-//                getChildElementsByName(xdc, chkEl, sourceEl, lastEl);
-//                if (xdc.getXDItemsNumber() > 0) {
-//                    if ((chkEl._sourceElem = xdc.getXDElement(0)) == null) {
-//                        chkEl._sourceElem =xdc.toElement(chkEl.getXXNSURI(), chkEl.getXXName());
-//                    }
-//                }
-//            }
             result = chkEl.exec(chkEl._xElement._compose, (byte) 'E');
         } else { //no create section specified
             if (sourceEl == null) {
