@@ -11,6 +11,9 @@
   * The new value type `XDUri` is added to X-definition X/script value types.
   * Fixed a bug in declaration of external methods with the XDBNFGrammar and XDBNFRule parameters.
 
+# ~~Version 42.2.40~~, release-date 2026-03-10 (incorrect version)
+  * Incorrect version, DO NOT USE IT!
+
 # Version 42.2.39, release-date 2026-02-09
   * Fixed a bug when generating Xcomponents with `extends` and `implements` specifications in a class
     referencing an implementation using the `%bind` and `%with` commands.
