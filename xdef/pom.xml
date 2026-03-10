@@ -25,6 +25,9 @@
     <properties>
         <!-- do deploy -->
         <maven.deploy.skip>false</maven.deploy.skip>
+
+        <!-- default gpg-key-name to sign arifacts -->
+        <gpg.keyname>info@syntea.cz</gpg.keyname>
     </properties>
 
     <dependencies>
@@ -187,7 +190,10 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <configuration>
-                            <keyname>info@syntea.cz</keyname>
+							<!-- set default gpg-key-name, see the property "gpg.keyname"
+								https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#keyname
+								<keyname>${gpg.keyname}</keyname>
+							-->
                             <!-- may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
                                 see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
                                 <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
