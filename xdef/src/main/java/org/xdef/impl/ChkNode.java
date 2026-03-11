@@ -51,7 +51,6 @@ import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefAttr;
-import org.xdef.impl.code.DefAttr;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
@@ -290,7 +289,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
      * @return source context or <i>null</i> if not available.
      */
     @Override
-    public XDValue getXDContext() {return _sourceElem != null ? new DefElement(_sourceElem) : null;}
+    public final XDValue getXDContext() {return _sourceElem != null ? new DefElement(_sourceElem) : null;}
 
     /** Set value from argument as context for create mode.
      * @param xdc context to be set (create mode).
