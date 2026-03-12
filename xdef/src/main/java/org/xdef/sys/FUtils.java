@@ -1333,7 +1333,6 @@ public class FUtils {
      */
     public static final void deleteAll(final File file, final boolean subdir) throws SException {
         if (!file.exists() || !file.isDirectory() || file.getParent() == null) {
-
             throw new SException(SYS.SYS025, file); //Directory doesn't exist or isn't accessible: &{0}
         }
         deleteAll(new File[]{file}, subdir);
