@@ -1339,6 +1339,21 @@ public class FUtils {
         deleteAll(new File[]{file}, subdir);
     }
 
+    /** Delete directory and ctrate the new one.Very dangerous: if the file is directory it deletes all subdirectories!
+     * @param dir directory to be deleted.
+     * @throws SIOException SYS025 Directory doesn't exist or isn't accessible.
+     */
+    public static final void deleteAndCreateDir(final File dir) throws SIOException {
+        if (dir.exists()) {
+            try {
+                deleteAll(dir, true);
+            } catch (SException ex) {
+                throw new SIOException(ex.getReport());
+            }
+        }
+        dir.mkdir();
+    }
+
     /** Very dangerous: if the file is directory it deletes all subdirectories!
      * @param fname file(s) to be deleted.
      * @param subdir if <code>true</code> then also subdirectories are deleted.
