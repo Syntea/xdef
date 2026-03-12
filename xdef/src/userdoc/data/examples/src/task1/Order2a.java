@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.File;
 import java.io.IOException;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -11,6 +12,10 @@ import org.w3c.dom.Element;
 
 public class Order2a {
     public static void main(String... args) throws IOException {
+        // ensure the directories task1/output and task1/errors exists
+        new File("task1/output").mkdirs();
+        new File("task1/errors").mkdirs();
+        
         // Compile X-definitions to XDPool
         XDPool xpool = XDFactory.compileXD(null, "src/task1/Order2a.xdef");
 

@@ -9,6 +9,8 @@ import org.xdef.util.GenXDefinition;
 /** Example of generation of X-definition from XML data. */
 public class GenXdefFromXML {
     public static void main(String[] args) throws IOException {
+        new File("task8/output").mkdirs(); // ensure the directory task8/output exists
+
         File xml = new File("task8/input/data.xml");
         File xdef = new File("task8/output/dataXML.xdef");
         // 1. create X-definition from XML data.

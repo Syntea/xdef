@@ -15,6 +15,10 @@ import org.xdef.xon.XonUtils;
 
 public class JsonExample {
     public static void main(String... args) throws IOException {
+        // ensure the directories task5/output and task5/errors exists
+        new File("task5/output").mkdirs();
+        new File("task5/errors").mkdirs();
+
         // compile the XDPool object from the X-definition source
         Properties props = new Properties();
         XDPool xpool = XDFactory.compileXD(props, "src/task5/jsonExample.xdef");
@@ -27,7 +31,6 @@ public class JsonExample {
         Object xon = xdoc.jparse("task5/input/jsonExample.json", reporter);
         // check errors
         if (reporter.errorWarnings()) {
-            new File("task5/errors").mkdirs();
             try ( // write log file with errors
                 PrintStream ps = new PrintStream("task5/errors/json.txt")) {
                 reporter.printReports(ps); //print errors
@@ -35,7 +38,6 @@ public class JsonExample {
             System.err.println("Task5.JsonExample input data error; see task5/errors/json.txt");
         } else {
             System.out.println("OK, Task5.JsonExample, see task5/output/result.json");
-            new File("task5/output").mkdirs();
             try ( // Store the parsed result
                 Writer out = new OutputStreamWriter(
                     new FileOutputStream("task5/output/result.json"), "UTF-8")) {

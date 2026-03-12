@@ -15,6 +15,10 @@ import org.xdef.xon.XonUtils;
 
 public class YamlExample {
     public static void main(String... args) throws IOException {
+        // ensure the directories task5/output and task5/errors exists
+        new File("task5/output").mkdirs();
+        new File("task5/errors").mkdirs();
+
         // compile XDPool from the X-definition
         Properties props = new Properties();
         XDPool xpool = XDFactory.compileXD(props, "src/task5/yamlExample.xdef");
@@ -27,7 +31,6 @@ public class YamlExample {
         // check errors
         if (reporter.errorWarnings()) {
             // write log file with errors
-            new File("task5/errors").mkdirs();
             try (PrintStream ps = new PrintStream("task5/errors/yaml.txt")) {
                 reporter.printReports(ps); //print errors
             }
@@ -35,7 +38,6 @@ public class YamlExample {
         } else {
             System.out.println("OK, Task5.YamlExample, see task5/output/result.yaml");
             // Store parsed result
-            new File("task5/output").mkdirs();
             try (Writer out = new OutputStreamWriter(
                 new FileOutputStream("task5/output/result.yaml"), "UTF-8")) {
                 out.write(XonUtils.toYamlString(xon));

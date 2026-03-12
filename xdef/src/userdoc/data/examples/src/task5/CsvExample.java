@@ -18,6 +18,10 @@ import org.xdef.xon.XonUtils;
 
 public class CsvExample {
     public static void main(String... args) throws IOException {
+        // ensure the directories task5/output and task5/errors exists
+        new File("task5/output").mkdirs();
+        new File("task5/errors").mkdirs();
+
         // compile the XDPool object from the X-definition source
         Properties props = new Properties();
         XDPool xpool = XDFactory.compileXD(props, "src/task5/csvExample.xdef");

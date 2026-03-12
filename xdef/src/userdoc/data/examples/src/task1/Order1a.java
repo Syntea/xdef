@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.File;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
@@ -12,6 +13,10 @@ import org.w3c.dom.Element;
 
 public class Order1a {
     public static void main(String... args) {
+        // ensure the directories task1/output and task1/errors exists
+        new File("task1/output").mkdirs();
+        new File("task1/errors").mkdirs();
+
         try {
             // Reasd the XDPool object from the file
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("task1/output/Order1a.xp"));

@@ -22,7 +22,6 @@ public class ExampleXQuery {
 
         // 3. set the XML to context
         Element el = KXmlUtils.parseXml(xmlData).getDocumentElement();
-        KXmlUtils.nodeToString(el, true);
         xdoc.setXDContext(el);
 
         // 4. create result

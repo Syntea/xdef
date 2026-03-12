@@ -1,5 +1,6 @@
 package task4;
 
+import java.io.File;
 import java.io.IOException;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
@@ -10,6 +11,10 @@ import java.util.Properties;
 
 public class Orders1 {
     public static void main(String... args) throws IOException {
+        // ensure the directories task4/output and task4/errors exists
+        new File("task4/output").mkdirs();
+        new File("task4/errors").mkdirs();
+
         // compile XDPool from the X-definition source
         Properties props = new Properties();
         XDPool xpool = XDFactory.compileXD(props, "src/task4/Orders1.xdef");

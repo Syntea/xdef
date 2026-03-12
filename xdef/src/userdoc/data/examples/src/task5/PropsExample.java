@@ -16,6 +16,10 @@ import org.xdef.xon.XonUtils;
 
 public class PropsExample {
     public static void main(String... args) throws IOException {
+        // ensure the directories task5/output and task5/errors exists
+        new File("task5/output").mkdirs();
+        new File("task5/errors").mkdirs();
+
         // compile the XDPool object from the X-definition source
         Properties props = new Properties();
         XDPool xpool = XDFactory.compileXD(props,"src/task5/propsExample.xdef");
@@ -28,7 +32,6 @@ public class PropsExample {
         // check errors
         if (reporter.errorWarnings()) {
             // write log file with errors
-            new File("task5/errors").mkdirs();
             try (PrintStream ps = new PrintStream("task5/errors/properties.txt")) {
                 reporter.printReports(ps); //print errors
             }
@@ -36,7 +39,6 @@ public class PropsExample {
         } else {
             System.out.println("OK, Task5.PropsExample, see task5/output/result.props");
             // Store the parsed result
-            new File("task5/output").mkdirs();
             try (Writer out = new OutputStreamWriter(
                 new FileOutputStream("task5/output/result.properties"), "ASCII")) {
                 out.write(XonUtils.toIniString(ini));

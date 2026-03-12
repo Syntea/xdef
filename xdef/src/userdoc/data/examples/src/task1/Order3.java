@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.File;
 import java.io.IOException;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -11,8 +12,12 @@ import org.w3c.dom.Element;
 public class Order3 {
 
     public static void main(String... args) throws IOException {
+        // ensure the directories task1/output and task1/errors exists
+        new File("task1/output").mkdirs();
+        new File("task1/errors").mkdirs();
+
         // Create an instance of the XDDocument object (from XDPool)
-        // (external method "err" called from the X-script see below)
+        // (external method "err" is called from the X-script; see below)
         XDPool xpool = XDFactory.compileXD(null, "src/task1/Order3.xdef");
 
         // Create an instance of the XDDocument object (from XDPool)

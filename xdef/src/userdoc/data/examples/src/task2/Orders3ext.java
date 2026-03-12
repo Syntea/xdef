@@ -31,8 +31,7 @@ public class Orders3ext {
         // writers will be created when an item to be written occurs
         _errorWriter = _outputWriter = null;
         // Prepare XPath expression to get customer code from an order
-        // Because of the command "forget" it will be in the processed document
-        // only one (the processed) order.
+        // Because of the command "forget" it will be in the processed document only one (the processed) order.
         // This XPath expression will be executed when an error item is generated.
         _xpath = new KXpathExpr("/Orders/Order[1]/@KodZakaznika");
         // Clear counters
@@ -52,9 +51,7 @@ public class Orders3ext {
             if (x._count == 0) { // check if nothing was written yet
                 // Create a writer and insert the XML header and the root element
                 try {
-                    x._outputWriter =
-                            XDFactory.createXDXmlOutStream(x._outputFile,
-                        "windows-1250", true);
+                    x._outputWriter = XDFactory.createXDXmlOutStream(x._outputFile, "windows-1250", true);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex.getMessage());
                 }
@@ -74,8 +71,7 @@ public class Orders3ext {
         // Create the XML writer for errors (if it was not created yet)
         if (x._errCount == 0) {
             try {
-                x._errorWriter = XDFactory.createXDXmlOutStream(x._errorFile,
-                    "windows-1250", true);
+                x._errorWriter = XDFactory.createXDXmlOutStream(x._errorFile, "windows-1250", true);
             } catch (IOException ex) {
                 throw new RuntimeException(ex.getMessage());
             }
@@ -87,8 +83,7 @@ public class Orders3ext {
         // Create the element to be written.
         Element el = x._errorDoc.createElement("Error");
         el.setAttribute("ErrorCode", String.valueOf(code));
-        String customer =
-            (String) x._xpath.evaluate(xnode.getElement(), XPathConstants.STRING);
+        String customer = (String) x._xpath.evaluate(xnode.getElement(), XPathConstants.STRING);
         el.setAttribute("Customer", customer);
         SPosition pos = xnode.getSPosition();
         el.setAttribute("Line", String.valueOf(pos.getLineNumber()));

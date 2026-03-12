@@ -11,6 +11,10 @@ import java.io.OutputStream;
 
 public class Orders1 {
     public static void main(String... args) throws IOException {
+        // ensure the directories task2/output and task2/errors exists
+        new File("task2/output").mkdirs();
+        new File("task2/errors").mkdirs();
+
         // Compile the X-definition source to the XDPool object
         XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders1.xdef");
 

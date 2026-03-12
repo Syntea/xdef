@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,6 +13,10 @@ import org.w3c.dom.Element;
 
 public class Order1b {
     public static void main(String... args) throws ClassNotFoundException, IOException {
+        // ensure the directories task1/output and task1/errors exists
+        new File("task1/output").mkdirs();
+        new File("task1/errors").mkdirs();
+        
         // Create the file with compiled X-definition source data
         Order1b_gen.main();
 

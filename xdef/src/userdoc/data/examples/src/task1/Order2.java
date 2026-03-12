@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.sys.ArrayReporter;
@@ -12,6 +13,9 @@ import org.w3c.dom.Element;
 
 public class Order2 {
     public static void main(String... args) throws IOException {
+        // ensure the directory task1/errors exists
+        new File("task1/errors").mkdirs();
+
         // Compile the X-definition source to variable
         XDPool xpool = XDFactory.compileXD(null, "src/task1/Order2.xdef");
 

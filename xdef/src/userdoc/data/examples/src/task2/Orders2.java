@@ -1,5 +1,6 @@
 package task2;
 
+import java.io.File;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -7,6 +8,10 @@ import org.xdef.XDPool;
 
 public class Orders2 {
     public static void main(String... args) {
+        // ensure the directories task2/output and task2/errors exists
+        new File("task2/output").mkdirs();
+        new File("task2/errors").mkdirs();
+
         // Compile X-definition to XDPool
         XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders2.xdef");
 

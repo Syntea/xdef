@@ -1,5 +1,6 @@
 package task2;
 
+import java.io.File;
 import java.io.IOException;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -7,26 +8,30 @@ import org.xdef.XDPool;
 
 public class Orders3 {
     public static void main(String... args) throws IOException {
-            // Compile X-definition to XDPool
-            XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders3.xdef");
+        // ensure the directories task2/output and task2/errors exists
+        new File("task2/output").mkdirs();
+        new File("task2/errors").mkdirs();
 
-            // Create an instance of the XDDocument object (from XDPool)
-            XDDocument xdoc = xpool.createXDDocument("Orders");
+        // Compile X-definition to XDPool
+        XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders3.xdef");
 
-            // Create an instance of Orders3ext
-            Orders3ext writer = new Orders3ext("task2/output/Orders.xml", "task2/errors/Orders_err.xml");
-            xdoc.setUserObject(writer);
+        // Create an instance of the XDDocument object (from XDPool)
+        XDDocument xdoc = xpool.createXDDocument("Orders");
 
-            // Run validation mode (you can also try task2/input/Order_err.xml)
-            xdoc.xparse("task2/input/Orders.xml", null);
+        // Create an instance of Orders3ext
+        Orders3ext writer = new Orders3ext("task2/output/Orders.xml", "task2/errors/Orders_err.xml");
+        xdoc.setUserObject(writer);
 
-            // Close all streams
-            writer.closeAll();
+        // Run validation mode (you can also try task2/input/Order_err.xml)
+        xdoc.xparse("task2/input/Orders.xml", null);
 
-            if (writer.errNum() != 0) {
-                System.err.println("Task2.Order3 Incorrect input data");
-            } else {
-                System.out.println("OK, Task2.Order3");
-            }
+        // Close all streams
+        writer.closeAll();
+
+        if (writer.errNum() != 0) {
+            System.err.println("Task2.Order3 Incorrect input data");
+        } else {
+            System.out.println("OK, Task2.Order3");
+        }
     }
 }

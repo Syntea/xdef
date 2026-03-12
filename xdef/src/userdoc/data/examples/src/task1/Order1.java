@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.File;
 import java.io.IOException;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -14,6 +15,10 @@ public class Order1 {
     static final XDPool xpool = XDFactory.compileXD(null, "src/task1/Order1.xdef");
 
     public static void main(String... args) throws IOException {
+        // ensure the directories task1/output and task1/errors exists
+        new File("task1/output").mkdirs();
+        new File("task1/errors").mkdirs();
+
         // Create an instance of the XDDocument object (from XDPool)
         XDDocument xdoc = xpool.createXDDocument("Order");
 

@@ -9,6 +9,8 @@ import org.xdef.util.GenXDefinition;
 /** Example of generation of X-definition from YAML data. */
 public class GenXdefFromYAML {
     public static void main(String[] args) throws IOException {
+        new File("task8/output").mkdirs(); // ensure the directory task8/output exists
+
         File yaml = new File("task8/input/data.yaml");
         File xdef = new File("task8/output/dataYAML.xdef");
         // 1. create X-definition fromYAML data.
