@@ -1362,6 +1362,12 @@ public class FUtils {
         deleteAll(new File(fname), subdir);
     }
 
+    /** Delete directory and create the new one.Very dangerous: if the file is directory it deletes all subdirectories!
+     * @param x path to directory to be deleted.
+     * @throws SIOException SYS025 Directory doesn't exist or isn't accessible.
+     */
+    public static final void deleteAndCreateDir(final String x) throws SIOException {deleteAndCreateDir(new File(x));}
+
     /** Secure copy InputStream to the file. First the input is saved to the temporary file and after
      * the copy was finished the file is renamed to the file given by parameter. If the file of same name
      * already exists then it is first renamed to the file with added extension ".bak".
