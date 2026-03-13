@@ -8,12 +8,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.xdef.sys.FUtils;
 
 public class Orders1 {
     public static void main(String... args) throws IOException {
-        // ensure the directories task2/output and task2/errors exists
-        new File("task2/output").mkdirs();
-        new File("task2/errors").mkdirs();
+        // ensure the directories task2/output and task2/errors are clear and exists
+        FUtils.deleteAndCreateDir("task2/output");
+        FUtils.deleteAndCreateDir("task2/errors");
 
         // Compile the X-definition source to the XDPool object
         XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders1.xdef");

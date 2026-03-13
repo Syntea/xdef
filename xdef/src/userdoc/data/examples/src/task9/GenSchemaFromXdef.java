@@ -14,10 +14,10 @@ import org.xml.sax.SAXException;
 /** Generate XML schema from X-definition.*/
 public class GenSchemaFromXdef {
 
-    public static void main(final String... args) throws SException {
-        // ensure the directories task9/output and task9/errors exists
-        new File("task9/output").mkdirs();
-        new File("task9/errors").mkdirs();
+    public static void main(final String... args) throws IOException, SException {
+        // ensure the directories task9/output and task9/errors are clear and exists
+        FUtils.deleteAndCreateDir("task9/output");
+        FUtils.deleteAndCreateDir("task9/errors");
         
         // 1. create XML schema from X-defiontion
         XdefToXsd.main(

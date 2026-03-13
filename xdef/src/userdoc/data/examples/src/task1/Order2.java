@@ -10,11 +10,11 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
+import org.xdef.sys.FUtils;
 
 public class Order2 {
     public static void main(String... args) throws IOException {
-        // ensure the directory task1/errors exists
-        new File("task1/errors").mkdirs();
+        FUtils.deleteAndCreateDir("task1/errors"); // ensure the directory task1/errors exists
 
         // Compile the X-definition source to variable
         XDPool xpool = XDFactory.compileXD(null, "src/task1/Order2.xdef");

@@ -9,12 +9,13 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.w3c.dom.Element;
+import org.xdef.sys.FUtils;
 
 public class Order2a {
     public static void main(String... args) throws IOException {
-        // ensure the directories task1/output and task1/errors exists
-        new File("task1/output").mkdirs();
-        new File("task1/errors").mkdirs();
+        // ensure the directories task1/output and task1/errors are clear and exists
+        FUtils.deleteAndCreateDir("task1/output");
+        FUtils.deleteAndCreateDir("task1/errors");
         
         // Compile X-definitions to XDPool
         XDPool xpool = XDFactory.compileXD(null, "src/task1/Order2a.xdef");

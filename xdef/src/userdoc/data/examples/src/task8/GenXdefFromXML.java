@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
+import org.xdef.sys.FUtils;
 import org.xdef.util.GenXDefinition;
 
 /** Example of generation of X-definition from XML data. */
 public class GenXdefFromXML {
+
     public static void main(String[] args) throws IOException {
-        new File("task8/output").mkdirs(); // ensure the directory task8/output exists
+        FUtils.deleteAndCreateDir("task8/output"); // ensure the directory tast8/output is clear and exists
 
         File xml = new File("task8/input/data.xml");
         File xdef = new File("task8/output/dataXML.xdef");

@@ -26,7 +26,7 @@ public class Town1 {
 
         // 3. Create an instance of the X-component City (unmarchall)
         // (Note the generated X-components are in the package "components".)
-        City city = (City) xd.xparseXComponent("task6/input/town.xml",null,null);
+        City city = (City)xd.xparseXComponent("task6/input/town.xml",null,null);
 
         // 4. Save XML with addresses to the file data1.xml
         KXmlUtils.writeXml("task6/output/data1.xml", city.toXml(), true, false);

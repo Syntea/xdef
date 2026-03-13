@@ -1,23 +1,24 @@
 package task5;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDPool;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Properties;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 import org.xdef.xon.XonUtils;
 
 public class YamlExample {
+
     public static void main(String... args) throws IOException {
-        // ensure the directories task5/output and task5/errors exists
-        new File("task5/output").mkdirs();
-        new File("task5/errors").mkdirs();
+        // ensure the directories task5/output and task5/errors are clear and exists
+        FUtils.deleteAndCreateDir("task5/output");
+        FUtils.deleteAndCreateDir("task5/errors");
 
         // compile XDPool from the X-definition
         Properties props = new Properties();
