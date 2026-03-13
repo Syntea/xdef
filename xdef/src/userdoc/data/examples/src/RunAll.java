@@ -16,8 +16,7 @@ public class RunAll {
             Method method = clazz.getMethod("main", String[].class);
             System.out.println("***** " + clazz.getCanonicalName() + " *****");
             method.invoke((Class<?>) null, (Object) new String[0]);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException
-            | RuntimeException ex) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | RuntimeException ex) {
             throw new RuntimeException("Error in " + clazz.getName(), ex);
         }
         System.out.flush();
@@ -27,11 +26,10 @@ public class RunAll {
     /** Run all tests.
      * @param args ignored
      */
-    public static void main(String... args) {
-        data.MyClass.class.getClass(); // force to translate
-        task1.Order3ext.class.getClass(); //force translation
-        task2.Orders3ext.class.getClass(); //force translation
-        task4.Orders2ext.class.getClass(); //force translation
+    public static void main(String... args) throws Exception {
+        org.xdef.sys.FUtils.deleteAndCreateDir("test");
+
+        RunAll_prepare.main(args); // prepare data directories etc.
 
         runExample(Example1.class);
         runExample(Example1_errors.class);
@@ -52,6 +50,7 @@ public class RunAll {
         runExample(ExampleJSON1.class);
         runExample(ExampleJSON1.class);
         runExample(ExampleXQuery.class);
+
 //////////////// task1 ////////////////
         runExample(task1.Order1.class);
         runExample(task1.Order1a_gen.class);

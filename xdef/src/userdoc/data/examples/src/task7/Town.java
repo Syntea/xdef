@@ -11,8 +11,8 @@ import org.xdef.xml.KXmlUtils;
 
 public class Town {
 
-    public static void main(String... args) throws IOException {       
-        new File("task7/output").mkdirs();  // ensure the directory task7/output exists
+    public static void main(String... args) throws IOException {
+        new File("task7/output").mkdirs(); // ensure the directory task7/output exists
 
         // 1. Compile X-definitions
         XDPool xPool = XDFactory.compileXD(null, "src/task7/town.xdef");

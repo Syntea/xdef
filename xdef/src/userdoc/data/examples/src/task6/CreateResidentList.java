@@ -1,5 +1,6 @@
 package task6;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import org.w3c.dom.Element;
@@ -26,6 +27,10 @@ public class CreateResidentList {
     }
 
     public static void main(String... args) throws IOException {
+        // ensure the directories task6/output and task5/errors exists
+        new File("task6/output").mkdirs();
+        new File("task6/errors").mkdirs();
+
 
         // 1. Create an instance of X-component (model of element Residents)
         Tenants tenants = new Tenants();
