@@ -7,12 +7,13 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 
 public class Town {
 
     public static void main(String... args) throws IOException {
-        new File("task7/output").mkdirs(); // ensure the directory task7/output exists
+        FUtils.deleteAndCreateDir("task7/output"); // ensure the directory tast7/output is clear and exists
 
         // 1. Compile X-definitions
         XDPool xPool = XDFactory.compileXD(null, "src/task7/town.xdef");

@@ -27,7 +27,6 @@ public class RunAll {
      * @param args ignored
      */
     public static void main(String... args) throws Exception {
-        org.xdef.sys.FUtils.deleteAndCreateDir("test");
 
         RunAll_prepare.main(args); // prepare data directories etc.
 

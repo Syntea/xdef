@@ -1,26 +1,27 @@
 package task5;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDPool;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 import org.xdef.xon.XonUtils;
 
 public class CsvExample {
+
     public static void main(String... args) throws IOException {
-        // ensure the directories task5/output and task5/errors exists
-        new File("task5/output").mkdirs();
-        new File("task5/errors").mkdirs();
+        // ensure the directories task5/output and task5/errors are clear and exists
+        FUtils.deleteAndCreateDir("task5/output");
+        FUtils.deleteAndCreateDir("task5/errors");
 
         // compile the XDPool object from the X-definition source
         Properties props = new Properties();
@@ -37,7 +38,6 @@ public class CsvExample {
         // check errors
         if (reporter.errorWarnings()) {
             // write log file with errors
-            new File("task5/errors").mkdirs();
             try (PrintStream ps = new PrintStream("task5/errors/csv.txt")) {
                 reporter.printReports(ps); //print errors
             }
@@ -45,11 +45,9 @@ public class CsvExample {
         } else {
             System.out.println("OK, Task5.CsvExample, see task5/output/result.csv");
             // Store the parsed result
-            new File("task5/output").mkdirs();
-            Writer out =
-                new OutputStreamWriter(new FileOutputStream("task5/output/result.csv"), "ISO8859-2");
-            out.write(XonUtils.toCsvString(csv));
-            out.close();
+            try (Writer out = new OutputStreamWriter(new FileOutputStream("task5/output/result.csv"), "ISO8859-2")) {
+                out.write(XonUtils.toCsvString(csv));
+            }
         }
     }
 }

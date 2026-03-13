@@ -4,16 +4,15 @@ import java.io.File;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.FUtils;
-import org.xdef.sys.SException;
 import org.xdef.util.XsdToXdef;
 
 /** Generate XML schema from X-definition.*/
 public class GenXdefFromSchema {
 
-    public static void main(final String... args) throws SException {
-        // ensure the directories task10/output and task10/errors exists
-        new File("task10/output").mkdirs();
-        new File("task10/errors").mkdirs();
+    public static void main(final String... args) throws Exception {
+        // ensure the directories task10/output and task10/errors are clear and exists
+        FUtils.deleteAndCreateDir("task10/output");
+        FUtils.deleteAndCreateDir("task10/errors");
 
         // 1. create XML schema from Xdefiontion
         XsdToXdef.main(
