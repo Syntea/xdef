@@ -18,7 +18,7 @@ public class GenSchemaFromXdef {
         // ensure the directories task9/output and task9/errors exists
         new File("task9/output").mkdirs();
         new File("task9/errors").mkdirs();
-
+        
         // 1. create XML schema from X-defiontion
         XdefToXsd.main(
             "-i", "task9/input/Town.xdef", // input file with X-definition

@@ -6,20 +6,15 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
+import org.xdef.sys.FUtils;
 
 /** Compile X-definitions and create the class with compiled XDPool. */
 public class GenComponents1 {
 
     public static void main(String... args) throws IOException {
         // 1. clear and create the directory with X-components
-        File components = new File("src/task6/components1");
-        if (components.exists()) {
-            for (File x: components.listFiles()) {
-                x.delete();
-            }
-            components.delete();
-        }
-        components.mkdirs();
+        File components1 = new File("src/task6/components1");
+        FUtils.deleteAndCreateDir(components1);
 
         // 2. Compile X-definitions
         XDPool xPool = XDFactory.compileXD(null,  //use System properties
@@ -31,8 +26,7 @@ public class GenComponents1 {
         System.out.println("XComponents City and House are created to src/task6/components1");
 
         // 4. save XDPool to the file "src/task6/components1/Town1.xp"
-        ObjectOutputStream os =
-            new ObjectOutputStream(new FileOutputStream(new File(components,"Town1.xp")));
+        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(new File(components1, "Town1.xp")));
         os.writeObject(xPool);
         System.out.println("XDPool saved to src/task6/components1/Town1.xp");
 
