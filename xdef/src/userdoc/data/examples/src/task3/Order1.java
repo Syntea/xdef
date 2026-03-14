@@ -1,13 +1,13 @@
 package task3;
 
 import java.io.IOException;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.xml.KXmlUtils;
+import java.io.PrintStream;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import java.io.PrintStream;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
+import org.xdef.xml.KXmlUtils;
 
 public class Order1 {
     public static void main(String... args) throws IOException {

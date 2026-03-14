@@ -1,0 +1,15 @@
+<Firma name="Software group a.s.">
+  <Zamestnanec>
+    <Jmeno>Josef Petrak</Jmeno>
+    <Telefon>773102030</Telefon>
+  </Zamestnanec>
+  <Zamestnanec>
+    <Jmeno>Martin Dobek</Jmeno>
+    <Telefon>775223311</Telefon>
+  </Zamestnanec>
+  <Zamestnanec>
+    <Jmeno>Petr Slonko</Jmeno>
+    <Telefon>777888999</Telefon>
+    <Telefon>755001002</Telefon>
+  </Zamestnanec>
+</Firma>

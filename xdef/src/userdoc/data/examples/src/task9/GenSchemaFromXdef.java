@@ -38,8 +38,7 @@ public class GenSchemaFromXdef {
         // 3. check created XML schema with invalid XML data
         s = checkXML(xsFile, "task9/input/Town_invalid.xml");
         if (s.isEmpty()) { // error not reported
-            FUtils.writeString(new File("task9/errors/schemaErr2.txt"),
-                "error was not recognized by generated schema");
+            FUtils.writeString(new File("task9/errors/schemaErr2.txt"), "error was not recognized by generated schema");
             System.err.println("task9.GenSchemaFromXdef, see task9/errors/schemaErr2.txt");
         } else {
             System.out.println("OK, task9.GenSchemaFromXdef, see XML schema in task9/output/main.xsd");
@@ -55,8 +54,7 @@ public class GenSchemaFromXdef {
     private static String checkXML(final String xsName, final String xmlName) {
         try { //check XML data with X-definition
             Source source = new StreamSource(new File(xmlName));
-            SchemaFactory xsdFactory =
-                SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+            SchemaFactory xsdFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
             Schema schema = xsdFactory.newSchema(new File(xsName));
             schema.newValidator().validate(source);
             return ""; // OK

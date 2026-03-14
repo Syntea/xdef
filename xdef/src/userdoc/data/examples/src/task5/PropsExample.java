@@ -3,14 +3,14 @@ package task5;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDPool;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Map;
 import java.util.Properties;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.xon.XonUtils;
 

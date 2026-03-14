@@ -1,22 +1,22 @@
 package task6;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponentUtil;
-import task6.components2.House;
+import org.xdef.sys.FUtils;
+import org.xdef.xml.KXmlUtils;
 import task6.components2.City;
+import task6.components2.House;
 import task6.components2.Tenants;
 
 public class Town2 {
 
     public static void main(String... args) throws IOException, ClassNotFoundException {
-        new File("task6/output").mkdirs(); // ensure output directory exists
-
+        FUtils.deleteAndCreateDir("task6/output"); // ensure the directories task6/output is clear and exists
+        
         // 1. Get compiled XDPool from the file
         ObjectInputStream os;
         os = new ObjectInputStream(new FileInputStream("src/task6/components2/Town2.xp"));

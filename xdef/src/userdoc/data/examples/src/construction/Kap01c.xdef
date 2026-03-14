@@ -1,0 +1,25 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2">
+<xd:declaration scope = "local"> external Element source; </xd:declaration>
+<Adresar xd:script="create xquery(source, '.')" firma="create xquery('@nazev')">
+  <Prace>
+    <Kontakt xd:script="*; create xquery('Zamestnanec[Telefon/@typ=\'prace\']')">
+      <Jmeno xd:script="create xquery('Jmeno')">
+        string; create xquery('text()')
+      </Jmeno>
+      <Telefon xd:script="create xquery('Telefon')">
+        create xquery('text()');
+      </Telefon>
+    </Kontakt>
+  </Prace>
+  <Osobni>
+    <Kontakt xd:script="*; create xquery('Zamestnanec[Telefon/@typ=\'osobni\']')">
+      <Jmeno xd:script="create xquery('Jmeno')" >
+        create xquery('text()');
+      </Jmeno>
+      <Telefon xd:script="create xquery('Telefon')">
+        create xquery('text()');
+      </Telefon>
+    </Kontakt>
+  </Osobni>
+</Adresar>
+</xd:def>

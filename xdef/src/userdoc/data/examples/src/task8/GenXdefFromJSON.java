@@ -15,8 +15,10 @@ public class GenXdefFromJSON {
 
         File json = new File("task8/input/data.json");
         File xdef = new File("task8/output/dataJSON.xdef");
+
         // 1. create X-definition from XML data.
         GenXDefinition.genXdef(json, xdef, "UTF-8", "XdefFromJSON");
+
         // 2. Check generated X-definition with given data.
         // if an error occurs an Exception will be thrown
         XDDocument xd = XDFactory.compileXD(null, xdef).createXDDocument();

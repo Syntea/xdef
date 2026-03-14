@@ -1,14 +1,14 @@
 package task2;
 
-import org.xdef.sys.FileReportWriter;
-import org.xdef.XDDocument;
-import org.xdef.XDFactory;
-import org.xdef.XDPool;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
 import org.xdef.sys.FUtils;
+import org.xdef.sys.FileReportWriter;
 
 public class Orders1 {
     public static void main(String... args) throws IOException {

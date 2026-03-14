@@ -1,12 +1,5 @@
 package task4;
 
-import org.xdef.sys.ArrayReporter;
-import org.xdef.xml.KXmlOutStream;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.XDDocument;
-import org.xdef.XDPool;
-import org.xdef.proc.XXData;
-import org.xdef.proc.XXNode;
 import java.io.IOException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -15,6 +8,13 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xdef.XDDocument;
+import org.xdef.XDPool;
+import org.xdef.proc.XXData;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.xml.KXmlOutStream;
+import org.xdef.xml.KXmlUtils;
 
 /** External methods called from Order2.xdef */
 public class Orders2ext {
