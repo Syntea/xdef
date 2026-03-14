@@ -3153,6 +3153,16 @@ public final class TestXdef extends XDTester {
             assertEq(xml, parse(xd, xml, reporter));
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
+        try {//test binding of XPath variabforest with XDefinition variabforest
+            xdef = //integer variable x without leading "$"
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
+"  <xd:declaration> int x = 123; </xd:declaration>\n"+
+"  <a xd:script = \"create from('*[@a=$x]')\"> string </a>\n"+
+"</xd:def>";
+            xml = "<w><b a='x'/><b a='123'>zxy</b><b>xx</b></w>";
+            assertEq("<a>zxy</a>", create(xdef, "", "a", reporter, xml));
+            assertNoErrorwarnings(reporter);
+        } catch (Exception ex) {fail(ex);}
 
         clearTempDir(); // delete created temporary files
         resetTester();
