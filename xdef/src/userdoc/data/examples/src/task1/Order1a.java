@@ -15,10 +15,8 @@ import org.xdef.sys.FUtils;
 public class Order1a {
 
     public static void main(String... args) throws IOException, ClassNotFoundException{
-        if (!new File("task1/output/Order1a.xp").exists()) {
-            // Create the file task1/output/Order1a.xp with compiled X-definition
-            Order1a_gen.main();
-        }
+        // Create the file task1/output/Order1a.xp with compiled X-definition
+        Order1a_gen.main();
 
         XDPool xpool;
         try ( // Reasd the XDPool object from the file

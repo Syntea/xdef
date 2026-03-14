@@ -1304,12 +1304,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     }
 
     /** Check absence of a text node in model. */
-    final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter c) {
+    final void chkTextAbsence(final int index, final XData txt, final boolean ignoreAbsence, final Counter counter) {
         if (_counters[index] != 0 || txt.minOccurs() <= XOccurrence.IGNORE) {
             return; //exists or IGNORED
         }
         _xdata = txt;
-        String orig = _data = null;
+        _data = null;
         _parseResult = null;
         String xPos = _xPos;
         String txtname = getTextPathIndex(index); // index or ""
@@ -1347,26 +1347,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             copyTemporaryReports();
         }
         if (_data != null) {
-            if (!_data.equals(orig)) {
-                Node txt1 = txt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
-                    : _rootChkDocument.getDocument().createTextNode(_data);
-                if (orig == null) {
-                    if (c == null) {
-                        _element.appendChild(txt1);
-                    } else {
-                        _element.insertBefore(txt1, getNodeByIndex(c._itemIdex));
-                        c._itemIdex++;
-                    }
-                    incRefNum();
-                } else {
-                    _element.replaceChild(txt1, getNodeByIndex(c._itemIdex));
-                }
+            Node txt1 = txt._cdata == 'T' ? _rootChkDocument.getDocument().createCDATASection(_data)
+                : _rootChkDocument.getDocument().createTextNode(_data);
+            if (counter == null) {
+                _element.appendChild(txt1);
+            } else {
+                _element.insertBefore(txt1, getNodeByIndex(counter._itemIdex));
+                counter._itemIdex++;
             }
-        } else if (orig != null) {
-            _element.removeChild(getNodeByIndex(c._itemIdex));
-            c._itemIdex--;
-            decRefNum();
-            _data = null;
+            incRefNum();
         }
         _xPos = xPos;
         _xdata = null;

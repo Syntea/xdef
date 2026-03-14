@@ -1,11 +1,11 @@
 package task4;
 
 import java.io.IOException;
-import org.xdef.sys.ArrayReporter;
-import  org.xdef.XDDocument;
-import  org.xdef.XDFactory;
-import  org.xdef.XDPool;
 import java.io.PrintStream;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 
 public class Orders2 {

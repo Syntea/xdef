@@ -1,6 +1,5 @@
 package task7;
 
-import java.io.File;
 import java.io.IOException;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
@@ -59,7 +58,6 @@ public class Town {
         xd = xPool.createXDDocument("town");
         reporter.clear();
         el = xd.xtranslate("task7/input/town_deu.xml", "deu", "ces", reporter);
-        new File("task7/output").mkdirs();
         if (reporter.errors()) {
             System.err.println("Error on translation from 'deu' to 'ces':\n" + reporter);
         } else {

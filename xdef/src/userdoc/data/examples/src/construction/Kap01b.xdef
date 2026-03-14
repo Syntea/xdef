@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd      =  "http://www.xdef.org/xdef/4.2"
+         xd:name      =  "kap01b"
+         xd:root      =  "Adresar"
+        >
+/*
+1.  Vytvoření kontextu ze zdrojového XML - /Firma (množina všech elementů
+    z elementu Firma.
+2.  Doplnění hodnoty atributu na základě aktuálního kontextu (viz. krok 1.),
+    tedy ze zdrojového atributu /Firma/@nazev
+*/
+<Adresar xd:script="create from('/Firma')" firma="create from('@nazev')">
+
+<Prace>
+ /*
+ 1. Vytvoření množiny prvků (iterátoru) na základě aktuálního kontextu
+    (/Firma) a nastavení kontextu na tuto množinu - množina obsahuje všechny
+    elementy 'Zamestnanec', jejichž podelement 'Telefon' má atribut 'typ'
+    s hodnotou 'prace'.
+    POZOR! Každý prvek vytvořené množiny (iterátoru) 'Zamestnanec' obsahuje
+    všechny podelementy, tedy i elementy 'Telefon' s atributem 'typ' jehož
+    hodnota je 'osobni'.
+ */
+ <Kontakt xd:script="*;create from('Zamestnanec[Telefon/@typ=\'prace\']')">
+    <Jmeno>
+    /*
+    1.  Získání textové hodnoty elementu 'Jmeno' na základě kontextu,
+        jímž je aktuální prvek (Zamestnanec) z dříve definované 
+        množiny(iterátoru) - (/Firma/Zamestnanec[Telefon/@typ='prace'])
+    2.  Získání textové hodnoty elementu 'Telefon' na základě stejného 
+        kontextu jako v kroku 1. Díky dříve definované podmínce, je zaručen
+        výskyt elementu 'Telefon' s atributem 'typ="prace"', zároveň však
+        aktuální kontext může obsahovat i elementy 'Telefon' s atributem
+        'typ="osobni"'. Protože chceme zobrazit pouze textové hodnoty
+        elementu 'Telefon', které obsahují atribut 'typ="prace"', je nutné
+        definovat filtr v podobě XPathové podmínky ([@typ=\'prace\']).
+    */
+        create from('Jmeno/text()');
+    </Jmeno>
+    <Telefon>
+        create from('Telefon[@typ=\'prace\']/text()');
+    </Telefon>
+  </Kontakt>
+</Prace>
+
+<Osobni>
+/*  Vytvoření množiny prvků (iterátoru) na základě aktuálního kontextu
+ (/Firma) a nastavení kontextu na tuto množinu je stejné jako v předchozím
+ případě u elementu 'Kontakt' s tím rozdílem, že jsou filtrovány pouze
+ elementy 'Telefon' s atributem 'typ="osobni"'. */
+ <Kontakt xd:script="*;create from('Zamestnanec[Telefon/@typ=\'osobni\']')">
+    <Jmeno>
+        create from('Jmeno/text()');
+    </Jmeno>
+    <Telefon>
+        create from('Telefon[@typ=\'osobni\']/text()');
+    </Telefon>
+  </Kontakt>
+</Osobni>
+
+</Adresar>
+</xd:def>

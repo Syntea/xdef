@@ -1,0 +1,24 @@
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"  xd:root = "Firma">
+
+  <xd:declaration scope = "local">
+    external String url;
+  </xd:declaration>
+  
+  <Adresar xd:script="create from(xparse(url, '*'), '/Firma');"
+           firma="string; create from('@name')">
+    <Kontakt xd:script = "occurs *; create from('Zamestnanec')"
+             jmeno="string; create from('Jmeno/text()')" >
+      <Telefon xd:script="occurs 1..*; create from('Telefon')">
+        num; create from('text()')
+      </Telefon>
+    </Kontakt>
+  </Adresar>
+  
+  <Firma name="string">
+    <Zamestnanec xd:script="occurs *">
+      <Jmeno>string</Jmeno>
+      <Telefon xd:script="occurs +">num</Telefon>
+    </Zamestnanec>
+  </Firma>
+
+</xd:def>

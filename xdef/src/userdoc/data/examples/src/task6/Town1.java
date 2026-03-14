@@ -1,32 +1,32 @@
 package task6;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
+import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
-import task6.components1.City;
 import task6.components1.House;
+import task6.components1.City;
 
 public class Town1 {
 
     public static void main(String... args) throws IOException, ClassNotFoundException {
-        new File("task6/output").mkdirs(); // ensure output directory exists
+        FUtils.deleteAndCreateDir("task6/output"); // ensure the directories task6/output is clear and exists
 
         // 1. Read the compiled XDPool object from the file
-        ObjectInputStream os;
-        os = new ObjectInputStream(new FileInputStream("src/task6/components1/Town1.xp"));
-        XDPool xPool = (XDPool) os.readObject();
-        os.close();
+        XDPool xPool;
+        try (ObjectInputStream os = new ObjectInputStream(new FileInputStream("src/task6/components1/Town1.xp"))) {
+            xPool = (XDPool) os.readObject();
+        }
 
         // 2. Create XDDocument
         XDDocument xd = xPool.createXDDocument("A");
 
         // 3. Create an instance of the X-component City (unmarchall)
         // (Note the generated X-components are in the package "components".)
-        City city = (City)xd.xparseXComponent("task6/input/town.xml",null,null);
+        City city = (City) xd.xparseXComponent("task6/input/town.xml",null,null);
 
         // 4. Save XML with addresses to the file data1.xml
         KXmlUtils.writeXml("task6/output/data1.xml", city.toXml(), true, false);

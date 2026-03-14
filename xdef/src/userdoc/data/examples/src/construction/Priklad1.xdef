@@ -1,0 +1,19 @@
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" 
+          xd:name    = "Knihy"
+          xd:root    = "knihy" >
+
+<xd:declaration>
+ int pocet = 0;
+ external String knihovna;
+</xd:declaration>
+
+<knihy>
+  <kniha nazev="required string"
+   isbn="required num;"
+   knihovna="required string; onAbsence setText(knihovna)"
+   xd:script="occurs +; finally pocet++;" >
+    <autor xd:script="occurs *">required string</autor>
+  </kniha>
+</knihy>
+
+</xd:def>

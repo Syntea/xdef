@@ -1,13 +1,13 @@
 package task4;
 
 import java.io.IOException;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
+import java.io.PrintStream;
+import java.util.Properties;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import java.io.PrintStream;
-import java.util.Properties;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 
 public class Orders1 {
     public static void main(String... args) throws IOException {

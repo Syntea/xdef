@@ -1,15 +1,14 @@
 package task1;
 
-import java.io.File;
 import java.io.IOException;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.xml.KXmlUtils;
+import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import org.w3c.dom.Element;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
+import org.xdef.xml.KXmlUtils;
 
 public class Order2a {
     public static void main(String... args) throws IOException {

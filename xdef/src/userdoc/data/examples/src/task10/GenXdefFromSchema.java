@@ -6,7 +6,7 @@ import org.xdef.XDPool;
 import org.xdef.sys.FUtils;
 import org.xdef.util.XsdToXdef;
 
-/** Generate XML schema from X-definition.*/
+/** Generate XML schema from X-definition. */
 public class GenXdefFromSchema {
 
     public static void main(final String... args) throws Exception {

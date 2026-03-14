@@ -1,10 +1,10 @@
 package task1;
 
-import org.xdef.sys.SPosition;
-import org.xdef.XDValue;
-import org.xdef.proc.XXNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xdef.XDValue;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.SPosition;
 
 public class Order3ext {
 
