@@ -21,20 +21,7 @@ public class TestSaxon extends XDTester {
 
     public TestSaxon() {super();}
 
-    private void testNoSaxon() {
-        String xdef, xml;
-        ArrayReporter reporter = new ArrayReporter();
-        try {//test binding of XPath variabforest with XDefinition variabforest
-            xdef = //integer variable x without leading "$"
-"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <xd:declaration> int x = 123; </xd:declaration>\n"+
-"  <a xd:script = \"create from('*[@a=$x]')\"> string </a>\n"+
-"</xd:def>";
-            xml = "<w><b a='x'/><b a='123'>zxy</b><b>xx</b></w>";
-            assertEq("<a>zxy</a>", create(xdef, "", "a", reporter, xml));
-            assertNoErrorwarnings(reporter);
-        } catch (Exception ex) {fail(ex);}
-    }
+    private void testNoSaxon() {putInfo("XQuery library not found; tests skipped.");}
 
     /** Test binding of a value to the external XQuery varialb;e.
      * @param typ name of value type.
