@@ -84,8 +84,7 @@ public abstract class XDTester extends STester {
         setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
         setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
         setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
-        setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
-            XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
+        setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT, XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
         setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, null);
     }
 
@@ -120,7 +119,7 @@ public abstract class XDTester extends STester {
     /** Set mode of full test.
      * @param x full test mode.
      */
-    public final static void setFulltestMode(boolean x) {_fulltestMode = x;}
+    public final static void setFulltestMode(final boolean x) {_fulltestMode = x;}
 
     /** Set tester property value.
      * @param key name of property.
@@ -332,14 +331,16 @@ public abstract class XDTester extends STester {
         return xd.getElement();
     }
 
-    /** Check XDPool conversion to OutputStream and return XDPool created from the stream (if _genObj
-     * is false the conversion is skipped).
+    /** Check XDPool conversion to OutputStream and return XDPool created from the stream (if _genObj is false
+     * then the conversion is skipped).
      * @param xp XDPool to be checked
      * @return XDPool read from converted stream.
      * @throws RuntimeException if an error occurs,
      */
     public final XDPool checkExtObjects(final XDPool xp) {
-        if (!_convertXD) {return xp;}
+        if (!_convertXD) {
+            return xp;
+        }
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             XDFactory.writeXDPool(baos, xp);
@@ -363,7 +364,7 @@ public abstract class XDTester extends STester {
      * @param mode 'P' => parse, 'C' => create
      * @return XML element from processed X-definition.
      */
-    final public Element test(final String[] xdefs,
+    public final Element test(final String[] xdefs,
         final String xml,
         final String dname,
         final OutputStream out,
@@ -418,7 +419,7 @@ public abstract class XDTester extends STester {
      * @param mode if 'C' then run construction mode.
      * @return xml element from processed X-definition.
      */
-    final public Element test(final String xdef,
+    public final Element test(final String xdef,
         final String xml,
         final String dname,
         final OutputStream out,
@@ -487,7 +488,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return xml element from processed X-definition.
      */
-    final public Element test(final File xdef,
+    public final Element test(final File xdef,
         final InputStream xml,
         final String dname,
         final OutputStream out,
@@ -504,7 +505,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return xml element from processed X-definition.
      */
-    final public Element test(final File[] xdefs,
+    public final Element test(final File[] xdefs,
         final InputStream xml,
         final String dname,
         final OutputStream out,
@@ -540,7 +541,7 @@ public abstract class XDTester extends STester {
      * @param mode 'P' => parse, 'C' => create.
      * @return xml element from processed X-definition.
      */
-    final public boolean test(final String xdef,final String xml,final String name,final char mode) {
+    public final boolean test(final String xdef, final String xml, final String name, final char mode) {
         return test(xdef, xml, name, mode, xml, "");
     }
 
@@ -553,7 +554,7 @@ public abstract class XDTester extends STester {
      * @param stdout expected stdout.
      * @return XML element from processed X-definition.
      */
-    final public boolean test(final String xdef,
+    public final boolean test(final String xdef,
         final String xml,
         final String name,
         final char mode,  // 'P' => parse, 'C' => create
@@ -571,7 +572,7 @@ public abstract class XDTester extends STester {
      * @param stdout expected stdout.
      * @return XML element from processed X-definition.
      */
-    final public boolean test(final String[] xdefs,
+    public final boolean test(final String[] xdefs,
         final String xml,
         final String name,
         final char mode,  // 'P' => parse, 'C' => create
@@ -604,8 +605,7 @@ public abstract class XDTester extends STester {
                     if (ar.errorWarnings()) {
                         error = true;
                         ar.printReports(System.err);
-                        System.err.println("Fails! Expected:\n" + result + "\n got:\n"
-                            + KXmlUtils.nodeToString(el, false));
+                        System.err.println("Fails! Expected:\n"+result+"\n got:\n"+ KXmlUtils.nodeToString(el, false));
                     }
                 }
             }
@@ -625,30 +625,30 @@ public abstract class XDTester extends STester {
         return error;
     }
 
-    final public XDPool compile(final URL[] source, final Class<?>... obj) {
+    public final XDPool compile(final URL[] source, final Class<?>... obj) {
         return checkExtObjects(XDFactory.compileXD(_props, source, obj));
     }
 
-    final public XDPool compile(final URL url, final Class<?>... obj) {
+    public final XDPool compile(final URL url, final Class<?>... obj) {
         return checkExtObjects(XDFactory.compileXD(	_props, url, obj));
     }
 
-    final public XDPool compile(final File[] files, final Class... obj) {
+    public final XDPool compile(final File[] files, final Class... obj) {
         chkSyntax(files).checkAndThrowErrors();
         return checkExtObjects(XDFactory.compileXD(_props, files, obj));
     }
 
-    final public XDPool compile(final File file, final Class... obj) {
+    public final XDPool compile(final File file, final Class... obj) {
         chkSyntax(file).checkAndThrowErrors();
         return checkExtObjects(XDFactory.compileXD(_props, file, obj));
     }
 
-    final public XDPool compile(final String xdef, final Class<?>... obj) {
+    public final XDPool compile(final String xdef, final Class<?>... obj) {
         chkSyntax(xdef).checkAndThrowErrors();
         return checkExtObjects(XDFactory.compileXD(_props, xdef, obj));
     }
 
-    final public XDPool compile(final String[] xdefs, final Class<?>... obj) {
+    public final XDPool compile(final String[] xdefs, final Class<?>... obj) {
         chkSyntax(xdefs).checkAndThrowErrors();
         return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
     }
@@ -660,10 +660,7 @@ public abstract class XDTester extends STester {
      * @param xml context (source of XML) or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
-        final String dname,
-        final ArrayReporter reporter,
-        final String xml) {
+    public final Element create(final XDPool xp, final String dname, final ArrayReporter reporter, final String xml) {
         if (reporter != null) {
             reporter.clear();
         }
@@ -681,10 +678,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
-        final String dname,
-        final String name,
-        final ArrayReporter reporter) {
+    public final Element create(final XDPool xp, final String dname, final String name, final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
         }
@@ -700,10 +694,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
-        final String dname,
-        final QName qname,
-        final ArrayReporter reporter) {
+    public final Element create(final XDPool xp, final String dname, final QName qname, final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
         }
@@ -719,10 +710,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final String xdef,
-        final String dname,
-        final QName qname,
-        final ArrayReporter reporter) {
+    public final Element create(final String xdef, final String dname, final QName qname, final ArrayReporter reporter){
         return create(compile(xdef), dname, qname, reporter);
     }
 
@@ -733,7 +721,7 @@ public abstract class XDTester extends STester {
      * @param ename element name of the constructed XML.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp, final String dname, final Element el, final String ename) {
+    public final Element create(final XDPool xp, final String dname, final Element el, final String ename) {
         XDDocument xd = xp.createXDDocument(dname);
         xd.setProperties(_props);
         if (el != null) {
@@ -750,7 +738,7 @@ public abstract class XDTester extends STester {
      * @param name element name of the constructed XML.
      * @return root element of the created XML document.
      */
-    final public Element create(final String xdef, final String dname, final Element el, final String name) {
+    public final Element create(final String xdef, final String dname, final Element el, final String name) {
         return create(compile(xdef), dname, el, name);
     }
 
@@ -764,7 +752,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final String xdef,
+    public final Element create(final String xdef,
         final String dname,
         final Element el,
         final String name,
@@ -784,7 +772,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
+    public final Element create(final XDPool xp,
         final String dname, // X-definition name
         final Element el, // contexdefinitionxt
         final String name, // name of model
@@ -817,7 +805,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
+    public final Element create(final XDPool xp,
         final String dname,
         final QName qname,
         final ArrayReporter reporter,
@@ -838,7 +826,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDDocument xd,
+    public final Element create(final XDDocument xd,
         final String name,
         final ArrayReporter reporter,
         final String xml,
@@ -874,7 +862,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDDocument xd,
+    public final Element create(final XDDocument xd,
         final QName qname,
         final ArrayReporter reporter,
         final String xml,
@@ -911,7 +899,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final String xdef,
+    public final Element create(final String xdef,
         final String dname,
         final QName qname,
         final ArrayReporter reporter,
@@ -931,7 +919,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
+    public final Element create(final XDPool xp,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -951,7 +939,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final String xdef,
+    public final Element create(final String xdef,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -969,7 +957,7 @@ public abstract class XDTester extends STester {
      * @param xml context (source of XML) or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDPool xp,
+    public final Element create(final XDPool xp,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -983,7 +971,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDDocument xd, final String ename, final ArrayReporter reporter) {
+    public final Element create(final XDDocument xd, final String ename, final ArrayReporter reporter) {
         return create(xd, ename, reporter, null, null, null);
     }
 
@@ -993,7 +981,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDDocument xd, final QName qname, final ArrayReporter reporter) {
+    public final Element create(final XDDocument xd, final QName qname, final ArrayReporter reporter) {
         return create(xd, qname, reporter, null, null, null);
     }
 
@@ -1004,10 +992,7 @@ public abstract class XDTester extends STester {
      * @param xml context (source of XML) or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDDocument xd,
-        final String name,
-        final ArrayReporter reporter,
-        final String xml) {
+    public final Element create(final XDDocument xd, final String name, final ArrayReporter reporter, final String xml){
         return create(xd, name, reporter, xml, null, null);
     }
 
@@ -1019,7 +1004,7 @@ public abstract class XDTester extends STester {
      * @param xml context (source of XML) or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final String xdef,
+    public final Element create(final String xdef,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -1034,10 +1019,7 @@ public abstract class XDTester extends STester {
      * @param xml context (source of XML) or null.
      * @return root element of the created XML document.
      */
-    final public Element create(final XDDocument xd,
-        final QName qname,
-        final ArrayReporter reporter,
-        final String xml) {
+    public final Element create(final XDDocument xd, final QName qname, final ArrayReporter reporter, final String xml){
         return create(xd, qname, reporter, xml, null, null);
     }
 
@@ -1050,7 +1032,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final XDDocument xd,
+    public final Object jcreate(final XDDocument xd,
         final String name,
         final ArrayReporter reporter,
         final Object obj,
@@ -1087,7 +1069,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final String xdef,
+    public final Object jcreate(final String xdef,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -1107,7 +1089,7 @@ public abstract class XDTester extends STester {
      * @param userObj user object or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final XDPool xp,
+    public final Object jcreate(final XDPool xp,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -1125,7 +1107,7 @@ public abstract class XDTester extends STester {
      * @param obj context (object) or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final XDPool xp,
+    public final Object jcreate(final XDPool xp,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -1139,7 +1121,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final XDDocument xd, final String name, final ArrayReporter reporter) {
+    public final Object jcreate(final XDDocument xd, final String name, final ArrayReporter reporter) {
         return jcreate(xd, name, reporter, null, null, null);
     }
 
@@ -1150,9 +1132,7 @@ public abstract class XDTester extends STester {
      * @param obj context (object) or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final XDDocument xd,final String name,
-        final ArrayReporter reporter,
-        final Object obj) {
+    public final Object jcreate(final XDDocument xd,final String name, final ArrayReporter reporter, final Object obj) {
         return jcreate(xd, name, reporter, obj, null, null);
     }
 
@@ -1164,7 +1144,7 @@ public abstract class XDTester extends STester {
      * @param obj context (object) or null.
      * @return created XON/JSON object.
      */
-    final public Object jcreate(final String xdef,
+    public final Object jcreate(final String xdef,
         final String dname,
         final String name,
         final ArrayReporter reporter,
@@ -1179,10 +1159,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDPool xp,
-        final String dname,
-        final String xml,
-        final ArrayReporter reporter) {
+    public final Element parse(final XDPool xp, final String dname, final String xml, final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
         }
@@ -1198,10 +1175,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final String xdef,
-        final String dname,
-        final String xml,
-        final ArrayReporter reporter) {
+    public final Element parse(final String xdef, final String dname, final String xml, final ArrayReporter reporter) {
         return parse(compile(xdef), dname, xml, reporter);
     }
 
@@ -1212,10 +1186,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDPool xp,
-        final String dname,
-        final Element el,
-        final ArrayReporter reporter) {
+    public final Element parse(final XDPool xp, final String dname, final Element el, final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
         }
@@ -1231,10 +1202,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final String xdef,
-        final String dname,
-        final Element el,
-        final ArrayReporter reporter) {
+    public final Element parse(final String xdef, final String dname, final Element el, final ArrayReporter reporter) {
         return parse(compile(xdef), dname, el, reporter);
     }
 
@@ -1245,7 +1213,7 @@ public abstract class XDTester extends STester {
      * @return XML element with processed data.
      * @throws RuntimeException if an error occurs.
      */
-    final public Element parse(final XDPool xp, final String dname, final Element el) {
+    public final Element parse(final XDPool xp, final String dname, final Element el) {
         XDDocument xd = xp.createXDDocument(dname);
         xd.setProperties(_props);
         return xd.xparse(el, null);
@@ -1258,7 +1226,7 @@ public abstract class XDTester extends STester {
      * @return XML element with processed data.
      * @throws RuntimeException if an error occurs.
      */
-    final public Element parse(final String xdef, final String dname, final Element el) {
+    public final Element parse(final String xdef, final String dname, final Element el) {
         return parse(compile(xdef), dname, el);
     }
 
@@ -1269,7 +1237,7 @@ public abstract class XDTester extends STester {
      * @return XML element with processed data.
      * @throws RuntimeException if an error occurs.
      */
-    final public Element parse(final XDPool xp, final String dname, final String xml) {
+    public final Element parse(final XDPool xp, final String dname, final String xml) {
         XDDocument xd = xp.createXDDocument(dname);
         xd.setProperties(_props);
         return xd.xparse(xml, null);
@@ -1282,7 +1250,7 @@ public abstract class XDTester extends STester {
      * @return XML element with processed data.
      * @throws RuntimeException if an error occurs.
      */
-    final public Element parse(final String xdef, final String dname, final String xml) {
+    public final Element parse(final String xdef, final String dname, final String xml) {
         return parse(compile(xdef), dname, xml);
     }
 
@@ -1294,7 +1262,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDPool xp,
+    public final Element parse(final XDPool xp,
         final String dname,
         final String xml,
         final ArrayReporter reporter,
@@ -1318,7 +1286,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final String xdef,
+    public final Element parse(final String xdef,
         final String dname,
         final ArrayReporter reporter,
         final String xml,
@@ -1336,7 +1304,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDPool xp,
+    public final Element parse(final XDPool xp,
         final String dname,
         final String xml,
         final ArrayReporter reporter,
@@ -1354,7 +1322,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDDocument xd, final String xml, final ArrayReporter reporter) {
+    public final Element parse(final XDDocument xd, final String xml, final ArrayReporter reporter) {
         return parse(xd, xml, reporter, null, null, null);
     }
 
@@ -1365,7 +1333,7 @@ public abstract class XDTester extends STester {
      * @param swr writer used as stdout or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDDocument xd,
+    public final Element parse(final XDDocument xd,
         final String xml,
         final ArrayReporter reporter,
         final StringWriter swr) {
@@ -1380,7 +1348,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDDocument xd,
+    public final Element parse(final XDDocument xd,
         final String xml,
         final ArrayReporter reporter,
         final StringWriter swr,
@@ -1397,7 +1365,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final XDDocument xd,
+    public final Element parse(final XDDocument xd,
         final String xml,
         final ArrayReporter reporter,
         final StringWriter swr,
@@ -1443,7 +1411,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return XML element with processed data.
      */
-    final public Element parse(final String xdef,
+    public final Element parse(final String xdef,
         final String dname,
         final String xml,
         final ArrayReporter reporter,
@@ -1460,7 +1428,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDPool xp,
+    public final Object jparse(final XDPool xp,
         final String dname,
         final String json,
         final ArrayReporter reporter) {
@@ -1479,10 +1447,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDPool xp,
-        final String dname,
-        final Object json,
-        final ArrayReporter reporter) {
+    public final Object jparse(final XDPool xp, final String dname, final Object json, final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
         }
@@ -1498,10 +1463,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final String xdef,
-        final String dame,
-        final Object json,
-        final ArrayReporter reporter) {
+    public final Object jparse(final String xdef, final String dame, final Object json, final ArrayReporter reporter) {
         return jparse(compile(xdef), dame, json, reporter);
     }
 
@@ -1513,7 +1475,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDPool xp,
+    public final Object jparse(final XDPool xp,
         final String dname,
         final Object json,
         final ArrayReporter reporter,
@@ -1537,7 +1499,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final String xdef,
+    public final Object jparse(final String xdef,
         final String dname,
         final ArrayReporter reporter,
         final Object json,
@@ -1555,7 +1517,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDPool xp,
+    public final Object jparse(final XDPool xp,
         final String dname,
         final Object json,
         final ArrayReporter reporter,
@@ -1576,7 +1538,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDDocument xd,final Object json,final ArrayReporter reporter) {
+    public final Object jparse(final XDDocument xd,final Object json,final ArrayReporter reporter) {
         return jparse(xd, json, reporter, null, null, null);
     }
 
@@ -1587,7 +1549,7 @@ public abstract class XDTester extends STester {
      * @param swr writer used as stdout or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDDocument xd,
+    public final Object jparse(final XDDocument xd,
         final Object json,
         final ArrayReporter reporter,
         final StringWriter swr) {
@@ -1602,7 +1564,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDDocument xd,
+    public final Object jparse(final XDDocument xd,
         final Object json,
         final ArrayReporter reporter,
         final StringWriter swr,
@@ -1619,7 +1581,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final XDDocument xd,
+    public final Object jparse(final XDDocument xd,
         final Object json,
         final ArrayReporter reporter,
         final StringWriter swr,
@@ -1663,7 +1625,7 @@ public abstract class XDTester extends STester {
      * @param obj user object or null.
      * @return processed JSON/XON data.
      */
-    final public Object jparse(final String xdef,
+    public final Object jparse(final String xdef,
         final String dname,
         final Object json,
         final ArrayReporter reporter,
@@ -1678,7 +1640,7 @@ public abstract class XDTester extends STester {
      * @param data source data.
      * @return listing of source data and reports.
      */
-    final public String getListing(final ArrayReporter r, final String data) {
+    public final String getListing(final ArrayReporter r, final String data) {
         if (data.charAt(0) == '<') {
             return ReportPrinter.printListing(data, r);
         } else {
@@ -1695,7 +1657,7 @@ public abstract class XDTester extends STester {
      * @param reporter ArrayReporter used to write error/warning messages or null.
      * @return string with created listing.
      */
-    final public String createListnig(final String data, final ArrayReporter reporter) {
+    public final String createListnig(final String data, final ArrayReporter reporter) {
         if (!reporter.errorWarnings()) {
             return "";
         }
@@ -1710,7 +1672,7 @@ public abstract class XDTester extends STester {
      * @param reportReader ArrayReporter with reports.
      * @param data String with source data.
      */
-    final public void printReports(final ArrayReporter reportReader, final String data) {
+    public final void printReports(final ArrayReporter reportReader, final String data) {
         System.out.flush();
         if (data.charAt(0) == '<') {
             ReportPrinter.printListing(System.err, data, reportReader, true);
@@ -1800,9 +1762,7 @@ public abstract class XDTester extends STester {
      * @return ArrayReporter with reports from generator of XComponents.
      * @throws RuntimeException if an error occurs.
      */
-    public final ArrayReporter genXComponent(final XDPool xp) {
-        return genXComponent(xp, clearTempDir());
-    }
+    public final ArrayReporter genXComponent(final XDPool xp) {return genXComponent(xp, clearTempDir());}
 
     /** Create X-components from the XDPool object to given directory.
      * @param xp XDPool from which the X-components created.
@@ -1810,9 +1770,7 @@ public abstract class XDTester extends STester {
      * @return ArrayReporter with reports from generator of XComponents.
      * @throws RuntimeException if an error occurs.
      */
-    public ArrayReporter genXComponent(final XDPool xp, final String dir) {
-        return genXComponent(xp, new File(dir));
-    }
+    public ArrayReporter genXComponent(final XDPool xp, final String dir) {return genXComponent(xp, new File(dir));}
 
     /** Create XComponents from XDPool to temp directory xp and copy created files to souorce directory.
      * @param xp XDPool with description of XComponents.
@@ -1982,7 +1940,7 @@ public abstract class XDTester extends STester {
      * @param src data to be tested.
      * @return empty string or error.
      */
-    public final String testX(final XDPool xp,final String xname,final String cls,final String src) {
+    public final String testX(final XDPool xp, final String xname, final String cls, final String src) {
         return testX(xp, xname, cls, src, null);
     }
 
