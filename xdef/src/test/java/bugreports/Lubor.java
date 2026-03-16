@@ -23,6 +23,9 @@ public class Lubor extends XDTester {
     /** Run test and display error information. */
     @Override
     public void test() {
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
         System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -56,7 +59,7 @@ public class Lubor extends XDTester {
             assertNoErrorsAndClear(reporter);
             assertEq(o, xc.toXon());
         } catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(T)return;
 /**/
         try {
             xdef =
@@ -77,7 +80,7 @@ public class Lubor extends XDTester {
             assertNoErrorsAndClear(reporter);
             assertEq(o, xc.toXon());
         } catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(T)return;
 /**/
         try {
             xdef =
@@ -98,7 +101,7 @@ public class Lubor extends XDTester {
             assertNoErrorsAndClear(reporter);
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(T)return;
 /**/
         try {
             xdef =
@@ -119,7 +122,7 @@ public class Lubor extends XDTester {
             assertNoErrorsAndClear(reporter);
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(T)return;
 /**/
         clearTempDir(); // delete temporary files.
     }

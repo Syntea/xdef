@@ -16,7 +16,7 @@ import org.xdef.xml.KXmlUtils;
 
 public class Koci {
 
-    private static String xdef =
+    private final static String XDEF =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"root\" name=\"Example1\">\n" +
 "  <xd:BNFGrammar name='g'>\n" +
 "    InpItem ::= 'CisloZml' | 'CisloDoc1' | 'CisloDoc2' | 'CisloZK' | 'DatumCasSU'\n" +
@@ -40,7 +40,6 @@ public class Koci {
     }
 
     public static void validateWithRule(XDBNFGrammar val, String rule, String inputString) {
-        XDBNFGrammar g = (XDBNFGrammar) val;
         XDBNFRule xrule = val.getRule(rule);
         XDParseResult result = xrule.perform(inputString);
         System.out.println("String: " + inputString);
@@ -51,16 +50,15 @@ public class Koci {
     public static void main(String[] args) {
         Properties props = System.getProperties();
 //        System.out.println(xdef);
-        XDPool xdpool = XDFactory.compileXD(props, xdef);
+        XDPool xdpool = XDFactory.compileXD(props, XDEF);
         XDDocument xdoc = xdpool.createXDDocument("Example1");
         ArrayReporter reporter = new ArrayReporter();
         Element result = xdoc.xparse(xml, reporter);
         if (reporter.errors()) {
             Report report = reporter.getReport();
-            System.out.println(
-"Chyba: " + report.getMsgID() + " " + report.getLocalizedText() +
-" xpath: " + report.getParameter("xpath") +
-" hodnota: " + report.getParameter("xpath")
+            System.out.println("Chyba: " + report.getMsgID() + " " + report.getLocalizedText()
+                + " xpath: " + report.getParameter("xpath")
+                + " hodnota: " + report.getParameter("xpath")
             );
         }
         System.out.println(KXmlUtils.nodeToString(result, true));

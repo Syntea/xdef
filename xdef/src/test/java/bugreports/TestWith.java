@@ -24,6 +24,9 @@ public class TestWith extends XDTester {
     /** Run test and display error information. */
     @Override
     public void test() {
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
         System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -58,7 +61,7 @@ public class TestWith extends XDTester {
             assertEq(xml, xc.toXml());
             assertEq(1234, XComponentUtil.get(xc, "VIN"));
         } catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+if(T)return;
 /**/
         clearTempDir(); // delete temporary files.
     }

@@ -20,7 +20,9 @@ public class Lubor2 extends XDTester {
     /** Run test and display error information. */
     @Override
     public void test() {
-        boolean T = false;
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
         setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
