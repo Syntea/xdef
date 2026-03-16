@@ -187,9 +187,11 @@ public class MyTest_0 extends XDTester {
     @SuppressWarnings("unchecked")
     @Override
     public void test() {
-        System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
         boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
+        System.out.println("X-definition version: " + XDFactory.getXDVersion());
+////////////////////////////////////////////////////////////////////////////////
 //		T = true; // if true, only the first one test is invoked
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
         setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
@@ -222,7 +224,7 @@ public class MyTest_0 extends XDTester {
                 assertEq(xtc.xGetValue(), ytc.xGetValue());
             }
         } catch (IOException | ClassNotFoundException | RuntimeException ex) {fail(ex);}
-if(true){return;}
+if(T){return;}
 
 ////////////////////////////////////////////////////////////////////////////////
         try {
@@ -265,7 +267,7 @@ if(true){return;}
                 fail(KXmlUtils.nodeToString(el));
             }
         } catch (Exception ex) {fail(ex);}
-//if(true)return;
+if(T)return;
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+

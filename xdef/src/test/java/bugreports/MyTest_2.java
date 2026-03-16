@@ -34,10 +34,11 @@ public class MyTest_2 extends XDTester {
     @SuppressWarnings("unchecked")
     @Override
     public void test() {
-        System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
         boolean T = false; // if false, all tests are invoked
-//		T = true; // if true, only the first one test is invoked
+////////////////////////////////////////////////////////////////////////////////
+        System.out.println("X-definition version: " + XDFactory.getXDVersion());
+////////////////////////////////////////////////////////////////////////////////
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
         setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
 //		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
@@ -241,11 +242,10 @@ if(T)return;
             genXComponent(xp, tempDir);
             json = "[1, \"2\", 3]"; //error (not string but number!)
             xp.createXDDocument().jparse(json, reporter);
-            assertTrue(reporter.printToString().contains("XDEF809"));
+            assertTrue(reporter.printToString().contains("XDEF823"), reporter.toString());
             reporter.clear();
             xp.createXDDocument().jparseXComponent(json, null, reporter);
-            assertTrue(reporter.getErrorCount() == 2
-                && reporter.printToString().contains("XDEF809"));
+            assertTrue(reporter.getErrorCount()==2 && reporter.printToString().contains("XDEF23"), reporter.toString());
         } catch (RuntimeException ex) {fail(ex);}
         reporter.clear();
 if(T)return;

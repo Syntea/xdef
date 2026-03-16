@@ -1,12 +1,18 @@
 package task2;
 
-import org.xdef.sys.ArrayReporter;
+import java.io.IOException;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 
 public class Orders2 {
-    public static void main(String... args) {
+    public static void main(String... args) throws IOException {
+        // ensure the directories task2/output and task2/errors are clear and exists
+        FUtils.deleteAndCreateDir("task2/output");
+        FUtils.deleteAndCreateDir("task2/errors");
+
         // Compile X-definition to XDPool
         XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders2.xdef");
 

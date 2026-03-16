@@ -1,17 +1,19 @@
 package task7;
 
-import java.io.File;
 import java.io.IOException;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 
 public class Town {
 
     public static void main(String... args) throws IOException {
+        FUtils.deleteAndCreateDir("task7/output"); // ensure the directory tast7/output is clear and exists
+
         // 1. Compile X-definitions
         XDPool xPool = XDFactory.compileXD(null, "src/task7/town.xdef");
 
@@ -56,7 +58,6 @@ public class Town {
         xd = xPool.createXDDocument("town");
         reporter.clear();
         el = xd.xtranslate("task7/input/town_deu.xml", "deu", "ces", reporter);
-        new File("task7/output").mkdirs();
         if (reporter.errors()) {
             System.err.println("Error on translation from 'deu' to 'ces':\n" + reporter);
         } else {

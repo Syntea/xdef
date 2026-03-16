@@ -21,21 +21,6 @@ public class TestSaxon extends XDTester {
 
     public TestSaxon() {super();}
 
-    private void testNoSaxon() {
-        String xdef, xml;
-        ArrayReporter reporter = new ArrayReporter();
-        try {//test binding of XPath variabforest with XDefinition variabforest
-            xdef = //integer variable x without leading "$"
-"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <xd:declaration> int x = 123; </xd:declaration>\n"+
-"  <a xd:script = \"create from('*[@a=$x]')\"> string </a>\n"+
-"</xd:def>";
-            xml = "<w><b a='x'/><b a='123'>zxy</b><b>xx</b></w>";
-            assertEq("<a>zxy</a>", create(xdef, "", "a", reporter, xml));
-            assertNoErrorwarnings(reporter);
-        } catch (Exception ex) {fail(ex);}
-    }
-
     /** Test binding of a value to the external XQuery varialb;e.
      * @param typ name of value type.
      * @param val value to bind witn the external Variable $doc in the XQuery.
@@ -62,7 +47,17 @@ public class TestSaxon extends XDTester {
         return swr.toString();
     }
 
-    private void testSaxon() {
+    @Override
+    public void test() {
+        if (!XDFactory.isXQuerySupported() || !XDFactory.isXPath2Supported()) {
+            putInfo("XQuery tests skipped.");
+            resetTester();
+            return;
+        }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Following code is executed only if implementstions of XQuery and XPath2 are available and supported by X-definition.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         String xdef, xml;
         Document doc;
         Element el;
@@ -145,8 +140,8 @@ public class TestSaxon extends XDTester {
 "    <j xd:script=\"occurs *; create xpath('preceding-sibling::sod:e')\"/>\n"+
 "  </a>\n"+
 "</xd:def>";
-            assertEq(create(xdef,
-                "", "a", reporter, xml), "<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>");
+            assertEq(create(xdef, "", "a", reporter, xml),
+                "<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>");
             assertNoErrorwarnings(reporter);
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' xmlns='N' xmlns:sod='N'\n"+
@@ -373,15 +368,6 @@ public class TestSaxon extends XDTester {
             assertEq("Hello", testBind("Text",
                 ((Element) doc.getDocumentElement().getChildNodes().item(0)).getChildNodes().item(0))); //Text
         } catch (Exception ex) {fail(ex);}
-    }
-
-    @Override
-    public void test() {
-        if (XDFactory.isXQuerySupported() && XDFactory.isXPath2Supported()) {
-            testSaxon();
-        } else {
-            testNoSaxon();
-        }
         resetTester();
     }
 

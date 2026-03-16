@@ -1333,10 +1333,24 @@ public class FUtils {
      */
     public static final void deleteAll(final File file, final boolean subdir) throws SException {
         if (!file.exists() || !file.isDirectory() || file.getParent() == null) {
-
             throw new SException(SYS.SYS025, file); //Directory doesn't exist or isn't accessible: &{0}
         }
         deleteAll(new File[]{file}, subdir);
+    }
+
+    /** Delete directory and ctrate the new one.Very dangerous: if the file is directory it deletes all subdirectories!
+     * @param dir directory to be deleted.
+     * @throws SIOException SYS025 Directory doesn't exist or isn't accessible.
+     */
+    public static final void deleteAndCreateDir(final File dir) throws SIOException {
+        if (dir.exists()) {
+            try {
+                deleteAll(dir, true);
+            } catch (SException ex) {
+                throw new SIOException(ex.getReport());
+            }
+        }
+        dir.mkdir();
     }
 
     /** Very dangerous: if the file is directory it deletes all subdirectories!
@@ -1347,6 +1361,12 @@ public class FUtils {
     public static final void deleteAll(final String fname, final boolean subdir) throws SException {
         deleteAll(new File(fname), subdir);
     }
+
+    /** Delete directory and create the new one.Very dangerous: if the file is directory it deletes all subdirectories!
+     * @param x path to directory to be deleted.
+     * @throws SIOException SYS025 Directory doesn't exist or isn't accessible.
+     */
+    public static final void deleteAndCreateDir(final String x) throws SIOException {deleteAndCreateDir(new File(x));}
 
     /** Secure copy InputStream to the file. First the input is saved to the temporary file and after
      * the copy was finished the file is renamed to the file given by parameter. If the file of same name

@@ -13,6 +13,7 @@ public class BindWith {
 
     /** @param args parameter not used */
     public static void main(String[] args) {
+        task6.components1.BindWithXC.class.getClass(); // force compilation of XComponent
         XDPool xp = XDFactory.compileXD(null, "src/task6/bindWith.xdef");
         XDDocument xd = xp.createXDDocument("");
         ArrayReporter reporter = new ArrayReporter();

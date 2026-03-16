@@ -25,6 +25,9 @@ public class Mates extends XDTester {
     /** Run test and display error information. */
     @Override
     public void test() {
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
         System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -54,18 +57,18 @@ public class Mates extends XDTester {
                 fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
             }
             jparse(xd, "{ \"address\": { \"x\": 1 } }", reporter);
-//			if (reporter.size() != 1 || !reporter.toString().contains("'d'")) {
+            if (reporter.size() != 1 || !reporter.toString().contains("'d'")) {
                 fail(reporter.toString()); // should be XDEF539: Required element 'd' is missing
-//			}
+            }
             jparse(xd, "{ \"address\": { } }", reporter);
-//			if (reporter.size() != 2) {
-//E XDEF539: Required element 'd' is missing; line=1; column=15; source="STRING_DATA"; path=$.['address']; X-position=#addr/$.['d']
-//E XDEF539: Required element 'x' is missing; line=1; column=15; source="STRING_DATA"; path=$.['address']; X-position=#A/$.['address'].['d']
+            if (reporter.size() != 2) {
+//E XDEF541: Missing required item(s) in 'map'; line=1; column=15; source="STRING_DATA"; path=$.['address'];
+//E XDEF541: Missing required item(s) in 'map'; line=1; column=15; source="STRING_DATA"; path=$.['address'];
 
                 fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
-//			}
+            }
         } catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+if(T)return;
 /**
         try {
             xdef =
@@ -133,7 +136,7 @@ if(true)return;
             assertNoErrorsAndClear(reporter);
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+if(T)return;
 /**
         try {
             xdef =
@@ -208,7 +211,7 @@ if(true)return;
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+if(T)return;
 /**/
         try {
             xdef =
@@ -297,7 +300,7 @@ if(true)return;
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+if(T)return;
 /**/
         try {
             xdef =
@@ -325,20 +328,20 @@ if(true)return;
 "  </xd:declaration>\n" +
 "\n" +
 "  <xd:json name = \"SynPLscript\">\n" +
-"        {\"SynPLscript\":\n" +
-"            {\n" +
-"                \"Name\":    \"  wfScriptName()\",\n" +
-"                \"Version\": \"  scriptVersion()\",\n" +
-"                \"Desc\":    \"  desc()\",\n" +
-"                \"Note\":    \"? desc()\",\n" +
-"                \"SysValues\": [ {\"%script\": \"*; ref SysValues#SysValues;\"} ],\n" +
-"                \"Variables\": [ {\"%script\":  \"*; ref Variables#Variables;\"} ],\n" +
-"                \"UserRoles\": [ {\"%script\":  \"*; ref UserRoles#UserRoles\"} ],\n" +
-"                \"UsedFunctions\": [ {\"%script\":  \"*; ref UsedFunctions#UsedFunctions\"} ],\n" +
-"                \"Statuses\": [ {\"%script\": \"+; ref Statuses#Statuses\", \"xxx\": \"?; string();\"} ]\n" +
-"                \"EndStatuses\": [ {\"%script\": \"+; ref EndStatuses#EndStatuses\"} ]\n" +
-"            }\n" +
-"        }\n" +
+"    {\"SynPLscript\":\n" +
+"      {\n" +
+"        \"Name\":          \"wfScriptName()\",\n" +
+"        \"Version\":       \"scriptVersion()\",\n" +
+"        \"Desc\":          \"desc()\",\n" +
+"        \"Note\":          \"? desc()\",\n" +
+"        \"SysValues\":     [ {\"%script\": \"*; ref SysValues#SysValues;\"} ],\n" +
+"        \"Variables\":     [ {\"%script\":  \"*; ref Variables#Variables;\"} ],\n" +
+"        \"UserRoles\":     [ {\"%script\":  \"*; ref UserRoles#UserRoles\"} ],\n" +
+"        \"UsedFunctions\": [ {\"%script\":  \"*; ref UsedFunctions#UsedFunctions\"} ],\n" +
+"        \"Statuses\":      [ {\"%script\": \"+; ref Statuses#Statuses\", \"xxx\": \"?; string();\"} ]\n" +
+"        \"EndStatuses\":   [ {\"%script\": \"+; ref EndStatuses#EndStatuses\"} ]\n" +
+"      }\n" +
+"    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_SynPLscript %link SynPLscript;\n" +
@@ -347,10 +350,12 @@ if(true)return;
 "</xd:def>\n" +
 "<xd:def name = 'SysValues'>\n" +
 "  <xd:json name='SysValues'>\n" +
-"                 { \"SysValue\": \"  variableSet.variableName.ID()\",\n" +
-"                   \"Type\":     \"  valueType()\",\n" +
-"                   \"Value\":    \"  sysValue()\",\n" +
-"                   \"Desc\":     \"? desc()\"}\n" +
+"    {\n" +
+"      \"SysValue\": \"variableSet.variableName.ID()\",\n" +
+"      \"Type\":     \"valueType()\",\n" +
+"      \"Value\":    \"sysValue()\",\n" +
+"      \"Desc\":     \"? desc()\"\n" +
+"    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_SysValues %link SysValues;\n" +
@@ -358,12 +363,13 @@ if(true)return;
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name = 'Variables'>\n" +
-"<xd:json name='Variables'>\n" +
-"                 {\n" +
-"                 \"Variable\": \"  variableSet.variableName.ID()\",\n" +
-"                 \"Type\":     \"  valueType()\",\n" +
-"                 \"Ref\":      \"? variableRef()\",\n" +
-"                 \"Desc\":     \"? desc()\"}\n" +
+"  <xd:json name='Variables'>\n" +
+"    {\n" +
+"      \"Variable\": \"  variableSet.variableName.ID()\",\n" +
+"      \"Type\":     \"  valueType()\",\n" +
+"      \"Ref\":      \"? variableRef()\",\n" +
+"      \"Desc\":     \"? desc()\"\n" +
+"    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_Variables %link Variables;\n" +
@@ -372,8 +378,7 @@ if(true)return;
 "</xd:def>\n" +
 "<xd:def name = 'UserRoles'>\n" +
 "  <xd:json name='UserRoles'>\n" +
-"                 { \"UserRole\": \"  userRole()\",\n" +
-"                   \"Desc\":     \"  desc()\"}\n" +
+"    { \"UserRole\": \"userRole()\", \"Desc\": \"desc()\" }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_UserRoles %link UserRoles;\n" +
@@ -382,9 +387,7 @@ if(true)return;
 "</xd:def>\n" +
 "<xd:def name = 'UsedFunctions'>\n" +
 "  <xd:json name='UsedFunctions'>\n" +
-"                 {\n" +
-"                    \"%anyName\": \"  functionDesc()\",\n" +
-"                    \"Params\":   \"  desc()\"}\n" +
+"    { \"%anyName\": \"functionDesc()\", \"Params\": \"desc()\" }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_UsedFunctions %link UsedFunctions;\n" +
@@ -393,20 +396,20 @@ if(true)return;
 "</xd:def>\n" +
 "<xd:def name = 'Statuses'>\n" +
 "  <xd:json name = 'Statuses'>\n" +
-"                {\n" +
-"                  \"Status\":       \"  statusSet.statusName.ID() AND eventStatusSet.statusName()\",\n" +
-"                  \"ActionCode\":   \"? actionCode()\",\n" +
-"                  \"TimeOverStep\": \"? interval() OOR variableSet.variableName.IDREF()\",\n" +
-"                  \"ChangeLog\":    \"? changeLog()\",\n" +
-"                  \"Events\": [\n" +
-"                    {\"%script\": \"+\",\n" +
-"                      \"Event\":       \"  eventStatusSet.eventName.ID()\",\n" +
-"                      \"UserRoleAny\": [\"1.. userRole()\"],\n" +
-"                      \"ActionCode\":  \"? actionCode()\",\n" +
-"                      \"NextStatus\":  \"? statusSet.statusName.IDREF()\"\n" +
-"                    }\n" +
-"                  ]\n" +
-"                }\n" +
+"    {\n" +
+"      \"Status\":       \"  statusSet.statusName.ID() AND eventStatusSet.statusName()\",\n" +
+"      \"ActionCode\":   \"? actionCode()\",\n" +
+"      \"TimeOverStep\": \"? interval() OOR variableSet.variableName.IDREF()\",\n" +
+"      \"ChangeLog\":    \"? changeLog()\",\n" +
+"      \"Events\": [\n" +
+"        {\"%script\": \"+\",\n" +
+"          \"Event\":       \"  eventStatusSet.eventName.ID()\",\n" +
+"          \"UserRoleAny\": [\"1.. userRole()\"],\n" +
+"          \"ActionCode\":  \"? actionCode()\",\n" +
+"          \"NextStatus\":  \"? statusSet.statusName.IDREF()\"\n" +
+"        }\n" +
+"      ]\n" +
+"    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_Statuses %link Statuses;\n" +
@@ -416,10 +419,9 @@ if(true)return;
 "<xd:def name='EndStatuses' root='EndStatuses'>\n" +
 "  <xd:json name='EndStatuses'>\n" +
 "    {\n" +
-//"                    \"%script\": \"?; ref Statuses$Statuses;\",\n" +
-"                    \"EndStatus\":  \"  statusSet.statusName.ID()\",\n" +
-"                    \"ActionCode\": \"? actionCode()\",\n" +
-"                    \"ChangeLog\":  \"? changeLog()\"\n" +
+"      \"EndStatus\":  \"  statusSet.statusName.ID()\",\n" +
+"      \"ActionCode\": \"? actionCode()\",\n" +
+"      \"ChangeLog\":  \"? changeLog()\"\n" +
 "    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
@@ -478,13 +480,14 @@ if(true)return;
 "  \"EndStatus\":  \"statusSet.statusName\",\n" +
 "  \"ChangeLog\":  \"Y\"\n" +
 "}";
+            xd = xp.createXDDocument("EndStatuses");
             o = jparse(xd, json, reporter);
             assertNoErrorsAndClear(reporter);
             xc = xd.jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(T)return;
 /**/
         clearTempDir(); // delete temporary files.
     }

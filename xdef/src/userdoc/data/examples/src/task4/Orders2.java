@@ -1,14 +1,16 @@
 package task4;
 
 import java.io.IOException;
-import org.xdef.sys.ArrayReporter;
-import  org.xdef.XDDocument;
-import  org.xdef.XDFactory;
-import  org.xdef.XDPool;
 import java.io.PrintStream;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 
 public class Orders2 {
     public static void main(String[] args) throws IOException {
+        
         // compile the XDPool from the X-definition source
         XDPool xpool = XDFactory.compileXD(null, "src/task4/Orders2.xdef");
 
@@ -29,11 +31,12 @@ public class Orders2 {
 
         // Check errors
         if (reporter.errorWarnings()) {
+            System.err.println("Task4.Order2 Incorrect input data, see task4/errors/Orders_err.txt");
+            FUtils.deleteAndCreateDir("task4/errors"); // ensure the directory task4/errors is clear and exists
             try ( // write log file with errors
                 PrintStream ps = new PrintStream("task4/errors/Orders_err.txt")) {
                 reporter.printReports(ps); //print errors
             }
-            System.err.println("Task4.Order2 Incorrect input data");
         } else {
             System.out.println("OK, Task4.Order2");
         }

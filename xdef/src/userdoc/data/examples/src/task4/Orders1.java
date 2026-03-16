@@ -1,15 +1,20 @@
 package task4;
 
 import java.io.IOException;
-import org.xdef.sys.ArrayReporter;
+import java.io.PrintStream;
+import java.util.Properties;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import java.io.PrintStream;
-import java.util.Properties;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 
 public class Orders1 {
     public static void main(String... args) throws IOException {
+        // ensure the directories task4/output and task4/errors are clear and exists
+        FUtils.deleteAndCreateDir("task4/output");
+        FUtils.deleteAndCreateDir("task4/errors");
+
         // compile XDPool from the X-definition source
         Properties props = new Properties();
         XDPool xpool = XDFactory.compileXD(props, "src/task4/Orders1.xdef");

@@ -8,7 +8,7 @@ fi
 
 mkdir -p temp/classes temp/test
 
-cp="-classpath temp/classes:../xdef-${project.version}.jar:lib/derby-${derby.version}.jar:lib/Saxon-HE-${saxon-he.version}-xqj.jar:lib/Saxon-HE-${saxon-he.version}.jar:lib/snakeyaml-${snakeyaml.version}.jar"
+cp="-classpath temp/classes:../xdef-${project.version}.jar:lib/*"
 copts="${cp} -encoding UTF8 -d temp/classes"
 
 if [ "${exName}" = "task6/Town1" -o "${exName}" = "task6/Town2" ]
@@ -32,7 +32,7 @@ then
 else 
     echo "${exName}: Compile and run ..."
     echo
-    javac ${copts} src/data/MyClass.java src/GenDerby.java src/${exName}.java
+    javac ${copts} src/GenDerby.java src/${exName}.java
     java ${cp} ${exName}
 fi
 

@@ -8,12 +8,17 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import java.io.PrintStream;
 import org.w3c.dom.Element;
+import org.xdef.sys.FUtils;
 
 public class Order1 {
     // Compile the X-definition source to the static variable with the XDPool object
     static final XDPool xpool = XDFactory.compileXD(null, "src/task1/Order1.xdef");
 
     public static void main(String... args) throws IOException {
+        // ensure the directories task1/output and task1/errors are clear and exists
+        FUtils.deleteAndCreateDir("task1/output");
+        FUtils.deleteAndCreateDir("task1/errors");
+
         // Create an instance of the XDDocument object (from XDPool)
         XDDocument xdoc = xpool.createXDDocument("Order");
 

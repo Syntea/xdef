@@ -3,6 +3,7 @@ package task6;
 import java.io.IOException;
 import java.util.List;
 import org.w3c.dom.Element;
+import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import task6.components2.Tenants;
 import task6.components2.Tenants.Resident;
@@ -26,6 +27,9 @@ public class CreateResidentList {
     }
 
     public static void main(String... args) throws IOException {
+        // ensure the directories task6/output and task6/errors are clear and exists
+        FUtils.deleteAndCreateDir("task6/output");
+        FUtils.deleteAndCreateDir("task6/errors");
 
         // 1. Create an instance of X-component (model of element Residents)
         Tenants tenants = new Tenants();
