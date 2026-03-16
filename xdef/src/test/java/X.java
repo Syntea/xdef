@@ -14,6 +14,7 @@ public class X extends XDTester {
     /** Run test and display error info. */
     @Override
     public void test() {
+        boolean T = false;
         System.out.println("X-definition version: " + XDFactory.getXDVersion());
         System.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
         XDDocument xd;
@@ -26,7 +27,7 @@ public class X extends XDTester {
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'><A xd:script='option moreAttributes'/></xd:def>").createXDDocument();
             parse(xd, "<A a='Таблица' />", reporter);
             assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
-            xd = XDFactory.compileXD(props, 
+            xd = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=';'/></xd:def>").createXDDocument();
             parse(xd, "<A a='Таблица' />", reporter);
             assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
@@ -35,7 +36,7 @@ public class X extends XDTester {
             parse(xd, "<A a='Таблица' />", reporter);
             assertTrue(reporter.toString().contains("XDEF823")); // chaset is checked
         } catch (RuntimeException ex) {fail(ex);}
-//if(true)return;
+if(T)return;
         try {
             xd = compile(
 "<xd:def xmlns:xd='" + XDConstants.XDEF42_NS_URI + "' root='A|X|Y|Z'>\n" +

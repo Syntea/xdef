@@ -95,6 +95,9 @@ public class MyTestX extends XDTester {
     @SuppressWarnings({"unchecked"})
     @Override
     public void test() {
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
 /**
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
             XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -133,9 +136,6 @@ public class MyTestX extends XDTester {
         System.out.print("; " + s + " ");
         System.out.println(org.xdef.xon.XonTools.xmlToJName(s));
 /**/
-////////////////////////////////////////////////////////////////////////////////
-        boolean T = false; // if false, all tests are invoked
-////////////////////////////////////////////////////////////////////////////////
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -151,7 +151,7 @@ public class MyTestX extends XDTester {
             assertNoErrorwarningsAndClear(reporter);
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
-if(true)return;
+if(T)return;
 /**/
         try {
             xdef =
@@ -167,7 +167,6 @@ if(true)return;
             s = _package+".MytestX_num";
             assertNull(testX(xp,"", s, xon));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T) return;
 clearSources();
 /**/
@@ -185,7 +184,6 @@ clearSources();
             s = _package+".MytestX_Str";
             assertNull(testX(xp,"", s, xon));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T) return;
 clearSources();
 /**/
@@ -218,10 +216,8 @@ clearSources();
                     + "\n*****\n" + XonUtils.toXonString(x, true));
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
-//if(true)return;
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
@@ -248,7 +244,6 @@ clearSources();
                     + "\n*****\n" + XonUtils.toXonString(x, true));
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -292,7 +287,6 @@ clearSources();
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -390,7 +384,6 @@ clearSources();
             assertNull(testM("int", "{a:1}"));
             assertNull(testM("int", "{ }"));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -421,7 +414,6 @@ clearSources();
             assertNull(testX(xp,"X", s, "\"1\""));
             assertNull(testX(xp,"X", s, "\" ab cd \""));
         } catch (Exception ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -457,7 +449,6 @@ clearSources();
                 reporter.clear();
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -519,7 +510,6 @@ clearSources();
             assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
             assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
         } catch (Exception ex) {fail(ex); reporter.clear();}
-//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -567,7 +557,6 @@ clearSources();
 //			assertNull(testX(xp,"x", s, "\"\\\"\""));
 //			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 clearSources();
 if(T)return;
 /**/
@@ -844,7 +833,6 @@ clearSources();
             assertNull(((Map) xc.toXon()).get("a"));
             assertFalse(((Map) xc.toXon()).containsKey("a"));
     } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-//if(true)return;
 clearSources();
 if(T)return;
 /**/

@@ -25,7 +25,9 @@ public class Lubor1 extends XDTester {
     /** Run test and display error information. */
     @Override
     public void test() {
-        boolean T = false;
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
         System.out.println("TempDir: " + getTempDir());
         System.out.println("SourceDir: " + getSourceDir());
 ////////////////////////////////////////////////////////////////////////////////
