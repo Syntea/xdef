@@ -23,21 +23,15 @@ public class X extends XDTester {
             props.setProperty(XDConstants.XDPROPERTY_STRING_CODES, "Windows-1250");
             ArrayReporter reporter = new ArrayReporter();
             xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <A xd:script='option moreAttributes'/>\n" +
-"</xd:def>").createXDDocument();
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'><A xd:script='option moreAttributes'/></xd:def>").createXDDocument();
+            parse(xd, "<A a='Таблица' />", reporter);
+            assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
+            xd = XDFactory.compileXD(props, 
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=';'/></xd:def>").createXDDocument();
             parse(xd, "<A a='Таблица' />", reporter);
             assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
             xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <A a=';'/>\n" +
-"</xd:def>").createXDDocument();
-            parse(xd, "<A a='Таблица' />", reporter);
-            assertNoErrorsAndClear(reporter); //for moreAttributes the charset is not checked
-            xd = XDFactory.compileXD(props, //moreAttributes
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <A a='string();'/>\n" +
-"</xd:def>").createXDDocument();
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a='string();'/></xd:def>").createXDDocument();
             parse(xd, "<A a='Таблица' />", reporter);
             assertTrue(reporter.toString().contains("XDEF823")); // chaset is checked
         } catch (RuntimeException ex) {fail(ex);}
@@ -128,10 +122,8 @@ public class X extends XDTester {
 "  </Y>\n" +
 "  <Z> required; string(1); onFalse out('error: ' + getText()); </Z>\n" +
 "</xd:def>").createXDDocument();
-
             xd.setStdOut(swr = new StringWriter());
-            xd.xparse("<A><B a='a--b@b--c'/><B a='&lt;a@b>'/><B a='\"a b\"&lt;a@b>'/><B a='JS--N@S.CZ'/></A>",
-                null);
+            xd.xparse("<A><B a='a--b@b--c'/><B a='&lt;a@b>'/><B a='\"a b\"&lt;a@b>'/><B a='JS--N@S.CZ'/></A>", null);
             try {
                 xd.xparse("<X><B a='0.5 USD'/><B a='1.2 CZK'/></X>", null);
                 assertTrue("0.5;USD\n1.2;CZK\n".equals(swr.toString()), swr.toString());
@@ -144,7 +136,7 @@ public class X extends XDTester {
                 xd.setStdOut(swr = new StringWriter());
                 xd.xparse("<Y> <Z a='--'/> </Y>", null);
                 assertTrue(xd.getVariable("date").isNull());
-                assertTrue("x, y, false, 2025-04-21\n".equals(swr.toString()), swr.toString());
+                assertTrue("x, y, false, 2026-04-06\n".equals(swr.toString()), swr.toString());
             } catch (RuntimeException ex) {
                 if (ex.getMessage() == null || !ex.getMessage().contains("XDEF998")) {
                     fail(ex);
@@ -162,6 +154,8 @@ public class X extends XDTester {
             xd.xparse("<Z>xx</Z>", null);
             assertEq("error: xx", swr.toString());
         } catch (RuntimeException ex) {fail(ex);}
+
+        resetTester();
     }
 
     /** Run test.
