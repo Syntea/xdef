@@ -2123,8 +2123,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 }
                 if (_element != null) {
                     _parent.incRefNum();
-                    //Maximum occurrence limit of &amp;{0} exceeded
-                    error(XDEF.XDEF558, "element " + _element.getTagName());
+                    error(XDEF.XDEF558, //Maximum occurrence limit of &amp;{0} exceeded
+                        _xElement._xon > 0 ? _xonKey : "element " + _element.getTagName());
                     error = true;
                 }
             } else {
