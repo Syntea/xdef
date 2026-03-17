@@ -1294,11 +1294,22 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                     }
                 }
             }
-            putTemporaryReport(_counters[index] == 0
-                ? Report.error(XDEF.XDEF539, //Required element '&{0}' is missing
-                    name + getPosMod(xelem.getXDPosition(), null))
-                : Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
+            if (_counters[index] == 0) {
+                String s = name + getPosMod(xelem.getXDPosition(), null);
+                long id = XDEF.XDEF539; //Required element '&{0}' is missing
+                if (_xElement._xon > 0 && "map".equals(name)) {
+                    int ndx1 = s.lastIndexOf("['");
+                    int ndx2 = s.lastIndexOf("']");
+                    if (ndx1 > 0 && ndx2 > ndx1) {
+                        s = s.substring(ndx1 + 2, ndx2);
+                        id = XDEF.XDEF319; //Required named item '&{0}' is missing
+                    }
+                }
+                putTemporaryReport(Report.error(id, s));
+            } else {
+                putTemporaryReport(Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
                     name + getPosMod(xelem.getXDPosition(), _xPos + "/" + name)));
+            }
         }
         copyTemporaryReports();
     }
