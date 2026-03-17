@@ -109,7 +109,6 @@ public class Jirka extends XDTester {
 "  </xd:json>\n" +
 "</xd:def>";
 System.out.println(xdef);
-            xp = compile(xdef);
             json =
 "{\"caseID\":      112233,\n" +
 "\"createdTime\":  \"2026-02-02\",\n" +
@@ -139,12 +138,15 @@ System.out.println(xdef);
 " }\n" +
 "}";
 System.out.println(json);
-            xd = xp.createXDDocument("Example");
-            xd.jparse(json, reporter);
-            assertNoErrors(reporter);
-//            jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
-//            assertNoErrors(reporter);
-//            assertEq("", swr.toString());
+            jparse(xdef, "Example", json, reporter, swr=new StringWriter(), null, null);
+            if (reporter.errors()) {
+                s = reporter.toString();
+                 if (reporter.getErrorCount() != 4 || !s.contains("'createdTime'") || !s.contains("'holder'")
+                    || !s.contains("'modifiedTime'") || !s.contains("'owner'")) {
+                   fail(reporter);
+                }
+            }
+            assertEq("", swr.toString());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 
