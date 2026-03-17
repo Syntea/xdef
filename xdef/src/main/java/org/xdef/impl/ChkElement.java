@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import static org.xdef.XDConstants.XON_NS_URI_W;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
@@ -1295,14 +1296,17 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 }
             }
             if (_counters[index] == 0) {
-                String s = name + getPosMod(xelem.getXDPosition(), null);
+                String s = name + getPosMod(xelem.getXDPosition(), null);;
                 long id = XDEF.XDEF539; //Required element '&{0}' is missing
                 if (_xElement._xon > 0) {
+                    id = XDEF.XDEF319; //Required item '&{0}' is missing
                     int ndx1 = s.lastIndexOf("['");
                     int ndx2 = s.lastIndexOf("']");
                     if (ndx1 > 0 && ndx2 > ndx1) {
                         s = s.substring(ndx1 + 2, ndx2);
-                        id = XDEF.XDEF319; //Required item '&{0}' is missing
+                    }
+                    if (!"map".equals(name) || !XON_NS_URI_W.equals(xelem.getNSUri())) {
+                       s = name;
                     }
                 }
                 putTemporaryReport(Report.error(id, s));
