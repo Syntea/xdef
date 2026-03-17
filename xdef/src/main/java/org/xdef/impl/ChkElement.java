@@ -1297,12 +1297,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             if (_counters[index] == 0) {
                 String s = name + getPosMod(xelem.getXDPosition(), null);
                 long id = XDEF.XDEF539; //Required element '&{0}' is missing
-                if (_xElement._xon > 0 && "map".equals(name)) {
+                if (_xElement._xon > 0) {
                     int ndx1 = s.lastIndexOf("['");
                     int ndx2 = s.lastIndexOf("']");
                     if (ndx1 > 0 && ndx2 > ndx1) {
                         s = s.substring(ndx1 + 2, ndx2);
-                        id = XDEF.XDEF319; //Required named item '&{0}' is missing
+                        id = XDEF.XDEF319; //Required item '&{0}' is missing
                     }
                 }
                 putTemporaryReport(Report.error(id, s));
