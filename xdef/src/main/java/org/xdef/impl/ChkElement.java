@@ -1296,20 +1296,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 }
             }
             if (_counters[index] == 0) {
-                String s = name + getPosMod(xelem.getXDPosition(), null);;
+                String s = name;
+                String t = getPosMod(xelem.getXDPosition(), null);
                 long id = XDEF.XDEF539; //Required element '&{0}' is missing
                 if (_xElement._xon > 0) {
                     id = XDEF.XDEF319; //Required item '&{0}' is missing
-                    int ndx1 = s.lastIndexOf("['");
-                    int ndx2 = s.lastIndexOf("']");
-                    if (ndx1 > 0 && ndx2 > ndx1) {
-                        s = s.substring(ndx1 + 2, ndx2);
-                    }
-                    if (!"map".equals(name) || !XON_NS_URI_W.equals(xelem.getNSUri())) {
-                       s = name;
+                    if ("map".equals(name) && XON_NS_URI_W.equals(xelem.getNSUri())) { // JSON map
+                        int ndx1, ndx2;
+                        if ((ndx1 = t.lastIndexOf("['")) > 0 && (ndx2 = t.lastIndexOf("']")) > ndx1) {
+                            s = t.substring(ndx1 + 2, ndx2); // extract name from X-position
+                        }
                     }
                 }
-                putTemporaryReport(Report.error(id, s));
+                putTemporaryReport(Report.error(id, s + t));
             } else {
                 putTemporaryReport(Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
                     name + getPosMod(xelem.getXDPosition(), _xPos + "/" + name)));
