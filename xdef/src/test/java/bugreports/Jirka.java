@@ -112,10 +112,17 @@ System.out.println(xdef);
             xp = compile(xdef);
             json =
 "{\"caseID\":      112233,\n" +
-//"\"createdTime\":  \"2026-02-02\",\n" +
+"\"createdTime\":  \"2026-02-02\",\n" +
 "\"createdTime\":  \"2026-01-29\",\n" +
-"\"modifiedTime\": \"2026-02-02\",\n" +
+//"\"modifiedTime\": \"2026-02-02\",\n" +
 "\"statusCode\":   \"Y\",\n" +
+"\"holder\": {\n" +
+"    \"subjectType\": \"NP\",\n" +
+"    \"firstName\":   \"JAN\",\n" +
+"    \"lastName\":    \"NOVÁK\",\n" +
+"    \"PIN\":         \"7403160123\",\n" +
+"    \"contacts\":    {\"phoneNum\": \"9988776655\"}\n" +
+" },\n" +
 "\"holder\": {\n" +
 "    \"subjectType\": \"NP\",\n" +
 "    \"firstName\":   \"JAN\",\n" +
