@@ -4,6 +4,7 @@
 *.iws
 *.iml
 *.pyc
+*.class
 *.log
 #*
 ~.~
