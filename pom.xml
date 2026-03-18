@@ -84,6 +84,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
 
         <saxon-he.version>12.9</saxon-he.version>
+        <servlet-api.version>6.1.0</servlet-api.version>
         <derby.version>10.12.1.1</derby.version>
         <snakeyaml.version>1.29</snakeyaml.version>
         <slf4j.version>2.0.17</slf4j.version>
@@ -132,6 +133,11 @@
                 <version>${saxon-he.version}</version>
                 <classifier>xqj</classifier>
             </dependency>
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>        
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>
