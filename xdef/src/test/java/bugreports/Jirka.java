@@ -108,7 +108,7 @@ public class Jirka extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "</xd:def>";
-System.out.println(xdef);
+//System.out.println(xdef);
             json =
 "{\"caseID\":      112233,\n" +
 "\"createdTime\":  \"2026-02-02\",\n" +
@@ -137,7 +137,7 @@ System.out.println(xdef);
 //"    \"contacts\":    {\"phoneNum\": \"9988776656\"}\n" +
 " }\n" +
 "}";
-System.out.println(json);
+//System.out.println(json);
             jparse(xdef, "Example", json, reporter, swr=new StringWriter(), null, null);
             if (reporter.errors()) {
                 s = reporter.toString();
