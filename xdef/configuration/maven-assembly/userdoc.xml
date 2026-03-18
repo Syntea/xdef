@@ -60,7 +60,6 @@
                 <include>org.yaml:snakeyaml</include>
                 <include>net.sf.saxon:Saxon-HE</include>
                 <include>org.xmlresolver:xmlresolver</include>
-                <include>org.xmlresolver:xmlresolver:data</include>
             </includes>
             <outputDirectory>examples/lib</outputDirectory>
         </dependencySet>

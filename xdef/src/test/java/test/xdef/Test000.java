@@ -959,7 +959,7 @@ public final class Test000 extends XDTester {
 "  </PN>\n"+
 "  <SkodaVozidla Mena=\"optional string();onAbsence{if(@Skoda)setText('CZK');}\"\n"+
 "    KodOpravny=\"optional string()\" />\n"+
-"  <RegistracePN  xd:script=\"ref PN\"/>\n"+
+"  <RegistracePN xd:script=\"ref PN\"/>\n"+
 "</xd:def>";
             xp = compile(xdef);
             el = parse(xp, "",

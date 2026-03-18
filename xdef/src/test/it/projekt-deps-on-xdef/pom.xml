@@ -6,15 +6,15 @@
 >
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>test</groupId>
-    <artifactId>test</artifactId>
+    <groupId>org.xdef</groupId>
+    <artifactId>it-projekt-depends-on-xdef</artifactId>
     <version>0</version>
 
     <dependencies>
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
-            <version>42.2.29-SNAPSHOT</version>
+            <version>42.2.42-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <repositories>

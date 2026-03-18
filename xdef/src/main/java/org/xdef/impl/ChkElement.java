@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import static org.xdef.XDConstants.XON_NS_URI_W;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
@@ -1294,11 +1295,24 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                     }
                 }
             }
-            putTemporaryReport(_counters[index] == 0
-                ? Report.error(XDEF.XDEF539, //Required element '&{0}' is missing
-                    name + getPosMod(xelem.getXDPosition(), null))
-                : Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
+            if (_counters[index] == 0) {
+                String s = name;
+                String t = getPosMod(xelem.getXDPosition(), null);
+                long id = XDEF.XDEF539; //Required element '&{0}' is missing
+                if (_xElement._xon > 0) {
+                    id = XDEF.XDEF319; //Required item '&{0}' is missing
+                    if ("map".equals(name) && XON_NS_URI_W.equals(xelem.getNSUri())) { // JSON map
+                        int ndx1, ndx2;
+                        if ((ndx1 = t.lastIndexOf("['")) > 0 && (ndx2 = t.lastIndexOf("']")) > ndx1) {
+                            s = t.substring(ndx1 + 2, ndx2); // extract name from X-position
+                        }
+                    }
+                }
+                putTemporaryReport(Report.error(id, s + t));
+            } else {
+                putTemporaryReport(Report.error(XDEF.XDEF555, //Minimum occurrence not reached for &amp;{0}
                     name + getPosMod(xelem.getXDPosition(), _xPos + "/" + name)));
+            }
         }
         copyTemporaryReports();
     }
@@ -2123,8 +2137,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 }
                 if (_element != null) {
                     _parent.incRefNum();
-                    //Maximum occurrence limit of &amp;{0} exceeded
-                    error(XDEF.XDEF558, "element " + _element.getTagName());
+                    error(XDEF.XDEF558, //Maximum occurrence limit of &amp;{0} exceeded
+                        _xElement._xon > 0 ? _xonKey : "element " + _element.getTagName());
                     error = true;
                 }
             } else {
