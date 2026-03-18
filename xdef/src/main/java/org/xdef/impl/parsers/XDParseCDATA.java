@@ -3,44 +3,18 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
 import org.xdef.XDNamedValue;
-import org.xdef.XDParseResult;
-import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.XDContainer;
-import static org.xdef.XDParserAbstract.checkCharset;
 import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-script "CDATA" type.
  * @author Vaclav Trojan
  */
-public class XDParseCDATA extends XDParserAbstract {
-    int _minLength, _maxLength;
+public class XDParseCDATA extends XSParseString {
 
     public XDParseCDATA() {super(); _minLength = 1; _maxLength = -1;}
-
-    @Override
-    public void parseObject(final XXNode xn, final XDParseResult p){
-        String s = p.getUnparsedBufferPart();
-        int len = s.length();
-        p.setParsedValue(s);
-        if (_maxLength >= 0 && len > _maxLength) {
-            p.errorWithString(XDEF.XDEF815, "string"); //Length of value of '&{0}' is too long&{0}'{: }
-        } else if (_minLength == -1 && len == 0 ||
-            _minLength >= 0 && len < _minLength) {
-            p.errorWithString(XDEF.XDEF814, "string"); //Length of value of '&{0}' is too short&{0}'{: }
-        } else {
-            checkCharset(xn, p);
-            p.setEos();
-        }
-    }
-
-    @Override
-    public String toString() {return "string";}
-
-    @Override
-    public String parserName() {return "string";}
 
     @Override
     public final void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
