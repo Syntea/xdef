@@ -205,9 +205,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
                 //Length of value of '&{0}' is too short"&{0}'&{1}
                 p.errorWithString(XDEF.XDEF814, parserName());
             } else if (_maxLength != -1 && len > _maxLength) {
-                p.errorWithString(XDEF.XDEF815, parserName(),
-" Len: " + len + "; maxLength: " + _maxLength + "; data: '" + s + "'");//Length of value of '&{0}' is too long&{1}'{: }
-throw new RuntimeException(" Len: " + len + "; maxLength: " + _maxLength + "; data: '" + s + "'");
+                p.errorWithString(XDEF.XDEF815, parserName());//Length of value of '&{0}' is too long&{0}'{: }
             }
         }
     }
