@@ -10,6 +10,7 @@ import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 
 /** Tests.
@@ -86,6 +87,7 @@ public class Jirka1 extends XDTester {
 "     \"statusCode\":         \"  statusCode()\",\n" +
 "     \"statusHistory\":      [{\"%script\": \"*; ref StatusHistory\"}],\n" +
 "     \"holder\":             {\"%script\":  \"ref Subject\"},\n" +
+"     \"owner\":             {\"%script\":  \"ref Subject\"},\n" +
 "  }\n" +
 "  </xd:json>\n" +
 "\n" +
@@ -126,7 +128,7 @@ public class Jirka1 extends XDTester {
 "  </xd:json>\n" +
 "\n" +
 "</xd:def>";
-System.out.println(xdef);
+//System.out.println(xdef);
             json =
 "{\"caseID\":       112233,\n" +
 "\"createdTime\":  \"2026-01-29\",\n" +
@@ -141,15 +143,50 @@ System.out.println(xdef);
 "    \"lastName\":    \"NOVAK\",\n" +
 "    \"PIN\":         \"7403160123\",\n" +
 "    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
+"},\n" +
+"\"owner\": {\n" +
+"    \"subjectType\": \"NP\",\n" +
+"    \"firstName\":   \"PETR\",\n" +
+"    \"lastName\":    \"NOVAK\",\n" +
+"    \"PIN\":         \"7403160123\",\n" +
+"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 766\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
 "}\n" +
 "}";
-System.out.println(json);
+//System.out.println(json);
+            j = XonUtils.parseJSON(json);
             xp = compile(xdef);
-            jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
+            o = jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
+            x = XonUtils.parseJSON(XonUtils.toJsonString(o));
+            assertTrue(XonUtils.xonEqual(x, j));
+            json =
+"{\"caseID\":       112233,\n" +
+"\"createdTime\":  \"2026-02-02\",\n" +
+"\"createdTime\":  \"2026-01-29\",\n" +
+"\"modifiedTime\": \"2026-02-02\",\n" +
+//"\"statusCode\":   \"Y\",\n" +
+"\"statusHistory\": [\n" +
+"    {\"statusCode\": \"X\", \"createdTime\": \"2026-01-29\"}\n" +
+"],\n" +
+"\"holder\": {\n" +
+"    \"subjectType\": \"NP\",\n" +
+"    \"firstName\":   \"JAN\",\n" +
+"    \"lastName\":    \"NOVAK\",\n" +
+"    \"PIN\":         \"7403160123\"\n" +
+//"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
+"},\n" +
+"\"holder\": {\n" +
+"    \"subjectType\": \"NP\",\n" +
+"    \"firstName\":   \"PETR\",\n" +
+"    \"lastName\":    \"NOVAK\",\n" +
+"    \"PIN\":         \"7403160123\"\n" +
+"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
+"}\n" +
+"}";
+            o = jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
             if (reporter.errors()) {
                 s = reporter.toString();
-                 if (reporter.getErrorCount() != 4 || !s.contains("'createdTime'") || !s.contains("'holder'")
-                    || !s.contains("'modifiedTime'") || !s.contains("'owner'")) {
+                 if (reporter.getErrorCount() != 5 || !s.contains("'createdTime'") || !s.contains("'contacts'")
+                    || !s.contains("'holder'") || !s.contains("'statusCode'") || !s.contains("'owner'")) {
                    fail(reporter);
                 }
             }
