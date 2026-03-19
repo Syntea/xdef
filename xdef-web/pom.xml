@@ -16,7 +16,7 @@
     <packaging>war</packaging>
 
     <name>xdef-web</name>
-    <description>web - info, tutorial, playground etc.</description>
+    <description>web for www.xdef.org - info, tutorial, playground etc. - requires toolchain-config for Java-21</description>
     <url>http://www.xdef.org</url>
     <scm>
         <url>https://github.com/Syntea/xdef</url>

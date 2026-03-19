@@ -15,7 +15,7 @@
     <artifactId>xdef-test11</artifactId>
 
     <name>xdef-test11</name>
-    <description>executing tests in module xdef on Java-11</description>
+    <description>execution of tests in module xdef on Java-11 - requires toolchain-config for Java-11</description>
 
     <properties>
         <jdk.version>11</jdk.version>
