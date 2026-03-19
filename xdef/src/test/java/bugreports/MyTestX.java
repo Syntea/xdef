@@ -76,19 +76,17 @@ public class MyTestX extends XDTester {
             _geneatedSources = null;
         }
     }
-    public static boolean chk1(String s)
-    {System.out.println("i1=" + s); return true;}
-    public static boolean chk2(int i, XDContainer c)
-    {System.out.println("i2="+i + ", " + c);return true;}
-    public static void chk3() {System.out.println("x3");}
-    public static boolean chk4(XXNode x,int i)
-    {System.out.println("i4="+i + ", " + x);return true;}
-    public static boolean chk5(XXNode x,int i)
-    {System.out.println("i5="+i + ", " + x);return true;}
-    public static void chk6(XXNode x, XDValue[] y) {
-        System.out.print("x6 " + x.getXPos() + ",");
-        for(XDValue z: y) System.out.print(" " + z);
-        System.out.println();
+    public static String chk1(String s) {return "i1=" + s;}
+    public static String chk2(int i, XDContainer c) {return "i2="+i + ", " + c;}
+    public static String chk3() {return "x3";}
+    public static String chk4(XXNode x,int i) {return "i4="+i + ", " + x;}
+    public static String chk5(XXNode x,int i) {return "i5="+i + ", " + x;}
+    public static String chk6(XXNode x, XDValue[] y) {
+        String s = "x6 " + x.getXPos() + ",";
+        for(XDValue z: y) {
+            s += " " + z;
+        }
+        return s;
     }
 
     /** Run test and display error information. */
@@ -116,26 +114,6 @@ public class MyTestX extends XDTester {
         List list;
         String xdef;
         XDPool xp;
-/**
-        s = "_x61_hoj"; //ahoj
-        System.out.print(s + " ");
-        System.out.print(org.xdef.xon.XonTools.xmlToJName(s));
-        s = "_x69_tem";  //item
-        System.out.print("; " + s + " ");
-        System.out.print(org.xdef.xon.XonTools.xmlToJName(s));
-        s = "_x6b_ey";  //key
-        System.out.print("; " + s + " ");
-        System.out.print(org.xdef.xon.XonTools.xmlToJName(s));
-        s = "_x76_alue";  //value
-        System.out.print("; " + s + " ");
-        System.out.print(org.xdef.xon.XonTools.xmlToJName(s));
-        s = "_x78_ml"; //xml
-        System.out.print("; " + s + " ");
-        System.out.println(org.xdef.xon.XonTools.xmlToJName(s));
-        s = "_x6d_ap"; //map
-        System.out.print("; " + s + " ");
-        System.out.println(org.xdef.xon.XonTools.xmlToJName(s));
-/**/
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -152,41 +130,30 @@ public class MyTestX extends XDTester {
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-/**/
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <xd:component>%class "+_package+".MytestX_num %link #A;</xd:component>\n" +
-"<xd:json name='A'>\n" +
-"\"eq('2021')\"\n" +
-"</xd:json>\n" +
+"  <xd:component>%class "+_package+".MytestX_eq %link #A;</xd:component>\n" +
+"<xd:json name='A'> \"eq('2021')\" </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
             genAndCopyXComponents(xp);
             xon = "\"2021\"";
+            s = _package+".MytestX_eq";
+            assertNull(testX(xp,"", s, xon));
+            xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
+"  <xd:component>%class "+_package+".MytestX_num %link #A;</xd:component>\n" +
+"<xd:json name='A'> [ \"num()\" ] </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            genAndCopyXComponents(xp);
+            xon = "[\"2021\"]";
             s = _package+".MytestX_num";
             assertNull(testX(xp,"", s, xon));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T) return;
 clearSources();
-/**/
-        try {
-            xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <xd:component>%class "+_package+".MytestX_Str %link #A;</xd:component>\n" +
-"<xd:json name='A'>\n" +
-"[ \"num()\" ]\n" +
-"</xd:json>\n" +
-"</xd:def>";
-            xp = compile(xdef);
-            genAndCopyXComponents(xp);
-            xon = "[\"2021\"]";
-            s = _package+".MytestX_Str";
-            assertNull(testX(xp,"", s, xon));
-        } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-if(T) return;
-clearSources();
-/**/
         try {
             xp = compile(
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
@@ -272,10 +239,8 @@ clearSources();
             y = xd.getXon();
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(x, y)) {
-                fail(XonUtils.xonDiff(x, XonUtils.xonToJson(y))
-                    + '\n' + KXmlUtils.nodeToString(el, true)
-                    + "\n***\n" + XonUtils.toXonString(x, true)
-                    + "\n***\n" + XonUtils.toXonString(y, true));
+                fail(XonUtils.xonDiff(x, XonUtils.xonToJson(y)) + '\n' + KXmlUtils.nodeToString(el, true)
+                    + "\n***\n" + XonUtils.toXonString(x, true) + "\n***\n" + XonUtils.toXonString(y, true));
             }
             xd = xp.createXDDocument();
             xd.setXONContext(xon);
@@ -332,21 +297,16 @@ clearSources();
             type = "date";
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-//"  <xd:json name='A'> [\"* " + type + "()\"] </xd:json>\n"+
-//"  <xd:json name='A'> [ \"" + type + "()\" ]</xd:json>\n"+
 "  <xd:json name='A'> \"" + type + "()\"</xd:json>\n"+
 "  <xd:component> %class "+_package+".Xon0 %link #A; </xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
             genAndCopyXComponents(xp);
-//			xon = "[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]";
-//			xon = "[d2021-01-12]";
             xon = "d2021-01-12";
-//			xon = "e\"a@bc\"";
             o = XonUtils.parseXON(xon);
             xd = xp.createXDDocument();
             x = xd.jparse(xon, reporter);
-            assertNoErrors(reporter);
+            assertNoErrorsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail("** 2\n" + XonUtils.toXonString(o, true) + "\n" + XonUtils.toXonString(x, true));
             }
@@ -429,8 +389,7 @@ clearSources();
             assertNoErrorwarningsAndClear(reporter);
             xc = xd.jparseXComponent(json, null, reporter);
             if (!XonUtils.xonEqual(y, x = xc.toXon())) {
-                fail(XonUtils.toXonString(y, true)
-                    + "\n*****\n" + XonUtils.toXonString(x, true));
+                fail(XonUtils.toXonString(y, true) + "\n*****\n" + XonUtils.toXonString(x, true));
             }
             el = xc.toXml();
             s = XonUtils.toXonString(XonUtils.xmlToXon(el), true);
@@ -438,10 +397,8 @@ clearSources();
             if (reporter.errorWarnings() || !XonUtils.xonEqual(o, y)) {
                 fail((reporter.errorWarnings()?reporter.printToString()+'\n':"")
                     +(!XonUtils.xonEqual(o,y)?"diff: "+XonUtils.xonDiff(o,y):"")
-                    + "\n" + KXmlUtils.nodeToString(el, true)
-                    +"\ns = " + s
-                    + "\noriginal =" + XonUtils.toXonString(y, true)
-                    + "\nnew =" + XonUtils.toXonString(o, true));
+                    + "\n" + KXmlUtils.nodeToString(el, true) + "\ns = " + s
+                    + "\noriginal =" + XonUtils.toXonString(y, true) + "\nnew =" + XonUtils.toXonString(o, true));
                 reporter.clear();
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
@@ -560,9 +517,7 @@ if(T)return;
             xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name=\"X\" root=\"testI\">\n" +
-"<xd:json name=\"testI\">\n"  +
-"  [ \"%oneOf\", \"jvalue()\", [%anyObj], {%anyName: %anyObj} ]\n"  +
-"</xd:json>\n"  +
+"<xd:json name=\"testI\"> [ \"%oneOf\", \"jvalue()\", [%anyObj], {%anyName: %anyObj} ] </xd:json>\n"  +
 "<xd:component> %class "+_package+".MyTestXX12 %link X#testI; </xd:component>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
@@ -595,13 +550,13 @@ clearSources();
             xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
-"<xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
+"  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
 "</xd:def>\n" +
-"<xd:def name=\"m\" root=\"testX\">\n" + // map
-"  <xd:json name=\"testX\"> { %anyName: %anyObj=\"*;\" } </xd:json>\n"  +
+"<xd:def name=\"m\" root=\"testX\">\n" +
+"  <xd:json name=\"testX\"> { %anyName: %anyObj=\"*;\" } </xd:json>\n" +  // map
 "</xd:def>\n" +
-"<xd:def name=\"x\" root=\"testX\">\n" + // any object
-"<xd:json name=\"testX\"> %anyObj </xd:json>\n" +
+"<xd:def name=\"x\" root=\"testX\">\n" +
+"  <xd:json name=\"testX\"> %anyObj </xd:json>\n" +  // any object
 "<xd:component>\n" +
 "  %class "+_package+".MyTestX_AnyXXa %link a#testX;\n" +
 "  %class "+_package+".MyTestX_AnyXXm %link m#testX;\n" +
@@ -619,7 +574,6 @@ clearSources();
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
     clearSources();
-/**/
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -654,7 +608,6 @@ if(T)return;
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 clearSources();
 if(T)return;
-/**/
         try {
             xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
@@ -664,12 +617,8 @@ if(T)return;
 "   { \"%script\":\"*; ref anyM;\" }\n" +
 " ]\n" +
 "</xd:json>\n" +
-"<xd:json name=\"anyA\">\n" +
-" [ \"%anyObj\" ]\n" +
-"</xd:json>\n" +
-"<xd:json name=\"anyM\">\n" +
-" { \"%anyName\": \"%anyObj\" }\n"+
-"</xd:json>\n" +
+"<xd:json name=\"anyA\"> [ \"%anyObj\" ] </xd:json>\n" +
+"<xd:json name=\"anyM\"> { \"%anyName\": \"%anyObj\" } </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX11 %link X#Any; </xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -683,7 +632,6 @@ if(T)return;
             assertNull(testX(xp,"X", s, "[1]"));
             assertNull(testX(xp,"X", s, "[[]]"));
             assertNull(testX(xp,"X", s, "[{}]"));
-
             // map
             assertNull(testX(xp,"X", s, "{a:1}"));
             assertNull(testX(xp,"X", s, "{a:[]}"));
@@ -722,8 +670,7 @@ clearSources();
             xd.setStdOut(XDFactory.createXDOutput(swr, false));
             xc = xd.jparseXComponent(s, null, reporter);
             assertEq("date\n", swr.toString());
-            XComponentUtil.set((XComponent) XComponentUtil.get(xc,"jx$item_1"), "val",
-                new SDatetime("2022-04-15"));
+            XComponentUtil.set((XComponent) XComponentUtil.get(xc,"jx$item_1"), "val", new SDatetime("2022-04-15"));
             assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
             s = "{a:\"202.2.4.10\"}";
             xd = xp.createXDDocument();
@@ -738,8 +685,7 @@ clearSources();
             xc = xd.jparseXComponent(s, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("ipAddr\n", swr.toString());
-            assertTrue(XonUtils.xonEqual(o, xc.toXon()),
-                XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(xc.toXon()));
+            assertTrue(XonUtils.xonEqual(o, xc.toXon()), XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(xc.toXon()));
             s = "{a:{x:1, y:\" ab\tcd \"}}";
             o = XonUtils.parseXON(s);
             xd = xp.createXDDocument();
@@ -775,8 +721,7 @@ clearSources();
             xc = xd.jparseXComponent(s, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("[...]\n", swr.toString());
-            assertTrue(XonUtils.xonEqual(o, xc.toXon()),
-                XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(xc.toXon()));
+            assertTrue(XonUtils.xonEqual(o, xc.toXon()), XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(xc.toXon()));
             s = "{a:{}}";
             xd = xp.createXDDocument();
             swr = new StringWriter();
@@ -790,8 +735,7 @@ clearSources();
             xc = xd.jparseXComponent(s, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("{ . }\n", swr.toString());
-            assertTrue(XonUtils.xonEqual(o, xc.toXon()),
-                XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(xc.toXon()));
+            assertTrue(XonUtils.xonEqual(o, xc.toXon()), XonUtils.toXonString(o)+'\n'+XonUtils.toXonString(xc.toXon()));
             s = "{a:null}";
             xd = xp.createXDDocument();
             swr = new StringWriter();
@@ -866,7 +810,7 @@ if(T)return;
             assertEq(xml, el);
             assertTrue(XonUtils.xonEqual(o, XonUtils.xmlToXon(el)),
                 XonUtils.toXonString(o) + '\n' + KXmlUtils.nodeToString(el)
-                + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+                    + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
             x = SUtils.getNewInstance(_package+".component.Y16c");
             y = SUtils.getNewInstance(_package+".component.Y16d");
             XComponentUtil.set((XComponent) y, "y", 1);
@@ -895,35 +839,20 @@ if(T)return;
             genAndCopyXComponents(xp);
             xon = "[ b(FF00), x(FF00) ]";
             x = XonUtils.parseXON(xon);
-list = (List) x;
-System.out.println(list.get(0).getClass() + "," + list.get(1).getClass());
-System.out.println(XonUtils.toXonString(x, true));
             xd = xp.createXDDocument();
             xd.jparse(xon, reporter);
             y = xd.getXon();
-list = (List) y;
-System.out.println(list.get(0).getClass() + "," + list.get(1).getClass());
-System.out.println(XonUtils.toXonString(y, true));
             assertTrue(XonUtils.xonEqual(x,y));
             assertNoErrorsAndClear(reporter);
             xd = xp.createXDDocument();
             xc = xd.jparseXComponent(xon, null, reporter);
             assertNoErrorsAndClear(reporter);
             y = xc.toXon();
-list = (List) y;
-System.out.println(list.get(0).getClass() + "," + list.get(1).getClass());
-System.out.println(XonUtils.toXonString(y, true));
             assertTrue(XonUtils.xonEqual(x,y));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
 clearSources();
-/**/
         try {
-//		String defDir =
-//			"D:/cvs/DEV/java/xdefxx/src/test/resources/test/xdef/data/";
-//		xp = compile(new String[] {defDir+"test/TestXComponents.xdef",
-//			defDir + "test/TestXComponent_Z.xdef"});
-//		assertNoErrors(genXComponent(xp, clearTempDir()));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name = 'O' root = \"A\">\n" +
 "  <xd:component>%class "+_package+".MytestX_O %link O#A;</xd:component>\n" +
@@ -946,7 +875,6 @@ clearSources();
         } catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"D\">\n" +
@@ -957,9 +885,9 @@ clearSources();
             genAndCopyXComponents(xp);
             xml = "<D a='111'/>";
             assertEq(xml, parse(xp,"", xml, reporter));
-            assertNoErrors(reporter);
+            assertNoErrorsAndClear(reporter);
             xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
-            assertNoErrors(reporter);
+            assertNoErrorsAndClear(reporter);
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
@@ -974,49 +902,53 @@ clearSources();
             swr = new StringWriter();
             xd.setStdOut(XDFactory.createXDOutput(swr, false));
             parse(xd, "<A/>", reporter);
-            System.out.println(swr);
-            System.out.println(String.join(", ", "a", "b")+".");
-            System.out.println(String.format("a, %s.", "b"));
+            assertEq("Pi = 3.141592", swr.toString());
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root='D'>\n" +
 "<xd:declaration>\n"+
-"  external method boolean "+_package+".MyTestX.chk1(String s);\n"+
-"  external method boolean "+_package+".MyTestX.chk2(int i, XDContainer c);\n"+
-"  external method void "+_package+".MyTestX.chk3();\n"+
-"  external method boolean "+_package+".MyTestX.chk4(XXNode x, int i);\n"+
-"  external method boolean "+_package+".MyTestX.chk5(XXNode x,int i);\n"+
-"  external method void "+_package+".MyTestX.chk6(XXNode x, XDValue[] y);\n"+
+"  external method String "+_package+".MyTestX.chk1(String s);\n"+
+"  external method String "+_package+".MyTestX.chk2(int i, XDContainer c);\n"+
+"  external method String "+_package+".MyTestX.chk3();\n"+
+"  external method String "+_package+".MyTestX.chk4(XXNode x, int i);\n"+
+"  external method String "+_package+".MyTestX.chk5(XXNode x,int i);\n"+
+"  external method String "+_package+".MyTestX.chk6(XXNode x, XDValue[] y);\n"+
+"  String s = '';\n"+
 "</xd:declaration>\n"+
-"<D a='chk1(getText());' xd:script='finally chk3();'>\n" +
-" <E b='chk4(4);' xd:script='finally chk6(1,2,%t=9);'>\n" +
-"   chk5(5);\n" +
+"<D a='string(); onTrue s += chk1(getText());' xd:script='finally {s += chk3(); out(s);}'>\n" +
+" <E b='string(); onTrue s += chk4(4);' xd:script='finally s += chk6(1,2,%t=9);'>\n" +
+"   string(); onTrue s += chk5(5);\n" +
 " </E>\n" +
-" chk2(2, %a = 2);\n" +
+" string(); onTrue s += chk2(2, %a = 2);\n" +
 "</D>\n" +
 "<xd:component> %class "+_package+".MyTestXExt %link #D; </xd:component>\n" +
 "</xd:def>";
-            xp = compile(xdef);
+            xp = XDFactory.compileXD(null, xdef);
             genAndCopyXComponents(xp);
             xml = "<D a='111'><E b='444'>555</E>222</D>";
-            parse(xp,"", xml, reporter);
-            assertNoErrors(reporter);
-            xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
-            assertNoErrors(reporter);
+            xd = xp.createXDDocument();
+            swr = new StringWriter();
+            xd.setStdOut(XDFactory.createXDOutput(swr, false));
+            parse(xd, xml, reporter);
+            assertEq("i1=111i4=4, XXNode Ei5=5, XXNode Ex6 /D/E[1], 1 2 %t=9i2=2, %a=2x3", swr.toString());
+            assertNoErrorsAndClear(reporter);
+            xd = xp.createXDDocument();
+            swr = new StringWriter();
+            xd.setStdOut(XDFactory.createXDOutput(swr, false));
+            xc = xd.xparseXComponent(xml, null, reporter);
+            assertNoErrorsAndClear(reporter);
             assertEq(xml, xc.toXml());
+            assertEq("i1=111i4=4, XXNode Ei5=5, XXNode Ex6 /D/E[1], 1 2 %t=9i2=2, %a=2x3", swr.toString());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"D\">\n" +
-"<xd:json name=\"D\">\n" +
-"  [ \"* int();\"]\n" +
-"</xd:json>\n" +
+"<xd:json name=\"D\"> [ \"* int();\"] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXonD %link #D; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1025,18 +957,14 @@ clearSources();
             s = _package+".MyTestXonD";
             assertNull(testX(xp, "", s, json)); // OK
             xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-            assertNoErrors(reporter);
-            System.out.println(xc.toXon());
+            assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"C\">\n" +
-"<xd:json name=\"C\">\n" +
-"  [ %anyObj, \"int();\"]\n" +
-"</xd:json>\n" +
+"<xd:json name=\"C\"> [ %anyObj, \"int();\"] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXonC %link #C; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1045,16 +973,14 @@ clearSources();
             s = _package+".MyTestXonC";
             assertNull(testX(xp, "", s, json)); // OK
             xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-            assertNoErrors(reporter);
-            System.out.println(xc.toXon());
+            assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
-"<xd:json name=\"A\">{ %anyName: %anyObj=\"occurs *;\" }</xd:json>\n" +
+"<xd:json name=\"A\"> { %anyName: %anyObj=\"occurs *;\" } </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX00M %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1068,13 +994,11 @@ clearSources();
             assertNull(testX(xp, "", s, json)); // OK
             xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
             assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), XComponentUtil.get(xc, "Map$")));
-//			setValueToSetter(xc, "setval", 2);
             json = "null";
             assertNotNull(testX(xp, "", s, json)); // error: not map
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1093,7 +1017,6 @@ clearSources();
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1118,7 +1041,7 @@ clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
-"<xd:json name=\"A\"> { a:\"? int()\" }</xd:json>\n" +
+"<xd:json name=\"A\"> { a:\"? int()\" } </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX02 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1145,7 +1068,6 @@ clearSources();
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1161,7 +1083,6 @@ clearSources();
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1176,12 +1097,10 @@ clearSources();
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
 "<xd:json name=\"A\"> [ %anyObj] </xd:json>\n" +
-//"<xd:json name=\"A\"> [ %anyObj=\"occurs 1;\", %anyObj=\"occurs ?;\" ] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX05 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1200,7 +1119,6 @@ clearSources();
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1212,7 +1130,6 @@ clearSources();
             s = _package+".MyTestXX06";
             xd = xp.createXDDocument();
             xc = xd.jparseXComponent("[[123, true]]", null, reporter);
-            System.out.println(((List<Object>) xc.toXon()).get(0));
             assertNull(testX(xp,"",s, "[true]")); // OK
             assertNull(testX(xp,"",s, "[1]")); // OK
             assertNull(testX(xp,"",s, "[[1]]")); // OK
@@ -1226,13 +1143,10 @@ clearSources();
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
-"<xd:json name=\"A\">\n" +
-"{ %anyName: %anyObj=\"occurs 2;\" }\n" +
-"</xd:json>\n" +
+"<xd:json name=\"A\"> { %anyName: %anyObj=\"occurs 2;\" } </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX07 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1241,17 +1155,14 @@ clearSources();
             assertNull(testX(xp,"",s, "{x:1, y:2}"));
             assertNotNull(testX(xp,"",s, "{}")); // empty
             assertNotNull(testX(xp,"",s, "{x:1}")); // only one item
-//?			assertNotNull(testX(xp,"",s, "{x:1,y:2,z:3}"));//more items
+            assertNotNull(testX(xp,"",s, "{x:1,y:2,z:3}"));//more items
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test %anyObj in array
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
-"<xd:json name=\"A\">\n" +
-"[ %anyObj = \"0..1;\" ]\n" +
-"</xd:json>\n" +
+"<xd:json name=\"A\"> [ %anyObj = \"0..1;\" ] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX08 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1265,11 +1176,10 @@ clearSources();
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test %anyObj in array
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
-"<xd:json name=\"A\">%anyObj</xd:json>\n" +
+"<xd:json name=\"A\"> %anyObj </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX09 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1283,7 +1193,6 @@ clearSources();
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {
             xdef = // test XON models
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
@@ -1295,14 +1204,10 @@ clearSources();
 "</xd:json>\n" +
 "<xd:json name=\"anyA\">\n" +
 " [ \"%anyObj: *;\" ]\n" +
-//" [ [%script=\"*; finally outln('AA');\", %anyObj ] ]\n" +
 "</xd:json>\n" +
 "<xd:json name=\"anyM\">\n" +
-//" { \"%anyName\": \"%anyOb\"j }\n"+
 " {%anyName:\n" +
-"   [\"%oneOf\", \"jvalue()\",\n" +
-"     [\"%script: ref Any; finally outln('MM')\"],\n" +
-"   ]\n" +
+"   [ \"%oneOf\", \"jvalue()\", [\"%script: ref Any; finally outln('MM')\"] ]\n" +
 " }\n" +
 "</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX10 %link X#Any; </xd:component>\n"+
@@ -1317,7 +1222,6 @@ clearSources();
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
-/**/
         try {// test %anyName in map
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
@@ -1368,8 +1272,7 @@ clearSources();
 "version=11.0.0.55";
             xini = xd.iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-                XonUtils.parseINI(XonUtils.toIniString(xini))));
+            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini), XonUtils.parseINI(XonUtils.toIniString(xini))));
             ini =
 "proxy type=0\n" +
 "hostaddr=\n" +
@@ -1380,8 +1283,7 @@ clearSources();
 "version=11.0.0.55";
             xini = xd.iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-                XonUtils.parseINI(XonUtils.toIniString(xini))));
+            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini), XonUtils.parseINI(XonUtils.toIniString(xini))));
             ini =
 "proxy type=0\n" +
 "[ x.y ]\n" +
@@ -1389,8 +1291,7 @@ clearSources();
 "version=11.0.0.55";
             xini = xd.iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-                XonUtils.parseINI(XonUtils.toIniString(xini))));
+            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini), XonUtils.parseINI(XonUtils.toIniString(xini))));
         } catch (RuntimeException ex) {fail(ex);}
         reporter.clear();
 if(T)return;
@@ -1400,10 +1301,7 @@ clearSources();
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  {\n" +
-"     \"Style\": [ \"%oneOf\",\n" +
-"       [ \"occurs 2..* string()\" ],\n" +
-"       \"string()\"\n" +
-"     ]\n" +
+"     \"Style\": [ \"%oneOf\", [ \"occurs 2..* string()\" ], \"string()\" ]\n" +
 "  }\n" +
 "</xd:json>\n"+
 "<xd:component>%class "+_package+".MyTestXX13 %link Skladby</xd:component>\n"+
@@ -1428,9 +1326,7 @@ clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:json name='A'>\n" +
-"{ a:\"?int();\" }\n" +
-"</xd:json>\n" +
+"<xd:json name='A'> { a:\"?int();\" } </xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX14 %link A</xd:component>\n"+
 "</xd:def>";
             s = "{ }";
@@ -1451,44 +1347,11 @@ if(T)return;
 clearSources();
         try {
             xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
-"<xd:json name=\"Skladby\">\n"+
-"  {\n" +
-"     \"Style\": [ \"%oneOf\",\n" +
-"       [ \"occurs 2..* string()\" ],\n" +
-"       \"string()\"\n" +
-"     ]\n" +
-"  }\n" +
-"</xd:json>\n"+
-"<xd:component>%class "+_package+".MyTestXX15 %link Skladby</xd:component>\n"+
-"</xd:def>";
-            s = "  { \"Style\": \"Classic\" }";
-            xp = compile(xdef);
-            genAndCopyXComponents(xp);
-            assertNull(testX(xp,"", s));
-            xd = xp.createXDDocument();
-            x = jparse(xd, s, reporter);
-            assertNoErrorwarnings(reporter);
-            xd = xp.createXDDocument("");
-            xd.setXONContext(x);
-            o = jcreate(xd, "Skladby", reporter);
-            assertNoErrorwarnings(reporter);
-            if (!XonUtils.xonEqual(x, o)) {
-                fail(x + "\n" + o + "\n");
-            }
-        } catch (RuntimeException ex) {fail(ex);}
-if(T)return;
-clearSources();
-        try {
-            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "<xd:json name='a'>\n" +
 "[\n" +
 "  { %script: \"occurs 1..*\",\n" +
-"    \"Genre\": [ \"%oneOf\",\n" +
-"      \"string()\",\n" +
-"      [\"occurs 1..* string()\"]\n" +
-"    ]\n" +
+"    \"Genre\": [ \"%oneOf\", \"string()\", [\"occurs 1..* string()\"] ]\n" +
 "  }\n" +
 "]\n" +
 "</xd:json>\n" +
@@ -1496,27 +1359,16 @@ clearSources();
 "</xd:def>";
             xp = compile(xdef);
             genAndCopyXComponents(xp);
-//			s =
-//"[\n" +
-//"  {\n" +
-//"    \"Genre\": [\"A1\"]\n" +
-//"  },\n" +
-//"  {\n" +
-//"    \"Genre\": [\"B1\", \"B2\"]\n" +
-//"  },\n" +
-//"  {\n" +
-//"    \"Genre\": \"C1\"\n" +
-//"  }\n" +
-//"]";
+            s = "[ { \"Genre\": [\"A1\"]  }, { \"Genre\": [\"B1\", \"B2\"] }, { \"Genre\": \"C1\" } ]";
+            jparse(xp, "", s, reporter);
+            assertNoErrorsAndClear(reporter);
         } catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:json name='A'>\n" +
-"{ a:\" int();\" }\n" +
-"</xd:json>\n" +
+"<xd:json name='A'> { a:\" int();\" } </xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX17 %link A</xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -1530,9 +1382,7 @@ clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
-"<xd:json name='a'>\n" +
-"{ \"\": \"jstring()\" }\n" +
-"</xd:json>\n" +
+"<xd:json name='a'> { \"\": \"jstring()\" } </xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX18 %link a</xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -1544,9 +1394,7 @@ clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
-"<xd:json name='a'>\n" +
-"{ \"\": \"jstring()\" }\n" +
-"</xd:json>\n" +
+"<xd:json name='a'> { \"\": \"jstring()\" } </xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX19 %link a</xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -1644,8 +1492,7 @@ clearSources();
 "SeverIP = 123.45.67.8\n" +
 "SendMailHost = smtp.synth.cz\n" +
 "MailAddr = jira@synth.cz\n" +
-"Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c\n" +
-"";
+"Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c";
             xini = xd.iparse(s, reporter);
             assertNoErrorwarnings(reporter);
             reporter.clear();
@@ -1660,7 +1507,7 @@ clearSources();
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
-"hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
+"hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" +
 "  </xd:ini>\n"  +
 "</xd:def>";
             xp = compile(xdef);
@@ -1671,22 +1518,21 @@ clearSources();
             assertNull(xini.get("hostaddr"));
             assertNoErrorwarnings(reporter);
             reporter.clear();
-            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s),
-                XonUtils.parseINI(XonUtils.toIniString(xini))));
+            assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s), XonUtils.parseINI(XonUtils.toIniString(xini))));
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xdef =
 "<xd:def  xmlns:xd='"+_xdNS+"' root='DefCiselnik' >\n" +
-"    <DefCiselnik              xd:script=\"create from('/*/*[last()]');\"\n" +
-"                              Name              =\"required string()\" >\n" +
-"        <Table                xd:script  = \"occurs 1..\"\n" +
-"                              Table             =\"required string()\">\n" +
-"              <xd:any  xd:script=\"occurs 1..; create from('*')\" />\n" +
+"    <DefCiselnik xd:script=\"create from('/*/*[last()]');\"\n" +
+"                 Name=\"required string()\" >\n" +
+"        <Table xd:script=\"occurs 1..\"\n" +
+"               Table=\"required string()\">\n" +
+"            <xd:any xd:script=\"occurs 1..; create from('*')\" />\n" +
 "        </Table>\n" +
 "    </DefCiselnik>\n" +
-"    <TransA   Column           =\"required string()\"/>\n" +
-"    <TransF   Column           =\"required string()\"/>\n" +
-"    <TransM   Column           =\"required string()\"/>\n" +
+"    <TransA Column=\"required string()\"/>\n" +
+"    <TransF Column=\"required string()\"/>\n" +
+"    <TransM Column=\"required string()\"/>\n" +
 "</xd:def>";
             xp = compile(xdef);
             xml =
@@ -1710,7 +1556,6 @@ clearSources();
             xd.setXDContext(xml);
             el = create(xd, "DefCiselnik", reporter);
             assertNoErrorsAndClear(reporter);
-            System.out.println(KXmlUtils.nodeToString(el,true));
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
