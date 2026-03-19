@@ -864,7 +864,7 @@ if(T)return;
             x = SUtils.getNewInstance(_package+".component.Y16");
             y = SUtils.getNewInstance(_package+".component.Y16a");
             XComponentUtil.set((XComponent) y, "y", 1);
-            XComponentUtil.set((XComponent) x, "$b", y);
+            XComponentUtil.set((XComponent) x, "x$b", y);
             o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
             el = ((XComponent)x).toXml();
             assertEq(xml, el);
@@ -1329,10 +1329,10 @@ clearSources();
 "proxy type = int()\n" +
 "hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
 "port= ? int(0, 9999)\n" +
-"[system] %script = optional\n" +
+"[system] optional\n" +
 "autolaunch=int()\n" +
-"[ x.y ] %script = optional\n" +
-"[selfupdate] %script = optional\n" +
+"[ x.y ] optional\n" +
+"[selfupdate] optional\n" +
 "version=ipAddr()\n" +
 "  </xd:ini>\n"  +
 "</xd:def>";
@@ -1351,7 +1351,7 @@ clearSources();
 "proxy type = required int(0,9)\n" +
 "hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" +
 "port= ? int(0, 9999);\n" +
-"[system] %script = optional\n" +
+"[system] optional\n" +
 "autolaunch=int()\n" +
 "[ x.y ]\n" +
 "[selfupdate]\n" +
@@ -1488,7 +1488,7 @@ clearSources();
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "<xd:json name='a'>\n" +
 "[\n" +
-"  { %script= \"occurs 1..*\",\n" +
+"  { %script: \"occurs 1..*\",\n" +
 "    \"Genre\": [ \"%oneOf\",\n" +
 "      \"string()\",\n" +
 "      [\"occurs 1..* string()\"]\n" +
@@ -1566,10 +1566,10 @@ clearSources();
 "  <xd:json name=\"test\">\n" +
 "    { date: \"date()\",\n" +
 "      cities: [\n" +
-"        { %script = \"occurs 1..*;\",\n" +
+"        { %script: \"occurs 1..*;\",\n" +
 "          \"from\": [\n" +
 "            \"string();\",\n" +
-"            { %script = \"occurs 1..*;\",\n" +
+"            { %script: \"occurs 1..*;\",\n" +
 "              \"to\": \"jstring();\",\n"+
 "              \"distance\": \"int();\"\n" +
 "            }\n" +
@@ -1619,7 +1619,7 @@ clearSources();
 "      Authority=enum(\"SECURITY\",\"SOFTWARE\",\"CLIENT\",\"UNREGISTRED\")\n" +
 "      ItemSize = int(10000, 15000000)\n" +
 "      ReceiverSleep = int(1, 3600)\n" +
-"    [Server] %script = optional\n" +
+"    [Server] optional\n" +
 "      RemoteServerURL = url()\n" +
 "      SeverIP = ipAddr()\n" +
 "      SendMailHost = domainAddr()\n" +
