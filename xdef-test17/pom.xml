@@ -15,7 +15,7 @@
     <artifactId>xdef-test17</artifactId>
 
     <name>xdef-test17</name>
-    <description>executing tests in module xdef on Java-17</description>
+    <description>execution of tests in module xdef on Java-17 - requires toolchain-config for Java-17</description>
 
     <properties>
         <jdk.version>17</jdk.version>

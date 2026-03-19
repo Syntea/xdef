@@ -15,7 +15,7 @@
     <artifactId>xdef-test21</artifactId>
 
     <name>xdef-test21</name>
-    <description>executing tests in module xdef on Java-21</description>
+    <description>execution of tests in module xdef on Java-21 - requires toolchain-config for Java-21</description>
 
     <properties>
         <jdk.version>21</jdk.version>
