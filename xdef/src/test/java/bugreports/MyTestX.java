@@ -864,7 +864,7 @@ if(T)return;
             x = SUtils.getNewInstance(_package+".component.Y16");
             y = SUtils.getNewInstance(_package+".component.Y16a");
             XComponentUtil.set((XComponent) y, "y", 1);
-            XComponentUtil.set((XComponent) x, "$b", y);
+            XComponentUtil.set((XComponent) x, "x$b", y);
             o = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
             el = ((XComponent)x).toXml();
             assertEq(xml, el);
