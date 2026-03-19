@@ -182,7 +182,7 @@ public final class XonReader extends StringParser implements XonParsers {
                         }
                     }
                 } else if (i == 0 || i == 2) { // $script
-                    error(JSON.JSON002, i == 0 ? ":" : "="); //"&{0}"&{1}{ or "}{"} expected
+                    error(JSON.JSON002, i == 0 || i == 2 ? ":" : "="); //"&{0}"&{1}{ or "}{"} expected
                     _jp.xdScript(name, new SBuffer("", getPosition()));
                 }
             } else {

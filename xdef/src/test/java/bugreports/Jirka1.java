@@ -163,7 +163,6 @@ public class Jirka1 extends XDTester {
 "\"createdTime\":  \"2026-02-02\",\n" +
 "\"createdTime\":  \"2026-01-29\",\n" +
 "\"modifiedTime\": \"2026-02-02\",\n" +
-//"\"statusCode\":   \"Y\",\n" +
 "\"statusHistory\": [\n" +
 "    {\"statusCode\": \"X\", \"createdTime\": \"2026-01-29\"}\n" +
 "],\n" +
@@ -172,7 +171,6 @@ public class Jirka1 extends XDTester {
 "    \"firstName\":   \"JAN\",\n" +
 "    \"lastName\":    \"NOVAK\",\n" +
 "    \"PIN\":         \"7403160123\"\n" +
-//"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
 "},\n" +
 "\"holder\": {\n" +
 "    \"subjectType\": \"NP\",\n" +

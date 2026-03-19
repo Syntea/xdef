@@ -398,11 +398,12 @@ public class XComponentUtil {
     }
 
     /** Create source list of items with separators (value of parsed list).
-     * @param list pasrsed list.
-     * @param isJlist if true generate jlist format, otherwise just list.
-     * @return list of items with separatort.
+     * @param list parsed list.
+     * @param isJlist if true generate jlist format (i.e. [ .. ]), otherwise just list.
+     * @param sepChar separator character.
+     * @return list of items with separator.
      */
-    public static final String listToString(final List list, final boolean isJlist) {
+    public static final String listToString(final List list, final boolean isJlist, final char sepChar) {
         if (list == null) {
             return "null";
         }
@@ -410,7 +411,7 @@ public class XComponentUtil {
         boolean wasFirst = false;
         for (Object o: list) {
             if (wasFirst) {
-                sb.append(",");
+                sb.append(sepChar);
             } else {
                 wasFirst = true;
             }
@@ -419,7 +420,7 @@ public class XComponentUtil {
             } else if (o instanceof XDContainer) {
                 return containerToJlist((XDContainer) o);
             } else if (o instanceof List) {
-                sb.append(listToString((List) o, true));
+                sb.append(listToString((List) o, true, sepChar));
             } else if (o instanceof String) {
                 String s = (String) o;
                 if ("false".equals(s) || "true".equals(s) || "null".equals(s) || s.isEmpty()

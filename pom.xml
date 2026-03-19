@@ -98,13 +98,10 @@
         <!-- main module X-definition -->
         <module>xdef</module>
 
-        <!-- web -->
-        <module>xdef-web</module>
-
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
 
-        <!--see also profile "testOnAllJvms"-->
+        <!-- see also profiles "web", "testOnAllJvms" -->
     </modules>
 
     <dependencyManagement>
@@ -370,6 +367,13 @@
             </properties>
         </profile>
         <profile>
+            <id>web</id>
+            <modules>
+                <!-- web for www.xdef.org -->
+                <module>xdef-web</module>
+            </modules>
+        </profile>
+        <profile>
             <id>testOnAllJvms</id>
             <modules>
                 <!-- run tests on Java-11, Java-17, Java-21 -->
@@ -387,13 +391,13 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <executions>
                             <execution>
+                                <configuration>
+                                    <quiet>true</quiet>
+                                </configuration>
                                 <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <configuration>
-                                    <quiet>true</quiet>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
