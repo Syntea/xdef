@@ -850,7 +850,8 @@ class XCGeneratorBase {
                     case XD_STRING: x = "get&{name}())"; break;
                     case XD_CONTAINER: {
                         x = "org.xdef.component.XComponentUtil.listToString(get&{name}(), "
-                            + (parseName.equals("jlist") ? "true" : "false") + "))";
+                            + (parseName.equals("jlist") ? "true" : "false")
+                            + ",'" + (parseName.equals("list") ? ' ' : ',') + "'))";
                         break;
                     }
                     default: x = "get&{name}().toString())";
@@ -928,7 +929,8 @@ class XCGeneratorBase {
                 }
             case XD_CONTAINER: {
                 x = "org.xdef.component.XComponentUtil.listToString(" + z + ","
-                    + (parseName.equals("jlist") ? "true" : "false") + ")";
+                    + (parseName.equals("jlist") ? "true" : "false")
+                    + ",'" + (parseName.equals("list") ? ' ' : ',') + "')";
                 break;
             }
             default:
