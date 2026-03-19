@@ -84,6 +84,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
 
         <saxon-he.version>12.9</saxon-he.version>
+        <servlet-api.version>6.1.0</servlet-api.version>
         <derby.version>10.12.1.1</derby.version>
         <snakeyaml.version>1.29</snakeyaml.version>
         <slf4j.version>2.0.17</slf4j.version>
@@ -97,13 +98,10 @@
         <!-- main module X-definition -->
         <module>xdef</module>
 
-        <!-- web -->
-        <module>xdef-web</module>
-
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
 
-        <!--see also profile "testOnAllJvms"-->
+        <!-- see also profiles "web", "testOnAllJvms" -->
     </modules>
 
     <dependencyManagement>
@@ -132,6 +130,11 @@
                 <version>${saxon-he.version}</version>
                 <classifier>xqj</classifier>
             </dependency>
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>        
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>
@@ -364,6 +367,13 @@
             </properties>
         </profile>
         <profile>
+            <id>web</id>
+            <modules>
+                <!-- web for www.xdef.org -->
+                <module>xdef-web</module>
+            </modules>
+        </profile>
+        <profile>
             <id>testOnAllJvms</id>
             <modules>
                 <!-- run tests on Java-11, Java-17, Java-21 -->
@@ -381,13 +391,13 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <executions>
                             <execution>
+                                <configuration>
+                                    <quiet>true</quiet>
+                                </configuration>
                                 <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <configuration>
-                                    <quiet>true</quiet>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
