@@ -188,40 +188,37 @@ if(T) return;
 clearSources();
 /**/
         try {
-            xdef =
+            xp = compile(
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
 "<xd:component>%class " + _package + ".Csvxx1 %link a</xd:component>\n" +
-" <xd:json name='a'>\n" +
-"    [ [ %script =\"+\", \"string()\"] ]\n" +
-//"    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
-" </xd:json>\n" +
-"</xd:def>";
-            xp = compile(xdef); // no property
+" <xd:json name='a'> [ [ %script =\"+\", \"*; string()\"] ] </xd:json>\n" +
+"</xd:def>");
             genAndCopyXComponents(xp);
             xd = xp.createXDDocument();
-            json =
-"[\n" +
-"  [\"a\t\n\\\"b\"],\n" +
-//"  [1, 2, \"a\", true],\n" +
-//"  [null, 1, \"a\t\n\\\"b\", false],\n" +
-//"  [6, null, null, true],\n" +
-//"  [null, null, null, null]\n" +
-"]";
+            json = "[ [\"a\t\n\\\"b\", \"a\"], [], [null, null, null, null] ]";
             o = xd.jparse(json, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            xc = xd.jparseXComponent(json, null, reporter);
-            x = xc.toXon();
+            x = xd.jparseXComponent(json, null, reporter).toXon();
             if (!XonUtils.xonEqual(o, x)) {
-                fail(XonUtils.toXonString(o, true)
-                    + "\n*****\n" + XonUtils.toXonString(x, true));
+                fail(XonUtils.toXonString(o, true) + "\n*****\n" + XonUtils.toXonString(x, true));
             }
-        } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-if(T)return;
-clearSources();
-        try {
+            xp = compile(
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
+"<xd:component>%class " + _package + ".Csvxx2 %link a</xd:component>\n" +
+" <xd:json name='a'> [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n" +
+"</xd:def>");
+            genAndCopyXComponents(xp);
+            xd = xp.createXDDocument();
+            json = "[[1, 2, \"abc\", true], [null, null, null, null]]";
+            o = xd.jparse(json, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            x = xd.jparseXComponent(json, null, reporter).toXon();
+            if (!XonUtils.xonEqual(o, x)) {
+                fail(XonUtils.toXonString(o, true) + "\n*****\n" + XonUtils.toXonString(x, true));
+            }
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
-"<xd:component>%class "+_package+".Csvxx2 %link a</xd:component>\n" +
+"<xd:component>%class "+_package+".Csvxx3 %link a</xd:component>\n" +
 " <xd:json name='a'>\n" +
 "    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
 " </xd:json>\n" +
@@ -240,8 +237,7 @@ clearSources();
             assertNoErrorwarningsAndClear(reporter);
             xc = xd.jparseXComponent(json, null, reporter);
             if (!XonUtils.xonEqual(o, x = xc.toXon())) {
-                fail(XonUtils.toXonString(o, true)
-                    + "\n*****\n" + XonUtils.toXonString(x, true));
+                fail(XonUtils.toXonString(o, true) + "\n*****\n" + XonUtils.toXonString(x, true));
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
