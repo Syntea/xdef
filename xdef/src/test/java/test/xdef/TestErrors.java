@@ -1029,7 +1029,7 @@ public final class TestErrors extends XDTester {
         try {
             XDFactory.compileXD(null, // incorrect excape characters in JSON X-script
 "<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
-"   <xd:json name = \"test\">[ { \"adresa\": \"%script= \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"   <xd:json name=\"test\">[ { \"adresa\": \"%script= \\\"ref adr;\\\"\"  } ]</xd:json>" +
 "</xd:def>");
             fail("Error not detected");
         } catch (RuntimeException ex) {
@@ -1038,7 +1038,7 @@ public final class TestErrors extends XDTester {
         try {
             XDFactory.compileXD(null, // incorrect excape characters in JSON X-script
 "<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
-"   <xd:json name = \"test\">[ { \"adresa\": \"%script= \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"   <xd:json name=\"test\">[ { \"adresa\": \"%script= \\\"ref adr;\\\"\"  } ]</xd:json>" +
 "</xd:def>");
             fail("Error not detected");
         } catch (RuntimeException ex) {
@@ -1074,7 +1074,7 @@ public final class TestErrors extends XDTester {
         try {
             XDFactory.compileXD(null, // incorrect excape characters in script
 "<xd:def xmlns:xd='"+_xdNS+"' root='test'>\n" +
-"   <xd:json name = \"test\">[ { \"adresa\": \"%script: \\\"ref adr;\\\"\"  } ]</xd:json>" +
+"   <xd:json name=\"test\">[ { \"adresa\": \"%script: \\\"ref adr;\\\"\"  } ]</xd:json>" +
 "</xd:def>");
             fail("Error not detected");
         } catch (RuntimeException ex) {

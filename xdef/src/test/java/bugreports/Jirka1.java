@@ -80,7 +80,7 @@ public class Jirka1 extends XDTester {
 "    type  yearOfManufacture integer(1920, 2050);\n" +
 "  </xd:declaration>\n" +
 " \n" +
-"  <xd:json name = \"S2KF\">\n" +
+"  <xd:json name=\"S2KF\">\n" +
 "  {  \"caseID\":             \"  caseID()\",\n" +
 "     \"createdTime\":        \"  xsDateTime()\",\n" +
 "     \"modifiedTime\":       \"  xsDateTime()\",\n" +
@@ -91,14 +91,14 @@ public class Jirka1 extends XDTester {
 "  }\n" +
 "  </xd:json>\n" +
 "\n" +
-"  <xd:json name = \"StatusHistory\">\n" +
+"  <xd:json name=\"StatusHistory\">\n" +
 "   {  \"statusCode\":   \"  statusCode()\", \n" +
 "      \"createdTime\":  \"  xsDateTime()\"\n" +
 "   }\n" +
 "\n" +
 "  </xd:json>\n" +
 " \n" +
-"  <xd:json name = \"Subject\">\n" +
+"  <xd:json name=\"Subject\">\n" +
 "   {  \"subjectType\":       \"  subjectType()\",\n" +
 "      \"firstName\":         \"? firstName()\",\n" +
 "      \"lastName\":          \"? lastName()\",\n" +
@@ -110,14 +110,14 @@ public class Jirka1 extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
-"  <xd:json name = \"Contact\">\n" +
+"  <xd:json name=\"Contact\">\n" +
 "   {  \"phoneNum\":        \"? phoneNum()\",\n" +
 "      \"emailAddr\":       \"? emailAddr()\",\n" +
 "      \"address\":         {\"%script\": \"?; ref Address\"}\n" +
 "   }\n" +
 "  </xd:json>\n" +
 " \n" +
-"  <xd:json name = \"Address\">\n" +
+"  <xd:json name=\"Address\">\n" +
 "   {  \"town\":      \"? town()\",\n" +
 "      \"district\":  \"? district()\",\n" +
 "      \"street\":    \"? street()\",\n" +

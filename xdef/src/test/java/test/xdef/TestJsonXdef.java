@@ -1079,7 +1079,7 @@ public class TestJsonXdef extends XDTester {
         try {
             xd = compile(
 "<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" xd:root = \"SynPLscript\">\n" +
-"  <xd:json name = \"SynPLscript\"> \n" +
+"  <xd:json name=\"SynPLscript\"> \n" +
 "    { \"Statuses\": [\n" +
 "        {  \"Status\": \"string()\",\n" +
 "           \"Events\": [\n" +
@@ -1112,7 +1112,7 @@ public class TestJsonXdef extends XDTester {
             xp = XDFactory.compileXD(null,
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\" } }\n" +
 "    }\n" +
@@ -1147,7 +1147,7 @@ public class TestJsonXdef extends XDTester {
             xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\" } }\n" +
 "    }\n" +
@@ -1182,7 +1182,7 @@ public class TestJsonXdef extends XDTester {
             xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\", \"y\": \"?; string()\" } }\n" +
 "    }\n" +

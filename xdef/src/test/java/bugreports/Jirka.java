@@ -79,7 +79,7 @@ public class Jirka extends XDTester {
 "    type  yearOfManufacture integer(1920, 2050);\n" +
 "  </xd:declaration>\n" +
 " \n" +
-"  <xd:json name = \"S2KF\">\n" +
+"  <xd:json name=\"S2KF\">\n" +
 "  {  \"caseID\":             \"  caseID()\",\n" +
 "     \"createdTime\":        \"  xsDateTime()\",\n" +
 "     \"modifiedTime\":       \"  xsDateTime()\",\n" +
@@ -90,7 +90,7 @@ public class Jirka extends XDTester {
 "  }\n" +
 "  </xd:json>\n" +
 "\n" +
-"  <xd:json name = \"Subject\">\n" +
+"  <xd:json name=\"Subject\">\n" +
 "   {  \"subjectType\":       \"  subjectType()\",\n" +
 "      \"firstName\":         \"? firstName()\",\n" +
 "      \"lastName\":          \"? lastName()\",\n" +
@@ -102,7 +102,7 @@ public class Jirka extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
-"  <xd:json name = \"Contact\">\n" +
+"  <xd:json name=\"Contact\">\n" +
 "   {  \"phoneNum\":  \"? phoneNum()\",\n" +
 "      \"emailAddr\": \"? emailAddr()\"\n" +
 "   }\n" +

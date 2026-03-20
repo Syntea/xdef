@@ -245,7 +245,7 @@ public final class TestDTDTypes extends XDTester {
             }
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"  <xd:component>%class " + _package + ".D_idref1 %link A</xd:component>\n" +
+"  <xd:component>%class "+_package+".D_idref1 %link A</xd:component>\n" +
 "  <xd:declaration scope='local'> uniqueSet u{t: string()}; </xd:declaration>\n"+
 "  <A> <B xd:script='*' b='? u.t.CHKIDS();' a='? u.t.ID'/> </A>\n"+
 "</xd:def>";
