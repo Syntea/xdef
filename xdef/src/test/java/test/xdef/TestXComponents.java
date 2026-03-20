@@ -338,7 +338,7 @@ public final class TestXComponents extends XDTester {
             assertEq(xml, xc.toXml());
             xdef = // test jcreateXComponent
 "<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
-"  <xd:json name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:json>\n"+
+"  <xd:json name='X'>{a:\"int();\", b:[\"boolean();\"]}</xd:json>\n"+
 "  <xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
@@ -361,7 +361,7 @@ public final class TestXComponents extends XDTester {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
-"  <xd:json name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
+"  <xd:json name='X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
             xd = xp.createXDDocument();
@@ -378,7 +378,7 @@ public final class TestXComponents extends XDTester {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
 "  <xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
-"  <xd:json name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
+"  <xd:json name='X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
             xd = xp.createXDDocument();
@@ -413,7 +413,7 @@ public final class TestXComponents extends XDTester {
             assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
             xdef = // jcreate with create section
 "<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
-"  <xd:json name = 'X'> [ \"boolean(); create 'true'\", \"int(); create '2'\" ] </xd:json>\n"+
+"  <xd:json name='X'> [ \"boolean(); create 'true'\", \"int(); create '2'\" ] </xd:json>\n"+
 "  <xd:component>%class "+_package+".JCreateX5 %link X</xd:component>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
@@ -428,7 +428,7 @@ public final class TestXComponents extends XDTester {
             assertTrue(XonUtils.xonEqual(xon, xc.toXon()));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='X'>\n"+
-"  <xd:json name = 'X'>\n"+
+"  <xd:json name='X'>\n"+
 "    { a:\"int(); create '1'\",\n"+
 "      b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
 "    }\n"+
@@ -675,9 +675,7 @@ public final class TestXComponents extends XDTester {
             xdef = // sequence with separator
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
-"  <xd:declaration>\n"+
-"    type s sequence(%separator=',', %item=[int, long, long]);\n"+
-"  </xd:declaration>\n"+
+"  <xd:declaration> type s sequence(%separator=',', %item=[int, long, long]); </xd:declaration>\n"+
 "  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
@@ -725,6 +723,41 @@ public final class TestXComponents extends XDTester {
             } else {
                 fail("incorrect type: " + o.getClass() + "; " + o);
             }
+            xdef = // test list, enum and ref
+"<xd:def xmlns:xd='"+_xdNS+"' root='A' name='Y21'>\n" +
+"  <xd:declaration scope=\"local\" >\n" +
+"    type eType enum('x', 'y', 'A1_b', 'z', '_1', 'A1_b2', '$');\n" +
+"    type myType eType;\n" +
+"    type eType1 enum('a', 'b', 'c');\n" +
+"    type extType eType1;\n" +
+"    type Test_int int(1, 10);\n" +
+"  </xd:declaration>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".Y21 %link Y21#A;\n" +
+"    %enum mytests.Y21_enum eType;\n" +
+"    %ref %enum test.xdef.TestXComponents_Y21enum eType1;\n" +
+"  </xd:component>\n" +
+"  <A b='myType;' >\n" +
+"    ? myType;\n" +
+"    <B xd:script='*' c='eType1;' d='? list(%item=Test_int);'>\n" +
+"      myType;\n" +
+"    </B>\n" +
+"    ? myType;\n" +
+"  </A>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            genXComponent(xp, clearTempDir());
+            xml = "<A b='x'>z<B c='a'>x</B><B c='c' d='1 2'>y</B>x</A>";
+            xc = parseXC(xp,"Y21", xml , null, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertEq(xml, xc.toXml());
+            XComponentUtil.set(xc, "$value", null);
+            o = SUtils.getObjectField("mytests.Y21_enum", "y");
+            XComponentUtil.set(xc, "b", o);
+            list = (List) XComponentUtil.getx(xc, "listOfB");
+            o = SUtils.getObjectField("test.xdef.TestXComponents_Y21enum", "b");
+            XComponentUtil.set((XComponent) list.get(1), "c", o);
+            assertEq("<A b='y'><B c='a'>x</B><B c='b' d='1 2'>y</B>x</A>", xc.toXml());
             xdef = //Names of getters of A/B and A/C/B must be same
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
@@ -907,10 +940,10 @@ public final class TestXComponents extends XDTester {
             xdef = // test IDREFS, CHKIDS, ENTITIES, NMTOKENS
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|C|D'>\n"+
 "  <xd:component>\n" +
-"	  %class " + _package + ".D_idrefA %link A;\n" +
-"	  %class " + _package + ".D_idrefB %link B;\n" +
-"	  %class " + _package + ".D_idrefC %link C;\n" +
-"	  %class " + _package + ".D_idrefD %link D;\n" +
+"	  %class "+_package+".D_idrefA %link A;\n" +
+"	  %class "+_package+".D_idrefB %link B;\n" +
+"	  %class "+_package+".D_idrefC %link C;\n" +
+"	  %class "+_package+".D_idrefD %link D;\n" +
 "  </xd:component>\n" +
 "  <xd:declaration scope='local'>\n"+
 "    uniqueSet u{t: string()};\n"+
