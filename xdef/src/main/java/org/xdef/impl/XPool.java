@@ -146,20 +146,23 @@ public final class XPool implements XDPool, Serializable {
         _props = props != null ? props : SManager.getProperties();
         // Set values of properties
         //debug mode
-        _debugMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DEBUG,
+        _debugMode = (byte) readProperty(_props,
+            XDConstants.XDPROPERTY_DEBUG,
             new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE, XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
-            XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
+                XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
         //showErrors display mode
-        _displayMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DISPLAY,
-            new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE,
-                XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS, XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
+        _displayMode = (byte) readProperty(_props,
+            XDConstants.XDPROPERTY_DISPLAY,
+            new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE, XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
+                XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
             XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
         _debugEditor = SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG_EDITOR);
         _xdefEditor = SManager.getProperty(_props, XDConstants.XDPROPERTY_XDEF_EDITOR);
         //set DOCTYPE illegal
-        _illegalDoctype = readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
+        _illegalDoctype = readProperty(_props,
+            XDConstants.XDPROPERTY_DOCTYPE,
             new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
-            XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;  //default is false
+                XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;  //default is false
         //switch if the actullal reporter is cleared on invoked action
         _clearReports=readProperty(_props,XDConstants.XDPROPERTY_CLEAR_REPORTS,
             new String[] {XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_TRUE,
@@ -179,7 +182,7 @@ public final class XPool implements XDPool, Serializable {
         _chkWarnings = readProperty(_props, XDConstants.XDPROPERTY_WARNINGS,
             new String[] {XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE,
                 XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE},
-                XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE) == 0;
+            XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE) == 0;
         _resolveIncludes = readProperty(_props,XDConstants.XDPROPERTY_XINCLUDE,
             new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
                 XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
@@ -189,8 +192,7 @@ public final class XPool implements XDPool, Serializable {
         _maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
         _specialDates = readPropertySpecDates(_props);
         _charsets = readPropertyStringCodes(_props);
-        _compiler = new CompileXDPool(this,
-            _reporter != null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
+        _compiler = new CompileXDPool(this, _reporter != null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -302,8 +304,7 @@ public final class XPool implements XDPool, Serializable {
      * @throws RuntimeException if source is missing or if an error occurs.
      */
     final void setSource(final String source, final String sourceId) {
-        if (getDisplayMode() == DISPLAY_TRUE && sourceId == null
-            && (source.startsWith("?") || source.isEmpty())) {
+        if (getDisplayMode() == DISPLAY_TRUE && sourceId == null && (source.startsWith("?") || source.isEmpty())) {
             if (source.length() <= 1) {
                 setSource(
 "<xd:def xmlns:xd='"+ XDConstants.XDEF42_NS_URI + "' root=\"a\" name=\"a\">\n"+
@@ -368,8 +369,7 @@ public final class XPool implements XDPool, Serializable {
             if (ex instanceof SThrowable) {
                 _compiler.getReportWriter().putReport(((SThrowable) ex).getReport());
             } else {
-                //Program exception &{0}
-                _compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex));
+                _compiler.getReportWriter().error(SYS.SYS036, STester.printThrowable(ex)); //Program exception &{0}
             }
         }
     }
@@ -384,8 +384,7 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final String[] sources, final String[] sourceIds) {
         if (sources == null || sources.length == 0) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903);
+            _compiler.getReportWriter().error(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         for (int i = 0; i < sources.length; i++) {
@@ -398,8 +397,7 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final File source) {
         if (source == null) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903);
+            _compiler.getReportWriter().error(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         try {
@@ -424,8 +422,7 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final File[] sources) {
         if (sources == null || sources.length == 0) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903);
+            _compiler.getReportWriter().error(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         for (File source : sources) {
@@ -438,8 +435,7 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final URL source) {
         if (source == null) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903);
+            _compiler.getReportWriter().error(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         try {
@@ -460,8 +456,7 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final URL[] sources) {
         if (sources == null || sources.length == 0) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903);
+            _compiler.getReportWriter().error(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         for (URL source : sources) {
@@ -479,8 +474,7 @@ public final class XPool implements XDPool, Serializable {
             s = "Stream_" + (++_streamItem);
         }
         if (source == null) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903, s);
+            _compiler.getReportWriter().error(XDEF.XDEF903, s); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         try {
@@ -503,8 +497,7 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final InputStream sources[], final String sourceIds[]) {
         if (sources == null || sources.length == 0) {
-            //X-definition source is missing or incorrect&{0}{: }
-            _compiler.getReportWriter().error(XDEF.XDEF903);
+            _compiler.getReportWriter().error(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
             return;
         }
         for (int i = 0; i < sources.length; i++) {
