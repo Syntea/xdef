@@ -36,7 +36,7 @@ public class Mates extends XDTester {
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
         Object o;
-        String json, xml, xdef;
+        String json, xdef;
         XDDocument xd;
         XDPool xp;
         XComponent xc;

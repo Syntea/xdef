@@ -17,7 +17,6 @@ import org.xdef.model.XMData;
 import org.xdef.proc.XXData;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xon.XonUtils;
 import test.XDTester;

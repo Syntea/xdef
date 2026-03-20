@@ -110,7 +110,6 @@ public class MyTestX extends XDTester {
         XComponent xc;
         Map<String, Object> xini;
         XDDocument xd;
-        List list;
         String xdef;
         XDPool xp;
         try {
@@ -857,7 +856,7 @@ clearSources();
             json = "[ 1, 2 ]";
             s = _package+".MyTestXonD";
             assertNull(testX(xp, "", s, json)); // OK
-            xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+            xp.createXDDocument().jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
@@ -873,7 +872,7 @@ clearSources();
             json = "[ true, 2 ]";
             s = _package+".MyTestXonC";
             assertNull(testX(xp, "", s, json)); // OK
-            xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+            xp.createXDDocument().jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;

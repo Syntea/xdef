@@ -1,12 +1,9 @@
 package bugreports;
 
 import java.io.StringWriter;
-import java.util.List;
 import org.xdef.XDConstants;
-import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
@@ -37,11 +34,8 @@ public class Jirka1 extends XDTester {
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
         Object o, x, j;
-        String json, s, xdef, xml;
-        List list;
-        XDDocument xd;
+        String json, s, xdef;
         XDPool xp;
-        XComponent xc;
         StringWriter swr;
         ArrayReporter reporter = new ArrayReporter();
         try {
@@ -155,7 +149,7 @@ public class Jirka1 extends XDTester {
 //System.out.println(json);
             j = XonUtils.parseJSON(json);
             xp = compile(xdef);
-            o = jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
+            o = jparse(xp, "Example", json, reporter, null, null, null);
             x = XonUtils.parseJSON(XonUtils.toJsonString(o));
             assertTrue(XonUtils.xonEqual(x, j));
             json =
@@ -180,7 +174,7 @@ public class Jirka1 extends XDTester {
 "    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
 "}\n" +
 "}";
-            o = jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
+            jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
             if (reporter.errors()) {
                 s = reporter.toString();
                  if (reporter.getErrorCount() != 5 || !s.contains("'createdTime'") || !s.contains("'contacts'")
