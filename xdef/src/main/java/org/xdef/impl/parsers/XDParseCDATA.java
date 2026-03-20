@@ -14,7 +14,7 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XDParseCDATA extends XSParseString {
 
-    public XDParseCDATA() {super(); _minLength = 1; _maxLength = -1;}
+    public XDParseCDATA() {super(); _minLength = -1; _maxLength = -1;}
 
     @Override
     public final void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
