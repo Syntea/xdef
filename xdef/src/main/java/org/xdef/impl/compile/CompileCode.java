@@ -1922,14 +1922,10 @@ public final class CompileCode extends CompileBase {
                 }
                 // parsers
                 if (npar == 0) { // no parameters
-                    if ("string".equals(name) || "CDATA".equals(name)) {
-                        genLDC(getParser("CDATA"));
-                    } else {
-                        if (imethod.getMinParams() > 0) {
-                            _parser.error(XDEF.XDEF460, name); //More parameters required for method &{0}
-                        }
-                        genLDC(getParser(name));
+                    if (imethod.getMinParams() > 0) {
+                        _parser.error(XDEF.XDEF460, name); //More parameters required for method &{0}
                     }
+                    genLDC(getParser(name));
                     return;
                 } else if ("list".equals(name) && //deprecated!
                     par1typ != XD_CONTAINER && par1typ != XD_PARSER) {

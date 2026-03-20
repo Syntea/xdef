@@ -544,7 +544,6 @@ public final class TestErrors extends XDTester {
             reporter.reset();
             assertEq("",chkReport(reporter, "XDEF809", "10", "39", null));
             assertEq("",chkReport(reporter, "XDEF809", "11", "39", null));
-            assertEq("",chkReport(reporter, "XDEF814", "12", "39", null));
             assertEq("",chkReport(reporter, "XDEF526", "18", "54", null));
             assertNull(reporter.getReport(), reporter.printToString());
             xdef = //check if error is only one
@@ -604,7 +603,6 @@ public final class TestErrors extends XDTester {
 "      p8 = '1'\n"+												//08<=
 "      p9 = '4'/>\n";											//09<=
             parse(xp, "", xml, reporter);
-            assertEq("", chkReport(reporter, "XDEF814", "1", "13", null));
             assertEq("", chkReport(reporter, "XDEF815", "2", "13", null));
             assertEq("", chkReport(reporter, "XDEF815", "4", "13", null));
             assertEq("", chkReport(reporter, "XDEF814", "5", "13", null));
@@ -817,7 +815,6 @@ public final class TestErrors extends XDTester {
             //test error reporting
             reporter.clear();
             xb = XDFactory.getXDBuilder(reporter,props);
-//			xb.setExternals(getClass());
             xb.setSource(dataDir + "test/TestErrors3.xdef");
             xp = xb.compileXD();
             if (reporter.errorWarnings()) {
@@ -1013,7 +1010,6 @@ public final class TestErrors extends XDTester {
                     assertTrue(s.contains("E XDEF903")||!s.contains("xd1"), s);
                     s = reporter.getReport().toString();
                     assertTrue(s.contains("E XDEF903")||!s.contains("xd2"), s);
-//					assertEq("", chkReport(reporter, "XDEF122","1","73",null));
                     assertNull(reporter.getReport(), reporter.printToString());
                 }
             }

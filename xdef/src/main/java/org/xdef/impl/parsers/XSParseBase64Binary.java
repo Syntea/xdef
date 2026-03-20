@@ -28,11 +28,11 @@ public class XSParseBase64Binary extends XSAbstractParser {
     long _maxLength;
     XDValue[] _enumeration;
 
-    public XSParseBase64Binary() {super(); _whiteSpace = 'c'; _minLength = _maxLength = -1;}
+    public XSParseBase64Binary() {super(); _whiteSpace = WS_COLLAPSE; _minLength = _maxLength = -1;}
 
     @Override
     public void initParams() {
-        _whiteSpace = 'c';
+        _whiteSpace = WS_COLLAPSE;
         _patterns = null;
         _enumeration = null;
         _minLength = _maxLength = -1;
