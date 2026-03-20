@@ -81,9 +81,7 @@ public class MyTest_0 extends XDTester {
 
     public MyTest_0() {super();}
 
-////////////////////////////////////////////////////////////////////////////////
-// User methods used in X-definitions tests
-////////////////////////////////////////////////////////////////////////////////
+    // User methods used in X-definitions tests
     public static boolean next(XXElement x) {
         MyTest_0 y = (MyTest_0) x.getUserObject();
         return !y._stack.empty() && (y._item = y._stack.pop()) != null;

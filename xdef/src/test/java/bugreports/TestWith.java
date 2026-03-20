@@ -34,8 +34,7 @@ public class TestWith extends XDTester {
 //		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
-        Object o;
-        String json, xdef, xml;
+        String xdef, xml;
         XDDocument xd;
         XDPool xp;
         XComponent xc;

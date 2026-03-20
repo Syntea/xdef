@@ -18,8 +18,6 @@ import static test.XDTester._xdNS;
 public class TestGenJava extends XDTester {
     public TestGenJava() {super();}
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     public static XDContainer x(XDContainer x, String a, String b, String mask) {return new DefContainer();}
 
     private void test(String className, XDPool xp, String xdName, String xml) throws Exception{
