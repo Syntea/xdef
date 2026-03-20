@@ -7,6 +7,10 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.WS_PRESERVE;
 import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-script "CDATA" type.
@@ -14,7 +18,28 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XDParseCDATA extends XSParseString {
 
-    public XDParseCDATA() {super(); _minLength = -1; _maxLength = -1;}
+    public XDParseCDATA() {super(); _whiteSpace = WS_PRESERVE; _minLength = 1; _maxLength = -1;}
+
+    @Override
+    public int getLegalKeys() {
+        return //PATTERN +
+//			ENUMERATION +
+//			WHITESPACE +
+//			MAXINCLUSIVE +
+//			MAXEXCLUSIVE +
+//			MININCLUSIVE +
+//			MINEXCLUSIVE +
+//			TOTALDIGITS +
+//			FRACTIONDIGITS +
+            LENGTH +
+            MAXLENGTH +
+            MINLENGTH +
+//			NORMALIZE +
+//			SEPARATOR +
+//			ITEM +
+//			BASE +
+            0;
+    }
 
     @Override
     public final void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
@@ -41,8 +66,8 @@ public class XDParseCDATA extends XSParseString {
             Object par1 = params[0];
             _minLength = Integer.parseInt(par1.toString());
             switch (params.length) {
-                case 1:_maxLength=_minLength;return;
-                case 2:_maxLength=Integer.parseInt(params[1].toString());return;
+                case 1: _maxLength=_minLength; return;
+                case 2: _maxLength=Integer.parseInt(params[1].toString()); return;
             }
             throw new SRuntimeException("Incorrect number of parameters");
         }

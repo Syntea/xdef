@@ -53,6 +53,7 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
      * are collapsed to a single #x20, and leading and trailing #x20's are removed.
      */
     protected byte _whiteSpace; //r replace, c collapse, 0 preserve
+
     protected XDRegex[] _patterns;
 
     protected XSAbstractParser() {}
@@ -162,9 +163,9 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
     public void setWhiteSpace(final String s) {
         byte old = _whiteSpace;
         switch (s) {
-            case "collapse": _whiteSpace = 'c'; break;
-            case "replace": _whiteSpace = 'r'; break;
-            case "preserve": _whiteSpace = 0; break;
+            case "collapse": _whiteSpace = WS_COLLAPSE; break; // 0
+            case "replace": _whiteSpace = WS_REPLACE; break; // 'r'
+            case "preserve": _whiteSpace = WS_PRESERVE; break; // 'c'
             default: //Parameter '&{0}' can be only '&{1}' for '&{2}'
                 throw new SRuntimeException(XDEF.XDEF812,
                     "whiteSpace","collapse, replace, preserve", parserName());

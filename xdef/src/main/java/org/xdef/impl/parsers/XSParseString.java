@@ -6,7 +6,7 @@ package org.xdef.impl.parsers;
 public class XSParseString extends XSAbstractParseString {
     private static final String ROOTBASENAME = "string";
 
-    public XSParseString() {super(); _whiteSpace = 0; _minLength = _maxLength = -1;}
+    public XSParseString() {super(); _whiteSpace = WS_PRESERVE; _minLength = 0; _maxLength = -1;}
 
     @Override
     public int getLegalKeys() {
@@ -33,7 +33,7 @@ public class XSParseString extends XSAbstractParseString {
     public  void initParams() {
         _patterns = null;
         _enumeration = null;
-        _whiteSpace = 0;
+        _whiteSpace = WS_PRESERVE;
         _minLength = _maxLength = -1;
     }
 
