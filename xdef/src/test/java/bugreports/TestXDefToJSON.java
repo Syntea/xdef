@@ -55,7 +55,9 @@ public class TestXDefToJSON extends XDTester {
 "    type  xsDateTime        xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
 "    type  yearOfManufacture integer(1920, 2050);\n" +
 "\n" +
-"    String s = \"abc\"; /* examle of variable */\n" +
+"  </xd:declaration>\n" +
+"  <xd:declaration scope = 'global'>\n" +
+"    String s = \"abc\"; /* example of variable */\n" +
 "    boolean test(String s) { /* examle of method */\n" +
 "       out(s); return !s.isEmpty();\n" +
 "    }\n" +
@@ -114,11 +116,15 @@ public class TestXDefToJSON extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
+"  <xd:component>\n" +
+"   %class test.xdef.componentGg %link Example#S2KF;" +
+"  </xd:component>\n" +
+"\n" +
 "</xd:def>";
             s = org.xdef.util.XDefToJSON.xmlXdefToJson(xdef);
-            System.out.println(s);
+//            System.out.println(s);
             s = org.xdef.util.XDefToJSON.jsonXdefToXml(s);
-            System.out.println(s);
+//            System.out.println(s);
             s = org.xdef.util.XDefToJSON.xmlXdefToJson(s);
             System.out.println(s);
             s = org.xdef.util.XDefToJSON.jsonXdefToXml(s);
@@ -165,7 +171,6 @@ public class TestXDefToJSON extends XDTester {
 "  }\n" +
 "}";
             j = XonUtils.parseJSON(json);
-            xp = compile(s);
             o = jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
             assertNoErrorsAndClear(reporter);
             assertEq("abc, 112233", swr.toString());

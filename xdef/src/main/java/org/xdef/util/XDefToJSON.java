@@ -11,9 +11,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 
-/**
- * Convertor of X-definition from XML format to JSON format and from JSON to XML.
- *
+/** Convertor of X-definition from XML format to JSON format and from JSON to XML.
  * @author trojan
  */
 public class XDefToJSON {
@@ -64,15 +62,7 @@ public class XDefToJSON {
                 throw new RuntimeException("Unexpected object " + i);
             }
             item = (Map) o;
-            if ((o = item.get(xdPrefix + ":declaration")) == null || item.size() > 2) { // model
-                if (item.size() != 1) {
-                    throw new RuntimeException("Unexpected object " + i);
-                }
-                String name = item.keySet().iterator().next();
-                sb.append("\n<").append(xdPrefix).append(":json name='").append(name).append("'>\n");
-                sb.append(XonUtils.toJsonString(item.get(name), true));
-                sb.append("\n</").append(xdPrefix).append(":json>\n");
-            } else { // declaration
+            if ((o = item.get(xdPrefix + ":declaration")) != null) { // declaration
                 sb.append("<").append(xdPrefix).append(":declaration");
                 String a = o.toString();
                 o = item.get(xdPrefix + ":scope");
@@ -84,6 +74,17 @@ public class XDefToJSON {
                 }
                 sb.append(">");
                 sb.append(a).append("</").append(xdPrefix).append(":declaration>\n");
+            } else if ((o = item.get(xdPrefix + ":component")) != null) { // component
+                sb.append("\n<").append(xdPrefix).append(":component>");
+                sb.append(o.toString());
+                sb.append("</").append(xdPrefix).append(":component>\n");
+            } else if (item.size() == 1) { // JSON model
+                String name = item.keySet().iterator().next();
+                sb.append("\n<").append(xdPrefix).append(":json name='").append(name).append("'>\n");
+                sb.append(XonUtils.toJsonString(item.get(name), true));
+                sb.append("\n</").append(xdPrefix).append(":json>\n");
+            } else { // declaration
+                throw new RuntimeException("Unexpected object: " + o);
             }
         }
         sb.append("</").append(xdPrefix).append(":def>\n");
@@ -161,6 +162,15 @@ public class XDefToJSON {
                                 } else {
                                     throw new RuntimeException("Expected name of json model at " + i);
                                 }
+                                break;
+                            case "component":
+                                sb.append("{ \"").append(xdPrefix).append(":component\": \"");
+                                sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
+                                sb.append("\"}");
+                                if (i < nl.getLength() - 1) {
+                                    sb.append(",");
+                                }
+                                sb.append("\n");
                                 break;
                             default:
                                 throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);
