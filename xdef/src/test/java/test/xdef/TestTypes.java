@@ -620,8 +620,7 @@ public final class TestTypes extends XDTester {
             xp = compile(// union with the sequence item
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n"+
-"    Parser s = sequence(%item=[boolean,decimal],\n"+
-"      %enumeration=['true 1', 'false 2']); \n"+
+"    Parser s = sequence(%item=[boolean,decimal], %enumeration=['true 1', 'false 2']); \n"+
 "    Parser t = union(%item=[decimal,boolean, s]); \n"+
 "  </xd:declaration>\n"+
 "  <a a='required t; options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
@@ -646,10 +645,7 @@ public final class TestTypes extends XDTester {
             assertTrue(reporter.errorWarnings(), "Error not reported");
             xp = compile( // sequence with enumeration
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <xd:declaration>\n"+
-"    Parser s = sequence(%item=[boolean,decimal],\n"+
-"      %enumeration=['true 1', 'false 2']); \n"+
-"  </xd:declaration>\n"+
+"  <xd:declaration>Parser s=sequence(%item=[boolean,decimal], %enumeration=['true 1', 'false 2']); </xd:declaration>\n"+
 " <a a='required s'/>\n"+
 "</xd:def>");
             xml = "<a a='true 1' />";
@@ -675,9 +671,7 @@ public final class TestTypes extends XDTester {
             parse(xdef, "", xml, reporter);
             assertTrue(reporter.errorWarnings(), "Error not reported");
             xdef = // sequence
-"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <a a=' sequence ( %item = [ decimal ( %maxInclusive = 5 ) ] ) '/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'> <a a=' sequence ( %item = [ decimal ( %maxInclusive = 5 ) ] ) '/></xd:def>";
             parse(xdef, "", "<a a=' 1' />", reporter);
             assertNoErrorwarnings(reporter);
             xp = compile( // sequence

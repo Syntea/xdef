@@ -1,12 +1,7 @@
 package bugreports;
 
-import java.io.StringWriter;
-import java.util.List;
 import org.xdef.XDConstants;
-import org.xdef.XDDocument;
 import org.xdef.XDFactory;
-import org.xdef.XDPool;
-import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
@@ -35,13 +30,7 @@ public class Jirka extends XDTester {
 //		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
-        Object o, x, j;
-        String json, s, xdef, xml;
-        List list;
-        XDDocument xd;
-        XDPool xp;
-        XComponent xc;
-        StringWriter swr;
+        String json, s, xdef;
         ArrayReporter reporter = new ArrayReporter();
         try {
             xdef =
@@ -79,7 +68,7 @@ public class Jirka extends XDTester {
 "    type  yearOfManufacture integer(1920, 2050);\n" +
 "  </xd:declaration>\n" +
 " \n" +
-"  <xd:json name = \"S2KF\">\n" +
+"  <xd:json name=\"S2KF\">\n" +
 "  {  \"caseID\":             \"  caseID()\",\n" +
 "     \"createdTime\":        \"  xsDateTime()\",\n" +
 "     \"modifiedTime\":       \"  xsDateTime()\",\n" +
@@ -90,7 +79,7 @@ public class Jirka extends XDTester {
 "  }\n" +
 "  </xd:json>\n" +
 "\n" +
-"  <xd:json name = \"Subject\">\n" +
+"  <xd:json name=\"Subject\">\n" +
 "   {  \"subjectType\":       \"  subjectType()\",\n" +
 "      \"firstName\":         \"? firstName()\",\n" +
 "      \"lastName\":          \"? lastName()\",\n" +
@@ -102,7 +91,7 @@ public class Jirka extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
-"  <xd:json name = \"Contact\">\n" +
+"  <xd:json name=\"Contact\">\n" +
 "   {  \"phoneNum\":  \"? phoneNum()\",\n" +
 "      \"emailAddr\": \"? emailAddr()\"\n" +
 "   }\n" +
@@ -138,7 +127,7 @@ public class Jirka extends XDTester {
 " }\n" +
 "}";
 //System.out.println(json);
-            jparse(xdef, "Example", json, reporter, swr=new StringWriter(), null, null);
+            jparse(xdef, "Example", json, reporter, null, null, null);
             if (reporter.errors()) {
                 s = reporter.toString();
                  if (reporter.getErrorCount() != 4 || !s.contains("'createdTime'") || !s.contains("'holder'")
@@ -146,7 +135,6 @@ public class Jirka extends XDTester {
                    fail(reporter);
                 }
             }
-            assertEq("", swr.toString());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 

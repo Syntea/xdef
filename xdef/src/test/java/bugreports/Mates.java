@@ -36,7 +36,7 @@ public class Mates extends XDTester {
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
 ////////////////////////////////////////////////////////////////////////////////
         Object o;
-        String json, xml, xdef;
+        String json, xdef;
         XDDocument xd;
         XDPool xp;
         XComponent xc;
@@ -142,7 +142,7 @@ if(T)return;
             xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      {\n" +
 "         \"End\":\n" +
@@ -217,7 +217,7 @@ if(T)return;
             xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      {\n" +
 "         \"Name\":    \"string()\",\n" +
@@ -327,7 +327,7 @@ if(T)return;
 "        uniqueSet eventStatusSet { statusName: statusName(); eventName: eventName()};/*duplicita eventu*/\n"+
 "  </xd:declaration>\n" +
 "\n" +
-"  <xd:json name = \"SynPLscript\">\n" +
+"  <xd:json name=\"SynPLscript\">\n" +
 "    {\"SynPLscript\":\n" +
 "      {\n" +
 "        \"Name\":          \"wfScriptName()\",\n" +
@@ -395,7 +395,7 @@ if(T)return;
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name = 'Statuses'>\n" +
-"  <xd:json name = 'Statuses'>\n" +
+"  <xd:json name='Statuses'>\n" +
 "    {\n" +
 "      \"Status\":       \"  statusSet.statusName.ID() AND eventStatusSet.statusName()\",\n" +
 "      \"ActionCode\":   \"? actionCode()\",\n" +

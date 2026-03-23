@@ -127,7 +127,7 @@ public interface XDConstants {
     /** The namespace URI for X-definition instance. */
     public static final String XDEF_INSTANCE_NS_URI = "http://www.xdef.org/xdef/instance";
     /** Last compatible version of XDPool (e.g. 4.0.001.005). */
-    public static final String XDPOOL_MIN_VERSION = "4.2.002.026";
+    public static final String XDPOOL_MIN_VERSION = "4.2.002.042";
 
 ////////////////////////////////////////////////////////////////////////////////
 // XON/JSON/INI

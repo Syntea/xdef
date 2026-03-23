@@ -1,23 +1,34 @@
 package bugreports;
 
 import java.io.StringWriter;
-import org.xdef.XDConstants;
+import org.w3c.dom.Element;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
-import static org.xdef.sys.STester.runTest;
+import org.xdef.util.XDefToJSON;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 
-/** Tests.
- * @author Vaclav Trojan
+/** Convertor of X-definition from XML format to JSON format and from JSON to XML.
+ * @author trojan
  */
-public class Jirka1 extends XDTester {
+public class TestXDefToJSON extends XDTester {
 
-    public Jirka1() {
-        super();
-        setChkSyntax(false); // here it MUST be false!
+    public TestXDefToJSON() {super();}
+
+    private static XDPool compile(final String x) {
+        String s;
+        if (x.trim().charAt(0) == '<') {
+            s = XDefToJSON.xmlXdefToJson(x);
+        } else {
+            s = x;
+        }
+        s = XDefToJSON.jsonXdefToXml(s);
+        s = XDefToJSON.xmlXdefToJson(s);
+//System.out.println(s);
+        s = XDefToJSON.jsonXdefToXml(s);
+System.out.println(s);
+        return XDFactory.compileXD(null, s);
     }
 
     /** Run test and display error information. */
@@ -26,18 +37,36 @@ public class Jirka1 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
         boolean T = false; // if false, all tests are invoked
 ////////////////////////////////////////////////////////////////////////////////
-        System.out.println("X-definition version: " + XDFactory.getXDVersion());
-////////////////////////////////////////////////////////////////////////////////
-        System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
-        setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
-//		setProperty(XDConstants.XDPROPERTY_DEBUG,  XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-        setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
-////////////////////////////////////////////////////////////////////////////////
-        Object o, x, j;
-        String json, s, xdef;
-        XDPool xp;
+        Element el;
+        Object j, o, x;
         StringWriter swr;
         ArrayReporter reporter = new ArrayReporter();
+        String s, json, xdef, xml;
+        XDPool xp;
+        try {
+            xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='B|json'>\n"+
+"  <xd:json name='json'> [{\"a\":\"boolean\"},\"string()\",\"int()\"] </xd:json>\n"+
+"  <xd:json name='B'> {\"a\":\"int\"} </xd:json>\n"+
+//"  <A/>\n"+
+"</xd:def>";
+            xp = compile(xdef);
+            json = "[{\"a\":true},\"x\",-1]";
+            x = jparse(xp, "", json, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), x), XonUtils.toJsonString(x, true));
+            el = XonUtils.xonToXmlW(x);
+            parse(xp, "", el, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            json = "{\"a\":1}";
+            x = jparse(xp, "", json, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), x), XonUtils.toJsonString(x, true));
+            el = XonUtils.xonToXmlW(x);
+            parse(xp, "", el, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+        } catch (RuntimeException ex) {fail(ex);}
+if (T) return;
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"Example\" xd:root=\"S2KF\">\n" +
@@ -72,10 +101,19 @@ public class Jirka1 extends XDTester {
 "    type  xsDate            xdatetime('yyyy-MM-dd'); \n" +
 "    type  xsDateTime        xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
 "    type  yearOfManufacture integer(1920, 2050);\n" +
+"\n" +
 "  </xd:declaration>\n" +
-" \n" +
+"  <xd:declaration scope = 'global'>\n" +
+"    String s = \"abc\"; /* example of variable */\n" +
+"    boolean test(String s) { /* examle of method */\n" +
+"       out(s); return !s.isEmpty();\n" +
+"    }\n" +
+"  </xd:declaration>\n" +
+"\n" +
+"   \n" +
 "  <xd:json name=\"S2KF\">\n" +
-"  {  \"caseID\":             \"  caseID()\",\n" +
+"  {\n" +
+"     \"caseID\":             \"  caseID(); finally test(s + ', ' + getText());\",\n" +
 "     \"createdTime\":        \"  xsDateTime()\",\n" +
 "     \"modifiedTime\":       \"  xsDateTime()\",\n" +
 "     \"statusCode\":         \"  statusCode()\",\n" +
@@ -86,14 +124,16 @@ public class Jirka1 extends XDTester {
 "  </xd:json>\n" +
 "\n" +
 "  <xd:json name=\"StatusHistory\">\n" +
-"   {  \"statusCode\":   \"  statusCode()\", \n" +
+"   {\n" +
+"      \"statusCode\":   \"  statusCode()\", \n" +
 "      \"createdTime\":  \"  xsDateTime()\"\n" +
 "   }\n" +
 "\n" +
 "  </xd:json>\n" +
 " \n" +
 "  <xd:json name=\"Subject\">\n" +
-"   {  \"subjectType\":       \"  subjectType()\",\n" +
+"   {\n" +
+"      \"subjectType\":       \"  subjectType()\",\n" +
 "      \"firstName\":         \"? firstName()\",\n" +
 "      \"lastName\":          \"? lastName()\",\n" +
 "      \"companyName\":       \"? companyName()\",\n" +
@@ -105,14 +145,16 @@ public class Jirka1 extends XDTester {
 "  </xd:json>\n" +
 "\n" +
 "  <xd:json name=\"Contact\">\n" +
-"   {  \"phoneNum\":        \"? phoneNum()\",\n" +
+"   {\n" +
+"      \"phoneNum\":        \"? phoneNum()\",\n" +
 "      \"emailAddr\":       \"? emailAddr()\",\n" +
 "      \"address\":         {\"%script\": \"?; ref Address\"}\n" +
 "   }\n" +
 "  </xd:json>\n" +
 " \n" +
 "  <xd:json name=\"Address\">\n" +
-"   {  \"town\":      \"? town()\",\n" +
+"   {\n" +
+"      \"town\":      \"? town()\",\n" +
 "      \"district\":  \"? district()\",\n" +
 "      \"street\":    \"? street()\",\n" +
 "      \"houseNum\":  \"? houseNum()\",\n" +
@@ -121,70 +163,60 @@ public class Jirka1 extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
+"  <xd:component>\n" +
+"   %class test.xdef.componentGg %link Example#S2KF;\n" +
+"  </xd:component>\n" +
+"\n" +
 "</xd:def>";
-//System.out.println(xdef);
+            xp = compile(xdef);
             json =
-"{\"caseID\":       112233,\n" +
-"\"createdTime\":  \"2026-01-29\",\n" +
-"\"modifiedTime\": \"2026-02-02\",\n" +
-"\"statusCode\":   \"Y\",\n" +
-"\"statusHistory\": [\n" +
+"{\n" +
+"  \"caseID\":       112233,\n" +
+"  \"createdTime\":  \"2026-01-29\",\n" +
+"  \"modifiedTime\": \"2026-02-02\",\n" +
+"  \"statusCode\":   \"Y\",\n" +
+"  \"statusHistory\": [\n" +
 "    {\"statusCode\": \"X\", \"createdTime\": \"2026-01-29\"}\n" +
-"],\n" +
-"\"holder\": {\n" +
+"  ],\n" +
+"  \"holder\": {\n" +
 "    \"subjectType\": \"NP\",\n" +
 "    \"firstName\":   \"JAN\",\n" +
 "    \"lastName\":    \"NOVAK\",\n" +
 "    \"PIN\":         \"7403160123\",\n" +
-"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
-"},\n" +
-"\"owner\": {\n" +
+"    \"contacts\": [\n" +
+"       {\n" +
+"          \"phoneNum\":  \"+421 987 876 765\",\n" +
+"          \"address\": {\n" +
+"             \"town\": \"BLAVA\",\n" +
+"             \"PSC\": \"123456\"\n" +
+"          }\n" +
+"       }\n" +
+"    ]\n" +
+"  },\n" +
+"  \"owner\": {\n" +
 "    \"subjectType\": \"NP\",\n" +
 "    \"firstName\":   \"PETR\",\n" +
 "    \"lastName\":    \"NOVAK\",\n" +
 "    \"PIN\":         \"7403160123\",\n" +
-"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 766\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
-"}\n" +
+"    \"contacts\": [\n"+
+"      {\n"+
+"         \"phoneNum\": \"+421 987 876 766\",\n"+
+"         \"address\":  {\n"+
+"            \"town\": \"BLAVA\",\n"+
+"            \"PSC\":  \"123456\"\n"+
+"         }\n"+
+"      }\n"+
+"    ]\n"+
+"  }\n" +
 "}";
-//System.out.println(json);
             j = XonUtils.parseJSON(json);
-            xp = compile(xdef);
-            o = jparse(xp, "Example", json, reporter, null, null, null);
+            o = jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
+            assertNoErrorsAndClear(reporter);
+            assertEq("abc, 112233", swr.toString());
             x = XonUtils.parseJSON(XonUtils.toJsonString(o));
             assertTrue(XonUtils.xonEqual(x, j));
-            json =
-"{\"caseID\":       112233,\n" +
-"\"createdTime\":  \"2026-02-02\",\n" +
-"\"createdTime\":  \"2026-01-29\",\n" +
-"\"modifiedTime\": \"2026-02-02\",\n" +
-"\"statusHistory\": [\n" +
-"    {\"statusCode\": \"X\", \"createdTime\": \"2026-01-29\"}\n" +
-"],\n" +
-"\"holder\": {\n" +
-"    \"subjectType\": \"NP\",\n" +
-"    \"firstName\":   \"JAN\",\n" +
-"    \"lastName\":    \"NOVAK\",\n" +
-"    \"PIN\":         \"7403160123\"\n" +
-"},\n" +
-"\"holder\": {\n" +
-"    \"subjectType\": \"NP\",\n" +
-"    \"firstName\":   \"PETR\",\n" +
-"    \"lastName\":    \"NOVAK\",\n" +
-"    \"PIN\":         \"7403160123\"\n" +
-"    \"contacts\": [{\"phoneNum\":  \"+421 987 876 765\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
-"}\n" +
-"}";
-            jparse(xp, "Example", json, reporter, swr=new StringWriter(), null, null);
-            if (reporter.errors()) {
-                s = reporter.toString();
-                 if (reporter.getErrorCount() != 5 || !s.contains("'createdTime'") || !s.contains("'contacts'")
-                    || !s.contains("'holder'") || !s.contains("'statusCode'") || !s.contains("'owner'")) {
-                   fail(reporter);
-                }
-            }
-            assertEq("", swr.toString());
         } catch (RuntimeException ex) {fail(ex);}
-if(T)return;
+if (T) return;
 
         clearTempDir(); // delete temporary files.
     }

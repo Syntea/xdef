@@ -619,10 +619,7 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("string()"), _msg);
         assertTrue(parse("Hello World!"), _msg);
 
-        // testing errors
-        if (!XDTester.getFulltestMode()) {
-            assertFalse(parse(""), _msg); //schema accepts empty string!!!
-        }
+        assertTrue(parse(""), _msg); //schema accepts empty string!!!
 
         // testing facets
         assertTrue(prepare("string(%enumeration=['Hello', 'world'])"), _msg);

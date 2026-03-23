@@ -47,8 +47,7 @@ public class TestJsonXdef extends XDTester {
 
     /** Get ID number of a test from the file name.
      * @param f file name
-     * @return ID (string created from the file name without the prefix "Test"
-     * and without file extension.
+     * @return ID (string created from the file name without the prefix "Test" and without file extension.
      */
     private static String getId(final File f) {
         String s = f.getName();
@@ -56,8 +55,7 @@ public class TestJsonXdef extends XDTester {
     }
 
     /** Generate XML files from JSON data in W3C mode and Xdefinition mode,
-     * create Xdefinitions in both modes and generate X-components. Then
-     * compile Xdefinitions and X-components.
+     * create Xdefinitions in both modes and generate X-components. Then compile Xdefinitions and X-components.
      * @return XDPool compiled from Xdefinitions.
      * @throws RuntimeException if an error occurs.
      */
@@ -90,8 +88,7 @@ public class TestJsonXdef extends XDTester {
                 SUtils.deleteAll(fdir, true); // clear this directory
             }
             fdir.mkdirs();
-            String components =
-                "<xd:component xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n";
+            String components = "<xd:component xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n";
             for (File fdef: _jfiles) {
                 Element el;
                 String id = getId(fdef); // get ID from jdef file name
@@ -105,8 +102,7 @@ public class TestJsonXdef extends XDTester {
                     Object json = XonUtils.parseJSON(f);
                     // write JSON as XML (W3C modc)
                     el = XonUtils.xonToXmlW(json);
-                    SUtils.writeString(new File(_tempDir + name + "a.xml"),
-                        KXmlUtils.nodeToString(el,true), "UTF-8");
+                    SUtils.writeString(new File(_tempDir + name + "a.xml"), KXmlUtils.nodeToString(el,true), "UTF-8");
                     if (!XonUtils.xonEqual(XonUtils.xmlToXon(el),
                         XonUtils.xmlToXon(XonUtils.xonToXml(json)))) {
                         throw new RuntimeException(rName + " xml transformation to JSON differs:\n" +
@@ -196,8 +192,6 @@ public class TestJsonXdef extends XDTester {
                 compileSources(classpath, classDir, sources);
             }
             return xp; // return XDPool with compiled Xdefinitions
-        } catch (RuntimeException ex) {
-            throw ex;
         } catch (SException ex) {
             throw new RuntimeException(ex);
         }
@@ -206,8 +200,7 @@ public class TestJsonXdef extends XDTester {
     /** Provides different tests on files with given ID.
      * @param xp compiled XDPool from generated Xdefinitions.
      * @param id identifier test.
-     * @return the empty string if tests are OK, otherwise return the string
-     * with error messages.
+     * @return the empty string if tests are OK, otherwise return the string with error messages.
      */
     private String testJdef(final XDPool xp, final String id) {
         Element e;
@@ -220,33 +213,29 @@ public class TestJsonXdef extends XDTester {
             Object o;
             String name = f.getName();
             String basename = name.substring(0, name.indexOf("a.xml"));
-            // read JSON data
-            try {
+            try { // read JSON data
                 json = XonUtils.parseJSON(_dataDir + basename + ".json");
             } catch (SRuntimeException ex) {
                 result += (result.isEmpty() ? "" : "\n") + "Incorrect JSON data Test"+id+".json";
                 continue;
             }
-            // create XDDocument with W3C from Xdefinition
-            try {
+            try { // create XDDocument with W3C from Xdefinition
                 reporter.clear(); // clear reporter
                 // parseJSON data with Xdefinition
                 e = xp.createXDDocument("Test"+id).xparse(f, reporter);
                 if (reporter.errorWarnings()) { // check errors
-                    result += (result.isEmpty() ? "" : "\n") + "ERRORS in " + name
-                        + " (xdef: Test" + id +"a.xdef" +"):\n" + reporter.printToString();
+                    result += (result.isEmpty() ? "" : "\n")
+                        + "ERRORS in " + name + " (xdef: Test" + id +"a.xdef" +"):\n" + reporter.printToString();
                 } else {
                     KXmlUtils.compareElements(e, f.getAbsolutePath(), true, reporter);
                     if (reporter.errorWarnings()) {
                         result += (result.isEmpty() ? "" : "\n") + "ERROR: result differs " + name + '\n' +
-                            KXmlUtils.nodeToString(e, true) + '\n' +
-                            KXmlUtils.nodeToString(KXmlUtils.parseXml(f), true);
+                            KXmlUtils.nodeToString(e, true) + '\n' +KXmlUtils.nodeToString(KXmlUtils.parseXml(f), true);
                     } else {
                         o = XonUtils.xmlToXon(KXmlUtils.nodeToString(e, true));
                         if (!XonUtils.xonEqual(json, o)) {
                             result += (result.isEmpty() ? "" : "\n") + "ERROR conversion XML to JSON: " + name
-                                + "\n" + XonUtils.toJsonString(json, true)
-                                + '\n' + XonUtils.toJsonString(o, true)
+                                + "\n" + XonUtils.toJsonString(json, true) + '\n' + XonUtils.toJsonString(o, true)
                                 + '\n' + KXmlUtils.nodeToString(e, true);
                         }
                     }
@@ -254,23 +243,20 @@ public class TestJsonXdef extends XDTester {
             } catch (SRuntimeException ex) {
                 result += (result.isEmpty() ? "" : "\n") + "Error " + name + "\n" + printThrowable(ex);
             }
-            // parseJSON with jparse
-            try {
+            try { // parseJSON with jparse
                 o = xp.createXDDocument("Test"+id).jvalidate(json, null);
                 if (!XonUtils.xonEqual(json, XonUtils.xonToJson(o))) {
                     result += (result.isEmpty() ? "" : "\n") + "Error jparse Test" + id + "\n"
-                        + XonUtils.toJsonString(json) + "\n"
-                        + XonUtils.toJsonString(XonUtils.xonToJson(o)) + "\n";
+                        + XonUtils.toJsonString(json) + "\n" + XonUtils.toJsonString(XonUtils.xonToJson(o)) + "\n";
                 }
             } catch (SRuntimeException ex) {
                 result += (result.isEmpty() ? "" : "\n") + "Incorrect jparse Test"+id+".json";
                 fail(ex);
                 continue;
             }
-            // parseJSON with X-component
-            try {
-                xc = xp.createXDDocument("Test"+id).xparseXComponent(f,
-                    Class.forName("test.common.json.component.Test"+id), null);
+            try { // parseJSON with X-component
+                xc = xp.createXDDocument(
+                    "Test"+id).xparseXComponent(f, Class.forName("test.common.json.component.Test"+id), null);
                 assertEq("", chkCompoinentSerializable(xc));
                 reporter.clear();
                 o = XonUtils.xonToJson(xc.toXon());
@@ -285,11 +271,9 @@ public class TestJsonXdef extends XDTester {
                         + "\n"+ KXmlUtils.nodeToString(e, true);
                 }
             } catch (ClassNotFoundException | SRuntimeException ex) {
-                result += (result.isEmpty() ? "" : "\n")
-                    + "Error X-component " + name + "\n" + printThrowable(ex);
+                result += (result.isEmpty() ? "" : "\n") + "Error X-component " + name + "\n" + printThrowable(ex);
             }
-            // Test X-component.
-            try {
+            try { // Test X-component.
                 xc = xp.createXDDocument("Test"+id).xparseXComponent(f,
                     Class.forName("test.common.json.component.Test"+id), null);
                 assertEq("", chkCompoinentSerializable(xc));
@@ -338,13 +322,11 @@ public class TestJsonXdef extends XDTester {
      * @param x file number.
      * @return XComponent with parsed data.
      */
-    private XComponent getXComponent(final XDPool xp,
-        final String test,
-        final int x) {
+    private XComponent getXComponent(final XDPool xp, final String test, final int x) {
         try {
             File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") + "a.xml");
-            return xp.createXDDocument(test).xparseXComponent(f,
-                Class.forName("test.common.json.component." + test), null);
+            return xp.createXDDocument(test)
+                .xparseXComponent(f, Class.forName("test.common.json.component." + test), null);
         } catch (ClassNotFoundException | SRuntimeException ex) {
             throw new RuntimeException("XComponent not found: " + test);
         }
@@ -373,8 +355,7 @@ public class TestJsonXdef extends XDTester {
                 wr.write(xon);
             }
             Object x = XonUtils.parseXON(f);
-            assertEq("ĚŠČŘŽÝÁÍÉÚŮĹ",
-                ((Map) ((Map) x).get("ěščřžýáíéúůĺ %u@#$")).get("é"));
+            assertEq("ĚŠČŘŽÝÁÍÉÚŮĹ", ((Map) ((Map) x).get("ěščřžýáíéúůĺ %u@#$")).get("é"));
             ArrayReporter reporter = new ArrayReporter();
             Object o = xd.jparse(f, reporter);
             if (reporter.errorWarnings()) {
@@ -382,8 +363,7 @@ public class TestJsonXdef extends XDTester {
                 reporter.clear();
             }
             if (!XonUtils.xonEqual(x, o)) {
-                result += "\n *** 1" + XonUtils.toXonString(x, true)
-                    + "\n " + XonUtils.toXonString(o, true);
+                result += "\n *** 1" + XonUtils.toXonString(x, true) + "\n " + XonUtils.toXonString(o, true);
             }
             XComponent xc = xd.jparseXComponent(f, null, reporter);
             if (reporter.errorWarnings()) {
@@ -391,8 +371,7 @@ public class TestJsonXdef extends XDTester {
                 reporter.clear();
             }
             if (!XonUtils.xonEqual(x, xc.toXon())) {
-                result += "\n *** 3" + XonUtils.toXonString(x, true)
-                    + "\n " + XonUtils.toXonString(xc.toXon(), true);
+                result += "\n *** 3" + XonUtils.toXonString(x, true) + "\n " + XonUtils.toXonString(xc.toXon(), true);
             }
             return result;
         } catch (IOException | SRuntimeException ex) {
@@ -521,8 +500,7 @@ public class TestJsonXdef extends XDTester {
         if (getFailCount() == 0) {
             clearTempDir(); // delete temporary files.
         }
-        // Other tests
-        try {
+        try { // Other tests
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='Person' root='Person'>\n"+
 "  <xd:json name=\"Person\">\n"+
@@ -569,10 +547,7 @@ public class TestJsonXdef extends XDTester {
 "    { \"Seznam\": \n"+
 "      [\n"+
 "        { \"%script\": \"occurs 1..*;\",\n"+
-"          \"Person\": { \"Name\": \"string(1, 50)\",\n" +
-"             \"Pay\": \"int(1000, 99999)\",\n" +
-"             \"Birth date.\": \"date()\"\n" +
-"          }\n" +
+"          \"Person\": { \"Name\": \"string(1, 50)\", \"Pay\": \"int(1000, 99999)\", \"Birth date.\": \"date()\" }\n" +
 "       }\n"+
 "      ]\n"+
 "    }\n"+
@@ -583,24 +558,9 @@ public class TestJsonXdef extends XDTester {
             json =
 "{\"Seznam\":\n"+
 " [\n" +
-"    { \"Person\":{\n" +
-"        \"Name\":\"Václav Novák\",\n" +
-"        \"Pay\":12345,\n" +
-"        \"Birth date.\":\"1980-11-07\"\n" +
-"      }\n" +
-"    },\n" +
-"    { \"Person\":{\n" +
-"        \"Name\":\"Ivan Bílý\",\n" +
-"        \"Pay\":23450,\n" +
-"        \"Birth date.\":\"1977-01-17\"\n" +
-"      }\n" +
-"    },\n" +
-"    { \"Person\":{\n" +
-"        \"Name\":\"Karel Kuchta\",\n" +
-"        \"Pay\":1340,\n" +
-"        \"Birth date.\":\"1995-10-06\"\n" +
-"      }\n" +
-"    }\n" +
+"    { \"Person\":{ \"Name\":\"Václav Novák\", \"Pay\":12345, \"Birth date.\":\"1980-11-07\" } },\n" +
+"    { \"Person\":{ \"Name\":\"Ivan Bílý\", \"Pay\":23450, \"Birth date.\":\"1977-01-17\" } },\n" +
+"    { \"Person\":{ \"Name\":\"Karel Kuchta\", \"Pay\":1340, \"Birth date.\":\"1995-10-06\" } }\n" +
 "  ]\n" +
 "}";
             x = jparse(xd, json, reporter);
@@ -612,18 +572,10 @@ public class TestJsonXdef extends XDTester {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Person_list'>\n"+
 "  <xd:json name=\"Person_list\">\n"+
-"    { \"Seznam\": \n"+
-"      [\n"+
-"        { \"%script\": \"occurs 1..*; ref Person\" }\n"+
-"      ]\n"+
-"    }\n"+
+"    { \"Seznam\": [ { \"%script\": \"occurs 1..*; ref Person\" } ] }\n"+
 "  </xd:json>\n"+
 "  <xd:json name=\"Person\">\n"+
-"    { \"Person\": { \"Name\": \"string(1, 50)\",\n" +
-"        \"Pay\": \"int(1000, 99999)\",\n" +
-"        \"Birth date.\": \"date()\"\n" +
-"      }\n" +
-"    }\n" +
+"    { \"Person\": { \"Name\": \"string(1, 50)\", \"Pay\": \"int(1000, 99999)\", \"Birth date.\": \"date()\" } }\n" +
 "  </xd:json>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -631,24 +583,9 @@ public class TestJsonXdef extends XDTester {
             json =
 "{\"Seznam\":\n"+
 " [\n" +
-"    { \"Person\":{\n" +
-"        \"Name\":\"Václav Novák\",\n" +
-"        \"Pay\":12345,\n" +
-"        \"Birth date.\":\"1980-11-07\"\n" +
-"      }\n" +
-"    },\n" +
-"    { \"Person\":{\n" +
-"        \"Name\":\"Ivan Bílý\",\n" +
-"        \"Pay\":23450,\n" +
-"        \"Birth date.\":\"1977-01-17\"\n" +
-"      }\n" +
-"    },\n" +
-"    { \"Person\":{\n" +
-"        \"Name\":\"Karel Kuchta\",\n" +
-"        \"Pay\":1340,\n" +
-"        \"Birth date.\":\"1995-10-06\"\n" +
-"      }\n" +
-"    }\n" +
+"    { \"Person\":{ \"Name\":\"Václav Novák\", \"Pay\":12345, \"Birth date.\":\"1980-11-07\" } },\n" +
+"    { \"Person\":{ \"Name\":\"Ivan Bílý\", \"Pay\":23450, \"Birth date.\":\"1977-01-17\" } },\n" +
+"    { \"Person\":{ \"Name\":\"Karel Kuchta\", \"Pay\":1340, \"Birth date.\":\"1995-10-06\" } }\n" +
 "  ]\n" +
 "}";
             x = jparse(xd, json, reporter);
@@ -660,21 +597,12 @@ public class TestJsonXdef extends XDTester {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Matrix'>\n"+
 "  <xd:json name=\"Matrix\">\n"+
-"    [\n" +
-"      [ \"%script:occurs 3;\",\n" +
-"        \"occurs 3; float()\"\n" +
-"      ]\n" +
-"    ]\n"+
+"    [ [ \"%script:occurs 3;\", \"occurs 3; float()\" ] ]\n"+
 "  </xd:json>\n"+
 "</xd:def>";
             xp = compile(xdef);
             xd = xp.createXDDocument("");
-            json =
-"[\n" +
-"  [123.4, -56, 1],\n" +
-"  [0, 0, 1],\n" +
-"  [-5, 33, 0.5]\n" +
-"]";
+            json = "[ [123.4, -56, 1], [0, 0, 1], [-5, 33, 0.5] ]";
             x = jparse(xd, json, reporter);
             assertNoErrorwarningsAndClear(reporter);
             xd = xp.createXDDocument("");
@@ -699,12 +627,8 @@ public class TestJsonXdef extends XDTester {
             xd = xp.createXDDocument();
             json =
 "[\n" +
-"  { \"Name\": \"Beethoven, Symfonie No 5\",\n" +
-"    \"Style\": \"Classic\"\n" +
-"  },\n" +
-"  { \"Name\": \"A Day at the Races\",\n" +
-"    \"Style\": [\"jazz\", \"pop\" ]\n" +
-"  }\n" +
+"  { \"Name\": \"Beethoven, Symfonie No 5\", \"Style\": \"Classic\" },\n" +
+"  { \"Name\": \"A Day at the Races\", \"Style\": [\"jazz\", \"pop\" ] }\n" +
 "]";
             x = jparse(xd, json, reporter);
             assertNoErrorwarningsAndClear(reporter);
@@ -713,11 +637,7 @@ public class TestJsonXdef extends XDTester {
             assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Skladby", reporter)));
             assertNoErrorwarningsAndClear(reporter);
             xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
-"  <xd:json name='json'>\n"+
-"    {\"\": \"optional jstring()\"}\n" +
-"  </xd:json>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='"+_xdNS+"' root='json'> <xd:json name='json'> {\"\": \"optional jstring()\"} </xd:json> </xd:def>";
             xp = compile(xdef);
             json = "{\"\":\"aaa\"}";
             jparse(xp, "", json, reporter);
@@ -727,12 +647,8 @@ public class TestJsonXdef extends XDTester {
             assertNoErrorwarningsAndClear(reporter);
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
-"  <xd:json name='json'>\n"+
-"    [{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" +
-"  </xd:json>\n"+
-"  <xd:json name='B'>\n"+
-"    {\"a\":\"int\"}\n"+
-"  </xd:json>\n"+
+"  <xd:json name='json'> [{\"a\":\"boolean\"},\"string()\",\"int()\"] </xd:json>\n"+
+"  <xd:json name='B'> {\"a\":\"int\"} </xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -766,9 +682,7 @@ public class TestJsonXdef extends XDTester {
             assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), x));
             assertEq("axb", swr.toString());
             xdef =
-"<xd:def xmlns:xd=\""+_xdNS+"\" root=\"root\" >\n" +
-"  <xd:json xd:name='root'> \"jvalue();\" </xd:json>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd=\""+_xdNS+"\" root=\"root\"> <xd:json xd:name='root'> \"jvalue();\" </xd:json> </xd:def>";
             xp = compile(xdef);
             x = 123;
             assertTrue(XonUtils.xonEqual(x, jparse(xp, "", (Object) x, reporter)));
@@ -798,7 +712,7 @@ public class TestJsonXdef extends XDTester {
 "   D=decimal(); finally out(\"D\");\n" +
 "   [E] optional; finally out(\"[E]\");\n" +
 "     x = ?int(); finally out(\"x\");\n" +
-"   [F]finally out(\"[F]\");\n" +
+"   [F] finally out(\"[F]\");\n" +
 " </xd:ini>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -895,9 +809,7 @@ public class TestJsonXdef extends XDTester {
 "      {\n" +
 "        a : \"? short()\",\n" +
 "        i : [],\n" +
-"        Towns : [\n" +
-"          \"* gps()\"\n" +
-"        ],\n" +
+"        Towns : [ \"* gps()\" ],\n" +
 "        j : \"? char()\"\n" +
 "      },\n" +
 "      \"base64Binary()\",\n" +
@@ -1055,14 +967,14 @@ public class TestJsonXdef extends XDTester {
 "{  \"lossEventNumber\": \"integer();\", \"lossEventCauseCode\": \"int();\" }\n" +
 "</xd:json>\n" +
 " <xd:json name=\"LossEventX9\">\n" +
-"{  \"%script\": \"ref LossEventBase;\",\n" +
-"   \"disbursementRecords\": [ \"%script:optional; \", \"occurs 0..*; string();\" ]\n" +
+"{ \"%script\": \"ref LossEventBase;\",\n" +
+"  \"disbursementRecords\": [ \"%script:optional; \", \"occurs 0..*; string();\" ]\n" +
 "}\n" +
 "</xd:json>\n" +
 " <xd:json name=\"CaseFile\">\n" +
-"{  \"%script\": \"ref LossEventX9;\",\n" +
-"   \"isSpecialAttention\": \"optional; boolean();\",\n" +
-"   \"originalCaseFileNumber\": \"optional; string();\"\n" +
+"{ \"%script\": \"ref LossEventX9;\",\n" +
+"  \"isSpecialAttention\": \"optional; boolean();\",\n" +
+"  \"originalCaseFileNumber\": \"optional; string();\"\n" +
 "}\n" +
 "</xd:json>\n" +
 "</xd:def>");
@@ -1079,7 +991,7 @@ public class TestJsonXdef extends XDTester {
         try {
             xd = compile(
 "<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" xd:root = \"SynPLscript\">\n" +
-"  <xd:json name = \"SynPLscript\"> \n" +
+"  <xd:json name=\"SynPLscript\"> \n" +
 "    { \"Statuses\": [\n" +
 "        {  \"Status\": \"string()\",\n" +
 "           \"Events\": [\n" +
@@ -1112,7 +1024,7 @@ public class TestJsonXdef extends XDTester {
             xp = XDFactory.compileXD(null,
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\" } }\n" +
 "    }\n" +
@@ -1147,22 +1059,18 @@ public class TestJsonXdef extends XDTester {
             xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\" } }\n" +
 "    }\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_AX %link A; %interface "+_package+".Mates_AX_I %link A;\n" +
-"  </xd:component>\n" +
+"  <xd:component> %class "+_package+".Mates_AX %link A; %interface "+_package+".Mates_AX_I %link A; </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='B' root='B'>\n" +
 "  <xd:json name='B'>\n" +
 "    { \"p\":  \"string()\", \"q\":  \"? string()\" }\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_BX %link B; %interface "+_package+".Mates_BX_I %link B;\n" +
-"  </xd:component>\n" +
+"  <xd:component> %class "+_package+".Mates_BX %link B; %interface "+_package+".Mates_BX_I %link B; </xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>");
             genXComponent(xp);
@@ -1182,22 +1090,18 @@ public class TestJsonXdef extends XDTester {
             xp = compile(
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
 "<xd:def name='A' root='A'>\n" +
-"  <xd:json name = \"A\">\n" +
+"  <xd:json name=\"A\">\n" +
 "    {\"A\":\n" +
 "      { \"B\": { \"%script\": \"ref B#B\", \"x\": \"?; string()\", \"y\": \"?; string()\" } }\n" +
 "    }\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_A %link A; %interface "+_package+".Mates_A_I %link A;\n" +
-"  </xd:component>\n" +
+"  <xd:component> %class "+_package+".Mates_A %link A; %interface "+_package+".Mates_A_I %link A; </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='B' root='B'>\n" +
 "  <xd:json name='B'>\n" +
 "    { \"p\":  \"string()\", \"q\":  \"? string()\" }\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_B %link B; %interface "+_package+".Mates_B_I %link B;\n" +
-"  </xd:component>\n" +
+"  <xd:component> %class "+_package+".Mates_B %link B; %interface "+_package+".Mates_B_I %link B; </xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>");
             genXComponent(xp);
