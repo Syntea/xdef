@@ -130,8 +130,9 @@ public class XDefToJSON {
             String key = (String) x;
             if (key.endsWith(":def")) {
                 return xdefToXml(xd, key); // xd:def
-            } else if (key.endsWith(":declaration") || key.endsWith(":component")) {
-                return textItemToXml(xd, key); // xd:def
+            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
+                || key.endsWith(":lexicon")) {
+                return textItemToXml(xd, key);
             }
         }
         throw new RuntimeException("Unexpected root object: " + item);
@@ -254,7 +255,8 @@ public class XDefToJSON {
         String localName = el.getLocalName();
         if ("def".equals(localName)) {
             return xdefToJson(el); // xd:def
-        } else if ("declaration".equals(localName) ||  "component".equals(localName)) {
+        } else if ("declaration".equals(localName) || "component".equals(localName)
+            || "BNFBNFGrammar".equals(localName) || "lexicon".equals(localName)) {
             return textItemToJson(el); // xd:declaration
         }
         throw new RuntimeException("Expected X-definition root element. Found: " + el.getNodeName());
