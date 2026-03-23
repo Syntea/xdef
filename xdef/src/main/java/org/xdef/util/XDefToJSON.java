@@ -109,7 +109,7 @@ public class XDefToJSON {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
         }
         sb.append("<").append(xdName);
-        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'>\n");
+        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'>");
         sb.append(xd.get(1).toString()).append("</").append(xdName).append(">");
         return sb.toString();
     }
