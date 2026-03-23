@@ -28,6 +28,8 @@ import static org.xdef.xon.XonTools.jstringToSource;
  * @author Vaclav Trojan
  */
 class XonToString extends XonTools {
+    /** recommended length of line of converted objects to string.*/
+    private final static int LINE_LEN = 74;
 
     /** Add the string created from XON/JSON simple value to StringBuilder.
      * @param x object to be converted to String.
@@ -134,10 +136,7 @@ class XonToString extends XonTools {
      * @param sb StringBuilder where to append the created string.
      * @param xon if true then XON else if false JOSN source is generated.
      */
-    private static void arrayToString(final List array,
-        final String indent,
-        final StringBuilder sb,
-        final boolean xon) {
+    private static void arrayToString(final List array, final String indent, final StringBuilder sb, final boolean xon){
         sb.append('[');
         if (array.isEmpty()) {
             sb.append(']');
@@ -151,8 +150,7 @@ class XonToString extends XonTools {
         for (Object o: array) {
             StringBuilder sb1 = new StringBuilder();
             objectToString(o, ind, sb1, xon);
-            if (items != null && ind != null && (sb1.indexOf("\n") >= 0
-                || (itemsLen += sb1.length() + 1) + lineLen > 74)) {
+            if (items!=null && ind!=null && (sb1.indexOf("\n")>=0 || (itemsLen+=sb1.length()+1) + lineLen>LINE_LEN)) {
                 items.add(sb1);
                 for (StringBuilder x : items) {
                     writeItem(ind, sb, x, notFirst, false);
@@ -186,10 +184,7 @@ class XonToString extends XonTools {
      * @param sb StringBuilder where to append the created string.
      * @param xon if true then XON else if false JOSN source is generated.
      */
-    final static void objectToString(final Object obj,
-        final String indent,
-        final StringBuilder sb,
-        final boolean xon) {
+    final static void objectToString(final Object obj, final String indent, final StringBuilder sb, final boolean xon) {
         if (obj instanceof List) {
             arrayToString((List) obj, indent, sb, xon);
         } else if (obj instanceof Map) {
@@ -231,10 +226,7 @@ class XonToString extends XonTools {
      * @param sb StringBuilder where to append the created string.
      * @param xon if true then XON else if false JOSN source is generated,
      */
-    private static void mapToString(final Map map,
-        final String indent,
-        final StringBuilder sb,
-        final boolean xon) {
+    private static void mapToString(final Map map, final String indent, final StringBuilder sb, final boolean xon) {
         sb.append('{');
         if (map.isEmpty()) {
             sb.append('}');
@@ -247,8 +239,7 @@ class XonToString extends XonTools {
         List<StringBuilder> items = new ArrayList<>();
         for (Object o: map.entrySet()) {
             StringBuilder sb1 = createNamedItem((Map.Entry) o, ind, xon);
-            if (items != null && ind != null && (sb1.indexOf("\n") >= 0
-                || (itemsLen += sb1.length() + 1) + lineLen >= 74)) {
+            if (items!=null && ind!=null && (sb1.indexOf("\n")>=0  || (itemsLen+=sb1.length()+1) + lineLen>=LINE_LEN)) {
                 items.add(sb1);
                 sb.append(' ');
                 for (StringBuilder x : items) {
