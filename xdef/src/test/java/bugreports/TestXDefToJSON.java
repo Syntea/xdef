@@ -1,8 +1,11 @@
 package bugreports;
 
 import java.io.StringWriter;
+import org.w3c.dom.Element;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.util.XDefToJSON;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 
@@ -13,13 +16,57 @@ public class TestXDefToJSON extends XDTester {
 
     public TestXDefToJSON() {super();}
 
+    private static XDPool compile(final String x) {
+        String s;
+        if (x.trim().charAt(0) == '<') {
+            s = XDefToJSON.xmlXdefToJson(x);
+        } else {
+            s = x;
+        }
+        s = XDefToJSON.jsonXdefToXml(s);
+        s = XDefToJSON.xmlXdefToJson(s);
+//System.out.println(s);
+        s = XDefToJSON.jsonXdefToXml(s);
+System.out.println(s);
+        return XDFactory.compileXD(null, s);
+    }
+
     /** Run test and display error information. */
     @Override
     public void test() {
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // if false, all tests are invoked
+////////////////////////////////////////////////////////////////////////////////
+        Element el;
         Object j, o, x;
         StringWriter swr;
         ArrayReporter reporter = new ArrayReporter();
         String s, json, xdef, xml;
+        XDPool xp;
+        try {
+            xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='B|json'>\n"+
+"  <xd:json name='json'> [{\"a\":\"boolean\"},\"string()\",\"int()\"] </xd:json>\n"+
+"  <xd:json name='B'> {\"a\":\"int\"} </xd:json>\n"+
+//"  <A/>\n"+
+"</xd:def>";
+            xp = compile(xdef);
+            json = "[{\"a\":true},\"x\",-1]";
+            x = jparse(xp, "", json, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), x), XonUtils.toJsonString(x, true));
+            el = XonUtils.xonToXmlW(x);
+            parse(xp, "", el, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            json = "{\"a\":1}";
+            x = jparse(xp, "", json, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), x), XonUtils.toJsonString(x, true));
+            el = XonUtils.xonToXmlW(x);
+            parse(xp, "", el, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+        } catch (RuntimeException ex) {fail(ex);}
+if (T) return;
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"Example\" xd:root=\"S2KF\">\n" +
@@ -117,19 +164,11 @@ public class TestXDefToJSON extends XDTester {
 "  </xd:json>\n" +
 "\n" +
 "  <xd:component>\n" +
-"   %class test.xdef.componentGg %link Example#S2KF;" +
+"   %class test.xdef.componentGg %link Example#S2KF;\n" +
 "  </xd:component>\n" +
 "\n" +
 "</xd:def>";
-            s = org.xdef.util.XDefToJSON.xmlXdefToJson(xdef);
-//            System.out.println(s);
-            s = org.xdef.util.XDefToJSON.jsonXdefToXml(s);
-//            System.out.println(s);
-            s = org.xdef.util.XDefToJSON.xmlXdefToJson(s);
-            System.out.println(s);
-            s = org.xdef.util.XDefToJSON.jsonXdefToXml(s);
-            System.out.println(s);
-            XDPool xp = compile(s);
+            xp = compile(xdef);
             json =
 "{\n" +
 "  \"caseID\":       112233,\n" +
@@ -177,6 +216,7 @@ public class TestXDefToJSON extends XDTester {
             x = XonUtils.parseJSON(XonUtils.toJsonString(o));
             assertTrue(XonUtils.xonEqual(x, j));
         } catch (RuntimeException ex) {fail(ex);}
+if (T) return;
 
         clearTempDir(); // delete temporary files.
     }

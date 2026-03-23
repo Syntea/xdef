@@ -61,10 +61,11 @@ public class XDefToJSON {
             if (!(o instanceof Map)) {
                 throw new RuntimeException("Unexpected object " + i);
             }
+            String s;
             item = (Map) o;
             if ((o = item.get(xdPrefix + ":declaration")) != null) { // declaration
                 sb.append("<").append(xdPrefix).append(":declaration");
-                String a = o.toString();
+                s = o.toString();
                 o = item.get(xdPrefix + ":scope");
                 if (o == null) {
                     o = item.get("scope");
@@ -73,10 +74,17 @@ public class XDefToJSON {
                     sb.append(" scope='").append(o.toString()).append("'");
                 }
                 sb.append(">");
-                sb.append(a).append("</").append(xdPrefix).append(":declaration>\n");
+                sb.append(s).append("</").append(xdPrefix).append(":declaration>\n");
             } else if ((o = item.get(xdPrefix + ":component")) != null) { // component
                 sb.append("\n<").append(xdPrefix).append(":component>");
-                sb.append(o.toString());
+                s = o.toString();
+                while (!s.isEmpty() && s.charAt(s.length() - 1) == ' ') {
+                    s = s.substring(0, s.length() - 1);
+                }
+                if (!s.endsWith("\n")) {
+                    s += '\n';
+                }
+                sb.append(s);
                 sb.append("</").append(xdPrefix).append(":component>\n");
             } else if (item.size() == 1) { // JSON model
                 String name = item.keySet().iterator().next();
