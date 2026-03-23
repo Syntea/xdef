@@ -120,8 +120,8 @@ public class XDefToJSON {
             attr = el.getAttributeNode("name");
         }
         sb.append("[\n");
-        sb.append("{\"").append(xdPrefix).append(":def\"");
-        sb.append(":  \"").append(attr != null ? attr.getNodeValue() : "").append("\"");
+        sb.append("{\"").append(xdPrefix).append(":def\": \"");
+        sb.append(attr != null ? attr.getNodeValue() : "").append("\"");
         sb.append(", \"xmlns:").append(xdPrefix).append("\": \"").append(xdNamespace).append("\"");
         attr = el.getAttributeNodeNS(xdNamespace, "root");
         if (attr == null) {
@@ -202,19 +202,7 @@ public class XDefToJSON {
         return sb.toString();
     }
 
-    /**
-     * String with command line information.
-     */
-    private static final String INFO
-        = "XDefToJSON - convertor of X-definition to JSON format or JSON fromat to XML.\n"
-        + "Parameters:\n"
-        + " -i or --input:  pathname of the file with input data (XML or JSON)\n"
-        + " -o or --outDir: pathname of output file with converted data\n"
-        + " -h or --help or /?: display help information";
-
-    /**
-     * Run XML schema (XSD) generator from command line.
-     *
+    /** Run XML schema (XSD) generator from command line.
      * @param args array of string with command line arguments:
      * <ul>
      * <li>-h or --help: display help information.</li>
@@ -224,48 +212,51 @@ public class XDefToJSON {
      * @throws Exception if an error occurs.
      */
     public static void main(String... args) throws Exception {
+        final String info =
+"XDefToJSON - convertor of X-definition XML -> JSON or JSON -> XML.\n" +
+"Parameters:\n" +
+" -i or --input:  pathname of the file with input data (XML or JSON)\n" +
+" -o or --outDir: pathname of output file with converted data\n" +
+" -h or --help or /?: display help information";
         File input = null; // input file
         File output = null; // output file
         if (args == null || args.length < 1) {
-            throw new RuntimeException("Error: parameters missing.\n" + INFO);
+            throw new RuntimeException("Error: parameters missing.\n" + info);
         }
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             switch (arg) {
                 case "-h":
                 case "/?":
-                case "--help":
-                    System.out.println(INFO);
-                    return;
+                case "--help": System.out.println(info); return;
                 case "-o":
                 case "--output":
                     if (output != null) {
-                        throw new RuntimeException("Redefinition of " + arg + ".\n" + INFO);
+                        throw new RuntimeException("Redefinition of " + arg + ".\n" + info);
                     }
                     output = new File(args[++i]);
                     if (output.exists() && output.isDirectory()) {
-                        throw new RuntimeException("output is directory: " + args[i] + ".\n" + INFO);
+                        throw new RuntimeException("output is directory: " + args[i] + ".\n" + info);
                     }
                     continue;
                 case "-i":
                 case "--input":
                     if (input != null) {
-                        throw new RuntimeException("Redefinition of " + arg + ".\n" + INFO);
+                        throw new RuntimeException("Redefinition of " + arg + ".\n" + info);
                     }
                     input = new File(args[++i]);
                     if (!input.exists() || input.isDirectory()) {
-                        throw new RuntimeException("input not exists or it is a directory: " + args[i] + ".\n" + INFO);
+                        throw new RuntimeException("input not exists or it is a directory: " + args[i] + ".\n" + info);
                     }
                     continue;
-                default:
-                    throw new RuntimeException("Switch error " + arg + ".\n" + INFO);
+                default: throw new RuntimeException("Switch error " + arg + ".\n" + info);
             }
         }
         if (output == null) {
-            throw new RuntimeException("Missing output file.\n" + INFO);
+            throw new RuntimeException("Missing output file.\n" + info);
         }
         if (input == null) {
-            throw new RuntimeException("Missing input file.\n" + INFO);
+            throw new RuntimeException("Missing input file.\n" + info);
         }
         String s = SUtils.readString(input, "UTF-8");
         s = (s.trim().startsWith("<")) ? xmlXdefToJson(s) : jsonXdefToXml(s);
