@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.sys.SUtils;
@@ -43,17 +44,20 @@ public class XDefToJSON {
         }
         o = item.get(xdPrefix + ":def");
         if (o == null) {
-            o = item.get("def");
+            throw new RuntimeException("Unexpected object: " + item);
         }
-        if (o != null && !((String) o).isEmpty()) {
-            sb.append(" xd:name='").append(o).append("'");
-        }
+        sb.append(" xd:name='").append(o).append("'");
         o = item.get(xdPrefix + ":root");
         if (o == null) {
             o = item.get("root");
         }
         if (o != null && !((String) o).isEmpty()) {
             sb.append(" xd:root='").append(o).append("'");
+        }
+        for (String key: item.keySet()) {
+            if (key.startsWith("impl-")) {
+                sb.append("\n  ").append(key).append("='").append(item.get(key).toString()).append("'");
+            }
         }
         sb.append(">\n");
         for (int i = 1; i < xd.size(); i++) {
@@ -125,6 +129,13 @@ public class XDefToJSON {
         }
         if (attr != null) {
             sb.append(", \"xd:root\": \"").append(attr.getValue()).append("\"");
+        }
+        NamedNodeMap nnm = el.getAttributes();
+        for (int i = 0; i < nnm.getLength(); i++) {
+            Node n = nnm.item(i);
+            if (n.getLocalName().startsWith("impl-")) {
+                sb.append(",\n  \"").append(n.getLocalName()).append("\": \"").append(n.getNodeValue()).append("\"");
+            }
         }
         sb.append("}");
         NodeList nl = el.getElementsByTagName("*");
