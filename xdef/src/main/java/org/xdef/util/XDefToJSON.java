@@ -27,26 +27,31 @@ public class XDefToJSON {
         Object o = XonUtils.parseXON(json);
         List xd = (List) o;
         String xdPrefix = null;
-        String xdNamespace;
+        String xdNamespace = null;
         o = xd.get(0);
         if (!(o instanceof Map)) {
             throw new RuntimeException("Unexpected root object");
         }
         Map<String, Object> item = (Map) o;
         for (String key : item.keySet()) {
-            if (key.startsWith("xmlns:")) {
-                xdPrefix = key.substring(6);
+            if (key.endsWith(":def")) {
+                xdPrefix = key.substring(0, key.length() - 4);
                 xdNamespace = (String) item.get(key);
-                sb.append("<").append(xdPrefix).append(":def ");
-                sb.append(key).append("='").append(xdNamespace).append("'");
+                sb.append("<").append(xdPrefix).append(":def");
+                sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'");
                 break;
             }
         }
-        o = item.get(xdPrefix + ":def");
-        if (o == null) {
-            throw new RuntimeException("Unexpected object: " + item);
+        if (xdNamespace == null || xdNamespace.isEmpty()) {
+            throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
         }
-        sb.append(" xd:name='").append(o).append("'");
+        o = item.get(xdPrefix + ":name");
+        if (o == null) {
+            o = item.get("name");
+        }
+        if (o != null && !((String) o).isEmpty()) {
+            sb.append(" xd:name='").append(o).append("'");
+        }
         o = item.get(xdPrefix + ":root");
         if (o == null) {
             o = item.get("root");
@@ -115,14 +120,15 @@ public class XDefToJSON {
         if (!el.getLocalName().equals("def")) {
             throw new RuntimeException("Expected root as element <xd:def ...");
         }
+        sb.append("[\n");
+        sb.append("{\"").append(xdPrefix).append(":def\": \"").append(xdNamespace).append("\"");
         Attr attr = el.getAttributeNodeNS(xdNamespace, "name");
         if (attr == null) {
             attr = el.getAttributeNode("name");
         }
-        sb.append("[\n");
-        sb.append("{\"").append(xdPrefix).append(":def\": \"");
-        sb.append(attr != null ? attr.getNodeValue() : "").append("\"");
-        sb.append(", \"xmlns:").append(xdPrefix).append("\": \"").append(xdNamespace).append("\"");
+        if (attr != null) {
+            sb.append(", \"").append(xdPrefix).append(":name\": \"").append(attr.getNodeValue()).append("\"");
+        }
         attr = el.getAttributeNodeNS(xdNamespace, "root");
         if (attr == null) {
             attr = el.getAttributeNode("root");
