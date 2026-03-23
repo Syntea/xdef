@@ -103,7 +103,7 @@ public class XDefToJSON {
     private static String textItemToXml(final List xd, final String xdName) {
         StringBuilder sb = new StringBuilder();
         Map<String, Object> item = (Map) xd.get(0);
-        String xdPrefix = xdName.substring(0, xdName.length() - 4);
+        String xdPrefix = xdName.substring(0, xdName.indexOf(':'));
         String xdNamespace = (String) item.get(xdName);
         if (xdNamespace == null || xdNamespace.isEmpty()) {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
