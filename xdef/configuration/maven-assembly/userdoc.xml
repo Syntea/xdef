@@ -8,6 +8,16 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
+    <files>
+        <file>
+            <source>../README.md</source>
+            <destName>README-project.md</destName>
+        </file>
+        <file>
+            <source>../apache-license-2.0.md</source>
+            <destName>apache-license-2.0.md</destName>
+        </file>
+    </files>
     <fileSets>
         <fileSet>
             <includes>
@@ -17,10 +27,9 @@
         </fileSet>
         <fileSet>
             <directory>src/documentation</directory>
-            <excludes>
-                <exclude>*.docx</exclude>
-                <exclude>*.doc</exclude>
-            </excludes>
+            <includes>
+                <include>*.pdf</include>
+            </includes>
             <outputDirectory>documentation</outputDirectory>
         </fileSet>
         <fileSet>
@@ -33,16 +42,6 @@
             <filtered>true</filtered>
         </fileSet>
     </fileSets>
-    <files>
-        <file>
-            <source>root-symlink-README.md</source>
-            <destName>README-project.md</destName>
-        </file>
-        <file>
-            <source>root-symlink-apache-license-2.0.md</source>
-            <destName>apache-license-2.0.md</destName>
-        </file>
-    </files>
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
