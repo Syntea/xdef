@@ -10,6 +10,14 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
+            <directory>..</directory>
+            <includes>
+                <include>README.md</include>
+                <include>apache-license-2.0.md</include>
+            </includes>
+            <outputDirectory>META-INF</outputDirectory>
+        </fileSet>
+        <fileSet>
             <includes>
                 <include>changelog.md</include>
             </includes>
@@ -35,16 +43,6 @@
             <source>.flattened-pom.xml</source>
             <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
             <destName>pom.xml</destName>
-        </file>
-        <file>
-            <source>root-symlink-README.md</source>
-            <outputDirectory>META-INF</outputDirectory>
-            <destName>README.md</destName>
-        </file>
-        <file>
-            <source>root-symlink-apache-license-2.0.md</source>
-            <outputDirectory>META-INF</outputDirectory>
-            <destName>apache-license-2.0.md</destName>
         </file>
     </files>
 </assembly>
