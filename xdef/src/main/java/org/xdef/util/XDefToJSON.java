@@ -114,6 +114,13 @@ public class XDefToJSON {
                     throw new RuntimeException("BNFGrammar name is missing");
                 }
                 sb.append(" ").append(xdPrefix).append(":name=\"").append(x).append("\"");
+                x = item.get("scope");
+                if (x == null) {
+                    x = (String) item.get(xdPrefix + ":scope");
+                }
+                if (x != null) {
+                    sb.append(" ").append(xdPrefix).append(":scope=\"").append(x).append("\"");
+                }
                 x = item.get("extends");
                 if (x == null) {
                     x = (String) item.get(xdPrefix + ":extends");
@@ -276,6 +283,14 @@ public class XDefToJSON {
                                 }
                                 if (attr != null) {
                                     sb.append(" \"").append("name").append("\": \"");
+                                    sb.append(attr.getValue()).append("\",");
+                                }
+                                attr = el.getAttributeNodeNS(xdNamespace, "scope");
+                                if (attr == null) {
+                                    attr = el.getAttributeNode("scope");
+                                }
+                                if (attr != null) {
+                                    sb.append(" \"").append("scope").append("\": \"");
                                     sb.append(attr.getValue()).append("\",");
                                 }
                                 attr = el.getAttributeNodeNS(xdNamespace, "extends");

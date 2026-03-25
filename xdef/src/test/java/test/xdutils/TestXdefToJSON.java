@@ -12,6 +12,7 @@ import org.xdef.sys.STester;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.util.XDefToJSON;
+import static test.XDTester._xdNS;
 
 /** Test of conversion of X-definition from XML to JSON.
  * @author Vaclav Trojan
@@ -24,14 +25,14 @@ public final class TestXdefToJSON extends XDTester {
         try {
             compile(xdef);
             String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
-//            if ("_Example".equals(xdName)) {
-//                System.out.println(xdef);
-//                System.out.println(xdef_JSON);
-//            }
+            if ("-Example".equals(xdName)) {
+                System.out.println(xdef);
+                System.out.println(xdef_JSON);
+            }
             String xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
-//            if ("_Example".equals(xdName)) {
-//                System.out.println(xdef_XML);
-//            }
+            if ("-Example".equals(xdName)) {
+                System.out.println(xdef_XML);
+            }
             XDPool xp = compile(xdef_XML);
             if (data != null) {
                 ArrayReporter reporter = new ArrayReporter();
@@ -79,22 +80,32 @@ public final class TestXdefToJSON extends XDTester {
         XDDocument xd;
         ArrayReporter reporter = new ArrayReporter();
         try {
-//            xdef =
-//"<xd:def xmlns:xd='"+_xdNS+"'>\n" +
-//"  <xd:declaration> String x() {return 'a'}; </xd:declaration>\n" +
-//"</xd:def>";
-//            assertEq("", testXdefJson(xdef, null, ""));
+            xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example' root=\"test\">\n" +
+"  <xd:json name=\"test\"> {\"pole\": [ {\"%script\":  \"2..3; ref Prvek\"}]} </xd:json>\n" +
+"  <xd:json name=\"Prvek\"> {\"prvek\": \"string()\"} </xd:json>\n" +
+"  <xd:component> %class "+_package+".TestxTOJson1 %link Example#test; </xd:component>\n"+
+"</xd:def>";
+            xp = compile(xdef);
+            json = "{\"pole\": [ {\"prvek\": \"prvni\"}, {\"prvek\": \"druhy\"}, {\"prvek\": \"treti\"} ] }";
+            jparse(xp, "Example", json, reporter);
+            assertNoErrorsAndClear(reporter);
+            xd = xp.createXDDocument("Example");
+            genXComponent(xp);
+            xd.jparseXComponent(json, null, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertEq("", testXdefJson(xdef, json, "Example"));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name = 'Example' xd:root = 'root'>\n" +
-"  <xd:declaration scope='global'>\n"+
+"  <xd:declaration scope='local'>\n"+
 "     type myType $rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
-"  <xd:BNFGrammar name = \"base\">\n"+
+"  <xd:BNFGrammar scope='local' name=\"base\">\n"+
 "    integer ::= [0-9]+\n"+
 "    S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "  </xd:BNFGrammar>\n"+
-"  <xd:BNFGrammar xd:name=\"$rrr\" xd:extends=\"base\" >\n"+
+"  <xd:BNFGrammar scope='local' xd:name=\"$rrr\" xd:extends=\"base\" >\n"+
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "  </xd:BNFGrammar>\n"+
@@ -102,7 +113,7 @@ public final class TestXdefToJSON extends XDTester {
 "{ a: \"required myType()\" }\n"+
 "  </xd:json>\n"+
 "  <xd:component>\n"+
-"  %class "+_package+".TestxTOJson %link Example#root;\n"+
+"  %class "+_package+".TestxTOJson2 %link Example#root;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
