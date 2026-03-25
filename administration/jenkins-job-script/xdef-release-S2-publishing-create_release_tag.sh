@@ -1,4 +1,4 @@
-#mark existing git-tag ${GIT_TAG} as a release-tag on GitHub.com on repository "Syntea/xdef":
+: 'mark existing git-tag ${GIT_TAG} as a release-tag on GitHub.com on repository "Syntea/xdef":'
 #  - viz https://wiki.syntea.cz/doku.php?id=syntea:navody:github#github-api operation "Create a release"
 #  - it's needed authentificating github-token ${CREATERELEASE_GITHUB_TOKEN} for this operation
 result=$(curl \
