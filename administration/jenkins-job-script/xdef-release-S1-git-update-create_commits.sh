@@ -10,7 +10,7 @@ set -e
 
 #set git properties
 git config --global user.email "it@syntea.cz"
-git config --global user.name "syntea-cz-builder"
+git config --global user.name  "syntea-cz-builder"
 git checkout ${BRANCH}
 git pull
 
