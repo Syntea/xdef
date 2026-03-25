@@ -137,7 +137,7 @@ public class XDefToJSON {
         }
         throw new RuntimeException("Unexpected root object: " + item);
     }
-
+    
     /** Convert X-definition XML to JSON.
      * @param elem Element with X-definition.
      * @return string with JSON format.
@@ -171,9 +171,10 @@ public class XDefToJSON {
         }
         sb.append("}");
         NodeList nl = elem.getElementsByTagName("*");
-        if (nl.getLength() > 0) {
-            sb.append(",\n");
+        if (nl.getLength() == 0) {
+            return sb.append("\n]").toString();
         }
+        sb.append(",\n");
         for (int i = 0; i < nl.getLength(); i++) {
             Node n = nl.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -193,9 +194,10 @@ public class XDefToJSON {
                                     sb.append("\"").append(xdPrefix).append(":scope\": \"");
                                     sb.append(attr.getValue()).append("\", ");
                                 }
-                                sb.append("\"").append(xdPrefix).append(":declaration\": \"");
+                                sb.append("\"").append(el.getTagName()).append("\": \"");
                                 sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
-                                sb.append("\"\n},\n");
+                                sb.append("\"}");
+                                sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 break;
                             case "json":
                                 attr = el.getAttributeNodeNS(xdNamespace, "name");
@@ -206,25 +208,19 @@ public class XDefToJSON {
                                     sb.append("{ \"").append(attr.getValue()).append("\":");
                                     sb.append(el.getTextContent());
                                     sb.append("}");
-                                    if (i < nl.getLength() - 1) {
-                                        sb.append(",");
-                                    }
-                                    sb.append("\n");
+                                    sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 } else {
                                     throw new RuntimeException("Expected name of json model at " + i);
                                 }
                                 break;
                             case "component":
-                                sb.append("{ \"").append(xdPrefix).append(":component\": \"");
+                            case "BNFGrammar":
+                                sb.append("{ \"").append(el.getTagName()).append("\": \"");
                                 sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
                                 sb.append("\"}");
-                                if (i < nl.getLength() - 1) {
-                                    sb.append(",");
-                                }
-                                sb.append("\n");
+                                sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 break;
-                            default:
-                                throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);
+                            default: throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);
                         }
                     }
                 }
