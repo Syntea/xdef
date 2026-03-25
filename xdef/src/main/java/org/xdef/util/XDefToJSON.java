@@ -17,6 +17,25 @@ import org.xdef.xon.XonUtils;
  */
 public class XDefToJSON {
 
+    /** Modify string to XML text format. */
+    private static String toXmlString(final String s) {
+        return KXmlUtils.toXmlText(s, '<', false);
+    }
+
+    /** Modify string to JSON format. */
+    private static String toJsonString(final String s) {
+        return SUtils.modifyString(s, "\"", "\\\"");
+    }
+
+    /** Remove trailing spaces, */
+    private static String removeTrailingSpaces(final String s) {
+        String t = s;
+        while (t.endsWith(" ") || t.endsWith("\t")) {
+            t = t.substring(0, t.length() - 1);
+        }
+        return t;
+    }
+
     /** Convert JSON format of xd:def to XML.
      * @param json input JSON data.
      * @return string with XML format.
@@ -48,7 +67,9 @@ public class XDefToJSON {
         }
         for (String key: item.keySet()) {
             if (key.startsWith("impl-")) {
-                sb.append("\n  ").append(key).append("='").append(item.get(key).toString()).append("'");
+                sb.append("\n  ").append(key).append("='");
+                sb.append(toXmlString(item.get(key).toString()));
+                sb.append("'");
             }
         }
         sb.append(">\n");
@@ -58,10 +79,10 @@ public class XDefToJSON {
                 throw new RuntimeException("Unexpected object " + i);
             }
             String s;
-            item = (Map) o;
+            item = (Map<String, Object>) o;
             if ((o = item.get(xdPrefix + ":declaration")) != null) { // declaration
                 sb.append("<").append(xdPrefix).append(":declaration");
-                s = o.toString();
+                s = toXmlString(o.toString());
                 o = item.get(xdPrefix + ":scope");
                 if (o == null) {
                     o = item.get("scope");
@@ -77,15 +98,51 @@ public class XDefToJSON {
                 while (!s.isEmpty() && s.charAt(s.length() - 1) == ' ') {
                     s = s.substring(0, s.length() - 1);
                 }
+                s = toXmlString(s);
                 if (!s.endsWith("\n")) {
                     s += '\n';
                 }
                 sb.append(s);
                 sb.append("</").append(xdPrefix).append(":component>\n");
+            } else if ((o = item.get(xdPrefix + ":BNFGrammar")) != null) { // component
+                sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
+                Object x = item.get("name");
+                if (x == null) {
+                    x = (String) item.get(xdPrefix + ":name");
+                }
+                if (x == null) {
+                    throw new RuntimeException("BNFGrammar name is missing");
+                }
+                sb.append(" ").append(xdPrefix).append(":name=\"").append(x).append("\"");
+                x = item.get("scope");
+                if (x == null) {
+                    x = (String) item.get(xdPrefix + ":scope");
+                }
+                if (x != null) {
+                    sb.append(" ").append(xdPrefix).append(":scope=\"").append(x).append("\"");
+                }
+                x = item.get("extends");
+                if (x == null) {
+                    x = (String) item.get(xdPrefix + ":extends");
+                }
+                if (x != null) {
+                    sb.append(" ").append(xdPrefix).append(":extends=\"").append(x).append("\"");
+                }
+                sb.append(">");
+                s = o.toString();
+                while (!s.isEmpty() && s.charAt(s.length() - 1) == ' ') {
+                    s = s.substring(0, s.length() - 1);
+                }
+                s = toXmlString(s);
+                if (!s.endsWith("\n")) {
+                    s += '\n';
+                }
+                sb.append(s);
+                sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
             } else if (item.size() == 1) { // JSON model
                 String name = item.keySet().iterator().next();
                 sb.append("\n<").append(xdPrefix).append(":json name='").append(name).append("'>\n");
-                sb.append(XonUtils.toJsonString(item.get(name), true));
+                sb.append(toXmlString(XonUtils.toJsonString(item.get(name), true)));
                 sb.append("\n</").append(xdPrefix).append(":json>\n");
             } else { // declaration
                 throw new RuntimeException("Unexpected object: " + o);
@@ -171,9 +228,10 @@ public class XDefToJSON {
         }
         sb.append("}");
         NodeList nl = elem.getElementsByTagName("*");
-        if (nl.getLength() > 0) {
-            sb.append(",\n");
+        if (nl.getLength() == 0) {
+            return sb.append("\n]").toString();
         }
+        sb.append(",\n");
         for (int i = 0; i < nl.getLength(); i++) {
             Node n = nl.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -193,9 +251,10 @@ public class XDefToJSON {
                                     sb.append("\"").append(xdPrefix).append(":scope\": \"");
                                     sb.append(attr.getValue()).append("\", ");
                                 }
-                                sb.append("\"").append(xdPrefix).append(":declaration\": \"");
-                                sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
-                                sb.append("\"\n},\n");
+                                sb.append("\"").append(el.getTagName()).append("\": \"");
+                                sb.append(toJsonString(removeTrailingSpaces(el.getTextContent())));
+                                sb.append("\"}");
+                                sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 break;
                             case "json":
                                 attr = el.getAttributeNodeNS(xdNamespace, "name");
@@ -204,27 +263,49 @@ public class XDefToJSON {
                                 }
                                 if (attr != null) {
                                     sb.append("{ \"").append(attr.getValue()).append("\":");
-                                    sb.append(el.getTextContent());
+                                    sb.append(removeTrailingSpaces(el.getTextContent()));
                                     sb.append("}");
-                                    if (i < nl.getLength() - 1) {
-                                        sb.append(",");
-                                    }
-                                    sb.append("\n");
+                                    sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 } else {
                                     throw new RuntimeException("Expected name of json model at " + i);
                                 }
                                 break;
                             case "component":
-                                sb.append("{ \"").append(xdPrefix).append(":component\": \"");
-                                sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
-                                sb.append("\"}");
-                                if (i < nl.getLength() - 1) {
-                                    sb.append(",");
-                                }
-                                sb.append("\n");
+                                 sb.append("{ \"").append(el.getTagName()).append("\": \"");
+                                 sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
+                                 sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 break;
-                            default:
-                                throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);
+                            case "BNFGrammar":
+                                sb.append("{");
+                                 attr = el.getAttributeNodeNS(xdNamespace, "name");
+                                if (attr == null) {
+                                    attr = el.getAttributeNode("name");
+                                }
+                                if (attr != null) {
+                                    sb.append(" \"").append("name").append("\": \"");
+                                    sb.append(attr.getValue()).append("\",");
+                                }
+                                attr = el.getAttributeNodeNS(xdNamespace, "scope");
+                                if (attr == null) {
+                                    attr = el.getAttributeNode("scope");
+                                }
+                                if (attr != null) {
+                                    sb.append(" \"").append("scope").append("\": \"");
+                                    sb.append(attr.getValue()).append("\",");
+                                }
+                                attr = el.getAttributeNodeNS(xdNamespace, "extends");
+                                if (attr == null) {
+                                   attr = el.getAttributeNode("extends");
+                                }
+                                if (attr != null) {
+                                    sb.append(" \"").append("extends").append("\": \"");
+                                    sb.append(attr.getValue()).append("\",");
+                                }
+                                sb.append(" \"").append(el.getTagName()).append("\": \"");
+                                sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
+                                sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
+                                break;
+                            default: throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);
                         }
                     }
                 }
