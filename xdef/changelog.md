@@ -1,4 +1,5 @@
 # Version ${version}, release-date ${release.date}
+.
 
 # Version 42.2.42, release-date 2026-03-23
   * We have introduced an experimental tool for converting XML from X-definition to JSON

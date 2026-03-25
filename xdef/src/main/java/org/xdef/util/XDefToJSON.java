@@ -17,6 +17,25 @@ import org.xdef.xon.XonUtils;
  */
 public class XDefToJSON {
 
+    /** Modify string to XML text format. */
+    private static String toXmlString(final String s) {
+        return KXmlUtils.toXmlText(s, '<', false);
+    }
+
+    /** Modify string to JSON format. */
+    private static String toJsonString(final String s) {
+        return SUtils.modifyString(s, "\"", "\\\"");
+    }
+
+    /** Remove trailing spaces, */
+    private static String removeTrailingSpaces(final String s) {
+        String t = s;
+        while (t.endsWith(" ") || t.endsWith("\t")) {
+            t = t.substring(0, t.length() - 1);
+        }
+        return t;
+    }
+
     /** Convert JSON format of xd:def to XML.
      * @param json input JSON data.
      * @return string with XML format.
@@ -48,7 +67,9 @@ public class XDefToJSON {
         }
         for (String key: item.keySet()) {
             if (key.startsWith("impl-")) {
-                sb.append("\n  ").append(key).append("='").append(item.get(key).toString()).append("'");
+                sb.append("\n  ").append(key).append("='");
+                sb.append(toXmlString(item.get(key).toString()));
+                sb.append("'");
             }
         }
         sb.append(">\n");
@@ -58,10 +79,10 @@ public class XDefToJSON {
                 throw new RuntimeException("Unexpected object " + i);
             }
             String s;
-            item = (Map) o;
+            item = (Map<String, Object>) o;
             if ((o = item.get(xdPrefix + ":declaration")) != null) { // declaration
                 sb.append("<").append(xdPrefix).append(":declaration");
-                s = o.toString();
+                s = toXmlString(o.toString());
                 o = item.get(xdPrefix + ":scope");
                 if (o == null) {
                     o = item.get("scope");
@@ -77,15 +98,44 @@ public class XDefToJSON {
                 while (!s.isEmpty() && s.charAt(s.length() - 1) == ' ') {
                     s = s.substring(0, s.length() - 1);
                 }
+                s = toXmlString(s);
                 if (!s.endsWith("\n")) {
                     s += '\n';
                 }
                 sb.append(s);
                 sb.append("</").append(xdPrefix).append(":component>\n");
+            } else if ((o = item.get(xdPrefix + ":BNFGrammar")) != null) { // component
+                sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
+                Object x = item.get("name");
+                if (x == null) {
+                    x = (String) item.get(xdPrefix + ":name");
+                }
+                if (x == null) {
+                    throw new RuntimeException("BNFGrammar name is missing");
+                }
+                sb.append(" ").append(xdPrefix).append(":name=\"").append(x).append("\"");
+                x = item.get("extends");
+                if (x == null) {
+                    x = (String) item.get(xdPrefix + ":extends");
+                }
+                if (x != null) {
+                    sb.append(" ").append(xdPrefix).append(":extends=\"").append(x).append("\"");
+                }
+                sb.append(">");
+                s = o.toString();
+                while (!s.isEmpty() && s.charAt(s.length() - 1) == ' ') {
+                    s = s.substring(0, s.length() - 1);
+                }
+                s = toXmlString(s);
+                if (!s.endsWith("\n")) {
+                    s += '\n';
+                }
+                sb.append(s);
+                sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
             } else if (item.size() == 1) { // JSON model
                 String name = item.keySet().iterator().next();
                 sb.append("\n<").append(xdPrefix).append(":json name='").append(name).append("'>\n");
-                sb.append(XonUtils.toJsonString(item.get(name), true));
+                sb.append(toXmlString(XonUtils.toJsonString(item.get(name), true)));
                 sb.append("\n</").append(xdPrefix).append(":json>\n");
             } else { // declaration
                 throw new RuntimeException("Unexpected object: " + o);
@@ -137,7 +187,7 @@ public class XDefToJSON {
         }
         throw new RuntimeException("Unexpected root object: " + item);
     }
-    
+
     /** Convert X-definition XML to JSON.
      * @param elem Element with X-definition.
      * @return string with JSON format.
@@ -195,7 +245,7 @@ public class XDefToJSON {
                                     sb.append(attr.getValue()).append("\", ");
                                 }
                                 sb.append("\"").append(el.getTagName()).append("\": \"");
-                                sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
+                                sb.append(toJsonString(removeTrailingSpaces(el.getTextContent())));
                                 sb.append("\"}");
                                 sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 break;
@@ -206,7 +256,7 @@ public class XDefToJSON {
                                 }
                                 if (attr != null) {
                                     sb.append("{ \"").append(attr.getValue()).append("\":");
-                                    sb.append(el.getTextContent());
+                                    sb.append(removeTrailingSpaces(el.getTextContent()));
                                     sb.append("}");
                                     sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 } else {
@@ -214,10 +264,30 @@ public class XDefToJSON {
                                 }
                                 break;
                             case "component":
+                                 sb.append("{ \"").append(el.getTagName()).append("\": \"");
+                                 sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
+                                 sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
+                                break;
                             case "BNFGrammar":
-                                sb.append("{ \"").append(el.getTagName()).append("\": \"");
-                                sb.append(SUtils.modifyString(el.getTextContent(), "\"", "\\\""));
-                                sb.append("\"}");
+                                sb.append("{");
+                                 attr = el.getAttributeNodeNS(xdNamespace, "name");
+                                if (attr == null) {
+                                    attr = el.getAttributeNode("name");
+                                }
+                                if (attr != null) {
+                                    sb.append(" \"").append("name").append("\": \"");
+                                    sb.append(attr.getValue()).append("\",");
+                                }
+                                attr = el.getAttributeNodeNS(xdNamespace, "extends");
+                                if (attr == null) {
+                                   attr = el.getAttributeNode("extends");
+                                }
+                                if (attr != null) {
+                                    sb.append(" \"").append("extends").append("\": \"");
+                                    sb.append(attr.getValue()).append("\",");
+                                }
+                                sb.append(" \"").append(el.getTagName()).append("\": \"");
+                                sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
                                 sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
                                 break;
                             default: throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);

@@ -23,6 +23,7 @@ public class TestAll {
             new TestXDChecker(),
             new TestXDGen(),
             new TestXd2XsdConv(),
+            new TestXdefToJSON(),
             new TestXsd2XdConv(),
         };
     }
