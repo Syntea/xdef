@@ -201,9 +201,11 @@ public final class TestXdefToJSON extends XDTester {
 "<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example' root=\"test\">\n" +
 "  <xd:json name=\"test\">\n" +
-"    {\"array\": [ {\"%script\":  \"2..3; ref Element\"}]}\n" +
+"    {\"array\": [ {\"%script\":  \"2..3; ref Example1#Element\"}]}\n" +
 "  </xd:json>\n" +
+"</xd:def>\n"+
 "\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example1'>\n" +
 "  <xd:json name=\"Element\">\n" +
 "    {\"element\": \"string()\"}\n" +
 "  </xd:json>\n" +

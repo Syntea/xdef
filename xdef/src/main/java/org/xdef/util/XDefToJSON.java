@@ -426,7 +426,7 @@ public class XDefToJSON {
                 }
                 n = n.getNextSibling();
             }
-            el = (n != null) ? (Element) el : null;
+            el = (n != null) ? (Element) n : null;
         }
         sb.append("\n]");
         return sb.toString();
