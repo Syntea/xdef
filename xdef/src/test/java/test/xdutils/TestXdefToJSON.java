@@ -26,12 +26,12 @@ public final class TestXdefToJSON extends XDTester {
         try {
             compile(xdef);
             String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
-            if ("Example".equals(xdName)) {
+            if ("???Example".equals(xdName)) {
                 System.out.println(xdef);
                 System.out.println(xdef_JSON);
             }
             String xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
-            if ("Example".equals(xdName)) {
+            if ("???Example".equals(xdName)) {
                 System.out.println(xdef_XML);
             }
             XDPool xp = compile(xdef_XML);
@@ -195,6 +195,30 @@ public final class TestXdefToJSON extends XDTester {
 "    \"PIN\": \"7403160123\",\n" +
 "    \"contacts\": {\"phoneNum\": \"9988776655\"}\n" +
 "  }\n" +
+"}";
+            assertEq("", testXdefJson(xdef, json, "Example"));
+            xdef =
+"<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example' root=\"test\">\n" +
+"  <xd:json name=\"test\">\n" +
+"    {\"array\": [ {\"%script\":  \"2..3; ref Element\"}]}\n" +
+"  </xd:json>\n" +
+"\n"+
+"  <xd:json name=\"Element\">\n" +
+"    {\"element\": \"string()\"}\n" +
+"  </xd:json>\n" +
+"\n"+
+"  <xd:component>\n"+
+"    %class "+_package+".TestxTOJson4 %link Example#test;\n"+
+"  </xd:component>\n"+
+"</xd:def>\n"+
+"</xd:collection>\n";
+            json =
+"{\"array\": [\n" +
+"    {\"element\": \"first\"},\n" +
+"    {\"element\": \"second\"},\n" +
+"    {\"element\": \"third\"}\n" +
+"  ]\n" +
 "}";
             assertEq("", testXdefJson(xdef, json, "Example"));
         } catch (RuntimeException ex) {fail(ex); return;}

@@ -152,49 +152,6 @@ public class XDefToJSON {
         return sb.toString();
     }
 
-    /** Convert JSON format of xd:declaration to XML.
-     * @param json input JSON data.
-     * @return string with XML format.
-     */
-    @SuppressWarnings("unchecked")
-    private static String textItemToXml(final List xd, final String xdName) {
-        StringBuilder sb = new StringBuilder();
-        Map<String, Object> item = (Map) xd.get(0);
-        String xdPrefix = xdName.substring(0, xdName.indexOf(':'));
-        String xdNamespace = (String) item.get(xdName);
-        if (xdNamespace == null || xdNamespace.isEmpty()) {
-            throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
-        }
-        sb.append("<").append(xdName);
-        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'>");
-        sb.append(xd.get(1).toString()).append("</").append(xdName).append(">");
-        return sb.toString();
-    }
-
-    /** Convert JSON format of X-definition source data to XML.
-     * @param json input JSON data.
-     * @return string with XML format.
-     */
-    public static String jsonXdefToXml(final String json) {
-        Object o = XonUtils.parseXON(json);
-        List xd = (List) o;
-        o = xd.get(0);
-        if (!(o instanceof Map)) {
-            throw new RuntimeException("Unexpected root object");
-        }
-        Map item = (Map) o;
-        for (Object x : item.keySet()) {
-            String key = (String) x;
-            if (key.endsWith(":def")) {
-                return xdefToXml(xd, key); // xd:def
-            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
-                || key.endsWith(":lexicon")) {
-                return textItemToXml(xd, key);
-            }
-        }
-        throw new RuntimeException("Unexpected root object: " + item);
-    }
-
     /** Convert X-definition XML to JSON.
      * @param elem Element with X-definition.
      * @return string with JSON format.
@@ -204,7 +161,7 @@ public class XDefToJSON {
         String xdNamespace = elem.getNamespaceURI();
         StringBuilder sb = new StringBuilder();
         sb.append("[\n");
-        sb.append("{\"").append(xdPrefix).append(":def\": \"").append(xdNamespace).append("\"");
+        sb.append("{\"").append(xdPrefix).append(":def\": \"").append(toJsonString(xdNamespace)).append("\"");
         Attr attr = elem.getAttributeNodeNS(xdNamespace, "name");
         if (attr == null) {
             attr = elem.getAttributeNode("name");
@@ -315,6 +272,100 @@ public class XDefToJSON {
         return sb.toString();
     }
 
+    /** Convert JSON format of xd:declaration to XML.
+     * @param json input JSON data.
+     * @return string with XML format.
+     */
+    @SuppressWarnings("unchecked")
+    private static String textItemToXml(final List xd, final String xdName) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object> item = (Map) xd.get(0);
+        String xdPrefix = xdName.substring(0, xdName.indexOf(':'));
+        String xdNamespace = (String) item.get(xdName);
+        if (xdNamespace == null || xdNamespace.isEmpty()) {
+            throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
+        }
+        sb.append("<").append(xdName);
+        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'>");
+        sb.append(xd.get(1).toString()).append("</").append(xdName).append(">");
+        return sb.toString();
+    }
+
+    /** Convert JSON format of xd:collection to XML.
+     * @param json input JSON data.
+     * @return string with XML format.
+     */
+    @SuppressWarnings("unchecked")
+    private static String collectionToXml(final List xd, final String xdName) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object> item = (Map) xd.get(0);
+        String xdPrefix = xdName.substring(0, xdName.indexOf(':'));
+        String xdNamespace = (String) item.get(xdName);
+        if (xdNamespace == null || xdNamespace.isEmpty()) {
+            throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
+        }
+        sb.append("<").append(xdName);
+        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'");
+        for (String key : item.keySet()) {
+            if (!key.startsWith(xdPrefix, 0) || !key.endsWith(":collection")) {
+                sb.append(" ").append(key).append("='").append(item.get(key)).append("'");
+            }
+        }
+        if (xd.size() == 1) {
+            return sb.append("/>\n").toString();
+        }
+        sb.append(">\n");
+        for (int i = 1; i < xd.size(); i++) {
+            List xd1 = (List) xd.get(i);
+            item = (Map) xd1.get(0);
+            for (Object x : item.keySet()) {
+                String key = (String) x;
+                if (key.endsWith(":def")) {
+                   sb.append(xdefToXml(xd1, key)); // xd:def
+                   break;
+                } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
+                    || key.endsWith(":lexicon")) {
+                    sb.append(textItemToXml(xd1, key));
+                   break;
+                } else if (key.endsWith(":collection")) {
+                    throw new RuntimeException("Collection in collection");
+                } else {
+
+                }
+            }
+        }
+        sb.append("\n</").append(xdName).append(">");
+        return sb.toString();
+    }
+
+    /** Convert JSON format of X-definition source data to XML.
+     * @param json input JSON data.
+     * @return string with XML format.
+     */
+    public static String jsonXdefToXml(final String json) {
+        Object o = XonUtils.parseXON(json);
+        List xd = (List) o;
+        o = xd.get(0);
+        if (!(o instanceof Map)) {
+            throw new RuntimeException("Unexpected root object");
+        }
+        Map item = (Map) o;
+        for (Object x : item.keySet()) {
+            String key = (String) x;
+            if (key.endsWith(":def")) {
+                return xdefToXml(xd, key); // xd:def
+            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
+                || key.endsWith(":lexicon")) {
+                return textItemToXml(xd, key);
+            } else if (key.endsWith(":collection")) {
+                return collectionToXml(xd, key);
+            }
+        }
+        throw new RuntimeException("Unexpected root object: " + item);
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /** Convert X-declaration XML to JSON.
      * @param elem Element with X-definition.
      * @return string with JSON format.
@@ -322,11 +373,64 @@ public class XDefToJSON {
     private static String textItemToJson(final Element elem) {
         StringBuilder sb = new StringBuilder();
         sb.append("[ { \"").append(elem.getNodeName()).append("\": \"");
-        sb.append(elem.getNamespaceURI()).append("\"},\n\"");
+        sb.append(toJsonString(elem.getNamespaceURI())).append("\"},\n\"");
         sb.append(SUtils.modifyString(elem.getTextContent(), "\"", "\\\"")).append("\"]");
         return sb.toString();
     }
 
+
+    /** Convert X-declaration XML to JSON.
+     * @param elem Element with X-definition.
+     * @return string with JSON format.
+     */
+    private static String collectionToJson(final Element elem) {
+        String xdPrefix = elem.getPrefix();
+        String xdNamespace = elem.getNamespaceURI();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[ { \"").append(xdPrefix).append(":collection\": \"").append(toJsonString(xdNamespace)).append("\"");
+        NamedNodeMap nnm = elem.getAttributes();
+        for (int i = 0; i < nnm.getLength(); i++) {
+            Node n = (Node) nnm.item(i);
+            String name = n.getNodeName();
+            if (!name.equals("xmlns:" + xdPrefix)) {
+                sb.append(", \"").append(name).append("\": \"").append(n.getNodeValue()).append("\"");
+            }
+        }
+        sb.append("}");
+        NodeList nl = elem.getChildNodes();
+        Element el = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node n = nl.item(i);
+            if (n != null && n.getNodeType() == Node.ELEMENT_NODE) {
+                el = (Element) n;
+                break;
+            }
+        }
+        while (el != null) {
+            sb.append(",\n");
+            String localName = el.getLocalName();
+            if ("def".equals(localName)) {
+                sb.append("\n").append(xdefToJson(el)); // xd:def
+            } else if ("declaration".equals(localName) || "component".equals(localName)
+                || "BNFBNFGrammar".equals(localName) || "lexicon".equals(localName)) {
+                sb.append("\n").append(textItemToJson(el)); // xd:declaration
+            } else if ("collection".equals(localName)) {
+                throw new RuntimeException("Collection in collection");
+            } else {
+                throw new RuntimeException("Expected X-definition root element. Found: " + el.getNodeName());
+            }
+            Node n = el.getNextSibling();
+            while (n != null) {
+                if (n.getNodeType() == Node.ELEMENT_NODE) {
+                    break;
+                }
+                n = n.getNextSibling();
+            }
+            el = (n != null) ? (Element) el : null;
+        }
+        sb.append("\n]");
+        return sb.toString();
+    }
     /** Convert XML format of X-definition source data to JSON.
      * @param xml input XML data.
      * @return string with JSON format.
@@ -339,6 +443,8 @@ public class XDefToJSON {
         } else if ("declaration".equals(localName) || "component".equals(localName)
             || "BNFBNFGrammar".equals(localName) || "lexicon".equals(localName)) {
             return textItemToJson(el); // xd:declaration
+        } else if ("collection".equals(localName)) {
+            return collectionToJson(el);
         }
         throw new RuntimeException("Expected X-definition root element. Found: " + el.getNodeName());
     }
