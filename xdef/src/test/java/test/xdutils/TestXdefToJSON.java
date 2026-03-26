@@ -8,7 +8,6 @@ import org.xdef.component.XComponent;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.SException;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
@@ -27,12 +26,12 @@ public final class TestXdefToJSON extends XDTester {
         try {
             compile(xdef);
             String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
-            if ("-Example".equals(xdName)) {
+            if ("Example".equals(xdName)) {
                 System.out.println(xdef);
                 System.out.println(xdef_JSON);
             }
             String xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
-            if ("-Example".equals(xdName)) {
+            if ("Example".equals(xdName)) {
                 System.out.println(xdef_XML);
             }
             XDPool xp = compile(xdef_XML);
@@ -58,8 +57,6 @@ public final class TestXdefToJSON extends XDTester {
                 }
             }
             return ""; // OK
-//        } catch (SRuntimeException ex) {
-//            return ex.getMessage();
         } catch (RuntimeException ex) {
             return STester.printThrowable(ex);
         }
@@ -80,28 +77,31 @@ public final class TestXdefToJSON extends XDTester {
 
     @Override
     public void test() {
-        String xdef, json;        
-        XDPool xp;
-        XDDocument xd;
-        ArrayReporter reporter = new ArrayReporter();
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
+////////////////////////////////////////////////////////////////////////////////
+        String xdef, json;
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example' root=\"test\">\n" +
 "  <xd:json name=\"test\">\n" +
-"    {\"array\": [ {\"%script\":  \"2..3; ref Item\"}]}\n" +
+"    {\"array\": [ {\"%script\":  \"2..3; ref Element\"}]}\n" +
 "  </xd:json>\n" +
 "\n"+
-"  <xd:json name=\"Item\">\n" +
-"    {\"item\": \"string()\"}\n" +
+"  <xd:json name=\"Element\">\n" +
+"    {\"element\": \"string()\"}\n" +
 "  </xd:json>\n" +
-"  <xd:component> %class "+_package+".TestxTOJson1 %link Example#test; </xd:component>\n"+
+"\n"+
+"  <xd:component>\n"+
+"    %class "+_package+".TestxTOJson1 %link Example#test;\n"+
+"  </xd:component>\n"+
 "</xd:def>";
             json =
 "{\"array\": [\n" +
-"    {\"item\": \"first\"},\n" +    
-"    {\"item\": \"second\"},\n" +    
-"    {\"item\": \"third\"}\n" +    
-"  ]\n" +    
+"    {\"element\": \"first\"},\n" +
+"    {\"element\": \"second\"},\n" +
+"    {\"element\": \"third\"}\n" +
+"  ]\n" +
 "}";
             assertEq("", testXdefJson(xdef, json, "Example"));
             xdef =
@@ -126,7 +126,7 @@ public final class TestXdefToJSON extends XDTester {
 "  </xd:json>\n"+
 "\n"+
 "  <xd:component>\n"+
-"  %class "+_package+".TestxTOJson2 %link Example#root;\n"+
+"    %class "+_package+".TestxTOJson2 %link Example#root;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
             json = "{ \"a\":\"123, 456, 789\" }";
@@ -148,37 +148,43 @@ public final class TestXdefToJSON extends XDTester {
 "  </xd:declaration>\n" +
 " \n" +
 "  <xd:json name=\"S2KF\">\n" +
-"  {  \"caseID\":             \"  caseID()\",\n" +
-"     \"createdTime\":        \"  xsDateTime()\",\n" +
-"     \"modifiedTime\":       \"  xsDateTime()\",\n" +
-"     \"statusCode\":         \"  statusCode()\",\n" +
-"     \"holder\":             {\"%script\":  \"ref Subject\"},\n" +
-"     \"owner\":              {\"%script\":  \"?; ref Subject\"},\n" +
+"  {\n" +
+"    \"caseID\":             \"  caseID()\",\n" +
+"    \"createdTime\":        \"  xsDateTime()\",\n" +
+"    \"modifiedTime\":       \"  xsDateTime()\",\n" +
+"    \"statusCode\":         \"  statusCode()\",\n" +
+"    \"holder\":             {\"%script\":  \"ref Subject\"},\n" +
+"    \"owner\":              {\"%script\":  \"?; ref Subject\"},\n" +
 "  }\n" +
 "  </xd:json>\n" +
 "\n" +
 "  <xd:json name=\"Subject\">\n" +
-"   {  \"subjectType\":       \"  subjectType()\",\n" +
-"      \"firstName\":         \"? firstName()\",\n" +
-"      \"lastName\":          \"? lastName()\",\n" +
-"      \"companyName\":       \"? companyName()\",\n" +
-"      \"birthDate\":         \"? xsDate()\",\n" +
-"      \"CIN\":               \"? ico()\",\n" +
-"      \"PIN\":               \"? rc()\",\n" +
-"      \"contacts\":   {\"%script\": \"ref Contact\"}\n" +
+"   {\n" +
+"     \"subjectType\":       \"  subjectType()\",\n" +
+"     \"firstName\":         \"? firstName()\",\n" +
+"     \"lastName\":          \"? lastName()\",\n" +
+"     \"companyName\":       \"? companyName()\",\n" +
+"     \"birthDate\":         \"? xsDate()\",\n" +
+"     \"CIN\":               \"? ico()\",\n" +
+"     \"PIN\":               \"? rc()\",\n" +
+"     \"contacts\":   {\"%script\": \"ref Contact\"}\n" +
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
 "  <xd:json name=\"Contact\">\n" +
-"   {  \"phoneNum\":  \"? phoneNum()\",\n" +
-"      \"emailAddr\": \"? emailAddr()\"\n" +
+"   {\n" +
+"     \"phoneNum\":  \"? phoneNum()\",\n" +
+"     \"emailAddr\": \"? emailAddr()\"\n" +
 "   }\n" +
 "  </xd:json>\n" +
 "\n" +
-//"  <xd:component> %class "+_package+".TestxTOJson2 %link Example#S2KF; </xd:component>\n"+
+"  <xd:component>\n" +
+"    %class "+_package+".TestxTOJson3 %link Example#S2KF;\n" +
+"  </xd:component>\n" +
 "</xd:def>";
             json =
-"{\"caseID\": 112233,\n" +
+"{\n" +
+"  \"caseID\": 112233,\n" +
 "  \"createdTime\": \"2026-01-29\",\n" +
 "  \"modifiedTime\": \"2026-02-02\",\n" +
 "  \"statusCode\": \"Y\",\n" +
@@ -190,13 +196,12 @@ public final class TestXdefToJSON extends XDTester {
 "    \"contacts\": {\"phoneNum\": \"9988776655\"}\n" +
 "  }\n" +
 "}";
-           
-            assertEq("", testXdefJson(xdef, json, "Example"));            
+            assertEq("", testXdefJson(xdef, json, "Example"));
         } catch (RuntimeException ex) {fail(ex); return;}
-//if(true) return;
+if(T) return;
         try { // test all X-definitions from test/xdef/data/json directory
             final String dataDir = getDataDir();
-            final String jsonDataDir = 
+            final String jsonDataDir =
                 dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/")) + "/test/xdef/data/json/";
             for (File f : SUtils.getFileGroup(jsonDataDir+"Test*.xdef")) {
                 String xdname = f.getName();

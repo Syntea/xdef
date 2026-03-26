@@ -1088,7 +1088,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      */
     @Override
     public final void printReports(final java.io.PrintStream x) {getReportWriter().getReportReader().printReports(x);}
-    
+
     /** Get actual source language used for lexicon.
      * @return string with actual language or return null if lexicon is not specified or if language is not specified.
      */
