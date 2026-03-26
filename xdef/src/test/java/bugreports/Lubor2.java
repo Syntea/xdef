@@ -21,9 +21,9 @@ public class Lubor2 extends XDTester {
     @Override
     public void test() {
 ////////////////////////////////////////////////////////////////////////////////
-        boolean T = false; // if false, all tests are invoked
+        boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+        System.out.println("X-definition version: " + XDFactory.getXDVersion());
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
         setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false

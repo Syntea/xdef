@@ -35,8 +35,9 @@ System.out.println(s);
     @Override
     public void test() {
 ////////////////////////////////////////////////////////////////////////////////
-        boolean T = false; // if false, all tests are invoked
+        boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
 ////////////////////////////////////////////////////////////////////////////////
+        System.out.println("X-definition version: " + XDFactory.getXDVersion());
         Element el;
         Object j, o, x;
         StringWriter swr;

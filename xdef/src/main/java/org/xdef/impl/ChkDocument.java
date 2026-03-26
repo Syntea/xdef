@@ -569,8 +569,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 }
                 try {
                     if (_xclass == null) {
-                        _xclass =
-                            Class.forName(className, false, Thread.currentThread().getContextClassLoader());
+                        _xclass = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
                     }
                     if (xe.getXDPosition().contains("#" + JSON_ANYOBJECT + "/$choice")) {
                         String y = xe.getName();
@@ -593,8 +592,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                         }
                     }
                     if (!createXComponent(_xclass)) {
-                        String x =
-                            XComponentUtil.xmlToJavaName(_chkRoot.getChkElement().getXMElement().getName());
+                        String x = XComponentUtil.xmlToJavaName(_chkRoot.getChkElement().getXMElement().getName());
                         if (!createXComponent(className + '$' + x)) {
                             Class<?>[] classes = _xclass.getDeclaredClasses();
                             for (Class<?> y : classes) {
@@ -876,23 +874,23 @@ final class ChkDocument extends ChkNode implements XDDocument {
     /** Set output stream writer.
      * @param out output stream.
      * @param encoding encoding of output.
-     * @param wrHeader if true full document is written, otherwise only root element.
+     * @param writeHeader if true full document is written, otherwise only root element.
      * @throws IOException if an error occurs.
      */
     @Override
-    public final void setStreamWriter(final OutputStream out, final String encoding, final boolean wrHeader)
+    public final void setStreamWriter(final OutputStream out, final String encoding, final boolean writeHeader)
         throws IOException {
-        _scp.setXmlStreamWriter( new DefXmlWriter(out,encoding,wrHeader));
+        _scp.setXmlStreamWriter( new DefXmlWriter(out,encoding,writeHeader));
     }
 
     /** Set XML writer.
      * @param out stream writer.
      * @param encoding encoding of output.
-     * @param wrHeader if true full document is written, otherwise only root element.
+     * @param writeHeader if true full document is written, otherwise only root element.
      */
     @Override
-    public final void setStreamWriter(final Writer out, final String encoding, final boolean wrHeader) {
-        _scp.setXmlStreamWriter(new DefXmlWriter(out,encoding,wrHeader));
+    public final void setStreamWriter(final Writer out, final String encoding, final boolean writeHeader) {
+        _scp.setXmlStreamWriter(new DefXmlWriter(out,encoding,writeHeader));
     }
 
     /** Set XML writer.
@@ -1086,12 +1084,10 @@ final class ChkDocument extends ChkNode implements XDDocument {
     public final void checkDateLegal(final boolean x){_stopCheckDateLegal = !x;}
 
     /** Print reports to PrintStream.
-     * @param out PrintStream where reports are printed.
+     * @param x PrintStream where reports are printed.
      */
     @Override
-    public final void printReports(final java.io.PrintStream out) {
-        getReportWriter().getReportReader().printReports(out);
-    }
+    public final void printReports(final java.io.PrintStream x) {getReportWriter().getReportReader().printReports(x);}
 
     /** Get actual source language used for lexicon.
      * @return string with actual language or return null if lexicon is not specified or if language is not specified.
@@ -1147,9 +1143,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      * @throws SRuntimeException if an error occurs.
      */
     @Override
-    public final Element xtranslate(final Element elem,
-        final String sourceLanguage,
-        final String destLanguage,
+    public final Element xtranslate(final Element elem, final String sourceLanguage, final String destLanguage,
         final ReportWriter reporter) throws SRuntimeException {
         _reporter = new SReporter(reporter);
         _scp.setStdErr(new DefOutStream(_reporter.getReportWriter()));

@@ -14,7 +14,9 @@ public class X extends XDTester {
     /** Run test and display error info. */
     @Override
     public void test() {
-        boolean T = false;
+////////////////////////////////////////////////////////////////////////////////
+        boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
+////////////////////////////////////////////////////////////////////////////////
         System.out.println("X-definition version: " + XDFactory.getXDVersion());
         System.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
         XDDocument xd;
