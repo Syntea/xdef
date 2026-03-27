@@ -27,7 +27,7 @@ public final class TestXdefToJSON extends XDTester {
             compile(xdef);
             String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
             if (display) {
-                System.out.println(xdef);
+//                System.out.println(xdef);
                 System.out.println(xdef_JSON);
             }
             String xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
@@ -82,7 +82,7 @@ public final class TestXdefToJSON extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
         boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
 ////////////////////////////////////////////////////////////////////////////////
-        String xdef, json;
+        String xdef, data;
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a|A\">\n" +
@@ -101,14 +101,14 @@ public final class TestXdefToJSON extends XDTester {
 "    %class "+_package+".TestxTOJson1A %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
-            json =
+            data =
 "{\"array\": [\n" +
 "    {\"element\": \"first\"},\n" +
 "    {\"element\": \"second\"},\n" +
 "    {\"element\": \"third\"}\n" +
 "  ]\n" +
 "}";
-            assertEq("", testXdefJson(xdef, json, "", false));
+            assertEq("", testXdefJson(xdef, data, "", false));
             assertEq("", testXdefJson(xdef, "<A a='123'/>", "", false));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name = 'Example' xd:root = 'root'>\n" +
@@ -135,8 +135,8 @@ public final class TestXdefToJSON extends XDTester {
 "    %class "+_package+".TestxTOJson2 %link Example#root;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
-            json = "{ \"a\":\"123, 456, 789\" }";
-            assertEq("", testXdefJson(xdef, json, "Example", false));
+            data = "{ \"a\":\"123, 456, 789\" }";
+            assertEq("", testXdefJson(xdef, data, "Example", false));
             xdef =
 "<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" name = \"Example\" root = \"S2KF\">\n" +
 "  <xd:declaration>\n" +
@@ -188,7 +188,7 @@ public final class TestXdefToJSON extends XDTester {
 "    %class "+_package+".TestxTOJson3 %link Example#S2KF;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
-            json =
+            data =
 "{\n" +
 "  \"caseID\": 112233,\n" +
 "  \"createdTime\": \"2026-01-29\",\n" +
@@ -202,7 +202,7 @@ public final class TestXdefToJSON extends XDTester {
 "    \"contacts\": {\"phoneNum\": \"9988776655\"}\n" +
 "  }\n" +
 "}";
-            assertEq("", testXdefJson(xdef, json, "Example", false));
+            assertEq("", testXdefJson(xdef, data, "Example", false));
             xdef =
 "<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example' root=\"test\">\n" +
@@ -236,32 +236,51 @@ public final class TestXdefToJSON extends XDTester {
 "    %class "+_package+".TestxTOJson4 %link Example#test;\n"+
 "</xd:component>\n"+
 "</xd:collection>\n";
-            json =
+            data =
 "{\"array\": [\n" +
 "    {\"element\": \"First\"},\n" +
 "    {\"element\": \"Second\"},\n" +
 "    {\"element\": \"Third\"}\n" +
 "  ]\n" +
 "}";
-            assertEq("", testXdefJson(xdef, json, "Example", false));
+            assertEq("", testXdefJson(xdef, data, "Example", false));
         } catch (RuntimeException ex) {fail(ex); return;}
 if(T) return;
         try { // test all X-definitions from test/xdef/data/json directory
             final String dataDir = getDataDir();
             final String jsonDataDir =
-                dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/")) + "/test/xdef/data/json/";
-            for (File f : SUtils.getFileGroup(jsonDataDir+"Test*.xdef")) {
+                dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/")) + "/test/xdef/data/";
+            for (File f : SUtils.getFileGroup(jsonDataDir+"json/Test*.xdef")) {
                 String xdname = f.getName();
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
-                File[] data = SUtils.getFileGroup(jsonDataDir+xdname+"*.json");
+                File[] files = SUtils.getFileGroup(jsonDataDir+xdname+"*.json");
                 String result;
-                if (data == null || data.length == 0) {
+                if (files == null || files.length == 0) {
                     result = testXdefJson(f, null, xdname, false);
                     if (!result.isEmpty()) {
                         fail(xdname + "\n"  + result);
                     }
                 } else {
-                    for (File g : data) {
+                    for (File g : files) {
+                        result = testXdefJson(f, g, xdname, false);
+                        if (!result.isEmpty()) {
+                            fail(xdname+ "; data: " + g.getName() + "\n" + result );
+                        }
+                    }
+                }
+            }
+            for (File f : SUtils.getFileGroup(jsonDataDir+"test/Test000_00*.xdef")) {
+                String xdname = f.getName();
+                xdname = xdname.substring(0, xdname.lastIndexOf('.'));
+                File[] file = SUtils.getFileGroup(jsonDataDir+xdname+"*.xml");
+                String result;
+                if (file == null || file.length == 0) {
+                    result = testXdefJson(f, null, xdname, false);
+                    if (!result.isEmpty()) {
+                        fail(xdname + "\n"  + result);
+                    }
+                } else {
+                    for (File g : file) {
                         result = testXdefJson(f, g, xdname, false);
                         if (!result.isEmpty()) {
                             fail(xdname+ "; data: " + g.getName() + "\n" + result );
