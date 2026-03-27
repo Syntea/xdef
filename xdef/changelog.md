@@ -1,5 +1,5 @@
 # Version ${version}, release-date ${release.date}
-. Fixed bugs in utility the `org.xdef.util.XDefToJSON`.
+. Fixed bugs in the utility `org.xdef.util.XDefToJSON`.
 
 # Version 42.2.42, release-date 2026-03-23
   * We have introduced an experimental tool for converting X definitions from XML to JSON and vice versa (see 
