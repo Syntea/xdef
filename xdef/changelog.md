@@ -1,4 +1,5 @@
 # Version ${version}, release-date ${release.date}
+.
 
 # Version 42.2.43, release-date 2026-03-28
   * Fixed bugs in the utility `org.xdef.util.XDefToJSON`.
