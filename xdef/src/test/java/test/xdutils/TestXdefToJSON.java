@@ -27,7 +27,6 @@ public final class TestXdefToJSON extends XDTester {
             compile(xdef);
             String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
             if (display) {
-//                System.out.println(xdef);
                 System.out.println(xdef_JSON);
             }
             String xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
@@ -269,8 +268,12 @@ if(T) return;
                     }
                 }
             }
-            for (File f : SUtils.getFileGroup(jsonDataDir+"test/Test000_00*.xdef")) {
+            for (File f : SUtils.getFileGroup(jsonDataDir+"test/Test000_0*.xdef")) {
                 String xdname = f.getName();
+                if (xdname.startsWith("Test000_05") || xdname.startsWith("Test000_06")
+                    || xdname.startsWith("Test000_08")) { //multiple XDefs
+                    continue;
+                }
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
                 File[] file = SUtils.getFileGroup(jsonDataDir+xdname+"*.xml");
                 String result;
