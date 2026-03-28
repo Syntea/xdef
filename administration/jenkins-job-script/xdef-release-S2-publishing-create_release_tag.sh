@@ -7,7 +7,7 @@ result=$(curl \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${CREATERELEASE_GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2026-03-10" \
-    -d "{\"tag_name\":\"${GIT_TAG}\"" \
+    -d "{\"tag_name\":\"${GIT_TAG}\", \"make_latest\":\"true\"}" \
     https://api.github.com/repos/Syntea/xdef/releases 
 )
 echo "${result}" | head --lines=1 | grep '^HTTP/2 201\s*$' > /dev/null || {
