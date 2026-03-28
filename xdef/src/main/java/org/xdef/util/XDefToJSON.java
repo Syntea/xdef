@@ -3,11 +3,12 @@ package org.xdef.util;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.xdef.XDConstants;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
@@ -34,6 +35,22 @@ public class XDefToJSON {
             t = t.substring(0, t.length() - 1);
         }
         return t;
+    }
+
+    /** Get namespace URI of X-definition or return null.
+     * @param el Element with namespace.
+     * @return accepted namespace URI of X-definition or return null.
+     */
+    private static String getXdefNamespace(final Element el) {
+        String nsURI = el.getNamespaceURI();
+        return XDConstants.XDEF31_NS_URI.equals(nsURI) || XDConstants.XDEF32_NS_URI.equals(nsURI)
+            || XDConstants.XDEF40_NS_URI.equals(nsURI) || XDConstants.XDEF41_NS_URI.equals(nsURI)
+            || XDConstants.XDEF42_NS_URI.equals(nsURI) ? nsURI : null;
+    }
+
+    /** Create JSON named item from attribute. */
+    private static String attrToJSON(final Node n) {
+        return "\"" + n.getNodeName() + "\": \"" + toJsonString(n.getNodeValue()) + "\"";
     }
 
     /** Convert JSON format of xd:def to XML.
@@ -139,6 +156,8 @@ public class XDefToJSON {
                 }
                 sb.append(s);
                 sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
+            } else if ((o = item.get(xdPrefix + ":xml")) != null) { // XML model
+                sb.append(o.toString());
             } else if (item.size() == 1) { // JSON model
                 String name = item.keySet().iterator().next();
                 sb.append("\n<").append(xdPrefix).append(":json name='").append(name).append("'>\n");
@@ -166,8 +185,60 @@ public class XDefToJSON {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
         }
         sb.append("<").append(xdName);
-        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'>");
-        sb.append(xd.get(1).toString()).append("</").append(xdName).append(">");
+        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'");
+        for (Entry o: item.entrySet()) {
+            if (!xdName.equals(o.getKey())) {
+                sb.append(" ").append(o.getKey().toString()).append("=\"").append(o.getValue().toString()).append("\"");
+            }
+        }
+        sb.append(">").append(xd.get(1).toString()).append("</").append(xdName).append(">\n");
+        return sb.toString();
+    }
+
+    /** Convert JSON format of xd:collection to XML.
+     * @param json input JSON data.
+     * @return string with XML format.
+     */
+    @SuppressWarnings("unchecked")
+    private static String collectionToXml(final List xd, final String xdName) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object> item = (Map) xd.get(0);
+        String xdPrefix = xdName.substring(0, xdName.indexOf(':'));
+        String xdNamespace = (String) item.get(xdName);
+        if (xdNamespace == null || xdNamespace.isEmpty()) {
+            throw new RuntimeException("Incorrect X-definition namespace: \"" + item + "\"");
+        }
+        sb.append("<").append(xdName);
+        sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'");
+        for (String key : item.keySet()) {
+            if (!key.startsWith(xdPrefix, 0) || !key.endsWith(":collection")) {
+                sb.append(" ").append(key).append("='").append(item.get(key)).append("'");
+            }
+        }
+        if (xd.size() == 1) {
+            return sb.append("/>\n").toString();
+        }
+        sb.append(">\n");
+        for (int i = 1; i < xd.size(); i++) {
+            List xd1 = (List) xd.get(i);
+            item = (Map) xd1.get(0);
+            for (Object x : item.keySet()) {
+                String key = (String) x;
+                if (key.endsWith(":def")) {
+                   sb.append(xdefToXml(xd1, key)); // xd:def
+                   break;
+                } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
+                    || key.endsWith(":lexicon")) {
+                    sb.append(textItemToXml(xd1, key));
+                   break;
+                } else if (key.endsWith(":collection")) {
+                    throw new RuntimeException("Collection in collection");
+                } else {
+
+                }
+            }
+        }
+        sb.append("\n</").append(xdName).append(">");
         return sb.toString();
     }
 
@@ -190,126 +261,128 @@ public class XDefToJSON {
             } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
                 || key.endsWith(":lexicon")) {
                 return textItemToXml(xd, key);
+            } else if (key.endsWith(":collection")) {
+                return collectionToXml(xd, key);
             }
         }
         throw new RuntimeException("Unexpected root object: " + item);
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private static Node getFirstChildElement(final Element el) {
+        Node n = el.getFirstChild();
+        while(n != null && n.getNodeType() != Node.ELEMENT_NODE) {
+            n = n.getNextSibling();
+        }
+        return n;
+    }
+
+    private static Node getNextChildElement(final Node n) {
+        Node x = n;
+        while((x = x.getNextSibling()) != null && x.getNodeType() != Node.ELEMENT_NODE);
+        return x;
     }
 
     /** Convert X-definition XML to JSON.
      * @param elem Element with X-definition.
      * @return string with JSON format.
      */
-    private static String xdefToJson(final Element elem) {
+    private static String xdefToJson(final Element elem, String nsUri) {
         String xdPrefix = elem.getPrefix();
-        String xdNamespace = elem.getNamespaceURI();
         StringBuilder sb = new StringBuilder();
         sb.append("[\n");
-        sb.append("{\"").append(xdPrefix).append(":def\": \"").append(xdNamespace).append("\"");
-        Attr attr = elem.getAttributeNodeNS(xdNamespace, "name");
-        if (attr == null) {
-            attr = elem.getAttributeNode("name");
-        }
-        if (attr != null) {
-            sb.append(", \"").append(xdPrefix).append(":name\": \"").append(attr.getNodeValue()).append("\"");
-        }
-        attr = elem.getAttributeNodeNS(xdNamespace, "root");
-        if (attr == null) {
-            attr = elem.getAttributeNode("root");
-        }
-        if (attr != null) {
-            sb.append(", \"xd:root\": \"").append(attr.getValue()).append("\"");
-        }
+        sb.append("{\"").append(xdPrefix).append(":def\": \"").append(toJsonString(nsUri)).append("\"");
         NamedNodeMap nnm = elem.getAttributes();
+        int len = sb.length();
         for (int i = 0; i < nnm.getLength(); i++) {
             Node n = nnm.item(i);
-            if (n.getLocalName().startsWith("impl-")) {
-                sb.append(",\n  \"").append(n.getLocalName()).append("\": \"").append(n.getNodeValue()).append("\"");
+            if (!n.getNodeName().equals("xmlns:" + xdPrefix)) {
+                sb.append(",");
+                String s = attrToJSON(n);
+                if ((len += s.length() + 2) > 110) {
+                    sb.append("\n ");
+                    len = 2;
+                }
+                sb.append(" ").append(s);
             }
         }
         sb.append("}");
-        NodeList nl = elem.getElementsByTagName("*");
-        if (nl.getLength() == 0) {
+        Node n = getFirstChildElement(elem);
+        if (n == null) {
             return sb.append("\n]").toString();
         }
         sb.append(",\n");
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node n = nl.item(i);
-            if (n.getNodeType() == Node.ELEMENT_NODE) {
-                Element el = (Element) n;
-                if (xdNamespace.equals(el.getNamespaceURI())) {
-                    if (null == el.getLocalName()) {
-                        throw new RuntimeException("Expected namexpace: " + el.getNodeName() + ", " + i);
-                    } else {
-                        switch (el.getLocalName()) {
-                            case "declaration":
-                                sb.append("{");
-                                attr = el.getAttributeNodeNS(xdNamespace, "scope");
-                                if (attr == null) {
-                                    attr = el.getAttributeNode("scope");
-                                }
-                                if (attr != null && !"local".equals(attr.getValue())) {
-                                    sb.append("\"").append(xdPrefix).append(":scope\": \"");
-                                    sb.append(attr.getValue()).append("\", ");
-                                }
-                                sb.append("\"").append(el.getTagName()).append("\": \"");
-                                sb.append(toJsonString(removeTrailingSpaces(el.getTextContent())));
-                                sb.append("\"}");
-                                sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
-                                break;
-                            case "json":
-                                attr = el.getAttributeNodeNS(xdNamespace, "name");
-                                if (attr == null) {
-                                    attr = el.getAttributeNode("name");
-                                }
-                                if (attr != null) {
-                                    sb.append("{ \"").append(attr.getValue()).append("\":");
-                                    sb.append(removeTrailingSpaces(el.getTextContent()));
-                                    sb.append("}");
-                                    sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
-                                } else {
-                                    throw new RuntimeException("Expected name of json model at " + i);
-                                }
-                                break;
-                            case "component":
-                                 sb.append("{ \"").append(el.getTagName()).append("\": \"");
-                                 sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
-                                 sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
-                                break;
-                            case "BNFGrammar":
-                                sb.append("{");
-                                 attr = el.getAttributeNodeNS(xdNamespace, "name");
-                                if (attr == null) {
-                                    attr = el.getAttributeNode("name");
-                                }
-                                if (attr != null) {
-                                    sb.append(" \"").append("name").append("\": \"");
-                                    sb.append(attr.getValue()).append("\",");
-                                }
-                                attr = el.getAttributeNodeNS(xdNamespace, "scope");
-                                if (attr == null) {
-                                    attr = el.getAttributeNode("scope");
-                                }
-                                if (attr != null) {
-                                    sb.append(" \"").append("scope").append("\": \"");
-                                    sb.append(attr.getValue()).append("\",");
-                                }
-                                attr = el.getAttributeNodeNS(xdNamespace, "extends");
-                                if (attr == null) {
-                                   attr = el.getAttributeNode("extends");
-                                }
-                                if (attr != null) {
-                                    sb.append(" \"").append("extends").append("\": \"");
-                                    sb.append(attr.getValue()).append("\",");
-                                }
-                                sb.append(" \"").append(el.getTagName()).append("\": \"");
-                                sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
-                                sb.append(i < nl.getLength() - 1 ? ",\n" : "\n");
-                                break;
-                            default: throw new RuntimeException("Expected item: " + el.getNodeName() + ", " + i);
+        while (n != null) {
+            Element el = (Element) n;
+            if (nsUri.equals(el.getNamespaceURI())) {
+                switch (el.getLocalName()) {
+                    case "declaration":
+                        sb.append("{");
+                        Attr attr = el.getAttributeNodeNS(nsUri, "scope");
+                        if (attr == null) {
+                            attr = el.getAttributeNode("scope");
                         }
-                    }
+                        if (attr != null) {
+                            sb.append(attrToJSON(attr)).append(", ");
+                        }
+                        sb.append("\"").append(el.getTagName()).append("\": \"");
+                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent())));
+                        sb.append("\"}");
+                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
+                        continue;
+                    case "json":
+                        attr = el.getAttributeNodeNS(nsUri, "name");
+                        if (attr == null) {
+                            attr = el.getAttributeNode("name");
+                        }
+                        if (attr != null) {
+                            sb.append("{ \"").append(attr.getValue()).append("\":");
+                            sb.append(removeTrailingSpaces(el.getTextContent()));
+                            sb.append("}");
+                            sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
+                        } else {
+                            throw new RuntimeException("Expected name of json model");
+                        }
+                        continue;
+                    case "component":
+                         sb.append("{ \"").append(el.getTagName()).append("\": \"");
+                         sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
+                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
+                        continue;
+                    case "BNFGrammar":
+                        sb.append("{");
+                         attr = el.getAttributeNodeNS(nsUri, "name");
+                        if (attr == null) {
+                            attr = el.getAttributeNode("name");
+                        }
+                        if (attr != null) {
+                            sb.append(" ").append(attrToJSON(attr)).append(",");
+                        }
+                        attr = el.getAttributeNodeNS(nsUri, "scope");
+                        if (attr == null) {
+                            attr = el.getAttributeNode("scope");
+                        }
+                        if (attr != null) {
+                            sb.append(" ").append(attrToJSON(attr)).append(",");
+                        }
+                        attr = el.getAttributeNodeNS(nsUri, "extends");
+                        if (attr == null) {
+                           attr = el.getAttributeNode("extends");
+                        }
+                        if (attr != null) {
+                            sb.append(" ").append(attrToJSON(attr)).append(",");
+                        }
+                        sb.append(" \"").append(el.getTagName()).append("\": \"");
+                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\"}");
+                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
+                        continue;
                 }
             }
+            //XML model
+            sb.append("{ \"").append(xdPrefix).append(":xml\": \"\n");
+            sb.append(toJsonString(KXmlUtils.nodeToString(el, true))).append("\n\"}");
+            sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
         }
         sb.append("]");
         return sb.toString();
@@ -319,11 +392,71 @@ public class XDefToJSON {
      * @param elem Element with X-definition.
      * @return string with JSON format.
      */
-    private static String textItemToJson(final Element elem) {
+    private static String textItemToJson(final Element elem, final String nsURI) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[ { \"").append(elem.getNodeName()).append("\": \"");
-        sb.append(elem.getNamespaceURI()).append("\"},\n\"");
+        sb.append("[ {");
+        NamedNodeMap nnm = elem.getAttributes();
+        String sep = " ";
+        for (int i = 0; i < nnm.getLength(); i++) {
+            Node n = nnm.item(i);
+            if (n.getNodeType() == Node.ATTRIBUTE_NODE) {
+                String name = n.getNodeName();
+                if (name.startsWith("xmlns:")) {
+                    continue;
+                }
+                sb.append(sep);
+                sb.append("\"").append(name).append("\": \"").append(toJsonString(n.getNodeValue())).append("\"");
+                sep = ", ";
+            }
+        }
+        sb.append(sep);
+        sb.append("\"").append(elem.getNodeName()).append("\": \"");
+        sb.append(toJsonString(nsURI)).append("\"},\n\"");
         sb.append(SUtils.modifyString(elem.getTextContent(), "\"", "\\\"")).append("\"]");
+        return sb.toString();
+    }
+
+
+    /** Convert X-declaration XML to JSON.
+     * @param elem Element with X-definition.
+     * @return string with JSON format.
+     */
+    private static String collectionToJson(final Element elem, final String nsURI) {
+        String xdPrefix = elem.getPrefix();
+        StringBuilder sb = new StringBuilder();
+        sb.append("[ { \"").append(xdPrefix).append(":collection\": \"").append(toJsonString(nsURI)).append("\"");
+        NamedNodeMap nnm = elem.getAttributes();
+        for (int i = 0; i < nnm.getLength(); i++) {
+            Node n = (Node) nnm.item(i);
+            String name = n.getNodeName();
+            if (!name.equals("xmlns:" + xdPrefix)) {
+                sb.append(", \"").append(name).append("\": \"").append(n.getNodeValue()).append("\"");
+            }
+        }
+        sb.append("}");
+        Node n = getFirstChildElement(elem);
+        while (n != null) {
+            Element el = (Element) n;
+            sb.append(",\n");
+            String localName = el.getLocalName();
+            String ns = getXdefNamespace(el);
+            if (ns != null) {
+                if ("def".equals(localName)) {
+                    sb.append("\n").append(xdefToJson(el, ns)); // xd:def
+                } else if ("declaration".equals(localName) || "component".equals(localName)
+                    || "BNFGrammar".equals(localName) || "lexicon".equals(localName)) {
+                    sb.append("\n").append(textItemToJson(el, ns)); // xd:declaration
+                } else if ("collection".equals(localName)) {
+                    throw new RuntimeException("Collection in collection");
+                } else {
+                    throw new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
+                }
+            } else {
+                throw new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
+            }
+            n = getNextChildElement(n);
+        }
+        sb.append("\n]");
         return sb.toString();
     }
 
@@ -333,12 +466,19 @@ public class XDefToJSON {
      */
     public static String xmlXdefToJson(final String xml) {
         Element el = KXmlUtils.parseXml(xml).getDocumentElement();
-        String localName = el.getLocalName();
-        if ("def".equals(localName)) {
-            return xdefToJson(el); // xd:def
-        } else if ("declaration".equals(localName) || "component".equals(localName)
-            || "BNFBNFGrammar".equals(localName) || "lexicon".equals(localName)) {
-            return textItemToJson(el); // xd:declaration
+        String nsURI = getXdefNamespace(el);
+        if (nsURI != null) {
+            String localName = el.getLocalName();
+            if (null != localName) {
+                switch (localName) {
+                    case "def": return xdefToJson(el, nsURI); // xd:def
+                    case "declaration":
+                    case "component":
+                    case "BNFBNFGrammar":
+                    case "lexicon": return textItemToJson(el, nsURI); // xd:declaration
+                    case "collection": return collectionToJson(el, nsURI); // collection
+                }
+            }
         }
         throw new RuntimeException("Expected X-definition root element. Found: " + el.getNodeName());
     }
