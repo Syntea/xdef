@@ -766,7 +766,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
         } else {
             unaryoperator = NOCHAR;
         }
-        switch (_sym) {
+        switch(_sym) {
             case LPAR_SYM: {// '('
                 nextSymbol();
                 short castRequest;
@@ -837,17 +837,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
                 }
                 break;
             }
-            case MOD_SYM: // NamedValue constructor
-                namedValueConstructor(null);
-                break;
-            case CONSTANT_SYM: // constant literal
-                _g.genLDC(_parsedValue); // addCode(_parsedValue, 1);
-                nextSymbol();
-                break;
-            case NULL_SYM: // null
-                _g.genLDC(new DefNull());
-                nextSymbol();
-                break;
+            case MOD_SYM: namedValueConstructor(null); break;// NamedValue constructor
+            case CONSTANT_SYM: _g.genLDC(_parsedValue); nextSymbol(); break; // constant literal
+            case NULL_SYM: _g.genLDC(new DefNull()); nextSymbol(); break;
             case IDENTIFIER_SYM: {
                 separateMethodNameFromIdentifier();
                 String name = _idName;
@@ -943,7 +935,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
         }
         short xTyp = _g._tstack[_g._sp];
         int xVal = _g._cstack[_g._sp];
-        switch (unaryoperator) {
+        switch(unaryoperator) {
             case PLUS_SYM:
             case MINUS_SYM: {
                 if (xTyp != XD_LONG && xTyp != XD_DOUBLE && xTyp != XD_DECIMAL && xTyp != XD_BIGINTEGER) {
@@ -3580,14 +3572,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
                     }
                     break;
                 }
-                case TYPE_SYM:
-                    // compile type or uniqueSet
-                   compileType((byte) 'G', local);
-                   continue;
-                case UNIQUE_SET_SYM:
-                    // compile type or uniqueSet
-                   compileUniqueset((byte) 'G', local);
-                   continue;
+                case TYPE_SYM: compileType((byte) 'G', local); continue; // compile type or uniqueSet
+                case UNIQUE_SET_SYM: compileUniqueset((byte) 'G', local); continue;
             }
             error(XDEF.XDEF487); //Variable or method declaration expected
             while (nextSymbol() != NOCHAR) {// skip to type identifier or EOS
@@ -3711,35 +3697,32 @@ class CompileStatement extends XScriptParser implements CodeTable {
     }
 
     /** Compile "var" section of the uniqueSet declaration (the named values).
-     * @param uniquesetName the name of the uniqueSet object.
+     * @param uniqueset the name of the uniqueSet object.
      * @param varMap the map with named values.
      * @param keyItems key items (to check if the name already was used)
      * @return the map with variables.
      */
-    private void uniquesetVar(final String uniquesetName,
-        final Map<String,Short> varMap,
-        final List<ParseItem> keyItems) {
+    private void uniquesetVar(final String uniqueset, final Map<String,Short> varMap, final List<ParseItem> keyItems) {
         for(;;) {
             short type = (nextSymbol() == IDENTIFIER_SYM) ? getTypeId(_idName) : -1;
             if (type <= 0) {
-                errorAndSkip(XDEF.XDEF458, //Expected type identifier of variable
-                    String.valueOf(END_SYM) + SEMICOLON_SYM);
+                //Expected type identifier of variable
+                errorAndSkip(XDEF.XDEF458, String.valueOf(END_SYM) + SEMICOLON_SYM);
                 return;
             }
             if (nextSymbol() != IDENTIFIER_SYM) {
-                errorAndSkip(XDEF.XDEF418,//Name of named item expected
-                    String.valueOf(END_SYM) + SEMICOLON_SYM);
+                errorAndSkip(XDEF.XDEF418, String.valueOf(END_SYM) + SEMICOLON_SYM);//Name of named item expected
                 return;
             }
             for (ParseItem x: keyItems) {
                 if (_idName.equals(x.getParseName())) {
                     //Redefinition of the named value specification &{0} in the declaration of uniqueSet &{1}
-                    error(XDEF.XDEF146, _idName, uniquesetName);
+                    error(XDEF.XDEF146, _idName, uniqueset);
                 }
             }
             if (varMap.put(_idName, type) != null) {
                 //Redefinition of the named value specification &{0} in the declaration of uniqueSet &{1}
-                error(XDEF.XDEF146, _idName, uniquesetName);
+                error(XDEF.XDEF146, _idName, uniqueset);
             }
             if (nextSymbol() != COMMA_SYM) {
                 break;
@@ -3858,12 +3841,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
                 nextSymbol();
                 while (_sym != END_SYM) {
                     switch (_sym) {
-                        case VAR_SYM:
-                            uniquesetVar(uniquesetName, varMap, keyItems);
-                            break;
-                        case IDENTIFIER_SYM:
-                            uniquesetKeyItem(uniquesetName, varMap, keyItems);
-                            break;
+                        case VAR_SYM: uniquesetVar(uniquesetName, varMap, keyItems); break;
+                        case IDENTIFIER_SYM: uniquesetKeyItem(uniquesetName, varMap, keyItems); break;
                         default: // identified
                             //In the uniqueSet is expected name of named item or named variable declaration
                             errorAndSkip(XDEF.XDEF418, String.valueOf(END_SYM));
@@ -3925,8 +3904,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
                 int i = 0;
                 for (String keyName: varMap.keySet()) {
                     assinedValueNames[i++] = keyName;
-                    CompileVariable x = new CompileVariable(uniquesetName + "." + keyName,
-                        X_UNIQUESET_NAMED, var.getOffset(), varKind, spos);
+                    CompileVariable x = new CompileVariable(
+                        uniquesetName + "." + keyName, X_UNIQUESET_NAMED, var.getOffset(), varKind, spos);
                     x.setCodeAddr(var.getCodeAddr());
                     if (varKind == 'G') {
                         _g._globalVariables.addVariable(x);
@@ -4022,9 +4001,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
                     _g.genStop();
                     break;
                 }
-                case XD_BOOLEAN:
-                    _g.genStop();
-                    break;
+                case XD_BOOLEAN: _g.genStop(); break;
                 case X_PARSEITEM:
                     if (_g._lastCodeIndex == start + 1) {
                         XDValue xv = _g.getLastCodeItem();
@@ -4042,10 +4019,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
                         }
                     }
                     break;
-                case XD_UNDEF:
-                    break;
-                default:
-                    error(XDEF.XDEF423, "boolean or ParseResult"); //Value of type '&{0}' expected
+                case XD_UNDEF: break;
+                default: error(XDEF.XDEF423, "boolean or ParseResult"); //Value of type '&{0}' expected
             }
             setDebugEndPosition(dx);
             if (_sym != END_SYM && _sym != COMMA_SYM && _sym != NOCHAR) {
