@@ -875,23 +875,20 @@ final class CompileXScript extends CompileStatement {
             if (returnType == XD_VOID) {//statement
                 int dx = addDebugInfo(false);
                 if (!statement()) {
-                    errorAndSkip(XDEF.XDEF426,//Action &{0} expected
-                        SCRIPT_SEPARATORS+';',"statement");
+                    errorAndSkip(XDEF.XDEF426, SCRIPT_SEPARATORS+';',"statement");//Action &{0} expected
                     result = -2; //error
                 }
                 setDebugEndPosition(dx);
             } else {
                 int dx = addDebugInfo(false);
                 if (!expression()) {//expression
-                    //Action &{0} expected
-                    errorAndSkip(XDEF.XDEF426, SCRIPT_SEPARATORS + ';', symToName(section));
+                    errorAndSkip(XDEF.XDEF426, SCRIPT_SEPARATORS + ';', symToName(section));//Action &{0} expected
                     result = -2; //error
                 } else {
                     setDebugEndPosition(dx);
                     if (returnType != XD_VOID) {
                         if (sp == _g._sp) {//we expect value
-                            //Value of type '&{0}' expected
-                            error(XDEF.XDEF423, CompileBase.getTypeName(returnType));
+                            error(XDEF.XDEF423, CompileBase.getTypeName(returnType)); //Value of type '&{0}' expected
                             result = -2; //error
                         } else {
                             short xType = _g._tstack[_g._sp];
@@ -917,8 +914,7 @@ final class CompileXScript extends CompileStatement {
                                         && xType != XD_LONG && xType != XD_BOOLEAN && xType != XD_STRING
                                         && xType != XD_NULL) {
                                         if (xType != XD_ANY && xType != CompileBase.XD_UNDEF) {
-                                            //Value of type '&{0}' expected
-                                            error(XDEF.XDEF423, "\"create element\"");
+                                            error(XDEF.XDEF423, "\"create element\""); //Value of type '&{0}' expected
                                             result = -2; //error
                                         }
                                     }
