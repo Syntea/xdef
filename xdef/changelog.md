@@ -1,3 +1,5 @@
+# Version ${version}, release-date ${release.date}
+
 # Version 42.2.43, release-date 2026-03-28
   * Fixed bugs in the utility `org.xdef.util.XDefToJSON`.
   * Fixed the reported error message in the JSON model caused by the incorrect `ref` command in the array script.
