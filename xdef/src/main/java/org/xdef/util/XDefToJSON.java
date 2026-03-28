@@ -246,31 +246,6 @@ public class XDefToJSON {
         return sb.toString();
     }
 
-    /** Convert JSON format of X-definition source data to XML.
-     * @param json input JSON data.
-     * @return string with XML format.
-     */
-    public static String jsonXdefToXml(final String json) {
-        List items = (List) XonUtils.parseXON(json);
-        Object o = items.get(0);
-        if (!(o instanceof Map)) {
-            throw new RuntimeException("Unexpected root object");
-        }
-        Map item = (Map) o;
-        for (Object x : item.keySet()) {
-            String key = (String) x;
-            if (key.endsWith(":def")) {
-                return xdefToXml(items, key); // xd:def
-            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
-                || key.endsWith(":lexicon")) {
-                return textItemToXml(items, key);
-            } else if (key.endsWith(":collection")) {
-                return collectionToXml(items, key);
-            }
-        }
-        throw new RuntimeException("Unexpected root object: " + item);
-    }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /** Convert X-definition XML to JSON.
@@ -423,6 +398,33 @@ public class XDefToJSON {
         }
         sb.append("\n]");
         return sb.toString();
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /** Convert JSON format of X-definition source data to XML.
+     * @param json input JSON data.
+     * @return string with XML format.
+     */
+    public static String jsonXdefToXml(final String json) {
+        List items = (List) XonUtils.parseXON(json);
+        Object o = items.get(0);
+        if (!(o instanceof Map)) {
+            throw new RuntimeException("Unexpected root object");
+        }
+        Map item = (Map) o;
+        for (Object x : item.keySet()) {
+            String key = (String) x;
+            if (key.endsWith(":def")) {
+                return xdefToXml(items, key); // xd:def
+            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
+                || key.endsWith(":lexicon")) {
+                return textItemToXml(items, key);
+            } else if (key.endsWith(":collection")) {
+                return collectionToXml(items, key);
+            }
+        }
+        throw new RuntimeException("Unexpected root object: " + item);
     }
 
     /** Convert XML format of X-definition source data to JSON.
