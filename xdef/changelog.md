@@ -1,5 +1,5 @@
 # Version ${version}, release-date ${release.date}
-.
+  * Fixed a bug in the code of the "test.xdutils.TestXdefToJSON.java" file (which reported an error on UNIX systems).
 
 # Version 42.2.43, release-date 2026-03-28
   * Fixed bugs in the utility `org.xdef.util.XDefToJSON`.
