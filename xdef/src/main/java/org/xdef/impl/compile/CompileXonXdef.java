@@ -436,13 +436,11 @@ public final class CompileXonXdef extends XScriptParser {
                         nextSymbol();
                         isOccurrence(occ);
                         if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
-                            //Maximum occurrence of item "&{0}" can not be higher then 1
-                            error(XDEF.XDEF535, key);
+                            error(XDEF.XDEF535, key);//Maximum occurrence of item "&{0}" can not be higher then 1
                             maxOccursErrorReported = true;
                         }
                     }
-                    if (findSection("ref", parseXscript(xscr._value)) != null
-                        && "array".equals(pn3.getLocalName())) {
+                    if (findSection("ref", parseXscript(xscr._value)) != null && "array".equals(pn3.getLocalName())) {
                         error(XDEF.XDEF311); //Incorrect reference to an array or map
                     }
                 }
@@ -456,12 +454,10 @@ public final class CompileXonXdef extends XScriptParser {
                             nextSymbol();
                             isOccurrence(occ);
                             if (occ.maxOccurs() > 1 && !maxOccursErrorReported) {
-                                //Maximum occurrence of item "&{0}" can not be higher then 1
-                                error(XDEF.XDEF535, key);
+                                error(XDEF.XDEF535, key);//Maximum occurrence of item "&{0}" can not be higher then 1
                             }
                         }
-                        if (findSection("ref", parseXscript(xscr._value)) != null
-                            && "array".equals(pn3.getLocalName())) {
+                        if (findSection("ref", parseXscript(xscr._value))!=null && "array".equals(pn3.getLocalName())) {
                             error(XDEF.XDEF311); //Incorrect reference to an array or map
                         }
                     }
@@ -534,11 +530,7 @@ public final class CompileXonXdef extends XScriptParser {
         }
         if (!oneOfList.isEmpty()) {
             PAttr xscr = getXDAttr(pn1, "script");
-            if (xscr != null && xscr._value != null) {
-                sections = parseXscript(xscr._value);
-            } else {
-                sections = new ArrayList<>();
-            }
+            sections = xscr != null && xscr._value != null ? parseXscript(xscr._value) : new ArrayList<>();
             if ((sbf = findSection("var", sections)) == null) {
                 sections.add("var");
                 sections.add(new SBuffer("int $oneOf = 0;", pn1._name));
@@ -554,8 +546,8 @@ public final class CompileXonXdef extends XScriptParser {
                 sbf = findSection("finally", sections);
                 if (sbf == null) {
                     sections.add("finally");
-                    sections.add(new SBuffer("if($oneOf==0) error("
-                        + "'XDEF241','Required oneOf item is missing in the map');", pn1._name));
+                    sections.add(new SBuffer(
+                        "if($oneOf==0) error('XDEF241','Required oneOf item is missing in the map');", pn1._name));
                 } else {
                     String s = sbf.getString();
                     if (!s.endsWith(";")) {
@@ -671,7 +663,11 @@ public final class CompileXonXdef extends XScriptParser {
                         } else if (!s.endsWith(")")) {
                             s += "()"; // add brackets
                         }
-                        addMatchExpression(pn1, s + ".parse((String)@" + X_VALATTR + ").matches()");
+                        if (s.startsWith("ref ")) { // refence can't be in match expression!
+                           error(sbs[1], XDEF.XDEF363, "ref");//'&{0}' is not allowed here&{#SYS000}
+                        } else {
+                            addMatchExpression(pn1, s + ".parse((String)@" + X_VALATTR + ").matches()");
+                        }
                     }
                 }
             }

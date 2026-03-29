@@ -1,5 +1,9 @@
 # Version ${version}, release-date ${release.date}
-. Fixed bugs in the utility `org.xdef.util.XDefToJSON`.
+
+# Version 42.2.43, release-date 2026-03-29
+  * Fixed bugs in the utility `org.xdef.util.XDefToJSON`.
+  * Fixed the reported error message in the JSON model caused by the incorrect `ref` command in the array script.
+  * Fixed a bug in the code of the "test.xdutils.TestXdefToJSON.java" file (which reported an error on UNIX systems).
 
 # Version 42.2.42, release-date 2026-03-23
   * We have introduced an experimental tool for converting X definitions from XML to JSON and vice versa (see 

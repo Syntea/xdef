@@ -278,7 +278,7 @@ Prerequisities:
     * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
       * configure the xml-file _~/.m2/toolchains.xml_ in the home directory
-      * see the template-file [administration/configuration-templates/maven/toolchains.xml](administration/      configuration-templates/maven/toolchains.xml)
+      * see the template-file [administration/configuration-templates/maven/toolchains.xml](administration/configuration-templates/maven/toolchains.xml)
 
 Frequent building operations:
   * cleaning before any compiling, building, deploying, etc.:
@@ -311,6 +311,7 @@ Frequent building operations:
     * Java-11 (it is run in the module "xdef-test11")
     * Java-17 (it is run in the module "xdef-test17")
     * Java-21 (it is run in the module "xdef-test21")
+    * Java-25 (it is run in the module "xdef-test25")
 
     ```shell
     mvn package -PtestOnAllJvms

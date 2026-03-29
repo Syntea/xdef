@@ -62,13 +62,13 @@
         <!-- update after release version, may change by:
             > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
         -->
-        <revision>42.2.43</revision>
+        <revision>42.2.44</revision>
         <!-- use profile "release" for build release-version -->
         <changelist>-SNAPSHOT</changelist>
         <!-- update before release version, may change by:
             > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
         -->
-        <release.date>2026-03-23</release.date>
+        <release.date>2026-03-29</release.date>
         <specification.version>4.2</specification.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -376,10 +376,11 @@
         <profile>
             <id>testOnAllJvms</id>
             <modules>
-                <!-- run tests on Java-11, Java-17, Java-21 -->
+                <!-- run tests on Java-11, Java-17, Java-21, Java-25 -->
                 <module>xdef-test11</module>
                 <module>xdef-test17</module>
                 <module>xdef-test21</module>
+                <!-- <module>xdef-test25</module> disabled temporarily -->
             </modules>
         </profile>
         <profile>
