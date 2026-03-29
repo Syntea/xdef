@@ -2,6 +2,9 @@ package test.xdutils;
 
 import java.io.File;
 import org.w3c.dom.Element;
+import static org.xdef.XDConstants.XDEF40_NS_URI;
+import static org.xdef.XDConstants.XDEF41_NS_URI;
+import static org.xdef.XDConstants.XDEF42_NS_URI;
 import org.xdef.XDDocument;
 import test.XDTester;
 import org.xdef.XDPool;
@@ -106,6 +109,13 @@ public final class TestXdefToJSON extends XDTester {
         String xdef, data;
         try {
             xdef =
+"<xd:declaration xmlns:xd='"+_xdNS+"'>\n" +
+"  type x string();\n" +
+"  type y int();\n" +
+"  type z xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
+"</xd:declaration>";
+            assertEq("", testXdefJson(xdef, null, null, false));
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name = 'Example' xd:root = 'root'>\n" +
 "  <xd:declaration scope='local'>\n"+
 "     type myType $rrr.parse('intList');\n"+
@@ -133,7 +143,7 @@ public final class TestXdefToJSON extends XDTester {
             data = "{ \"a\":\"123, 456, 789\" }";
             assertEq("", testXdefJson(xdef, data, "Example", false));
             xdef =
-"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" name = \"Example\" root = \"S2KF\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"Example\" root=\"S2KF\">\n" +
 "  <xd:declaration>\n" +
 "    type  caseID            long(1,999_999_999); \n" +
 "    type  companyName       string(1,100); \n" +
@@ -149,18 +159,18 @@ public final class TestXdefToJSON extends XDTester {
 "  </xd:declaration>\n" +
 " \n" +
 "  <xd:json name=\"S2KF\">\n" +
-"  {\n" +
+"{\n" +
 "    \"caseID\":             \"  caseID()\",\n" +
 "    \"createdTime\":        \"  xsDateTime()\",\n" +
 "    \"modifiedTime\":       \"  xsDateTime()\",\n" +
 "    \"statusCode\":         \"  statusCode()\",\n" +
 "    \"holder\":             {\"%script\":  \"ref Subject\"},\n" +
 "    \"owner\":              {\"%script\":  \"?; ref Subject\"},\n" +
-"  }\n" +
+"}\n" +
 "  </xd:json>\n" +
 "\n" +
 "  <xd:json name=\"Subject\">\n" +
-"   {\n" +
+"{\n" +
 "     \"subjectType\":       \"  subjectType()\",\n" +
 "     \"firstName\":         \"? firstName()\",\n" +
 "     \"lastName\":          \"? lastName()\",\n" +
@@ -169,14 +179,14 @@ public final class TestXdefToJSON extends XDTester {
 "     \"CIN\":               \"? ico()\",\n" +
 "     \"PIN\":               \"? rc()\",\n" +
 "     \"contacts\":   {\"%script\": \"ref Contact\"}\n" +
-"   }\n" +
+"}\n" +
 "  </xd:json>\n" +
 "\n" +
 "  <xd:json name=\"Contact\">\n" +
-"   {\n" +
+"{\n" +
 "     \"phoneNum\":  \"? phoneNum()\",\n" +
 "     \"emailAddr\": \"? emailAddr()\"\n" +
-"   }\n" +
+"}\n" +
 "  </xd:json>\n" +
 "\n" +
 "  <xd:component>\n" +
@@ -199,20 +209,21 @@ public final class TestXdefToJSON extends XDTester {
 "}";
             assertEq("", testXdefJson(xdef, data, "Example", false));
             xdef =
-"<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/4.2\">\n" +
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='Example' root=\"A | B#B\">\n" +
+"<xd:collection xmlns:xd='"+XDEF40_NS_URI+"'>\n" +
+"\n"+
+"<xd:def xmlns:xd='"+XDEF41_NS_URI+"' name='Example' root=\"A | B#B\">\n" +
 "  <xd:json name=\"A\">\n" +
-"    {\"array\": [ {\"%script\":  \"2..3; ref B#Element\"}]}\n" +
+"{\"array\": [ {\"%script\":  \"2..3; ref B#Element\"}]}\n" +
 "  </xd:json>\n" +
 "</xd:def>\n"+
 "\n"+
-"<xd:BNFGrammar name=\"base\">\n"+
+"<xd:BNFGrammar xmlns:xd='"+XDEF41_NS_URI+"' name=\"base\">\n"+
 "    integer ::= [0-9]+\n"+
 "    S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "</xd:BNFGrammar>\n"+
 "\n"+
-"<xd:BNFGrammar xd:name=\"$rrr\" xd:extends=\"base\" >\n"+
+"<xd:BNFGrammar xmlns:xd='"+XDEF41_NS_URI+"' xd:name=\"$rrr\" xd:extends=\"base\" >\n"+
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "</xd:BNFGrammar>\n"+
@@ -223,20 +234,21 @@ public final class TestXdefToJSON extends XDTester {
 "   type list $rrr.parse('intList');\n"+
 "</xd:declaration>\n"+
 "\n"+
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name='B' root='B'>\n" +
+"<xd:def xmlns:xd='"+XDEF41_NS_URI+"' name='B' root='B'>\n" +
 "  <xd:json name=\"Element\">\n" +
-"    {\"element\": \"myType\"}\n" +
+"{\"element\": \"myType\"}\n" +
 "  </xd:json>\n" +
 "  <B a='? string()'>\n"+
 "    <C>string()</C>\n"+
 "  </B>\n"+
 "</xd:def>\n"+
 "\n"+
-"<xd:component>\n"+
+"<xd:component xmlns:xd='"+XDEF42_NS_URI+"'>\n"+
 "    %class "+_package+".TestxTOJson4A %link Example#A;\n"+
 "    %class "+_package+".TestxTOJson4B %link B#B;\n"+
 "</xd:component>\n"+
-"</xd:collection>\n";
+"\n"+
+"</xd:collection>";
             data =
 "{\"array\": [\n" +
 "    {\"element\": \"First\"},\n" +
@@ -249,13 +261,13 @@ public final class TestXdefToJSON extends XDTester {
         } catch (RuntimeException ex) {fail(ex); return;}
 if(T) return;
         try { // test all X-definitions from test/xdef/data/json directory
-            final String dataDir = getDataDir();
-            final String jsonDataDir =
-                dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/")) + "/test/xdef/data/";
-            for (File f : SUtils.getFileGroup(jsonDataDir+"json/Test*.xdef")) {
+            String dataDir = getDataDir();
+            dataDir = dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/"));
+            final String xdefDataDir = dataDir + "/test/xdef/data/";
+            for (File f : SUtils.getFileGroup(xdefDataDir+"json/Test*.xdef")) {
                 String xdname = f.getName();
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
-                File[] files = SUtils.getFileGroup(jsonDataDir+xdname+"*.json");
+                File[] files = SUtils.getFileGroup(xdefDataDir+xdname+"*.json");
                 String result;
                 if (files == null || files.length == 0) {
                     result = testXdefJson(f, null, xdname, false);
@@ -271,14 +283,14 @@ if(T) return;
                     }
                 }
             }
-            for (File f : SUtils.getFileGroup(jsonDataDir+"test/Test000_0*.xdef")) {
+            for (File f : SUtils.getFileGroup(xdefDataDir+"test/Test000_0*.xdef")) {
                 String xdname = f.getName();
-                if (xdname.startsWith("Test000_02") ||xdname.startsWith("Test000_05") || xdname.startsWith("Test000_06")
-                    || xdname.startsWith("Test000_07") || xdname.startsWith("Test000_08")) { //multiple XDefs
+                if (xdname.contains("Test000_02") || xdname.contains("Test000_05")|| xdname.contains("Test000_06")
+                    || xdname.contains("Test000_07") || xdname.contains("Test000_08")) { //multiple XDefs
                     continue;
                 }
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
-                File[] file = SUtils.getFileGroup(jsonDataDir+xdname+"*.xml");
+                File[] file = SUtils.getFileGroup(xdefDataDir+xdname+"*.xml");
                 String result;
                 if (file == null || file.length == 0) {
                     result = testXdefJson(f, null, xdname, false);
