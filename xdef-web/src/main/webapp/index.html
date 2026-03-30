@@ -7,10 +7,20 @@
     <title>X-definition 4.2</title>
     <link rel="stylesheet" type="text/css" href="style/common.css"/>
     <link rel="icon" type="image/x-icon" href="image/favicon.ico"/>
+    <link rel="preload" type="text/html" href="header.html"/>
+    <!-- <script src="https://code.jquery.com/jquery-4.0.0.slim.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-4.0.0.js"></script>
+</head>
   </head>
   <body>
     <div id="body">
+      <embed src="header.html" type="text/html" height="6em" width="20em" ></embed>
+      <!--
       <iframe src="header.html" title="header" frameborder="0" style="height:6em; width:100%;" ></iframe> 
+      <iframe src="header.html" title="header" frameborder="0" style="height:6em; width:100%;" ></iframe> 
+      -->
+      <div id="header2">HEADER</div>
+      <script>$("#header2").load("header.html");</script>
       <h2 style='text-align: center;'>X-definition 4.2</h2>
       <div id="content">
         <ul>
