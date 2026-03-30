@@ -40,14 +40,20 @@ public interface JSON {
     public static final long JSON022 = 13834649616L;
     /** Illegal number value&amp;{0}{ for the XON type "}{"}: &amp;{1}&amp;{#SYS000} */
     public static final long JSON023 = 13834649617L;
+    /** Text is not allowed in XON/JSON map element &amp;{0} */
+    public static final long JSON050 = 13834649618L;
+    /** Unsupported XON/JSON W element: &amp;{0} */
+    public static final long JSON051 = 13834649619L;
+    /** Unknown element from XON/JSON namespace: &amp;{0} */
+    public static final long JSON052 = 13834649620L;
     /** Incorrect specification of the %encoding directive: "&amp;{0}"&amp;{#SYS000} */
-    public static final long JSON081 = 13834649618L;
+    public static final long JSON081 = 13834649621L;
     /** The %encoding directive is missing the name of the character set&amp;{#SYS000} */
-    public static final long JSON083 = 13834649619L;
+    public static final long JSON083 = 13834649622L;
     /** YAML - the package org.yaml.snakeyaml is not available. Please add it to classPath&amp;{#SYS000} */
-    public static final long JSON101 = 13834649620L;
+    public static final long JSON101 = 13834649623L;
     /** Messages for JSON and XON */
-    public static final long JSON_DESCRIPTION = 13834649621L;
+    public static final long JSON_DESCRIPTION = 13834649624L;
     /** English */
-    public static final long JSON_LANGUAGE = 13834649622L;
+    public static final long JSON_LANGUAGE = 13834649625L;
 }

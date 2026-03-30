@@ -43,13 +43,13 @@ class XonToXml extends XonTools {
      * @return element with given name and XON/JSON namespace and prefix..
      */
     private Element genJElement(final String name) {
-        return _xPrefix == null || _xPrefix.isEmpty() ? _doc.createElementNS(_xNamespace, name)
-            : _doc.createElementNS(_xNamespace, _xPrefix + ':' + name);
+        return _xPrefix == null || _xPrefix.isEmpty()
+            ? _doc.createElementNS(_xNamespace, name) : _doc.createElementNS(_xNamespace, _xPrefix + ':' + name);
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// XON/JSON to XML (Xdetinition format)
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* XON/JSON to XML (Xdetinition format)
+******************************************************************************/
 
     /** Create and append new element and push context.
      * @param n node to which new element will be appended.
@@ -175,7 +175,7 @@ class XonToXml extends XonTools {
      * Otherwise, return null.
      * @param list the array to be converted.
      * @param mode flag if to generate it to an attribute, text node or JList.
-     * @return the string with array representation or null.
+     * @return string with array representation or null.
      */
     private String genTextFromItem(final Object val, final int mode) {
         if (isSimpleValue(val)) {
@@ -231,8 +231,7 @@ class XonToXml extends XonTools {
             Map m = (Map) array.get(0);
             if (len == 1) {
                 if (m.isEmpty()) {
-                    //this is special case: the map is not interpreted as attrs so it will be an empty element
-                    return;
+                    return; //this is special case: the map is not interpreted as attrs so it will be an empty element
                 }
                 e = addXonElem(elem, X_ARRAY);
                 addArrayItems(e, array, 0);
@@ -332,8 +331,7 @@ class XonToXml extends XonTools {
                         addElem(elem, namespace, name);
                         _ns.popContext();
                     } else {
-                        //add this map and remaining items from array to element
-                        addArrayItems(elem, array, 1);
+                        addArrayItems(elem, array, 1); //add this map and remaining items from array to element
                     }
                 } else {
                     if (m.isEmpty()) {
@@ -416,8 +414,7 @@ class XonToXml extends XonTools {
                     }
                 }
             }
-            if (numAttrs > 0) { // set attrs
-                // set other attributes
+            if (numAttrs > 0) { // set other attributes
                 for (Object x: map.entrySet()) {
                     Map.Entry entry = (Map.Entry) x;
                     String key = (String) entry.getKey();
@@ -584,16 +581,15 @@ class XonToXml extends XonTools {
             Element e = x.addXonElem(x._doc, X_VALUE);
             x.addValueAsText(e, xon);
             x._ns.popContext();
-        } else {
-            //Not XON/JSON object&{0}
+        } else { //Not XON/JSON object&{0}
             throw new SRuntimeException(JSON.JSON011, xon == null ? null : xon.getClass());
         }
         return x._doc.getDocumentElement();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// XON/JSON to XML ("W" format)
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* XON/JSON to XML ("W" format)
+******************************************************************************/
 
     /** Create element in "W" format from an object.
      * @param val value.

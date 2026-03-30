@@ -10,6 +10,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
+import org.xdef.msg.JSON;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
@@ -77,8 +79,7 @@ class XonFromXml extends XonUtils {
         NamedNodeMap nnm = el.getAttributes();
         for (int i = 0; i < nnm.getLength(); i++) {
             Node n = nnm.item(i);
-            if (!(xmlnsName.equals(name = n.getNodeName())
-                && XDConstants.XON_NS_URI_XD.equals(el.getNamespaceURI()))) {
+            if (!(xmlnsName.equals(name = n.getNodeName()) && XDConstants.XON_NS_URI_XD.equals(el.getNamespaceURI()))) {
                 String attName = XonTools.xmlToJName(name);
                 Object val = XonTools.xmlToJValue(n.getNodeValue());
                 result.put(attName, val);
@@ -88,8 +89,7 @@ class XonFromXml extends XonUtils {
     }
 
     /** Create XON/JSON object (array, map, or primitive value).
-     * @param elem element from XDConstants.XON_NS_URI_XD namespace with XON/JSON array, map,
-     * or primitive value.
+     * @param elem element from XDConstants.XON_NS_URI_XD namespace with XON/JSON array, map, or primitive value.
      * @return XON/JSON array, map, or primitive value.
      */
     private Object fromXmlW(final Element elem) {
@@ -109,13 +109,12 @@ class XonFromXml extends XonUtils {
             case J_NUMBER: return new BigDecimal(elem.getTextContent().trim());
             case J_STRING: return XonTools.xmlToJValue(elem.getTextContent());
         }
-        throw new RuntimeException("Unsupported XON/JSON W element: " + elem.getLocalName());
+        throw new SRuntimeException(JSON.JSON051, elem.getLocalName());//"Unsupported XON/JSON W element: {0}
     }
 
-////////////////////////////////////////////////////////////////////////////////
+/*=***************************************************************************/
 
-    /** Add string with a simple value or with the list of simple values.
-     * to the array from the argument.
+    /** Add string with a simple value or with the list of simple values to the array from the argument.
      * <UL>
      * <li> [] -> empty array.
      * <li> [ x ... ,x] -> empty with simple values.
@@ -155,8 +154,7 @@ class XonFromXml extends XonUtils {
                     if (elem.hasAttribute(X_VALATTR)) {
                         s = elem.getAttribute(X_VALATTR);
                     } else {
-                        s = elem.getTextContent();
-                        if (s != null) {
+                        if ((s = elem.getTextContent()) != null) {
                             s = s.trim();
                         }
                     }
@@ -191,7 +189,8 @@ class XonFromXml extends XonUtils {
                             String s = (String) o;
                             if (!s.isEmpty() || !s.startsWith("/*") || !s.endsWith("*/")) {// if not comment
                                 map.put(name, XonTools.xmlToJValue(s));
-                                throw new RuntimeException("Text is not allowed in XON/JSON map element: "+s);
+                                //Text is not allowed in XON/JSON map element &{0}
+                                throw new SRuntimeException(JSON.JSON050, s);
                             }
                         }
                     }
@@ -208,8 +207,7 @@ class XonFromXml extends XonUtils {
                         }
                     }
                     return array;
-                case J_NULL:
-                    return null;
+                case J_NULL: return null;
                 case J_STRING:
                 case J_NUMBER:
                 case J_BOOLEAN: {
@@ -219,10 +217,9 @@ class XonFromXml extends XonUtils {
                     String s = elem.getTextContent();
                     return XonTools.xmlToJValue(s);
                 }
-                default:
-                    break;
+                default: break;
             }
-            throw new RuntimeException("Unknown element from XON/JSON namespace: " + name);
+            throw new SRuntimeException(JSON.JSON052, name); //Unknown element from XON/JSON namespace: &{0}
         }
         if (childNodes.isEmpty()) {
             if (attrs.isEmpty()) {
@@ -329,9 +326,9 @@ class XonFromXml extends XonUtils {
         return map;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// internal format
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Internal format
+******************************************************************************/
 
     /** Create XON/JSON array from array element.
      * @param elem array element from XDConstants.XON_NS_URI_XD namespace.
@@ -365,8 +362,7 @@ class XonFromXml extends XonUtils {
                     key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
                     result.put(key, fromXmlW(e));
                 } else {
-                    Object val = e.hasAttribute(X_VALATTR)
-                        ? XonTools.xmlToJValue(e.getAttribute(X_VALATTR)): null;
+                    Object val = e.hasAttribute(X_VALATTR) ? XonTools.xmlToJValue(e.getAttribute(X_VALATTR)): null;
                     result.put(XonTools.xmlToJName(key),val);
                 }
             }
@@ -375,17 +371,15 @@ class XonFromXml extends XonUtils {
         return result;
     }
 
-////////////////////////////////////////////////////////////////////////////////
+/*=***************************************************************************/
 
     /** Create XON/JSON object (map, array or primitive value) from an element.
      * @param node XML node with XON/JSON data.
      * @return created XON/JSON object (map, array or primitive value).
      */
     final static Object toXon(final Node node) {
-        Element elem = node.getNodeType() == Node.DOCUMENT_NODE
-            ? ((Document) node).getDocumentElement() : (Element) node;
+        Element elem = node.getNodeType()==Node.DOCUMENT_NODE ? ((Document) node).getDocumentElement() : (Element) node;
         XonFromXml x = new XonFromXml();
-        return (XDConstants.XON_NS_URI_W.equals(elem.getNamespaceURI()))
-            ? x.fromXmlW(elem) : x.fromXmlXD(elem); // if not comment : XD format
+        return (XDConstants.XON_NS_URI_W.equals(elem.getNamespaceURI())) ? x.fromXmlW(elem) : x.fromXmlXD(elem);
     }
 }

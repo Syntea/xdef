@@ -22,7 +22,7 @@ public class XonObjParser implements XonParser {
     private final boolean _convertXDBytes; // if XDBytes are conterted to byte[]
 
     /** Create new instance of XonObjParser.
-     * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+     * @param convertXDBytes flag if XDBytes objects are converted to byte[].
      */
     public XonObjParser(final boolean convertXDBytes) {
         _kinds = new Stack<>();
@@ -33,9 +33,9 @@ public class XonObjParser implements XonParser {
         _convertXDBytes = convertXDBytes;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// XonParser interface
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* XonParser interface
+******************************************************************************/
 
     /** Put value to result.
      * @param value X_Value to be added to result object.
@@ -47,13 +47,12 @@ public class XonObjParser implements XonParser {
             o = ((XDBytes) o).getBytes();
         }
         switch (_kind) {
-            case 1: _arrays.peek().add(o);break;
+            case 1: _arrays.peek().add(o); break;
             case 2:
                 String name = _names.pop();
                 _maps.peek().put(name, o);
                 break;
-            default:
-                _value = o;
+            default: _value = o;
         }
     }
 
