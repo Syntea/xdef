@@ -12,7 +12,7 @@ import test.XDTester;
  */
 public class Jirka extends XDTester {
 
-    Jirka() {super();}
+    public Jirka() {super();}
 
     /** Run test and display error information. */
     @Override

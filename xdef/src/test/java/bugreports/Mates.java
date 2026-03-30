@@ -17,7 +17,7 @@ import static test.XDTester._xdNS;
  */
 public class Mates extends XDTester {
 
-    Mates() {super();}
+    public Mates() {super();}
 
     /** Run test and display error information. */
     @Override

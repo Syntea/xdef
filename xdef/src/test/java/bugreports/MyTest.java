@@ -27,7 +27,7 @@ import static test.XDTester._xdNS;
  */
 public class MyTest extends XDTester {
 
-    MyTest() {
+    public MyTest() {
         super();
         setChkSyntax(false); // here it MUST be false!
     }

@@ -15,7 +15,7 @@ import test.XDTester;
  */
 public class Jirka1 extends XDTester {
 
-    Jirka1() {super();}
+    public Jirka1() {super();}
 
     /** Run test and display error information. */
     @Override

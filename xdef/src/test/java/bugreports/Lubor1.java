@@ -18,7 +18,7 @@ import static test.XDTester.chkCompoinentSerializable;
  */
 public class Lubor1 extends XDTester {
 
-    Lubor1() {super();}
+    public Lubor1() {super();}
 
     /** Run test and display error information. */
     @Override
@@ -261,13 +261,12 @@ if (T) return;
 "   implements bugreports.subelem.PlatneOd, bugreports.subelem.PlatneOd1\n" +
 "   %link PIS_iop_common#PlatneOdDo;\n" +
 " %interface bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
-" %interface bugreports.subelem.PlatneOdDo extends bugreports.subelem.PlatneOd\n" +
-"   %link PIS_iop_common#PlatneOdDo;\n" +
+" %interface bugreports.subelem.PlatneOdDo extends bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOdDo;\n" +
 "</xd:component>\n" +
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
 //			genXComponent(xp);
-            genXComponentAndCopySources(xp);
+            genXComponentAndCopySources(xp); // can't use genXComponent(xp), must be genXComponentAndCopySources(xp)!
             xd = xp.createXDDocument("");
             xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
             assertEq(xml, parse(xd, xml, reporter));
