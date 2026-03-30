@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<project
+    xmlns             ="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi         ="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.xdef</groupId>
+        <artifactId>xdef-parent</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>xdef-test25</artifactId>
+
+    <name>xdef-test25</name>
+    <description>execution of tests in module xdef on Java-25 - requires toolchain-config for Java-25</description>
+
+    <properties>
+        <jdk.version>25</jdk.version>
+        <jdk.vendor>sun</jdk.vendor>
+    </properties>
+
+    <dependencies>
+        <!-- xdef modules -->
+        <dependency>
+            <groupId>org.xdef</groupId>
+            <artifactId>xdef</artifactId>
+        </dependency>
+        
+        <!-- test-phase -->
+        <!-- ========== -->
+        
+        <!-- third parties -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- junit-test -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
