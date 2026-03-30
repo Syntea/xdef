@@ -48,4 +48,16 @@
         </configuration>
     </toolchain>
 
+    <!-- JDK 25 -->
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>25</version>
+            <vendor>sun</vendor>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-25-openjdk-amd64</jdkHome>
+        </configuration>
+    </toolchain>
+
 </toolchains>
