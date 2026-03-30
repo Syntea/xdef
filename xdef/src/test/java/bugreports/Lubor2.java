@@ -16,7 +16,7 @@ import test.XDTester;
  */
 public class Lubor2 extends XDTester {
 
-    Lubor2() {super();}
+    public Lubor2() {super();}
 
     /** Run test and display error information. */
     @Override

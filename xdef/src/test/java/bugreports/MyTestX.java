@@ -16,10 +16,7 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.sys.SDatetime;
-import org.xdef.sys.SException;
-import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -31,8 +28,8 @@ import static test.XDTester._xdNS;
  * @author Vaclav Trojan
  */
 public class MyTestX extends XDTester {
-    File[] _geneatedSources = null;
-    MyTestX() {
+
+    public MyTestX() {
         super();
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
         setProperty(XDConstants.XDPROPERTY_DISPLAY, XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);//true | errors

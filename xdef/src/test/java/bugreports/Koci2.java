@@ -13,7 +13,6 @@ import java.util.Properties;
 
 public class Koci2 {
 
-/**/
     public static XDContainer getData(XXData xData) {
         XDContainer v = (XDContainer) xData.getXDContext();
         v = (v != null) ? XDFactory.createXDContainer(v.getElement()) : XDFactory.createXDContainer("content of c");

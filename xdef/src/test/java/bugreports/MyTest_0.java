@@ -79,7 +79,7 @@ public class MyTest_0 extends XDTester {
     private final Stack<String> _stack = new Stack<>();
     private String _item;
 
-    MyTest_0() {super();}
+    public MyTest_0() {super();}
 
     // User methods used in X-definitions tests
     public static boolean next(XXElement x) {

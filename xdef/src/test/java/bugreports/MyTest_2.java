@@ -24,7 +24,7 @@ import static test.XDTester._xdNS;
  */
 public class MyTest_2 extends XDTester {
 
-    MyTest_2() {super();}
+    public MyTest_2() {super();}
 
     private static Object toJson(final XComponent xc) {
         return XonUtils.xmlToXon(xc.toXml());
