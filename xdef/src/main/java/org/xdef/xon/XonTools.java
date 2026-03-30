@@ -41,9 +41,10 @@ public class XonTools {
     /** Value of null in XON/JSON objects. */
     public static final JNull JNULL = new JNull();
 
-////////////////////////////////////////////////////////////////////////////////
-// methods used in this package
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Methods used in this package
+******************************************************************************/
+
     /** Convert character to representation used in XML names.
      * @param c character to be converted.
      * @return string with converted character.
@@ -96,9 +97,10 @@ public class XonTools {
         return i >= 0 ? s.substring(0, i) + "_x3a_" + s.substring(i + 1) : s;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// public methods (used also in X-definition compilation and X-components)
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Public methods (used also in X-definition compilation and X-components)
+******************************************************************************/
+
     /** Create string from XON/JSON source string data.
      * @param s XON/JSON string.
      * @return string created from XON/JSON string data.
@@ -116,12 +118,7 @@ public class XonTools {
                 case '\n': sb.append("\\n"); continue;
                 case '\r': sb.append("\\r"); continue;
                 case '\t': sb.append("\\t"); continue;
-                default:
-                    if (ch >= ' ' && Character.isDefined(ch)) {
-                        sb.append(ch);
-                    } else { // create \\uxxxx
-                        sb.append(genCharAsUTF(ch));
-                    }
+                default: sb.append(ch >= ' ' && Character.isDefined(ch) ? ch : genCharAsUTF(ch));
             }
         }
         return sb.toString();
@@ -153,8 +150,8 @@ public class XonTools {
             char ch;
             int i;
             if ((i=p.isOneOfTokens(new String[]{"null","true","false"}))>=0
-                && (p.eos() || (ch=p.getCurrentChar())<=' '||ch==']'||ch==',')){
-                    ar.add(i == 0 ? null : i==1);
+                && (p.eos() || (ch=p.getCurrentChar()) <= ' ' || ch == ']' || ch == ',')) {
+                    ar.add(i == 0 ? null : i == 1);
             } else {
                 char typCh; // character with type specification after a number
                 if (p.isSignedInteger() && (typCh=p.isOneOfChars("bsilND"))>=0
@@ -245,7 +242,7 @@ public class XonTools {
         int len = s.length();
         char ch = s.charAt(0);
         if (len == 1) {
-            if (ch>='0' && ch<='9') { // one digit: -> byte
+            if (ch >= '0' && ch <= '9') { // one digit: -> byte
                 return ch - '0';
             }
             return s; // one char
@@ -404,8 +401,7 @@ public class XonTools {
             return src;
         }
         // remove starting and ending '"'
-        return jstringToSource(src.charAt(0) == '"' && src.endsWith("\"")
-            ? src.substring(1, src.length() - 1) : src);
+        return jstringToSource(src.charAt(0) == '"' && src.endsWith("\"") ? src.substring(1, src.length() - 1) : src);
     }
 
     /** Convert a character to XON/JSON representation.
@@ -417,7 +413,7 @@ public class XonTools {
         if (i >= 0) {
             return "\\" + "\"\\/bfnrt".charAt(i);
         }
-        return i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0)==StringParser.XML_CHAR_ILLEGAL
+        return i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0) == StringParser.XML_CHAR_ILLEGAL
             ? genCharAsUTF(c) : String.valueOf(c);
     }
 
@@ -461,8 +457,7 @@ public class XonTools {
         char ch = s.charAt(0);
         if (addQuot) {
             if (s.equals(s.trim()) && ch != '"' && ch != '[' && ch != '\\'){
-                // For attributes it is not necessary to add quotes if
-                // string does not contain leading or trailing white spaces
+                // For attributes is not necessary to add quotes if string does not contain leading or trailing spaces
                 return s;
             } else {
                 return '"' + jstringToSource(s) + '"';
@@ -519,9 +514,10 @@ public class XonTools {
         return null;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// Interface and classes used when XON/JSON is parsed in X-definition compiler.
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Interface and classes used when XON/JSON is parsed in X-definition compiler.
+******************************************************************************/
+
     /** Interface of JSON/XON object. */
     public interface JObject {
         public SPosition getPosition();
@@ -653,7 +649,7 @@ public class XonTools {
                     if (i + 1 == len) {
                         return '"' + s + '"';
                     }
-                    if (ch!='0'||(ch=s.charAt(i+1))=='.'||ch=='E'||ch=='e') {
+                    if (ch!='0' || (ch = s.charAt(i+1)) == '.' || ch == 'E' || ch == 'e') {
                         // number without redundant leading zeroes
                         StringParser p = new StringParser(s);
                         if ((p.isFloat() || p.isInteger()) && p.eos()) {
@@ -756,7 +752,8 @@ public class XonTools {
             }
             return '"' + sb.toString() + '"';
         } else {
-            return val instanceof XDBytes ? (((XDBytes) val).isBase64() ? "b(" : "x(") + val + ')'
+            return val instanceof XDBytes
+                ? (((XDBytes) val).isBase64() ? "b(" : "x(") + val + ')'
                 : val instanceof InetAddress ? val.toString().substring(1) : val.toString();
         }
     }
@@ -774,14 +771,12 @@ public class XonTools {
             try { // try if it is URL
                 return (f.exists() && f.isFile()) ? getInputFromObject(f, sysId)
                     : getInputFromObject(SUtils.getExtendedURL((String)source), sysId);
-            } catch (RuntimeException | MalformedURLException ex) {
-                //not URL, file name, so create from string a reader
-                return new InputData(new StringReader((String) source), sysId==null ? "STRING" : sysId);
+            } catch (RuntimeException | MalformedURLException ex) {//not URL, file name -> create reader from string
+                return new InputData(new StringReader((String) source), sysId == null ? "STRING" : sysId);
             }
         } else if (source instanceof URL) {
             try {
-                return new InputData(((URL) source).openStream(),
-                    sysId==null ? ((URL) source).toString() : sysId);
+                return new InputData(((URL) source).openStream(), sysId==null ? ((URL) source).toString() : sysId);
             } catch (Exception ex) {
                 throw new SRuntimeException(SYS.SYS029, source.toString());//Can't read input stream&{0}{; }
             }

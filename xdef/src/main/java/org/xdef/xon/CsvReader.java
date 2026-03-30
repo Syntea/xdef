@@ -186,9 +186,10 @@ public class CsvReader extends StringParser implements XonParsers {
 
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// CVS to String
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* CVS to String
+******************************************************************************/
+
     /** Create line with CSV data.
      * @param csvLine the array with CSV data from a row.
      * @param sb StringBuilder to which line is added.
@@ -246,9 +247,11 @@ public class CsvReader extends StringParser implements XonParsers {
         return sb.toString();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// CSV to XML
-////////////////////////////////////////////////////////////////////////////////
+
+/*=****************************************************************************
+* CSV to XML
+******************************************************************************/
+
     /** Create XML element with CSV data.
      * @param csv object with CSV data.
      * @return Element created from CSV data.
@@ -270,9 +273,10 @@ public class CsvReader extends StringParser implements XonParsers {
         return root;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// XML to CSV
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* XML to CSV
+******************************************************************************/
+
     /** Create CSV object from XML element.
      * @param el element from which the CSV object is created.
      * @return created CSV object.
@@ -283,9 +287,9 @@ public class CsvReader extends StringParser implements XonParsers {
         return (List<Object>) XonUtils.parseXON(s);
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// interface XONParsers
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Interface XONParsers
+******************************************************************************/
 
     /** Parse INI/Properties source data.
      * @throws SRuntimeException if an error occurs,

@@ -201,12 +201,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
             while (i > 0 && ((c=val.charAt(i-1)) == ' ' || c == '\n' || c == '\r' || c == '\t')) {
                 i--;
             }
-            if (i == 0) {
-                val = null;
-            } else if (i < len) {
-                val = val.substring(0, i);
-            }
-            _jp.putValue(new XonTools.JValue(spos, val));
+            _jp.putValue(new XonTools.JValue(spos, i == 0 ? null : val.substring(0, i)));
             return true;
         }
         error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
@@ -303,9 +298,9 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
         _jp.mapEnd(this);
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// interface XONParsers
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Interface XONParsers
+******************************************************************************/
 
     /** Parse INI/Properties source data.
      * @throws SRuntimeException if an error occurs,
@@ -328,9 +323,9 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
     @Override
     public void setJsonMode() {} // not used here
 
-////////////////////////////////////////////////////////////////////////////////
-// INI to String
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* INI to String
+******************************************************************************/
 
     /** Create INI/Properties source format of a string.
      * @param sb where to create.
@@ -347,12 +342,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
                 case '\n' : sb.append("\\n"); continue;
                 case '\r' : sb.append("\\r"); continue;
                 case '\t' : sb.append("\\t"); continue;
-                default :
-                    if (ch < ' ' || !Character.isDefined(ch)) {
-                        sb.append(XonTools.genCharAsUTF(ch));
-                    } else {
-                        sb.append(ch);
-                    }
+                default : sb.append(ch < ' ' || !Character.isDefined(ch) ? XonTools.genCharAsUTF(ch) : ch);
             }
         }
     }
@@ -448,8 +438,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
      */
     @SuppressWarnings("unchecked")
     public static final Element iniToXml(final Object ini) {
-        Document doc = KXmlUtils.newDocument(
-            XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
+        Document doc =
+            KXmlUtils.newDocument(XDConstants.XON_NS_URI_W, XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP, null);
         Element el = doc.getDocumentElement();
         iniToXml((Map<String,Object>) ini, el);
         return el;

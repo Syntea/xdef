@@ -7,9 +7,10 @@ import org.xdef.XDConstants;
  * @author Vaclav Trojan
  */
 public interface XonNames {
-////////////////////////////////////////////////////////////////////////////////
-// names used in XON DX and W3C format
-////////////////////////////////////////////////////////////////////////////////
+
+/*=****************************************************************************
+* Names used in XON DX and W3C format
+******************************************************************************/
     /** XML element name of XON/JSON map. */
     public static final String X_MAP = "map";
     /** XML attribute name of XON/JSON named item in a map. */
@@ -27,9 +28,9 @@ public interface XonNames {
     /** QName of of XON/JSON value. */
     public static final QName Q_VALUE = new QName(XDConstants.XON_NS_URI_W, X_VALUE);
 
-////////////////////////////////////////////////////////////////////////////////
-// Names of XON directives
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Names of XON directives
+******************************************************************************/
     /** Encoding directive {used only in first line of XON source data}. */
     public static final String ENCODING_DIRECTIVE = "%encoding";
     /** Directive with script in XON model. */
