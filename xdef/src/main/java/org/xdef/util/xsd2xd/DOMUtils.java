@@ -5,8 +5,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import org.w3c.dom.*;
 
-/** Provides general static methods for manipulating with Document Object Model
- * nodes.
+/** Provides general static methods for manipulating with Document Object Model nodes.
  * @author Ilia Alexandrov
  */
 public class DOMUtils extends KDOMUtils {
@@ -16,6 +15,7 @@ public class DOMUtils extends KDOMUtils {
      * @return URL representation of given namespace.
      * @throws Exception if cannot create URL from path.
      */
+    @SuppressWarnings("deprecation")
     public static URL getURLFromNamespace(final String namespace) throws Exception {
         return new URL(URLDecoder.decode(namespace, "UTF-8"));
     }

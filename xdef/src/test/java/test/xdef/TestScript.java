@@ -13,6 +13,7 @@ import org.xdef.XDValue;
 import org.xdef.component.XComponent;
 import org.xdef.proc.XXData;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
 import static test.XDTester._xdNS;
 
 /** TestScript.
@@ -43,13 +44,9 @@ public final class TestScript extends XDTester {
     final public static void myCheck3() {}
     final public static long myCheck4() {return 2;}
     final public static long myCheck4(long i) {return i + 1;}
-    final public static long myCheck5(double p1, long p2, long p3, String p4) {
-        return 3;
-    }
+    final public static long myCheck5(double p1, long p2, long p3, String p4) {return 3;}
 
-    private static void display(final XDPool defPool,
-        final String xdef,
-        final String data) {
+    private static void display(final XDPool defPool, final String xdef, final String data) {
         System.out.flush();
         System.err.flush();
         System.out.println("\nXdefinition:\n"+ xdef);
@@ -65,8 +62,7 @@ public final class TestScript extends XDTester {
         System.err.flush();
         String xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'\n"+
-"   script='options preserveEmptyAttributes," +
-"           preserveAttrWhiteSpaces, noTrimAttr'>\n"+
+"   script='options preserveEmptyAttributes, preserveAttrWhiteSpaces, noTrimAttr'>\n"+
 "<xd:declaration>\n"+
 "  external method {\n"+
 "     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
@@ -122,9 +118,7 @@ public final class TestScript extends XDTester {
         System.out.flush();
         String xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"<xd:declaration>\n"+
-"  String result='?';\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration> String result='?'; </xd:declaration>\n"+
 "  <a a='string' xd:script='finally result=" + source + "'/>\n"+
 "</xd:def>\n";
         String xml = "<a a='abc'/>";
@@ -206,9 +200,7 @@ public final class TestScript extends XDTester {
         }
     }
 
-    private void testCheckMethod(final String value,
-        final String source,
-        final String call) {
+    private void testCheckMethod(final String value, final String source, final String call) {
         System.err.flush();
         System.out.flush();
         String xdef =
@@ -226,11 +218,10 @@ public final class TestScript extends XDTester {
 "      long test.xdef.TestScript.myCheck4(long);\n"+
 "      long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
 "   }\n"+
- source +
+            source +
 "  </xd:declaration>\n"+
-            "\n"+
-            "  <a a=\"optional " + call + "\"/>\n"+
-            "</xd:def>\n";
+"  <a a=\"optional " + call + "\"/>\n"+
+"</xd:def>";
         String data = "<a a=\"" + value + "\"/>";
         XDPool xp = null;
         try {
@@ -267,15 +258,10 @@ public final class TestScript extends XDTester {
         Element el;
         XComponent xc;
         XDPool xp;
-
         setDebug(true);
         _printCode = true;
         _printCode = false;
-////////////////////////////////////////////////////////////////////////////////
-//		test("de,ef","setResult(NCNameList(','));");
-//if(true)return;
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+
         xdef = // test rounding seconds acordint to milliseconds
 "<xd:def xmlns:xd='"+_xdNS+"' root='T'>\n" +
 "  <xd:declaration>\n" +
@@ -290,7 +276,7 @@ public final class TestScript extends XDTester {
 "<T D1='2022-01-01 12:34:56.1'" +
 " D2='2022-01-01 12:34:56.5' D3='2022-01-01 12:34:56.6'/>", reporter));
         assertNoErrorwarnings(reporter);
-////////////////////////////////////////////////////////////////////////////////
+
         testAttr1("(String)@a", "abc");
         testAttr1(" (String) @a", "abc");
         testAttr1("toString(@a)", "abc");
@@ -324,7 +310,7 @@ public final class TestScript extends XDTester {
         testAttr1("(\"\" + (@a) + (@b)) + @a", "abcabc");
         testAttr1("toString(!(@a OR @b) AND @a)", "false");
         testAttr1("(String) ((@a | @b) &amp; @a)", "true");
-////////////////////////////////////////////////////////////////////////////////
+
         test("","/*koment*/setResult(true);/*koment*/;");
         test("","/*koment*/setResult/*koment*/(/*koment*/true/*koment*/OR"
             + "/*koment*/false/*koment*/)/*koment*/;/*koment*/");
@@ -350,8 +336,7 @@ public final class TestScript extends XDTester {
         test("","setResult(!'a'.equals('aa'));");
         test("","setResult('aB'.equalsIgnoreCase('Ab'));");
         test("","setResult(toString(-9223372036854775808) == '-9223372036854775808');");
-        test("","setResult(toString(9_223_372_036_854_775_807)"
-            + "== '9223372036854775807');");
+        test("","setResult(toString(9_223_372_036_854_775_807) == '9223372036854775807');");
         test("","setResult(toString(-9_223_372_036_854_775_808) == '-9223372036854775808');");
         test("","setResult(toString(0xf0) == '240');");
         test("","setResult(toString(0XF0) == '240');");
@@ -532,8 +517,7 @@ public final class TestScript extends XDTester {
         test("63","setResult(eq(toString(-myCheck4(1)+3*2*10 + 3 + 2)));");
         test("Monday, 23 January 2006", "setResult(xdatetime('EEEE, d MMMM y'))");
         test("Mon, 23 Jan 2006", "setResult(xdatetime('EEE, d MMM y'));");
-        test("1999-05-01T20:43:09.876+01:00",
-            "setResult(eq(parseDate('1999-05-01T20:43:09.876+01:00').toString()));");
+        test("1999-05-01T20:43:09.876+01:00", "setResult(eq(parseDate('1999-05-01T20:43:09.876+01:00').toString()));");
         test("1999-05-01T20:43:09+01:00", "setResult(eq(toString(parseDate('1999-05-01T20:43:09+01:00'))));");
         test("1999-05-01", "setResult(eq(parseDate(getText(), 'yyyy-MM-dd').toString()));");
         test("1999-04-05", "setResult(eq(easterMonday(1999).toString()));");
@@ -541,8 +525,10 @@ public final class TestScript extends XDTester {
         test("1999-04-05", "setResult(parseDate(getText()).lastDayOfMonth() == 30);");
         test("Mon, 23 Jan 2006 20:26:46", "setResult(emailDate());");
         test("Mon, 23 Jan 2006 20:26:46 +0100", "setResult(emailDate());");
-        test("Mon, 23 Jan 2006 20:26:46 +0100 (CET)","setResult(emailDate());");
-        test("Mon, 23 Jan 2006 20:26:46 CET", "setResult(emailDate());");
+        if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+            test("Mon, 23 Jan 2006 20:26:46 +0100 (CET)","setResult(emailDate());");
+            test("Mon, 23 Jan 2006 20:26:46 CET", "setResult(emailDate());");
+        }
         test("Fri, 6 Nov 2009 01:44:36 +0100", "setResult(emailDate());");
         test("Fri, 6 Nov 2009 21:59:58 +0000 (GMT)", "setResult(emailDate());");
         test("ahoj 2","setResult(eq('ahoj ' + 002));");
@@ -622,7 +608,7 @@ public final class TestScript extends XDTester {
         test("1.5.1999","setResult(eq(toString(parseDate('19990501','yyyyMMdd'),'d.M.yyyy')));");
         test("010599", "setResult(eq(toString(parseDate('99-05-01','YY-MM-dd'),'ddMMyy')));");
         test("", "{Datetime d = parseDate('2005-03-01T14:48:40.352');"+
-            "String s = 'datum: 01/03/2005, čas: 14:48:40.352';" +
+            "String s = 'datum: 01/03/2005, čas: 14:48:40.352';"+
             "String m='\\'datum: \\'dd/MM/yyyy\\', čas: \\'HH:mm:ss.SSS';" +
             "setResult(toString(d,m) == s);}");
         test("2008", "setResult(eq(toString(parseDate('2008','yyyy'),'yyyy')));");
@@ -761,52 +747,41 @@ public final class TestScript extends XDTester {
         // Test XML schema gYear
         test("", "{Parser p = gYear(%minInclusive=1999);\nsetResult(p.parse('1999'));}");
         test("", "{Parser p = gYear(%minInclusive=1999);\nsetResult(!p.parse('1998'));}");
-        test("", "{Parser p = gYear(%minInclusive=1999);\nParseResult r = p.parse('1999');\n"
-            + "setResult(r.matches());}");
-        test("", "{Parser p = gYear(%minInclusive=1999);\nParseResult r = p.parse('1998');\n"
-            + "setResult(!r.matches());}");
+        test("", "{Parser p = gYear(%minInclusive=1999);\nParseResult r = p.parse('1999'); setResult(r.matches());}");
+        test("", "{Parser p = gYear(%minInclusive=1999);\nParseResult r = p.parse('1998'); setResult(!r.matches());}");
         test("1999", "{setResult(gYear(%minInclusive=1999));}");
         test("1999", "{setResult(gYear(%minInclusive=1999).parse());}");
         test("1990", "{setResult(!gYear(%minInclusive=1999));}");
         test("1990", "{setResult(!gYear(%minInclusive=1999).parse());}");
         // test email
         testAttr2("tr.ab@vol.cz","onTrue setResult(true);required emailAddr();onFalse setResult(false);");//OK
-        testAttr2("&lt;p-G@d-t.o&gt;","onTrue setResult(true);"
-            + "required emailAddr();onFalse setResult(false);"); // OK
+        testAttr2("&lt;p-G@d-t.o&gt;","onTrue setResult(true);required emailAddr();onFalse setResult(false);"); // OK
         testAttr2("Pa Gr &lt;p-G@d-t.o&gt;","onTrue setResult(true);"
             + "required emailAddr();onFalse setResult(false);"); // OK
-        testAttr2("(Pa Gr)p-G@d-t.o","onTrue setResult(true);"
-            + "required emailAddr();onFalse setResult(false);"); // OK
-        testAttr2("p-G@d-t.o(Pa Gr)","onTrue setResult(true);"
-            + "required emailAddr();onFalse setResult(false);"); // OK
+        testAttr2("(Pa Gr)p-G@d-t.o","onTrue setResult(true);required emailAddr();onFalse setResult(false);"); // OK
+        testAttr2("p-G@d-t.o(Pa Gr)","onTrue setResult(true);required emailAddr();onFalse setResult(false);"); // OK
         testAttr2("(a a) =?UTF-8?Q?Xx. Yy?=(b)&lt;1@2g>(c)","onTrue setResult("
             + "true); required emailAddr(); onFalse setResult(false);"); // OK
-        testAttr2("tro.cz","onTrue setResult(false); required emailAddr();"
-            + " onFalse setResult(true);"); // missing "@"
+        testAttr2("tro.cz","onTrue setResult(false); required emailAddr(); onFalse setResult(true);"); // missing "@"
         testAttr2("@trovolny.cz","onTrue setResult(false);required emailAddr();"
             + " onFalse setResult(true);"); // missing local name
         testAttr2("trovolny.cz@","onTrue setResult(false);required emailAddr();"
             + " onFalse setResult(true);"); // missing domain
-        testAttr2("tr@@vol.cz","onTrue setResult(false); required emailAddr();"
-            + " onFalse setResult(true);"); // more than one "@"
-        testAttr2("tr@vol@ny.cz","onTrue setResult(false);required emailAddr();"
-            + " onFalse setResult(true);"); // more than one "@"
-        testAttr2("a b t@v","onTrue setResult(true); required emailAddr();"
-            + " onFalse setResult(true);"); // OK
+        testAttr2("tr@@vol.cz","onTrue setResult(false); required emailAddr(); onFalse setResult(true);"); // more "@"
+        testAttr2("tr@vol@ny.cz","onTrue setResult(false);required emailAddr();onFalse setResult(true);"); // more "@"
+        testAttr2("a b t@v","onTrue setResult(true); required emailAddr(); onFalse setResult(true);"); // OK
         // emailAddrList
         testAttr2("t@v.c(ab)","onTrue setResult(true);required emailAddrList();"
             + " onFalse setResult(true);"); // OK
-        testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true);"
-            + "required emailAddrList();onFalse setResult(false);"); // OK
+        testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true); required emailAddrList();onFalse setResult(false);"); // OK
         testAttr2("@v","onTrue setResult(true); required emailAddrList();"
             + " onFalse setResult(true);"); // local part missing
         testAttr2("t@v.","onTrue setResult(true); required emailAddrList();"
             + " onFalse setResult(true);"); // top domain part missing
-        testAttr2(" x &lt;t@v.cc>\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult"
-            + "(true); required emailAddrList();" // OK, white spaces allowed
-            + " onFalse setResult(false);");
-        testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required"
-            + " emailAddrList();onFalse setResult(true);"); //missing ";" or ","
+        testAttr2(" x &lt;t@v.cc>\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult(true); required emailAddrList();"
+            + " onFalse setResult(false);"); // OK, white spaces allowed
+        testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);"
+            + " required emailAddrList();onFalse setResult(true);"); //missing ";" or ","
         // switch (String) tests
         testCheckMethod("12", "boolean m(){switch(getText()){case '12': " +
                 "setResult(true); return true; default: return false;}}","m()");
@@ -814,40 +789,35 @@ public final class TestScript extends XDTester {
             + ": setResult(true);return true; default: setResult(false);"
             + " return false;}}", "m()");
         testCheckMethod("ahoj", "boolean m(){switch(getText()){case'ahoj':"
-            + "case'nazdar':setResult(true);return true;}setResult(false);"
-            + "return false;}", "m()");
-        testCheckMethod("ahoj", "boolean xxx(String s, int i){"
-            + "if (i != 999) {setResult(false); return false;}"
-            + "switch(s){}setResult(true);return true;}",
+            + "case'nazdar':setResult(true);return true;}setResult(false); return false;}", "m()");
+        testCheckMethod("ahoj", "boolean xxx(String s, int i) {"
+            + "if (i != 999) {setResult(false); return false;} switch(s){}setResult(true);return true; }",
             "xxx(getText(),999);");
         testCheckMethod("ahoj", "boolean xxx(String s, int i){if (i != 999) {"
             + "setResult(false); return false;} switch(s){"
-            + "case'ahoj':case'nazdar':"
-            + "setResult(true);return true;} setResult(false); return false;}",
+            + "case'ahoj':case'nazdar': setResult(true); return true;} setResult(false); return false;}",
             "xxx('ahoj',999);");
-        testCheckMethod("ahoj", "boolean xxx(String s, int i){if (i != 999) {"
-            + "setResult(false); return false;} switch(s){"
+        testCheckMethod("ahoj", "boolean xxx(String s, int i){"
+            + "if (i != 999) {setResult(false); return false;} switch(s) {"
             + "case'ahoj': setResult(true);return true;"
-            + "default: setResult(false); return false;}}",
+            + "default: setResult(false); return false;} } ",
             "xxx(getText(),999);");
-////////////////////////////////////////////////////////////////////////////////
+
         testAttr2("+1.21","onTrue setResult(true); required decimal; onFalse setResult(false); ");
-        testAttr2("ahoj","required enum('nazdar','ahoj');onTrue"
+        testAttr2("ahoj","required enum('nazdar','ahoj'); onTrue"
             + " setResult(true);onFalse {clearReports(); setResult(false);}");
-        testAttr2("hoj","required enum('nazdar','ahoj');onTrue"
+        testAttr2("hoj","required enum('nazdar','ahoj'); onTrue"
             + " setResult(false);onFalse {clearReports(); setResult(true);}");
         testAttr2("Ahoj","required enum('nazdar','ahoj');"+
             "onTrue setResult(false); onFalse {clearReports(); setResult(true);}");
         testAttr2("hoj","required  enum('nazdar','ahoj');" +
             "onTrue setResult(false); onFalse {clearReports(); setResult(true);}");
         testAttr2("ahoj","required; onTrue setResult(true); onFalse {clearReports(); setResult(false);}");
-        testAttr2("ahoj","required string(); onTrue setResult(true);"
-            + "onFalse {clearReports(); setResult(false);}");
+        testAttr2("ahoj","required string(); onTrue setResult(true); onFalse {clearReports(); setResult(false);}");
         testAttr2("ahoj", "required; finally setResult(true);");
         testAttr2("ahoj", "required; onTrue setResult(true);");
         testAttr2("ahoj", "required eq('ahoj'); onTrue setResult(true); onFalse setResult(false);");
-        testAttr2("ahoj", "required eq('nazdar'); onTrue setResult(false);"
-            + "onFalse {clearReports(); setResult(true);}");
+        testAttr2("ahoj", "required eq('nazdar'); onTrue setResult(false); onFalse {clearReports(); setResult(true);}");
         testAttr2("ahoj", "required eq('ahoj'); onTrue setResult(false);"
             + "onFalse setResult(false); finally setResult(true);");
         testAttr2("nazdar","required eq('nazdar');\nonFalse setResult(false); onTrue setResult(true);");
@@ -883,12 +853,14 @@ public final class TestScript extends XDTester {
         testAttr2("//X/y","onTrue setResult(true); required file(); onFalse setResult(false); ");
         testAttr2("Sun, 18 Nov 2001 23:42:39 +0100",
             "onTrue setResult(true); required emailDate(); onFalse setResult(false); ");
-        testAttr2("Tue, 27 Nov 2001 12:17:54 +0100 (CET)", "onTrue setResult(true); required emailDate();"
-            + " onFalse setResult(false); ");
+        if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+            testAttr2("Tue, 27 Nov 2001 12:17:54 +0100 (CET)",
+                "onTrue setResult(true); required emailDate(); onFalse setResult(false); ");
+        }
         testAttr2("http://pes.eunet.cz","onTrue setResult(true);required url(); onFalse setResult(false); ");
-////////////////////////////////////////////////////////////////////////////////
-// Test check methods
-////////////////////////////////////////////////////////////////////////////////
+/*=*****************************************************************************
+Test check methods
+*******************************************************************************/
 //		_printCode = true;
         _printCode = false;
         testCheckMethod("ahoj", "boolean m(){setResult(true); return true;}", "m()");
@@ -908,7 +880,7 @@ public final class TestScript extends XDTester {
             + "setResult(false); return false;}"
             + " switch(i){}setResult(true);return true;}",
             "xxx(getText(),999);");
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************/
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
@@ -1060,8 +1032,8 @@ public final class TestScript extends XDTester {
 "  </a:a>\n"+
 "  <b:a xd:script='ref A#a:a' b:c='int()'> int(); </b:a>\n"+
 "  <xd:component>\n"+
-"   %class "+_package+".MyTest10 %link A#a:a;\n" +
-"   %class "+_package+".MyTest11 %link A#b:a;\n" +
+"    %class "+_package+".MyTest10 %link A#a:a;\n" +
+"    %class "+_package+".MyTest11 %link A#b:a;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
             genXComponent(xp = compile(xdef));
@@ -1084,12 +1056,10 @@ public final class TestScript extends XDTester {
 "    <b a='int()' a:b='int()' />\n"+
 "  </a>\n"+
 "</xd:def>\n" +
-"<xd:def name='B' root='a' xmlns='c.d' xmlns:a='a.b'>\n"+
-"  <a xd:script='ref A#a:a'/>\n"+
-"</xd:def>\n" +
+"<xd:def name='B' root='a' xmlns='c.d' xmlns:a='a.b'> <a xd:script='ref A#a:a'/> </xd:def>\n" +
 "<xd:component>\n"+
-" %class "+_package+".MyTest20 %link A#a;\n" +
-" %class "+_package+".MyTest22 %link B#a;\n" +
+"  %class "+_package+".MyTest20 %link A#a;\n" +
+"  %class "+_package+".MyTest22 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
             genXComponent(xp = compile(xdef));
@@ -1106,12 +1076,10 @@ public final class TestScript extends XDTester {
 "    <b a='int()' a:b='int()' />\n"+
 "  </a>\n"+
 "</xd:def>\n" +
-"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
-"  <a xd:script='ref A#a:a' />\n"+
-"</xd:def>\n" +
+"<xd:def name='B' root='a' xmlns:a='a.b'> <a xd:script='ref A#a:a' /> </xd:def>\n" +
 "<xd:component>\n"+
-" %class "+_package+".MyTest30 %link A#a;\n" +
-" %class "+_package+".MyTest32 %link B#a;\n" +
+"  %class "+_package+".MyTest30 %link A#a;\n" +
+"  %class "+_package+".MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
             genXComponent(xp = compile(xdef));

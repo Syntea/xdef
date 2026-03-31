@@ -26,6 +26,7 @@ public class DTDToXdef {
      * @param logFile log file.
      * @throws IllegalArgumentException if log file is empty or log file name is illegal.
      */
+    @SuppressWarnings("deprecation")
     private void setLogFile(String logFile) {
         if (logFile == null || "".equals(logFile)) {
             throw new IllegalArgumentException("Log file name is empty");

@@ -340,6 +340,7 @@ public class RegisterReportTables {
          * @return ISO 639-2 language ID (three letters).
          * @throws RuntimeException if language code is not found.
          */
+        @SuppressWarnings("deprecation")
         private static String getISO639_2_ID(final String language)
             throws RuntimeException {
             String result;
