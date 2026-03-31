@@ -3797,7 +3797,7 @@ public class StringParser extends SReporter implements SParser {
             if (!isQNamePart(xmlVersion)) {
                 return false;
             }
-            _parsedString = s + _source.substring(pos, getIndex());;
+            _parsedString = s + _source.substring(pos, getIndex());
             return true;
         }
         return false;

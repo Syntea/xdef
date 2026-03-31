@@ -1,5 +1,6 @@
 package org.xdef.util.xsd2xd;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -234,7 +235,7 @@ public class Utils {
         if (!IMPORT.equals(type) && !INCLUDE.equals(type) && !REDEFINE.equals(type)) {
             throw new IllegalArgumentException("Given type is not supported by this method");
         }
-        Set<URL> ret = new HashSet<URL>();
+        Set<URL> ret = new HashSet<>();
         NodeList externals = DOMUtils.getChildElementsNS(schemaElement, NSURI_SCHEMA, type);
         for (int i = 0; i < externals.getLength(); i++) {
             Element external = (Element) externals.item(i);
@@ -328,7 +329,7 @@ public class Utils {
      */
     public static Set<URL> getImportedSchemaURLs(URL schemaURL, Element schemaElement, String namespace)
         throws MalformedURLException {
-        Set<URL> ret = new HashSet<URL>();
+        Set<URL> ret = new HashSet<>();
         NodeList imports = DOMUtils.getChildElementsNS(schemaElement, NSURI_SCHEMA, IMPORT);
         for (int i = 0; i < imports.getLength(); i++) {
             Element importElement = (Element) imports.item(i);
@@ -342,7 +343,7 @@ public class Utils {
                     URL url;
                     try {
                         url = new URL(URLDecoder.decode(namespaceAttribute, "UTF-8"));
-                    } catch (Exception ex) {
+                    } catch (UnsupportedEncodingException | MalformedURLException ex) {
                         url = new URL(namespaceAttribute);
                     }
 

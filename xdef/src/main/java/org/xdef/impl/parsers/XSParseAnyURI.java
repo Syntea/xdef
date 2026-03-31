@@ -59,7 +59,6 @@ public class XSParseAnyURI extends XSAbstractParser {
 
     @Override
     public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
-
     @Override
     public void parseObject(final XXNode xnode, final XDParseResult p){
         int pos0 = p.getIndex();
@@ -77,43 +76,32 @@ public class XSParseAnyURI extends XSAbstractParser {
         checkLength(p);
         checkEnumeration(p);
     }
-
     @Override
     public void setLength(final long x) { _minLength = _maxLength = x; }
-
     @Override
     public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
-
     @Override
     public void setMaxLength(final long x) { _maxLength = x; }
-
     @Override
     public long getMaxLength() { return _maxLength; }
-
     @Override
     public void setMinLength(final long x) { _minLength = x; }
-
     @Override
     public long getMinLength() { return _minLength; }
-
     @Override
     public XDValue[] getEnumeration() {return _enumeration;}
-
     @Override
     public void setParseSQParams(final Object... params) {
         if (params != null && params.length >= 1) {
             Object par1 = params[0];
             _minLength = Integer.parseInt(par1.toString());
-            if (params.length == 1) {
-                _maxLength = _minLength;
-            } else if (params.length == 2) {
-                _maxLength = Integer.parseInt(params[1].toString());
-            } else {
-                throw new SRuntimeException("Incorrect number of parameters");
+            switch (params.length) {
+                case 1: _maxLength = _minLength; break;
+                case 2: _maxLength = Integer.parseInt(params[1].toString()); break;
+                default: throw new SRuntimeException("Incorrect number of parameters");
             }
         }
     }
-
     @Override
     public void setEnumeration(final Object[] o) {
         _enumeration = null;
@@ -123,13 +111,14 @@ public class XSParseAnyURI extends XSAbstractParser {
         DefUri[] e = null;
         //the list of strings must be sorted by length down
     loop:
-        for (int i = 0; i < o.length; i++) {
-            DefUri x = (DefUri) iObject(null, o[i]);
+        for (Object o1 : o) {
+            DefUri x = (DefUri) iObject(null, o1);
             if (e == null) {
                 e = new DefUri[]{x};
             } else {
-                for (int j = 0; j < e.length; j++) {
-                    if (e[j].equals(x)) {//already is in enumeration
+                for (DefUri e1 : e) {
+                    if (e1.equals(x)) {
+                        //already is in enumeration
                         continue loop;
                     }
                 }
@@ -141,6 +130,10 @@ public class XSParseAnyURI extends XSAbstractParser {
         }
         _enumeration = e;
     }
+    @Override
+    public short parsedType() {return XD_ANYURI;}
+    @Override
+    public String parserName() {return ROOTBASENAME;}
 
     void checkLength(final XDParseResult p) {
         if (p.matches()) {
@@ -154,25 +147,4 @@ public class XSParseAnyURI extends XSAbstractParser {
             }
         }
     }
-
-    void checkEnumeration(XDParseResult p, XXNode xnode) {
-        if (p.matches()) {
-            if (_enumeration == null || _enumeration.length == 0) {
-                return;
-            }
-            DefUri u = (DefUri) p.getParsedValue();
-            for (DefUri x : _enumeration) {
-                if (x.equals(u)) {
-                    return;
-                }
-            }
-            p.errorWithString(XDEF.XDEF810, parserName());//Doesn't fit enumeration list of &{0}&{1}{: }
-        }
-    }
-
-    @Override
-    public short parsedType() {return XD_ANYURI;}
-
-    @Override
-    public String parserName() {return ROOTBASENAME;}
 }

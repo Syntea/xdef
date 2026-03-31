@@ -132,7 +132,7 @@ public class GlobalDeclaration {
         String type,
         Map<URL, Element> schemaElements) {
         GlobalDeclaration ret = getGlobalDeclarationInSchemaAndIncludes(
-            localName, schemaURL, type, new HashSet<URL>(), schemaElements);
+            localName, schemaURL, type, new HashSet<>(), schemaElements);
         if (ret == null) {
             throw new RuntimeException("Global declaration [name='"
                 + localName + "', " + "type='" + type
