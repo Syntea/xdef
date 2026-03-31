@@ -711,12 +711,7 @@ TESTING normalizedstring
         assertTrue(parse("Hello World!"), _msg);
         assertTrue(prepare("normalizedString(%whiteSpace='replace')"),_msg);
         assertTrue(parse("Hello World!"), _msg);
-
-        if (!XDTester.getFulltestMode()) {//schema accepts empty string???
-            if (SUtils.JAVA_RUNTIME_VERSION_ID >= 2500) { // only in new version
-                assertTrue(parseFail(""), _msg);
-            }
-        }
+        assertTrue(parse(""), _msg); // empty string
 
         // testing facets
         assertTrue(prepare("normalizedString(%enumeration=['Hello', 'world'])"), _msg);
