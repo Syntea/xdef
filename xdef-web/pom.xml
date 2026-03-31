@@ -72,22 +72,46 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
                             <targetPath>META-INF</targetPath>
+                            <directory>.</directory>
+                            <includes>
+                                <inlude> .flattened-pom.xml</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>..</directory>
+                            <includes>
+                                <inlude>README.md</inlude>
+                                <inlude>apache-license-2.0.md</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>../xdef</directory>
+                            <includes>
+                                <inlude>changelog.md</inlude>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
                             <includes>
                                 <inlude>pominfo.properties</inlude>
                             </includes>
                         </resource>
                         <resource>
+                            <targetPath>.</targetPath>
                             <directory>src/main/webapp</directory>
-                            <filtering>true</filtering>
                             <includes>
                                 <inlude>footer.html</inlude>
                             </includes>
+                            <filtering>true</filtering>
                         </resource>
                         <resource>
-                            <directory>../xdef/target/reports/apidocs</directory>
                             <targetPath>javadoc</targetPath>
+                            <directory>../xdef/target/reports/apidocs</directory>
                         </resource>
                     </webResources>
                 </configuration>
