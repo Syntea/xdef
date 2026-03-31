@@ -1,13 +1,13 @@
 html {
-    /* aby se id-odkazy neschovaly pod sticky-header */
+    /* not to jump to the id-link be hidden under the sticky-header */
     overflow:           auto;
     scroll-padding-top: 5em;
 }
 
 body {
     margin-top:         0;
-    margin-left:        4em;
-    margin-right:       4em;
+    margin-left:        2cm;
+    margin-right:       2cm;
 }
 
 h1 {
