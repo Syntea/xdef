@@ -43,24 +43,19 @@ public final class TestXSTypes extends XDTester {
     private String _xdef = "";
     private boolean _result = false;
     private String _params;
-
     private DocumentBuilderFactory _builderFactory;
     private DocumentBuilder _builder;
     private Validator _validator;
     private String _schema = "";
     private ErrorHandler _errHandler = new ErrorHandler() {
-
         @Override
         final public void warning(final SAXParseException x) throws SAXException{setMesage(x);}
-
         @Override
         final public void error(final SAXParseException x) throws SAXException {setMesage(x);}
-
         @Override
         final public void fatalError(final SAXParseException x) throws SAXException {setMesage(x);}
     };
     private final EntityResolver _entityResolver =  new EntityResolver() {
-
         @Override
         final public InputSource resolveEntity(final String publicId, final String systemId)
             throws SAXException, IOException {
@@ -72,8 +67,7 @@ public final class TestXSTypes extends XDTester {
         if (_schema == null || _schema.isEmpty()) {
             return true; //do not check schema if it is not available
         }
-        //error handler to be assigned to builder and validator
-        //we nead to set resolver for builder to assign the schema
+        //error handler to be assigned to builder and validator we nead to set resolver for builder to assign the schema
         try {
             if (_xml != null) {
                 Document doc =
@@ -255,18 +249,15 @@ public final class TestXSTypes extends XDTester {
         return true;
     }
 
-    private static void genSimpleType(final String type,
-        final XScriptParser p,
-        final String indent,
-        final StringBuffer sb) {
-        sb.append(indent).append("<xs:simpleType>\n");
-        sb.append(indent).append("  <xs:restriction base='");
+    private static void genSimpleType(final String type,final XScriptParser p,final String indnt,final StringBuffer sb){
+        sb.append(indnt).append("<xs:simpleType>\n");
+        sb.append(indnt).append("  <xs:restriction base='");
         sb.append(type);
         if (isSymbol(p, XScriptParser.LPAR_SYM)) {
             sb.append("'>\n");
             if (!isSymbol(p, XScriptParser.RPAR_SYM)) { //not empty list
                 for(;;) {
-                    parseRestriction(p, indent + "    ", sb);
+                    parseRestriction(p, indnt + "    ", sb);
                     if (isSymbol(p, XScriptParser.RPAR_SYM)) {
                         break;
                     }
@@ -275,16 +266,14 @@ public final class TestXSTypes extends XDTester {
                     }
                 }
             }
-            sb.append(indent).append("  </xs:restriction>\n");
+            sb.append(indnt).append("  </xs:restriction>\n");
         } else {
             sb.append("'/>\n");
         }
-        sb.append(indent).append("</xs:simpleType>\n");
+        sb.append(indnt).append("</xs:simpleType>\n");
     }
 
-    private static void genUnionItem(final XScriptParser p,
-        final String indent,
-        final StringBuffer sb) {
+    private static void genUnionItem(final XScriptParser p, final String indent, final StringBuffer sb) {
         if (!"item".equals(parseKeyParam(p))) {
             throw new RuntimeException("'%item' expexted as first parameter of union");
         }
@@ -320,9 +309,7 @@ public final class TestXSTypes extends XDTester {
         sb.append(indent).append("  </xs:simpleType>\n");
     }
 
-    private static void genListItem(final XScriptParser p,
-        final String indent,
-        final StringBuffer sb) {
+    private static void genListItem(final XScriptParser p, final String indent, final StringBuffer sb) {
         if (!"item".equals(parseKeyParam(p))) {
             throw new RuntimeException("'%item' expexted as first parameter");
         }
@@ -350,9 +337,7 @@ public final class TestXSTypes extends XDTester {
         sb.append(indent).append("</xs:restriction>\n");
     }
 
-    private static void genSchemaType(final XScriptParser p,
-        final String indent,
-        final StringBuffer sb) {
+    private static void genSchemaType(final XScriptParser p, final String indent, final StringBuffer sb) {
         String type = readTypeName(p);
         if (type == null) {
             throw new RuntimeException("name of type expected");
@@ -604,9 +589,9 @@ public final class TestXSTypes extends XDTester {
         setProperty("xdef.minyear", null);
         setProperty("xdef.maxyear", null);
 
-//------------------------------------------------------------------------------
-//                          TESTING string
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING string
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("string(%maxInclusive='asdf')"), _msg);
         assertTrue(checkFail("string(%maxExclusive='qwer')"), _msg);
@@ -695,15 +680,13 @@ public final class TestXSTypes extends XDTester {
         }
         assertTrue(parseFail("a"), _msg);
 
-        assertTrue(prepare(
-            "string(%whiteSpace='collapse',%length='1')"), _msg);
+        assertTrue(prepare("string(%whiteSpace='collapse',%length='1')"), _msg);
         assertTrue(parse("  a  "), _msg);
         assertTrue(parseFail("  ab  "), _msg);
         assertTrue(parseFail("    "), _msg);
 
         if (XDTester.getFulltestMode()) {
-            assertTrue(prepare(
-                "string(%whiteSpace='collapse',%minLength='0')"), _msg);
+            assertTrue(prepare("string(%whiteSpace='collapse',%minLength='0')"), _msg);
             assertTrue(parse("    ", ""), _msg); //should return text value null
         }
 
@@ -711,9 +694,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("\r\t Hello  world! \n", "   Hello  world!  "), _msg);
 
 
-//------------------------------------------------------------------------------
-//                          TESTING normalizedstring
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING normalizedstring
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("normalizedString(%maxInclusive='asdf')"),_msg);
         assertTrue(checkFail("normalizedString(%maxExclusive='qwer')"),_msg);
@@ -728,14 +711,10 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("Hello World!"), _msg);
         assertTrue(prepare("normalizedString(%whiteSpace='replace')"),_msg);
         assertTrue(parse("Hello World!"), _msg);
-
-        if (!XDTester.getFulltestMode()) {
-//			assertTrue(parseFail(""), _msg); //schema accepts empty string???
-        }
+        assertTrue(parse(""), _msg); // empty string
 
         // testing facets
-        assertTrue(prepare(
-            "normalizedString(%enumeration=['Hello', 'world'])"), _msg);
+        assertTrue(prepare("normalizedString(%enumeration=['Hello', 'world'])"), _msg);
         assertTrue(parse("Hello"), _msg);
         assertTrue(parse("world"), _msg);
         assertTrue(parseFail("hello"), _msg);
@@ -758,8 +737,7 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("normalizedString(%whiteSpace='replace',"
             + "%enumeration=['\n Being a Dog Is \n a Full-Time Job\n',"
             + " '\nBla\n'])"), _msg);
-        assertTrue(parse("\n Being a Dog Is \n a Full-Time Job\n",
-            "  Being a Dog Is   a Full-Time Job "), _msg);
+        assertTrue(parse("\n Being a Dog Is \n a Full-Time Job\n", "  Being a Dog Is   a Full-Time Job "), _msg);
         assertTrue(parse("\nBla\n", " Bla "), _msg);
 
         assertTrue(prepare("normalizedString(%pattern=['[A-Z][a-z]{3}'])"), _msg);
@@ -796,21 +774,18 @@ public final class TestXSTypes extends XDTester {
             assertTrue(parse("     ", ""), _msg);
         }
 
-        assertTrue(prepare(
-            "normalizedString(%whiteSpace='collapse',%minLength='1')"),_msg);
+        assertTrue(prepare("normalizedString(%whiteSpace='collapse',%minLength='1')"),_msg);
         assertTrue(parse("  a  "), _msg);
         assertTrue(parseFail("    "), _msg);
 
-        assertTrue(prepare(
-            "normalizedString(%whiteSpace='collapse',%length='0')"), _msg);
+        assertTrue(prepare("normalizedString(%whiteSpace='collapse',%length='0')"), _msg);
         if (XDTester.getFulltestMode()) {
             assertTrue(parse(""), _msg);
             assertTrue(parse("    "), _msg);//should return empty string
         }
         assertTrue(parseFail("a"), _msg);
 
-        assertTrue(prepare(
-            "normalizedString(%whiteSpace='collapse',%length='1')"), _msg);
+        assertTrue(prepare("normalizedString(%whiteSpace='collapse',%length='1')"), _msg);
         assertTrue(parse("  a  "), _msg);
         assertTrue(parseFail("  ab  "), _msg);
         assertTrue(parseFail("    "), _msg);
@@ -820,9 +795,9 @@ public final class TestXSTypes extends XDTester {
             assertTrue(parse("    ", ""), _msg); //should return text value null
         }
 
-//------------------------------------------------------------------------------
-//                          TESTING anyURI
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING anyURI
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("anyURI(%minInclusive='1')"), _msg);
         assertTrue(checkFail("anyURI(%maxInclusive='1')"), _msg);
@@ -868,9 +843,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("www.a.cz www.b.cz"), _msg);
         assertTrue(parseFail("a.b.cz"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING boolean
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING boolean
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("boolean(%enumeration=['1', 'false']"), _msg);
         assertTrue(checkFail("boolean(%length='1')"), _msg);
@@ -916,9 +891,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("boolean"), _msg);
         assertTrue(parse("0"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING decimal
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING decimal
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("decimal(%length='1')"), _msg);
         assertTrue(checkFail("decimal(%minLength='1')"), _msg);
@@ -1010,17 +985,16 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("1.23"), _msg);
         assertTrue(parseFail("1.234"), _msg);
 
-        assertTrue(prepare("decimal(%totalDigits='2',%fractionDigits='2')"),
-            _msg);
+        assertTrue(prepare("decimal(%totalDigits='2',%fractionDigits='2')"), _msg);
         assertTrue(parse("0.23"), _msg);
         assertTrue(parseFail("1.23"), _msg);
 
         assertTrue(prepare("decimal"), _msg);
         assertTrue(parse("   123   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING integer
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING integer
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("integer(%length='1')"), _msg);
         assertTrue(checkFail("integer(%minLength='1')"), _msg);
@@ -1094,9 +1068,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("1"), _msg);
         assertTrue(parseFail("111"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING negativeInteger
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING negativeInteger
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("negativeInteger(%length='1')"), _msg);
         assertTrue(checkFail("negativeInteger(%minLength='1')"), _msg);
@@ -1163,9 +1137,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("-1"), _msg);
         assertTrue(parseFail("-111"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING byte
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING byte
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("byte(%length='1')"), _msg);
         assertTrue(checkFail("byte(%minLength='1')"), _msg);
@@ -1208,15 +1182,13 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("2"), _msg);
         assertTrue(parseFail("1"), _msg);
 
-        assertTrue(prepare("byte(%minInclusive='1',%maxInclusive='2')"),
-            _msg);
+        assertTrue(prepare("byte(%minInclusive='1',%maxInclusive='2')"), _msg);
         assertTrue(parse("1"), _msg);
         assertTrue(parse("2"), _msg);
         assertTrue(parseFail("0"), _msg);
         assertTrue(parseFail("3"), _msg);
 
-        assertTrue(prepare("byte(%minExclusive='0',%maxExclusive='3')"),
-            _msg);
+        assertTrue(prepare("byte(%minExclusive='0',%maxExclusive='3')"), _msg);
         assertTrue(parse("1"), _msg);
         assertTrue(parse("2"), _msg);
         assertTrue(parseFail("0"), _msg);
@@ -1250,9 +1222,9 @@ public final class TestXSTypes extends XDTester {
 //		assertTrue(prepare("byte(%whiteSpace='collapse')"), _msg);
 //		assertTrue(parse("   123   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING short
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING short
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("short(%length='1')"), _msg);
         assertTrue(checkFail("short(%minLength='1')"), _msg);
@@ -1322,9 +1294,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("1"), _msg);
         assertTrue(parseFail("111"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING int
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING int
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("int(%length='1')"), _msg);
         assertTrue(checkFail("int(%minLength='1')"), _msg);
@@ -1354,8 +1326,8 @@ public final class TestXSTypes extends XDTester {
         // testing errors
         assertTrue(parseFail(""), _msg);
         assertTrue(parseFail("  "), _msg);
-        assertTrue(parseFail("2147483648"), _msg); //higher then max
-        assertTrue(parseFail("-2147483649"), _msg);  //lower then max
+        assertTrue(parseFail("2147483648"), _msg);  //higher then max
+        assertTrue(parseFail("-2147483649"), _msg); //lower then max
 
         // testing facets
         assertTrue(prepare("int(%minInclusive='1')"), _msg);
@@ -1396,9 +1368,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("1"), _msg);
         assertTrue(parseFail("111"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING unsignedInt
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING unsignedInt
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("unsignedInt(%length='1')"), _msg);
         assertTrue(checkFail("unsignedInt(%minLength='1')"), _msg);
@@ -1468,9 +1440,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("1"), _msg);
         assertTrue(parseFail("111"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING long
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING long
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("long(%length='1')"), _msg);
         assertTrue(checkFail("long(%minLength='1')"), _msg);
@@ -1559,9 +1531,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("long"), _msg);
         assertTrue(parse("  00457812   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING float
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING float
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("float(%length='1')"), _msg);
         assertTrue(checkFail("float(%minLength='1')"), _msg);
@@ -1690,9 +1662,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("float"), _msg);
         assertTrue(parse("  -9.9   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING double
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING double
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("double(%length='1')"), _msg);
         assertTrue(checkFail("double(%minLength='1')"), _msg);
@@ -1820,9 +1792,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("double"), _msg);
         assertTrue(parse("  -9.9   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING date
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING date
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("date(%length='1')"), _msg);
         assertTrue(checkFail("date(%minLength='1')"), _msg);
@@ -1985,9 +1957,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("date"), _msg);
         assertTrue(parse("   2000-01-01   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING time
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING time
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("time(%length='1')"), _msg);
         assertTrue(checkFail("time(%minLength='1')"), _msg);
@@ -2109,9 +2081,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("time"), _msg);
         assertTrue(parse("   04:05:20Z   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING dateTime
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING dateTime
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("dateTime(%length='1')"), _msg);
         assertTrue(checkFail("dateTime(%minLength='1')"), _msg);
@@ -2194,8 +2166,7 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("dateTime(%enumeration=['2002-10-10T00:00:00+05:00'])"), _msg);
         assertTrue(parse("2002-10-09T19:00:00Z"), _msg);
 
-        assertTrue(prepare("dateTime(%enumeration=['2010-01-01T05:00:00.123+01:00','2010-12-31T24:00:00Z'])"),
-            _msg);
+        assertTrue(prepare("dateTime(%enumeration=['2010-01-01T05:00:00.123+01:00','2010-12-31T24:00:00Z'])"), _msg);
         assertTrue(parse("2010-01-01T05:00:00.123+01:00"), _msg);
         assertTrue(parse("2010-01-01T04:00:00.123Z"), _msg);
         assertTrue(parse("2010-12-31T24:00:00Z"), _msg);
@@ -2274,9 +2245,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("dateTime"), _msg);
         assertTrue(parse("   2000-01-01T02:00:00   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING gDay
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING gDay
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("gDay(%length='1')"), _msg);
         assertTrue(checkFail("gDay(%minLength='1')"), _msg);
@@ -2402,9 +2373,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("gDay"), _msg);
         assertTrue(parse("   ---01   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING gMonth
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING gMonth
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("gMonth(%length='1')"), _msg);
         assertTrue(checkFail("gMonth(%minLength='1')"), _msg);
@@ -2484,9 +2455,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("gMonth"), _msg);
         assertTrue(parse("   --01   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING gMonthDay
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING gMonthDay
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("gMonthDay(%length='1')"), _msg);
         assertTrue(checkFail("gMonthDay(%minLength='1')"), _msg);
@@ -2600,9 +2571,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("gMonthDay"), _msg);
         assertTrue(parse("   --01-01   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING gYear
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING gYear
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("gYear(%length='1')"), _msg);
         assertTrue(checkFail("gYear(%minLength='1')"), _msg);
@@ -2689,9 +2660,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("gYear"), _msg);
         assertTrue(parse("   2009   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING gYearMonth
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING gYearMonth
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("gYearMonth(%length='1')"), _msg);
         assertTrue(checkFail("gYearMonth(%minLength='1')"), _msg);
@@ -2776,9 +2747,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("gYearMonth"), _msg);
         assertTrue(parse("   2009-01   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING duration
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING duration
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("duration(%length='1')"), _msg);
         assertTrue(checkFail("duration(%minLength='10')"), _msg);
@@ -2967,9 +2938,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("duration"), _msg);
         assertTrue(parse("   P37M   "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING NOTATION
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING NOTATION
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("NOTATION(%minInclusive='1')"), _msg);
         assertTrue(checkFail("NOTATION(%maxInclusive='1')"), _msg);
@@ -2981,9 +2952,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(checkFail("NOTATION(%fractionDigits='2')"), _msg);
 
 
-//------------------------------------------------------------------------------
-//                          TESTING NCname
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING NCName
+******************************************************************************/
         // testing illegal facets
 //        assertTrue(checkFail("NCName%totalDigits='2')"), _msg);
 //        assertTrue(checkFail("NCName(%fractionDigits='2')"), _msg);
@@ -3004,9 +2975,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("pq:a.b-c"), _msg);
         assertTrue(parseFail("{P547D}"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING QName
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING QName
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("QName(%totalDigits='2')"), _msg);
         assertTrue(checkFail("QName(%fractionDigits='2')"), _msg);
@@ -3026,9 +2997,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("{P547D}"), _msg);
 //        assertTrue(parseFail("pq:abc"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING token
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING token
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("token(%maxInclusive='asdf')"), _msg);
         assertTrue(checkFail("token(%maxExclusive='qwer')"), _msg);
@@ -3093,9 +3064,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(prepare("token"), _msg);
         assertTrue(parse("   Hello world!  "), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING language
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING language
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("language(%minInclusive='1')"), _msg);
         assertTrue(checkFail("language(%maxInclusive='1')"), _msg);
@@ -3152,9 +3123,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("en.cs"), _msg);
 //	assertTrue(parseFail("ffff"), _msg); /* XML schema does not report error */
 
-//------------------------------------------------------------------------------
-//                          TESTING NMTOKEN
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING NMTOKEN
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("NMTOKEN(%minInclusive='1')"), _msg);
         assertTrue(checkFail("NMTOKEN(%maxInclusive='1')"), _msg);
@@ -3219,9 +3190,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("a.cz b.cz"), _msg);
         assertTrue(parseFail("a.b.cz"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING NMTOKENS
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING NMTOKENS
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("NMTOKENS(%minInclusive='1')"), _msg);
         assertTrue(checkFail("NMTOKENS(%maxInclusive='1')"), _msg);
@@ -3294,9 +3265,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("a.cz b.cz"), _msg);
         assertTrue(parseFail("a.b.cz"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING Name
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING Name
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("Name(%minInclusive='1')"), _msg);
         assertTrue(checkFail("Name(%maxInclusive='1')"), _msg);
@@ -3360,9 +3331,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("a.cz b.cz"), _msg);
         assertTrue(parseFail("a.b.cz"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING NCName
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING NCName
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("NCName(%minInclusive='1')"), _msg);
         assertTrue(checkFail("NCName(%maxInclusive='1')"), _msg);
@@ -3422,9 +3393,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("a.cz b.cz"), _msg);
         assertTrue(parseFail("a.b.cz"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING base64Binary
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING base64Binary
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("base64Binary(%minInclusive='1')"), _msg);
         assertTrue(checkFail("base64Binary(%maxInclusive='1')"), _msg);
@@ -3487,9 +3458,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("ab cd"), _msg);
         assertTrue(parseFail("HbRBHw=="), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING hexBinary
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING hexBinary
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("hexBinary(%minInclusive='1')"), _msg);
         assertTrue(checkFail("hexBinary(%maxInclusive='1')"), _msg);
@@ -3545,9 +3516,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("ab cd"), _msg);
         assertTrue(parseFail("ff00"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING union
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING union
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("union(%item=[boolean, short],%minInclusive='1')"), _msg);
         assertTrue(checkFail("union(%item=[boolean, short],%maxInclusive='1')"), _msg);
@@ -3609,9 +3580,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("1999-10-11"), _msg);
         assertTrue(parse("1999-10-11T10:11:12"), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING list
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING list
+******************************************************************************/
         // testing illegal facets
         assertTrue(checkFail("list(%item=short,%minInclusive='1')"),_msg);
         assertTrue(checkFail("list(%item=short,%maxInclusive='1')"),_msg);
@@ -3643,8 +3614,7 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse(" 123   -4560  0  "), _msg);
         assertTrue(parseFail("123 4560  0"), _msg);
 
-        assertTrue(prepare("list(%item=short,%pattern=['\\\\s*\\\\d*\\\\s+-\\\\d*\\\\s+\\\\d*\\\\s*'])"),
-            _msg);
+        assertTrue(prepare("list(%item=short,%pattern=['\\\\s*\\\\d*\\\\s+-\\\\d*\\\\s+\\\\d*\\\\s*'])"), _msg);
         assertTrue(parse("123 -456 0"), _msg);
         assertTrue(parse(" 123   -456  0  "), _msg);
         assertTrue(parseFail("123 456  0"), _msg);
@@ -3679,9 +3649,9 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parseFail("1"), _msg);
         assertTrue(parseFail(""), _msg);
 
-//------------------------------------------------------------------------------
-//                          TESTING list and union
-//------------------------------------------------------------------------------
+/*=****************************************************************************
+TESTING list and union
+******************************************************************************/
         //list contains union
         assertTrue(prepare("list(%item=union(%item=[short(%minInclusive=-9),boolean]),%length=3)"), _msg);
         assertTrue(parse("-9 0 9"), _msg);
@@ -3700,7 +3670,8 @@ public final class TestXSTypes extends XDTester {
         assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
         assertTrue(prepare("list(%item=union(%item=[string(%length=1),dateTime,date,int]))"), _msg);
         assertTrue(parse("x 1999 1999-10-11 1999-10-11T10:11:12"), _msg);
-//------------------------------------------------------------------------------
+
+/*=***************************************************************************/
 
         resetTester();
     }

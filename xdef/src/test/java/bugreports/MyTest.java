@@ -35,18 +35,14 @@ public class MyTest extends XDTester {
     public static boolean a(boolean a, String b) {return true;}
     public static int b(String b) {return 0;}
     public static void c() {}
-    private static Object toJson(final XComponent xc) {
-        return XonUtils.xmlToXon(xc.toXml());
-    }
+    private static Object toJson(final XComponent xc) {return XonUtils.xmlToXon(xc.toXml());}
     public static String xxx(XXNode xn) {return "" + xn.getXComponent();}
     private static boolean _xxx;
     final public static void setResult(XXNode xnode, boolean x) {_xxx = x;}
     final public static void setResult(XXData xnode, XDParser parser) {
         setResult(xnode, parser.check(null, xnode.getTextValue()));
     }
-    final public static void setResult(XXNode xnode, XDParseResult result) {
-        setResult(xnode, !result.errors());
-    }
+    final public static void setResult(XXNode xnode, XDParseResult result) {setResult(xnode, !result.errors());}
     private static String testAny(XDPool xp, String s) {
         String result = "";
         try {
@@ -166,9 +162,7 @@ if(T)return;
             xdef = // sequence with separator
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n"+
-"  <xd:declaration>\n"+
-"    type s sequence(%separator=',', %item=[int, long, long]);\n"+
-"  </xd:declaration>\n"+
+"  <xd:declaration> type s sequence(%separator=',', %item=[int, long, long]); </xd:declaration>\n"+
 "  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
 "</xd:def>";
             xp = compile(xdef);
@@ -205,56 +199,8 @@ if(T)return;
             assertEq(5, list.get(0));
             assertEq(6, list.get(1));
             assertEq(7, list.get(2));
-            xdef = // sequence with separator
-"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n"+
-"  <xd:declaration>\n"+
-"    type s sequence(%separator=',', %item=[int, long, long]);\n"+
-"  </xd:declaration>\n"+
-"  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
-"</xd:def>";
-            genXComponent(xp = compile(xdef));
-            xml = "<a/>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarningsAndClear(reporter);
-            xc = parseXC(xp, "", xml, null, reporter);
-            assertNoErrorwarningsAndClear(reporter);
-            assertNull(XComponentUtil.get(xc, "a"));
-            xml = "<a a='1,2,3'>4,5,6</a>";
-            assertEq(xml, parse(xp, "", xml, reporter));
-            assertNoErrorwarningsAndClear(reporter);
-            assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
-            assertNoErrorwarningsAndClear(reporter);
-            if ((o = XComponentUtil.get(xc, "a")) instanceof List) {
-                assertTrue(((List) o).get(0) instanceof Long);
-                assertEq(1, ((List) o).get(0));
-                assertEq(2, ((List) o).get(1));
-                assertEq(3, ((List) o).get(2));
-            } else {
-                fail("incorrect type: " + o.getClass() + "; " + o);
-            }
-            if ((o=XComponentUtil.get(xc, "$value")) instanceof List){
-                assertTrue(((List) o).get(0) instanceof Long);
-                assertEq(4, ((List) o).get(0));
-                assertEq(5, ((List) o).get(1));
-                assertEq(6, ((List) o).get(2));
-            } else {
-                fail("incorrect type: " + o.getClass() + "; " + o);
-            }
             assertNull(XComponentUtil.get(xc, "$b"));
             assertNoErrorwarningsAndClear(reporter);
-            xml = "<a><b>5,6,7</b></a>";
-            assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
-            assertNoErrorwarningsAndClear(reporter);
-            assertNull(XComponentUtil.get(xc, "a"));
-            assertNull(XComponentUtil.get(xc, "$value"));
-            if ((o = XComponentUtil.get(xc, "$b")) instanceof List) {
-                assertEq(5, ((List) o).get(0));
-                assertEq(6, ((List) o).get(1));
-                assertEq(7, ((List) o).get(2));
-            } else {
-                fail("incorrect type: " + o.getClass() + "; " + o);
-            }
 if(T)return;
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='x'>\n"+
@@ -324,7 +270,6 @@ if(T)return;
 "</xd:def>";
             xml = "<A><B b=\"x\"><B b=\"y\"/></B></A>";
             assertEq(xml, parse(xp = compile(xdef), "", xml, reporter));
-//			xp.displayCode();
             assertNoErrorwarningsAndClear(reporter);
             (xd = xp.createXDDocument()).setXDContext(xml);
             assertEq(xml, create(xd, "A", reporter));
@@ -371,7 +316,6 @@ if (T) return;
 "</xd:def>";
             xp = compile(xdef);
             genXComponent(xp, clearTempDir());
-
             assertEq("", testAny(xp, "\"abc\""));
             assertEq("", testAny(xp, "[]"));
             assertEq("", testAny(xp, "[\"a\"]"));
@@ -393,14 +337,12 @@ if(T)return;
 "}\n" +
 "</xd:json>\n" +
 "</xd:def>";
-            System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-                XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
+            System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
             xp = compile(xdef);
             xd = xp.createXDDocument();
             json = "{ b: {a: \"x\"} }";
             o = XonUtils.parseXON(json);
-            assertTrue(XonUtils.xonEqual(o, o = xd.jparse(json, reporter)),
-                XonUtils.toXonString(o, true));
+            assertTrue(XonUtils.xonEqual(o, o = xd.jparse(json, reporter)), XonUtils.toXonString(o, true));
             assertNoErrors(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
@@ -435,23 +377,16 @@ if(T)return;
             xp = compile(xdef);
             xd = xp.createXDDocument();
             xml = "<A a=' 2022-5-8   2022-5-11 2020-1-2 '></A>";
-            assertEq("<A a='20220508 20220511 20200102'></A>",
-                parse(xd, xml, reporter));
+            assertEq("<A a='20220508 20220511 20200102'></A>", parse(xd, xml, reporter));
             assertNoErrors(reporter);
         } catch (Exception ex) { fail(ex); }
 if(T)return;
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
-"<xd:declaration>\n" +
-"  external method String bugreports.MyTest.xxx(XXNode);\n" +
-"</xd:declaration>\n" +
-"<xd:json name='a'>\n" +
-"  [ %script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n" +
-"</xd:json>\n" +
-"<xd:component>\n" +
-"  %class bugreports.MyTesta %link a;\n" +
-"</xd:component>\n" +
+"<xd:declaration> external method String bugreports.MyTest.xxx(XXNode); </xd:declaration>\n" +
+"<xd:json name='a'> [ %script=\"finally outln(xxx());\", \"gps();\", \"gps();\"] </xd:json>\n" +
+"<xd:component> %class bugreports.MyTesta %link a; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
             genXComponent(xp, clearTempDir());
@@ -506,8 +441,8 @@ if(T)return;
 "  %class bugreports.MyTest_Y %link y;\n" +
 "  %class bugreports.MyTest_Y1 %link y1;\n" +
 "  %class bugreports.MyTest_Y2 %link y2;\n" +
-"     %bind js$xxx %link #y2/jx:array/jx:item[2];\n" +
-"     %bind js$yyy %link #y2/jx:array/jx:item[3];\n" +
+"    %bind js$xxx %link #y2/jx:array/jx:item[2];\n" +
+"    %bind js$yyy %link #y2/jx:array/jx:item[3];\n" +
 "</xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -546,7 +481,6 @@ if(T)return;
             assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
             xc = xd.jparseXComponent(s, Class.forName("bugreports.MyTest_Y"), reporter);
             assertTrue(XonUtils.xonEqual(j, toJson(xc)), XonUtils.toJsonString(toJson(xc), true));
-
             xd = xp.createXDDocument("");
             s = "{\"a\": 123}";
             j = XonUtils.parseJSON(s);
@@ -591,7 +525,6 @@ if(T)return;
 
         } catch (RuntimeException ex) {fail(ex);}
 if (T) return;
-////////////////////////////////////////////////////////////////////////////////
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
@@ -609,7 +542,6 @@ if (T) return;
 "  <a x='mujtyp1()' y='mujtyp2()' z='r'/>\n"+
 "</xd:def>";
             xp = compile(xdef);
-//			xp.displayCode();
             XMData xmd;
             XDValue xdv;
             XDParser xdp;
@@ -627,10 +559,7 @@ if (T) return;
             assertNoErrorwarnings(reporter);
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-        try {
-            // \p{Lu} capital letters
-            // \p{Ll} small letters
-            // \.     dot
+        try { // \p{Lu} capital letters, \p{Ll} small letters, \.     dot
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
 //"  <a a='string(%pattern=[\"\\\\p{Lu}(\\\\.|\\\\p{Ll}+)( \\\\p{Lu}(\\\\p{Ll}*|\\\\.))*\"]);'/>\n" +
@@ -654,7 +583,6 @@ if(T)return;
             assertEq(xml, parse(xp, "", xml, reporter));
             assertNoErrorwarnings(reporter);
         } catch (Exception ex) {fail(ex);}
-if(T)return;
 
         clearTempDir(); // delete temporary files.
     }

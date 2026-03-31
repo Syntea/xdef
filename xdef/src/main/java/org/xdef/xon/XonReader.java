@@ -90,7 +90,7 @@ public final class XonReader extends StringParser implements XonParsers {
                 if (sb == null) {
                     sb = new StringBuilder();
                     spos = getPosition();
-                    if (!_acceptComments) { // omments not allowed
+                    if (!_acceptComments) {
                         lightError(JSON.JSON019);//Comments are not allowed here
                     }
                 }
@@ -264,7 +264,11 @@ public final class XonReader extends StringParser implements XonParsers {
             return;
         }
         final String[] directives = new String[] {
-            '"' + SCRIPT_DIRECTIVE , '"' + ONEOF_DIRECTIVE, SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE};
+            '"' + SCRIPT_DIRECTIVE ,
+            '"' + ONEOF_DIRECTIVE,
+            SCRIPT_DIRECTIVE,
+            ONEOF_DIRECTIVE
+        };
         boolean wasItem = false;
         boolean wasErrorReported = false;
         while(!eos()) {
@@ -618,8 +622,7 @@ public final class XonReader extends StringParser implements XonParsers {
                                 }
                                 if (isChar(')')) {
                                     try {
-                                        return returnValue(
-                                            spos, new GPSPosition(latitude, longitude, altitude,name));
+                                        return returnValue(spos, new GPSPosition(latitude, longitude, altitude,name));
                                     } catch(SRuntimeException ex) {
                                         putReport(ex.getReport()); //invalid GPS
                                         return returnValue(spos, null);
@@ -675,7 +678,7 @@ public final class XonReader extends StringParser implements XonParsers {
                 }
             }
         }
-        setIndex(pos); // error
+        setIndex(pos);
         return returnError(spos, null, JSON.JSON010, "[]{}"); //JSON simpleValue expected
     }
 
@@ -730,14 +733,11 @@ public final class XonReader extends StringParser implements XonParsers {
      * @param in Reader with XON/JSON source data.
      * @param sysId System ID of source position or null.
      * @param xonMode if true then XON, if false JSON.
-     * @param convertXDBytes flag if XDBytes objects are converted to byte[].
+     * @param convert flag if XDBytes objects are converted to byte[].
      * @return parsed XON or JSON object.
      */
-    private static Object parseXonJson(final Reader in,
-        final String sysId,
-        final boolean xonMode,
-        final boolean convertXDBytes) {
-        XonObjParser jp = new XonObjParser(convertXDBytes);
+    private static Object parseXonJson(final Reader in,final String sysId,final boolean xonMode,final boolean convert) {
+        XonObjParser jp = new XonObjParser(convert);
         XonReader xr = new XonReader(in, jp);
         xr._acceptComments = xonMode;
         xr._xonMode = xonMode; // XON/JSON mode
@@ -853,7 +853,7 @@ public final class XonReader extends StringParser implements XonParsers {
     }
 
     /** Creates Reader from input stream. If data starts with %encoding directive the reader is created with
-     * the specified encoding. Otherwise, the UTF-8 encoding is used.
+     * specified encoding. Otherwise, the UTF-8 encoding is used.
      * @param in input stream wit XON/JSON data.
      * @return reader with detected encoding.
      */
@@ -868,9 +868,9 @@ public final class XonReader extends StringParser implements XonParsers {
         }
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// interface XONParsers
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* Interface XONParsers
+******************************************************************************/
 
     /** Set mode that XON/JSON is parsed in X-definition compiler. */
     @Override
@@ -882,7 +882,7 @@ public final class XonReader extends StringParser implements XonParsers {
 
     /** Set mode for strict JSON parsing (JSON, no comments). */
     @Override
-    public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
+    public final void setJsonMode() {_acceptComments = _xonMode = _jdef = false;}
 
     /** Parse XON/JSON source data (depends on the flag "_xon"). */
     @Override
@@ -910,8 +910,7 @@ public final class XonReader extends StringParser implements XonParsers {
             } else {
                 try {//check charset
                     Charset.forName(enc);
-                } catch (Exception ex) {
-                    //Incorrect specification of the %chars0et directive: "&{0}"
+                } catch (Exception ex) {//Incorrect specification of the %chars0et directive: "&{0}"
                     error(JSON.JSON081, getBufferPart(pos2, getIndex()));
                 }
             }

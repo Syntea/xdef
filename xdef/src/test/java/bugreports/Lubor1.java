@@ -18,10 +18,7 @@ import static test.XDTester.chkCompoinentSerializable;
  */
 public class Lubor1 extends XDTester {
 
-    public Lubor1() {
-        super();
-        setChkSyntax(false); // here it MUST be false!
-    }
+    public Lubor1() {super();}
 
     /** Run test and display error information. */
     @Override
@@ -43,7 +40,6 @@ public class Lubor1 extends XDTester {
         XDPool xp;
         XComponent xc;
         ArrayReporter reporter = new ArrayReporter();
-/**/
         try {
             test.xdef.TestXComponents_G.class.getClass();
             xdef =
@@ -66,7 +62,6 @@ public class Lubor1 extends XDTester {
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
             genXComponent(xp);
-//			genXComponentAndCopySources(xp);
             xml = "<G g='g'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>";
             xd = xp.createXDDocument("");
             o = org.xdef.sys.SUtils.getNewInstance("test.xdef.component.G");
@@ -83,8 +78,8 @@ public class Lubor1 extends XDTester {
             XComponentUtil.set(xc, "XX", "abc");
             assertEq("abc", XComponentUtil.get(xc, "XX"));
         } catch (Exception ex) {fail(ex);}
+//deleteCreatedSources();
 if (T) return;
-/**/
         try {
             test.xdef.TestXComponents_bindAbstract.class.getClass(); //force compilation
             test.xdef.TestXComponents_bindInterface.class.getClass(); //force compilation
@@ -102,7 +97,6 @@ if (T) return;
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
             genXComponent(xp);
-//			genXComponentAndCopySources(xp);
             xc = (XComponent) org.xdef.sys.SUtils.getNewInstance(_package+".Lubor1_XCPerson");
             XComponentUtil.set(xc, "Name", "John Brown");
             XComponentUtil.set(xc, "Birth", new java.sql.Timestamp(new java.util.Date(0).getTime()));
@@ -122,9 +116,8 @@ if (T) return;
             assertEq(xml, xc.toXml());
             assertEq("M", ((test.xdef.TestXComponents_bindAbstract) xc).getSexString());
         } catch (RuntimeException ex) {fail(ex);}
-deleteCreatedSources();
+//deleteCreatedSources();
 if (T) return;
-/**/
         try { // the command %interface with extension
             xp = org.xdef.XDFactory.compileXD(null,
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"A | B\">\n" +
@@ -139,7 +132,6 @@ if (T) return;
 "</xd:component>\n" +
 "</xd:def>");
             genXComponent(xp);
-//			genXComponentAndCopySources(xp);
             xd = xp.createXDDocument("");
             xml = "<A a=\"1\" />";
             parse(xd, xml, reporter);
@@ -156,9 +148,8 @@ if (T) return;
             assertEq(xml, xc.toXml());
             assertEq(2, XComponentUtil.get(xc, "a"));
         } catch (RuntimeException ex) {fail(ex);}
-deleteCreatedSources();
+//deleteCreatedSources();
 if (T) return;
-/**/
         try {
             xp = org.xdef.XDFactory.compileXD(null, new String[] { // nested declaration of type
 "<xd:def xmlns:xd='"+_xdNS+"' name='D7_xc'>\n" +
@@ -184,7 +175,6 @@ if (T) return;
 "  </xd:declaration>\n" +
 "</xd:def>"});
             genXComponent(xp);
-//			genXComponentAndCopySources(xp);
             xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
             assertEq(xml, parse(xp, "D7_", xml, reporter));
             assertNoErrorwarningsAndClear(reporter);
@@ -207,7 +197,7 @@ if (T) return;
             assertEq(new org.xdef.sys.SDatetime("2021-05-24"), XComponentUtil.get(xc,"P"));
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
-deleteCreatedSources();
+//deleteCreatedSources();
 if (T) return;
         try {
             xp = org.xdef.XDFactory.compileXD(null, new String[] { // nested declaration of type
@@ -236,7 +226,6 @@ if (T) return;
 "  </xd:declaration>\n" +
 "</xd:def>"});
             genXComponent(xp);
-//			genXComponentAndCopySources(xp);
             xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
             assertEq(xml, parse(xp, "D7_", xml, reporter));
             assertNoErrorwarningsAndClear(reporter);
@@ -258,9 +247,8 @@ if (T) return;
             assertEq("x", XComponentUtil.get(xc,"C"));
             assertEq(new org.xdef.sys.SDatetime("2021-05-24"), XComponentUtil.get(xc,"P"));
         } catch (RuntimeException ex) {fail(ex);}
-deleteCreatedSources();
+//deleteCreatedSources();
 if (T) return;
-/**/
         try {
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneOdDo' name='PIS_iop_common'>\n" +
@@ -273,13 +261,12 @@ if (T) return;
 "   implements bugreports.subelem.PlatneOd, bugreports.subelem.PlatneOd1\n" +
 "   %link PIS_iop_common#PlatneOdDo;\n" +
 " %interface bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOd;\n" +
-" %interface bugreports.subelem.PlatneOdDo extends bugreports.subelem.PlatneOd\n" +
-"   %link PIS_iop_common#PlatneOdDo;\n" +
+" %interface bugreports.subelem.PlatneOdDo extends bugreports.subelem.PlatneOd %link PIS_iop_common#PlatneOdDo;\n" +
 "</xd:component>\n" +
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
 //			genXComponent(xp);
-            genXComponentAndCopySources(xp);
+            genXComponentAndCopySources(xp); // can't use genXComponent(xp), must be genXComponentAndCopySources(xp)!
             xd = xp.createXDDocument("");
             xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
             assertEq(xml, parse(xd, xml, reporter));
@@ -300,8 +287,6 @@ if (T) return;
             assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
         } catch (RuntimeException ex) {fail(ex);}
 //deleteCreatedSources();
-if (T) return;
-/**/
         clearTempDir(); // delete temporary files.
     }
 

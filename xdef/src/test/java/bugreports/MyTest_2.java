@@ -241,10 +241,11 @@ if(T)return;
             genXComponent(xp, tempDir);
             json = "[1, \"2\", 3]"; //error (not string but number!)
             xp.createXDDocument().jparse(json, reporter);
-            assertTrue(reporter.printToString().contains("XDEF823"), reporter.toString());
+            assertTrue(reporter.printToString().contains("XDEF809"), reporter.toString());
             reporter.clear();
             xp.createXDDocument().jparseXComponent(json, null, reporter);
-            assertTrue(reporter.getErrorCount()==2 && reporter.printToString().contains("XDEF23"), reporter.toString());
+            assertTrue(reporter.getErrorCount()==2 && reporter.printToString().contains("XDEF809"),
+                reporter.toString());
         } catch (RuntimeException ex) {fail(ex);}
         reporter.clear();
 if(T)return;

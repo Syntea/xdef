@@ -15,10 +15,7 @@ import test.XDTester;
  */
 public class Lubor extends XDTester {
 
-    public Lubor() {
-        super();
-        setChkSyntax(false); // here it MUST be false!
-    }
+    public Lubor() {super();}
 
     /** Run test and display error information. */
     @Override
@@ -80,7 +77,6 @@ if(T)return;
             assertEq(o, xc.toXon());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-/**/
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"PlatneOd\">\n" +
@@ -101,7 +97,6 @@ if(T)return;
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-/**/
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"PlatneOd\">\n" +
@@ -122,7 +117,6 @@ if(T)return;
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-/**/
         clearTempDir(); // delete temporary files.
     }
 

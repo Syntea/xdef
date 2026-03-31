@@ -5,6 +5,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
@@ -33,7 +34,6 @@ public class Lubor2 extends XDTester {
         XDPool xp;
         XComponent xc;
         ArrayReporter reporter = new ArrayReporter();
-/**/
         try { //TEST1
             System.out.println("[INFO] Xdefinition version: " + XDFactory.getXDVersion());
             xdef =
@@ -56,7 +56,6 @@ public class Lubor2 extends XDTester {
 "</xd:component>\n" +
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
-//			genXComponent(xp);
             genXComponentAndCopySources(xp);
             xd = xp.createXDDocument("");
             xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
@@ -71,15 +70,16 @@ public class Lubor2 extends XDTester {
             assertNoErrorsAndClear(reporter);
             assertEq(xml, (xc = xd.xparseXComponent(xml, null, reporter)).toXml());
             assertNoErrorsAndClear(reporter);
+            assertEq("2025-01-01", XComponentUtil.get(xc, "PlatnostOd").toString());
+            assertEq("2025-02-01", XComponentUtil.get(xc, "PlatnostDo").toString());
+
             assertEq("2025-01-01", ((bugreports.PlatneX1) xc).getPlatnostOd().toString());
             assertEq("2025-02-01", ((bugreports.subelem.PlatneOdDo) xc).getPlatnostDo().toString());
             assertEq("2025-01-01", ((bugreports.PlatneX1) xc).getPlatnostOd().toString());
             assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
             assertNull(((bugreports.PlatneX1 ) xc).getHodnota());
         } catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
 if (T) return;
-/**/
         try { //TEST2
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneX' name='PIS_iop_common'>\n" +
@@ -101,7 +101,6 @@ if (T) return;
 "</xd:component>\n" +
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
-//			genXComponent(xp);
             genXComponentAndCopySources(xp);
             xd = xp.createXDDocument("");
             xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
@@ -122,9 +121,7 @@ if (T) return;
             assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
             assertNull(((bugreports.PlatneX2 ) xc).getHodnota());
         } catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
 if (T) return;
-/**/
         try { //TEST3
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneX' name='PIS_iop_common'>\n" +
@@ -144,7 +141,6 @@ if (T) return;
 "</xd:component>\n" +
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
-//			genXComponent(xp);
             genXComponentAndCopySources(xp);
             xd = xp.createXDDocument("");
             xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
@@ -167,7 +163,6 @@ if (T) return;
         } catch (RuntimeException ex) {fail(ex);}
 //deleteCreatedSources();
 if (T) return;
-/**/
         try { //TEST4
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='PlatneOd|PlatneX' name='PIS_iop_common'>\n" +
@@ -189,7 +184,6 @@ if (T) return;
 "</xd:component>\n" +
 "</xd:def>";
             xp = org.xdef.XDFactory.compileXD(null, xdef);
-//			genXComponent(xp);
             genXComponentAndCopySources(xp);
             xd = xp.createXDDocument("");
             xml = "<PlatneOd PlatnostOd='2025-01-01'/>";
@@ -210,9 +204,7 @@ if (T) return;
             assertEq("2025-01-01", ((bugreports.subelem.PlatneOd) xc).getPlatnostOd().toString());
             assertNull(((bugreports.PlatneX4 ) xc).getHodnota());
         } catch (RuntimeException ex) {fail(ex);}
-//deleteCreatedSources();
 if (T) return;
-/**/
         clearTempDir(); // delete temporary files.
     }
 

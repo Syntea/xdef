@@ -150,7 +150,7 @@ class XonToString extends XonTools {
         for (Object o: array) {
             StringBuilder sb1 = new StringBuilder();
             objectToString(o, ind, sb1, xon);
-            if (items!=null && ind!=null && (sb1.indexOf("\n")>=0 || (itemsLen+=sb1.length()+1) + lineLen>LINE_LEN)) {
+            if (items!=null && ind!=null && (sb1.indexOf("\n") >= 0 || (itemsLen+=sb1.length()+1) + lineLen>LINE_LEN)) {
                 items.add(sb1);
                 for (StringBuilder x : items) {
                     writeItem(ind, sb, x, notFirst, false);
@@ -268,9 +268,9 @@ class XonToString extends XonTools {
         sb.append('}');
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// XON to JSON contertor
-////////////////////////////////////////////////////////////////////////////////
+/*=****************************************************************************
+* XON to JSON contertor
+******************************************************************************/
 
     /** Convert XON array to JSON.
      * @param xlist XON array.
@@ -304,8 +304,7 @@ class XonToString extends XonTools {
      * @return XON object converted to JSON.
      */
     final static Object xonToJson(final Object x) {
-        if (x == null || x instanceof String || x instanceof Boolean || x instanceof Number
-            || x instanceof XonTools.JNull) {
+        if (x==null||x instanceof String||x instanceof Boolean||x instanceof Number||x instanceof XonTools.JNull) {
             return x;
         } else if (x instanceof Map) {
             return xonMapToJson((Map) x);

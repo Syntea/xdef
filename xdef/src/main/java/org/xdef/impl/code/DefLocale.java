@@ -9,6 +9,7 @@ import static org.xdef.XDValueType.LOCALE;
 /** The class DefLocale implements items with Locale values.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation")
 public final class DefLocale extends XDValueAbstract {
     /** The string value of this item. */
     private Locale _value;

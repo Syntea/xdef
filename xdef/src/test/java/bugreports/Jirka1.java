@@ -15,10 +15,7 @@ import test.XDTester;
  */
 public class Jirka1 extends XDTester {
 
-    public Jirka1() {
-        super();
-        setChkSyntax(false); // here it MUST be false!
-    }
+    public Jirka1() {super();}
 
     /** Run test and display error information. */
     @Override
@@ -121,7 +118,6 @@ public class Jirka1 extends XDTester {
 "  </xd:json>\n" +
 "\n" +
 "</xd:def>";
-//System.out.println(xdef);
             json =
 "{\"caseID\":       112233,\n" +
 "\"createdTime\":  \"2026-01-29\",\n" +
@@ -145,7 +141,6 @@ public class Jirka1 extends XDTester {
 "    \"contacts\": [{\"phoneNum\":  \"+421 987 876 766\", \"address\": {\"town\":\"BLAVA\", \"PSC\":\"123456\"}}]\n" +
 "}\n" +
 "}";
-//System.out.println(json);
             j = XonUtils.parseJSON(json);
             xp = compile(xdef);
             o = jparse(xp, "Example", json, reporter, null, null, null);

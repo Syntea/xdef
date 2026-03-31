@@ -9,7 +9,7 @@ import test.XDTester;
 import static test.XDTester._xdNS;
 
 public class X extends XDTester {
-    public X() {}
+    X() {}
 
     /** Run test and display error info. */
     @Override

@@ -166,8 +166,7 @@ final class XonCompare {
                 return ((BigDecimal) n1).compareTo((BigDecimal) n2) == 0;
             } else if (n2 instanceof BigInteger) {
                 return equalNumber(n1, new BigDecimal((BigInteger) n2));
-            } else if (n2 instanceof Long || n2 instanceof Integer
-                || n2 instanceof Short || n2 instanceof Byte) {
+            } else if (n2 instanceof Long || n2 instanceof Integer || n2 instanceof Short || n2 instanceof Byte) {
                 return equalNumber(n1, new BigDecimal(n2.longValue()));
             } else if (n2 instanceof Double) {
                 //this is real equality, decimal can't be exactly converted!
@@ -181,8 +180,7 @@ final class XonCompare {
                 return ((BigInteger) n1).compareTo((BigInteger) n2) == 0;
             } else if (n2 instanceof BigDecimal || n2 instanceof BigInteger) {
                 return equalNumber(new BigDecimal((BigInteger)n1), n2);
-            } else if (n2 instanceof Long || n2 instanceof Integer
-                || n2 instanceof Short || n2 instanceof Byte) {
+            } else if (n2 instanceof Long || n2 instanceof Integer || n2 instanceof Short || n2 instanceof Byte) {
                 return equalNumber(n1, new BigInteger(n2.toString()));
             } else if (n2 instanceof Double || n2 instanceof Float) {
                 return equalNumber(new BigDecimal((BigInteger)n1), n2);
@@ -190,8 +188,7 @@ final class XonCompare {
         } else if (n1 instanceof Long || n1 instanceof Integer || n1 instanceof Short || n1 instanceof Byte) {
             if (n2 instanceof Long || n2 instanceof Integer || n2 instanceof Short || n2 instanceof Byte) {
                 return n1.longValue() == n2.longValue();
-            } else if (n2 instanceof Double || n2 instanceof Float || n2 instanceof BigInteger
-                || n2 instanceof BigDecimal) {
+            } else if (n2 instanceof Double||n2 instanceof Float||n2 instanceof BigInteger||n2 instanceof BigDecimal) {
                 return equalNumber(n2, n1);
             }
         } else if (n2 instanceof BigInteger || n2 instanceof BigDecimal) {

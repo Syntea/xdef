@@ -52,6 +52,7 @@ import org.xdef.sys.SUtils;
 /** Provides interactive editing and debugging of X-definition.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation")
 public class GUIEditor extends GUIScreen {
 
     private static final Class[] URLPARAMS = new Class[]{URL.class};

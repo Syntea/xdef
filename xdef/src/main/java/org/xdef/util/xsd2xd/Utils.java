@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
  * and getting information.
  * @author Ilia Alexandrov
  */
+@SuppressWarnings("deprecation")
 public class Utils {
     /** Namespace URI for XML Schema 1.0. */
     public static final String NSURI_SCHEMA = "http://www.w3.org/2001/XMLSchema";

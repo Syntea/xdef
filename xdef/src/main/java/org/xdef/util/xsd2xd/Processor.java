@@ -24,6 +24,7 @@ public abstract class Processor implements Convertor {
     /** Creates instance with root schema at given URL. Initializes all schema elements.
      * @param rootSchemaURL URL of root schema.
      */
+    @SuppressWarnings("deprecation")
     public Processor(URL rootSchemaURL) {
         try {
             _schemaURLStack = new Stack<URL>();

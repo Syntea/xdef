@@ -295,9 +295,11 @@ public class TestSUtils extends STester {
 
             d = new SDatetime("2024-08-22T11:00:00.005-05:00");
             assertNotNull(d.getTZ());
-            d.setTZ("AST");
-            assertEq("2024-08-22T08:00:00.005-08:00", d.toString());
-            assertEq(d.getTZ(), TimeZone.getTimeZone("AST"));
+            if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+                d.setTZ("AST");
+                assertEq("2024-08-22T08:00:00.005-08:00", d.toString());
+                assertEq(d.getTZ(), TimeZone.getTimeZone("AST"));
+            }
 
             d = new SDatetime("2024-08-22T11:00:00.005-05:00");
             assertNotNull(d.getTZ());
@@ -371,10 +373,11 @@ public class TestSUtils extends STester {
 
             d = new SDatetime("2024-11-22T11:00:00.005-05:00");
             assertNotNull(d.getTZ());
-            d.setTZ("AST");
-            assertEq("2024-11-22T07:00:00.005-09:00", d.toString());
-            assertEq(d.getTZ(), TimeZone.getTimeZone("AST"));
-
+            if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+                d.setTZ("AST");
+                assertEq("2024-11-22T07:00:00.005-09:00", d.toString());
+                assertEq(d.getTZ(), TimeZone.getTimeZone("AST"));
+            }
             d = new SDatetime("2024-11-22T11:00:00.005-05:00");
             assertNotNull(d.getTZ());
             d.setTZ("NZ");
@@ -630,17 +633,19 @@ public class TestSUtils extends STester {
             s = SDatetime.toRFC822(c);
             assertEq("Sun, 18 Feb 2007 18:45:09 +0100", s);
         } catch (Exception ex) {fail(ex);}
-        try { // date format RFC822
-            s = "Tue, 27 Nov 2001 14:05:12 +0100 (CET)";
-            p = new StringParser(s);
-            if (p.isDatetime("EEE, dd MMM yyyy HH:mm:ss ZZZZZ[ (z)]") && p.eos()) {
-                c = p.getParsedSDatetime().getCalendar();
-                assertEq("Tue, 27 Nov 2001 14:05:12 +0100",
-                    SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ"));
-            } else {
-                fail();
-            }
-        } catch (RuntimeException ex) {fail(ex);}
+        if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+            try { // date format RFC822
+                s = "Tue, 27 Nov 2001 14:05:12 +0100 (CET)";
+                p = new StringParser(s);
+                if (p.isDatetime("EEE, dd MMM yyyy HH:mm:ss ZZZZZ[ (z)]") && p.eos()) {
+                    c = p.getParsedSDatetime().getCalendar();
+                    assertEq("Tue, 27 Nov 2001 14:05:12 +0100",
+                        SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ"));
+                } else {
+                    fail();
+                }
+            } catch (RuntimeException ex) {fail(ex);}
+        }
         try { // date format ISO 8601e
             s = "1992-05-26 1:30:15AM-04:00";
             p = new StringParser(s);

@@ -1,9 +1,9 @@
 The included software and documentation corresponds to the version:
    ${project.version} (release-date ${release.date})
 
-The project X-definition information:   "README-project.md"
-This software is licensed under:        "apache-license-2.0.md"
-Release information:                    "changelog.md"
+The project X-definition information:   "META-INF/README.md"
+This software is licensed under:        "META-INF/apache-license-2.0.md"
+Release information:                    "META-INF/changelog.md"
 
 JAR file with compiled X-definition:    "xdef-${project.version}.jar"
 Original java source code:              "xdef-${project.version}-sources.jar"

@@ -8,41 +8,44 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
+    <files>
+        <file>
+            <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
+            <source>.flattened-pom.xml</source>
+            <destName>pom.xml</destName>
+        </file>
+        <file>
+            <outputDirectory>META-INF</outputDirectory>
+            <source>changelog.md</source>
+            <filtered>true</filtered>
+        </file>
+        <file>
+            <outputDirectory>META-INF</outputDirectory>
+            <source>src/main/resources-filters/org/xdef/sys/config/pominfo.properties</source>
+            <filtered>true</filtered>
+        </file>
+    </files>
     <fileSets>
         <fileSet>
+            <outputDirectory>META-INF</outputDirectory>
             <directory>..</directory>
             <includes>
                 <include>README.md</include>
                 <include>apache-license-2.0.md</include>
             </includes>
-            <outputDirectory>META-INF</outputDirectory>
         </fileSet>
         <fileSet>
-            <includes>
-                <include>changelog.md</include>
-            </includes>
-            <outputDirectory>META-INF</outputDirectory>
-            <filtered>true</filtered>
-        </fileSet>
-        <fileSet>
+            <outputDirectory>.</outputDirectory>
             <directory>src/main/java</directory>
-            <outputDirectory>.</outputDirectory>
         </fileSet>
         <fileSet>
+            <outputDirectory>.</outputDirectory>
             <directory>src/main/resources</directory>
-            <outputDirectory>.</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>src/main/resources-filters</directory>
             <outputDirectory>.</outputDirectory>
+            <directory>src/main/resources-filters</directory>
             <filtered>true</filtered>
         </fileSet>
     </fileSets>
-    <files>
-        <file>
-            <source>.flattened-pom.xml</source>
-            <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
-            <destName>pom.xml</destName>
-        </file>
-    </files>
 </assembly>

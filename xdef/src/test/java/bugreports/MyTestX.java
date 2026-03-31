@@ -16,10 +16,7 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.sys.SDatetime;
-import org.xdef.sys.SException;
-import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -31,7 +28,7 @@ import static test.XDTester._xdNS;
  * @author Vaclav Trojan
  */
 public class MyTestX extends XDTester {
-    File[] _geneatedSources = null;
+
     public MyTestX() {
         super();
         System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -40,41 +37,6 @@ public class MyTestX extends XDTester {
         setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true|false
     }
 
-    private void genAndCopyXComponents(final XDPool xp) {
-        File file = clearTempDir();
-        file.mkdirs();
-        FUtils.deleteAll(file.listFiles(), true);
-        genXComponent(xp, file).checkAndThrowErrors();
-        String source = getSourceDir();
-        File[] files = new File(file, _package).listFiles();
-        for (int i=0; i < files.length; i++) {
-            File f = files[i];
-            String name = f.getName();
-            if (name.endsWith(".java")) {
-                File f1 = new File(source, name);
-                try {
-                    FUtils.copyToFile(f, f1);
-                } catch (SException ex) {
-                    throw new SRuntimeException(ex.getReport());
-                }
-                files[i] = f1;
-            } else {
-                files[i] = null;
-            }
-        }
-        _geneatedSources = files;
-    }
-
-    private void clearSources() {
-        if (_geneatedSources != null) {
-            for (File _geneatedSource : _geneatedSources) {
-                if (_geneatedSource != null) {
-                    _geneatedSource.delete();
-                }
-            }
-            _geneatedSources = null;
-        }
-    }
     public static String chk1(String s) {return "i1=" + s;}
     public static String chk2(int i, XDContainer c) {return "i2="+i + ", " + c;}
     public static String chk3() {return "x3";}
@@ -96,12 +58,6 @@ public class MyTestX extends XDTester {
         boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
 ////////////////////////////////////////////////////////////////////////////////
         System.out.println("X-definition version: " + XDFactory.getXDVersion());
-/**
-        System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-            XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
-        System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
-            "");
-/**/
         Element el;
         File file;
         String ini, json, s, xml, xon;
@@ -122,8 +78,7 @@ public class MyTestX extends XDTester {
 "</xd:def>";
             xp = compile(xdef);
             xml = "<A><B a=\"a'b\"/><B a='a b'/><B b=\"'a b' 'a''b'\"/></A>";
-            genAndCopyXComponents(xp);
-            clearSources();
+            genXComponent(xp, clearTempDir());
             xc = parseXC(xp, "", xml, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq(xml, xc.toXml());
@@ -136,7 +91,7 @@ if(T)return;
 "<xd:json name='A'> \"eq('2021')\" </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xon = "\"2021\"";
             s = _package+".MytestX_eq";
             assertNull(testX(xp,"", s, xon));
@@ -146,20 +101,19 @@ if(T)return;
 "<xd:json name='A'> [ \"num()\" ] </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp);
             xon = "[\"2021\"]";
             s = _package+".MytestX_num";
             assertNull(testX(xp,"", s, xon));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T) return;
-clearSources();
         try {
             xp = compile(
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
 "<xd:component>%class "+_package+".Csvxx1 %link a</xd:component>\n" +
 " <xd:json name='a'> [ [ %script =\"+\", \"*; string()\"] ] </xd:json>\n" +
 "</xd:def>");
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xd = xp.createXDDocument();
             json = "[ [\"a\t\n\\\"b\", \"a\"], [], [null, null, null, null] ]";
             o = xd.jparse(json, reporter);
@@ -173,7 +127,7 @@ clearSources();
 "<xd:component>%class "+_package+".Csvxx2 %link a</xd:component>\n" +
 " <xd:json name='a'> [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n" +
 "</xd:def>");
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xd = xp.createXDDocument();
             json = "[[1, 2, \"abc\", true], [null, null, null, null]]";
             o = xd.jparse(json, reporter);
@@ -188,10 +142,9 @@ clearSources();
 " <xd:json name='a'> [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xd = xp.createXDDocument();
-            json =
-"[ [1, 2, \"a\", true], [null, 1, \"a\t\n\\\"b\", false], [6, null, null, true], [null, null, null, null]]";
+            json = "[ [1,2,\"a\",true],[null,1,\"a\t\n\\\"b\",false],[6,null,null,true],[null,null,null,null] ]";
             o = xd.jparse(json, reporter);
             assertNoErrorwarningsAndClear(reporter);
             xc = xd.jparseXComponent(json, null, reporter);
@@ -200,7 +153,6 @@ clearSources();
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -211,7 +163,7 @@ clearSources();
             xon = "[ b(D66Z), b(), x(0FAE99), x() ]";
             x = jparse(xp, "", xon, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
@@ -231,7 +183,6 @@ clearSources();
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             String type;
             type = "date";
@@ -241,7 +192,7 @@ clearSources();
 "  <xd:component> %class "+_package+".Xon0 %link #A; </xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xon = "d2021-01-12";
             o = XonUtils.parseXON(xon);
             xd = xp.createXDDocument();
@@ -250,7 +201,6 @@ clearSources();
             if (!XonUtils.xonEqual(o, x)) {
                 fail("** 2\n" + XonUtils.toXonString(o, true) + "\n" + XonUtils.toXonString(x, true));
             }
-
             assertNull(testA("jnull", "[ null, null ]"));
             assertNull(testA("jboolean", "[ null, true ]"));
             assertNull(testA("jnumber", "[ null, 1, 3.14E+2, -0 ]"));
@@ -281,7 +231,6 @@ clearSources();
             assertNull(testM("int", "{ }"));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
@@ -289,7 +238,7 @@ clearSources();
 "<xd:component> %class "+_package+".Xon0 %link X#Any; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".Xon0";
             // value
             assertNull(testX(xp,"X", s, "true"));
@@ -306,7 +255,6 @@ clearSources();
             assertNull(testX(xp,"X", s, "\" ab cd \""));
         } catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -314,7 +262,7 @@ clearSources();
 "<xd:component> %class "+_package+".Xon0x %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef); // no property
-            genAndCopyXComponents(xp);
+            genXComponent(xp);
             xd = xp.createXDDocument();
             json = "[d2021-01-11,d2023]";
             y = xd.jparse(json, reporter);
@@ -335,7 +283,6 @@ clearSources();
             }
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
@@ -347,7 +294,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTest_xxx %link X#Any; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTest_xxx";
             // value
             assertNull(testX(xp,"X", s, "true"));
@@ -386,7 +333,6 @@ clearSources();
             assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
         } catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
@@ -414,7 +360,7 @@ clearSources();
 "</xd:component>\n" +
 "</xd:collection>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestX_AnyXXx";
             assertNull(testX(xp,"x", s, "null"));
             assertNull(testX(xp,"x", s, "true"));
@@ -431,7 +377,6 @@ clearSources();
 //			assertNull(testX(xp,"x", s, "\"\\\"\""));
 //			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-clearSources();
 if(T)return;
         try {
             xdef =
@@ -442,7 +387,7 @@ if(T)return;
 "</xd:def>\n"+
 "</xd:collection>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             assertNull(testX(xp,"X", "[1]"));
             assertNull(testX(xp,"X", "[ [] ]"));
             assertNull(testX(xp,"X", "[ [1, true] ]"));
@@ -464,7 +409,6 @@ if(T)return;
         } catch (Exception ex) {fail(ex);}
         reporter.clear();
 if(T)return;
-clearSources();
         try {
             xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
@@ -484,7 +428,7 @@ clearSources();
 "</xd:def>\n" +
 "</xd:collection>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestX_AnyXXx";
             assertNull(testX(xp,"x", s, "\" ab\tcd \""));
             assertNull(testX(xp,"x", s, "\" ab\\tcd \""));
@@ -492,7 +436,6 @@ clearSources();
             assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
-    clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -500,7 +443,7 @@ if(T)return;
 "  <xd:json name='A'> [ \"base64Binary()\", \"hexBinary()\", \"? hexBinary()\" ] </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xon = "[b(true), x(0FAE99), x()]";
             x = XonUtils.parseXON(xon);
             s = XonUtils.toJsonString(x, true);
@@ -519,7 +462,6 @@ if(T)return;
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-clearSources();
 if(T)return;
         try {
             xdef = // test XON reference to %any in %oneOf
@@ -532,7 +474,7 @@ if(T)return;
 "<xd:component> %class "+_package+".MyTestXX11 %link X#Any; </xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX11";
             // value
             assertNull(testX(xp,"X", s, "true"));
@@ -547,7 +489,6 @@ if(T)return;
             assertNull(testX(xp,"X", s, "{a:[]}"));
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
     try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"test\">\n" +
@@ -682,7 +623,6 @@ clearSources();
             assertNull(((Map) xc.toXon()).get("a"));
             assertFalse(((Map) xc.toXon()).containsKey("a"));
     } catch (RuntimeException ex) {fail(ex); reporter.clear();}
-clearSources();
 if(T)return;
     try {
         xdef =
@@ -703,7 +643,7 @@ if(T)return;
 "  <g y='int'/>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xml = "<a><x:b xmlns:x='x.int' y='1'/></a>";
             x = SUtils.getNewInstance(_package+".component.Y16");
             y = SUtils.getNewInstance(_package+".component.Y16a");
@@ -728,7 +668,6 @@ if(T)return;
             xml = "<e><f y='1'/></e>";
             assertEq(xml, ((XComponent) x).toXml());
         } catch (Exception ex) {fail(ex); reporter.clear();}
-clearSources();
 if(T)return;
         try {
             xdef =
@@ -737,7 +676,7 @@ if(T)return;
 "<xd:json name=\"A\"> [ \"base64Binary()\", \"hexBinary()\" ] </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xon = "[ b(FF00), x(FF00) ]";
             x = XonUtils.parseXON(xon);
             xd = xp.createXDDocument();
@@ -752,7 +691,6 @@ if(T)return;
             assertTrue(XonUtils.xonEqual(x,y));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name = 'O' root = \"A\">\n" +
@@ -766,7 +704,7 @@ clearSources();
 "  </A>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xml = "<A><B/>1<C/><C/><B/>2<C/>3<B/></A>";
             xc = parseXC(xp, "O", xml, null, null);
             assertEq(xml, xc.toXml());
@@ -775,7 +713,6 @@ clearSources();
             assertEq(xml, xc.toXml());
         } catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"D\">\n" +
@@ -783,7 +720,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXUnion %link #D; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xml = "<D a='111'/>";
             assertEq(xml, parse(xp,"", xml, reporter));
             assertNoErrorsAndClear(reporter);
@@ -792,7 +729,6 @@ clearSources();
             assertEq(xml, xc.toXml());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -806,7 +742,6 @@ clearSources();
             assertEq("Pi = 3.141592", swr.toString());
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root='D'>\n" +
@@ -828,7 +763,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXExt %link #D; </xd:component>\n" +
 "</xd:def>";
             xp = XDFactory.compileXD(null, xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xml = "<D a='111'><E b='444'>555</E>222</D>";
             xd = xp.createXDDocument();
             swr = new StringWriter();
@@ -845,7 +780,6 @@ clearSources();
             assertEq("i1=111i4=4, XXNode Ei5=5, XXNode Ex6 /D/E[1], 1 2 %t=9i2=2, %a=2x3", swr.toString());
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"D\">\n" +
@@ -853,7 +787,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXonD %link #D; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             json = "[ 1, 2 ]";
             s = _package+".MyTestXonD";
             assertNull(testX(xp, "", s, json)); // OK
@@ -861,7 +795,6 @@ clearSources();
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"C\">\n" +
@@ -869,7 +802,8 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXonC %link #C; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
+//            genAndCopyXComponents(xp);
             json = "[ true, 2 ]";
             s = _package+".MyTestXonC";
             assertNull(testX(xp, "", s, json)); // OK
@@ -877,7 +811,6 @@ clearSources();
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -885,7 +818,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX00M %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX00M";
             json = "{}";
             assertNull(testX(xp, "", s, json)); // OK
@@ -899,7 +832,6 @@ clearSources();
             assertNotNull(testX(xp, "", s, json)); // error: not map
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -907,7 +839,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX00 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX00";
             json = "1";
             assertNull(testX(xp,"",s, json)); // OK
@@ -917,7 +849,6 @@ clearSources();
             assertEq(2, XComponentUtil.get(xc, "val"));
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -925,7 +856,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTest_xxy %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTest_xxy";
             json = "[1]";
             assertNull(testX(xp,"",s, json)); // OK
@@ -937,7 +868,6 @@ clearSources();
             assertEq(xc.toXon(), XComponentUtil.get(xc, "Array$"));
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -945,7 +875,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX02 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX02";
             json = "{}";
             assertNull(testX(xp,"",s, json)); // OK
@@ -967,7 +897,6 @@ clearSources();
             assertNull(XComponentUtil.get(xc, "$a"));
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -975,14 +904,13 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX03 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX03";
             assertNull(testX(xp,"",s, "[]")); // OK
             assertNull(testX(xp,"",s, "[1]")); // OK
             assertNull(testX(xp,"",s, "[1,2]")); // OK
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -990,13 +918,12 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX04 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX04";
             assertNull(testX(xp,"",s, "{}")); // OK
             assertNull(testX(xp,"",s, "{a:1}")); // OK
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1004,7 +931,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX05 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX05";
             assertNull(testX(xp,"",s, "[true]")); // OK
             assertNull(testX(xp,"",s, "[1]")); // OK
@@ -1018,7 +945,6 @@ clearSources();
             assertNotNull(testX(xp,"",s, "[]")); // error empty
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1026,7 +952,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX06 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX06";
             xd = xp.createXDDocument();
             xd.jparseXComponent("[[123, true]]", null, reporter);
@@ -1042,7 +968,6 @@ clearSources();
             assertNotNull(testX(xp,"",s, "{a:1,b:2}")); // error not array
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1050,7 +975,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX07 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX07";
             assertNull(testX(xp,"",s, "{x:1, y:2}"));
             assertNotNull(testX(xp,"",s, "{}")); // empty
@@ -1058,7 +983,6 @@ clearSources();
             assertNotNull(testX(xp,"",s, "{x:1,y:2,z:3}"));//more items
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test %anyObj in array
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1066,7 +990,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX08 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX08";
             assertNull(testX(xp,"",s, "[]"));
             assertNull(testX(xp,"",s, "[true]"));
@@ -1075,7 +999,6 @@ clearSources();
             assertNotNull(testX(xp,"",s,"[1,2]")); // more then one item
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test %anyObj in array
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"A\">\n" +
@@ -1083,7 +1006,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX09 %link #A; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX09";
             assertNull(testX(xp,"",s, "123"));
             assertNull(testX(xp,"",s, "[]"));
@@ -1092,7 +1015,6 @@ clearSources();
             assertNull(testX(xp,"",s,"{a:1,b:2}"));
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef = // test XON models
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='Any'>\n" +
@@ -1109,7 +1031,7 @@ clearSources();
 "<xd:component> %class "+_package+".MyTestXX10 %link X#Any; </xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = _package+".MyTestXX10";
             assertNull(testX(xp,"X", s, "true", "V"));
             assertNull(testX(xp,"X", s, "[]", "A"));
@@ -1117,7 +1039,6 @@ clearSources();
             assertNull(testX(xp,"X", s, "{}", "M"));
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {// test %anyName in map
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
@@ -1191,7 +1112,6 @@ clearSources();
         } catch (RuntimeException ex) {fail(ex);}
         reporter.clear();
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Skladby'>\n"+
@@ -1200,7 +1120,7 @@ clearSources();
 "</xd:def>";
             s ="{\"Style\": \"Classic\"}";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             assertNull(testX(xp,"", s));
             xd = xp.createXDDocument();
             x = jparse(xd, s, reporter);
@@ -1214,7 +1134,6 @@ clearSources();
             }
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -1223,7 +1142,7 @@ clearSources();
 "</xd:def>";
             s = "{ }";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             assertNull(testX(xp,"", s));
             x = XonUtils.parseXON(s);
             assertNoErrorwarnings(reporter);
@@ -1236,7 +1155,6 @@ clearSources();
             }
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
@@ -1246,13 +1164,12 @@ clearSources();
 "<xd:component>%class "+_package+".MyTestXX16 %link a</xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             s = "[ { \"Genre\": [\"A1\"]  }, { \"Genre\": [\"B1\", \"B2\"] }, { \"Genre\": \"C1\" } ]";
             jparse(xp, "", s, reporter);
             assertNoErrorsAndClear(reporter);
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -1262,11 +1179,10 @@ clearSources();
             xp = compile(xdef);
             file = clearTempDir();
             genXComponent(xp, file);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             assertNull(testX(xp,"", "{ a:1 }"));
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
@@ -1274,11 +1190,10 @@ clearSources();
 "<xd:component>%class "+_package+".MyTestXX18 %link a</xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             assertNull(testX(xp,"", "{ \"\":\"\" }"));
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
@@ -1286,11 +1201,10 @@ clearSources();
 "<xd:component>%class "+_package+".MyTestXX19 %link a</xd:component>\n"+
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             assertNull(testX(xp,"", "{ \"\":\"\" }"));
         } catch (Exception ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"Example\" root=\"test\">\n" +
@@ -1312,7 +1226,7 @@ clearSources();
 "  </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            genAndCopyXComponents(xp);
+            genXComponent(xp, clearTempDir());
             xd = xp.createXDDocument("Example");
             s =
 "{ \"date\" : \"2020-02-22\",\n" +
@@ -1340,7 +1254,6 @@ clearSources();
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try {
             xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" root=\"TRSconfig\">\n" +
@@ -1390,7 +1303,6 @@ clearSources();
             reporter.clear();
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-clearSources();
         try { // test Windows INI
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
@@ -1444,8 +1356,6 @@ clearSources();
             create(xd, "DefCiselnik", reporter);
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
-if(T)return;
-clearSources();
 
         clearTempDir(); // delete temporary files.
     }

@@ -47,8 +47,7 @@ public class TestSParser extends STester {
             result += (result.isEmpty() ? "" : "\n") + "Second: " + d1.getSecond() + "/" +  d2.getSecond();
         }
         if (d1.getMillisecond() != d2.getMillisecond()) {
-            result += (result.isEmpty() ? ""
-                : "\n") + "Millisecond: " + d1.getMillisecond()+"/"+ d2.getMillisecond();
+            result += (result.isEmpty() ? "" : "\n") + "Millisecond: " + d1.getMillisecond()+"/"+ d2.getMillisecond();
         }
         if (d1.getTimezone() != d2.getTimezone()) {
             result += (result.isEmpty() ? "" : "\n") + "Timezone: "+ d1.getTimezone() +"/"+  d2.getTimezone();
@@ -65,8 +64,7 @@ public class TestSParser extends STester {
                 result += (result.isEmpty() ? "" : "\n") + "EonAndYear: null/" +  d2.getEonAndYear();
             }
         } else if (!d1.getEonAndYear().equals(d2.getEonAndYear())) {
-            result +=  (result.isEmpty() ? ""
-                : "\n") + "EonAndYear: " + d1.getEonAndYear() + "/" +  d2.getEonAndYear();
+            result +=  (result.isEmpty() ? "" : "\n") + "EonAndYear: " + d1.getEonAndYear() + "/" +  d2.getEonAndYear();
         }
         return result;
     }
@@ -266,47 +264,33 @@ public class TestSParser extends STester {
             p.isSpaces();
             assertTrue(p.isInteger() && (p.getParsedInt() == 123), "b) isInteger() fails: " + p.getParsedInt());
             p.isSpaces();
-            assertTrue(p.isSignedInteger() && (p.getParsedInt() == 123),
-                "a) isSignedInteger() fails: " + p.getParsedInt());
+            assertTrue(p.isSignedInteger() && (p.getParsedInt()==123),"a)isSignedInteger() fails: " + p.getParsedInt());
             p.isSpaces();
-            assertTrue(p.isSignedInteger() && (p.getParsedInt() == -123),
-                "b) isSignedInteger() fails: " + p.getParsedInt());
+            assertTrue(p.isSignedInteger()&&(p.getParsedInt()==-123),"b)isSignedInteger() fails: " + p.getParsedInt());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 12e3),
-                "a) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 12e3), "a) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && p.getParsedFloat() == -12e3,
-                "b) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && p.getParsedFloat() == -12e3, "b) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 120e-1),
-                "c) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 120e-1), "c) isFloat() fails: "+p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 12.50e+1),
-                "d) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat()==12.50e+1), "d) isFloat() fails: "+p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5),
-                "e) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5), "e) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5e1),
-                "f) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5e1), "f) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5),
-                "g) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5), "g) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5e1),
-                "h) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5e1), "h) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.),
-                "i) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.), "i) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.e1),
-                "j) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.e1), "j) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.),
-                "k) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.), "k) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
-            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.e1),
-                "l) isFloat() fails: " + p.getParsedFloat());
+            assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.e1), "l) isFloat() fails: " + p.getParsedFloat());
             p.isSpaces();
             if (p.isDatetime("d.M.yyyy")) {
                 c = p.getParsedCalendar();
@@ -467,7 +451,8 @@ public class TestSParser extends STester {
                 assertEq(c.get(Calendar.SECOND), 58);
                 assertEq(c.get(Calendar.MILLISECOND), 543);
             }
-            s = "29/10/1975 11:55:23.345 CET";
+            s = SUtils.JAVA_RUNTIME_VERSION_ID >= 2500
+                ? "29/10/1975 11:55:23.345 +01:00" : "29/10/1975 11:55:23.345 CET";
             if (!(p = new StringParser(s)).isDatetime("d?'/.'M?'./'yyyy HH:mm:ss?',.'S z")) {
                 fail(s);
             } else {
@@ -491,16 +476,18 @@ public class TestSParser extends STester {
                 c = p.getParsedCalendar();
                 assertEq(c.getTimeZone().getRawOffset(), 3600000);
             }
-            s = "11/10/2005 17:56:46.395 CETXYZ";
-            if (!(p = new StringParser(s)).isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
-                fail();
-            } else {
-                assertTrue(p.isToken("XYZ"), p.getUnparsedBufferPart());
-                assertTrue(p.eos());
-                c = p.getParsedCalendar();
-                TimeZone tz = c.getTimeZone();
-                assertEq("CEST",tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
-                assertEq(c.getTimeZone().getRawOffset(), 3600000);
+            if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+                s = "11/10/2005 17:56:46.395 CETXYZ";
+                if (!(p = new StringParser(s)).isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
+                    fail();
+                } else {
+                    assertTrue(p.isToken("XYZ"), p.getUnparsedBufferPart());
+                    assertTrue(p.eos());
+                    c = p.getParsedCalendar();
+                    TimeZone tz = c.getTimeZone();
+                    assertEq("CEST",tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
+                    assertEq(c.getTimeZone().getRawOffset(), 3600000);
+                }
             }
             s = "11/10/2005 17:56:46.395 GMT+01:00";
             if (!(p = new StringParser(s)).isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
@@ -588,7 +575,6 @@ public class TestSParser extends STester {
             } else {
                 fail();
             }
-            ;
             if ((p = new StringParser("1993045")).isDatetime("yyyyDDD[Z]")) {
                 c = p.getParsedCalendar();
                 assertEq(c.get(Calendar.YEAR), 1993);
@@ -902,15 +888,17 @@ public class TestSParser extends STester {
             assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy") && p.eos());
             p = new StringParser("7.6.2020:16");
             assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy") && p.eos());
-            p = new StringParser("Sun Jun 07 18:00:00 CET 2020");
-            assertTrue(p.isPrintableDatetime() && p.eos());
+            if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+                p = new StringParser("Sun Jun 07 18:00:00 CET 2020");
+                assertTrue(p.isPrintableDatetime() && p.eos());
+            }
             p = new StringParser("12/6/1961");
             assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y") && p.eos());
             p = new StringParser(p.getParsedSDatetime().formatDate("{L(cs)}d/MMM/y"));
             assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y") && p.eos());
             p = new StringParser(p.getParsedSDatetime().formatDate("{L(en)}d/MMM/y"));
             assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y") && p.eos());
-            assertTrue(!(p = new StringParser("20.11.")).isDatetime("d.M.yyyy[ HH:mm]"));
+            assertTrue(!(new StringParser("20.11.")).isDatetime("d.M.yyyy[ HH:mm]"));
             p = new StringParser("20.11.2005 23:");
             assertTrue(!(p.isDatetime("d.M.yyyy[ HH:mm]") && p.eos()));
             assertEq(" 23:", p.getUnparsedBufferPart());
@@ -1075,11 +1063,11 @@ public class TestSParser extends STester {
             du = new SDuration("1999-11-05T23:11:05/P0001-10-11T23:01:55/2009-11-05T23:11:05");
             assertEq("1999-11-05T23:11:05/P1Y10M11DT23H1M55S/2009-11-05T23:11:05", du.toString());
             try {
-                new SDuration("P1M2Y");
+                new SDuration("P1M2Y"); // just test
                 fail("parts order - Y must precede M");
             } catch (SRuntimeException ex) {}
             try {
-                new SDuration("P1Y-1M");
+                new SDuration("P1Y-1M"); // just test
                 fail("all parts must be positive, error not thrown");
             } catch (SRuntimeException ex) {
                 String msg = "" + ex.getMessage();

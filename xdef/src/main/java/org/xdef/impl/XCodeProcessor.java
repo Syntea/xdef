@@ -571,10 +571,10 @@ import org.xdef.xon.XonTools;
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation")
 public final class XCodeProcessor {
     /** This identifier is created if it is undefined. */
     private static final String UNDEF_ID = "__UNDEF_ID__";
-    /** Switch to allow/restrict DOCTYPE in XML. */
     /** Executable code */
     private XDValue[] _code;
     /** Address of code initialization. */

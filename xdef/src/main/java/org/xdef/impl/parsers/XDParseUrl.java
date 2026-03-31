@@ -28,6 +28,7 @@ public class XDParseUrl extends XDParserAbstract {
      * @param s string with URL.
      * @return true if the string contains correct URL.
      */
+    @SuppressWarnings("deprecation")
     final static boolean chkUrl(final XDParseResult p,
         final String s,
         final String paserName) {

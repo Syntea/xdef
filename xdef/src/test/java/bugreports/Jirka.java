@@ -12,10 +12,7 @@ import test.XDTester;
  */
 public class Jirka extends XDTester {
 
-    public Jirka() {
-        super();
-        setChkSyntax(false); // here it MUST be false!
-    }
+    public Jirka() {super();}
 
     /** Run test and display error information. */
     @Override
@@ -96,7 +93,6 @@ public class Jirka extends XDTester {
 "   }\n" +
 "  </xd:json>\n" +
 "</xd:def>";
-//System.out.println(xdef);
             json =
 "{\"caseID\":      112233,\n" +
 "\"createdTime\":  \"2026-02-02\",\n" +
@@ -116,13 +112,6 @@ public class Jirka extends XDTester {
 "    \"lastName\":    \"NOVÁK\",\n" +
 "    \"PIN\":         \"7403160123\",\n" +
 "    \"contacts\":    {\"phoneNum\": \"9988776655\"}\n" +
-//" },\n" +
-//"\"owner\": {\n" +
-//"    \"subjectType\": \"LE\",\n" +
-//"    \"firstName\":   \"PETR\",\n" +
-//"    \"lastName\":    \"NOVÁK\",\n" +
-//"    \"PIN\":         \"7403160124\",\n" +
-//"    \"contacts\":    {\"phoneNum\": \"9988776656\"}\n" +
 " }\n" +
 "}";
 //System.out.println(json);

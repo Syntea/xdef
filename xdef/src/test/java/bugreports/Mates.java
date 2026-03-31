@@ -17,10 +17,7 @@ import static test.XDTester._xdNS;
  */
 public class Mates extends XDTester {
 
-    public Mates() {
-        super();
-        setChkSyntax(false); // here it MUST be false!
-    }
+    public Mates() {super();}
 
     /** Run test and display error information. */
     @Override
@@ -40,7 +37,6 @@ public class Mates extends XDTester {
         XDPool xp;
         XComponent xc;
         ArrayReporter reporter = new ArrayReporter();
-/**/
         try { // test extension of map and correct reporting.
             xd = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
@@ -68,150 +64,6 @@ public class Mates extends XDTester {
             }
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-/**
-        try {
-            xdef =
-"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
-"<xd:def name='A' root='A'>\n" +
-"<A>\n" +
-"  <B>\n" +
-"    <xd:mixed xd:ref='B#B'>\n" +
-//"    <xd:mixed xd:script='ref B#B'>\n" +
-"      <X/>\n" +
-"      <Y/>\n" +
-"    </xd:mixed>\n" +
-"  </B>\n" +
-"</A>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_A %link A;\n" +
-"  </xd:component>\n" +
-"</xd:def>\n" +
-"<xd:def name='B'>\n" +
-"    <xd:mixed xd:name='B'>\n" +
-"      <P/>\n" +
-"      <Q/>\n" +
-"    </xd:mixed>\n" +
-//"  <B>\n" +
-//"    <xd:mixed>\n" +
-//"      <P/>\n" +
-//"      <Q/>\n" +
-//"    </xd:mixed>\n" +
-//"  </B>\n" +
-"  <xd:component>\n" +
-//"    %class "+_package+".Mates_B %link B;\n" +
-"  </xd:component>\n" +
-"</xd:def>\n" +
-"</xd:collection>";
-            xp = XDFactory.compileXD(null, xdef);
-            genXComponent(xp);
-            xml =
-"<A>\n" +
-"  <B>\n" +
-"    <P/>\n" +
-"    <Q/>\n" +
-"    <X/>\n" +
-"    <Y/>\n" +
-"  </B>\n" +
-"</A>\n";
-            xd = xp.createXDDocument("A");
-            parse(xd, xml, reporter);
-            assertNoErrorsAndClear(reporter);
-            xc = xd.xparseXComponent(xml, null, reporter);
-            assertNoErrorsAndClear(reporter);
-            assertEq(xml, xc.toXml());
-            xml =
-"<A>\n" +
-"  <B>\n" +
-"    <Y/>\n" +
-"    <X/>\n" +
-"    <Q/>\n" +
-"    <P/>\n" +
-"  </B>\n" +
-"</A>\n";
-            xd = xp.createXDDocument("A");
-            parse(xd, xml, reporter);
-            assertNoErrorsAndClear(reporter);
-            xc = xd.xparseXComponent(xml, null, reporter);
-            assertNoErrorsAndClear(reporter);
-            assertEq(xml, xc.toXml());
-        } catch (RuntimeException ex) {fail(ex);}
-if(T)return;
-/**
-        try {
-            xdef =
-"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
-"<xd:def name='A' root='A'>\n" +
-"  <xd:json name=\"A\">\n" +
-"    {\"A\":\n" +
-"      {\n" +
-"         \"End\":\n" +
-"           {\n" +
-"             \"%script\": \"ref B#B\",\n" +
-"             \"x\": \"?; string()\",\n" +
-"             \"y\": \"?; string()\"\n" +
-"           }\n" +
-"      }\n" +
-"    }\n" +
-"  </xd:json>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_A %link A;\n" +
- "   %interface "+_package+".Mates_A_I %link A;\n" +
-"  </xd:component>\n" +
-"</xd:def>\n" +
-"<xd:def name='B' root='B'>\n" +
-"  <xd:json name='B'>\n" +
-"    {\n" +
-"       \"p\":  \"string()\",\n" +
-"       \"q\":  \"? string()\"\n" +
-"    }\n" +
-"  </xd:json>\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".Mates_B %link B;\n" +
-"    %interface "+_package+".Mates_B_I %link B;\n" +
-"  </xd:component>\n" +
-"</xd:def>\n" +
-"</xd:collection>";
-            xp = compile(xdef);
-            genXComponent(xp);
-            json =
-"{\"A\":\n" +
-"   {\n" +
-"     \"End\":\n" +
-"       {\n" +
-"         \"p\": \"P\",\n" +
-"         \"q\": \"Q\",\n" +
-"         \"x\": \"x\",\n" +
-"         \"y\": \"y\",\n" +
-"       }\n" +
-"   }\n" +
-"}\n";
-            xd = xp.createXDDocument("A");
-            o = jparse(xd, json, reporter);
-            assertNoErrorsAndClear(reporter);
-            xc = xd.jparseXComponent(json, null, reporter);
-            assertNoErrorsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-            json =
-"{\"A\":\n" +
-"   {\n" +
-"     \"End\":\n" +
-"       {\n" +
-"         \"y\": \"y\",\n" +
-"         \"x\": \"x\",\n" +
-"         \"q\": \"Q\",\n" +
-"         \"p\": \"P\",\n" +
-"       }\n" +
-"   }\n" +
-"}\n";
-            xd = xp.createXDDocument("A");
-            o = jparse(xd, json, reporter);
-            assertNoErrorsAndClear(reporter);
-            xc = xd.jparseXComponent(json, null, reporter);
-            assertNoErrorsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-        } catch (RuntimeException ex) {fail(ex);}
-if(T)return;
-/**/
         try {
             xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
@@ -224,7 +76,6 @@ if(T)return;
 "           {\n" +
 "             \"%script\": \"+; ref EndStatuses#EndStatuses\",\n" +
 "             \"x\": \"?; string()\",\n" +
-//"             \"y\": \"?; string()\"\n" +
 "           }\n" +
 "         ]\n" +
 "      }\n" +
@@ -232,7 +83,6 @@ if(T)return;
 "  </xd:json>\n" +
 "  <xd:component>\n" +
 "    %class "+_package+".Mates_A %link A;\n" +
-// "    %interface "+_package+".Mates_A_I %link A;\n" +
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='EndStatuses' root='EndStatuses'>\n" +
@@ -252,21 +102,18 @@ if(T)return;
             genXComponent(xp);
             json =
 "{\"A\":\n" +
-"            {\n" +
-"                \"Name\": \"xxxxxxx\",\n" +
-"                \"End\": [\n" +
-"                  {\n" +
-"                    \"ChangeLog\": \"Y\",\n" +
-"                    \"EndStatus\": \"actionCode\",\n" +
-"                    \"x\":       \"xxx\",\n" +
-"                  },\n" +
-"                  {\n" +
-"                    \"ChangeLog\": \"Y\",\n" +
-"                    \"EndStatus\": \"actionCode1\",\n" +
-"                    \"x\":       \"xxx1\",\n" +
-"                  }\n" +
-"                ]\n" +
-"            }\n" +
+"  { \"Name\": \"xxxxxxx\",\n" +
+"    \"End\": [\n" +
+"      { \"ChangeLog\": \"Y\",\n" +
+"        \"EndStatus\": \"actionCode\",\n" +
+"        \"x\":       \"xxx\",\n" +
+"      },\n" +
+"      { \"ChangeLog\": \"Y\",\n" +
+"        \"EndStatus\": \"actionCode1\",\n" +
+"        \"x\":       \"xxx1\",\n" +
+"      }\n" +
+"    ]\n" +
+"  }\n" +
 "}\n";
             xd = xp.createXDDocument("A");
             o = jparse(xd, json, reporter);
@@ -275,22 +122,19 @@ if(T)return;
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
             json =
-"{\"A\":\n" +
-"            {\n" +
-"                \"Name\": \"xxxxxxx\",\n" +
-"                \"End\": [\n" +
-"                  {\n" +
-"                    \"ChangeLog\": \"Y\",\n" +
-"                    \"EndStatus\": \"actionCode\",\n" +
-"                    \"x\":       \"xxx\",\n" +
-"                  },\n" +
-"                  {\n" +
-"                    \"ChangeLog\": \"Y\",\n" +
-"                    \"x\":       \"xxx1\",\n" +
-"                    \"EndStatus\": \"actionCode1\",\n" +
-"                  }\n" +
-"                ]\n" +
-"            }\n" +
+"{\"A\": {\n" +
+"    \"Name\": \"xxxxxxx\",\n" +
+"    \"End\": [\n" +
+"      { \"ChangeLog\": \"Y\",\n" +
+"        \"EndStatus\": \"actionCode\",\n" +
+"        \"x\":       \"xxx\",\n" +
+"      },\n" +
+"      { \"ChangeLog\": \"Y\",\n" +
+"        \"x\":       \"xxx1\",\n" +
+"        \"EndStatus\": \"actionCode1\",\n" +
+"      }\n" +
+"    ]\n" +
+"  }\n" +
 "}\n";
             xd = xp.createXDDocument("A");
             o = jparse(xd, json, reporter);
@@ -300,7 +144,6 @@ if(T)return;
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
-/**/
         try {
             xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
@@ -432,40 +275,36 @@ if(T)return;
             xp = compile(xdef);
             genXComponent(xp);
             json =
-"{\"SynPLscript\":\n" +
-"            {\n" +
-"                \"Version\": \"2025-11-21\",\n" +
-"                \"Desc\":    \"???????\",\n" +
-"                \"SysValues\": [ ],\n" +
-"                \"Variables\": [ ],\n" +
-"                \"UserRoles\": [ ],\n" +
-"                \"UsedFunctions\": [ ],\n" +
-"                \"EndStatuses\": [\n" +
-"                  {\n" +
-"                    \"EndStatus\":  \"statusName1\",\n" +
-"                    \"ActionCode\": \"actionCode\",\n" +
-"                    \"ChangeLog\":  \"Y\"\n" +
-"                  }\n" +
-"                ],\n" +
-"                \"Name\":    \"wfScriptName\",\n" +
-"                \"Statuses\": [\n" +
-"                  {\n" +
-"                    \"ActionCode\":   \"actionCode\",\n" +
-"                    \"Status\":       \"statusName\",\n" +
-"                    \"TimeOverStep\": \"60H\",\n" +
-"                    \"Events\": [\n" +
-"                      {\n" +
-"                        \"Event\":       \"eventName\",\n" +
-"                        \"ActionCode\":  \"actionCode\",\n" +
-"                        \"UserRoleAny\": [\"userRole\"],\n" +
-"                        \"NextStatus\":  \"statusName\"\n" +
-"                      }\n" +
-"                    ],\n" +
-"                    \"ChangeLog\":    \"Y\",\n" +
-"                    \"xxx\":          \"xxx\",\n" +
-"                  }\n" +
-"                ]\n" +
-"            }\n" +
+"{ \"SynPLscript\": {\n" +
+"    \"Version\": \"2025-11-21\",\n" +
+"    \"Desc\":    \"???????\",\n" +
+"    \"SysValues\": [ ],\n" +
+"    \"Variables\": [ ],\n" +
+"    \"UserRoles\": [ ],\n" +
+"    \"UsedFunctions\": [ ],\n" +
+"    \"EndStatuses\": [\n" +
+"      { \"EndStatus\":  \"statusName1\",\n" +
+"        \"ActionCode\": \"actionCode\",\n" +
+"        \"ChangeLog\":  \"Y\"\n" +
+"      }\n" +
+"    ],\n" +
+"    \"Name\": \"wfScriptName\",\n" +
+"    \"Statuses\": [\n" +
+"      { \"ActionCode\":   \"actionCode\",\n" +
+"        \"Status\":       \"statusName\",\n" +
+"        \"TimeOverStep\": \"60H\",\n" +
+"        \"Events\": [\n" +
+"          { \"Event\":       \"eventName\",\n" +
+"            \"ActionCode\":  \"actionCode\",\n" +
+"            \"UserRoleAny\": [\"userRole\"],\n" +
+"            \"NextStatus\":  \"statusName\"\n" +
+"          }\n" +
+"        ],\n" +
+"        \"ChangeLog\":    \"Y\",\n" +
+"        \"xxx\":          \"xxx\",\n" +
+"      }\n" +
+"    ]\n" +
+"  }\n" +
 "}\n";
             xd = xp.createXDDocument("SynPLscript");
             o = jparse(xd, json, reporter);
@@ -474,8 +313,7 @@ if(T)return;
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
             json =
-"{\n" +
-"  \"ActionCode\": \"actionCode\",\n" +
+"{ \"ActionCode\": \"actionCode\",\n" +
 "  \"EndStatus\":  \"statusSet.statusName\",\n" +
 "  \"ChangeLog\":  \"Y\"\n" +
 "}";
@@ -486,8 +324,7 @@ if(T)return;
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
         } catch (RuntimeException ex) {fail(ex);}
-if(T)return;
-/**/
+
         clearTempDir(); // delete temporary files.
     }
 
