@@ -72,6 +72,13 @@
                 <configuration>
                     <webResources>
                         <resource>
+                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
+                            <targetPath>META-INF</targetPath>
+                            <includes>
+                                <inlude>pominfo.properties</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
                             <directory>src/main/webapp</directory>
                             <filtering>true</filtering>
                             <includes>
