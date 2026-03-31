@@ -712,8 +712,10 @@ TESTING normalizedstring
         assertTrue(prepare("normalizedString(%whiteSpace='replace')"),_msg);
         assertTrue(parse("Hello World!"), _msg);
 
-        if (!XDTester.getFulltestMode()) {
-            assertTrue(parseFail(""), _msg); //schema accepts empty string???
+        if (!XDTester.getFulltestMode()) {//schema accepts empty string???
+            if (SUtils.JAVA_RUNTIME_VERSION_ID >= 2500) { // only in new version
+                assertTrue(parseFail(""), _msg);
+            }
         }
 
         // testing facets
