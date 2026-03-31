@@ -133,7 +133,7 @@ public final class TestXdefToJSON extends XDTester {
 "  <b attr=\"optional an(); default 'a123x'\"> <c/> </b>\n"+
 "</x:def>\n";
             data = "<a><c/><p/><q/></a>";
-            assertEq("", testXdefJson(xdef, null, true, data));
+            assertEq("", testXdefJson(xdef, null, false, data));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name = 'Example' xd:root = 'root'>\n" +
 "  <xd:declaration scope='local'>\n"+
