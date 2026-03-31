@@ -66,18 +66,25 @@
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<webResources>
-						<resource>
-							<directory>../xdef/target/reports/apidocs</directory>
-							<targetPath>javadoc</targetPath>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <inlude>footer.html</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <directory>../xdef/target/reports/apidocs</directory>
+                            <targetPath>javadoc</targetPath>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
