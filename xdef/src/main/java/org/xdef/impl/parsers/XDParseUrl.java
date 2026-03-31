@@ -1,10 +1,12 @@
 package org.xdef.impl.parsers;
 
+import java.net.MalformedURLException;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import java.net.URL;
+import static org.xdef.XDParserAbstract.checkCharset;
 
 /** Parse email address.
  * @author Vaclav Trojan
@@ -34,12 +36,11 @@ public class XDParseUrl extends XDParserAbstract {
         final String paserName) {
         try {
             if (!s.isEmpty()) {
-                new URL(s);
+                new URL(s); // just to check
                 return true;
             }
-        } catch (Exception ex) {}
-        //Incorrect value of '&{0}'&{1}{: }
-        p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
+        } catch (MalformedURLException ex) {}
+        p.errorWithString(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of '&{0}'&{1}{: }
         return false;
     }
 

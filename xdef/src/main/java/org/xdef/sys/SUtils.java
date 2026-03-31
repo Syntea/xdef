@@ -16,11 +16,13 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -47,9 +49,10 @@ public class SUtils extends FUtils {
     /** Cache to accelerate 2 letters/3 letter country methods.*/
     private static final Map<String, Locale> COUNTRIES = new LinkedHashMap<>();
 
-////////////////////////////////////////////////////////////////////////////////
-// initialize static final variables
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Initialize static final variables
+*******************************************************************************/
+
     /** Version of Java VM as an integer composed from the string where the version part is multiplied
      * by 100 and subversion part is added. E.g. "1.6" is converted to 106. The build version is ignored.
      */
@@ -67,7 +70,8 @@ public class SUtils extends FUtils {
                 m = m.invoke(null).getClass().getDeclaredMethod("version");
                 s = m.invoke(null).toString();
             }
-        } catch (Exception ex) {
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException
+            | InvocationTargetException ex) {
             s = System.getProperty("java.version");
         }
         if (s.startsWith("9.")) {
@@ -85,9 +89,10 @@ public class SUtils extends FUtils {
         JAVA_RUNTIME_BUILD = s;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// enconding/decoding of hexadecimal format
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Enconding/decoding of hexadecimal format
+*******************************************************************************/
+
     /** Encodes a byte array to hexadecimal format, no blanks or line breaks are inserted.
      * @param bytes The array of bytes to be encoded.
      * @return the array of hexadecimal digits.
@@ -328,9 +333,10 @@ public class SUtils extends FUtils {
         return out.toByteArray();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// enconding/decoding of base64 format
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Enconding/decoding of base format
+*******************************************************************************/
+
     /** Encode a byte array to Base64 format, no blanks or line breaks are inserted.
      * @param bytes array of bytes to be encoded.
      * @return byte array with the Base64 encoded data.
@@ -532,7 +538,7 @@ public class SUtils extends FUtils {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 encodeBase64(new ByteArrayInputStream(bytes), out, lines);
                 return out.toByteArray();
-            } catch (Exception ex) {// never should happen
+            } catch (SException ex) {// never should happen
                 throw new SRuntimeException(SYS.SYS036,STester.printThrowable(ex));//Program exception&{0}{: }
             }
         } else {
@@ -701,9 +707,7 @@ public class SUtils extends FUtils {
      * <br>SYS048 .. Base64 format error.
      */
     public static final void decodeBase64(final InputStream in, final OutputStream out) throws SException {
-        decodeBase64(new SReader() {
-            @Override
-            public final int read() throws IOException {return in.read();}}, out);
+        decodeBase64(in::read, out);
     }
 
     /** Decode input MIME/BASE64 Reader <b>in</b> to output stream.
@@ -714,37 +718,7 @@ public class SUtils extends FUtils {
      * <br>SYS048 .. Base64 format error.
      */
     public static final void decodeBase64(final Reader in, final OutputStream out) throws SException {
-        decodeBase64(new SReader() {
-            @Override
-            public final int read() throws IOException {return in.read();}}, out);
-    }
-
-    /** Decode input MIME/BASE64 from SPaser <b>in</b> to the output stream.
-     * @param in SAParser with Base64 data.
-     * @param out Writer for decoded byte stream.
-     * @throws SException
-     * <br>SYS036 .. Program exception: {msg}.
-     * <br>SYS048 .. Base64 format error.
-     */
-    public static final void decodeBase64(final SParser in, final OutputStream out) throws SException {
-        decodeBase64(new SReader() {
-            @Override
-            public final int read() {return in.eos() ? -1 : in.peekChar();}
-        },
-        out);
-    }
-
-    /** Decode input MIME/BASE64 from SPaser <b>in</b> to byte array.
-     * @param in SAParser with Base64 data.
-     * @return byte array decoded from source.
-     * @throws SException
-     * <br>SYS036 .. Program exception: {msg}.
-     * <br>SYS048 .. Base64 format error.
-     */
-    public static final byte[] decodeBase64(final SParser in) throws SException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        decodeBase64(in, out);
-        return out.toByteArray();
+        decodeBase64(in::read, out);
     }
 
     /** Decode input MIME/BASE64 from byte array <b>in</b> to byte array.
@@ -780,9 +754,9 @@ public class SUtils extends FUtils {
         return out.toByteArray();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// String tools
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+String tools
+*******************************************************************************/
 
     /** Return string of given length created from given characters.
      * If argument "length" is less or equal zero then returns the empty string.
@@ -937,9 +911,10 @@ public class SUtils extends FUtils {
         return sb.toString();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// Localization
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Localization
+*******************************************************************************/
+
     /** Get ISO 639-2 (3 letters) language ID.
      * @param language The language code (ISO 639 3 letters) or (ISO 639-2 3 letters).
      * @return the ISO 639-2 language ID (three letters).
@@ -996,7 +971,7 @@ public class SUtils extends FUtils {
                 LANGUAGES.put(s, loc);
                 return result;
             }
-        } catch (Exception ex) {}
+        } catch (MissingResourceException ex) {}
         throw new SRuntimeException(SYS.SYS018, language);//Unsupported language code: &{0}
     }
 
@@ -1047,7 +1022,7 @@ public class SUtils extends FUtils {
                 COUNTRIES.put(s, loc);
                 return result;
             }
-        } catch (Exception ex) {}
+        } catch (MissingResourceException ex) {}
         for (String country : Locale.getISOCountries()) {
             loc = new Locale("", country);
             if (s.equals(country) || s.equals(loc.getISO3Country())) {
@@ -1058,9 +1033,10 @@ public class SUtils extends FUtils {
         throw new SRuntimeException(SYS.SYS017, code);//Unsupported country code: &{0}
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// Access objects from a class.
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Access objects from a class.
+*******************************************************************************/
+
     /** Check if a class implements given interface.
      * @param clazz the class to be checked.
      * @param interfaceName the qualified name of interface (including package
@@ -1106,7 +1082,8 @@ public class SUtils extends FUtils {
             Constructor<?> constructor = cls.getConstructor(paramTypes);
             constructor.setAccessible(true);
             return constructor.newInstance(pars);
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException
+            | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
             throw new SRuntimeException(SYS.SYS101, className);//Constructor in the class &{0} not found
         }
     }
@@ -1122,7 +1099,7 @@ public class SUtils extends FUtils {
         Class<?> cls;
         try {
             cls = Class.forName(className);
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException ex) {
             throw new SRuntimeException(SYS.SYS102, className);//Class &{0} not found
         }
         for (;;) {
@@ -1130,7 +1107,7 @@ public class SUtils extends FUtils {
                 Field f = cls.getDeclaredField(name);
                 f.setAccessible(true);
                 return f.get(null); //static
-            } catch (Exception ex) {
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
                 if ((cls = cls.getSuperclass()) == null) {
                     break;
                 }
@@ -1153,10 +1130,10 @@ public class SUtils extends FUtils {
                 f.setAccessible(true);
                 try {
                     return f.get(o);
-                } catch (Exception ex) {
+                } catch (IllegalAccessException | IllegalArgumentException ex) {
                     return f.get(null); //static
                 }
-            } catch (Exception ex) {
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
                 if ((cls = cls.getSuperclass()) == null) {
                     break;
                 }
@@ -1180,11 +1157,11 @@ public class SUtils extends FUtils {
                 try {
                     f.set(o, v);
                     return;
-                } catch (Exception ex) {
+                } catch (IllegalAccessException | IllegalArgumentException ex) {
                     f.set(null, v); // static
                     return;
                 }
-            } catch (Exception ex) {
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
                 if ((cls = cls.getSuperclass()) == null) {
                     break;
                 }
@@ -1207,10 +1184,11 @@ public class SUtils extends FUtils {
                 m.setAccessible(true);
                 try {
                     return m.invoke(o);
-                } catch (Exception ex) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     return m.invoke(null); //static
                 }
-            } catch (Exception ex) {
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException
+                | InvocationTargetException ex) {
                 if ((cls = cls.getSuperclass()) == null) {
                     break;
                 }
@@ -1236,11 +1214,12 @@ public class SUtils extends FUtils {
                         try {
                             m.invoke(o, v);
                             return;
-                        } catch (Exception ex) {
+                        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                             m.invoke(null, v); // static
                             return;
                         }
-                    } catch (Exception ex) {}
+                    } catch (IllegalAccessException | IllegalArgumentException | SecurityException
+                        | InvocationTargetException ex) {}
                 }
             }
             if ((cls = cls.getSuperclass()) == null) {
@@ -1250,9 +1229,10 @@ public class SUtils extends FUtils {
         throw new SRuntimeException(SYS.SYS105, name, cls.getName());//Setter &{0} not found in class &{1}
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// Execute a process.
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Execute a process.
+*******************************************************************************/
+
     /** This is the auxiliary thread for piping of output streams of method execute(stdout, stderr). */
     private static final class PipedOutStream extends Thread {
         private final BufferedReader _in;
@@ -1274,7 +1254,7 @@ public class SUtils extends FUtils {
                     }
                 }
                 _in.close();
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
@@ -1339,9 +1319,10 @@ public class SUtils extends FUtils {
         return execute(command, null, null, System.out, System.err, null, true);
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// Deprecated mthods
-////////////////////////////////////////////////////////////////////////////////
+/*-*****************************************************************************
+Deprecated mthods
+*******************************************************************************/
+
     /** Get ISO 639-2 (3 letters) System language ID.
      * @deprecated please use getISO3Language(System.getProperties().getProperty("user.language"))
      * @return ISO 639-2 (3 letters) language ID.
