@@ -71,7 +71,6 @@ public class XDefToJSON {
      * @param name local name of X-definition attribuge.
      * @return string with attribute declaration or the empty string.
      */
-
     private static String createXDeNamedvalue(final Map<String, Object> map, final String xdPrefix, final String name) {
         Object o = map.get(xdPrefix + ":" + name);
         if (o == null) {
@@ -127,14 +126,18 @@ public class XDefToJSON {
         if (xdNamespace == null || xdNamespace.isEmpty()) {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + map + "\"");
         }
-        sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
-        sb.append(createXDeNamedvalue(map, xdPrefix, "root"));
         for (String key: map.keySet()) {
-            if (key.startsWith("impl-")) {
-                sb.append("\n  ").append(key).append("='");
-                sb.append(toXmlString(map.get(key).toString()));
-                sb.append("'");
+            if (key.startsWith(xdPrefix + ":")) {
+                if (key.endsWith(":def")) {
+                    continue;
+                }
+            } else if (key.equals("def")) {
+                continue;
             }
+            String s = toXmlString(map.get(key).toString());
+            sb.append(sb.length() + s.length() > 110 ? "\n  " : " ").append(key).append("='");
+            sb.append(toXmlString(s));
+            sb.append("'");
         }
         sb.append(">\n");
         for (int i = 1; i < xd.size(); i++) {
@@ -142,7 +145,6 @@ public class XDefToJSON {
             if (!(o instanceof Map)) {
                 throw new RuntimeException("Unexpected object " + i);
             }
-            String s;
             map = (Map<String, Object>) o;
             if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
                 sb.append("<").append(xdPrefix).append(":declaration");
@@ -321,7 +323,13 @@ public class XDefToJSON {
             }
             //XML model
             sb.append("{ \"").append(xdPrefix).append(":xml\": \"\n");
-            sb.append(toJsonString(KXmlUtils.nodeToString(el, true))).append("\n\"}");
+            String s = KXmlUtils.nodeToString(el, true);
+            String t = " xmlns:" + xdPrefix + "=\"" + nsUri + "\"";
+            int ndx = s.indexOf(t);
+            if (ndx > 0) { // remove attribute xmlnd with X-definition namespac
+                s = s.substring(0, ndx) + s.substring(ndx + t.length());
+            }
+            sb.append(toJsonString(s)).append("\n\"}");
             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
         }
         sb.append("]");
@@ -381,15 +389,14 @@ public class XDefToJSON {
             String localName = el.getLocalName();
             String ns = getXdefNamespace(el);
             if (ns != null) {
-                if ("def".equals(localName)) {
-                    sb.append("\n").append(xdefToJson(el, ns)); // xd:def
-                } else if ("declaration".equals(localName) || "component".equals(localName)
-                    || "BNFGrammar".equals(localName) || "lexicon".equals(localName)) {
-                    sb.append("\n").append(textItemToJson(el, ns)); // xd:declaration
-                } else if ("collection".equals(localName)) {
-                    throw new RuntimeException("Collection in collection");
-                } else {
-                    throw new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
+                switch(localName) {
+                    case "def": sb.append("\n").append(xdefToJson(el, ns)); break;// xd:def
+                    case "declaration":
+                    case "component":
+                    case "BNFGrammar":
+                    case "lexicon": sb.append("\n").append(textItemToJson(el, ns)); break;
+                    case "collection": throw new RuntimeException("Collection in collection");
+                    default: new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
                 }
             } else {
                 throw new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
