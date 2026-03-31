@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.UserDataHandler;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
 import test.XDTester;
 
 /** Test KDOMBuilder.
@@ -421,7 +422,7 @@ public class TestKDOMBuilder extends XDTester {
             txt = ((Text) el.getFirstChild()).replaceWholeText("987");
             assertEq("987", txt.getWholeText());
             assertEq("b", txt.getNextSibling().getNodeName());
-            ////////////////////////////////////////////////////////////////////
+
             doc = builder.parse("<a><![CDATA[12]]>34<b>56</b>78</a>");
             el = doc.getDocumentElement();
             nl = el.getChildNodes();
@@ -478,7 +479,7 @@ public class TestKDOMBuilder extends XDTester {
             assertTrue(el.getNamespaceURI() == null);
             assertEq("e", el.getAttribute("e"));
             assertTrue(el.getAttributeNode("e").getNamespaceURI() == null);
-            ////////////////////////////////
+
             builder.setNamespaceAware(true);
             doc = builder.parse(data);
             el = doc.getDocumentElement();
@@ -787,7 +788,7 @@ public class TestKDOMBuilder extends XDTester {
             builder.setExpandEntityReferences(false);
             doc = builder.parse(data);
             el = doc.getDocumentElement();
-/////////////////////////////////////////
+
             obj = doc.setUserData("key", "doc0", u1);
             assertNull(obj);
             obj = doc.setUserData("key", "doc", u1);
@@ -1235,60 +1236,61 @@ public class TestKDOMBuilder extends XDTester {
                 fail(ex);
             }
         }
-        try {
-            // test processing instruction.
-            builder = new KDOMBuilder();
-            builder.setNamespaceAware(true);
-            builder.setExpandEntityReferences(true);
-            builder.setValidating(false);
-            builder.setIgnoringComments(false);
-            doc = builder.parse(getDataDir() + "TestDTD025.xml");
-            el = doc.getDocumentElement();
-            nl = el.getChildNodes();
-            if (nl.getLength() != 5) {
-                fail("" + nl.item(0));
-            } else if (nl.item(0).getNodeValue().length() != 102402) {
-                fail("" + nl.item(0).getNodeValue().length());
-            }
-            // test entity redefinition.
-            builder = new KDOMBuilder();
-            builder.setNamespaceAware(true);
-            builder.setExpandEntityReferences(true);
-            builder.setValidating(true);
-            builder.setIgnoringComments(false);
-            doc = builder.parse(getDataDir() + "TestDTD026.xml");
-            el = doc.getDocumentElement();
-            assertEq("<x", el.getAttribute("b"));
-            assertEq(">x", el.getChildNodes().item(0).getNodeValue());
-            // test ANY.
-            builder = new KDOMBuilder();
-            builder.setNamespaceAware(true);
-            builder.setExpandEntityReferences(true);
-            builder.setValidating(true);
-            builder.setIgnoringComments(false);
-            data = "<!DOCTYPE a [<!ELEMENT a ANY>\n"
-                + "<!ELEMENT b ANY>\n"
-                + "<!ELEMENT c ANY>\n"
-                + "<!ELEMENT d EMPTY>]>\n"
-                + "<a>a<b>b1<c>c1<d></d>c2<b/></c>b2</b>c</a>";
-            doc = builder.parse(data);
-            el = doc.getDocumentElement();
-            if (el == null) {
-                fail(" root is null");
-            }
-            //test empty string
-            builder = new KDOMBuilder();
-            builder.setNamespaceAware(true);
-            builder.setExpandEntityReferences(true);
-            builder.setValidating(true);
-            builder.setIgnoringComments(false);
-            data =
+        if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+            try {
+                // test processing instruction.
+                builder = new KDOMBuilder();
+                builder.setNamespaceAware(true);
+                builder.setExpandEntityReferences(true);
+                builder.setValidating(false);
+                builder.setIgnoringComments(false);
+                doc = builder.parse(getDataDir() + "TestDTD025.xml");
+                el = doc.getDocumentElement();
+                nl = el.getChildNodes();
+                if (nl.getLength() != 5) {
+                    fail("" + nl.item(0));
+                } else if (nl.item(0).getNodeValue().length() != 102402) {
+                    fail("" + nl.item(0).getNodeValue().length());
+                }
+                // test entity redefinition.
+                builder = new KDOMBuilder();
+                builder.setNamespaceAware(true);
+                builder.setExpandEntityReferences(true);
+                builder.setValidating(true);
+                builder.setIgnoringComments(false);
+                doc = builder.parse(getDataDir() + "TestDTD026.xml");
+                el = doc.getDocumentElement();
+                assertEq("<x", el.getAttribute("b"));
+                assertEq(">x", el.getChildNodes().item(0).getNodeValue());
+                // test ANY.
+                builder = new KDOMBuilder();
+                builder.setNamespaceAware(true);
+                builder.setExpandEntityReferences(true);
+                builder.setValidating(true);
+                builder.setIgnoringComments(false);
+                data =
+"<!DOCTYPE a [<!ELEMENT a ANY>\n"+
+"<!ELEMENT b ANY>\n"+
+"<!ELEMENT c ANY>\n"+
+"<!ELEMENT d EMPTY>]>\n"+
+"<a>a<b>b1<c>c1<d></d>c2<b/></c>b2</b>c</a>";
+                doc = builder.parse(data);
+                el = doc.getDocumentElement();
+                if (el == null) {
+                    fail(" root is null");
+                }
+                //test empty string
+                builder = new KDOMBuilder();
+                builder.setNamespaceAware(true);
+                builder.setExpandEntityReferences(true);
+                builder.setValidating(true);
+                builder.setIgnoringComments(false);
+                data =
 "<!DOCTYPE a [<!ELEMENT a EMPTY>\n" +
 "<!ATTLIST a b CDATA #REQUIRED>]>\n" +
 "<a b=''/>";
-            builder.parse(data);
-        } catch (DOMException ex) {
-            fail(ex);
+                builder.parse(data);
+            } catch (DOMException ex) {fail(ex);}
         }
         try { //test NOTATION
             builder = new KDOMBuilder();

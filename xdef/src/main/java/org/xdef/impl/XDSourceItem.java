@@ -69,14 +69,14 @@ public final class XDSourceItem {
      * @return XDSourceItem object
      * @throws IOException if an error occurs.
      */
+    @SuppressWarnings("deprecation")
     public static final XDSourceItem readXDSourceItem(final XDReader xr)
         throws IOException{
         XDSourceItem result = new XDSourceItem();
         String s = xr.readString();
         if (s != null) {
             try {
-                result._url = new URL(URLDecoder.decode(s,
-                    System.getProperties().getProperty("file.encoding")));
+                result._url = new URL(URLDecoder.decode(s, System.getProperties().getProperty("file.encoding")));
             } catch (UnsupportedEncodingException | MalformedURLException ex) {
                 result._url = new URL(s);
             }

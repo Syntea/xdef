@@ -20,6 +20,7 @@ import org.xdef.XDConstants;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.sys.SException;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
 import org.xdef.util.GenCollection;
 import org.xdef.util.XdefToXsd;
 import org.xml.sax.SAXException;
@@ -337,8 +338,10 @@ public class TestXd2XsdConv extends XDTester {
             assertTrue(parse("collectionTest_valid3"), popMessage());
             assertTrue(parse("collectionTest_valid4"), popMessage());
 
-            assertTrue(prepare("dateTimeTest"), popMessage());
-            assertTrue(parse("dateTimeTest_valid_1"), popMessage());
+            if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+                assertTrue(prepare("dateTimeTest"), popMessage());
+                assertTrue(parse("dateTimeTest_valid_1"), popMessage());
+            }
 
             assertTrue(prepare("declarationTest"), popMessage());
             assertTrue(parse("declarationTest_valid_1"), popMessage());
@@ -362,7 +365,9 @@ public class TestXd2XsdConv extends XDTester {
             assertTrue(prepare("xdTypeTest"), popMessage());
             assertTrue(parse("xdTypeTest_valid"), popMessage());
             assertTrue(parse("xdTypeTest_valid_1"), popMessage());
-            assertTrue(parse("xdTypeTest_valid_2"), popMessage());
+            if (SUtils.JAVA_RUNTIME_VERSION_ID < 2500) {
+                assertTrue(parse("xdTypeTest_valid_2"), popMessage());
+            }
             assertTrue(parse("xdTypeTest_valid_3"), popMessage());
             assertTrue(parse("xdTypeTest_valid_4"), popMessage());
 

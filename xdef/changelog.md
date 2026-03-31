@@ -1,4 +1,5 @@
 # Version ${version}, release-date ${release.date}
+  * Changes for translation and testing in Java version 25
 
 # Version 42.2.43, release-date 2026-03-29
   * Fixed bugs in the utility `org.xdef.util.XDefToJSON`.

@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 /** Represents XML Schema (XSD) to X-definition convertor (see {@link org.xdef.util.XsdToXdef#main(String[])}).
  * @author Ilia Alexandrov
  */
+@SuppressWarnings("deprecation")
 public class XsdToXdef {
 
     /** Constant that represents XML Schema version 1.0. */

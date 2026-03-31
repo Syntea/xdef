@@ -124,6 +124,17 @@ public final class TestXdefToJSON extends XDTester {
 "</xd:declaration>";
             assertEq("", testXdefJson(xdef, null, false));
             xdef =
+"<x:def xmlns:x='"+_xdNS+"' name='a' root='a' script='options ignoreEmptyAttributes'>\n"+
+"  <a x:script='ref b'>\n"+
+"    <p/>\n"+
+"    <q/>\n"+
+"    optional int(); default 456\n"+
+"  </a>\n"+
+"  <b attr=\"optional an(); default 'a123x'\"> <c/> </b>\n"+
+"</x:def>\n";
+            data = "<a><c/><p/><q/></a>";
+            assertEq("", testXdefJson(xdef, null, true, data));
+            xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name = 'Example' xd:root = 'root'>\n" +
 "  <xd:declaration scope='local'>\n"+
 "     type myType $rrr.parse('intList');\n"+

@@ -25,6 +25,7 @@ import java.util.Map;
 /** Collection of useful methods.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation")
 public class SUtils extends FUtils {
     /** Length of line of encoded hex format and base64 format. */
     private static final int ENCODED_LINE_LENGTH = 72;
