@@ -10,35 +10,44 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <files>
         <file>
-            <source>../README.md</source>
-            <destName>README-project.md</destName>
+            <outputDirectory>META-INF/maven/${project.groupId}/${project.artifactId}</outputDirectory>
+            <source>.flattened-pom.xml</source>
+            <destName>pom.xml</destName>
         </file>
         <file>
-            <source>../apache-license-2.0.md</source>
-            <destName>apache-license-2.0.md</destName>
+            <outputDirectory>META-INF</outputDirectory>
+            <source>changelog.md</source>
+            <filtered>true</filtered>
+        </file>
+        <file>
+            <outputDirectory>META-INF</outputDirectory>
+            <source>src/main/resources-filters/org/xdef/sys/config/pominfo.properties</source>
+            <filtered>true</filtered>
         </file>
     </files>
     <fileSets>
         <fileSet>
+            <outputDirectory>META-INF</outputDirectory>
+            <directory>..</directory>
             <includes>
-                <include>changelog.md</include>
+                <include>README.md</include>
+                <include>apache-license-2.0.md</include>
             </includes>
-            <filtered>true</filtered>
         </fileSet>
         <fileSet>
+            <outputDirectory>documentation</outputDirectory>
             <directory>src/documentation</directory>
             <includes>
                 <include>*.pdf</include>
             </includes>
-            <outputDirectory>documentation</outputDirectory>
         </fileSet>
         <fileSet>
+            <outputDirectory>.</outputDirectory>
             <directory>src/userdoc/data</directory>
-            <outputDirectory>.</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>src/userdoc/data-filter</directory>
             <outputDirectory>.</outputDirectory>
+            <directory>src/userdoc/data-filter</directory>
             <filtered>true</filtered>
         </fileSet>
     </fileSets>
