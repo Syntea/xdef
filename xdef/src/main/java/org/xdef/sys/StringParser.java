@@ -3329,7 +3329,8 @@ public class StringParser extends SReporter implements SParser {
                     int i = 0;
                     for (;;) {
                         if (eos()) {
-                            //Error in datetime mask format: missing closing character&{0}{: '}{'}&{1}{, position: }
+                            //Error in datetime mask format: missing closing
+                            // character&{0}{: '}{'}&{1}{, position: }
                             return Report.error(SYS.SYS064, null, beg);
                         }
                         char c;
@@ -3377,14 +3378,16 @@ public class StringParser extends SReporter implements SParser {
                                 try { //check language code
                                     SUtils.getISO3Language(p1);
                                 } catch (SRuntimeException ex) {
-                                    //Datetime mask error: unsupported language code&{0}{: '}{'}&{1}{, position: }
+                                    //Datetime mask error: unsupported language code
+                                    //&{0}{: '}{'}&{1}{, position: }
                                     return Report.error(SYS.SYS060,
                                         "" + p1,
                                         "" + (i == 2 ? start - p3.length() - p2.length()
                                             : i == 1 ? start - p2.length() : start));
                                 }
                                 if ( i > 0 && !SUtils.isCountryCode(p2)) {
-                                    //Datetime mask error: unsupported country code&{0}{: '}{'}&{1}{, position: }
+                                    //Datetime mask error: unsupported country code
+                                    //&{0}{: '}{'}&{1}{, position: }
                                     return Report.error(SYS.SYS067, p2, (i==2 ? start-p2.length() : start));
                                 }
                                 _parsedDatetime.setLocaleFormatSymbols(new DateFormatSymbols(new Locale(p1,p2,p3)));
@@ -3797,7 +3800,7 @@ public class StringParser extends SReporter implements SParser {
             if (!isQNamePart(xmlVersion)) {
                 return false;
             }
-            _parsedString = s + _source.substring(pos, getIndex());
+            _parsedString = s + _source.substring(pos, getIndex());;
             return true;
         }
         return false;
