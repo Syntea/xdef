@@ -27,7 +27,7 @@ public abstract class Processor implements Convertor {
     @SuppressWarnings("deprecation")
     public Processor(URL rootSchemaURL) {
         try {
-            _schemaURLStack = new Stack<URL>();
+            _schemaURLStack = new Stack<>();
             String urlString = rootSchemaURL.toExternalForm();
             String replaced = URLDecoder.decode(urlString.replace('\\', '/'), "UTF-8");
             URL newURL = new URL(replaced);
@@ -43,7 +43,7 @@ public abstract class Processor implements Convertor {
      * @throws RuntimeException can not create URL or given URL is not schema.
      */
     private Map<URL, Element> getSchemaElements(URL rootSchemaURL) {
-        Map<URL, Element> schemaElements = new HashMap<URL, Element>();
+        Map<URL, Element> schemaElements = new HashMap<>();
         getSchemaElements(schemaElements, rootSchemaURL);
         return schemaElements;
     }

@@ -1,13 +1,8 @@
 package org.xdef.util;
 
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FileReportWriter;
-import org.xdef.sys.SReporter;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import org.w3c.dom.Document;
 
@@ -15,9 +10,6 @@ import org.w3c.dom.Document;
  * @author Alexandrov Ilia
  */
 public class DTDToXdef {
-
-    /** Reporter for reporting warnings and errors. */
-    private SReporter _reporter = new SReporter(new ArrayReporter());
 
     /** Creates the instance of DTD to X-definition convertor. */
     private DTDToXdef() {}
@@ -37,7 +29,6 @@ public class DTDToXdef {
             if (!log.exists()) {
                 log.createNewFile();
             }
-            _reporter = new SReporter(new FileReportWriter(new PrintWriter(new FileWriter(log, true)),false));
         } catch (IOException ex) {
             throw new IllegalArgumentException("Log file name is illegal", ex);
         }
@@ -48,9 +39,7 @@ public class DTDToXdef {
      * @param file file name.
      * @throws IOException if error occurred during writing file.
      */
-    private void writeFile(Document doc, String file) throws IOException {
-        KXmlUtils.writeXml(file, doc);
-    }
+    private void writeFile(Document doc, String file) throws IOException {KXmlUtils.writeXml(file, doc);}
 
     /** Generates X-definition file with given name from given DTD file with given root element.
      * @param dtd DTD string or URL as string.
@@ -69,8 +58,7 @@ public class DTDToXdef {
         try {
             writeFile(doc, outXdef);
         } catch (IOException ex) {
-            throw new RuntimeException(
-                "Error when writing X-definition file");
+            throw new RuntimeException("Error when writing X-definition file");
         }
     }
 
@@ -85,16 +73,6 @@ public class DTDToXdef {
         }
     }
 
-    /** String with command line information. */
-    private static final String INFO =
-"Convertor of DTD to X-definition.\n"+
-"Command line arguments:\n"+
-"  -in, --input <PATH> input schema file location\n" +
-"  -out, --output <PATH> output file or directory name\n" +
-"  -r, --root <ROOT> name of root element \n" +
-"  -l, --logFile <PATH> log file name \n" +
-"  -?, -h, --help help";
-
     /** Calling the program from command line.
      * @param args array of parameters.
      * <p><i>[-in | --input] file [-out | --output] file [-r | --root] element
@@ -107,8 +85,16 @@ public class DTDToXdef {
      * </ul>
      */
     public static void main(String... args) {
-        final StringBuilder err = new StringBuilder();
+        final String info = // String with command line information.
+"Convertor of DTD to X-definition.\n"+
+"Command line arguments:\n"+
+"  -in, --input <PATH> input schema file location\n" +
+"  -out, --output <PATH> output file or directory name\n" +
+"  -r, --root <ROOT> name of root element \n" +
+"  -l, --logFile <PATH> log file name \n" +
+"  -?, -h, --help help";
 
+        final StringBuilder err = new StringBuilder();
         String INPUT = "--input";
         String OUTPUT = "--output";
         String LOGFILE = "--logFile";
@@ -149,7 +135,7 @@ public class DTDToXdef {
             } else {
                 if ("-h".equals(parameter) || "-?".equals(parameter)
                     || "--help".equals(parameter)) {
-                    System.out.println(INFO);
+                    System.out.println(info);
                     return;
                 } else if ("-in".equals(parameter) || INPUT.equals(parameter)) {
                     if (input != null) {
@@ -196,7 +182,7 @@ public class DTDToXdef {
             err.append("Root element name is missing\n");
         }
         if (err.length() > 0) {
-            throw new RuntimeException(err + INFO);
+            throw new RuntimeException(err + info);
         }
         //creating convertor
         DTDToXdef dtd2xdef = new DTDToXdef();

@@ -26,16 +26,16 @@ import static test.XDTester._xdNS;
  */
 public final class TestXdefToJSON extends XDTester {
 
-    TestXdefToJSON() {super();}
+    public TestXdefToJSON() {super();}
 
     /** Test the conversion of X-definition from XML to JSON and vice versa.
      * @param xdef string with XML form of X-definition
-     * @param xdName name of invoked X-definition.
+     * @param name name of invoked X-definition.
      * @param display it true, results of conversion are displayed.
      * @param data list with data strings.
-     * @return empty string if test is OK, otherwis, returns string witn error message
+     * @return empty string if test is OK, otherwise, returns string with error message.
      */
-    private String testXdefJson(final String xdef, final String xdName, final boolean display,final String... dataList){
+    private String testXdefJson(final String xdef, final String name, final boolean display, final String... dataList) {
         try {
             compile(xdef);
             String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
@@ -51,7 +51,7 @@ public final class TestXdefToJSON extends XDTester {
                 for (String data: dataList) {
                     ArrayReporter reporter = new ArrayReporter();
                     boolean isXML = data.trim().startsWith("<");
-                    Object o = isXML ? parse(xp, xdName, data, reporter) : jparse(xp, xdName, data, reporter);
+                    Object o = isXML ? parse(xp, name, data, reporter) : jparse(xp, name, data, reporter);
                     if (reporter.errorWarnings()) {
                         return reporter.toString();
                     }
@@ -60,7 +60,7 @@ public final class TestXdefToJSON extends XDTester {
                     } catch (Exception ex) {
                         return ""; // OK, component was not created
                     }
-                    XDDocument xd = xp.createXDDocument(xdName);
+                    XDDocument xd = xp.createXDDocument(name);
                     XComponent xc = isXML
                         ? xd.xparseXComponent(data, null, reporter) : xd.jparseXComponent(data, null, reporter);
                     if (reporter.errorWarnings()) {
@@ -68,11 +68,11 @@ public final class TestXdefToJSON extends XDTester {
                     }
                     if (isXML) {
                         String s = "" + KXmlUtils.compareElements((Element)o, xc.toXml());
-                        return "OK".equals(s) ? "" : ("Error: parsed object in not equal to object from XComponent:"+s);
+                        return "OK".equals(s) ? "" : ("Parsed object is not equal to object from XComponent:¨n" + s);
                     } else {
                         Object x = xc.toXon();
                         if (!XonUtils.xonEqual(o, x)) {
-                            return "Error: parsed object in not equal to object from XComponent:\n"
+                            return "Parsed object in not equal to object from XComponent:\n"
                                 + XonUtils.toJsonString(o) + "\n" + XonUtils.toJsonString(x);
                         }
                     }
@@ -87,11 +87,11 @@ public final class TestXdefToJSON extends XDTester {
     /** Test the conversion of X-definition from XML to JSON and vice versa.
      * @param xdef file with XML form of X-definition
      * @param data file with data (may be null, XML or JSON).
-     * @param xdName name of invoked X-definition.
+     * @param name name of invoked X-definition.
      * @param display it true, results of conversion are displayed.
-     * @return empty string if test is OK, otherwis, returns string witn error message
+     * @return empty string if test is OK, otherwise, returns string with error message
      */
-    private String testXdefJson(final File xdef, final String xdName, final boolean display, final File... dataList) {
+    private String testXdefJson(final File xdef, final String name, final boolean display, final File... dataList) {
         try {
             String xdef_str = FUtils.readString(xdef, "UTF-8");
             ArrayList<String> ar = new ArrayList<>();
@@ -103,9 +103,9 @@ public final class TestXdefToJSON extends XDTester {
                 }
             }
             if (ar.isEmpty()) {
-                return testXdefJson(xdef_str,xdName, display);
+                return testXdefJson(xdef_str,name, display);
             }
-            return testXdefJson(xdef_str,xdName, display, (String[] )ar.toArray());
+            return testXdefJson(xdef_str,name, display, (String[] )ar.toArray());
         } catch (SException ex) {return STester.printThrowable(ex);}
     }
 
@@ -280,8 +280,8 @@ public final class TestXdefToJSON extends XDTester {
 if(T) return;
         try { // test all X-definitions from test/xdef/data/json directory
             String dataDir = getDataDir();
-            dataDir = dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/"));
-            final String xdefDataDir = dataDir + "/test/xdef/data/";
+            dataDir = dataDir.substring(0, dataDir.indexOf("/test/xdutils/data/")); // cut from this part
+            final String xdefDataDir = dataDir + "/test/xdef/data/"; // set test/xdef/data directory.
             for (File f : SUtils.getFileGroup(xdefDataDir+"json/Test*.xdef")) {
                 String xdname = f.getName();
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
@@ -294,9 +294,9 @@ if(T) return;
             }
             for (File f : SUtils.getFileGroup(xdefDataDir+"test/Test000_0*.xdef")) {
                 String xdname = f.getName();
-                if (xdname.contains("Test000_02") || xdname.contains("Test000_05")|| xdname.contains("Test000_06")
-                    || xdname.contains("Test000_07") || xdname.contains("Test000_08")) { //multiple XDefs
-                    continue;
+                if (xdname.contains("Test000_02") || xdname.contains("Test000_05") || xdname.contains("Test000_06")
+                    || xdname.contains("Test000_07") || xdname.contains("Test000_08")) {
+                    continue;  //multiple XDefs, skip tests
                 }
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
                 File[] files = SUtils.getFileGroup(xdefDataDir+xdname+"*.xml");

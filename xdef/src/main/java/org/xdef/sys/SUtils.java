@@ -25,7 +25,6 @@ import java.util.Map;
 /** Collection of useful methods.
  * @author Vaclav Trojan
  */
-@SuppressWarnings("deprecation")
 public class SUtils extends FUtils {
     /** Length of line of encoded hex format and base64 format. */
     private static final int ENCODED_LINE_LENGTH = 72;
@@ -945,6 +944,7 @@ public class SUtils extends FUtils {
      * @return the ISO 639-2 language ID (three letters).
      * @throws SRuntimeException code SYS018 if language code is not found.
      */
+    @SuppressWarnings("deprecation")
     public static final String getISO2Language(final String language) throws SRuntimeException {
         String s = language.toLowerCase();
         Locale loc = LANGUAGES.get(s);
@@ -975,6 +975,7 @@ public class SUtils extends FUtils {
      * @return the ISO 639-2 language ID (three letters).
      * @throws SRuntimeException code SYS018 if language code is not found.
      */
+    @SuppressWarnings("deprecation")
     public static final String getISO3Language(final String language) throws SRuntimeException {
         String s = language.toLowerCase();
         Locale loc = LANGUAGES.get(s);
@@ -1013,6 +1014,7 @@ public class SUtils extends FUtils {
      * @return ISO 3166-1 alpha-2 code (two letters).
      * @throws SRuntimeException code SYS018 if language code is not found.
      */
+    @SuppressWarnings("deprecation")
     public static final String getISO2Country(final String code) {
         String s = code.toUpperCase();
         Locale loc = COUNTRIES.get(s);
@@ -1034,6 +1036,7 @@ public class SUtils extends FUtils {
      * @return ISO 3166-1 alpha-3 code (three letters).
      * @throws SRuntimeException code SYS018 if language code is not found.
      */
+    @SuppressWarnings("deprecation")
     public static final String getISO3Country(final String code) {
         String s = code.toUpperCase();
         Locale loc = COUNTRIES.get(s);

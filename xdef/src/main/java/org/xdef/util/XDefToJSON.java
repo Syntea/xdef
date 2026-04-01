@@ -385,23 +385,21 @@ public class XDefToJSON {
         Node n = getFirstChildElement(elem);
         while (n != null) {
             Element el = (Element) n;
-            sb.append(",\n");
+            n = getNextChildElement(n);
             String localName = el.getLocalName();
             String ns = getXdefNamespace(el);
-            if (ns != null) {
+            if (ns != null) { // namespace URI belongs to X-definition
+                sb.append(",\n");
                 switch(localName) {
-                    case "def": sb.append("\n").append(xdefToJson(el, ns)); break;// xd:def
+                    case "def": sb.append("\n").append(xdefToJson(el,ns)); continue;
                     case "declaration":
                     case "component":
                     case "BNFGrammar":
-                    case "lexicon": sb.append("\n").append(textItemToJson(el, ns)); break;
-                    case "collection": throw new RuntimeException("Collection in collection");
-                    default: new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
+                    case "lexicon": sb.append("\n").append(textItemToJson(el,ns)); continue;
+                    case "collection": throw new RuntimeException("Error: collection can not be in collection");
                 }
-            } else {
-                throw new RuntimeException("Incorrect element in collectio: " + el.getNodeName());
             }
-            n = getNextChildElement(n);
+            throw new RuntimeException("Illegal element in collectio: " + el.getNodeName());
         }
         sb.append("\n]");
         return sb.toString();
@@ -464,7 +462,7 @@ public class XDefToJSON {
      * @throws Exception if an error occurs.
      */
     public static void main(String... args) throws Exception {
-        final String info =
+        final String info = // String with command line information.
 "XDefToJSON - convertor of X-definition XML -> JSON or JSON -> XML.\n" +
 "Parameters:\n" +
 " -i or --input:  pathname of the file with input data (XML or JSON)\n" +
@@ -475,6 +473,7 @@ public class XDefToJSON {
         if (args == null || args.length < 1) {
             throw new RuntimeException("Error: parameters missing.\n" + info);
         }
+        final StringBuilder err = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             switch (arg) {
@@ -484,31 +483,34 @@ public class XDefToJSON {
                 case "-o":
                 case "--output":
                     if (output != null) {
-                        throw new RuntimeException("Redefinition of " + arg + ".\n" + info);
+                        err.append("Redefinition of ").append(arg).append(".\n");
                     }
                     output = new File(args[++i]);
                     if (output.exists() && output.isDirectory()) {
-                        throw new RuntimeException("output is directory: " + args[i] + ".\n" + info);
+                        err.append("Output is directory, not file: ").append(args[i]).append(".\n");
                     }
                     continue;
                 case "-i":
                 case "--input":
                     if (input != null) {
-                        throw new RuntimeException("Redefinition of " + arg + ".\n" + info);
+                        err.append("Redefinition of ").append(arg).append(".\n");
                     }
                     input = new File(args[++i]);
                     if (!input.exists() || input.isDirectory()) {
-                        throw new RuntimeException("input not exists or it is a directory: " + args[i] + ".\n" + info);
+                        err.append("input not exists or it is a directory: ").append(args[i]).append(".\n");
                     }
                     continue;
-                default: throw new RuntimeException("Switch error " + arg + ".\n" + info);
+                default: err.append("Switch error ").append(arg).append(".\n");
             }
         }
         if (output == null) {
-            throw new RuntimeException("Missing output file.\n" + info);
+            err.append("Missing output file.\n");
         }
         if (input == null) {
-            throw new RuntimeException("Missing input file.\n" + info);
+            err.append("Missing input file.\n");
+        }
+        if (err.length() > 0) {
+            throw new RuntimeException(err + info);
         }
         String s = SUtils.readString(input, "UTF-8");
         s = (s.trim().startsWith("<")) ? xmlXdefToJson(s) : jsonXdefToXml(s);

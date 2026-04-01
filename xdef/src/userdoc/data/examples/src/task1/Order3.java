@@ -12,6 +12,7 @@ import org.xdef.xml.KXmlUtils;
 public class Order3 {
 
     public static void main(String... args) throws IOException {
+        task1.Order3ext.class.getClass(); // just force to compile Order3ext
         // ensure the directories task1/output and task1/errors are clear and exists
         FUtils.deleteAndCreateDir("task1/output");
         FUtils.deleteAndCreateDir("task1/errors");

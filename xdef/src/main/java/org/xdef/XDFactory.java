@@ -54,8 +54,7 @@ public final class XDFactory extends XDTools {
      * @return created XDBuilder.
      */
     public static final XDBuilder getXDBuilder(final ReportWriter reporter, final Properties props){
-        XDBuilder result = new org.xdef.impl.XBuilder(reporter, props);
-        return result;
+        return new org.xdef.impl.XBuilder(reporter, props);
     }
 
     /** Set object from parameter to be prepared for compiling.
@@ -156,12 +155,10 @@ public final class XDFactory extends XDTools {
             Object[] x = (Object[]) param;
             if (x.length == 2 && (x[0] instanceof InputStream) && x[1] instanceof String) {
                 b.setSource((InputStream) x[0], (String) x[1]);
-            } else {
-                //Incorrect parameter of compiler of X-definitions&{0}{: }
+            } else { //Incorrect parameter of compiler of X-definitions&{0}{: }
                 throw new SRuntimeException(XDEF.XDEF904, param.getClass());
             }
-        } else {
-            //Incorrect parameter of compiler of X-definitions&{0}{: }
+        } else { //Incorrect parameter of compiler of X-definitions&{0}{: }
             throw new SRuntimeException(XDEF.XDEF904, param.getClass());
         }
     }
@@ -196,7 +193,7 @@ public final class XDFactory extends XDTools {
      * @return generated XDPool.
      * @throws SRuntimeException if an error occurs.
      */
-    public static final XDPool compileXD(final Properties props, final File... pars) throws SRuntimeException{
+    public static final XDPool compileXD(final Properties props, final File... pars) throws SRuntimeException {
         XDBuilder builder = getXDBuilder(props);
         setParam(builder, pars);
         return builder.compileXD();
@@ -241,41 +238,40 @@ public final class XDFactory extends XDTools {
     }
 
     /** Compile XDPool from source.
-     * @param r the ReportWriter to be used for error reporting.
+     * @param reporter the ReportWriter to be used for error reporting.
      * @param props Properties or null.
      * @param pars list of sources, source pairs or external classes.
      * @return generated XDPool.
      * @throws SRuntimeException if an error occurs.
      */
-    public static final XDPool compileXD(final ReportWriter r, final Properties props, final Object... pars)
+    public static final XDPool compileXD(final ReportWriter reporter, final Properties props, final Object... pars)
         throws SRuntimeException {
         if (pars == null || pars.length == 0) {
             throw new SRuntimeException(XDEF.XDEF903); //X-definition source is missing or incorrect&{0}{: }
         }
-        XDBuilder builder = getXDBuilder(r, props);
+        XDBuilder builder = getXDBuilder(reporter, props);
         setParam(builder, pars);
         return builder.compileXD();
     }
 
     /** Parse XML with X-definition declared in source input stream.
-     * @param source where to read XML.
-     * @param r used for error messages or null.
+     * @param src where to read XML.
+     * @param reporter used for error messages or null.
      * @return created XDDocument object.
      * @throws RuntimeException if an error occurs.
      */
-    public static final XDDocument xparse(final InputStream source, final ReportWriter r)
-        throws SRuntimeException {
-        return XBuilder.xparse(source, r);
+    public static final XDDocument xparse(final InputStream src, final ReportWriter reporter)throws SRuntimeException {
+        return XBuilder.xparse(src, reporter);
     }
 
     /** Parse XML with X-definition declared in source.
-     * @param source URL, pathname direct to XML or direct XML.
-     * @param r used for error messages or null.
+     * @param src URL, pathname direct to XML or direct XML.
+     * @param reporter used for error messages or null.
      * @return created XDDocument object.
      * @throws SRuntimeException if an error occurs.
      */
-    public static final XDDocument xparse(final String source, final ReportWriter r) throws SRuntimeException{
-        return XBuilder.xparse(source, r);
+    public static final XDDocument xparse(final String src, final ReportWriter reporter) throws SRuntimeException {
+        return XBuilder.xparse(src, reporter);
     }
 
     /** Write the XDPool to output stream.
@@ -326,13 +322,11 @@ public final class XDFactory extends XDTools {
     }
 
     /** Read the XDPool from the input stream.
-     * @param file file with X-definition.
+     * @param f file with X-definition.
      * @return XDPool object.
      * @throws IOException if an error occurs.
      */
-    public static final XDPool readXDPool(final File file) throws IOException {
-        return readXDPool(new FileInputStream(file));
-    }
+    public static final XDPool readXDPool(final File f) throws IOException {return readXDPool(new FileInputStream(f));}
 
     /** Read the XDPool from the input stream.
      * @param fname pathname of file or string with URL with X-definition (it may be also "classpath://...").

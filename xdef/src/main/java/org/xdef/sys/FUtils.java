@@ -33,7 +33,6 @@ import java.util.zip.ZipOutputStream;
 /** Utilities to handle with files.
  * @author Vaclav Trojan
  */
-@SuppressWarnings("deprecation")
 public class FUtils {
     /** Temporary file items extension (used in secureCopy). */
     public static final String TEMPORARY_FILE_EXTENSION = ".tmp";
@@ -1626,6 +1625,7 @@ public class FUtils {
      * @return the array of URL names.
      * @throws Exception if an error occurs.
      */
+    @SuppressWarnings("deprecation")
     public static final String[] getSourceGroup(final String src) throws Exception {
         List<String> urls = new ArrayList<>();
         if (src.startsWith("classpath://")) {
@@ -1641,7 +1641,9 @@ public class FUtils {
                 if (null == u.getProtocol()) {
                     throw new RuntimeException("Unknown protocol: " + u.getProtocol());
                 } else switch (u.getProtocol()) {
-                    case "file": getSourceFileGroup(urls, u.getFile(), wc); break;
+                    case "file":
+                        getSourceFileGroup(urls, u.getFile(), wc);
+                        break;
                     case "jar":
                         String s = u.toExternalForm();
                         ndx = s.indexOf('!');
@@ -1671,7 +1673,8 @@ public class FUtils {
             } else {
                 urls.add(src);
             }
-        } else if (src.startsWith("ftp:")||src.startsWith("ftps:")||src.startsWith("http:")||src.startsWith("https:")) {
+        } else if (src.startsWith("ftp:") || src.startsWith("ftps:") || src.startsWith("http:")
+            || src.startsWith("https:")) {
             urls.add(src);
         } else { // try just pathname
             File[] files = getFileGroup(src);
@@ -1687,6 +1690,7 @@ public class FUtils {
      * @return URL created from the source string.
      * @throws MalformedURLException IF AN ERROR OCCURS.
      */
+    @SuppressWarnings("deprecation")
     public static final URL getExtendedURL(final String source) throws MalformedURLException {
         String s;
         try {

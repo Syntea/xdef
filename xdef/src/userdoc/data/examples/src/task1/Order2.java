@@ -38,7 +38,7 @@ public class Order2 {
             // write errors to the file
             KXmlUtils.writeXml("task1/errors/Order_err.xml", result);
             String s = xdoc.getVariable("errors").toString();
-            try (PrintStream ps = new PrintStream("task1/errors/Order_err.txt ")) {
+            try (PrintStream ps = new PrintStream("task1/errors/Order_err.txt")) {
                 ps.print(s);
             }
             System.out.println(s);
