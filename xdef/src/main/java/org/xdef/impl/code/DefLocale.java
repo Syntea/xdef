@@ -4,13 +4,11 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import java.util.Locale;
-import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueType.LOCALE;
 
 /** The class DefLocale implements items with Locale values.
  * @author Vaclav Trojan
  */
-@SuppressWarnings("deprecation")
 public final class DefLocale extends XDValueAbstract {
     /** The string value of this item. */
     private Locale _value;
@@ -21,12 +19,14 @@ public final class DefLocale extends XDValueAbstract {
     /** Creates a new instance of DeLocale.
      * @param lang lowercase two-letter ISO-639 code.
      */
+    @SuppressWarnings("deprecation")
     public DefLocale(final String lang) {_value = new Locale(lang);}
 
     /** Creates a new instance of DeLocale.
      * @param lang lowercase two-letter ISO-639 code.
      * @param country uppercase two-letter ISO-3166 code.
      */
+    @SuppressWarnings("deprecation")
     public DefLocale(final String lang, final String country) {
         _value = new Locale(lang.toLowerCase(), country.toUpperCase());
     }
@@ -36,6 +36,7 @@ public final class DefLocale extends XDValueAbstract {
      * @param country uppercase two-letter ISO-3166 code.
      * @param variant vendor and browser specific code..
      */
+    @SuppressWarnings("deprecation")
     public DefLocale(final String lang, final String country, final String variant) {
         _value = new Locale(lang.toLowerCase(), country.toUpperCase(), variant);
     }
@@ -50,9 +51,9 @@ public final class DefLocale extends XDValueAbstract {
      */
     public Locale getLocale() {return _value;}
 
-/*-*****************************************************************************
-Implementation of XDValue interface
-*******************************************************************************/
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XDValue interface
+////////////////////////////////////////////////////////////////////////////////
 
     /** Get associated object.
      * @return the associated object or null.

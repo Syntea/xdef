@@ -76,7 +76,7 @@ public final class XDSourceItem {
         String s = xr.readString();
         if (s != null) {
             try {
-                result._url = new URL(URLDecoder.decode(s, System.getProperties().getProperty("file.encoding")));
+                result._url = new URL(URLDecoder.decode(s,System.getProperties().getProperty("file.encoding")));
             } catch (UnsupportedEncodingException | MalformedURLException ex) {
                 result._url = new URL(s);
             }
