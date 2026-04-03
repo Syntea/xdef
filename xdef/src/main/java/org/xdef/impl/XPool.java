@@ -284,7 +284,7 @@ public final class XPool implements XDPool, Serializable {
      * @param dflt default value.
      * @return index of value in the array.
      */
-    private int readProperty(final Properties props, final String key, final String[] val, final String dflt){
+    private int readProperty(final Properties props, final String key, final String[] val, final String dflt) {
         String v = SManager.getProperty(props, key);
         v = (v == null) ? dflt : v.trim();
         for (int i = 0; i < val.length; i++) {
@@ -742,15 +742,13 @@ public final class XPool implements XDPool, Serializable {
      * @return array with all XMDefinitions from this XDPool.
      */
     @Override
-    public final XMDefinition[] getXMDefinitions() {
-        return _xdefs.values().toArray(new XMDefinition[_xdefs.size()]);
-    }
+    public final XMDefinition[] getXMDefinitions() {return _xdefs.values().toArray(new XMDefinition[_xdefs.size()]);}
 
     /** Get array with all X-definitions from this XDPool.
      * @return array with all X-definitions from this XDPool.
      */
     @Override
-    public final String[] getXMDefinitionNames() {return (String[]) _xdefs.keySet().toArray();}
+    public final String[] getXMDefinitionNames() {return _xdefs.keySet().toArray(new String[_xdefs.size()]);}
 
     /** Find XModel in XDPool.
      * @param xdpos position of XModel in XDPool.
@@ -1246,7 +1244,7 @@ public final class XPool implements XDPool, Serializable {
      * @throws IOException if an error occurs.
      * @throws ClassNotFoundException if class not found.
      */
-    private void readObject(final java.io.ObjectInputStream input) throws IOException,ClassNotFoundException {
+    private void readObject(final java.io.ObjectInputStream input) throws IOException, ClassNotFoundException {
         _xdefs = new LinkedHashMap<>();
         _sourceInfo = new XDSourceInfo();
         GZIPInputStream in = new GZIPInputStream(input);
