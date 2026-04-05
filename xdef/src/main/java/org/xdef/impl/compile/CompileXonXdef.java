@@ -70,7 +70,7 @@ import org.xdef.xon.XonTools.JValue;
 /** Create X-definition model from xd:json/xon element.
  * @author Vaclav Trojan
  */
-public final class CompileXonXdef extends XScriptParser {
+final class CompileXonXdef extends XScriptParser {
 
     /** Prefix of X-definition namespace. */
     private final String _xdPrefix;
@@ -121,13 +121,11 @@ public final class CompileXonXdef extends XScriptParser {
     }
 
     /** Get Xdef attribute.
-     * @param pn PNode where to set attribute.
+     * @param p PNode where to set attribute.
      * @param name local name of attribute.
      * @return PAttr or null.
      */
-    private PAttr getXDAttr(final PNode pn, final String name) {
-        return pn.getAttrNS(name, pn._nsPrefixes.get(_xdPrefix));
-    }
+    private PAttr getXDAttr(final PNode p, final String name) {return p.getAttrNS(name, p._nsPrefixes.get(_xdPrefix));}
 
     /** Set Xdef attribute.
      * @param pn PNode where to set attribute.
@@ -151,9 +149,7 @@ public final class CompileXonXdef extends XScriptParser {
         return pa;
     }
 
-    /** Skip white space separators and comments. Note: line comments are not
-     * allowed in X-script.
-     */
+    /** Skip white space separators and comments. Note: line comments are not allowed in X-script. */
     private void skipSpacesAndComments() {
         isSpaces();
         while(isToken("/*") ) {
@@ -178,8 +174,7 @@ public final class CompileXonXdef extends XScriptParser {
 
     /** Parse X-script and return occurrence and executive part (type declaration) in separate fields.
      * @param sbuf source text with X-script
-     * @return array with SBuffer items (item 0 is occurrence specification) and item 1 is composed
-     * form remaining X-script parts).
+     * @return array with SBuffer items (item 0 is occurrence section) and item is ccreatd form remaining script parts).
      */
     private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
         SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
@@ -203,7 +198,7 @@ public final class CompileXonXdef extends XScriptParser {
      * @param pos source position.
      * @return created PNode.
      */
-    private PNode genPElement(final PNode parent, final String nsURI, final String name, final SPosition pos){
+    private PNode genPElement(final PNode parent, final String nsURI, final String name, final SPosition pos) {
         PNode result = new PNode(name, pos, parent, parent._xdVersion, parent._xmlVersion);
         int nsindex;
         String localName;
@@ -628,8 +623,8 @@ public final class CompileXonXdef extends XScriptParser {
             for(; index < len; index++) {
                 PNode pn1 = genXonModel(array.get(index), pn);
                 PAttr val;
-                // if it is not the last and it has xd:script attribute where the min occurrence differs from
-                // max occurrence and it has the attribute with a value description
+                // if it is not the last and it has xd:script attribute where the min occurrence differs
+                // from max occurrence and it has the attribute with a value description
                 if (X_VALUE.equals(pn1._localName) && XDConstants.XON_NS_URI_W.equals(pn1._nsURI)
                     && (val = pn1.getAttrNS(X_VALATTR, -1)) != null) {
                     PAttr script = getXDAttr(pn1, "script");
@@ -642,9 +637,8 @@ public final class CompileXonXdef extends XScriptParser {
                             isOccurrence(occ);
                         }
                     }
-                    if (index < len-1 && pn.getNSIndex() == _xdIndex //xdef
-                        && ("mixed".equals(pn.getLocalName()) || "choice".equals(pn.getLocalName()))
-                        || occ != null && occ.minOccurs() != occ.maxOccurs()) {
+                    if (index < len-1 && pn.getNSIndex() == _xdIndex && ("mixed".equals(pn.getLocalName())
+                        || "choice".equals(pn.getLocalName())) || occ != null && occ.minOccurs() != occ.maxOccurs()) {
                         SBuffer[] sbs = parseTypeDeclaration(val.getValue());
                         String s = sbs[1].getString();
                         int i;
@@ -840,10 +834,10 @@ public final class CompileXonXdef extends XScriptParser {
      * @return true if it is a section name.
      */
     private static boolean isSectionCommand(final char sym) {
-        return sym==VAR_SYM||sym==FINALLY_SYM||sym==CREATE_SYM||sym==ON_TRUE_SYM||sym==ON_FALSE_SYM
-            ||sym==ON_ABSENCE_SYM||sym==ON_ILLEGAL_ATTR_SYM||sym==CREATE_SYM||sym==MATCH_SYM
-            ||sym==ON_START_ELEMENT_SYM||sym==FINALLY_SYM||sym==FORGET_SYM||sym==INIT_SYM||sym==DEFAULT_SYM
-            ||sym==FIXED_SYM||sym==REF_SYM||sym==ON_EXCESS_SYM||sym==OPTION_SYM||sym==OPTIONS_SYM;
+        return sym==VAR_SYM || sym==FINALLY_SYM || sym==CREATE_SYM || sym==ON_TRUE_SYM || sym==ON_FALSE_SYM
+            || sym==ON_ABSENCE_SYM || sym==ON_ILLEGAL_ATTR_SYM || sym==CREATE_SYM || sym==MATCH_SYM
+            || sym==ON_START_ELEMENT_SYM || sym==FINALLY_SYM || sym==FORGET_SYM || sym==INIT_SYM || sym==DEFAULT_SYM
+            || sym==FIXED_SYM || sym==REF_SYM || sym==ON_EXCESS_SYM || sym==OPTION_SYM || sym==OPTIONS_SYM;
     }
 
     /** Parse command which follows section.
@@ -930,10 +924,7 @@ public final class CompileXonXdef extends XScriptParser {
      * @return section list. Each section is composed of two items: the first item is id of section
      * (a character) and the following item is a SBuffer with the source of the section command.
      */
-    private List<Object> parseXscript(SBuffer source) {
-        setSourceBuffer(source);
-        return parseXscript();
-    }
+    private List<Object> parseXscript(SBuffer source) {setSourceBuffer(source); return parseXscript();}
 
     /** Parse X-script and return the section list.
      * @return section list. Each section is composed of two items: the first
@@ -1090,7 +1081,6 @@ public final class CompileXonXdef extends XScriptParser {
         private final int ARRAY = 1;
         /** kind = map */
         private final int MAP = 2;
-
         /** stack with kinds of nested items. */
         private final Stack<Integer> _kinds = new Stack<>();
         /** stack with kinds of arrays. */
@@ -1122,7 +1112,6 @@ public final class CompileXonXdef extends XScriptParser {
             }
             _value = value; // it is VALUE
         }
-
         /** Set name of value pair.
          * @param name value name.
          * @return true if the name of pair already exists.
@@ -1140,7 +1129,6 @@ public final class CompileXonXdef extends XScriptParser {
             _names.push(name);
             return result;
         }
-
         /** Array started.
          * @param pos source position.
          */
@@ -1150,7 +1138,6 @@ public final class CompileXonXdef extends XScriptParser {
             _kinds.push(_kind = ARRAY);
             _arrays.push(new JArray(pos));  // new item to array stack
         }
-
         /** Array ended.
          * @param pos source position.
          */
@@ -1166,7 +1153,6 @@ public final class CompileXonXdef extends XScriptParser {
                 _arrays.peek().add(_value);
             } // else it is VALUE
         }
-
         /** Map started.
          * @param pos source position.
          */
@@ -1176,7 +1162,6 @@ public final class CompileXonXdef extends XScriptParser {
             _kinds.push(_kind = MAP);
             _maps.push(new JMap(pos)); // new item to map stack
         }
-
         /** Map ended.
          * @param pos source position.
          */
@@ -1192,13 +1177,11 @@ public final class CompileXonXdef extends XScriptParser {
                 _arrays.peek().add(_value);
             } // parent is value
         }
-
         /** Processed comment.
          * @param value SBuffer with the value of comment.
          */
         @Override
         public final void comment(final SBuffer value){/*we ingore it here*/}
-
         /** X-script item parsed, not used methods for JSON/XON parsing (used in X-definition compiler).
          * @param name name of item.
          * @param value value of item.
@@ -1222,7 +1205,6 @@ public final class CompileXonXdef extends XScriptParser {
                 _maps.peek().put(s, jv);
             }
         }
-
         /** Get result of parser.
          * @return parsed object.
          */

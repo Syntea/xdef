@@ -7,7 +7,7 @@ import org.xdef.XDPool;
 /** Implementation of the model of processing instruction.
  * @author Vaclav Trojan
  */
-public final class XPI extends XData {
+final class XPI extends XData {
 
     /** Creates a new instance of XPI.
      * @param name The name of processing instruction.
