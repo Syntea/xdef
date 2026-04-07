@@ -12,7 +12,7 @@ public interface XHandler {
 
     /** Push reader the the stack of readers.
      * @param mr reader to be pushed.
-     * @return reader on the tom of the stack befor pushing.
+     * @return reader on the top of stack before pushing.
      */
     public InputSource pushReader(final XAbstractReader mr);
 }

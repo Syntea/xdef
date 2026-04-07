@@ -260,8 +260,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
     /////////////////////////////////////////////////////////////
 
     @Override
-    public InputSource resolveEntity(final String pubID, final String sysID)
-        throws IOException {
+    public InputSource resolveEntity(final String pubID, final String sysID) throws IOException {
         InputStream in;
         InputSource is;
         if (!_isDTD && sysID != null && pubID == null) {
@@ -482,10 +481,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
     }
 
     @Override
-    public void startElement(final String uri,
-        final String localName,
-        final String qName,
-        final Attributes atts) {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts) {
         setDocumentLocator(_locator);
         XAbstractReader mr = getReader();
         String nsuri = uri != null && uri.isEmpty() ? null : uri;
@@ -623,11 +619,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
     public void characters(final char[] ch, final int start, final int length) {_sb.append(ch, start,length);}
 
     @Override
-    public void ignorableWhitespace(final char[] ch,
-        final int start,
-        final int length) {
-        _sb.append(ch, start, length);
-    }
+    public void ignorableWhitespace(final char[] ch, final int start, final int length) {_sb.append(ch, start, length);}
 
     @Override
     public void processingInstruction(final String target,final String data) {
