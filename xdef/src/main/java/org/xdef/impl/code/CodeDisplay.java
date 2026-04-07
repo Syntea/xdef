@@ -130,8 +130,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
             case EXTMETHOD_XXNODE_XDARRAY:
             case EXTMETHOD_XDARRAY:
                 return codeName +" "+ ((CodeExtMethod) item).getExtMethod().toString() +","+ item.getParam();
-            case COMPILE_BNF:
-                return (codeName + " source:\n" + item.toString().trim() + "\n=== BNF source end ===");
+            case COMPILE_BNF: return (codeName + " source:\n" + item.toString().trim() + "\n=== BNF source end ===");
             case SRCINFO_CODE: return "SRCINFO " + item.stringValue(); //source info
             default:
                 if (item instanceof CodeSWTableInt) {

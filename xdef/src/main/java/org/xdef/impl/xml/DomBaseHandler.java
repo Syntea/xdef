@@ -17,8 +17,7 @@ import org.xml.sax.ext.LexicalHandler;
 /** Reader used in SAX parser.
  * @author Vaclav Trojan
  */
-public abstract class DomBaseHandler implements ContentHandler, EntityResolver, ErrorHandler,
-    LexicalHandler, XHandler {
+public abstract class DomBaseHandler implements ContentHandler, EntityResolver, ErrorHandler, LexicalHandler, XHandler {
     private static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
     public final DocumentBuilder _docBuilder;
     public InputSource _is;
@@ -45,7 +44,7 @@ public abstract class DomBaseHandler implements ContentHandler, EntityResolver, 
             // no xml:base attributes
             DBF.setFeature("http://apache.org/xml/features/xinclude/fixup-base-uris", false);
         } catch (ParserConfigurationException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex); // never happens
         }
     }
 
@@ -180,13 +179,10 @@ public abstract class DomBaseHandler implements ContentHandler, EntityResolver, 
 
     @Override
     public void setDocumentLocator(final Locator locator) {_locator = locator;}
-
     @Override
     public void startPrefixMapping(final String prefix, final String uri) {_prefixes.put(prefix, uri);}
-
     @Override
     public void endPrefixMapping(final String prefix){}
-
     @Override
     public void skippedEntity(final String name) {}
 
@@ -196,22 +192,16 @@ public abstract class DomBaseHandler implements ContentHandler, EntityResolver, 
 
     @Override
     public void startEntity(final String name) {}
-
     @Override
     public void endEntity(final String name) {}
-
     @Override
     public void startCDATA() {}
-
     @Override
     public void endCDATA() {}
-
     @Override
     public void startDTD(final String name, final String publicId, final String systemId) {_isDTD=true;}
-
     @Override
     public void endDTD() {_isDTD = false;}
-
     @Override
     public void comment(final char[] ch, final int start, final int length) {}
 }

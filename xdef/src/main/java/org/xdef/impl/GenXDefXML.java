@@ -52,7 +52,7 @@ import org.xdef.xml.KXmlUtils;
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
  */
-public final class GenXDefXML {
+final class GenXDefXML {
 
     /** Model of attribute. */
     private final static class XAttr {

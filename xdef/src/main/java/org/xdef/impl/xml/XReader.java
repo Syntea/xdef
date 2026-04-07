@@ -54,8 +54,7 @@ public class XReader extends XAbstractReader {
     }
 
     @Override
-    public final int read(final char[] cbuf,
-        final int off, final int len) throws IOException {
+    public final int read(final char[] cbuf, final int off, final int len) throws IOException {
         if (_notScanning) {
             return _in.read(cbuf, off, len);
         }

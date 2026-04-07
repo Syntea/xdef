@@ -52,7 +52,5 @@ public final class KParsedAttr {
     public final SPosition getPosition() {return _pos;}
 
     @Override
-    public final String toString() {
-        return _name + " = \"" + _value + '"' + (_nsURI == null ? "" : "; URI = " + _nsURI);
-    }
+    public final String toString() {return _name + " = \"" + _value + '"' + (_nsURI==null ? "" : "; URI = " + _nsURI);}
 }

@@ -8,9 +8,8 @@ import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
-/** Implementation of interface javax.xml.namespace.NamespaceContext.
- * There are implemented more methods pushContext(), popContext(), getRecentPrefixes(), setPrefix(String),
- * getAllNamespaceURIs(), getAllPrefixes() and clearContext().
+/** Implementation of interface javax.xml.namespace.NamespaceContext. There are implemented more methods pushContext(),
+ * popContext(), getRecentPrefixes(), setPrefix(String), getAllNamespaceURIs(), getAllPrefixes() and clearContext().
  * @author Vaclav Trojan
  */
 public class KNamespace implements NamespaceContext {
@@ -29,8 +28,7 @@ public class KNamespace implements NamespaceContext {
     /** Table of namespace URIs. */
     private String[] _uris;
 
-    /** Creates a new instance of KNamespaceImpl with default items for prefixes "xml" and "xmlns".
-     */
+    /** Creates a new instance of KNamespaceImpl with default items for prefixes "xml" and "xmlns". */
     public KNamespace() {}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +50,6 @@ public class KNamespace implements NamespaceContext {
         }
         return null;
     }
-
     /** Find most recent prefix assigned to given namespace URI.
      * @param uri namespace URI to be searched.
      * @return namespace prefix or null.
@@ -69,7 +66,6 @@ public class KNamespace implements NamespaceContext {
         }
         return null;
     }
-
     /** Find all prefixes assigned to given namespace URI.
      * @param uri namespace URI to be searched.
      * @return iterator with list of prefixes.
@@ -156,7 +152,7 @@ public class KNamespace implements NamespaceContext {
     }
 
     /** Get array with prefixes from the top of context stack. If no new prefixes are on the top this method
-     * returns empty array. Also prefixes defining the empty namespace are returned in the array.
+     * returns an empty array. Also prefixes defining the empty namespace are returned in the array.
      * @return array with prefixes from the top of context stack.
      */
     public String[] getRecentPrefixes() {
