@@ -44,7 +44,9 @@ public final class KParsedElement {
     }
 
     public final String getParsedName() {return _tagname;}
+
     public final SPosition getParsedNameSourcePosition() {return _pos;}
+
     public final String getParsedNSURI() {return _nsURI;}
 
     /** Add attribute to the list.
@@ -73,8 +75,7 @@ public final class KParsedElement {
     }
 
     /** Get attribute at given position from the list.
-     * @param index position of attribute. If value of this argument is out of range of the list the method
-     * return null.
+     * @param index position of attribute. If value of this argument is out of range of the list return null.
      * @return attribute from given position or null.
      */
     public final KParsedAttr getAttr(final int index) {
@@ -166,8 +167,7 @@ public final class KParsedElement {
     public final KParsedAttr remove(final KParsedAttr ka) {return remove(indexOf(ka.getName()));}
 
     /** Remove attribute from given position in the list.
-     * @param index position of attribute. If value of this argument
-     * is out of range of the list the method returns null and no
+     * @param index position of attribute. If value of this argument is out of range of the list return null and no
      * attribute is deleted.
      * @return removed object or null.
      */

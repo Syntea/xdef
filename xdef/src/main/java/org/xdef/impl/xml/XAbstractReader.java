@@ -69,13 +69,10 @@ public abstract class XAbstractReader extends Reader {
 
     @Override
     abstract public int read() throws IOException;
-
     @Override
     abstract public int read(char[] cbuf) throws IOException;
-
     @Override
     abstract public int read(char[] cbuf, int off, int len) throws IOException;
-
     @Override
     abstract public void close() throws IOException;
 
@@ -448,7 +445,7 @@ public abstract class XAbstractReader extends Reader {
         return -1;
     }
 
-/* NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'.*/
+    /** NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'.*/
     private int scanNotationDecl() {
         if (!isToken("<!NOTATION")) {
             return -1;
@@ -480,7 +477,7 @@ public abstract class XAbstractReader extends Reader {
         _sysId = p.getSysId();
     }
 
-/* markupdecl ::= elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment */
+    /** markupdecl ::= elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment */
     private int scanMarkupDecl() {
         int result;
         if ((result = scanPEReference()) >= 0 || (result = scanElementdecl()) >= 0
@@ -508,85 +505,83 @@ public abstract class XAbstractReader extends Reader {
         return -1;
     }
 
-/*
-   document ::= prolog element Misc*
-   EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-               |  "'" ([^%&'] | PEReference | Reference)* "'"
-   AttValue ::= '"' ([^<&"] | Reference)* '"'
-            |  "'" ([^<&'] | Reference)* "'"
-   SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
-   PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
-   PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
-   Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
-   PI ::= '<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
-   PITarget ::= Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
-   prolog ::= XMLDecl? Misc* (doctypedecl Misc*)?
-   XMLDecl ::= '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
-   VersionInfo ::= S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
-   Eq ::= S? '=' S?
-   VersionNum  ::= '1.' [0-9]+
-   EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
-   EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
-   Misc ::= Comment | PI | S
-   doctypedecl ::= '<!DOCTYPE' S Name
-               (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
-   DeclSep ::= PEReference | S
-   PEReference ::= '%' Name ';'
-   intSubset ::= (markupdecl | DeclSep)*
-   markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-              | NotationDecl | PI | Comment
-   extSubset ::= TextDecl? extSubsetDecl
-   extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
-   SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
-          | ('"' ('yes' | 'no') '"'))
-   STag ::= '<' Name (S Attribute)* S? '>'
-   Attribute ::= Name Eq AttValue
-   ETag ::= '</' Name S? '>'
-   content ::= CharData? ((element | Reference | CDSect
-           | PI | Comment) CharData?)*
-   EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
-   elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
-   contentspec ::= 'EMPTY' | 'ANY' | Mixed | children
-   children ::= (choice | seq) ('?' | '*' | '+')?
-   cp ::= (Name | choice | seq) ('?' | '*' | '+')?
-   choice ::= '(' S? cp ( S? '|' S? cp )+ S? ')'
-   seq ::= '(' S? cp ( S? ',' S? cp )* S? ')'
-   Mixed ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
-         | | '(' S? '#PCDATA' S? ')'
-   AttlistDecl ::= '<!ATTLIST' S Name AttDef* S? '>'
-   AttDef ::= S Name S AttType S DefaultDecl
-   AttType ::= StringType | TokenizedType | EnumeratedType
-   StringType ::= 'CDATA'
-   TokenizedType ::= 'ID' | 'IDREF' | 'IDREFS' | 'ENTITY' | 'ENTITIES'
-                 | 'NMTOKEN' | 'NMTOKENS'
-   EnumeratedType ::= NotationType | Enumeration
-   NotationType ::= 'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
-   Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
-   DefaultDecl ::= '#REQUIRED' | '#IMPLIED' | (('#FIXED' S)? AttValue)
-   conditionalSect ::= includeSect | ignoreSect
-   includeSect ::= '<![' S? 'INCLUDE' S? '[' extSubsetDecl ']]>'
-   ignoreSect ::= '<![' S? 'IGNORE' S? '[' ignoreSectContents* ']]>'
-   ignoreSectContents ::= Ignore ('<![' ignoreSectContents ']]>' Ignore)*
-   Ignore ::= Char* - (Char* ('<![' | ']]>') Char*)
-   CharRef ::= '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
-   Reference ::= EntityRef | CharRef
-   EntityRef ::= '&' Name ';'
-   PEReference ::= '%' Name ';'
-   EntityDecl ::= GEDecl | PEDecl
-   GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
-   PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
-   EntityDef ::= EntityValue | (ExternalID NDataDecl?)
-   PEDef ::= EntityValue | ExternalID
-   ExternalID ::= 'SYSTEM' S SystemLiteral
-              | 'PUBLIC' S PubidLiteral S SystemLiteral
-   NDataDecl ::= S 'NDATA' S Name
-   TextDecl ::= '<?xml' VersionInfo? EncodingDecl S? '?>'
-   extParsedEnt ::= TextDecl? content
-   EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
-   EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')*
-   NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
-   PublicID ::= 'PUBLIC' S PubidLiteral
- */
+    /** document ::= prolog element Misc*
+    * EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
+    *             |  "'" ([^%&'] | PEReference | Reference)* "'"
+    * AttValue ::= '"' ([^<&"] | Reference)* '"'
+    *          |  "'" ([^<&'] | Reference)* "'"
+    * SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
+    * PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
+    * PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
+    * Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
+    * PI ::= '<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
+    * PITarget ::= Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+    * prolog ::= XMLDecl? Misc* (doctypedecl Misc*)?
+    * XMLDecl ::= '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
+    * VersionInfo ::= S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
+    * Eq ::= S? '=' S?
+    * VersionNum  ::= '1.' [0-9]+
+    * EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+    * EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
+    * Misc ::= Comment | PI | S
+    * doctypedecl ::= '<!DOCTYPE' S Name
+    *             (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
+    * DeclSep ::= PEReference | S
+    * PEReference ::= '%' Name ';'
+    * intSubset ::= (markupdecl | DeclSep)*
+    * markupdecl ::= elementdecl | AttlistDecl | EntityDecl
+    *            | NotationDecl | PI | Comment
+    * extSubset ::= TextDecl? extSubsetDecl
+    * extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
+    * SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
+    *        | ('"' ('yes' | 'no') '"'))
+    * STag ::= '<' Name (S Attribute)* S? '>'
+    * Attribute ::= Name Eq AttValue
+    * ETag ::= '</' Name S? '>'
+    * content ::= CharData? ((element | Reference | CDSect
+    *         | PI | Comment) CharData?)*
+    * EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
+    * elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
+    * contentspec ::= 'EMPTY' | 'ANY' | Mixed | children
+    * children ::= (choice | seq) ('?' | '*' | '+')?
+    * cp ::= (Name | choice | seq) ('?' | '*' | '+')?
+    * choice ::= '(' S? cp ( S? '|' S? cp )+ S? ')'
+    * seq ::= '(' S? cp ( S? ',' S? cp )* S? ')'
+    * Mixed ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
+    *       | | '(' S? '#PCDATA' S? ')'
+    * AttlistDecl ::= '<!ATTLIST' S Name AttDef* S? '>'
+    * AttDef ::= S Name S AttType S DefaultDecl
+    * AttType ::= StringType | TokenizedType | EnumeratedType
+    * StringType ::= 'CDATA'
+    * TokenizedType ::= 'ID' | 'IDREF' | 'IDREFS' | 'ENTITY' | 'ENTITIES'
+    *               | 'NMTOKEN' | 'NMTOKENS'
+    * EnumeratedType ::= NotationType | Enumeration
+    * NotationType ::= 'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
+    * Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
+    * DefaultDecl ::= '#REQUIRED' | '#IMPLIED' | (('#FIXED' S)? AttValue)
+    * conditionalSect ::= includeSect | ignoreSect
+    * includeSect ::= '<![' S? 'INCLUDE' S? '[' extSubsetDecl ']]>'
+    * ignoreSect ::= '<![' S? 'IGNORE' S? '[' ignoreSectContents* ']]>'
+    * ignoreSectContents ::= Ignore ('<![' ignoreSectContents ']]>' Ignore)*
+    * Ignore ::= Char* - (Char* ('<![' | ']]>') Char*)
+    * CharRef ::= '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
+    * Reference ::= EntityRef | CharRef
+    * EntityRef ::= '&' Name ';'
+    * PEReference ::= '%' Name ';'
+    * EntityDecl ::= GEDecl | PEDecl
+    * GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
+    * PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
+    * EntityDef ::= EntityValue | (ExternalID NDataDecl?)
+    * PEDef ::= EntityValue | ExternalID
+    * ExternalID ::= 'SYSTEM' S SystemLiteral
+    *            | 'PUBLIC' S PubidLiteral S SystemLiteral
+    * NDataDecl ::= S 'NDATA' S Name
+    * TextDecl ::= '<?xml' VersionInfo? EncodingDecl S? '?>'
+    * extParsedEnt ::= TextDecl? content
+    * EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+    * EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')*
+    * NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
+    * PublicID ::= 'PUBLIC' S PubidLiteral */
     public final int scanDoctype() {
         scanSpaces();
         if (!isToken("<!DOCTYPE")) {
@@ -727,8 +722,7 @@ public abstract class XAbstractReader extends Reader {
         }
         // skip to the start of element
         while (scanComment() > 0 || scanPI() > 0 || scanCDATA() >= 0
-            || scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {
-        }
+            || scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {}
         List<Object[]> result = new ArrayList<>();
         String name;
         SPosition spos = getBufferPosition1();
@@ -770,8 +764,7 @@ public abstract class XAbstractReader extends Reader {
             if ((scanned = scanLiteral()) < 0) {
                 break; // error no quoted literal
             }
-            item[2] = _pos-1 > scanned +1
-                ? _bf.substring(scanned +1, _pos-1) : "";
+            item[2] = _pos-1 > scanned + 1 ? _bf.substring(scanned +1, _pos-1) : "";
             result.add(item);
             if (!"*".equals(qName)) {
                 releaseScanned();

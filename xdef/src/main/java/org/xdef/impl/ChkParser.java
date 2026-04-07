@@ -105,8 +105,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
             SPF.setFeature( // do not create xml:base attributes
                 "http://apache.org/xml/features/xinclude/fixup-base-uris", false);
             SPF.setSchema(null);
-        } catch (ParserConfigurationException | SAXNotRecognizedException
-            | SAXNotSupportedException ex) {
+        } catch (ParserConfigurationException | SAXNotRecognizedException | SAXNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -235,9 +234,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
      * @param in The source input stream.
      * @param sourceName the name of source data
      */
-    ChkParser(final ReportWriter reporter,
-        final InputStream in,
-        final String sourceName) {
+    ChkParser(final ReportWriter reporter, final InputStream in, final String sourceName) {
         this(reporter);
         if (in == null) {
             throw new SRuntimeException(SYS.SYS024, "null"); //File does not exist: &{0}
@@ -314,7 +311,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
     /////////////////////////////////////////////////////////////
 
     @Override
-    public InputSource resolveEntity(final String pubID, final String sysID) throws SAXException, IOException{
+    public InputSource resolveEntity(final String pubID, final String sysID) throws SAXException, IOException {
         InputSource is;
         if (_isDTD && pubID != null) {
             InputStream in = new ByteArrayInputStream(new byte[0]);
@@ -329,8 +326,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
             InputStream in = new ByteArrayInputStream(new byte[0]);
             if (_isDTD && _illegalDoctype) {
                 _sReporter.fatal(XML.XML099);//DOCTYPE is set as not allowed
-            } else if ((_isDTD
-                && ((XDefinition) _chkDoc.getXMDefinition())._resolveEntities != 'F') || !_isDTD) {
+            } else if ((_isDTD && ((XDefinition) _chkDoc.getXMDefinition())._resolveEntities != 'F') || !_isDTD) {
                 try {
                     URL u = SUtils.getExtendedURL(sysID);
                     in = u.openStream();
@@ -385,10 +381,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
     }
 
     @Override
-    public void startElement(final String uri,
-        final String localName,
-        final String qName,
-        final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+        throws SAXException {
         _elemLocator.setIndex(_elemLocator.getIndex() + qName.length() + 1);
         _sReporter.setPosition(_elemLocator);
         _isDTD = false;
@@ -478,9 +472,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
     }
 
     @Override
-    public void endElement(final String uri,
-        final String localName,
-        final String qName) throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         _sReporter.setPosition(_elemLocator);
         XAbstractReader mr = getReader();
         processText(mr);
@@ -501,9 +493,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
     }
 
     @Override
-    public void characters(final char[] ch,
-        final int start,
-        final int length) throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         appendText(String.valueOf(ch, start, length));
         updateLocator();
     }
@@ -515,8 +505,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
     }
 
     @Override
-    public void processingInstruction(final String target, final String data)
-        throws SAXException {
+    public void processingInstruction(final String target, final String data) throws SAXException {
         if (_level >= 0) {
             _element.appendChild(_doc.createProcessingInstruction(target,data));
         } else if (_doc != null) {
@@ -632,8 +621,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
                 _sReporter.error(XML.XML024, s); //Expected end tag "&{0}"
                 return;
             }
-            if (m.contains("Recursive include detected.")) {
-                //XInclude - recursive include &{0}
+            if (m.contains("Recursive include detected.")) { //XInclude - recursive include &{0}
                 int ndx1 = m.indexOf("Document");
                 if (ndx1 >= 0) {
                     ndx1 += 9;
@@ -733,8 +721,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
                 throw ex;
             } catch (SAXException ex) {
                 //XML parser was canceled by exception: &{0}
-                Report err = Report.fatal(
-                    XML.XML080, "SAXException; "+ex.getMessage());
+                Report err = Report.fatal(XML.XML080, "SAXException; "+ex.getMessage());
                 int adr;
                 if (_chkDoc != null && _chkDoc._xElement != null && _chkDoc._xElement._definition != null
                     && (adr=_chkDoc._xElement._definition._onXmlError) >= 0) {
@@ -759,8 +746,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
             _chkEl = null;
             _chkElemStack = null;
         } catch (SError e) {
-            if ("XDEF906".equals(e.getMsgID())) {
-                throw e; //X-definition canceled
+            if ("XDEF906".equals(e.getMsgID())) { //X-definition canceled
+                throw e;
             }
             throw new SRuntimeException(e.getReport(), e.getCause());
         }
@@ -790,8 +777,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
             _text = null;
         }
         if (_locationDetails && mr != null) {
-            while (mr.scanCDATA() >= 0 ||  mr.scanPI() >= 0 || mr.scanEntity() >= 0 || mr.scanComment() >= 0
-                 || mr.scanText() >= 0) {}
+            while (mr.scanCDATA()>=0 || mr.scanPI()>=0 || mr.scanEntity()>=0 || mr.scanComment()>=0||mr.scanText()>=0){}
         }
     }
 
@@ -816,8 +802,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
                 _element.removeAttribute(xPrefix + "location");
                 if ((_chkDoc == null || ka != null && "#".equals(_chkDoc.getXMDefinition().getName()))) {
                     XPool xdp;
-                    String systemLiteral = getExternalId(
-                        new SBuffer(ka.getValue(), ka.getPosition()));
+                    String systemLiteral = getExternalId(new SBuffer(ka.getValue(), ka.getPosition()));
                     URL u;
                     try {
                         s = _sysId.replace('\\', '/');
@@ -838,8 +823,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
                     try {
                         xdp =(XPool)new XBuilder(null).setSource(u).compileXD();
                     } catch (Exception ex) {
-                        //In X-definition are errors&{0}{: }
-                        _sReporter.putReport(Report.fatal(XDEF.XDEF543, ex));
+                        _sReporter.putReport(Report.fatal(XDEF.XDEF543, ex)); //In X-definition are errors&{0}{: }
                         return;
                     }
                     //xdi:definition
@@ -963,8 +947,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
         }
         if (i == 1) { //PUBLIC
             if (!p.isSpaces()) {
-                //Whitespace expected after '&{0}'
-                _sReporter.putReport(val, Report.lightError(XML.XML014, "PUBLIC"));
+                _sReporter.putReport(val, Report.lightError(XML.XML014, "PUBLIC")); //Whitespace expected after '&{0}'
             }
             if (p.readString() == null) {
                 _sReporter.error(XDEF.XDEF504); //Quoted string declaration expected
@@ -974,8 +957,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
                 _sReporter.putReport(val, Report.lightError(XML.XML014, "PUBLIC identifier"));
             }
         } else if (!p.isSpaces()) {
-            //Whitespace expected after '&{0}'
-            _sReporter.putReport(val, Report.lightError(XML.XML014, "SYSTEM"));
+            _sReporter.putReport(val, Report.lightError(XML.XML014, "SYSTEM"));//Whitespace expected after '&{0}'
         }
         String sourceURL;
         if ((sourceURL = p.readString()) != null) {

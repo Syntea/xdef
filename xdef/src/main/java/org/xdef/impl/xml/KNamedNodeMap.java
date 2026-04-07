@@ -38,10 +38,8 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
         }
         return null;
     }
-
     @Override
     public final Node setNamedItem(final Node arg) throws DOMException {return setNamedItemNS(arg);}
-
     @Override
     public final Node removeNamedItem(final String name) throws DOMException {
         Node n;
@@ -50,7 +48,6 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
         }
         return n;
     }
-
     @Override
     public final Node getNamedItemNS(final String ns, final String localName) throws DOMException {
         QName qname = new QName(ns, localName);
@@ -61,7 +58,6 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
         }
         return null;
     }
-
     @Override
     public final Node setNamedItemNS(final Node arg) throws DOMException {
         String ns = arg.getNamespaceURI();
@@ -72,7 +68,6 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
         add(arg);
         return n;
     }
-
     @Override
     public final Node removeNamedItemNS(final String ns, final String localName) throws DOMException {
         Node n;
