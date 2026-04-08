@@ -65,7 +65,29 @@
     <build>
         <finalName>${project.artifactId}</finalName>
 
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources-filters</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -96,22 +118,23 @@
                         </resource>
                         <resource>
                             <targetPath>META-INF</targetPath>
-                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
+                            <directory>target/classes/org/xdef/web/config</directory>
                             <includes>
-                                <inlude>pominfo.properties</inlude>
+                                <inlude>buildinfo.properties</inlude>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>other</targetPath>
-                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
+                            <directory>target/classes/org/xdef/web/config</directory>
                             <includes>
-                                <inlude>pominfo.properties</inlude>
+                                <inlude>buildinfo.properties</inlude>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>.</targetPath>
                             <directory>src/main/webapp</directory>
                             <includes>
+                                <inlude>footer0.html</inlude>
                                 <inlude>footer.html</inlude>
                                 <inlude>cs/footer.html</inlude>
                             </includes>
