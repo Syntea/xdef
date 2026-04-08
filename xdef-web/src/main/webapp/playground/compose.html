@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Online construction or transformation of XML data using X-definition" />
+    <meta name="keywords" content="XML, data contruction, compose, create, transform, transformation, XSLT, X-definition, Xdefinition, XDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:22rem; max-height:22rem; display:flex; overflow:hidden;}</style>    
+    <style>.B{min-height:13rem; max-height:14rem; display:flex; overflow:hidden;}</style>
+    <title>X-definition compose mode (data construction or transformation)</title>
+  </head>
+  <body style="background: #EAFFFD">
+    <form method="post" action="/tutorial/Examples">
+      <i>If you have a collection with more X-definitions enter the name of X-definition with root XML data:
+      </i>
+      <input name="xdname" value="" type="text"/>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="html">
+  &lt;html>
+    &lt;head>&lt;title> create "Generated today message"; &lt;/title>&lt;/head>
+    &lt;body>
+      &lt;h1>
+        &lt;font color="string(); create 'red'"> 
+          string(); create "Hello! Today is " + now().toString("EEEE, d. MMMM GG yyyy, hh:mm a.");
+        &lt;/font> 
+      &lt;/h1>
+      &lt;h2>
+        &lt;font color="string(); create 'blue'"> 
+          &lt;i>string(); create "This is an example of compose mode.";&lt;/i>
+        &lt;/font> 
+      &lt;/h2>
+      &lt;h5 xd:script="*; create from('//i');">
+        &lt;font color="string(); create 'green'"> 
+          string(); create from("@x");
+        &lt;/font> 
+      &lt;/h5>
+    &lt;/body>
+  &lt;/html>
+&lt;/xd:def>
+        </textarea>
+      </div>
+      <b>Input data</b>
+      <i>&nbsp;If necessary you can specify the name and namespace of the model:</i>
+      <input name="mName" value="" type="text"/>
+      <i>&nbsp; and namespace:</i>
+      <input name="mURI" value="" type="text"/>
+      <input type="hidden" name="mode" value="compose" />
+      <div class="B">
+        <div id="line-numbers_1"> </div>
+        <textarea id="textarea_1" style="width:100%;" name="data">
+&lt;x>
+  &lt;i x='Hello'/>
+  &lt;i x='world!'/>
+&lt;/x>
+        </textarea>
+      </div>        
+      <input name="submit" value="Execute" type="submit"/>
+      <input name="view" value="Display result as html" type="submit"/>
+      <span>
+        <i>&nbsp;You can edit <b>X-definition</b> or <b>Input data</b></i>
+      </span>
+    </form>
+  </body>
+</html>

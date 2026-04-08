@@ -1,0 +1,36 @@
+html, body {
+/*        margin:0; padding:0; width:100vw; height:100vh; font-size: 1rem; font-weight: 400; /**/
+        overflow:hidden; font-family: lucida console, courier new, courier, monospace;
+      }
+      #codeEditor, #lineCounter {
+        font-family: lucida console, courier new, courier, monospace; margin: 0;
+/*        padding: 5px 0; /**/
+        height: 50vh; font-size: 13px; border-radius: 0; resize: none;
+        line-height: 1; outline: none; box-sizing: border-box;
+        -moz-box-sizing: border-box; -webkit-box-sizing: border-box;
+      }
+      #codeEditor {
+        padding-left: calc(3.5rem + 5px); width:100%;
+        /* Determine appearance of code editor *
+        background-color:#272822; border-color:#272822; color:#ffffff;
+        /**/
+      }
+      #lineCounter {
+        display: flex;
+        border-color: transparent;
+        overflow-y: hidden;
+        text-align: right;
+        box-shadow: none;
+        background-color: #d8d8d8;
+        color: #707070;
+        position: absolute;
+        width: 2rem;
+        /* Determine appearance of line counter *
+        background-color:#3E3D32;
+        border-color:#3E3D32;
+        color:#928869;
+        /**/
+      }
+      #lineCounter:focus-visible, #codeEditor:focus-visible {
+          outline:none;
+}

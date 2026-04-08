@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="X-definition: CSV" />
+    <meta name="keywords" content="CSV, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>4.4. CSV comma-separated values</title>
+    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
+    <script src="/tutorial/highlighter/shCore.js"> </script>
+    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+  </head>
+  <body>
+    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
+      <a href="ch04.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
+      <a href="ch04s03.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
+      <a href="ch05.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
+      <a href="ch05.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
+    </div>
+    <div id="body">
+      <h2>4.4. CSV comma-separated values</h2>
+      Let's have the data below in comma-separated values (CSV) format.
+      <br/><br/>
+      <i>
+      Note that the first row of data contains the column names in the
+      following rows.
+      <br/><br/>
+      Also note that some values are not included in the row (e.g.,
+      an email address or phone number may be omitted). Only the data in
+      the column name (the first column) is required.
+      </i>
+      <br/><br/>
+      <font size="1">
+<pre>
+Name, Email Address, Mobile Number
+John Smith, john.smith@smith.com, +1 2345 67 89 01
+, nobody@somewhere.org, +89 987 654 321
+Somebody, ,
+, , 98765412
+Pamela Green, pamela-G@data.org, +49 123 456 789
+Mary Green, mg@data.org, +49 1234 567 890
+</pre>
+      </font>
+      The first line of CSV data contains names of columns of data items. Model
+      of CSV data is described as array of JSON/XON values:
+<pre class="xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test">
+  &lt;xd:json name="test">
+    [
+      # header line:
+      ["occurs 3 string(); /*three column names*/"],
+      # CSV lines:
+      [ %script="*",
+        "required string()", "optional emailAddr", "optional telephone()"
+      ]
+    ]
+  &lt;/xd:json>
+&lt;/xd:def>
+</pre>
+      You can try it <a href="ch04s04e00.html"><b>HERE</b></a>
+    </div>
+    <script type="text/javascript">
+      dp.SyntaxHighlighter.HighlightAll('code');
+    </script>
+  </body>
+</html>

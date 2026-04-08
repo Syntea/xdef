@@ -41,24 +41,82 @@
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
         </dependency>
+
+        <!-- third parties -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<webResources>
-						<resource>
-							<directory>../xdef/target/reports/apidocs</directory>
-							<targetPath>javadoc</targetPath>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>.</directory>
+                            <includes>
+                                <inlude> .flattened-pom.xml</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>..</directory>
+                            <includes>
+                                <inlude>README.md</inlude>
+                                <inlude>apache-license-2.0.md</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>../xdef</directory>
+                            <includes>
+                                <inlude>changelog.md</inlude>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <targetPath>META-INF</targetPath>
+                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
+                            <includes>
+                                <inlude>pominfo.properties</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>.</targetPath>
+                            <directory>src/main/webapp</directory>
+                            <includes>
+                                <inlude>footer.html</inlude>
+                                <inlude>cs/footer.html</inlude>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <targetPath>javadoc</targetPath>
+                            <directory>../xdef/target/reports/apidocs</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
