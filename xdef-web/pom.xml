@@ -102,6 +102,13 @@
                             </includes>
                         </resource>
                         <resource>
+                            <targetPath>other</targetPath>
+                            <directory>../xdef/target/classes/org/xdef/sys/config</directory>
+                            <includes>
+                                <inlude>pominfo.properties</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
                             <targetPath>.</targetPath>
                             <directory>src/main/webapp</directory>
                             <includes>
