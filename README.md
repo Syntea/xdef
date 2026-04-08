@@ -230,13 +230,14 @@ List of file assets:
                                       very similar to _xdef-{version}-sources.jar_
   * _xdef-{version}.pom_            - maven metadata of the package
 
-## For maven projects
+## Usage in your maven project
 
-Configuration file pom.xml:
-  * dependency on a release version in the central maven repository:
+Configure your file pom.xml:
+  * add the following `dependency` on a release version in the central maven repository:
 
     ```xml
     <dependencies>
+        ...
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
@@ -244,17 +245,21 @@ Configuration file pom.xml:
         </dependency>
     <dependencies>
     ```
-  * dependency on a snapshot (or also release) version in the central maven snapshot repository:
+  * or add the following `dependency` on a snapshot (or also release) version
+    in the central maven snapshot repository (it's necessary to add the following `repository`):
 
     ```xml
     <dependencies>
+        ...
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
             <version>[snapshot (or also release) version]</version>
         </dependency>
     </dependencies>
+    ...
     <repositories>
+        ...
         <repository>
             <id>central-snapshot</id>
             <url>https://central.sonatype.com/repository/maven-snapshots</url>
