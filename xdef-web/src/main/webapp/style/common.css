@@ -1,13 +1,8 @@
-html {
-    /* not to jump to the id-link be hidden under the sticky-header */
-    overflow:           auto;
-    scroll-padding-top: 5em;
-}
-
 body {
     margin-top:         0;
     margin-left:        2cm;
     margin-right:       2cm;
+    background-color:   #e6f7ff;
 }
 
 h1 {
@@ -26,13 +21,49 @@ ul {
     margin-top:         0;
 }
 
-div#header {
-    position:           sticky;
-    top:                0;
-}
 
-div#footer  {
+/* header and footer                        */
+/*==========================================*/
+
+div.footer {
     padding-top:        2em;
     text-align:         center;
     font-size:          0.8em;
+}
+
+div#header {
+    position:           sticky;
+    top:                0;
+    opacity:            0.9;
+}
+
+html {
+    /* id-link not to be hidden under the sticky-header after jump to it */
+    overflow:           auto;
+    scroll-padding-top: 5em;
+}
+
+ul.header {
+    margin:             0;
+    padding:            0;
+    background-image:   linear-gradient(#8bceee, #e6f7ff);
+}
+
+ul.header > li {
+    padding-left:       3em;
+    display:            inline-block;
+    vertical-align:     middle;
+}
+
+ul.header > li.logo {
+    padding-left:       0;
+}
+
+div.lang {
+    text-align:         right;
+    float:              right;
+}
+
+ul.header img {
+    height:             4em;
 }

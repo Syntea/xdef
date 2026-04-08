@@ -106,6 +106,7 @@
                             <directory>src/main/webapp</directory>
                             <includes>
                                 <inlude>footer.html</inlude>
+                                <inlude>cs/footer.html</inlude>
                             </includes>
                             <filtering>true</filtering>
                         </resource>
