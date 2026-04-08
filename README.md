@@ -15,13 +15,13 @@ This project is an implementation for the platform Java 1.8+
 (additional note: up to the version 41.0.4 for the platform Java 1.6+).
 
 
-# License
+## License
 
 The source code for this project is licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
 
 
-# Illustrative examples
+## Illustrative examples
 
 You can try the following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
 
@@ -150,7 +150,7 @@ Model of the XML data:
 
 
 
-# Annotation
+## Annotation
 
 This document describes the programming language and the technology called
 “X‑definition“. X‑definition is designed for description and processing of
@@ -194,13 +194,13 @@ The term "X‑definition" we use in the two different meanings:
 either as a name of the programming language or as an XML element
 containing the code of X‑definition language.
 
-# Documentation and online playground
+## Documentation and online playground
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
-For the **change-log** see file [xdef/changelog.md](/xdef/changelog.md).
+For **the information about release versions** see file [xdef/changelog.md](/xdef/changelog.md).
 
-You can try your X-definition examples at the following **online playgrounds**:
-  * guidepost of online playgrounds: <https://xdef.syntea.cz/tutorial/examples/online.html>
+You can try your X-definition examples at the following **"Playground-online"**:
+  * guidepost of "Playground-online": <https://xdef.syntea.cz/tutorial/examples/online.html>
 
 
 
@@ -209,9 +209,15 @@ You can try your X-definition examples at the following **online playgrounds**:
 ## Check and download available versions
 
 Links:
-  * release versions from the central maven repository: <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
-  * snapshot versions from the central maven snapshot repository: <https://central.sonatype.com/repository/maven-snapshots/>
-    (SNAPSHOT www-browsing may be unavailable yet)
+  * **published release versions** from the **central maven repository**:
+    * <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
+  * published **snapshot** versions from the central maven **snapshot** repository:
+    * <https://central.sonatype.com/repository/maven-snapshots/>
+      (SNAPSHOT www-browsing may be unavailable yet)
+  * **information** about **release versions**:
+    * [xdef/changelog.md](/xdef/changelog.md)
+  * **download** using maven system and **maven-commands directly**:
+    * [xdef-download.sh](/administration/script-aux/xdef-download.sh)
 
 ## Package content
 
@@ -224,13 +230,14 @@ List of file assets:
                                       very similar to _xdef-{version}-sources.jar_
   * _xdef-{version}.pom_            - maven metadata of the package
 
-## For maven projects
+## Usage in your maven project
 
-Configuration file pom.xml:
-  * dependency on a release version in the central maven repository:
+Configure your file pom.xml:
+  * add the following `dependency` on a release version in the central maven repository:
 
     ```xml
     <dependencies>
+        ...
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
@@ -238,17 +245,21 @@ Configuration file pom.xml:
         </dependency>
     <dependencies>
     ```
-  * dependency on a snapshot (or also release) version in the central maven snapshot repository:
+  * or add the following `dependency` on a snapshot (or also release) version
+    in the central maven snapshot repository (it's necessary to add the following `repository`):
 
     ```xml
     <dependencies>
+        ...
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
             <version>[snapshot (or also release) version]</version>
         </dependency>
     </dependencies>
+    ...
     <repositories>
+        ...
         <repository>
             <id>central-snapshot</id>
             <url>https://central.sonatype.com/repository/maven-snapshots</url>

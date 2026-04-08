@@ -1,0 +1,147 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="text/html; charset=UTF-8"/>
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:23rem;max-height:24rem;display:flex;overflow:hidden;}</style>
+    <style>.B{min-height:13rem; max-height:12rem; display:flex; overflow:hidden;}</style>
+    <title>X-definition - the construction mode</title>
+  </head>
+  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples" >
+      <input type="hidden" name="mode" value="compose" />
+      <b>X-definition</b><br/>
+      <div class="A">
+        <div id="line-numbers"> </div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xmlns='http://www.w3.org/1999/xhtml'>
+  &lt;html xd:script='template'>
+    &lt;head>
+      &lt;title> British monarchs &lt;/title>
+    &lt;/head>
+    &lt;body>
+      &lt;h2> British monarchs: &lt;/h2>
+      &lt;table border="create 'border'">
+        &lt;tr bgcolor="C0C0C0" xd:script='template'>
+          &lt;td>Monarch&lt;/td>
+          &lt;td>Reigned from&lt;/td>
+          &lt;td>Reigned to&lt;/td>
+        &lt;/tr>
+        &lt;tr xd:script='*; create from("//monarch").sort("reigned/start/text()")'>
+          &lt;td bgcolor="fixed 'violet'">create from('name/text()')&lt;/td>
+          &lt;td bgcolor="fixed 'yellow'">create from('reigned/start/text()')&lt;/td>
+          &lt;td bgcolor="fixed 'lightgrey'">optional string(); create from('reigned/end/text()')&lt;/td>
+        &lt;/tr>
+      &lt;/table>
+    &lt;/body>
+   &lt;/html>
+&lt;/xd:def>
+</textarea><br/>
+      </div>
+      <b>Input data</b><br/>
+      <div class="B">
+        <div id="line-numbers_1"> </div>
+        <textarea id="textarea_1" style="width:100%;" name="data">
+&lt;monarchs>
+   &lt;monarch>
+      &lt;name>Charles III&lt;/name>
+      &lt;reigned>
+         &lt;start>2022&lt;/start>
+         &lt;end>&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>Victoria&lt;/name>
+      &lt;reigned>
+         &lt;start>1837&lt;/start>
+         &lt;end>1901&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>Anne&lt;/name>
+      &lt;reigned>
+         &lt;start>1707&lt;/start>
+         &lt;end>1714&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>George I&lt;/name>
+      &lt;reigned>
+         &lt;start>1714&lt;/start>
+         &lt;end>1727&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>George II&lt;/name>
+      &lt;reigned>
+         &lt;start>1727&lt;/start>
+         &lt;end>1760&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>George III&lt;/name>
+      &lt;reigned>
+         &lt;start>1760&lt;/start>
+         &lt;end>1820&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>George IV&lt;/name>
+      &lt;reigned>
+         &lt;start>1820&lt;/start>
+         &lt;end>1830&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>Wiliam IV&lt;/name>
+      &lt;reigned>
+         &lt;start>1830&lt;/start>
+         &lt;end>1837&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>Edward VII&lt;/name>
+      &lt;reigned>
+         &lt;start>1901&lt;/start>
+         &lt;end>1910&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>George V&lt;/name>
+      &lt;reigned>
+         &lt;start>1910&lt;/start>
+         &lt;end>1936&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>Edward VIII&lt;/name>
+      &lt;reigned>
+         &lt;start>1936&lt;/start>
+         &lt;end>1936&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>George VI&lt;/name>
+      &lt;reigned>
+         &lt;start>1936&lt;/start>
+         &lt;end>1952&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+   &lt;monarch>
+      &lt;name>Elizabeth II&lt;/name>
+      &lt;reigned>
+         &lt;start>1952&lt;/start>
+         &lt;end>2022&lt;/end>
+      &lt;/reigned>
+   &lt;/monarch>
+&lt;/monarchs>
+</textarea>
+      </div>
+      <input name="submit" value="Execute" type="submit"/>
+      <input name="view" value="Display as html" type="submit"/>
+      <font style="background-color: lightgrey">
+        <i>&nbsp;You can edit both the X-definition and/or input data above</i>
+      </font>
+    </form>
+  </body>
+</html>

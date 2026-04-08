@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="Example of X-definition data construction" />
+    <meta name="keywords" content="example, construction, validation, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:22rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
+    <style>.B{min-height:10rem;max-height:10rem;display:flex;overflow:hidden;}</style>
+    <title>Example of validation and construction mode</title>
+  </head>
+  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples">
+      <p style="font: Tahoma; font-size: 13px;">
+        Note that the validation is described in the "Weather" model and the
+        construction is called in the "finally" section. In the X-definition,
+        two global variables ("<b>sum</b>" and "<b>num</b>") that are used to
+        calculate the average temperature. In the "Weather" model, the "finally"
+        section starts the construction of the "html" model. The method
+        "<b>returnElement</b>" sets the returned value.
+      </p>
+      <b>X-definition</b>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="Example" xd:root="Weather" >
+
+  &lt;xd:declaration> float sum = 0; int num = 0; &lt;/xd:declaration>
+
+  &lt;Weather xd:script="finally returnElement(xcreate('html'));"
+    date="optional date();">
+    &lt;Measurement xd:script="occurs *;"
+       temperature="float(-30.0, +50.0); onTrue {num++; sum += getParsedFloat();}"
+       wind       ="float(0,150);"
+       time       ="time();" />
+  &lt;/Weather>
+
+  &lt;html>
+    &lt;h2> create 'Weather on ' + from('@date'); &lt;/h2>
+    &lt;li xd:script="occurs *; create from('Measurement');" >
+      create 'Time: ' + from('@time') + ', wind: ' + from('@wind') + ', temperature: ' + from('@temperature');
+    &lt;/li>
+    &lt;h3> create num==0 ? 'No available measurements' : format('Average temperature: %2.1f', sum/num); &lt;/h3>
+  &lt;/html>
+
+&lt;/xd:def>
+</textarea>
+      </div>
+      <b>Input data</b>
+      <div class="B">
+        <div id="line-numbers_1"></div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;Weather date = "2005-05-11" >
+   &lt;Measurement wind = "5.3" temperature = "13.0" time = "05:00:00" />
+   &lt;Measurement wind = "7.2" temperature = "15.5" time = "11:00:00" />
+   &lt;Measurement wind = "8.7" temperature = "15.3" time = "15:00:00" />
+&lt;/Weather>
+</textarea>
+      </div>
+      <input name="submit" value="Execute" type="submit" />
+      <input name="view" value="Display as html" type="submit"/>
+      <Font style="background-color: lightgrey">
+          <i>
+            &nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b>
+          </i>
+      </Font>
+    </form>
+  </body>
+</html>

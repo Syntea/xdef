@@ -380,7 +380,7 @@
                 <module>xdef-test11</module>
                 <module>xdef-test17</module>
                 <module>xdef-test21</module>
-                <!-- <module>xdef-test25</module> disabled temporarily -->
+                <module>xdef-test25</module>
             </modules>
         </profile>
         <profile>
