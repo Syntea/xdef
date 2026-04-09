@@ -124,7 +124,7 @@
                             </includes>
                         </resource>
                         <resource>
-                            <targetPath>other</targetPath>
+                            <targetPath>common</targetPath>
                             <directory>target/classes/org/xdef/web/config</directory>
                             <includes>
                                 <inlude>buildinfo.properties</inlude>
