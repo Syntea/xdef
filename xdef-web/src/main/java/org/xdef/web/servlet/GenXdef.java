@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.w3c.dom.Element;
 import org.xdef.sys.Report;
 import org.xdef.sys.STester;
 import org.xdef.util.GenXDefinition;
 import org.xdef.xml.KXmlUtils;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
@@ -20,6 +20,11 @@ import org.xdef.xml.KXmlUtils;
 public final class GenXdef extends AbstractMyServlet {
 
     private static final long serialVersionUID = -815756752335589510L;
+
+    /** default constructor, calls super() only */
+    public GenXdef() {
+        super();
+    }
 
     /** Generate X-definition and run validation of given object with created X-definition.
      * @param req servlet request object.

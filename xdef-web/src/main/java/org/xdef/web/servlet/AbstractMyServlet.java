@@ -7,15 +7,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.xdef.sys.ReportPrinter;
+import org.xdef.sys.ReportReader;
+import org.xdef.sys.SManager;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.xdef.sys.ReportPrinter;
-import org.xdef.sys.ReportReader;
-import org.xdef.sys.SManager;
 
 /** Abstract servlet used for servlet implementation.
  * @author Vaclav Trojan
@@ -33,6 +33,11 @@ public abstract class AbstractMyServlet extends HttpServlet {
     protected static File _dataDir = null;
     /** SManager used for reporting.*/
     static final SManager MANAGER = SManager.getInstance();
+
+    /** default constructor, calls super() only */
+    protected AbstractMyServlet() {
+        super();
+    }
 
     /** Get listing from reporter.
      * @param reporter reporter with error and warning messages.
@@ -138,9 +143,11 @@ public abstract class AbstractMyServlet extends HttpServlet {
             setPriority(Thread.MAX_PRIORITY);
         }
 
-////////////////////////////////////////////////////////////////////////////////
-// implementation of HttpServlet methods
-////////////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // implementation of HttpServlet methods
+        ////////////////////////////////////////////////////////////////////////////////
+
         /** Run servlet. */
         @Override
         public final void run() {
@@ -242,20 +249,28 @@ public abstract class AbstractMyServlet extends HttpServlet {
         _dataDir = f;
     }
 
+    /** generates html-page with given title and body
+     * @param title given title
+     * @param body  given body
+     * @return generated html-page
+     */
     public final static String genHtmlMessage(final String title, final String body) {
         return "<html xmlns='http://www.w3.org/1999/xhtml'>\n" +
-"  <head>\n" +
-"     <meta http-equiv='content-type' content='text/html; charset=UTF-8'/>\n"+
-"     <title>" + title + "</title>\n" +
-"  </head>\n" +
-"  <body>\n" +
-"    <h1>" + title + "</h1>\n" + body +
-"  </body>\n" +
-"</html>";
+            "  <head>\n" +
+            "     <meta http-equiv='content-type' content='text/html; charset=UTF-8'/>\n"+
+            "     <title>" + title + "</title>\n" +
+            "  </head>\n" +
+            "  <body>\n" +
+            "    <h1>" + title + "</h1>\n" + body +
+            "  </body>\n" +
+            "</html>"
+        ;
     }
-////////////////////////////////////////////////////////////////////////////////
-// Abstract methods
-////////////////////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Abstract methods
+    ////////////////////////////////////////////////////////////////////////////////
 
     /** Returns a short description of this servlet.
      * @return short description of this servlet.

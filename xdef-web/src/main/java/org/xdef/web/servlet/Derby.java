@@ -12,9 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
@@ -34,6 +31,10 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import org.xdef.xml.KXmlUtils;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
@@ -238,6 +239,11 @@ public final class Derby extends AbstractMyServlet {
 "  </body>\n" +
 "</html>";
 ////////////////////////////////////////////////////////////////////////////////
+
+    /** default constructor, calls super() only */
+    public Derby() {
+        super();
+    }
 
     private static String genDatabaseURL(final String dbname) {
         return "jdbc:derby:memory:"+ dbname + ";create=true";

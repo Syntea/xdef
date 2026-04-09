@@ -6,9 +6,6 @@ import java.io.StringReader;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -26,12 +23,21 @@ import org.xdef.util.XdefToXsd;
 import org.xdef.xml.KXmlUtils;
 import org.xml.sax.SAXException;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
 public final class GenSchema extends AbstractMyServlet {
 
     private static final long serialVersionUID = -7389516366202036753L;
+
+    /** default constructor, calls super() only */
+    public GenSchema() {
+        super();
+    }
 
     /** Generate X-definition and run validation of given object with created X-definition.
      * @param req servlet request object.

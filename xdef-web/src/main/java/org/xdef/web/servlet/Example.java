@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
@@ -35,6 +32,10 @@ import org.xdef.sys.STester;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
@@ -59,12 +60,19 @@ public final class Example extends AbstractMyServlet {
 "  </body>\n" +
 "</html>";
 
+    /** default constructor, calls super() only */
+    public Example() {
+        super();
+    }
+
     /** Convert result of YAML parser to JSON.
      * @param o result of YAML parser.
      * @return JSON result.
      */
     private static Object yamlToJson(final Object o) {
-        if (null == o) return null;
+        if (null == o) {
+            return null;
+        }
         if (o instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<Object, Object> om     = (Map<Object, Object>)o;
