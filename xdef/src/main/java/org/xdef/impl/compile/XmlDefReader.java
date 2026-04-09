@@ -581,8 +581,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
                     parseText(mr);
                 } else {
                     parseText(mr);
-                    if (_text == null && _sb.length() > 0
-                        ||  (_text != null && !_sb.toString().equals(_text.getString()))) {
+                    if (_text==null && _sb.length()>0 ||  (_text!=null && !_sb.toString().equals(_text.getString()))) {
                             if (mr.getXInclude() != null) { // XInclude fallback
                                 _text = new SBuffer(_sb.toString(),
                                 _text == null ? mr.getSPosition() : _text);

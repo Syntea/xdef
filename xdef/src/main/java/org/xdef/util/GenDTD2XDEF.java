@@ -248,25 +248,16 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 
     @Override
     public final void startDocument() {}
-
     @Override
     public final void endDocument() {}
-
     @Override
-    public final void startElement(final String uri,
-        final String localName,
-        final String qName,
-        final Attributes atts) {}
-
+    public final void startElement(final String uri, final String localName, final String qName,final Attributes atts){}
     @Override
     public final void endElement(final String uri, final String localName, final String qName) {}
-
     @Override
     public final void characters(final char[] ch,final int off,final int len){}
-
     @Override
     public final void ignorableWhitespace(final char[] ch, final int beg, final int len) {}
-
     @Override
     public final void processingInstruction(final String target, final String data) {}
 
@@ -295,10 +286,8 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 
     @Override
     public void warning(SAXParseException x) {_reporter.warning("", x.getMessage());}
-
     @Override
     public void error(SAXParseException x) {_reporter.error("", x.getMessage());}
-
     @Override
     public void fatalError(SAXParseException x) {_reporter.fatal("", x.getMessage());}
 
@@ -308,7 +297,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 
     @Override
     public final void popReader() {}
-
     @Override
     public final InputSource pushReader(final XAbstractReader mr) {return null;}
 
@@ -318,22 +306,16 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 
     @Override
     public final void startEntity(final String name) {}
-
     @Override
     public final void endEntity(final String name) {}
-
     @Override
     public final void startCDATA() {}
-
     @Override
     public final void endCDATA() {}
-
     @Override
     public final void startDTD(final String name, final String publicId, final String systemId) {_isDTD=true;}
-
     @Override
     public final void endDTD() {_isDTD = false;}
-
     @Override
     public final void comment(final char[] ch, final int start, final int length) {}
 
@@ -347,7 +329,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
             _elemDeclMap.put(name, new ElemDecl(name, model));
         }
     }
-
     @Override
     public final void attributeDecl(final String eName,
         final String aName,
@@ -358,10 +339,8 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
             _attrDeclList.add(new AttrDecl(eName, aName, type, mode, value));
         }
     }
-
     @Override
     public final void internalEntityDecl(final String name,final String value){}
-
     @Override
     public final void externalEntityDecl(final String name, final String pubId, final String sysId) {}
 
