@@ -1,4 +1,6 @@
-# Kontrola vzhledu stranek webu pri vyvoji primo ze zdrojoveho kodu pomoci file-protokolu
+# Vyvoj
+
+## Kontrola vzhledu stranek webu pri vyvoji primo ze zdrojoveho kodu pomoci file-protokolu
 
 Pri vyvoji stranek webu lze jejich vzhled (velmi blizky cilove podobe) okamzite kontrolovat v prohlizeci
 primo ze zdrojoveho kodu pres file-protokol, tj. napr. url
@@ -10,5 +12,6 @@ To lze vyresit pro jednotlive prohlizece nasledujicim nastavenim:
   * Mozilla Firefox: upravit nastaveni "about:config"
     * abour:config > polozka "security.fileuri.strict_origin_policy" > nastavit na hodnotu "false"
   * Google Chrome: spustit chrome s volbou "--allow-file-access-from-files", tj. prikaz (spustte z terminalu):
-    * ``> chrome.exe --allow-file-access-from-files``
-  * Microsoft IE-Edge: ... [doplnit]
+    * ``> chrome --allow-file-access-from-files``
+  * Microsoft Edge: spustit Edge s volbou "--disable-web-security", tj. prikaz (spustte z terminalu):
+    * ``> msedge --disable-web-security --user-data-dir="/home/sisma/projekt"``
