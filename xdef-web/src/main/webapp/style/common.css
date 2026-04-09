@@ -21,6 +21,11 @@ ul {
     margin-top:         0;
 }
 
+dl {
+    margin-top:         0;
+    padding-left:       2em;
+}
+
 
 /* header and footer                        */
 /*==========================================*/
@@ -64,9 +69,9 @@ ul.nav {
 }
 
 ul.nav > li {
-    padding-left:       3em;
     display:            inline-block;
     vertical-align:     middle;
+    padding-left:       3em;
 }
 
 ul.nav > li.logo {

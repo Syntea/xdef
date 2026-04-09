@@ -38,6 +38,7 @@
             <outputDirectory>documentation</outputDirectory>
             <directory>src/documentation</directory>
             <includes>
+                <include>*.md</include>
                 <include>*.pdf</include>
             </includes>
         </fileSet>

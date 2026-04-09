@@ -6,17 +6,17 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+import org.xdef.sys.FUtils;
+import org.xdef.sys.Report;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-
-import org.xdef.sys.FUtils;
-import org.xdef.sys.Report;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SException;
 
 /** The servlet for execution of server service commands.
  * @author Vaclav Trojan
@@ -25,6 +25,11 @@ import org.xdef.sys.SException;
 public final class Service extends AbstractMyServlet {
 
     private static final long serialVersionUID = 8846128427001680285L;
+
+    /** default constructor, calls super() only */
+    public Service() {
+        super();
+    }
 
     private static String getDirInfo(final File dir) {
         if (dir == null) {
