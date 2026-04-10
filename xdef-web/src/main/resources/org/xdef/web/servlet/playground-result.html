@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>${title}</title>
-    <meta name="description" content="&{title}"/>
+    <title>Playground result &mdash; ${status}</title>
+    <meta name="description" content="Playground result &mdash; ${status}"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="style/common.css"/>
@@ -13,17 +13,16 @@
 <div id="header">ERROR: HEADER NOT LOADED</div>
 <script>$("#header").load("header0.html")</script>
 
-<h1>Playground result</h1>
+<h1>Playground result &mdash; ${status}</h1>
 
 <h2>${result-title}</h2>
 <pre>${result}</pre>
 ${stdout}
 
-<p>X-definition version: ${xdef-version}</p>
-
 <div id="footer">ERROR: FOOTER NOT LOADED</div>
-<script>$("#footer").load("footer0.html")</script>
-<!-- <script>$("#footer").append(", X-definition version: {xdef-version}")</script> -->
+<script>$("#footer").load("footer0.html",
+    function() { $(this).children("div").append(", X-definition: ${xdef}"); }
+)</script>
 
 </body>
 </html>

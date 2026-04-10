@@ -269,17 +269,19 @@ public abstract class AbstractMyServlet extends HttpServlet {
         ;
     }
 
-    protected final static String readRsrcAsString(Class<?> clazz, String resource) {
+    protected final static String readRsrcAsString(final Class<?> clazz, final String resource) {
         return Optional.ofNullable(clazz.getResourceAsStream(resource))
             .map(is -> {
                 try {
                     return is.readAllBytes();
                 } catch (IOException ex) {
-                    throw new RuntimeException("Unreadable resource \"" + resource + "\" by class " + clazz.getName(), ex);
+                    throw new RuntimeException(
+                        "Unreadable resource \"" + resource + "\" by class " + clazz.getName(), ex);
                 }
             })
             .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
-            .orElseThrow(() -> new RuntimeException("Non-existent resource \"" + resource + "\" by class " + clazz.getName()))
+            .orElseThrow(() -> new RuntimeException(
+                "Non-existent resource \"" + resource + "\" by class " + clazz.getName()))
         ;
     }
 

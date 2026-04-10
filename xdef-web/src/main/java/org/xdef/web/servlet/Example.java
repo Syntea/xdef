@@ -1,7 +1,5 @@
 package org.xdef.web.servlet;
 
-import static org.xdef.sys.SUtils.modifyFirst;
-
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +27,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
+import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -113,7 +112,7 @@ public final class Example extends AbstractMyServlet {
             String inLex = getParam(req, "inLex");
             String outLex = getParam(req, "outLex");
 
-            String outHtml = modifyFirst(HTML_RESULT, "${xdef-version}", XDConstants.BUILD_IDENTIFIER);
+            String outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef}", XDConstants.BUILD_IDENTIFIER);
             String result;
             String stdOutput = "";
             PrintWriter out = resp.getWriter();
@@ -143,8 +142,8 @@ public final class Example extends AbstractMyServlet {
                         reporter.reset();
                     }
                     result = printReports(reporter, xdef);
-                    outHtml = modifyFirst(outHtml, "${title}", "Error");
-                    outHtml = modifyFirst(outHtml, "${result-title}", "X-definition error(s):");
+                    outHtml = SUtils.modifyString(outHtml, "${status}", "Error");
+                    outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "X-definition error(s):");
                 } else {
                     Object resultXon = null;
                     Map<String, Object> resultIni = null;
@@ -231,30 +230,30 @@ public final class Example extends AbstractMyServlet {
                     }
                     caw.close();
                     if (reporter.errors()) {
-                        outHtml = modifyFirst(outHtml, "${title}", "Error");
-                        outHtml = modifyFirst(outHtml, "${result-title}", "Input data error(s):");
+                        outHtml = SUtils.modifyString(outHtml, "${status}", "Error");
+                        outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "Input data error(s):");
                         result = printReports(reporter, data);
                     } else {
-                        outHtml = modifyFirst(outHtml, "${title}", "Result");
+                        outHtml = SUtils.modifyString(outHtml, "${status}", "OK");
                         if (null!=view && view.toLowerCase().contains("html")) {
                             out.println(KXmlUtils.nodeToString(resultElement,true,false,true,130));
                             return;
                         } else if(json.isEmpty() && csv.isEmpty() && ini.isEmpty()) {
-                            outHtml = modifyFirst(outHtml, "${result-title}", "XML result:");
+                            outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "XML result:");
                             result = KXmlUtils.nodeToString(resultElement, true, false, true, 110);
                         } else {
                             if (null!=view && view.isEmpty()) {
                                 view = !ini.isEmpty() ? "INI" : !csv.isEmpty() ? "CSV" : "JSON";
                             }
                             if (null!=view && view.contains("YAML")) {
-                                outHtml = modifyFirst(outHtml, "${result-title}", "YAML result:");
+                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "YAML result:");
                                 Yaml yaml = new Yaml();
                                 result = yaml.dump(XonUtils.xonToJson(resultXon));
                             } else if (null!=view && view.contains("XON")) {
-                                outHtml = modifyFirst(outHtml, "${result-title}", "XON result:");
+                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "XON result:");
                                 result = XonUtils.toXonString(resultXon, true);
                             } else if (null!=view && view.contains("XML")) {
-                                outHtml = modifyFirst(outHtml, "${result-title}", "XML result:");
+                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "XML result:");
                                 if (!csv.isEmpty() && resultCsv!=null) {
                                     result = KXmlUtils.nodeToString(XonUtils.csvToXml(resultCsv));
                                 } else if (!ini.isEmpty() && resultIni != null) {
@@ -265,13 +264,13 @@ public final class Example extends AbstractMyServlet {
                                         XonUtils.xonToJson(resultXon)), true, false, true, 110);
                                 }
                             } else if (null!=view && view.contains("CSV") && resultCsv!=null){
-                                outHtml = modifyFirst(outHtml, "${result-title}", "CSV result:");
+                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "CSV result:");
                                 result = XonUtils.toCsvString(resultCsv);
                             } else if (null!=view && view.contains("INI") && resultIni!=null){
-                                outHtml = modifyFirst(outHtml, "${result-title}", "INI result:");
+                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "INI result:");
                                 result = XonUtils.toIniString(resultIni);
                             } else {
-                                outHtml = modifyFirst(outHtml, "${result-title}", "JSON result:");
+                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "JSON result:");
                                 result = XonUtils.toJsonString(resultXon,true);
                             }
                         }
@@ -282,8 +281,8 @@ public final class Example extends AbstractMyServlet {
                     }
                 }
             } catch (SRuntimeException ex) {
-                outHtml = modifyFirst(outHtml, "${title}", "Error");
-                outHtml = modifyFirst(outHtml, "${result-title}", "Input data error(s):");
+                outHtml = SUtils.modifyString(outHtml, "${status}", "Error");
+                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "Input data error(s):");
                 if ("SYS024".equals(ex.getMsgID())) {
                     reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
                         "The XML document must start with '<'", "&{line}1&{column}1"));
@@ -294,8 +293,8 @@ public final class Example extends AbstractMyServlet {
                 result = printReports(reporter, data);
                 reporter.reset();
             }
-            outHtml = modifyFirst(outHtml, "${result}", stringToHTml(result, true));
-            outHtml = modifyFirst(outHtml, "${stdout}", stdOutput);
+            outHtml = SUtils.modifyFirst(outHtml, "${result}", stringToHTml(result, true));
+            outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stdOutput);
             out.print(outHtml);
         }
     }
