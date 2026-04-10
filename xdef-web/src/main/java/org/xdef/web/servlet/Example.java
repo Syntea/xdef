@@ -112,7 +112,7 @@ public final class Example extends AbstractMyServlet {
             String inLex = getParam(req, "inLex");
             String outLex = getParam(req, "outLex");
 
-            String outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef}", XDConstants.BUILD_IDENTIFIER);
+            String outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef-lib-id}", XDConstants.BUILD_IDENTIFIER);
             String result;
             String stdOutput = "";
             PrintWriter out = resp.getWriter();
