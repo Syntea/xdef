@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
@@ -267,6 +269,19 @@ public abstract class AbstractMyServlet extends HttpServlet {
         ;
     }
 
+    protected final static String readRsrcAsString(Class<?> clazz, String resource) {
+        return Optional.ofNullable(clazz.getResourceAsStream(resource))
+            .map(is -> {
+                try {
+                    return is.readAllBytes();
+                } catch (IOException ex) {
+                    throw new RuntimeException("Unreadable resource \"" + resource + "\" by class " + clazz.getName(), ex);
+                }
+            })
+            .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+            .orElseThrow(() -> new RuntimeException("Non-existent resource \"" + resource + "\" by class " + clazz.getName()))
+        ;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Abstract methods

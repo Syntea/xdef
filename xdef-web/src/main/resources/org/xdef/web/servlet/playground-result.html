@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>${title}</title>
+    <meta name="description" content="&{title}"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="image/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="style/common.css"/>
+    <script type="text/javascript" src="style/jquery-4.0.0.min.js"></script>
+</head>
+<body>
+
+<div id="header">ERROR: HEADER NOT LOADED</div>
+<script>$("#header").load("header0.html")</script>
+
+<h1>Playground result</h1>
+
+<h2>${result-title}</h2>
+<pre>${result}</pre>
+${stdout}
+
+<p>X-definition version: ${xdef-version}</p>
+
+<div id="footer">ERROR: FOOTER NOT LOADED</div>
+<script>$("#footer").load("footer0.html")</script>
+<!-- <script>$("#footer").append(", X-definition version: {xdef-version}")</script> -->
+
+</body>
+</html>
