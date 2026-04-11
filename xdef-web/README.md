@@ -7,7 +7,7 @@ e.g. placed at http://xdef.org mainly.
 
   * target Java-platform: Java SE 21
   * target distribution package:
-    * WAR-file: ``xdef-web.wae``
+    * WAR-file: ``xdef-web.war``
   * servlet API: Jakarta Servlet 6.1 for Jakarta EE 11 (requires Java SE 17+)
     * see https://jakarta.ee/specifications/servlet/6.1/
     * e.g. requires web-servlet server "Tomcat 11" (download at https://tomcat.apache.org/download-11.cgi)
