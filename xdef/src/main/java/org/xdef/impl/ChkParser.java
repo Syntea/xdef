@@ -273,7 +273,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
         _stackReader.push(new HandlerInfo(this, mr));
         return new InputSource(mr);
     }
-
     /** Pop reader in the stack of readers. */
     @Override
     public final void popReader() {
@@ -379,7 +378,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
         }
         return null;
     }
-
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
         throws SAXException {
@@ -470,7 +468,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
         updateLocator();
         elementStart(parsedElem);
     }
-
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         _sReporter.setPosition(_elemLocator);
@@ -497,13 +494,11 @@ final class ChkParser extends DomBaseHandler implements XParser {
         appendText(String.valueOf(ch, start, length));
         updateLocator();
     }
-
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         appendText(String.valueOf(ch, start, length));
         updateLocator();
     }
-
     @Override
     public void processingInstruction(final String target, final String data) throws SAXException {
         if (_level >= 0) {
@@ -513,13 +508,13 @@ final class ChkParser extends DomBaseHandler implements XParser {
         }
         updateLocator();
     }
-
     @Override
     public void endDocument() throws SAXException {_text = null; _chkDoc.endDocument();}
 
     /////////////////////////////////////////////////////////////
     // Implementation of LexicalHandler
     /////////////////////////////////////////////////////////////
+
     @Override
     public void startDTD(String name, String publicId, String systemId) {
         _isDTD = true;
@@ -530,23 +525,15 @@ final class ChkParser extends DomBaseHandler implements XParser {
     }
 
     @Override
-    public void endDTD() {
-        _isDTD = false;
-        updateLocator();
-    }
-
+    public void endDTD() { _isDTD = false; updateLocator(); }
     @Override
     public void startEntity(String name) {updateLocator();}
-
     @Override
     public void endEntity(String name) {updateLocator();}
-
     @Override
     public void startCDATA() {updateLocator();}
-
     @Override
     public void endCDATA() {updateLocator();}
-
     @Override
     public void comment(char[] ch, int start, int length) {
         if (!isIgnoringComments() && _doc != null) {
@@ -577,14 +564,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
         _sReporter.setPosition(getPos(x));
         _sReporter.warning(XML.XML075, m); //XML error&{0}{: }
     }
-
     @Override
     public final void error(final SAXParseException x) {
         String m = x.getMessage();
         _sReporter.setPosition(getPos(x));
         _sReporter.error(XML.XML075, m); //XML error&{0}{: }
     }
-
     @Override
     public final void fatalError(final SAXParseException x) throws SAXException{
         String m = x.getMessage();
@@ -666,13 +651,11 @@ final class ChkParser extends DomBaseHandler implements XParser {
             try {_in.close();} catch (IOException ex) {} //ignore exception
         }
     }
-
     @Override
     /** Get connected reporter.
      * @return connected SReporter.
      */
     public final SReporter getReporter() {return _sReporter;}
-
     @Override
     /** Parse XML source and process check and processing instructions.
      * @param chkDoc The ChkDocument object.

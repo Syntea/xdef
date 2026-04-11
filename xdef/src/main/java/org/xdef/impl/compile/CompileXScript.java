@@ -1054,6 +1054,7 @@ final class CompileXScript extends CompileStatement {
         boolean acceptQualifiedAttr = false;
         boolean nillable = false;
         boolean cdata = false;
+        boolean illegalNull = false;
         while (_sym == IDENTIFIER_SYM || _sym == FORGET_SYM) {
             if (_sym == FORGET_SYM) {
                 if (kind != XMELEMENT) {
@@ -1100,7 +1101,7 @@ final class CompileXScript extends CompileStatement {
                 result._attrWhiteSpaces = (byte) ("ignoreAttrWhiteSpaces".equals(_idName) ? 'T' : 'F');
             } else if ("copyTextWhiteSpaces".equals(_idName) || "preserveTextWhiteSpaces".equals(_idName)
                 || "ignoreTextWhiteSpaces".equals(_idName)) {
-                if("copyTextWhiteSpaces".equals(_idName)) {
+                if ("copyTextWhiteSpaces".equals(_idName)) {
                     //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
                     reportDeprecated(_idName, "preserveTextWhiteSpaces");
                 }
@@ -1242,6 +1243,11 @@ final class CompileXScript extends CompileStatement {
                         xel._clearReports = "clearReports".equals(_idName) ? (byte) 'T' : (byte) 'F';
                     }
                 }
+            } else if ("acceptJsonNull".equals(_idName) || "illegalJsonNull".equals(_idName)) {
+                if (illegalNull) {
+                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
+                }
+                result._illegalJsonNull = "illegalJsonNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
             } else {
                 error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
             }
