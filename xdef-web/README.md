@@ -1,11 +1,17 @@
-# Architecture of the web-project
+# The Project Architecture
 
-## Used API
+This maven-module is servlet-web project. Implements web "xdef.org", the introduction web to X-definition,
+e.g. placed at http://xdef.org mainly.
 
-  * Target platform: Java JDK 21
-  * Servlet API: Jakarta Servlet 6.1 for Jakarta EE 11
+## Used APIs, standards, libraries
+
+  * target Java-platform: Java SE 21
+  * target distribution package:
+    * WAR-file: ``xdef-web.wae``
+  * servlet API: Jakarta Servlet 6.1 for Jakarta EE 11 (requires Java SE 17+)
     * see https://jakarta.ee/specifications/servlet/6.1/
     * e.g. requires web-servlet server "Tomcat 11" (download at https://tomcat.apache.org/download-11.cgi)
+  * html-pages version: HTML 5
 
 ## Used libraries
 
@@ -15,7 +21,7 @@ Javascript libraries and plugins:
   * jQuery - Customizable Line Numbers For Textareas
     * https://www.jqueryscript.net/form/customizable-line-numbers-textarea.html
 
-# Development
+# Development Notes
 
 ## Kontrola vzhledu stranek webu pri vyvoji primo ze zdrojoveho kodu pomoci file-protokolu
 
