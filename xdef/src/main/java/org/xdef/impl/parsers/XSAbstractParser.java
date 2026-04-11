@@ -377,9 +377,9 @@ public abstract class XSAbstractParser extends XDParserAbstract implements XDPar
      */
     public void check(final XXNode xnode, final XDParseResult p) {
         if (xnode != null && xnode.getXMElement().getXonMode() != 0 && "null".equals(p.getSourceBuffer())) {
-            byte noJsonNull = xnode.getXMNode() instanceof XData ? ((XData) xnode.getXMNode())._illegalJsonNull : 0;
+            byte noJsonNull = xnode.getXMNode() instanceof XData ? ((XData) xnode.getXMNode())._illegalJSONNull : 0;
             if (noJsonNull == 0) {
-                noJsonNull = ((XDefinition) xnode.getXMDefinition())._illegalJsonNull;
+                noJsonNull = ((XDefinition) xnode.getXMDefinition())._illegalJSONNull;
             }
             if (noJsonNull != 'T') {
                 p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
