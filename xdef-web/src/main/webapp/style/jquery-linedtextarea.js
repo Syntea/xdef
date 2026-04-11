@@ -4,12 +4,6 @@
  *
  * Copyright (c) 2010 Alan Williamson
  * 
- * This version contains improvement for working with a 
- * large number of lines.
- *
- * Available at
- * 		https://github.com/cotenoni/jquery-linedtextarea
- * 
  * Version: 
  *    $Id: jquery-linedtextarea.js 464 2010-01-08 10:36:33Z alan $
  *
@@ -28,7 +22,6 @@
  *   });
  *
  * History:
- * 	 - 2010.02.20: Fixed performance problem with high numbers of line
  *   - 2010.01.08: Fixed a Google Chrome layout problem
  *   - 2010.01.07: Refactored code for speed/readability; Fixed horizontal sizing
  *   - 2010.01.06: Initial Release
@@ -40,7 +33,6 @@
 		
 		// Get the Options
 		var opts = $.extend({}, $.fn.linedtextarea.defaults, options);
-		var LINEHEIGHT = 15;
 		
 		
 		/*
@@ -105,30 +97,15 @@
 			textarea.width( textareaNewWidth );
 			linedWrapDiv.width( linedWrapDivNewWidth );
 			
-			/* React to the scroll event */
-			var tid = null;
-			textarea.scroll( function(tn){
-				if (tid === null) {
-					var that = this;
-					
-					// We use a timeout as to avoid appending/redrawing
-					// the div on every scroll event. This does add some latency
-					// before the right line number is displayed, but makes possible
-					// scrolling with a very high number of lines
-					tid = setTimeout( function() {
-						codeLinesDiv.empty();
-						
-						// Calculare the line numbers to display
-						var domTextArea			= $(that)[0];
-						var scrollTop 			= domTextArea.scrollTop;
-						var firstLine 			= Math.floor((scrollTop / LINEHEIGHT) + 1);
-						var remainingScroll = (scrollTop / LINEHEIGHT) % 1;
 
-						fillOutLines( codeLinesDiv, linesDiv.height(), firstLine );
-						codeLinesDiv.css( {'margin-top': (-1*(remainingScroll*LINEHEIGHT)) + "px"} );
-						tid=null;
-					}, 150);
-				}
+			
+			/* React to the scroll event */
+			textarea.scroll( function(tn){
+				var domTextArea		= $(this)[0];
+				var scrollTop 		= domTextArea.scrollTop;
+				var clientHeight 	= domTextArea.clientHeight;
+				codeLinesDiv.css( {'margin-top': (-1*scrollTop) + "px"} );
+				lineNo = fillOutLines( codeLinesDiv, scrollTop + clientHeight, lineNo );
 			});
 
 

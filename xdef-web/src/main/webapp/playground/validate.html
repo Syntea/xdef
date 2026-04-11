@@ -7,8 +7,8 @@
     <link rel="icon" type="image/x-icon" href="../image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="text/javascript" src="../style/jquery-4.0.0.min.js"></script>
-    <script type="text/javascript" src="../style/jquery-linedtextarea.js"></script>
-    <link rel="stylesheet" href="../style/jquery-linedtextarea.css"/>
+    <script type="text/javascript" src="../style/jquery.textarea-with-linenumbers.js"></script>
+    <link rel="stylesheet" href="../style/jquery.textarea-with-linenumbers.css"/>
 </head>
 <body>
 
@@ -19,10 +19,11 @@
 <h1>Playground &mdash; X-definition validation mode</h1>
 
 <form method="post" action="../Example">
-    <b>X-definition</b>
-    <i>If you have a collection with more X-definitions enter the name of X-definition with root XML data:</i>
-    <input name="xdname" value="" type="text"/>
-    <textarea name="xdef" rows="10" class="lined">
+
+<b>X-definition:</b>
+If you have a collection with more X-definitions enter the name of X-definition with root XML data:
+<input name="xdname" value="" type="text"/>
+<textarea name="xdef" rows="10" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
   &lt;root a="int(); onTrue outln('root a: ' + getText());" >
     &lt;b xd:script="occurs *" >
@@ -31,18 +32,20 @@
   &lt;/root>
 &lt;/xd:def>
 </textarea>
-    <b>Input data</b>
-    <textarea name="data" rows="10" class="lined">
+
+<b>Input data:</b>
+<textarea name="data" rows="10" class="lined">
 &lt;root a="123" >
   &lt;b>Lorem ipsum dolor sit amet.&lt;/b>
   &lt;b/>
 &lt;/root>
 </textarea>
-    <input name="submit" value="Execute" type="submit"/>
-    <i>You can edit <b>X-definition</b> or <b>Input</b> window</i>
+<input name="submit" value="Execute" type="submit"/>
+You can edit <b>X-definition</b> or <b>Input</b> window
+
 </form>
 
-<script>$("textarea.lined").linedtextarea()</script>
+<script>$("textarea.lined").linenumbers()</script>
 
 
 <div id="footer">ERROR: FOOTER NOT LOADED</div>
