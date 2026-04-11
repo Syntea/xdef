@@ -35,7 +35,7 @@ public class Jindra extends XDTester {
         try {
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
-"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJsonNull\" } </xd:json>\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJSONNull\" } </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
             json = "{ \"stavPoistenia\": null }";
@@ -46,7 +46,7 @@ public class Jindra extends XDTester {
                 assertTrue(reporter.printToString().contains("XDEF809"));
             }
             xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJSONNull' >\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);

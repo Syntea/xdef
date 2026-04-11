@@ -397,7 +397,7 @@ XdefOption ::= "moreAttributes" | "moreElements" | "moreText" | "forget" | "notF
   | "setAttrUpperCase" | "setAttrLowerCase" | "setTextUpperCase" | "setTextLowerCase" | "acceptQualifiedAttr"
   | "notAcceptQualifiedAttr" | "trimAttr" | "noTrimAttr" | "trimText" | "noTrimText" | "resolveEntities"
   | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
-  | "acceptJsonNull" | "illegalJsonNull"
+  | "acceptJSONNull" | "illegalJSONNull"
 
 /******************************************************************************/
 /* Script of text nodes and attributes                                        */
@@ -470,7 +470,7 @@ ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces" | "setTextUp
   | "setTextLowerCase" | "trimText" | "noTrimText" | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces"
   | "cdata" | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr"
   | "ignoreEmptyAttributes" | "acceptEmptyAttributes" | "acceptQualifiedAttr" | "notAcceptQualifiedAttr"
-  | "preserveTextCase" | "acceptJsonNull" | "illegalJsonNull"
+  | "preserveTextCase" | "acceptJSONNull" | "illegalJSONNull"
 
 Reference ::= "ref" S XPosition
 
