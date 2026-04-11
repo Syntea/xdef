@@ -1,4 +1,4 @@
-# Architektura web-projektu
+# Architecture of the web-project
 
 ## Used API
 
@@ -7,14 +7,15 @@
     * see https://jakarta.ee/specifications/servlet/6.1/
     * e.g. requires web-servlet server "Tomcat 11" (download at https://tomcat.apache.org/download-11.cgi)
 
-## Pouzite knihovny javascript pluginy
+## Used libraries
 
+Javascript libraries and plugins:
   * jQuery 4.0.0
     * https://jquery.com/
   * jQuery - Customizable Line Numbers For Textareas
     * https://www.jqueryscript.net/form/customizable-line-numbers-textarea.html
 
-# Vyvoj
+# Development
 
 ## Kontrola vzhledu stranek webu pri vyvoji primo ze zdrojoveho kodu pomoci file-protokolu
 
