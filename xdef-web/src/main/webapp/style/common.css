@@ -26,6 +26,16 @@ dl {
     padding-left:       2em;
 }
 
+.output {
+    border:             1px solid black;
+    background-color:   white;
+}
+
+textarea.lined {
+    width:              100%;
+    display:            block;
+}
+
 
 /* header and footer                        */
 /*==========================================*/
