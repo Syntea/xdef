@@ -78,6 +78,8 @@ public abstract class XCodeDescriptor extends XNode {
     public byte _nillable; //0 not set 'T' or 'F'
     /** flag to set a text as CDATA section. */
     public byte _cdata; //0 not set 'T' or 'F'
+    /** flag to set JSON values null is not allowed. */
+    public byte _illegalJsonNull; //0 not set 'T' or 'F'
 
     ////////////////////////////////////////////////////////////////////////////
     // Variables
@@ -154,6 +156,7 @@ public abstract class XCodeDescriptor extends XNode {
         _acceptQualifiedAttr = x._acceptQualifiedAttr;
         _nillable = x._nillable;
         _cdata = x._cdata;
+        _illegalJsonNull = x._illegalJsonNull;
     }
 
     /** Clear all actions in this descriptor. */
@@ -319,7 +322,8 @@ public abstract class XCodeDescriptor extends XNode {
             _moreText, //0 not set, 'T' or 'F'
             _xon, //0 not set, or XON/JSON version
             _nillable, //0 not set 'T' or 'F'
-            _cdata //0 not set 'T' or 'F'
+            _cdata, //0 not set 'T' or 'F'
+            _illegalJsonNull//0 not set 'T' or 'F'
         });
         // variables
         xw.writeInt(_varsize); // size of variables.
@@ -376,6 +380,7 @@ public abstract class XCodeDescriptor extends XNode {
         _xon = b[14]; //0 not set, or version number
         _nillable = b[15]; //0 not set 'T' or 'F'
         _cdata = b[16]; //0 not set 'T' or 'F'
+        _illegalJsonNull = b[17]; //0 not set 'T' or 'F'
         // variables
         _varsize = xr.readInt(); // size of variables.
         _vartable = xr.readBoolean() ? XVariableTable.readXD(xr) : null;

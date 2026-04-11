@@ -433,6 +433,7 @@ import static org.xdef.impl.code.CodeTable.SET_MONTH;
 import static org.xdef.impl.code.CodeTable.SET_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.SET_NANOS;
 import static org.xdef.impl.code.CodeTable.SET_PARSED_ERROR;
+import static org.xdef.impl.code.CodeTable.SET_PARSED_RESULT;
 import static org.xdef.impl.code.CodeTable.SET_PARSED_STRING;
 import static org.xdef.impl.code.CodeTable.SET_PARSED_VALUE;
 import static org.xdef.impl.code.CodeTable.SET_SECOND;
@@ -3049,6 +3050,9 @@ public final class XCodeProcessor {
                 }
                 case GET_PARSED_RESULT: //get parsed result
                     _stack[++sp] = chkEl._parseResult == null ? new DefParseResult() : chkEl._parseResult;
+                    continue;
+                case SET_PARSED_RESULT: //get parsed result
+                     chkEl._parseResult = (XDParseResult) _stack[sp--];
                     continue;
                 case SET_NAMEDVALUE:
                     if (item.getParam() == 2) {

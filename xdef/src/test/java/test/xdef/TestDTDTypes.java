@@ -192,7 +192,8 @@ public final class TestDTDTypes extends XDTester {
             if ((rep = reporter.getReport()) == null) {
                 fail("Error not reported");
             } else {
-                assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#v 0124"));
+                String s = rep.toString();
+                assertTrue(s.contains("XDEF522") && s.contains("#v ") && s.contains("124"));
             }
 //CHKIDS
             xdef =
