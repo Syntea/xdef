@@ -1,6 +1,6 @@
 # The Project Architecture
 
-This maven-module is servlet-web project. Implements web "xdef.org", the introduction web to X-definition,
+This maven-module is a servlet-web project. Implements web "xdef.org", the introduction web to X-definition,
 e.g. placed at http://xdef.org mainly.
 
 ## Used APIs, standards, libraries
