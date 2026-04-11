@@ -86,7 +86,7 @@ public class PomInfo {
     /** @return detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values) */
     public String getBuildIdentifier() {
         boolean tagOK    = ("version/" + getVersion()).equals(gitTags);
-        boolean branchOK = "main".equals(gitBranch);
+        boolean branchOK = "main".equals(gitBranch) || "origin/main".equals(gitBranch);
         return
             groupId + ":" + artifactId + ":" + version + " (" +
             (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
