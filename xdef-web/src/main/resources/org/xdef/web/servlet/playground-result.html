@@ -21,7 +21,7 @@
 
 <div id="footer">ERROR: FOOTER NOT LOADED</div>
 <script>$("#footer").load("footer0.html",
-    () => { $(this).children("div").append(", X-definition: ${xdef-lib-id}"); })
+    function() { $(this).children("div").append(", X-definition: ${xdef-lib-id}"); })
 </script>
 
 </body>
