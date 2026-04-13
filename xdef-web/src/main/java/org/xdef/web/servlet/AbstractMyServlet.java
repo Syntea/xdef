@@ -269,6 +269,12 @@ public abstract class AbstractMyServlet extends HttpServlet {
         ;
     }
 
+    /**
+     * read text java-resource, it's supposed encoding UTF-8
+     * @param clazz base class for relative path 
+     * @param resource path to resource
+     * @return required java-resource as string
+     */
     protected final static String readRsrcAsString(final Class<?> clazz, final String resource) {
         return Optional.ofNullable(clazz.getResourceAsStream(resource))
             .map(is -> {

@@ -1,0 +1,9 @@
+textarea { background: white; border: 1px solid #888; width: 350px; height: 150px; }
+
+textarea.linenumbers { resize: none; position: relative; left: 30px; }
+.linenumbers-gutter { background-color: white; border-color: transparent;}
+.linenumbers-gutter span { display: block; }
+.linenumbers-gutter span.current-line { color: blue; }
+.linenumbers-gutter span.success { background-color:lightgreen; }
+.linenumbers-gutter span.warning { background-color:goldenrod; }
+.linenumbers-gutter span.error { background-color:orangered; }

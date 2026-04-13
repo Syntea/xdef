@@ -16,13 +16,13 @@
 <h1>Playground result &mdash; ${status}</h1>
 
 <h2>${result-title}</h2>
-<pre>${result}</pre>
-${stdout}
+<pre class="output">${result}</pre>
+<div class="output">${stdout}</div>
 
 <div id="footer">ERROR: FOOTER NOT LOADED</div>
 <script>$("#footer").load("footer0.html",
-    function() { $(this).children("div").append(", X-definition: ${xdef-lib-id}"); }
-)</script>
+    function() { $(this).children("div").append(", X-definition: ${xdef-lib-id}"); })
+</script>
 
 </body>
 </html>
