@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -390,11 +391,12 @@ public class TestJsonXdef extends XDTester {
         Object x;
         List list;
         Element el;
-        ArrayReporter reporter = new ArrayReporter();
         StringWriter swr;
         XComponent xc, y;
         XDDocument xd;
         XDPool xp;
+        ArrayReporter reporter = new ArrayReporter();
+        Properties props = new Properties();
         try {
             xp = genAll("Test*");// Generate Xdefinitons, X-components, sources
 //			xp = genAll("Test064");
@@ -1118,6 +1120,22 @@ public class TestJsonXdef extends XDTester {
             xc = xd.jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+            xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"P5R_json\" xd:root=\"P5R\">\n" +
+"    <xd:json name=\"P5R\">\n" +
+"        {\n" +
+"            \"stavPoistenia\": \"jnumber()\"\n" +
+"            \"obj\"          : { \"%script\": \"ref MyObj\" },\n" +
+"        }\n" +
+"    </xd:json>\n" +
+"    <xd:json name = \"MyObj\">\n" +
+"        { \"a\": \"jstring()\" }\n" +
+"    </xd:json>\n" +
+"</xd:def>";
+            xp = XDFactory.compileXD(props, xdef);
+            json = "{ \"stavPoistenia\": 123, \"obj\": { \"a\": \"ABC\" } }";
+            jparse(xp, "", json, reporter);
+            assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xp = compile(
@@ -1130,6 +1148,54 @@ public class TestJsonXdef extends XDTester {
 "</xd:def>");
             jparse(xp, "", "{\"c\":\"LMN0H7\",\"a\":1,\"b\":\"MA5800-X17\"}", reporter);
             assertNoErrorsAndClear(reporter);
+        } catch (RuntimeException ex) {fail(ex);}
+        try { // test option illegalJsonNull
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJsonNull\" } </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            if (!reporter.errors()) {
+                fail("Error not reported");
+            } else {
+                assertTrue(reporter.printToString().contains("XDEF809"));
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            if (!reporter.errors()) {
+                fail("Error not reported");
+            } else {
+                assertTrue(reporter.printToString().contains("XDEF809"));
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
+"</xd:def>";
+            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
+            xp = XDFactory.compileXD(props, xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            if (!reporter.errors()) {
+                fail("Error not reported");
+            } else {
+                assertTrue(reporter.printToString().contains("XDEF809"));
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
+"</xd:def>";
+            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
+            xp = XDFactory.compileXD(props, xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            assertNoErrorwarnings(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 
         clearTempDir(); // delete temporary files.
