@@ -40,7 +40,6 @@ public abstract class XCodeDescriptor extends XNode {
     public int _onIllegalElement;
     /** Variables initialization code address or -1. */
     public int _varinit;
-
     ////////////////////////////////////////////////////////////////////////////
     // Options
     ////////////////////////////////////////////////////////////////////////////
@@ -72,15 +71,15 @@ public abstract class XCodeDescriptor extends XNode {
     public byte _moreElements; //0 not set, 'T' or 'F'
     /** "more attributes" flag. */
     public byte _moreText; //0 not set, 'T' or 'F'
-    /** version of XON/JSON transformation to XML (see XConstants: XON_xx). */
-    public byte _xon; //0...no XON/JSON, 1...XON/JSON to XML mode: W3C or XD
     /** flag to set element nillable. */
     public byte _nillable; //0 not set 'T' or 'F'
     /** flag to set a text as CDATA section. */
     public byte _cdata; //0 not set 'T' or 'F'
-    /** flag to set JSON values null is not allowed. */
-    public byte _illegalJSONNull; //0 not set 'T' or 'F'
-
+    /** Flag to set JSON values null is not allowed. */
+    public byte _noJsonNull; //0 not set 'T' or 'F'
+    ////////////////////////////////////////////////////////////////////////////
+    /** version of XON/JSON transformation to XML (see XConstants: XON_xx). */
+    public byte _xonVersion; //0...no XON/JSON, 1...XON/JSON to XML mode: W3C or XD
     ////////////////////////////////////////////////////////////////////////////
     // Variables
     ////////////////////////////////////////////////////////////////////////////
@@ -130,15 +129,16 @@ public abstract class XCodeDescriptor extends XNode {
 
     /** Clear all options in this descriptor. */
     public final void clearOptions() {
-        _ignoreComments = _attrWhiteSpaces = _textWhiteSpaces = _ignoreEmptyAttributes = _attrValuesCase
-            = _textValuesCase = _trimAttr = _trimText = _moreElements = _moreText = _xon = _moreAttributes
-            = _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = 0;
+        _xonVersion = _ignoreComments = _attrWhiteSpaces = _textWhiteSpaces = _ignoreEmptyAttributes = _attrValuesCase
+            = _textValuesCase = _trimAttr = _trimText = _moreElements = _moreText =  _moreAttributes
+            = _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = _noJsonNull = 0;
     }
 
     /** Copy all options from the given XCodeDescriptor to this object.
      * @param x XCodeDescriptor from which to copy options to this object.
      */
     public final void copyOptions(final XCodeDescriptor x) {
+        _xonVersion = x. _xonVersion;
         _ignoreComments = x._ignoreComments;
         _attrWhiteSpaces = x._attrWhiteSpaces;
         _textWhiteSpaces = x._textWhiteSpaces;
@@ -149,20 +149,66 @@ public abstract class XCodeDescriptor extends XNode {
         _trimText = x._trimText;
         _moreElements = x._moreElements;
         _moreText = x._moreText;
-        _xon = x._xon;
         _moreAttributes = x._moreAttributes;
         _resolveEntities = x._resolveEntities;
         _resolveIncludes = x._resolveIncludes;
         _acceptQualifiedAttr = x._acceptQualifiedAttr;
         _nillable = x._nillable;
         _cdata = x._cdata;
-        _illegalJSONNull = x._illegalJSONNull;
+        _noJsonNull = x._noJsonNull;
     }
 
     /** Clear all actions in this descriptor. */
     public final void clearActions() {
         _init = _finaly = _match = _compose = _check = _onTrue = _onFalse = _deflt = _onStartElement
             = _onAbsence = _onExcess = _onIllegalAttr = _onIllegalText = _onIllegalElement = _varinit = -1;
+    }
+
+    /** Get options as array of bytes.
+     * @return array of bytes with option values.
+     */
+    public final byte[] optionsToBytes() {
+        return new byte[] { // write all options as byte array.
+            _ignoreComments, //0 not set, 'T' or 'F'
+            _attrWhiteSpaces, //0 not set, 'T' or 'F'
+            _textWhiteSpaces, //0 not set, 'T' or 'F'
+            _ignoreEmptyAttributes, //0 not set, 'T' or 'F'
+            _attrValuesCase, //0 not set, 'I' ignore, 'T' or 'F'
+            _textValuesCase, //0 not set, 'I' ignore, 'T' or 'F'
+            _trimAttr, //0 not set, 'T' or 'F'
+            _trimText, //0 not set 'T' or 'F'
+            _resolveEntities,
+            _resolveIncludes,
+            _acceptQualifiedAttr, //0 not set 'T' or 'F'
+            _moreAttributes, //0 not set, 'T' or 'F'
+            _moreElements, //0 not set, 'T' or 'F'
+            _moreText, //0 not set, 'T' or 'F'
+            _nillable, //0 not set 'T' or 'F'
+            _cdata, //0 not set 'T' or 'F'
+            _noJsonNull};//0 not set 'T' or 'F'
+    }
+
+    /** Set values of options from the array of bytes.
+     * @param bytes array of bytes with values of optsions.
+     */
+    public final void optionsFromBytes(final byte[] bytes) {
+        _ignoreComments = bytes[0];
+        _attrWhiteSpaces = bytes[1];
+        _textWhiteSpaces = bytes[2];
+        _ignoreEmptyAttributes = bytes[3];
+        _attrValuesCase = bytes[4];
+        _textValuesCase = bytes[5];
+        _trimAttr = bytes[6];
+        _trimText = bytes[7];
+        _resolveEntities = bytes[8];
+        _resolveIncludes = bytes[9];
+        _acceptQualifiedAttr = bytes[10];
+        _moreAttributes = bytes[11];
+        _moreElements = bytes[12];
+        _moreText = bytes[13];
+        _nillable = bytes[14];
+        _cdata = bytes[15];
+        _noJsonNull = bytes[16];
     }
 
     /** Copy all actions from the given XCodeDescriptor to this object.
@@ -304,27 +350,9 @@ public abstract class XCodeDescriptor extends XNode {
         xw.writeInt(_onIllegalText); // occurrence of illegal text node.
         xw.writeInt(_onIllegalElement); // occurrence of illegal element.
         xw.writeInt(_varinit); // init variables.
+        xw.writeByte(_xonVersion); // xon version.
         // Options
-        xw.writeBytes(new byte[] { // write all options as byte array.
-            _ignoreComments, //0 not set, 'T' or 'F'
-            _attrWhiteSpaces, //0 not set, 'T' or 'F'
-            _textWhiteSpaces, //0 not set, 'T' or 'F'
-            _ignoreEmptyAttributes, //0 not set, 'T' or 'F'
-            _attrValuesCase, //0 not set, 'I' ignore, 'T' or 'F'
-            _textValuesCase, //0 not set, 'I' ignore, 'T' or 'F'
-            _trimAttr, //0 not set, 'T' or 'F'
-            _trimText, //0 not set 'T' or 'F'
-            _resolveEntities,
-            _resolveIncludes,
-            _acceptQualifiedAttr, //0 not set 'T' or 'F'
-            _moreAttributes, //0 not set, 'T' or 'F'
-            _moreElements, //0 not set, 'T' or 'F'
-            _moreText, //0 not set, 'T' or 'F'
-            _xon, //0 not set, or XON/JSON version
-            _nillable, //0 not set 'T' or 'F'
-            _cdata, //0 not set 'T' or 'F'
-            _illegalJSONNull//0 not set 'T' or 'F'
-        });
+        xw.writeBytes(optionsToBytes());
         // variables
         xw.writeInt(_varsize); // size of variables.
         if (_vartable == null) {
@@ -361,26 +389,9 @@ public abstract class XCodeDescriptor extends XNode {
         _onIllegalText = xr.readInt(); // occurrence of illegal text node.
         _onIllegalElement = xr.readInt(); // occurrence of illegal element.
         _varinit = xr.readInt(); // init variables.
+        _xonVersion = xr.readByte(); // xon version.
         // Options
-        byte[] b = xr.readBytes();
-        _ignoreComments = b[0]; //0 not set, 'T' or 'F'
-        _attrWhiteSpaces = b[1]; //0 not set, 'T' or 'F'
-        _textWhiteSpaces = b[2]; //0 not set, 'T' or 'F'
-        _ignoreEmptyAttributes = b[3]; //0 not set, 'T','P' or 'F'
-        _attrValuesCase = b[4]; //0 not set, 'I' ignore, 'T' or 'F'
-        _textValuesCase = b[5]; //0 not set, 'I' ignore, 'T' or 'F'
-        _trimAttr = b[6]; //0 not set, 'T' or 'F'
-        _trimText = b[7]; //0 not set 'T' or 'F'
-        _resolveEntities = b[8];
-        _resolveIncludes = b[9];
-        _acceptQualifiedAttr = b[10]; //0 not set 'T' or 'F'
-        _moreAttributes = b[11]; //0 not set, 'T' or 'F'
-        _moreElements = b[12]; //0 not set, 'T' or 'F'
-        _moreText = b[13]; //0 not set, 'T' or 'F'
-        _xon = b[14]; //0 not set, or version number
-        _nillable = b[15]; //0 not set 'T' or 'F'
-        _cdata = b[16]; //0 not set 'T' or 'F'
-        _illegalJSONNull = b[17]; //0 not set 'T' or 'F'
+        optionsFromBytes(xr.readBytes());
         // variables
         _varsize = xr.readInt(); // size of variables.
         _vartable = xr.readBoolean() ? XVariableTable.readXD(xr) : null;

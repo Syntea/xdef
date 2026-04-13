@@ -184,7 +184,7 @@ final class ChkComposer extends SReporter {
      */
     final void xcreate(final ChkDocument chkDoc, final String nsURI, final String qname) {
         XElement oldXElement = chkDoc._xElement; //Save XElement
-        if (oldXElement == null || oldXElement._xon == 0) {
+        if (oldXElement == null || oldXElement._xonVersion == 0) {
             chkDoc._xElement = null;
         }
         setReportWriter(chkDoc.getReportWriter());
@@ -850,7 +850,7 @@ final class ChkComposer extends SReporter {
             }
             String s = chkElem.getTextValue();
             if (s != null) {
-                if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 || xatr._ignoreEmptyAttributes == 0
+                if (!s.isEmpty() || xatr._ignoreEmptyAttributes!=0 || xatr._ignoreEmptyAttributes==0
                     && xel._ignoreEmptyAttributes != 0 ||  xel._ignoreEmptyAttributes == 0
                     && chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
                     // set attribute

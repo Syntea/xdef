@@ -1479,7 +1479,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             if (_scriptCompiler._g._varBlock != null) {
                 _scriptCompiler._g._varBlock = _scriptCompiler._g._varBlock.getParent();
             }
-            ((XElement) newNode)._xon = xon;
+            ((XElement) newNode)._xonVersion = xon;
         }
     }
 
@@ -1544,7 +1544,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     XElement dummy = new XElement(dname, null, def);
                     dummy.setSPosition(copySPosition(pnode._name));
                     dummy.setXDPosition(def.getXDPosition() + dname);
-                    dummy._xon = nodei._xonMode; /*xx*/
+                    dummy._xonVersion = nodei._xonMode; /*xx*/
                     addNode(def, dummy, 1, nodei._name);
                     if (!def.addModel(dummy)) {
                         error(gname, XDEF.XDEF236, gname.getString());//Repeated specification of element &{0}
@@ -1556,7 +1556,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         } else if (name.startsWith("att")) {
                             compileAttrs(nodei, defName, dummy, true);
                         } else {
-                            compileXChild(dummy,dummy,nodei,def,2, dummy._xon);
+                            compileXChild(dummy, dummy, nodei, def, 2, dummy._xonVersion);
                         }
                     }
                 }
@@ -2014,7 +2014,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             xel._vartable = y._vartable;
             xel._varsize = y._varsize;
             xel._varinit = y._varinit;
-            xel._xon = y._xon;
+            xel._xonVersion = y._xonVersion;
             //copy specified options from target to unspecified options
             if (xel._trimAttr == 0) {// _trimAttr not set
                 if (y._trimAttr != 0) {
@@ -2086,6 +2086,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             }
             if (xel._nillable == 0 && y._nillable != 0) {
                 xel._nillable = y._nillable;
+            }
+            if (xel._noJsonNull == 0 && y._noJsonNull != 0) {
+                xel._noJsonNull = y._noJsonNull;
             }
             if (xel._varinit == -1 && y._varinit != 0) {
                 xel._varinit = y._varinit;
@@ -2173,10 +2176,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     && XDConstants.XON_NS_URI_W.equals(xel.getNSUri())
                     && "map".equals(y.getLocalName()) && XDConstants.XON_NS_URI_W.equals(y.getNSUri())
                     && (lenx > 1 && xel._childNodes[0].getKind() == XMREFERENCE
-                    && xel._childNodes[1].getKind() == XMMIXED
-                    && xel._childNodes[lenx].getKind() == XMSELECTOR_END
-                    && y._childNodes[0].getKind() == XMMIXED
-                        && y._childNodes[leny-1].getKind() == XMSELECTOR_END
+                    && xel._childNodes[1].getKind() == XMMIXED && xel._childNodes[lenx].getKind() == XMSELECTOR_END
+                    && y._childNodes[0].getKind() == XMMIXED && y._childNodes[leny-1].getKind() == XMSELECTOR_END
                     || leny <= 1 || lenx == 1 && leny == 1)) {
                     if (lenx == 1 && leny == 1) {
                         childNodes = new XNode[4];
@@ -2184,15 +2185,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         childNodes[1] = y._childNodes[0]; // XMixed
                         childNodes[2] = xel._childNodes[1];
                         childNodes[3] = new XSelectorEnd(); // selector_end
-                    } else if (leny > 1) {
-                        // both mixed -> join to one
+                    } else if (leny > 1) { // both mixed -> join to one
                         childNodes = new XNode[lenx + leny - 2];
                         copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
                         copyChildNodes(y._childNodes, 1, childNodes, lenx - 1, leny-1);
                     } else {
                         childNodes = new XNode[lenx + leny];
                         copyChildNodes(xel._childNodes, 1, childNodes, 0, lenx - 1);
-                        if (leny > 0) {
+                        if (lenx == 0) {
+                             childNodes[0] = xel._childNodes[0];
+                        } else if (leny > 0) {
                             childNodes[lenx - 1] = y._childNodes[0];
                             childNodes[lenx] = xel._childNodes[lenx];
                         } else {
