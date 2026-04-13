@@ -500,8 +500,8 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
      */
     private boolean compareElementStructure(final XElement y,final ArrayReporter reporter,final boolean full){
         boolean result = compareNamespace(y, reporter);
-        if (_nillable != y._nillable || _moreAttributes != y._moreAttributes || _moreElements != y._moreElements
-            || _moreText != y._moreText) {
+        if (_nillable != y._nillable || _moreAttributes != y._moreAttributes ||
+            _moreElements != y._moreElements || _moreText != y._moreText) {
             reporter.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
             result = false;
         }

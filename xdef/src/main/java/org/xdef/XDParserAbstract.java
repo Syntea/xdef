@@ -47,15 +47,18 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
      */
     @Override
     public XDParser getBase() {return _base;}
+
     /** Set base parser.
      * @param x base XDParser or null.
      */
     @Override
     public void setBase(final XDParser x) {_base = x;};
+
     /** Set separator. (May be overwritten.)
      * @param x string to be used as separator
      */
     public void setSeparator(final String x) {} // default do nothing
+
     /** Check value of string.
      * @param source string to be checked.
      * @param xnode actual XXNode object or null.
@@ -66,6 +69,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
         check(xnode, p);
         return p;
     }
+
     /** Create parseResult object from StringParser.
      * @param p Parsed result to be checked.
      * @param xnode actual XXNode object or null.
@@ -87,6 +91,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
             }
         }
     }
+
     /** This method provides some final checks which are dependent on the context of parsing (such as ENTITY,
      * ENTITIES, ID, IDREF, IDREFS). Usually this method is empty and you do not need to override this method.
      * @param p Parsed result to be checked.
@@ -94,16 +99,19 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
      */
     @Override
     public void finalCheck(XXNode xnode, XDParseResult p) {}
+
     /** Get value of whiteSpace parameter.
      * @return 0 .. preserve, 'r' .. replace, 'c' .. collapse
      */
     @Override
     public byte getWhiteSpaceParam() {return 'c';} // the default value
+
     /** Get named parameters (pattern,enumeration,white spaces,total digits,..).
      * @return named parameters.
      */
     @Override
     public XDContainer getNamedParams() {return new DefContainer();}
+
     /** Set named parameters.
      * @param xnode actual XXNode object or null.
      * @param params container with named items of parameters.
@@ -132,13 +140,16 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
             }
         }
     }
+
     /** Set value of "sequential" parameters of parser.
      * @param params "sequential" parameters.
      */
     @Override
     public void setParseSQParams(Object... params) {}
+
     @Override
     public String toString() {return parserName();}
+
     @Override
     public boolean equals(final XDValue arg) {
         if (arg != null && (arg instanceof XDParser)) {
@@ -151,15 +162,19 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
         }
         return false;
     }
+
     @Override
     public short parsedType() {return XD_STRING;}
+
     /** Get integer with bits representing the allowed keyword parameters.
      * @return integer with bits representing the allowed keyword parameters.
      */
     @Override
     public int getLegalKeys() {return 0;}
+
     @Override
     public short getAlltemsType() {return parsedType();} // default parsedType
+
     @Override
     public String getSeparator() {return null;} // default null (not set)
 
@@ -169,22 +184,24 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 
     @Override
     public final short getItemId() {return XD_PARSER;} // do not override
+
     @Override
     public final short getCode() {return LD_CONST;}
+
     @Override
     public final XDValueType getItemType() {return PARSER;}
+
     /** Set declared type name of parser.
      * @param name the declared type name.
      */
     @Override
     public final void setDeclaredName(final String name) {_declaredName = name;}
+
     /** Get declared type name of parser.
      * @return declared type name of parser
      */
     @Override
     public final String getDeclaredName() {return _declaredName;}
-
-    ////////////////////////////////////////////////////////////////////////////
 
     /** Check if value is parser and return it as a Parser or convert it to Parser (if it is possible).
      * @param x value to be checked.
@@ -210,6 +227,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
                 case XD_PARSERESULT: {
                     XDParseResult y = (XDParseResult) x;
                     return new XDParserAbstract() {
+
                         @Override
                         public void parseObject(XXNode xnode, XDParseResult p) {
                             XDParseResult y = (XDParseResult) x;
@@ -218,11 +236,13 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
                             p.setParsedValue(y.getParsedValue());
                             p.addReports(y.getReporter());
                         }
+
                         @Override
                         public short parsedType() {
                             XDValue v = y.getParsedValue();
                             return v == null ? XD_ANY : v.getItemId();
                         }
+
                         @Override
                         public String parserName() {return "generatedParser";}
                     };

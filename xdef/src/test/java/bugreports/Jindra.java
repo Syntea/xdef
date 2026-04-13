@@ -37,8 +37,8 @@ public class Jindra extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"P5R_json\" xd:root=\"P5R\">\n" +
 "    <xd:json name=\"P5R\">\n" +
 "        {\n" +
-"            \"stavPoistenia\": \"jnumber()\",\n" +
-"            \"obj\"          : { \"%script\": \"ref MyObj\" }\n" +
+"            \"stavPoistenia\": \"jnumber()\"\n" +
+"            \"obj\"          : { \"%script\": \"ref MyObj\" },\n" +
 "        }\n" +
 "    </xd:json>\n" +
 "    <xd:json name = \"MyObj\">\n" +
@@ -46,6 +46,10 @@ public class Jindra extends XDTester {
 "    </xd:json>\n" +
 "</xd:def>";
             xp = XDFactory.compileXD(null, xdef);
+            json = "{ \"stavPoistenia\": 123, \"obj\": { \"a\": \"ABC\" } }";
+            jparse(xp, "", json, reporter);
+            assertNoErrorsAndClear(reporter);
+            System.out.println("OK");
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
         try {
@@ -81,6 +85,7 @@ if(T)return;
             json = "{ \"stavPoistenia\": null }";
             jparse(xp, "", json, reporter);
             assertNoErrorwarnings(reporter);
+            System.out.println("OKOK");
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 

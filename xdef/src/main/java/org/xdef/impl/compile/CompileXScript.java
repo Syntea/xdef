@@ -1101,7 +1101,7 @@ final class CompileXScript extends CompileStatement {
                 result._attrWhiteSpaces = (byte) ("ignoreAttrWhiteSpaces".equals(_idName) ? 'T' : 'F');
             } else if ("copyTextWhiteSpaces".equals(_idName) || "preserveTextWhiteSpaces".equals(_idName)
                 || "ignoreTextWhiteSpaces".equals(_idName)) {
-                if ("copyTextWhiteSpaces".equals(_idName)) {
+                if("copyTextWhiteSpaces".equals(_idName)) {
                     //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
                     reportDeprecated(_idName, "preserveTextWhiteSpaces");
                 }
