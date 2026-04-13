@@ -10,8 +10,9 @@
 </head>
 <body>
 
-<div id="header">ERROR: HEADER NOT LOADED</div>
-<script>$("#header").load("header0.html")</script>
+<div class="header">ERROR: HEADER NOT LOADED</div>
+<!-- <script>$("div.header").load("header0.html")</script> -->
+<script>setTimeout(function() { $("div.header").load("header0.html"); }, 1000)</script>
 
 
 <h1>X-definition Introduction</h1>

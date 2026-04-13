@@ -46,7 +46,8 @@ div.footer {
     font-size:          0.8em;
 }
 
-div#header {
+div.header {
+    height:             4em;
     position:           sticky;
     top:                0;
     opacity:            0.9;
@@ -58,8 +59,8 @@ html {
     scroll-padding-top: 5em;
 }
 
-div.header {
-    opacity:            0.9;
+div.header > div {
+    height:             100%;
 }
 
 div.lang {
@@ -72,13 +73,27 @@ div.lang, div.lang select {
     font-size:          85%;
 }
 
+div.logo {
+    position:           absolute;;
+}
+
+div.logo img {
+    height:             4em;
+}
+
+div.logo img:hover {
+    height:             12em;
+}
+
 ul.nav {
+    height:             100%;
     margin:             0;
     padding:            0;
     background-image:   linear-gradient(#8bceee, #e6f7ff);
 }
 
 ul.nav > li {
+    height:             100%;
     display:            inline-block;
     vertical-align:     middle;
     padding-left:       3em;
@@ -86,8 +101,4 @@ ul.nav > li {
 
 ul.nav > li.logo {
     padding-left:       0;
-}
-
-ul.nav img {
-    height:             4em;
 }
