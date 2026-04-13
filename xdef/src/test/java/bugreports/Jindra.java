@@ -34,8 +34,24 @@ public class Jindra extends XDTester {
         ArrayReporter reporter = new ArrayReporter();
         try {
             xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"P5R_json\" xd:root=\"P5R\">\n" +
+"    <xd:json name=\"P5R\">\n" +
+"        {\n" +
+"            \"stavPoistenia\": \"jnumber()\",\n" +
+"            \"obj\"          : { \"%script\": \"ref MyObj\" }\n" +
+"        }\n" +
+"    </xd:json>\n" +
+"    <xd:json name = \"MyObj\">\n" +
+"        { \"a\": \"jstring()\" }\n" +
+"    </xd:json>\n" +
+"</xd:def>";
+            xp = XDFactory.compileXD(null, xdef);
+        } catch (RuntimeException ex) {fail(ex);}
+if(T)return;
+        try {
+            xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
-"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJSONNull\" } </xd:json>\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJsonNull\" } </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
             json = "{ \"stavPoistenia\": null }";
@@ -46,7 +62,7 @@ public class Jindra extends XDTester {
                 assertTrue(reporter.printToString().contains("XDEF809"));
             }
             xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJSONNull' >\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -57,6 +73,14 @@ public class Jindra extends XDTester {
             } else {
                 assertTrue(reporter.printToString().contains("XDEF809"));
             }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            assertNoErrorwarnings(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 

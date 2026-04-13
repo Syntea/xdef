@@ -101,6 +101,9 @@ public interface XDConstants {
     /** Property defines stream used for debug input (default is stdIn). */
     public static final String XDPROPERTY_DEBUG_IN = "xdef_debug_in";
 
+    /** Property defines list of default options. */
+    public static final String XDPROPERTY_OPTION = "xdef_option";
+
 //////////////////////////////////////////////////////////////////////////////////
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////

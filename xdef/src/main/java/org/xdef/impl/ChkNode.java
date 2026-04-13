@@ -934,7 +934,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
      * @return XON mode or zero.
      */
     @Override
-    public final byte getXonMode() {return _xElement == null ? 0 : _xElement._xon;}
+    public final byte getXonMode() {return _xElement == null ? 0 : _xElement._xonVersion;}
 
     /** Get actual value of default time zone.
      * @return actual value of default time zone.

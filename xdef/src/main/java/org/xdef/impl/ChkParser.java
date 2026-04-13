@@ -325,7 +325,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
             InputStream in = new ByteArrayInputStream(new byte[0]);
             if (_isDTD && _illegalDoctype) {
                 _sReporter.fatal(XML.XML099);//DOCTYPE is set as not allowed
-            } else if ((_isDTD && ((XDefinition) _chkDoc.getXMDefinition())._resolveEntities != 'F') || !_isDTD) {
+            } else if ((_isDTD && ((XDefinition) _chkDoc.getXMDefinition())._resolveEntities!='F') || !_isDTD){
                 try {
                     URL u = SUtils.getExtendedURL(sysID);
                     in = u.openStream();

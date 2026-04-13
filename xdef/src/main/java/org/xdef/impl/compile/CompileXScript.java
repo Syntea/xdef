@@ -1243,11 +1243,11 @@ final class CompileXScript extends CompileStatement {
                         xel._clearReports = "clearReports".equals(_idName) ? (byte) 'T' : (byte) 'F';
                     }
                 }
-            } else if ("acceptJSONNull".equals(_idName) || "illegalJSONNull".equals(_idName)) {
+            } else if ("acceptJsonNull".equals(_idName) || "illegalJsonNull".equals(_idName)) {
                 if (illegalNull) {
                     error(XDEF.XDEF432,_idName);//Option &{0} redefinition
                 }
-                result._illegalJSONNull = "illegalJSONNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
+                result._noJsonNull = "illegalJsonNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
             } else {
                 error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
             }

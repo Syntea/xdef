@@ -124,12 +124,12 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
      * @return 0 .. no XON/JSON, 1 .. XON/JSON w3c mode, 2 .. XON/JSON xd mode.
      */
     @Override
-    public final byte getXonMode() {return _xon;}
+    public final byte getXonMode() {return _xonVersion;}
 
     /** Set mode of XON/JSON model.
      * @param x 0 .. no XON/JSON, 1 .. XON/JSON w3c mode, 2 .. XON/JSON xd mode.
      */
-    public final void setXonMode(final byte x) {_xon = x;}
+    public final void setXonMode(final byte x) {_xonVersion = x;}
 
     /** Set this model is created from other model (reference).
      * @param ref string of position of model reference.
@@ -500,8 +500,8 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
      */
     private boolean compareElementStructure(final XElement y,final ArrayReporter reporter,final boolean full){
         boolean result = compareNamespace(y, reporter);
-        if (_nillable != y._nillable || _moreAttributes != y._moreAttributes ||
-            _moreElements != y._moreElements || _moreText != y._moreText) {
+        if (_nillable != y._nillable || _moreAttributes != y._moreAttributes || _moreElements != y._moreElements
+            || _moreText != y._moreText) {
             reporter.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
             result = false;
         }

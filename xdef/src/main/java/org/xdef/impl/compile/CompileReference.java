@@ -205,7 +205,7 @@ final class CompileReference extends XNode {
                     return null;
                 }
                 return (XNode) xn;
-            } else if (xe._xon > 0) {
+            } else if (xe._xonVersion > 0) {
                 XMNode[] models = xe.getChildNodeModels();
                 if (models.length==1 && models[0].getKind()==XMELEMENT) {
                     return (XElement) models[0];
