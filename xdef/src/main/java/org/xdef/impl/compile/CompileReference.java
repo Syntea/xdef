@@ -18,17 +18,14 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
 import static org.xdef.model.XMNode.XMDEFINITION;
 import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMREFERENCE;
+import static org.xdef.model.XMNode.XMINCLUDE;
 
 /** Provides an object for resolving references in X-definition source. This object is pseudo XNode and
  * will be replaced by referred object.
  * @author Vaclav Trojan
  */
 final class CompileReference extends XNode {
-    /** Kind of XNode XReference */
-    static final short XMREFERENCE = XMSELECTOR_END + 1;
-    /** Kind of XNode  XINCLUDE */
-    static final short XMINCLUDE = XMREFERENCE + 1;
     private final String _refXdefName;
     /** The X-definition associated with parent. */
     private final XDefinition _definition;

@@ -12,6 +12,9 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 // Properties
 ////////////////////////////////////////////////////////////////////////////////
+    /** Property with list of default options.*/
+    public static final String XDPROPERTY_OPTIONS = "xdef_options";
+
     /** Property defines debug mode (default is false).*/
     public static final String XDPROPERTY_DEBUG = "xdef_debug";
     /** Value "true" of property "xdef_debug" */

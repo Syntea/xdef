@@ -7,6 +7,8 @@ import org.xdef.XDPool;
  * @author Vaclav Trojan
  */
 public abstract class XCodeDescriptor extends XNode {
+    /** version of XON/JSON transformation to XML (see XConstants: XON_xx). */
+    public byte _xonVersion; //0...no XON/JSON, 1...XON/JSON to XML mode: W3C or XD
     ////////////////////////////////////////////////////////////////////////////
     // Actions
     ////////////////////////////////////////////////////////////////////////////
@@ -77,9 +79,6 @@ public abstract class XCodeDescriptor extends XNode {
     public byte _cdata; //0 not set 'T' or 'F'
     /** Flag to set JSON values null is not allowed. */
     public byte _noJsonNull; //0 not set 'T' or 'F'
-    ////////////////////////////////////////////////////////////////////////////
-    /** version of XON/JSON transformation to XML (see XConstants: XON_xx). */
-    public byte _xonVersion; //0...no XON/JSON, 1...XON/JSON to XML mode: W3C or XD
     ////////////////////////////////////////////////////////////////////////////
     // Variables
     ////////////////////////////////////////////////////////////////////////////

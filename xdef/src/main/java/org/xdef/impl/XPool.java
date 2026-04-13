@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -20,7 +21,9 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.XDConstants;
 import static org.xdef.XDConstants.BUILD_VERSION;
+import static org.xdef.XDConstants.XDEF42_NS_URI;
 import static org.xdef.XDConstants.XDPOOL_MIN_VERSION;
+import static org.xdef.XDConstants.XDPROPERTY_OPTIONS;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import static org.xdef.XDPool.DISPLAY_TRUE;
@@ -28,6 +31,7 @@ import org.xdef.XDValue;
 import org.xdef.component.GenXComponent;
 import org.xdef.impl.code.CodeDisplay;
 import org.xdef.impl.compile.CompileXDPool;
+import org.xdef.impl.compile.XScriptParser;
 import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
@@ -42,10 +46,12 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SManager;
+import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
 /** Implementation of the XDPool containing the set of X-definitions.
@@ -106,20 +112,14 @@ public final class XPool implements XDPool, Serializable {
     private Map<String, String> _binds;
     /** Enumerations.*/
     private Map<String, String> _enums;
-    /** Lexicon of tag names in different languages.*/
-    XDLexicon _lexicon = null;
-    /** Reporter writer.*/
-    ReportWriter _reporter;
-    /** CompileXDPool for definitions. */
-    CompileXDPool _compiler;
-    /** Table of definitions.*/
-    Map<String, XDefinition> _xdefs;
     /** Table of source objects.*/
     private XDSourceInfo _sourceInfo;
     /** Default time zone.*/
     private TimeZone _defaultZone = null;
     /** Array with Charset mappings of legal values of parsed strings.*/
     private Charset[] _charsets;
+    /** List of options from properties. */
+    private byte[] _options;
 ///////////////////////////////////////////////////////////////////////////////////
 // Valid date parameters
 ///////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +129,15 @@ public final class XPool implements XDPool, Serializable {
     private int _minYear;
     /** List of dates to be accepted out of interval _minYear.._maxYear.*/
     private SDatetime[] _specialDates;
+///////////////////////////////////////////////////////////////////////////////////
+    /** Lexicon of tag names in different languages.*/
+    XDLexicon _lexicon = null;
+    /** Reporter writer.*/
+    ReportWriter _reporter;
+    /** CompileXDPool for definitions. */
+    CompileXDPool _compiler;
+    /** Table of definitions.*/
+    Map<String, XDefinition> _xdefs;
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Constructors
@@ -193,6 +202,7 @@ public final class XPool implements XDPool, Serializable {
         _specialDates = readPropertySpecDates(_props);
         _charsets = readPropertyStringCodes(_props);
         _compiler = new CompileXDPool(this, _reporter != null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
+        readOptionList(_props);
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -294,6 +304,22 @@ public final class XPool implements XDPool, Serializable {
         }
         _compiler.getReportWriter().error(SYS.SYS082, key + "=" + v); //Incorrect property value: &{0}
         return 0; // default value
+    }
+
+    /** Read list of default options from properties.
+     * @param props properties with list of options.
+     */
+    private void readOptionList(final Properties props) {
+        XDefinition dummy = new XDefinition("", (XDPool) null, XDEF42_NS_URI, (SPosition) null, (byte) 0);
+        String v = SManager.getProperty(props, XDPROPERTY_OPTIONS);
+        if (v == null || (v = v.trim()).isEmpty()) {
+            return;
+        }
+        XScriptParser p = new XScriptParser(StringParser.XMLVER1_0);
+        p.setSourceBuffer(v);
+        p.nextSymbol();
+        p.readOptionList(dummy);
+        _options = dummy.optionsToBytes();
     }
 
     /** Add source data of X-definition or collection. If the argument starts with "&lt;" character then it is
@@ -719,6 +745,30 @@ public final class XPool implements XDPool, Serializable {
         }
     }
 
+    /** Set list of XComponents.
+     * @param p list of XComponents.
+     */
+    public final void setXComponents(Map<String, String> p) {_components = p;}
+
+    /** Set default options from properties. */
+    public void setDefaultOptions() {
+        if (_options != null) {
+            for (XDefinition x: _xdefs.values()) {
+                byte[] b = x.optionsToBytes();
+                boolean updated = false;
+                for (int i = 0; i < b.length; i++) {
+                    if (_options[i] != 0 && b[i] == 0) {
+                        b[i] = _options[i];
+                        updated = true;
+                    }
+                }
+                if (updated) {
+                    x.optionsFromBytes(b);
+                }
+            }
+        }
+    }
+
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XDPool
 ////////////////////////////////////////////////////////////////////////////////
@@ -1010,11 +1060,6 @@ public final class XPool implements XDPool, Serializable {
      */
     @Override
     public final Map<String, String> getXComponents() {return _components;}
-
-    /** Set list of XComponents.
-     * @param p list of XComponents.
-     */
-    public final void setXComponents(Map<String, String> p) {_components = p;}
 
     /** Get list of XComponent binds.
      * @return list of XComponent binds.

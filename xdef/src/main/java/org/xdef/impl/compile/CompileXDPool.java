@@ -41,7 +41,6 @@ import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.compile.CompileBase.ELEM_MODE;
 import static org.xdef.impl.compile.CompileBase.GLOBAL_MODE;
-import static org.xdef.impl.compile.CompileReference.XMREFERENCE;
 import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
 import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
 import static org.xdef.impl.compile.XScriptParser.INIT_SYM;
@@ -54,7 +53,9 @@ import static org.xdef.model.XMNode.XMATTRIBUTE;
 import static org.xdef.model.XMNode.XMCHOICE;
 import static org.xdef.model.XMNode.XMDEFINITION;
 import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMINCLUDE;
 import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMREFERENCE;
 import static org.xdef.model.XMNode.XMSELECTOR_END;
 import static org.xdef.model.XMNode.XMSEQUENCE;
 import static org.xdef.model.XMNode.XMTEXT;
@@ -113,11 +114,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         final Class<?>[] extClasses,
         final Map<String, XDefinition> xdefs) {
         _precomp = new XPreCompiler(reporter,
-            extClasses,
-            xp.getDisplayMode(),
-            xp.isChkWarnings(),
-            xp.isDebugMode(),
-            xp.isIgnoreUnresolvedExternals());
+            extClasses, xp.getDisplayMode(), xp.isChkWarnings(), xp.isDebugMode(), xp.isIgnoreUnresolvedExternals());
         _xdefs = xdefs;
         _nodeList = new ArrayList<>();
         _codeGenerator = _precomp.getCodeGenerator();
@@ -128,8 +125,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         _listCollection = _precomp.getPCollections();
         _listComponent = _precomp.getPComponents();
         ClassLoader cloader = Thread.currentThread().getContextClassLoader();
-        _scriptCompiler = new CompileXScript(
-            _codeGenerator, StringParser.XMLVER1_0, XPreCompiler.DEFINED_PREFIXES,cloader);
+        _scriptCompiler =
+            new CompileXScript(_codeGenerator, StringParser.XMLVER1_0, XPreCompiler.DEFINED_PREFIXES, cloader);
         _scriptCompiler.setReportWriter(reporter);
     }
 
@@ -321,8 +318,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 SBuffer sbf = new SBuffer(result.substring(6, ndx), spos);
                 while(st.hasMoreTokens()) {
                     if (_codeGenerator._binds.put(st.nextToken(),sbf) != null) {
-                        _scriptCompiler.error(spos,//Duplicity of reference &{0}
-                            XDEF.XDEF355, sbf.getString());
+                        _scriptCompiler.error(spos, XDEF.XDEF355, sbf.getString());//Duplicity of reference &{0}
                     }
                 }
             } else if (result.startsWith("%ref ")) {
@@ -1130,7 +1126,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             }
             name = ref.getString() + '$' + refName;
         }
-        return new CompileReference(CompileReference.XMINCLUDE, xdef, null, name, ref, newNode);
+        return new CompileReference(XMINCLUDE, xdef, null, name, ref, newNode);
     }
 
     private static void setXDPosition(final XNode parent, final XElement parentElement, final XNode xn) {
@@ -1610,7 +1606,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     break;
                 }
                 CompileReference xref =
-                    new CompileReference(CompileReference.XMREFERENCE, def, nsURI, refName, pos);
+                    new CompileReference(XMREFERENCE, def, nsURI, refName, pos);
                 if (def._rootSelection.containsKey(xref.getName())) {
                     _scriptCompiler.error(pos, XDEF.XDEF231, refName);//Repeated root selection &{0}
                 } else {
@@ -1890,6 +1886,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 }
             }
         }
+        ((XPool) xdp).setDefaultOptions();
     }
 
     /** Get PreCompiler.
@@ -1972,7 +1969,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         boolean result = true;
         int lenx;
         if ((lenx = xel._childNodes.length) > 0
-            && (xel._childNodes[0].getKind() == CompileReference.XMREFERENCE)) {
+            && (xel._childNodes[0].getKind() == XMREFERENCE)) {
             CompileReference xref = (CompileReference) xel._childNodes[0];
             XNode x = xref.getTargetModel();
             if (x == null || x.getKind() != XMELEMENT) {
@@ -2226,7 +2223,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         int i = 0;
         lenx = xel._childNodes.length;
         while(i < lenx) {//resolve include references
-            if (xel._childNodes[i].getKind() != CompileReference.XMINCLUDE) {
+            if (xel._childNodes[i].getKind() != XMINCLUDE) {
                 i++;
                 continue;
             }

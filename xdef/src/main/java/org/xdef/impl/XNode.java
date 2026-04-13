@@ -190,7 +190,7 @@ public abstract class XNode implements XMNode {
             case XMCHOICE:
             case XMMIXED: return XSelector.readXSelector(xr, kind);
             case XMSELECTOR_END: return new XSelectorEnd();
-            default: throw new SIOException(SYS.SYS066,"Unexpected kind: "+kind); //Internal error&{0}{: }
+           default: throw new SIOException(SYS.SYS066,"Unexpected kind: "+kind); //Internal error&{0}{: }
         }
     }
 

@@ -1,6 +1,7 @@
 # Version ${version}, release-date ${release.date}
   * Implemented missing X-script method `setParseResult(ParseResut)`.
   * New X-script options have been added for JSON data: `acceptJsonNull` (default) and `illegalJsonNull`.
+  * Default X-script options is now possible to declare in properties.
   * Changes for translation and testing in Java version 25
 
 # Version 42.2.43, release-date 2026-03-29

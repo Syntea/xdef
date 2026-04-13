@@ -93,9 +93,7 @@ import static org.xdef.impl.compile.XScriptParser.UNIQUE_SET_SYM;
 import static org.xdef.impl.compile.XScriptParser.USES_SYM;
 import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
 import static org.xdef.impl.compile.XScriptParser.symToName;
-import static org.xdef.model.XMNode.XMATTRIBUTE;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMTEXT;
+import static org.xdef.model.XMNode.XMREFERENCE;
 import static org.xdef.sys.SParser.NOCHAR;
 import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 
@@ -810,8 +808,7 @@ final class CompileXScript extends CompileStatement {
                             }
                         }
                         String nsUri = ns != null ? _g._namespaceURIs.get(ns) : null;
-                        xel.addNode(new CompileReference(CompileReference.XMREFERENCE,
-                            xel, nsUri, _idName, new SPosition(this)));
+                        xel.addNode(new CompileReference(XMREFERENCE, xel, nsUri, _idName, new SPosition(this)));
                         nextSymbol();
                     } else {
                         error(XDEF.XDEF328); //Reference specification expected
@@ -1014,15 +1011,6 @@ final class CompileXScript extends CompileStatement {
         return ref;
     }
 
-    /** Report deprecated symbol.
-     * @param sym deprecated symbol.
-     * @param advise what should be done.
-     */
-    private void reportDeprecated(
-        //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-        final String sym,final String advise) {_g.reportDeprecated(sym, advise);
-    }
-
     /** Read list of options.
      * @param result The object with script code.
      */
@@ -1031,231 +1019,7 @@ final class CompileXScript extends CompileStatement {
             error(XDEF.XDEF430); //'options' was already specified
         }
         _options = true;
-        if (_sym != IDENTIFIER_SYM && _sym != FORGET_SYM) {
-            error(XDEF.XDEF431); //Option identifier expected
-            return;
-        }
-        short kind = result.getKind();
-        //XMNode.XMDEFINITION, XMELEMENT, XMATTRIBUTE, XMTEXT ...
-        boolean forget = false;
-        boolean clearAdoptedForgets = false;
-        boolean attrWhiteSpaces = false;
-        boolean textWhiteSpaces = false;
-        boolean ignoreComments = false;
-        boolean ignoreEmptyAttributes = false;
-        boolean setAttrValuesCase = false;
-        boolean setTextValuesCase = false;
-        boolean trimAttr = false;
-        boolean trimText = false;
-        boolean moreAttributes = false;
-        boolean moreElements = false;
-        boolean moreText = false;
-        boolean ignoreEntities = false;
-        boolean acceptQualifiedAttr = false;
-        boolean nillable = false;
-        boolean cdata = false;
-        boolean illegalNull = false;
-        while (_sym == IDENTIFIER_SYM || _sym == FORGET_SYM) {
-            if (_sym == FORGET_SYM) {
-                if (kind != XMELEMENT) {
-                    error(XDEF.XDEF411, symToName(FORGET_SYM)); //The token '&{0}' is not allowed here
-                } else {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                    reportDeprecated("option forget", "forget (action)");
-                    if (forget) {
-                        error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                    }
-                    ((XElement) result)._forget = 'T';
-                }
-            } else if ("notForget".equals(_idName)) {
-                if (forget) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                if (kind != XMELEMENT) {
-                    error(XDEF.XDEF411, "notForget"); //The token '&{0}' is not allowed here
-                } else {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                    reportDeprecated("option notForget", "forget (action)");
-                    if (forget) {
-                        error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                    }
-                }
-            } else if ("clearAdoptedForgets".equals(_idName)) {
-                if (kind != XMELEMENT) {
-                    error(XDEF.XDEF411, "clearAdoptedForgets"); //The token '&{0}' is not allowed here
-                } else {
-                    if (clearAdoptedForgets) {
-                        error(XDEF.XDEF422); //Duplicated script section
-                    }
-                    ((XElement)result)._clearAdoptedForgets = 'T';
-                }
-                clearAdoptedForgets = true;
-            } else if ("copyAttrWhiteSpaces".equals(_idName) || "preserveAttrWhiteSpaces".equals(_idName)
-                || "ignoreAttrWhiteSpaces".equals(_idName)) {
-                if("copyAttrWhiteSpaces".equals(_idName)) {
-                    //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                    reportDeprecated(_idName, "preserveAttrWhiteSpaces");
-                }
-                if (attrWhiteSpaces) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                attrWhiteSpaces = true;
-                result._attrWhiteSpaces = (byte) ("ignoreAttrWhiteSpaces".equals(_idName) ? 'T' : 'F');
-            } else if ("copyTextWhiteSpaces".equals(_idName) || "preserveTextWhiteSpaces".equals(_idName)
-                || "ignoreTextWhiteSpaces".equals(_idName)) {
-                if("copyTextWhiteSpaces".equals(_idName)) {
-                    //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                    reportDeprecated(_idName, "preserveTextWhiteSpaces");
-                }
-                if (textWhiteSpaces) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                textWhiteSpaces = true;
-                result._textWhiteSpaces = (byte) ("ignoreTextWhiteSpaces".equals(_idName) ? 'T' : 'F');
-            } else if ("ignoreComments".equals(_idName)) {
-                if (ignoreComments) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                ignoreComments = true;
-                result._ignoreComments = 'T';
-            } else if ("copyComments".equals(_idName) || "preserveComments".equals(_idName)) {
-                if ("copyComments".equals(_idName)) {//XDEF998=&{0} is deprecated.&{1}{Please use }{ instead.}
-                    reportDeprecated(_idName,"preserveComments");
-                }
-                if (ignoreComments) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                ignoreComments = true;
-                result._ignoreComments = 'F';
-            } else if ("copyEmptyAttributes".equals(_idName) || "acceptEmptyAttributes".equals(_idName)
-                || "preserveEmptyAttributes".equals(_idName) || "ignoreEmptyAttributes".equals(_idName)) {
-                if("copyEmptyAttributes".equals(_idName)) {
-                    //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                    reportDeprecated(_idName, "acceptEmptyAttributes");
-                }
-                if (ignoreEmptyAttributes) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                ignoreEmptyAttributes = true;
-                result._ignoreEmptyAttributes = (byte) ("ignoreEmptyAttributes".equals(_idName) ? 'T'
-                    : "acceptEmptyAttributes".equals(_idName) ? 'A'
-                    : "preserveEmptyAttributes".equals(_idName) ? 'P'
-                    : 'F');
-            } else if ("setAttrUpperCase".equals(_idName) || "setAttrLowerCase".equals(_idName)
-                || "noSetAttrCase".equals(_idName) || "preserveAttrCase".equals(_idName)) {
-                if (setAttrValuesCase) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                setAttrValuesCase = true;
-                result._attrValuesCase = (byte) ("setAttrUpperCase".equals(_idName) ? 'T'
-                    : ("noSetAttrCase".equals(_idName) || "preserveAttrCase".equals(_idName)) ? 'I'
-                    : 'F');
-            } else if ("setTextUpperCase".equals(_idName) || "setTextLowerCase".equals(_idName)
-                || "noSetTextCase".equals(_idName) || "preserveTextCase".equals(_idName)) {
-                if (setTextValuesCase) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                setTextValuesCase = true;
-                result._textValuesCase = (byte) ("setTextUpperCase".equals(_idName) ? 'T'
-                    : ("notSetTextCase".equals(_idName) || "preserveTextCase".equals(_idName)) ? 'I'
-                    : 'F');
-            } else if ("trimAttr".equals(_idName) || "noTrimAttr".equals(_idName)) {
-                if (trimAttr) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                trimAttr = true;
-                result._trimAttr = (byte) ("trimAttr".equals(_idName) ? 'T' : 'F');
-            } else if ("trimText".equals(_idName) || "noTrimText".equals(_idName)) {
-                if (trimText) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                trimText = true;
-                result._trimText = (byte) ("trimText".equals(_idName) ? 'T' : 'F');
-            } else if ("moreAttributes".equals(_idName)) {
-                if (moreAttributes) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                moreAttributes = true;
-                result._moreAttributes = 'T';
-            } else if ("moreElements".equals(_idName)) {
-                if (moreElements) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                moreElements = true;
-                result._moreElements = 'T';
-            } else if ("moreText".equals(_idName)) {
-                if (moreText) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                moreText = true;
-                result._moreText = 'T';
-            } else if ("acceptOther".equals(_idName) || "ignoreOther".equals(_idName)) {
-                if (moreAttributes | moreElements | moreText) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                moreAttributes = moreElements = moreText = true;
-                byte b = "acceptOther".equals(_idName) ? (byte)'T' : (byte) 'I';
-                result._moreAttributes = result._moreElements = result._moreText= b;
-            } else if ("nillable".equals(_idName) || "noNillable".equals(_idName)) {
-                if (nillable) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                } else if (kind != XMELEMENT) {
-                    error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
-                }
-                nillable = true;
-                result._nillable = (byte) ("nillable".equals(_idName) ? 'T' : 'F');
-            } else if ("ignoreEntities".equals(_idName) || "resolveEntities".equals(_idName)) {
-                if (ignoreEntities) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                ignoreEntities = true;
-                result._resolveEntities = (byte) ("resolveEntities".equals(_idName) ? 'T' : 'F');
-            } else if ("acceptQualifiedAttr".equals(_idName) || "notAacceptQualifiedAttr".equals(_idName)) {
-                if (acceptQualifiedAttr) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                acceptQualifiedAttr = true;
-                result._acceptQualifiedAttr = (byte) ("acceptQualifiedAttr".equals(_idName) ? 'T' : 'F');
-            } else if ("cdata".equals(_idName)) {
-                if (cdata) {
-                    error(XDEF.XDEF432); // option redefinition
-                }
-                cdata = true;
-                if (kind == XMTEXT || kind == XMATTRIBUTE && (result.getName().equals("$text")
-                    || result.getName().equals("$textcontent"))) {
-                    result._cdata = 'T';
-                    if ("textcontent".equals(result.getName()) && result.maxOccurs() > 1) {
-                        if (_g._chkWarnings) {
-                            //Maximum occurrence of item "&{0}" can not be higher then 1
-                            error(XDEF.XDEF535, "textcontent");
-                        }
-                        result.setOccurrence(result.minOccurs(), 1);
-                    }
-                } else {
-                    error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
-                }
-            } else if ("clearReports".equals(_idName) || "preserveReports".equals(_idName)) {
-                if (kind != XMELEMENT) {
-                    error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
-                } else {
-                    XElement xel = (XElement) result;
-                    if (xel._clearReports != 0) {
-                        error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                    } else {
-                        xel._clearReports = "clearReports".equals(_idName) ? (byte) 'T' : (byte) 'F';
-                    }
-                }
-            } else if ("acceptJsonNull".equals(_idName) || "illegalJsonNull".equals(_idName)) {
-                if (illegalNull) {
-                    error(XDEF.XDEF432,_idName);//Option &{0} redefinition
-                }
-                result._noJsonNull = "illegalJsonNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
-            } else {
-                error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
-            }
-            if (nextSymbol() != COMMA_SYM) {
-                break;
-            }
-            nextSymbol();
-        }
+        readOptionList(result);
         checkSemicolon(SCRIPT_SEPARATORS);
     }
 }

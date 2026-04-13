@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDFactory;
@@ -32,6 +33,7 @@ public class Jindra extends XDTester {
         String json, s, xdef;
         XDPool xp;
         ArrayReporter reporter = new ArrayReporter();
+        Properties props = new Properties();
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"P5R_json\" xd:root=\"P5R\">\n" +
@@ -45,11 +47,10 @@ public class Jindra extends XDTester {
 "        { \"a\": \"jstring()\" }\n" +
 "    </xd:json>\n" +
 "</xd:def>";
-            xp = XDFactory.compileXD(null, xdef);
+            xp = XDFactory.compileXD(props, xdef);
             json = "{ \"stavPoistenia\": 123, \"obj\": { \"a\": \"ABC\" } }";
             jparse(xp, "", json, reporter);
             assertNoErrorsAndClear(reporter);
-            System.out.println("OK");
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
         try {
@@ -79,13 +80,26 @@ if(T)return;
             }
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
+"</xd:def>";
+            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
+            xp = XDFactory.compileXD(props, xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            if (!reporter.errors()) {
+                fail("Error not reported");
+            } else {
+                assertTrue(reporter.printToString().contains("XDEF809"));
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
 "</xd:def>";
-            xp = compile(xdef);
+            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
+            xp = XDFactory.compileXD(props, xdef);
             json = "{ \"stavPoistenia\": null }";
             jparse(xp, "", json, reporter);
             assertNoErrorwarnings(reporter);
-            System.out.println("OKOK");
         } catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 
