@@ -139,23 +139,7 @@ public abstract class XCodeDescriptor extends XNode {
      */
     public final void copyOptions(final XCodeDescriptor x) {
         _xonVersion = x. _xonVersion;
-        _ignoreComments = x._ignoreComments;
-        _attrWhiteSpaces = x._attrWhiteSpaces;
-        _textWhiteSpaces = x._textWhiteSpaces;
-        _ignoreEmptyAttributes = x._ignoreEmptyAttributes;
-        _attrValuesCase = x._attrValuesCase;
-        _textValuesCase = x._textValuesCase;
-        _trimAttr = x._trimAttr;
-        _trimText = x._trimText;
-        _moreElements = x._moreElements;
-        _moreText = x._moreText;
-        _moreAttributes = x._moreAttributes;
-        _resolveEntities = x._resolveEntities;
-        _resolveIncludes = x._resolveIncludes;
-        _acceptQualifiedAttr = x._acceptQualifiedAttr;
-        _nillable = x._nillable;
-        _cdata = x._cdata;
-        _noJsonNull = x._noJsonNull;
+        optionsFromBytes(x.optionsToBytes());
     }
 
     /** Clear all actions in this descriptor. */

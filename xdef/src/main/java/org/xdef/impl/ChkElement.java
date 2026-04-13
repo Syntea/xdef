@@ -275,8 +275,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
     }
 
-    /** Search XNode in the list of nodes.<p/> This is very tricky method. It is necessary to know that it is invoked
-     * when a child node occurs. There are important variables:<p/>
+    /** Search XNode in the list of nodes.<p/>
+     * This is very tricky method. It is necessary to know that it is invoked when a child node occurs. There are
+     * important variables:<p/>
      * _defList .. array of XNodes<br/>
      * _counters .. array of occurrence counters<br/>
      * _actDefIndex .. -1 or index to actually processed XNode item<br/>
@@ -374,7 +375,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 if (_selector._kind == XMCHOICE) {
                                     _nextDefIndex = _selector._endIndex;
                                     if (_selector._count > _selector.maxOccurs()) {
-                                        error(XDEF.XDEF558, "choice");//Maximum occurrence limit of &amp;{0} exceeded
+                                        //Maximum occurrence limit of &amp;{0} exceeded
+                                        error(XDEF.XDEF558, "choice");
                                     }
                                 } else {
                                     checkMixedAll();
@@ -450,7 +452,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 case XMMIXED:
                 case XMCHOICE: createGroup((XSelector) xn); continue;
                 default: throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
-                            "Xdefinifion ChkElement, unknown item: "+kind+" "+xn);
+                            "Xdefinifion - ChkElement, unknown item: "+kind+" "+xn);
             }
         }
         return null;
@@ -954,8 +956,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
     private String attrWhitespaces(final XData xatt, final String data) {
         String result;
         if ((xatt != null && xatt._attrWhiteSpaces!= 0) ? xatt._attrWhiteSpaces == 'T'
-            : (_xElement._attrWhiteSpaces != 0)
-                ? _xElement._attrWhiteSpaces == 'T' : _rootChkDocument._attrWhiteSpaces == 'T') {
+            : (_xElement._attrWhiteSpaces!= 0) ? _xElement._attrWhiteSpaces == 'T'
+            : _rootChkDocument._attrWhiteSpaces == 'T') {
             result = SUtils.trimAndRemoveMultipleWhiteSpaces(data);
         } else if ((xatt != null && xatt._trimAttr != 0) ? xatt._trimAttr != 'F'
             : (_xElement._trimAttr != 0) ? _xElement._trimAttr != 'F'
@@ -966,8 +968,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
         if (result.isEmpty()) {
             if ((xatt != null && xatt._ignoreEmptyAttributes != 0)
-                ? xatt._ignoreEmptyAttributes == 'T' : (_xElement._ignoreEmptyAttributes != 0)
-                ? _xElement._ignoreEmptyAttributes == 'T' : _rootChkDocument._ignoreEmptyAttributes == 'T') {
+                ? xatt._ignoreEmptyAttributes == 'T'
+                : (_xElement._ignoreEmptyAttributes != 0) ? _xElement._ignoreEmptyAttributes == 'T'
+                : _rootChkDocument._ignoreEmptyAttributes == 'T') {
                 return null;
             }
             return result;
@@ -976,7 +979,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             return result;
         }
         byte c = (xatt != null && xatt._attrValuesCase != 0) ? xatt._attrValuesCase
-            : _xElement._attrValuesCase != 0 ? _xElement._attrValuesCase  : _rootChkDocument._setAttrValuesCase;
+            : _xElement._attrValuesCase != 0 ? _xElement._attrValuesCase
+            : _rootChkDocument._setAttrValuesCase;
         return c == 'T' ? result.toUpperCase() : c == 'F' ? result.toLowerCase() : result;
     }
 
@@ -1008,8 +1012,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             if (item.getItemId() == XD_PARSERESULT) {
                 _parseResult = (XDParseResult) item;
                 _data = _parseResult.getSourceBuffer();
-                if (_xComponent != null && _parseResult.matches() && getXMNode() != null
-                    && getXMNode().getXDPosition() != null) {
+                if (_xComponent != null && _parseResult.matches()
+                    && getXMNode()!=null && getXMNode().getXDPosition()!=null) {
                     if ("$text".equals(xdata.getName())) {
                         _xComponent.xSetText(this, _parseResult);
                     } else {
@@ -1945,7 +1949,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             xd._textWhiteSpaces  == 'T' : _xElement._textWhiteSpaces == 'T') {
             result = SUtils.trimAndRemoveMultipleWhiteSpaces(data);
         } else if ((xd != null && xd._trimText != 0) ? xd._trimText != 'F'
-            : (_xElement._trimText!=0) ? _xElement._trimText!='F' : _rootChkDocument._trimText!='F') {
+            : (_xElement._trimText != 0) ? _xElement._trimText != 'F' : _rootChkDocument._trimText != 'F') {
             result = data.trim();
         } else {
             result = data;
@@ -2133,8 +2137,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 }
                 if (_element != null) {
                     _parent.incRefNum();
-                    //Maximum occurrence limit of &amp;{0} exceeded
-                    error(XDEF.XDEF558, _xElement._xonVersion > 0 ? _xonKey : "element " + _element.getTagName());
+                    error(XDEF.XDEF558, //Maximum occurrence limit of &amp;{0} exceeded
+                        _xElement._xonVersion > 0 ? _xonKey : "element " + _element.getTagName());
                     error = true;
                 }
             } else {
@@ -2599,8 +2603,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                 _actDefIndex = actDefIndex;
                 xtxt1 = _xElement.getDefAttr("$text", -1);
             } else if (_xElement._moreElements != 'T' && _xElement._moreElements != 'I'
-                && !_xElement.hasDefAttr("$textcontent")
-                && _xElement._moreText != 'T' && _xElement._moreText != 'I') {
+                && !_xElement.hasDefAttr("$textcontent") && _xElement._moreText != 'T' && _xElement._moreText != 'I') {
                 debugXPos(XDDebug.ONILLEGALTEXT);
                 if (_xElement._onIllegalText >= 0) {
                     _elemValue = _element;
@@ -2959,14 +2962,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                         // if the value is an ampty string and the option is set to "acceptEmptyAttributes"
                         // at any level then set the result of the check method to "true" (do NOT
                         // report and/or process an error)!
-                        if (_data.isEmpty() && ((xatt._ignoreEmptyAttributes == 'A'
-                            || xatt._ignoreEmptyAttributes=='P' && xatt.isOptional())
-                            || xatt._ignoreEmptyAttributes == 0
-                                && (_xElement._ignoreEmptyAttributes=='A'
-                            ||_xElement._ignoreEmptyAttributes=='P' && xatt.isOptional())
-                            || _xElement._ignoreEmptyAttributes == 0
-                                && (_rootChkDocument._ignoreEmptyAttributes=='A'
-                            || _rootChkDocument._ignoreEmptyAttributes=='P' && xatt.isOptional()))) {
+                        if (_data.isEmpty()
+                            && ((xatt._ignoreEmptyAttributes == 'A' || xatt._ignoreEmptyAttributes == 'P'
+                            && xatt.isOptional()) || xatt._ignoreEmptyAttributes == 0
+                            && (_xElement._ignoreEmptyAttributes=='A' ||_xElement._ignoreEmptyAttributes=='P'
+                            && xatt.isOptional()) || _xElement._ignoreEmptyAttributes == 0
+                            && (_rootChkDocument._ignoreEmptyAttributes=='A'
+                                || _rootChkDocument._ignoreEmptyAttributes=='P' && xatt.isOptional()))) {
                             //accept empty attributes
                             _attNames.add(xname);
                             _parseResult = new DefParseResult(""); // empty attr

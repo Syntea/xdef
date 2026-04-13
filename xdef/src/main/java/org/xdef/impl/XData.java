@@ -364,14 +364,14 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
         boolean result = compareNameAndNS(y, rep) && compareOccurrence(y, rep);
         if ("$text".equals(getName())) {
             if (_textValuesCase != y._textValuesCase || _textWhiteSpaces != y._textWhiteSpaces
-                || _textValuesCase != y._textValuesCase || _trimText != y._trimText || _noJsonNull != y._noJsonNull) {
+                || _textValuesCase != y._textValuesCase || _trimText != y._trimText) {
                 rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
                 result = false;
             }
         } else {
             if (_attrValuesCase != y._attrValuesCase || _acceptQualifiedAttr != y._acceptQualifiedAttr
                 || _ignoreEmptyAttributes != y._ignoreEmptyAttributes || _attrValuesCase != y._attrValuesCase
-                || _attrWhiteSpaces != y._attrWhiteSpaces || _trimAttr != y._trimAttr || _noJsonNull != y._noJsonNull) {
+                || _attrWhiteSpaces != y._attrWhiteSpaces || _trimAttr != y._trimAttr) {
                 rep.error(XDEF.XDEF290, getXDPosition(), y.getXDPosition());//Options differs: &{0} and &{1}
                 result = false;
             }

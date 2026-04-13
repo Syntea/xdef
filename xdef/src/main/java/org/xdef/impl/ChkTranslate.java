@@ -552,7 +552,7 @@ final class ChkTranslate extends SReporter {
             }
             String s = chkElem.getTextValue();
             if (s != null) {
-                if (!s.isEmpty() || xatr._ignoreEmptyAttributes!=0 || xatr._ignoreEmptyAttributes==0
+                if (!s.isEmpty() || xatr._ignoreEmptyAttributes != 0 || xatr._ignoreEmptyAttributes == 0
                     && xel._ignoreEmptyAttributes != 0 ||  xel._ignoreEmptyAttributes == 0
                     && chkElem._rootChkDocument._ignoreEmptyAttributes != 0) {
                     // set attribute
