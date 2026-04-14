@@ -1176,7 +1176,7 @@ public class TestJsonXdef extends XDTester {
             }
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
-"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
 "</xd:def>";
             props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
             xp = XDFactory.compileXD(props, xdef);
