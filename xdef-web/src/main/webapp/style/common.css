@@ -59,7 +59,7 @@ span#footVerAct {
 }
 
 div#header {
-    min-height:         4em;
+    min-height:         4.1em;
     position:           sticky;
     top:                0;
     opacity:            0.9;
