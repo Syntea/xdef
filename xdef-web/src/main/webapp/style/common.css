@@ -36,6 +36,9 @@ textarea.lined {
     display:            block;
 }
 
+span.error {
+    visibility:         hidden;
+}
 
 /* header and footer                        */
 /*==========================================*/
@@ -46,7 +49,7 @@ div.footer {
     font-size:          0.8em;
 }
 
-div.header {
+div#header {
     height:             4em;
     position:           sticky;
     top:                0;
@@ -59,7 +62,7 @@ html {
     scroll-padding-top: 5em;
 }
 
-div.header > div {
+div.header {
     height:             100%;
 }
 

@@ -6,13 +6,16 @@
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="style/common.css"/>
-    <script type="text/javascript" src="style/jquery-4.0.0.min.js"></script>
+    <script src="style/jquery-4.0.0.min.js"></script>
+    <script src="style/common.js"></script>
+<!--     <script type="module" src="style/common.js"></script> -->
 </head>
 <body>
 
-<div class="header">ERROR: HEADER NOT LOADED</div>
-<!-- <script>$("div.header").load("header0.html")</script> -->
-<script>setTimeout(function() { $("div.header").load("header0.html"); }, 1000)</script>
+<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
+<script>loadHeader("header0.html")</script>
+<div id="out"></div>
+<script>$('div#out').html("result: " + $('link[rel="icon"]').attr("href"))</script>
 
 
 <h1>X-definition Introduction</h1>
@@ -76,8 +79,11 @@ Articles, lectures, presentations, videos:<ul>
 </ul>
 
 
-<div id="footer">ERROR: FOOTER NOT LOADED</div>
-<script>$("#footer").load("footer0.html")</script>
+<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
+<script>$("div#footer").load("footer0.html")</script>
+
+<!-- <script>$("div#header").load("header0.html");$("div#footer").load("footer0.html")</script> -->
+<!-- <script>init()</script> -->
 
 </body>
 </html>
