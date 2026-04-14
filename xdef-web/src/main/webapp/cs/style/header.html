@@ -8,10 +8,17 @@
         </select>
     </div>
     <ul class="nav">
-        <li><a href="${rootPath}../tutorial/"               >Tutoriál</a><sup>(en)</sup></li>
-        <li><a href="${rootPath}../playground/"             >Pískoviště</a><sup>(en)</sup></li>
-        <li><a href="${rootPath}../other/download.html"     >Stáhnout</a><sup>(en)</sup></li>
-        <li><a href="${rootPath}./#Media"                   >Média</a></li>
-        <li><a href="https://www.syntea.cz/o-nas/"          >Syntea</a></li>
+        <li class="logo"><span></span></li>
+        <li><span><a href="${rootPath}../tutorial/"                 >Tutoriál</a><sup>(en)</sup></span></li>
+        <li><span><a href="${rootPath}../playground/"               >Pískoviště</a><sup>(en)</sup></span></li>
+        <li><span><a href="${rootPath}../other/download.html"       >Stáhnout</a><sup>(en)</sup></span></li>
+        <li><span><a href="${rootPath}./#Media"                     >Média</a></span></li>
+        <li><span><a href="https://www.syntea.cz/o-nas/"            >Syntea</a></span></li>
     </ul>
+    <script>
+        $("div.logo").hover(
+            function(){ $("img").animate({height: '8em'}, "fast"); },
+            function(){ $("img").animate({height: '4em'}, "fast"); }
+        )
+    </script>
 </div>

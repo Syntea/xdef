@@ -58,7 +58,6 @@ span#footVerAct {
 }
 
 div#header {
-    height:             4em;
     position:           sticky;
     top:                0;
     opacity:            0.9;
@@ -71,16 +70,16 @@ html {
 }
 
 div.header {
-    height:             100%;
+    background-image:   linear-gradient(#8bceee, #e6f7ff);
 }
 
-div.lang {
+div.header div.lang {
     text-align:         right;
     float:              right;
     padding-top:        0.5em;
 }
 
-div.lang, div.lang select {
+div.header div.lang, div.header div.lang select {
     font-size:          85%;
 }
 
@@ -97,32 +96,28 @@ select#headLangAct {
     display:            none;
 }
 
-div.logo {
+div.header div.logo {
     position:           absolute;;
 }
 
-div.logo img {
+div.header div.logo img {
     height:             4em;
 }
 
-div.logo img:hover {
-    height:             12em;
-}
-
-ul.nav {
-    height:             100%;
+div.header ul.nav {
     margin:             0;
     padding:            0;
-    background-image:   linear-gradient(#8bceee, #e6f7ff);
+    list-style-type:    none;
 }
 
-ul.nav > li {
-    height:             100%;
-    display:            inline-block;
-    vertical-align:     middle;
+div.header ul.nav > li {
+    height:             4em;
+    display:            inline-flex;
+    align-items:        center;
     padding-left:       3em;
 }
 
-ul.nav > li.logo {
+div.header ul.nav > li.logo {
     padding-left:       0;
+    width:              4em;
 }
