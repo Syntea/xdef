@@ -37,6 +37,7 @@ textarea.lined {
 }
 
 span.error {
+    color:              red;
     visibility:         hidden;
 }
 
@@ -58,6 +59,7 @@ span#footVerAct {
 }
 
 div#header {
+    min-height:         4em;
     position:           sticky;
     top:                0;
     opacity:            0.9;

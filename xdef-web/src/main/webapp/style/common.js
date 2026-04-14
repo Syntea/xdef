@@ -65,6 +65,8 @@ export function headLangActivate() {
 }
 
 
+setTimeout(function() { $(".error").css("visibility", "visible"); }, 1000);
+
 //exports to window
 window.loadHeaderFooter     = loadHeaderFooter;
 window.linenumbers          = linenumbers;
