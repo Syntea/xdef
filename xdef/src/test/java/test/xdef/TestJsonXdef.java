@@ -1149,7 +1149,7 @@ public class TestJsonXdef extends XDTester {
             jparse(xp, "", "{\"c\":\"LMN0H7\",\"a\":1,\"b\":\"MA5800-X17\"}", reporter);
             assertNoErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
-        try { // test option illegalJsonNull
+        try { // test options illegalJsonNull, acceptJsonNull
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJsonNull\" } </xd:json>\n" +
@@ -1191,7 +1191,6 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
 "</xd:def>";
-            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
             xp = XDFactory.compileXD(props, xdef);
             json = "{ \"stavPoistenia\": null }";
             jparse(xp, "", json, reporter);
@@ -1213,7 +1212,6 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' >\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
 "</xd:def>";
-            System.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
             xp = XDFactory.compileXD(null, xdef);
             json = "{ \"stavPoistenia\": null }";
             jparse(xp, "", json, reporter);
