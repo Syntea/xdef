@@ -49,6 +49,14 @@ div.footer {
     font-size:          0.8em;
 }
 
+span#footVerPas {
+    display:            inline;
+}
+
+span#footVerAct {
+    display:            none;
+}
+
 div#header {
     height:             4em;
     position:           sticky;
@@ -74,6 +82,19 @@ div.lang {
 
 div.lang, div.lang select {
     font-size:          85%;
+}
+
+span#headLangPas {
+    display:            inline;
+    cursor:             pointer;
+}
+
+span#headLangPas:hover {
+    text-decoration:    underline;
+}
+
+select#headLangAct {
+    display:            none;
 }
 
 div.logo {

@@ -1,0 +1,17 @@
+<div class="header">
+    <div class="logo"><a href="${rootPath}./"><img src="${rootPath}image/logo.png"/></a></div>
+    <div class="lang" title="Výběr jazyka">
+        <span id="headLangPas" onclick="headLangActivate()">Jazyk: CZ</span>
+        <select id="headLangAct" onchange="location = this.value;">
+            <option value="${rootPath}../" title="anglicky" lang="en"                    >english</option>
+            <option value="${rootPath}./"  title="česky"    lang="cs" selected="selected">česky</option>
+        </select>
+    </div>
+    <ul class="nav">
+        <li><a href="${rootPath}../tutorial/"               >Tutoriál</a><sup>(en)</sup></li>
+        <li><a href="${rootPath}../playground/"             >Pískoviště</a><sup>(en)</sup></li>
+        <li><a href="${rootPath}../other/download.html"     >Stáhnout</a><sup>(en)</sup></li>
+        <li><a href="${rootPath}./#Media"                   >Média</a></li>
+        <li><a href="https://www.syntea.cz/o-nas/"          >Syntea</a></li>
+    </ul>
+</div>

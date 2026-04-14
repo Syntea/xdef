@@ -14,7 +14,7 @@ function replaceHtml(rootPath, targets) {
 export function loadHeaderFooter(completeFooter, completeHeader) {
     const faviconHref = $('link[rel="icon"]').attr("href");
     const rootPathRes = /^(.*)image\/favicon\.ico$/.exec(faviconHref);
-    let   rootPath    = "";
+    var   rootPath    = "";
     if (rootPathRes) {
         rootPath = rootPathRes[1];
     }
@@ -49,7 +49,25 @@ export function linenumbers() {
     $("textarea.lined").linenumbers();
 }
 
+export function footVerActivate() {
+    $("#footVerPas").css("display", "none");
+    $("#footVerAct").css("display", "inline");
+}
+
+export function footVerDeactivate() {
+    $("#footVerPas").css("display", "inline");
+    $("#footVerAct").css("display", "none");
+}
+
+export function headLangActivate() {
+    $("#headLangPas").css("display", "none");
+    $("#headLangAct").css("display", "inline");
+}
+
 
 //exports to window
-window.loadHeaderFooter = loadHeaderFooter;
-window.linenumbers      = linenumbers;
+window.loadHeaderFooter     = loadHeaderFooter;
+window.linenumbers          = linenumbers;
+window.footVerActivate      = footVerActivate;
+window.footVerDeactivate    = footVerDeactivate;
+window.headLangActivate     = headLangActivate;
