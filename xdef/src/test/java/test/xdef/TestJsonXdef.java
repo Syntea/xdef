@@ -1175,7 +1175,7 @@ public class TestJsonXdef extends XDTester {
                 assertTrue(reporter.printToString().contains("XDEF809"));
             }
             xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
 "</xd:def>";
             props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
@@ -1188,7 +1188,7 @@ public class TestJsonXdef extends XDTester {
                 assertTrue(reporter.printToString().contains("XDEF809"));
             }
             xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option illegalJsonNull' >\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
 "</xd:def>";
             props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
@@ -1196,7 +1196,31 @@ public class TestJsonXdef extends XDTester {
             json = "{ \"stavPoistenia\": null }";
             jparse(xp, "", json, reporter);
             assertNoErrorwarnings(reporter);
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +
+"</xd:def>";
+            System.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
+            xp = XDFactory.compileXD(null, xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            if (!reporter.errors()) {
+                fail("Error not reported");
+            } else {
+                assertTrue(reporter.printToString().contains("XDEF809"));
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' >\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option acceptJsonNull\" } </xd:json>\n" +
+"</xd:def>";
+            System.setProperty(XDConstants.XDPROPERTY_OPTIONS, "illegalJsonNull");
+            xp = XDFactory.compileXD(null, xdef);
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            assertNoErrorwarnings(reporter);
+            System.out.println("OOK");
         } catch (RuntimeException ex) {fail(ex);}
+        System.getProperties().remove(XDConstants.XDPROPERTY_OPTIONS);
 
         clearTempDir(); // delete temporary files.
     }
