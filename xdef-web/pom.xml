@@ -97,7 +97,7 @@
                             <targetPath>META-INF</targetPath>
                             <directory>.</directory>
                             <includes>
-                                <inlude> .flattened-pom.xml</inlude>
+                                <inlude>.flattened-pom.xml</inlude>
                             </includes>
                         </resource>
                         <resource>

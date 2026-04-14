@@ -1,15 +1,55 @@
-//import "./jquery-4.0.0.min.js";
-//import("./jquery-4.0.0.min.js");
+import "./jquery-4.0.0.min.js";
+//import "./jquery-4.0.0.js";
+import "./jquery.textarea-with-linenumbers.js";
 
-function loadHeader(url, data, complete) {
-    $("div#header").load(url, data, complete);
-    //setTimeout(function() { $("div#header").load("header0.html"); }, 1000);
+
+function replaceHtml(rootPath, targets) {
+    targets.forEach((target) => {
+        $(this).find(target.elem + "[" + target.attr + "]").each(function() {
+            $(this).attr(target.attr, $(this).attr(target.attr).replace("${rootPath}", rootPath));
+        })
+    })
+}
+
+export function loadHeaderFooter(completeFooter, completeHeader) {
+    const faviconHref = $('link[rel="icon"]').attr("href");
+    const rootPathRes = /^(.*)image\/favicon\.ico$/.exec(faviconHref);
+    let   rootPath    = "";
+    if (rootPathRes) {
+        rootPath = rootPathRes[1];
+    }
+
+    const targets = [
+        { elem: "a",      attr: "href"},
+        { elem: "img",    attr: "src"},
+        { elem: "option", attr: "value"}
+    ];
+
+    $("div#header").load(
+        rootPath + "style/header.html",
+        function(responseText, textStatus, jqXHR) {
+            replaceHtml.call(this, rootPath, targets);
+            if (completeHeader) {
+                completeHeader.call(this, responseText, textStatus, jqXHR);
+            }
+        }
+    );
+    $("div#footer").load(
+        rootPath + "style/footer.html",
+        function(responseText, textStatus, jqXHR) {
+            replaceHtml.call(this, rootPath, targets);
+            if (completeFooter) {
+                completeFooter.call(this, responseText, textStatus, jqXHR);
+            }
+        }
+    );
 };
 
-function loadFooter(url, data, complete) {
-    $("div#footer").load(url, data, complete);
-};
+export function linenumbers() {
+    $("textarea.lined").linenumbers();
+}
 
-//$(init);
-//init();
-//window.init = init;
+
+//exports to window
+window.loadHeaderFooter = loadHeaderFooter;
+window.linenumbers      = linenumbers;

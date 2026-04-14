@@ -74,7 +74,7 @@
                 var line_number_output='';
                 // declare spacers and max_spacers vars, and set defaults
                 var max_spacers = ''; var spacers = '';
-                for(i=0;i<opt.digits;i++){
+                for(var i=0;i<opt.digits;i++){
                     max_spacers += ' ';
                 }
                 var obj = this;
@@ -85,8 +85,8 @@
                         validatorClasses += ' current-line';
                     }
                     // Determine the appropriate number of leading spaces
-                    lencheck = k+opt.start+'!';
-                    spacers = max_spacers.substr(lencheck.length-1);
+                    var lencheck = k+opt.start+'!';
+                    var spacers = max_spacers.substr(lencheck.length-1);
                     // Add the line with out line number, to the output variable
                     line_number_output += '<span class="'+validatorClasses+'">'+spacers+(k+opt.start)+' '+'</span>';
                 });

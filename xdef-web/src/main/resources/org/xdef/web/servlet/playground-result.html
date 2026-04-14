@@ -6,12 +6,11 @@
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="image/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="style/common.css"/>
-    <script type="text/javascript" src="style/jquery-4.0.0.min.js"></script>
+    <script type="module" src="style/common.js"></script>
 </head>
 <body>
 
-<div id="header">ERROR: HEADER NOT LOADED</div>
-<script>$("#header").load("header0.html")</script>
+<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
 
 <h1>Playground result &mdash; ${status}</h1>
 
@@ -19,8 +18,9 @@
 <pre class="output">${result}</pre>
 <div class="output">${stdout}</div>
 
-<div id="footer">ERROR: FOOTER NOT LOADED</div>
-<script>$("#footer").load("footer0.html",
+<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">loadHeaderFooter(
     function() { $(this).children("div").append(", X-definition: ${xdef-lib-id}"); })
 </script>
 
