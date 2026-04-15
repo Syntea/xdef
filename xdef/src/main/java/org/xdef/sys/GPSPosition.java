@@ -29,10 +29,7 @@ public class GPSPosition implements Serializable {
      * @param name the name of locality or null.
      * @throws SRuntimeException if position is incorrect.
      */
-    public GPSPosition(final double latitude,
-        final double longitude,
-        final double altitude,
-        final String name) {
+    public GPSPosition(final double latitude, final double longitude, final double altitude, final String name) {
         _latitude = latitude;
         _longitude = longitude;
         _altitude = altitude;
@@ -92,8 +89,8 @@ public class GPSPosition implements Serializable {
 
     @Override
     public int hashCode() {
-        return (int) Double.doubleToLongBits(101*_latitude
-            + 97 * (_longitude+19*(_altitude == Double.MIN_VALUE ? 1 : _altitude)));
+        return (int) Double.doubleToLongBits(101*_latitude + 97 * (_longitude+19 *
+            (_altitude == Double.MIN_VALUE ? 1 : _altitude)));
     }
 
     @Override

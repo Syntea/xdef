@@ -130,21 +130,20 @@ public class RegisterReportTables {
 
         @Override
         /** Get report text (with resolved references). If ID doesn't exist the returned value is null.
-         * @param ID report registered ID.
+         * @param id report registered id number.
          * @return The text of report or null.
          */
-        public final String getReportText(final long ID) {
-            int ndx = getRegisteredReportId(ID);
-            return getReportText(getPrefix() + _ids[ndx]);
+        public final String getReportText(final long id) {
+            return getReportText(getPrefix() + _ids[getRegisteredReportId(id)]);
         }
 
         @Override
         /** Get reportID from registered report ID.
-         * @param ID registered report ID.
+         * @param id registered report ID number.
          * @return string with report ID or null.
          */
-        public final String getReportID(final long ID) {
-            return _ids == null ? null : getPrefix() + _ids[getRegisteredReportId(ID)];
+        public final String getReportID(final long id) {
+            return _ids == null ? null : getPrefix() + _ids[getRegisteredReportId(id)];
         }
 
         @Override
@@ -198,16 +197,16 @@ public class RegisterReportTables {
         abstract protected String getReportText(final String reportID);
 
         /** Get report text (with resolved references). If ID doesn't exist the returned value is null.
-         * @param ID report registered ID.
+         * @param id report registered ID number.
          * @return The text of report or null.
          */
-        abstract protected String getReportText(final long ID);
+        abstract protected String getReportText(final long id);
 
         /** Get string of reportID from registered report ID.
-         * @param ID registered report ID.
+         * @param id registered report ID number.
          * @return string created from registered report ID or null.
          */
-        abstract protected String getReportID(final long ID);
+        abstract protected String getReportID(final long id);
 
         protected ReportTable(final Class<?> baseClass, final Class<?> localizedClass) {
             String className = localizedClass.getName();
@@ -315,10 +314,10 @@ public class RegisterReportTables {
         }
 
         /** Get sorted array of all parameter names of report.
-         * @param ID report registered ID.
+         * @param id report registered ID number.
          * @return The array of parameter names.
          */
-        protected final String[] getReportParamNames(final long ID) {return getParams(getReportText(ID));}
+        protected final String[] getReportParamNames(final long id) {return getParams(getReportText(id));}
 
         @Override
         public String toString() {return "ReportTable: " + _tableName;}
@@ -482,11 +481,11 @@ public class RegisterReportTables {
         }
 
         /** Get index from registered report ID.
-         * @param ID report registered ID.
+         * @param id report registered ID number.
          * @return registered report ID.
          */
-        protected final static int getRegisteredReportId(final long ID) {
-            return (int) ID & IDMASK;
+        protected final static int getRegisteredReportId(final long id) {
+            return (int) id & IDMASK;
         }
     }
 

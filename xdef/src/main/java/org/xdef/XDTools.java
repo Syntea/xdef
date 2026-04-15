@@ -41,21 +41,21 @@ public class XDTools {
     public static final String getXDVersion() {	return BUILD_VERSION + " (" + BUILD_DATETIME + ")";}
 
     /** Creates XDInput from InputStream.
-     * @param value the stream.
-     * @param xmlFormat if true the input data are in XML format, otherwise in string format.
+     * @param is the stream.
+     * @param isXml if true the input data are in XML format, otherwise in string format.
      * @return the XDInput object.
      */
-    public static final XDInput createXDInput(final InputStream value, final boolean xmlFormat) {
-        return new DefInStream(value, xmlFormat);
+    public static final XDInput createXDInput(final InputStream is, final boolean isXml) {
+        return new DefInStream(is, isXml);
     }
 
     /** Creates XDInput from InputStream.
      * @param value the stream.
-     * @param isxml if true the input data are in XML format, otherwise in string format.
+     * @param isXml if true the input data are in XML format, otherwise in string format.
      * @return the XDInput object.
      */
-    public static final XDInput createXDInput(final InputStreamReader value, final boolean isxml) {
-        return new DefInStream(value, isxml);
+    public static final XDInput createXDInput(final InputStreamReader value, final boolean isXml) {
+        return new DefInStream(value, isXml);
     }
 
     /** Creates XDInput from InputStream.

@@ -417,7 +417,7 @@ public final class DefParseResult extends XDValueAbstract implements XDParseResu
         putReport(Report.error(id, msg, mod));
     }
     @Override
-    public final void error(final long ID, final Object... mod) {putReport(Report.error(ID, mod));}
+    public final void error(final long id, final Object... mod) {putReport(Report.error(id, mod));}
     @Override
     public final void putReport(final Report report) {
         if (_ar == null) {

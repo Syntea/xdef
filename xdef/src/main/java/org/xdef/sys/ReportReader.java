@@ -41,5 +41,4 @@ public interface ReportReader {
      * @param reporter OutputStreamWriter where to write,
      */
     public void writeReports(final ReportWriter reporter);
-
 }

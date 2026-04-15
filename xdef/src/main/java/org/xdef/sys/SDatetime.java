@@ -2188,37 +2188,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
         return x;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of javax.xml.datatype.XMLGregorianCalendar
-////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public final void reset() {
-        synchronized(this) {
-            resetOriginalValues();
-            _dfs = null;
-            _calendar = null;
-        }
-    }
-
-    @Override
-    public final void clear() {init();}
-
-    @Override
-    public final void setYear(final BigInteger year) {
-        synchronized(this) {
-            if (year == null) {
-                _eon = 0;
-                _year = Integer.MIN_VALUE;
-            } else {
-                BigInteger temp = year.remainder(BILLION_I);
-                _year = temp.intValue();
-                temp = year.subtract(temp);
-                _eon = temp.compareTo(BigInteger.ZERO) == 0 ? 0 : year.divide(BILLION_I).intValue();
-            }
-        }
-    }
-
     /** Set the Raw time zone offset.
      * @param offset The time zone offset in millisecond.
      */
@@ -2244,11 +2213,38 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
         }
     }
 
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of javax.xml.datatype.XMLGregorianCalendar
+////////////////////////////////////////////////////////////////////////////////
     @Override
+    public final void reset() {
+        synchronized(this) {
+            resetOriginalValues();
+            _dfs = null;
+            _calendar = null;
+        }
+    }
+    @Override
+    public final void clear() {init();}
+    @Override
+    public final void setYear(final BigInteger year) {
+        synchronized(this) {
+            if (year == null) {
+                _eon = 0;
+                _year = Integer.MIN_VALUE;
+            } else {
+                BigInteger temp = year.remainder(BILLION_I);
+                _year = temp.intValue();
+                temp = year.subtract(temp);
+                _eon = temp.compareTo(BigInteger.ZERO) == 0 ? 0 : year.divide(BILLION_I).intValue();
+            }
+        }
+    }
     /** Number of minutes of time zone offset or
      * (DatatypeConstants.FIELD_UNDEFINED, i.e. Integer.MIN_VALUE).
-     * @param minutes of time zone offset; range from -14 hours (-14 * 60) to 14 hours (14 * 60).
+     * @param offset of time zone offset; range from -14 hours (-14 * 60) to 14 hours (14 * 60).
      */
+    @Override
     public final void setTimezone(final int offset) {
         synchronized(this) {
             if(offset<-14*60 || offset > 14*60) {
@@ -2269,32 +2265,26 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
             }
         }
     }
-
     @Override
     public final void setFractionalSecond(final BigDecimal x) {setFraction(x == null ? 0 : x.doubleValue());}
-
     @Override
     public final BigInteger getEon() {return _eon == 0 ? null : BigInteger.valueOf(_eon).multiply(BILLION_I);}
-
     @Override
     public final BigInteger getEonAndYear() {
         return _year == Integer.MIN_VALUE
             ? null : _eon != 0 ? getEon().add(BigInteger.valueOf(_year)) : BigInteger.valueOf(_year);
     }
-
-    @Override
     /** Get time zone offset in minutes.
      * @return minutes of time zone offset or Integer.MIN_VALUE (DatatypeConstants.FIELD_UNDEFINED).
      */
+    @Override
     public final int getTimezone() {
         return _tz == null ? Integer.MIN_VALUE
             : _year != Integer.MIN_VALUE && _month != Integer.MIN_VALUE && _day != Integer.MIN_VALUE
                 ? _tz.getOffset(getTime().getTime()) / 60000 : _tz.getRawOffset() / 60000;
     }
-
     @Override
     public final BigDecimal getFractionalSecond() {return new BigDecimal(getFraction());}
-
     @Override
     public final int compare(final XMLGregorianCalendar x) {
         if (x instanceof SDatetime) {
@@ -2310,11 +2300,10 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
             return compareTo(y);
         }
     }
-
-    @Override
     /** Normalize this instance to UTC.
      * @return normalized XMLGregorianCalendar.
      */
+    @Override
     public final SDatetime normalize() {
         SDatetime result = (SDatetime) clone();
         if (_tz != null && _tz != NULL_ZONE) {
@@ -2323,7 +2312,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
         }
         return result;
     }
-
     @Override
     public final String toXMLFormat() {
         QName typekind = getXMLSchemaType();
@@ -2337,7 +2325,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
             : "y-MM-dd'T'HH:mm:ss"; //DATETIME
         return formatDate(mask + (_tz != null ? "Z" : ""));
     }
-
     @Override
     public final QName getXMLSchemaType() {
         switch ((_year!=Integer.MIN_VALUE ? 0x20 : 0) | (_month!=Integer.MIN_VALUE ? 0x10 : 0)
@@ -2354,10 +2341,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
         }
         throw new IllegalStateException(this.getClass().getName() + "#getXMLSchemaType(): InvalidFields");
     }
-
     @Override
     public final boolean isValid() {return chkDatetime();}
-
     @Override
     public final void add(final Duration duration) {
         int sign = duration.getSign();
@@ -2379,10 +2364,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
         }
         add(years, months, days, hours, minutes, seconds, fraction);
     }
-
     @Override
     public final GregorianCalendar toGregorianCalendar() {return (GregorianCalendar) getCalendar();}
-
     @Override
     public final GregorianCalendar toGregorianCalendar(final TimeZone timezone,
         final Locale locale,
@@ -2467,7 +2450,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
         }
         return result;
     }
-
     @Override
     public final TimeZone getTimeZone(final int defaultZoneoffset) {return _tz;}
 }

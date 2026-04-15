@@ -1216,7 +1216,6 @@ public class TestJsonXdef extends XDTester {
             json = "{ \"stavPoistenia\": null }";
             jparse(xp, "", json, reporter);
             assertNoErrorwarnings(reporter);
-            System.out.println("OOK");
         } catch (RuntimeException ex) {fail(ex);}
         System.getProperties().remove(XDConstants.XDPROPERTY_OPTIONS);
 

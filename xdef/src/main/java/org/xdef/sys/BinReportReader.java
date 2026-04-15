@@ -26,19 +26,14 @@ public class BinReportReader implements ReportReader {
     public final void close() {
         try {_in.getStream().close();} catch (IOException ex) {}
     }
-
     @Override
     public final void printReports(final PrintStream out) {}
-
     @Override
     public final void printReports(final PrintStream out, final String language) {}
-
     @Override
     public final String printToString() {return null;}
-
     @Override
     public final String printToString(final String language) {return null;}
-
     @Override
     /** Write reports from this reporter reader to report writer.
      * @param reporter OutputStreamWriter where to write,
