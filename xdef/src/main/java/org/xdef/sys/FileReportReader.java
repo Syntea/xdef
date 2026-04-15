@@ -26,24 +26,21 @@ public class FileReportReader implements ReportReader {
 
     /** Create new empty KFileReportReader.
      * @param fname The pathname of file with the input data.
-     * @param xmlFormat if true the from of input data is in XML,otherwise the input data stream is processed
-     * as a stream of source lines.
+     * @param isXml if true the from of input data is in XML,otherwise the input data stream is processed
+     * as source lines stream.
      * @throws SException if an error occurs.
      */
-    public FileReportReader(final String fname, final boolean xmlFormat) throws SException {
-        this(new File(fname), xmlFormat);
-    }
+    public FileReportReader(final String fname, final boolean isXml) throws SException {this(new File(fname), isXml);}
 
     /** Create new empty KFileReportReader.
      * @param fname The pathname of file with the input data.
      * @param encoding The name of encoding table (null =&gt; default encoding).
-     * @param xmlFormat if true the from of input data is in XML, otherwise the input data stream is processed
-     * as a stream of source lines.
+     * @param isXml if true the from of input data is in XML, otherwise the input data stream is processed
+     * as source lines stream.
      * @throws SException if an error occurs.
      */
-    public FileReportReader(final String fname, final String encoding, final boolean xmlFormat)
-        throws SException {
-        this(new File(fname), encoding, xmlFormat);
+    public FileReportReader(final String fname, final String encoding, final boolean isXml) throws SException {
+        this(new File(fname), encoding, isXml);
     }
 
     /** Create new empty KFileReportReader.
@@ -55,7 +52,7 @@ public class FileReportReader implements ReportReader {
     /** Create new empty KFileReportReader.
      * @param in The file with the input data.
      * @param isXML if true the format of input data is  XML, otherwise the input data stream is processed
-     * as a stream of source lines.
+     * as source lines stream.
      * @throws SException if an error occurs.
      */
     public FileReportReader(final File in, final boolean isXML) throws SException {this(in, null, isXML);}
@@ -64,14 +61,13 @@ public class FileReportReader implements ReportReader {
      * @param in The file with the input data.
      * @param encoding The name of encoding table (null =&gt; default encoding).
      * @param isXML if true the format of input data is in XML, otherwise the input data stream is processed
-     * as a stream of source lines.
+     * as source lines stream.
      * @throws SException if an error occurs.
      */
     public FileReportReader(final File in, final String encoding, final boolean isXML) throws SException {
         try {
             if (encoding != null && encoding.length() > 0) {
-                init(new InputStreamReader(new FileInputStream(in),
-                    encoding), isXML);
+                init(new InputStreamReader(new FileInputStream(in), encoding), isXML);
             } else {
                 init(new InputStreamReader(new FileInputStream(in)), isXML);
             }
@@ -90,7 +86,7 @@ public class FileReportReader implements ReportReader {
     /** Create new empty KFileReportReader.
      * @param in The input stream reader.
      * @param isXML if true the format of input data is in XML, otherwise the input data stream is processed
-     * as a stream of source lines.
+     * as source lines stream.
      */
     public FileReportReader(final InputStreamReader in, final boolean isXML) {init(in, isXML);}
 
@@ -132,13 +128,13 @@ public class FileReportReader implements ReportReader {
     }
 
     private static String[] REPORTSTARTTOKENS =
-        new String[] {"<S>","<U","<T","<A","<M","<W","<L","<E","<F","<X","<D","<K","<I"};
+        new String[] {"<S>", "<U", "<T", "<A", "<M", "<W", "<L", "<E", "<F", "<X", "<D", "<K", "<I"};
 
-    @Override
     /** Get next report from the list or null.
      * @return The report or null.
      * @throws SRuntimeException if error occurs.
      */
+    @Override
     public final Report getReport() {
         if (_parser != null) {
             if (_parser.eos()) {
@@ -163,22 +159,15 @@ public class FileReportReader implements ReportReader {
                             }
                             return Report.string(null, text);
                         }
-                        //Incorrect format of report
-                        throw new SIOException(SYS.SYS042);
+                        throw new SIOException(SYS.SYS042); //Incorrect format of report
                     }
                     default: {
-                        String id = _parser.isToken(" id=\"") ?
-                            parseXMLTextUntil('"') : null;
-                        String txt = _parser.isToken(" txt=\"") ?
-                            parseXMLTextUntil('"') : null;
-                        String mod = _parser.isToken(" mod=\"") ?
-                            parseXMLTextUntil('"') : null;
-                        long time = _parser.isToken(" time=\"") ?
-                            Long.parseLong(parseXMLTextUntil('"'), 16) : -1L;
+                        String id = _parser.isToken(" id=\"") ? parseXMLTextUntil('"') : null;
+                        String txt = _parser.isToken(" txt=\"") ? parseXMLTextUntil('"') : null;
+                        String mod = _parser.isToken(" mod=\"") ? parseXMLTextUntil('"') : null;
+                        long time = _parser.isToken(" time=\"") ? Long.parseLong(parseXMLTextUntil('"'), 16) : -1L;
                         if (_parser.isToken("/>")) {
-                            Report result = new Report(
-                                (byte) REPORTSTARTTOKENS[index].charAt(1),
-                                id, txt, mod);
+                            Report result = new Report((byte) REPORTSTARTTOKENS[index].charAt(1), id, txt, mod);
                             if (time != -1L) {
                                 result.setTimestamp(time);
                             }
@@ -194,8 +183,7 @@ public class FileReportReader implements ReportReader {
                 }
                 throw new SIOException(SYS.SYS042);//Incorrect format of report
             } catch (NumberFormatException | SIOException ex) {
-                //Program exception&{0}{: }
-                throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+                throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
             }
         } else if (_reader == null) {
             return null;
@@ -226,9 +214,8 @@ public class FileReportReader implements ReportReader {
         }
         return Report.string(null, sb.toString());
     }
-
-    @Override
     /* Close the stream. */
+    @Override
     public final void close() {
         if (_reader != null) {
             try {
@@ -240,18 +227,16 @@ public class FileReportReader implements ReportReader {
             _parser = null;
         }
     }
-
-    @Override
     /** Write reports to String.
      * @return the String with reports.
      */
-    public final String printToString() {return printToString(null);}
-
     @Override
+    public final String printToString() {return printToString(null);}
     /** Write reports to String in specified language.
      * @param language language id (ISO-639).
      * @return the String with reports.
      */
+    @Override
     public final String printToString(final String language) {
         StringBuilder sb = new StringBuilder();
         Report rep;
@@ -267,36 +252,33 @@ public class FileReportReader implements ReportReader {
         }
         return sb.toString();
     }
-
-    @Override
     /** Write reports to output stream.
      * @param out The PrintStream where reports are printed.
      * @throws SRuntimeException if an error occurs.
      */
+    @Override
     public final void printReports(final PrintStream out) {
         Report rep;
         while ((rep = getReport()) != null) {
             out.println(rep.toString());
         }
     }
-
-    @Override
     /** Write reports to output stream.
      * @param out The PrintStream where reports are printed.
      * @param language language id (ISO-639).
      * @throws SRuntimeException if an error occurs.
      */
+    @Override
     public final void printReports(final PrintStream out, final String language) {
         Report rep;
         while ((rep = getReport()) != null) {
             out.println(rep.toString(language));
         }
     }
-
-    @Override
     /** Write reports from this reporter reader to report writer.
      * @param reporter OutputStreamWriter where to write,
      */
+    @Override
     public final void writeReports(final ReportWriter reporter) {
         Report rep;
         while((rep = getReport()) != null) {

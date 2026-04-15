@@ -93,49 +93,6 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
         return result;
     }
 
-    @Override
-    /** compares position of report - internally used for sorting. */
-    public final boolean equals(final Object o) {
-        if (o != null && o instanceof ReportPrinter) {
-            ReportPrinter rep = (ReportPrinter)o;
-            return rep._sysId.equals(_sysId) && rep._line==_line && rep._column==_column;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public final int hashCode() {
-        int hash = 53 * 7 + (int) (_line ^ (_line >>> 32));
-        hash = 53 * hash + (int) (_column ^ (_column >>> 32));
-        return 53 * hash + (_sysId != null ? _sysId.hashCode() : 0);
-    }
-
-    @Override
-    /** Compares this object with the specified object for order. Comparison respects
-     * 1. position (if specified),
-     * 2. time (if specified). This serves to sort messages according to source position.
-     * @param rep Object to be compared.
-     * @return A negative integer, zero, or a positive integer as this object
-     * is less than, equal to, or greater than the specified object.
-     */
-    public final int compareTo(final ReportPrinter rep) {
-        if (rep._line == -1) {
-            return -1;
-        }
-        if (_line == -1) {
-            return 1;
-        }
-        if ((_sysId == null || rep._sysId == null)
-            || _sysId.compareTo(rep._sysId) != 0){
-            return -1;
-        }
-        if (_line != rep._line) {
-            return _line < rep._line ? -1 : 1;
-        }
-        return _column == rep._column ? 0 : _column < rep._column ? -1 : 1;
-    }
-
     /** Print message sources of all registered messages with given prefix.
      * @param prefix Message prefix.
      * @param out where to print.
@@ -420,15 +377,9 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
                 out.write(sp.toString(language));
                 out.write('\n');
                 switch (sp.getType()) {
-                    case Report.FATAL:
-                        fatals++;
-                        break;
-                    case Report.ERROR:
-                        errors++;
-                        break;
-                    case Report.WARNING:
-                        warnings++;
-                        break;
+                    case Report.FATAL: fatals++; break;
+                    case Report.ERROR: errors++; break;
+                    case Report.WARNING: warnings++; break;
                     default:
                 }
                 if (sp._pos > -1) {
@@ -444,15 +395,9 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
                 do {
                     sp = sortedArray[index];
                     switch (sp.getType()) {
-                        case Report.FATAL:
-                            fatals++;
-                            break;
-                        case Report.ERROR:
-                            errors++;
-                            break;
-                        case Report.WARNING:
-                            warnings++;
-                            break;
+                        case Report.FATAL: fatals++; break;
+                        case Report.ERROR: errors++; break;
+                        case Report.WARNING: warnings++; break;
                         default:
                     }
                     out.write(sp.toString(language));
@@ -461,8 +406,7 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
             }
             if (fatals + errors + warnings > 0) {
                 //Fatal errors: &{0}, errors: &{1}, warnings: &{2}
-                out.write(Report.text(SYS.SYS068, fatals, errors, warnings)
-                    .toString(language));
+                out.write(Report.text(SYS.SYS068, fatals, errors, warnings).toString(language));
                 out.write('\n');
             }
             out.flush();
@@ -476,7 +420,7 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
     /** print message and help information and finish program.
      * @param msg The message.
      */
-    private static final void printUsage(final String msg) {
+    private static void printUsage(final String msg) {
         System.err.println("ReportPrinter");
         System.err.println(msg);
         System.err.println("Usage: -i errfile [-o output]\n"
@@ -533,8 +477,7 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
                                 }
                             }
                             continue;
-                        default:
-                            continue;
+                        default: continue;
                     }
                 }
             }
@@ -566,5 +509,46 @@ public final class ReportPrinter extends Report implements Comparable<ReportPrin
         } else if (null != out) {
             out.flush();
         }
+    }
+
+    /** compares position of report - internally used for sorting. */
+    @Override
+    public final boolean equals(final Object o) {
+        if (o != null && o instanceof ReportPrinter) {
+            ReportPrinter rep = (ReportPrinter)o;
+            return rep._sysId.equals(_sysId) && rep._line==_line && rep._column==_column;
+        } else {
+            return false;
+        }
+    }
+    @Override
+    public final int hashCode() {
+        int hash = 53 * 7 + (int) (_line ^ (_line >>> 32));
+        hash = 53 * hash + (int) (_column ^ (_column >>> 32));
+        return 53 * hash + (_sysId != null ? _sysId.hashCode() : 0);
+    }
+    /** Compares this object with the specified object for order. Comparison respects
+     * 1. position (if specified),
+     * 2. time (if specified). This serves to sort messages according to source position.
+     * @param rep Object to be compared.
+     * @return A negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     */
+    @Override
+    public final int compareTo(final ReportPrinter rep) {
+        if (rep._line == -1) {
+            return -1;
+        }
+        if (_line == -1) {
+            return 1;
+        }
+        if ((_sysId == null || rep._sysId == null)
+            || _sysId.compareTo(rep._sysId) != 0){
+            return -1;
+        }
+        if (_line != rep._line) {
+            return _line < rep._line ? -1 : 1;
+        }
+        return _column == rep._column ? 0 : _column < rep._column ? -1 : 1;
     }
 }

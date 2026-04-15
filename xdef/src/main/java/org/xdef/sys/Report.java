@@ -668,13 +668,13 @@ public class Report {
     }
 
     /** Get modified text of localized registered report (see description of this class above).
-     * @param ID registered report ID.
+     * @param id registered report ID number.
      * @param modification modification string.
      * @param language language code (ISO-639) or null (i.e. default language).
      * @return text of localized report in given language or null.
      */
-    public static final String getLocalizedText(final long ID, String modification, final String language) {
-        return MANAGER.getLocalizedText(ID, modification, language);
+    public static final String getLocalizedText(final long id, String modification, final String language) {
+        return MANAGER.getLocalizedText(id, modification, language);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -682,102 +682,98 @@ public class Report {
     ////////////////////////////////////////////////////////////////////////////
 
     /** Create new registered report object with type AUDIT.
-     * @param ID registered report id.
+     * @param id registered report id number.
      * @param mod modification string of report text.
      * @return generated report.
      */
-    public static final Report audit(final long ID, final Object... mod) {return new Report(AUDIT, ID, mod);}
+    public static final Report audit(final long id, final Object... mod) {return new Report(AUDIT, id, mod);}
 
     /** Create new registered report object with type FATAL.
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification string of report text.
      * @return generated report.
      */
-    public static final Report fatal(final long ID, final Object... mod) {return new Report(FATAL, ID, mod);}
+    public static final Report fatal(final long id, final Object... mod) {return new Report(FATAL, id, mod);}
 
     /** Create new registered report object with type ERROR.
-     * @param ID registered report id.
+     * @param id registered report id number.
      * @param mod modification string of report text.
      * @return generated report.
      */
-    public static final Report error(final long ID, final Object... mod) {return new Report(ERROR, ID, mod);}
+    public static final Report error(final long id, final Object... mod) {return new Report(ERROR, id, mod);}
 
     /** Create new registered report object with type LIGHT (light error).
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification parameters.
      * @return generated report.
      */
-    public static final Report lightError(
-        final long ID,final Object... mod) {return new Report(LIGHTERROR,ID,mod);
-    }
+    public static final Report lightError(final long id, final Object... mod) {return new Report(LIGHTERROR,id,mod);}
 
     /** Create new registered report object with type WARNING.
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification parameters.
      * @return generated report.
      */
-    public static final Report warning(long ID, final Object... mod) {return new Report(WARNING, ID, mod);}
+    public static final Report warning(final long id, final Object... mod) {return new Report(WARNING, id, mod);}
 
     /** Create new registered report object with type MESSAGE.
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification parameters.
      * @return generated report.
      */
-    public static final Report message(final long ID,final Object... mod) {return new Report(MESSAGE,ID,mod);}
+    public static final Report message(final long id,final Object... mod) {return new Report(MESSAGE,id,mod);}
 
     /** Create new registered report object with type INFO.
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification string of report text.
      * @return generated report.
      */
-    public static final Report info(final long ID, final Object... mod) {return new Report(INFO, ID, mod);}
+    public static final Report info(final long id, final Object... mod) {return new Report(INFO, id, mod);}
 
     /** Create new registered report object with type STRING.
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification string of report text.
      * @return generated report.
      */
-    public static final Report string(final long ID, final Object... mod) {return new Report(STRING,ID,mod);}
+    public static final Report string(final long id, final Object... mod) {return new Report(STRING,id,mod);}
 
     /** Create new registered report object with type TEXT.
-     * @param ID Registered report id.
+     * @param id Registered report id number.
      * @param mod modification parameters.
      * @return generated report.
      */
-    public static final Report text(final long ID, final Object... mod) {return new Report(TEXT, ID, mod);}
+    public static final Report text(final long id, final Object... mod) {return new Report(TEXT, id, mod);}
 
     /** Get string with the report ID created from registered ID.
-     * @param ID registered report ID.
+     * @param id registered report ID number.
      * @return string with report ID or null.
      */
-    public static final String getReportID(final long ID) {return SManager.getReportID(ID);}
+    public static final String getReportID(final long id) {return SManager.getReportID(id);}
 
     /** Get "raw" text of report from report table {i.e. references to other
      * reports are not resolved).
-     * @param ID registered report ID.
+     * @param id registered report ID number.
      * @param language language code.
      * @return text of report.
      */
-    public static final String getRawReportText(final long ID, final String language) {
-        return MANAGER.getReportText(ID, language, false);
+    public static final String getRawReportText(final long id, final String language) {
+        return MANAGER.getReportText(id, language, false);
     }
 
     /** Get text of report from report table. All references to other reports are resolved.
-     * @param ID registered report ID.
+     * @param id registered report ID number.
      * @param language language code.
      * @return text of report.
      */
-    public static final String getReportText(final long ID,
-        final String language) {
-        return MANAGER.getReportText(ID, language, true);
+    public static final String getReportText(final long id, final String language) {
+        return MANAGER.getReportText(id, language, true);
     }
 
-    /** Get text of report from report table in the actual language. All references to other reports
-     * are resolved.
-     * @param ID registered report ID.
+    /** Get text of report from report table in the actual language. All references to other reports are resolved.
+     * @param id registered report ID number.
      * @return text of report.
      */
-    public static final String getReportText(final long ID) {return MANAGER.getReportText(ID, null, true);}
+    public static final String getReportText(final long id) {return MANAGER.getReportText(id, null, true);}
 
     /** Get info report with system build information.
      * @return report with build information.
