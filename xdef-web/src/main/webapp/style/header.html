@@ -1,7 +1,7 @@
 <div class="header">
     <div class="logo"><a href="${rootPath}./"><img src="${rootPath}image/logo.png"/></a></div>
-    <div class="lang" title="Language selection">
-        <span id="headLangPas" onclick="headLangActivate()">Lang: EN</span>
+    <div class="lang" title="Language selection - English">
+        <span id="headLangPas" onclick="headLangActivate()">Lang: <img src="${rootPath}image/lang.png"/></span>
         <select id="headLangAct" onchange="location = this.value;">
             <option value="${rootPath}./"  title="english" lang="en" selected="selected">english</option>
             <option value="${rootPath}cs/" title="czech"   lang="cs"                    >česky</option>
@@ -17,8 +17,8 @@
     </ul>
     <script>
         $("div.logo").hover(
-    		function(){ $("img").animate({height: '8em'}, "fast"); },
-            function(){ $("img").animate({height: '4em'}, "fast"); }
+    		function(){ $("div.logo img").animate({height: '8em'}, "fast"); },
+            function(){ $("div.logo img").animate({height: '4em'}, "fast"); }
 		)
     </script>
 </div>

@@ -17,6 +17,19 @@ a:hover {
     text-decoration:    underline;
 }
 
+.enFramed {
+    display:            inline-block;
+    margin:             0.2em;
+    padding:            0.2em;
+    border:             0.2em solid black;
+    background-color:   #8bceee;
+}
+
+.output {
+    border:             1px solid black;
+    background-color:   white;
+}
+
 ul {
     margin-top:         0;
 }
@@ -24,11 +37,6 @@ ul {
 dl {
     margin-top:         0;
     padding-left:       2em;
-}
-
-.output {
-    border:             1px solid black;
-    background-color:   white;
 }
 
 textarea.lined {
@@ -92,6 +100,10 @@ span#headLangPas {
 
 span#headLangPas:hover {
     text-decoration:    underline;
+}
+
+span#headLangPas img {
+    height:             1em;
 }
 
 select#headLangAct {

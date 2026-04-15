@@ -11,7 +11,7 @@ function replaceHtml(rootPath, targets) {
     })
 }
 
-export function loadHeaderFooter(completeFooter, completeHeader) {
+function loadHeaderFooter(completeFooter, completeHeader) {
     const faviconHref = $('link[rel="icon"]').attr("href");
     const rootPathRes = /^(.*)image\/favicon\.ico$/.exec(faviconHref);
     var   rootPath    = "";
@@ -45,7 +45,12 @@ export function loadHeaderFooter(completeFooter, completeHeader) {
     );
 };
 
-export function linenumbers() {
+export function initPageBasic(completeFooter, completeHeader) {
+    loadHeaderFooter(completeFooter, completeHeader);
+}
+
+export function initPageBasicTal(completeFooter, completeHeader) {
+    loadHeaderFooter(completeFooter, completeHeader);
     $("textarea.lined").linenumbers();
 }
 
@@ -65,11 +70,12 @@ export function headLangActivate() {
 }
 
 
+//error-messages are usually invisible not to flash on the page during loading. That's why it appears after a second
 setTimeout(function() { $(".error").css("visibility", "visible"); }, 1000);
 
 //exports to window
-window.loadHeaderFooter     = loadHeaderFooter;
-window.linenumbers          = linenumbers;
+window.initPageBasic        = initPageBasic;
+window.initPageBasicTal     = initPageBasicTal;
 window.footVerActivate      = footVerActivate;
 window.footVerDeactivate    = footVerDeactivate;
 window.headLangActivate     = headLangActivate;

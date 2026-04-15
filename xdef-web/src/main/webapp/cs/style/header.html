@@ -1,7 +1,7 @@
 <div class="header">
     <div class="logo"><a href="${rootPath}./"><img src="${rootPath}image/logo.png"/></a></div>
-    <div class="lang" title="Výběr jazyka">
-        <span id="headLangPas" onclick="headLangActivate()">Jazyk: CZ</span>
+    <div class="lang" title="Výběr jazyka - Česky">
+        <span id="headLangPas" onclick="headLangActivate()">Jazyk: <img src="${rootPath}image/lang.png"/></span>
         <select id="headLangAct" onchange="location = this.value;">
             <option value="${rootPath}../" title="anglicky" lang="en"                    >english</option>
             <option value="${rootPath}./"  title="česky"    lang="cs" selected="selected">česky</option>
@@ -9,16 +9,19 @@
     </div>
     <ul class="nav">
         <li class="logo"><span>.</span></li>
-        <li><span><a href="${rootPath}../tutorial/"                 >Tutoriál</a><sup>(en)</sup></span></li>
-        <li><span><a href="${rootPath}../playground/"               >Pískoviště</a><sup>(en)</sup></span></li>
-        <li><span><a href="${rootPath}../other/download.html"       >Stáhnout</a><sup>(en)</sup></span></li>
+        <li><span><a href="${rootPath}../tutorial/"                 >Tutoriál</a>
+            <sup><img src="${rootPath}../image/lang.png"/></sup></span></li>
+        <li><span><a href="${rootPath}../playground/"               >Pískoviště</a>
+            <sup><img src="${rootPath}../image/lang.png"/></sup></span></li>
+        <li><span><a href="${rootPath}../other/download.html"       >Stáhnout</a>
+            <sup><img src="${rootPath}../image/lang.png"/></sup></span></li>
         <li><span><a href="${rootPath}./#Media"                     >Média</a></span></li>
         <li><span><a href="https://www.syntea.cz/o-nas/"            >Syntea</a></span></li>
     </ul>
     <script>
         $("div.logo").hover(
-            function(){ $("img").animate({height: '8em'}, "fast"); },
-            function(){ $("img").animate({height: '4em'}, "fast"); }
+            function(){ $("div.logo img").animate({height: '8em'}, "fast"); },
+            function(){ $("div.logo img").animate({height: '4em'}, "fast"); }
         )
     </script>
 </div>
