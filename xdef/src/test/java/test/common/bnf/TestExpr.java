@@ -9,6 +9,7 @@ import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.sys.STester;
+import static org.xdef.sys.STester.runTest;
 
 /** Test of parsing and executions of BNF expressions an assignment commands.
  * @author Vaclav Trojan
@@ -20,8 +21,7 @@ public class TestExpr extends STester {
     /** Map of variables. */
     private static final Map<String, Object> _variables = new TreeMap<>();
     /** used to get printed text. */
-    private static final ByteArrayOutputStream _byteArray =
-        new ByteArrayOutputStream();
+    private static final ByteArrayOutputStream _byteArray = new ByteArrayOutputStream();
     /** Switch to print generated code. */
     private static boolean _displayCode;
 
@@ -43,13 +43,11 @@ public class TestExpr extends STester {
             grammar.setUserObject(this);
             if (grammar.parse(p, name)) {
                 if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
+                    return grammar.getParser().getReportWriter().getReportReader().printToString();
                 }
                 return grammar.getParsedString();
             } else {
-                return name + " failed, " + (p.eos()?
-                    "eos" : p.getPosition().toString()) + "; ";
+                return name + " failed, " + (p.eos() ? "eos" : p.getPosition().toString()) + "; ";
             }
         } catch (Exception ex) {
             return "Exception " + ex;
@@ -84,8 +82,7 @@ public class TestExpr extends STester {
             TestExprCompiler.execute(s, code, _variables, _byteArray);
         }
         Charset chs = Charset.availableCharsets().get("UTF-8");
-        return SUtils.modifyString(
-            new String(_byteArray.toByteArray(), chs), "\r\n","\n");
+        return SUtils.modifyString(new String(_byteArray.toByteArray(), chs), "\r\n","\n");
     }
 
     private String parse(BNFGrammar grammar, String source) {
@@ -107,8 +104,7 @@ public class TestExpr extends STester {
     @Override
     public void test() {
         BNFGrammar g;
-        g = BNFGrammar.compile(null,
-            new File(getDataDir() + "TestExpr.bnf"), null);
+        g = BNFGrammar.compile(null, new File(getDataDir() + "TestExpr.bnf"), null);
         g.setUserObject(this);
         try {
             g.trace(null);
@@ -286,15 +282,16 @@ if (true) return;
             assertEq(Math.sin(3.14), getVar("i"));
             assertEq("3x\n", prog(g, "print(min(3,14)); println('x');"));
             assertEq("Ahoj\n", prog(g, "printf('Ahoj'); println();"));
-            assertEq("3, 4, 5\nx\n",
-                prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);"));
+            assertEq("3, 4, 5\nx\n", prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);"));
             assertEq("null\n1\n", prog(g, "println(null);println(1);"));
             assertEq("null\n", prog(g, "Object i=3; i=null; println(i);"));
+//            assertEq("", prog(g, "if ( true ) print(1) ; "));
 //TODO (parse -> prog)
 //_displayCode = true;
             assertEq("", parse(g, "if ( true ) print(1) ; "));
             assertEq("", parse(g, "int i=1; if (i==1) {print(1); print(2);}"));
             assertEq("", parse(g, "int i=1;if (i==1) if (i==1) print(1);"));
+            assertEq("", parse(g, "int i = 1; { if (i == 1) {i = 2;} else {i = 0;} }"));
             assertEq("", parse(g, "if(false){}else{print(2);print(1);}"));
             assertEq("", parse(g, "i=1; while ( i++ < 3 ) print(i);"));
             assertEq("", parse(g, "i=1; do print(i); while (i++ < 3) ;"));
@@ -303,8 +300,8 @@ if (true) return;
                 "  switch(i) {\n"+
                 "    case 1: print(i); break;\n"+
                 "    case 2: print(i); continue;\n"+
-                "   default: print(i);\n"+
-                "  } "));
+                "    default: print(i);\n"+
+                "  }"));
         } catch (Exception ex) {fail(ex);}
     }
 

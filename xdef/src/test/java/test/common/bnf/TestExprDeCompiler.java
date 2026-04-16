@@ -42,8 +42,7 @@ public class TestExprDeCompiler {
             if (level == 7) { // assignment
                 String s = stack.pop()._s;
                 String name = stack.pop()._s;
-                String assOp =  " " +
-                    new Operation(item.substring(3)).getOperator().trim() + "= ";
+                String assOp =  " " + new Operation(item.substring(3)).getOperator().trim() + "= ";
                 stack.push(new SourceItem(name + ' ' + assOp + ' ' + s));
             } else if (level == 6) { // unary
                 SourceItem x = stack.peek();
@@ -71,14 +70,12 @@ public class TestExprDeCompiler {
                 SourceItem x = stack.peek();
                 x._s = x._s + (item.startsWith("INC") ? "++" : "--");
             } else if (item.endsWith("type")) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 if ("boolean".equals(s) || "int".equals(s) || "float".equals(s)
                     || "String".equals(s) || "Object".equals(s)) {
                     // type decl
                     char ch = item.charAt(0);
-                    if (i + 1 < code.length
-                        && ((String)code[i + 1]).startsWith("name ")) {
+                    if (i + 1 < code.length && ((String)code[i + 1]).startsWith("name ")) {
                         ii = code[++i].toString().split(" ");
                         String name = source.substring(Integer.parseInt(ii[1]),
                             Integer.parseInt(ii[2]));
@@ -89,9 +86,8 @@ public class TestExprDeCompiler {
                             : TestExprCompiler.TYPE_OBJECT;
                         SourceItem val = new SourceItem("");
                         variables.put(name, val);
-                        val = new SourceItem(new String[] {
-                            "","boolean","int","float","String","Object"} [type]
-                            + " " + name);
+                        val = new SourceItem(
+                            new String[] {"", "boolean", "int", "float", "String", "Object"} [type] + " " + name);
                         stack.push(val);
                     }
                 }
@@ -104,8 +100,7 @@ public class TestExprDeCompiler {
             } else if ("method".equals(item) || "function".equals(item)) {
                 Stack<SourceItem> params = stackOfStack.pop();
                 stack = stackOfStack.pop();
-                StringBuilder s = // "name("
-                    new StringBuilder(stack.pop()._s + '(');
+                StringBuilder s = new StringBuilder(stack.pop()._s + '('); // "name("
                 int len = params.size();
                 if (len > 0) {
                     s.append(params.get(0)._s); // parameter
@@ -116,48 +111,40 @@ public class TestExprDeCompiler {
                 s.append(')');
                 stack.push(new SourceItem(s.toString()));
             } else if ("intConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 SourceItem x = new SourceItem(s);
                 stack.push(x);
             } else if ("fltConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 SourceItem x = new SourceItem(s);
                 stack.push(x);
             } else if ("boolConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 SourceItem x = new SourceItem(s);
                 stack.push(x);
             } else if ("strConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 SourceItem x = new SourceItem(s);
                 stack.push(x);
             } else if ("nullConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 SourceItem x = new SourceItem(s);
                 stack.push(x);
             } else if ("name".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
+                String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 stack.push(new SourceItem(s));
 ////////////////////////////////////////////////////////////////////////////////
             } else if ("idRef".equals(item)) { // reference to variable name
             } else if ("command".equals(item)) {  // clear stack
                 result.append(stack.pop()._s).append(";\n");
                 if (!stack.empty()) {
-                    result.append(Report.error("",
-                        "Stack item: " + stack.pop()).toString());
+                    result.append(Report.error("", "Stack item: " + stack.pop()).toString());
                 }
             } else if ("boolexpr".equals(item)) {  //???
             } else if ("if".equals(item)) {  //???
             } else if ("then".equals(item)) {  //???
             } else {
-                result.append(
-                    Report.error("", "Unknown code: " + item).toString());
+                result.append(Report.error("", "Unknown code: " + item).toString());
                 return result.toString();
             }
         }
@@ -191,13 +178,11 @@ public class TestExprDeCompiler {
                 Operation op = new Operation(code.substring(3));
                 value = "=" + op.value;
                 _level = 7;
-            } else if ("MINUS".equals(code) || "NOT".equals(code)
-                || "NEG".equals(code)){
+            } else if ("MINUS".equals(code) || "NOT".equals(code) || "NEG".equals(code)){
                 _level = 6; // unary oparator
                 ch = code.charAt(1);
                 value = ch == 'I' ? "-" : ch == 'O' ? "!" : "~";
-            } else if ("LT".equals(code) || "GT".equals(code)
-                || "LE".equals(code) || "GE".equals(code)
+            } else if ("LT".equals(code) || "GT".equals(code) || "LE".equals(code) || "GE".equals(code)
                 || "EQ".equals(code) || "NE".equals(code)) {
                 _level = 1; // comparing;
                 ch = code.charAt(0);
@@ -205,22 +190,19 @@ public class TestExprDeCompiler {
                     : ch == 'N' ? "!="
                     : ch == 'L' ? code.charAt(1) == 'T' ? "<" : "<="
                     : code.charAt(1) == 'T' ? ">" : ">=";
-            } else if ("AND".equals(code) || "OR".equals(code)
-                || "XOR".equals(code)) {
+            } else if ("AND".equals(code) || "OR".equals(code) || "XOR".equals(code)) {
                 ch = code.charAt(0);
                 _level = 2;
                 value = ch == 'A' ? " & " : ch == 'O' ? " | " : " ^ ";
             } else if (code.endsWith("SH")) { // shifts
                 _level = 3;
                 ch = code.charAt(0);
-                value = ch == 'L' ? "<<"
-                    : code.charAt(1) == 'S' ? ">>" : ">>>";
+                value = ch == 'L' ? "<<" : code.charAt(1) == 'S' ? ">>" : ">>>";
             } else if ("ADD".equals(code) || "SUB".equals(code)) {
                 _level = 4;
                 ch = code.charAt(0);
                 value = ch == 'A' ? "+" : "-";
-            } else if ("MUL".equals(code) || "DIV".equals(code)
-                || "MOD".equals(code)) {
+            } else if ("MUL".equals(code) || "DIV".equals(code) || "MOD".equals(code)) {
                 _level = 5;
                 ch = code.charAt(1);
                 value = ch == 'U' ? "*" : ch == 'I' ? "/" : "%";

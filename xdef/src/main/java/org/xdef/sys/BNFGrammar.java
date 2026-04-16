@@ -493,7 +493,7 @@ public final class BNFGrammar {
      */
     private boolean parse(final StringParser p) {_p = p; return parse();}
     /** Create new BNFRule.
-     * @param name name of trule.
+     * @param name name of true rule.
      * @return new BNFRule.
      */
     private BNFRuleObj newRule(final String name) {return new BNFRuleObj(name, this);}
@@ -509,8 +509,8 @@ public final class BNFGrammar {
      * @return new BNFTTooken.
      */
     private BNFToken newItemToken(final boolean i, final String s) {return new BNFToken(i, s);}
-    /** Create new empty BNFSequenc.
-     * @return new BNFSequenc.
+    /** Create new empty BNFSequence.
+     * @return new BNFSequence.
      */
     private BNFSequence newItemSequence() {return new BNFSequence();}
     /** Create new empty BNFUnion.
@@ -521,8 +521,8 @@ public final class BNFGrammar {
      * @return new BNFAll.
      */
     private BNFAll newItemAll() {return new BNFAll();}
-    /** Create new BNFConstrain.
-     * @return new BNFConstrain.
+    /** Create new BNFConstraint.
+     * @return new BNFConstraint.
      */
     private BNFConstrain newItemConstraint() {return new BNFConstrain();}
     /** Create new BNFReference.
@@ -543,7 +543,7 @@ public final class BNFGrammar {
      * @param pars List of parameters.
      * @return new BNFExtMethodObj.
      */
-    private BNFExtMethodObj newItemExtMethod(final String name, final String fullName, final List<Object>pars) {
+    private BNFExtMethodObj newItemExtMethod(final String name, final String fullName,final List<Object>pars){
         return new BNFExtMethodObj(name, fullName, pars);
     }
     /** Create new BNFPredefined inline method
@@ -566,7 +566,6 @@ public final class BNFGrammar {
         }
         return null;
     }
-
     /** Create clone of grammar.
      * @return clone of this grammar.
      */
@@ -609,10 +608,10 @@ public final class BNFGrammar {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Convert the string from parameter to hexadecimal reprezentation of characters (if necesary).
+    /** Convert the string from parameter to hexadecimal representation of characters (if necessary).
      * @param s string to e converted.
      * @return converted result.
-     */ 
+     */
     private static String genBNFChars(final String s) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
@@ -2583,6 +2582,7 @@ public final class BNFGrammar {
                         seq.addItem(item);
                     }
                     if (_sym == RBR_SYM) {
+                        skipSeparators();
                         item = seq._items.length == 1 ? seq._items[0] :  seq;
                         _item = null;
                         if (checkQuantifier(item) && item._max > 1 && item instanceof BNFAll) {

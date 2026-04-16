@@ -10,6 +10,8 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SException;
 import org.xdef.sys.StringParser;
 import org.xdef.sys.STester;
+import static org.xdef.sys.STester.printThrowable;
+import static org.xdef.sys.STester.runTest;
 
 /** Test of BNF.
  * @author Vaclav Trojan
@@ -314,89 +316,7 @@ public class TestBNF extends STester {
         BNFGrammar g, g1;
         String s;
         try {
-            g = BNFGrammar.compile("X::= 'A'?");
-            assertEq("", p(g, "X", ""));
-            assertEq("A", p(g, "X", "A"));
-            g = BNFGrammar.compile("X::= 'A'? 'B'?");
-            assertEq("", p(g, "X", ""));
-            assertEq("A", p(g, "X", "A"));
-            assertEq("B", p(g, "X", "B"));
-            assertEq("AB", p(g, "X", "AB"));
-            g = BNFGrammar.compile("X::= \"A\"* \"B\"? \"C\"*");
-            assertEq("", p(g, "X", ""));
-            assertEq("A", p(g, "X", "A"));
-            assertEq("B", p(g, "X", "B"));
-            assertEq("AB", p(g, "X", "AB"));
-            assertEq("C", p(g, "X", "C"));
-            assertEq("CC", p(g, "X", "CC"));
-            assertEq("ACC", p(g, "X", "ACC"));
-            assertEq("BCC", p(g, "X", "BCC"));
-            assertEq("ABC", p(g, "X", "ABC"));
-            assertEq("AAABCC", p(g, "X", "AAABCC"));
-            g = BNFGrammar.compile("X::= A|B A::=$integer B::=$float");
-            assertEq("123", p(g, "X", "123"));
-            assertEq("123.5", p(g, "X", "123.5"));
-            g = BNFGrammar.compile("C::= $xmlChar B::= \"'\"");
-            assertEq("'", p(g, "B", "'"));
-            assertEq("'", p(g, "C", "'"));
-            assertEq(" ", p(g, "C", " "));
-            assertEq("@", p(g, "C", "@"));
-            g = BNFGrammar.compile("x ::= $JavaName");
-            assertEq("a1", p(g, "x", "a1"));
-            g = BNFGrammar.compile("x::=$JavaQName");
-            assertEq("a.b", p(g, "x", "a.b"));
-            assertEq("ab", p(g, "x", "ab"));
-            g = BNFGrammar.compile("x ::= 'a' $anyChar");
-            assertEq("ax", p(g, "x", "ax"));
-            assertTrue(p(g, "x", "a").contains("x failed, "));
-            assertTrue(p(g, "x", "bb").contains("x failed, "));
-            g = BNFGrammar.compile("x ::= 'a' $anyChar * ");
-            assertEq("a", p(g, "x", "a"));
-            assertNull(g.getParsedObjects());
-            assertEq("ax", p(g, "x", "ax"));
-            assertEq("axy", p(g, "x", "axy"));
-            assertTrue(p(g, "x", "b").contains("x failed, "));
-            assertTrue(p(g, "x", "bb").contains("x failed, "));
-            g = BNFGrammar.compile("x ::= 'a' $stop 'b' ");
-            assertEq("a", p(g, "x", "abc"));
-            assertNull(g.getParsedObjects());
-            g = BNFGrammar.compile("%define $x: $stop(123) x ::= 'a' $x 'b' ");
-            assertEq("a", p(g, "x", "abc"));
-            assertEq("STOP 123", (String) g.getParsedObjects()[0]);
-            g = BNFGrammar.compile("%define $x:$stop(1,'x')x::='a'$x'b'");
-            assertEq("a", p(g, "x", "abc"));
-            assertEq("STOP 1,\"x\"", (String) g.getParsedObjects()[0]);
-            g = BNFGrammar.compile(
-"S::=$whitespace+XMLName::=$xmlName RefName::=XMLName|XMLName?\"#\"XMLName" +
-" RootList::=S?(RefName|\"*\")(S?\"|\"S?(RefName|\"*\"))*S?" +
-"Reference::=\"ref\"S RefName");
-            assertEq("#A", p(g, "RefName", "#A"));
-            assertEq("A", p(g, "RefName", "A"));
-            assertEq("A#B", p(g, "RefName", "A#B"));
-            g = BNFGrammar.compile( // whitespaces
-"S ::= $whitespace+\n"+
-"ElementLink ::= (\"implements\" | \"uses\")  S XPosition\n" +
-"XPosition ::= (XDefName? \"#\")? XModelName\n" +
-"  (\"/\" XMLName)*\n" +
-"XMLName ::= $xmlName\n"+
-"XDefName ::= XMLName\n" +
-"XModelName ::= XMLName"			);
-            assertEq("implements #A", p(g, "ElementLink", "implements #A"));
-            assertEq("implements A", p(g, "ElementLink", "implements A"));
-            assertEq("uses A#B", p(g, "ElementLink", "uses A#B"));
-            g = BNFGrammar.compile("X::='A' 'A'%");
-            assertEq("AA", p(g, "X", "AA"));
-            assertEq("Aa", p(g, "X", "Aa"));
-            g = BNFGrammar.compile("X::= \"ABC\"% \"ABC\"");
-            assertEq("ABCABC", p(g, "X", "ABCABC"));
-            assertEq("abcABC", p(g, "X", "abcABC"));
-            g = BNFGrammar.compile("X::=('AA'|'BC')('AA'%|'BC'%|'ACC'%)");
-            assertEq("AAAA", p(g, "X", "AAAA"));
-            assertEq("AAaa", p(g, "X", "AAaa"));
-            assertEq("AAbc", p(g, "X", "AAbc"));
-            assertEq("BCacc", p(g, "X", "BCacc"));
-            assertEq("BCACC", p(g, "X", "BCACC"));
-/**/
+////////////////////////////////////////////////////////////////////////////////
             g = BNFGrammar.compile( // test "all" selections
 "A::= 'a' ('A', 'B')\n" +
 "B::= 'a' ('A','B'?)\n" +
@@ -414,7 +334,7 @@ public class TestBNF extends STester {
 "N::= 'Z' | 'A', 'B'\n"+
 "O::= 'A', 'B' | 'C', 'D'\n"+
 "P::= ('A', 'B') | ('C', 'D')\n"+
-"");
+"Q::= 'a' ('A','B')?\n");
             g = BNFGrammar.compile(g.display(false));
             assertEq(s="aBA", p(g, "A", s));
             assertTrue(!(s="a").equals(p(g, "A", s)));
@@ -474,8 +394,94 @@ public class TestBNF extends STester {
             assertEq(s="DC", p(g, "O", s));
             assertEq(s="BA", p(g, "P", s));
             assertEq(s="DC", p(g, "P", s));
-/**/
+            assertEq(s="aAB", p(g, "Q", s));
+            assertEq(s="aBA", p(g, "Q", s));
+            assertEq(s="a", p(g, "Q", s));
+            assertTrue(!(s="aB").equals(p(g, "Q", s)));
+            assertTrue(!(s="aA").equals(p(g, "Q", s)));
+            assertTrue(!(s="aB").equals(p(g, "Q", s)));
 ////////////////////////////////////////////////////////////////////////////////
+            g = BNFGrammar.compile("X::= 'A'?");
+            assertEq("", p(g, "X", ""));
+            assertEq("A", p(g, "X", "A"));
+            g = BNFGrammar.compile("X::= 'A'? 'B'?");
+            assertEq("", p(g, "X", ""));
+            assertEq("A", p(g, "X", "A"));
+            assertEq("B", p(g, "X", "B"));
+            assertEq("AB", p(g, "X", "AB"));
+            g = BNFGrammar.compile("X::= \"A\"* \"B\"? \"C\"*");
+            assertEq("", p(g, "X", ""));
+            assertEq("A", p(g, "X", "A"));
+            assertEq("B", p(g, "X", "B"));
+            assertEq("AB", p(g, "X", "AB"));
+            assertEq("C", p(g, "X", "C"));
+            assertEq("CC", p(g, "X", "CC"));
+            assertEq("ACC", p(g, "X", "ACC"));
+            assertEq("BCC", p(g, "X", "BCC"));
+            assertEq("ABC", p(g, "X", "ABC"));
+            assertEq("AAABCC", p(g, "X", "AAABCC"));
+            g = BNFGrammar.compile("X::= A|B A::=$integer B::=$float");
+            assertEq("123", p(g, "X", "123"));
+            assertEq("123.5", p(g, "X", "123.5"));
+            g = BNFGrammar.compile("C::= $xmlChar B::= \"'\"");
+            assertEq("'", p(g, "B", "'"));
+            assertEq("'", p(g, "C", "'"));
+            assertEq(" ", p(g, "C", " "));
+            assertEq("@", p(g, "C", "@"));
+            g = BNFGrammar.compile("x ::= $JavaName");
+            assertEq("a1", p(g, "x", "a1"));
+            g = BNFGrammar.compile("x::=$JavaQName");
+            assertEq("a.b", p(g, "x", "a.b"));
+            assertEq("ab", p(g, "x", "ab"));
+            g = BNFGrammar.compile("x ::= 'a' $anyChar");
+            assertEq("ax", p(g, "x", "ax"));
+            assertTrue(p(g, "x", "a").contains("x failed, "));
+            assertTrue(p(g, "x", "bb").contains("x failed, "));
+            g = BNFGrammar.compile("x ::= 'a' $anyChar * ");
+            assertEq("a", p(g, "x", "a"));
+            assertNull(g.getParsedObjects());
+            assertEq("ax", p(g, "x", "ax"));
+            assertEq("axy", p(g, "x", "axy"));
+            assertTrue(p(g, "x", "b").contains("x failed, "));
+            assertTrue(p(g, "x", "bb").contains("x failed, "));
+            g = BNFGrammar.compile("x ::= 'a' $stop 'b' ");
+            assertEq("a", p(g, "x", "abc"));
+            assertNull(g.getParsedObjects());
+            g = BNFGrammar.compile("%define $x: $stop(123) x ::= 'a' $x 'b' ");
+            assertEq("a", p(g, "x", "abc"));
+            assertEq("STOP 123", (String) g.getParsedObjects()[0]);
+            g = BNFGrammar.compile("%define $x:$stop(1,'x')x::='a'$x'b'");
+            assertEq("a", p(g, "x", "abc"));
+            assertEq("STOP 1,\"x\"", (String) g.getParsedObjects()[0]);
+            g = BNFGrammar.compile(
+"S::=$whitespace+XMLName::=$xmlName RefName::=XMLName|XMLName?\"#\"XMLName" +
+" RootList::=S?(RefName|\"*\")(S?\"|\"S?(RefName|\"*\"))*S?Reference::=\"ref\"S RefName");
+            assertEq("#A", p(g, "RefName", "#A"));
+            assertEq("A", p(g, "RefName", "A"));
+            assertEq("A#B", p(g, "RefName", "A#B"));
+            g = BNFGrammar.compile( // whitespaces
+"S ::= $whitespace+\n"+
+"ElementLink ::= (\"implements\" | \"uses\")  S XPosition\n" +
+"XPosition ::= (XDefName? \"#\")? XModelName\n" +
+"  (\"/\" XMLName)*\n" +
+"XMLName ::= $xmlName\n"+
+"XDefName ::= XMLName\n" +
+"XModelName ::= XMLName"			);
+            assertEq("implements #A", p(g, "ElementLink", "implements #A"));
+            assertEq("implements A", p(g, "ElementLink", "implements A"));
+            assertEq("uses A#B", p(g, "ElementLink", "uses A#B"));
+            g = BNFGrammar.compile("X::='A' 'A'%");
+            assertEq("AA", p(g, "X", "AA"));
+            assertEq("Aa", p(g, "X", "Aa"));
+            g = BNFGrammar.compile("X::= \"ABC\"% \"ABC\"");
+            assertEq("ABCABC", p(g, "X", "ABCABC"));
+            assertEq("abcABC", p(g, "X", "abcABC"));
+            g = BNFGrammar.compile("X::=('AA'|'BC')('AA'%|'BC'%|'ACC'%)");
+            assertEq("AAAA", p(g, "X", "AAAA"));
+            assertEq("AAaa", p(g, "X", "AAaa"));
+            assertEq("AAbc", p(g, "X", "AAbc"));
+            assertEq("BCacc", p(g, "X", "BCacc"));
+            assertEq("BCACC", p(g, "X", "BCACC"));
             bnf =
 "%define $x: $test.common.bnf.TestBNF.xxx\n"+
 "digit ::= [0-9]" +
@@ -510,8 +516,7 @@ public class TestBNF extends STester {
             g.setUserObject(null);
             assertTrue(g.parse("-12345,3","signedIntegers"));
             assertEq("-12345,3", g.getParsedString());
-            assertEq("signedInteger:-12345,p:0\nsignedInteger:3,p:7",
-                g.getUserObject());
+            assertEq("signedInteger:-12345,p:0\nsignedInteger:3,p:7", g.getUserObject());
             bnf =
 "M      ::= [#9#10#13 ]*   /*skip white spaces*/\n" +
 "OD     ::= M \",\" M      /*separator of values*/\n" +
@@ -541,10 +546,8 @@ public class TestBNF extends STester {
             g = BNFGrammar.compile(null, bnf, null);
             assertEq("2H", p(g, "r" , "2H"));
             assertEq("D(09:00)", p(g, "r" , "D(09:00)"));
-            assertEq("D(10:00),W(1,2,3,4,5,6)",
-                p(g, "r" , "D(10:00),W(1,2,3,4,5,6)"));
-            assertEq("D(14:45,20:00),W(1,2,3,4,5)",
-                p(g, "r" , "D(14:45,20:00),W(1,2,3,4,5)"));
+            assertEq("D(10:00),W(1,2,3,4,5,6)", p(g, "r" , "D(10:00),W(1,2,3,4,5,6)"));
+            assertEq("D(14:45,20:00),W(1,2,3,4,5)", p(g, "r" , "D(14:45,20:00),W(1,2,3,4,5)"));
             assertEq("D(11:00),W(1)", p(g, "r" , "D(11:00),W(1)"));
             assertEq("1W(2)", p(g, "r" , "1W(2)"));
             assertEq("D(12:00),W(-1)", p(g, "r" , "D(12:00),W(-1)"));
@@ -571,8 +574,7 @@ public class TestBNF extends STester {
             assertEq("a:b-c.d .e ( ) ?", p(g, "X", "a:b-c.d .e ( ) ?"));
             assertEq("a:b-c.d . e ( ) ?", p(g, "X", "a:b-c.d . e ( ) ?"));
 ////////////////////////////////////////////////////////////////////////////////
-            bnf = FUtils.readString(
-                new File(getDataDir() + "TestXPath2.bnf"), "windows-1250");
+            bnf = FUtils.readString(new File(getDataDir() + "TestXPath2.bnf"), "windows-1250");
             g = BNFGrammar.compile(null, bnf, null);
             assertEq("a/b", p(g, "XPath", "a/b"));
             assertEq("/a/b", p(g, "XPath", "/a/b"));
@@ -585,8 +587,7 @@ public class TestBNF extends STester {
             "S ::= ( ' ' | Comment )+\n"+
             "A ::= S? 'X' S?";
             g = BNFGrammar.compile(null, bnf, null);
-            assertEq("X /*jmeno - znaky*/  ",
-                p(g, "A" , "X /*jmeno - znaky*/  "));
+            assertEq("X /*jmeno - znaky*/  ", p(g, "A" , "X /*jmeno - znaky*/  "));
             bnf = "A::=B-C*C::='c'B::=[a-z]";
             g = BNFGrammar.compile(null, bnf, null);
             assertEq("b", p(g, "A" , "b"));
@@ -644,8 +645,7 @@ public class TestBNF extends STester {
 "  | ((float | integer | boolean | string | identifier) $value)\n"+
 "assignment::= identifier  $value S '=' $assign e\n"+
 "statement::= S? (assignment  S)? ';' \n"+
-"program::= statement+ \n"+
-"";
+"program::= statement+";
             g = BNFGrammar.compile(null, bnf, null);
             assertEq("x=x-555.1", p(g, "assignment", "x=x-555.1;"));
             assertEq(443.9, _result, printStack());
@@ -689,11 +689,9 @@ public class TestBNF extends STester {
             assertEq(456, _result, printStack());
             assertEq("\n\n  -\n123+\t456", p(g, "e", "\n\n  -\n123+\t456"));
             assertEq(333, _result, printStack());
-            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(-44, _result, printStack());
-            assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(44, _result, printStack());
             assertEq("1", p(g, "e", "1"));
             assertEq(1, _result, printStack());
@@ -724,8 +722,7 @@ public class TestBNF extends STester {
             assertEq(999, _variables.get("x"));
             assertEq("x=-x", p(g, "assignment", "x=-x"));
             assertEq(-999, _variables.get("x"));
-            assertEq("i=x-555;\nj=5; j = i - j;",
-                p(g, "program", "i=x-555;\nj=5; j = i - j; xxx"));
+            assertEq("i=x-555;\nj=5; j = i - j;", p(g, "program", "i=x-555;\nj=5; j = i - j; xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("x=x-555.1", p(g, "assignment", "x=x-555.1;"));
@@ -739,8 +736,7 @@ public class TestBNF extends STester {
             assertEq("x='a'+1.0E+1", p(g, "assignment", "x='a'+1.0E+1"));
             assertEq("a10.0", _result, printStack());
             assertEq("a10.0", _variables.get("x"));
-            assertEq("x=1.0+1.0E-1+'a'",
-                p(g, "assignment", "x=1.0+1.0E-1+'a'"));
+            assertEq("x=1.0+1.0E-1+'a'", p(g, "assignment", "x=1.0+1.0E-1+'a'"));
             assertEq("1.1a", _result, printStack());
             assertEq("1.1a", _variables.get("x"));
             assertEq("x=true", p(g, "assignment", "x=true"));
@@ -767,14 +763,12 @@ public class TestBNF extends STester {
 "mydate  ::= $mydate (S? \",\" S? mydate)*\n"+
 "myInteger ::= $myInteger\n"+
 "myInteger1 ::= $myInteger1\n"+
-"myInteger2 ::= $integer\n"+
-"";
+"myInteger2 ::= $integer";
             g1 = BNFGrammar.compile(g, bnf, null);
             assertEq("a", p(g1, "set1", "a"));
             assertEq("x='ab'+1+2", p(g1, "assignment", "x='ab'+1+2"));
             assertEq("ab12", _result, printStack());
-            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program",
-                "i=x-555;\nj=5; j = i - j; xxx"));
+            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program", "i=x-555;\nj=5; j = i - j; xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("AB", p(g1, "rule1a", "AB"));
@@ -862,8 +856,7 @@ public class TestBNF extends STester {
 "mydate ::= $mydate ( S? \",\" S? mydate )* \n" +
 "myInteger ::= $myInteger \n" +
 "myInteger1 ::= $myInteger1 \n" +
-"myInteger2 ::= $integer \n" +
-"";
+"myInteger2 ::= $integer";
             g = BNFGrammar.compile(null, bnf, null);
             assertEq("a", p(g, "set1", "a"));
             assertFalse(g.parse("b", "set1"));
@@ -895,11 +888,9 @@ public class TestBNF extends STester {
             assertEq(456, _result, printStack());
             assertEq("\n\n  -\n123+\t456", p(g, "e", "\n\n  -\n123+\t456"));
             assertEq(333, _result, printStack());
-            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(-44, _result, printStack());
-            assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(44, _result, printStack());
             assertEq("-1", p(g, "e", "-1"));
             assertEq(-1, _result, printStack());
@@ -916,8 +907,7 @@ public class TestBNF extends STester {
             assertEq(999, _variables.get("x"));
             assertEq("x=-x", p(g, "assignment", "x=-x"));
             assertEq(-999, _variables.get("x"));
-            assertEq("i=x-555;\nj=5; j = i - j;", p(g, "program",
-                "i=x-555;\nj=5; j = i - j; xxx"));
+            assertEq("i=x-555;\nj=5; j = i - j;", p(g, "program", "i=x-555;\nj=5; j = i - j; xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("x=x-555.1", p(g, "assignment", "x=x-555.1;"));
@@ -931,8 +921,7 @@ public class TestBNF extends STester {
             assertEq("x='a'+1.0E+1", p(g, "assignment", "x='a'+1.0E+1"));
             assertEq("a10.0", _result, printStack());
             assertEq("a10.0", _variables.get("x"));
-            assertEq("x=1.0+1.0E-1+'a'",
-                p(g, "assignment", "x=1.0+1.0E-1+'a'"));
+            assertEq("x=1.0+1.0E-1+'a'", p(g, "assignment", "x=1.0+1.0E-1+'a'"));
             assertEq("1.1a", _result, printStack());
             assertEq("1.1a", _variables.get("x"));
             assertEq("x=true", p(g, "assignment", "x=true"));
@@ -961,13 +950,10 @@ public class TestBNF extends STester {
             assertEq("123", p(g, "myInteger2", "123"));
             assertEq("123", p(g, "myInteger", "123"));
             assertFalse(g1.parse("x123", "myInteger"));
-            assertTrue(p(g,
-                "myInteger1", "123").indexOf("greater then max") > 0);
-            assertEq("123 3.14 1999-01-02T23:10:54+01:00", p(g,
-                "testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
+            assertTrue(p(g, "myInteger1", "123").indexOf("greater then max") > 0);
+            assertEq("123 3.14 1999-01-02T23:10:54+01:00", p(g, "testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
             assertEq("2.12.1945", p(g, "myDatetime", "2.12.1945"));
-            assertEq("1.1.1990, 6.12.1945",
-                p(g, "mydate", "1.1.1990, 6.12.1945"));
+            assertEq("1.1.1990, 6.12.1945", p(g, "mydate", "1.1.1990, 6.12.1945"));
 ////////////////////////////////////////////////////////////////////////////////
             // BNF extension
             bnf =
@@ -977,8 +963,7 @@ public class TestBNF extends STester {
 "ncname ::= $ncName \n"+
 "ncnames ::= $ncName (S $ncName)*\n"+
 "nmtoken ::= $nmToken \n"+
-"nmtokens ::= nmtoken (S nmtoken)*\n"+
-"";
+"nmtokens ::= nmtoken (S nmtoken)*";
             g1 = BNFGrammar.compile(g, bnf, null);
             assertEq("a", p(g1, "set1", "a"));
             assertFalse(g1.parse("b", "set1"));
@@ -1016,11 +1001,9 @@ public class TestBNF extends STester {
             assertEq("\t", p(g1, "tab", "\txxx"));
             assertEq("\n\n  -\n123+\t456",p(g1, "e", "\n\n  -\n123+\t456"));
             assertEq(333, _result, printStack());
-            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(-44, _result, printStack());
-            assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g1, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g1, "e", "+ ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(44, _result, printStack());
             assertEq("-1", p(g, "e", "-1"));
             assertEq(-1, _result, printStack());
@@ -1037,8 +1020,7 @@ public class TestBNF extends STester {
             assertEq(999, _variables.get("x"));
             assertEq("x=-x", p(g1, "assignment", "x=-x"));
             assertEq(-999, _variables.get("x"));
-            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program",
-                "i=x-555;\nj=5; j = i - j; xxx"));
+            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program", "i=x-555;\nj=5; j = i - j; xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("x=x-555.1", p(g1, "assignment", "x=x-555.1;"));
@@ -1049,33 +1031,27 @@ public class TestBNF extends STester {
             assertEq("x='ab'+1+2", p(g1, "assignment", "x='ab'+1+2"));
             assertEq("ab12", _result, printStack());
             assertEq("ab12", _variables.get("x"));
-            assertEq("x='a'+1.0E+1",
-                p(g1, "assignment", "x='a'+1.0E+1"));
+            assertEq("x='a'+1.0E+1", p(g1, "assignment", "x='a'+1.0E+1"));
             assertEq("a10.0", _result, printStack());
             assertEq("a10.0", _variables.get("x"));
-            assertEq("x=1.0+1.0E-1+'a'",
-                p(g1, "assignment", "x=1.0+1.0E-1+'a'"));
+            assertEq("x=1.0+1.0E-1+'a'", p(g1, "assignment", "x=1.0+1.0E-1+'a'"));
             assertEq("1.1a", _result, printStack());
             assertEq("1.1a", _variables.get("x"));
             assertEq("x=true", p(g1, "assignment", "x=true"));
             assertEq(Boolean.TRUE, _result, printStack());
             assertEq(Boolean.TRUE, _variables.get("x"));
-            assertEq("123 3.14 1999-01-02T23:10:54+01:00", p(g,
-                "testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
+            assertEq("123 3.14 1999-01-02T23:10:54+01:00", p(g, "testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
             assertEq("2.12.1945", p(g, "myDatetime", "2.12.1945"));
             assertEq("2.12.1945", p(g1, "myDatetime", "2.12.1945"));
             assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-                p(g1, "myDuration",
-                    "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
+                p(g1, "myDuration", "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
             assertEq("null", "" + g1.popObject());
             assertEq("a-b c:d.e f1",p(g1,"xmlnames", "a-b c:d.e f1"));
-            assertEq("a-b c:d.e f1 123",
-                p(g1, "nmtokens", "a-b c:d.e f1 123"));
+            assertEq("a-b c:d.e f1 123", p(g1, "nmtokens", "a-b c:d.e f1 123"));
             assertEq("123", p(g1, "nmtokens", "123"));
             assertEq("a", p(g1, "set1", "a"));
             assertEq("x='ab'+1+2", p(g1, "assignment", "x='ab'+1+2"));
-            assertEq("i=x-555;\nj=5; j = i - j;",
-                p(g1, "program", "i=x-555;\nj=5; j = i - j; xxx"));
+            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program", "i=x-555;\nj=5; j = i - j; xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("AB", p(g1, "rule1a", "AB"));
@@ -1098,14 +1074,11 @@ public class TestBNF extends STester {
             assertFalse(g1.parse("ab", "lid3"));
             assertFalse(g1.parse("cd", "lid3"));
             assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-                p(g1, "myDuration",
-                    "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
+                p(g1, "myDuration", "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
             assertEq("a-b c:d.e f1", p(g1, "xmlnames", "a-b c:d.e f1"));
-            assertEq("a-b c:d.e f1 123",
-                p(g1, "nmtokens", "a-b c:d.e f1 123"));
+            assertEq("a-b c:d.e f1 123", p(g1, "nmtokens", "a-b c:d.e f1 123"));
             assertEq("123", p(g1, "nmtokens", "123"));
-            assertEq("1.1.1990, 6.12.1945",
-                p(g, "mydate", "1.1.1990, 6.12.1945"));
+            assertEq("1.1.1990, 6.12.1945", p(g, "mydate", "1.1.1990, 6.12.1945"));
             g1 = BNFGrammar.compile(null, g1.toString(), null);
             assertEq("a", p(g1, "set1", "a"));
             assertFalse(g1.parse("b", "set1"));
@@ -1142,11 +1115,9 @@ public class TestBNF extends STester {
             assertEq("\t", p(g1, "tab", "\txxx"));
             assertEq("\n\n  -\n123+\t456", p(g1,"e", "\n\n  -\n123+\t456"));
             assertEq(333, _result, printStack());
-            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ",
-                p(g1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
+            assertEq("- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ", p(g1, "e", "- ( 123 - 5 * ( 3 - 2 + 6) ) / 2 ::"));
             assertEq(-44, _result, printStack());
-            assertEq("+(123-5*(3-2+6))/2",
-                p(g1, "e", "+(123-5*(3-2+6))/2::"));
+            assertEq("+(123-5*(3-2+6))/2", p(g1, "e", "+(123-5*(3-2+6))/2::"));
             assertEq(44, _result, printStack());
             assertEq("1-x", p(g1, "e", "1-x"));
             assertEq(-998, _result, printStack());
@@ -1159,8 +1130,7 @@ public class TestBNF extends STester {
             assertEq(999, _variables.get("x"));
             assertEq("x=-x", p(g1, "assignment", "x=-x"));
             assertEq(-999, _variables.get("x"));
-            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program",
-                "i=x-555;\nj=5; j = i - j; xxx"));
+            assertEq("i=x-555;\nj=5; j = i - j;", p(g1, "program", "i=x-555;\nj=5; j = i - j; xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("x=x-555.1", p(g1, "assignment", "x=x-555.1;"));
@@ -1174,28 +1144,23 @@ public class TestBNF extends STester {
             assertEq("x='a'+1.0E+1", p(g1, "assignment", "x='a'+1.0E+1"));
             assertEq("a10.0", _result, printStack());
             assertEq("a10.0", _variables.get("x"));
-            assertEq("x=1.0+1.0E-1+'a'",
-                p(g1, "assignment", "x=1.0+1.0E-1+'a'"));
+            assertEq("x=1.0+1.0E-1+'a'", p(g1, "assignment", "x=1.0+1.0E-1+'a'"));
             assertEq("1.1a", _result, printStack());
             assertEq("1.1a", _variables.get("x"));
             assertEq("x=true", p(g1, "assignment", "x=true"));
             assertEq(true, _result, printStack());
             assertEq(true, _variables.get("x"));
-            assertEq("123 3.14 1999-01-02T23:10:54+01:00", p(g,
-                "testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
+            assertEq("123 3.14 1999-01-02T23:10:54+01:00", p(g, "testBuildIn", "123 3.14 1999-01-02T23:10:54+01:00"));
             assertEq("2.12.1945", p(g, "myDatetime", "2.12.1945"));
             assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-                p(g1, "myDuration",
-                    "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
+                p(g1, "myDuration", "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
             assertEq("a-b c:d.e f1",p(g1,"xmlnames", "a-b c:d.e f1"));
-            assertEq("a-b c:d.e f1 123",
-                p(g1, "nmtokens", "a-b c:d.e f1 123"));
+            assertEq("a-b c:d.e f1 123", p(g1, "nmtokens", "a-b c:d.e f1 123"));
             assertEq("123", p(g1, "nmtokens", "123"));
             assertEq("a", p(g1, "set1", "a"));
             assertEq("x='ab'+1+2", p(g1, "assignment", "x='ab'+1+2"));
             assertEq("ab12", _result, printStack());
-            assertEq("i=x-555;j=5;j=i-j;",
-                p(g1, "program", "i=x-555;j=5;j=i-j;xxx"));
+            assertEq("i=x-555;j=5;j=i-j;", p(g1, "program", "i=x-555;j=5;j=i-j;xxx"));
             assertEq(444, _variables.get("i"));
             assertEq(439, _variables.get("j"));
             assertEq("AB", p(g1, "rule1a", "AB"));
@@ -1219,11 +1184,9 @@ public class TestBNF extends STester {
             assertFalse(g1.parse("ab", "lid3"));
             assertFalse(g1.parse("cd", "lid3"));
             assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-                p(g1, "myDuration",
-                    "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
+                p(g1, "myDuration", "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
             assertEq("a-b c:d.e f1", p(g1, "xmlnames", "a-b c:d.e f1"));
-            assertEq("a-b c:d.e f1 123",
-                p(g1, "nmtokens", "a-b c:d.e f1 123"));
+            assertEq("a-b c:d.e f1 123", p(g1, "nmtokens", "a-b c:d.e f1 123"));
             assertEq("123", p(g1, "nmtokens", "123"));
             assertEq("a", p(g1, "set1", "a"));
             assertFalse(g1.parse("b", "set1"));
@@ -1263,14 +1226,11 @@ public class TestBNF extends STester {
             assertEq("123", p(g1, "myInteger", "123"));
             assertEq("2.12.1945", p(g1, "myDatetime", "2.12.1945"));
             assertEq("P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H",
-                p(g1, "myDuration",
-                    "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
+                p(g1, "myDuration", "P0001-10-11T23:01:55/2009-11-05T23:11:05PT15H"));
             assertEq("a-b c:d.e f1",p(g1,"xmlnames", "a-b c:d.e f1"));
-            assertEq("a-b c:d.e f1 123",
-                p(g1, "nmtokens", "a-b c:d.e f1 123"));
+            assertEq("a-b c:d.e f1 123", p(g1, "nmtokens", "a-b c:d.e f1 123"));
             assertEq("123", p(g1, "nmtokens", "123"));
-            assertEq("1.1.1990, 6.12.1945",
-                p(g, "mydate", "1.1.1990, 6.12.1945"));
+            assertEq("1.1.1990, 6.12.1945", p(g, "mydate", "1.1.1990, 6.12.1945"));
         } catch (SException | RuntimeException ex) {
             fail(ex);
         }

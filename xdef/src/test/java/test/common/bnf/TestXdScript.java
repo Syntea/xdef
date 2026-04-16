@@ -27,15 +27,13 @@ public class TestXdScript extends XDTester {
      * @param source source to be parsed.
      * @return parsed part of source.
      */
-    private static String parse(final BNFGrammar grammar,
-        final String name,
-        final String source) {
+    private static String parse(final BNFGrammar grammar, final String name, final String source) {
         try {
             if (grammar.parse(new StringParser(source), name)) {
                 return grammar.getParsedString();
             } else {
-                return name + " failed, " + (grammar.getParser().eos()?
-                    "eos" : grammar.getParser().getPosition().toString()) +"; ";
+                return name + " failed, "
+                    + (grammar.getParser().eos() ? "eos" : grammar.getParser().getPosition().toString()) +"; ";
             }
         } catch (Exception ex) {
             return "Exception " + ex;
@@ -63,11 +61,8 @@ public class TestXdScript extends XDTester {
         String s;
         BNFGrammar g;
         try {
-            Element e = KXmlUtils.parseXml(
-                "classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef")
-                    .getDocumentElement();
-            e = KXmlUtils.firstElementChildNS(
-                e, e.getNamespaceURI(), "BNFGrammar");
+            Element e =KXmlUtils.parseXml("classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef").getDocumentElement();
+            e = KXmlUtils.firstElementChildNS(e, e.getNamespaceURI(), "BNFGrammar");
             String bnfOfBNF = KXmlUtils.getTextValue(e);
             g = BNFGrammar.compile(null, bnfOfBNF, null);
             if (XDTester.getFulltestMode()) {

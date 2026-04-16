@@ -16,13 +16,12 @@ public class TestXML extends STester {
         try {
             if (grammar.parse(new StringParser(source), name)) {
                 if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
+                    return grammar.getParser().getReportWriter().getReportReader().printToString();
                 }
                 return grammar.getParsedString();
             } else {
-                return name + " failed, " + (grammar.getParser().eos()?
-                    "eos" : grammar.getParser().getPosition().toString()) +"; ";
+                return name + " failed, "
+                    + (grammar.getParser().eos() ? "eos" : grammar.getParser().getPosition().toString()) +"; ";
             }
         } catch (Exception ex) {
             return printThrowable(ex);
@@ -38,10 +37,8 @@ public class TestXML extends STester {
             String s;
 
 ////////////////////////////////////////////////////////////////////////////////
-            grammar = BNFGrammar.compile(null,
-                new File(getDataDir() + "TestXML.bnf"), null);
+            grammar = BNFGrammar.compile(null, new File(getDataDir() + "TestXML.bnf"), null);
 //			grammar.display(System.out, true);
-
 ////////////////////////////////////////////////////////////////////////////////
             s = "<!--c-o-m-m-e-n-t-->";
             assertEq(s, parse(grammar, "Comment", s));

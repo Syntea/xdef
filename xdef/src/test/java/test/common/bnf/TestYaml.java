@@ -18,13 +18,11 @@ public class TestYaml extends STester {
             grammar.setUserObject(this);
             if (grammar.parse(p, name)) {
                 if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
+                    return grammar.getParser().getReportWriter().getReportReader().printToString();
                 }
                 return grammar.getParsedString();
             } else {
-                return name + " failed, " + (p.eos()?
-                    "eos" : p.getPosition().toString()) + "; ";
+                return name + " failed, " + (p.eos() ? "eos" : p.getPosition().toString()) + "; ";
             }
         } catch (Exception ex) {
             return printThrowable(ex);
