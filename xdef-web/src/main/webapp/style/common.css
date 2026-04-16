@@ -101,7 +101,6 @@ div#header {
     min-height:         4.1em;
     position:           sticky;
     top:                0;
-    opacity:            0.9;
 }
 
 html {
@@ -112,32 +111,27 @@ html {
 
 div.header {
     background-image:   linear-gradient(#8bceee, #e6f7ff);
+    opacity:            0.9;
 }
 
 div.header div.lang {
     text-align:         right;
     float:              right;
-    padding-top:        0.5em;
+    margin-top:         0.5em;
+    padding:            0.3em;
+    background-color:   #38a9dd;
+    cursor:             pointer;
 }
 
 div.header div.lang, div.header div.lang select {
     font-size:          85%;
 }
 
-span#headLangPas {
-    display:            inline;
-    cursor:             pointer;
-}
-
-span#headLangPas:hover {
-    text-decoration:    underline;
-}
-
-span#headLangPas img {
+div.header div.lang img {
     height:             1em;
 }
 
-select#headLangAct {
+.headLangAct {
     display:            none;
 }
 

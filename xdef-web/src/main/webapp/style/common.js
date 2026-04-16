@@ -65,8 +65,8 @@ export function footVerDeactivate() {
 }
 
 export function headLangActivate() {
-    $("#headLangPas").css("display", "none");
-    $("#headLangAct").css("display", "inline");
+    $(".headLangPas").css("display", "none");
+    $(".headLangAct").css("display", "inline");
 }
 
 
