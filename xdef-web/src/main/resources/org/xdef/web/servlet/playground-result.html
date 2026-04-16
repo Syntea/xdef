@@ -12,6 +12,7 @@
 
 <div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
 
+
 <h1>Playground result &mdash; ${status}</h1>
 
 <h2>${result-title}</h2>
@@ -20,15 +21,14 @@
 <div style="display: ((html-div))">
 <h2>Display as HTML</h2>
 <div class="output resizable">
-<iframe srcdoc="${result-html}">
-    <p>Your browser does not support iframes.</p>
-</iframe>
+<iframe srcdoc="${result-html}">Your browser does not support iframes</iframe>
 </div>
 </div>
 
 <h2>Output stream (System.out)</h2>
-<div style="display: ((stdout-div))" class="output">${stdout}</div>
-<div style="display: ((stdout-empty))" class="output-empty">Empty.</div>
+<pre style="display: ((stdout-div))" class="output">${stdout}</pre>
+<div style="display: ((stdout-empty))">Empty.</div>
+
 
 <div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
 

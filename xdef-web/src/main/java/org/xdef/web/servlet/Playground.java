@@ -312,7 +312,7 @@ public final class Playground extends AbstractMyServlet {
         	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))", stdOutputEx ? "block" : "none");
         	outHtml = SUtils.modifyFirst(outHtml, "((stdout-empty))", stdOutputEx ? "none"  : "block");
             if (stdOutputEx) {
-            	outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stdOutput);
+            	outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stringToHTml(stdOutput, true));
             }
             out.print(outHtml);
         }
