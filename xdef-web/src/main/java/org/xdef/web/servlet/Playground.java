@@ -302,15 +302,15 @@ public final class Playground extends AbstractMyServlet {
             
             String outHtml;
             outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef-lib-id}", XDConstants.BUILD_IDENTIFIER);
-            outHtml = SUtils.modifyString(outHtml, "${status}", status);
-            outHtml = SUtils.modifyFirst(outHtml, "${result-title}", resultTitle);
-            outHtml = SUtils.modifyFirst(outHtml, "${result}", stringToHTml(result, true));
-            outHtml = SUtils.modifyFirst(outHtml, "((html-div))", isResHtml ? "block" : "none");
+            outHtml = SUtils.modifyString(outHtml, "${status}", 	  status);
+            outHtml = SUtils.modifyFirst(outHtml,  "${result-title}", resultTitle);
+            outHtml = SUtils.modifyFirst(outHtml,  "${result}",    	  stringToHTml(result, true));
+            outHtml = SUtils.modifyFirst(outHtml,  "((html-div))", 	  isResHtml ? "block" : "none");
             if (isResHtml) {
                 outHtml = SUtils.modifyFirst(outHtml, "${result-html}", result.replaceAll("\"", "&quot;"));
             }
-        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))", stdOutputEx ? "block" : "none");
-        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-empty))", stdOutputEx ? "none"  : "block");
+        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))",  stdOutputEx ? "block" : "none");
+        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-none))", stdOutputEx ? "none"  : "block");
             if (stdOutputEx) {
             	outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stringToHTml(stdOutput, true));
             }
