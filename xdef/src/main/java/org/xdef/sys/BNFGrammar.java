@@ -492,19 +492,66 @@ public final class BNFGrammar {
      * @return true if text was parsed successfully.
      */
     private boolean parse(final StringParser p) {_p = p; return parse();}
+    /** Create new BNFRule.
+     * @param name name of true rule.
+     * @return new BNFRule.
+     */
     private BNFRuleObj newRule(final String name) {return new BNFRuleObj(name, this);}
+    /** Create new BNFChar.
+     * @param i if true case insensitive.
+     * @param c the character.
+     * @return new BNFChar.
+     */
     private BNFChar newItemChar(final boolean i, final char c) {return new BNFChar(i, c);}
+    /** Create new BNFTToken.
+     * @param i if true case insensitive.
+     * @param s the token.
+     * @return new BNFTTooken.
+     */
     private BNFToken newItemToken(final boolean i, final String s) {return new BNFToken(i, s);}
+    /** Create new empty BNFSequence.
+     * @return new BNFSequence.
+     */
     private BNFSequence newItemSequence() {return new BNFSequence();}
+    /** Create new empty BNFUnion.
+     * @return new BNFUnion.
+     */
     private BNFSelection newItemUnion() {return new BNFSelection();}
+    /** Create new BNFAll.
+     * @return new BNFAll.
+     */
     private BNFAll newItemAll() {return new BNFAll();}
+    /** Create new BNFConstraint.
+     * @return new BNFConstraint.
+     */
     private BNFConstrain newItemConstraint() {return new BNFConstrain();}
+    /** Create new BNFReference.
+     * @return new BNFReference.
+     */
     private BNFReference newItemReference() {return new BNFReference();}
+    /** Create new BNFIsSet.
+     * @return new BNFIsSet.
+     */
     private BNFSet newItemIsSet() {return new BNFIsSet();}
+    /** Create new BNFNotSet.
+     * @return new BNFNotSet.
+     */
     private BNFSet newItemNotSet() {return new BNFNotSet();}
+    /** Create new BNFExtMethodObj
+     * @param name name of external method.
+     * @param fullName Full name of external method.
+     * @param pars List of parameters.
+     * @return new BNFExtMethodObj.
+     */
     private BNFExtMethodObj newItemExtMethod(final String name, final String fullName,final List<Object>pars){
         return new BNFExtMethodObj(name, fullName, pars);
     }
+    /** Create new BNFPredefined inline method
+     * @param methodName BNF script name of inline method.
+     * @param fullName Full name of inline method.
+     * @param pars List of parameters.
+     * @return new BNFPredefined.
+     */
     private BNFPredefined newInlineMethod(final String methodName, final String name, final List<Object>pars){
         for(int i = 0; i < INLINE_METHOD_NAMES.length; i++) {
             if (methodName.equals(INLINE_METHOD_NAMES[i])) {
@@ -519,7 +566,6 @@ public final class BNFGrammar {
         }
         return null;
     }
-
     /** Create clone of grammar.
      * @return clone of this grammar.
      */
@@ -545,14 +591,27 @@ public final class BNFGrammar {
 // write/read object
 ////////////////////////////////////////////////////////////////////////////////
 
+    /** Write this gammar to SObjectWriter.
+     * @param w where to write.
+     * @throws IOException if an error occurs.
+     */
     public final void writeObj(final SObjectWriter w) throws IOException {w.writeString(display(false));}
 
+    /** Read grammar from SObjectReader.
+     * @param r where to read.
+     * @return BNFGrammar object.
+     * @throws IOException if an error occurs.
+     */
     public static BNFGrammar readObj(final SObjectReader r) throws IOException {
         return compile(null, r.readString(), null);
     }
 
 ////////////////////////////////////////////////////////////////////////////////
 
+    /** Convert the string from parameter to hexadecimal representation of characters (if necessary).
+     * @param s string to e converted.
+     * @return converted result.
+     */
     private static String genBNFChars(final String s) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
@@ -2523,6 +2582,7 @@ public final class BNFGrammar {
                         seq.addItem(item);
                     }
                     if (_sym == RBR_SYM) {
+                        skipSeparators();
                         item = seq._items.length == 1 ? seq._items[0] :  seq;
                         _item = null;
                         if (checkQuantifier(item) && item._max > 1 && item instanceof BNFAll) {
