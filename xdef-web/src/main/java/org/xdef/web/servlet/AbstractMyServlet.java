@@ -55,7 +55,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 
     /** Create string from data which can be part of HTML.
      * @param data string to be converted.
-     * @param pre if true new lines are converted to "&amp;br/>".
+     * @param pre if true new lines are converted to "&lt;br/>".
      * @return data convertod be displayed in HTML.
      */
     public static final String stringToHTml(final String data, final boolean pre) {

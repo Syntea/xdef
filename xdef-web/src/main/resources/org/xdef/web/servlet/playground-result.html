@@ -16,12 +16,24 @@
 
 <h2>${result-title}</h2>
 <pre class="output">${result}</pre>
-<div class="output">${stdout}</div>
+
+<div style="display: ((html-div))">
+<h2>Display as HTML</h2>
+<div class="output resizable">
+<iframe srcdoc="${result-html}">
+    <p>Your browser does not support iframes.</p>
+</iframe>
+</div>
+</div>
+
+<h2>Output stream (System.out)</h2>
+<div style="display: ((stdout-div))" class="output">${stdout}</div>
+<div style="display: ((stdout-empty))" class="output-empty">Empty.</div>
 
 <div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">loadHeaderFooter(
-    function() { $(this).children("div").append(", X-definition: ${xdef-lib-id}"); })
+<script type="module">initPageBasic(
+    function() { $(this).children("div").append("<span>, X-definition: ${xdef-lib-id}</span>"); })
 </script>
 
 </body>

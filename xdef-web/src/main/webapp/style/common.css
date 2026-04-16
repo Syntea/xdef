@@ -17,6 +17,15 @@ a:hover {
     text-decoration:    underline;
 }
 
+ul {
+    margin-top:         0;
+}
+
+dl {
+    margin-top:         0;
+    padding-left:       2em;
+}
+
 .enFramed {
     display:            inline-block;
     margin:             0.2em;
@@ -30,19 +39,37 @@ a:hover {
     background-color:   white;
 }
 
-ul {
-    margin-top:         0;
+div.resizable {
+    resize:             vertical;
+    overflow:           auto;
 }
 
-dl {
-    margin-top:         0;
-    padding-left:       2em;
-}
-
-textarea.lined {
+div.resizable iframe {
+    border:             none;
     width:              100%;
-    display:            block;
+    height:             98%;
+    min-height:         15em;
 }
+
+
+/* based on jquery.textarea-with-linenumbers.css - edited */
+/*========================================================*/
+textarea.lined {
+    display:            block;
+    resize:             vertical;
+    width:              100%;
+    background-color:   white;
+    border:             1px solid #888; 
+    position:           relative;
+    left:               3em;
+}
+.linenumbers-gutter                     { background-color: white; border-color: transparent;}
+.linenumbers-gutter span                { display:          block; }
+.linenumbers-gutter span.current-line   { color:            blue; }
+.linenumbers-gutter span.success        { background-color: lightgreen; }
+.linenumbers-gutter span.warning        { background-color: goldenrod; }
+.linenumbers-gutter span.error          { background-color: orangered; }
+
 
 span.error {
     color:              red;
