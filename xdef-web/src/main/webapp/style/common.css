@@ -83,14 +83,14 @@ textarea.lined {
 /* header and footer                        */
 /*==========================================*/
 
+div#footer {
+    min-height:         2.8em;
+}
+
 div.footer {
     padding-top:        2em;
     text-align:         center;
     font-size:          0.8em;
-}
-
-span#footVerPas {
-    display:            inline;
 }
 
 span#footVerAct {
@@ -98,9 +98,9 @@ span#footVerAct {
 }
 
 div#header {
-    min-height:         4.1em;
     position:           sticky;
     top:                0;
+    min-height:         4.1em;
 }
 
 html {
