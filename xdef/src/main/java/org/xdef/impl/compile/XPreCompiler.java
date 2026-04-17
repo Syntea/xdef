@@ -689,11 +689,11 @@ public class XPreCompiler implements PreCompiler {
     }
 
     /** Put error to compiler reporter.
-     * @param ID registered report id.
+     * @param id registered report id} number.
      * @param mod Message modification parameters.
      */
     @Override
-    public final void error(final long ID, final Object... mod) {getReportWriter().error(ID, mod);}
+    public final void error(final long id, final Object... mod) {getReportWriter().error(id, mod);}
 
     /** Put report to compiler reporter.
      * @param rep Report.

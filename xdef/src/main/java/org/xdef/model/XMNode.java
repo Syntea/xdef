@@ -30,6 +30,10 @@ public interface XMNode extends XMOccurrence {
     public static final short XMMIXED = 10;
     /** End of a sequence of items ID. */
     public static final short XMSELECTOR_END = 11;
+    /** Kind of XNode XReference */
+    public static final short XMREFERENCE = 12;
+    /** Kind of XNode  XINCLUDE */
+    public static final short XMINCLUDE = 13;
 
     /** Get name of model of the node.
      * @return name of node.

@@ -108,38 +108,43 @@ public class TestExprCompiler {
             }
             String[] ii = ((String) code[i]).split(" ");
             item = ii[0];
-            if ("intConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
-                result[i] = new CodeItem(item, Long.valueOf(s));
-            } else if ("fltConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
-                result[i] = new CodeItem(item, Double.valueOf(s));
-            } else if ("boolConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
-                result[i] = new CodeItem(item, "true".equals(s));
-            } else if ("strConst".equals(item)) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
-                String delimiter = String.valueOf(s.charAt(0));
-                s = s.substring(1, s.length() - 1);
-                s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
-                result[i] = new CodeItem(item, s);
-            } else if ("nullConst".equals(item)) {
-                result[i] = new CodeItem(item, null);
-            } else if ("name".equals(item) || item.endsWith("type")) {
-                String s = source.substring(Integer.parseInt(ii[1]),
-                    Integer.parseInt(ii[2]));
-                result[i] = new CodeItem(item, s);
+            String s;
+            switch (item) {
+                case "intConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                    result[i] = new CodeItem(item, Long.valueOf(s));
+                    break;
+                case "fltConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                    result[i] = new CodeItem(item, Double.valueOf(s));
+                    break;
+                case "boolConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                    result[i] = new CodeItem(item, "true".equals(s));
+                    break;
+                case "strConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                    String delimiter = String.valueOf(s.charAt(0));
+                    s = s.substring(1, s.length() - 1);
+                    s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
+                    result[i] = new CodeItem(item, s);
+                    break;
+                case "nullConst": result[i] = new CodeItem(item, null); break;
+                case "name": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                    result[i] = new CodeItem(item, s);
+                    break;
+                case "jmp":
+                case "jmpf":
+                case "jmpt": result[i] = new CodeItem(item, new Integer(ii[1])); break;
+                case "jmptf": result[i] = new CodeItem(item, new int[] {new Integer(ii[1]), new Integer(ii[2])}); break;
+                default:
+                    s = null;
+                    if (item.endsWith("type")) {
+                        s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                    }
+                    result[i] = new CodeItem(item, s);
+            }
 /***************************************************************
-            } else if ("jmp".equals(item) || "jmpf".equals(item)
-                || "jmpt".equals(item) ) {
+            } else if ("jmp".equals(item) || "jmpf".equals(item) || "jmpt".equals(item) ) {
                 result[i] = new CodeItem(item, new Integer(ii[1]));
             } else if ("jmptf".equals(item)) {
-                result[i] = new CodeItem(item,
-                    new int[] {new Integer(ii[1]), new Integer(ii[2])});
+                result[i] = new CodeItem(item, new int[] {new Integer(ii[1]), new Integer(ii[2])});
             } else if ("if".equals(item)) {
                 for (int j = i+1; j < code.length; j++) {
                     String[] jj = ((String) code[j]).split(" ");
@@ -195,11 +200,9 @@ public class TestExprCompiler {
                             if ("for".equals(kk[0]) && kk[1].equals(ii[1])) {
                                 for (int m = k+1; m < code.length; m++) {
                                     String[] mm = ((String) code[m]).split(" ");
-                                    if ("for3".equals(mm[0])
-                                        && mm[1].equals(kk[2])) {
+                                    if ("for3".equals(mm[0]) && mm[1].equals(kk[2])) {
                                         code[j] = "jmptf " + k + " " + m;
-                                        result[j] = new CodeItem("jmpf",
-                                            new int[]{k,m});
+                                        result[j] = new CodeItem("jmpf", new int[]{k,m});
                                         code[k] = "jmp " + i;
                                         result[k] = new CodeItem("jmp", i);
                                         code[m] = "jmp " + j;
@@ -211,9 +214,6 @@ public class TestExprCompiler {
                     }
                 }
 ***************************************************************/
-            } else {// operators
-                result[i] = new CodeItem(item, null);
-            }
         }
         return result;
     }
@@ -241,298 +241,287 @@ public class TestExprCompiler {
         CodeItem[] pc = precompile(source, code);
         for (int i = 0; i < pc.length; i++) {
             CodeItem item = pc[i];
-            if ("intConst".equals(item._op)) {
-                stack.push((Long) item._value);
-            } else if ("fltConst".equals(item._op)) {
-                stack.push((Double) item._value);
-            } else if ("boolConst".equals(item._op)) {
-                stack.push((Boolean) item._value);
-            } else if ("strConst".equals(item._op)) {
-                stack.push((String) item._value);
-            } else if ("nullConst".equals(item._op)) {
-                stack.push(null);
-            } else if ("name".equals(item._op)) {
-                stack.push((String) item._value);
-            } else if ("type".equals(item._op)) {
-                String s = (String) item._value;
-                s = s.substring(2); // name
-                variables.put(s, null);
-                stack.push(s);
-            } else if ("MINUS".equals(item._op)) {
-                Number x = (Number) stack.pop();
-                if (x instanceof Long) {
-                    stack.push(-x.longValue());
-                } else {
-                    stack.push(-x.doubleValue());
-                }
-            } else if ("NOT".equals(item._op)) {
-                stack.push(!((Boolean) stack.pop()));
-            } else if ("NEG".equals(item._op)) {
-                stack.push(~((Long) stack.pop()));
-            } else if ("idRef".equals(item._op)) {
-                stack.push(variables.get(stack.pop().toString()));
-            } else if ("AND".equals(item._op) || "OR".equals(item._op)
-                || "XOR".equals(item._op)) {
-                Object y = stack.pop();
-                Object x = stack.pop();
-                if (x instanceof Boolean &&
-                    y instanceof Boolean) { // logical operation
-                    if ("AND".equals(item._op)) {
-                        stack.push((Boolean) x && (Boolean) y);
-                    } else if ("OR".equals(item._op)) {
-                        stack.push((Boolean) x || (Boolean) y);
-                    } else {
-                        stack.push((Boolean) x ^ (Boolean) y);
-                    }
-                } else if (x instanceof Long &&
-                    y instanceof Long) { // bitwise operation
-                    if ("AND".equals(item._op)) {
-                        stack.push((Long) x & (Long) y);
-                    } else if ("OR".equals(item._op)) {
-                        stack.push((Long) x | (Long) y);
-                    } else {
-                        stack.push((Long) x ^ (Long) y);
-                    }
-                } else {
-                    throw new RuntimeException("Error: Operand types "
-                        + x.getClass() + "," + y.getClass());
-                }
-            } else if ("LSH".equals(item._op) || "RSH".equals(item._op)
-                || "RRSH".equals(item._op)) {
-                Object y = stack.pop();
-                Object x = stack.pop();
-                if (x instanceof Long && y instanceof Long) {
-                    long xx = (Long) x;
-                    long yy = (Long) y;
-                    y = "LSH".equals(item._op) ? xx << yy
-                        : "RSH".equals(item._op) ? xx >> yy : xx >>> yy;
-                    stack.push(y);
-                } else {
-                    throw new RuntimeException("Error: Operand types "
-                        + x.getClass() + "," + y.getClass());
-                }
-            } else if ("ADD".equals(item._op)) {
-                Object y = stack.pop();
-                Object x = stack.pop();
-                if (x instanceof Number && y instanceof Number) {
-                    if (x instanceof Long && y instanceof Long) {
-                        stack.push(((Number) x).longValue()
-                            + ((Number) y).longValue());
-                    } else {
-                        stack.push(((Number) x).doubleValue()
-                            + ((Number) y).doubleValue());
-                    }
-                } else {
-                    stack.push(x.toString() + y.toString());
-                }
-            } else if ("SUB".equals(item._op) || "MUL".equals(item._op)
-                || "DIV".equals(item._op) || "MOD".equals(item._op)) {
-                Number y = (Number) stack.pop();
-                Number x = (Number) stack.pop();
-                if (x instanceof Long && y instanceof Long) {
-                    if ("SUB".equals(item._op)) {
-                        stack.push(x.longValue() - y.longValue());
-                    } else if ("MUL".equals(item._op)) {
-                        stack.push(x.longValue() * y.longValue());
-                    } else if ("DIV".equals(item._op)) {
-                        stack.push(x.longValue() / y.longValue());
-                    } else { // MOD
-                        stack.push(x.longValue() % y.longValue());
-                    }
-                } else {
-                    if ("SUB".equals(item._op)) {
-                        stack.push(x.doubleValue() - y.doubleValue());
-                    } else if ("MUL".equals(item._op)) {
-                        stack.push(x.doubleValue() * y.doubleValue());
-                    } else if ("DIV".equals(item._op)) {
-                        stack.push(x.doubleValue() / y.doubleValue());
-                    } else { // MOD
-                        stack.push(x.doubleValue() % y.doubleValue());
-                    }
-                }
-            } else if ("GT".equals(item._op) || "LT".equals(item._op)
-                || "GE".equals(item._op) || "LE".equals(item._op)
-                || "EQ".equals(item._op) || "NE".equals(item._op)) {
-                Object y = stack.pop();
-                Object x = stack.pop();
-                if (x instanceof Long && y instanceof Long) {
-                    long xx = (Long) x;
-                    long yy = (Long) y;
-                    stack.push("GT".equals(item._op) ? xx > yy
-                        : "LT".equals(item._op) ? xx < yy
-                        : "GE".equals(item._op) ? xx >= yy
-                        : "LE".equals(item._op) ? xx <= yy
-                        : "EQ".equals(item._op) ? xx == yy : xx != yy);
-                } else if (x instanceof Number && y instanceof Number) {
-                    double xx = ((Number) x).doubleValue();
-                    double yy = ((Number) y).doubleValue();
-                    stack.push("GT".equals(item._op) ? xx > yy
-                        : "LT".equals(item._op) ? xx < yy
-                        : "GE".equals(item._op) ? xx >= yy
-                        : "LE".equals(item._op) ? xx <= yy
-                        : "EQ".equals(item._op) ? xx == yy : xx != yy);
-                } else if (x instanceof Boolean&& y instanceof Boolean){
-                    boolean xx = (Boolean) x;
-                    boolean yy = (Boolean) y;
-                    if ("EQ".equals(item._op)) {
-                        stack.push(xx == yy);
-                    } else if ("NE".equals(item._op)) {
-                        stack.push(xx != yy);
-                    } else {
-                        throw new RuntimeException("Error: Operand types "
-                            + x.getClass() + "," + x.getClass());
-                    }
-                }
-            } else if ("INCBEFORE".equals(item._op)
-                || "DECBEFORE".equals(item._op)
-                || "INCAFTER".equals(item._op) || "DECAFTER".equals(item._op)) {
-                String name = stack.pop().toString(); // name of var
-                Object x = variables.get(name);
-                if (x instanceof Long) {
-                    if ("INCBEFORE".equals(item._op)
-                        || "DECBEFORE".equals(item._op)){
-                        x = (Long) x + ("INCBEFORE".equals(item._op) ? 1 : -1);
-                        variables.put(name, x);
-                        stack.push(x);
-                    } else {
-                        stack.push(x);
-                        x = (Long) x + ("INCAFTER".equals(item._op) ? 1 : -1);
-                        variables.put(name, x);
-                    }
-                } else if (x instanceof Double) {
-                    if ("INCBEFORE".equals(item._op)
-                        || "DECBEFORE".equals(item._op)) {
-                        x = (Double) x+("INCBEFORE".equals(item._op) ? 1 : -1);
-                        variables.put(name, x);
-                        stack.push(x);
-                    } else {
-                        stack.push(x);
-                        x = (Double) x + ("INCAFTER".equals(item._op) ? 1 : -1);
-                        variables.put(name, x);
-                    }
-                } else {
-                    throw new RuntimeException("Error: Operand type " + x);
-                }
-            } else if ("ASS".equals(item._op)) {
-                Object x = stack.pop();
-                variables.put((String) stack.pop(), x);
-            } else if ("ASSADD".equals(item._op) || "ASSSUB".equals(item._op)
-                || "ASSMUL".equals(item._op) || "ASSDIV".equals(item._op)
-                || "ASSMOD".equals(item._op)) {
-                Object x = stack.pop();
-                String name = (String) stack.pop();
-                Object y = variables.get(name);
-                if (x instanceof Number && y instanceof Number) {
-                    boolean bothint =
-                        x instanceof Long && y instanceof Long;
-                    Number xx = (Number) x;
-                    Number yy = (Number) y;
-                    if ("ASSADD".equals(item._op)) {
-                        if (bothint) {
-                            y = yy.longValue() + xx.longValue();
+            switch (item._op) {
+                case "intConst": stack.push((Long) item._value); break;
+                case "fltConst": stack.push((Double) item._value); break;
+                case "boolConst": stack.push((Boolean) item._value); break;
+                case "strConst": stack.push((String) item._value); break;
+                case "nullConst": stack.push(null); break;
+                case "name": stack.push((String) item._value); break;
+                case "type":
+                    String s = (String) item._value;
+                    s = s.substring(2); // name
+                    variables.put(s, null);
+                    stack.push(s);
+                    break;
+                case "MINUS": {
+                        Number x = (Number) stack.pop();
+                        if (x instanceof Long) {
+                            stack.push(-x.longValue());
                         } else {
-                            y = yy.doubleValue() + xx.doubleValue();
+                            stack.push(-x.doubleValue());
                         }
-                    } else if ("ASSSUB".equals(item._op)) {
-                        if (bothint) {
-                            y = yy.longValue() - xx.longValue();
-                        } else {
-                            y = yy.doubleValue() - xx.doubleValue();
-                        }
-                    } else if ("ASSMUL".equals(item._op)) {
-                        if (bothint) {
-                            y = yy.longValue() * xx.longValue();
-                        } else {
-                            y = yy.doubleValue() * xx.doubleValue();
-                        }
-                    } else if ("ASSDIV".equals(item._op)) {
-                        if (bothint) {
-                            y = yy.longValue() / xx.longValue();
-                        } else {
-                            y = yy.doubleValue() / xx.doubleValue();
-                        }
-                    } else {// ASSMOD
-                        if (bothint) {
-                            y = yy.longValue() % xx.longValue();
-                        } else {
-                            y = yy.doubleValue() % xx.doubleValue();
-                        }
+                        break;
                     }
-                } else if ("ASSADD".equals(item._op)
-                    && y instanceof String) {
-                    y = y.toString() + x;
-                }
-                variables.put(name, y);
-            } else if ("ASSAND".equals(item._op) || "ASSOR".equals(item._op)
-                || "ASSXOR".equals(item._op)) {
-                Object x = stack.pop();
-                String name = (String) stack.pop();
-                Object y = variables.get(name);
-                if (x instanceof Boolean && y instanceof Boolean) {
-                    boolean xx = (Boolean) x;
-                    boolean yy = (Boolean) y;
-                    y = "ASSAND".equals(item._op) ? yy & xx
-                        : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
-                } else if (x instanceof Long && y instanceof Long) {
-                    long xx = (Long) x;
-                    long yy = (Long) y;
-                    y = "ASSAND".equals(item._op) ? yy & xx
-                        : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
-                }
-                variables.put(name, y);
-            } else if ("ASSLSH".equals(item._op) || "ASSRSH".equals(item._op)
-                || "ASSRRSH".equals(item._op)) {
-                Object x = stack.pop();
-                String name = (String) stack.pop();
-                Object y = variables.get(name);
-                if (x instanceof Long && y instanceof Long) {
-                    long xx = (Long) x;
-                    long yy = (Long) y;
-                    y = "ASSLSH".equals(item._op) ? yy << xx
-                        : "ASSRSH".equals(item._op) ? yy >> xx
-                        : yy >>> xx;
-                }
-                variables.put(name, y);
-            } else if ("paramList".equals(item._op)) {
-                stack.push(new PredefinedMethod(stack.pop().toString()));
-            } else if ("param".equals(item._op)) {  // parameter
-                Object x = stack.pop();
-                PredefinedMethod y =  (PredefinedMethod) stack.peek();
-                y.add(x);
-            } else if ("method".equals(item._op)
-                || "function".equals(item._op)) {
-                // procedure or function
-                PredefinedMethod x = (PredefinedMethod) stack.pop();
-                if ("function".equals(item._op)) {
-                    Object y = x.invoke(out);
-                    if (y != null) {
-                        stack.push(y);
-                    } else {
-                        throw new RuntimeException("Value of method "
-                            + x._name + " expected");
+                case "NOT": stack.push(!((Boolean) stack.pop())); break;
+                case "NEG": stack.push(~((Long) stack.pop())); break;
+                case "idRef": stack.push(variables.get(stack.pop().toString())); break;
+                case "AND":
+                case "OR":
+                case "XOR": {
+                        Object y = stack.pop();
+                        Object x = stack.pop();
+                        if (x instanceof Boolean && y instanceof Boolean) { // boolean operation
+                            switch (item._op) {
+                                case "AND": stack.push((Boolean) x && (Boolean) y); break;
+                                case "OR": stack.push((Boolean) x || (Boolean) y); break;
+                                default: stack.push((Boolean) x ^ (Boolean) y); // XOR
+                            }
+                        } else if (x instanceof Long && y instanceof Long) { // bitwise operation
+                            switch (item._op) {
+                                case "AND": stack.push((Long) x & (Long) y); break;
+                                case "OR": stack.push((Long) x | (Long) y); break;
+                                default: stack.push((Long) x ^ (Long) y);
+                            }
+                        } else {
+                            throw new RuntimeException("Error: Operand types " + x.getClass() + "," + y.getClass());
+                        }
+                        break;
                     }
-                } else {
-                    x.invoke(out);
-                }
-            } else if ("command".equals(item._op)) {
-                stack.clear();
-/***************************************************************
-            } else if ("jmp".equals(item._op)) {
-                i = (Integer) item._value;
-            } else if ("jmpf".equals(item._op)) {
-                if (!((Boolean)stack.pop())) {
-                    i = (Integer) item._value;
-                }
-            } else if ("jmpt".equals(item._op)) {
-                if (((Boolean)stack.pop())) {
-                    i = (Integer) item._value;
-                }
-            } else if ("jmptf".equals(item._op)) {
-                i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1];
-***************************************************************/
-            } else if ("nop".equals(item._op) || "info".equals(item._op)) {
-            } else {
-                throw new RuntimeException("Unknown code at "+i+": " + item);
+                case "LSH":
+                case "RSH":
+                case "RRSH": {
+                        Object y = stack.pop();
+                        Object x = stack.pop();
+                        if (x instanceof Long && y instanceof Long) {
+                            long xx = (Long) x;
+                            long yy = (Long) y;
+                            y = "LSH".equals(item._op) ? xx << yy : "RSH".equals(item._op) ? xx >> yy : xx >>> yy;
+                            stack.push(y);
+                        } else {
+                            throw new RuntimeException("Error: Operand types " + x.getClass() + "," + y.getClass());
+                        }
+                        break;
+                    }
+                case "ADD": {
+                        Object y = stack.pop();
+                        Object x = stack.pop();
+                        if (x instanceof Number && y instanceof Number) {
+                            if (x instanceof Long && y instanceof Long) {
+                                stack.push(((Number) x).longValue() + ((Number) y).longValue());
+                            } else {
+                                stack.push(((Number) x).doubleValue() + ((Number) y).doubleValue());
+                            }
+                        } else {
+                            stack.push(x.toString() + y.toString());
+                        }
+                        break;
+                    }
+                case "SUB":
+                case "MUL":
+                case "DIV":
+                case "MOD": {
+                        Number y = (Number) stack.pop();
+                        Number x = (Number) stack.pop();
+                        if (x instanceof Long && y instanceof Long) {
+                           switch (item._op) {
+                                case "SUB": stack.push(x.longValue() - y.longValue()); break;
+                                case "MUL": stack.push(x.longValue() * y.longValue()); break;
+                                case "DIV": stack.push(x.longValue() / y.longValue()); break;
+                                default: stack.push(x.longValue() % y.longValue()); // MOD
+                            }
+                        } else {
+                            switch (item._op) {
+                                case "SUB": stack.push(x.doubleValue() - y.doubleValue()); break;
+                                case "MUL": stack.push(x.doubleValue() * y.doubleValue()); break;
+                                case "DIV": stack.push(x.doubleValue() / y.doubleValue()); break;
+                                default: stack.push(x.doubleValue() % y.doubleValue());// MOD
+                            }
+                        }
+                        break;
+                    }
+                case "GT":
+                case "LT":
+                case "GE":
+                case "LE":
+                case "EQ":
+                case "NE": {
+                        Object y = stack.pop();
+                        Object x = stack.pop();
+                        if (x instanceof Long && y instanceof Long) {
+                            long xx = (Long) x;
+                            long yy = (Long) y;
+                            stack.push("GT".equals(item._op) ? xx > yy
+                                : "LT".equals(item._op) ? xx < yy
+                                    : "GE".equals(item._op) ? xx >= yy
+                                        : "LE".equals(item._op) ? xx <= yy
+                                            : "EQ".equals(item._op) ? xx == yy : xx != yy);
+                        } else if (x instanceof Number && y instanceof Number) {
+                            double xx = ((Number) x).doubleValue();
+                            double yy = ((Number) y).doubleValue();
+                            stack.push("GT".equals(item._op) ? xx > yy
+                                : "LT".equals(item._op) ? xx < yy
+                                    : "GE".equals(item._op) ? xx >= yy
+                                        : "LE".equals(item._op) ? xx <= yy
+                                            : "EQ".equals(item._op) ? xx == yy : xx != yy);
+                        } else if (x instanceof Boolean&& y instanceof Boolean){
+                            boolean xx = (Boolean) x;
+                            boolean yy = (Boolean) y;
+                            switch (item._op) {
+                                case "EQ": stack.push(xx == yy); break;
+                                case "NE": stack.push(xx != yy); break;
+                                default: throw new RuntimeException("Error: Operand types "
+                                            + x.getClass() + "," + x.getClass());
+                            }
+                        }
+                        break;
+                    }
+                case "INCBEFORE":
+                case "DECBEFORE":
+                case "INCAFTER":
+                case "DECAFTER": {
+                        String name = stack.pop().toString(); // name of var
+                        Object x = variables.get(name);
+                        if (x instanceof Long) {
+                            if ("INCBEFORE".equals(item._op) || "DECBEFORE".equals(item._op)) {
+                                x = (Long) x + ("INCBEFORE".equals(item._op) ? 1 : -1);
+                                variables.put(name, x);
+                                stack.push(x);
+                            } else {
+                                stack.push(x);
+                                x = (Long) x + ("INCAFTER".equals(item._op) ? 1 : -1);
+                                variables.put(name, x);
+                            }
+                        } else if (x instanceof Double) {
+                            if ("INCBEFORE".equals(item._op) || "DECBEFORE".equals(item._op)) {
+                                x = (Double) x+("INCBEFORE".equals(item._op) ? 1 : -1);
+                                variables.put(name, x);
+                                stack.push(x);
+                            } else {
+                                stack.push(x);
+                                x = (Double) x + ("INCAFTER".equals(item._op) ? 1 : -1);
+                                variables.put(name, x);
+                            }
+                        } else {
+                            throw new RuntimeException("Error: Operand type " + x);
+                        }
+                        break;
+                    }
+                case "ASS": {
+                        Object x = stack.pop();
+                        variables.put((String) stack.pop(), x);
+                        break;
+                    }
+                case "ASSADD":
+                case "ASSSUB":
+                case "ASSMUL":
+                case "ASSDIV":
+                case "ASSMOD": {
+                        Object x = stack.pop();
+                        String name = (String) stack.pop();
+                        Object y = variables.get(name);
+                        if (x instanceof Number && y instanceof Number) {
+                            boolean bothint = x instanceof Long && y instanceof Long;
+                            Number xx = (Number) x;
+                            Number yy = (Number) y;
+                            if (x instanceof Long && y instanceof Long) {
+                                switch (item._op) {
+                                    case "ASSADD": y = yy.longValue() + xx.longValue(); break;
+                                    case "ASSSUB": y = yy.longValue() - xx.longValue(); break;
+                                    case "ASSMUL": y = yy.longValue() * xx.longValue(); break;
+                                    case "ASSDIV": y = yy.longValue() / xx.longValue(); break;
+                                    default: y = yy.longValue() % xx.longValue(); // ASSMOD
+                                }
+                            } else {
+                                switch (item._op) {
+                                    case "ASSADD": y = yy.doubleValue() + xx.doubleValue(); break;
+                                    case "ASSSUB": y = yy.doubleValue() - xx.doubleValue(); break;
+                                    case "ASSMUL": y = yy.doubleValue() * xx.doubleValue(); break;
+                                    case "ASSDIV": y = yy.doubleValue() / xx.doubleValue(); break;
+                                    default: y = yy.doubleValue() % xx.doubleValue(); // ASSMOD
+                                }
+                            }
+                        } else if ("ASSADD".equals(item._op) && y instanceof String) {
+                            y = y.toString() + x;
+                        }
+                        variables.put(name, y);
+                        break;
+                    }
+                case "ASSAND":
+                case "ASSOR":
+                case "ASSXOR": {
+                        Object x = stack.pop();
+                        String name = (String) stack.pop();
+                        Object y = variables.get(name);
+                        if (x instanceof Boolean && y instanceof Boolean) {
+                            boolean xx = (Boolean) x;
+                            boolean yy = (Boolean) y;
+                            y = "ASSAND".equals(item._op) ? yy & xx : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
+                        } else if (x instanceof Long && y instanceof Long) {
+                            long xx = (Long) x;
+                            long yy = (Long) y;
+                            y = "ASSAND".equals(item._op) ? yy & xx : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
+                        }
+                        variables.put(name, y);
+                        break;
+                    }
+                case "ASSLSH":
+                case "ASSRSH":
+                case "ASSRRSH": {
+                        Object x = stack.pop();
+                        String name = (String) stack.pop();
+                        Object y = variables.get(name);
+                        if (x instanceof Long && y instanceof Long) {
+                            long xx = (Long) x;
+                            long yy = (Long) y;
+                            y = "ASSLSH".equals(item._op) ? yy << xx : "ASSRSH".equals(item._op) ? yy >> xx : yy >>> xx;
+                        }
+                        variables.put(name, y);
+                        break;
+                    }
+                case "paramList":
+                    stack.push(new PredefinedMethod(stack.pop().toString()));
+                    break;
+                case "param": { // parameter
+                        Object x = stack.pop();
+                        PredefinedMethod y =  (PredefinedMethod) stack.peek();
+                        y.add(x);
+                        break;
+                    }
+                case "method":
+                case "function": { // procedure or function
+                        PredefinedMethod x = (PredefinedMethod) stack.pop();
+                        if ("function".equals(item._op)) {
+                            Object y = x.invoke(out);
+                            if (y != null) {
+                                stack.push(y);
+                            } else {
+                                throw new RuntimeException("Value of method " + x._name + " expected");
+                            }
+                        } else {
+                            x.invoke(out);
+                        }       break;
+                    }
+                case "command":
+                    stack.clear();
+                    /***************************************************************
+                     * } else if ("jmp".equals(item._op)) {
+                     * i = (Integer) item._value;
+                     * } else if ("jmpf".equals(item._op)) {
+                     * if (!((Boolean)stack.pop())) {
+                     * i = (Integer) item._value;
+                     * }
+                     * } else if ("jmpt".equals(item._op)) {
+                     * if (((Boolean)stack.pop())) {
+                     * i = (Integer) item._value;
+                     * }
+                     * } else if ("jmptf".equals(item._op)) {
+                     * i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1];
+                     ***************************************************************/
+                    break;
+                case "nop":
+                case "info": break;
+                default: throw new RuntimeException("Unknown code at "+i+": " + item);
             }
         }
         return stack.isEmpty() ? null : stack.pop();
@@ -549,106 +538,71 @@ public class TestExprCompiler {
 
         private Object invoke(PrintStream out) {
             if (isEmpty()) { // no parameters
-                if ("random".equals(_name)) {
-                    return Math.random();
-                } else if ("empty".equals(_name)) {
-                    return "";
-                } else if ("println".equals(_name)) {
-                    out.println();
-                    return null;
+                switch (_name) {
+                    case "random": return Math.random();
+                    case "empty": return "";
+                    case "println": out.println(); return null;
                 }
-            } else {
+            } else { // one or more parameters
                 Object o1 = get(0);
-                if ("printf".equals(_name)) { // one or more parameters
+                if ("printf".equals(_name)) {
                     remove(0); // we have the first parametr in o1
                     out.printf(o1.toString(), toArray());
                     return null;
                 }
                 if (size() == 1) { // one parameter
-                    if ("println".equals(_name)) {
-                        out.println(o1);
-                        return null;
-                    } else if ("print".equals(_name)) {
-                        out.print(o1);
-                        return null;
+                    switch (_name) {
+                        case "println": out.println(o1); return null;
+                        case "print": out.print(o1); return null;
                     }
                     if (o1 instanceof Number) {
                         double x = ((Number) o1).doubleValue();
-                        if ("abs".equals(_name)) {
-                            return Math.abs(x);
-                        } else if ("acos".equals(_name)) {
-                            return Math.acos(x);
-                        } else if ("asin".equals(_name)) {
-                            return Math.asin(x);
-                        } else if ("atan".equals(_name)) {
-                            return Math.atan(x);
-                        } else if ("cbrt".equals(_name)) {
-                            return Math.cbrt(x);
-                        } else if ("ceil".equals(_name)) {
-                            return Math.ceil(x);
-                        } else if ("cos".equals(_name)) {
-                            return Math.cos(x);
-                        } else if ("cosh".equals(_name)) {
-                            return Math.cosh(x);
-                        } else if ("exp".equals(_name)) {
-                            return Math.exp(x);
-                        } else if ("expm".equals(_name)) {
-                            return Math.expm1(x);
-                        } else if ("floor".equals(_name)) {
-                            return Math.floor(x);
-                        } else if ("log".equals(_name)) {
-                            return Math.log(x);
-                        } else if ("log10".equals(_name)) {
-                            return Math.log10(x);
-                        } else if ("log1p".equals(_name)) {
-                            return Math.log1p(x);
-                        } else if ("rint".equals(_name)) {
-                            return Math.rint(x);
-                        } else if ("round".equals(_name)) {
-                            return Math.round(x);
-                        } else if ("signum".equals(_name)) {
-                            return Math.signum(x);
-                        } else if ("sin".equals(_name)) {
-                            return Math.sin(x);
-                        } else if ("sinh".equals(_name)) {
-                            return Math.sinh(x);
-                        } else if ("sqrt".equals(_name)) {
-                            return Math.sqrt(x);
-                        } else if ("tan".equals(_name)) {
-                            return Math.tan(x);
-                        } else if ("tanh".equals(_name)) {
-                            return Math.tanh(x);
-                        } else if ("toDegrees".equals(_name)) {
-                            return Math.toDegrees(x);
-                        } else if ("toRadians".equals(_name)) {
-                            return Math.toRadians(x);
-                        } else if ("ulp".equals(_name)) {
-                            return Math.ulp(x);
+                        switch (_name) {
+                            case "abs": return Math.abs(x);
+                            case "acos": return Math.acos(x);
+                            case "asin": return Math.asin(x);
+                            case "atan": return Math.atan(x);
+                            case "cbrt": return Math.cbrt(x);
+                            case "ceil": return Math.ceil(x);
+                            case "cos": return Math.cos(x);
+                            case "cosh": return Math.cosh(x);
+                            case "exp": return Math.exp(x);
+                            case "expm": return Math.expm1(x);
+                            case "floor": return Math.floor(x);
+                            case "log": return Math.log(x);
+                            case "log10": return Math.log10(x);
+                            case "log1p": return Math.log1p(x);
+                            case "rint": return Math.rint(x);
+                            case "round": return Math.round(x);
+                            case "signum": return Math.signum(x);
+                            case "sin": return Math.sin(x);
+                            case "sinh": return Math.sinh(x);
+                            case "sqrt": return Math.sqrt(x);
+                            case "tan": return Math.tan(x);
+                            case "tanh": return Math.tanh(x);
+                            case "toDegrees": return Math.toDegrees(x);
+                            case "toRadians": return Math.toRadians(x);
+                            case "ulp":return Math.ulp(x);
                         }
                     }
                 }
                 if (size() == 2) { // two parameters
                     Object o2 = get(1);
                     if (o1 instanceof Long && o2 instanceof Long) {
-                        if ("min".equals(_name)) {
-                            return Math.min(((Long) o1), ((Long) o2));
-                        } else if ("max".equals(_name)) {
-                            return Math.max(((Long) o1), ((Long) o2));
+                        switch (_name) {
+                            case "min": return Math.min(((Long) o1), ((Long) o2));
+                            case "max": return Math.max(((Long) o1), ((Long) o2));
                         }
                     }
                     if (o1 instanceof Number && o2 instanceof Number) {
                         double x = ((Number) o1).doubleValue();
                         double y = ((Number) o2).doubleValue();
-                        if ("atan2".equals(_name)) {
-                            return Math.atan2(x, y);
-                        } else if ("hypot".equals(_name)) {
-                            return Math.hypot(x, y);
-                        } else if ("min".equals(_name)) {
-                            return Math.min(x, y);
-                        } else if ("max".equals(_name)) {
-                            return Math.max(x, y);
-                        } else if ("pow".equals(_name)) {
-                            return Math.pow(x, y);
+                        switch (_name) {
+                            case "atan2": return Math.atan2(x, y);
+                            case "hypot": return Math.hypot(x, y);
+                            case "min": return Math.min(x, y);
+                            case "max": return Math.max(x, y);
+                            case "pow": return Math.pow(x, y);
                         }
                     }
                 }

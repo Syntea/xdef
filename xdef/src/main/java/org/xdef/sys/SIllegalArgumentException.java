@@ -46,10 +46,10 @@ public class SIllegalArgumentException
     public SIllegalArgumentException(final String msg, final Throwable cause) {this(null, msg, cause);}
 
     /** Creates a new instance of SIllegalArgumentException with registered message.
-     * @param ID registered message ID.
+     * @param id registered message ID number.
      * @param mod Message modification parameters.
      */
-    public SIllegalArgumentException(final long ID, final Object... mod) {this(Report.error(ID, mod));}
+    public SIllegalArgumentException(final long id, final Object... mod) {this(Report.error(id, mod));}
 
     /** Creates a new instance of SIllegalArgumentException.
      * @param id The message ID

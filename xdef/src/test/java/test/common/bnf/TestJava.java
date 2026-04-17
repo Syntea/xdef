@@ -17,13 +17,11 @@ public class TestJava extends STester {
             StringParser p = new StringParser(source);
             if (grammar.parse(p, name)) {
                 if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
+                    return grammar.getParser().getReportWriter().getReportReader().printToString();
                 }
                 return grammar.getParsedString();
             } else {
-                return name + " failed, " + (p.eos()?
-                    "eos" : p.getPosition().toString()) + "; ";
+                return name + " failed, " + (p.eos() ? "eos" : p.getPosition().toString()) + "; ";
             }
         } catch (Exception ex) {
             return printThrowable(ex);
@@ -38,8 +36,7 @@ public class TestJava extends STester {
         String s;
         BNFGrammar g;
         try {
-            g = BNFGrammar.compile(
-                null, new File(getDataDir() + "JavaSyntax.bnf"), null);
+            g = BNFGrammar.compile(null, new File(getDataDir() + "JavaSyntax.bnf"), null);
             s = "i+1";
             assertEq(s, parse(g, "expression", s));
 //			s =

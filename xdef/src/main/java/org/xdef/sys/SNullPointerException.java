@@ -55,10 +55,10 @@ public class SNullPointerException extends NullPointerException implements SThro
     public SNullPointerException(final String msg) {this(null, msg);}
 
     /** Creates a new instance of SNullPointerException with registered message.
-     * @param ID registered message ID.
+     * @param id registered message ID number.
      * @param mod Message modification parameters.
      */
-    public SNullPointerException(final long ID, final Object... mod) {this(Report.error(ID, mod));}
+    public SNullPointerException(final long id, final Object... mod) {this(Report.error(id, mod));}
 
     /** Creates a new instance of SNullPointerException.
      * @param id The message ID

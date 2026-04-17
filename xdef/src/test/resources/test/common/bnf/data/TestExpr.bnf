@@ -4,9 +4,9 @@
 
 comment    ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
 S          ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
-keyword    ::= "true" | "false" | "null"| "if" | "else" | "do" | "while" | "for"
-               | "switch" | "case" | "default" | "try" | "catch" | "finally"
-               | "throw" | "break" | "continue" | "return"
+keyword    ::= "true" | "false" | "null"| "if" | "else" | "do" | "while"
+               | "for" | "switch" | "case" | "default" | "try" | "catch"
+               | "finally" | "throw" | "break" | "continue" | "return"
 
 /* Constant values */
 boolConst   ::= ("true" | "false") $rule
@@ -85,7 +85,8 @@ method      ::= name paramList $rule
 vardecl     ::= type S declItem (S "," S declItem)*
 varcmd      ::= vardecl | assign | incdec
 simplecmd   ::= varcmd | method
-command     ::= S ($info blockcmd | (($info (simplecmd | do) S )? ";" )) $rule S
+command     ::= S ($info blockcmd | (($info (simplecmd | do) S )? ";" ))
+                $rule S
 
 /***************************************************************
             TODO

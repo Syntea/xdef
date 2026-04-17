@@ -19,13 +19,11 @@ public class TestSQL extends STester {
             grammar.setUserObject(this);
             if (grammar.parse(p, name)) {
                 if (grammar.getParser().errorWarnings()) {
-                    return grammar.getParser().getReportWriter().
-                        getReportReader().printToString();
+                    return grammar.getParser().getReportWriter().getReportReader().printToString();
                 }
                 return grammar.getParsedString();
             } else {
-                return name + " failed, " + (p.eos()?
-                    "eos" : p.getPosition().toString()) + "; ";
+                return name + " failed, " + (p.eos() ? "eos" : p.getPosition().toString()) + "; ";
             }
         } catch (Exception ex) {
             return printThrowable(ex);
@@ -37,8 +35,7 @@ public class TestSQL extends STester {
     @Override
     public void test() {
         try {
-            BNFGrammar g = BNFGrammar.compile(
-                null, new File(getDataDir() + "TestSQL.bnf"), null);
+            BNFGrammar g = BNFGrammar.compile(null, new File(getDataDir() + "TestSQL.bnf"), null);
             String s =
 "select * /* Comment*/ from // Comment\n"+
 "   -- Comment\n"+

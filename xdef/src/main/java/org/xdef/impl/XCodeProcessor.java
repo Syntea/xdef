@@ -3219,9 +3219,9 @@ public final class XCodeProcessor {
                 case NEW_INSTREAM:
                     switch (item.getParam()) {
                         case 3: {
-                            boolean xmlFormat = _stack[sp--].booleanValue();
+                            boolean ixXml = _stack[sp--].booleanValue();
                             String s = _stack[sp--].toString();
-                            _stack[sp] = new DefInStream(_stack[sp].toString(), s, xmlFormat);
+                            _stack[sp] = new DefInStream(_stack[sp].toString(), s, ixXml);
                             break;
                         }
                         case 2: {
@@ -3239,9 +3239,9 @@ public final class XCodeProcessor {
                 case NEW_OUTSTREAM: {
                     switch (item.getParam()) {
                         case 3: {
-                            boolean xmlFormat = _stack[sp--].booleanValue();
+                            boolean isXml = _stack[sp--].booleanValue();
                             String s = _stack[sp--].toString();
-                            _stack[sp] = new DefOutStream(_stack[sp].toString(),s, xmlFormat);
+                            _stack[sp] = new DefOutStream(_stack[sp].toString(),s, isXml);
                             break;
                         }
                         case 2: {

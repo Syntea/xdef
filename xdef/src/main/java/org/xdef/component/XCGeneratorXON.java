@@ -387,7 +387,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
     private static String getXonItemName(final XElement xe, final String prefix, final Set<String> varNames) {
         XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
         String name = null;
-        if (xe._xon==XConstants.XON_MODE_W && xe._match>=0 && keyAttr!=null
+        if (xe._xonVersion==XConstants.XON_MODE_W && xe._match>=0 && keyAttr!=null
             && keyAttr._check >= 0) {
             XDValue[] code = ((XPool)xe.getXDPool()).getCode();
             for (int i = keyAttr._check; i < code.length; i++) {
@@ -750,7 +750,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
         final StringBuilder getters,
         final StringBuilder sbi,
         final Set<String> varNames) {
-        if (xe._xon == 0) {
+        if (xe._xonVersion == 0) {
             return;
         }
         String template;
@@ -873,7 +873,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
         boolean any = false;
         XMNode[] nodes = xe.getChildNodeModels();
         String s;
-        if (xe._xon != 0 && nodes.length == 5 //anyObj?
+        if (xe._xonVersion != 0 && nodes.length == 5 //anyObj?
             && nodes[0].getKind() == XMCHOICE && nodes[1].getKind() == XMELEMENT
             && X_VALUE.equals(nodes[1].getLocalName()) && nodes[2].getKind() == XMELEMENT
             && X_ARRAY.equals(nodes[2].getLocalName())

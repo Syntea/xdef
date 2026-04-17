@@ -73,10 +73,8 @@ public final class SBuffer extends SPosition {
     public int hashCode() {
         return  97 + 3*Objects.hashCode(this._source);
     }
-
     @Override
     public final String toString() {return super.toString() + ";\n" + _source;}
-
     @Override
     public boolean equals(final Object o) {
         if (o instanceof SBuffer) {

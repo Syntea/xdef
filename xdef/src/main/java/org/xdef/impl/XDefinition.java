@@ -54,7 +54,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
      * @param pos source position of X-definition.
      * @param ver XML version of X-definition source.
      */
-    public XDefinition(final String name,final XDPool xp,final String uri,final SPosition pos,final byte ver){
+    public XDefinition(final String name, final XDPool xp, final String uri, final SPosition pos, final byte ver){
         super(name, uri, (XPool) xp, XMDEFINITION);
         _xElements = new ArrayList<>();
         _properties = new Properties();

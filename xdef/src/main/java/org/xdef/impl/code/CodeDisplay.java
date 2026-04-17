@@ -213,8 +213,8 @@ public class CodeDisplay implements CodeTable, XDValueID {
             sc.getKind() == XMTEXT) {
             out.print(" (" + ((XMData) sc).getValueTypeName() + ")");
         }
-        if (sc._xon > 0) {
-            out.print(",xon=" + sc._xon);
+        if (sc._xonVersion > 0) {
+            out.print(",xon=" + sc._xonVersion);
         }
         if (sc._check >= 0) {
             out.print(",check=" + sc._check);

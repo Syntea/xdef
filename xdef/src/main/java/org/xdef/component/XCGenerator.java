@@ -164,7 +164,7 @@ final class XCGenerator extends XCGeneratorXON {
         // Generate namespace attributes
         for (Map.Entry<Object, Object> item : nsmap.entrySet()) {
             final String value = (String) item.getValue();
-            if (xe._xon == XConstants.XON_MODE_W && XON_NS_URI_W.equals(value)){
+            if (xe._xonVersion == XConstants.XON_MODE_W && XON_NS_URI_W.equals(value)){
                 continue;
             }
             final String name = ((String) item.getKey());
@@ -422,7 +422,7 @@ final class XCGenerator extends XCGeneratorXON {
                         }
                     }
                     genChildElementCreator(iname,  listNodes, max > 1);
-                    if (xe1._xon == XConstants.XON_MODE_W) {
+                    if (xe1._xonVersion == XConstants.XON_MODE_W) {
                         if (XON_NS_URI_W.equals(xe1.getNSUri())) {
                             if (groupKind != XMCHOICE) {
                                 if (XonNames.X_VALUE.equals(xe1.getLocalName())){

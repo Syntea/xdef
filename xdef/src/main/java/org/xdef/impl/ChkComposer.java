@@ -184,7 +184,7 @@ final class ChkComposer extends SReporter {
      */
     final void xcreate(final ChkDocument chkDoc, final String nsURI, final String qname) {
         XElement oldXElement = chkDoc._xElement; //Save XElement
-        if (oldXElement == null || oldXElement._xon == 0) {
+        if (oldXElement == null || oldXElement._xonVersion == 0) {
             chkDoc._xElement = null;
         }
         setReportWriter(chkDoc.getReportWriter());

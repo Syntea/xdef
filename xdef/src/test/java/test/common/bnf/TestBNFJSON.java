@@ -17,8 +17,7 @@ public class TestBNFJSON extends STester {
     public TestBNFJSON() {super();}
 
     private String getXonDir() {
-        String s = (new File(getDataDir()).getAbsolutePath()
-            + File.separator).replace('\\', '/');
+        String s = (new File(getDataDir()).getAbsolutePath() + File.separator).replace('\\', '/');
         int ndx = s.indexOf("/bnf/");
         return s.substring(0, ndx) + "/xon/data/";
     }
@@ -47,11 +46,9 @@ public class TestBNFJSON extends STester {
             try {
                 String name = f.getName();
                 int ndx = name.indexOf("UTF");
-                String t = name.equals("Test201windows-1250.xon")
-                    ? FUtils.readString(f, "windows-1250")
-                    : ndx > 0
-                        ? FUtils.readString(f, name.substring(ndx, name.indexOf(".xon")))
-                        : FUtils.readString(f, "UTF-8");
+                String t = name.equals("Test201windows-1250.xon") ? FUtils.readString(f, "windows-1250")
+                    : ndx > 0 ? FUtils.readString(f, name.substring(ndx, name.indexOf(".xon")))
+                    : FUtils.readString(f, "UTF-8");
                 String s = parse(g, rule, t);
                 if (!t.equals(s)) {
                     fail("E: " + f.getName() + "\n" + s + "\n" + t);
@@ -104,7 +101,6 @@ public class TestBNFJSON extends STester {
         try { // JSON
             g = BNFGrammar.compile(null, new File(getDataDir() + "TestJSON.bnf"), null);
 //			grammar.display(System.out, true);
-
 ////////////////////////////////////////////////////////////////////////////////
             test(new String[] {
                 "null",

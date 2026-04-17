@@ -239,7 +239,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
             QName qn = new QName(namespaceURI, nm);
             for (String xName: _xdef._rootSelection.keySet()) {
                 XElement xe = (XElement) _xdef._rootSelection.get(xName);
-                if (xe._xon > 0) {
+                if (xe._xonVersion > 0) {
                     QName qxe = xe.getQName();
                     if (qn.equals(qxe)) {
                         return xe;
@@ -1367,7 +1367,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                         byte jVersion = (Byte) yClass.getDeclaredField("XON").get(null);
                         if (jVersion > 0) {
                             XElement xe = selectRoot(jmodel, XDConstants.XON_NS_URI_W, -1);
-                            if (xe != null && xe._xon != 0) {
+                            if (xe != null && xe._xonVersion != 0) {
                                 break;
                             }
                         }
@@ -1444,7 +1444,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
         for (XMElement x : _scp.getXDefinition().getModels()) {
             if (name.equals(x.getName())) {
                 XMNode[] models = x.getChildNodeModels();
-                if (models != null && models.length == 1 && ((XElement) x)._xon > 0) {
+                if (models != null && models.length == 1 && ((XElement) x)._xonVersion > 0) {
                     return (XElement) models[0];
                 }
                 break;
@@ -1920,7 +1920,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                         byte jVersion = (Byte) yClass.getDeclaredField("XON").get(null);
                         if (jVersion > 0) {
                             XElement xe = selectRoot(jmodel, XDConstants.XON_NS_URI_W, -1);
-                            if (xe != null && xe._xon != 0) {
+                            if (xe != null && xe._xonVersion != 0) {
                                 break;
                             }
                         }

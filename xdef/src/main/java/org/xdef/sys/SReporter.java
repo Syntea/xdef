@@ -98,29 +98,23 @@ public class SReporter extends SPosition {
     }
 
     /** Put error message with modification parameters.
-     * @param ID registered message ID.
+     * @param id registered message ID number.
      * @param mod Message modification parameters.
      */
-    public void error(final long ID, final Object... mod) {
-        putReport(Report.error(ID, mod), _reportWriter);
-    }
+    public void error(final long id, final Object... mod) {putReport(Report.error(id, mod), _reportWriter);}
 
     /** Put light error message with modification parameters.
-     * @param ID registered message ID.
+     * @param id registered id ID number.
      * @param mod Message modification parameters.
      * @throws SRuntimeException if reporter is null.
      */
-    public void lightError(final long ID, final Object... mod) {
-        putReport(Report.lightError(ID, mod), _reportWriter);
-    }
+    public void lightError(final long id, final Object... mod) {putReport(Report.lightError(id, mod), _reportWriter);}
 
     /** Put warning message with modification parameters.
-     * @param ID registered message ID.
+     * @param id registered id ID number.
      * @param mod Message modification parameters.
      */
-    public void warning(final long ID, final Object... mod) {
-        putReport(Report.warning(ID,mod),_reportWriter);
-    }
+    public void warning(final long id, final Object... mod) {putReport(Report.warning(id,mod),_reportWriter);}
 
     /** Put report. Type of report may be WARNING, ERROR or FATAL; see {@link org.xdef.sys.Report#getMsgID()}.
      * @param report The report.
@@ -133,9 +127,7 @@ public class SReporter extends SPosition {
      * @param report The report.
      * @throws SRuntimeException if reporter is null and if report type is FATAL, ERROR or LIGHTERROR .
      */
-    public void putReport(final SPosition pos, final Report report) {
-        pos.putReport(report, _reportWriter);
-    }
+    public void putReport(final SPosition pos, final Report report) {pos.putReport(report, _reportWriter);}
 
     /** Get number of errors.
      * @return Number of errors.
@@ -156,9 +148,7 @@ public class SReporter extends SPosition {
     /** Check if errors, light errors or warnings were generated.
      * @return true if errors or warnings occurred.
      */
-    public final boolean errorWarnings() {
-        return _reportWriter == null ? false : _reportWriter.errorWarnings();
-    }
+    public final boolean errorWarnings() {return _reportWriter == null ? false : _reportWriter.errorWarnings();}
 
     /** Check error reports in the reporter. Return normally if no error was reported, otherwise throws
      * the exception with the list of error messages (max. MAX_REPORTS messages).

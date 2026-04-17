@@ -61,10 +61,10 @@ public class SRuntimeException extends RuntimeException implements SThrowable {
     public SRuntimeException(final String msg) {this(null, msg);}
 
     /** Creates a new instance of SRuntimeException with registered message.
-     * @param ID registered message ID.
+     * @param id registered message ID number.
      * @param mod Message modification parameters.
      */
-    public SRuntimeException(final long ID, final Object... mod) {this(Report.error(ID, mod));}
+    public SRuntimeException(final long id, final Object... mod) {this(Report.error(id, mod));}
 
     /** Creates a new instance of SException.
      * @param id The message ID

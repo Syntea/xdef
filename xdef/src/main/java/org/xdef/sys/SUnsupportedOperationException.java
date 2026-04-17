@@ -76,12 +76,11 @@ public class SUnsupportedOperationException extends UnsupportedOperationExceptio
         _modification = Report.genModification(mod);
     }
 
-    /** Creates a new instance of SUnsupportedOperationException with
-     * registered message.
-     * @param ID registered message ID.
+    /** Creates a new instance of SUnsupportedOperationException with registered message.
+     * @param id registered message ID number.
      * @param mod The modification parameters.
      */
-    public SUnsupportedOperationException(final long ID, final Object... mod) {this(Report.error(ID, mod));}
+    public SUnsupportedOperationException(final long id, final Object... mod) {this(Report.error(id, mod));}
 
     /** Creates a new instance of SUnsupportedOperationException.
      * @param report The Report object.
@@ -99,51 +98,46 @@ public class SUnsupportedOperationException extends UnsupportedOperationExceptio
      */
     public SUnsupportedOperationException(final Report report, final Throwable ex) {this(report);_cause = ex;}
 
-    @Override
     /** Set cause of exception.
      * @param cause The object with cause data.
      */
-    public final void setCause(final Throwable cause) {_cause = cause;}
-
     @Override
+    public final void setCause(final Throwable cause) {_cause = cause;}
     /** Get cause of exception. If cause was not set return null.
      * @return cause The object with cause data.
      */
+    @Override
     public final Throwable getCause() {return _cause;}
 
-    @Override
     /** Set Report message.
      * @param report Report of this object.
      */
+    @Override
     public final void setReport(final Report report) {
         _msgID = report.getMsgID();
         _modification = report.getModification();
         _text = report.getText();
     }
-
-    @Override
     /** Get Report object associated with this exception.
      * @return The Report object.
      */
-    public final Report getReport() {return Report.error(_msgID, _text, _modification);}
-
     @Override
+    public final Report getReport() {return Report.error(_msgID, _text, _modification);}
     /** Get id of message.
      * @return The message id (may be null).
      */
-    public final String getMsgID() {return _msgID;}
-
     @Override
+    public final String getMsgID() {return _msgID;}
     /** Creates a message text from this exception.
      * @return The text of localized message.
      */
+    @Override
     public final String getMessage() {
         return _msgID == null ? Report.text(null, _text, _modification).toString() : getReport().toString();
     }
-
-    @Override
     /** Creates a localized message assigned to this exception.
      * @return The text of localized message.
      */
+    @Override
     public final String getLocalizedMessage() {return getMessage();}
 }

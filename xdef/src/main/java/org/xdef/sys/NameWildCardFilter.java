@@ -51,8 +51,7 @@ public class NameWildCardFilter implements java.io.FileFilter {
                     if (j > wcLen) {
                         return true;
                     }
-                    if ((ch = wc.charAt(j++)) == '.'
-                        && wc.indexOf('.',j) < 0) {
+                    if ((ch = wc.charAt(j++)) == '.' && wc.indexOf('.',j) < 0) {
                         int ndx = fn.lastIndexOf('.');
                         if (ndx < i) {
                             return false;
