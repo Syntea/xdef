@@ -13,7 +13,7 @@ function replaceHtml(rootPath, targets) {
 
 function loadHeaderFooter(completeFooter, completeHeader) {
     const faviconHref = $('link[rel="icon"]').attr("href");
-    const rootPathRes = /^(.*)image\/favicon\.ico$/.exec(faviconHref);
+    const rootPathRes = /^(.*)style\/favicon\.ico$/.exec(faviconHref);
     var   rootPath    = "";
     if (rootPathRes) {
         rootPath = rootPathRes[1];
