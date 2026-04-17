@@ -36,15 +36,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/** Servlet for execution of examples from tutorial.
+/** 
+ * Servlet for execution "Playground-online". For example for playing users or for tester-users or
+ * for tutorial examples or for other examples on internet
+ * 
  * @author Vaclav Trojan
  */
-public final class Example extends AbstractMyServlet {
+public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
-    private static final String HTML_RESULT = readRsrcAsString(Example.class, "playground-result.html");
+    private static final String HTML_RESULT = readRsrcAsString(Playground.class, "playground-result.html");
 
     /** default constructor, calls super() only */
-    public Example() {
+    public Playground() {
         super();
     }
 
@@ -112,9 +115,10 @@ public final class Example extends AbstractMyServlet {
             String inLex = getParam(req, "inLex");
             String outLex = getParam(req, "outLex");
 
-            String outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef-lib-id}", XDConstants.BUILD_IDENTIFIER);
+            String status;
+            String resultTitle;
             String result;
-            String stdOutput = "";
+            String stdOutput = null;
             PrintWriter out = resp.getWriter();
             XDPool xp = null;
             Properties props = new Properties();
@@ -126,7 +130,7 @@ public final class Example extends AbstractMyServlet {
             } catch (Throwable ex) {
                 if (null == xp || !reporter.errorWarnings()) {
                     out.print(genHtmlMessage("Exception",
-                        "<pre><tt><b>" + stringToHTml(STester.printThrowable(ex), true) + "</b></tt></pre>"));
+                        "<pre><b>" + stringToHTml(STester.printThrowable(ex), true) + "</b></pre>"));
                     return;
                 } else {
                     reporter.reset();
@@ -141,9 +145,9 @@ public final class Example extends AbstractMyServlet {
                     } else {
                         reporter.reset();
                     }
+                    status = "Error";
+                    resultTitle = "X-definition error(s)";
                     result = printReports(reporter, xdef);
-                    outHtml = SUtils.modifyString(outHtml, "${status}", "Error");
-                    outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "X-definition error(s):");
                 } else {
                     Object resultXon = null;
                     Map<String, Object> resultIni = null;
@@ -230,30 +234,30 @@ public final class Example extends AbstractMyServlet {
                     }
                     caw.close();
                     if (reporter.errors()) {
-                        outHtml = SUtils.modifyString(outHtml, "${status}", "Error");
-                        outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "Input data error(s):");
+                        status = "Error";
+                        resultTitle = "Input data error(s)";
                         result = printReports(reporter, data);
                     } else {
-                        outHtml = SUtils.modifyString(outHtml, "${status}", "OK");
-                        if (null!=view && view.toLowerCase().contains("html")) {
-                            out.println(KXmlUtils.nodeToString(resultElement,true,false,true,130));
-                            return;
+                        status = "OK";
+                        if ("html".equals(view)) {
+                        	resultTitle = "HTML result";
+                            result = KXmlUtils.nodeToString(resultElement,true,false,true,130);
                         } else if(json.isEmpty() && csv.isEmpty() && ini.isEmpty()) {
-                            outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "XML result:");
+                        	resultTitle = "XML result";
                             result = KXmlUtils.nodeToString(resultElement, true, false, true, 110);
                         } else {
                             if (null!=view && view.isEmpty()) {
                                 view = !ini.isEmpty() ? "INI" : !csv.isEmpty() ? "CSV" : "JSON";
                             }
                             if (null!=view && view.contains("YAML")) {
-                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "YAML result:");
+                            	resultTitle = "YAML result";
                                 Yaml yaml = new Yaml();
                                 result = yaml.dump(XonUtils.xonToJson(resultXon));
                             } else if (null!=view && view.contains("XON")) {
-                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "XON result:");
+                            	resultTitle = "XON result";
                                 result = XonUtils.toXonString(resultXon, true);
                             } else if (null!=view && view.contains("XML")) {
-                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "XML result:");
+                            	resultTitle = "XML result";
                                 if (!csv.isEmpty() && resultCsv!=null) {
                                     result = KXmlUtils.nodeToString(XonUtils.csvToXml(resultCsv));
                                 } else if (!ini.isEmpty() && resultIni != null) {
@@ -264,25 +268,24 @@ public final class Example extends AbstractMyServlet {
                                         XonUtils.xonToJson(resultXon)), true, false, true, 110);
                                 }
                             } else if (null!=view && view.contains("CSV") && resultCsv!=null){
-                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "CSV result:");
+                            	resultTitle = "CSV result";
                                 result = XonUtils.toCsvString(resultCsv);
                             } else if (null!=view && view.contains("INI") && resultIni!=null){
-                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "INI result:");
+                            	resultTitle = "INI result";
                                 result = XonUtils.toIniString(resultIni);
                             } else {
-                                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "JSON result:");
+                            	resultTitle = "JSON result";
                                 result = XonUtils.toJsonString(resultXon,true);
                             }
                         }
                     }
                     if (caw.size() > 0) {
-                        stdOutput = "<h3>Output stream (System.out):</h3><pre><tt>"
-                            + stringToHTml(caw.toString(), true) + "</tt></pre>";
+                        stdOutput = stringToHTml(caw.toString(), true);
                     }
                 }
             } catch (SRuntimeException ex) {
-                outHtml = SUtils.modifyString(outHtml, "${status}", "Error");
-                outHtml = SUtils.modifyFirst(outHtml, "${result-title}", "Input data error(s):");
+                status = "Error";
+                resultTitle = "Input data error(s)";
                 if ("SYS024".equals(ex.getMsgID())) {
                     reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
                         "The XML document must start with '<'", "&{line}1&{column}1"));
@@ -293,8 +296,24 @@ public final class Example extends AbstractMyServlet {
                 result = printReports(reporter, data);
                 reporter.reset();
             }
-            outHtml = SUtils.modifyFirst(outHtml, "${result}", stringToHTml(result, true));
-            outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stdOutput);
+
+            boolean stdOutputEx = stdOutput != null && !stdOutput.isEmpty();
+            boolean isResHtml   = "html".equals(view);
+            
+            String outHtml;
+            outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef-lib-id}", XDConstants.BUILD_IDENTIFIER);
+            outHtml = SUtils.modifyString(outHtml, "${status}", 	  status);
+            outHtml = SUtils.modifyFirst(outHtml,  "${result-title}", resultTitle);
+            outHtml = SUtils.modifyFirst(outHtml,  "${result}",    	  stringToHTml(result, true));
+            outHtml = SUtils.modifyFirst(outHtml,  "((html-div))", 	  isResHtml ? "block" : "none");
+            if (isResHtml) {
+                outHtml = SUtils.modifyFirst(outHtml, "${result-html}", result.replaceAll("\"", "&quot;"));
+            }
+        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))",  stdOutputEx ? "block" : "none");
+        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-none))", stdOutputEx ? "none"  : "block");
+            if (stdOutputEx) {
+            	outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stringToHTml(stdOutput, true));
+            }
             out.print(outHtml);
         }
     }
