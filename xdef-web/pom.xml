@@ -97,7 +97,7 @@
                             <targetPath>META-INF</targetPath>
                             <directory>.</directory>
                             <includes>
-                                <inlude> .flattened-pom.xml</inlude>
+                                <inlude>.flattened-pom.xml</inlude>
                             </includes>
                         </resource>
                         <resource>
@@ -134,9 +134,8 @@
                             <targetPath>.</targetPath>
                             <directory>src/main/webapp</directory>
                             <includes>
-                                <inlude>footer0.html</inlude>
-                                <inlude>footer.html</inlude>
-                                <inlude>cs/footer.html</inlude>
+                                <inlude>style/footer.html</inlude>
+                                <inlude>cs/style/footer.html</inlude>
                             </includes>
                             <filtering>true</filtering>
                         </resource>

@@ -4,14 +4,13 @@
     <title>X-definice &mdash; Úvod</title>
 	<meta name="description" content="X-definice &mdash; Úvod"/>
     <meta charset="UTF-8"/>
-    <link rel="icon" type="image/x-icon" href="../image/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
-    <script type="text/javascript" src="../style/jquery-4.0.0.min.js"></script>
+    <script type="module" src="../style/common.js"></script>
 </head>
 <body>
 
-<div id="header">ERROR: HEADER NOT LOADED</div>
-<script>$("#header").load("header0.html")</script>
+<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
 
 
 <h1>X-definice &mdash; Úvod</h1>
@@ -20,9 +19,9 @@
 <h2>X-definition web sites</h2>
 
 Web sites:<ul>
-    <li><a href="tutorial/">Tutorial</a></li>
-    <li><a href="playground/">Playground-online</a></li>
-    <li><a href="download.html">Download</a> &mdash; jar file, sources, documentation, examples</li>
+    <li><a href="../tutorial/">Tutorial</a></li>
+    <li><a href="../playground/">Playground-online</a></li>
+    <li><a href="../other/download.html">Download</a> &mdash; jar file, sources, documentation, examples</li>
     <li><a href="https://github.com/Syntea/xdef">Project on GitHub.com</a></li>
 </ul>
 
@@ -30,7 +29,7 @@ Web sites:<ul>
 <h2>Helper applications</h2>
 
 Helper applications:<ul>
-    <li><a href='other/XDefGUI.html'>XDefGUI</a> &mdash; X-definition editor and debugger guide</li>
+    <li><a href='../other/XDefGUI.html'>XDefGUI</a> &mdash; X-definition editor and debugger guide</li>
 </ul>
 
 
@@ -75,8 +74,9 @@ Helper applications:<ul>
 </ul>
 
 
-<div id="footer">ERROR: FOOTER NOT LOADED</div>
-<script>$("#footer").load("footer.html")</script>
+<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasic()</script>
 
 </body>
 </html>

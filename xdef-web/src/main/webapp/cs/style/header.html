@@ -1,0 +1,33 @@
+<div class="header">
+    <div class="logo"><a href="${rootPath}./" title="Úvod"><img src="${rootPath}style/logo.png"/></a></div>
+    <div class="lang" title="Výběr jazyka - Čeština" onclick="headLangActivate()">
+        <span class="headLangPas">
+            <img src="${rootPath}style/lang.png"/>
+        </span>
+        <span class="headLangAct">
+            <select onchange="location = this.value">
+                <option value="${rootPath}../" title="angličtina" lang="en"                    >english</option>
+                <option value="${rootPath}./"  title="čeština"    lang="cs" selected="selected">čeština</option>
+            </select>
+        </span>
+    </div>
+    <ul class="nav">
+        <li class="logo"><span>.</span></li>
+        <li><span><a href="${rootPath}../tutorial/"                 >Tutoriál</a>
+            <sup><img src="${rootPath}../style/lang.png"/></sup></span></li>
+        <li><span><a href="${rootPath}../playground/"               >Pískoviště</a>
+            <sup><img src="${rootPath}../style/lang.png"/></sup></span></li>
+        <li><span><a href="${rootPath}../other/download.html"       >Stáhnout</a>
+            <sup><img src="${rootPath}../style/lang.png"/></sup></span></li>
+        <li><span><a href="${rootPath}./#Media"                     >Média</a>
+            </span></li>
+        <li><span><a href="https://www.syntea.cz/o-nas/"            >Syntea</a>
+            </span></li>
+    </ul>
+    <script>
+        $("div.logo").hover(
+            function(){ $("div.logo img").animate({height: '8em'}, "fast"); },
+            function(){ $("div.logo img").animate({height: '4em'}, "fast"); }
+        )
+    </script>
+</div>

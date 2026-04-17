@@ -4,25 +4,22 @@
     <title>Playground &mdash; X-definition validation mode</title>
     <meta name="description" content="Online validation and processing of XML data with X-definition"/>
     <meta charset="UTF-8"/>
-    <link rel="icon" type="image/x-icon" href="../image/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
-    <script type="text/javascript" src="../style/jquery-4.0.0.min.js"></script>
-    <script type="text/javascript" src="../style/jquery.textarea-with-linenumbers.js"></script>
-    <link rel="stylesheet" href="../style/jquery.textarea-with-linenumbers.css"/>
+    <script type="module" src="../style/common.js"></script>
 </head>
 <body>
 
-<div id="header">ERROR: HEADER NOT LOADED</div>
-<script>$("#header").load("../header1.html")</script>
+<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
 
 
 <h1>Playground &mdash; X-definition validation mode</h1>
 
-<form method="post" action="../Example">
+<form method="post" action="../Playground">
 
-<b>X-definition:</b>
-If you have a collection with more X-definitions enter the name of X-definition with root XML data:
-<input name="xdname" value="" type="text"/>
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="xdname" value="" type="text"/>
+(enter if you have a collection with more X-definitions)
 <textarea name="xdef" rows="10" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
   &lt;root a="int(); onTrue outln('root a: ' + getText());" >
@@ -40,16 +37,16 @@ If you have a collection with more X-definitions enter the name of X-definition 
   &lt;b/>
 &lt;/root>
 </textarea>
+
 <input name="submit" value="Execute" type="submit"/>
 You can edit <b>X-definition</b> or <b>Input</b> window
 
 </form>
 
-<script>$("textarea.lined").linenumbers()</script>
 
+<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
 
-<div id="footer">ERROR: FOOTER NOT LOADED</div>
-<script>$("#footer").load("../footer.html")</script>
+<script type="module">initPageBasicTal();</script>
 
 </body>
 </html>
