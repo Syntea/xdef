@@ -16,6 +16,9 @@
 <h1>Example of validation and construction mode</h1>
 
 <form method="post" action="../Playground">
+<input name="mode"    value="create" type="hidden"/>
+<input name="input"   value="xml"    type="hidden"/>
+<input name="display" value="html"   type="hidden"/>
 
 <p>
 Note that the validation is described in the "Weather" model and the
@@ -60,7 +63,7 @@ section starts the construction of the "html" model. The method
 &lt;/Weather>
 </textarea>
 
-<input name="view" value="Execute - display as html" type="submit"/>
+<button type="submit" name="mode" value="validate">Validate</button>
 You can edit both <b>X-definition</b> and <b>Input data</b>
 
 </form>

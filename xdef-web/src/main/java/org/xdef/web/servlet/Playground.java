@@ -239,7 +239,7 @@ public final class Playground extends AbstractMyServlet {
                         result = printReports(reporter, data);
                     } else {
                         status = "OK";
-                        if (null!=view && view.toLowerCase().contains("html")) {
+                        if ("html".equals(view)) {
                         	resultTitle = "HTML result";
                             result = KXmlUtils.nodeToString(resultElement,true,false,true,130);
                         } else if(json.isEmpty() && csv.isEmpty() && ini.isEmpty()) {
@@ -298,7 +298,7 @@ public final class Playground extends AbstractMyServlet {
             }
 
             boolean stdOutputEx = stdOutput != null && !stdOutput.isEmpty();
-            boolean isResHtml   = result.trim().startsWith("<html>");
+            boolean isResHtml   = "html".equals(view);
             
             String outHtml;
             outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef-lib-id}", XDConstants.BUILD_IDENTIFIER);
