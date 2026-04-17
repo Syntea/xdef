@@ -57,6 +57,7 @@ div.resizable iframe {
 
 span.error {
     color:              red;
+    font-weight:        bold;                 
     visibility:         hidden;
 }
 
