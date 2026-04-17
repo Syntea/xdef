@@ -136,13 +136,18 @@ public class TestExprDeCompiler {
 ////////////////////////////////////////////////////////////////////////////////
             } else if ("idRef".equals(item)) { // reference to variable name
             } else if ("command".equals(item)) {  // clear stack
-                result.append(stack.pop()._s).append(";\n");
                 if (!stack.empty()) {
-                    result.append(Report.error("", "Stack item: " + stack.pop()).toString());
+                    result.append(stack.pop()._s).append(";\n");
+                    if (!stack.empty()) {
+                        result.append(Report.error("", "Stack item: " + stack.pop()).toString());
+                    }
                 }
             } else if ("boolexpr".equals(item)) {  //???
             } else if ("if".equals(item)) {  //???
             } else if ("then".equals(item)) {  //???
+            } else if ("nop".equals(item)) {  //???
+            } else if ("jmptf".equals(item)) {  //???
+            } else if ("jmp".equals(item)) {  //???
             } else {
                 result.append(Report.error("", "Unknown code: " + item).toString());
                 return result.toString();

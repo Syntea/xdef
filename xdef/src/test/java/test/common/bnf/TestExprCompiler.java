@@ -97,8 +97,7 @@ public class TestExprCompiler {
         public String toString() {return _op + ' ' + _value;}
     }
 
-    static CodeItem[] precompile(final String source,
-        final Object[] code) {
+    static CodeItem[] precompile(final String source, final Object[] code) {
         CodeItem[] result = new CodeItem[code.length];
         for (int i = 0; i < code.length; i++) {
             String item = code[i].toString();
@@ -108,37 +107,113 @@ public class TestExprCompiler {
             }
             String[] ii = ((String) code[i]).split(" ");
             item = ii[0];
-            String s;
             switch (item) {
-                case "intConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                    result[i] = new CodeItem(item, Long.valueOf(s));
+                case "intConst":
+                    result[i] = new CodeItem(item,
+                        Long.valueOf(source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
                     break;
-                case "fltConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                    result[i] = new CodeItem(item, Double.valueOf(s));
+                case "fltConst":
+                    result[i] = new CodeItem(item,
+                        Double.valueOf(source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
                     break;
-                case "boolConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                    result[i] = new CodeItem(item, "true".equals(s));
+                case "boolConst":
+                    result[i] = new CodeItem(item, "true".equals(
+                        source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
                     break;
-                case "strConst": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                case "strConst": {
+                    String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                     String delimiter = String.valueOf(s.charAt(0));
                     s = s.substring(1, s.length() - 1);
                     s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
                     result[i] = new CodeItem(item, s);
                     break;
+                }
                 case "nullConst": result[i] = new CodeItem(item, null); break;
-                case "name": s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                    result[i] = new CodeItem(item, s);
+                case "name":
+                    result[i] = new CodeItem(item, source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2])));
                     break;
                 case "jmp":
                 case "jmpf":
-                case "jmpt": result[i] = new CodeItem(item, new Integer(ii[1])); break;
-                case "jmptf": result[i] = new CodeItem(item, new int[] {new Integer(ii[1]), new Integer(ii[2])}); break;
-                default:
-                    s = null;
-                    if (item.endsWith("type")) {
-                        s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                case "jmpt": result[i] = new CodeItem(item, Integer.valueOf(ii[1])); break;
+                case "jmptf": {
+                    result[i] = new CodeItem(item, new int[] {Integer.parseInt(ii[1]), Integer.parseInt(ii[2])});
+                    break;
+                }
+                case "if":
+                    for (int j = i+1; j < code.length; j++) {
+                        String[] s = ((String) code[j]).split(" ");
+                        if ("then".equals(s[0]) && s[1].equals(ii[2])) {
+                            result[i] = new CodeItem("jmpf", j);
+                            code[i] = "jmpf " + j;
+                            code[j] = "nop 0 0";
+                            for (int k = j + 1; k < code.length; k++) {
+                                String[] kk = ((String) code[k]).split(" ");
+                                if ("else".equals(kk[0]) && kk[1].equals(s[2])) {
+                                    result[j] = new CodeItem("jmp", k);
+                                    code[j] = "jmp " + k;
+                                    code[k] = "nop 0 0";
+                                }
+                            }
+                        }
                     }
-                    result[i] = new CodeItem(item, s);
+                    break;
+                case "while": 
+                    code[i] = "nop 0 0";
+                    result[i] = new CodeItem("nop", null);
+                    for (int j = i+1; j < code.length; j++) {
+                        String[] jj = ((String) code[j]).split(" ");
+                        if ("while".equals(jj[0]) && jj[1].equals(ii[1])) {
+                            for (int k = j+1; k < code.length; k++) {
+                                String[] kk = ((String) code[k]).split(" ");
+                                if ("while".equals(kk[0]) && kk[1].equals(jj[2])) {
+                                    code[j] = "jmpf " + k;
+                                    result[j] = new CodeItem("jmpf", k);
+                                    code[k] = "jmp " + i;
+                                    result[k] = new CodeItem("jmp", i);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "do":
+                    code[i] = "nop 0 0";
+                    result[i] = new CodeItem("nop", null);
+                    for (int j = i+1; j < code.length; j++) {
+                        String[] jj = ((String) code[j]).split(" ");
+                        if ("do".equals(jj[0]) && jj[1].equals(ii[2])) {
+                            code[j] = "jmpt " + i;
+                            result[j] = new CodeItem("jmpt", i);
+                        }
+                    }
+                    break;
+                case "for":
+                    code[i] = "nop 0 0";
+                    result[i] = new CodeItem("nop", null);
+                    for (int j = i+1; j < code.length; j++) {
+                        String[] jj = ((String) code[j]).split(" ");
+                        if ("for".equals(jj[0]) && jj[1].equals(ii[1])) {
+                            for (int k = j+1; k < code.length; k++) {
+                                String[] kk = ((String) code[k]).split(" ");
+                                if ("for".equals(kk[0]) && kk[1].equals(ii[1])) {
+                                    for (int m = k+1; m < code.length; m++) {
+                                        String[] mm = ((String) code[m]).split(" ");
+                                        if ("for3".equals(mm[0]) && mm[1].equals(kk[2])) {
+                                            code[j] = "jmptf " + k + " " + m;
+                                            result[j] = new CodeItem("jmpf", new int[]{k,m});
+                                            code[k] = "jmp " + i;
+                                            result[k] = new CodeItem("jmp", i);
+                                            code[m] = "jmp " + j;
+                                            result[m] = new CodeItem("jmp", j);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    result[i] = new CodeItem(item,
+                        item.endsWith("type")? source.substring(Integer.parseInt(ii[1]),Integer.parseInt(ii[2])): null);
             }
 /***************************************************************
             } else if ("jmp".equals(item) || "jmpf".equals(item) || "jmpt".equals(item) ) {
@@ -488,37 +563,30 @@ public class TestExprCompiler {
                         y.add(x);
                         break;
                     }
-                case "method":
+                case "method": ((PredefinedMethod) stack.pop()).invokeMethod(out); break;
                 case "function": { // procedure or function
                         PredefinedMethod x = (PredefinedMethod) stack.pop();
-                        if ("function".equals(item._op)) {
-                            Object y = x.invoke(out);
-                            if (y != null) {
-                                stack.push(y);
-                            } else {
-                                throw new RuntimeException("Value of method " + x._name + " expected");
-                            }
+                        Object y = x.invokeMethod(out);
+                        if (y != null) {
+                            stack.push(y);
                         } else {
-                            x.invoke(out);
-                        }       break;
+                            throw new RuntimeException("Value of method " + x._name + " expected");
+                        }
+                        break;
                     }
-                case "command":
-                    stack.clear();
-                    /***************************************************************
-                     * } else if ("jmp".equals(item._op)) {
-                     * i = (Integer) item._value;
-                     * } else if ("jmpf".equals(item._op)) {
-                     * if (!((Boolean)stack.pop())) {
-                     * i = (Integer) item._value;
-                     * }
-                     * } else if ("jmpt".equals(item._op)) {
-                     * if (((Boolean)stack.pop())) {
-                     * i = (Integer) item._value;
-                     * }
-                     * } else if ("jmptf".equals(item._op)) {
-                     * i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1];
-                     ***************************************************************/
+                case "jmp": i = (Integer) item._value; break;
+                case "jmpf":
+                    if (!((Boolean)stack.pop())) {
+                        i = (Integer) item._value;
+                    }
                     break;
+                case "jmpt":
+                    if (((Boolean)stack.pop())) {
+                        i = (Integer) item._value;
+                    }
+                    break;
+                case "jmptf": i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1]; break;
+                case "command": stack.clear(); break;
                 case "nop":
                 case "info": break;
                 default: throw new RuntimeException("Unknown code at "+i+": " + item);
@@ -536,7 +604,7 @@ public class TestExprCompiler {
             _name = name;
         }
 
-        private Object invoke(PrintStream out) {
+        private Object invokeMethod(PrintStream out) {
             if (isEmpty()) { // no parameters
                 switch (_name) {
                     case "random": return Math.random();

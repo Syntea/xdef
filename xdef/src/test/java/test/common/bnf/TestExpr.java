@@ -109,17 +109,6 @@ public class TestExpr extends STester {
         try {
             g.trace(null);
             _displayCode = false;
-/**
-
-            _displayCode = true;
-            assertEq("", parse(g, "{\n" +
-"  for(i=1; i<3; i++) {\n" +
-"    print(i);\n" +
-"    for(j=1; j<3; j++) print(j);\n" +
-"  }\n" +
-"}\n"));
-if (true) return;
-/**/
             assertEq("0", prog(g, " /*x*/ print ( /*x*/ 0 /*x*/) /*x*/; "));
             assertEq("13", prog(g, "print ( /*x*/ 12/*x*//*x*/ + 1 /*x*/);"));
             assertEq("abcdef", prog(g, "print('abc' + 'def');"));
@@ -285,17 +274,19 @@ if (true) return;
             assertEq("3, 4, 5\nx\n", prog(g, "printf('%d, %d, %d\nx\n', 3,4,5);"));
             assertEq("null\n1\n", prog(g, "println(null);println(1);"));
             assertEq("null\n", prog(g, "Object i=3; i=null; println(i);"));
-//            assertEq("", prog(g, "if ( true ) print(1) ; "));
+            assertEq("", prog(g, "if ( false ) print(1) ; "));
+            assertEq("1", prog(g, "if ( true ) print(1) ; "));
+            assertEq("12", prog(g, "int i=1; if (i==1) {print(1); print(2);}"));
+            assertEq("2", prog(g, "int i = 1; { if (i == 1) {i = 2;} else {i = 0;} print(i);}"));
+            assertEq("21", prog(g, "if(false){} else {print(2);print(1);}"));
+            assertEq("23", prog(g, "int i=1; while ( i++ < 3 ) print(i);"));
+            assertEq("23", prog(g, "i=1; while ( i++ < 3 ) print(i);"));
+            assertEq("123", prog(g, "i=1; do print(i); while (i++ < 3) ;"));
+            assertEq("12", prog(g, "for(i=1; i<3; i++) print(i);"));
+            assertEq("212", prog(g, "{ for(i=1; i<3; i++) { print(i); for(j=1; j<3; j++) print(j); }}\n"));
+//            assertEq("", prog(g, "int i=1;if (i==1) if (i==1) print(1);"));
 //TODO (parse -> prog)
 //_displayCode = true;
-            assertEq("", parse(g, "if ( true ) print(1) ; "));
-            assertEq("", parse(g, "int i=1; if (i==1) {print(1); print(2);}"));
-            assertEq("", parse(g, "int i=1;if (i==1) if (i==1) print(1);"));
-            assertEq("", parse(g, "int i = 1; { if (i == 1) {i = 2;} else {i = 0;} }"));
-            assertEq("", parse(g, "if(false){}else{print(2);print(1);}"));
-            assertEq("", parse(g, "i=1; while ( i++ < 3 ) print(i);"));
-            assertEq("", parse(g, "i=1; do print(i); while (i++ < 3) ;"));
-            assertEq("", parse(g, "for(i=1; i<3; i++) print(i);"));
             assertEq("", parse(g, "for (int i = 1; i < 3; i++)\n"+
                 "  switch(i) {\n"+
                 "    case 1: print(i); break;\n"+
