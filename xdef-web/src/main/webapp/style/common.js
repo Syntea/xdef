@@ -70,8 +70,9 @@ export function headLangActivate() {
 }
 
 
-//error-messages are usually invisible not to flash on the page during loading. That's why it appears after a second
-setTimeout(function() { $(".error").css("visibility", "visible"); }, 1000);
+//error-messages are usually invisible at the beginning not to flash on the page during loading.
+//  That's why it appears after a second. VD - visibility delayed
+setTimeout(function() { $(".errorVD").css("visibility", "visible"); }, 1000);
 
 //exports to window
 window.initPageBasic        = initPageBasic;

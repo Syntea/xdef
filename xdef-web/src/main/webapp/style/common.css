@@ -58,6 +58,12 @@ div.resizable iframe {
 span.error {
     color:              red;
     font-weight:        bold;                 
+}
+
+/* VD - visibility delayed, see common.js */
+span.errorVD {
+    color:              red;
+    font-weight:        bold;                 
     visibility:         hidden;
 }
 

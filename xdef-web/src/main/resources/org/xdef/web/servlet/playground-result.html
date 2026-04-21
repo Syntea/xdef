@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
 <h1>Playground result &mdash; ${status}</h1>
@@ -21,7 +21,7 @@
 <div style="display: ((html-div))">
 <h2>Display as HTML</h2>
 <div class="output resizable">
-<iframe srcdoc="${result-html}">Your browser does not support iframes</iframe>
+<iframe srcdoc="${result-html}"><span class="error">INFO: your browser does not support iframes</span></iframe>
 </div>
 </div>
 
@@ -30,7 +30,7 @@
 <div style="display: ((stdout-none))">None.</div>
 
 
-<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
 <script type="module">initPageBasic(
     function() { $(this).children("div").append("<span>, X-definition: ${xdef-lib-id}</span>"); })
