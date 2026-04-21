@@ -64,14 +64,14 @@ public final class GenXdef extends AbstractMyServlet {
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
 "        <textarea id='textarea' style='width: 100%;' name='xdef'>\n" +
-                stringToHTml(xdef, true)+
+                preStringToPre(xdef)+
 "</textarea>\n" +
 "      </div>\n"+
 "      <b>Input data</b>\n" +
 "      <div class=\"container\">\n" +
 "        <div id=\"line-numbers_1\" class=\"container_1\"></div>\n" +
 "        <textarea id=\"textarea_1\" style=\"width: 100%;\" name=\"data\">\n" +
-                stringToHTml(data, true).trim()+
+                preStringToPre(data).trim()+
 "</textarea>\n" +
 "      </div>\n");
                 if (data.startsWith("<")) { //data is XML format
@@ -94,7 +94,7 @@ public final class GenXdef extends AbstractMyServlet {
 "</html>");
             } catch (IOException | RuntimeException ex) {
                 out.print("<html><body><h1>Exception</h1>" +
-                    "<pre><tt><b>"+stringToHTml(STester.printThrowable(ex),true)
+                    "<pre><tt><b>"+preStringToPre(STester.printThrowable(ex))
                     + "</b></tt></pre></body></html>");
             }
         }

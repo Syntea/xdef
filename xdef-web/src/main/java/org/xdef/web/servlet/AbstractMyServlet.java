@@ -53,13 +53,15 @@ public abstract class AbstractMyServlet extends HttpServlet {
         return writer.toString();
     }
 
-    /** Create string from data which can be part of HTML.
-     * @param data string to be converted.
-     * @param pre if true new lines are converted to "&lt;br/>".
-     * @return data convertod be displayed in HTML.
+    /**
+     * Create string from data which can be part of HTML
+     *
+     * @param preStr pre-formatted string to be converted
+     * @param pre if true convert to as inside pre-element. Otherwise convert to as inside div-element
+     * @return converted data
      */
-    public static final String stringToHTml(final String data, final boolean pre) {
-        StringBuilder sb = new StringBuilder(null == data ? "" : data.trim());
+    private static final String preStringToHtml(final String preStr, final boolean pre) {
+        StringBuilder sb = new StringBuilder(null == preStr ? "" : preStr.trim());
         int i = 0;
         while (i < sb.length()) {
             char c = sb.charAt(i);
@@ -89,6 +91,36 @@ public abstract class AbstractMyServlet extends HttpServlet {
             i++;
         }
         return sb.toString();
+    }
+
+    /**
+     * see {@link #preStringToHtml(String, boolean)} with pre=true
+     *
+     * @param preStr pre-formatted string to be converted
+     * @return converted data
+     */
+    public static final String preStringToPre(final String preStr) {
+    	return preStringToHtml(preStr, true);
+    }
+
+    /**
+     * see {@link #preStringToHtml(String, boolean)} with pre=false
+     *
+     * @param preStr pre-formatted string to be converted
+     * @return converted data
+     */
+    public static final String preStringToDiv(final String preStr) {
+    	return preStringToHtml(preStr, false);
+    }
+
+    /**
+     * Create string from html-string which can be part of HTML-attribute
+     *
+     * @param htmlStr html-string to be converted
+     * @return converted data
+     */
+    public static final String htmlStringToAttr(final String htmlStr) {
+    	return htmlStr.replaceAll("\"", "&quot;");
     }
 
     /** Get parameter from servlet request.
@@ -271,7 +303,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
 
     /**
      * read text java-resource, it's supposed encoding UTF-8
-     * @param clazz base class for relative path 
+     * @param clazz base class for relative path
      * @param resource path to resource
      * @return required java-resource as string
      */

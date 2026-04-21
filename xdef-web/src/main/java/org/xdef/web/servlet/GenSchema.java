@@ -88,14 +88,14 @@ public final class GenSchema extends AbstractMyServlet {
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
 "        <textarea id='textarea' style='width: 100%;' name='schemaResult'>\n" +
-                    stringToHTml(xd, true) + "\n" +
+                    preStringToPre(xd) + "\n" +
 "</textarea>\n" +
 "      </div>\n"+
 "      <b>XML data</b>\n" +
 "      <div class=\"container\">\n" +
 "        <div id=\"line-numbers_1\" class=\"container_1\"></div>\n" +
 "        <textarea id=\"textarea_1\" style=\"width: 100%;\" name=\"data\">\n" +
-                stringToHTml(data, true) + "\n" +
+                preStringToPre(data) + "\n" +
 "</textarea>\n" +
 "      </div>\n" +
 "      <input type='hidden' name='schema' value='checkSchema' />\n" +
@@ -120,7 +120,7 @@ public final class GenSchema extends AbstractMyServlet {
                             out.print("<html><body><h1>OK</h1></body></html>");
                         } catch (RuntimeException ex) {
                             out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
-                                + stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
+                                + preStringToPre(ex.toString()) + "</b></tt></pre></body></html>");
                         }
                     } else {
                         out.print("<html><body><h1>Exception</h1>"
@@ -135,7 +135,7 @@ public final class GenSchema extends AbstractMyServlet {
                         validator = nschema.newValidator();
                     } catch (SAXException ex) {
                         out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
-                            + stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
+                            + preStringToPre(ex.toString()) + "</b></tt></pre></body></html>");
                         return;
                     }
                     try {//check by XML schema
@@ -143,12 +143,12 @@ public final class GenSchema extends AbstractMyServlet {
                         out.print("<html><body><h1>OK</h1></body></html>");
                     } catch (IOException | SAXException ex) {
                         out.print("<html><body><h1>Exception</h1><b>Error:</b><pre><tt><b>"
-                            + stringToHTml(ex.toString(),true) + "</b></tt></pre></body></html>");
+                            + preStringToPre(ex.toString()) + "</b></tt></pre></body></html>");
                     }
                 }
             } catch (RuntimeException ex) {
                 out.print("<html><body><h1>Exception</h1><pre><tt><b>"
-                    + stringToHTml(STester.printThrowable(ex),true) + "</b></tt></pre></body></html>");
+                    + preStringToPre(STester.printThrowable(ex)) + "</b></tt></pre></body></html>");
             }
         }
     }

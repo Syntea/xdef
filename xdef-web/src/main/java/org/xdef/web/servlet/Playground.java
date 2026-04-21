@@ -36,10 +36,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet for execution "Playground-online". For example for playing users or for tester-users or
  * for tutorial examples or for other examples on internet
- * 
+ *
  * @author Vaclav Trojan
  */
 public final class Playground extends AbstractMyServlet {
@@ -130,7 +130,7 @@ public final class Playground extends AbstractMyServlet {
             } catch (Throwable ex) {
                 if (null == xp || !reporter.errorWarnings()) {
                     out.print(genHtmlMessage("Exception",
-                        "<pre><b>" + stringToHTml(STester.printThrowable(ex), true) + "</b></pre>"));
+                        "<pre><b>" + preStringToPre(STester.printThrowable(ex)) + "</b></pre>"));
                     return;
                 } else {
                     reporter.reset();
@@ -280,7 +280,7 @@ public final class Playground extends AbstractMyServlet {
                         }
                     }
                     if (caw.size() > 0) {
-                        stdOutput = stringToHTml(caw.toString(), true);
+                        stdOutput = caw.toString();
                     }
                 }
             } catch (SRuntimeException ex) {
@@ -299,20 +299,20 @@ public final class Playground extends AbstractMyServlet {
 
             boolean stdOutputEx = stdOutput != null && !stdOutput.isEmpty();
             boolean isResHtml   = "html".equals(view);
-            
+
             String outHtml;
-            outHtml = SUtils.modifyFirst(HTML_RESULT, "${xdef-lib-id}", XDConstants.BUILD_IDENTIFIER);
-            outHtml = SUtils.modifyString(outHtml, "${status}", 	  status);
-            outHtml = SUtils.modifyFirst(outHtml,  "${result-title}", resultTitle);
-            outHtml = SUtils.modifyFirst(outHtml,  "${result}",    	  stringToHTml(result, true));
+            outHtml = SUtils.modifyFirst(HTML_RESULT, "((xdef-lib-id))", XDConstants.BUILD_IDENTIFIER);
+            outHtml = SUtils.modifyString(outHtml, "((status))", 	  status);
+            outHtml = SUtils.modifyFirst(outHtml,  "((result-title))", resultTitle);
+            outHtml = SUtils.modifyFirst(outHtml,  "((result))",    	  preStringToPre(result));
             outHtml = SUtils.modifyFirst(outHtml,  "((html-div))", 	  isResHtml ? "block" : "none");
             if (isResHtml) {
-                outHtml = SUtils.modifyFirst(outHtml, "${result-html}", result.replaceAll("\"", "&quot;"));
+                outHtml = SUtils.modifyFirst(outHtml, "((result-html))", htmlStringToAttr(result));
             }
         	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))",  stdOutputEx ? "block" : "none");
         	outHtml = SUtils.modifyFirst(outHtml, "((stdout-none))", stdOutputEx ? "none"  : "block");
             if (stdOutputEx) {
-            	outHtml = SUtils.modifyFirst(outHtml, "${stdout}", stringToHTml(stdOutput, true));
+            	outHtml = SUtils.modifyFirst(outHtml, "((stdout))", preStringToPre(stdOutput));
             }
             out.print(outHtml);
         }

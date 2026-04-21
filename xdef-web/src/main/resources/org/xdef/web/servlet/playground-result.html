@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Playground result &mdash; ${status}</title>
-    <meta name="description" content="Playground result &mdash; ${status}"/>
+    <title>Playground result &mdash; ((status))</title>
+    <meta name="description" content="Playground result &mdash; ((status))"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="style/common.css"/>
@@ -13,27 +13,27 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<h1>Playground result &mdash; ${status}</h1>
+<h1>Playground result &mdash; ((status))</h1>
 
-<h2>${result-title}</h2>
-<pre class="output">${result}</pre>
+<h2>((result-title))</h2>
+<pre class="output">((result))</pre>
 
 <div style="display: ((html-div))">
 <h2>Display as HTML</h2>
 <div class="output resizable">
-<iframe srcdoc="${result-html}"><span class="error">INFO: your browser does not support iframes</span></iframe>
+<iframe srcdoc="((result-html))"><span class="error">INFO: your browser does not support iframes</span></iframe>
 </div>
 </div>
 
 <h2>Output stream (System.out)</h2>
-<pre style="display: ((stdout-div))" class="output">${stdout}</pre>
+<pre style="display: ((stdout-div))" class="output">((stdout))</pre>
 <div style="display: ((stdout-none))">None.</div>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
 <script type="module">initPageBasic(
-    function() { $(this).children("div").append("<span>, X-definition: ${xdef-lib-id}</span>"); })
+    function() { $(this).children("div").append("<span>, X-definition: ((xdef-lib-id))</span>"); })
 </script>
 
 </body>
