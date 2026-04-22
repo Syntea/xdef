@@ -14,15 +14,16 @@ import java.util.TreeSet;
 import java.util.Properties;
 import java.util.Set;
 import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XDPROPERTY_MESSAGES;
+import static org.xdef.XDConstants.XDPROPERTY_MSGLANGUAGE;
 import org.xdef.msg.SYS;
 import org.xdef.sys.RegisterReportTables.ReportTable;
 import org.xdef.xml.KXmlUtils;
 
 /** Provides managing of properties, languages and report tables. It exists the singleton instance of SManager.
  * You can get this instance by the static method {@link org.xdef.sys.SManager#getInstance()}.
- * <p>Note the SManager is used as manager of reports. Therefore in such multi thread applications which
- * requires to have well defined environment for the language, properties and/or message tables you have to
- * synchronize run of such application by:</p>
+ * <p>Note the SManager is used as manager of reports. Therefore in such multi thread applications which requires
+ * well defined environment for the language, properties and/or message tables you have to synchronize by</p>
  * <pre><code><b>
  * synchronize(SManager.getSManager()) {
  * ...
@@ -69,8 +70,8 @@ public final class SManager implements XDConstants {
     private SManager() {
         _properties = (Properties) System.getProperties().clone();
         String s = getProperty(_properties, XDPROPERTY_MSGLANGUAGE);
-        s = (s != null) ? SUtils.getISO3Language(s)
-            : SUtils.getISO3Language(System.getProperties().getProperty("user.language"));
+        s = (s != null)
+            ? SUtils.getISO3Language(s) : SUtils.getISO3Language(System.getProperties().getProperty("user.language"));
         _language = new SLanguage(s, "eng");
     }
 
@@ -103,7 +104,7 @@ public final class SManager implements XDConstants {
 
     /** Get SManager property.
      * @param name property name.
-     * @return string with property value or <i>null</i>.
+     * @return string with property value ornull.
      */
     public static final String getProperty(final String name) {
         return getProperty(getInstance()._properties, name);
@@ -130,8 +131,8 @@ public final class SManager implements XDConstants {
 
     /** Set SManager property.
      * @param key property name.
-     * @param value property value (may be <i>null</i> - then the property is removed).
-     * @return string with original property value or <i>null</i>.
+     * @param value property value (may be null - then the property is removed).
+     * @return string with original property value or null.
      */
     public static final String setProperty(final String key, final String value) {
         SManager sm = getInstance();
@@ -236,8 +237,8 @@ public final class SManager implements XDConstants {
 
     /** Get report table associated with given report. If the language is null, the primary langue table is searched.
      * @param reportID report ID.
-     * @param language language code (ISO-639) or <i>null</i>.
-     * @return report table or <i>null</i>.
+     * @param language language code (ISO-639) or null.
+     * @return report table or null.
      */
     final ReportTable getReportTable(final String reportID, final String language) {
         String langId = language == null ? getLanguage() : SUtils.getISO3Language(language);
@@ -293,12 +294,12 @@ public final class SManager implements XDConstants {
     }
 
     /** Get array of langue identifiers of available languages for given report ID.
-     * @param reportID the report ID
+     * @param id the report ID
      * @return array of langue identifiers of available languages.
      */
-    public static final String[] getAvailableLanguages(final String reportID) {
+    public static final String[] getAvailableLanguages(final String id) {
         Set<String> x = new TreeSet<>();
-        String prefix = ReportTable.getPrefixFromID(reportID) + '_';
+        String prefix = ReportTable.getPrefixFromID(id) + '_';
         SManager sm = getInstance();
         synchronized (sm) {
             for (int i = 0; i <= sm._tableHighIndex; i++) {
@@ -469,27 +470,26 @@ public final class SManager implements XDConstants {
     // Auxiliary methos called from this package.
     ////////////////////////////////////////////////////////////////////////////
 
-    /** Get text of report from report table. All references to other reports
-     * are resolved if the argument <i>resolveReferences</i> is <i>true</i>.
+    /** Get text of report from report table. All references to other reports are resolved if the argument
+     * resolveReferences is true.
      * @param regID registered report ID.
      * @param language language code.
-     * @param resolveReferences if <i>true</i> then all references to other reports are resolved.
+     * @param resolveReferences if true then all references to other reports are resolved.
      * @return text of report.
      */
     final String getReportText(final long regID, final String language, final boolean resolveReferences) {
         return getReportText(regID, language != null ? ReportTable.getLanguageID(language) : 0, resolveReferences);
     }
 
-    /** Get text of report from report table. All references to other reports
-     * are resolved if the argument <i>resolveReferences</i> is <i>true</i>.
-     * @param reportID report ID.
-     * @param language code of required language or <i>null</i> (then the actual setting language is used).
-     * @param resolveReferences if <i>true</i> then all references to other reports are resolved.
+    /** Get text of report from report table. All references to other reports are resolved
+     * if the argument resolveReferences is true.
+     * @param id report ID.
+     * @param language code of required language or null (then the actual setting language is used).
+     * @param resolveReferences if true then all references to other reports are resolved.
      * @return text of report.
      */
-    final String getReportText(final String reportID, final String language, final boolean resolveReferences) {
-        String id;
-        if ((id = reportID) == null || (id = id.trim()).isEmpty()) {
+    final String getReportText(final String id, final String language, final boolean resolveReferences) {
+        if (id == null || id.trim().isEmpty()) {
             return null;
         }
         ReportTable table = getReportTable(id, language);
@@ -539,29 +539,25 @@ public final class SManager implements XDConstants {
     }
 
     /** Get modified text of localized report (see description of this class above) .
-     * @param reportID report id.
-     * @param modelText model text of report.
+     * @param id report id.
+     * @param text model text of report.
      * @param modification modification string.
      * @param language language id (ISO-639).
-     * @return localized text of report in given language or <i>null</i>.
+     * @return localized text of report in given language or null.
      */
-    final String getLocalizedText(final String reportID,
-        final String modelText,
-        final String modification,
-        final String language) {
+    final String getLocalizedText(final String id, final String text, final String modification, final String language){
         String mod = modification;
-        String text;
-        String id;
-        if ((id = reportID) != null && (id = id.trim()).length() > 0) {
-            text = getReportText(id, language, true);
-            if (text == null) {
-                text = modelText;
+        String txt;
+        if (id != null && id.trim().length() > 0) {
+            txt = getReportText(id, language, true);
+            if (txt == null) {
+                txt = text;
             }
         } else {
-            text = resolveReportReferences(modelText, language);
+            txt = resolveReportReferences(text, language);
         }
-        if (text == null || !text.contains("&{")) {
-            return text;
+        if (txt == null || !txt.contains("&{")) {
+            return txt;
         }
         if (mod != null) {
             int i = mod.indexOf("&{&&");
@@ -592,17 +588,17 @@ public final class SManager implements XDConstants {
                 i = mod.indexOf("&{&", i);
             }
         }
-        return getModifiedText(text, mod, language);
+        return getModifiedText(txt, mod, language);
     }
 
     /** Get sorted array of parameter names from report text.
      * @param reportID report ID.
-     * @param language language id (ISO-639) or <i>null</i>.
-     * @return The sorted array of parameter names or <i>null</i>.
+     * @param id language id (ISO-639) or null.
+     * @return The sorted array of parameter names or null.
      */
-    final String[] getReportParamNames(final String reportID, final String language) {
-        ReportTable table = getReportTable(reportID, language);
-        return table == null ? null : table.getReportParamNames(reportID);
+    final String[] getReportParamNames(final String id, final String language) {
+        ReportTable table = getReportTable(id, language);
+        return table == null ? null : table.getReportParamNames(id);
     }
 
     /** Get reportID from registered report ID.
@@ -613,6 +609,10 @@ public final class SManager implements XDConstants {
         return getTextFromRegisteredForm(regID >>> ReportTable.IDBITS)
             + getTextFromRegisteredForm(regID & ReportTable.IDMASK);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Private methods
+    ////////////////////////////////////////////////////////////////////////////
 
     /** Add report table.
      * @param reportTable report table.
@@ -644,14 +644,10 @@ public final class SManager implements XDConstants {
             return reportTable; //not exists yet, we return the table
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Private methods
-    ////////////////////////////////////////////////////////////////////////////
-
+    
     /** Remove specified report table.
      * @param tableID Report table name.
-     * @return removed table or <i>null</i>.
+     * @return removed table or null.
      */
     private ReportTable removeReportTable(final String tableID) {
         long id  = RegisterReportTables.getTableID(tableID);
@@ -689,11 +685,11 @@ public final class SManager implements XDConstants {
         }
     }
 
-    /** Get text of report from report table. All references to other reports
-     * are resolved if the argument resolveReferences is true.
+    /** Get text of report from report table. All references to other reports are resolved if the argument
+     * resolveReferences is true.
      * @param regID registered report ID.
      * @param languageID computed language ID or 0.
-     * @param resolveReferences if <i>true</i> then all references to other reports are resolved.
+     * @param resolveReferences if true then all references to other reports are resolved.
      * @return text of report.
      */
     private String getReportText(final long regID, final int languageID, final boolean resolveReferences) {
@@ -776,7 +772,7 @@ public final class SManager implements XDConstants {
 
     /** Add report table with the specified table name.
      * @param tableName table ID (prefix + '_' + language)
-     * @return ReportTable or <i>null</i> if no table can be added.
+     * @return ReportTable or null if no table can be added.
      */
     private ReportTable addReportTable(final String tableName){
         synchronized(this) {
@@ -827,8 +823,8 @@ public final class SManager implements XDConstants {
                             String name = f.getName();
                             if (name.equals(tableName+".properties")) {
                                 try {
-                                    ReportTable table = RegisterReportTables.genReportTable(
-                                        ReportTable.readProperties(new FileInputStream(f)));
+                                    Properties props = ReportTable.readProperties(new FileInputStream(f));
+                                    ReportTable table = RegisterReportTables.genReportTable(props);
                                     table._ids = ids;
                                     return addReportTable(table);
                                 } catch (IOException ex) {
@@ -840,18 +836,11 @@ public final class SManager implements XDConstants {
                 }
             }
             if (s != null) {
-                ReportTable[] tables = null;
                 try {
                     ReportTable table = RegisterReportTables.genReportTable(ReportTable.readProperties(s));
                     table._ids = ids;
                     return addReportTable(table);
                 } catch (Exception ex) {}
-                for (int i = 0; i <= _tableHighIndex; i++) {
-                    if (tableName.equals(tables[i].getTableName())) {
-                        tables[i]._ids = ids;
-                        return addReportTable(tables[i]);
-                    }
-                }
             }
         }
         return null;
@@ -871,12 +860,10 @@ public final class SManager implements XDConstants {
         return sb.toString();
     }
 
-    /** Get ReportTable for the actual language or for the primary language.
-     * If the actual language table is not available then a table for the
-     * primary language is returned. If none of those was found then return
-     * <i>null</i>.
+    /** Get ReportTable for the actual language or for the primary language. If the actual language table is
+     * not available then a table for the primary language is returned. If none of those was found then return null.
      * @param tableID registered table ID.
-     * @return report table or <i>null</i>.
+     * @return report table or null.
      */
     private ReportTable findReportTable(final long tableID) {
         synchronized(this) {
@@ -914,7 +901,7 @@ public final class SManager implements XDConstants {
 
     /** Find index of table in sorted array of tables.
      * @param id table ID.
-     * @return index of table if table was found otherwise return <i>null</i>.
+     * @return index of table if table was found otherwise return null.
      */
     private int indexOfTable(final long id) {
         int last;
