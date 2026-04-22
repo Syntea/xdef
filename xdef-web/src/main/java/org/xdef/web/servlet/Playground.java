@@ -45,6 +45,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
+
     private static final String HTML_RESULT = readRsrcAsString(Playground.class, "playground-result.html");
 
     /** default constructor, calls super() only */

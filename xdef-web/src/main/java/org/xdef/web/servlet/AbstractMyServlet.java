@@ -25,6 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @MultipartConfig
 public abstract class AbstractMyServlet extends HttpServlet {
     private static final long serialVersionUID = -8154631839408075000L;
+
     /** Base directory. */
     protected static File _baseDir = null;
     /** Temporary directory for 100MB. */
