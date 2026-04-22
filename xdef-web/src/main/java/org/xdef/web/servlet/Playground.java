@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,244 @@ public final class Playground extends AbstractMyServlet {
         super();
     }
 
+    /** Processes requests with respect to required language. The Language is set according to request
+     * parameter "submit".
+     * @param req servlet request object.
+     * @param resp servlet response object.
+     * @throws IOException if an error occurs.
+     */
+    @Override
+    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+        throws ServletException,IOException{
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html;charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        // This part we must synchronize to keep language settings for whole process.
+        synchronized(MANAGER) {
+            Report.setLanguage("eng");
+            ArrayReporter reporter = new ArrayReporter();
+            String mode = getParam(req, "mode").toLowerCase(); //values: "", validate, compose, translate
+            String xdef = getParam(req, "xdef"); //values: xml with X-definition
+            String data = getParam(req, "data"); //values: input data xml, xon (i.e. json, yaml, ini, csv)
+            String xdName = getParam(req, "xdname");
+            String mName = getParam(req, "mName");
+            String mURI = getParam(req, "mURI");
+            List<String> display = Arrays.asList(getParam(req, "display").toLowerCase().split("\\s+")); //list of unique values: html, xon
+            String input = getParam(req, "input").toLowerCase(); //values: "", xml, xon
+            String inputCsvHeader = getParam(req, "inputCsvHeader").toLowerCase(); //values: "", no, yes
+            String langSrc = getParam(req, "langSrc").toLowerCase(); //values: source langueage (only for modes validate, translate)
+            String langDest = getParam(req, "langDest").toLowerCase(); //values: destination langueage (only for mode translate)
+
+            mode  = mode .isEmpty() ? "validate" : mode;
+            input = input.isEmpty() ? "xml"      : input;
+
+            String status;
+            String resultTitle;
+            String result;
+            String stdOutput = null;
+            PrintWriter out = resp.getWriter();
+            XDPool xp = null;
+
+            Properties props = new Properties();
+            props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+
+            try {
+                XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
+                xb.setSource(xdef);
+                xp = xb.compileXD();
+            } catch (Exception ex) {
+                if (xp == null || !reporter.errorWarnings()) {
+                    out.print(genHtmlMessage(
+                        "Exception",
+                        "<pre><b>" + preStringToPre(STester.printThrowable(ex)) + "</b></pre>")
+                    );
+                    return;
+                } else {
+                    reporter.reset();
+                }
+            }
+
+            try {
+                if (reporter.errorWarnings()) {//incorrect xdef
+                    Report rep = reporter.getReport();
+                    if (null != rep && "XDEF903".equals(rep.getMsgID()) && null != rep.getModification()
+                        && !rep.getModification().startsWith("&{0}<")) {
+                        return;
+                    } else {
+                        reporter.reset();
+                    }
+                    status = "Error";
+                    resultTitle = "X-definition error(s)";
+                    result = printReports(reporter, xdef);
+
+                } else {
+                    Element             resultElement = null;
+                    Object              resultXon     = null;
+                    Map<String, Object> resultIni     = null;
+                    List<Object>        resultCsv     = null;
+
+                    reporter.clear();
+                    CharArrayWriter caw = new CharArrayWriter();
+                    XDOutput stdout = XDFactory.createXDOutput(caw, false);
+
+                    XDDocument xd = xp.createXDDocument(xdName);
+
+                    xd.setProperties(props);
+                    xd.setStdOut(stdout);
+
+                    if ("compose".equals(mode)) {
+                        String name;
+                        String uri;
+                        XMDefinition def = xd.getXMDefinition();
+                        if (!mName.isEmpty()) {
+                            name = mName;
+                            uri = !mURI.isEmpty() ? mURI : null;
+                        } else {
+                            XMElement[] x = xd.getXMDefinition().getModels();
+                            name = x[0].getName();
+                            uri = x[0].getNSUri();
+                        }
+                        if (data.length() > 0) {
+                            Element el = KXmlUtils.parseXml(data).getDocumentElement();
+                            xd.setXDContext(el);
+                            String n = el.getLocalName();
+                            String u = el.getNamespaceURI();
+                            if (null != def && null != def.getModel(u, n)) {
+                                uri = u;
+                                name = n;
+                            }
+                        }
+                        resultElement = xd.xcreate(new QName(uri, name), reporter);
+                    } else if ("translate".equals(mode)) {
+                        resultElement = xd.xtranslate(data, langSrc, langDest, reporter);
+                    } else {
+                        if ("json".equals(input) || "yaml".equals(input)) {
+                            String s;
+                            if ("json".equals(input)) {
+                                if (data.startsWith("<") && data.endsWith(">")) { //JSON in XML-format
+                                    s = XonUtils.toJsonString(XonUtils.xmlToXon(data), true);
+                                } else { //XON/JSON
+                                    XonUtils.parseJSON(data);
+                                    s = data;
+                                }
+                            } else { //XON/YAML
+                                s = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data)), true);
+                            }
+
+                            data = s;
+                            resultXon = xd.jparse(data, reporter);
+                        } else if ("ini".equals(input)) {
+                            resultXon = resultIni = xd.iparse(data, reporter);
+                        } else if ("csv".equals(input)) {
+                            resultXon = resultCsv = xd.cparse(
+                        		new StringReader(data),
+                                ',', // separator
+                                inputCsvHeader.isEmpty() || inputCsvHeader.equals("no"),
+                                null, // source name
+                                reporter
+                            );
+                        } else {
+                            if (!langSrc.isEmpty()) {
+                                xd.setLexiconLanguage(langSrc);
+                            }
+                            resultElement = xd.xparse(data, reporter);
+                        }
+                    }
+                    caw.close();
+
+                    if (reporter.errors()) {
+                        status = "Error";
+                        resultTitle = "Input data error(s)";
+                        result = printReports(reporter, data);
+                        display.clear();
+                    } else {
+                        status = "OK";
+                        resultTitle = "Result " + input.toUpperCase() + " - mode \"" + mode + "\"";
+                        display.remove(input);
+
+                        if (resultElement != null) {
+                            result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
+                        } else if (resultXon != null) {
+                            if (input.equals("json")) {
+                                result = XonUtils.toJsonString(resultXon, true);
+                            } else if (input.equals("yaml")) {
+                                Yaml yaml = new Yaml();
+                                result = yaml.dump(XonUtils.xonToJson(resultXon));
+                            } else if (resultCsv != null) {
+                                result = XonUtils.toCsvString(resultCsv);
+                            } else if (resultIni != null){
+                                result = XonUtils.toIniString(resultIni);
+                            } else {
+                                result = XonUtils.toXonString(resultXon, true);
+                            }
+
+                            if (display.contains("xml")) {
+                                if (resultCsv != null) {
+                                    result = KXmlUtils.nodeToString(
+                                        XonUtils.csvToXml(resultCsv)
+                                    );
+                                } else if (resultIni != null) {
+                                    result = KXmlUtils.nodeToString(
+                                        XonUtils.iniToXml(XonUtils.xonToJson(resultXon)),
+                                        true, false, true, 110
+                                    );
+                                } else {
+                                    result = KXmlUtils.nodeToString(
+                                        XonUtils.xonToXml(XonUtils.xonToJson(resultXon)),
+                                        true, false, true, 110
+                                    );
+                                }
+                            }
+                        } else {
+                            throw new RuntimeException("No result - shouldn't happen");
+                        }
+                    }
+                    if (caw.size() > 0) {
+                        stdOutput = caw.toString();
+                    }
+                }
+            } catch (SRuntimeException ex) {
+                status = "Error";
+                resultTitle = "Input data error(s)";
+                if ("SYS024".equals(ex.getMsgID())) {
+                    reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
+                        "The XML document must start with '<'", "&{line}1&{column}1"));
+                } else if (!reporter.errorWarnings()) {
+                    reporter.putReport(Report.fatal(ex.getMsgID(),
+                        ex.getReport().getText(), ex.getReport().getModification()));
+                }
+                result = printReports(reporter, data);
+                reporter.reset();
+            }
+
+            boolean stdOutputEx = stdOutput != null && !stdOutput.isEmpty();
+            boolean isResHtml   = result.startsWith("<html");
+
+            String outHtml;
+            outHtml = SUtils.modifyFirst(HTML_RESULT, "((xdef-lib-id))", XDConstants.BUILD_IDENTIFIER);
+            outHtml = SUtils.modifyString(outHtml, "((status))", 	     status);
+            outHtml = SUtils.modifyFirst(outHtml,  "((result-title))",   resultTitle);
+            outHtml = SUtils.modifyFirst(outHtml,  "((result))",    	 preStringToPre(result));
+            outHtml = SUtils.modifyFirst(outHtml,  "((html-div))", 	     isResHtml ? "block" : "none");
+            if (isResHtml) {
+                outHtml = SUtils.modifyFirst(outHtml, "((result-html))", htmlStringToAttr(result));
+            }
+        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))",      stdOutputEx ? "block" : "none");
+        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-none))",     stdOutputEx ? "none"  : "block");
+            if (stdOutputEx) {
+            	outHtml = SUtils.modifyFirst(outHtml, "((stdout))",      preStringToPre(stdOutput));
+            }
+            out.print(outHtml);
+        }
+    }
+
+    /** Returns a short description of this servlet.
+     * @return short description of this servlet.     */
+    @Override
+    public final String getServletInfo() {
+        return "This servlet executes a X-definition with given XML data";
+    }
+
     /** Convert result of YAML parser to JSON.
      * @param o result of YAML parser.
      * @return JSON result.
@@ -85,241 +324,4 @@ public final class Playground extends AbstractMyServlet {
         return o;
     }
 
-    /** Processes requests with respect to required language. The Language is set according to request
-     * parameter "submit".
-     * @param req servlet request object.
-     * @param resp servlet response object.
-     * @throws IOException if an error occurs.
-     */
-    @Override
-    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
-        throws ServletException,IOException{
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        // This part we must synchronize to keep language settings for whole process.
-        synchronized(MANAGER) {
-            Report.setLanguage("eng");
-            ArrayReporter reporter = new ArrayReporter();
-            String mode = getParam(req, "mode");
-            String xdef = getParam(req, "xdef");
-            String data = getParam(req, "data");
-            String xdName = getParam(req, "xdname");
-            String mName = getParam(req, "mName");
-            String mURI = getParam(req, "mURI");
-            String view = getParam(req, "view");
-            String json = getParam(req, "json");
-            String ini = getParam(req, "ini");
-            String csv = getParam(req, "csv");
-            String csvMode = getParam(req, "csvMode");
-            String inLex = getParam(req, "inLex");
-            String outLex = getParam(req, "outLex");
-
-            String status;
-            String resultTitle;
-            String result;
-            String stdOutput = null;
-            PrintWriter out = resp.getWriter();
-            XDPool xp = null;
-            Properties props = new Properties();
-            props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-            try {
-                XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
-                xb.setSource(xdef);
-                xp = xb.compileXD();
-            } catch (Throwable ex) {
-                if (null == xp || !reporter.errorWarnings()) {
-                    out.print(genHtmlMessage("Exception",
-                        "<pre><b>" + preStringToPre(STester.printThrowable(ex)) + "</b></pre>"));
-                    return;
-                } else {
-                    reporter.reset();
-                }
-            }
-            try {
-                if (reporter.errorWarnings()) {//incorrect xdef
-                    Report rep = reporter.getReport();
-                    if (null != rep && "XDEF903".equals(rep.getMsgID()) && null != rep.getModification()
-                        && !rep.getModification().startsWith("&{0}<")) {
-                        return;
-                    } else {
-                        reporter.reset();
-                    }
-                    status = "Error";
-                    resultTitle = "X-definition error(s)";
-                    result = printReports(reporter, xdef);
-                } else {
-                    Object resultXon = null;
-                    Map<String, Object> resultIni = null;
-                    List<Object> resultCsv = null;
-                    Element resultElement = null;
-                    reporter.clear();
-                    CharArrayWriter caw = new CharArrayWriter();
-                    XDOutput stdout = XDFactory.createXDOutput(caw, false);
-                    XDDocument xd;
-                    try {
-                        xd = xp.createXDDocument(xdName);
-                    } catch (RuntimeException ex) {
-                        xd = xp.createXDDocument("Example");
-                    }
-                    xd.setProperties(props);
-                    xd.setStdOut(stdout);
-                    if ("compose".equals(mode)) {
-                        String name;
-                        String uri;
-                        XMDefinition def =  xd.getXMDefinition();
-                        if (null != mName && !(mName = mName.trim()).isEmpty()) {
-                            name = mName;
-                            uri = null != mURI  && !(mURI=mURI.trim()).isEmpty() ? mURI : null;
-                        } else {
-                            XMElement[] x = xd.getXMDefinition().getModels();
-                            name = x[0].getName();
-                            uri = x[0].getNSUri();
-                        }
-                        if (null != data && data.trim().length() > 0) {
-                            Element el = KXmlUtils.parseXml(data).getDocumentElement();
-                            xd.setXDContext(el);
-                            String n = el.getLocalName();
-                            String u = el.getNamespaceURI();
-                            if (null != def && null != def.getModel(u, n)) {
-                                uri = u;
-                                name = n;
-                            }
-                        }
-                        resultElement = xd.xcreate(new QName(uri, name), reporter);
-                    } else {
-                        if ("json".equals(json)) {
-                            String s;
-                            if (data.trim().startsWith("<") && data.trim().endsWith(">")) { // XML
-                                s = XonUtils.toJsonString(XonUtils.xmlToXon(data), true);
-                            } else {
-                                s = data;
-                                try { // try XON/JSON
-                                    XonUtils.parseXON(data);
-                                } catch (SRuntimeException ex) {
-                                    try {
-                                        Object o;
-                                        try (StringReader sr = new StringReader(data)) {
-                                            Yaml yaml = new Yaml();
-                                            o = yaml.load(sr);
-                                        }
-                                        o = yamlToJson(o);
-                                        s = XonUtils.toJsonString(o, true);
-                                    } catch (Exception exy) {} // will be error
-                                }
-                            }
-                            xd.jparse(s, reporter);
-                            data = s;
-                            resultXon = xd.getXon();
-                        } else if ("ini".equals(ini)) {
-                            resultXon = resultIni = xd.iparse(data.trim(), reporter);
-                        } else if ("csv".equals(csv)) {
-                            resultXon = resultCsv = xd.cparse(new StringReader(data.trim()),
-                                ',', // separator
-                                csvMode.isEmpty() || csvMode.equals("no"),
-                                null, // source name
-                                reporter);
-                        } else {
-                            if (inLex.isEmpty() && outLex.isEmpty() || inLex.equals(resultXon)) {
-                                resultElement = xd.xparse(data, reporter);
-                            } else {
-                                if (inLex.equals(resultXon)|| outLex.isEmpty()) {
-                                    xd.setLexiconLanguage(inLex);
-                                    resultElement = xd.xparse(data, reporter);
-                                } else {
-                                    resultElement = xd.xtranslate(data, inLex, outLex, reporter);
-                                }
-                            }
-                        }
-                    }
-                    caw.close();
-                    if (reporter.errors()) {
-                        status = "Error";
-                        resultTitle = "Input data error(s)";
-                        result = printReports(reporter, data);
-                    } else {
-                        status = "OK";
-                        if ("html".equals(view)) {
-                        	resultTitle = "HTML result";
-                            result = KXmlUtils.nodeToString(resultElement,true,false,true,130);
-                        } else if(json.isEmpty() && csv.isEmpty() && ini.isEmpty()) {
-                        	resultTitle = "XML result";
-                            result = KXmlUtils.nodeToString(resultElement, true, false, true, 110);
-                        } else {
-                            if (null!=view && view.isEmpty()) {
-                                view = !ini.isEmpty() ? "INI" : !csv.isEmpty() ? "CSV" : "JSON";
-                            }
-                            if (null!=view && view.contains("YAML")) {
-                            	resultTitle = "YAML result";
-                                Yaml yaml = new Yaml();
-                                result = yaml.dump(XonUtils.xonToJson(resultXon));
-                            } else if (null!=view && view.contains("XON")) {
-                            	resultTitle = "XON result";
-                                result = XonUtils.toXonString(resultXon, true);
-                            } else if (null!=view && view.contains("XML")) {
-                            	resultTitle = "XML result";
-                                if (!csv.isEmpty() && resultCsv!=null) {
-                                    result = KXmlUtils.nodeToString(XonUtils.csvToXml(resultCsv));
-                                } else if (!ini.isEmpty() && resultIni != null) {
-                                    result = KXmlUtils.nodeToString(XonUtils.iniToXml(
-                                        XonUtils.xonToJson(resultXon)), true, false, true, 110);
-                                } else {
-                                    result = KXmlUtils.nodeToString(XonUtils.xonToXml(
-                                        XonUtils.xonToJson(resultXon)), true, false, true, 110);
-                                }
-                            } else if (null!=view && view.contains("CSV") && resultCsv!=null){
-                            	resultTitle = "CSV result";
-                                result = XonUtils.toCsvString(resultCsv);
-                            } else if (null!=view && view.contains("INI") && resultIni!=null){
-                            	resultTitle = "INI result";
-                                result = XonUtils.toIniString(resultIni);
-                            } else {
-                            	resultTitle = "JSON result";
-                                result = XonUtils.toJsonString(resultXon,true);
-                            }
-                        }
-                    }
-                    if (caw.size() > 0) {
-                        stdOutput = caw.toString();
-                    }
-                }
-            } catch (SRuntimeException ex) {
-                status = "Error";
-                resultTitle = "Input data error(s)";
-                if ("SYS024".equals(ex.getMsgID())) {
-                    reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
-                        "The XML document must start with '<'", "&{line}1&{column}1"));
-                } else if (!reporter.errorWarnings()) {
-                    reporter.putReport(Report.fatal(ex.getMsgID(),
-                        ex.getReport().getText(), ex.getReport().getModification()));
-                }
-                result = printReports(reporter, data);
-                reporter.reset();
-            }
-
-            boolean stdOutputEx = stdOutput != null && !stdOutput.isEmpty();
-            boolean isResHtml   = "html".equals(view);
-
-            String outHtml;
-            outHtml = SUtils.modifyFirst(HTML_RESULT, "((xdef-lib-id))", XDConstants.BUILD_IDENTIFIER);
-            outHtml = SUtils.modifyString(outHtml, "((status))", 	  status);
-            outHtml = SUtils.modifyFirst(outHtml,  "((result-title))", resultTitle);
-            outHtml = SUtils.modifyFirst(outHtml,  "((result))",    	  preStringToPre(result));
-            outHtml = SUtils.modifyFirst(outHtml,  "((html-div))", 	  isResHtml ? "block" : "none");
-            if (isResHtml) {
-                outHtml = SUtils.modifyFirst(outHtml, "((result-html))", htmlStringToAttr(result));
-            }
-        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-div))",  stdOutputEx ? "block" : "none");
-        	outHtml = SUtils.modifyFirst(outHtml, "((stdout-none))", stdOutputEx ? "none"  : "block");
-            if (stdOutputEx) {
-            	outHtml = SUtils.modifyFirst(outHtml, "((stdout))", preStringToPre(stdOutput));
-            }
-            out.print(outHtml);
-        }
-    }
-
-    /** Returns a short description of this servlet.
-     * @return short description of this servlet.     */
-    @Override
-    public final String getServletInfo() {return "This servlet executes a X-definition with given XML data";}
 }
