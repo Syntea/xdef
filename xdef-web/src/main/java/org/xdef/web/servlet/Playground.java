@@ -64,21 +64,22 @@ public final class Playground extends AbstractMyServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
+
         // This part we must synchronize to keep language settings for whole process.
         synchronized(MANAGER) {
             Report.setLanguage("eng");
             ArrayReporter reporter = new ArrayReporter();
-            String mode = getParam(req, "mode").toLowerCase(); //values: "", validate, compose, translate
+            String mode = getParam(req, "mode").toLowerCase(); //values: "", validate, compose
             String xdef = getParam(req, "xdef"); //values: xml with X-definition
-            String data = getParam(req, "data"); //values: input data xml, xon (i.e. json, yaml, ini, csv)
+            String data = getParam(req, "data"); //values: input data xml, xon, json, yaml, ini, csv
             String xdName = getParam(req, "xdname");
             String mName = getParam(req, "mName");
             String mURI = getParam(req, "mURI");
-            List<String> display = Arrays.asList(getParam(req, "display").toLowerCase().split("\\s+")); //list of unique values: html, xon
-            String input = getParam(req, "input").toLowerCase(); //values: "", xml, xon
-            String inputCsvHeader = getParam(req, "inputCsvHeader").toLowerCase(); //values: "", no, yes
-            String langSrc = getParam(req, "langSrc").toLowerCase(); //values: source langueage (only for modes validate, translate)
-            String langDest = getParam(req, "langDest").toLowerCase(); //values: destination langueage (only for mode translate)
+            List<String> xonDisplayAs = Arrays.asList(getParam(req, "xonDisplayAs").toLowerCase().split("\\s+")); //list of values: xon, json, yaml, ini, csv, xml
+            String input = getParam(req, "input").toLowerCase(); //values: "", xml, xon, json, yaml, ini, csv
+            String csvHeaderExport = getParam(req, "csvHeaderExport").toLowerCase(); //values: "", no, yes
+            String langInp = getParam(req, "langInp").toLowerCase(); //values: langueage of input data (only for mode validate)
+            String langOut = getParam(req, "langOut").toLowerCase(); //values: langueage of processed data (only for mode validate)
 
             mode  = mode .isEmpty() ? "validate" : mode;
             input = input.isEmpty() ? "xml"      : input;
@@ -160,8 +161,6 @@ public final class Playground extends AbstractMyServlet {
                             }
                         }
                         resultElement = xd.xcreate(new QName(uri, name), reporter);
-                    } else if ("translate".equals(mode)) {
-                        resultElement = xd.xtranslate(data, langSrc, langDest, reporter);
                     } else {
                         if ("json".equals(input) || "yaml".equals(input)) {
                             String s;
@@ -184,13 +183,15 @@ public final class Playground extends AbstractMyServlet {
                             resultXon = resultCsv = xd.cparse(
                         		new StringReader(data),
                                 ',', // separator
-                                inputCsvHeader.isEmpty() || inputCsvHeader.equals("no"),
+                                csvHeaderExport.isEmpty() || csvHeaderExport.equals("no"),
                                 null, // source name
                                 reporter
                             );
+                        } else if (!langOut.isEmpty()) {
+                            resultElement = xd.xtranslate(data, langInp, langOut, reporter);
                         } else {
-                            if (!langSrc.isEmpty()) {
-                                xd.setLexiconLanguage(langSrc);
+                            if (!langInp.isEmpty()) {
+                                xd.setLexiconLanguage(langInp);
                             }
                             resultElement = xd.xparse(data, reporter);
                         }
@@ -201,11 +202,9 @@ public final class Playground extends AbstractMyServlet {
                         status = "Error";
                         resultTitle = "Input data error(s)";
                         result = printReports(reporter, data);
-                        display.clear();
                     } else {
                         status = "OK";
                         resultTitle = "Result " + input.toUpperCase() + " - mode \"" + mode + "\"";
-                        display.remove(input);
 
                         if (resultElement != null) {
                             result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
@@ -223,7 +222,7 @@ public final class Playground extends AbstractMyServlet {
                                 result = XonUtils.toXonString(resultXon, true);
                             }
 
-                            if (display.contains("xml")) {
+                            if (xonDisplayAs.contains("xml")) {
                                 if (resultCsv != null) {
                                     result = KXmlUtils.nodeToString(
                                         XonUtils.csvToXml(resultCsv)
@@ -264,6 +263,7 @@ public final class Playground extends AbstractMyServlet {
 
             boolean stdOutputEx = stdOutput != null && !stdOutput.isEmpty();
             boolean isResHtml   = result.startsWith("<html");
+            xonDisplayAs.remove(input);
 
             String outHtml;
             outHtml = SUtils.modifyFirst(HTML_RESULT, "((xdef-lib-id))", XDConstants.BUILD_IDENTIFIER);
