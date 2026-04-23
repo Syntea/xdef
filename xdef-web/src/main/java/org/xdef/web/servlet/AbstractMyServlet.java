@@ -211,27 +211,27 @@ public abstract class AbstractMyServlet extends HttpServlet {
      * @throws IOException if IO error occurs.
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        ProcReq p = new ProcReq(request, response, this);
-        synchronized(p) {
-            IOException ioex = null;
-            try {
-                p.start();
-                p.join(25000);
-                if (!p.isFinished()) {
-                    p.interrupt(); //???
-                    ioex = new IOException("Interrupted - timeout");
-                    ioex.setStackTrace(new StackTraceElement[0]);
-                }
-                if (null != p.getException()) {
-                    ioex = new IOException(p.getException().toString());
-                }
-            } catch (InterruptedException ex) {
-                ioex = new IOException("Interrupted", ex);
+        throws ServletException, IOException
+    {
+        ProcReq     p    = new ProcReq(request, response, this);
+        IOException ioex = null;
+
+        try {
+            p.start();
+            p.join(25000);
+            if (!p.isFinished()) {
+                p.interrupt(); //???
+                ioex = new IOException("Interrupted - timeout");
+                ioex.setStackTrace(new StackTraceElement[0]);
             }
-            if (null != ioex) {
-                throw ioex;
+            if (null != p.getException()) {
+                ioex = new IOException(p.getException().toString());
             }
+        } catch (InterruptedException ex) {
+            ioex = new IOException("Interrupted", ex);
+        }
+        if (null != ioex) {
+            throw ioex;
         }
     }
 
