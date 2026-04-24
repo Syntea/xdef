@@ -8,14 +8,15 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xdef.XDConstants;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.SManager;
-import org.xdef.web.config.BuildInfo;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -26,7 +27,8 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Abstract servlet used for servlet implementation.
  * <p>
- * It sets globally X-definition report-language to pom.xml/property/servlet.xdef.report.lang.
+ * It sets globally and localy X-definition report-language
+ * (ISO-639 two letters or ISO-639-2 three letters, e.g. "eng", "ces", "slk").
  *
  * @author Vaclav Trojan
  */
@@ -34,6 +36,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public abstract class AbstractMyServlet extends HttpServlet {
     private static final long serialVersionUID = -8154631839408075000L;
     private static final Logger logger = LoggerFactory.getLogger(AbstractMyServlet.class);
+
+    /** internal default X-definition reporter language */
+    private static final String         reportLangDefault   = "eng";
+
+    /** default X-definition properties */
+    protected static final Properties   XdPropsDefault      = getXdPropsDefault();
 
     /** Base directory. */
     protected static File _baseDir = null;
@@ -48,8 +56,8 @@ public abstract class AbstractMyServlet extends HttpServlet {
 
     static {
         //set X-definition report-language globally
-        Report.setLanguage(BuildInfo.BUILDINFO.getServletXdefReportLang());
-        logger.info("set X-definition report-language globally to: " + BuildInfo.BUILDINFO.getServletXdefReportLang());
+        Report.setLanguage(reportLangDefault);
+        logger.info("set X-definition report-language globally to: " + reportLangDefault);
     }
 
     /** default constructor, calls super() only */
@@ -58,15 +66,30 @@ public abstract class AbstractMyServlet extends HttpServlet {
     }
 
     /** Get listing from reporter.
-     * @param reporter reporter with error and warning messages.
-     * @param data string with source data.
-     * @return string with listing form of source data.
+     * @param reporter reporter with error and warning messages
+     * @param data string with source data
+     * @param reportLang reporter language
+     * @return string with listing form of source data
      */
-    public static final String printReports(final ReportReader reporter, final String data) {
+    public static final String printReports(final ReportReader reporter, final String data, String reportLang) {
         Writer writer = new CharArrayWriter();
         Reader car = new CharArrayReader(data.toCharArray());
-        ReportPrinter.printListing(writer,car,reporter,null,90,false,"eng");
+        ReportPrinter.printListing(
+            writer, car, reporter,
+            null, 120, false,
+            getReportLang(reportLang)
+        );
         return writer.toString();
+    }
+
+    /**
+     * see {@link #printReports(ReportReader, String, String)} with reportLang = reportLangDefault
+     * @param reporter see
+     * @param data see
+     * @return see
+     */
+    public static final String printReports(final ReportReader reporter, final String data) {
+        return printReports(reporter, data, reportLangDefault);
     }
 
     /**
@@ -81,31 +104,49 @@ public abstract class AbstractMyServlet extends HttpServlet {
         int i = 0;
         while (i < sb.length()) {
             char c = sb.charAt(i);
-            if (!pre && '\r' == c) {
-                sb.deleteCharAt(i);
-                continue;
+
+            switch (c) {
+                case '\r':
+                    if (!pre) {
+                        sb.deleteCharAt(i);
+                        continue;
+                    }
+                    break;
+                case '\n':
+                    if (!pre) {
+                        sb.insert(i, "<br/>");
+                        i += 6;
+                    }
+                    break;
+                case ' ':
+                    if (!pre) {
+                        sb.replace(i, i + 1, "&nbsp;");
+                        i += 5;
+                    }
+                    break;
+                case '\t':
+                    if (!pre) {
+                        sb.replace(i, i + 1, "&nbsp;&nbsp;&nbsp;&nbsp;"); //for spaces
+                        i += 23;
+                    }
+                    break;
+                case '<':
+                    sb.replace(i, i + 1, "&lt;");
+                    i += 3;
+                    break;
+                case '&':
+                    sb.replace(i, i + 1, "&amp;");
+                    i += 4;
+                    break;
+                case '>':
+                    sb.replace(i, i + 1, "&gt;");
+                    i += 3;
+                    break;
             }
-            if (!pre && '\n' == c) {
-                sb.insert(i, "<br/>");
-                i += 6;
-            } else if (!pre && ' ' == c) {
-                sb.replace(i, i + 1, "&nbsp;");
-                i += 5;
-            } else if (!pre && '\t' == c) {
-                sb.replace(i, i + 1, "&nbsp;&nbsp;&nbsp;"); //three spaces
-                i += 17;
-            } else if ('<' == c) {
-                sb.replace(i, i + 1, "&lt;");
-                i += 3;
-            } else if ('&' == c) {
-                sb.replace(i, i + 1, "&amp;");
-                i += 4;
-            } else if ('>' == c) {
-                sb.replace(i, i + 1, "&gt;");
-                i += 3;
-            }
-            i++;
+
+            ++i;
         }
+
         return sb.toString();
     }
 
@@ -318,12 +359,22 @@ public abstract class AbstractMyServlet extends HttpServlet {
     }
 
     /**
+     * Derives X-definition reporter language, using default value
+     *
+     * @param reportLang user reporter language
+     * @return derived X-definition reporter language
+     */
+    public final static String getReportLang(String reportLang) {
+        return reportLang == null || reportLang.isEmpty() ? reportLangDefault : reportLang;
+    }
+
+    /**
      * read text java-resource, it's supposed encoding UTF-8
      * @param clazz base class for relative path
      * @param resource path to resource
      * @return required java-resource as string
      */
-    protected final static String readRsrcAsString(final Class<?> clazz, final String resource) {
+    public final static String readRsrcAsString(final Class<?> clazz, final String resource) {
         return Optional.ofNullable(clazz.getResourceAsStream(resource))
             .map(is -> {
                 try {
@@ -337,6 +388,13 @@ public abstract class AbstractMyServlet extends HttpServlet {
             .orElseThrow(() -> new RuntimeException(
                 "Non-existent resource \"" + resource + "\" by class " + clazz.getName()))
         ;
+    }
+
+    /** @return default X-definition properties */
+    private static Properties getXdPropsDefault() {
+        Properties props = new Properties();
+        props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+        return props;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

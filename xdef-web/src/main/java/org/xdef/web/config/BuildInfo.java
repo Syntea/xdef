@@ -22,7 +22,6 @@ public class BuildInfo {
     private String name                     = null;
     private String description              = null;
     private String releaseDate              = null;
-    private String servletXdefReportLang    = null;
     private String buildTimestamp           = null;
     private String gitTags                  = null;
     private String gitBranch                = null;
@@ -65,7 +64,6 @@ public class BuildInfo {
         name                    = pp.getProperty("project.name");
         description             = pp.getProperty("project.description");
         releaseDate             = pp.getProperty("release.date");
-        servletXdefReportLang   = pp.getProperty("servlet.xdef.report.lang");
         buildTimestamp          = pp.getProperty("build.timestamp");
         gitTags                 = pp.getProperty("git.tags");
         gitBranch               = pp.getProperty("git.branch");
@@ -75,11 +73,18 @@ public class BuildInfo {
         gitCommitTime           = pp.getProperty("git.commit.time");
     }
 
+    /**
+     * if the version is snapshot
+     * @return result
+     */
     public boolean isVersionSnapshot() {
         return version.endsWith("-SNAPSHOT");
     }
 
-    /** @return detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values) */
+    /**
+     * Derives detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values)
+     * @return derived identifier
+     */
     public String getBuildIdentifier() {
         boolean tagOK    = ("version/" + getVersion()).equals(gitTags);
         boolean branchOK = "main".equals(gitBranch) || "origin/main".equals(gitBranch);
@@ -96,31 +101,56 @@ public class BuildInfo {
         ;
     }
 
+    /** by the method name
+     * @return result */
     public String getGroupId() {return groupId;}
 
+    /** by the method name
+     * @return result */
     public String getArtifactId() {return artifactId;}
 
+    /** by the method name
+     * @return result */
     public String getVersion() {return version;}
 
+    /** by the method name
+     * @return result */
     public String getName() {return name;}
 
+    /** by the method name
+     * @return result */
     public String getDescription() {return description;}
 
+    /** by the method name
+     * @return result */
     public String getReleaseDate() {return releaseDate;}
 
-    public String getServletXdefReportLang() {return servletXdefReportLang;}
-
+    /** by the method name
+     * @return result */
     public String getBuildTimestamp() {return buildTimestamp;}
 
+    /** by the method name
+     * @return result */
     public String getGitTags() {return gitTags;}
 
+    /** by the method name
+     * @return result */
     public String getGitBranch() {return gitBranch;}
 
+    /** by the method name
+     * @return result */
     public String getGitDirty() {return gitDirty;}
 
+    /** by the method name
+     * @return result */
     public String getGitCommitId() {return gitCommitId;}
 
+    /** by the method name
+     * @return result */
     public String getGitCommitIdAbbrev() {return gitCommitIdAbbrev;}
 
+    /** by the method name
+     * @return result */
     public String getGitCommitTime() {return gitCommitTime;}
+
 }

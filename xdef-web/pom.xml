@@ -33,9 +33,6 @@
 
         <!-- do deploy -->
         <!--<maven.deploy.skip>false</maven.deploy.skip>-->
-
-        <!--report-language for X-definition processing in servlets (ISO-639 two letters or ISO-639-2 three letters)-->
-        <servlet.xdef.report.lang>eng</servlet.xdef.report.lang>
     </properties>
 
     <dependencies>

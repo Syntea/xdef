@@ -2,14 +2,12 @@ package org.xdef.web.servlet;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,7 +48,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
 
-    private static final String HTML_RESULT = readRsrcAsString(Playground.class, "playground-result.html");
+    private static final String RESPONSE_HTML_TEMPL = readRsrcAsString(Playground.class, "playground-response-template.html");
 
     /** default constructor, calls super() only */
     public Playground() {
@@ -72,6 +70,8 @@ public final class Playground extends AbstractMyServlet {
      *   <li>modelURI</li>
      *   <li>xonDisplayAs: set of values: xon, json, yaml, ini, csv, xml</li>
      *   <li>csvHeaderExport: values: no/"", yes</li>
+     *   <li>reportLang: optionally report language (ISO-639 two letters or ISO-639-2 three letters,
+     *       e.g. "", "eng", "ces", "slk")</li>
      * </ul>
      *
      * @param req servlet request object.
@@ -86,211 +86,203 @@ public final class Playground extends AbstractMyServlet {
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        //This part we must synchronize to keep language settings for whole process.
-        synchronized(MANAGER) {
-            ArrayReporter reporter = new ArrayReporter();
+        //request parameters: see javadoc
+        String rootName     = getParam(req, "rootName");
+        String xdef         = getParam(req, "xdef");
+        String dataFormat   = getParam(req, "dataFormat").toLowerCase();
+        String data         = getParam(req, "data");
+        String mode         = getParam(req, "mode").toLowerCase();
+        String langInp      = getParam(req, "langInp").toLowerCase();
+        String langOut      = getParam(req, "langOut").toLowerCase();
+        String modelName    = getParam(req, "modelName");
+        String modelURI     = getParam(req, "modelURI");
+        Set<String> xonDisplayAs = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("\\s+"))
+            .collect(Collectors.toSet());
+        String csvHeaderExport = getParam(req, "csvHeaderExport").toLowerCase();
+        String reportLang   = getParam(req, "reportLang");
 
-            //request parameters: see javadoc
-            String rootName = getParam(req, "rootName");
-            String xdef = getParam(req, "xdef");
-            String input = getParam(req, "input").toLowerCase();
-            String data = getParam(req, "data");
-            String mode = getParam(req, "mode").toLowerCase();
-            String langInp = getParam(req, "langInp").toLowerCase();
-            String langOut = getParam(req, "langOut").toLowerCase();
-            String modelName = getParam(req, "modelName");
-            String modelURI = getParam(req, "modelURI");
-            Set<String> xonDisplayAs = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("\\s+"))
-                .collect(Collectors.toSet());
-            String csvHeaderExport = getParam(req, "csvHeaderExport").toLowerCase();
+        //process default values
+        mode            = mode.equals("compose") ? mode : "validate";
+        dataFormat      = dataFormat.isEmpty() ? "xml" : dataFormat;
+        csvHeaderExport = csvHeaderExport.isEmpty() || csvHeaderExport.equals("no") ? "no" : "yes";
+        reportLang      = getReportLang(reportLang);
 
-            //process default values
-            mode            = mode .isEmpty() ? "validate" : mode;
-            input           = input.isEmpty() ? "xml"      : input;
-            csvHeaderExport = csvHeaderExport.isEmpty() || csvHeaderExport.equals("no") ? "" : "yes";
+        String data2Xd       = data;
+        String dataFormat2Xd = dataFormat;
+        String status;
+        String title;
+        String message       = null;
+        String result        = null;
+        String stdOutput     = null;
 
-            String status;
-            String title;
-            String message = null;
-            String result = null;
-            String stdOutput = null;
-            PrintWriter out = resp.getWriter();
-            XDPool xp = null;
+        XDPool        xdPool   = null;
+        ArrayReporter reporter = new ArrayReporter();
 
-            Properties props = new Properties();
-            props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+        try {
+            XDBuilder xdBuilder = XDFactory.getXDBuilder(reporter, XdPropsDefault);
+            xdBuilder.setSource(xdef);
+            xdPool = xdBuilder.compileXD();
 
-            try {
-                XDBuilder xb = XDFactory.getXDBuilder(reporter, props);
-                xb.setSource(xdef);
-                xp = xb.compileXD();
-            } catch (Exception ex) {
-                if (xp == null || !reporter.errorWarnings()) {
-                    out.print(genHtmlMessage(
-                        "Exception",
-                        "<pre><b>" + preStringToPre(STester.printThrowable(ex)) + "</b></pre>")
-                    );
+            if (reporter.errorWarnings()) { //incorrect xdef
+                Report rep = reporter.getReport();
+                if (null != rep && "XDEF903".equals(rep.getMsgID()) && null != rep.getModification()
+                    && !rep.getModification().startsWith("&{0}<")) {
                     return;
                 } else {
                     reporter.reset();
                 }
-            }
-
-            try {
-                if (reporter.errorWarnings()) {//incorrect xdef
-                    Report rep = reporter.getReport();
-                    if (null != rep && "XDEF903".equals(rep.getMsgID()) && null != rep.getModification()
-                        && !rep.getModification().startsWith("&{0}<")) {
-                        return;
-                    } else {
-                        reporter.reset();
-                    }
-                    status = "Error";
-                    title = "X-definition error(s)";
-                    message = printReports(reporter, xdef);
-
-                } else {
-                    Element             resultElement = null;
-                    Object              resultXon     = null;
-                    Map<String, Object> resultIni     = null;
-                    List<Object>        resultCsv     = null;
-
-                    reporter.clear();
-                    CharArrayWriter caw = new CharArrayWriter();
-                    XDOutput stdout = XDFactory.createXDOutput(caw, false);
-
-                    XDDocument xd = xp.createXDDocument(rootName);
-
-                    xd.setProperties(props);
-                    xd.setStdOut(stdout);
-
-                    if ("compose".equals(mode)) {
-                        String name;
-                        String uri;
-                        XMDefinition def = xd.getXMDefinition();
-                        if (!modelName.isEmpty()) {
-                            name = modelName;
-                            uri = !modelURI.isEmpty() ? modelURI : null;
-                        } else {
-                            XMElement[] x = xd.getXMDefinition().getModels();
-                            name = x[0].getName();
-                            uri = x[0].getNSUri();
-                        }
-                        if (data.length() > 0) {
-                            Element el = KXmlUtils.parseXml(data).getDocumentElement();
-                            xd.setXDContext(el);
-                            String n = el.getLocalName();
-                            String u = el.getNamespaceURI();
-                            if (null != def && null != def.getModel(u, n)) {
-                                uri = u;
-                                name = n;
-                            }
-                        }
-                        resultElement = xd.xcreate(new QName(uri, name), reporter);
-                    } else {
-                        if ("json".equals(input) || "yaml".equals(input)) {
-                            String s;
-                            if ("json".equals(input)) {
-                                if (data.startsWith("<") && data.endsWith(">")) { //JSON in XML-format
-                                    s = XonUtils.toJsonString(XonUtils.xmlToXon(data), true);
-                                } else { //XON/JSON
-                                    XonUtils.parseJSON(data);
-                                    s = data;
-                                }
-                            } else { //XON/YAML
-                                s = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data)), true);
-                            }
-
-                            data = s;
-                            resultXon = xd.jparse(data, reporter);
-                        } else if ("ini".equals(input)) {
-                            resultXon = resultIni = xd.iparse(data, reporter);
-                        } else if ("csv".equals(input)) {
-                            resultXon = resultCsv = xd.cparse(
-                                new StringReader(data),
-                                ',', // separator
-                                csvHeaderExport.isEmpty(),
-                                null, // source name
-                                reporter
-                            );
-                        } else if (!langOut.isEmpty()) {
-                            resultElement = xd.xtranslate(data, langInp, langOut, reporter);
-                        } else {
-                            if (!langInp.isEmpty()) {
-                                xd.setLexiconLanguage(langInp);
-                            }
-                            resultElement = xd.xparse(data, reporter);
-                        }
-                    }
-                    caw.close();
-
-                    if (reporter.errors()) {
-                        status = "Error";
-                        title = "Input data error(s)";
-                        message = printReports(reporter, data);
-                    } else {
-                        status = "OK";
-                        title = "Result (mode \"" + mode + "\")";
-
-                        if (resultElement != null) {
-                            result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
-                        } else if (resultXon != null) {
-                            result = convertXon(resultXon, input);
-                        }
-                    }
-
-                    if (caw.size() > 0) {
-                        stdOutput = caw.toString();
-                    }
-                }
-            } catch (SRuntimeException ex) {
                 status = "Error";
-                title = "Input data error(s)";
-                if ("SYS024".equals(ex.getMsgID())) {
-                    reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
-                        "The XML document must start with '<'", "&{line}1&{column}1"));
-                } else if (!reporter.errorWarnings()) {
-                    reporter.putReport(Report.fatal(ex.getMsgID(),
-                        ex.getReport().getText(), ex.getReport().getModification()));
+                title = "X-definition error(s)";
+                message = printReports(reporter, xdef, reportLang);
+
+            } else {
+                Element resultElement = null;
+                Object  resultXon     = null;
+
+                reporter.clear();
+                CharArrayWriter caw = new CharArrayWriter();
+                XDOutput stdout = XDFactory.createXDOutput(caw, false);
+
+                XDDocument xd = xdPool.createXDDocument(rootName);
+
+                xd.setProperties(XdPropsDefault);
+                xd.setStdOut(stdout);
+
+                //xdef process
+                if ("compose".equals(mode)) {
+                    String name;
+                    String uri;
+                    XMDefinition def = xd.getXMDefinition();
+                    if (!modelName.isEmpty()) {
+                        name = modelName;
+                        uri = !modelURI.isEmpty() ? modelURI : null;
+                    } else {
+                        XMElement[] x = xd.getXMDefinition().getModels();
+                        name = x[0].getName();
+                        uri = x[0].getNSUri();
+                    }
+                    if (data2Xd.length() > 0) {
+                        Element el = KXmlUtils.parseXml(data2Xd).getDocumentElement();
+                        xd.setXDContext(el);
+                        String n = el.getLocalName();
+                        String u = el.getNamespaceURI();
+                        if (null != def && null != def.getModel(u, n)) {
+                            name = n;
+                            uri  = u;
+                        }
+                    }
+                    resultElement = xd.xcreate(new QName(uri, name), reporter);
+                } else {
+                    if ("json".equals(dataFormat) || "yaml".equals(dataFormat)) {
+                        if ("json".equals(dataFormat)) {
+                            if (data2Xd.startsWith("<") && data2Xd.endsWith(">")) { //JSON in XML-format
+                                data2Xd = XonUtils.toJsonString(XonUtils.xmlToXon(data2Xd), true);
+                            } else { //XON/JSON
+                                XonUtils.parseJSON(data2Xd);
+                            }
+                        } else { //XON/YAML
+                            data2Xd = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data2Xd)), true);
+                        }
+
+                        dataFormat2Xd  = "json";
+                        resultXon = xd.jparse(data2Xd, reporter);
+                    } else if ("ini".equals(dataFormat)) {
+                        resultXon = xd.iparse(data2Xd, reporter);
+                    } else if ("csv".equals(dataFormat)) {
+                        resultXon = xd.cparse(
+                            new StringReader(data2Xd),
+                            ',', // separator
+                            csvHeaderExport.equals("no"),
+                            null, // source name
+                            reporter
+                        );
+                    } else if (!langOut.isEmpty()) {
+                        resultElement = xd.xtranslate(data2Xd, langInp, langOut, reporter);
+                    } else {
+                        if (!langInp.isEmpty()) {
+                            xd.setLexiconLanguage(langInp);
+                        }
+                        resultElement = xd.xparse(data2Xd, reporter);
+                    }
                 }
-                message = printReports(reporter, data);
-                reporter.reset();
-            }
+                caw.close();
 
-            boolean stdOutputEx  = stdOutput != null && !stdOutput.isEmpty();
-            boolean resultIsHtml = result != null && input.equals("xml") && result.startsWith("<html");
-            xonDisplayAs.remove(input);
+                //create text result from xd-process result
+                if (reporter.errors()) {
+                    status = "Error";
+                    title = "Input data error(s)";
+                    message = printReports(reporter, data2Xd, reportLang);
+                } else {
+                    status = "OK";
+                    title = "Result (mode \"" + mode + "\")";
 
-            String outHtml;
-            outHtml = SUtils.modifyFirst(HTML_RESULT,   "((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
-            outHtml = SUtils.modifyString(outHtml,      "((status))",           status);
-            outHtml = SUtils.modifyFirst(outHtml,       "((title))",            title);
-            outHtml = SUtils.modifyFirst(outHtml,       "((message-disp))",     message != null ? "block" : "none");
-            if (message != null) {
-                outHtml = SUtils.modifyFirst(outHtml,   "((message))",          preStringToPre(message));
+                    if (resultElement != null) {
+                        result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
+                    } else if (resultXon != null) {
+                        result = convertXon(resultXon, dataFormat);
+                    }
+                }
+
+                //create text std-output
+                if (caw.size() > 0) {
+                    stdOutput = caw.toString();
+                }
             }
-            outHtml = SUtils.modifyFirst(outHtml,       "((result-disp))",      result != null ? "block" : "none");
-            if (result != null) {
-                outHtml = SUtils.modifyFirst(outHtml,   "((result-format))",    preStringToPre(input.toUpperCase()));
-                outHtml = SUtils.modifyFirst(outHtml,   "((result))",           preStringToPre(result));
+        } catch (SRuntimeException ex) {
+            status = "Error";
+            title  = "Unexpected or fatal input data error(s)";
+            if ("SYS024".equals(ex.getMsgID())) {
+                reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
+                    "The XML document must start with '<'", "&{line}1&{column}1"));
+            } else if (!reporter.errorWarnings()) {
+                reporter.putReport(Report.fatal(ex.getMsgID(),
+                    ex.getReport().getText(), ex.getReport().getModification()));
             }
-            outHtml = SUtils.modifyFirst(outHtml,       "((display-html-disp))", resultIsHtml ? "block" : "none");
-            if (resultIsHtml) {
-                outHtml = SUtils.modifyFirst(outHtml,   "((display-html))",     htmlStringToAttr(result));
-            }
-            outHtml = SUtils.modifyFirst(outHtml,       "((stdout-disp))",      stdOutputEx ? "block" : "none");
-            if (stdOutputEx) {
-                outHtml = SUtils.modifyFirst(outHtml,   "((stdout))",           preStringToPre(stdOutput));
-            }
-            out.print(outHtml);
+            reporter.reset();
+            message = printReports(reporter, data2Xd, reportLang);
+        } catch (Exception ex) {
+            status = "Error";
+            title  = "Unhandled Exception";
+            message = preStringToPre(STester.printThrowable(ex));
         }
+
+        //assembly html-response
+        boolean stdOutputEx  = stdOutput != null && !stdOutput.isEmpty();
+        boolean resultIsHtml = result != null && dataFormat.equals("xml") && result.startsWith("<html");
+        xonDisplayAs.remove(dataFormat);
+
+        String respHtml = RESPONSE_HTML_TEMPL;
+        respHtml = SUtils.modifyFirst(respHtml,   	"((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
+        respHtml = SUtils.modifyString(respHtml,    "((status))",           status);
+        respHtml = SUtils.modifyFirst(respHtml,     "((title))",            title);
+        respHtml = SUtils.modifyFirst(respHtml,     "((message-disp))",     message != null ? "block" : "none");
+        if (message != null) {
+            respHtml = SUtils.modifyFirst(respHtml, "((message))",          preStringToPre(message));
+        }
+        respHtml = SUtils.modifyFirst(respHtml,     "((result-disp))",      result != null ? "block" : "none");
+        if (result != null) {
+            respHtml = SUtils.modifyFirst(respHtml, "((result-format))",    preStringToPre(dataFormat2Xd.toUpperCase()));
+            respHtml = SUtils.modifyFirst(respHtml, "((result))",           preStringToPre(result));
+        }
+        respHtml = SUtils.modifyFirst(respHtml,     "((display-html-disp))", resultIsHtml ? "block" : "none");
+        if (resultIsHtml) {
+            respHtml = SUtils.modifyFirst(respHtml, "((display-html))",     htmlStringToAttr(result));
+        }
+        respHtml = SUtils.modifyFirst(respHtml,     "((stdout-disp))",      stdOutputEx ? "block" : "none");
+        if (stdOutputEx) {
+            respHtml = SUtils.modifyFirst(respHtml, "((stdout))",           preStringToPre(stdOutput));
+        }
+
+        //send
+        resp.getWriter().print(respHtml);
     }
 
     /** Returns a short description of this servlet.
-     * @return short description of this servlet.     */
+     * @return short description of this servlet.
+     */
     @Override
     public final String getServletInfo() {
-        return "This servlet executes a X-definition with given XML data";
+        return "This servlet executes a X-definition with given XML/XON data";
     }
 
     /** Convert result of YAML parser to JSON.
@@ -327,55 +319,55 @@ public final class Playground extends AbstractMyServlet {
         return o;
     }
 
-    private static String convertXon(Object xon, String format) {
-        if (format == null) {
+    private static String convertXon(Object xon, String outFormat) {
+        if (outFormat == null) {
             return null;
         }
 
         String result = null;
 
-        switch (format) {
-        case "json":
-            result = XonUtils.toJsonString(xon, true);
-            break;
-        case "yaml":
-            Yaml yaml = new Yaml();
-            result = yaml.dump(XonUtils.xonToJson(xon));
-            break;
-        case "csv":
-            if (xon instanceof List) {
+        switch (outFormat) {
+            case "json":
+                result = XonUtils.toJsonString(xon, true);
+                break;
+            case "yaml":
+                Yaml yaml = new Yaml();
+                result = yaml.dump(XonUtils.xonToJson(xon));
+                break;
+            case "csv":
+                if (xon instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    List<Object> xonCsv = (List<Object>)xon;
+                    result = XonUtils.toCsvString(xonCsv);
+                }
+                break;
+            case "ini":
+                @SuppressWarnings("unchecked")
+                Map<String, Object> xonIni = (Map<String, Object>)xon;
+                result = XonUtils.toIniString(xonIni);
+                break;
+            case "xon":
+                result = XonUtils.toXonString(xon, true);
+                break;
+            case "csv-xml":
                 @SuppressWarnings("unchecked")
                 List<Object> xonCsv = (List<Object>)xon;
-                result = XonUtils.toCsvString(xonCsv);
-            }
-            break;
-        case "ini":
-            @SuppressWarnings("unchecked")
-            Map<String, Object> xonIni = (Map<String, Object>)xon;
-            result = XonUtils.toIniString(xonIni);
-            break;
-        case "xon":
-            result = XonUtils.toXonString(xon, true);
-            break;
-        case "csv-xml":
-            @SuppressWarnings("unchecked")
-            List<Object> xonCsv = (List<Object>)xon;
-            result = KXmlUtils.nodeToString(
-                XonUtils.csvToXml(xonCsv)
-            );
-            break;
-        case "ini-xml":
-            result = KXmlUtils.nodeToString(
-                XonUtils.iniToXml(XonUtils.xonToJson(xon)),
-                true, false, true, 110
-            );
-            break;
-        case "xon-xml":
-            result = KXmlUtils.nodeToString(
-                XonUtils.xonToXml(XonUtils.xonToJson(xon)),
-                true, false, true, 110
-            );
-            break;
+                result = KXmlUtils.nodeToString(
+                    XonUtils.csvToXml(xonCsv)
+                );
+                break;
+            case "ini-xml":
+                result = KXmlUtils.nodeToString(
+                    XonUtils.iniToXml(XonUtils.xonToJson(xon)),
+                    true, false, true, 120
+                );
+                break;
+            case "xon-xml":
+                result = KXmlUtils.nodeToString(
+                    XonUtils.xonToXml(XonUtils.xonToJson(xon)),
+                    true, false, true, 120
+                );
+                break;
         }
 
         return result;
