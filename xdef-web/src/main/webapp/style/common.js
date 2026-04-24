@@ -49,7 +49,7 @@ export function initPageBasic(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function initPageBasicTal(completeFooter, completeHeader) {
+export function initPageBasicLined(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
     $("textarea.lined").linenumbers();
 }
@@ -76,7 +76,7 @@ setTimeout(function() { $(".errorVD").css("visibility", "visible"); }, 1000);
 
 //exports to window
 window.initPageBasic        = initPageBasic;
-window.initPageBasicTal     = initPageBasicTal;
+window.initPageBasicLined   = initPageBasicLined;
 window.footVerActivate      = footVerActivate;
 window.footVerDeactivate    = footVerDeactivate;
 window.headLangActivate     = headLangActivate;

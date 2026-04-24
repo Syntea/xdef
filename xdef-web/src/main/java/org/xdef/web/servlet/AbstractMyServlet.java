@@ -9,9 +9,13 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.SManager;
+import org.xdef.web.config.BuildInfo;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -19,12 +23,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/** Abstract servlet used for servlet implementation.
+/**
+ * Abstract servlet used for servlet implementation.
+ * <p>
+ * It sets globally X-definition report-language to pom.xml/property/servlet.xdef.report.lang.
+ *
  * @author Vaclav Trojan
  */
 @MultipartConfig
 public abstract class AbstractMyServlet extends HttpServlet {
     private static final long serialVersionUID = -8154631839408075000L;
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMyServlet.class);
 
     /** Base directory. */
     protected static File _baseDir = null;
@@ -36,6 +45,12 @@ public abstract class AbstractMyServlet extends HttpServlet {
     protected static File _dataDir = null;
     /** SManager used for reporting.*/
     static final SManager MANAGER = SManager.getInstance();
+
+    static {
+        //set X-definition report-language globally
+        Report.setLanguage(BuildInfo.BUILDINFO.getServletXdefReportLang());
+        logger.info("set X-definition report-language globally to: " + BuildInfo.BUILDINFO.getServletXdefReportLang());
+    }
 
     /** default constructor, calls super() only */
     protected AbstractMyServlet() {

@@ -15,26 +15,39 @@
 
 <div class="title">Playground result &mdash; ((status))</div>
 
-<h2>((result-title))</h2>
-<pre class="output">((result))</pre>
+<h1>((title))</h1>
 
-<div style="display: ((html-div))">
+<div style="display: ((message-disp))">
+<h2>Message</h2>
+<pre class="output">((message))</pre>
+</div>
+
+<div style="display: ((result-disp))">
+<h2>Result (format ((result-format)))</h2>
+<pre class="output">((result))</pre>
+</div>
+
+<div style="display: ((display-html-disp))">
 <h2>Display as HTML</h2>
 <div class="output resizable">
-<iframe srcdoc="((result-html))"><span class="error">INFO: your browser does not support iframes</span></iframe>
+    <iframe srcdoc="((display-html))"><span class="error">INFO: your browser does not support iframes</span></iframe>
 </div>
 </div>
 
+<div style="display: ((stdout-disp))">
 <h2>Output stream (System.out)</h2>
-<pre style="display: ((stdout-div))" class="output">((stdout))</pre>
-<div style="display: ((stdout-none))">None.</div>
+<pre class="output">((stdout))</pre>
+</div>
+
+<hr/>
+Technical info:<ul>
+    <li>processed by library X-definition: ((xdef-lib-id))</li>
+</ul>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasic(
-    function() { $(this).children("div").append("<span>, X-definition: ((xdef-lib-id))</span>"); })
-</script>
+<script type="module">initPageBasic()</script>
 
 </body>
 </html>
