@@ -84,7 +84,7 @@ public class TestExprCompiler {
         //TODO
     }
 
-    private final static class CodeItem {
+    public final static class CodeItem {
         final String _op;
         final Object _value;
         CodeItem(final String name, final Object value) {
@@ -95,15 +95,61 @@ public class TestExprCompiler {
         public String toString() {return _op + ' ' + _value;}
     }
 
-    static CodeItem[] precompile(final String source, final Object[] code) {
+    private static void compileIf(final int i, final Object[] code, CodeItem[] result, final String[] ii) {
+        result[i] = new CodeItem("nop", 1000 + i);
+        int x = -1;
+        for (int j = i + 1; j < code.length; j++) {
+            if (result[j] != null) continue;
+            String[] s = ((String) code[j]).split(" ");
+            if ("if".equals(s[0])) {
+                if (s[1].equals(ii[1])) {
+                    result[j] = new CodeItem("nop", 9000 + j);
+                    x = j;
+                } else {
+                    compileIf(j, code, result, s);
+                }
+                continue;
+            }
+            if ("else".equals(s[0])) { //else
+                result[x] = new CodeItem("jmpf", j);
+                for (int k = j + 1; k < code.length; k++) {
+                    if (result[k] != null) continue;
+                    String[] kk = ((String) code[k]).split(" ");
+                    if ("endIf".equals(kk[0]) && kk[1].equals(s[2])) {
+                        result[j] = new CodeItem("jmp", k + 1);
+                        result[k] = new CodeItem("nop", 9000 + i);
+                        return;
+                    }
+                }
+                throw new RuntimeException("endIf missing after else");
+            }
+            if ("endIf".equals(s[0])) {
+                result[x] = new CodeItem("jmpf", j);
+                result[j] = new CodeItem("nop", 9000 + i);
+                return;
+            }
+        }
+        throw new RuntimeException("endIf missing, i=" + i);
+    }
+
+    public static CodeItem[] precompile(final String source, final Object[] code) {
         CodeItem[] result = new CodeItem[code.length];
         for (int i = 0; i < code.length; i++) {
             String item = code[i].toString();
             if (item.startsWith("info: ")) { // parsed position
                 result[i] = new CodeItem("info", item.substring(6).trim());
+            } else if (item.startsWith("type ")) { // parsed position
+                result[i] = new CodeItem("nop", 9999);
+            }
+            if (result[i] != null) {
                 continue;
             }
-            String[] ii = ((String) code[i]).split(" ");
+            String[] ii;
+            try {
+                ii = item.split(" ");
+            } catch (Exception ex) {
+                throw new RuntimeException("i = " + i);
+            }
             item = ii[0];
             switch (item) {
                 case "intConst":
@@ -137,29 +183,7 @@ public class TestExprCompiler {
                     result[i] = new CodeItem(item, new int[] {Integer.parseInt(ii[1]), Integer.parseInt(ii[2])});
                     break;
                 }
-                case "if": {
-                    if (result[i] != null) continue;
-                    result[i] = new CodeItem("nop", 900);
-                    int x = -1;
-                    for (int j = i+1; j < code.length; j++) {
-                        if (result[j] != null) continue;
-                        String[] s = ((String) code[j]).split(" ");
-                        if ("if".equals(s[0]) && s[1].equals(ii[1]) && s[2].equals(ii[2])) {
-                            result[i] = new CodeItem("nop", 901);
-                        }
-                        if ("if".equals(s[0]) && s[1].equals(ii[2])) { //then
-                            result[j] = new CodeItem("jmpf", j);
-                            for (int k = j + 1; k < code.length; k++) {
-                                if (result[k] != null) continue;
-                                String[] kk = ((String) code[k]).split(" ");
-                                if ("else".equals(kk[0]) && kk[1].equals(s[2])) {
-                                    result[j] = new CodeItem("jmp", k);
-                                }
-                            }
-                        }
-                    }
-                    break;
-                }
+                case "if": compileIf(i, code, result, ii); break;
                 case "while": 
                     code[i] = "nop 0 0";
                     result[i] = new CodeItem("nop", null);
@@ -215,8 +239,12 @@ public class TestExprCompiler {
                     }
                     break;
                 default:
-                    result[i] = new CodeItem(item,
-                        item.endsWith("type")? source.substring(Integer.parseInt(ii[1]),Integer.parseInt(ii[2])): null);
+                    try {
+                        result[i] = new CodeItem(item,
+                            item.endsWith("type")? source.substring(Integer.parseInt(ii[1]),Integer.parseInt(ii[2])): null);
+                    } catch (Exception ex) {
+                        throw new RuntimeException("i = " + i + "; " + code[i]);
+                    }
             }
 /***************************************************************
             } else if ("jmp".equals(item) || "jmpf".equals(item) || "jmpt".equals(item) ) {
@@ -293,7 +321,6 @@ public class TestExprCompiler {
                 }
 ***************************************************************/
         }
-        System.out.println(printCode(source, code, result));
         return result;
     }
 

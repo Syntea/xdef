@@ -12,6 +12,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.sys.STester;
 import static org.xdef.sys.STester.runTest;
+import static test.common.bnf.TestExprCompiler.precompile;
 
 /** Test of parsing and executions of BNF expressions an assignment commands.
  * @author Vaclav Trojan
@@ -82,7 +83,12 @@ public class TestExpr extends STester {
         if (_displayCode) {
             TestExprDeCompiler.printCode(code);
         }
-        TestExprCompiler.execute(source, code, _variables, getPrintStream());
+        try {
+            TestExprCompiler.execute(source, code, _variables, getPrintStream());
+        } catch (Exception ex) {
+            System.out.println(TestExprCompiler.printCode(source, code, TestExprCompiler.precompile(source, code)));
+            throw ex;
+        }
         if (_displayCode) {
             String s = TestExprDeCompiler.toSource(source, code);
             result = parse(grammar, "program", s);
@@ -110,9 +116,31 @@ public class TestExpr extends STester {
         }
         return "";
     }
-
+    
 ////////////////////////////////////////////////////////////////////////////////
     
+    String test(final String x, final BNFGrammar g, final String prog) {
+        String result = parse(g, "program", prog);
+        if (!prog.equals(result)) {
+            return "Syntax error: " + result;
+        }
+        Object[] code = g.getParsedObjects();
+        TestExprCompiler.CodeItem[] pc = null;
+        try {
+            pc = precompile(prog, code);
+            TestExprCompiler.execute(prog, pc, _variables, getPrintStream());
+            String y =new String(_byteArray.toByteArray(), Charset.availableCharsets().get("UTF-8"));
+            y = SUtils.modifyString(y, "\r\n","\n");
+            if (x.equals(y)) {
+                return null;
+            }
+            return "'" + x + "', '" + y + "'\n" + TestExprCompiler.printCode(prog, code, pc);
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+            return "'" + x + "', '?????'\n" + TestExprCompiler.printCode(prog, code, pc);
+        }
+    }
+        
     private static void print(int i) {System.out.print(i);}
 
     /** Run test and print error information. */
@@ -124,8 +152,8 @@ public class TestExpr extends STester {
         try {
             g.trace(null);
 //            _displayCode = true;
-//int i=1;if (i==1) if (i==1) print(1); System.out.println(" result");
-            assertEq("1", prog(g, "int i=1;if (i==1) if (i==1) print(1);"));
+int i=1;if (i==1) if (i==1) print(1); System.out.println();
+            assertNull(test("", g, "int i=1;if (i==1) if (i==1) print(1);"));
 if(true)return;
             _displayCode = false;
             assertEq("0", prog(g, " /*x*/ print ( /*x*/ 0 /*x*/) /*x*/; "));

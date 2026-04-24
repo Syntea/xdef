@@ -84,23 +84,22 @@ type        ::= ("boolean" | "int" | "float" | "String" | "Object") $rule
 method      ::= name paramList $rule
 vardecl     ::= type S declItem (S "," S declItem)*
 varcmd      ::= vardecl | assign | incdec
-simplecmd   ::= varcmd
-command     ::= S ($info blockcmd | (($info (simplecmd | do) S )? ";" ))
-                $rule S
+simplecmd   ::= varcmd | method
+command     ::= S ($info blockcmd | (($info (simplecmd | do) S )? ";" )) S
+blockcmd    ::= block | if | while | for | switch | break | continue
+brexpr      ::= S "(" expr ")" S
 
 /***************************************************************
             TODO
 ***************************************************************/
-blockcmd    ::= block | if | while | for | switch | method | break | continue
 block       ::= "{" command* S "}"
 break       ::= "break" S ";" $rule
 continue    ::= "continue" S ";" $rule
-if          ::= "if" $rule then else? then
-then        ::= brexpr $rule command 
-brexpr      ::= S "(" expr ")" S
+if          ::= "if" $rule brexpr $rule command else? endIf
 else        ::= S "else" S command $rule
+endIf        ::= $rule
 while       ::= "while" $rule brexpr $rule command $rule
-switch      ::= "switch" brexpr $rule "{" ( case | default )* "}" S  $rule
+switch      ::= "switch" brexpr $rule "{" ( case | default )* "}" S $rule
 swconstant  ::= boolConst | strConst | intConst
 case        ::= S ("case" S swconstant S ":" $rule command* $rule) S
 default     ::= S ("default" $rule S ":" command*) S
