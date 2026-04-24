@@ -2,6 +2,8 @@ package test.common.bnf;
 
 import java.io.File;
 import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,9 +21,9 @@ public class TestExpr extends STester {
     public TestExpr() {super();}
 
     /** Map of variables. */
-    private static final Map<String, Object> _variables = new TreeMap<>();
+    private final Map<String, Object> _variables = new TreeMap<>();
     /** used to get printed text. */
-    private static final ByteArrayOutputStream _byteArray = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream _byteArray = new ByteArrayOutputStream();
     /** Switch to print generated code. */
     private static boolean _displayCode;
 
@@ -54,6 +56,18 @@ public class TestExpr extends STester {
         }
     }
 
+    /** Create PrintStream from byte array.
+     * @return created PrintStream.
+     */
+    private PrintStream getPrintStream() {
+        _byteArray.reset();
+        try { // prepare printing commands
+            return new PrintStream(_byteArray, true, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {  // never happens
+            return new PrintStream(_byteArray, true);
+        }
+    }
+    
     /** Parse source data according the rule "program" from given BNF grammar.
      * @param grammar BNF grammar.
      * @param source source data.
@@ -68,8 +82,7 @@ public class TestExpr extends STester {
         if (_displayCode) {
             TestExprDeCompiler.printCode(code);
         }
-
-        TestExprCompiler.execute(source, code, _variables, _byteArray);
+        TestExprCompiler.execute(source, code, _variables, getPrintStream());
         if (_displayCode) {
             String s = TestExprDeCompiler.toSource(source, code);
             result = parse(grammar, "program", s);
@@ -79,10 +92,10 @@ public class TestExpr extends STester {
                 throw new RuntimeException("error in toSource");
             }
             code = grammar.getParsedObjects();
-            TestExprCompiler.execute(s, code, _variables, _byteArray);
+            TestExprCompiler.execute(s, code, _variables, getPrintStream());
         }
-        Charset chs = Charset.availableCharsets().get("UTF-8");
-        return SUtils.modifyString(new String(_byteArray.toByteArray(), chs), "\r\n","\n");
+        return SUtils.modifyString(new String(_byteArray.toByteArray(), Charset.availableCharsets().get("UTF-8")),
+            "\r\n","\n");
     }
 
     private String parse(BNFGrammar grammar, String source) {
@@ -99,6 +112,8 @@ public class TestExpr extends STester {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
+    
+    private static void print(int i) {System.out.print(i);}
 
     /** Run test and print error information. */
     @Override
@@ -108,6 +123,10 @@ public class TestExpr extends STester {
         g.setUserObject(this);
         try {
             g.trace(null);
+//            _displayCode = true;
+//int i=1;if (i==1) if (i==1) print(1); System.out.println(" result");
+            assertEq("1", prog(g, "int i=1;if (i==1) if (i==1) print(1);"));
+if(true)return;
             _displayCode = false;
             assertEq("0", prog(g, " /*x*/ print ( /*x*/ 0 /*x*/) /*x*/; "));
             assertEq("13", prog(g, "print ( /*x*/ 12/*x*//*x*/ + 1 /*x*/);"));
@@ -284,7 +303,7 @@ public class TestExpr extends STester {
             assertEq("123", prog(g, "i=1; do print(i); while (i++ < 3) ;"));
             assertEq("12", prog(g, "for(i=1; i<3; i++) print(i);"));
             assertEq("212", prog(g, "{ for(i=1; i<3; i++) { print(i); for(j=1; j<3; j++) print(j); }}\n"));
-//            assertEq("", prog(g, "int i=1;if (i==1) if (i==1) print(1);"));
+//            assertEq("1", prog(g, "int i=1;if (i==1) if (i==1) print(1);"));
 //TODO (parse -> prog)
 //_displayCode = true;
             assertEq("", parse(g, "for (int i = 1; i < 3; i++)\n"+

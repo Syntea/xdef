@@ -1,8 +1,6 @@
 package test.common.bnf;
 
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -139,24 +137,29 @@ public class TestExprCompiler {
                     result[i] = new CodeItem(item, new int[] {Integer.parseInt(ii[1]), Integer.parseInt(ii[2])});
                     break;
                 }
-                case "if":
+                case "if": {
+                    if (result[i] != null) continue;
+                    result[i] = new CodeItem("nop", 900);
+                    int x = -1;
                     for (int j = i+1; j < code.length; j++) {
+                        if (result[j] != null) continue;
                         String[] s = ((String) code[j]).split(" ");
-                        if ("then".equals(s[0]) && s[1].equals(ii[2])) {
-                            result[i] = new CodeItem("jmpf", j);
-                            code[i] = "jmpf " + j;
-                            code[j] = "nop 0 0";
+                        if ("if".equals(s[0]) && s[1].equals(ii[1]) && s[2].equals(ii[2])) {
+                            result[i] = new CodeItem("nop", 901);
+                        }
+                        if ("if".equals(s[0]) && s[1].equals(ii[2])) { //then
+                            result[j] = new CodeItem("jmpf", j);
                             for (int k = j + 1; k < code.length; k++) {
+                                if (result[k] != null) continue;
                                 String[] kk = ((String) code[k]).split(" ");
                                 if ("else".equals(kk[0]) && kk[1].equals(s[2])) {
                                     result[j] = new CodeItem("jmp", k);
-                                    code[j] = "jmp " + k;
-                                    code[k] = "nop 0 0";
                                 }
                             }
                         }
                     }
                     break;
+                }
                 case "while": 
                     code[i] = "nop 0 0";
                     result[i] = new CodeItem("nop", null);
@@ -290,32 +293,70 @@ public class TestExprCompiler {
                 }
 ***************************************************************/
         }
+        System.out.println(printCode(source, code, result));
         return result;
     }
 
+    public static String printCode(final String source, final Object[] code, final CodeItem[] pc) {
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < code.length; j++) {
+            String t = "";
+            String[] x =((String) code[j]).split(" ");
+            if (x.length == 3) {
+                int k = -1, l = -1;
+                try {
+                    k = Integer.parseInt(x[1]);
+                    l = Integer.parseInt(x[2]);
+                    t = source.substring(k, l);
+                } catch (Exception ex) {
+                    t = "";
+                }
+            }
+            String v = "";
+            if (((String) code[j]).startsWith("command")) {
+                 v = "; " + t;
+            }
+            String s = String.format("%3d: ", j) + (pc == null ? "" : pc[j]) + "\t";
+            if (s.length() < 9) {
+                s += "\t\t\t";
+            } else if (s.length() < 17) {
+                s += "\t\t";
+            } else if (s.length() < 25) {
+                s += "\t";
+            }
+            String u = code[j] + v;
+            if (!t.isEmpty()) {
+                u += "\t";
+                if (u.length() < 9) {
+                    u += "\t\t\t";
+                } else if (u.length() < 17) {
+                    u += "\t\t";
+                } else if (u.length() < 25) {
+                    u += "\t";
+                }
+
+            }
+            sb.append(s).append(u).append(t).append('\n');            
+        }
+        return sb.toString();
+    }
+
     /** Execute generated code.
-     * @param source source text.
+     * @param src source text.
      * @param code generated code.
-     * @param variables variable table.
+     * @param vars variable table.
      * @return result of execution (or null).
      */
-    static Object execute(final String source,
-        final Object[] code,
-        final Map<String, Object> variables,
-        ByteArrayOutputStream byteArray) {
+    static Object execute(final String src, final Object[] code, final Map<String, Object> vars, final PrintStream out){
         final Stack<Object> stack = new Stack<>();
-        PrintStream out;
-        variables.clear();
-        byteArray.reset();
-        byteArray.reset();
-        try { // prepare printing commands
-            out = new PrintStream(byteArray, true, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            out = new PrintStream(byteArray, true); // never happens
-        } // never happens
-        CodeItem[] pc = precompile(source, code);
+        vars.clear();
+        CodeItem[] pc = precompile(src, code);
         for (int i = 0; i < pc.length; i++) {
             CodeItem item = pc[i];
+if (item == null) {
+    System.out.println("i: " + i);
+    System.out.println(item._op); //throws exception
+}
             switch (item._op) {
                 case "intConst": stack.push((Long) item._value); break;
                 case "fltConst": stack.push((Double) item._value); break;
@@ -326,7 +367,7 @@ public class TestExprCompiler {
                 case "type":
                     String s = (String) item._value;
                     s = s.substring(2); // name
-                    variables.put(s, null);
+                    vars.put(s, null);
                     stack.push(s);
                     break;
                 case "MINUS": {
@@ -340,7 +381,7 @@ public class TestExprCompiler {
                     }
                 case "NOT": stack.push(!((Boolean) stack.pop())); break;
                 case "NEG": stack.push(~((Long) stack.pop())); break;
-                case "idRef": stack.push(variables.get(stack.pop().toString())); break;
+                case "idRef": stack.push(vars.get(stack.pop().toString())); break;
                 case "AND":
                 case "OR":
                 case "XOR": {
@@ -456,26 +497,26 @@ public class TestExprCompiler {
                 case "INCAFTER":
                 case "DECAFTER": {
                         String name = stack.pop().toString(); // name of var
-                        Object x = variables.get(name);
+                        Object x = vars.get(name);
                         if (x instanceof Long) {
                             if ("INCBEFORE".equals(item._op) || "DECBEFORE".equals(item._op)) {
                                 x = (Long) x + ("INCBEFORE".equals(item._op) ? 1 : -1);
-                                variables.put(name, x);
+                                vars.put(name, x);
                                 stack.push(x);
                             } else {
                                 stack.push(x);
                                 x = (Long) x + ("INCAFTER".equals(item._op) ? 1 : -1);
-                                variables.put(name, x);
+                                vars.put(name, x);
                             }
                         } else if (x instanceof Double) {
                             if ("INCBEFORE".equals(item._op) || "DECBEFORE".equals(item._op)) {
                                 x = (Double) x+("INCBEFORE".equals(item._op) ? 1 : -1);
-                                variables.put(name, x);
+                                vars.put(name, x);
                                 stack.push(x);
                             } else {
                                 stack.push(x);
                                 x = (Double) x + ("INCAFTER".equals(item._op) ? 1 : -1);
-                                variables.put(name, x);
+                                vars.put(name, x);
                             }
                         } else {
                             throw new RuntimeException("Error: Operand type " + x);
@@ -484,7 +525,7 @@ public class TestExprCompiler {
                     }
                 case "ASS": {
                         Object x = stack.pop();
-                        variables.put((String) stack.pop(), x);
+                        vars.put((String) stack.pop(), x);
                         break;
                     }
                 case "ASSADD":
@@ -494,7 +535,7 @@ public class TestExprCompiler {
                 case "ASSMOD": {
                         Object x = stack.pop();
                         String name = (String) stack.pop();
-                        Object y = variables.get(name);
+                        Object y = vars.get(name);
                         if (x instanceof Number && y instanceof Number) {
                             boolean bothint = x instanceof Long && y instanceof Long;
                             Number xx = (Number) x;
@@ -519,7 +560,7 @@ public class TestExprCompiler {
                         } else if ("ASSADD".equals(item._op) && y instanceof String) {
                             y = y.toString() + x;
                         }
-                        variables.put(name, y);
+                        vars.put(name, y);
                         break;
                     }
                 case "ASSAND":
@@ -527,7 +568,7 @@ public class TestExprCompiler {
                 case "ASSXOR": {
                         Object x = stack.pop();
                         String name = (String) stack.pop();
-                        Object y = variables.get(name);
+                        Object y = vars.get(name);
                         if (x instanceof Boolean && y instanceof Boolean) {
                             boolean xx = (Boolean) x;
                             boolean yy = (Boolean) y;
@@ -537,7 +578,7 @@ public class TestExprCompiler {
                             long yy = (Long) y;
                             y = "ASSAND".equals(item._op) ? yy & xx : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
                         }
-                        variables.put(name, y);
+                        vars.put(name, y);
                         break;
                     }
                 case "ASSLSH":
@@ -545,13 +586,13 @@ public class TestExprCompiler {
                 case "ASSRRSH": {
                         Object x = stack.pop();
                         String name = (String) stack.pop();
-                        Object y = variables.get(name);
+                        Object y = vars.get(name);
                         if (x instanceof Long && y instanceof Long) {
                             long xx = (Long) x;
                             long yy = (Long) y;
                             y = "ASSLSH".equals(item._op) ? yy << xx : "ASSRSH".equals(item._op) ? yy >> xx : yy >>> xx;
                         }
-                        variables.put(name, y);
+                        vars.put(name, y);
                         break;
                     }
                 case "paramList":
