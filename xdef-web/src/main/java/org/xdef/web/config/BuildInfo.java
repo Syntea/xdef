@@ -82,7 +82,9 @@ public class BuildInfo {
     }
 
     /**
-     * Derives detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values)
+     * Derives detailed identifier of the build - artifact-name, version, git-commit-info
+     * (contains unexpected values mainly)
+     *
      * @return derived identifier
      */
     public String getBuildIdentifier() {

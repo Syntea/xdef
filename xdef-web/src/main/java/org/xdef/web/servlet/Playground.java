@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,6 +48,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
+    //private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
     private static final String RESPONSE_HTML_TEMPL = readRsrcAsString(Playground.class, "playground-response-template.html");
 
@@ -79,7 +81,7 @@ public final class Playground extends AbstractMyServlet {
      * @throws IOException if an error occurs.
      */
     @Override
-    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+    public final void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException
     {
         req.setCharacterEncoding("UTF-8");
@@ -89,34 +91,38 @@ public final class Playground extends AbstractMyServlet {
         //request parameters: see javadoc
         String rootName     = getParam(req, "rootName");
         String xdef         = getParam(req, "xdef");
-        String dataFormat   = getParam(req, "dataFormat").toLowerCase();
+        String dataFormatS  = getParam(req, "dataFormat").toLowerCase();
         String data         = getParam(req, "data");
         String mode         = getParam(req, "mode").toLowerCase();
         String langInp      = getParam(req, "langInp").toLowerCase();
         String langOut      = getParam(req, "langOut").toLowerCase();
         String modelName    = getParam(req, "modelName");
         String modelURI     = getParam(req, "modelURI");
-        Set<String> xonDisplayAs = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("\\s+"))
+        Set<XdDataFormat> xonDisplayAs = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("\\s+"))
+            .map(xdfs -> XdDataFormat.valueOf2(xdfs))
+            .filter(xdf -> xdf != null && xdf != XdDataFormat.xml)
             .collect(Collectors.toSet());
         String csvHeaderExport = getParam(req, "csvHeaderExport").toLowerCase();
         String reportLang   = getParam(req, "reportLang");
 
-        //process default values
+        //process default values and conversions
         mode            = mode.equals("compose") ? mode : "validate";
-        dataFormat      = dataFormat.isEmpty() ? "xml" : dataFormat;
         csvHeaderExport = csvHeaderExport.isEmpty() || csvHeaderExport.equals("no") ? "no" : "yes";
         reportLang      = getReportLang(reportLang);
+        XdDataFormat dataFormat = XdDataFormat.valueOf2(dataFormatS, XdDataFormat.xml);
+        xonDisplayAs.remove(dataFormat);
 
-        String data2Xd       = data;
-        String dataFormat2Xd = dataFormat;
-        String status;
-        String title;
-        String message       = null;
-        String result        = null;
-        String stdOutput     = null;
+        String          data2Xd         = data;
+        XdDataFormat    dataFormat2Xd   = dataFormat;
+        String          status;
+        String          title;
+        String          message         = null;
+        String          result          = null;
+        Object          resultXon       = null;
+        String          stdOutput       = null;
 
-        XDPool        xdPool   = null;
-        ArrayReporter reporter = new ArrayReporter();
+        XDPool          xdPool          = null;
+        ArrayReporter   reporter        = new ArrayReporter();
 
         try {
             XDBuilder xdBuilder = XDFactory.getXDBuilder(reporter, XdPropsDefault);
@@ -124,20 +130,13 @@ public final class Playground extends AbstractMyServlet {
             xdPool = xdBuilder.compileXD();
 
             if (reporter.errorWarnings()) { //incorrect xdef
-                Report rep = reporter.getReport();
-                if (null != rep && "XDEF903".equals(rep.getMsgID()) && null != rep.getModification()
-                    && !rep.getModification().startsWith("&{0}<")) {
-                    return;
-                } else {
-                    reporter.reset();
-                }
                 status = "Error";
                 title = "X-definition error(s)";
                 message = printReports(reporter, xdef, reportLang);
 
             } else {
+                String  mode2Xd;
                 Element resultElement = null;
-                Object  resultXon     = null;
 
                 reporter.clear();
                 CharArrayWriter caw = new CharArrayWriter();
@@ -171,9 +170,10 @@ public final class Playground extends AbstractMyServlet {
                             uri  = u;
                         }
                     }
+                    mode2Xd       = "compose";
                     resultElement = xd.xcreate(new QName(uri, name), reporter);
                 } else {
-                    if ("json".equals(dataFormat) || "yaml".equals(dataFormat)) {
+                    if (dataFormat == XdDataFormat.json || dataFormat == XdDataFormat.yaml) {
                         if ("json".equals(dataFormat)) {
                             if (data2Xd.startsWith("<") && data2Xd.endsWith(">")) { //JSON in XML-format
                                 data2Xd = XonUtils.toJsonString(XonUtils.xmlToXon(data2Xd), true);
@@ -184,11 +184,14 @@ public final class Playground extends AbstractMyServlet {
                             data2Xd = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data2Xd)), true);
                         }
 
-                        dataFormat2Xd  = "json";
+                        dataFormat2Xd  = XdDataFormat.json;
+                        mode2Xd   = "validate-json";
                         resultXon = xd.jparse(data2Xd, reporter);
-                    } else if ("ini".equals(dataFormat)) {
+                    } else if (dataFormat == XdDataFormat.ini) {
+                        mode2Xd   = "validate-ini";
                         resultXon = xd.iparse(data2Xd, reporter);
-                    } else if ("csv".equals(dataFormat)) {
+                    } else if (dataFormat == XdDataFormat.csv) {
+                        mode2Xd   = "validate-csv";
                         resultXon = xd.cparse(
                             new StringReader(data2Xd),
                             ',', // separator
@@ -197,11 +200,13 @@ public final class Playground extends AbstractMyServlet {
                             reporter
                         );
                     } else if (!langOut.isEmpty()) {
+                        mode2Xd       = "translate";
                         resultElement = xd.xtranslate(data2Xd, langInp, langOut, reporter);
                     } else {
                         if (!langInp.isEmpty()) {
                             xd.setLexiconLanguage(langInp);
                         }
+                        mode2Xd       = "validate";
                         resultElement = xd.xparse(data2Xd, reporter);
                     }
                 }
@@ -214,7 +219,7 @@ public final class Playground extends AbstractMyServlet {
                     message = printReports(reporter, data2Xd, reportLang);
                 } else {
                     status = "OK";
-                    title = "Result (mode \"" + mode + "\")";
+                    title = "Result &mdash; mode \"" + mode2Xd + "\"";
 
                     if (resultElement != null) {
                         result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
@@ -239,17 +244,19 @@ public final class Playground extends AbstractMyServlet {
                     ex.getReport().getText(), ex.getReport().getModification()));
             }
             reporter.reset();
-            message = printReports(reporter, data2Xd, reportLang);
+            message =
+                printReports(reporter, data2Xd, reportLang) + "\n" +
+                STester.printThrowable(ex)
+            ;
         } catch (Exception ex) {
             status = "Error";
             title  = "Unhandled Exception";
-            message = preStringToPre(STester.printThrowable(ex));
+            message = STester.printThrowable(ex);
         }
 
         //assembly html-response
         boolean stdOutputEx  = stdOutput != null && !stdOutput.isEmpty();
-        boolean resultIsHtml = result != null && dataFormat.equals("xml") && result.startsWith("<html");
-        xonDisplayAs.remove(dataFormat);
+        boolean resultIsHtml = result != null && dataFormat2Xd == XdDataFormat.xml && result.startsWith("<html");
 
         String respHtml = RESPONSE_HTML_TEMPL;
         respHtml = SUtils.modifyFirst(respHtml,   	"((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
@@ -261,7 +268,7 @@ public final class Playground extends AbstractMyServlet {
         }
         respHtml = SUtils.modifyFirst(respHtml,     "((result-disp))",      result != null ? "block" : "none");
         if (result != null) {
-            respHtml = SUtils.modifyFirst(respHtml, "((result-format))",    preStringToPre(dataFormat2Xd.toUpperCase()));
+            respHtml = SUtils.modifyFirst(respHtml, "((result-format))",    preStringToPre(dataFormat2Xd.toString().toUpperCase()));
             respHtml = SUtils.modifyFirst(respHtml, "((result))",           preStringToPre(result));
         }
         respHtml = SUtils.modifyFirst(respHtml,     "((display-html-disp))", resultIsHtml ? "block" : "none");
@@ -271,6 +278,21 @@ public final class Playground extends AbstractMyServlet {
         respHtml = SUtils.modifyFirst(respHtml,     "((stdout-disp))",      stdOutputEx ? "block" : "none");
         if (stdOutputEx) {
             respHtml = SUtils.modifyFirst(respHtml, "((stdout))",           preStringToPre(stdOutput));
+        }
+        for (XdDataFormat df : XdDataFormat.valuesXon()) {
+            boolean dfDisp = resultXon != null && xonDisplayAs.contains(df);
+            respHtml = SUtils.modifyFirst(
+                respHtml,
+                "((display-" + df.toString() + "-disp))",
+                dfDisp ? "block" : "none"
+            );
+            if (dfDisp) {
+                respHtml = SUtils.modifyFirst(
+                    respHtml,
+                    "((display-" + df.toString() + "))",
+                    preStringToPre(convertXon(resultXon, df))
+                );
+            }
         }
 
         //send
@@ -319,7 +341,7 @@ public final class Playground extends AbstractMyServlet {
         return o;
     }
 
-    private static String convertXon(Object xon, String outFormat) {
+    private static String convertXon(Object xon, XdDataFormat outFormat) {
         if (outFormat == null) {
             return null;
         }
@@ -327,50 +349,89 @@ public final class Playground extends AbstractMyServlet {
         String result = null;
 
         switch (outFormat) {
-            case "json":
+            case json:
                 result = XonUtils.toJsonString(xon, true);
                 break;
-            case "yaml":
+            case yaml:
                 Yaml yaml = new Yaml();
                 result = yaml.dump(XonUtils.xonToJson(xon));
                 break;
-            case "csv":
+            case csv:
                 if (xon instanceof List) {
                     @SuppressWarnings("unchecked")
                     List<Object> xonCsv = (List<Object>)xon;
                     result = XonUtils.toCsvString(xonCsv);
                 }
                 break;
-            case "ini":
+            case ini:
                 @SuppressWarnings("unchecked")
                 Map<String, Object> xonIni = (Map<String, Object>)xon;
                 result = XonUtils.toIniString(xonIni);
                 break;
-            case "xon":
+            case xon:
                 result = XonUtils.toXonString(xon, true);
                 break;
-            case "csv-xml":
+            case csv_xml:
                 @SuppressWarnings("unchecked")
                 List<Object> xonCsv = (List<Object>)xon;
                 result = KXmlUtils.nodeToString(
                     XonUtils.csvToXml(xonCsv)
                 );
                 break;
-            case "ini-xml":
+            case ini_xml:
                 result = KXmlUtils.nodeToString(
                     XonUtils.iniToXml(XonUtils.xonToJson(xon)),
                     true, false, true, 120
                 );
                 break;
-            case "xon-xml":
+            case xon_xml:
                 result = KXmlUtils.nodeToString(
                     XonUtils.xonToXml(XonUtils.xonToJson(xon)),
                     true, false, true, 120
                 );
+                break;
+            default:
                 break;
         }
 
         return result;
     }
 
+
+    /** list of X-definition input data formats */
+    private static enum XdDataFormat {
+        xml,
+        json,
+        yaml,
+        csv,
+        ini,
+        xon,
+        csv_xml,
+        ini_xml,
+        xon_xml,
+        ;
+
+        @Override
+        public String toString() {
+            return name().replace('_', '-');
+        }
+
+        static XdDataFormat valueOf2(String val) {
+            try {
+                return XdDataFormat.valueOf(val.replace('-', '_'));
+            } catch (IllegalArgumentException ex) {
+                return null;
+            }
+        }
+
+        static XdDataFormat valueOf2(String val, XdDataFormat defaultt) {
+            return Optional.ofNullable(XdDataFormat.valueOf2(val))
+                .orElse(defaultt)
+            ;
+        }
+
+        static XdDataFormat[] valuesXon() {
+            return Stream.of(values()).filter(df -> df != xml).toArray(XdDataFormat[]::new);
+        }
+    }
 }
