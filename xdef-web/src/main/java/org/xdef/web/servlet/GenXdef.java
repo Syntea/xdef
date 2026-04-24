@@ -32,7 +32,7 @@ public final class GenXdef extends AbstractMyServlet {
      * @throws IOException if an error occurs.
      */
     @Override
-    public void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+    public void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");

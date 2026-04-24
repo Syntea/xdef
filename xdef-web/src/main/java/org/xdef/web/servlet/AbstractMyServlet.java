@@ -214,107 +214,6 @@ public abstract class AbstractMyServlet extends HttpServlet {
         }
     }
 
-    /** This class implements thread in which runs XDDocument.
-     * We need to run it in the separate thread to prevent long servlet
-     * response.
-     */
-    private static class ProcReq extends Thread {
-        private final AbstractMyServlet _x;
-        private final HttpServletRequest _request;
-        private final HttpServletResponse _response;
-        private boolean _finished = false;
-        private Exception _exception = null;
-
-        ProcReq(final HttpServletRequest request, final HttpServletResponse response, AbstractMyServlet x) {
-            _request = request;
-            _response = response;
-            _exception = null;
-            _finished = false;
-            _x = x;
-            setPriority(Thread.MAX_PRIORITY);
-        }
-
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // implementation of HttpServlet methods
-        ////////////////////////////////////////////////////////////////////////////////
-
-        /** Run servlet. */
-        @Override
-        public final void run() {
-            try {
-                _x.procReq(_request, _response);
-            } catch (Error ex) {
-                _exception = new Exception(ex.toString());
-                _exception.setStackTrace(new StackTraceElement[0]);
-            } catch (IOException | ServletException | RuntimeException ex) {
-                _exception = ex;
-            }
-            synchronized(this) {
-                _finished = true;
-                notify();
-            }
-        }
-        synchronized boolean isFinished() {return _finished;}
-        synchronized Exception getException() {return _exception;}
-    }
-
-    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     * @param request servlet request.
-     * @param response servlet response.
-     * @throws ServletException if an error occurs.
-     * @throws IOException if IO error occurs.
-     */
-    private void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
-        ProcReq     p    = new ProcReq(request, response, this);
-        IOException ioex = null;
-
-        try {
-            p.start();
-            p.join(25000);
-            if (!p.isFinished()) {
-                p.interrupt(); //???
-                ioex = new IOException("Interrupted - timeout");
-                ioex.setStackTrace(new StackTraceElement[0]);
-            }
-            if (null != p.getException()) {
-                ioex = new IOException(p.getException().toString());
-            }
-        } catch (InterruptedException ex) {
-            ioex = new IOException("Interrupted", ex);
-        }
-        if (null != ioex) {
-            throw ioex;
-        }
-    }
-
-    /** Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if servlet error occurs.
-     * @throws java.io.IOException if IO error occurs.
-     */
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /** Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if servlet error occurs.
-     * @throws java.io.IOException if IO error occurs.
-     */
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
     /** Init this servlet. Set directories for temporary data. */
     @Override
     public void init() {
@@ -338,6 +237,65 @@ public abstract class AbstractMyServlet extends HttpServlet {
             throw new RuntimeException("Directory /opt/tutorial/data is not available");
         }
         _dataDir = f;
+    }
+
+    /** Handles the HTTP <code>GET</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if servlet error occurs.
+     * @throws java.io.IOException if IO error occurs.
+     */
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        //processRequestInNewThread(request, response);
+        processRequest(request, response);
+    }
+
+    /** Handles the HTTP <code>POST</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if servlet error occurs.
+     * @throws java.io.IOException if IO error occurs.
+     */
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        //processRequestInNewThread(request, response);
+        processRequest(request, response);
+    }
+
+    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods in new thread.
+     * @param request servlet request.
+     * @param response servlet response.
+     * @throws ServletException if an error occurs.
+     * @throws IOException if IO error occurs.
+     */
+    @SuppressWarnings("unused")
+    private void processRequestInNewThread(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException
+    {
+        ProcReq     p    = new ProcReq(request, response, this);
+        IOException ioex = null;
+
+        try {
+            p.start();
+            p.join(25000);
+            if (!p.isFinished()) {
+                p.interrupt(); //???
+                ioex = new IOException("Interrupted - timeout");
+                ioex.setStackTrace(new StackTraceElement[0]);
+            }
+            if (null != p.getException()) {
+                ioex = new IOException(p.getException().toString());
+            }
+        } catch (InterruptedException ex) {
+            ioex = new IOException("Interrupted", ex);
+        }
+        if (null != ioex) {
+            throw ioex;
+        }
     }
 
     /** generates html-page with given title and body
@@ -413,6 +371,54 @@ public abstract class AbstractMyServlet extends HttpServlet {
      * @throws ServletException if servlet error occurs.
      * @throws IOException if a IO error occurs.
      */
-    public abstract void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+    public abstract void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException;
+
+
+
+    /** This class implements thread in which runs XDDocument.
+     * We need to run it in the separate thread to prevent long servlet
+     * response.
+     */
+    private static class ProcReq extends Thread {
+        private final AbstractMyServlet _x;
+        private final HttpServletRequest _request;
+        private final HttpServletResponse _response;
+        private boolean _finished = false;
+        private Exception _exception = null;
+
+        ProcReq(final HttpServletRequest request, final HttpServletResponse response, AbstractMyServlet x) {
+            _request = request;
+            _response = response;
+            _exception = null;
+            _finished = false;
+            _x = x;
+            setPriority(Thread.MAX_PRIORITY);
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // implementation of HttpServlet methods
+        ////////////////////////////////////////////////////////////////////////////////
+
+        /** Run servlet. */
+        @Override
+        public final void run() {
+            try {
+                _x.processRequest(_request, _response);
+            } catch (Error ex) {
+                _exception = new Exception(ex.toString());
+                _exception.setStackTrace(new StackTraceElement[0]);
+            } catch (IOException | ServletException | RuntimeException ex) {
+                _exception = ex;
+            }
+            synchronized(this) {
+                _finished = true;
+                notify();
+            }
+        }
+        synchronized boolean isFinished() {return _finished;}
+        synchronized Exception getException() {return _exception;}
+    }
+
 }

@@ -265,7 +265,7 @@ public final class Derby extends AbstractMyServlet {
      * @throws IOException if a IO error occurs.
      */
     @Override
-    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+    public final void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException{
         // This part we must synchronize to keep language settings etc
         // for whole process of the X-definition.
