@@ -81,7 +81,7 @@ textarea.lined {
     background-color:   white;
     border:             0.1em solid #888; 
     position:           relative;
-    left:               3em;
+    left:               30px;
 }
 .linenumbers-gutter                     { background-color: white; border-color: transparent; }
 .linenumbers-gutter span                { display:          block; }
