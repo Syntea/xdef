@@ -70,7 +70,7 @@ public final class Service extends AbstractMyServlet {
      * @throws IOException if an IO error occurs.
      */
     @Override
-    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+    public final void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");

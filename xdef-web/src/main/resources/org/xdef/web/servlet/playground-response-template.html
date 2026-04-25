@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground result &mdash; ((status))</title>
+    <meta name="description" content="Playground result &mdash; ((status))"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="style/common.css"/>
+    <script type="module" src="style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground result &mdash; ((status))</div>
+
+<h1>((title))</h1>
+
+<div style="display: ((message-disp))">
+<h2>Message</h2>
+<pre class="output">((message))</pre>
+</div>
+
+<div style="display: ((result-disp))">
+<h2>Result &mdash; format ((result-format))</h2>
+<pre class="output">((result))</pre>
+</div>
+
+<div style="display: ((display-html-disp))">
+<h2>Display as HTML</h2>
+<div class="output resizable">
+    <iframe srcdoc="((display-html))"><span class="error">INFO: your browser does not support iframes</span></iframe>
+</div>
+</div>
+
+<div style="display: ((display-json-disp))">
+<h2>Display as JSON</h2>
+<pre class="output">((display-json))</pre>
+</div>
+
+<div style="display: ((display-yaml-disp))">
+<h2>Display as YAML</h2>
+<pre class="output">((display-yaml))</pre>
+</div>
+
+<div style="display: ((display-csv-disp))">
+<h2>Display as CSV</h2>
+<pre class="output">((display-csv))</pre>
+</div>
+
+<div style="display: ((display-ini-disp))">
+<h2>Display as INI</h2>
+<pre class="output">((display-ini))</pre>
+</div>
+
+<div style="display: ((display-xon-disp))">
+<h2>Display as XON</h2>
+<pre class="output">((display-xon))</pre>
+</div>
+
+<div style="display: ((display-xml-disp))">
+<h2>Display as XML</h2>
+<pre class="output">((display-xml))</pre>
+</div>
+
+<div style="display: ((stdout-disp))">
+<h2>Output stream (System.out)</h2>
+<pre class="output">((stdout))</pre>
+</div>
+
+<hr/>
+Technical info:<ul>
+    <li>processed by library X-definition: ((xdef-lib-id))</li>
+</ul>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasic()</script>
+
+</body>
+</html>

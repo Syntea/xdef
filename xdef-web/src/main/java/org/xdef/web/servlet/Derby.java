@@ -265,7 +265,7 @@ public final class Derby extends AbstractMyServlet {
      * @throws IOException if a IO error occurs.
      */
     @Override
-    public final void procReq(final HttpServletRequest req, final HttpServletResponse resp)
+    public final void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException{
         // This part we must synchronize to keep language settings etc
         // for whole process of the X-definition.
@@ -321,7 +321,7 @@ public final class Derby extends AbstractMyServlet {
                     displayMsg(out,
                         "Error",
                         "Database creation error<br/>"+
-                            stringToHTml(STester.printThrowable(ex),true));
+                            preStringToPre(STester.printThrowable(ex)));
                     return;
                 }
             } else {
@@ -367,7 +367,7 @@ public final class Derby extends AbstractMyServlet {
                 if (null == xp || !reporter.errorWarnings()) {
                     out.print("<html xmlns='http://www.w3.org/1999/xhtml'>"
                         + "<body><h1>Exception</h1><pre><tt><b>"
-                        + stringToHTml(STester.printThrowable(ex), true)
+                        + preStringToPre(STester.printThrowable(ex))
                         + "</b></tt></pre></body></html>");
                     return;
                 } else {
@@ -441,7 +441,7 @@ public final class Derby extends AbstractMyServlet {
                         service.close();
                         if (caw.size() > 0) {
                             stdOutput = "<h3>Output stream (System.out):</h3><pre><tt>"
-                                + stringToHTml(caw.toString(), true) + "</tt></pre>";
+                                + preStringToPre(caw.toString()) + "</tt></pre>";
                         }
                     }
                     if (reporter.errors()) {
@@ -453,8 +453,8 @@ public final class Derby extends AbstractMyServlet {
                         if (mode.equals("compose")) {
                             title = "Display database";
                             result = "<h3>Database as XML:</h3><pre><tt>"
-                                + stringToHTml(KXmlUtils.nodeToString(
-                                    resultElement,true,false,true,110), true)
+                                + preStringToPre(KXmlUtils.nodeToString(
+                                    resultElement,true,false,true,110))
                                 + "</tt></pre>\n";
                         } else if (task.equals("finished")) {
                             if ("Drop database".equals(getParam(req,"submit"))){
@@ -479,7 +479,7 @@ public final class Derby extends AbstractMyServlet {
                         return;
                     }
                 }
-                result = stringToHTml(result, true);
+                result = preStringToPre(result);
             } catch (SRuntimeException ex) {
                 if ("SYS024".equals(ex.getMsgID())) {
                     reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
@@ -488,7 +488,7 @@ public final class Derby extends AbstractMyServlet {
                     reporter.putReport(Report.fatal(ex.getMsgID(),
                         ex.getReport().getText(), ex.getReport().getModification()));
                 }
-                displayMsg(out, "Input data error", stringToHTml(printReports(reporter,data),true));
+                displayMsg(out, "Input data error", preStringToPre(printReports(reporter,data)));
                 reporter.reset();
                 return;
             }

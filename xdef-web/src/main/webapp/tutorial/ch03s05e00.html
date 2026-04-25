@@ -10,15 +10,12 @@
 </head>
 <body>
 
-<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<h1>Example of validation and construction mode</h1>
+<div class="title">Example of validation and construction mode</div>
 
 <form method="post" action="../Playground">
-<input name="mode"    value="create" type="hidden"/>
-<input name="input"   value="xml"    type="hidden"/>
-<input name="display" value="html"   type="hidden"/>
 
 <p>
 Note that the validation is described in the "Weather" model and the
@@ -63,15 +60,14 @@ section starts the construction of the "html" model. The method
 &lt;/Weather>
 </textarea>
 
-<button type="submit" name="mode" value="validate">Validate</button>
-You can edit both <b>X-definition</b> and <b>Input data</b>
+<button type="submit" name="mode" value="compose">Compose</button>
 
 </form>
 
 
-<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicTal()</script>
+<script type="module">initPageBasicLined()</script>
 
 </body>
 </html>
