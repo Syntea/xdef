@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 import org.xdef.sys.SUtils;
 
@@ -14,15 +15,12 @@ public class TestExprCompiler {
 
     public TestExprCompiler() {super();}
 
-    /* Value types. */
-    static final int TYPE_VOID = 0;
-    static final int TYPE_BOOLEAN = 1;
-    static final int TYPE_INT = 2;
-    static final int TYPE_FLOAT = 3;
-    static final int TYPE_STRING = 4;
-    static final int TYPE_OBJECT = 5;
+    static final Map<String, Byte> _codes = new HashMap<>();
 
-    static final byte INTCONST_OP = 1;
+    /* Code operators. */
+    static final byte NOP_OP = 0;
+    static final byte INFO_OP = NOP_OP + 1;
+    static final byte INTCONST_OP = INFO_OP + 1;
     static final byte FLTCONST_OP = INTCONST_OP + 1;
     static final byte BOOLCONST_OP = FLTCONST_OP + 1;
     static final byte STRCONST_OP = BOOLCONST_OP + 1;
@@ -50,7 +48,11 @@ public class TestExprCompiler {
     static final byte LE_OP = GE_OP + 1;
     static final byte EQ_OP = LE_OP + 1;
     static final byte NE_OP = EQ_OP + 1;
-    static final byte INCBEFORE_OP = NE_OP + 1;
+    static final byte JMP_OP = NE_OP + 1;
+    static final byte JMPF_OP = JMP_OP + 1;
+    static final byte JMPT_OP = JMPF_OP + 1;
+    static final byte JMPTF_OP = JMPT_OP + 1;
+    static final byte INCBEFORE_OP = JMPTF_OP + 1;
     static final byte DECBEFORE_OP = INCBEFORE_OP + 1;
     static final byte INCAFTER_OP = DECBEFORE_OP + 1;
     static final byte DECAFTER_OP = INCAFTER_OP + 1;
@@ -70,52 +72,209 @@ public class TestExprCompiler {
     static final byte PARAM_OP = PARAMLIST_OP + 1;
     static final byte METHOD_OP = PARAM_OP + 1;
     static final byte FUNCTION_OP = METHOD_OP + 1;
-    static final byte COMMAND_OP = FUNCTION_OP + 1;
+    static final byte SWITCH_OP = FUNCTION_OP + 1;
+    static final byte COMMAND_OP = SWITCH_OP + 1;
+    static final byte IF_OP = COMMAND_OP + 1;
 
-    static final Map<String, Byte> _codes = new HashMap<>();
+    static final byte ELSE_OP = IF_OP + 1;
+    static final byte IF1_OP = ELSE_OP + 1;
+    static final byte ENDIF_OP = IF1_OP + 1;
+    static final byte WILEIF_OP = ENDIF_OP + 1;
+    static final byte ENDWILE_OP = WILEIF_OP + 1;
+    static final byte ENDDO_OP = ENDWILE_OP + 1;
+    static final byte ENDSWITCH_OP = ENDDO_OP + 1;
+
+    /* Predefined functions and methods. */
+    static final byte ABS = ENDSWITCH_OP + 10; //Math.abs(x)
+    static final byte ACOS = ABS + 1; // acos(x);
+    static final byte ASIN = ACOS + 1; // asin(x);
+    static final byte ATAN = ASIN + 1; // atan(x)
+    static final byte CBRT = ATAN + 1; // cbrt(x)
+    static final byte CEIL = CBRT + 1; // ceil(x)
+    static final byte COS = CEIL + 1; // cos(x)
+    static final byte COSH = COS + 1; // cosh(x)
+    static final byte EXP = COSH + 1; // exp(x)
+    static final byte EXPM1 = EXP + 1; // expm1(x)
+    static final byte FLOOR = EXPM1 + 1; // floor(x)
+    static final byte LOG = FLOOR + 1; // log(x)
+    static final byte LOG10 = LOG + 1; // log10(x)
+    static final byte LOG1P = LOG10 + 1; // log1p(x)
+    static final byte RINT = LOG1P + 1; // rint(x)
+    static final byte ROUND = RINT + 1; // round(x)
+    static final byte SIGNUM = ROUND  + 1; // signum(x)
+    static final byte SIN = SIGNUM + 1; // sin(x)
+    static final byte SINH = SIN + 1; // sinh(x)
+    static final byte SQRT = SINH + 1; // sinh(x)
+    static final byte TAN = SQRT + 1; // tan(x)
+    static final byte TANH = TAN + 1; // tahn(x)
+    static final byte TODEGREES = TANH + 1; // toDegrees(x)
+    static final byte TORADIANS = TODEGREES + 1; // toRadians(x)
+    static final byte ULP = TORADIANS + 1; // ulp(x)
+
+    static final byte ATAN2 = ULP + 1; //  Math.atan2(x, y);
+    static final byte HYPOT = ATAN2 + 1; // Math.hypot(x, y);
+    static final byte POW = HYPOT + 1; // Math.pow(x, y);
+
+    static final byte MIN = POW + 1; // min(x,y)
+    static final byte MAX = MIN + 1; // max(x,y)
+
+    static final byte RANDOM = MAX + 1; //random();
+
+
+    static final byte PRINT = RANDOM + 1; //random();
+    static final byte PRINTLN = PRINT + 1; //random();
+    static final byte PRINTF = PRINTLN+ 1; //random();
+
+    static final byte EMPTY = PRINTF + 1; //empty();
 
     static {
+        // code operators
+        _codes.put("nop", NOP_OP);
+        _codes.put("info", INFO_OP);
         _codes.put("intConst", INTCONST_OP);
         _codes.put("fltConst", FLTCONST_OP);
         _codes.put("boolConst", BOOLCONST_OP);
         _codes.put("strConst", STRCONST_OP);
         _codes.put("nullConst", NULLCONST_OP);
         _codes.put("name", NAME_OP);
-        //TODO
+        _codes.put("type", TYPE_OP);
+        _codes.put("MINUS", MINUS_OP);
+        _codes.put("NOT", NOT_OP);
+        _codes.put("NEG", NEG_OP);
+        _codes.put("idRef", IDREF_OP);
+        _codes.put("AND", AND_OP);
+        _codes.put("OR", OR_OP);
+        _codes.put("XOR", XOR_OP);
+        _codes.put("LSH", LSH_OP);
+        _codes.put("RSH", RSH_OP);
+        _codes.put("RRSH", RRSH_OP);
+        _codes.put("ADD", ADD_OP);
+        _codes.put("SUB", SUB_OP);
+        _codes.put("MUL", MUL_OP);
+        _codes.put("DIV", DIV_OP);
+        _codes.put("MOD", MOD_OP);
+        _codes.put("GT", GT_OP);
+        _codes.put("LT", LT_OP);
+        _codes.put("GE", GE_OP);
+        _codes.put("LE", LE_OP);
+        _codes.put("EQ", EQ_OP);
+        _codes.put("NE", NE_OP);
+        _codes.put("jmp", JMP_OP);
+        _codes.put("jmpf", JMPF_OP);
+        _codes.put("jmpt", JMPT_OP);
+        _codes.put("jmptf", JMPTF_OP);
+        _codes.put("INCBEFORE", INCBEFORE_OP);
+        _codes.put("DECBEFORE", DECBEFORE_OP);
+        _codes.put("INCAFTER", INCAFTER_OP);
+        _codes.put("DECAFTER", DECAFTER_OP);
+        _codes.put("ASS", ASS_OP);
+        _codes.put("ASSADD", ASSADD_OP);
+        _codes.put("ASSSUB", ASSSUB_OP);
+        _codes.put("ASSMUL", ASSMUL_OP);
+        _codes.put("ASSDIV", ASSDIV_OP);
+        _codes.put("ASSMOD", ASSMOD_OP);
+        _codes.put("ASSAND", ASSAND_OP);
+        _codes.put("ASSOR", ASSOR_OP);
+        _codes.put("ASSXOR", ASSXOR_OP);
+        _codes.put("ASSLSH", ASSLSH_OP);
+        _codes.put("ASSRSH", ASSRSH_OP);
+        _codes.put("ASSRRSH", ASSRRSH_OP);
+        _codes.put("paramList", PARAMLIST_OP);
+        _codes.put("param", PARAM_OP);
+        _codes.put("method", METHOD_OP);
+        _codes.put("function", FUNCTION_OP);
+        _codes.put("seitch", SWITCH_OP);
+        _codes.put("command", COMMAND_OP);
+
+        _codes.put("if", IF_OP);
+        _codes.put("if1", IF1_OP);
+        _codes.put("else", ELSE_OP);
+        _codes.put("endIf", ENDIF_OP);
+        _codes.put("endSwith", ENDSWITCH_OP);
+
+        _codes.put("whileIf", WILEIF_OP);
+        _codes.put("endWhile", ENDWILE_OP);
+        _codes.put("endDo", ENDDO_OP);
+
+        // predefined functions and methods
+        _codes.put("abs", ABS);
+        _codes.put("acos", ACOS);
+        _codes.put("asin", ASIN);
+        _codes.put("atan", ATAN);
+        _codes.put("cbrt", CBRT);
+        _codes.put("cos", COS);
+        _codes.put("cosh", COSH);
+        _codes.put("exp", EXP);
+        _codes.put("expm1", EXPM1);
+        _codes.put("floor", FLOOR);
+        _codes.put("log", LOG);
+        _codes.put("log10", LOG10);
+        _codes.put("log1p", LOG1P);
+        _codes.put("rint", RINT);
+        _codes.put("round", ROUND);
+        _codes.put("signum", SIGNUM);
+        _codes.put("sin", SIN);
+        _codes.put("sinh", SINH);
+        _codes.put("sqrt", SQRT);
+        _codes.put("tanh", TANH);
+        _codes.put("toDegrees", TODEGREES);
+        _codes.put("toRadians", TORADIANS);
+        _codes.put("ulp", ULP);
+        _codes.put("atan2", ATAN2);
+        _codes.put("hypot", HYPOT);
+        _codes.put("pow", POW);
+        _codes.put("min", MIN);
+        _codes.put("max", MAX);
+        _codes.put("random", RANDOM);
+        _codes.put("print", PRINT);
+        _codes.put("println", PRINTLN);
+        _codes.put("printf", PRINTF);
+        _codes.put("empty", EMPTY);
     }
 
     public final static class CodeItem {
-        final String _op;
+        final byte _op;
         final Object _value;
         CodeItem(final String name, final Object value) {
-            _op = name; _value = value;
+            try {
+                _op = _codes.get(name);
+                _value = value;
+            } catch (Exception ex) {
+                throw new RuntimeException("name: " + name + "; value: " + value);
+            }
         }
 
         @Override
-        public String toString() {return _op + ' ' + _value;}
+        public String toString() {
+            for (Entry<String, Byte> e: _codes.entrySet()) {
+                if (_op == e.getValue()) {
+                    return e.getKey() + " " + _value;
+                }
+            }
+            return "UNKNOWN OP: " + _op + ", " + _value;
+        }
     }
 
-    private static void compileIf(final int i, final Object[] code, CodeItem[] result, final String[] ii) {
+    private static void compileIf(final int i, final Object[] code, CodeItem[] result) {
         result[i] = new CodeItem("nop", 1000 + i);
         int x = -1;
         for (int j = i + 1; j < code.length; j++) {
             if (result[j] != null) continue;
-            String[] s = ((String) code[j]).split(" ");
-            if ("if".equals(s[0])) {
-                if (s[1].equals(ii[1])) {
-                    result[j] = new CodeItem("nop", 9000 + j);
-                    x = j;
-                } else {
-                    compileIf(j, code, result, s);
-                }
+            if (((String) code[j]).startsWith("if ")) {
+                compileIf(j, code, result);
                 continue;
             }
-            if ("else".equals(s[0])) { //else
-                result[x] = new CodeItem("jmpf", j);
+            if (((String) code[j]).startsWith("if1 ")) {
+                result[j] = new CodeItem("nop", 9000 + j);
+                x = j;
+                continue;
+            }
+            if (((String) code[j]).startsWith("else ")) {
+                result[x] = new CodeItem("jmpf", j + 1);
                 for (int k = j + 1; k < code.length; k++) {
                     if (result[k] != null) continue;
                     String[] kk = ((String) code[k]).split(" ");
-                    if ("endIf".equals(kk[0]) && kk[1].equals(s[2])) {
+                    if (((String) code[k]).startsWith("endIf ")) {
                         result[j] = new CodeItem("jmp", k + 1);
                         result[k] = new CodeItem("nop", 9000 + i);
                         return;
@@ -123,7 +282,7 @@ public class TestExprCompiler {
                 }
                 throw new RuntimeException("endIf missing after else");
             }
-            if ("endIf".equals(s[0])) {
+            if (((String) code[j]).startsWith("endIf ")) {
                 result[x] = new CodeItem("jmpf", j);
                 result[j] = new CodeItem("nop", 9000 + i);
                 return;
@@ -132,194 +291,153 @@ public class TestExprCompiler {
         throw new RuntimeException("endIf missing, i=" + i);
     }
 
+    private static void compileWhile(final int i, final Object[] code, CodeItem[] result) {
+        result[i] = new CodeItem("nop", null);
+        for (int j = i+1; j < code.length; j++) {
+            if (result[j] != null) {
+                continue;
+            }
+            String[] jj = ((String) code[j]).split(" ");
+            if ("whileIf".equals(jj[0])) {
+                for (int k = j + 1; k < code.length; k++) {
+                    if (result[k] != null) {
+                        continue;
+                    }
+                    String[] kk = ((String) code[k]).split(" ");
+                    if ("while".equals(kk[0])) {
+                        compileWhile(k, code, result);
+                    }
+                    if ("endWhile".equals(kk[0])) {
+                        result[j] = new CodeItem("jmpf", k + 1);
+                        result[k] = new CodeItem("jmp", i);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void compileDo(final int i, final Object[] code, CodeItem[] result) {
+        result[i] = new CodeItem("nop", 0);
+        for (int j = i+1; j < code.length; j++) {
+            if (result[j] != null) continue;
+            String[] jj = ((String) code[j]).split(" ");
+            if ("endDo".equals(jj[0])) {
+                result[j] = new CodeItem("jmpt", i + 1);
+                return;
+            }
+        }
+    }
+
+    private static void compileFor(final int i, final Object[] code, CodeItem[] result) {
+        result[i] = new CodeItem("nop", 0);
+        int c = i;
+        int j = i+1;
+        for (; j < code.length; j++) {
+            if (result[j] != null || !((String) code[j]).startsWith("for ")) continue;
+            result[j] = new CodeItem("nop", 9000);
+            c = j++;
+            break;
+        }
+        if (c == i) {
+            j = i+1;
+        }
+        for (; j < code.length; j++) {
+            if (result[j] != null) continue;
+            if (((String) code[j]).startsWith("for ")) {
+                compileFor(j, code, result);
+                continue;
+            }
+            if (!((String) code[j]).startsWith("for1 ")) continue;
+            result[j] = new CodeItem("nop", 9001);
+            int j1 = j;
+            for (; j1 < code.length; j1++) {
+                if (result[j1] != null) continue;
+                if (((String) code[j1]).startsWith("for ")) {
+                    compileFor(j1, code, result);
+                    continue;
+                }
+                if (!((String) code[j1]).startsWith("for1 ")) continue;
+                break;
+            }
+            for (int k = j1 + 1; k < code.length; k++) {
+                if (result[k] != null) continue;
+                if (((String) code[k]).startsWith("for ")) {
+                    compileFor(k, code, result);
+                    continue;
+                }
+                if (!((String) code[k]).startsWith("for2")) continue;
+                result[k] = new CodeItem("nop", 9003);
+                for (int m = k+1; m < code.length; m++) {
+                    for (int n = m+1; n < code.length; n++) {
+                        if (result[n] != null) continue;
+                        if (((String) code[n]).startsWith("for ")) {
+                            compileFor(n, code, result);
+                            continue;
+                        }
+                        if (!((String) code[n]).startsWith("for3")) continue;
+                        result[j] = new CodeItem("jmpf", n + 1);
+                        result[j+1] = new CodeItem("jmp", k + 1);
+                        result[k] = new CodeItem("jmp", c + 1);
+                        result[n] = new CodeItem("jmp", j + 2);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void compileSwitch(final int i, final Object[] code, CodeItem[] result) {
+        for (int j = i+1; j < code.length; j++) {
+System.out.println("***** [" + j + "]: " + code[j]); //TODO
+        }
+    }
+
     public static CodeItem[] precompile(final String source, final Object[] code) {
         CodeItem[] result = new CodeItem[code.length];
         for (int i = 0; i < code.length; i++) {
+            if (result[i] != null) continue;
             String item = code[i].toString();
             if (item.startsWith("info: ")) { // parsed position
                 result[i] = new CodeItem("info", item.substring(6).trim());
-            } else if (item.startsWith("type ")) { // parsed position
-                result[i] = new CodeItem("nop", 9999);
-            }
-            if (result[i] != null) {
                 continue;
             }
-            String[] ii;
-            try {
-                ii = item.split(" ");
-            } catch (Exception ex) {
-                throw new RuntimeException("i = " + i);
-            }
-            item = ii[0];
-            switch (item) {
+            String[] ii = ((String) code[i]).split(" ");
+            switch (item = ii[0]) {
                 case "intConst":
                     result[i] = new CodeItem(item,
                         Long.valueOf(source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
-                    break;
+                    continue;
                 case "fltConst":
                     result[i] = new CodeItem(item,
                         Double.valueOf(source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
-                    break;
+                    continue;
                 case "boolConst":
-                    result[i] = new CodeItem(item, "true".equals(
-                        source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
-                    break;
+                    result[i] = new CodeItem(item,
+                        "true".equals(source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]))));
+                    continue;
                 case "strConst": {
                     String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                     String delimiter = String.valueOf(s.charAt(0));
                     s = s.substring(1, s.length() - 1);
                     s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
                     result[i] = new CodeItem(item, s);
-                    break;
+                    continue;
                 }
                 case "nullConst": result[i] = new CodeItem(item, null); break;
                 case "name":
                     result[i] = new CodeItem(item, source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2])));
-                    break;
-                case "jmp":
-                case "jmpf":
-                case "jmpt": result[i] = new CodeItem(item, Integer.valueOf(ii[1])); break;
-                case "jmptf": {
-                    result[i] = new CodeItem(item, new int[] {Integer.parseInt(ii[1]), Integer.parseInt(ii[2])});
-                    break;
+                    continue;
+                case "if": compileIf(i, code, result); continue;
+                case "while": compileWhile(i, code, result); continue;
+                case "do": compileDo(i, code, result); continue;
+                case "for": compileFor(i, code, result); continue;
+                case "switch": compileSwitch(i, code, result); continue;
+                default: if (result[i] == null) {
+                    result[i] = new CodeItem(item,
+                        item.endsWith("type")? source.substring(Integer.parseInt(ii[1]),Integer.parseInt(ii[2])): null);
                 }
-                case "if": compileIf(i, code, result, ii); break;
-                case "while": 
-                    code[i] = "nop 0 0";
-                    result[i] = new CodeItem("nop", null);
-                    for (int j = i+1; j < code.length; j++) {
-                        String[] jj = ((String) code[j]).split(" ");
-                        if ("while".equals(jj[0]) && jj[1].equals(ii[1])) {
-                            for (int k = j+1; k < code.length; k++) {
-                                String[] kk = ((String) code[k]).split(" ");
-                                if ("while".equals(kk[0]) && kk[1].equals(jj[2])) {
-                                    code[j] = "jmpf " + k;
-                                    result[j] = new CodeItem("jmpf", k);
-                                    code[k] = "jmp " + i;
-                                    result[k] = new CodeItem("jmp", i);
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case "do":
-                    code[i] = "nop 0 0";
-                    result[i] = new CodeItem("nop", null);
-                    for (int j = i+1; j < code.length; j++) {
-                        String[] jj = ((String) code[j]).split(" ");
-                        if ("do".equals(jj[0]) && jj[1].equals(ii[2])) {
-                            code[j] = "jmpt " + i;
-                            result[j] = new CodeItem("jmpt", i);
-                        }
-                    }
-                    break;
-                case "for":
-                    code[i] = "nop 0 0";
-                    result[i] = new CodeItem("nop", null);
-                    for (int j = i+1; j < code.length; j++) {
-                        String[] jj = ((String) code[j]).split(" ");
-                        if ("for".equals(jj[0]) && jj[1].equals(ii[1])) {
-                            for (int k = j+1; k < code.length; k++) {
-                                String[] kk = ((String) code[k]).split(" ");
-                                if ("for".equals(kk[0]) && kk[1].equals(ii[1])) {
-                                    for (int m = k+1; m < code.length; m++) {
-                                        String[] mm = ((String) code[m]).split(" ");
-                                        if ("for3".equals(mm[0]) && mm[1].equals(kk[2])) {
-                                            code[j] = "jmptf " + k + " " + m;
-                                            result[j] = new CodeItem("jmpf", new int[]{k,m});
-                                            code[k] = "jmp " + i;
-                                            result[k] = new CodeItem("jmp", i);
-                                            code[m] = "jmp " + j;
-                                            result[m] = new CodeItem("jmp", j);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    try {
-                        result[i] = new CodeItem(item,
-                            item.endsWith("type")? source.substring(Integer.parseInt(ii[1]),Integer.parseInt(ii[2])): null);
-                    } catch (Exception ex) {
-                        throw new RuntimeException("i = " + i + "; " + code[i]);
-                    }
             }
-/***************************************************************
-            } else if ("jmp".equals(item) || "jmpf".equals(item) || "jmpt".equals(item) ) {
-                result[i] = new CodeItem(item, new Integer(ii[1]));
-            } else if ("jmptf".equals(item)) {
-                result[i] = new CodeItem(item, new int[] {new Integer(ii[1]), new Integer(ii[2])});
-            } else if ("if".equals(item)) {
-                for (int j = i+1; j < code.length; j++) {
-                    String[] jj = ((String) code[j]).split(" ");
-                    if ("then".equals(jj[0]) && jj[1].equals(ii[2])) {
-                        result[i] = new CodeItem("jmpf", j);
-                        code[i] = "jmpf " + j;
-                        code[j] = "nop 0 0";
-                        for (int k = j + 1; k < code.length; k++) {
-                            String[] kk = ((String) code[k]).split(" ");
-                            if ("else".equals(kk[0]) && kk[1].equals(jj[2])) {
-                                result[j] = new CodeItem("jmp", k);
-                                code[j] = "jmp " + k;
-                                code[k] = "nop 0 0";
-                            }
-                        }
-                    }
-                }
-            } else if ("while".equals(item)) {
-                code[i] = "nop 0 0";
-                result[i] = new CodeItem("nop", null);
-                for (int j = i+1; j < code.length; j++) {
-                    String[] jj = ((String) code[j]).split(" ");
-                    if ("while".equals(jj[0]) && jj[1].equals(ii[1])) {
-                        for (int k = j+1; k < code.length; k++) {
-                            String[] kk = ((String) code[k]).split(" ");
-                            if ("while".equals(kk[0]) && kk[1].equals(jj[2])) {
-                                code[j] = "jmpf " + k;
-                                result[j] = new CodeItem("jmpf", k);
-                                code[k] = "jmp " + i;
-                                result[k] = new CodeItem("jmp", i);
-                            }
-                        }
-                    }
-                }
-            } else if ("do".equals(item)) {
-                code[i] = "nop 0 0";
-                result[i] = new CodeItem("nop", null);
-                for (int j = i+1; j < code.length; j++) {
-                    String[] jj = ((String) code[j]).split(" ");
-                    if ("do".equals(jj[0]) && jj[1].equals(ii[2])) {
-                        code[j] = "jmpt " + i;
-                        result[j] = new CodeItem("jmpt", i);
-                    }
-                }
-            } else if ("for".equals(item)) {
-                code[i] = "nop 0 0";
-                result[i] = new CodeItem("nop", null);
-                for (int j = i+1; j < code.length; j++) {
-                    String[] jj = ((String) code[j]).split(" ");
-                    if ("for".equals(jj[0]) && jj[1].equals(ii[1])) {
-                        for (int k = j+1; k < code.length; k++) {
-                            String[] kk = ((String) code[k]).split(" ");
-                            if ("for".equals(kk[0]) && kk[1].equals(ii[1])) {
-                                for (int m = k+1; m < code.length; m++) {
-                                    String[] mm = ((String) code[m]).split(" ");
-                                    if ("for3".equals(mm[0]) && mm[1].equals(kk[2])) {
-                                        code[j] = "jmptf " + k + " " + m;
-                                        result[j] = new CodeItem("jmpf", new int[]{k,m});
-                                        code[k] = "jmp " + i;
-                                        result[k] = new CodeItem("jmp", i);
-                                        code[m] = "jmp " + j;
-                                        result[m] = new CodeItem("jmp", j);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-***************************************************************/
         }
         return result;
     }
@@ -356,48 +474,44 @@ public class TestExprCompiler {
                 u += "\t";
                 if (u.length() < 9) {
                     u += "\t\t\t";
-                } else if (u.length() < 17) {
+                } else if (u.length() < 16) {
                     u += "\t\t";
-                } else if (u.length() < 25) {
+                } else if (u.length() < 24) {
                     u += "\t";
                 }
 
             }
-            sb.append(s).append(u).append(t).append('\n');            
+            sb.append(s).append(u).append(t).append('\n');
         }
         return sb.toString();
     }
 
     /** Execute generated code.
-     * @param src source text.
-     * @param code generated code.
+     * @param pc generated program code;
      * @param vars variable table.
+     * @param out where to print
      * @return result of execution (or null).
      */
-    static Object execute(final String src, final Object[] code, final Map<String, Object> vars, final PrintStream out){
-        final Stack<Object> stack = new Stack<>();
+    public static Object execute(final CodeItem[] pc, final Map<String, Object> vars, final PrintStream out) {
         vars.clear();
-        CodeItem[] pc = precompile(src, code);
+        final Stack<Object> stack = new Stack<>();
         for (int i = 0; i < pc.length; i++) {
             CodeItem item = pc[i];
-if (item == null) {
-    System.out.println("i: " + i);
-    System.out.println(item._op); //throws exception
-}
             switch (item._op) {
-                case "intConst": stack.push((Long) item._value); break;
-                case "fltConst": stack.push((Double) item._value); break;
-                case "boolConst": stack.push((Boolean) item._value); break;
-                case "strConst": stack.push((String) item._value); break;
-                case "nullConst": stack.push(null); break;
-                case "name": stack.push((String) item._value); break;
-                case "type":
+                case NOP_OP: continue;
+                case INTCONST_OP: stack.push((Long) item._value); break;
+                case FLTCONST_OP: stack.push((Double) item._value); break;
+                case BOOLCONST_OP: stack.push((Boolean) item._value); break;
+                case STRCONST_OP: stack.push((String) item._value); break;
+                case NULLCONST_OP: stack.push(null); break;
+                case NAME_OP: stack.push((String) item._value); break;
+                case TYPE_OP:
                     String s = (String) item._value;
                     s = s.substring(2); // name
                     vars.put(s, null);
                     stack.push(s);
                     break;
-                case "MINUS": {
+                case MINUS_OP: {
                         Number x = (Number) stack.pop();
                         if (x instanceof Long) {
                             stack.push(-x.longValue());
@@ -406,24 +520,24 @@ if (item == null) {
                         }
                         break;
                     }
-                case "NOT": stack.push(!((Boolean) stack.pop())); break;
-                case "NEG": stack.push(~((Long) stack.pop())); break;
-                case "idRef": stack.push(vars.get(stack.pop().toString())); break;
-                case "AND":
-                case "OR":
-                case "XOR": {
+                case NOT_OP: stack.push(!((Boolean) stack.pop())); break;
+                case NEG_OP: stack.push(~((Long) stack.pop())); break;
+                case IDREF_OP: stack.push(vars.get(stack.pop().toString())); break;
+                case AND_OP:
+                case OR_OP:
+                case XOR_OP: {
                         Object y = stack.pop();
                         Object x = stack.pop();
                         if (x instanceof Boolean && y instanceof Boolean) { // boolean operation
                             switch (item._op) {
-                                case "AND": stack.push((Boolean) x && (Boolean) y); break;
-                                case "OR": stack.push((Boolean) x || (Boolean) y); break;
+                                case AND_OP: stack.push((Boolean) x && (Boolean) y); break;
+                                case OR_OP: stack.push((Boolean) x || (Boolean) y); break;
                                 default: stack.push((Boolean) x ^ (Boolean) y); // XOR
                             }
                         } else if (x instanceof Long && y instanceof Long) { // bitwise operation
                             switch (item._op) {
-                                case "AND": stack.push((Long) x & (Long) y); break;
-                                case "OR": stack.push((Long) x | (Long) y); break;
+                                case AND_OP: stack.push((Long) x & (Long) y); break;
+                                case OR_OP: stack.push((Long) x | (Long) y); break;
                                 default: stack.push((Long) x ^ (Long) y);
                             }
                         } else {
@@ -431,22 +545,22 @@ if (item == null) {
                         }
                         break;
                     }
-                case "LSH":
-                case "RSH":
-                case "RRSH": {
+                case LSH_OP:
+                case RSH_OP:
+                case RRSH_OP: {
                         Object y = stack.pop();
                         Object x = stack.pop();
                         if (x instanceof Long && y instanceof Long) {
                             long xx = (Long) x;
                             long yy = (Long) y;
-                            y = "LSH".equals(item._op) ? xx << yy : "RSH".equals(item._op) ? xx >> yy : xx >>> yy;
+                            y = LSH_OP == item._op ? xx << yy : RSH_OP == item._op ? xx >> yy : xx >>> yy;
                             stack.push(y);
                         } else {
                             throw new RuntimeException("Error: Operand types " + x.getClass() + "," + y.getClass());
                         }
                         break;
                     }
-                case "ADD": {
+                case ADD_OP: {
                         Object y = stack.pop();
                         Object x = stack.pop();
                         if (x instanceof Number && y instanceof Number) {
@@ -456,88 +570,88 @@ if (item == null) {
                                 stack.push(((Number) x).doubleValue() + ((Number) y).doubleValue());
                             }
                         } else {
-                            stack.push(x.toString() + y.toString());
+                            stack.push(x.toString() + y);
                         }
                         break;
                     }
-                case "SUB":
-                case "MUL":
-                case "DIV":
-                case "MOD": {
+                case SUB_OP:
+                case MUL_OP:
+                case DIV_OP:
+                case MOD_OP: {
                         Number y = (Number) stack.pop();
                         Number x = (Number) stack.pop();
                         if (x instanceof Long && y instanceof Long) {
                            switch (item._op) {
-                                case "SUB": stack.push(x.longValue() - y.longValue()); break;
-                                case "MUL": stack.push(x.longValue() * y.longValue()); break;
-                                case "DIV": stack.push(x.longValue() / y.longValue()); break;
+                                case SUB_OP: stack.push(x.longValue() - y.longValue()); break;
+                                case MUL_OP: stack.push(x.longValue() * y.longValue()); break;
+                                case DIV_OP: stack.push(x.longValue() / y.longValue()); break;
                                 default: stack.push(x.longValue() % y.longValue()); // MOD
                             }
                         } else {
                             switch (item._op) {
-                                case "SUB": stack.push(x.doubleValue() - y.doubleValue()); break;
-                                case "MUL": stack.push(x.doubleValue() * y.doubleValue()); break;
-                                case "DIV": stack.push(x.doubleValue() / y.doubleValue()); break;
+                                case SUB_OP: stack.push(x.doubleValue() - y.doubleValue()); break;
+                                case MUL_OP: stack.push(x.doubleValue() * y.doubleValue()); break;
+                                case DIV_OP: stack.push(x.doubleValue() / y.doubleValue()); break;
                                 default: stack.push(x.doubleValue() % y.doubleValue());// MOD
                             }
                         }
                         break;
                     }
-                case "GT":
-                case "LT":
-                case "GE":
-                case "LE":
-                case "EQ":
-                case "NE": {
+                case GT_OP:
+                case LT_OP:
+                case GE_OP:
+                case LE_OP:
+                case EQ_OP:
+                case NE_OP: {
                         Object y = stack.pop();
                         Object x = stack.pop();
                         if (x instanceof Long && y instanceof Long) {
                             long xx = (Long) x;
                             long yy = (Long) y;
-                            stack.push("GT".equals(item._op) ? xx > yy
-                                : "LT".equals(item._op) ? xx < yy
-                                    : "GE".equals(item._op) ? xx >= yy
-                                        : "LE".equals(item._op) ? xx <= yy
-                                            : "EQ".equals(item._op) ? xx == yy : xx != yy);
+                            stack.push(GT_OP == item._op ? xx > yy
+                                : LT_OP == item._op ? xx < yy
+                                    : GE_OP == item._op ? xx >= yy
+                                        : LE_OP == item._op ? xx <= yy
+                                            : EQ_OP == item._op ? xx == yy : xx != yy);
                         } else if (x instanceof Number && y instanceof Number) {
                             double xx = ((Number) x).doubleValue();
                             double yy = ((Number) y).doubleValue();
-                            stack.push("GT".equals(item._op) ? xx > yy
-                                : "LT".equals(item._op) ? xx < yy
-                                    : "GE".equals(item._op) ? xx >= yy
-                                        : "LE".equals(item._op) ? xx <= yy
-                                            : "EQ".equals(item._op) ? xx == yy : xx != yy);
+                            stack.push(GT_OP == item._op ? xx > yy
+                                : LT_OP == item._op ? xx < yy
+                                    : GE_OP == item._op ? xx >= yy
+                                        : LE_OP == item._op ? xx <= yy
+                                            : EQ_OP == item._op ? xx == yy : xx != yy);
                         } else if (x instanceof Boolean&& y instanceof Boolean){
                             boolean xx = (Boolean) x;
                             boolean yy = (Boolean) y;
                             switch (item._op) {
-                                case "EQ": stack.push(xx == yy); break;
-                                case "NE": stack.push(xx != yy); break;
+                                case EQ_OP: stack.push(xx == yy); break;
+                                case NE_OP: stack.push(xx != yy); break;
                                 default: throw new RuntimeException("Error: Operand types "
                                             + x.getClass() + "," + x.getClass());
                             }
                         }
                         break;
                     }
-                case "INCBEFORE":
-                case "DECBEFORE":
-                case "INCAFTER":
-                case "DECAFTER": {
+                case INCBEFORE_OP:
+                case DECBEFORE_OP:
+                case INCAFTER_OP:
+                case DECAFTER_OP: {
                         String name = stack.pop().toString(); // name of var
                         Object x = vars.get(name);
                         if (x instanceof Long) {
-                            if ("INCBEFORE".equals(item._op) || "DECBEFORE".equals(item._op)) {
-                                x = (Long) x + ("INCBEFORE".equals(item._op) ? 1 : -1);
+                            if (INCBEFORE_OP == item._op || DECBEFORE_OP == item._op) {
+                                x = (Long) x + (INCBEFORE_OP == item._op ? 1 : -1);
                                 vars.put(name, x);
                                 stack.push(x);
                             } else {
                                 stack.push(x);
-                                x = (Long) x + ("INCAFTER".equals(item._op) ? 1 : -1);
+                                x = (Long) x + (INCAFTER_OP == item._op ? 1 : -1);
                                 vars.put(name, x);
                             }
                         } else if (x instanceof Double) {
-                            if ("INCBEFORE".equals(item._op) || "DECBEFORE".equals(item._op)) {
-                                x = (Double) x+("INCBEFORE".equals(item._op) ? 1 : -1);
+                            if (INCBEFORE_OP == item._op || DECBEFORE_OP == item._op) {
+                                x = (Double) x+(INCBEFORE_OP == item._op ? 1 : -1);
                                 vars.put(name, x);
                                 stack.push(x);
                             } else {
@@ -550,37 +664,36 @@ if (item == null) {
                         }
                         break;
                     }
-                case "ASS": {
+                case ASS_OP: {
                         Object x = stack.pop();
                         vars.put((String) stack.pop(), x);
                         break;
                     }
-                case "ASSADD":
-                case "ASSSUB":
-                case "ASSMUL":
-                case "ASSDIV":
-                case "ASSMOD": {
+                case ASSADD_OP:
+                case ASSSUB_OP:
+                case ASSMUL_OP:
+                case ASSDIV_OP:
+                case ASSMOD_OP: {
                         Object x = stack.pop();
                         String name = (String) stack.pop();
                         Object y = vars.get(name);
                         if (x instanceof Number && y instanceof Number) {
-                            boolean bothint = x instanceof Long && y instanceof Long;
                             Number xx = (Number) x;
                             Number yy = (Number) y;
                             if (x instanceof Long && y instanceof Long) {
                                 switch (item._op) {
-                                    case "ASSADD": y = yy.longValue() + xx.longValue(); break;
-                                    case "ASSSUB": y = yy.longValue() - xx.longValue(); break;
-                                    case "ASSMUL": y = yy.longValue() * xx.longValue(); break;
-                                    case "ASSDIV": y = yy.longValue() / xx.longValue(); break;
+                                    case ASSADD_OP: y = yy.longValue() + xx.longValue(); break;
+                                    case ASSSUB_OP: y = yy.longValue() - xx.longValue(); break;
+                                    case ASSMUL_OP: y = yy.longValue() * xx.longValue(); break;
+                                    case ASSDIV_OP: y = yy.longValue() / xx.longValue(); break;
                                     default: y = yy.longValue() % xx.longValue(); // ASSMOD
                                 }
                             } else {
                                 switch (item._op) {
-                                    case "ASSADD": y = yy.doubleValue() + xx.doubleValue(); break;
-                                    case "ASSSUB": y = yy.doubleValue() - xx.doubleValue(); break;
-                                    case "ASSMUL": y = yy.doubleValue() * xx.doubleValue(); break;
-                                    case "ASSDIV": y = yy.doubleValue() / xx.doubleValue(); break;
+                                    case ASSADD_OP: y = yy.doubleValue() + xx.doubleValue(); break;
+                                    case ASSSUB_OP: y = yy.doubleValue() - xx.doubleValue(); break;
+                                    case ASSMUL_OP: y = yy.doubleValue() * xx.doubleValue(); break;
+                                    case ASSDIV_OP: y = yy.doubleValue() / xx.doubleValue(); break;
                                     default: y = yy.doubleValue() % xx.doubleValue(); // ASSMOD
                                 }
                             }
@@ -590,73 +703,72 @@ if (item == null) {
                         vars.put(name, y);
                         break;
                     }
-                case "ASSAND":
-                case "ASSOR":
-                case "ASSXOR": {
+                case ASSAND_OP:
+                case ASSOR_OP:
+                case ASSXOR_OP: {
                         Object x = stack.pop();
                         String name = (String) stack.pop();
                         Object y = vars.get(name);
                         if (x instanceof Boolean && y instanceof Boolean) {
                             boolean xx = (Boolean) x;
                             boolean yy = (Boolean) y;
-                            y = "ASSAND".equals(item._op) ? yy & xx : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
+                            y = ASSAND_OP == item._op ? yy & xx : ASSOR_OP == item._op ? yy | xx : yy ^ xx;
                         } else if (x instanceof Long && y instanceof Long) {
                             long xx = (Long) x;
                             long yy = (Long) y;
-                            y = "ASSAND".equals(item._op) ? yy & xx : "ASSOR".equals(item._op) ? yy | xx : yy ^ xx;
+                            y = ASSAND_OP == item._op ? yy & xx : ASSOR_OP == item._op ? yy | xx : yy ^ xx;
                         }
                         vars.put(name, y);
                         break;
                     }
-                case "ASSLSH":
-                case "ASSRSH":
-                case "ASSRRSH": {
+                case ASSLSH_OP:
+                case ASSRSH_OP:
+                case ASSRRSH_OP: {
                         Object x = stack.pop();
                         String name = (String) stack.pop();
                         Object y = vars.get(name);
                         if (x instanceof Long && y instanceof Long) {
                             long xx = (Long) x;
                             long yy = (Long) y;
-                            y = "ASSLSH".equals(item._op) ? yy << xx : "ASSRSH".equals(item._op) ? yy >> xx : yy >>> xx;
+                            y = ASSLSH_OP == item._op ? yy << xx : ASSRSH_OP == item._op ? yy >> xx : yy >>> xx;
                         }
                         vars.put(name, y);
                         break;
                     }
-                case "paramList":
+                case PARAMLIST_OP:
                     stack.push(new PredefinedMethod(stack.pop().toString()));
                     break;
-                case "param": { // parameter
+                case PARAM_OP: { // parameter
                         Object x = stack.pop();
                         PredefinedMethod y =  (PredefinedMethod) stack.peek();
                         y.add(x);
                         break;
                     }
-                case "method": ((PredefinedMethod) stack.pop()).invokeMethod(out); break;
-                case "function": { // procedure or function
+                case METHOD_OP: ((PredefinedMethod) stack.pop()).invokeMethod(out); break;
+                case FUNCTION_OP: { // procedure or function
                         PredefinedMethod x = (PredefinedMethod) stack.pop();
                         Object y = x.invokeMethod(out);
                         if (y != null) {
                             stack.push(y);
                         } else {
-                            throw new RuntimeException("Value of method " + x._name + " expected");
+                            throw new RuntimeException("Value of method " + x + " expected");
                         }
                         break;
                     }
-                case "jmp": i = (Integer) item._value; break;
-                case "jmpf":
+                case JMP_OP: i = ((Integer) item._value) - 1; break;
+                case JMPF_OP:
                     if (!((Boolean)stack.pop())) {
-                        i = (Integer) item._value;
+                        i = ((Integer) item._value) - 1;
                     }
                     break;
-                case "jmpt":
+                case JMPT_OP:
                     if (((Boolean)stack.pop())) {
-                        i = (Integer) item._value;
+                        i = ((Integer) item._value) - 1;
                     }
                     break;
-                case "jmptf": i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1]; break;
-                case "command": stack.clear(); break;
-                case "nop":
-                case "info": break;
+                case JMPTF_OP: i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1]; break;
+                case COMMAND_OP: stack.clear(); break;
+                case INFO_OP: break;
                 default: throw new RuntimeException("Unknown code at "+i+": " + item);
             }
         }
@@ -665,85 +777,94 @@ if (item == null) {
 
     /** Predefined method. */
     private static final class PredefinedMethod extends ArrayList<Object> {
-        private final String _name; // name of method
+        private final byte _op; // name of method
 
         private PredefinedMethod(final String name) {
             super();
-            _name = name;
+            _op = _codes.get(name);
         }
 
         private Object invokeMethod(PrintStream out) {
             if (isEmpty()) { // no parameters
-                switch (_name) {
-                    case "random": return Math.random();
-                    case "empty": return "";
-                    case "println": out.println(); return null;
+                switch (_op) {
+                    case RANDOM: return Math.random();
+                    case EMPTY: return "";
+                    case PRINTLN: out.println(); return null;
                 }
             } else { // one or more parameters
                 Object o1 = get(0);
-                if ("printf".equals(_name)) {
+                if (PRINTF == _op) {
                     remove(0); // we have the first parametr in o1
                     out.printf(o1.toString(), toArray());
                     return null;
                 }
                 if (size() == 1) { // one parameter
-                    switch (_name) {
-                        case "println": out.println(o1); return null;
-                        case "print": out.print(o1); return null;
+                    switch (_op) {
+                        case PRINTLN: out.println(o1); return null;
+                        case PRINT: out.print(o1); return null;
                     }
                     if (o1 instanceof Number) {
                         double x = ((Number) o1).doubleValue();
-                        switch (_name) {
-                            case "abs": return Math.abs(x);
-                            case "acos": return Math.acos(x);
-                            case "asin": return Math.asin(x);
-                            case "atan": return Math.atan(x);
-                            case "cbrt": return Math.cbrt(x);
-                            case "ceil": return Math.ceil(x);
-                            case "cos": return Math.cos(x);
-                            case "cosh": return Math.cosh(x);
-                            case "exp": return Math.exp(x);
-                            case "expm": return Math.expm1(x);
-                            case "floor": return Math.floor(x);
-                            case "log": return Math.log(x);
-                            case "log10": return Math.log10(x);
-                            case "log1p": return Math.log1p(x);
-                            case "rint": return Math.rint(x);
-                            case "round": return Math.round(x);
-                            case "signum": return Math.signum(x);
-                            case "sin": return Math.sin(x);
-                            case "sinh": return Math.sinh(x);
-                            case "sqrt": return Math.sqrt(x);
-                            case "tan": return Math.tan(x);
-                            case "tanh": return Math.tanh(x);
-                            case "toDegrees": return Math.toDegrees(x);
-                            case "toRadians": return Math.toRadians(x);
-                            case "ulp":return Math.ulp(x);
+                        switch (_op) {
+                            case ABS: return Math.abs(x);
+                            case ACOS: return Math.acos(x);
+                            case ASIN: return Math.asin(x);
+                            case ATAN: return Math.atan(x);
+                            case CBRT: return Math.cbrt(x);
+                            case CEIL: return Math.ceil(x);
+                            case COS: return Math.cos(x);
+                            case COSH: return Math.cosh(x);
+                            case EXP: return Math.exp(x);
+                            case EXPM1: return Math.expm1(x);
+                            case FLOOR: return Math.floor(x);
+                            case LOG: return Math.log(x);
+                            case LOG10: return Math.log10(x);
+                            case LOG1P: return Math.log1p(x);
+                            case RINT: return Math.rint(x);
+                            case ROUND: return Math.round(x);
+                            case SIGNUM: return Math.signum(x);
+                            case SIN: return Math.sin(x);
+                            case SINH: return Math.sinh(x);
+                            case SQRT: return Math.sqrt(x);
+                            case TAN: return Math.tan(x);
+                            case TANH: return Math.tanh(x);
+                            case TODEGREES: return Math.toDegrees(x);
+                            case TORADIANS: return Math.toRadians(x);
+                            case ULP: return Math.ulp(x);
                         }
                     }
                 }
                 if (size() == 2) { // two parameters
                     Object o2 = get(1);
                     if (o1 instanceof Long && o2 instanceof Long) {
-                        switch (_name) {
-                            case "min": return Math.min(((Long) o1), ((Long) o2));
-                            case "max": return Math.max(((Long) o1), ((Long) o2));
+                        switch (_op) {
+                            case MIN: return Math.min(((Long) o1), ((Long) o2));
+                            case MAX: return Math.max(((Long) o1), ((Long) o2));
                         }
                     }
                     if (o1 instanceof Number && o2 instanceof Number) {
                         double x = ((Number) o1).doubleValue();
                         double y = ((Number) o2).doubleValue();
-                        switch (_name) {
-                            case "atan2": return Math.atan2(x, y);
-                            case "hypot": return Math.hypot(x, y);
-                            case "min": return Math.min(x, y);
-                            case "max": return Math.max(x, y);
-                            case "pow": return Math.pow(x, y);
+                        switch (_op) {
+                            case ATAN2: return Math.atan2(x, y);
+                            case HYPOT: return Math.hypot(x, y);
+                            case MIN: return Math.min(x, y);
+                            case MAX: return Math.max(x, y);
+                            case POW: return Math.pow(x, y);
                         }
                     }
                 }
             }
-            throw new RuntimeException("Unknown method: " + _name);
+            throw new RuntimeException("Unknown method: " + this);
+        }
+        @Override
+        public String toString() {
+            for (Entry<String, Byte> e: _codes.entrySet()) {
+                if (_op == e.getValue()) {
+                    return e.getKey();
+                }
+            }
+            return "UNKNOWN METHOD: " + _op;
         }
     }
 }
