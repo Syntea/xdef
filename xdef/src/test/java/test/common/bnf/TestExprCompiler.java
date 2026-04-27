@@ -75,7 +75,6 @@ public class TestExprCompiler {
     static final byte SWITCH_OP = FUNCTION_OP + 1;
     static final byte COMMAND_OP = SWITCH_OP + 1;
     static final byte IF_OP = COMMAND_OP + 1;
-
     static final byte ELSE_OP = IF_OP + 1;
     static final byte IF1_OP = ELSE_OP + 1;
     static final byte ENDIF_OP = IF1_OP + 1;
@@ -83,9 +82,14 @@ public class TestExprCompiler {
     static final byte ENDWILE_OP = WILEIF_OP + 1;
     static final byte ENDDO_OP = ENDWILE_OP + 1;
     static final byte ENDSWITCH_OP = ENDDO_OP + 1;
+    static final byte CASE_OP = ENDSWITCH_OP + 1;
+    static final byte CASE1_OP = CASE_OP + 1;
+    static final byte DEFAULT_OP = CASE1_OP + 1;
+    static final byte SWITCHBREAK_OP = DEFAULT_OP + 1;
+
 
     /* Predefined functions and methods. */
-    static final byte ABS = ENDSWITCH_OP + 10; //Math.abs(x)
+    static final byte ABS = SWITCHBREAK_OP + 10; //Math.abs(x)
     static final byte ACOS = ABS + 1; // acos(x);
     static final byte ASIN = ACOS + 1; // asin(x);
     static final byte ATAN = ASIN + 1; // atan(x)
@@ -196,6 +200,13 @@ public class TestExprCompiler {
         _codes.put("endWhile", ENDWILE_OP);
         _codes.put("endDo", ENDDO_OP);
 
+        _codes.put("case", CASE_OP);
+        _codes.put("case1", CASE1_OP);
+
+        _codes.put("default", DEFAULT_OP);
+
+        _codes.put("switchBreak", SWITCHBREAK_OP);
+
         // predefined functions and methods
         _codes.put("abs", ABS);
         _codes.put("acos", ACOS);
@@ -255,13 +266,13 @@ public class TestExprCompiler {
         }
     }
 
-    private static void compileIf(final int i, final Object[] code, CodeItem[] result) {
+    private static int compileIf(final int i, final Object[] code, CodeItem[] result) {
         result[i] = new CodeItem("nop", 1000 + i);
         int x = -1;
         for (int j = i + 1; j < code.length; j++) {
             if (result[j] != null) continue;
             if (((String) code[j]).startsWith("if ")) {
-                compileIf(j, code, result);
+                j = compileIf(j, code, result);
                 continue;
             }
             if (((String) code[j]).startsWith("if1 ")) {
@@ -273,11 +284,10 @@ public class TestExprCompiler {
                 result[x] = new CodeItem("jmpf", j + 1);
                 for (int k = j + 1; k < code.length; k++) {
                     if (result[k] != null) continue;
-                    String[] kk = ((String) code[k]).split(" ");
                     if (((String) code[k]).startsWith("endIf ")) {
                         result[j] = new CodeItem("jmp", k + 1);
                         result[k] = new CodeItem("nop", 9000 + i);
-                        return;
+                        return k;
                     }
                 }
                 throw new RuntimeException("endIf missing after else");
@@ -285,51 +295,57 @@ public class TestExprCompiler {
             if (((String) code[j]).startsWith("endIf ")) {
                 result[x] = new CodeItem("jmpf", j);
                 result[j] = new CodeItem("nop", 9000 + i);
-                return;
+                return j;
             }
         }
         throw new RuntimeException("endIf missing, i=" + i);
     }
 
-    private static void compileWhile(final int i, final Object[] code, CodeItem[] result) {
+    private static int compileWhile(final int i, final Object[] code, CodeItem[] result) {
         result[i] = new CodeItem("nop", null);
         for (int j = i+1; j < code.length; j++) {
             if (result[j] != null) {
                 continue;
             }
-            String[] jj = ((String) code[j]).split(" ");
-            if ("whileIf".equals(jj[0])) {
+            if (((String) code[j]).startsWith("whileIf ")) {
                 for (int k = j + 1; k < code.length; k++) {
                     if (result[k] != null) {
                         continue;
                     }
-                    String[] kk = ((String) code[k]).split(" ");
-                    if ("while".equals(kk[0])) {
-                        compileWhile(k, code, result);
+                    String s = (String) code[k];
+                    if (s.startsWith("while ")) {
+                        k = compileWhile(k, code, result);
+                        continue;
                     }
-                    if ("endWhile".equals(kk[0])) {
+                    if (s.startsWith("endWhile ")) {
                         result[j] = new CodeItem("jmpf", k + 1);
                         result[k] = new CodeItem("jmp", i);
-                        return;
+                        return k;
                     }
                 }
             }
         }
+        throw new RuntimeException("endWhile missing, i=" + i);
     }
 
-    private static void compileDo(final int i, final Object[] code, CodeItem[] result) {
+    private static int compileDo(final int i, final Object[] code, CodeItem[] result) {
         result[i] = new CodeItem("nop", 0);
         for (int j = i+1; j < code.length; j++) {
             if (result[j] != null) continue;
-            String[] jj = ((String) code[j]).split(" ");
-            if ("endDo".equals(jj[0])) {
+            String s = (String) code[j];
+            if (s.startsWith("do ")) {
+                j = compileDo(j, code, result);
+                continue;
+            }
+            if (s.startsWith("endDo ")) {
                 result[j] = new CodeItem("jmpt", i + 1);
-                return;
+                return j;
             }
         }
+        throw new RuntimeException("endDo missing, i=" + i);
     }
 
-    private static void compileFor(final int i, final Object[] code, CodeItem[] result) {
+    private static int compileFor(final int i, final Object[] code, CodeItem[] result) {
         result[i] = new CodeItem("nop", 0);
         int c = i;
         int j = i+1;
@@ -344,53 +360,79 @@ public class TestExprCompiler {
         }
         for (; j < code.length; j++) {
             if (result[j] != null) continue;
-            if (((String) code[j]).startsWith("for ")) {
-                compileFor(j, code, result);
+            String s = (String) code[j];
+            if (s.startsWith("for ")) {
+                j = compileFor(j, code, result);
                 continue;
             }
-            if (!((String) code[j]).startsWith("for1 ")) continue;
+            if (!s.startsWith("for1 ")) continue;
             result[j] = new CodeItem("nop", 9001);
             int j1 = j;
             for (; j1 < code.length; j1++) {
                 if (result[j1] != null) continue;
-                if (((String) code[j1]).startsWith("for ")) {
-                    compileFor(j1, code, result);
+                s = (String) code[j1];
+                if (s.startsWith("for ")) {
+                    j1 = compileFor(j1, code, result);
                     continue;
                 }
-                if (!((String) code[j1]).startsWith("for1 ")) continue;
+                if (!s.startsWith("for1 ")) continue;
                 break;
             }
             for (int k = j1 + 1; k < code.length; k++) {
                 if (result[k] != null) continue;
-                if (((String) code[k]).startsWith("for ")) {
-                    compileFor(k, code, result);
+                s = (String) code[k];
+                if (s.startsWith("for ")) {
+                    k = compileFor(k, code, result);
                     continue;
                 }
-                if (!((String) code[k]).startsWith("for2")) continue;
+                if (!s.startsWith("for2 ")) continue;
                 result[k] = new CodeItem("nop", 9003);
                 for (int m = k+1; m < code.length; m++) {
                     for (int n = m+1; n < code.length; n++) {
                         if (result[n] != null) continue;
-                        if (((String) code[n]).startsWith("for ")) {
-                            compileFor(n, code, result);
+                        s = (String) code[n];
+                        if (s.startsWith("for ")) {
+                            m = compileFor(n, code, result);
                             continue;
                         }
-                        if (!((String) code[n]).startsWith("for3")) continue;
+                        if (!s.startsWith("for3 ")) continue;
                         result[j] = new CodeItem("jmpf", n + 1);
                         result[j+1] = new CodeItem("jmp", k + 1);
                         result[k] = new CodeItem("jmp", c + 1);
                         result[n] = new CodeItem("jmp", j + 2);
-                        return;
+                        return n;
                     }
                 }
             }
         }
+        throw new RuntimeException("for3 missing, i=" + i);
     }
 
-    private static void compileSwitch(final int i, final Object[] code, CodeItem[] result) {
-        for (int j = i+1; j < code.length; j++) {
-System.out.println("***** [" + j + "]: " + code[j]); //TODO
+    private static int compileSwitch(final int i, final Object[] code, CodeItem[] result) {
+        result[i] = new CodeItem("nop", 0);
+        for (int j = i + 1; j < code.length; j++) {
+            String s = (String) code[j];
+            System.out.println("***** [" + j + "]: " + s); //TODO
+            if (result[j] != null) {
+                continue;
+            }
+            if (s.startsWith("switch ")) {
+                j = compileSwitch(j, code, result);
+                continue;
+            }
+            if (s.startsWith("endSwitch ")) {
+                result[j] = new CodeItem("nop", 999);
+                return j;
+            }
+            if (s.startsWith("case ")
+                || s.startsWith("case1 ")
+                || s.startsWith("endCase ")
+                || s.startsWith("default ")
+                || s.startsWith("endDefault ")) {
+                result[j] = new CodeItem("nop", 0);
+            }
         }
+        throw new RuntimeException("endSwitch missing, i=" + i);
     }
 
     public static CodeItem[] precompile(final String source, final Object[] code) {

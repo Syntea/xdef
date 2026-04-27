@@ -644,7 +644,7 @@ public final class SManager implements XDConstants {
             return reportTable; //not exists yet, we return the table
         }
     }
-    
+
     /** Remove specified report table.
      * @param tableID Report table name.
      * @return removed table or null.

@@ -85,8 +85,11 @@ method      ::= name paramList $rule
 vardecl     ::= type S declItem (S "," S declItem)*
 varcmd      ::= vardecl | assign | incdec
 simplecmd   ::= varcmd | method
-command     ::= S ( $info blockcmd | (($info (simplecmd | do) )?  S ";" ) | "{" command* S "}" ) $rule
-blockcmd    ::= if | while | for | switch
+
+continue    ::= "continue" S ";" $rule
+command     ::= S ( (($info (simplecmd | do) )?  S ";" )
+                | ( $info switch | $info blockcmd | "{" command* S "}" ) )
+blockcmd    ::= if | while | for 
 brexpr      ::= S "(" expr ")"
 if          ::= "if" $rule if1 command (else S command) ? endIf
 if1         ::= brexpr $rule 
@@ -102,16 +105,15 @@ for         ::= "for" $rule S "(" S (varcmd (S ? "," varcmd)*)? S ";" $rule
 for1        ::= (expr $rule)? $rule 
 for2        ::= ((varcmd | method) (S ? "," (varcmd | method))*)? $rule
 for3        ::= command $rule
+program     ::= command+ S
 /***************************************************************
             TODO
 ***************************************************************/
-break       ::= "break" S ";" $rule
-continue    ::= "continue" S ";" $rule
-switch      ::= "switch" brexpr $rule S "{" ( case | default )* endSwitch
+switch      ::= S "switch" $rule brexpr switchBody endSwitch
+switchBody  ::= S "{" ( case | default )* S "}"
 swconstant  ::= boolConst | strConst | intConst
-case        ::= S "case" $rule S swconstant S ":" $rule case1
-case1       ::= $rule command* S
-default     ::= S "default" $rule S ":" command* S
-endSwitch   ::= S "}" $rule
-/***************************************************************/
-program     ::= command+ S
+case        ::= S "case" $rule S swconstant S ":" case1
+case1       ::= $rule (switchBreak | command)* S
+default     ::= S "default" S ":" $rule (switchBreak | command)* S
+switchBreak ::= S "break" S ";" $rule
+endSwitch   ::= $rule

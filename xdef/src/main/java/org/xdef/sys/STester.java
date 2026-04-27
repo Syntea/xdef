@@ -973,7 +973,7 @@ public abstract class STester {
                         String[] arguments = new String[args.length - i + 1];
                         for (int j = i + 1; j < args.length; j++) {
                             arguments[j - i + 1] = args[j];
-                        }                        
+                        }
                         return at.runTest(out, err, log, printOK, arguments); // it must be the last parameter
                     case 'd':
                         s = args[++i];
