@@ -42,7 +42,7 @@ TRSUser = string(); finally outln("TRS user: " + getText());
 
 <b>INI input data:</b>
 <input name="dataFormat" value="ini" type="hidden"/>
-<textarea name="data" rows="14" class="lined">
+<textarea name="data" rows="19" class="lined">
 ############# TRS configuration #############
 # TRS user name
 TRSUser = John Smith
@@ -59,8 +59,8 @@ MailAddr = jira@synth.cz
 Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
 </textarea>
 
-<input name="xonDisplayAs" value="json yaml xon xml" type="hidden"/>
-Display also as JSON, YAML, XON, XML.<br/>
+Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
+(subset of json, xon, yaml, xml, csv, ini)<br/>
 <button type="submit">Validate</button>
 
 </form>

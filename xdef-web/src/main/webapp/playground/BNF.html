@@ -1,23 +1,26 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="Online data validation with BNF grammar with X-definition" />
-    <meta name="keywords" content="XML, BNF, BNF grammar, validation, X-definition, Xdefinition, XDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:24rem; max-height:24rem; display:flex; overflow:hidden;}</style>    
-    <style>.B{min-height:11rem; max-height:11rem; display:flex; overflow:hidden;}</style>    
-    <title>X-definition BNF grammar specification</title>
-  </head>
-  <body style="background: #EAFFFD">
-    <form method="post" action="/tutorial/Examples">
-      <b>X-definition</b>
-      <i>If you have a collection with more X-definitions enter the name of X-definition with root INI data:
-      </i>
-      <input name="rootName" value="" type="text"/>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground &mdash; BNF grammar with X-definition</title>
+    <meta name="description" content="Playground &mdash; BNF grammar with X-definition"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground &mdash; BNF grammar with X-definition</div>
+
+<form method="post" action="../Playground">
+
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="rootName" value="" type="text"/>
+(enter in case of X-definition collection)
+<textarea name="xdef" rows="26" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
   &lt;xd:BNFGrammar name = "base">
     S ::= [#9#10#13 ]+ /* white spaces */
@@ -42,18 +45,22 @@
   &lt;/root>
 &lt;/xd:def>
 </textarea>
-      </div>
-      <b>Input data</b>
-      <div class="B">
-        <div id="line-numbers_1"></div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
+
+<b>Input data:</b>
+<textarea name="data" rows="5" class="lined">
 &lt;root>
   x = - abc + 3.14159 * - ( 2.3 - 3e-2 ) / 2 * 10e5
 &lt;/root>
 </textarea>
-      </div>        
-        <input name="submit" value="Execute" type="submit"/>
-        <i>&nbsp;You can edit <b>X-definition</b> or <b>Input</b> window</i>
-    </form>
-  </body>
+
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined();</script>
+
+</body>
 </html>

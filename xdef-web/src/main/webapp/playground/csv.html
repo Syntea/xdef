@@ -45,13 +45,13 @@ Somebody, ,
 , , 98765412
 </textarea>
 
-Export also CSV-header line:
-<select name="csvHeaderExport">
-    <option value="yes">Yes</option>
-    <option value="no">No</option>
+Process csv-header line:
+<select name="csvHeader">
+    <option value="yes">yes</option>
+    <option value="no">no</option>
 </select><br/>
-<input name="xonDisplayAs" value="json yaml xon xml" type="hidden"/>
-Display also as JSON, YAML, XON, XML.<br/>
+Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
+(subset of json, xon, yaml, xml, csv, ini)<br/>
 <button type="submit">Validate</button>
 
 </form>

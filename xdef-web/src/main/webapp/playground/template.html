@@ -1,22 +1,29 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="Online template model (construction) with X-definition " />
-    <meta name="keywords" content="XML, template model, construction, X-definition, Xdefinition, XDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:22rem; max-height:22rem; display:flex; overflow:hidden;}</style>    
-    <style>.B{min-height:13rem; max-height:14rem; display:flex; overflow:hidden;}</style>
-    <title>X-definition example of template model (construction mode)</title>
-  </head>
-  <body style="background: #EAFFFD">
-    <form method="post" action="/tutorial/Examples">
-      <b>X-definition</b>&nbsp;If you have a collection with more
-      X-definitions specify the name of root X-definition:
-      <input name="rootName" value="" type="text"/>
-      <div class="A">
-        <div id="line-numbers"> </div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground &mdash; X-definition example of template model</title>
+    <meta name="description" content="Playground &mdash; X-definition example of template model (construction mode)"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground &mdash; X-definition example of template model</div>
+
+<p>
+X-definition example of template model (construction mode).
+</p>
+
+<form method="post" action="../Playground">
+
+Name of root X-definition: <input name="rootName" value="" type="text"/>
+(enter in case of X-definition collection)
+<textarea name="xdef" rows="24" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="html" name="Example">
   &lt;!-- Note the value of the attribute script below is "template"
      so following element a template model. -->
@@ -38,23 +45,25 @@
   &lt;/html>
 &lt;/xd:def>
 </textarea>
-      </div>        
-      <b>Input data</b>&nbsp;
-      <i>If necessary please specify the name of the model:</i>
-      <input name="modelName" value="" type="text"/>&nbsp; namespace:
-      <input name="modelURI" value="" type="text"/>
-      <input type="hidden" name="mode" value="compose" />
-      <div class="B">
-        <div id="line-numbers_1"> </div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
+
+<b>Input data:</b><br/>
+The model name <input name="modelName" value="" type="text"/>
+and namespace: <input name="modelURI" value="" type="text"/>
+(optionally)
+<textarea name="data" rows="10" class="lined">
 &lt;Input>
   Hello world!
 &lt;/Input>
 </textarea>
-      </div>        
-      <input name="submit" value="execute" type="submit"/>
-      <input name="view" value="Display as html" type="submit"/>
-      <i>&nbsp;You can edit <b>X-definition</b> or <b>Input</b> window</i>
-    </form>
-  </body>
+
+<button name="mode" value="compose" type="submit">Compose</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined();</script>
+
+</body>
 </html>

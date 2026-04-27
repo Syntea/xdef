@@ -1,20 +1,26 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:18rem; max-height:18rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:18rem; max-height:18rem;display:flex;overflow:hidden;}</style>    
-    <title>X-definition: BNF</title>
-  </head>
-  <body style="background: #EAFFFD">
-    <form method="post" action="/tutorial/Examples">
-      <b>X-definition</b>
-      <i>If you have a collection with more X-definitions enter the name of X-definition with root INI data:
-      </i><input name="rootName" value="" type="text"/>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground &mdash; BNF grammar of SQL</title>
+    <meta name="description" content="Playground &mdash; BNF grammar of SQL"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground &mdash; BNF grammar of SQL</div>
+
+<form method="post" action="../Playground">
+
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="rootName" value="" type="text"/>
+(enter in case of X-definition collection)
+<textarea name="xdef" rows="50" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
   &lt;root>
     &lt;sql xd:script="*">SQL.rule('Statement'); options noTrimText&lt;/sql>
@@ -156,12 +162,11 @@ Update::= 'UPDATE'% S? ColumnRef S?
   'SET'% S? Name '=' S? Value (Comma Name S? '=' S? Value)*
    (S? 'WHERE'% S? Condition)?
 ]]&gt;&lt;/xd:BNFGrammar>
-&lt;/xd:def></textarea>
-      </div>
-      <b>Input data</b>
-      <div class="B">
-        <div id="line-numbers_1"></div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="50" class="lined">
 &lt;root>
 &lt;sql>SELECT * /* Comment */ FROM // Comment
     test
@@ -230,12 +235,17 @@ Update::= 'UPDATE'% S? ColumnRef S?
 &lt;sql>UPDATE Customers SET ContactName='Alfred Schmidt', City='Frankfurt'
    WHERE CustomerID = 1
 &lt;/sql>
-&lt;/root></textarea>
-      </div>        
-      <input name="submit" value="Execute" type="submit"/>
-      <input name="view" value="Display result as html" type="submit"/>
-      <i>&nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b></i>
-      </div>
-    </form>
-  </body>
+&lt;/root>
+</textarea>
+
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined();</script>
+
+</body>
 </html>
