@@ -9,6 +9,13 @@ import org.xdef.sys.Report;
  * @author Vaclav Trojan
  */
 public class TestExprDeCompiler {
+    /* Value types. */
+    static final int TYPE_VOID = 0;
+    static final int TYPE_BOOLEAN = 1;
+    static final int TYPE_INT = 2;
+    static final int TYPE_FLOAT = 3;
+    static final int TYPE_STRING = 4;
+    static final int TYPE_OBJECT = 5;
 
     /** Create source code from generated code.
      * @param source source text.
@@ -72,18 +79,16 @@ public class TestExprDeCompiler {
             } else if (item.endsWith("type")) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 if ("boolean".equals(s) || "int".equals(s) || "float".equals(s)
-                    || "String".equals(s) || "Object".equals(s)) {
-                    // type decl
+                    || "String".equals(s) || "Object".equals(s)) { // type decl
                     char ch = item.charAt(0);
                     if (i + 1 < code.length && ((String)code[i + 1]).startsWith("name ")) {
                         ii = code[++i].toString().split(" ");
-                        String name = source.substring(Integer.parseInt(ii[1]),
-                            Integer.parseInt(ii[2]));
-                        int type = ch == 'B' ? TestExprCompiler.TYPE_BOOLEAN
-                            : ch == 'I' ? TestExprCompiler.TYPE_INT
-                            : ch == 'F' ? TestExprCompiler.TYPE_FLOAT
-                            : ch == 'S' ? TestExprCompiler.TYPE_STRING
-                            : TestExprCompiler.TYPE_OBJECT;
+                        String name = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                        int type = ch == 'B' ? TYPE_BOOLEAN
+                            : ch == 'I' ? TYPE_INT
+                            : ch == 'F' ? TYPE_FLOAT
+                            : ch == 'S' ? TYPE_STRING
+                            : TYPE_OBJECT;
                         SourceItem val = new SourceItem("");
                         variables.put(name, val);
                         val = new SourceItem(
@@ -136,13 +141,18 @@ public class TestExprDeCompiler {
 ////////////////////////////////////////////////////////////////////////////////
             } else if ("idRef".equals(item)) { // reference to variable name
             } else if ("command".equals(item)) {  // clear stack
-                result.append(stack.pop()._s).append(";\n");
                 if (!stack.empty()) {
-                    result.append(Report.error("", "Stack item: " + stack.pop()).toString());
+                    result.append(stack.pop()._s).append(";\n");
+                    if (!stack.empty()) {
+                        result.append(Report.error("", "Stack item: " + stack.pop()).toString());
+                    }
                 }
             } else if ("boolexpr".equals(item)) {  //???
             } else if ("if".equals(item)) {  //???
             } else if ("then".equals(item)) {  //???
+            } else if ("nop".equals(item)) {  //???
+            } else if ("jmptf".equals(item)) {  //???
+            } else if ("jmp".equals(item)) {  //???
             } else {
                 result.append(Report.error("", "Unknown code: " + item).toString());
                 return result.toString();

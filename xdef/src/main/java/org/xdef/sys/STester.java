@@ -98,10 +98,7 @@ public abstract class STester {
      * @param out where to print messages.
      * @param err where to print errors.
      */
-    public STester(final PrintStream out, final PrintStream err) {
-        _out = out;
-        _err = err;
-    }
+    public STester(final PrintStream out, final PrintStream err) {_out = out; _err = err;}
     /** Get arguments.
      * @return array of command line arguments or null.
      */
@@ -179,7 +176,7 @@ public abstract class STester {
      * @return print stream or null if the output is not defined.
      */
     public final PrintStream getOutStream() {return _out;}
-    /** Set charset encoding of test data.
+    /** Set character encoding of test data.
      * @param encoding encoding of test data.
      */
     public final void setEncoding(final String encoding) {_encoding = encoding;}
@@ -223,8 +220,8 @@ public abstract class STester {
      * @return The debug flag.
      */
     public final boolean isDebug() {return _debug;}
-    /** Set debug flag. If true some additional information is printed (such as the stack trace after
-     * fail method with an exception is invoked).
+    /** Set debug flag. If true an additional information is printed (such as the exception stack trace
+     * after fail of invoked method).
      * @param debug the debug flag.
      */
     public final void setDebug(final boolean debug) {_debug = debug;}
@@ -304,8 +301,8 @@ public abstract class STester {
         }
         printErr(text + "\n" + s + '\n');
     }
-    /** Increase error counter and write the default information to the print stream. If the print stream
-     * is null the message is ignored.
+    /** Increase error counter and write the default information to the print stream. If the print stream is null
+     * the message is ignored.
      */
     public final void fail() {putErrMsg("*");}
     /** Increase error counter and write information of given object.* If the print stream is null
@@ -329,12 +326,12 @@ public abstract class STester {
             }
         }
     }
-    /** Check booleans.
+    /** Check the boolean values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public final void assertEq(final Boolean a1, final Boolean a2) {assertEq(a1, a2, null);}
-    /** Check booleans.
+    /** Check the boolean values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -344,12 +341,12 @@ public abstract class STester {
             fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
         }
     }
-    /** Check characters.
+    /** Check the character values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public final void assertEq(final Character a1, final Character a2) {assertEq(a1, a2, null);}
-    /** Check characters.
+    /** Check the character values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -360,12 +357,12 @@ public abstract class STester {
                 +"a1='" + a1 + "'(" + ((int) a1) + "); a2='" + a2 + "'(" + ((int) a2) + ")");
         }
     }
-    /** Check integer numbers.
+    /** Check the integer values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public final void assertEq(final Long a1, final Long a2) {assertEq(a1, a2, null);}
-    /** Check integer numbers.
+    /** Check the integer values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -375,12 +372,12 @@ public abstract class STester {
             fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
         }
     }
-    /** Check float numbers.
+    /** Check the float number values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public final void assertEq(final Double a1, final Double a2) {assertEq(a1, a2, null);}
-    /** Check float numbers.
+    /** Check the float number values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -390,12 +387,12 @@ public abstract class STester {
             fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
         }
     }
-    /** Check BigDecimal numbers.
+    /** Check the BigDecimal values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public final void assertEq(final BigDecimal a1, final BigDecimal a2) {assertEq(a1, a2, null);}
-    /** Check BigDecimal numbers.
+    /** Check the BigDecimal values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -405,12 +402,12 @@ public abstract class STester {
             fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
         }
     }
-    /** Check strings.
+    /** Check the String values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public final void assertEq(final String a1, final String a2) {assertEq(a1, a2, null);}
-    /** Check strings.
+    /** Check the String values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -421,48 +418,48 @@ public abstract class STester {
                 + (a1 == null ? "null" : "'" + a1 + "'")+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
         }
     }
-    /** Check elements.
-     * @param a1 first value.
+    /** Check the org.w3c.Element values from parameters are equal.
+     * @param a1 source of first element.
      * @param a2 second value.
      */
     public final void assertEq(final String a1, final Element a2) {
         assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2);
     }
-    /** Check elements.
-     * @param a1 first value.
+    /** Check the org.w3c.Element values from parameters are equal.
+     * @param a1 string with source of the first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
      */
     public final void assertEq(final String a1, final Element a2, final String msg) {
         assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2, msg);
     }
-    /** Check elements.
+    /** Check the org.w3c.Element values from parameters are equal.
      * @param a1 first value.
-     * @param a2 second value.
+     * @param a2 string with source of the second value.
      */
     public final void assertEq(final Element a1, final String a2) {
         assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement());
     }
-    /** Check elements.
+    /** Check the org.w3c.Element values from parameters are equal.
      * @param a1 first value.
-     * @param a2 second value.
+     * @param a2 string with source of the second value.
      * @param msg message to be printed or null.
      */
     public final void assertEq(final Element a1, final String a2, final String msg) {
         assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement(), msg);
     }
-    /** Check elements.
+    /** Check the org.w3c.Element values from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public void assertEq(final Element a1, final Element a2) {assertEq(a1, a2, null);}
-    /** Check elements are equal (text nodes are trimmed).
+    /** Check the org.w3c.Element values from parameters are equal (text nodes are trimmed).
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
      */
     public final void assertEq(final Element a1,final Element a2,final String msg) {assertEq(a1,a2,msg,true);}
-    /** Check elements are equal (text nodes are trimmed if argument trim is true).
+    /** Check the org.w3c.Element values from parameters are equal (text nodes are trimmed if argument trim is true).
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -474,12 +471,12 @@ public abstract class STester {
                 + "\narg2:\n"+KXmlUtils.nodeToString(a2));
         }
     }
-    /** Check objects.
+    /** Check the objects from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      */
     public void assertEq(final Object a1, final Object a2) {assertEq(a1, a2, null);}
-    /** Check objects.
+    /** Check the objects from parameters are equal.
      * @param a1 first value.
      * @param a2 second value.
      * @param msg message to be printed or null.
@@ -493,7 +490,7 @@ public abstract class STester {
             fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
         }
     }
-    /** Check if objects are equal.
+    /** Check the objects from parameters are equal.
      * @param a1 first object.
      * @param a2 second object.
      * @return true if and only if both objects are equal.
@@ -574,78 +571,71 @@ public abstract class STester {
      */
     public final void assertFalse(final boolean x, final Object msg) {if (x)  fail(msg);}
     /** Check if the reporter does not contain an error.
-     * @param reporter the reporter to be checked for no errors.
+     * @param r the reporter to be checked for no errors.
      */
-    public final void assertNoErrors(final ReportWriter reporter) {
-        if (reporter.errors()) fail(reporter.toString());
-    }
+    public final void assertNoErrors(final ReportWriter r) {if (r.errors()) fail(r.toString());}
     /** Check if the reporter contains an error.
-     * @param reporter reporter to be checked for no errors.
+     * @param r reporter to be checked for no errors.
      */
-    public final void assertErrors(final ReportWriter reporter) {
-        if (!reporter.errors()) fail("Error not reported");
-    }
+    public final void assertErrors(final ReportWriter r) {if (!r.errors()) fail("Error not reported");}
     /** Check if the reporter contains an error and clear reporter.
-     * @param reporter reporter to be checked for no errors.
+     * @param r reporter to be checked for no errors.
      */
-    public final void assertErrorsAndClear(final ReportWriter reporter) {
-        assertErrors(reporter);
-        reporter.clear();
+    public final void assertErrorsAndClear(final ReportWriter r) {
+        assertErrors(r);
+        r.clear();
     }
     /** Check if the reporter does not contain an error and clear reporter.
-     * @param reporter the reporter to be checked for no errors.
+     * @param r the reporter to be checked for no errors.
      */
-    public final void assertNoErrorsAndClear(final ArrayReporter reporter) {
-        if (reporter.errorWarnings()) {
-            assertNoErrors(reporter);
-            reporter.clear();
+    public final void assertNoErrorsAndClear(final ArrayReporter r) {
+        if (r.errorWarnings()) {
+            assertNoErrors(r);
+            r.clear();
         }
     }
     /** Check if the reporter does not contain an error or warning. If yes then
      * invoke the method fail with the argument msg. Clear reporter after message is reported.
-     * @param reporter the reporter to be checked for no errors and no warnings.
+     * @param r the reporter to be checked for no errors and no warnings.
      */
-    public final void assertNoErrorwarningsAndClear(
-        final ArrayReporter reporter) {
-        if (reporter.errorWarnings()) {
-            assertNoErrorwarnings(reporter);
-            reporter.clear();
+    public final void assertNoErrorwarningsAndClear(final ArrayReporter r) {
+        if (r.errorWarnings()) {
+            assertNoErrorwarnings(r);
+            r.clear();
         }
     }
     /** Check if the reporter contains errors or warnings. If not then invoke method fail with argument msg.
      * @param msg message to be printed or null.
-     * @param reporter the reporter to be checked for no errors and no warnings.
+     * @param r the reporter to be checked for no errors and no warnings.
      */
-    public final void assertErrorwarnings(final ArrayReporter reporter, final String msg) {
-        if (!reporter.errorWarnings()) {
+    public final void assertErrorwarnings(final ArrayReporter r, final String msg) {
+        if (!r.errorWarnings()) {
             fail(msg);
         }
     }
     /** Check if the reporter contains errors or warnings. If not then invoke the method fail with the
      * argument msg. Finally clear reporter.
      * @param msg message to be printed or null.
-     * @param reporter the reporter to be checked for errors and no warnings.
+     * @param r the reporter to be checked for errors and no warnings.
      */
-    public final void assertErrorwarningsAndClear(final ArrayReporter reporter, final String msg) {
-        if (!reporter.errorWarnings()) {
+    public final void assertErrorwarningsAndClear(final ArrayReporter r, final String msg) {
+        if (!r.errorWarnings()) {
             fail(msg);
         } else {
-            reporter.clear();
+            r.clear();
         }
     }
     /** Check if the reporter contains errors or warnings. If mot then
      * invoke the method fail("Errorwarnings not reported"). Finally clear reporter.
-     * @param reporter the reporter to be checked for no errors and no warnings.
+     * @param r the reporter to be checked for no errors and no warnings.
      */
-    public final void assertErrorwarnings(final ArrayReporter reporter) {
-        assertErrorwarnings(reporter, "Errorwarnings not reported");
-    }
+    public final void assertErrorwarnings(final ArrayReporter r) {assertErrorwarnings(r, "Errorwarnings not reported");}
     /** Check if the reporter contains errors or warnings. If not then
      * invoke the method fail("Errorwarnings not reported"). Finally clear reporter.
-     * @param reporter the reporter to be checked for errors and no warnings.
+     * @param r the reporter to be checked for errors and no warnings.
      */
-    public final void assertErrorwarningsAndClear(final ArrayReporter reporter) {
-        assertErrorwarningsAndClear(reporter, "Errorwarnings not reported");
+    public final void assertErrorwarningsAndClear(final ArrayReporter r) {
+        assertErrorwarningsAndClear(r, "Errorwarnings not reported");
     }
     private static String getListing(final ReportWriter reporetr, final Object msg) {
         if (msg == null) {
@@ -675,36 +665,34 @@ public abstract class STester {
         return xml;
     }
     /** Check if the reporter does not contain an error. If yes then invoke the method fail with argument msg.
-     * @param reporter reporter to be checked for no errors.
+     * @param r reporter to be checked for no errors.
      * @param msg message to be printed or null.
      */
-    public final void assertNoErrors(final ReportWriter reporter, final Object msg) {
-        if (reporter.errors()) {
+    public final void assertNoErrors(final ReportWriter r, final Object msg) {
+        if (r.errors()) {
             if (msg == null) {
                 fail();
             } else {
-                fail(getListing(reporter, msg));
+                fail(getListing(r, msg));
             }
         }
     }
     /** Check if the reporter does not contain an error or warning. If yes then invoke the method fail
      * with argument msg.
-     * @param reporter the reporter to be checked for no errors and no warnings.
+     * @param r the reporter to be checked for no errors and no warnings.
      */
-    public final void assertNoErrorwarnings(final ReportWriter reporter) {
-        if (reporter.errorWarnings()) fail(reporter.toString());
-    }
+    public final void assertNoErrorwarnings(final ReportWriter r) {if (r.errorWarnings()) fail(r.toString());}
     /** Check if the reporter does not contain an error or warning. If yes then
      * invoke the method fail with the argument msg.
-     * @param reporter the reporter to be checked for no errors and no warnings.
+     * @param r the reporter to be checked for no errors and no warnings.
      * @param msg message to be printed or null.
      */
-    public final void assertNoErrorwarnings(final ReportWriter reporter, final Object msg) {
-        if (reporter.errorWarnings()) {
+    public final void assertNoErrorwarnings(final ReportWriter r, final Object msg) {
+        if (r.errorWarnings()) {
             if (msg == null) {
                 fail();
             } else {
-                fail(getListing(reporter, msg));
+                fail(getListing(r, msg));
             }
         }
     }
@@ -973,11 +961,11 @@ public abstract class STester {
         PrintStream out = System.out;
         PrintStream err = System.err;
         PrintStream log = null;
-        String s;
         if (args == null || args.length == 0) {
             return at.runTest(out, err, log, true);
         }
         boolean printOK = true;
+        String s;
         for (int i = 0; i < args.length; i++) {
             if (args[i].length() >= 2 && args[i].charAt(0) == '-') {
                 switch (args[i].charAt(1)) {
@@ -986,8 +974,7 @@ public abstract class STester {
                         for (int j = i + 1; j < args.length; j++) {
                             arguments[j - i + 1] = args[j];
                         }
-                        //must be the last parameter
-                        return at.runTest(out, err, log, printOK, arguments);
+                        return at.runTest(out, err, log, printOK, arguments); // it must be the last parameter
                     case 'd':
                         s = args[++i];
                         File f = new File(s);
@@ -1077,8 +1064,8 @@ public abstract class STester {
             float duration =
                 ((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
             String s = "[INFO] " + (_errors == 0 ? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
-            s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo) + ", time="
-                + new DecimalFormat("0.00").format(duration) + "s";
+            s += _name + (_resultInfo.isEmpty()
+                ? "" : ", " + _resultInfo) + ", time=" + new DecimalFormat("0.00").format(duration) + "s";
             out.flush();
             System.err.flush();
             if (log != null) {
@@ -1122,7 +1109,7 @@ public abstract class STester {
         float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
         System.err.flush();
         out.flush();
-        String s = "[INFO] " + (errors>0 ? errors+" error"+(errors>1 ? "s,": ",") : "OK")
+        String s = "[INFO] " + (errors>0 ? errors+" error" + (errors>1 ? "s,": ",") : "OK")
             + " " + (info != null ? info + ", ": "") + "total time: " + DECFORMAT.format(duration) + "s";
         if (log != null) {
             log.println(s);
