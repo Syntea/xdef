@@ -1,65 +1,76 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="Example of X-lexicon?" />
-    <meta name="keywords" content="X-lexicon, X-position, X-definition, Xdefinition, XXDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:24rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:10rem;max-height:10rem;display:flex;overflow:hidden;}</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <title>X-lexicon (German version)</title>
-  </head>
-  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples">
-      <p style="font: Tahoma; font-size: 13px;">
-        Usage of X-lexicon in the X-definition, input data in the German version.
-        <i>(You can also try the french version <a href="ch05s01e01.html"><b>HERE</b></a>).)</i>
-      </p>
-      <b>X-definition</b>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book" >
+    <meta name="description" content="X-lexicon (German version)"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">X-lexicon (German version)</div>
+
+<form method="post" action="../Playground">
+
+<p>
+Usage of X-lexicon in the X-definition, input data in the German version.
+You can also try the french version <a href="ch05s01e01.html"><b>HERE</b></a>.
+</p>
+
+<b>X-definition:</b>
+<textarea name="xdef" rows="26" class="lined">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
   &lt;Book ISBN="int(10000000, 999999999);"
       year = "gYear();"
-      title = "string();" >
+      title = "string();"
+  >
       &lt;Author xd:script="occurs *"> string(); &lt;/Author>
   &lt;/Book>
-/* All items in the model are in English version. */
-&lt;xd:lexicon language='eng' default='yes'/>
-&lt;xd:lexicon language='deu'> 
-    Test#Book =         Buch
-    Test#Book/@year =   Jahr
-    Test#Book/@title =  Buchtitel
-    Test#Book/Author =  Autor
-&lt;/xd:lexicon>
-&lt;xd:lexicon language='fra'>
-    Test#Book =         Livre
-    Test#Book/@year =   année
-    Test#Book/@title =  titre
-    Test#Book/Author =  Auteur
+
+  /* All items in the model are in English version */
+  &lt;xd:lexicon language='eng' default='yes'/>
+  &lt;xd:lexicon language='deu'> 
+      Test#Book =         Buch
+      Test#Book/@year =   Jahr
+      Test#Book/@title =  Buchtitel
+      Test#Book/Author =  Autor
+  &lt;/xd:lexicon>
+  &lt;xd:lexicon language='fra'>
+      Test#Book =         Livre
+      Test#Book/@year =   année
+      Test#Book/@title =  titre
+      Test#Book/Author =  Auteur
   &lt;/xd:lexicon>
 &lt;/xd:def>
 </textarea>
-      </div>
-      <b>Input data</b>
-      <div class="B">
-        <div id="line-numbers_1"></div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
+
+<b>Input data:</b>
+<input name="langInp" value="deu" type="hidden"/>
+<textarea name="data" rows="10" class="lined">
 &lt;Buch ISBN = "123456789"
       Jahr = "1992"
-      Buchtitel = "Snow Crash" >
+      Buchtitel = "Snow Crash"
+>
   &lt;Autor>Neal Stephenson&lt;/Autor>
 &lt;/Buch>
 </textarea>
-      </div>        
-      <input name="submit" value="Execute" type="submit"/>
-      <input name="inLex" value="deu" type="hidden"/>
-      <Font style="background-color: lightgrey">
-        <i>&nbsp;You can edit <b>X-definition</b> or <b>Input data</b>. </i>
-      </Font>
-      Specify language <b>"eng"</b> or <b>"fra"</b>:</b>
-      <input name="outLex" value="" type="text"/>
-    </form>
-  </body>
+
+Output language:
+<input name="langOut" value="" type="text"/>
+(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)<br/>
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined()</script>
+
+</body>
 </html>

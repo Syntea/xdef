@@ -10,16 +10,16 @@
 </head>
 <body>
 
-<div id="header"><span class="error">ERROR: HEADER NOT LOADED</span></div>
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<h1>Playground &mdash; X-definition validation mode</h1>
+<div class="title">Playground &mdash; X-definition validation mode</div>
 
 <form method="post" action="../Playground">
 
 <b>X-definition:</b><br/>
-Name of root X-definition: <input name="xdname" value="" type="text"/>
-(enter if you have a collection with more X-definitions)
+Name of root X-definition: <input name="rootName" value="" type="text"/>
+(enter in case of X-definition collection)
 <textarea name="xdef" rows="10" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
   &lt;root a="int(); onTrue outln('root a: ' + getText());" >
@@ -38,15 +38,14 @@ Name of root X-definition: <input name="xdname" value="" type="text"/>
 &lt;/root>
 </textarea>
 
-<input name="submit" value="Execute" type="submit"/>
-You can edit <b>X-definition</b> or <b>Input</b> window
+<button type="submit">Validate</button>
 
 </form>
 
 
-<div id="footer"><span class="error">ERROR: FOOTER NOT LOADED</span></div>
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicTal();</script>
+<script type="module">initPageBasicLined();</script>
 
 </body>
 </html>
