@@ -1,3 +1,5 @@
+# Version ${version}, release-date ${release.date}
+
 # Version 42.2.44, release-date 2026-04-27
   * Implemented missing X-script method `setParseResult(ParseResut)`.
   * New X-script options have been added for JSON data: `acceptJsonNull` (default) and `illegalJsonNull`.
