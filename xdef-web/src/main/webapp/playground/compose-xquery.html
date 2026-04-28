@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground &mdash; X-definition compose mode with XQuery</title>
+    <meta name="description" content="Playground &mdash; X-definition compose mode with XQuery (data construction or transformation)"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground &mdash; X-definition compose mode with XQuery</div>
+
+<form method="post" action="../Playground">
+
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
+(enter in case of X-definition collection)
+<textarea name="xdef" rows="20" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="anthill" >
+  &lt;xd:declaration scope="local">
+    &lt;!-- xquery returns a string with position of anthill with more than one ant-soldiers or null --> 
+    String qry = "for $i in (//anthill) return $i[count(//insect[caste/text()='soldier' and @location=$i/@position]) &gt; 1] /@position";
+  &lt;/xd:declaration>
+
+  &lt;anthill locality="string(); create xquery(qry);"/> 
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="20" class="lined">
+&lt;forest>
+  &lt;animals>
+    &lt;insect family="anteatersí" location="nexToStrawberry"> &lt;genus>ant&lt;/genus> &lt;caste>queen&lt;/caste>   &lt;/insect>
+    &lt;insect family="anteatersí" location="nexToStrawberry"> &lt;genus>ant&lt;/genus> &lt;caste>male&lt;/caste>    &lt;/insect>
+    &lt;insect family="anteatersí" location="nexToStrawberry"> &lt;genus>ant&lt;/genus> &lt;caste>male&lt;/caste>    &lt;/insect>
+    &lt;insect family="anteatersí" location="nexToStrawberry"> &lt;genus>ant&lt;/genus> &lt;caste>soldier&lt;/caste> &lt;/insect>
+    &lt;insect family="anteatersí" location="underSpruce">     &lt;genus>ant&lt;/genus> &lt;caste>queen&lt;/caste>   &lt;/insect>
+    &lt;insect family="anteatersí" location="underSpruce">     &lt;genus>ant&lt;/genus> &lt;caste>soldier&lt;/caste> &lt;/insect>
+    &lt;insect family="anteatersí" location="underSpruce">     &lt;genus>ant&lt;/genus> &lt;caste>male&lt;/caste>    &lt;/insect>
+    &lt;insect family="anteatersí" location="underSpruce">     &lt;genus>ant&lt;/genus> &lt;caste>soldier&lt;/caste> &lt;/insect>
+  &lt;/animals>
+  &lt;anthill position="nexToStrawberry" />
+  &lt;anthill position="underSpruce" />
+&lt;/forest>
+</textarea>
+
+The model name: <input name="modelName" value="" type="text"/>
+and namespace: <input name="modelURI" value="" type="text"/>
+(enter if non-default model required)<br/>
+<button name="mode" value="compose" type="submit">Compose</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined();</script>
+
+</body>
+</html>

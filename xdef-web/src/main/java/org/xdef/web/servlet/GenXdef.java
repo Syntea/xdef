@@ -58,8 +58,7 @@ public final class GenXdef extends AbstractMyServlet {
 "    <title>Validate data witn created X-definition</title>\n" +
 "  </head>\n" +
 "  <body style='background: #EAFFFD'>\n" +
-//"    <form method='post' action='/tutorial/Example' target=\"_blank\">\n" +
-"    <form method='post' action='/tutorial/Example'>\n" +
+"    <form method='post' action='Playground'>\n" +
 "      <b>Created X-definition</b>\n" +
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
@@ -79,11 +78,9 @@ public final class GenXdef extends AbstractMyServlet {
 "      <input name='submit' value='Execute' type='submit' />\n");
                 } else {  // data is JSON format (??? - TODO other formats)
                     out.print(
-"      <input type='hidden' name='json' value='json' />\n" +
-"      <input name='view' value='Display result as JSON' type='submit'/>\n" +
-"      <input name='view' value='Display result as YAML' type='submit'/>\n" +
-"      <input name='view' value='Display result as XON' type='submit'/>\n" +
-"      <input name='view' value='Display result as XML' type='submit'/>\n");
+"      <input type='hidden' name='dataFormat' value='xon'/>\n" +
+"      <input type='hidden' name='xonDisplayAs' value='json yaml xon xml'/>\n" +
+"      <button type='submit'>Execute</button>\n");
                 }
                 out.print(
 "      <i>&nbsp;\n" +

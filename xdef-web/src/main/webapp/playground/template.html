@@ -21,13 +21,14 @@ X-definition example of template model (construction mode).
 
 <form method="post" action="../Playground">
 
+<b>X-definition:</b><br/>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
 <textarea name="xdef" rows="24" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="html" name="Example">
   &lt;!-- Note the value of the attribute script below is "template"
      so following element a template model. -->
-  &lt;html xd:script="template" >
+  &lt;html xd:script="template">
     &lt;head>
       &lt;title>Example of template model&lt;/title>
         &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -56,7 +57,7 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 The model name: <input name="modelName" value="" type="text"/>
 and namespace: <input name="modelURI" value="" type="text"/>
 (enter if non-default model required)<br/>
-<button name="mode" value="compose" type="submit">Compose</button>
+<button name="mode" value="compose" type="submit">Compose from template</button>
 
 </form>
 

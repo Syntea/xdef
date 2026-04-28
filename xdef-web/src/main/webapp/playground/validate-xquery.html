@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground &mdash; X-definition validation with xquery</title>
+    <meta name="description" content="Playground &mdash; X-definition validation with xquery"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground &mdash; X-definition validation with xquery</div>
+
+<form method="post" action="../Playground">
+
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
+(enter in case of X-definition collection)
+<textarea name="xdef" rows="10" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Person" >
+  &lt;xd:declaration scope="local">
+    String qry = "'Age of ' || /Person/@name || ' is ' || /Person/@age";
+  &lt;/xd:declaration>
+
+  &lt;Person xd:script="finally outln(xquery(qry));"
+          name="string();"
+          age="int();" />
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="10" class="lined">
+&lt;Person name="Alice" age="32"/>
+</textarea>
+
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined();</script>
+
+</body>
+</html>
