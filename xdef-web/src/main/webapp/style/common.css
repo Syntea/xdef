@@ -125,7 +125,7 @@ div.header {
     opacity:            0.9;
 }
 
-div.header div.lang {
+div.header div.headLang {
     text-align:         right;
     float:              right;
     margin-top:         0.5em;
@@ -134,11 +134,11 @@ div.header div.lang {
     cursor:             pointer;
 }
 
-div.header div.lang, div.header div.lang select {
+div.header div.headLang, div.header div.headLang select {
     font-size:          85%;
 }
 
-div.header div.lang img {
+div.header div.headLang img {
     height:             1em;
 }
 
@@ -146,28 +146,28 @@ div.header div.lang img {
     display:            none;
 }
 
-div.header div.logo {
+div.header div.headLogo {
     position:           absolute;;
 }
 
-div.header div.logo img {
+div.header div.headLogo img {
     height:             4em;
 }
 
-div.header ul.nav {
+div.header ul.headNav {
     margin:             0;
     padding:            0;
     list-style-type:    none;
 }
 
-div.header ul.nav > li {
+div.header ul.headNav > li {
     height:             4em;
     display:            inline-flex;
     align-items:        center;
     padding-left:       3em;
 }
 
-div.header ul.nav > li.logo {
+div.header ul.headNav > li.headLogo {
     padding-left:       0;
     width:              4em;
 }

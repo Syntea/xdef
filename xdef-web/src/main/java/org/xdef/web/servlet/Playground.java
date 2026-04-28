@@ -50,7 +50,8 @@ public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
     //private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
-    private static final String RESPONSE_HTML_TEMPL = readRsrcAsString(Playground.class, "playground-response-template.html");
+    private static final String RESPONSE_HTML_TEMPL =
+        readRsrcAsString(Playground.class, "webapp/playground-response-template.html");
 
     /** default constructor, calls super() only */
     public Playground() {
@@ -91,7 +92,7 @@ public final class Playground extends AbstractMyServlet {
         req.setCharacterEncoding("UTF-8");
 
         //request parameters: see javadoc
-        String rootName     = getParam(req, "rootName");
+        String xdefRoot     = getParam(req, "xdefRoot");
         String xdef         = getParam(req, "xdef");
         String dataFormatS  = getParam(req, "dataFormat").toLowerCase();
         String data         = getParam(req, "data");
@@ -107,7 +108,7 @@ public final class Playground extends AbstractMyServlet {
         String csvHeader = getParam(req, "csvHeaderExport").toLowerCase();
 
         //process default values and conversions
-        rootName  = rootName.isEmpty() ? null : rootName;
+        xdefRoot  = xdefRoot.isEmpty() ? null : xdefRoot;
         mode      = mode.equals("compose") ? mode : "validate";
         csvHeader = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
         XdDataFormat dataFormat = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
@@ -142,7 +143,7 @@ public final class Playground extends AbstractMyServlet {
                 CharArrayWriter caw = new CharArrayWriter();
                 XDOutput stdout = XDFactory.createXDOutput(caw, false);
 
-                XDDocument xd = xdPool.createXDDocument(rootName);
+                XDDocument xd = xdPool.createXDDocument(xdefRoot);
 
                 xd.setProperties(XdPropsDefault);
                 xd.setStdOut(stdout);

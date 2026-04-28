@@ -22,7 +22,7 @@ X-definition compose mode &mdash; data construction or transformation.
 <form method="post" action="../Playground">
 
 <b>X-definition:</b><br/>
-Name of root X-definition: <input name="rootName" value="" type="text"/>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
 <textarea name="xdef" rows="24" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="html">
@@ -49,10 +49,7 @@ Name of root X-definition: <input name="rootName" value="" type="text"/>
 &lt;/xd:def>
 </textarea>
 
-<b>Input data:</b><br/>
-The model name <input name="modelName" value="" type="text"/>
-and namespace: <input name="modelURI" value="" type="text"/>
-(optionally)
+<b>Input data:</b>
 <textarea name="data" rows="10" class="lined">
 &lt;x>
   &lt;i x='Hello'/>
@@ -60,6 +57,9 @@ and namespace: <input name="modelURI" value="" type="text"/>
 &lt;/x>
 </textarea>
 
+The model name: <input name="modelName" value="" type="text"/>
+and namespace: <input name="modelURI" value="" type="text"/>
+(enter if non-default model required)<br/>
 <button name="mode" value="compose" type="submit">Compose</button>
 
 </form>
