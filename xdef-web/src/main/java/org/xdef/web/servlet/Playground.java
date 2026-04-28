@@ -51,7 +51,7 @@ public final class Playground extends AbstractMyServlet {
     //private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
     private static final String RESPONSE_HTML_TEMPL =
-        readRsrcAsString(Playground.class, "webapp/playground-response-template.html");
+        readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
 
     /** default constructor, calls super() only */
     public Playground() {

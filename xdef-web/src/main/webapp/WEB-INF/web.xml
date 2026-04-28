@@ -33,19 +33,19 @@
 
     <servlet-mapping>
         <servlet-name>Playground</servlet-name>
-        <url-pattern>/Playground</url-pattern>
+        <url-pattern>/playground/Playground</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GenXdef</servlet-name>
-        <url-pattern>/GenXdef</url-pattern>
+        <url-pattern>/playground/GenXdef</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GenSchema</servlet-name>
-        <url-pattern>/GenSchema</url-pattern>
+        <url-pattern>/playground/GenSchema</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Derby</servlet-name>
-        <url-pattern>/Derby</url-pattern>
+        <url-pattern>/playground/Derby</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Service</servlet-name>
