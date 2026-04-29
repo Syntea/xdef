@@ -1,6 +1,6 @@
 <div class="header">
     <div class="headLogo"><a href="${rootPath}./" title="Introduction"><img src="${rootPath}style/logo.png"/></a></div>
-    <div class="headLang" title="Language selection &mdash; English" onclick="headLangActivate()">
+    <div class="headLang" title="Language selection - English" onclick="headLangActivate()">
         <span class="headLangPas">
             <img src="${rootPath}style/lang.png"/>
         </span>
@@ -26,7 +26,7 @@
     </ul>
     <script>
         $("div.headLogo").hover(
-    		function(){ $("div.headLogo img").animate({height: '8em'}, "fast"); },
+    		function(){ $("div.headLogo img").clearQueue().animate({height: '8em'}, "fast"); },
             function(){ $("div.headLogo img").animate({height: '4em'}, "fast"); }
 		)
     </script>
