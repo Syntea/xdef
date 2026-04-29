@@ -50,7 +50,8 @@ public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
     //private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
-    private static final String RESPONSE_HTML_TEMPL = readRsrcAsString(Playground.class, "playground-response-template.html");
+    private static final String RESPONSE_HTML_TEMPL =
+        readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
 
     /** default constructor, calls super() only */
     public Playground() {
@@ -63,15 +64,19 @@ public final class Playground extends AbstractMyServlet {
      * Request params:<ul>
      *   <li>rootName: name of root X-definition, in case of X-definition collection</li>
      *   <li>xdef: X-definition (xml-format)</li>
-     *   <li>input: values: xml/"", xon, json, yaml, ini, csv</li>
-     *   <li>data: input data, in format xml, xon, json, yaml, ini, csv</li>
+     *   <li>dataFormat: values: xml/"", json, xon, yaml, csv, ini</li>
+     *   <li>data: input data, in format "dataFormat",
+     *      for dataFormat in json, xon, yaml, data can be in format "xon-xml"
+     *   </li>
      *   <li>mode: X-definition processing mode, values: validate/"", compose</li>
      *   <li>langInp: value: language of input data (only for mode validate)</li>
      *   <li>langOut: value: language of processed data (only for mode validate)</li>
      *   <li>modelName</li>
      *   <li>modelURI</li>
-     *   <li>xonDisplayAs: set of values: xon, json, yaml, ini, csv, xml</li>
-     *   <li>csvHeaderExport: values: no/"", yes</li>
+     *   <li>xonDisplayAs: set of values: json, xon, yaml, xml, csv, ini (only for mode=validate and xon-like input
+     *      (i.e. json, xon, yaml, csv, ini))
+ *      </li>
+     *   <li>csvHeader: values: no/"", yes</li>
      *   <li>reportLang: optionally report language (ISO-639 two letters or ISO-639-2 three letters,
      *       e.g. "", "eng", "ces", "slk")</li>
      * </ul>
@@ -85,11 +90,9 @@ public final class Playground extends AbstractMyServlet {
         throws ServletException,IOException
     {
         req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
-        resp.setCharacterEncoding("UTF-8");
 
         //request parameters: see javadoc
-        String rootName     = getParam(req, "rootName");
+        String xdefRoot     = getParam(req, "xdefRoot");
         String xdef         = getParam(req, "xdef");
         String dataFormatS  = getParam(req, "dataFormat").toLowerCase();
         String data         = getParam(req, "data");
@@ -98,15 +101,16 @@ public final class Playground extends AbstractMyServlet {
         String langOut      = getParam(req, "langOut").toLowerCase();
         String modelName    = getParam(req, "modelName");
         String modelURI     = getParam(req, "modelURI");
-        Set<XdDataFormat> xonDisplayAs = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("\\s+"))
+        Set<XdDataFormat> xonDisplayAs = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("(\\s|,)+"))
             .map(xdfs -> XdDataFormat.valueOfN(xdfs))
             .filter(xdf -> xdf != null)
             .collect(Collectors.toSet());
-        String csvHeaderExport = getParam(req, "csvHeaderExport").toLowerCase();
+        String csvHeader = getParam(req, "csvHeaderExport").toLowerCase();
 
         //process default values and conversions
-        mode            = mode.equals("compose") ? mode : "validate";
-        csvHeaderExport = csvHeaderExport.isEmpty() || csvHeaderExport.equals("no") ? "no" : "yes";
+        xdefRoot  = xdefRoot.isEmpty() ? null : xdefRoot;
+        mode      = mode.equals("compose") ? mode : "validate";
+        csvHeader = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
         XdDataFormat dataFormat = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
         xonDisplayAs.remove(dataFormat);
 
@@ -139,45 +143,49 @@ public final class Playground extends AbstractMyServlet {
                 CharArrayWriter caw = new CharArrayWriter();
                 XDOutput stdout = XDFactory.createXDOutput(caw, false);
 
-                XDDocument xd = xdPool.createXDDocument(rootName);
+                XDDocument xd = xdPool.createXDDocument(xdefRoot);
 
                 xd.setProperties(XdPropsDefault);
                 xd.setStdOut(stdout);
 
-                //xdef process
+                //xdef-process
                 if ("compose".equals(mode)) {
                     String name;
                     String uri;
                     XMDefinition def = xd.getXMDefinition();
+
                     if (!modelName.isEmpty()) {
                         name = modelName;
-                        uri = !modelURI.isEmpty() ? modelURI : null;
+                        uri  = !modelURI.isEmpty() ? modelURI : null;
                     } else {
                         XMElement[] x = xd.getXMDefinition().getModels();
                         name = x[0].getName();
-                        uri = x[0].getNSUri();
+                        uri  = x[0].getNSUri();
                     }
+
                     if (data2Xd.length() > 0) {
                         Element el = KXmlUtils.parseXml(data2Xd).getDocumentElement();
                         xd.setXDContext(el);
                         String n = el.getLocalName();
                         String u = el.getNamespaceURI();
+
                         if (null != def && null != def.getModel(u, n)) {
                             name = n;
                             uri  = u;
                         }
                     }
+
                     mode2Xd       = "compose";
                     resultElement = xd.xcreate(new QName(uri, name), reporter);
                 } else {
-                    if (dataFormat == XdDataFormat.json || dataFormat == XdDataFormat.yaml) {
-                        if (dataFormat == XdDataFormat.json) {
-                            if (data2Xd.startsWith("<") && data2Xd.endsWith(">")) { //JSON in XML-format
-                                data2Xd = XonUtils.toJsonString(XonUtils.xmlToXon(data2Xd), true);
-                            } else { //XON/JSON
-                                XonUtils.parseJSON(data2Xd);
-                            }
-                        } else { //XON/YAML
+                    if (dataFormat == XdDataFormat.json || dataFormat == XdDataFormat.xon || dataFormat == XdDataFormat.yaml) {
+                        if (data2Xd.startsWith("<") && data2Xd.endsWith(">")) { //XON in XML-format
+                            data2Xd = XonUtils.toJsonString(XonUtils.xmlToXon(data2Xd), true);
+                        } else if (dataFormat == XdDataFormat.json) { //JSON
+                            XonUtils.parseJSON(data2Xd);
+                        } else if (dataFormat == XdDataFormat.xon) { //XON
+                            data2Xd = XonUtils.toJsonString(XonUtils.parseXON(data2Xd), true);
+                        } else if (dataFormat == XdDataFormat.yaml) { //YAML
                             data2Xd = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data2Xd)), true);
                         }
 
@@ -191,7 +199,7 @@ public final class Playground extends AbstractMyServlet {
                         resultXon = xd.cparse(
                             new StringReader(data2Xd),
                             ',', // separator
-                            csvHeaderExport.equals("no"),
+                            csvHeader.equals("no"),
                             null, // source name
                             reporter
                         );
@@ -208,7 +216,7 @@ public final class Playground extends AbstractMyServlet {
                 }
                 caw.close();
 
-                //create text result from xd-process result
+                //create text result from xdef-process result
                 if (reporter.errors()) {
                     status = "Error";
                     title = "Input data error(s)";
@@ -220,7 +228,7 @@ public final class Playground extends AbstractMyServlet {
                     if (resultElement != null) {
                         result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
                     } else if (resultXon != null) {
-                        result = convertXon(resultXon, dataFormat);
+                        result = convertXon2Str(resultXon, dataFormat);
                     }
                 }
 
@@ -277,22 +285,28 @@ public final class Playground extends AbstractMyServlet {
             respHtml = SUtils.modifyFirst(respHtml, "((stdout))",           preStringToPre(stdOutput));
         }
         for (XdDataFormat df : XdDataFormat.values()) {
-            boolean dfDisp = result!= null && resultXon != null && xonDisplayAs.contains(df);
+            String  dfDisp   = null;
+            boolean dfDispEx =
+                result != null && resultXon != null && xonDisplayAs.contains(df) &&
+                (dfDisp = convertXon2Str(resultXon, df)) != null
+            ;
             respHtml = SUtils.modifyFirst(
                 respHtml,
                 "((display-" + df.toString() + "-disp))",
-                dfDisp ? "block" : "none"
+                dfDispEx ? "block" : "none"
             );
-            if (dfDisp) {
+            if (dfDispEx) {
                 respHtml = SUtils.modifyFirst(
                     respHtml,
                     "((display-" + df.toString() + "))",
-                    preStringToPre(convertXon(resultXon, df))
+                    preStringToPre(dfDisp)
                 );
             }
         }
 
-        //send
+        //return response
+        resp.setContentType("text/html;charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().print(respHtml);
     }
 
@@ -338,7 +352,7 @@ public final class Playground extends AbstractMyServlet {
         return o;
     }
 
-    private static String convertXon(Object xon, XdDataFormat outFormat) {
+    private static String convertXon2Str(Object xon, XdDataFormat outFormat) {
         if (outFormat == null) {
             return null;
         }
@@ -357,14 +371,22 @@ public final class Playground extends AbstractMyServlet {
                 if (xon instanceof List) {
                     @SuppressWarnings("unchecked")
                     List<Object> xonCsv = (List<Object>)xon;
-                    result = XonUtils.toCsvString(xonCsv);
+                    try {
+                        result = XonUtils.toCsvString(xonCsv);
+                    } catch (Exception ex) {
+                        //return null
+                    }
                 }
                 break;
             case ini:
                 if (xon instanceof Map) {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> xonIni = (Map<String, Object>)xon;
-                    result = XonUtils.toIniString(xonIni);
+                    try {
+                        result = XonUtils.toIniString(xonIni);
+                    } catch (Exception ex) {
+                        //return null
+                    }
                 }
                 break;
             case xon:
@@ -407,10 +429,10 @@ public final class Playground extends AbstractMyServlet {
     private static enum XdDataFormat {
         xml,
         json,
+        xon,
         yaml,
         csv,
         ini,
-        xon,
         ;
 
         static XdDataFormat valueOfN(String val) {

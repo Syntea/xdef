@@ -186,9 +186,8 @@ public final class Service extends AbstractMyServlet {
                 out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
 "  <head> <title>Server command</title> </head>\n" +
 "  <body>     \n" +
-//"    <form style='background: #EAFFFD' method=\"post\" target='_blank'\n" +
 "    <form style='background: #EAFFFD' method=\"post\"\n" +
-"          action='/tutorial/Service' enctype='multipart/form-data'>");
+"          action='Service' enctype='multipart/form-data'>");
                 if (!getParam(req, "upload").isEmpty()) {
                     out.println(
 "      <b>Choose a file to upload:</b>\n" +

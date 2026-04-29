@@ -82,8 +82,7 @@ public final class GenSchema extends AbstractMyServlet {
 "    <title>XML schema</title>\n" +
 "  </head>\n" +
 "  <body style='background: #EAFFFD'>\n" +
-//"    <form method='post' action='/tutorial/GenSchema' target='_blank'>\n" +
-"    <form method='post' action='/tutorial/GenSchema'>\n" +
+"    <form method='post' action='GenSchema'>\n" +
 "      <b>Created XML schema</b>\n" +
 "      <div class='container'>\n" +
 "        <div id='line-numbers' class='container_1'></div>\n" +
