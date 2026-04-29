@@ -27,6 +27,7 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css"/>
     <link rel="stylesheet" type="text/css" href="../style/syntaxHighlighter.css" />
     <script src="../style/highlighter/shCore.js"></script>
     <script src="../style/highlighter/shBrushXml.js"></script>    
@@ -40,8 +41,8 @@
 
 <div style="text-align: center">
     <a href="ch02.html"   ><img src="image/first.gif" alt="Previous chapter"/></a>
-    <a href="ch02.html"   ><img src="image/prev1.gif"  alt="Back"/></a>
-    <a href="ch02s02.html"><img src="image/next1.gif"  alt="Next"/></a>
+    <a href="ch02.html"   ><img src="image/prev.gif"  alt="Back"/></a>
+    <a href="ch02s02.html"><img src="image/next.gif"  alt="Next"/></a>
     <a href="ch03.html"   ><img src="image/last.gif"  alt="Next chapter"/></a>
 </div>
 

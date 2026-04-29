@@ -23,4 +23,7 @@ fi
 
 
 #hlavni krok - vygenerovat dokumentaci z JIRA-xml-exportu tasku
-java -jar ${HOME}/${saxonPath} -xsl:${xslFile} -s:$1 -o:output.html
+for i in tutorual/*.html
+do
+    java -jar ${HOME}/${saxonPath} -xsl:${xslFile} -s:$i -o:tutorial-new/$i.html
+done
