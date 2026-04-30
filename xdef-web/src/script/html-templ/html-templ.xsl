@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet 
+<xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs ="http://www.w3.org/2001/XMLSchema"
     xmlns:h  ="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="xs"
     version="3.0"
 >
-    
+
 <xsl:output
     method="html"
     indent="no"
     encoding="utf-8"
     omit-xml-declaration="yes"
-    doctype-public="-//W3C//DTD XHTML 1.1//EN"
-    doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
 />
 
 
@@ -30,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="style/common.css"/>
     <link rel="stylesheet" type="text/css" href="../style/syntaxHighlighter.css" />
     <script src="../style/highlighter/shCore.js"></script>
-    <script src="../style/highlighter/shBrushXml.js"></script>    
+    <script src="../style/highlighter/shBrushXml.js"></script>
 </head>
 <body>
 
@@ -55,7 +53,7 @@ elements of the input data. The attribute "name" contains the name of X-definiti
 if the project is composed from more X-definitions). Note also that the element "xd:declaration"
 has the attribute scope="global", which specifies that the contents of the declaration are "visible"
 from all X-definitions (the attribute is optional and the default value is "local"
-&mdash; i.e. the declaration is visibble only from this X-definition).
+- i.e. the declaration is visible only from this X-definition).
 </p>
 
 <pre class="xml">
@@ -122,23 +120,23 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
     </xsl:variable>
     <xsl:variable name="dalsiTit"   select="($reseniTitZa/h1)[1]"                   as="element(h1)?"/>
     <xsl:variable name="reseni"     select="$dalsiTit/preceding-sibling::node()"    as="node()*"/>
-    
+
     <!-- pole ID - ID u zakaznika -->
     <xsl:variable name="ID"         select="
         customfields/customfield[customfieldname/text() = 'ID']
     "                                                                               as="element(customfield)?"/>
-    
-    
+
+
     <xsl:variable name="testPopis"   select="$popisTit  /text() = 'Popis'"          as="xs:boolean"/>
     <xsl:variable name="testAnalyza" select="$analyzaTit/text() = 'Analýza'"        as="xs:boolean"/>
     <xsl:variable name="testReseni"  select="$reseniTit /text() = 'Řešení'"         as="xs:boolean"/>
-    
+
     <xsl:variable name="testPopHead" select="exists(($popis/self::*)[1]/self::ul)"  as="xs:boolean"/>
-    
+
     <xsl:variable name="test"        select="
         $testPopis and $testAnalyza and $testReseni and $testPopHead
     "                                                                               as="xs:boolean"/>
-    
+
     <!-- chyby se vypisi s cervenym podbarvenim -->
     <div>
         <!-- nadpis tasku s JIRA-ID a s moznosti byt odkazovan pres a/@name-->
@@ -149,7 +147,7 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
             <xsl:sequence select="key/text()"/>
             <xsl:text>)</xsl:text>
         </h1>
-        
+
         <!-- odstavec s popisem -->
         <h2>
             <xsl:text>Popis</xsl:text>
@@ -165,7 +163,7 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
         <xsl:apply-templates mode="trans" select="$popis">
             <xsl:with-param name="ID" select="if ($ID) then parse-xml-fragment(string($ID/customfieldvalues/customfieldvalue)) else ()"/>
         </xsl:apply-templates>
-        
+
         <!-- odstavec s analyzou -->
         <h2>
             <xsl:text>Analýza</xsl:text>
@@ -175,7 +173,7 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
             </xsl:if>
         </h2>
         <xsl:apply-templates mode="trans" select="$analyza"/>
-        
+
         <!-- odstavec s resenim -->
         <h2>
             <xsl:text>Řešení</xsl:text>
@@ -185,7 +183,7 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
             </xsl:if>
         </h2>
         <xsl:apply-templates mode="trans" select="$reseni"/>
-        
+
         <!-- pokud clanek obsahuje nejakou formatovaci chybu umisti se cely nakonec s oranzovym podbarvenim -->
         <xsl:if test="not($test)">
             <div class="j2dOriginal">
@@ -199,11 +197,11 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
 
 <xsl:template mode="trans" match="@* | node()">
     <xsl:param name="ID" as="xs:string?"/>
-    
+
     <xsl:variable name="sub" as="node()*">
         <xsl:apply-templates mode="#current" select="node()"/>
     </xsl:variable>
-    
+
     <xsl:choose>
         <!-- generovani nadpisu h1-6 jako h2-7 -->
         <xsl:when test="self::h1">

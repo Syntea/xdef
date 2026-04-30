@@ -126,7 +126,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
                     break;
                 case '\t':
                     if (!pre) {
-                        sb.replace(i, i + 1, "&nbsp;&nbsp;&nbsp;&nbsp;"); //for spaces
+                        sb.replace(i, i + 1, "&nbsp;&nbsp;&nbsp;&nbsp;"); //four spaces
                         i += 23;
                     }
                     break;
