@@ -177,7 +177,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
      * @return converted data
      */
     public static final String htmlStringToAttr(final String htmlStr) {
-    	return htmlStr.replaceAll("\"", "&quot;");
+    	return htmlStr.replaceAll("&", "&amp;").replaceAll("\"", "&quot;");
     }
 
     /** Get parameter from servlet request.

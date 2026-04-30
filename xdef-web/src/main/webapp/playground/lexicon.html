@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>X-lexicon French version</title>
-    <meta name="description" content="X-lexicon French version"/>
+    <title>X-definition with X-lexicon</title>
+    <meta name="description" content="X-definition with X-lexicon"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
@@ -13,16 +13,13 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">X-lexicon French version</div>
+<div class="title">X-definition with X-lexicon</div>
 
-<form method="post" action="../playground/Playground">
+<form method="post" action="Playground">
 
-<p>
-Usage of X-lexicon in the X-definition, input data in the French version.
-You can also try the German version <a href="ch05s01e00.html"><b>HERE</b></a>.
-</p>
-
-<b>X-definition:</b>
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
+(enter in case of X-definition collection)
 <textarea name="xdef" rows="26" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
   &lt;Book ISBN="int(10000000, 999999999);"
@@ -49,20 +46,21 @@ You can also try the German version <a href="ch05s01e00.html"><b>HERE</b></a>.
 &lt;/xd:def>
 </textarea>
 
-<b>Input data:</b>
-<input name="langInp" value="fra" type="hidden"/>
+<b>Input data:</b><br/>
+Language of data: <input name="langInp" value="deu" type="text"/>
+(language from X-lexicon)
 <textarea name="data" rows="10" class="lined">
-&lt;Livre ISBN = "123456789"
-      année = "1992"
-      titre = "Snow Crash"
+&lt;Buch ISBN = "123456789"
+      Jahr = "1992"
+      Buchtitel = "Snow Crash"
 >
-  &lt;Auteur>Neal Stephenson&lt;/Auteur>
-&lt;/Livre>
+  &lt;Autor>Neal Stephenson&lt;/Autor>
+&lt;/Buch>
 </textarea>
 
 Output language:
 <input name="langOut" value="" type="text"/>
-(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)<br/>
+((language from X-lexicon or empty to preserve language))<br/>
 <button type="submit">Validate</button>
 
 </form>

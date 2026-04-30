@@ -58,7 +58,7 @@ public final class Derby extends AbstractMyServlet {
 "    <title>Add items</title>\n"+
 "  </head>\n"+
 "  <body style='background: #EAFFFD'>\n"+
-"    <form method='post' action='/tutorial/Derby'>\n"+
+"    <form method='post' action='Derby'>\n"+
 "      <b>X-definition</b>&nbsp;\n"+
 "      <i>If you have a collection with more\n"+
 "        X-definitions specify the name of root X-definition:</i>\n"+
@@ -125,7 +125,7 @@ public final class Derby extends AbstractMyServlet {
 "    <title>Display database</title>\n"+
 "  </head>\n"+
 "  <body style='background: #EAFFFD'>\n"+
-"    <form method='post' action='/tutorial/Derby'>\n"+
+"    <form method='post' action='Derby'>\n"+
 "      <b>X-definition</b>&nbsp;\n"+
 "      <i>If you have a collection with more\n"+
 "        X-definitions specify the name of root X-definition:</i>\n"+
@@ -179,7 +179,7 @@ public final class Derby extends AbstractMyServlet {
 "    <title>Add items</title>\n"+
 "  </head>\n"+
 "  <body style='background: #EAFFFD'>\n"+
-"    <form method='post' action='/tutorial/Derby'>\n"+
+"    <form method='post' action='Derby'>\n"+
 "      <b>X-definition</b>&nbsp;\n"+
 "      <i>If you have a collection with more\n"+
 "        X-definitions specify the name of root X-definition:</i>\n"+
@@ -467,7 +467,7 @@ public final class Derby extends AbstractMyServlet {
                         } else {
                             title = "Database created";
                             result =
-"<form style='background: #EAFFFD' method='post' action='/tutorial/Derby' >\n"+
+"<form style='background: #EAFFFD' method='post' action='Derby' >\n"+
 "<h2>Select task:</h2>\n"+
 "<input name='task' value='Add items' type='submit'/>\n"+
 "<input name='task' value='Display database' type='submit'/>\n"+
