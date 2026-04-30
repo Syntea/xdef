@@ -1260,7 +1260,7 @@ public class TestXon extends XDTester {
             assertNull(testX(xp, "", _package+".TestAnyRef", json));
             genXComponent(xp = compile( //test anyName, oneOf
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"a\" root=\"test\">\n" +
-"<xd:json name=\"test\">[ \"%script:ref A\" ]</xd:json>\n" +
+"  <xd:json name=\"test\">[ \"%script:ref A\" ]</xd:json>\n" +
 "  <xd:json name=\"A\">\n" +
 "    [\"%oneOf\",\n"+
 "      \"jvalue();\",\n" +
