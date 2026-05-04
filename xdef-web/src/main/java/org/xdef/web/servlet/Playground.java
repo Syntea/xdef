@@ -105,7 +105,7 @@ public final class Playground extends AbstractMyServlet {
             .map(xdfs -> XdDataFormat.valueOfN(xdfs))
             .filter(xdf -> xdf != null)
             .collect(Collectors.toSet());
-        String csvHeader = getParam(req, "csvHeaderExport").toLowerCase();
+        String csvHeader = getParam(req, "csvHeader").toLowerCase();
 
         //process default values and conversions
         xdefRoot  = xdefRoot.isEmpty() ? null : xdefRoot;
