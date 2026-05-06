@@ -20,6 +20,8 @@ Javascript libraries and plugins:
     * https://jquery.com/
   * jQuery - Customizable Line Numbers For Textareas
     * https://www.jqueryscript.net/form/customizable-line-numbers-textarea.html
+  * highlight.js - javaScript syntax highlighter supporting Node.js and the web, version 11.11.1
+    * https://highlightjs.org
 
 # Development Notes
 

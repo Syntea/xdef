@@ -262,27 +262,29 @@ public final class Playground extends AbstractMyServlet {
         //assembly html-response
         boolean stdOutputEx  = stdOutput != null && !stdOutput.isEmpty();
         boolean resultIsHtml = result != null && dataFormat == XdDataFormat.xml && result.startsWith("<html");
+        String  dataFormatL  = dataFormat == XdDataFormat.csv ? "plaintext" : dataFormat.toString();
 
         String respHtml = RESPONSE_HTML_TEMPL;
-        respHtml = SUtils.modifyFirst(respHtml,   	"((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
-        respHtml = SUtils.modifyString(respHtml,    "((status))",           status);
-        respHtml = SUtils.modifyFirst(respHtml,     "((title))",            title);
-        respHtml = SUtils.modifyFirst(respHtml,     "((message-disp))",     message != null ? "block" : "none");
+        respHtml = SUtils.modifyFirst(respHtml,         "((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
+        respHtml = SUtils.modifyString(respHtml,        "((status))",           status);
+        respHtml = SUtils.modifyFirst(respHtml,         "((title))",            title);
+        respHtml = SUtils.modifyFirst(respHtml,         "((message-disp))",     message != null ? "block" : "none");
         if (message != null) {
-            respHtml = SUtils.modifyFirst(respHtml, "((message))",          preStringToPre(message));
+            respHtml = SUtils.modifyFirst(respHtml,     "((message))",          preStringToPre(message));
         }
-        respHtml = SUtils.modifyFirst(respHtml,     "((result-disp))",      result != null ? "block" : "none");
+        respHtml = SUtils.modifyFirst(respHtml,         "((result-disp))",      result != null ? "block" : "none");
         if (result != null) {
-            respHtml = SUtils.modifyFirst(respHtml, "((result-format))",    preStringToPre(dataFormat.toString().toUpperCase()));
-            respHtml = SUtils.modifyFirst(respHtml, "((result))",           preStringToPre(result));
+            respHtml = SUtils.modifyFirst(respHtml,     "((result-format))",    preStringToPre(dataFormat.toString().toUpperCase()));
+            respHtml = SUtils.modifyFirst(respHtml,     "((result-formatL))",   preStringToPre(dataFormatL));
+            respHtml = SUtils.modifyFirst(respHtml,     "((result))",           preStringToPre(result));
         }
-        respHtml = SUtils.modifyFirst(respHtml,     "((display-html-disp))", resultIsHtml ? "block" : "none");
+        respHtml = SUtils.modifyFirst(respHtml,         "((display-html-disp))", resultIsHtml ? "block" : "none");
         if (resultIsHtml) {
-            respHtml = SUtils.modifyFirst(respHtml, "((display-html))",     htmlStringToAttr(result));
+            respHtml = SUtils.modifyFirst(respHtml,     "((display-html))",     htmlStringToAttr(result));
         }
-        respHtml = SUtils.modifyFirst(respHtml,     "((stdout-disp))",      stdOutputEx ? "block" : "none");
+        respHtml = SUtils.modifyFirst(respHtml,         "((stdout-disp))",      stdOutputEx ? "block" : "none");
         if (stdOutputEx) {
-            respHtml = SUtils.modifyFirst(respHtml, "((stdout))",           preStringToPre(stdOutput));
+            respHtml = SUtils.modifyFirst(respHtml,     "((stdout))",           preStringToPre(stdOutput));
         }
         for (XdDataFormat df : XdDataFormat.values()) {
             String  dfDisp   = null;
@@ -398,7 +400,7 @@ public final class Playground extends AbstractMyServlet {
                     true, false, true, 120
                 );
                 /* * /
-                //DEBUG:
+                //DBG:
                 result += "\n\n==json-xml==\n" + KXmlUtils.nodeToString(
                     XonUtils.xonToXml(XonUtils.xonToJson(xon)),
                     true, false, true, 120

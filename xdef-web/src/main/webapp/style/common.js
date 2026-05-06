@@ -1,6 +1,14 @@
-import "./jquery-4.0.0.min.js";
-//import "./jquery-4.0.0.js";
-import "./jquery.textarea-with-linenumbers.js";
+//lib jquery 4.0.0
+import "./jquery-4.0.0.min.js"
+//import "./jquery-4.0.0.js"
+
+//lib jquery.textarea-with-linenumbers
+import "./jquery.textarea-with-linenumbers.js"
+
+//lib highlightjs-11.11.1 with languages "common"
+import { hljs } from './highlight.min.js'
+//import { hljs } from './highlight.js'
+
 
 
 function replaceHtml(rootPath, targets) {
@@ -50,8 +58,13 @@ export function initPageBasic(completeFooter, completeHeader) {
 }
 
 export function initPageBasicLined(completeFooter, completeHeader) {
-    loadHeaderFooter(completeFooter, completeHeader);
     $("textarea.lined").linenumbers();
+    loadHeaderFooter(completeFooter, completeHeader);
+}
+
+export function initPageBasicHili(completeFooter, completeHeader) {
+    hljs.highlightAll();
+    loadHeaderFooter(completeFooter, completeHeader);
 }
 
 export function footVerActivate() {
@@ -75,8 +88,9 @@ export function headLangActivate() {
 setTimeout(function() { $(".errorVD").css("visibility", "visible"); }, 1000);
 
 //exports to window
-window.initPageBasic        = initPageBasic;
-window.initPageBasicLined   = initPageBasicLined;
-window.footVerActivate      = footVerActivate;
-window.footVerDeactivate    = footVerDeactivate;
-window.headLangActivate     = headLangActivate;
+window.initPageBasic            = initPageBasic;
+window.initPageBasicLined       = initPageBasicLined;
+window.initPageBasicHili        = initPageBasicHili;
+window.footVerActivate          = footVerActivate;
+window.footVerDeactivate        = footVerDeactivate;
+window.headLangActivate         = headLangActivate;

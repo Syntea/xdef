@@ -3,7 +3,7 @@
   (c) 2006-2025 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
-var hljs = (function () {
+export var hljs = (function () {
   'use strict';
 
   /* eslint-disable no-multi-assign */

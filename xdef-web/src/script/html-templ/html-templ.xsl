@@ -10,10 +10,11 @@
 <xsl:output
     method="html"
     indent="no"
+/>
+<!--
     encoding="utf-8"
     omit-xml-declaration="yes"
-/>
-
+-->
 
 
 <xsl:template match="/">
@@ -25,10 +26,6 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css"/>
-    <link rel="stylesheet" type="text/css" href="../style/syntaxHighlighter.css" />
-    <script src="../style/highlighter/shCore.js"></script>
-    <script src="../style/highlighter/shBrushXml.js"></script>
 </head>
 <body>
 
@@ -56,8 +53,7 @@ from all X-definitions (the attribute is optional and the default value is "loca
 - i.e. the declaration is visible only from this X-definition).
 </p>
 
-<pre class="xml">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
+<pre><code>&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
   &lt;xd:declaration scope="global">
     void message(String s) {
       outln(s);
@@ -80,17 +76,16 @@ from all X-definitions (the attribute is optional and the default value is "loca
   &lt;/Inventory>
 
 &lt;/xd:def>
-</pre>
+</code></pre>
 
 <p>
 You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
 </p>
 
-<script type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code')</script>
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasic()</script>
+<script type="module">initPageBasicHili()</script>
 
 </body>
 </html>
