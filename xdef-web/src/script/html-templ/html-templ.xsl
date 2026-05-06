@@ -3,16 +3,18 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs ="http://www.w3.org/2001/XMLSchema"
     xmlns:h  ="http://www.w3.org/1999/xhtml"
-    exclude-result-prefixes="xs"
+    exclude-result-prefixes="xsl xs h"
     version="3.0"
 >
 
 <xsl:output
-    method="html"
+    method="xhtml"
+    encoding="UTF-8"
+    omit-xml-declaration="yes"
+    doctype-public="aa"
     indent="no"
 />
 <!--
-    encoding="utf-8"
     omit-xml-declaration="yes"
 -->
 
