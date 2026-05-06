@@ -72,24 +72,11 @@ public class TestExprCompiler {
     static final byte PARAM_OP = PARAMLIST_OP + 1;
     static final byte METHOD_OP = PARAM_OP + 1;
     static final byte FUNCTION_OP = METHOD_OP + 1;
-    static final byte SWITCH_OP = FUNCTION_OP + 1;
-    static final byte COMMAND_OP = SWITCH_OP + 1;
-    static final byte IF_OP = COMMAND_OP + 1;
-    static final byte ELSE_OP = IF_OP + 1;
-    static final byte IF1_OP = ELSE_OP + 1;
-    static final byte ENDIF_OP = IF1_OP + 1;
-    static final byte WILEIF_OP = ENDIF_OP + 1;
-    static final byte ENDWILE_OP = WILEIF_OP + 1;
-    static final byte ENDDO_OP = ENDWILE_OP + 1;
-    static final byte ENDSWITCH_OP = ENDDO_OP + 1;
-    static final byte CASE_OP = ENDSWITCH_OP + 1;
-    static final byte CASE1_OP = CASE_OP + 1;
-    static final byte DEFAULT_OP = CASE1_OP + 1;
-    static final byte SWITCHBREAK_OP = DEFAULT_OP + 1;
-
+    static final byte COMMAND_OP = FUNCTION_OP + 1;
+    static final byte SWITCHBODY_OP = COMMAND_OP + 1;
 
     /* Predefined functions and methods. */
-    static final byte ABS = SWITCHBREAK_OP + 10; //Math.abs(x)
+    static final byte ABS = SWITCHBODY_OP + 10; //Math.abs(x)
     static final byte ACOS = ABS + 1; // acos(x);
     static final byte ASIN = ACOS + 1; // asin(x);
     static final byte ATAN = ASIN + 1; // atan(x)
@@ -187,25 +174,8 @@ public class TestExprCompiler {
         _codes.put("param", PARAM_OP);
         _codes.put("method", METHOD_OP);
         _codes.put("function", FUNCTION_OP);
-        _codes.put("seitch", SWITCH_OP);
         _codes.put("command", COMMAND_OP);
-
-        _codes.put("if", IF_OP);
-        _codes.put("if1", IF1_OP);
-        _codes.put("else", ELSE_OP);
-        _codes.put("endIf", ENDIF_OP);
-        _codes.put("endSwith", ENDSWITCH_OP);
-
-        _codes.put("whileIf", WILEIF_OP);
-        _codes.put("endWhile", ENDWILE_OP);
-        _codes.put("endDo", ENDDO_OP);
-
-        _codes.put("case", CASE_OP);
-        _codes.put("case1", CASE1_OP);
-
-        _codes.put("default", DEFAULT_OP);
-
-        _codes.put("switchBreak", SWITCHBREAK_OP);
+        _codes.put("switchBody", SWITCHBODY_OP); //switch(){...}
 
         // predefined functions and methods
         _codes.put("abs", ABS);
@@ -408,28 +378,63 @@ public class TestExprCompiler {
         throw new RuntimeException("for3 missing, i=" + i);
     }
 
-    private static int compileSwitch(final int i, final Object[] code, CodeItem[] result) {
+    private static int compileSwitch(final int i, final String source, final Object[] code, CodeItem[] result) {
         result[i] = new CodeItem("nop", 0);
+        ArrayList<Integer> breaks = new ArrayList<>();
+        HashMap<Object, Integer> swItems = new HashMap<Object, Integer>();
         for (int j = i + 1; j < code.length; j++) {
             String s = (String) code[j];
-            System.out.println("***** [" + j + "]: " + s); //TODO
             if (result[j] != null) {
                 continue;
             }
             if (s.startsWith("switch ")) {
-                j = compileSwitch(j, code, result);
+                j = compileSwitch(j, source, code, result);
                 continue;
+            }
+            if (s.startsWith("switchBody")) {
+
+                result[j] = new CodeItem("switchBody", swItems);
             }
             if (s.startsWith("endSwitch ")) {
                 result[j] = new CodeItem("nop", 999);
+                for (Integer x: breaks) {
+                    result[x] = new CodeItem("jmp", j);
+                }
                 return j;
             }
-            if (s.startsWith("case ")
-                || s.startsWith("case1 ")
-                || s.startsWith("endCase ")
-                || s.startsWith("default ")
-                || s.startsWith("endDefault ")) {
-                result[j] = new CodeItem("nop", 0);
+            if (s.startsWith("case ")) {
+                s = (String) code[j-1];
+                String[] ii = s.split(" ");
+                Object x = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                if (s.startsWith("intConst ")) {
+                    x = Long.valueOf((String) x);
+                } else if (s.startsWith("boolConst ")) {
+                    x = "true".equals(x);
+                } else if (s.startsWith("strConst ")) {
+                    s = (String) x;
+                    String delimiter = String.valueOf(s.charAt(0));
+                    s = s.substring(1, s.length() - 1);
+                    s = SUtils.modifyString(s, delimiter + delimiter, delimiter);
+                } else {
+                    throw new RuntimeException("Constant expected");
+                }
+                result[j-1] = new CodeItem("nop", 929);
+                swItems.put(x, j);
+                result[j] = new CodeItem("nop", 920);
+            }
+            if (s.startsWith("endCase ")) {
+                result[j] = new CodeItem("nop", 930);
+            }
+            if (s.startsWith("default ")) {
+                swItems.put(null, j);
+                result[j] = new CodeItem("nop", 960);
+            }
+            if (s.startsWith("endDefault ")) {
+                result[j] = new CodeItem("nop", 970);
+            }
+            if (s.startsWith("switchBreak ")) {
+                result[j] = new CodeItem("nop", 970);
+                breaks.add(j);
             }
         }
         throw new RuntimeException("endSwitch missing, i=" + i);
@@ -474,7 +479,7 @@ public class TestExprCompiler {
                 case "while": compileWhile(i, code, result); continue;
                 case "do": compileDo(i, code, result); continue;
                 case "for": compileFor(i, code, result); continue;
-                case "switch": compileSwitch(i, code, result); continue;
+                case "switch": compileSwitch(i, source, code, result); continue;
                 default: if (result[i] == null) {
                     result[i] = new CodeItem(item,
                         item.endsWith("type")? source.substring(Integer.parseInt(ii[1]),Integer.parseInt(ii[2])): null);
@@ -495,7 +500,7 @@ public class TestExprCompiler {
                     k = Integer.parseInt(x[1]);
                     l = Integer.parseInt(x[2]);
                     t = source.substring(k, l);
-                } catch (Exception ex) {
+                } catch (NumberFormatException ex) {
                     t = "";
                 }
             }
@@ -809,6 +814,17 @@ public class TestExprCompiler {
                     }
                     break;
                 case JMPTF_OP: i = ((int[]) (item._value))[((Boolean) stack.pop()) ? 0 : 1]; break;
+                case SWITCHBODY_OP: {
+                    Object x = stack.pop();
+                    HashMap swItems = (HashMap) item._value;
+                    Object y = swItems.get(x);
+                    if (y == null) { // default
+                        y = swItems.get(null);
+                    }
+                    if (y != null) {
+                        i = (Integer) y;
+                    }
+                }
                 case COMMAND_OP: stack.clear(); break;
                 case INFO_OP: break;
                 default: throw new RuntimeException("Unknown code at "+i+": " + item);

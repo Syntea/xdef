@@ -116,13 +116,10 @@ public class TestExpr extends STester {
         try {
             g.trace(null);
 /**
-if(false){}else print(2);print(1);
-int i=1; switch(1) { case 1: print(i); break; default: print(0);}
            _displayCode = true;
-            assertNull(test("1", g, "int i=1; switch(1) { case 1: print(i); break; default: print(0);}"));
-if(true) return;
-if(true) return;
-//            assertNull(test("", g, "int i=0; switch(i) {}"));
+            assertNull(test("", g, "int i=0; switch(i + 2) {}"));
+            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
+            assertNull(test("1", g, "int i=1; switch(i) {case 1: print(1); break; default: print(0);}"));
 if(true)return;
 /**/
             assertNull(test("0", g, " /*x*/ print ( /*x*/ 0 /*x*/) /*x*/; "));
@@ -299,7 +296,6 @@ if(true)return;
             assertNull(test("", g, "if (false) print(1); "));
             assertNull(test("1", g, "if (true) print(1); "));
             assertNull(test("21", g, "if(false){} else print(2); print(1);"));
-//            assertNull(test("21", g, "if(false){} else print(2);print(1);"));
             assertNull(test("12", g, "int i=1; if (i==1) {print(1); print(2);}"));
             assertNull(test("2", g, "int i = 1; { if (i == 1) {i = 2;} else {i = 0;} print(i);}"));
             assertNull(test("", g, "int i=1;if (i==1) {if (i!=1) print(1);}"));
@@ -317,8 +313,9 @@ if(true)return;
             assertNull(test("-19", g, "int i=1; if (i!=1) print(1); else print(-1); print(9);"));
             assertNull(test("1", g, "int i=1; if (i==1) if (i==1) if (i==1) print(1); else print(2);"));
             assertNull(test("2", g, "int i=1;if (i==1) if (i==1) if (i!=1) print(1); else print(2);"));
-//            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(i); break; dafault: print(0);}"));
-//            assertNull(test("1", g, "int i=1; switch(i) {case 1: print(i); break; dafault: print(0);}"));
+            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
+            assertNull(test("1", g, "int i=1; switch(i) {case 1: print(1); break; default: print(0);}"));
+            assertNull(test("0", g, "int i=0; switch(i + 2) {case 2: switch(i){} print(i);break;}"));
         } catch (Exception ex) {fail(ex);}
     }
 
