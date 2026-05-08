@@ -79,13 +79,16 @@ public class TestExpr extends STester {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
     String test(final String x, final BNFGrammar g, final String prog) {
         String s = parse(g, "program", prog);
         if (s != null) {
             return "Syntax error: " + s;
         }
-        Object[] code = g.getParsedObjects();
+        Object[] parsed = g.getParsedObjects();
+        String[] code = new String[parsed.length];
+        for (int i = 0; i < parsed.length; i++) {
+            code[i] = (String) parsed[i];
+        }
         TestExprCompiler.CodeItem[] pc = null;
         try {
             pc = precompile(prog, code);
@@ -117,9 +120,8 @@ public class TestExpr extends STester {
             g.trace(null);
 /**
            _displayCode = true;
-//int i=0; while ( i++ < 3 )if(i==2) continue; else print(i);
-//            assertNull(test("2", g, "int i=1; do {if (i == 1) continue; print(i);}while (i++ < 2);"));
-//            assertNull(test("", g, "int i=1; do {if (i == 1) break; print(i);}while (i++ < 2);"));
+for (int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i); break;}
+            assertNull(test("0", g,"for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
 if(true)return;
 /**/
             assertNull(test("", g, ";"));
@@ -321,6 +323,8 @@ if(true)return;
             assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
             assertNull(test("1", g, "int i=1; switch(i) {case 1: print(1); break; default: print(0);}"));
             assertNull(test("0", g, "int i=0; switch(i + 2) {case 2: switch(i){} print(i);break;}"));
+            assertNull(test("0",g,"for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
+//            assertNull(test("2", g, "for (int i=0;i<4;i++) if (i==3)break; else switch(i) {case 2: print(i);break;}"));
         } catch (Exception ex) {fail(ex);}
     }
 
