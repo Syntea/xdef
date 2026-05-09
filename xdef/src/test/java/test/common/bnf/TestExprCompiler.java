@@ -316,10 +316,10 @@ public class TestExprCompiler {
                         }
                         return k;
                     }
-                    if (s.startsWith("break ")) {
+                    if (s.startsWith("break ") || s.startsWith("whileBreak ")) {
                         result[k] = new CodeItem("nop", 971);
                         breaks.add(k);
-                    } else if (s.startsWith("continue ")) {
+                    } else if (s.startsWith("continue ") || s.startsWith("whileContinue ")) {
                         result[k] = new CodeItem("jmp", i);
                     }
                 }
@@ -351,10 +351,10 @@ public class TestExprCompiler {
                for (Integer x: continues) {
                    result[x] = new CodeItem("jmp", j + 1);
                }
-            } else if (s.startsWith("break ")) {
+            } else if (s.startsWith("break ") || s.startsWith("doBreak ")) {
                 result[j] = new CodeItem("nop", 973);
                 breaks.add(j);
-            } else if (s.startsWith("continue ")) {
+            } else if (s.startsWith("continue ") || s.startsWith("doContinue ")) {
                 result[j] = new CodeItem("nop", 974);
                 continues.add(j);
             }
@@ -405,12 +405,11 @@ public class TestExprCompiler {
                 }
                 if (!s.startsWith("for2 ")) continue;
                 result[k] = new CodeItem("nop", 9003);
-                for (int m = k+1; m < code.length; m++) {
-                    for (int n = m+1; n < code.length; n++) {
+                    for (int n = k+1; n < code.length; n++) {
                         if (result[n] != null) continue;
                         s = (String) code[n];
                         if (s.startsWith("for ")) {
-                            m = compileFor(n, source, code, result);
+                            n = compileFor(n, source, code, result);
                             continue;
                         }
                         if (s.startsWith("for3 ")) {
@@ -423,14 +422,13 @@ public class TestExprCompiler {
                             }
                             return n;
                         }
-                        if (s.startsWith("break ")) {
+                        if (s.startsWith("break ") || s.startsWith("forBreak ")) {
                             result[n] = new CodeItem("nop", 972);
                             breaks.add(n);
-                        } else if (s.startsWith("continue ")) {
+                        } else if (s.startsWith("continue ") || s.startsWith("forContinue ")) {
                             result[n] = new CodeItem("jmp", j + 2);
                         }
                     }
-                }
             }
         }
         throw new RuntimeException("for3 missing, i=" + i);
@@ -454,9 +452,13 @@ public class TestExprCompiler {
             }
             if (s.startsWith("endSwitch ")) {
                 result[j] = new CodeItem("nop", 999);
+                if (swItems.get(null) == null) {
+                    swItems.put(null, j);
+                }
                 for (Integer x: breaks) {
                     result[x] = new CodeItem("jmp", j);
                 }
+
                 return j;
             }
             if (s.startsWith("case ")) {
@@ -473,21 +475,25 @@ public class TestExprCompiler {
                 } else {
                     throw new RuntimeException("Constant expected");
                 }
-                result[j-1] = new CodeItem("nop", 929);
+//                result[j-1] = new CodeItem("nop", 929);
                 swItems.put(x, j);
                 result[j] = new CodeItem("nop", 920);
+                continue;
             }
             if (s.startsWith("endCase ")) {
                 result[j] = new CodeItem("nop", 930);
+                continue;
             }
             if (s.startsWith("default ")) {
                 swItems.put(null, j);
                 result[j] = new CodeItem("nop", 960);
+                continue;
             }
             if (s.startsWith("endDefault ")) {
                 result[j] = new CodeItem("nop", 970);
+                continue;
             }
-            if (s.startsWith("break ")) {
+            if (s.startsWith("break ") || s.startsWith("swBreak ")) {
                 result[j] = new CodeItem("nop", 970);
                 breaks.add(j);
             }
