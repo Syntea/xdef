@@ -120,8 +120,8 @@ public class TestExpr extends STester {
             g.trace(null);
 /**
            _displayCode = true;
-for (int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i); break;}
-            assertNull(test("0", g,"for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
+            int i=0; switch(i) {case 1: print(1); break; default: print(0);}
+            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
 if(true)return;
 /**/
             assertNull(test("", g, ";"));
@@ -323,8 +323,9 @@ if(true)return;
             assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
             assertNull(test("1", g, "int i=1; switch(i) {case 1: print(1); break; default: print(0);}"));
             assertNull(test("0", g, "int i=0; switch(i + 2) {case 2: switch(i){} print(i);break;}"));
-            assertNull(test("0",g,"for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
-//            assertNull(test("2", g, "for (int i=0;i<4;i++) if (i==3)break; else switch(i) {case 2: print(i);break;}"));
+            assertNull(test("01",g,"for(i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
+            assertNull(test("", g, "for (int i=0;i<4;i++) if (i==3)switch(i){case 2: print(i);break;} else break;"));
+            assertNull(test("2", g, "for(i=0; i < 4; i++) if(i==3) break; else switch(i){case 2: print(i); break;}"));
         } catch (Exception ex) {fail(ex);}
     }
 

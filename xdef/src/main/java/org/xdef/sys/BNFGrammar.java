@@ -277,9 +277,8 @@ public final class BNFGrammar {
         } catch (SError ex) {
             if ("BNF stop".equals(ex.getMessage())) {
                 return true;
-            } else {
-                throw ex;
             }
+            throw ex;
         }
     }
 
@@ -292,9 +291,7 @@ public final class BNFGrammar {
      * @param index index of rule.
      * @return rule from grammar with given index or null.
      */
-    public final BNFRule getRule(final int index) {
-        return index < 0 || index >= _rules.size() ? null : _rules.get(index);
-    }
+    public final BNFRule getRule(final int index) {return index < 0 || index>=_rules.size() ? null : _rules.get(index);}
 
     /** Get rule from grammar with given name.
      * @param name name of rule.
@@ -314,10 +311,7 @@ public final class BNFGrammar {
      * @return compiled grammar.
      * @throws SRuntimeException if the reporter argument is null and an error occurs.
      */
-    public static BNFGrammar compile(final String source) throws SRuntimeException {
-        return compile(null, source, null);
-    }
-
+    public static BNFGrammar compile(final String source) throws SRuntimeException {return compile(null, source, null);}
     @Override
     /** Returns String with source BNF grammar. */
     public String toString() {return display(false);}
@@ -377,9 +371,7 @@ public final class BNFGrammar {
      * @return compiled grammar.
      * @throws SRuntimeException if the reporter argument is null and an error occurs.
      */
-    public static BNFGrammar compile(final File source) throws SRuntimeException {
-        return compile(null, source, null);
-    }
+    public static BNFGrammar compile(final File source) throws SRuntimeException {return compile(null, source, null);}
 
     /** Compile BNF grammar.
      * @param g the grammar to be extended or null.
@@ -543,7 +535,7 @@ public final class BNFGrammar {
      * @param pars List of parameters.
      * @return new BNFExtMethodObj.
      */
-    private BNFExtMethodObj newItemExtMethod(final String name, final String fullName,final List<Object>pars){
+    private BNFExtMethodObj newItemExtMethod(final String name, final String fullName,final List<Object>pars) {
         return new BNFExtMethodObj(name, fullName, pars);
     }
     /** Create new BNFPredefined inline method
@@ -552,19 +544,16 @@ public final class BNFGrammar {
      * @param pars List of parameters.
      * @return new BNFPredefined.
      */
-    private BNFPredefined newInlineMethod(final String methodName, final String name, final List<Object>pars){
+    private BNFPredefined newInlineMethod(final String methodName, final String name, final List<Object>pars) {
         for(int i = 0; i < INLINE_METHOD_NAMES.length; i++) {
             if (methodName.equals(INLINE_METHOD_NAMES[i])) {
                 return new BNFInline(i, name, pars);
             }
         }
         // compatibility with old version
-        if ("pushParsedObject".equals(methodName) || "pushParsedString".equals(methodName)) {
-            return new BNFInline(INL_PUSH, name, pars);
-        } else if ("popParsedObject".equals(methodName)) {
-            return new BNFInline(INL_POP, name, pars);
-        }
-        return null;
+        return "pushParsedObject".equals(methodName) || "pushParsedString".equals(methodName)
+            ? new BNFInline(INL_PUSH, name, pars) : "popParsedObject".equals(methodName)
+            ? new BNFInline(INL_POP, name, pars) : null;
     }
     /** Create clone of grammar.
      * @return clone of this grammar.
@@ -602,9 +591,7 @@ public final class BNFGrammar {
      * @return BNFGrammar object.
      * @throws IOException if an error occurs.
      */
-    public static BNFGrammar readObj(final SObjectReader r) throws IOException {
-        return compile(null, r.readString(), null);
-    }
+    public static BNFGrammar readObj(final SObjectReader r)throws IOException{return compile(null,r.readString(),null);}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -691,19 +678,16 @@ public final class BNFGrammar {
         final void setPosition() {_pos = _p.getPosition();}
 
         final void resetPosition() {_p.resetPosition(_pos);}
-
         @Override
         /** Get name of this rule.
          * @return name of this rule.
          */
         public final String getName() {return _name;}
-
         @Override
         /** Get string with parsed part by this rule.
          * @return string with parsed part by this rule.
          */
         public final String getParsedString() {return _pos==null ? "":_p.getParsedBufferPartFrom(_pos.getIndex());}
-
         @Override
         /** Get position of parsed part of string by this rule.
          * @return position of parsed part by this rule.
@@ -757,7 +741,6 @@ public final class BNFGrammar {
                 throw new StackOverflowError(sb.toString());
             }
         }
-
         @Override
         /** Get array of objects created by this rule.
          * @return array of objects created by this rule or null.
@@ -794,7 +777,6 @@ public final class BNFGrammar {
                 getItem().display(sb);
             }
         }
-
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
@@ -944,7 +926,6 @@ public final class BNFGrammar {
             _tokens = tokens;
             _i = i;
         }
-
         @Override
         final boolean perform() {
             if (_max == 1) {
@@ -988,6 +969,7 @@ public final class BNFGrammar {
         char[] _intervals;
 
         BNFSet() {}
+
         abstract boolean isNot();
         @Override
         final void display(final StringBuilder sb) {
@@ -1021,7 +1003,6 @@ public final class BNFGrammar {
             }
             return false;
         }
-
         @Override
         final boolean isNot() {return false;}
         @Override
@@ -1071,7 +1052,6 @@ public final class BNFGrammar {
             _p.nextChar();
             return true;
         }
-
         @Override
         final boolean isNot() {return true;}
         @Override
@@ -1127,7 +1107,6 @@ public final class BNFGrammar {
     private final class BNFSelection extends BNFGroup {
 
         BNFSelection() {super();}
-
         @Override
         final boolean perform() {
             SPosition startPos = setPosition();
@@ -1200,7 +1179,6 @@ public final class BNFGrammar {
     private final class BNFAll extends BNFGroup {
 
         BNFAll() {super();}
-
         @Override
         final boolean perform() {
             SPosition startPos = setPosition();
@@ -1257,7 +1235,6 @@ public final class BNFGrammar {
     private final class BNFConstrain extends BNFGroup {
 
         BNFConstrain() {super();}
-
         @Override
         final boolean perform() {
             setPosition();
@@ -1329,7 +1306,6 @@ public final class BNFGrammar {
     private final class BNFSequence extends BNFGroup {
 
         BNFSequence() {super();}
-
         @Override
         final boolean perform() {
             setPosition();
@@ -1389,7 +1365,6 @@ public final class BNFGrammar {
         BNFReference() {super();}
 
         final void setRule(final BNFRuleObj rule) {_rule = rule;}
-
         @Override
         final boolean perform() {
             BNFRuleObj savedRule = _actRule; //save
@@ -1501,7 +1476,6 @@ public final class BNFGrammar {
                 return false;
             }
         }
-
         @Override
         final boolean perform() {
             try {
@@ -1546,77 +1520,77 @@ public final class BNFGrammar {
                 return false;
             }
         }
+        @Override
         /** Get actual source position.
          * @return SPosition object with actual source position.
          */
-        @Override
         public final SPosition getSPosition() {return _pos;}
+        @Override
         /** Set user object.
          * @param obj new user object.
          * @return old user object.
          */
-        @Override
         public final Object setUserObject(final Object obj) {
             Object o = _userObject;
             _userObject = obj;
             return o;
         }
+        @Override
         /** Get associated user object.
          * @return associated user object.
          */
-        @Override
         public final Object getUserObject() {return _userObject;}
+        @Override
         /** Get parsed part of string by this rule.
          * @return parsed part of string by this rule.
          */
-        @Override
         public final String getParsedString() {
             return _pos==null ? "" : _p.getParsedBufferPartFrom(_pos.getIndex());
         }
+        @Override
         /** Get objects from internal stack.
          * @return objects from  internal stack.
          */
-        @Override
         public Object[] getParsedStack() {return _actRule.getItem().getStack();}
+        @Override
         /** Pop value from parsed stack.
          * @return the top of parsed stack or null.
          */
-        @Override
         public Object popParsedObject() {return _actRule.getItem().peekStack();}
+        @Override
         /** Get the value of the top of grammar stack.
          * @return the top of grammar stack or null.
          */
-        @Override
         public Object peekParsedObject(){return _actRule.getItem().peekStack();}
+        @Override
         /** Push object to grammar stack.
          * @param o object to be pushed.
          */
-        @Override
         public void pushParsedObject(Object o){_actRule.getItem().pushStack(o);}
+        @Override
         /**  Get actual BNF rule.
          * @return actual BNF rule.
          */
-        @Override
         public final BNFRule getRule() {return _actRule;}
+        @Override
         /** Get actual rule name.
          * @return actual rule name.
          */
-        @Override
         public String getRuleName() {return _actRule.getName();}
+        @Override
         /** Get root rule.
          * @return  root rule.
          */
-        @Override
         public final BNFRule getRootRule() {return _rootRule;}
+        @Override
         /** Get StringParser used for parsing.
          * @return StringParser.
          */
-        @Override
         public final StringParser getParser() {return _p;}
+        @Override
         /** Get name of external method.
          * @return name of external method.
          */
-        @Override
         public final String getMethodName() {return _name;}
         @Override
         final BNFItem adoptTo(final BNFGrammar grammar) {
@@ -1640,7 +1614,6 @@ public final class BNFGrammar {
     private abstract class BNFPredefined extends BNFItem {
 
         abstract String getName();
-
         @Override
         BNFItem adoptTo(final BNFGrammar grammar) {
             BNFPredefined item = grammar.newInlineMethod(getName(), getName(), null);
@@ -1714,7 +1687,6 @@ public final class BNFGrammar {
         private final class MyReader extends Reader {
 
             MyReader() {}
-
             @Override
             public final int read(final char[] cbuf) {
                 if (_p.eos()) {
@@ -1833,11 +1805,7 @@ public final class BNFGrammar {
                 case INL_XMLNAMEEXTCHAR:  return _p.isXMLNameExtensionChar(StringParser.XMLVER1_0) != SParser.NOCHAR;
                 case INL_CLEAR: _parsedObjects = null; return true;//clearParsedObjects
                 case INL_PUSH: //pushParsedObject
-                    if (_param != null) {
-                        pushObject(_param);
-                        return true;
-                    }
-                    pushObject(_actRule.getParsedString());
+                    pushObject(_param!=null ? _param :_actRule.getParsedString());
                     return true;
                 case INL_POP: return popObject() != null; //popParsedObject
                 case INL_ANYCHAR: {//anyChar
@@ -1854,8 +1822,7 @@ public final class BNFGrammar {
                 }
                 case INL_FIND:{ //find
                     String s = ((String) _param);
-                    return s.length() == 1
-                        ? _p.findChar(s.charAt(0)) : _p.findToken(s);
+                    return s.length() == 1 ? _p.findChar(s.charAt(0)) : _p.findToken(s);
                 }
                 case INL_ERROR: { //error
                     String id = "";
@@ -1902,15 +1869,15 @@ public final class BNFGrammar {
             }
         }
 
+        @Override
         /** Get declared name of parse item.
          * @return the name of parse item.
          */
-        @Override
         final String getName() {return _name;}
+        @Override
         /** Provide parsing.
          * @return true if and only if parsed text fits to item.
          */
-        @Override
         final boolean perform() {
             if (_max == 1) {
                 return invoke() || _min == 0;
@@ -1927,11 +1894,11 @@ public final class BNFGrammar {
             }
             return _min == 0;
         }
+        @Override
         /** Adopt this item to other grammar.
          * @param grammar the other grammar.
          * @return the adopted BNFItem.
          */
-        @Override
         final BNFItem adoptTo(final BNFGrammar grammar) {
             final List<Object> params = new ArrayList<>();
             if (_param != null) {

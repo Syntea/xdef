@@ -86,37 +86,52 @@ vardecl       ::= type S declItem (S "," S declItem)*
 varcmd        ::= vardecl | assign | incdec
 simplecmd     ::= varcmd | method
 
-command       ::= S ( $info (( (simplecmd | do) )?  S ";" ) | (if | while | for | switch | break | continue ) )
+command       ::= S ( $info (( (simplecmd | do) )?  S ";" ) | (if | while | for | switch | break | continue) )
 blok          ::= S "{" command* S "}"
 continue      ::= "continue" S ";" $rule
 break         ::= "break" S ";" $rule
 brexpr        ::= S "(" expr ")"
+
 if            ::= "if" $rule if1 ifCmd (else S ifCmd) ? endIf
 ifCmd         ::= (command | blok)
 if1           ::= brexpr $rule 
 else          ::= S "else" $rule
 endIf         ::= $rule
+
 while         ::= "while" $rule whileIf endWhile
 whileIf       ::= brexpr $rule
-endWhile      ::= (command | blok) $rule
-do            ::= "do" S $rule (command | blok) S endDo
+whileCmd      ::= whileBreak | whileContinue | command
+whileBreak    ::= "break" S ";" $rule
+whileContinue ::= "break" S ";" $rule
+whileBlok     ::= S "{" whileCmd* S "}"
+endWhile      ::= (whileCmd | whileBlok) $rule
+
+do            ::= "do" S $rule (doCmd | doBlok) S endDo
+doCmd         ::= doBreak | doContinue | command
+doBreak       ::= "break" S ";" $rule
+doContinue    ::= "break" S ";" $rule
+doBlok        ::= S "{" doCmd* S "}"
 endDo         ::= doExpr $rule
 doExpr        ::= "while" S $rule brexpr
-doCmd         ::= (command | blok)
+
 for           ::= "for" $rule S "(" S (varcmd (S ? "," varcmd)*)? S ";" $rule
                   S for1 S ";" S for2 S ")" for3
 for1          ::= (expr $rule)? $rule 
 for2          ::= ((varcmd | method) (S ? "," (varcmd | method))*)? $rule
 for3          ::= forCmd $rule
-forCmd        ::= (command | blok)
-program       ::= ( command | blok )+ S
-/***************************************************************
-            TODO
-***************************************************************/
+forCmd        ::= (forBreak | forContinue | command | forBlok)
+forBreak      ::= "break" S ";" $rule
+forContinue   ::= "break" S ";" $rule
+forBlok       ::= S "{" forCmd* S "}"
+
 switch        ::= S "switch" $rule brexpr switchBody
 switchBody    ::= S "{" $rule ( case | default )* S "}" endSwitch
 swconstant    ::= boolConst | strConst | intConst
-case          ::= S "case" S swconstant S ":" $rule switchCmd S
-default       ::= S "default" S ":" $rule switchCmd S
-switchCmd     ::= (command | blok)*
+case          ::= S "case" S swconstant S ":" $rule swCmd S
+default       ::= S "default" S ":" $rule swCmd S
+swBreak       ::= "break" S ";" $rule
+swCmd         ::= (swBreak | command | swBlok)*
+swBlok        ::= S "{" swCmd* S "}"
 endSwitch     ::= $rule
+
+program       ::= ( command | blok )+ S
