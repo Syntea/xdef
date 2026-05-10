@@ -103,12 +103,11 @@ public class TestExpr extends STester {
             }
             return "'" + x + "', '" + y + "'\n" + TestExprCompiler.printCode(prog, code, pc);
         } catch (RuntimeException ex) {
-            ex.printStackTrace();
             return "'" + x + "', '?????'\n" + TestExprCompiler.printCode(prog, code, pc);
         }
     }
 
-    private static void print(Object o) {System.out.print(o.toString());}
+    private static void print(final Object o) {System.out.print(o.toString());}
 
     /** Run test and print error information. */
     @Override
