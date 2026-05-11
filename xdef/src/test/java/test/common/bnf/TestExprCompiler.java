@@ -405,30 +405,30 @@ public class TestExprCompiler {
                 }
                 if (!s.startsWith("for2 ")) continue;
                 result[k] = new CodeItem("nop", 9003);
-                    for (int n = k+1; n < code.length; n++) {
-                        if (result[n] != null) continue;
-                        s = (String) code[n];
-                        if (s.startsWith("for ")) {
-                            n = compileFor(n, source, code, result);
-                            continue;
-                        }
-                        if (s.startsWith("for3 ")) {
-                            result[j] = new CodeItem("jmpf", n + 1);
-                            result[j+1] = new CodeItem("jmp", k + 1);
-                            result[k] = new CodeItem("jmp", c + 1);
-                            result[n] = new CodeItem("jmp", j + 2);
-                            for (Integer x: breaks) {
-                                result[x] = new CodeItem("jmp", n + 1);
-                            }
-                            return n;
-                        }
-                        if (s.startsWith("break ") || s.startsWith("forBreak ")) {
-                            result[n] = new CodeItem("nop", 972);
-                            breaks.add(n);
-                        } else if (s.startsWith("continue ") || s.startsWith("forContinue ")) {
-                            result[n] = new CodeItem("jmp", j + 2);
-                        }
+                for (int n = k+1; n < code.length; n++) {
+                    if (result[n] != null) continue;
+                    s = (String) code[n];
+                    if (s.startsWith("for ")) {
+                        n = compileFor(n, source, code, result);
+                        continue;
                     }
+                    if (s.startsWith("for3 ")) {
+                        result[j] = new CodeItem("jmpf", n + 1);
+                        result[j+1] = new CodeItem("jmp", k + 1);
+                        result[k] = new CodeItem("jmp", c + 1);
+                        result[n] = new CodeItem("jmp", j + 2);
+                        for (Integer x: breaks) {
+                            result[x] = new CodeItem("jmp", n + 1);
+                        }
+                        return n;
+                    }
+                    if (s.startsWith("break ") || s.startsWith("forBreak ")) {
+                        result[n] = new CodeItem("nop", 972);
+                        breaks.add(n);
+                    } else if (s.startsWith("continue ") || s.startsWith("forContinue ")) {
+                        result[n] = new CodeItem("jmp", j + 2);
+                    }
+                }
             }
         }
         throw new RuntimeException("for3 missing, i=" + i);

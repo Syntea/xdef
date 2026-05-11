@@ -112,6 +112,7 @@ public class TestExpr extends STester {
     /** Run test and print error information. */
     @Override
     public void test() {
+        String s;
         BNFGrammar g;
         g = BNFGrammar.compile(null, new File(getDataDir() + "TestExpr.bnf"), null);
         g.setUserObject(this);
@@ -119,10 +120,35 @@ public class TestExpr extends STester {
             g.trace(null);
 /**
            _displayCode = true;
-            int i=0; switch(i) {case 1: print(1); break; default: print(0);}
-            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
+for(int i=0; i < 4; i++) {
+  if(i==3) {
+    break;
+  } else {
+    switch(i) {
+      case 2:
+        print(i);
+        break;
+    }
+  }
+  print(9);
+}
+            s =
+"for(int i=0; i < 4; i++) {\n"+
+"  if(i==3) {\n"+
+"    break;\n"+
+"  } else {\n"+
+"    switch(i) {\n"+
+"      case 2:\n"+
+"        print(i);\n"+
+"        break;\n"+
+"    }\n"+
+"  }\n"+
+"  print(9);\n"+
+"}";
+            System.out.println(s);
+           assertNull(test("9929", g, s));
 if(true)return;
-/**/
+/**/          
             assertNull(test("", g, ";"));
             assertNull(test("", g, " ;; "));
             assertNull(test("", g, " { ; ; } { ; ; } "));
@@ -324,7 +350,8 @@ if(true)return;
             assertNull(test("0", g, "int i=0; switch(i + 2) {case 2: switch(i){} print(i);break;}"));
             assertNull(test("01",g,"for(i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
             assertNull(test("", g, "for (int i=0;i<4;i++) if (i==3)switch(i){case 2: print(i);break;} else break;"));
-            assertNull(test("2", g, "for(i=0; i < 4; i++) if(i==3) break; else switch(i){case 2: print(i); break;}"));
+            assertNull(test("2", g,"for(int i=0; i < 4; i++) if(i==3)break; else switch(i){case 2: print(i);break;}"));
+            assertNull(test("2", g,"for(int i=0;i<4;i++)if(i==3)continue; else switch(i){case 2: print(i);continue;}"));
         } catch (Exception ex) {fail(ex);}
     }
 
