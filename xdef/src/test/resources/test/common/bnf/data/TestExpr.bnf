@@ -100,17 +100,9 @@ endIf         ::= $rule
 
 while         ::= "while" $rule whileIf endWhile
 whileIf       ::= brexpr $rule
-whileCmd      ::= whileBreak | whileContinue | command
-whileBreak    ::= "break" S ";" $rule
-whileContinue ::= "break" S ";" $rule
-whileBlok     ::= S "{" whileCmd* S "}"
-endWhile      ::= (whileCmd | whileBlok) $rule
+endWhile      ::= (command | blok) $rule
 
-do            ::= "do" S $rule (doCmd | doBlok) S endDo
-doCmd         ::= doBreak | doContinue | command
-doBreak       ::= "break" S ";" $rule
-doContinue    ::= "break" S ";" $rule
-doBlok        ::= S "{" doCmd* S "}"
+do            ::= "do" S $rule (command | blok) S endDo
 endDo         ::= doExpr $rule
 doExpr        ::= "while" S $rule brexpr
 
@@ -118,20 +110,14 @@ for           ::= "for" $rule S "(" S (varcmd (S ? "," varcmd)*)? S ";" $rule
                   S for1 S ";" S for2 S ")" for3
 for1          ::= (expr $rule)? $rule 
 for2          ::= ((varcmd | method) (S ? "," (varcmd | method))*)? $rule
-for3          ::= forCmd $rule
-forCmd        ::= (forBreak | forContinue | command | forBlok)
-forBreak      ::= "break" S ";" $rule
-forContinue   ::= "break" S ";" $rule
-forBlok       ::= S "{" forCmd* S "}"
+for3          ::= (command | blok) $rule
 
 switch        ::= S "switch" $rule brexpr switchBody
 switchBody    ::= S "{" $rule ( case | default )* S "}" endSwitch
 swconstant    ::= boolConst | strConst | intConst
 case          ::= S "case" S swconstant S ":" $rule swCmd S
 default       ::= S "default" S ":" $rule swCmd S
-swBreak       ::= "break" S ";" $rule
-swCmd         ::= (swBreak | command | swBlok)*
-swBlok        ::= S "{" swCmd* S "}"
+swCmd         ::= (command | blok)*
 endSwitch     ::= $rule
 
 program       ::= ( command | blok )+ S
