@@ -7,6 +7,8 @@ S            ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
 keyword      ::= "true" | "false" | "null"| "if" | "else" | "do" | "while"
                  | "for" | "switch" | "case" | "default" | "try" | "catch"
                  | "finally" | "throw" | "break" | "continue" | "return"
+                 | "AND" | "GT" | "GE" | "LT" | "LE" | "RRSH" | "RSH" | "LSH"
+                 | "ASSAND" | "ASSLSH" | "ASSRSH" | "ASSRRSH"
 
 /* Constant values */
 boolConst     ::= ("true" | "false") $rule
@@ -23,16 +25,16 @@ idRef         ::= name S $rule /* name which refers to an object (variable) */
 /* Operators */
 OR            ::= "|" bxor $rule
 XOR           ::= "^" band $rule
-AND           ::= "&" equal $rule
+AND           ::= ("&" | "AND") equal $rule
 EQ            ::= "==" rel $rule
 NE            ::= "!=" rel $rule
-LT            ::= "<" shift $rule
-GT            ::= ">" shift $rule
-LE            ::= "<=" shift $rule
-GE            ::= ">=" shift $rule
-RRSH          ::= ">>>" add $rule
-RSH           ::= ">>" add $rule
-LSH           ::= "<<" add $rule
+LT            ::= ("<" | "LT") shift $rule
+GT            ::= (">" | "GT") shift $rule
+LE            ::= ("<=" | "LE") shift $rule
+GE            ::= (">=" | "GE") shift $rule
+RRSH          ::= (">>>" | "RRSH") add $rule
+RSH           ::= (">>" | "RSH") add $rule
+LSH           ::= ("<<" | "LSH") add $rule
 ADD           ::= "+" mul $rule
 SUB           ::= "-" mul $rule
 MUL           ::= "*" term $rule
@@ -52,12 +54,12 @@ ASSSUB        ::= "-=" expr $rule
 ASSMUL        ::= "*=" expr $rule
 ASSDIV        ::= "/=" expr $rule
 ASSMOD        ::= "%=" expr $rule
-ASSAND        ::= "&=" expr $rule
+ASSAND        ::= ("&=" | "ASSAND") expr $rule
 ASSXOR        ::= "^=" expr $rule
 ASSOR         ::= "|=" expr $rule
-ASSLSH        ::= "<<=" expr $rule
-ASSRSH        ::= ">>=" expr $rule
-ASSRRSH       ::= ">>>=" expr $rule
+ASSLSH        ::= ("<<=" | "ASSLSH") expr $rule
+ASSRSH        ::= (">>=" | "ASSRSH") expr $rule
+ASSRRSH       ::= (">>>=" | "ASSRRSH") expr $rule
 
 /* Expression */
 expr          ::= bxor OR*
@@ -88,21 +90,21 @@ simplecmd     ::= varcmd | method
 
 command       ::= S ( $info (( (simplecmd | do) )?  S ";" ) | (if | while | for | switch | break | continue) )
 blok          ::= S "{" command* S "}"
+statement     ::= command | blok
 continue      ::= "continue" S ";" $rule
 break         ::= "break" S ";" $rule
 brexpr        ::= S "(" expr ")"
 
-if            ::= "if" $rule if1 ifCmd (else S ifCmd) ? endIf
-ifCmd         ::= (command | blok)
+if            ::= "if" $rule if1 statement (else S statement) ? endIf
 if1           ::= brexpr $rule 
 else          ::= S "else" $rule
 endIf         ::= $rule
 
-while         ::= "while" $rule whileIf endWhile
+while         ::= "while" $rule whileIf statement endWhile
 whileIf       ::= brexpr $rule
-endWhile      ::= (command | blok) $rule
+endWhile      ::= $rule
 
-do            ::= "do" S $rule (command | blok) S endDo
+do            ::= "do" S $rule statement S endDo
 endDo         ::= doExpr $rule
 doExpr        ::= "while" S $rule brexpr
 
@@ -110,14 +112,13 @@ for           ::= "for" $rule S "(" S (varcmd (S ? "," varcmd)*)? S ";" $rule
                   S for1 S ";" S for2 S ")" for3
 for1          ::= (expr $rule)? $rule 
 for2          ::= ((varcmd | method) (S ? "," (varcmd | method))*)? $rule
-for3          ::= (command | blok) $rule
+for3          ::= statement $rule
 
 switch        ::= S "switch" $rule brexpr switchBody
 switchBody    ::= S "{" $rule ( case | default )* S "}" endSwitch
 swconstant    ::= boolConst | strConst | intConst
-case          ::= S "case" S swconstant S ":" $rule swCmd S
-default       ::= S "default" S ":" $rule swCmd S
-swCmd         ::= (command | blok)*
+case          ::= S "case" S swconstant S ":" $rule statement* S
+default       ::= S "default" S ":" $rule statement* S
 endSwitch     ::= $rule
 
-program       ::= ( command | blok )+ S
+program       ::= statement+ S
