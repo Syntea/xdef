@@ -3,28 +3,46 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs ="http://www.w3.org/2001/XMLSchema"
     xmlns:h  ="http://www.w3.org/1999/xhtml"
+    xmlns:saxon="http://saxon.sf.net/"
     exclude-result-prefixes="xsl xs h"
     version="3.0"
 >
 
 <xsl:output
     method="xhtml"
-    encoding="UTF-8"
     omit-xml-declaration="yes"
-    doctype-public="aa"
+    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
     indent="no"
+    encoding="UTF-8"
 />
 <!--
-    omit-xml-declaration="yes"
+    version="5"
 -->
 
 
+<xsl:param name="html" as="xs:string"/>
+
+
 <xsl:template match="/">
-<xsl:result-document xml:space="preserve"><html lang="en">
+    <xsl:choose>
+    <xsl:when test="$html">
+        <xsl:variable name="html" select="saxon:html-parse(unparsed-text($html))" as="node()"/>
+        <xsl:result-document xml:space="preserve"><xsl:apply-templates select="$html/html"/></xsl:result-document>
+    </xsl:when>
+    <xsl:otherwise>
+        <xsl:result-document xml:space="preserve"><xsl:apply-templates select="html"/></xsl:result-document>
+    </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+
+<xsl:template match="html">
+<html lang="en">
 <head>
-    <title>2.1. Example of complete X-definition</title>
+    <title><xsl:sequence select="h:html/h:head/h:title/text()"/></title>
     <meta name="description" content="Example of X-definition"/>
-    <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
@@ -92,7 +110,6 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
 
 </body>
 </html>
-</xsl:result-document>
 </xsl:template>
 
 
