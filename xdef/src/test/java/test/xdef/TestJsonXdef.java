@@ -949,6 +949,8 @@ public class TestJsonXdef extends XDTester {
             assertNoErrorsAndClear(reporter); //OK
             jparse(xd, "{ \"address\": { \"d\": \"cde\", \"x\": 1 } }", reporter);
             assertNoErrorsAndClear(reporter); //OK
+            jparse(xd, "{ \"address\": { \"x\": 1, \"d\": \"cde\" } }", reporter);
+            assertNoErrorsAndClear(reporter); //OK
             jparse(xd, "{ \"address\": { \"d\": \"dd\" } }", reporter);
             if (reporter.size() != 1 || !reporter.toString().contains("'x'")) {
                 fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
@@ -986,6 +988,15 @@ public class TestJsonXdef extends XDTester {
 "  \"disbursementRecords\":[ ],\n" +
 "  \"isSpecialAttention\":false,\n" +
 "  \"originalCaseFileNumber\":\"76\"\n" +
+"}";
+            jparse(xp, "X9", json, reporter);
+            assertNoErrorsAndClear(reporter);
+            json =
+"{ \"lossEventNumber\":1012,\n" +
+"  \"isSpecialAttention\":false,\n" +
+"  \"disbursementRecords\":[ ],\n" +
+"  \"originalCaseFileNumber\":\"76\",\n" +
+"  \"lossEventCauseCode\":1\n" +
 "}";
             jparse(xp, "X9", json, reporter);
             assertNoErrorsAndClear(reporter);
