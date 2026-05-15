@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.45, release-date 2026-04-27
-  * .
+  * Fixed a bug in the length check for `num` definition-X type values.
 
 # Version 42.2.44, release-date 2026-04-27
   * Implemented missing X-script method `setParseResult(ParseResut)`.
