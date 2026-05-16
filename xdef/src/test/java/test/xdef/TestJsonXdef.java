@@ -972,16 +972,23 @@ public class TestJsonXdef extends XDTester {
 "    </xd:json>" +
 "  <xd:component> %class "+_package+".Kocman_XC_2 %link #test; </xd:component>\n" +
 "</xd:def>";
-            json = "{\"code\" : \"4120\"}";
             xp = compile(xdef);
             genXComponent(xp);
             xd = xp.createXDDocument();
+            json = "{\"code\" : \"4120\"}";
             x = jparse(xd, json, reporter);
             assertNoErrorsAndClear(reporter);
             assertEq(x, XonUtils.parseJSON(json));
             xc = xd.jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
             assertEq(x, xc.toXon());
+            json = "{\"code\" : 4120 }"; // missing quotes
+            x = jparse(xd, json, reporter);
+            assertErrorsAndClear(reporter);
+            assertFalse(x.equals(XonUtils.parseJSON(json)));
+            xc = xd.jparseXComponent(json, null, reporter);
+            assertErrorsAndClear(reporter);
+//            assertFalse(x.equals(xc.toXon())); //??? TODO ClasCastException
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xp = compile(
