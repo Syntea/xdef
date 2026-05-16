@@ -963,6 +963,25 @@ public class TestJsonXdef extends XDTester {
             if (reporter.size() != 2) {
                 fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
             }
+            xdef = // test num in JSON
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"test\">\n" +
+"    <xd:json name = \"test\">\n" +
+"      {\n" +
+"          \"code\": \"num(4)\"\n" +
+"      }\n" +
+"    </xd:json>" +
+"  <xd:component> %class "+_package+".Kocman_XC_2 %link #test; </xd:component>\n" +
+"</xd:def>";
+            json = "{\"code\" : \"4120\"}";
+            xp = compile(xdef);
+            genXComponent(xp);
+            xd = xp.createXDDocument();
+            x = jparse(xd, json, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertEq(x, XonUtils.parseJSON(json));
+            xc = xd.jparseXComponent(json, null, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertEq(x, xc.toXon());
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xp = compile(
