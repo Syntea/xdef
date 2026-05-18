@@ -1881,34 +1881,6 @@ public abstract class XDTester extends STester {
         compileSources(classpath, classDir, dir);
     }
 
-    /** Simple type test in the Array
-     * @param type type method.
-     * @param xon XON/JSON data to be tested.
-     * @return string with errors or null.
-     */
-    public final String testA(final String type, final String xon) {
-        return testX(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A'>\n"+
-"  <xd:json name='A'> [\"* " + type + "()\"] </xd:json>\n"+
-"  <xd:component> %class test.TestGJ" + type + " %link #A; </xd:component>\n"+
-"</xd:def>", "", xon);
-    }
-
-    /** Simple type test in the Map.
-     * @param type type method.
-     * @param xon XON/JSON data to be tested.
-     * @return string with errors or null.
-     */
-    public final String testM(final String type, final String xon) {
-        return testX(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A'>\n"+
-"<xd:json name='A'>\n" +
-"{a:\"? " + type + "();\",b:\"? " + type + "();\",c:\"? " + type + "();\"}\n" +
-"</xd:json>\n" +
-"<xd:component>%class test.TestGM" + type + " %link A</xd:component>\n"+
-"</xd:def>", "", xon);
-    }
-
     /** Testing the entered data using X-definition.
      * @param xdef X-definition source.
      * @param xname name of X-definition.
