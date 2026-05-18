@@ -3,46 +3,34 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs ="http://www.w3.org/2001/XMLSchema"
     xmlns:h  ="http://www.w3.org/1999/xhtml"
-    xmlns:saxon="http://saxon.sf.net/"
     exclude-result-prefixes="xsl xs h"
     version="3.0"
 >
 
 <xsl:output
-    method="xhtml"
-    omit-xml-declaration="yes"
-    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+    method="html"
+    version="5"
     indent="no"
     encoding="UTF-8"
 />
 <!--
-    version="5"
+    omit-xml-declaration="yes"
+    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
 -->
 
 
-<xsl:param name="html" as="xs:string"/>
-
-
 <xsl:template match="/">
-    <xsl:choose>
-    <xsl:when test="$html">
-        <xsl:variable name="html" select="saxon:html-parse(unparsed-text($html))" as="node()"/>
-        <xsl:result-document xml:space="preserve"><xsl:apply-templates select="$html/html"/></xsl:result-document>
-    </xsl:when>
-    <xsl:otherwise>
-        <xsl:result-document xml:space="preserve"><xsl:apply-templates select="html"/></xsl:result-document>
-    </xsl:otherwise>
-    </xsl:choose>
+    <xsl:result-document><xsl:apply-templates select="h:html"/></xsl:result-document>
 </xsl:template>
 
 
 
-<xsl:template match="html">
-<html lang="en">
+<xsl:template match="h:html">
+<xsl:sequence xml:space="preserve"><html lang="en">
 <head>
-    <title><xsl:sequence select="h:html/h:head/h:title/text()"/></title>
-    <meta name="description" content="Example of X-definition"/>
+    <title><xsl:sequence select="h:head/h:title/text()"/></title>
+    <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
@@ -110,6 +98,7 @@ You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
 
 </body>
 </html>
+</xsl:sequence>
 </xsl:template>
 
 

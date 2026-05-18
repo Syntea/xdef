@@ -26,8 +26,10 @@ fi
 
 
 #hlavni krok - vygenerovat dokumentaci z JIRA-xml-exportu tasku
-for i in tutorial/ch02s01.html
+#for i in tutorial/ch??s??.html
+for i in tutorial/ch02s02.html
 do
-    xmllint --html --xmlout --recover $i | \
+    xmllint --html --xmlout --nodefdtd --recover $i | \
     java -cp "${cp}" "net.sf.saxon.Transform" -xsl:${xslFile} -o:../webapp-new/$i -s:-
+    #java -cp "${cp}" "net.sf.saxon.Transform" -xsl:${xslFile} -o:../webapp-new/$i -s:$i
 done
