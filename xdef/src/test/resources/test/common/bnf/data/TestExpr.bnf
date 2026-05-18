@@ -2,118 +2,123 @@
 /* BNF grammar rules                                                          */
 /******************************************************************************/
 
-comment    ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
-S          ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
-keyword    ::= "true" | "false" | "null"| "if" | "else" | "do" | "while"
-               | "for" | "switch" | "case" | "default" | "try" | "catch"
-               | "finally" | "throw" | "break" | "continue" | "return"
+comment      ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
+S            ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
+keyword      ::= "true" | "false" | "null"| "if" | "else" | "do" | "while"
+                 | "for" | "switch" | "case" | "default" | "try" | "catch"
+                 | "finally" | "throw" | "break" | "continue" | "return"
+                 | "AND" | "GT" | "GE" | "LT" | "LE" | "RRSH" | "RSH" | "LSH"
+                 | "ASSAND" | "ASSLSH" | "ASSRSH" | "ASSRRSH"
 
 /* Constant values */
-boolConst   ::= ("true" | "false") $rule
-strConst    ::= ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $rule
-intConst    ::= [0-9]+ $rule
-fltConst    ::= ([0-9]+ ("." [0-9]+ [eE] [-+]? [0-9]+
-                | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule
-nullConst   ::= "null" $rule
+boolConst     ::= ("true" | "false") $rule
+strConst      ::= ("'" ("''" | [^']+)* "'" | '"' ('""' | [^"]+)* '"') $rule
+intConst      ::= [0-9]+ $rule
+fltConst      ::= ([0-9]+ ("." [0-9]+ [eE] [-+]? [0-9]+
+                  | [eE] [-+]? [0-9]+ | "." [0-9]+)) $rule
+nullConst     ::= "null" $rule
 
 /* Identifiers */
-name        ::= ($JavaName - keyword) $rule
-idRef       ::= name S $rule /* name which refers to an object (variable) */
+name          ::= ($JavaName - keyword) $rule
+idRef         ::= name S $rule /* name which refers to an object (variable) */
 
 /* Operators */
-OR          ::= "|" bxor $rule
-XOR         ::= "^" band $rule
-AND         ::= "&" equal $rule
-EQ          ::= "==" rel $rule
-NE          ::= "!=" rel $rule
-LT          ::= "<" shift $rule
-GT          ::= ">" shift $rule
-LE          ::= "<=" shift $rule
-GE          ::= ">=" shift $rule
-RRSH        ::= ">>>" add $rule
-RSH         ::= ">>" add $rule
-LSH         ::= "<<" add $rule
-ADD         ::= "+" mul $rule
-SUB         ::= "-" mul $rule
-MUL         ::= "*" term $rule
-DIV         ::= "/" term $rule
-MOD         ::= "%" term $rule
-INCAFTER    ::= name S "++" $rule
-DECAFTER    ::= name S "--" $rule
-INCBEFORE   ::= "++" S name $rule
-DECBEFORE   ::= "--" S name $rule
-PLUS        ::= "+" value /* ignore unary plus (rule not generated) */
-MINUS       ::= "-" value $rule
-NOT         ::= "!" value $rule
-NEG         ::= "~" value $rule
-ASS         ::= "=" expr $rule
-ASSADD      ::= "+=" expr $rule
-ASSSUB      ::= "-=" expr $rule
-ASSMUL      ::= "*=" expr $rule
-ASSDIV      ::= "/=" expr $rule
-ASSMOD      ::= "%=" expr $rule
-ASSAND      ::= "&=" expr $rule
-ASSXOR      ::= "^=" expr $rule
-ASSOR       ::= "|=" expr $rule
-ASSLSH      ::= "<<=" expr $rule
-ASSRSH      ::= ">>=" expr $rule
-ASSRRSH     ::= ">>>=" expr $rule
+OR            ::= "|" bxor $rule
+XOR           ::= "^" band $rule
+AND           ::= ("&" | "AND") equal $rule
+EQ            ::= "==" rel $rule
+NE            ::= "!=" rel $rule
+LT            ::= ("<" | "LT") shift $rule
+GT            ::= (">" | "GT") shift $rule
+LE            ::= ("<=" | "LE") shift $rule
+GE            ::= (">=" | "GE") shift $rule
+RRSH          ::= (">>>" | "RRSH") add $rule
+RSH           ::= (">>" | "RSH") add $rule
+LSH           ::= ("<<" | "LSH") add $rule
+ADD           ::= "+" mul $rule
+SUB           ::= "-" mul $rule
+MUL           ::= "*" term $rule
+DIV           ::= "/" term $rule
+MOD           ::= "%" term $rule
+INCAFTER      ::= name S "++" $rule
+DECAFTER      ::= name S "--" $rule
+INCBEFORE     ::= "++" S name $rule
+DECBEFORE     ::= "--" S name $rule
+PLUS          ::= "+" value /* ignore unary plus (rule not generated) */
+MINUS         ::= "-" value $rule
+NOT           ::= "!" value $rule
+NEG           ::= "~" value $rule
+ASS           ::= "=" expr $rule
+ASSADD        ::= "+=" expr $rule
+ASSSUB        ::= "-=" expr $rule
+ASSMUL        ::= "*=" expr $rule
+ASSDIV        ::= "/=" expr $rule
+ASSMOD        ::= "%=" expr $rule
+ASSAND        ::= ("&=" | "ASSAND") expr $rule
+ASSXOR        ::= "^=" expr $rule
+ASSOR         ::= "|=" expr $rule
+ASSLSH        ::= ("<<=" | "ASSLSH") expr $rule
+ASSRSH        ::= (">>=" | "ASSRSH") expr $rule
+ASSRRSH       ::= (">>>=" | "ASSRRSH") expr $rule
 
 /* Expression */
-expr        ::= bxor OR*
-bxor        ::= band XOR*
-band        ::= equal AND*
-equal       ::= rel (EQ | NE)*
-rel         ::= shift (LT | GT | LE | GE)*
-shift       ::= add (RRSH | RSH | LSH)*
-add         ::= mul (ADD | SUB)*
-mul         ::= term (MUL | DIV | MOD)*
-incdec      ::= (INCAFTER | DECAFTER | INCBEFORE | DECBEFORE) S
-term        ::= S ( incdec | MINUS | NOT | NEG | PLUS | value) S
-value       ::= S (const | function | idRef | "(" S expr S ")") S
-const       ::= fltConst | intConst | boolConst | strConst | nullConst
-function    ::= name paramList $rule
-param       ::= expr $rule
-paramList   ::= S "(" S $rule ( param (S "," param )* )? S ")"
+expr          ::= bxor OR*
+bxor          ::= band XOR*
+band          ::= equal AND*
+equal         ::= rel (EQ | NE)*
+rel           ::= shift (LT | GT | LE | GE)*
+shift         ::= add (RRSH | RSH | LSH)*
+add           ::= mul (ADD | SUB)*
+mul           ::= term (MUL | DIV | MOD)*
+incdec        ::= (INCAFTER | DECAFTER | INCBEFORE | DECBEFORE) S
+term          ::= S ( incdec | MINUS | NOT | NEG | PLUS | value) S
+value         ::= S (const | function | idRef | "(" S expr S ")") S
+const         ::= fltConst | intConst | boolConst | strConst | nullConst
+function      ::= name paramList $rule
+param         ::= expr $rule
+paramList     ::= S "(" S $rule ( param (S "," param )* )? S ")"
 
 /* Statements */
-assign      ::= name S (ASS | ASSADD | ASSSUB | ASSMUL | ASSDIV | ASSMOD
-                | ASSAND | ASSXOR | ASSOR | ASSLSH | ASSRSH | ASSRRSH)
-declItem    ::= name S (ASS)?
-type        ::= ("boolean" | "int" | "float" | "String" | "Object") $rule
-method      ::= name paramList $rule
-vardecl     ::= type S declItem (S "," S declItem)*
-varcmd      ::= vardecl | assign | incdec
-simplecmd   ::= varcmd | method
+assign        ::= name S (ASS | ASSADD | ASSSUB | ASSMUL | ASSDIV | ASSMOD
+                  | ASSAND | ASSXOR | ASSOR | ASSLSH | ASSRSH | ASSRRSH)
+declItem      ::= name S (ASS)?
+type          ::= ("boolean" | "int" | "float" | "String" | "Object") $rule
+method        ::= name paramList $rule
+vardecl       ::= type S declItem (S "," S declItem)*
+varcmd        ::= vardecl | assign | incdec
+simplecmd     ::= varcmd | method
 
-continue    ::= "continue" S ";" $rule
-command     ::= S ( (($info (simplecmd | do) )?  S ";" )
-                | ( $info switch | $info blockcmd | "{" command* S "}" ) )
-blockcmd    ::= if | while | for 
-brexpr      ::= S "(" expr ")"
-if          ::= "if" $rule if1 command (else S command) ? endIf
-if1         ::= brexpr $rule 
-else        ::= S "else" $rule
-endIf        ::= $rule
-while       ::= "while" $rule whileIf endWhile
-whileIf      ::= brexpr $rule
-endWhile    ::=  command $rule
-do          ::= "do" S $rule command S endDo
-endDo       ::=  "while" S brexpr $rule
-for         ::= "for" $rule S "(" S (varcmd (S ? "," varcmd)*)? S ";" $rule
-                S for1 S ";" S for2 S ")" for3
-for1        ::= (expr $rule)? $rule 
-for2        ::= ((varcmd | method) (S ? "," (varcmd | method))*)? $rule
-for3        ::= command $rule
-program     ::= command+ S
-/***************************************************************
-            TODO
-***************************************************************/
-switch      ::= S "switch" $rule brexpr switchBody endSwitch
-switchBody  ::= S "{" ( case | default )* S "}"
-swconstant  ::= boolConst | strConst | intConst
-case        ::= S "case" $rule S swconstant S ":" case1
-case1       ::= $rule (switchBreak | command)* S
-default     ::= S "default" S ":" $rule (switchBreak | command)* S
-switchBreak ::= S "break" S ";" $rule
-endSwitch   ::= $rule
+command       ::= S ( $info (( (simplecmd | do) )?  S ";" ) | (if | while | for | switch | break | continue) )
+blok          ::= S "{" command* S "}"
+statement     ::= command | blok
+continue      ::= "continue" S ";" $rule
+break         ::= "break" S ";" $rule
+brexpr        ::= S "(" expr ")"
+
+if            ::= "if" $rule if1 statement (else S statement) ? endIf
+if1           ::= brexpr $rule 
+else          ::= S "else" $rule
+endIf         ::= $rule
+
+while         ::= "while" $rule whileIf statement endWhile
+whileIf       ::= brexpr $rule
+endWhile      ::= $rule
+
+do            ::= "do" S $rule statement S endDo
+endDo         ::= doExpr $rule
+doExpr        ::= "while" S $rule brexpr
+
+for           ::= "for" $rule S "(" S (varcmd (S ? "," varcmd)*)? S ";" $rule
+                  S for1 S ";" S for2 S ")" for3
+for1          ::= (expr $rule)? $rule 
+for2          ::= ((varcmd | method) (S ? "," (varcmd | method))*)? $rule
+for3          ::= statement $rule
+
+switch        ::= S "switch" $rule brexpr switchBody
+switchBody    ::= S "{" $rule ( case | default )* S "}" endSwitch
+swconstant    ::= boolConst | strConst | intConst
+case          ::= S "case" S swconstant S ":" $rule statement* S
+default       ::= S "default" S ":" $rule statement* S
+endSwitch     ::= $rule
+
+program       ::= statement+ S

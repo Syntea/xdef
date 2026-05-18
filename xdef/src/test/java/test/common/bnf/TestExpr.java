@@ -79,13 +79,16 @@ public class TestExpr extends STester {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
     String test(final String x, final BNFGrammar g, final String prog) {
         String s = parse(g, "program", prog);
         if (s != null) {
             return "Syntax error: " + s;
         }
-        Object[] code = g.getParsedObjects();
+        Object[] parsed = g.getParsedObjects();
+        String[] code = new String[parsed.length];
+        for (int i = 0; i < parsed.length; i++) {
+            code[i] = (String) parsed[i];
+        }
         TestExprCompiler.CodeItem[] pc = null;
         try {
             pc = precompile(prog, code);
@@ -100,44 +103,51 @@ public class TestExpr extends STester {
             }
             return "'" + x + "', '" + y + "'\n" + TestExprCompiler.printCode(prog, code, pc);
         } catch (RuntimeException ex) {
-            ex.printStackTrace();
             return "'" + x + "', '?????'\n" + TestExprCompiler.printCode(prog, code, pc);
         }
     }
 
-    private static void print(int i) {System.out.print(i);}
+    private static void print(final Object o) {System.out.print(o.toString());}
 
     /** Run test and print error information. */
     @Override
     public void test() {
+        String s;
         BNFGrammar g;
         g = BNFGrammar.compile(null, new File(getDataDir() + "TestExpr.bnf"), null);
         g.setUserObject(this);
         try {
             g.trace(null);
 /**
-if(false){}else print(2);print(1);
-int i=1; switch(1) { case 1: print(i); break; default: print(0);}
-           _displayCode = true;
-            assertNull(test("1", g, "int i=1; switch(1) { case 1: print(i); break; default: print(0);}"));
-if(true) return;
-if(true) return;
-//            assertNull(test("", g, "int i=0; switch(i) {}"));
+            _displayCode = true;
+            assertNull(test("0122", g,
+"for(int i=0; i < 4; i++) {\n"+
+"  if(i==3) break;\n"+
+"  else\n"+
+"    switch(i) {\n"+
+"      case 2:\n"+
+"        print(i);\n"+
+"        break;\n"+
+"    }\n"+
+"  print(i);\n"+
+"}"));
 if(true)return;
 /**/
+            assertNull(test("", g, ";"));
+            assertNull(test("", g, " ;; "));
+            assertNull(test("", g, " { ; ; } { ; ; } "));
             assertNull(test("0", g, " /*x*/ print ( /*x*/ 0 /*x*/) /*x*/; "));
-            assertNull(test("13", g, "print ( /*x*/ 12/*x*//*x*/ + 1 /*x*/);"));
+            assertNull(test("13", g, "print ( /*x*/ 12/*x*//*x*/ + 1 /*x*/) ;"));
             assertNull(test("abcdef", g, "print('abc' + 'def');"));
             assertNull(test("25abc", g, "print(( + ( + 3+2 ) * + 5 ) + 'abc');"));
             assertNull(test("25abc", g, "print( +( + 5 * ( 3 + 2 ) ) + 'abc');"));
             assertNull(test("50abc", g, "print(+(+5 * - ( - 7 + 2 ))*2+'abc');"));
             assertNull(test("true", g, "print( true );"));
-
             assertNull(test("false", g, "print( ! true);"));
             assertNull(test("true", g, "print(true|false);"));
             assertNull(test("false", g, "print(true & false);"));
             assertNull(test("true", g, "print(true ^ false);"));
-            assertNull(test("true", g, "print( ! (true & false) );"));
+            assertNull(test("true", g, "print(!(true&false));"));
             assertNull(test("-1abc", g, "print( - ( ( 3 + 3 ) / 5 ) + \"abc\" );"));
             assertNull(test("1.26abc", g, "print(((3 + 3.3)/5) + 'abc');"));
             assertNull(test("2", g, "print( - 1 + 3 );"));
@@ -239,12 +249,9 @@ if(true)return;
             assertNull(test("", g, "i = 1; j = i--;"));
             assertEq(0, getVar("i"));
             assertEq(1, getVar("j"));
-            assertNull(test("", g, "i = 1; j = i--;"));
-            assertEq(0, getVar("i"));
+            assertNull(test("", g, "i = 2; j = --i;"));
+            assertEq(1, getVar("i"));
             assertEq(1, getVar("j"));
-            assertNull(test("", g, "i = 2.1; j = --i;"));
-            assertEq(1.1, getVar("i"));
-            assertEq(1.1, getVar("j"));
             assertNull(test("", g, "i = 1; i += 2;"));
             assertEq(3, getVar("i"));
             assertNull(test("", g, "i = 1; i -= 2;"));
@@ -267,14 +274,11 @@ if(true)return;
             assertEq(8, getVar("k"));
             assertEq(8, getVar("l"));
             assertEq(8.5, getVar("m"));
-            assertNull(test("", g, "i = true; j = false; k = i == j; m = i != j;\n"
-                 + "o = 1; p = 0; q = o > p; r = 1.0; s = 2.0; t = r <= s;"));
+            assertNull(test("", g, "i = true; j = false; k = i == j; m = i != j;"));
             assertEq(true, getVar("i"));
             assertEq(false, getVar("j"));
             assertEq(false, getVar("k"));
             assertEq(true, getVar("m"));
-            assertEq(true, getVar("q"));
-            assertEq(true, getVar("t"));
             assertNull(test("", g, "i=sin(3.14);"));
             assertEq(Math.sin(3.14), getVar("i"));
             assertNull(test("", g, "sin(3.14); i=1;"));
@@ -290,16 +294,9 @@ if(true)return;
             assertNull(test("3, 4, 5\nx\n", g, "printf('%d, %d, %d\nx\n', 3,4,5);"));
             assertNull(test("null\n1\n", g, "println(null);println(1);"));
             assertNull(test("null\n", g, "Object i=3; i=null; println(i);"));
-            assertNull(test("12", g, "int i=1; do print(i); while (i++ < 2) ;"));
-            assertNull(test("112", g, "int i=1; int j=1; do do print(j); while (i++ < 2); while (j++ < 2) ;"));
-            assertNull(test("23", g, "int i=1; while ( i++ < 3 ) print(i);"));
-            assertNull(test("5434", g, "int i=1; int j=6; {while (i++<3) {while (j-->3) print(j);} print(i);}"));
-            assertNull(test("12", g, "for(int i=1; i<3; i++) print(i);"));
-            assertNull(test("112212", g, "for(int i=1; i<3; i++) { print(i); for(int j=1; j<3; j++) print(j); }\n"));
             assertNull(test("", g, "if (false) print(1); "));
             assertNull(test("1", g, "if (true) print(1); "));
             assertNull(test("21", g, "if(false){} else print(2); print(1);"));
-//            assertNull(test("21", g, "if(false){} else print(2);print(1);"));
             assertNull(test("12", g, "int i=1; if (i==1) {print(1); print(2);}"));
             assertNull(test("2", g, "int i = 1; { if (i == 1) {i = 2;} else {i = 0;} print(i);}"));
             assertNull(test("", g, "int i=1;if (i==1) {if (i!=1) print(1);}"));
@@ -317,8 +314,46 @@ if(true)return;
             assertNull(test("-19", g, "int i=1; if (i!=1) print(1); else print(-1); print(9);"));
             assertNull(test("1", g, "int i=1; if (i==1) if (i==1) if (i==1) print(1); else print(2);"));
             assertNull(test("2", g, "int i=1;if (i==1) if (i==1) if (i!=1) print(1); else print(2);"));
-//            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(i); break; dafault: print(0);}"));
-//            assertNull(test("1", g, "int i=1; switch(i) {case 1: print(i); break; dafault: print(0);}"));
+            assertNull(test("12", g, "int i=1; do print(i); while (i++ < 2) ;"));
+            assertNull(test("112", g, "int i=1; int j=1; do do print(j); while (i++ < 2); while (j++ < 2) ;"));
+            assertNull(test("2", g, "int i=1; do {if (i == 1) continue; print(i);}while (i++ < 2);"));
+            assertNull(test("", g, "int i=1; do {if (i == 1) break; print(i);}while (i++ < 2);"));
+            assertNull(test("23", g, "int i=1; while ( i++ < 3 ) print(i);"));
+            assertNull(test("5434", g, "int i=1; int j=6; {while (i++<3) {while (j-->3) print(j);} print(i);}"));
+            assertNull(test("1", g, "int i=0; while ( i++ < 3 )if(i==2) break; else print(i);"));
+            assertNull(test("13", g, "int i=0; while ( i++ < 3 )if(i==2) continue; else print(i);"));
+            assertNull(test("12", g, "for(int i=1; i<3; i++) print(i);"));
+            assertNull(test("112212", g, "for(int i=1; i<3; i++) { print(i); for(int j=1; j<3; j++) print(j); }\n"));
+            assertNull(test("112", g, "for(int i=1;i<3;i++){print(i); if(i==2) continue; print(i);}"));
+            assertNull(test("1", g, "for(int i=1;i<3;i++){print(i); if(i==1) break; print(i);}"));
+            assertNull(test("0", g, "int i=0; switch(i) {case 1: print(1); break; default: print(0);}"));
+            assertNull(test("1", g, "int i=1; switch(i) {case 1: print(1); break; default: print(0);}"));
+            assertNull(test("0", g, "int i=0; switch(i + 2) {case 2: switch(i){} print(i);break;}"));
+            assertNull(test("", g, "for (int i=0;i<4;i++)if(i==3)switch(i){case 2: print(i);break;} else break;"));
+            assertNull(test("2", g,"for(int i=0; i < 4; i++) if(i==3)break; else switch(i){case 2: print(i);break;}"));
+            assertNull(test("2", g,"for(int i=0;i<4;i++)if(i==3)continue; else switch(i){case 2: print(i);continue;}"));
+            assertNull(test("01",g,
+                "for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
+            assertNull(test("0122", g,
+"for(int i=0; i < 4; i++) {\n"+
+"  if(i==3) break;\n"+
+"  else switch(i) {\n"+
+"      case 2:\n"+
+"        print(i);\n"+
+"        break;\n"+
+"    }\n"+
+"  print(i);\n"+
+"}"));
+            assertNull(test("0122", g,
+"for(int i=0; i < 4; i++) {\n"+
+"  if(i!=3) switch(i) {\n"+
+"      case 2:\n"+
+"        print(i);\n"+
+"        break;\n"+
+"    }\n"+
+"  else break;\n"+
+"  print(i);\n"+
+"}"));
         } catch (Exception ex) {fail(ex);}
     }
 

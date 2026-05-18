@@ -1,10 +1,8 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
-import org.xdef.impl.code.DefParseResult;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
-import org.xdef.xon.XonTools;
 
 /** Parser of X-script "num" type.
  * @author Vaclav Trojan
@@ -19,7 +17,13 @@ public class XDParseNum extends XSAbstractParseToken {
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
-        boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+        boolean quoted = false;
+        if (xn != null && xn.getXonMode() > 0) {
+            if (!(quoted = p.isChar('"'))) { // JSON string must be in quotes!
+                p.error(XDEF.XDEF809, parserName() + ": value is not string"); //Incorrect value of '&{0}'&{1}{: }
+                return;
+            }
+        }
         if (p.isDigit() < 0) {
             p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
             return;
@@ -31,10 +35,16 @@ public class XDParseNum extends XSAbstractParseToken {
         }
         p.setParsedValue(p.getBufferPart(pos, p.getIndex()));
         String s = p.getBufferPart(pos, p.getIndex());
-        p.setParsedValue(s);
         p.isSpaces();
         p.replaceParsedBufferFrom(pos0, s);
-        checkItem(p);
+        p.setParsedValue(s);
+        if (quoted) {
+            p.setParsedValue(s.substring(1, s.length() - 1)); //remove quotes from the parsed vqlue
+            checkItem(p);
+            p.setParsedValue(s); //set removed quotes from the parsed vqlue
+        } else {
+            checkItem(p);
+        }
     }
     @Override
     public String parserName() {return ROOTBASENAME;}

@@ -949,6 +949,8 @@ public class TestJsonXdef extends XDTester {
             assertNoErrorsAndClear(reporter); //OK
             jparse(xd, "{ \"address\": { \"d\": \"cde\", \"x\": 1 } }", reporter);
             assertNoErrorsAndClear(reporter); //OK
+            jparse(xd, "{ \"address\": { \"x\": 1, \"d\": \"cde\" } }", reporter);
+            assertNoErrorsAndClear(reporter); //OK
             jparse(xd, "{ \"address\": { \"d\": \"dd\" } }", reporter);
             if (reporter.size() != 1 || !reporter.toString().contains("'x'")) {
                 fail(reporter.toString()); // should be XDEF539: Required element 'x' is missing
@@ -961,6 +963,32 @@ public class TestJsonXdef extends XDTester {
             if (reporter.size() != 2) {
                 fail(reporter.toString()); // should be XDEF539, elements 'd' and 'x' is missing
             }
+            xdef = // test num in JSON
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"test\">\n" +
+"    <xd:json name = \"test\">\n" +
+"      {\n" +
+"          \"code\": \"num(4)\"\n" +
+"      }\n" +
+"    </xd:json>" +
+"  <xd:component> %class "+_package+".Kocman_XC_2 %link #test; </xd:component>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            genXComponent(xp);
+            xd = xp.createXDDocument();
+            json = "{\"code\" : \"4120\"}";
+            x = jparse(xd, json, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertEq(x, XonUtils.parseJSON(json));
+            xc = xd.jparseXComponent(json, null, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertEq(x, xc.toXon());
+            json = "{\"code\" : 4120 }"; // missing quotes
+            x = jparse(xd, json, reporter);
+            assertErrorsAndClear(reporter);
+            assertFalse(x.equals(XonUtils.parseJSON(json)));
+            xc = xd.jparseXComponent(json, null, reporter);
+            assertErrorsAndClear(reporter);
+            assertTrue(x.equals(xc.toXon())); //???
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xp = compile(
@@ -986,6 +1014,15 @@ public class TestJsonXdef extends XDTester {
 "  \"disbursementRecords\":[ ],\n" +
 "  \"isSpecialAttention\":false,\n" +
 "  \"originalCaseFileNumber\":\"76\"\n" +
+"}";
+            jparse(xp, "X9", json, reporter);
+            assertNoErrorsAndClear(reporter);
+            json =
+"{ \"lossEventNumber\":1012,\n" +
+"  \"isSpecialAttention\":false,\n" +
+"  \"disbursementRecords\":[ ],\n" +
+"  \"originalCaseFileNumber\":\"76\",\n" +
+"  \"lossEventCauseCode\":1\n" +
 "}";
             jparse(xp, "X9", json, reporter);
             assertNoErrorsAndClear(reporter);

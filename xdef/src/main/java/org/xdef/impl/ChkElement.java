@@ -1080,6 +1080,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 case "unsignedShort":
                                 case "int": _xonValue = x.intValue(); break;
                                 case "float": _xonValue = x.floatValue(); break;
+                                case "num": _xonValue = ""; break;
                                 default: _xonValue = obj; // "decimal", "dec"
                             }
                         } else if (obj instanceof String) {
