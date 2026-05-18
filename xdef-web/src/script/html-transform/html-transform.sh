@@ -1,5 +1,5 @@
 #!/bin/bash
-#translate html-files by template
+#transform html-files by template
 
 #konstanty
 saxonVersion=12.9
@@ -7,7 +7,7 @@ xmlResVer=5.3.3
 #konstanty odvozene
 prgDir=$(dirname $(readlink -f $0))
 saxonPath=.m2/repository/net/sf/saxon/Saxon-HE/$saxonVersion/Saxon-HE-$saxonVersion.jar
-xslFile="$prgDir"/html-templ.xsl
+xslFile="$prgDir"/html-transform.xsl
 cp="${HOME}/${saxonPath}:\
 ${HOME}/.m2/repository/org/xmlresolver/xmlresolver/5.3.3/xmlresolver-${xmlResVer}.jar:\
 ${HOME}/.m2/repository/org/xmlresolver/xmlresolver/5.3.3/xmlresolver-${xmlResVer}-data.jar\
