@@ -201,34 +201,6 @@ if(T)return;
             if (!XonUtils.xonEqual(o, x)) {
                 fail("** 2\n" + XonUtils.toXonString(o, true) + "\n" + XonUtils.toXonString(x, true));
             }
-            assertNull(testA("jnull", "[ null, null ]"));
-            assertNull(testA("jboolean", "[ null, true ]"));
-            assertNull(testA("jnumber", "[ null, 1, 3.14E+2, -0 ]"));
-            assertNull(testA("jstring", "[ null, \"abc\" ]"));
-            assertNull(testA("jvalue", "[ null,true,1,3.14E+2,\"a b\",\"\" ]"));
-
-            assertNull(testA("byte", "[null, 1b, -3b ]"));
-            assertNull(testA("short", "[null, 1s ]"));
-            assertNull(testA("int", "[null, 1i ]"));
-            assertNull(testA("long", "[null, 1 ]"));
-            assertNull(testA("integer", "[null, 0N, -3N ]"));
-            assertNull(testA("float", "[null, 1.0f, 1f ]"));
-            assertNull(testA("double", "[ null, 1.0, 1d ]"));
-            assertNull(testA("decimal", "[ null,0D,1D,-1D,1.5D,3.33e-5D ]"));
-            assertNull(testA("date", "[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
-            assertNull(testA("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
-            assertNull(testA("gps", "[null,g(20.2,19.9),g(20.21,19.99,0.1),g(51.52,-0.09,0,xxx)]"));
-            assertNull(testA("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
-            assertNull(testA("char", "[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
-            assertNull(testA("anyURI", "[null, u\"http://a.b\" ]"));
-            assertNull(testA("emailAddr", "[ null, e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
-            assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
-            assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
-            assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
-            assertNull(testA("telephone","[null, t\"+420 234 567 890\"]"));
-
-            assertNull(testM("int", "{a:1}"));
-            assertNull(testM("int", "{ }"));
         } catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
         try {

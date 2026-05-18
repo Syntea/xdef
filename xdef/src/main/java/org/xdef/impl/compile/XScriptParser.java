@@ -1913,7 +1913,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
                 if (illegalNull) {
                     error(XDEF.XDEF432,_idName);//Option &{0} redefinition
                 }
-                result._noJsonNull = "illegalJsonNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
+                result._acceptJsonNull = "acceptJsonNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
             } else {
                 error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
             }

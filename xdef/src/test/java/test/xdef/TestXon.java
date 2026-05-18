@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -61,6 +62,30 @@ public class TestXon extends XDTester {
             reporter2.add(Report.error("E", s));
         }
         return reporter;
+    }
+
+    /** Simple type test in the Array
+     * @param type type method.
+     * @param xon XON/JSON data to be tested.
+     * @return string with errors or null.
+     */
+    private String testA(final String type, final String xon) {
+        return testX(
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' script='option acceptJsonNull'>\n"+
+"  <xd:json name='A'> [\"* " + type + "(); option acceptJsonNull\"] </xd:json>\n"+
+"  <xd:component> %class test.TestGJ" + type + " %link #A; </xd:component>\n</xd:def>", "", xon);
+    }
+
+    /** Simple type test in the Map.
+     * @param type type method.
+     * @param xon XON/JSON data to be tested.
+     * @return string with errors or null.
+     */
+    private String testM(final String type, final String xon) {
+        return testX(
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' script='option acceptJsonNull'>\n"+
+"<xd:json name='A'>{a:\"? " + type + "();\",b:\"? " + type + "();\",c:\"? " + type + "();\"}</xd:json>\n" +
+"<xd:component>%class test.TestGM" + type + " %link A</xd:component>\n</xd:def>", "", xon);
     }
 
     /** Run all tests. */
@@ -144,7 +169,7 @@ public class TestXon extends XDTester {
 "}");
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
             genXComponent(xp = compile(
-"<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a' script='option acceptJsonNull'>\n" +
 "  <xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
 " <xd:json name='a'>\n" +
 "    [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
@@ -158,6 +183,24 @@ public class TestXon extends XDTester {
 "  [6, null, null, true],\n" +
 "  [null, null, null, null]\n" +
 "]";
+            o = xd.jparse(json, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            xc = xd.jparseXComponent(json, null, reporter);
+            assertEq("", chkCompoinentSerializable(xc));
+            if (!XonUtils.xonEqual(o, x = xc.toXon())) {
+                fail(XonUtils.toXonString(o, true)
+                    + "\n*****\n" + XonUtils.toXonString(x, true));
+            }
+            Properties props = new Properties();
+            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "acceptJsonNull");
+            genXComponent(xp = XDFactory.compileXD(props,
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a'>\n" +
+"  <xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
+" <xd:json name='a'>\n" +
+"    [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
+" </xd:json>\n" +
+"</xd:def>"));
+            xd = xp.createXDDocument();
             o = xd.jparse(json, reporter);
             assertNoErrorwarningsAndClear(reporter);
             xc = xd.jparseXComponent(json, null, reporter);
@@ -292,7 +335,7 @@ public class TestXon extends XDTester {
 "    o : c\"\n\",                     # Character\n" +
 "    p : c\"\\n\",                    # Character\n" +
 "    q : c\" \",                      # Character\n" +
-"    r : null,                        # Character (null)\n" +
+"    r : c\"\t\",                     # Character (null)\n" +
 "    t : d0001,                       # year (without zone)\n" +
 "    u : d-0001,                      # year (without zone)\n" +
 "    v : d123456789Z,                 # year zone\n" +
@@ -301,7 +344,7 @@ public class TestXon extends XDTester {
 "  },  #**** end of map ****\n" +
 "  null,                              # null\n" +
 "  3f,                                # Float\n" +
-"  null,                              # null\n" +
+"  3.0f,                              # null\n" +
 "  -3.1d,                             # BigDecimal\n" +
 "  -2b,                               # Byte\n" +
 "  1N,                                # BigInteger\n" +
