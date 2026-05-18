@@ -120,7 +120,7 @@ public class XComponentUtil {
      */
     public static final Element toXml(final XComponent xc, final XDPool xp, final String xdPos) {
         XMNode xm = xp.findModel(xdPos);
-        if (xm.getKind() != XMELEMENT) {            
+        if (xm.getKind() != XMELEMENT) {
             throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());//Argument is not model of element: &{0}
         }
         return toXml(xc, (XMElement) xm);
@@ -630,7 +630,7 @@ public class XComponentUtil {
                 try {
                     x.setAccessible(true);
                     o = x.invoke(xc);
-                } catch (IllegalAccessException | IllegalArgumentException 
+                } catch (IllegalAccessException | IllegalArgumentException
                     | SecurityException | InvocationTargetException ex) {
                     throw new RuntimeException("Can't access getter: " + x.getName());
                 }
