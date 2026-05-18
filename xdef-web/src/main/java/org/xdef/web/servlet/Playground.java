@@ -223,7 +223,7 @@ public final class Playground extends AbstractMyServlet {
                     message = printReports(reporter, data2Xd);
                 } else {
                     status = "OK";
-                    title = "Result &mdash; mode \"" + mode2Xd + "\"";
+                    title = "Result — mode \"" + mode2Xd + "\"";
 
                     if (resultElement != null) {
                         result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
