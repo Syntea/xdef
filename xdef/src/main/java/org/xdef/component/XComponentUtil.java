@@ -53,8 +53,7 @@ public class XComponentUtil {
      * @throws Exception if variable not exists.
      */
     public static final Object getVariable(final XComponent xc, final String name) throws Exception {
-        Class<?> clazz = xc.getClass();
-        final Method method = clazz.getDeclaredMethod("get" + name);
+        final Method method = xc.getClass().getDeclaredMethod("get" + name);
         method.setAccessible(true);
         return method.invoke(xc);
     }
@@ -122,8 +121,7 @@ public class XComponentUtil {
     public static final Element toXml(final XComponent xc, final XDPool xp, final String xdPos) {
         XMNode xm = xp.findModel(xdPos);
         if (xm.getKind() != XMELEMENT) {
-            //Argument is not model of element: &{0}
-            throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
+            throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());//Argument is not model of element: &{0}
         }
         return toXml(xc, (XMElement) xm);
     }
@@ -177,8 +175,7 @@ public class XComponentUtil {
      * @param childList child list.
      * @param xc XComponent list.
      */
-    public static final void addXC(final List<XComponent> childList,
-        final List xc) {
+    public static final void addXC(final List<XComponent> childList, final List xc) {
         for (int i = 0; i < xc.size(); i++) {
             Object y;
             if ((y =  xc.get(i)) != null) {
@@ -256,8 +253,7 @@ public class XComponentUtil {
         }
     }
 
-    /** Updates XPositions in the subtree of XComponents starting
-     * with given argument.
+    /** Updates XPositions in the subtree of XComponents starting with given argument.
      * @param xc XComponent where updating starts.
      */
     public static final void updateXPos(final XComponent xc) {updateXPos(xc, "", 0);}
@@ -309,12 +305,11 @@ public class XComponentUtil {
                 }
                 result.add(new DefString(s));
             } else if (o instanceof Number) {
-                result.add(o instanceof BigDecimal ? new DefDecimal((BigDecimal)o)
-                    : o instanceof Double ? new DefDouble(((Number)o).doubleValue())
-                    : new DefLong(((Number)o).longValue()));
+                result.add(o instanceof BigDecimal ? new DefDecimal((BigDecimal)o) : o instanceof Double
+                    ? new DefDouble(((Number)o).doubleValue()) : new DefLong(((Number)o).longValue()));
             } else {
-                result.add(o instanceof Boolean ? new DefBoolean((Boolean)o)
-                    : o instanceof List ? listToJlist((List) o) : o);
+                result.add(o instanceof Boolean
+                    ? new DefBoolean((Boolean)o) : o instanceof List ? listToJlist((List) o) : o);
             }
         }
         return result;
@@ -336,8 +331,7 @@ public class XComponentUtil {
                 }
                 result.add(s);
             } else {
-                result.add(o instanceof DefJNull ? null
-                    : o instanceof List ? jlistToList((List) o)
+                result.add(o instanceof DefJNull ? null : o instanceof List ? jlistToList((List) o)
                     : o instanceof XDValue ? ((XDValue) o).getObject() : o);
             }
         }
@@ -389,8 +383,7 @@ public class XComponentUtil {
             wasFirst = true;
             String s = (o == null) ? "" : o.toString();
             if (s.contains(" ") || s.contains("'")) {
-                s = s.replaceAll("'", "''");
-                s = '\'' + s + '\'';
+                s = '\'' + s.replaceAll("'", "''") + '\'';
             }
             sb.append(s);
         }
@@ -423,9 +416,9 @@ public class XComponentUtil {
                 sb.append(listToString((List) o, true, sepChar));
             } else if (o instanceof String) {
                 String s = (String) o;
-                if ("false".equals(s) || "true".equals(s) || "null".equals(s) || s.isEmpty()
-                    || s.indexOf('\\') >= 0 || s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
-                    || s.indexOf('\n') >=0 || s.indexOf('"') >= 0 || new StringParser(s).isSignedInteger()) {
+                if ("false".equals(s) || "true".equals(s) || "null".equals(s) || s.isEmpty() || s.indexOf('\\') >= 0
+                    || s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0 || s.indexOf('\n') >=0 || s.indexOf('"') >= 0
+                    || new StringParser(s).isSignedInteger()) {
                     s = '"' + XonTools.jstringToSource(s) + '"';
                 }
                 sb.append(s);
@@ -548,8 +541,7 @@ public class XComponentUtil {
         for (Method x: methods) {
             String methodName = x.getName();
             Object o;
-            if (methodName.startsWith("get" + XON_NS_PREFIX + "$")
-                && x.getParameterTypes().length == 0) {
+            if (methodName.startsWith("get" + XON_NS_PREFIX + "$") && x.getParameterTypes().length == 0) {
                 String key;
                 try {
                     x.setAccessible(true);
@@ -633,7 +625,7 @@ public class XComponentUtil {
         Map<String, Object> result = getXonAttrs(xc);
         for (Method x: methods) {
             String name = x.getName();
-            if (name.startsWith("get")&&!name.startsWith("get$")&&x.getParameterTypes().length==0) {
+            if (name.startsWith("get") && !name.startsWith("get$") && x.getParameterTypes().length==0) {
                 Object o = null;
                 try {
                     x.setAccessible(true);
@@ -651,9 +643,8 @@ public class XComponentUtil {
                             Method m = cls1.getDeclaredMethod("get"+X_KEYATTR);
                             m.setAccessible(true);
                             key = XonTools.xmlToJName((String) m.invoke(o));
-                        } catch (IllegalAccessException | IllegalArgumentException
-                            | NoSuchMethodException	| SecurityException
-                            | InvocationTargetException ex){
+                        } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
+                            | SecurityException | InvocationTargetException ex){
                             throw new RuntimeException("Not key", ex);
                         }
                         o = toXon((XComponent) o);

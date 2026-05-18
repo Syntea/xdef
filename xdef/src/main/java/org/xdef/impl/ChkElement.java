@@ -1084,15 +1084,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 default: _xonValue = obj; // "decimal", "dec"
                             }
                         } else if (obj instanceof String) {
-                            String s;
-                            if ("num".equals(xdata.getParserName()) && !(s=(String) obj).isEmpty()
-                                && !s.startsWith("\"") && !s.endsWith("\"")) {
-                                //Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
-                                _parseResult.error(XDEF.XDEF809, "num: " + s + " (missing quotes)");
-                                _xonValue = "";
-                            } else {
-                                _xonValue = XonTools.xmlToJValue((String) obj);
-                            }
+                            _xonValue = XonTools.xmlToJValue((String) obj);
                         } else {
                             _xonValue = obj;
                         }

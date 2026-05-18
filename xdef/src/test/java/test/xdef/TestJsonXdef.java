@@ -988,7 +988,7 @@ public class TestJsonXdef extends XDTester {
             assertFalse(x.equals(XonUtils.parseJSON(json)));
             xc = xd.jparseXComponent(json, null, reporter);
             assertErrorsAndClear(reporter);
-//            assertFalse(x.equals(xc.toXon())); //??? TODO ClasCastException
+            assertTrue(x.equals(xc.toXon())); //???
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xp = compile(

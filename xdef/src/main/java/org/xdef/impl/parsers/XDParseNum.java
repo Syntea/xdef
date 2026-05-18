@@ -17,7 +17,13 @@ public class XDParseNum extends XSAbstractParseToken {
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
-        boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+        boolean quoted = false;
+        if (xn != null && xn.getXonMode() > 0) {
+            if (!(quoted = p.isChar('"'))) { // JSON string must be in quotes!
+                p.error(XDEF.XDEF809, parserName() + ": value is not string"); //Incorrect value of '&{0}'&{1}{: }
+                return;
+            }
+        }
         if (p.isDigit() < 0) {
             p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
             return;
