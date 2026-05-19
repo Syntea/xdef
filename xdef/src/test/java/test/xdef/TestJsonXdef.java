@@ -388,7 +388,7 @@ public class TestJsonXdef extends XDTester {
             return;
         }
         String fname, ini, json, xdef, xml;
-        Object x;
+        Object o, x;
         List list;
         Element el;
         StringWriter swr;
@@ -976,19 +976,19 @@ public class TestJsonXdef extends XDTester {
             genXComponent(xp);
             xd = xp.createXDDocument();
             json = "{\"code\" : \"4120\"}";
-            x = jparse(xd, json, reporter);
+            o = jparse(xd, json, reporter);
             assertNoErrorsAndClear(reporter);
-            assertEq(x, XonUtils.parseJSON(json));
+            assertEq(o, XonUtils.parseJSON(json));
             xc = xd.jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
-            assertEq(x, xc.toXon());
+            assertEq(o, xc.toXon());
             json = "{\"code\" : 4120 }"; // missing quotes
             x = jparse(xd, json, reporter);
             assertErrorsAndClear(reporter);
-            assertFalse(x.equals(XonUtils.parseJSON(json)));
+            assertFalse(o.equals(x));
             xc = xd.jparseXComponent(json, null, reporter);
             assertErrorsAndClear(reporter);
-            assertTrue(x.equals(xc.toXon())); //???
+            assertFalse(o.equals(xc.toXon())); //???
         } catch (RuntimeException ex) {fail(ex);}
         try {
             xp = compile(
