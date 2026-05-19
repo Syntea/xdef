@@ -20,84 +20,82 @@
 -->
 
 
+<xsl:variable name="nl" select="'
+'" as="xs:string"/>
+
+
+
 <xsl:template match="/">
-    <xsl:result-document><xsl:apply-templates select="h:html"/></xsl:result-document>
+    <xsl:result-document><xsl:apply-templates select="*:html"/></xsl:result-document>
 </xsl:template>
 
 
 
+<xsl:template match="html">
+    <xsl:sequence select="."/>
+</xsl:template>
+
 <xsl:template match="h:html">
-<xsl:sequence xml:space="preserve"><html lang="en">
-    <head>
-        <title><xsl:sequence select="h:head/h:title/text()"/></title>
-        <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
-        <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
-        <link rel="stylesheet" type="text/css" href="../style/common.css"/>
-        <script type="module" src="../style/common.js"></script>
-        <link rel="stylesheet" type="text/css" href="style/common.css"/>
-    </head>
-    <body>
-        <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
-        
-        
-        <div class="title">X-definition tutorial</div>
-        
-        <div class="nav">
-            <a href="ch02.html"   ><img src="style/first.gif" alt="Previous chapter"/></a>
-            <a href="ch02.html"   ><img src="style/prev.gif"  alt="Back"/></a>
-            <a href="ch02s02.html"><img src="style/next.gif"  alt="Next"/></a>
-            <a href="ch03.html"   ><img src="style/last.gif"  alt="Next chapter"/></a>
-        </div>
-        
-        <h2>2.1. Example of complete X-definition</h2>
-        
-        <p>
-        Note that the X-definition in the example below has the attributes "name" and "root" (see line 1).
-        The attribute "root" specifies which model (or models) from the X-definition can be used as the root
-        elements of the input data. The attribute "name" contains the name of X-definition (it is required
-        if the project is composed from more X-definitions). Note also that the element "xd:declaration"
-        has the attribute scope="global", which specifies that the contents of the declaration are "visible"
-        from all X-definitions (the attribute is optional and the default value is "local"
-        - i.e. the declaration is visible only from this X-definition).
-        </p>
-        
-        <pre><code class="language-html">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
-  &lt;xd:declaration scope="global">
-    void message(String s) {
-      outln(s);
-    }
-    int count = 0;
-    type isbn int(10000000, 999999999);
-  &lt;/xd:declaration>
+    <xsl:variable name="nav"             select="h:body/h:div[@id='footer']/h:a"                    as="element(h:a)*"/>
+    <xsl:variable name="content"         select="h:body/h:div[@id='body']/node()"                   as="node()*"/>
+    <xsl:variable name="title"           select="$content/self::h:h2"                               as="element(h:h2)"/>
+    <xsl:variable name="contAfterTitle"  select="$content/self::h:h2/following-sibling::node()"     as="node()*"/>
+    
+    <xsl:sequence xml:space="preserve"><html lang="en">
+  <head>
+    <title><xsl:sequence select="h:head/h:title/text()"/></title>
+    <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css"/>
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-  &lt;Inventory xd:script="init message('Created ' + now()); finally message('Processed ' + count + ' books');">
-    &lt;Book xd:script="occurs +; onAbsence error('No books!'); finally {count++; outln('ISBN code: " ' + @ISBN)};"
-          ISBN="isbn;"
-          published="optional gYear();" >
-      &lt;Author xd:script="occurs *" >
-        string()
-      &lt;/Author>
-      &lt;Title>
-        string();
-      &lt;/Title>
-    &lt;/Book>
-  &lt;/Inventory>
 
-&lt;/xd:def>
-        </code></pre>
-        
-        <p>
-        You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
-        </p>
-        
-        
-        <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
-        
-        <script type="module">initPageBasicHili()</script>
-        
-    </body>
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="{$nav[1]/@href}"><img src="style/first.gif" alt="Previous chapter"/></a>
+        <a href="{$nav[2]/@href}"><img src="style/prev.gif"  alt="Back"/></a>
+        <a href="{$nav[3]/@href}"><img src="style/next.gif"  alt="Next"/></a>
+        <a href="{$nav[4]/@href}"><img src="style/last.gif"  alt="Next chapter"/></a>
+      </div>
+
+      <h2><xsl:sequence select="$title/text()"/></h2>
+      <xsl:apply-templates mode="content" select="$contAfterTitle"/>
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
 </html>
 </xsl:sequence>
+</xsl:template>
+
+
+
+<xsl:template mode="content" match="text()">
+    <xsl:sequence select="."/>
+</xsl:template>
+
+<xsl:template mode="content" match="h:pre">
+    <pre>
+        <code>
+            <xsl:if test="@class">
+                <xsl:attribute name="class" select="concat('language-', @class)"/>
+            </xsl:if>
+            <xsl:sequence select="node()"/>
+        </code>
+    </pre>
+</xsl:template>
+
+<xsl:template mode="content" match="h:*">
+    <xsl:element name="{local-name()}">
+        <xsl:sequence select="@*"/>
+        <xsl:apply-templates mode="content" select="node()"/>
+    </xsl:element>
 </xsl:template>
 
 

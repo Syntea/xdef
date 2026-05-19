@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Example 4 — validation of simple data</title>
+    <meta name="description" content="Example of X-definition"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Example 4 — validation of simple data</div>
+
+<form method="post" action="../playground/Playground">
+
+<p>
+The X-definition below describes the root XML element "Inventory", which contains the "Book" elements.
+Each "Book" element must have an "ISBN" attribute corresponding to the validation method and may
+optionally contain a year of publication. A "Book" element may contain multiple "Author" elements
+and it must contain a "Title" element. Information on ISBNs, on number of books and errors is printed
+on the system output as follows.
+</p><p>
+The input data shows the use of this definition for two books, one with multiple authors and the other
+with only the title.
+</p><p>
+Note XML allows to use of both <b>"</b> (the quote) or <b>'</b> (the apostrophe)
+characters as a delimiter of attribute value you can reverse usage of them (you can try it
+<a href="ch02s01e01.html"><b>HERE</b></a>).
+</p>
+
+<b>X-definition:</b>
+<textarea name="xdef" rows="19" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory">
+  &lt;xd:declaration scope="global">
+    void message(String s) { outln(s); }
+    int count = 0;
+    type isbn int(10000000, 999999999);
+  &lt;/xd:declaration>
+
+  &lt;Inventory xd:script="init message('Launched on ' + now()); finally message('Processed ' + count + ' books');">
+    &lt;Book xd:script="occurs +; onAbsence message('No books!'); finally {count++; outln('ISBN code: ' + @ISBN);}"
+          ISBN="isbn; onFalse error('Incorrect ISBN!');"
+          published="optional gYear();" >
+      &lt;Author xd:script="occurs *"> string(); &lt;/Author>
+      &lt;Title> string(); &lt;/Title>
+    &lt;/Book>
+  &lt;/Inventory>
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="14" class="lined">
+&lt;Inventory>
+  &lt;Book ISBN="123456789" published="2017">
+    &lt;Author>Jiří Kamenický&lt;/Author>
+    &lt;Author>Jindřich Kocman&lt;/Author>
+    &lt;Author>Václav Trojan&lt;/Author>
+    &lt;Title>X-definition 3.1&lt;/Title>
+  &lt;/Book>
+  &lt;Book ISBN="567890123">
+    &lt;Title>The Bible&lt;/Title>
+  &lt;/Book>
+&lt;/Inventory>
+</textarea>
+
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined()</script>
+
+</body>
+</html>
