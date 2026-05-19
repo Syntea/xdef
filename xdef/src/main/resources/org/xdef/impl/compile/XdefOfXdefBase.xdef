@@ -390,14 +390,16 @@ XdefOptions ::= ("options" | "option") S XdefOptionsList
 XdefOptionsList ::= XdefOption (S? "," S? XdefOption)*
   /* Each option can be specified only once. */
 
-XdefOption ::= "moreAttributes" | "moreElements" | "moreText" | "forget" | "notForget" | "clearAdoptedForgets"
-  | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes" | "preserveComments"
-  | "ignoreComments" | "acceptEmptyAttributes" | "preserveEmptyAttributes" | "ignoreEmptyAttributes"
-  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
-  | "setAttrUpperCase" | "setAttrLowerCase" | "setTextUpperCase" | "setTextLowerCase" | "acceptQualifiedAttr"
-  | "notAcceptQualifiedAttr" | "trimAttr" | "noTrimAttr" | "trimText" | "noTrimText" | "resolveEntities"
-  | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
-  | "acceptJsonNull" | "illegalJsonNull"
+XdefOption ::= "moreAttributes" | "moreElements" | "moreText" | "forget"
+  | "notForget" | "clearAdoptedForgets" | "resolveEntities" | "ignoreEntities"
+  | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
+  | "acceptEmptyAttributes" | "preserveEmptyAttributes" | "ignoreEmptyAttributes"
+  | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces" | "preserveTextWhiteSpaces"
+  | "ignoreTextWhiteSpaces" | "setAttrUpperCase" | "setAttrLowerCase"
+  | "setTextUpperCase" | "setTextLowerCase" | "acceptQualifiedAttr"
+  | "notAcceptQualifiedAttr" | "trimAttr" | "noTrimAttr" | "trimText" | "noTrimText"
+  | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes"
+  | "preserveComments" | "ignoreComments" | "acceptJsonNull" | "illegalJsonNull"
 
 /******************************************************************************/
 /* Script of text nodes and attributes                                        */
@@ -467,10 +469,10 @@ ValueOptionsList ::= ValueOption (S? "," S? ValueOption)*
   /* Each option can be specified only once. */
 
 ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces" | "setTextUpperCase"
-  | "setTextLowerCase" | "trimText" | "noTrimText" | "preserveAttrWhiteSpaces" | "ignoreAttrWhiteSpaces"
-  | "cdata" | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr"
-  | "ignoreEmptyAttributes" | "acceptEmptyAttributes" | "acceptQualifiedAttr" | "notAcceptQualifiedAttr"
-  | "preserveTextCase" | "acceptJsonNull" | "illegalJsonNull"
+  | "setTextLowerCase" | "trimText" | "noTrimText" | "preserveAttrWhiteSpaces"
+  | "ignoreAttrWhiteSpaces" | "cdata" | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr"
+  | "noTrimAttr" | "ignoreEmptyAttributes" | "acceptEmptyAttributes" | "acceptQualifiedAttr"
+  | "notAcceptQualifiedAttr" | "preserveTextCase" | "acceptJsonNull" | "illegalJsonNull"
 
 Reference ::= "ref" S XPosition
 
@@ -532,8 +534,8 @@ ElementOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "trimText" | "noTrimText" | "resolveEntities" | "ignoreEntities"
   | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
   | "preserveTextCase" | "preserveAttrCase" | "acceptOther" | "ignoreOther"
-  | "clearReports" | "preserveReports" | "nillable" | "noNillable"
-
+  | "nillable" | "noNillable" | "preserveReports" | "acceptJsonNull" | "illegalJsonNull"
+ 
 /******************************************************************************/
 /* Script of the declaration part                                             */
 /******************************************************************************/
