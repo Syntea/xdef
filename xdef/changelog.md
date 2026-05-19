@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.46, release-date 2026-05-19
+  * .
+
 # Version 42.2.45, release-date 2026-05-19
   * Fixed a bug in the length check for X-definition `num` type values.
   * Defalut option is changed from `acceptJsonNull` to `illegalJsonNull`.
