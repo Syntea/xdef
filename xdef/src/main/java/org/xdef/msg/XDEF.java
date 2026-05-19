@@ -451,7 +451,7 @@ public interface XDEF {
     public static final long XDEF491 = 31159025884L;
     /** Incorrect macro parameter index&amp;{#SYS000} */
     public static final long XDEF492 = 31159025885L;
-    /** String specification expected&amp;{#SYS000} */
+    /** String expected&amp;{#SYS000} */
     public static final long XDEF493 = 31159025886L;
     /** 'default' can't be duplicated in 'switch' statement&amp;{#SYS000} */
     public static final long XDEF495 = 31159025887L;
