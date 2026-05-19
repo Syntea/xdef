@@ -20,7 +20,8 @@ public class XDParseNum extends XSAbstractParseToken {
         boolean quoted = false;
         if (xn != null && xn.getXonMode() > 0) {
             if (!(quoted = p.isChar('"'))) { // JSON string with digits must be in quotes!
-                p.error(XDEF.XDEF809, parserName()+" (value must be a JSON string)");//Incorrect value of '&{0}'&{1}{: }
+                //XDEF493=String excpected
+                p.error(XDEF.XDEF809, parserName() + ": JSON &{#XDEF493}");//Incorrect value of '&{0}'&{1}{: }
                 return;
             }
         }
