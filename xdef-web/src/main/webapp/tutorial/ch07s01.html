@@ -1,0 +1,64 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>7.1.&nbsp;What is X-component?</title>
+    <meta name="description" content="X-definition: What is X-component?">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch07.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch07.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch07s02.html"><img src="style/next.gif" alt="Next"></a>
+        <a href=""><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>7.1.&nbsp;What is X-component?</h2>
+      
+      From compiled X-definitions, you can generate Java source code of
+      X-components. The classes of X-components contain getters and setters
+      so can this way access data declared in the model. Let's have a simple
+      X-definition:
+<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Book" &gt;
+  &lt;Book ISBN="int(100000000, 9999999999);"
+      year = "gYear();"
+      title = "string();" &gt;
+      &lt;author xd:script="occurs *"&gt; string(); &lt;/author&gt;
+  &lt;/Book&gt;
+  &lt;xd:component&gt;
+    %class test.book.Book %link Test#Book;
+  &lt;/xd:component&gt;
+&lt;/xd:def&gt;</code></pre>
+      <i>Note in the example was declared component "Book", which will be generated to
+        the package "test.book".<br>
+        It contains the following getters and setters in the Java source code:</i>
+  <pre><code class="language-printing">
+package test.book;
+public class Book implements org.xdef.component.XComponent{
+  public <b xmlns="http://www.w3.org/1999/xhtml">String getISBN()</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">setISBN(String x)</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">org.xdef.sys.SDatetime getyear()</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">setyear(org.xdef.sys.SDatetime x)</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">String gettitle()</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">void settitle(String x)</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">java.util.List&lt;Book.author&gt; listOfauthor()</b> {...}
+  public <b xmlns="http://www.w3.org/1999/xhtml">void addauthor(Book.author x)</b> {...}
+  ...
+</code></pre>
+      <i>Note that the instances of X-component class implements the interface java.io.Serializable, so
+        it is possible to write them to a stream and to get them back. This makes X-component usefull
+        as a general form of XML, JSON, or INI data.</i>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

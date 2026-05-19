@@ -1,0 +1,61 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>2.6.&nbsp;Collection of X-definitions</title>
+    <meta name="description" content="Collection of X-definitions">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch01.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch02s05.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch03.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch03.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>2.6.&nbsp;Collection of X-definitions</h2>
+      
+      <p>Example of more X-definitions (<b>collestion</b>) in one XML document and cross-references between
+        them:</p>
+<pre><code class="language-xml">
+&lt;xd:collection xmlns:xd="http://www.xdef.org/xdef/4.2" &gt;
+
+&lt;xd:def xd:name="Example" xd:root="Family" &gt;
+  &lt;Family&gt;
+  &lt;Father xd:script="occurs ?; ref common#Person;" /&gt;
+  &lt;Mother xd:script="occurs 1; ref common#Person;" /&gt;
+     &lt;xd:mixed&gt;
+        &lt;Son      xd:script="occurs 0..12; ref common#Person;" /&gt;
+        &lt;Daughter xd:script="occurs 0..12; ref common#Person;" /&gt;
+     &lt;/xd:mixed&gt;
+  &lt;Address xd:script= "occurs 1; ref common#Address;" /&gt;
+  &lt;/Family&gt;
+&lt;/xd:def&gt;
+
+&lt;!-- Models of referred elements --&gt;
+&lt;xd:def xd:name="common" &gt;
+   &lt;Person Firstname ="required string(1,30)"
+           Familyname="required string(1,30)"
+           BirthDate ="required date()" /&gt;
+   &lt;Address Street="required string(1,30)"
+            Number="optional int()"
+            City  ="required string()" /&gt;
+&lt;/xd:def&gt;
+
+&lt;/xd:collection&gt;
+</code></pre>
+      You can try it <a href="ch02s06e00.html"><b>HERE</b></a>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

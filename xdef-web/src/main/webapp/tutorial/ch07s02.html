@@ -1,0 +1,53 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Chapter&nbsp;7.2&nbsp;Example of using X-components in Java</title>
+    <meta name="description" content="X-definition: Example of using X-components in Java">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch07.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch07s01.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href=""><img src="style/next.gif" alt="Next"></a>
+        <a href=""><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>7.2&nbsp;Example of using X-components in Java</h2>
+      
+      In a Java program, you must first generate X-components and compile them
+      with the Java compiler.  Only then can you get an instance of the
+      X-component created from the input XML data:
+<pre><code class="language-printing">
+// 1. compile X-definition sources and generate X-components
+  File xdef =  ...; File data = ...;
+  XDPool xpool = XDFactory.compileXD(null, xdef);
+  XDDocument xdoc = xpool.createXDDocument("Test");
+... compile generated X-components ...
+// 2. parse the input data and get the instance of Xcopmponent
+  test.book.Book book = (test.book.Book) xdoc.parseXComponent(data, null, null);
+  System.out.println("Book: " + book.gettitle() + ", ISBN = " + book.getISBN());
+</code></pre>
+      If the file with data is written the XML document:
+<pre><code class="language-xml">&lt;Book ISBN="123456789"
+      year="2020"
+      title = "X-definitions" &gt;
+  &lt;author&gt;Tomáš Šmíd&lt;/author&gt;
+&lt;/Book&gt;</code></pre>
+      you can get the instance of X-component from data by method
+      xparseXComponent from XDDocument. The printed result will be:
+  <pre><code class="language-printing">Book: X-definition, ISBN = 123456</code></pre>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

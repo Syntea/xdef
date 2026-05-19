@@ -1,0 +1,57 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>2.3.&nbsp;References and models of elements</title>
+    <meta name="description" content="Reference X-definition">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch01.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch02s02.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch02s04.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch03.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>2.3.&nbsp;References and models of elements</h2>
+      
+      <p>XML data:</p>
+<pre><code class="language-xml">
+&lt;Family&gt;
+    &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" /&gt;
+    &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" /&gt;
+    &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" /&gt;
+    &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" /&gt;
+&lt;/Family&gt;
+</code></pre>
+      <p>The links point to the element models (see "ref" keywords in X-script). Note that the occurrence is
+        specified in the corresponding X-script of an model:</p>
+<pre><code class="language-xml">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root = "Family"&gt;
+
+&lt;Family&gt;
+    &lt;Father   xd:script = "optional; ref Person;" /&gt;
+    &lt;Mother   xd:script = "required; ref Person;" /&gt;
+    &lt;Son      xd:script = "occurs *; ref Person;" /&gt;
+    &lt;Daughter xd:script = "occurs *; ref Person;" /&gt;
+&lt;/Family&gt;
+
+&lt;Person Firstname = "string();" Familyname = "string();" BirthDate = "date();" /&gt;
+
+&lt;/xd:def&gt;
+</code></pre>
+      You can try it <a href="ch02s03e00.html"><b>HERE</b></a>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

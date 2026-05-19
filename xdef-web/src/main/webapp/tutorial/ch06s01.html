@@ -1,0 +1,59 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>6.1.&nbsp;JAVA programming</title>
+    <meta name="description" content="X-definition: Java programming">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch05.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch06.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch07.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch07.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>6.1.&nbsp;JAVA programming</h2>
+      
+      In Java, you must first compile the source files with X-definitions.  The first parameter of the method
+      is the Properties for compilation (this parameter can be null or an empty Properties object - then
+      the compilation defaults are used). The result of the compilation is an XDPool object:
+<pre><code>
+  File xdef1, xdef2; // files with X-definition source code
+  Properties props = new Properties();
+  props.setProperty(XDConstants.XDPROPERTY_WARNINGS, "true"); // set compiler to report both warnings and errors
+  XDPool xpool = XDFactory.compileXD(props, xdef1, xdef2); // compile X-definitions and create XDPool object
+</code></pre>
+      From the XDPool object it is possible to create the XDDocument object,
+      in which the X-definition name is entered, which contains the data model to be worked with:
+<pre><code>
+  XDDocument xdoc = xpool.createXDDocument("d1"); //create XDDocument from the X-definition with the name "d1"
+</code></pre>
+      Before work, it is advisable to prepare a reporter in which information
+      about the process will be recorded. Then it is possible to start the
+      validation or construction mode of processing:
+<pre><code>
+  ArrayReporter reporter = new ArrayReporter(); // create empty reporter
+  xdoc.xparse(data, reporter); // run validate mode with data source (or you can run xcreate - construction mode)
+)
+  // errors in reporter?
+  if (reporter.errors()) { 
+    reporter.printReports(System.err); // print reported messages
+  } else { // no error has been reported
+    ...
+  }
+</code></pre>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

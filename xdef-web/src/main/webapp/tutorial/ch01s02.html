@@ -1,0 +1,52 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>1.2.&nbsp;Notation of a quantifier</title>
+    <meta name="description" content="X-definition quantifier">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch01.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch01s01.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch01s03.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch02.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>1.2.&nbsp;Notation of quantifier (cardinality of the data item)</h2>
+      
+      <p>The following table describes the possible forms of the quantifier:</p>
+<pre><code>
+occurs required exactly one occurrence (occurs 1)
+occurs optional zero or one occurrence (occurs 0..1)
+occurs ?        zero or one occurrence (occurs 0..1)
+occurs *        unlimited occurrence (occurs 0..*)
+occurs +        one or more occurrences (occurs 1..*)
+</code></pre>
+      <p>Explicit forms of the quantifier:</p>
+<pre><code>
+occurs n     exactly n occurrences
+occurs m..n  minimum m occurrences, maximum n occurrences
+occurs m..*  minimum m occurrences, maximum unlimited
+</code></pre>
+      <p>
+      The keyword "occurs" may by omitted. Following notations of the quantifier are equivalent:
+      &nbsp;"<tt><b>occurs 10</b></tt>"&nbsp; and &nbsp; "<tt><b>10</b></tt>".<br><br>
+      <i>Note that since the default value of the quantifier is " required ", its entry can be omitted. E.g:</i>
+      <br><tt>&nbsp;&nbsp;<b>ISBN="required int(10000000, 999999999)"</b></tt>
+      <br><i>can be written as:<br></i><tt>&nbsp;&nbsp;<b>ISBN="int(10000000, 999999999)"</b></tt>
+      </p>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

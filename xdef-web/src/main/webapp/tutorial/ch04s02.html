@@ -1,0 +1,62 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>4.2&nbsp;YAML</title>
+    <meta name="description" content="X-definition: example of YAML">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch04.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch04s01.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch04s03.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch05.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>4.2&nbsp;YAML</h2>
+      
+      The same data from Chapter 4.1 can be recorded in the YAML format:
+<font size="1">
+<pre><code class="language-printing">
+cities:
+- from:
+  - Brussels
+  - {to: London, distance: 322}
+  - {to: Paris, distance: 265}
+- from:
+  - London
+  - {to: Brussels, distance: 322}
+  - {to: Paris, distance: 344}
+</code></pre></font>
+      Since the YAML format is just a different structure notation than JSON,
+      the X-definition will be the same as in the previous Chapter 4.1:
+<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies" &gt;
+  &lt;xd:json name="test"&gt;
+    { "cities"  : [
+        { %script = "occurs 1..*;",
+          "from": [ "string();",
+            { %script = "occurs 1..*;",
+              "to": "jstring();",  "distance": "int();"
+            }
+          ]
+        }
+      ]
+    }
+  &lt;/xd:json&gt;
+&lt;/xd:def&gt;
+</code></pre>
+      You can try it <a href="ch04s02e00.html"><b>HERE</b></a>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>

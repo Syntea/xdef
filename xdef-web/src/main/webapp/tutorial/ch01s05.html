@@ -1,0 +1,56 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>1.5.&nbsp;Declaration of types, methods, and variables</title>
+    <meta name="description" content="X-definition, Declaration of types, methods, and variables">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
+  </head>
+  <body>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch01.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch01s04.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch02.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch02.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>1.5.&nbsp;Declaration of types, methods, and variables</h2>
+      
+      <p>You can declare the data types (validation methods), methods and variables used in the X-script in
+        the auxiliary element "xd:declaration" and refer to them by name:</p>
+<pre><code class="language-xml">
+&lt;xd:declaration&gt;
+  type isbn int(10000000, 999999999);
+  type published gYear();
+  Date today = now(); /* actual date and time (when this X-definition started) */
+
+  /* This methos prints a line with string to system output. */
+  void message(String s) {
+    outln(s);
+  }
+&lt;/xd:declaration&gt;
+
+&lt;Book xd:script="init message('Started ' + today); finally message('Process finished');"
+      ISBN="isbn();"
+      published="optional published();" &gt; 
+      &lt;Author xd:script="occurs *" &gt;
+        string()
+      &lt;/Author&gt;
+      &lt;Title&gt;
+        string()
+      &lt;/Title&gt;
+&lt;/Book&gt;
+</code></pre>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
+  </body>
+</html>
