@@ -28,41 +28,40 @@
 
 <xsl:template match="h:html">
 <xsl:sequence xml:space="preserve"><html lang="en">
-<head>
-    <title><xsl:sequence select="h:head/h:title/text()"/></title>
-    <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
-    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
-    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
-    <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css"/>
-</head>
-<body>
-
-<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
-
-
-<div class="title">X-definition tutorial</div>
-
-<div class="nav">
-    <a href="ch02.html"   ><img src="style/first.gif" alt="Previous chapter"/></a>
-    <a href="ch02.html"   ><img src="style/prev.gif"  alt="Back"/></a>
-    <a href="ch02s02.html"><img src="style/next.gif"  alt="Next"/></a>
-    <a href="ch03.html"   ><img src="style/last.gif"  alt="Next chapter"/></a>
-</div>
-
-<h2>2.1. Example of complete X-definition</h2>
-
-<p>
-Note that the X-definition in the example below has the attributes "name" and "root" (see line 1).
-The attribute "root" specifies which model (or models) from the X-definition can be used as the root
-elements of the input data. The attribute "name" contains the name of X-definition (it is required
-if the project is composed from more X-definitions). Note also that the element "xd:declaration"
-has the attribute scope="global", which specifies that the contents of the declaration are "visible"
-from all X-definitions (the attribute is optional and the default value is "local"
-- i.e. the declaration is visible only from this X-definition).
-</p>
-
-<pre><code class="language-html">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
+    <head>
+        <title><xsl:sequence select="h:head/h:title/text()"/></title>
+        <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
+        <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+        <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+        <script type="module" src="../style/common.js"></script>
+        <link rel="stylesheet" type="text/css" href="style/common.css"/>
+    </head>
+    <body>
+        <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+        
+        
+        <div class="title">X-definition tutorial</div>
+        
+        <div class="nav">
+            <a href="ch02.html"   ><img src="style/first.gif" alt="Previous chapter"/></a>
+            <a href="ch02.html"   ><img src="style/prev.gif"  alt="Back"/></a>
+            <a href="ch02s02.html"><img src="style/next.gif"  alt="Next"/></a>
+            <a href="ch03.html"   ><img src="style/last.gif"  alt="Next chapter"/></a>
+        </div>
+        
+        <h2>2.1. Example of complete X-definition</h2>
+        
+        <p>
+        Note that the X-definition in the example below has the attributes "name" and "root" (see line 1).
+        The attribute "root" specifies which model (or models) from the X-definition can be used as the root
+        elements of the input data. The attribute "name" contains the name of X-definition (it is required
+        if the project is composed from more X-definitions). Note also that the element "xd:declaration"
+        has the attribute scope="global", which specifies that the contents of the declaration are "visible"
+        from all X-definitions (the attribute is optional and the default value is "local"
+        - i.e. the declaration is visible only from this X-definition).
+        </p>
+        
+        <pre><code class="language-html">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
   &lt;xd:declaration scope="global">
     void message(String s) {
       outln(s);
@@ -85,18 +84,18 @@ from all X-definitions (the attribute is optional and the default value is "loca
   &lt;/Inventory>
 
 &lt;/xd:def>
-</code></pre>
-
-<p>
-You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
-</p>
-
-
-<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
-
-<script type="module">initPageBasicHili()</script>
-
-</body>
+        </code></pre>
+        
+        <p>
+        You can try it <a href="ch02s01e00.html"><b>HERE</b></a>
+        </p>
+        
+        
+        <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+        
+        <script type="module">initPageBasicHili()</script>
+        
+    </body>
 </html>
 </xsl:sequence>
 </xsl:template>
