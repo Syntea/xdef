@@ -5,6 +5,10 @@ body {
     background-color:   #e6f7ff;
 }
 
+code, input, textarea, button {
+    font-size:          1rem;
+}
+
 div.title {
     font-size:          2.2em;
     font-weight:        bold;
@@ -34,7 +38,7 @@ pre {
     margin-top:         0;
 }
 
-.enFramed {
+.enframed {
     display:            inline-block;
     margin:             0.2em;
     padding:            0.2em;

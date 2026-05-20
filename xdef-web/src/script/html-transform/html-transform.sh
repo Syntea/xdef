@@ -32,6 +32,7 @@ fi
 for i in tutorial/index.html tutorial/ch??.html tutorial/ch??s??.html tutorial/ch??s??e??.html
 #for i in tutorial/ch02s02.html
 do
+    echo "file: $i"
     xmllint --html --xmlout --nodefdtd --recover $i | \
     java -cp "${cp}" "net.sf.saxon.Transform" -xsl:${xslFile} -o:../webapp/$i -s:-
     #java -cp "${cp}" "net.sf.saxon.Transform" -xsl:${xslFile} -o:../webapp-new/$i -s:$i

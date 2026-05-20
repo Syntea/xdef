@@ -1,10 +1,10 @@
-<!DOCTYPE HTML><html lang="en">
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!DOCTYPE html><html lang="en">
+<head>
     <title>X-lexicon German version</title>
-    <meta name="description" content="X-lexicon German version">
-    
-    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <meta name="description" content="X-lexicon German version"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
 </head>
 <body>
@@ -23,45 +23,46 @@ You can also try the French version <a href="ch05s01e01.html"><b>HERE</b></a>.
 
 <b>X-definition:</b>
 <textarea name="xdef" rows="26" class="lined">
-&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book"&gt;
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
   &lt;Book ISBN="int(10000000, 999999999);"
       year = "gYear();"
       title = "string();"
-  &gt;
-      &lt;Author xd:script="occurs *"&gt; string(); &lt;/Author&gt;
-  &lt;/Book&gt;
+  >
+      &lt;Author xd:script="occurs *"> string(); &lt;/Author>
+  &lt;/Book>
 
   /* All items in the model are in English version */
-  &lt;xd:lexicon language='eng' default='yes'/&gt;
-  &lt;xd:lexicon language='deu'&gt; 
+  &lt;xd:lexicon language='eng' default='yes'/>
+  &lt;xd:lexicon language='deu'> 
       Test#Book =         Buch
       Test#Book/@year =   Jahr
       Test#Book/@title =  Buchtitel
       Test#Book/Author =  Autor
-  &lt;/xd:lexicon&gt;
-  &lt;xd:lexicon language='fra'&gt;
+  &lt;/xd:lexicon>
+  &lt;xd:lexicon language='fra'>
       Test#Book =         Livre
       Test#Book/@year =   année
       Test#Book/@title =  titre
       Test#Book/Author =  Auteur
-  &lt;/xd:lexicon&gt;
-&lt;/xd:def&gt;
+  &lt;/xd:lexicon>
+&lt;/xd:def>
 </textarea>
 
-<b>Input data:</b>
-<input name="langInp" value="deu" type="hidden">
+<b>Input data:</b><br>
+Language of data:
+<input name="langInp" value="deu" type="text"/>
 <textarea name="data" rows="10" class="lined">
 &lt;Buch ISBN = "123456789"
       Jahr = "1992"
       Buchtitel = "Snow Crash"
-&gt;
-  &lt;Autor&gt;Neal Stephenson&lt;/Autor&gt;
-&lt;/Buch&gt;
+>
+  &lt;Autor>Neal Stephenson&lt;/Autor>
+&lt;/Buch>
 </textarea>
 
 Output language:
-<input name="langOut" value="" type="text">
-(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)<br>
+<input name="langOut" value="" type="text"/>
+(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)<br/>
 <button type="submit">Validate</button>
 
 </form>

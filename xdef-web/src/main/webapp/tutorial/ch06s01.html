@@ -14,7 +14,7 @@
       <div class="title">X-definition tutorial</div>
 
       <div class="nav">
-        <a href="ch05.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch06.html"><img src="style/first.gif" alt="Previous chapter"></a>
         <a href="ch06.html"><img src="style/prev.gif" alt="Back"></a>
         <a href="ch07.html"><img src="style/next.gif" alt="Next"></a>
         <a href="ch07.html"><img src="style/last.gif" alt="Next chapter"></a>
@@ -25,21 +25,21 @@
       In Java, you must first compile the source files with X-definitions.  The first parameter of the method
       is the Properties for compilation (this parameter can be null or an empty Properties object - then
       the compilation defaults are used). The result of the compilation is an XDPool object:
-<pre><code>
+<pre>
   File xdef1, xdef2; // files with X-definition source code
   Properties props = new Properties();
   props.setProperty(XDConstants.XDPROPERTY_WARNINGS, "true"); // set compiler to report both warnings and errors
   XDPool xpool = XDFactory.compileXD(props, xdef1, xdef2); // compile X-definitions and create XDPool object
-</code></pre>
+</pre>
       From the XDPool object it is possible to create the XDDocument object,
       in which the X-definition name is entered, which contains the data model to be worked with:
-<pre><code>
+<pre>
   XDDocument xdoc = xpool.createXDDocument("d1"); //create XDDocument from the X-definition with the name "d1"
-</code></pre>
+</pre>
       Before work, it is advisable to prepare a reporter in which information
       about the process will be recorded. Then it is possible to start the
       validation or construction mode of processing:
-<pre><code>
+<pre>
   ArrayReporter reporter = new ArrayReporter(); // create empty reporter
   xdoc.xparse(data, reporter); // run validate mode with data source (or you can run xcreate - construction mode)
 )
@@ -49,7 +49,7 @@
   } else { // no error has been reported
     ...
   }
-</code></pre>
+</pre>
     
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
+    version  ="3.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs ="http://www.w3.org/2001/XMLSchema"
     xmlns:h  ="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="xsl xs h"
-    version="3.0"
 >
 
 <xsl:output
@@ -26,17 +26,14 @@
 
 
 <xsl:template match="/">
-    <xsl:result-document><xsl:apply-templates select="*:html"/></xsl:result-document>
+    <xsl:result-document><xsl:apply-templates select="h:html"/></xsl:result-document>
 </xsl:template>
 
 
-
-<xsl:template match="html">
-    <xsl:sequence select="."/>
-</xsl:template>
 
 <xsl:template match="h:html">
-    <xsl:variable name="nav"             select="h:body/h:div[@id='footer']/h:a"                    as="element(h:a)*"/>
+    <xsl:variable name="nav"             select="h:body/h:div[@id='footer']"                        as="element(h:div)?"/>
+    <xsl:variable name="navIts"          select="$nav/*[self::h:a or self::h:img]"                  as="element()*"/>
     <xsl:variable name="content"         select="h:body/h:div[@id='body']/node()"                   as="node()*"/>
     <xsl:variable name="title"           select="$content/self::h:h2"                               as="element(h:h2)"/>
     <xsl:variable name="contAfterTitle"  select="$content/self::h:h2/following-sibling::node()"     as="node()*"/>
@@ -56,12 +53,12 @@
 
       <div class="title">X-definition tutorial</div>
 
-      <div class="nav">
-        <a href="{$nav[1]/@href}"><img src="style/first.gif" alt="Previous chapter"/></a>
-        <a href="{$nav[2]/@href}"><img src="style/prev.gif"  alt="Back"/></a>
-        <a href="{$nav[3]/@href}"><img src="style/next.gif"  alt="Next"/></a>
-        <a href="{$nav[4]/@href}"><img src="style/last.gif"  alt="Next chapter"/></a>
-      </div>
+      <xsl:if test="$nav"><div class="nav">
+        <xsl:apply-templates mode="nav" select="$navIts[1]"/>
+        <xsl:apply-templates mode="nav" select="$navIts[2]"/>
+        <xsl:apply-templates mode="nav" select="$navIts[3]"/>
+        <xsl:apply-templates mode="nav" select="$navIts[4]"/>
+      </div></xsl:if>
 
       <h2><xsl:sequence select="$title/text()"/></h2>
       <xsl:apply-templates mode="content" select="$contAfterTitle"/>
@@ -76,26 +73,33 @@
 
 
 
-<xsl:template mode="content" match="text()">
-    <xsl:sequence select="."/>
+<xsl:template mode="nav" match="h:img">
+    <img src="{@src}" alt="{@alt}"/>
 </xsl:template>
 
-<xsl:template mode="content" match="h:pre">
-    <pre>
-        <code>
-            <xsl:if test="@class">
-                <xsl:attribute name="class" select="concat('language-', @class)"/>
-            </xsl:if>
-            <xsl:sequence select="node()"/>
-        </code>
-    </pre>
+<xsl:template mode="nav" match="h:a">
+    <a href="{@href}"><img src="{h:img/@src}" alt="{h:img/@alt}"/></a>
 </xsl:template>
+
 
 <xsl:template mode="content" match="h:*">
     <xsl:element name="{local-name()}">
         <xsl:sequence select="@*"/>
         <xsl:apply-templates mode="content" select="node()"/>
     </xsl:element>
+</xsl:template>
+
+<xsl:template mode="content" match="text()">
+    <xsl:sequence select="."/>
+</xsl:template>
+
+<xsl:template mode="content" match="h:pre[@class]">
+    <pre>
+        <code>
+            <xsl:attribute name="class" select="concat('language-', @class)"/>
+            <xsl:sequence select="node()"/>
+        </code>
+    </pre>
 </xsl:template>
 
 
