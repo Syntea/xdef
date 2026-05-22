@@ -17,30 +17,27 @@ public class XDParseCHKIDS extends XSParseENTITIES {
     public XDParseCHKIDS() {super();}
 
     @Override
-    public void finalCheck(final XXNode xnode, final XDParseResult result) {
-        if (xnode == null) {
+    public void finalCheck(final XXNode xn, final XDParseResult result) {
+        if (xn == null) {
             //The validation method &{0} can be called only from the X-script of attribute or text node
             result.error(XDEF.XDEF574, ROOTBASENAME);
             return;
         }
-        CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
+        CodeUniqueset tab = ((ChkNode) xn).getIdRefTable();
         DefContainer val = (DefContainer) result.getParsedValue();
         for (int i = 0; i < val.getXDItemsNumber(); i++) {
             XDValue id = val.getXDItem(i);
             tab.getParsedItems()[0].setParsedObject(id);
             if (!tab.hasId()) {
                 //Unique value "&{0}" was not set
-                result.error(XDEF.XDEF522, id +"&{xpath}"+xnode.getXPos()+"&{xdpos}"+xnode.getXDPosition());
+                result.error(XDEF.XDEF522, id + "&{xpath}" + xn.getXPos() + "&{xdpos}" + xn.getXDPosition());
             }
         }
     }
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
-
     @Override
     public short getAlltemsType() {return XD_OBJECT;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

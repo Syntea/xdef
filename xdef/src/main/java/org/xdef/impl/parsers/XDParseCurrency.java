@@ -16,7 +16,7 @@ public class XDParseCurrency extends XDParserAbstract {
     public XDParseCurrency() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         p.isSpaces();
         boolean xon;
         if (xon = p.isToken("C(")) {
@@ -41,10 +41,8 @@ public class XDParseCurrency extends XDParserAbstract {
         //Incorrect value of '&{0}'&{1}{: }
         p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(pos1,pos2));
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_CURRENCY;}
 }

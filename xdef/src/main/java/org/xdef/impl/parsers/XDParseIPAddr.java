@@ -52,10 +52,8 @@ public class XDParseIPAddr extends XDParserAbstract {
         p.setParsedValue(new DefIPAddr()); //null IPAddr
         p.errorWithString(XDEF.XDEF809,parserName(), s); //Incorrect value of '&{0}'&{1}{: }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_IPADDR;}
 }

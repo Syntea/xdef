@@ -24,7 +24,6 @@ public class XDParseEqi extends XDParseEq {
             throw new SRuntimeException("Incorrect number of parameters");
         }
     }
-
     @Override
     public void parseObject(final XXNode xn, final XDParseResult p){
         XDParseResult q = xn != null && xn.getXonMode() > 0 && p.isChar('"')
@@ -37,10 +36,8 @@ public class XDParseEqi extends XDParseEq {
         }
         checkCharset(xn, p);
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseEqi) ) {

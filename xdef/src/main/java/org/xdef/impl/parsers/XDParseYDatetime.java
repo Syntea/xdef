@@ -34,7 +34,6 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
 
     @Override
     public void initParams() {super.initParams(); _format = null; _outFormat = null;}
-
     @Override
     public int getLegalKeys() {
         return PATTERN +
@@ -57,9 +56,8 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
             OUTFORMAT +
             0;
     }
-
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
@@ -74,12 +72,12 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
         String s = p.getParsedBufferPartFrom(pos);
         p.isSpaces();
         p.setParsedValue(new DefDate(d));
-        checkDate(xnode, p);
+        checkDate(xn, p);
         if (p.errors()) {
             return; // an error occurs
         }
         TimeZone defaulttz;
-        if (xnode!=null && (defaulttz = xnode.getDefaultZone()) !=null && !defaulttz.equals(d.getTZ())) {
+        if (xn!=null && (defaulttz = xn.getDefaultZone()) !=null && !defaulttz.equals(d.getTZ())) {
             d.setTZ(defaulttz);
         }
         if (_outFormat != null) {
@@ -87,7 +85,6 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
         }
         p.replaceParsedBufferFrom(pos0, s);
     }
-
     @Override
     /** Set named parameters.
      * @param params Container with named items of parameters.
@@ -100,19 +97,15 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
             throw new SException(XDEF.XDEF545, "format"); //Missing required parameter: &{0}
         }
     }
-
     @Override
     public void setFormat(final String x) {_format = x;}
 
     @Override
     public String getFormat() { return _format; }
-
     @Override
     public void setOutFormat(final String x) {_outFormat = x;}
-
     @Override
     public String getOutFormat() { return _outFormat; }
-
     @Override
     public void addNamedParams(final XDContainer map) {
         if (_format != null) {
@@ -122,10 +115,8 @@ public class XDParseYDatetime extends XSAbstractParseComparable {
             map.setXDNamedItem("outFormat", new DefString(_outFormat));
         }
     }
-
     @Override
     public short parsedType() {return XD_DATETIME;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

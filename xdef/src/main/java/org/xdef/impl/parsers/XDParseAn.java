@@ -34,7 +34,6 @@ public class XDParseAn extends XSAbstractParseToken {
         }
         p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

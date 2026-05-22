@@ -40,16 +40,14 @@ public class XDParseQNameURI extends XSAbstractParseToken {
             ARGUMENT +
             0;
     }
-
     @Override
     public void initParams() {super.initParams(); _elem = null;}
-
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
-        Element el = _elem == null ? xnode.getElement() : _elem;
+        Element el = _elem == null ? xn.getElement() : _elem;
         byte xmlVersion1 = "1.1".equals(el.getOwnerDocument().getXmlVersion())
             ? StringParser.XMLVER1_1 : StringParser.XMLVER1_0;
         StringParser parser = new StringParser(p.getSourceBuffer(), pos);
@@ -106,13 +104,10 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 
     @Override
     public void setArgument(final XDValue x) {_elem = x.getElement();}
-
     @Override
     public XDValue getArgument() {return new DefElement(_elem);}
-
     @Override
     public short parsedType() {return XD_STRING;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

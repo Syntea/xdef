@@ -48,16 +48,15 @@ public class XDParseNCNameList extends XSAbstractParseToken {
             SEPARATOR +
             0;
     }
-
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
         XDContainer results = new DefContainer();
         StringParser parser = new StringParser(p.getSourceBuffer(), pos);
         XDValue val;
-        if ((val = parse(xnode, parser)) == null) {
+        if ((val = parse(xn, parser)) == null) {
             p.addReports((ArrayReporter) parser.getReportWriter());
             if (_minLength == 0 && _enumeration == null) {
                 p.replaceParsedBufferFrom(pos0, "");
@@ -87,7 +86,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
                 break;
             }
             int pos2 = parser.getIndex();
-            if ((val = parse(xnode, parser)) == null) {
+            if ((val = parse(xn, parser)) == null) {
                 parser.setIndex(pos1);
                 break;
             }
@@ -101,7 +100,6 @@ public class XDParseNCNameList extends XSAbstractParseToken {
         p.setParsedValue(results);
         checkItem(p);
     }
-
     @Override
     public void addNamedParams(final XDContainer map) {
         if (_separator != null) {
@@ -118,16 +116,12 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 
     @Override
     public void setSeparator(final String x) {_separator = x;}
-
     @Override
     public String getSeparator() {return _separator;}
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short getAlltemsType() {return XD_STRING;}
 }

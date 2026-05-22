@@ -39,7 +39,6 @@ public class XDParseRegex extends XDParserAbstract {
             p.setEos();
         }
     }
-
     @Override
     public void setNamedParams(final XXNode xn, final XDContainer params)
         throws SException {
@@ -62,7 +61,6 @@ public class XDParseRegex extends XDParserAbstract {
             }
         }
     }
-
     @Override
     public final XDContainer getNamedParams() {
         XDContainer map = new DefContainer();
@@ -71,13 +69,10 @@ public class XDParseRegex extends XDParserAbstract {
         }
         return map;
     }
-
     @Override
     public short parsedType() {return XD_STRING;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseRegex) ) {

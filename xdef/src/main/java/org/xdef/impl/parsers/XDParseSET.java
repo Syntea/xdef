@@ -15,17 +15,16 @@ public class XDParseSET extends XSParseQName {
     public XDParseSET() {super();}
 
     @Override
-    public void finalCheck(final XXNode xnode, final XDParseResult result) {
-        if (xnode == null) {
+    public void finalCheck(final XXNode xn, final XDParseResult result) {
+        if (xn == null) {
             //The validation method &{0} can be called only from the X-script of attribute or text node
             result.error(XDEF.XDEF574, ROOTBASENAME);
             return;
         }
-        CodeUniqueset tab = ((ChkNode) xnode).getIdRefTable();
+        CodeUniqueset tab = ((ChkNode) xn).getIdRefTable();
         tab.getParsedItems()[0].setParsedObject(result.getParsedValue());
         tab.setId();
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

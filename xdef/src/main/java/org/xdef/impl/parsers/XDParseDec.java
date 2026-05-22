@@ -15,7 +15,7 @@ public class XDParseDec extends XSParseDecimal {
     public XDParseDec() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         int pos0 = p.getIndex();
         if (_whiteSpace == WS_COLLAPSE) {
             p.isSpaces();
@@ -78,10 +78,8 @@ public class XDParseDec extends XSParseDecimal {
         checkPatterns(p);
         checkComparable(p);
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_DECIMAL;}
 }

@@ -20,7 +20,7 @@ public class XDParseEmailAddrList extends XDParserAbstract {
     private static final String ROOTBASENAME = "emailAddrList";
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         try {
             StringParser q = new StringParser(p.getSourceBuffer());
             q.setIndex(p.getIndex());
@@ -40,13 +40,10 @@ public class XDParseEmailAddrList extends XDParserAbstract {
         p.setParsedValue(DefNull.genNullValue(parsedType()));
         p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
-
     @Override
     public short getAlltemsType() {return XD_EMAIL;}
 }

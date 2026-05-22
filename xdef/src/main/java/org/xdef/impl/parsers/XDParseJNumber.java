@@ -16,7 +16,7 @@ public class XDParseJNumber extends XSParseDouble {
     public XDParseJNumber() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         int pos0 = p.getIndex();
         p.isSpaces();
         if (p.getCurrentChar() == '+') {
@@ -42,10 +42,8 @@ public class XDParseJNumber extends XSParseDouble {
         checkPatterns(p);
         checkComparable(p);
     }
-
     @Override
     public short parsedType() {return XD_NUMBER;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

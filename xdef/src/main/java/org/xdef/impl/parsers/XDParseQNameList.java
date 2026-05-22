@@ -14,13 +14,12 @@ public class XDParseQNameList extends XDParseNCNameList {
     public XDParseQNameList() {super();}
 
     @Override
-    XDValue parse(final XXNode xnode, final StringParser p) {
+    XDValue parse(final XXNode xn, final StringParser p) {
         if (!p.isXMLName((byte) 10)) {
             return null;
         }
         return new DefString(p.getParsedString());
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

@@ -14,7 +14,7 @@ public class XDParseCountry extends XSAbstractParseToken {
     public XDParseCountry() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
         p.isSpaces();
         while(p.getCurrentChar() > ' '){p.nextChar();}
@@ -32,7 +32,6 @@ public class XDParseCountry extends XSAbstractParseToken {
         p.setParsedValue(s);
         checkItem(p);
     }
-
     @Override
     public final String parserName() {return ROOTBASENAME;}
 }

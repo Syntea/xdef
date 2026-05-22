@@ -11,11 +11,10 @@ public class XDParseTrue extends XDParserAbstract {
     private static final String ROOTBASENAME = "true_parser";
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         p.setParsedValue(p.getSourceBuffer());
         p.setEos();
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

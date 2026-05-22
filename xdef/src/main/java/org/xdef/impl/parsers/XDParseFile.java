@@ -1,6 +1,7 @@
 package org.xdef.impl.parsers;
 
 import java.io.File;
+import java.io.IOException;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.msg.XDEF;
@@ -23,6 +24,7 @@ public class XDParseFile extends XDParserAbstract {
             p.setEos();
         }
     }
+
     /** Check if the argument contains correct filename.
      * @param p XDParseResult where to set en error information.
      * @param s string with filename.
@@ -34,15 +36,13 @@ public class XDParseFile extends XDParserAbstract {
             try {
                 new File(s).getCanonicalFile();
                 return true;
-            } catch (Exception ex) {}
+            } catch (IOException ex) {}
         }
         p.errorWithString(XDEF.XDEF809, ROOTBASENAME); //Incorrect value of '&{0}'&{1}{: }
         return false;
     }
-
     @Override
     public short parsedType() {return XD_STRING;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }
