@@ -40,9 +40,8 @@ public class XDParseCDATA extends XSParseString {
 //			BASE +
             0;
     }
-
     @Override
-    public final void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
+    public final void setNamedParams(final XXNode xn, final XDContainer params) throws SException {
         _minLength = _maxLength = -1;
         XDNamedValue[] pars;
         if (params == null || (pars = params.getXDNamedItems()) == null) {
@@ -59,7 +58,6 @@ public class XDParseCDATA extends XSParseString {
             throw new SException(XDEF.XDEF808); //Incorrect combination of maximum and minimum
         }
     }
-
     @Override
     public void setParseSQParams(final Object... params) {
         if (params != null && params.length >= 1) {
@@ -72,7 +70,6 @@ public class XDParseCDATA extends XSParseString {
             throw new SRuntimeException("Incorrect number of parameters");
         }
     }
-
     @Override
     public final XDContainer getNamedParams() {
         XDContainer map = new DefContainer();

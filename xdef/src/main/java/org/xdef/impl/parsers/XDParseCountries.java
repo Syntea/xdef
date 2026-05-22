@@ -13,9 +13,8 @@ public class XDParseCountries  extends XDParseNCNameList {
     private static final String ROOTBASENAME = "countries";
 
     public XDParseCountries() {super();}
-
     @Override
-    XDValue parse(final XXNode xnode, final StringParser p) {
+    XDValue parse(final XXNode xn, final StringParser p) {
         p.isSpaces();
         int pos = p.getIndex();
         while(p.getCurrentChar() > ' ') {p.nextChar();}
@@ -26,7 +25,6 @@ public class XDParseCountries  extends XDParseNCNameList {
         } catch (Exception ex) {}
         return null;
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

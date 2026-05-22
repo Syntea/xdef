@@ -49,7 +49,6 @@ public class XDParseEmailAddr extends XDParserAbstract {
 
     @Override
     public short parsedType() {return XD_EMAIL;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

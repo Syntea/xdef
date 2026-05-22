@@ -27,10 +27,8 @@ public class XDParseEnds extends XDParseEq {
         }
         checkCharset(xn, p);
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseEnds) ) {

@@ -43,10 +43,8 @@ public class XDParseEnumi extends XDParseEnum {
             }
         }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseEnumi) ) {

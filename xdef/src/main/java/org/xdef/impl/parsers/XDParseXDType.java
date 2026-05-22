@@ -23,7 +23,7 @@ public class XDParseXDType extends XDParserAbstract {
     private static final String ROOTBASENAME = "xdType";
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         p.isSpaces();
         String s = p.getUnparsedBufferPart().trim();
         try {
@@ -33,7 +33,7 @@ public class XDParseXDType extends XDParserAbstract {
 "<A/>" +
 "</xd:def>";
             Properties props = new Properties();
-            if (xnode.getXDPool().isChkWarnings()) {
+            if (xn.getXDPool().isChkWarnings()) {
                 props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
             }
             XDPool xp = XDFactory.compileXD(props, xdef);
@@ -53,10 +53,8 @@ public class XDParseXDType extends XDParserAbstract {
             p.error(XDEF.XDEF817, s, parserName());
         }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_PARSER;}
 }

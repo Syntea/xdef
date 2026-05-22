@@ -17,7 +17,7 @@ public class XDParseUrlList extends XDParserAbstract {
     private static final String ROOTBASENAME = "urlList";
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         String s = p.getUnparsedBufferPart().trim();
         StringTokenizer st = new StringTokenizer(s, ", \n\t\r");
         if (!st.hasMoreTokens()) {
@@ -41,13 +41,10 @@ public class XDParseUrlList extends XDParserAbstract {
         p.setParsedValue(val);
         p.setEos();
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
-
     @Override
     public short getAlltemsType() {return XD_STRING;}
 }

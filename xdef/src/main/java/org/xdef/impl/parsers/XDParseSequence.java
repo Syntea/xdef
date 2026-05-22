@@ -63,10 +63,8 @@ public class XDParseSequence extends XSAbstractParser {
             BASE +
             0;
     }
-
     @Override
     public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
-
     @Override
     public boolean addTypeParser(final XDValue x) {
         if (_itemTypes == null) {
@@ -80,28 +78,20 @@ public class XDParseSequence extends XSAbstractParser {
         _itemTypes[old.length] = valueToParser(x);
         return true;
     }
-
     @Override
     public void setLength(final long x) {_minLength = _maxLength = x;}
-
     @Override
     public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
-
     @Override
     public void setMaxLength(final long x) {_maxLength = x;}
-
     @Override
     public long getMaxLength() {return _maxLength;}
-
     @Override
     public void setMinLength(final long x) {_minLength = x;}
-
     @Override
     public long getMinLength() {return _minLength;}
-
     @Override
     public XDValue[] getEnumeration() {return _enumeration;}
-
     @Override
     public void setEnumeration(final Object[] o) {
         if (o == null || o.length == 0) {
@@ -113,7 +103,6 @@ public class XDParseSequence extends XSAbstractParser {
         }
         _enumeration = e;
     }
-
     @Override
     public void setItem(final XDValue item) {
         if (item.getItemId() != XD_CONTAINER) {
@@ -125,31 +114,24 @@ public class XDParseSequence extends XSAbstractParser {
             addTypeParser(c.getXDItem(i));
         }
     }
+    @Override
+    public void check(final XXNode xn, final XDParseResult p) {parse(xn, p, true);}
 
     @Override
-    public void check(final XXNode xnode, final XDParseResult p) {
-        parse(xnode, p, true);
-    }
+    public void parseObject(final XXNode xn, final XDParseResult p) {parse(xn, p, false);}
 
-    @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
-        parse(xnode, p, false);
-    }
-
-    private void parse(final XXNode xnode,
-        final XDParseResult p,
-        boolean isFinal) {
+    private void parse(final XXNode xn, final XDParseResult p, boolean isFinal) {
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos1 = p.getIndex();
         DefContainer val = new DefContainer();
-        _itemTypes[0].parseObject(xnode, p);
+        _itemTypes[0].parseObject(xn, p);
         String s = p.getParsedBufferPartFrom(pos1);
         if (p.errors()) {
             return;
         }
         if (isFinal) {
-            _itemTypes[0].finalCheck(xnode, p);
+            _itemTypes[0].finalCheck(xn, p);
         }
         val.addXDItem(p.getParsedValue());
         for (int i = 1; i < _itemTypes.length; i++) {
@@ -160,9 +142,9 @@ public class XDParseSequence extends XSAbstractParser {
                 break;
             }
             pos1 = p.getIndex();
-            _itemTypes[i].parseObject(xnode, p);
+            _itemTypes[i].parseObject(xn, p);
             if (isFinal) {
-                _itemTypes[i].finalCheck(xnode, p);
+                _itemTypes[i].finalCheck(xn, p);
             }
             if (p.matches()) {
                 val.addXDItem(p.getParsedValue());
@@ -212,10 +194,8 @@ public class XDParseSequence extends XSAbstractParser {
             map.setXDNamedItem("separator", new DefString(_separatorChars));
         }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseSequence)) {
@@ -254,16 +234,12 @@ public class XDParseSequence extends XSAbstractParser {
             return true;
         }
     }
-
     @Override
     public void setSeparator(final String x) {_separatorChars = x;}
-
     @Override
     public String getSeparator() {return _separatorChars;}
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
-
     @Override
     public short getAlltemsType() {return getItemsType(_itemTypes);}
 }

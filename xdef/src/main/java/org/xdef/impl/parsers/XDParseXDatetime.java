@@ -38,7 +38,6 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
         _format = null;
         _outFormat = null;
     }
-
     @Override
     public int getLegalKeys() {
         return PATTERN +
@@ -61,9 +60,8 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
             OUTFORMAT +
             0;
     }
-
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
@@ -79,12 +77,12 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
         String s = p.getParsedBufferPartFrom(pos);
         p.isSpaces();
         p.setParsedValue(new DefDate(d));
-        checkDate(xnode, p);
+        checkDate(xn, p);
         if (p.errors()) {
             return; // an error occurs
         }
         TimeZone defaulttz;
-        if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
+        if (d.getTZ() == null && xn != null && (defaulttz = xn.getDefaultZone()) != null) {
             d.setTZ(defaulttz);
         }
         if (_outFormat != null) {
@@ -92,38 +90,32 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
         }
         p.replaceParsedBufferFrom(pos0, s);
     }
-
     @Override
     /** Set named parameters.
      * @param params Container with named items of parameters.
      * @param xnode actual XXNode object.
      * @throws SException if an error occurs.
      */
-    public void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
-        super.setNamedParams(xnode, params);
+    public void setNamedParams(final XXNode xn, final XDContainer params) throws SException {
+        super.setNamedParams(xn, params);
         if (_format == null) {
             throw new SException(XDEF.XDEF545, "format"); //Missing required parameter: &{0}
         }
     }
-
     @Override
     public void setFormat(final String x) {
         SDatetime.checkFormat(x);
         _format = x;
     }
-
     @Override
     public String getFormat() { return _format; }
-
     @Override
     public void setOutFormat(final String x) {
         SDatetime.checkFormat(x);
         _outFormat = x;
     }
-
     @Override
     public String getOutFormat() { return _outFormat; }
-
     @Override
     public void addNamedParams(final XDContainer map) {
         if (_format != null) {
@@ -133,10 +125,8 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
             map.setXDNamedItem("outFormat", new DefString(_outFormat));
         }
     }
-
     @Override
     public short parsedType() {return XD_DATETIME;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

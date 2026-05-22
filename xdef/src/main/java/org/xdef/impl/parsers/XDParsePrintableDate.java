@@ -12,10 +12,8 @@ public class XDParsePrintableDate extends XDParseDateYMDhms {
 
     @Override
     boolean parse(final StringParser parser) {return parser.isPrintableDatetime();}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_DATETIME;}
 }

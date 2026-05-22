@@ -14,7 +14,7 @@ public class XDParseHex extends XSParseBase64Binary {
     public XDParseHex() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
         p.isSpaces();
         int quoted = p.isOneOfTokens("x(", "\"");
@@ -71,7 +71,6 @@ public class XDParseHex extends XSParseBase64Binary {
         p.setParsedValue(new DefBytes(bytes, false));
         check(p);
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

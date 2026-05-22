@@ -19,7 +19,6 @@ public class XDParseChar extends XSAbstractParseToken {
 
     @Override
     public void initParams() {_whiteSpace = WS_PRESERVE;}
-
     @Override
     public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
@@ -62,7 +61,6 @@ public class XDParseChar extends XSAbstractParseToken {
 
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_CHAR;}
 }
