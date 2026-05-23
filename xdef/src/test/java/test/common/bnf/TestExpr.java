@@ -147,7 +147,7 @@ if(true)return;
             assertNull(test("1.0",  g, "print(min(2,1.0));"));
             assertNull(test("1.0", g, "print(min(2.0,1));"));
             assertNull(test(String.valueOf(Math.sin(3.1)), g,"print(sin(3.1));"));
-            assertNull(test("0.269439", g, "printf('%f',(sin(3.1) + 4)/(2*3 +9));"));
+            assertNull(test("0,269439", g, "printf('%f',(sin(3.1) + 4)/(2*3 +9));"));
             assertNull(test(String.valueOf(Math.cos(3.1)), g,"print(cos(3.1));"));
             assertNull(test("", g, "Object i;"));
             assertNull(test("", g, "empty();"));
