@@ -8,5 +8,5 @@ ul.emphasized li {
 }
 
 div.toc ul {
-    
+    list-style-type:    none;
 }
