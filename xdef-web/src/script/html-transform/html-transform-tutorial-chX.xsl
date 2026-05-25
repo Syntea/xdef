@@ -32,11 +32,12 @@
 
 
 <xsl:template match="h:html">
-    <xsl:variable name="nav"             select="h:body/h:div[@id='footer']"                        as="element(h:div)?"/>
-    <xsl:variable name="navIts"          select="$nav/*[self::h:a or self::h:img]"                  as="element()*"/>
-    <xsl:variable name="content"         select="h:body/h:div[@id='body']/node()"                   as="node()*"/>
-    <xsl:variable name="title"           select="$content/self::h:h2"                               as="element(h:h2)"/>
-    <xsl:variable name="contAfterTitle"  select="$content/self::h:h2/following-sibling::node()"     as="node()*"/>
+    <xsl:variable name="nav"            select="h:body/h:div[@id='footer']"                         as="element(h:div)?"/>
+    <xsl:variable name="navIts"         select="$nav/*[self::h:a or self::h:img]"                   as="element()*"/>
+    <xsl:variable name="content"        select="h:body/h:div[@id='body']/node()"                    as="node()*"/>
+    <xsl:variable name="title"          select="$content/self::h:h2"                                as="element(h:h2)"/>
+    <xsl:variable name="contAfterTitle" select="$content/self::h:h2/following-sibling::node()"      as="node()*"/>
+    <xsl:variable name="toc"            select="$contAfterTitle/self::h:dl/h:dt/h:a"                as="element(h:a)*"/>
     
     <xsl:sequence xml:space="preserve"><html lang="en">
   <head>
@@ -60,12 +61,17 @@
         <xsl:apply-templates mode="nav" select="$navIts[4]"/>
       </div></xsl:if>
 
-      <h2><xsl:sequence select="$title/text()"/></h2>
-      <xsl:apply-templates mode="content" select="$contAfterTitle"/>
+      <h1><xsl:sequence select="$title/text()"/></h1>
+
+      <div class="toc">
+      Table of Contents:<ul><!--
+        --><xsl:apply-templates mode="toc" select="$toc"/>
+      </ul>
+      </div>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-      <script type="module">initPageBasicHili()</script>
+      <script type="module">initPageBasic()</script>
   </body>
 </html>
 </xsl:sequence>
@@ -82,24 +88,12 @@
 </xsl:template>
 
 
-<xsl:template mode="content" match="h:*">
-    <xsl:element name="{local-name()}">
-        <xsl:sequence select="@*"/>
-        <xsl:apply-templates mode="content" select="node()"/>
-    </xsl:element>
-</xsl:template>
-
-<xsl:template mode="content" match="text()">
-    <xsl:sequence select="."/>
-</xsl:template>
-
-<xsl:template mode="content" match="h:pre[@class]">
-    <pre>
-        <code>
-            <xsl:attribute name="class" select="concat('language-', @class)"/>
-            <xsl:sequence select="node()"/>
-        </code>
-    </pre>
+<xsl:template mode="toc" match="h:a">
+    <xsl:text>
+        </xsl:text>
+    <li>
+    <a href="{@href}"><xsl:sequence select="text()"/></a>
+    </li>
 </xsl:template>
 
 

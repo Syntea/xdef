@@ -1,6 +1,6 @@
 <!DOCTYPE HTML><html lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>1.3.&nbsp;X-script of elements and text nodes </title>
+    <title>1.3. X-script of elements and text nodes </title>
     <meta name="description" content="X-definition description of values of attributes and text nodes">
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
@@ -20,20 +20,20 @@
         <a href="ch02.html"><img src="style/last.gif" alt="Next chapter"></a>
       </div>
 
-      <h2>1.3.&nbsp;X-script of elements and text nodes</h2>
+      <h2>1.3. X-script of elements and text nodes</h2>
       
       <p>
-        &nbsp;&nbsp;&nbsp;
         Now we will show how to specify child nodes of an element and how to write the X-script of XML element
         models. The X-script of an XML element model must be written in the special attribute "xd:script"
-        (the prefix "xd" must match the namespace of the X-definition).<br>
-        &nbsp;&nbsp;&nbsp;
+        (the prefix "xd" must match the namespace of the X-definition).
+      </p><p>
         In the example below, we have added child elements "Title" and "Author". Both child elements contain
         a mandatory text node. The X-script of the XML text node is written as the value of the text node
         (similar to attributes). Consider that there are books with one author, multiple authors or even no
         author. Therefore, the quantifier of the "Author" element is specified as "occurs *" (i.e., no or
-        multiple occurrences). However, the child element "Title" must be just one (i.e., it is mandatory): 
+        multiple occurrences).
       </p>
+        However, the child element "Title" must be just one (i.e., it is mandatory): 
 <pre><code class="language-xml">
 &lt;Book ISBN="required int(10000000, 999999999);"
       published="optional gYear();" &gt; 
@@ -45,8 +45,8 @@
   &lt;/Title&gt;
 &lt;/Book&gt;
 </code></pre>
-      <p>Since the default value of the quantifier is "required", note that the specification of this
-        quantifier can be omitted:</p>
+        Since the default value of the quantifier is "required", note that the specification of this
+        quantifier can be omitted:
 <pre><code class="language-xml">
 &lt;Book ISBN="int(0, 9999999999);"
       published="optional gYear();" &gt;

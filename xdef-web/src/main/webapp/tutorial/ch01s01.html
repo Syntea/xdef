@@ -1,6 +1,6 @@
 <!DOCTYPE HTML><html lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>1.1.&nbsp;Model of XML element in X-definition</title>
+    <title>1.1. Model of XML element in X-definition</title>
     <meta name="description" content="Model of XML element">
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
@@ -20,52 +20,56 @@
         <a href="ch02.html"><img src="style/last.gif" alt="Next chapter"></a>
       </div>
 
-      <h2>1.1.&nbsp;X-definition and model of XML element</h2>
+      <h2>1.1. X-definition and model of XML element</h2>
       
+
       As a starting point, consider following XML element that describes a book:
 <pre><code class="language-xml">&lt;Book ISBN = "123456789"
-      published = "2010" &gt;
-      title = "X-definition tutorial" &gt;
+      published = "2010"
+      title = "X-definition tutorial"&gt;
 &lt;/Book&gt;
 </code></pre>
-      &nbsp;&nbsp;&nbsp;
+      <p>
       XML data can be described, for example, using XSD (XML Schema) or Relax NG. <b>X-definition</b> is
       an alternative approach to XML data description. The X-definition allows for a more precise and detailed
       description of XML data. Let's get a first idea of what an XML element description looks like in
-      an X-definition (this description is called an <b>element model).</b><br>
-      &nbsp;&nbsp;&nbsp;
+      an X-definition (this description is called an <b>element model</b>).
+      </p><p>
       X-definition describes the names and cardinality (possible number of occurrences) of items and the
       structure of children in the XML element model. An X-definition itself is an XML
       element with the X-definition namespace ("<b>http://www.xdef.org/xdef/4.2</b>") and local name "def"
       where the name prefix referrs to the X-definition namespace. The child nodes of an X-definition can
-      be element models.<br>
-      &nbsp;&nbsp;&nbsp;
+      be element models.
+      </p><p>
       Note that such a description looks similar to the data it describes, but attribute values (and textual
       content of elements) are replaced by value descriptions in this model. The description of data value
       contains the <b>quantifier</b> (specification of occurrence) of the value and the call to the
       <b>validation method</b> (analysis and evaluation of the data type).
-      For example:<br>
-      <tt><b>&nbsp;&nbsp;&nbsp;required int(10000000, 999999999);</b></tt>
-      mandatory integer number in range 10000000 ... 999999999<br>
-      <tt><b>&nbsp;&nbsp;&nbsp;optional gYear();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></tt>
-      optional notation of calendar year<br>
-      <tt><b>&nbsp;&nbsp;&nbsp;required string();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></tt>
-      mandatory character sequence<br>
+      </p>
+      For example:<dl>
+      <dt><code><b>required int(10000000, 999999999);</b></code></dt>
+      <dd>mandatory integer number in range 10000000 ... 999999999</dd>
+      <dt><code><b>optional gYear();</b></code></dt>
+      <dd>optional notation of calendar year</dd>
+      <dt><code><b>required string()</b></code></dt>
+      <dd>mandatory character sequence</dd>
+      </dl>
+      <p>
       The language used here to describe data values is called <b>"X-script"</b> of the X-definition.
-      <br><br>
+      </p><p>
       The element models are written  as child nodes of this element.
+      </p>
       The X-definition with XML data model describing the above book will be of the form:
-<pre><code class="language-xml">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"&gt;
+<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"&gt;
   &lt;Book ISBN = "required int(10000000, 999999999); /* ISBN code - integer number in the given range */"
         published = "optional gYear(); /* year of publishing (can be omitted). */" 
         title = "required string(); /* any string */" &gt;
   &lt;/Book&gt;;
 &lt;/xd:def&gt;
 </code></pre>
-      <i>Note the possibility to write comments (<b>/*...*/</b>) in the X-script.</i><br>
+      <p>
+      Note: the possibility to write comments (<b>/*...*/</b>) in the X-script.
+      </p>
     
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>

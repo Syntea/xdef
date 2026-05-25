@@ -18,10 +18,13 @@
     </div>
     <div id="body">
       <h2>3.2. Construction of data from previous slide</h2>
-      <p>&nbsp;&nbsp;&nbsp;You will notice that the X definition describes the document model to be created.
-        The result is created from the input data as described in the "create" section of the X script.<br/>
-        &nbsp;&nbsp;&nbsp;Note the example below plots a trace of the input data according to the codel in
-        the X-definition:</p>            
+
+      <p>
+        You will notice that the X definition describes the document model to be created.
+        The result is created from the input data as described in the "create" section of the X script.
+      </p>
+        Note the example below plots a trace of the input data according to the codel in
+        the X-definition:            
 <pre class="xml">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" >
   &lt;Contract ProcessedDate="required; create toString(now(),'yyyy-MM-dd HH:mm');"
@@ -45,7 +48,9 @@
   &lt;Client role="2" firstname="John" familyname="Smith" pId="311270/1234" />
   &lt;Client role="3" firstname="Fred" familyname="Brown" personalId="311270/1234" cId="87654321" />
 &lt;/Contract></pre>
-      You can try it <a href="ch03s02e00.html"><b>HERE</b></a>
+      <p>
+        You can try it <a href="ch03s02e00.html"><b>HERE</b></a>
+      </p>
     </div>
     <script type="text/javascript">
       dp.SyntaxHighlighter.HighlightAll('code');
