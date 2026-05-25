@@ -3,7 +3,8 @@
 /******************************************************************************/
 
 comment      ::= "/*" ( [^*]+ | "*" [^/] )* "*/"
-S            ::= ( [#9#10#13 ]+ | comment )* /* white spaces */
+WS           ::= ( [#9#10#13 ]+ | comment )+ /* white space */
+S            ::= WS? /* optioal white space */
 keyword      ::= "true" | "false" | "null"| "if" | "else" | "do" | "while"
                  | "for" | "switch" | "case" | "default" | "try" | "catch"
                  | "finally" | "throw" | "break" | "continue" | "return"
