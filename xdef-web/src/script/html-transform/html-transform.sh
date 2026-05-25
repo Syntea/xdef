@@ -29,11 +29,23 @@ fi
 
 
 #hlavni krok - transformace webapp
-for i in tutorial/index.html tutorial/ch??.html tutorial/ch??s??.html tutorial/ch??s??e??.html
-#for i in tutorial/ch02s02.html
+for i in tutorial/index.html tutorial/ch??.html
 do
-    echo "file: $i"
+    echo "chX: file: $i"
     xmllint --html --xmlout --nodefdtd --recover $i | \
-    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:${xslFile} -o:../webapp/$i -s:-
-    #java -cp "${cp}" "net.sf.saxon.Transform" -xsl:${xslFile} -o:../webapp-new/$i -s:$i
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chX.xsl" -o:../webapp/$i -s:-
+done
+
+for i in tutorial/ch??s??.html 
+do
+    echo "chXsY: file: $i"
+    xmllint --html --xmlout --nodefdtd --recover $i | \
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chXsY.xsl" -o:../webapp/$i -s:-
+done
+
+for i in tutorial/ch??s??e??.html
+do
+    echo "example: file: $i"
+    xmllint --html --xmlout --nodefdtd --recover $i | \
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-example.xsl" -o:../webapp/$i -s:-
 done
