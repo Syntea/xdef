@@ -3,6 +3,7 @@ package test.common.bnf;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Stack;
@@ -101,22 +102,17 @@ public class TestExprCompiler {
     static final byte TODEGREES = TANH + 1; // toDegrees(x)
     static final byte TORADIANS = TODEGREES + 1; // toRadians(x)
     static final byte ULP = TORADIANS + 1; // ulp(x)
-
     static final byte ATAN2 = ULP + 1; //  Math.atan2(x, y);
     static final byte HYPOT = ATAN2 + 1; // Math.hypot(x, y);
     static final byte POW = HYPOT + 1; // Math.pow(x, y);
-
     static final byte MIN = POW + 1; // min(x,y)
     static final byte MAX = MIN + 1; // max(x,y)
-
     static final byte RANDOM = MAX + 1; //random();
-
-
-    static final byte PRINT = RANDOM + 1; //random();
-    static final byte PRINTLN = PRINT + 1; //random();
-    static final byte PRINTF = PRINTLN+ 1; //random();
-
-    static final byte EMPTY = PRINTF + 1; //empty();
+    static final byte PRINT = RANDOM + 1; //print(x);
+    static final byte PRINTLN = PRINT + 1; //println();
+    static final byte PRINTF = PRINTLN + 1; //printf(x ...);
+    static final byte TOSTRING = PRINTF + 1; //toString(x);
+    static final byte EMPTY = TOSTRING + 1; //empty();
 
     static {
         // code operators
@@ -210,6 +206,7 @@ public class TestExprCompiler {
         _codes.put("print", PRINT);
         _codes.put("println", PRINTLN);
         _codes.put("printf", PRINTF);
+        _codes.put("toString", TOSTRING);
         _codes.put("empty", EMPTY);
     }
 
@@ -845,13 +842,14 @@ public class TestExprCompiler {
                 Object o1 = get(0);
                 if (PRINTF == _op) {
                     remove(0); // we have the first parametr in o1
-                    out.printf(o1.toString(), toArray());
+                    out.printf(Locale.US, o1.toString(), toArray());
                     return null;
                 }
                 if (size() == 1) { // one parameter
                     switch (_op) {
                         case PRINTLN: out.println(o1); return null;
                         case PRINT: out.print(o1); return null;
+                        case TOSTRING: return o1.toString();
                     }
                     if (o1 instanceof Number) {
                         double x = ((Number) o1).doubleValue();
