@@ -8,7 +8,6 @@ xmlResVer=5.3.3
 #konstanty odvozene
 prgDir=$(dirname $(readlink -f $0))
 saxonPath=".m2/repository/net/sf/saxon/Saxon-HE/$saxonVersion/Saxon-HE-${saxonVersion}.jar"
-xslFile="${prgDir}/html-transform.xsl"
 cp="${HOME}/${saxonPath}:\
 ${HOME}/.m2/repository/org/xmlresolver/xmlresolver/${xmlResVer}/xmlresolver-${xmlResVer}.jar:\
 ${HOME}/.m2/repository/org/xmlresolver/xmlresolver/${xmlResVer}/xmlresolver-${xmlResVer}-data.jar\
