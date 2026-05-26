@@ -1,23 +1,27 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="X-definition: Windows INI, Properties" />
-    <meta name="keywords" content="Windows INI, Properties, X-definition, Xdefinition, XXDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>4.3 Windows INI, Properties</title>
-    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
-    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
-    <script src="/tutorial/highlighter/shCore.js"> </script>
-    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>4.3 Windows INI, Properties</title>
+    <meta name="description" content="X-definition: Windows INI, Properties">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
-      <a href="ch04.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
-      <a href="ch04s02.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
-      <a href="ch04s04.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
-      <a href="ch05.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
-    </div>
-    <div id="body">
-      <h2>4.3 Windows Properties, INI</h2>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch04.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch04s02.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch04s04.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch05.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>4.3. Windows Properties, INI</h2>
+      
       Since the Properties format is syntactically a subset of the Windows INI
       format, our example will be in the Windows INI format. Let's have the
       following Windows INI data:
@@ -35,8 +39,8 @@ Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c</pre></font>
       The description of values of items in the data is specified as values of
       data items in the X-script language. Note that items "ReceiverSleep" and the
       section "Server" are optional:
-<pre class="xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS" >
-  &lt;xd:ini name="TRS">
+<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS" &gt;
+  &lt;xd:ini name="TRS"&gt;
     TRSUser = string(); /* user name */
     [User]
        Home = file(); /* user home directory */
@@ -46,13 +50,14 @@ Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c</pre></font>
       RemoteServerURL = url();
       SeverIP = ipAddr();
       Signature = SHA1();
-  &lt;/xd:ini>
-&lt;/xd:def>
-</pre>
+  &lt;/xd:ini&gt;
+&lt;/xd:def&gt;
+</code></pre>
       You can try it <a href="ch04s03e00.html"><b>HERE</b></a>
-    </div>
-    <script type="text/javascript">
-      dp.SyntaxHighlighter.HighlightAll('code');
-    </script>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
   </body>
 </html>

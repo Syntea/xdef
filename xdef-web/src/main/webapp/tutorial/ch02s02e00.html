@@ -1,67 +1,71 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="Example of namespace in X-definition" />
-    <meta name="keywords" content="example, XML namespace, X-definition, Xdefinition, XXDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:23rem;max-height:23rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:10rem;max-height:10rem;display:flex;overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Using namespaces</title>
+    <meta name="description" content="Example of namespace in X-definition">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
   </head>
-  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples">
-      <p style="font: Tahoma; font-size: 13px;">
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+    <div class="title">Using namespaces</div>
+
+    
+    <form method="post" action="../playground/Playground">
+      <p>
         Using namespace in X-definition. Note that the prefix "bk" is used in
         the X-definition below. However, the prefix "books" is used in the input
         data.Using namespace in X-definition. Note that the prefix "bk" is used
         in the X-definition below. However, the prefix "books" is used in the
         input data.
       </p>
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
+      <b>X-definition:</b><br>
+      
+        
+        <textarea name="xdef" rows="19" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
         xmlns:bk = "http://www.book.com"
         xd:name = "Books" 
-        xd:root = "bk:Inventory" >
+        xd:root = "bk:Inventory" &gt;
                 
-  &lt;bk:Inventory>
+  &lt;bk:Inventory&gt;
      &lt;bk:book xd:script = "occurs *"
-              bk:ISBN="num(10);" >
-        &lt;bk:publisher> string();  &lt;/bk:publisher>
-        &lt;bk:year>      gYear();   &lt;/bk:year>
-        &lt;bk:price>     decimal(); &lt;/bk:price>
-        &lt;bk:author xd:script="occurs *"> string(); &lt;/bk:author>
-        &lt;bk:title>     string();  &lt;/bk:title>
-     &lt;/bk:book>    
-  &lt;/bk:Inventory>
+              bk:ISBN="num(10);" &gt;
+        &lt;bk:publisher&gt; string();  &lt;/bk:publisher&gt;
+        &lt;bk:year&gt;      gYear();   &lt;/bk:year&gt;
+        &lt;bk:price&gt;     decimal(); &lt;/bk:price&gt;
+        &lt;bk:author xd:script="occurs *"&gt; string(); &lt;/bk:author&gt;
+        &lt;bk:title&gt;     string();  &lt;/bk:title&gt;
+     &lt;/bk:book&gt;    
+  &lt;/bk:Inventory&gt;
 
-&lt;/xd:def>
+&lt;/xd:def&gt;
 </textarea>
-      </div>
-      <b>Input data</b>
-      <div class="B">
-        <div id="line-numbers_1"></div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
-&lt;books:Inventory xmlns:books = "http://www.book.com">
-   &lt;books:book books:ISBN = "0553380958">
-        &lt;books:publisher>Spectra&lt;/books:publisher>
-        &lt;books:year>1992&lt;/books:year>
-        &lt;books:price>14.95&lt;/books:price>
-        &lt;books:author>Neal Stephenson&lt;/books:author>
-        &lt;books:title>Snow Crash&lt;/books:title>
-  &lt;/books:book>
-&lt;/books:Inventory>
+      
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="11" class="lined">
+&lt;books:Inventory xmlns:books = "http://www.book.com"&gt;
+   &lt;books:book books:ISBN = "0553380958"&gt;
+        &lt;books:publisher&gt;Spectra&lt;/books:publisher&gt;
+        &lt;books:year&gt;1992&lt;/books:year&gt;
+        &lt;books:price&gt;14.95&lt;/books:price&gt;
+        &lt;books:author&gt;Neal Stephenson&lt;/books:author&gt;
+        &lt;books:title&gt;Snow Crash&lt;/books:title&gt;
+  &lt;/books:book&gt;
+&lt;/books:Inventory&gt;
 </textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit" />
-      <Font style="background-color: lightgrey">
-          <i>
-            &nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b>
-          </i>
-      </Font>
+      
+      <button type="submit">Validate</button>
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>X-lexicon French version</title>
+    <meta name="description" content="X-lexicon French version"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">X-lexicon French version</div>
+
+<form method="post" action="../playground/Playground">
+
+<p>
+Usage of X-lexicon in the X-definition, input data in the French version.
+You can also try the German version <a href="ch05s01e00.html"><b>HERE</b></a>.
+</p>
+
+<b>X-definition:</b>
+<textarea name="xdef" rows="26" class="lined">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
+  &lt;Book ISBN="int(10000000, 999999999);"
+      year = "gYear();"
+      title = "string();"
+  >
+      &lt;Author xd:script="occurs *"> string(); &lt;/Author>
+  &lt;/Book>
+
+  /* All items in the model are in English version */
+  &lt;xd:lexicon language='eng' default='yes'/>
+  &lt;xd:lexicon language='deu'> 
+      Test#Book =         Buch
+      Test#Book/@year =   Jahr
+      Test#Book/@title =  Buchtitel
+      Test#Book/Author =  Autor
+  &lt;/xd:lexicon>
+  &lt;xd:lexicon language='fra'>
+      Test#Book =         Livre
+      Test#Book/@year =   année
+      Test#Book/@title =  titre
+      Test#Book/Author =  Auteur
+  &lt;/xd:lexicon>
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<input name="langInp" value="fra" type="hidden"/>
+<textarea name="data" rows="10" class="lined">
+&lt;Livre ISBN = "123456789"
+      année = "1992"
+      titre = "Snow Crash"
+>
+  &lt;Auteur>Neal Stephenson&lt;/Auteur>
+&lt;/Livre>
+</textarea>
+
+Output language:
+<input name="langOut" value="" type="text"/>
+(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)<br/>
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLined()</script>
+
+</body>
+</html>

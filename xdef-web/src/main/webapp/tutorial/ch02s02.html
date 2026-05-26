@@ -1,49 +1,55 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="Namespace in X-definition" />
-    <meta name="keywords" content="XML namespace, X-definition, Xdefinition, XXDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>2.2. Using namespaces</title>
-    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
-    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
-    <script src="/tutorial/highlighter/shCore.js"> </script>
-    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>2.2. Using namespaces</title>
+    <meta name="description" content="Namespace in X-definition">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
-      <a href="ch01.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
-      <a href="ch02s01.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
-      <a href="ch02s03.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
-      <a href="ch03.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
-    </div>
-    <div id="body">
-      <h2 style="clear: both">2.2. Using namespaces</h2>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch02.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch02s01.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch02s03.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch03.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>2.2. Using namespaces</h2>
+      
       All namespaces referenced from data objects must be declared in the X-definition header.
-<pre class="xml">&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
+<pre><code class="language-xml">&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
         xmlns:bk = "http://www.book.com"
-        xd:name = "Books" xd:root = "bk:Inventory" >
+        xd:name  = "Books" xd:root = "bk:Inventory"&gt;
 
-  &lt;bk:Inventory>
-     &lt;bk:book xd:xcript = "occurs *"
-              ISBN      = "num(10);" >
-        &lt;bk:publisher> string();  &lt;/bk:publisher>
-        &lt;bk:year>      gYear();   &lt;/bk:year>
-        &lt;bk:price>     decimal(); &lt;/bk:price>
-        &lt;bk:author xd:script="occurs *"> string(); &lt;/bk:author>
-        &lt;bk:title>     string();  &lt;/bk:title>
-     &lt;/bk:book>    
-&lt;/bk:Inventory>
+  &lt;bk:Inventory&gt;
+    &lt;bk:book xd:xcript = "occurs *"
+             ISBN      = "num(10);"&gt;
+      &lt;bk:publisher&gt; string();  &lt;/bk:publisher&gt;
+      &lt;bk:year&gt;      gYear();   &lt;/bk:year&gt;
+      &lt;bk:price&gt;     decimal(); &lt;/bk:price&gt;
+      &lt;bk:author xd:script="occurs *"&gt; string(); &lt;/bk:author&gt;
+      &lt;bk:title&gt;     string();  &lt;/bk:title&gt;
+    &lt;/bk:book&gt;
+  &lt;/bk:Inventory&gt;
 
-&lt;/xd:def>
-</pre>
+&lt;/xd:def&gt;
+</code></pre>
+      <p>
       You can try it <a href="ch02s02e00.html"><b>HERE</b></a>
-      <br/>
-      <br/>
-      <i>Note It is also possible to use the "default" namespace without prefix, but this is strictly <b>not
-        recommended</b>. You should always prefer to declare namespaces with a prefix.</i>      
-    </div>      
-    <script type="text/javascript">
-      dp.SyntaxHighlighter.HighlightAll('code');
-    </script>
+      </p><p>
+      Note: It is also possible to use the "default" namespace without prefix, but this is strictly <b>not
+      recommended</b>. You should always prefer to declare namespaces with a prefix.
+      </p>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
   </body>
 </html>

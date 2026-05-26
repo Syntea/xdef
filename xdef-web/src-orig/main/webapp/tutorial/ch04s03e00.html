@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="description" content="X-definition: Windows INI, Properties" />
+    <meta name="keywords" content="Windows INI, Properties, X-definition, Xdefinition, XXDEF" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="/tutorial/styles/lineNumbers.js"> </script>
+    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
+    <style>.A{min-height:20rem;max-height:20rem;display:flex;overflow:hidden;}</style>    
+    <style>.B{min-height:12rem;max-height:12rem;display:flex;overflow:hidden;}</style>
+    <title>X-definition - INI/Properties</title>
+  </head>
+  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <form method="post" action="/tutorial/Examples">
+      <b>X-definition</b>
+      <div class="A">
+        <div id="line-numbers"></div>
+        <textarea id="textarea" style="width: 100%;" name="xdef">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test">
+  &lt;xd:ini name="test">
+    TRSUser = string(); finally outln("User: " + getText());
+    [User]
+      Home = file(); finally outln("Home directory: " + getText());
+      Authority = enum("MANAGER", "CLIENT", "UNREGISTRED"); finally outln("authority: " + getText());
+      ReceiverSleep = optional int(1, 3600); /* default value is 10 */
+    [Server] %script = optional
+      RemoteServerURL = url()
+      SeverIP = ipAddr()
+      Signature = SHA1()
+  &lt;/xd:ini>
+&lt;/xd:def>
+</textarea>
+      </div>
+      <b>Input data</b>
+      <div class="B">
+        <div id="line-numbers_1"></div>
+        <textarea id="textarea_1" style="width: 100%;" name="data">
+############# TRS configuration #############
+# TRS user name
+TRSUser = John Smith
+[User]
+Home = D:/TRS_Client/usr/Smith
+# authority(SECURITY | SOFTWARE | CLIENT | UNREGISTRED)
+Authority=CLIENT
+[Server]
+RemoteServerURL=http://localhost:8080/TRS/TRSServer
+SeverIP = 123.45.67.8
+Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
+</textarea>
+      </div>        
+      <input type="hidden" name="ini" value="ini" />
+      <input name="view" value="Display result as INI" type="submit"/>
+      <i>&nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b></i>
+    </form>
+  </body>
+</html>

@@ -1,56 +1,60 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="description" content="Example of construction mode in X-definition" />
-    <meta name="keywords" content="Example, construction mode, compose, create, X-definition, Xdefinition, XXDEF" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>3.1. Example of construction mode</title>
-    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
-    <link rel="stylesheet" href="/tutorial/styles/syntea.css" type="text/css" />
-    <link type="text/css" rel="stylesheet" href="/tutorial/styles/SyntaxHighlighter.css"/>
-    <script src="/tutorial/highlighter/shCore.js"> </script>
-    <script src="/tutorial/highlighter/shBrushXml.js"> </script>    
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>3.1. Example of construction mode</title>
+    <meta name="description" content="Example of construction mode in X-definition">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-    <div id="footer" class="box" style='margin: 0; padding: 0; text-align: center;'>
-      <a href="ch03.html"><img src="/tutorial/images/first1.gif" border=0 alt="Previous chapter"></a>
-      <a href="ch03.html"><img src="/tutorial/images/prev1.gif" border=0 alt="Back"></a>
-      <a href="ch03s02.html"><img src="/tutorial/images/next1.gif" border=0 alt="next"></a>
-      <a href="ch04.html"><img src="/tutorial/images/last1.gif" border=0 alt="Next chapter"></a>
-    </div>
-    <div id="body">
-      <h2>3.1. Example of construction mode</h2>
+      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+      <div class="title">X-definition tutorial</div>
+
+      <div class="nav">
+        <a href="ch03.html"><img src="style/first.gif" alt="Previous chapter"></a>
+        <a href="ch03.html"><img src="style/prev.gif" alt="Back"></a>
+        <a href="ch03s02.html"><img src="style/next.gif" alt="Next"></a>
+        <a href="ch04.html"><img src="style/last.gif" alt="Next chapter"></a>
+      </div>
+
+      <h2>3.1. Example of construction mode</h2>
+      
       <p>Let's have input data:</p>
-<pre class="xml">
-&lt;Contract num = "0123456789">
+<pre><code class="language-xml">
+&lt;Contract num = "0123456789"&gt;
   &lt;Client role       = "1"
           name       = "Some Company Ltd"
-          cId        = "12345678" />
+          cId        = "12345678" /&gt;
   &lt;Client role       = "2"
           firstname  = "John"
           familyname = "Smith"
-          pId        = "311270/1234" />
+          pId        = "311270/1234" /&gt;
   &lt;Client role       = "3"
           firstname  = "Fred"
           familyname = "Brown"
-          cId        = "87654321" />
-&lt;/Contract>
-</pre>
+          cId        = "87654321" /&gt;
+&lt;/Contract&gt;
+</code></pre>
       <p>The required result is different:</p>
-<pre class="xml">
+<pre><code class="language-xml">
 &lt;Contract ProcessedDate = "2006-02-05 14:00"
-          ConractId     = "0123456789" >
+          ConractId     = "0123456789" &gt;
   &lt;Owner  ComanyId  = "12345678"
-          Name      = "Some Company Ltd" />
+          Name      = "Some Company Ltd" /&gt;
   &lt;Holder PersonalId = "311270/1234"
           Firstname  = "John"
-          Lastname   = "Smith" />
+          Lastname   = "Smith" /&gt;
   &lt;Policyholder CompanyId = "87654321"
-                Name      = "Fred Brown" />
-&lt;/Contract>
-</pre>
-    </div>
-    <script type="text/javascript">
-      dp.SyntaxHighlighter.HighlightAll('code');
-    </script>
+                Name      = "Fred Brown" /&gt;
+&lt;/Contract&gt;
+</code></pre>
+    
+
+      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+      <script type="module">initPageBasicHili()</script>
   </body>
 </html>

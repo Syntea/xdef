@@ -1,66 +1,74 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:22rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:11rem;max-height:11rem;display:flex;overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Collection of X-definitions</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
   </head>
-  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples">
-      <p style="font: Tahoma; font-size: 13px;">
-        Collection of X-definitions. Note in the X-definition "Example" in the model
-        "Family" are references to models 'Person' and 'Address' in X-definition 'Models'.
-      </p>
-      <b>X-definition</b>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:collection xmlns:xd="http://www.xdef.org/xdef/4.2" >
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-&lt;xd:def name="Example" xd:root="Family" >
-  &lt;Family>
-  &lt;Father xd:script="occurs ?; ref models#Person;" />
-  &lt;Mother xd:script="occurs 1; ref models#Person;" />
-     &lt;xd:mixed>
-        &lt;Son      xd:script="occurs 0..12; ref models#Person;" />
-        &lt;Daughter xd:script="occurs 0..12; ref models#Person;" />
-     &lt;/xd:mixed>
-  &lt;Address xd:script="occurs 1; ref models#Address" />
-  &lt;/Family>
-&lt;/xd:def>
 
-&lt;!-- Models of referred elements -->
-&lt;xd:def xd:name="models" >
+    <div class="title">Collection of X-definitions</div>
+
+    
+    <p>
+      Collection of X-definitions. Note in the X-definition "Example" in the model
+      "Family" are references to models 'Person' and 'Address' in X-definition 'Models'.
+    </p>
+    <form method="post" action="../playground/Playground">
+      <b>X-definition:</b><br>
+      Name of root X-definition: <input name="xdefRoot" value="Example" type="text">
+      (enter in case of X-definition collection)
+      
+        
+        <textarea name="xdef" rows="25" class="lined">
+&lt;xd:collection xmlns:xd="http://www.xdef.org/xdef/4.2"&gt;
+
+&lt;xd:def name="Example" xd:root="Family"&gt;
+  &lt;Family&gt;
+  &lt;Father xd:script="occurs ?; ref models#Person;"/&gt;
+  &lt;Mother xd:script="occurs 1; ref models#Person;"/&gt;
+     &lt;xd:mixed&gt;
+        &lt;Son      xd:script="occurs 0..12; ref models#Person;"/&gt;
+        &lt;Daughter xd:script="occurs 0..12; ref models#Person;"/&gt;
+     &lt;/xd:mixed&gt;
+  &lt;Address xd:script="occurs 1; ref models#Address"/&gt;
+  &lt;/Family&gt;
+&lt;/xd:def&gt;
+
+&lt;!-- Models of referred elements --&gt;
+&lt;xd:def xd:name="models" &gt;
    &lt;Person Firstname ="required string(1,30);"
            Familyname="required string(1,30);"
-           BirthDate ="required date();" />
-   &lt;Address Street="required string(1,30);" Number="optional int();" City="required string();" />
-&lt;/xd:def>
+           BirthDate ="required date();"/&gt;
+   &lt;Address Street="required string(1,30);" Number="optional int();" City="required string();"/&gt;
+&lt;/xd:def&gt;
 
-&lt;/xd:collection>
+&lt;/xd:collection&gt;
 </textarea>
-      </div>
-      <b>Input data</b>
-      <div class="B">
-        <div id="line-numbers_1"></div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
-&lt;Family>  
-   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" />  
-   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" />  
-   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" />  
-   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" />  
-   &lt;Address Street="Downing" Number="10" City="London"/>
-&lt;/Family>
+      
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="9" class="lined">
+&lt;Family&gt;
+   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13"/&gt;
+   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18"/&gt;
+   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18"/&gt;
+   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11"/&gt;
+   &lt;Address Street="Downing" Number="10" City="London"/&gt;
+&lt;/Family&gt;
 </textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit" />
-      <Font style="background-color: lightgrey">
-          <i>
-            &nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b>
-          </i>
-      </Font>
+      
+      <button type="submit">Validate</button>
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

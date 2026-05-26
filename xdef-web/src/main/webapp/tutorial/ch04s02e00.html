@@ -1,20 +1,25 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:22rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:10rem;max-height:10rem;display:flex;overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - JSON</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../style/common.css">
+    <script type="module" src="../style/common.js"></script>
   </head>
-  <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples">
-      <b>X-definition</b>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies">
-  &lt;xd:json name="Distancies">
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+    <div class="title">X-definition - JSON</div>
+
+    
+    <form method="post" action="../playground/Playground">
+      <b>X-definition:</b>
+      
+        
+        <textarea name="xdef" rows="16" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies"&gt;
+  &lt;xd:json name="Distancies"&gt;
     { "cities"  : [
         { %script = "occurs 1..*;",
           "from": [ "string();",
@@ -25,14 +30,14 @@
         }
       ]
     }
-  &lt;/xd:json>
-&lt;/xd:def>
+  &lt;/xd:json&gt;
+&lt;/xd:def&gt;
 </textarea>
-      </div>
-      <b>Input data</b>
-      <div class="B">
-        <div id="line-numbers_1"></div>
-        <textarea id="textarea_1" style="width: 100%;" name="data">
+      
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="11" class="lined">
 cities:
 - from:
   - Brussels
@@ -43,12 +48,17 @@ cities:
   - {to: Brussels, distance: 322}
   - {to: Paris, distance: 344}
 </textarea>
-      </div>        
-      <input type="hidden" name="json" value="json" />
-      <input name="view" value="Display YAML result" type="submit"/>
+              
+      <input type="hidden" name="json" value="json">
+      <button type="submit">Validate</button>
       <i>
-          &nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b>
+          &nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b>
       </i>
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

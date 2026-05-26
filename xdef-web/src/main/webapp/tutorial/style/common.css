@@ -1,0 +1,12 @@
+div.nav {
+    text-align:         center;
+}
+
+ul.emphasized li {
+    font-weight:        bold;
+    margin-bottom:      0.5em;
+}
+
+div.toc ul {
+    list-style-type:    none;
+}
