@@ -1,69 +1,68 @@
 <!DOCTYPE HTML><html lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>X-definition</title>
-    <meta name="description" content="">
+    <title>X-definition Tutorial</title>
+    <meta name="description" content="X-definition Tutorial">
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
     <script type="module" src="../style/common.js"></script>
     <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
+    <div class="title">X-definition Tutorial</div>
 
-      <div class="title">X-definition tutorial</div>
+    <div class="nav">
+      <img src="style/firstG.gif" alt="Previous chapter">
+      <img src="style/prevG.gif" alt="Back">
+      <a href="ch01.html"><img src="style/next.gif" alt="Next"></a>
+      <a href="ch01.html"><img src="style/last.gif" alt="Next chapter"></a>
+    </div>
 
-      <div class="nav">
-        <img src="style/firstG.gif" alt="Previous chapter">
-        <img src="style/prevG.gif" alt="Back">
-        <a href="ch01.html"><img src="style/next.gif" alt="Next"></a>
-        <a href="ch01.html"><img src="style/last.gif" alt="Next chapter"></a>
-      </div>
+    <div class="toc">
+    Table of Contents:<ul>
+      <li><a href="ch01.html">Chapter 1. Model of XML element step-by-step</a></li>
+      <li><a href="ch02.html">Chapter 2. Description of XML data with X-definition</a></li>
+      <li><a href="ch03.html">Chapter 3. Construction mode</a></li>
+      <li><a href="ch04.html">Chapter 4. Not only XML - also JSON, ...</a></li>
+      <li><a href="ch05.html">Chapter 5. X-lexicon</a></li>
+      <li><a href="ch06.html">Chapter 6. Java programming with X-definitions</a></li>
+      <li><a href="ch07.html">Chapter 7. X-components</a></li>
+    </ul>
+    </div>
 
-      <div class="toc">
-      Table of Contents:<ul>
-        <li><a href="ch01.html">Chapter 1. Model of XML element step-by-step</a></li>
-        <li><a href="ch02.html">Chapter 2. Description of XML data with X-definition</a></li>
-        <li><a href="ch03.html">Chapter 3. Construction mode</a></li>
-        <li><a href="ch04.html">Chapter 4. Not only XML - also JSON, ...</a></li>
-        <li><a href="ch05.html">Chapter 5. X-lexicon</a></li>
-        <li><a href="ch06.html">Chapter 6. Java programming with X-definitions</a></li>
-        <li><a href="ch07.html">Chapter 7. X-components</a></li>
-      </ul>
-      </div>
+    <h1>What is X-definition?</h1>
 
-      <h1>What is X-definition?</h1>
+    <p>
+    X-definition is a programming language designed to describe the structure of XML documents and to
+    work with them. The X-definition language itself also takes the form of XML. It allows you to validate
+    input data, perform processing, or construct data as described in the X-definition or to make
+    transformation of input data according to the requirements of X-definition. In addition to data in XML
+    form, X-definition can also be used to work with data fe from JSON, YAML, Properties, Windows INI
+    or CSV data (comma separated values).
+    </p>
+    The X-definition properties are as follows:
+    <ul class="emphasized">
+      <li>Clear, understandable and easy to read data description in various formats (XML, JSON, YAML,
+        properties, Windows INI, CSV).</li>
+      <li>Integrated technology for data validation, processing or data construction/transformation.</li>
+      <li>Detailed error reporting and the ability to process error log files.</li>
+      <li>X-component generator - Java class source code generator representing the object created
+        from model of data described in the X-definition. Those objects can be generally used for data process</li>
+      <li>Interfacing with external data objects and/or Java methods.</li>
+      <li>Easy maintenance of large-scale projects with many different data structures.</li>
+      <li>Ability to process very large data (many GB in size).</li>
+      <li>Ability to interface with databases and other external data sources and methods.</li>
+      <li>Extended list of supported data types compared to XML schema types (e.g. GPS position,
+        currencies, IP addresses, email addresses, phone numbers, etc.).</li>
+      <li>In addition to the pre-declared data types, you can also describe the data format using e.g.
+        the BNF grammar.</li>
+      <li>X-definition supports also the general notation of data objects supported in X-definition
+        (XON — X-definition Object Notation).</li>
+    </ul>
 
-      <p>
-      X-definition is a programming language designed to describe the structure of XML documents and to
-      work with them. The X-definition language itself also takes the form of XML. It allows you to validate
-      input data, perform processing, or construct data as described in the X-definition or to make
-      transformation of input data according to the requirements of X-definition. In addition to data in XML
-      form, X-definition can also be used to work with data fe from JSON, YAML, Properties, Windows INI
-      or CSV data (comma separated values).
-      </p>
-      The X-definition properties are as follows:
-      <ul class="emphasized">
-        <li>Clear, understandable and easy to read data description in various formats (XML, JSON, YAML,
-          properties, Windows INI, CSV).</li>
-        <li>Integrated technology for data validation, processing or data construction/transformation.</li>
-        <li>Detailed error reporting and the ability to process error log files.</li>
-        <li>X-component generator - Java class source code generator representing the object created
-          from model of data described in the X-definition. Those objects can be generally used for data process</li>
-        <li>Interfacing with external data objects and/or Java methods.</li>
-        <li>Easy maintenance of large-scale projects with many different data structures.</li>
-        <li>Ability to process very large data (many GB in size).</li>
-        <li>Ability to interface with databases and other external data sources and methods.</li>
-        <li>Extended list of supported data types compared to XML schema types (e.g. GPS position,
-          currencies, IP addresses, email addresses, phone numbers, etc.).</li>
-        <li>In addition to the pre-declared data types, you can also describe the data format using e.g.
-          the BNF grammar.</li>
-        <li>X-definition supports also the general notation of data objects supported in X-definition
-          (XON — X-definition Object Notation).</li>
-      </ul>
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-      <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
-
-      <script type="module">initPageBasic()</script>
+    <script type="module">initPageBasic()</script>
   </body>
 </html>
