@@ -13,11 +13,6 @@
     indent="no"
     encoding="UTF-8"
 />
-<!--
-    omit-xml-declaration="yes"
-    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
--->
 
 
 <xsl:variable name="nl" select="'
@@ -51,8 +46,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <xsl:if test="$nav"><div class="nav">
         <xsl:apply-templates mode="nav" select="$navIts[1]"/>

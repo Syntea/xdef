@@ -13,11 +13,6 @@
     indent="no"
     encoding="UTF-8"
 />
-<!--
-    omit-xml-declaration="yes"
-    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
--->
 
 
 <xsl:variable name="nl" select="'
@@ -32,8 +27,6 @@
 
 
 <xsl:template match="h:html">
-    <xsl:variable name="nav"             select="h:body/h:div[@id='footer']"                        as="element(h:div)?"/>
-    <xsl:variable name="navIts"          select="$nav/*[self::h:a or self::h:img]"                  as="element()*"/>
     <xsl:variable name="content"         select="h:body/node()"                                     as="node()*"/>
     
     <xsl:sequence xml:space="preserve"><html lang="en">
@@ -46,7 +39,6 @@
   </head>
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
-
 
     <div class="title"><xsl:sequence select="h:head/h:title/text()"/></div>
 
