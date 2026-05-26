@@ -28,6 +28,7 @@ fi
 
 
 #hlavni krok - transformace webapp
+if false; then
 for i in tutorial/ch??.html
 do
     echo "tutorial-chX: file: $i"
@@ -41,10 +42,11 @@ do
     xmllint --html --xmlout --nodefdtd --recover $i | \
     java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chXsY.xsl" -o:../webapp/$i -s:-
 done
+fi
 
-for i in tutorial/ch??s??e??.html
+for i in tutorial/ch??s??e??.html `find example -name *html`
 do
     echo "example: file: $i"
     xmllint --html --xmlout --nodefdtd --recover $i | \
-    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-example.xsl" -o:../webapp/$i -s:-
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-example.xsl" -o:../webapp/$i -s:- filename=$i
 done

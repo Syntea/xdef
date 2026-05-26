@@ -14,6 +14,8 @@
     encoding="UTF-8"
 />
 
+<xsl:param name="filename"/>
+
 
 <xsl:variable name="nl" select="'
 '" as="xs:string"/>
@@ -27,15 +29,22 @@
 
 
 <xsl:template match="h:html">
-    <xsl:variable name="content"         select="h:body/node()"                                     as="node()*"/>
+    <xsl:variable name="content"    as="node()*"        select="h:body/node()"/>
+    <xsl:variable name="fnTok"      as="xs:string*"     select="tokenize($filename, '/')"/>
+    <xsl:variable name="rootPath"   as="xs:string"      select="
+        string-join(
+            for $dir in subsequence($fnTok, 1, count($fnTok) - 1)
+                return '../'
+        )
+    "/>
     
     <xsl:sequence xml:space="preserve"><html lang="en">
   <head>
     <title><xsl:sequence select="h:head/h:title/text()"/></title>
     <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
-    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
-    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
-    <script type="module" src="../style/common.js"></script>
+    <link rel="icon" type="image/x-icon" href="{$rootPath}style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="{$rootPath}style/common.css"/>
+    <script type="module" src="{$rootPath}style/common.js"></script>
   </head>
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
@@ -72,30 +81,30 @@
 </xsl:template>
 
 <xsl:template mode="content" match="h:form">
-    <form method="post" action="../playground/Playground">
+    <form method="post" action="{$rootPath}playground/Playground">
     <xsl:apply-templates mode="content" select="node()"/>
     </form>
 </xsl:template>
 
-<xsl:template mode="content" match="h:textarea[@name=('xdef', 'data')]">
+<xsl:template mode="content" match="h:textarea[@name = ('xdef', 'data')]">
     <textarea name="{@name}" rows="{count(tokenize(string-join(text()), '\n'))}" class="lined">
     <xsl:apply-templates mode="content" select="node()"/>
     </textarea>
 </xsl:template>
 
-<xsl:template mode="content" match="h:input[@type=('submit')]">
+<xsl:template mode="content" match="h:input[@type = ('submit')]">
     <button type="submit">Validate</button>
 </xsl:template>
 
-<xsl:template mode="content" match="text()[.='X-definition']">
+<xsl:template mode="content" match="text()[. = 'X-definition']">
     <xsl:text>X-definition:</xsl:text>
 </xsl:template>
 
-<xsl:template mode="content" match="text()[.='Input data']">
+<xsl:template mode="content" match="text()[. = 'Input data']">
     <xsl:text>Input data:</xsl:text>
 </xsl:template>
 
-<xsl:template mode="content" match="h:div[@class=('A', 'B') or @id=('line-numbers', 'line-numbers_1')]">
+<xsl:template mode="content" match="h:div[@class = ('A', 'B') or @id = ('line-numbers', 'line-numbers_1')]">
     <xsl:apply-templates mode="content" select="node()"/>
 </xsl:template>
 
