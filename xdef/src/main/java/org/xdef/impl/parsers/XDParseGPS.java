@@ -19,7 +19,7 @@ public class XDParseGPS extends XDParserAbstract {
     public XDParseGPS() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         p.isSpaces();
         int pos = p.getIndex();
         boolean xon;
@@ -52,7 +52,7 @@ public class XDParseGPS extends XDParserAbstract {
                         if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
                             GPSPosition gpos = new GPSPosition(latitude, longitude, altitude, name);
                             p.setParsedValue(new XDGPSPosition(gpos));
-                            checkCharset(xnode, p);
+                            checkCharset(xn, p);
                             return;
                         }
                     }
@@ -98,7 +98,6 @@ public class XDParseGPS extends XDParserAbstract {
 
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_GPSPOSITION;}
 }

@@ -15,7 +15,6 @@ public class XDParseJBoolean extends XSParseBoolean {
 
     @Override
     public void initParams() {_whiteSpace = WS_PRESERVE;}
-
     @Override
     public int getLegalKeys() {
         return PATTERN +
@@ -36,9 +35,8 @@ public class XDParseJBoolean extends XSParseBoolean {
             BASE +
             0;
     }
-
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p){
         int pos0 = p.getIndex();
         p.isSpaces();
         int pos = p.getIndex();
@@ -53,13 +51,10 @@ public class XDParseJBoolean extends XSParseBoolean {
             checkPatterns(p);
         }
     }
-
     @Override
     public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_BOOLEAN;}
 }

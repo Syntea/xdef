@@ -12,10 +12,8 @@ public class XDParseEmailDate extends XDParseDateYMDhms {
 
     @Override
     boolean parse(final StringParser parser) {return parser.isRFC822Datetime();}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_DATETIME;}
 }

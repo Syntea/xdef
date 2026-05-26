@@ -12,9 +12,6 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
-    boolean parse(final StringParser parser) {
-        return parser.isDatetime("yyyyMMddHHmmss");
-    }
+    boolean parse(final StringParser parser) {return parser.isDatetime("yyyyMMddHHmmss");}
 }

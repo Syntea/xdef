@@ -120,17 +120,8 @@ public class TestExpr extends STester {
             g.trace(null);
 /**
             _displayCode = true;
-            assertNull(test("0122", g,
-"for(int i=0; i < 4; i++) {\n"+
-"  if(i==3) break;\n"+
-"  else\n"+
-"    switch(i) {\n"+
-"      case 2:\n"+
-"        print(i);\n"+
-"        break;\n"+
-"    }\n"+
-"  print(i);\n"+
-"}"));
+//print((Math.sin(3.1) + 4)/(2*3 +9));
+            assertNull(test("0.269438710828886", g, "print((sin(3.1) + 4)/(2*3 +9));"));
 if(true)return;
 /**/
             assertNull(test("", g, ";"));
@@ -156,24 +147,24 @@ if(true)return;
             assertNull(test("1.0",  g, "print(min(2,1.0));"));
             assertNull(test("1.0", g, "print(min(2.0,1));"));
             assertNull(test(String.valueOf(Math.sin(3.1)), g,"print(sin(3.1));"));
+            assertNull(test("0,269439", g, "printf('%f',(sin(3.1) + 4)/(2*3 +9));"));
             assertNull(test(String.valueOf(Math.cos(3.1)), g,"print(cos(3.1));"));
+            assertNull(test("true", g,"int i = 1; print(i==1 | i==3);"));
+            assertNull(test("false", g,"int i = 1; print(i==1 & i==3);"));
+            assertNull(test("abc", g, "String j = empty() + 'abc'; print(j);"));
             assertNull(test("", g, "Object i;"));
             assertNull(test("", g, "empty();"));
-            assertNull(test("", g, "j = empty() + 'abc';"));
-            assertEq("abc", getVar("j"));
-            assertNull(test("", g, "i=~1;"));
-            assertEq(-2, getVar("i"));
-            assertNull(test("", g, "i = ~ ( ~ 1 );"));
-            assertEq(1, getVar("i"));
-            assertNull(test("", g, "i = 8; i = i << 2;"));
-            assertEq(32, getVar("i"));
+            assertNull(test("-2", g, "i=~1; print(i);"));
+            assertNull(test("1", g, "i = ~ ( ~ 1 ); print(i);"));
+            assertNull(test("32", g, "i = 8; i = i << 2; print(i);"));
+            assertNull(test("2", g, "i = 8; i = i >> 2; print(i);"));
+            assertNull(test("15", g, "i = -1; i = i >>> 60; print(i);"));
+            assertNull(test("15", g, "i=1;print(i);print(i+4);"));
             assertNull(test("", g, "j = 'abc' + empty(); k = j + 'd';"));
             assertEq("abc", getVar("j"));
             assertEq("abcd", getVar("k"));
             assertNull(test("", g, "i=sin(3.14) ; "));
             assertEq(Math.sin(3.14), getVar("i"));
-            assertNull(test("", g, "i=3; "));
-            assertEq(3, getVar("i"));
             assertNull(test("", g, "i = 3 ; j = i * 5 ;"));
             assertEq(3, getVar("i"));
             assertEq(15, getVar("j"));

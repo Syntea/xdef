@@ -21,6 +21,7 @@ import test.common.xml.TestKXmlUtils;
 import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
 import test.XDTester;
+import test.common.bnf.TestJava;
 import test.common.xon.TestIni;
 
 /** Run all available basic tests for package org.xdef.sys.
@@ -30,27 +31,28 @@ public class TestAll {
 
     static final STester[] getTests() {
         return new STester[] {
+            // BNF
+            new TestBNF(),
+            new TestBNFJSON(),
+            new TestExpr(),
+            new TestJava(),
+            new TestSQL(),
+            new TestXML(),
+            new TestXdScript(),
             // sys
             new TestReport(),
             new TestErrorReporting(),
             new TestSParser(),
             new TestSUtils(),
             new TestObjectWriter(),
-            // XON/INI
-            new TestXonUtil(),
-            new TestIni(),
             // XML
             new TestXml(),
             new TestKDOMBuilder(),
             new TestKXmlUtils(),
             new TestXmOutStream(),
-            // BNF
-            new TestBNF(),
-            new TestBNFJSON(),
-            new TestExpr(),
-            new TestSQL(),
-            new TestXML(),
-            new TestXdScript(),
+            // XON/INI
+            new TestXonUtil(),
+            new TestIni(),
         };
     }
 

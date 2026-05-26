@@ -26,10 +26,8 @@ public class XDParseStarts extends XDParseEq {
             p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
         }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseStarts) ) {

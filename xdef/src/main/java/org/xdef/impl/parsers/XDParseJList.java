@@ -69,7 +69,7 @@ public class XDParseJList extends XSAbstractParser {
             0;
     }
 
-    private void parse(final XXNode xnode, final XDParseResult p, boolean isFinal) {
+    private void parse(final XXNode xn, final XDParseResult p, boolean isFinal) {
         XDParser itemParser = _itemType != null ? _itemType : new XDParseJValue(); // default parser jvalue
         DefContainer results = new DefContainer();
         String source = p.getSourceBuffer();
@@ -91,7 +91,7 @@ public class XDParseJList extends XSAbstractParser {
                 if (p.getCurrentChar() == '[') {
                     DefParseResult q = new DefParseResult(source);
                     q.setIndex(p.getIndex());
-                    parse(xnode, q, isFinal);
+                    parse(xn, q, isFinal);
                     p.addReports(q.getReporter());
                     p.setParsedValue(q.getParsedValue());
                     end = q.getIndex();
@@ -107,14 +107,14 @@ public class XDParseJList extends XSAbstractParser {
                         p.setSourceBuffer(p.getBufferPart(0,start) + s);
                     }
                     p.setIndex(start);
-                    itemParser.parseObject(xnode, p);
+                    itemParser.parseObject(xn, p);
                 } else {
                     DefParseResult q;
                     int pos = p.getIndex();
                     if (p.isOneOfTokens("g(", "p(", "c\"") >= 0) {
                         p.setIndex(pos);
                         q = new DefParseResult(p.getUnparsedBufferPart());
-                        itemParser.parseObject(xnode, q);
+                        itemParser.parseObject(xn, q);
                         p.addReports(q.getReporter());
                         p.setParsedValue(q.getParsedValue());
                         end = start + q.getIndex();
@@ -125,7 +125,7 @@ public class XDParseJList extends XSAbstractParser {
                         }
                         end = p.getIndex();
                         q = new DefParseResult(p.getBufferPart(start, end));
-                        itemParser.parseObject(xnode, q);
+                        itemParser.parseObject(xn, q);
                     }
                     p.addReports(q.getReporter());
                     p.setParsedValue(q.getParsedValue());
@@ -172,20 +172,17 @@ public class XDParseJList extends XSAbstractParser {
 
     @Override
     public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
-
     @Override
     public boolean addTypeParser(final XDValue x) {
         _itemType = valueToParser(x);
         return true;
     }
-
     @Override
     public void addNamedParams(final XDContainer map) {
         if (_itemType != null) {
             map.setXDNamedItem("item", _itemType);
         }
     }
-
     @Override
     public void setItem(final XDValue item) {
         if (item.getItemId() == XD_PARSER) {
@@ -194,25 +191,18 @@ public class XDParseJList extends XSAbstractParser {
             throw new SRuntimeException(XDEF.XDEF423, "Parser"); //Value of type '&amp;{0}' expected
         }
     }
-
     @Override
     public void setLength(final long x) { _minLength = _maxLength = x; }
-
     @Override
     public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
-
     @Override
     public void setMaxLength(final long x) { _maxLength = x; }
-
     @Override
     public long getMaxLength() { return _maxLength; }
-
     @Override
     public void setMinLength(final long x) { _minLength = x; }
-
     @Override
     public long getMinLength() { return _minLength; }
-
     @Override
     public void setParseSQParams(final Object... params) {
         if (params != null && params.length >= 1) {
@@ -227,13 +217,10 @@ public class XDParseJList extends XSAbstractParser {
             }
         }
     }
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
-
     @Override
     public void parseObject(final XXNode xnode, final XDParseResult p) {parse(xnode, p, false);}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XSParseList)) {
@@ -242,7 +229,6 @@ public class XDParseJList extends XSAbstractParser {
         XDParseJList x = (XDParseJList) o;
         return _itemType == null ? false : _itemType.equals(x._itemType);
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

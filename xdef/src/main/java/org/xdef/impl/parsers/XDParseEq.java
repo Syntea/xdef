@@ -36,7 +36,6 @@ public class XDParseEq extends XDParserAbstract {
         }
         checkCharset(xn, p);
     }
-
     @Override
     public void setParseSQParams(final Object... param) {
         if (param.length == 1) {
@@ -45,7 +44,6 @@ public class XDParseEq extends XDParserAbstract {
             throw new SRuntimeException("Incorrect number of parameters");
         }
     }
-
     @Override
     public void setNamedParams(final XXNode xnode, final XDContainer params)
         throws SException {
@@ -68,7 +66,6 @@ public class XDParseEq extends XDParserAbstract {
             }
         }
     }
-
     @Override
     public final XDContainer getNamedParams() {
         XDContainer map = new DefContainer();
@@ -77,10 +74,8 @@ public class XDParseEq extends XDParserAbstract {
         }
         return map;
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseEq) ) {

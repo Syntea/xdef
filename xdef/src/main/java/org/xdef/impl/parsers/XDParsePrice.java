@@ -20,7 +20,7 @@ public class XDParsePrice extends XDParserAbstract {
     public XDParsePrice() {super();}
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         p.isSpaces();
         int pos = p.getIndex();
         boolean xon;
@@ -57,10 +57,8 @@ public class XDParsePrice extends XDParserAbstract {
         //Incorrect value of '&{0}'&{1}{: }
         p.errorWithString(XDEF.XDEF809, parserName(), p.getBufferPart(pos, p.getIndex()));
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_PRICE;}
 }

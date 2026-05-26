@@ -14,8 +14,9 @@ public class XDParseTelephone extends XDParserAbstract {
     private static final String ROOTBASENAME = "telephone";
 
     public XDParseTelephone() {super();}
+
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         int i1 = p.getIndex();
         p.isSpaces();
         boolean xon = p.isToken("t\"");
@@ -32,10 +33,8 @@ public class XDParseTelephone extends XDParserAbstract {
             p.setParsedValue(new DefTelephone(parsedValue));
         }
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_TELEPHONE;}
 }

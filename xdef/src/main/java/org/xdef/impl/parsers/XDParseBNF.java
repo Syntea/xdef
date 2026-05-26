@@ -47,9 +47,8 @@ public class XDParseBNF extends XDParserAbstract {
         }
         checkCharset(xn, p);
     }
-
     @Override
-    public void setNamedParams(final XXNode xnode, final XDContainer params)
+    public void setNamedParams(final XXNode xn, final XDContainer params)
         throws SException {
         int num;
         if (params == null || (num = params.getXDNamedItemsNumber()) == 0) {
@@ -86,7 +85,6 @@ public class XDParseBNF extends XDParserAbstract {
             throw new SException(BNF.BNF901, ruleName); //Rule '&{0}' doesn't exist
         }
     }
-
     @Override
     public void setParseSQParams(final Object... params) {
         ArrayReporter reporter = new ArrayReporter();
@@ -98,17 +96,14 @@ public class XDParseBNF extends XDParserAbstract {
             throw new SRuntimeException(BNF.BNF901, ruleName); // Rule '&{0}' doesn't exist
         }
     }
-
     @Override
     public XDContainer getNamedParams() {
         XDContainer map = new DefContainer();
         map.setXDNamedItem("a1", _rule);
         return map;
     }
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public short parsedType() {return XD_CONTAINER;}
 }

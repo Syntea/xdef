@@ -40,7 +40,6 @@ public class XDParseEnum extends XDParserAbstract {
         }
         p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of &{0}&{1}{: }
     }
-
     @Override
     public void setParseSQParams(final Object... params) {
         int n = params.length;
@@ -49,7 +48,6 @@ public class XDParseEnum extends XDParserAbstract {
             _list[i] = params[i].toString();
         }
     }
-
     @Override
     public void setNamedParams(final XXNode xnode, final XDContainer params)
         throws SException {
@@ -163,13 +161,10 @@ public class XDParseEnum extends XDParserAbstract {
         }
         return map;
     }
-
     @Override
     public short parsedType() {return XD_STRING;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
-
     @Override
     public boolean equals(final XDValue o) {
         if (!super.equals(o) || !(o instanceof XDParseEnum) ) {

@@ -30,10 +30,8 @@ public class XDParseDomainAddr extends XDParserAbstract {
         p.setParsedValue(new DefIPAddr()); //null IPAddr
         p.errorWithString(XDEF.XDEF809, parserName(), s); //Incorrect value of '&{0}'&{1}{: }
     }
-
     @Override
     public short parsedType() {return XD_EMAIL;}
-
     @Override
     public String parserName() {return ROOTBASENAME;}
 }

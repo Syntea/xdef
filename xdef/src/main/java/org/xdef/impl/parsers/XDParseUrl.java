@@ -1,5 +1,6 @@
 package org.xdef.impl.parsers;
 
+import java.net.MalformedURLException;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
@@ -14,12 +15,12 @@ public class XDParseUrl extends XDParserAbstract {
     private static final String ROOTBASENAME = "url";
 
     @Override
-    public void parseObject(final XXNode xnode, final XDParseResult p) {
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         p.isSpaces();
         String s = p.getUnparsedBufferPart().trim();
         if (chkUrl(p, s, ROOTBASENAME)) {
             p.setParsedValue(s);
-            checkCharset(xnode, p);
+            checkCharset(xn, p);
             p.setEos();
         }
     }
@@ -37,7 +38,7 @@ public class XDParseUrl extends XDParserAbstract {
                 new URL(s);
                 return true;
             }
-        } catch (Exception ex) {}
+        } catch (MalformedURLException ex) {}
         //Incorrect value of '&{0}'&{1}{: }
         p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
         return false;

@@ -127,9 +127,9 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
     }
 
     @Override
-    public void parseObject(final XXNode xn, final XDParseResult p){
+    public void parseObject(final XXNode xn, final XDParseResult p) {
         int pos0 = p.getIndex();
-        boolean quotedString = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+        boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
         if (_whiteSpace == WS_COLLAPSE) {
             p.isSpaces();
         }
@@ -140,7 +140,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
                 return;
             }
             s = p.getParsedValue().toString();
-            if (quotedString && s.endsWith("\"") &&  s.length() > 1) {
+            if (quoted && s.endsWith("\"") &&  s.length() > 1) {
                 s = s.substring(0, s.length() - 1);
             }
             if (_whiteSpace == WS_COLLAPSE) {
@@ -151,7 +151,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
             while((s = p.nextToken()) != null) {
                 sb.append(s);
                 if (p.isSpaces()) {
-                    if (quotedString) {
+                    if (quoted) {
                         if  (p.isChar('"')) {
                             sb.append('"');
                             if (p.eos()) {
@@ -170,12 +170,12 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
             }
             p.isSpaces();
             s = sb.toString();
-            if (quotedString && s.endsWith("\"")) {
+            if (quoted && s.endsWith("\"")) {
                 s = s.substring(0, s.length() - 1).trim(); // remove '"' from the end of string
             }
         } else {//preserve or replace
             s = p.getUnparsedBufferPart();
-            if (quotedString && s.endsWith("\"")) {
+            if (quoted && s.endsWith("\"")) {
                 s = s.substring(0, s.length() - 1);
             }
             if (_whiteSpace == WS_REPLACE) { //replace
@@ -189,7 +189,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
         p.setParsedValue(s);
         checkPatterns(p);
         checkLength(p);
-        if (quotedString) { // JSON string
+        if (quoted) { // JSON string
             s = '"' + s + '"';
             p.replaceParsedBufferFrom(pos0, s);
             p.setParsedValue(s);
