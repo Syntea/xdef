@@ -29,21 +29,19 @@ fi
 
 
 #hlavni krok - transformace webapp
-for i in tutorial/ch??.html
-do
-    echo "chX: file: $i"
-    xmllint --html --xmlout --nodefdtd --recover $i | \
-    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chX.xsl" -o:../webapp/$i -s:-
-done
+#for i in tutorial/ch??.html
+#do
+#    echo "chX: file: $i"
+#    xmllint --html --xmlout --nodefdtd --recover $i | \
+#    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chX.xsl" -o:../webapp/$i -s:-
+#done
 
-for i in tutorial/ch??s??.html 
-do
-    echo "chXsY: file: $i"
-    xmllint --html --xmlout --nodefdtd --recover $i | \
-    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chXsY.xsl" -o:../webapp/$i -s:-
-done
-
-exit
+#for i in tutorial/ch??s??.html 
+#do
+#    echo "chXsY: file: $i"
+#    xmllint --html --xmlout --nodefdtd --recover $i | \
+#    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chXsY.xsl" -o:../webapp/$i -s:-
+#done
 
 for i in tutorial/ch??s??e??.html
 do

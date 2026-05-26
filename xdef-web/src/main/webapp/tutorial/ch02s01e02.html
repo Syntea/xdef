@@ -1,18 +1,58 @@
 <!DOCTYPE HTML><html lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Example 4b - string literals</title>
+    <title>Example 4b — string literals</title>
     <meta name="description" content="">
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
     <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-      <div class="title">X-definition tutorial</div>
+    <div class="title">Example 4b — string literals</div>
 
+    
+    <p>
+      This example shows how to specify special characters in a string. You can specify a reference to an
+      XML entity as "&amp;amp;", "&amp;lt;", "&amp;gt;", "&amp;apos;", "&amp;quot;", etc. However, you can
+      also use the <code><b>\</b></code> (the backslash) notation within the string. You can also express any
+      Unicode character as the notation "\uxxxx" (where xxxx are four hexadecimal digits).
+    </p>
+    <form method="post" action="../playground/Playground">
+      <b>X-definition:</b><br>
       
-
+        
+        <textarea name="xdef" rows="15" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root = "Dummy"&gt;
+  &lt;Dummy
+    xd:script="finally {
+       outln('Hello X-definition\'s friends\u0021');
+       outln('This is quote character: &amp;quot; (entity notation)'); 
+       outln('This is quote character: \u0022 (\\uxxxx notation)');
+       outln('This is backslash character: \\'); 
+       outln('This is apostroph character: \''); 
+       outln('This is newline \n character'); 
+       outln('This is tab \t character');
+    }"
+  /&gt;
+&lt;/xd:def&gt;
+</textarea>
       
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="3" class="lined">
+&lt;Dummy/&gt;
+</textarea>
+      
+      <button type="submit">Validate</button>
+      
+    </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
+  </body>
+</html>

@@ -8,26 +8,28 @@
     <title>Collection of X-definitions</title>
   </head>
   <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <p style="font: Tahoma; font-size: 13px;">
+      Collection of X-definitions. Note in the X-definition "Example" in the model
+      "Family" are references to models 'Person' and 'Address' in X-definition 'Models'.
+    </p>
     <form method="post" action="/tutorial/Examples">
-      <p style="font: Tahoma; font-size: 13px;">
-        Collection of X-definitions. Note in the X-definition "Example" in the model
-        "Family" are references to models 'Person' and 'Address' in X-definition 'Models'.
-      </p>
-      <b>X-definition</b>
+      <b>X-definition</b><br/>
+      Name of root X-definition: <input name="xdefRoot" value="Example" type="text"/>
+      (enter in case of X-definition collection)
       <div class="A">
         <div id="line-numbers"></div>
         <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:collection xmlns:xd="http://www.xdef.org/xdef/4.2" >
+&lt;xd:collection xmlns:xd="http://www.xdef.org/xdef/4.2">
 
-&lt;xd:def name="Example" xd:root="Family" >
+&lt;xd:def name="Example" xd:root="Family">
   &lt;Family>
-  &lt;Father xd:script="occurs ?; ref models#Person;" />
-  &lt;Mother xd:script="occurs 1; ref models#Person;" />
+  &lt;Father xd:script="occurs ?; ref models#Person;"/>
+  &lt;Mother xd:script="occurs 1; ref models#Person;"/>
      &lt;xd:mixed>
-        &lt;Son      xd:script="occurs 0..12; ref models#Person;" />
-        &lt;Daughter xd:script="occurs 0..12; ref models#Person;" />
+        &lt;Son      xd:script="occurs 0..12; ref models#Person;"/>
+        &lt;Daughter xd:script="occurs 0..12; ref models#Person;"/>
      &lt;/xd:mixed>
-  &lt;Address xd:script="occurs 1; ref models#Address" />
+  &lt;Address xd:script="occurs 1; ref models#Address"/>
   &lt;/Family>
 &lt;/xd:def>
 
@@ -35,8 +37,8 @@
 &lt;xd:def xd:name="models" >
    &lt;Person Firstname ="required string(1,30);"
            Familyname="required string(1,30);"
-           BirthDate ="required date();" />
-   &lt;Address Street="required string(1,30);" Number="optional int();" City="required string();" />
+           BirthDate ="required date();"/>
+   &lt;Address Street="required string(1,30);" Number="optional int();" City="required string();"/>
 &lt;/xd:def>
 
 &lt;/xd:collection>
@@ -46,11 +48,11 @@
       <div class="B">
         <div id="line-numbers_1"></div>
         <textarea id="textarea_1" style="width: 100%;" name="data">
-&lt;Family>  
-   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" />  
-   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" />  
-   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" />  
-   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" />  
+&lt;Family>
+   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13"/>
+   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18"/>
+   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18"/>
+   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11"/>
    &lt;Address Street="Downing" Number="10" City="London"/>
 &lt;/Family>
 </textarea>

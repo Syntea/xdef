@@ -5,14 +5,71 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
     <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-      <div class="title">X-definition tutorial</div>
+    <div class="title">Example of compose mode of X-definition</div>
 
+    
+    <form method="post" action="../playground/Playground">
+      <p>
+This example illustrates how to build an XML element from input data. Note that
+the structure of the input XML element and the structure of the output element
+are different. In this way it is possible to use the X-definition to transform
+XML input data. Note also that "<code>from</code>" methods have arguments with the 
+string as XPATH expression.
+      </p>
+      <b>X-definition:</b>
       
-
+        
+        <textarea name="xdef" rows="17" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" &gt;
+  &lt;Contract ProcessedDate="required dateTime(); create now();"
+       ConractId="required num(10); create from('@num');" &gt;
+    &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');" 
+       CompanyId="required num(8); create from('@cId');"
+       Name     ="required string(1,30); create from('@name');" /&gt;
+    &lt;Holder xd:script="occurs 1; create from('Client[@role=\'2\']');" 
+       PersonalId="required string(10,11); create from('@pId');"
+       Firstname ="required string(1,30); create from('@firstname');"
+       Lastname  ="required string(1,30); create from('@familyname');" /&gt;
+    &lt;Policyholder xd:script="occurs 1; create from('Client[@role=\'3\']');"
+       CompanyId="required num(8); create from('@cId');"
+       Name     ="required string(1,30); create from('@firstname') + ' ' + from('@familyname');"/&gt;
+  &lt;/Contract&gt;
+&lt;/xd:def&gt;
+</textarea>
       
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="16" class="lined">
+&lt;Contract num = "0123456789"&gt;
+  &lt;Client role       = "1"
+      name       = "Some Company Ltd"
+      cId        = "12345678" /&gt;
+  &lt;Client role       = "2"
+      firstname  = "John"
+      familyname = "Smith"
+      pId        = "311270/1234" /&gt;
+  &lt;Client role       = "3"
+      firstname  = "Fred"
+      familyname = "Brown"
+      personalId = "311270/1234"
+      cId        = "87654321" /&gt;
+&lt;/Contract&gt;
+</textarea>
+      
+      <button type="submit">Validate</button>
+      <input type="hidden" name="mode" value="compose">
+      
+    </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
+  </body>
+</html>

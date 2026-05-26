@@ -1,18 +1,75 @@
 <!DOCTYPE HTML><html lang="en">
   <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Example 4a - string delimiters</title>
+    <title>Example 4a — string delimiters</title>
     <meta name="description" content="">
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
     <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-      <div class="title">X-definition tutorial</div>
+    <div class="title">Example 4a — string delimiters</div>
 
+    
+    <p>
+      This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
+      to <code><b>'</b></code> (the apostrophe) — see the section "finally" in the X-script.
+    </p><p>
+      If you need to use a special character in a string you can specify XML entity or the
+      <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
+    </p>
+
+    <form method="post" action="../playground/Playground">
+      <b>X-definition:</b><br>
       
+        
+        <textarea name="xdef" rows="20" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory"&gt;
+  &lt;xd:declaration&gt;
+    void message(String s) {
+      outln(s);
+    }
+    int count = 0;
+    type isbn int(10000000, 999999999);
+  &lt;/xd:declaration&gt;
 
+  &lt;Inventory xd:script='init message("Created " + now()); finally message("Processed " + count + " books");'&gt;
+    &lt;Book xd:script='occurs +; onAbsence message("No books!"); finally count++;'
+          ISBN="isbn; onTrue outln('ISBN code: ' + @ISBN); onFalse error('Incorrect ISBN!');"
+          published="optional gYear();"&gt;
+      &lt;Author xd:script='occurs *'&gt; string(); onTrue outln("Author: " + getText()); &lt;/Author&gt;
+      &lt;Title&gt; string(); onTrue outln("Title: " + getText()); &lt;/Title&gt;
+    &lt;/Book&gt;
+  &lt;/Inventory&gt;
+&lt;/xd:def&gt;
+</textarea>
       
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="13" class="lined">
+&lt;Inventory&gt;
+  &lt;Book ISBN="123456789" published="2017"&gt;
+    &lt;Author&gt;Jiří Kamenický&lt;/Author&gt;
+    &lt;Author&gt;Jindřich Kocman&lt;/Author&gt;
+    &lt;Author&gt;Václav Trojan&lt;/Author&gt;
+    &lt;Title&gt;X-definition 3.1&lt;/Title&gt;
+  &lt;/Book&gt;
+  &lt;Book ISBN="567890123"&gt;
+    &lt;Title&gt;The Bible&lt;/Title&gt;
+  &lt;/Book&gt;
+&lt;/Inventory&gt;
+</textarea>
+      
+      <button type="submit">Validate</button>
+      
+    </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
+  </body>
+</html>

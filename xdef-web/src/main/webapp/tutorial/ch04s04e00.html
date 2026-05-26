@@ -5,14 +5,66 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
     <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-      <div class="title">X-definition tutorial</div>
+    <div class="title">X-definition - CSV format</div>
 
+    
+    <form method="post" action="../playground/Playground">
+      <p>
+        Note the first line of input data contains names of columns in rows.
+      </p>
+      <b>X-definition:</b>
       
-
+        
+        <textarea name="xdef" rows="14" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
+  &lt;xd:json name="test"&gt;
+    [
+      # header line:
+      ["occurs 3 string();"],
+      # CSV lines:
+      [ %script="*",
+        "required string()", "optional emailAddr", "optional telephone()"
+      ]
+    ]
+  &lt;/xd:json&gt;
+&lt;/xd:def&gt;
+</textarea>
       
+      <b>Input data:</b>
+      <label for="csvMode">Export header line</label>
+      <span>
+         <select name="csvMode" id="csvHdr">
+           <option value="yes">Yes</option>
+           <option value="no">No</option>
+         </select>
+      </span>
+      
+        
+        <textarea name="data" rows="9" class="lined">
+Name, Email Address, Mobile Number
+John Smith, john.smith@smith.com, +1 2345 67 89 01
+, nobody@somewhere.org, +89 987 654 321
+Somebody, ,
+, , 98765412
+Pamela Green, pamela-G@data.org, +49 123 456 789
+Mary Green, mg@data.org, +49 1234 567 890
+</textarea>
+              
+      <button type="submit">Validate</button>
+      <input type="hidden" name="csv" value="csv">
+      
+      <i>&nbsp;You can edit <b>X-definition:</b> or <b>Input</b> window</i>
+      <i>&nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b></i>
+    </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
+  </body>
+</html>

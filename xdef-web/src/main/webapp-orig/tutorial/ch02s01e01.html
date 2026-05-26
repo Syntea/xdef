@@ -5,22 +5,23 @@
     <script src="/tutorial/styles/lineNumbers_1.js"> </script>
     <style>.A{min-height:19rem;max-height:19rem;display:flex;overflow:hidden;}</style>    
     <style>.B{min-height:12rem;max-height:12rem;display:flex;overflow:hidden;}</style>
-    <title>Example 4a - string delimiters</title>
+    <title>Example 4a — string delimiters</title>
   </head>
   <body text="#000000" bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
+    <p>
+      This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
+      to <code><b>'</b></code> (the apostrophe) — see the section "finally" in the X-script.
+    </p><p>
+      If you need to use a special character in a string you can specify XML entity or the
+      <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
+    </p>
+
     <form method="post" action="/tutorial/Examples">
-      <p style="font: Tahoma; font-size: 13px;">
-        This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
-        to <code><b>'</b></code> (the apostroph) - see the section "finally" in the X-script.
-        <br/>
-        If you need to use a special character in a string you can specify XML entity or the
-        <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
-      </p>
-      <b>X-definition</b><br/>
+      <b>X-definition:</b><br/>
       <div class="A">
         <div id="line-numbers"></div>
         <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory" >
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory">
   &lt;xd:declaration>
     void message(String s) {
       outln(s);

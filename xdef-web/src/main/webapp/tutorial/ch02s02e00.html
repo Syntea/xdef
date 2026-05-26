@@ -5,14 +5,67 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../style/common.css">
     <script type="module" src="../style/common.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/common.css">
   </head>
   <body>
-      <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-      <div class="title">X-definition tutorial</div>
+    <div class="title">Using namespaces</div>
 
+    
+    <form method="post" action="../playground/Playground">
+      <p>
+        Using namespace in X-definition. Note that the prefix "bk" is used in
+        the X-definition below. However, the prefix "books" is used in the input
+        data.Using namespace in X-definition. Note that the prefix "bk" is used
+        in the X-definition below. However, the prefix "books" is used in the
+        input data.
+      </p>
+      <b>X-definition:</b><br>
       
+        
+        <textarea name="xdef" rows="19" class="lined">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"
+        xmlns:bk = "http://www.book.com"
+        xd:name = "Books" 
+        xd:root = "bk:Inventory" &gt;
+                
+  &lt;bk:Inventory&gt;
+     &lt;bk:book xd:script = "occurs *"
+              bk:ISBN="num(10);" &gt;
+        &lt;bk:publisher&gt; string();  &lt;/bk:publisher&gt;
+        &lt;bk:year&gt;      gYear();   &lt;/bk:year&gt;
+        &lt;bk:price&gt;     decimal(); &lt;/bk:price&gt;
+        &lt;bk:author xd:script="occurs *"&gt; string(); &lt;/bk:author&gt;
+        &lt;bk:title&gt;     string();  &lt;/bk:title&gt;
+     &lt;/bk:book&gt;    
+  &lt;/bk:Inventory&gt;
 
+&lt;/xd:def&gt;
+</textarea>
       
+      <b>Input data:</b>
+      
+        
+        <textarea name="data" rows="11" class="lined">
+&lt;books:Inventory xmlns:books = "http://www.book.com"&gt;
+   &lt;books:book books:ISBN = "0553380958"&gt;
+        &lt;books:publisher&gt;Spectra&lt;/books:publisher&gt;
+        &lt;books:year&gt;1992&lt;/books:year&gt;
+        &lt;books:price&gt;14.95&lt;/books:price&gt;
+        &lt;books:author&gt;Neal Stephenson&lt;/books:author&gt;
+        &lt;books:title&gt;Snow Crash&lt;/books:title&gt;
+  &lt;/books:book&gt;
+&lt;/books:Inventory&gt;
+</textarea>
+      
+      <button type="submit">Validate</button>
+      
+    </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
+  </body>
+</html>
