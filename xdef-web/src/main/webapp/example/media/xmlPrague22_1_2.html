@@ -1,25 +1,29 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:21rem; max-height:21rem; display:flex; overflow:hidden;}</style>    
-    <style>.B{min-height:14rem; max-height:14rem; display:flex; overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition: arrays</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../style/common.css">
+    <script type="module" src="../../style/common.js"></script>
   </head>
-  <body style="background: #EAFFFD">
-    <form method="post" action="/tutorial/Examples" target="_blank">
-      <span><b>X-definition</b></span>
-      <textarea style="width: 100%;" cols="80" rows="14" name="xdef">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Matrix" >
-  &lt;Matrix>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition: arrays</div>
+
+    
+    <form method="post" action="../../playground/Playground">
+      <span><b>X-definition:</b></span>
+      <textarea name="xdef" rows="7" class="lined">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Matrix" &gt;
+  &lt;Matrix&gt;
     jlist(%item=jlist(%item=double()));
-  &lt;/Matrix>
-&lt;/xd:def>
+  &lt;/Matrix&gt;
+&lt;/xd:def&gt;
 </textarea>
-      <b>Input data</b>
-      <textarea style="width: 100%;" cols="80" rows="10" name="data">
-&lt;Matrix>
+      <b>Input data:</b>
+      <textarea name="data" rows="12" class="lined">
+&lt;Matrix&gt;
 [
   [0,1,2,3,4],
   [-1,-2],
@@ -28,12 +32,17 @@
   [],
   null
 ] 
-&lt;/Matrix>
+&lt;/Matrix&gt;
 </textarea>
       <span>
-      <input name="submit" value="Execute" type="submit" />
-      <i>&nbsp;You can edit both <b>X-definition</b> and/or <b>Input data</b></i>
+      <button type="submit">Validate</button>
+      <i>&nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b></i>
       </span>
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

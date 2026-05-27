@@ -1,47 +1,54 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta content="text/html; charset=UTF-8"/>
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:24rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:14rem; max-height:12rem; display:flex; overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - the construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
   </head>
-  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples" >
-      <input type="hidden" name="mode" value="compose" />
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"> </div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2">
-&lt;a>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - the construction mode</div>
+
+    
+    <form method="post" action="../../../playground/Playground">
+      
+      <b>X-definition:</b><br>
+      
+         
+        <textarea name="xdef" rows="10" class="lined">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"&gt;
+&lt;a&gt;
   &lt;b xd:script = "occurs *; create from('b/*/..')"
-     x = "required string()" >
+     x = "required string()" &gt;
     &lt;c xd:script = "occurs *;"
-       y = "required string()" />
-  &lt;/b>
-&lt;/a>
-&lt;/xd:def></textarea><br/>
-      </div>
-      <b>Input data</b><br/>
-      <div class="B">
-        <div id="line-numbers_1"> </div>
-        <textarea id="textarea_1" style="width:100%;" name="data">
-&lt;a>
-  &lt;b x="1">
-    &lt;c y="11"/>
-  &lt;/b>
-  &lt;b x="2"/>
-  &lt;b x="3">
-    &lt;c y="33"/>
-  &lt;/b>
-&lt;/a></textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit"/>
-      <font style="background-color: lightgrey">
-        <i>&nbsp;You can edit both the X-definition and/or input data above</i>
-      </font>
+       y = "required string()" /&gt;
+  &lt;/b&gt;
+&lt;/a&gt;
+&lt;/xd:def&gt;</textarea><br>
+      
+      <b>Input data:</b><br>
+      
+         
+        <textarea name="data" rows="10" class="lined">
+&lt;a&gt;
+  &lt;b x="1"&gt;
+    &lt;c y="11"/&gt;
+  &lt;/b&gt;
+  &lt;b x="2"/&gt;
+  &lt;b x="3"&gt;
+    &lt;c y="33"/&gt;
+  &lt;/b&gt;
+&lt;/a&gt;</textarea>
+      
+      <button name="mode" value="compose" type="submit">Compose</button>
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

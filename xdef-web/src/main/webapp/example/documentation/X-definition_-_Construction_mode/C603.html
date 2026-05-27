@@ -1,61 +1,68 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta content="text/html; charset=UTF-8"/>
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:24rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
-    <style>.B{min-height:14rem; max-height:12rem; display:flex; overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - the construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
   </head>
-  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples" >
-      <input type="hidden" name="mode" value="compose" />
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"> </div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root = "Weather">
-&lt;xd:declaration>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - the construction mode</div>
+
+    
+    <form method="post" action="../../../playground/Playground">
+      
+      <b>X-definition:</b><br>
+      
+         
+        <textarea name="xdef" rows="26" class="lined">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root = "Weather"&gt;
+&lt;xd:declaration&gt;
   float sum = 0; int num = 0;
-&lt;/xd:declaration>
+&lt;/xd:declaration&gt;
 
 &lt;Weather xd:script="finally returnElement(xcreate('html'))"
-   date = "optional date()">
+   date = "optional date()"&gt;
    &lt;Measurement xd:script = "occurs +"
        wind = "required float(0, 150)"
        temperature = "required float(-40,60); /*limits of temperature*/
                       onTrue {num++; sum += parseFloat(getText());}"
-       time = "required time()" />
-&lt;/Weather>
+       time = "required time()" /&gt;
+&lt;/Weather&gt;
 
-&lt;html>
+&lt;html&gt;
   string; create "Weather on " + from("@date");
-  &lt;li xd:script = "occurs +; create from('Measurement')">
+  &lt;li xd:script = "occurs +; create from('Measurement')"&gt;
     string; create "Time: " + from("@time") + ", wind: " + from("@wind") +
                    ", temperature: " + from("@temperature");
-  &lt;/li>
-  &lt;h3 style="fixed 'background: yellow'">
+  &lt;/li&gt;
+  &lt;h3 style="fixed 'background: yellow'"&gt;
     string; create num==0 ? "No data" : format("Average temperature: %2.1f", sum/num);
-  &lt;/h3>
-&lt;/html>
-&lt;/xd:def></textarea>
-      </div>
-      <b>Input data</b><br/>
-      <div class="B">
-        <div id="line-numbers_1"> </div>
-        <textarea id="textarea_1" style="width:100%;" name="data">
-&lt;Weather date = "2005-05-11" >
-   &lt;Measurement wind = "5.3" temperature = "13.0" time = "05:00:00" />
-   &lt;Measurement wind = "7.2" temperature = "15.2" time = "11:00:00" />
-   &lt;Measurement wind = "8.7" temperature = "18.1" time = "15:00:00" />
-   &lt;Measurement wind = "3.9" temperature = "16.5" time = "20:00:00" />
-&lt;/Weather></textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit"/>
-      <input name="view" value="Display as html" type="submit"/>
-      <font style="background-color: lightgrey">
-        <i>&nbsp;You can edit both the X-definition and/or input data above</i>
-      </font>
+  &lt;/h3&gt;
+&lt;/html&gt;
+&lt;/xd:def&gt;</textarea>
+      
+      <b>Input data:</b><br>
+      
+         
+        <textarea name="data" rows="7" class="lined">
+&lt;Weather date = "2005-05-11" &gt;
+   &lt;Measurement wind = "5.3" temperature = "13.0" time = "05:00:00" /&gt;
+   &lt;Measurement wind = "7.2" temperature = "15.2" time = "11:00:00" /&gt;
+   &lt;Measurement wind = "8.7" temperature = "18.1" time = "15:00:00" /&gt;
+   &lt;Measurement wind = "3.9" temperature = "16.5" time = "20:00:00" /&gt;
+&lt;/Weather&gt;</textarea>
+      
+      <button name="mode" value="compose" type="submit">Compose</button>
+      <input name="view" value="Display as html" type="submit">
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

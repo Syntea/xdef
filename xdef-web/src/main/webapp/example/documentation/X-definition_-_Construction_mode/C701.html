@@ -1,37 +1,45 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta content="text/html; charset=UTF-8"/>
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:24rem;max-height:22rem;display:flex;overflow:hidden;}</style>    
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - the construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
   </head>
-  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples" >
-      <input type="hidden" name="mode" value="compose" />
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"> </div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='html'>
-&lt;html xd:script="template">
-  &lt;head>
-    &lt;title>Actual date&lt;/title>
-      &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  &lt;/head>
-  &lt;body bgcolor="yellow">
-    &lt;h1>Today is:&lt;/h1>
-    &lt;h2>$$$script: string(); create now().toString('{L(en,US)}EEEE, d. MMMM yyyy GG, hh:mm a')&lt;/h2>
-    &lt;h3>This is an example of template model in construction mode.&lt;/h3>
-  &lt;/body>
-&lt;/html>
-&lt;/xd:def></textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit"/>
-      <input name="view" value="Display as html" type="submit"/>
-      <font style="background-color: lightgrey">
-        <i>&nbsp;(You can edit the X-definition above)&nbsp;</i>
-      </font>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - the construction mode</div>
+
+    
+    <form method="post" action="../../../playground/Playground">
+      
+      <b>X-definition:</b><br>
+      
+         
+        <textarea name="xdef" rows="14" class="lined">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='html'&gt;
+&lt;html xd:script="template"&gt;
+  &lt;head&gt;
+    &lt;title&gt;Actual date&lt;/title&gt;
+      &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/&gt;
+  &lt;/head&gt;
+  &lt;body bgcolor="yellow"&gt;
+    &lt;h1&gt;Today is:&lt;/h1&gt;
+    &lt;h2&gt;$$$script: string(); create now().toString('{L(en,US)}EEEE, d. MMMM yyyy GG, hh:mm a')&lt;/h2&gt;
+    &lt;h3&gt;This is an example of template model in construction mode.&lt;/h3&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+&lt;/xd:def&gt;</textarea>
+      
+      <button name="mode" value="compose" type="submit">Compose</button>
+      <input name="view" value="Display as html" type="submit">
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

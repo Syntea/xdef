@@ -1,147 +1,154 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta content="text/html; charset=UTF-8"/>
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:23rem;max-height:24rem;display:flex;overflow:hidden;}</style>
-    <style>.B{min-height:13rem; max-height:12rem; display:flex; overflow:hidden;}</style>
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - the construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
   </head>
-  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples" >
-      <input type="hidden" name="mode" value="compose" />
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"> </div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xmlns='http://www.w3.org/1999/xhtml'>
-  &lt;html xd:script='template'>
-    &lt;head>
-      &lt;title> British monarchs &lt;/title>
-    &lt;/head>
-    &lt;body>
-      &lt;h2> British monarchs: &lt;/h2>
-      &lt;table border="create 'border'">
-        &lt;tr bgcolor="C0C0C0" xd:script='template'>
-          &lt;td>Monarch&lt;/td>
-          &lt;td>Reigned from&lt;/td>
-          &lt;td>Reigned to&lt;/td>
-        &lt;/tr>
-        &lt;tr xd:script='*; create from("//monarch").sort("reigned/start/text()")'>
-          &lt;td bgcolor="fixed 'violet'">create from('name/text()')&lt;/td>
-          &lt;td bgcolor="fixed 'yellow'">create from('reigned/start/text()')&lt;/td>
-          &lt;td bgcolor="fixed 'lightgrey'">optional string(); create from('reigned/end/text()')&lt;/td>
-        &lt;/tr>
-      &lt;/table>
-    &lt;/body>
-   &lt;/html>
-&lt;/xd:def>
-</textarea><br/>
-      </div>
-      <b>Input data</b><br/>
-      <div class="B">
-        <div id="line-numbers_1"> </div>
-        <textarea id="textarea_1" style="width:100%;" name="data">
-&lt;monarchs>
-   &lt;monarch>
-      &lt;name>Charles III&lt;/name>
-      &lt;reigned>
-         &lt;start>2022&lt;/start>
-         &lt;end>&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>Victoria&lt;/name>
-      &lt;reigned>
-         &lt;start>1837&lt;/start>
-         &lt;end>1901&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>Anne&lt;/name>
-      &lt;reigned>
-         &lt;start>1707&lt;/start>
-         &lt;end>1714&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>George I&lt;/name>
-      &lt;reigned>
-         &lt;start>1714&lt;/start>
-         &lt;end>1727&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>George II&lt;/name>
-      &lt;reigned>
-         &lt;start>1727&lt;/start>
-         &lt;end>1760&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>George III&lt;/name>
-      &lt;reigned>
-         &lt;start>1760&lt;/start>
-         &lt;end>1820&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>George IV&lt;/name>
-      &lt;reigned>
-         &lt;start>1820&lt;/start>
-         &lt;end>1830&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>Wiliam IV&lt;/name>
-      &lt;reigned>
-         &lt;start>1830&lt;/start>
-         &lt;end>1837&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>Edward VII&lt;/name>
-      &lt;reigned>
-         &lt;start>1901&lt;/start>
-         &lt;end>1910&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>George V&lt;/name>
-      &lt;reigned>
-         &lt;start>1910&lt;/start>
-         &lt;end>1936&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>Edward VIII&lt;/name>
-      &lt;reigned>
-         &lt;start>1936&lt;/start>
-         &lt;end>1936&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>George VI&lt;/name>
-      &lt;reigned>
-         &lt;start>1936&lt;/start>
-         &lt;end>1952&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-   &lt;monarch>
-      &lt;name>Elizabeth II&lt;/name>
-      &lt;reigned>
-         &lt;start>1952&lt;/start>
-         &lt;end>2022&lt;/end>
-      &lt;/reigned>
-   &lt;/monarch>
-&lt;/monarchs>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - the construction mode</div>
+
+    
+    <form method="post" action="../../../playground/Playground">
+      
+      <b>X-definition:</b><br>
+      
+         
+        <textarea name="xdef" rows="24" class="lined">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xmlns='http://www.w3.org/1999/xhtml'&gt;
+  &lt;html xd:script='template'&gt;
+    &lt;head&gt;
+      &lt;title&gt; British monarchs &lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h2&gt; British monarchs: &lt;/h2&gt;
+      &lt;table border="create 'border'"&gt;
+        &lt;tr bgcolor="C0C0C0" xd:script='template'&gt;
+          &lt;td&gt;Monarch&lt;/td&gt;
+          &lt;td&gt;Reigned from&lt;/td&gt;
+          &lt;td&gt;Reigned to&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr xd:script='*; create from("//monarch").sort("reigned/start/text()")'&gt;
+          &lt;td bgcolor="fixed 'violet'"&gt;create from('name/text()')&lt;/td&gt;
+          &lt;td bgcolor="fixed 'yellow'"&gt;create from('reigned/start/text()')&lt;/td&gt;
+          &lt;td bgcolor="fixed 'lightgrey'"&gt;optional string(); create from('reigned/end/text()')&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+    &lt;/body&gt;
+   &lt;/html&gt;
+&lt;/xd:def&gt;
+</textarea><br>
+      
+      <b>Input data:</b><br>
+      
+         
+        <textarea name="data" rows="95" class="lined">
+&lt;monarchs&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Charles III&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;2022&lt;/start&gt;
+         &lt;end&gt;&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Victoria&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1837&lt;/start&gt;
+         &lt;end&gt;1901&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Anne&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1707&lt;/start&gt;
+         &lt;end&gt;1714&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George I&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1714&lt;/start&gt;
+         &lt;end&gt;1727&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George II&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1727&lt;/start&gt;
+         &lt;end&gt;1760&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George III&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1760&lt;/start&gt;
+         &lt;end&gt;1820&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George IV&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1820&lt;/start&gt;
+         &lt;end&gt;1830&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Wiliam IV&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1830&lt;/start&gt;
+         &lt;end&gt;1837&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Edward VII&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1901&lt;/start&gt;
+         &lt;end&gt;1910&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George V&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1910&lt;/start&gt;
+         &lt;end&gt;1936&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Edward VIII&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1936&lt;/start&gt;
+         &lt;end&gt;1936&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George VI&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1936&lt;/start&gt;
+         &lt;end&gt;1952&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Elizabeth II&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1952&lt;/start&gt;
+         &lt;end&gt;2022&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+&lt;/monarchs&gt;
 </textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit"/>
-      <input name="view" value="Display as html" type="submit"/>
-      <font style="background-color: lightgrey">
-        <i>&nbsp;You can edit both the X-definition and/or input data above</i>
-      </font>
+      
+      <button name="mode" value="compose" type="submit">Compose</button>
+      <input name="view" value="Display as html" type="submit">
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

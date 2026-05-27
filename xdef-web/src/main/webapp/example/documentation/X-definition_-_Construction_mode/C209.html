@@ -1,26 +1,34 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta content="text/html; charset=UTF-8"/>
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:35rem;max-height:35rem;display:flex;overflow:hidden;}</style>    
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - the construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
   </head>
-  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples" >
-      <input type="hidden" name="mode" value="compose" />
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"></div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'>
-   &lt;A xd:script="create 'blabla'"/>
-&lt;/xd:def></textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit"/>
-      <font style="background-color: lightgrey">
-        <i>&nbsp;(You can edit the X-definition above)</i>
-      </font>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - the construction mode</div>
+
+    
+    <form method="post" action="../../../playground/Playground">
+      
+      <b>X-definition:</b><br>
+      
+        
+        <textarea name="xdef" rows="4" class="lined">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
+   &lt;A xd:script="create 'blabla'"/&gt;
+&lt;/xd:def&gt;</textarea>
+      
+      <button name="mode" value="compose" type="submit">Compose</button>
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>

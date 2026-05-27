@@ -1,36 +1,44 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta content="text/html; charset=UTF-8"/>
-    <script src="/tutorial/styles/lineNumbers.js"> </script>
-    <script src="/tutorial/styles/lineNumbers_1.js"> </script>
-    <style>.A{min-height:35rem;max-height:35rem;display:flex;overflow:hidden;}</style>    
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>X-definition - the construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
   </head>
-  <body bgcolor="#EAFFFD" link="#000080" vlink="#0000FF" alink="#808080">
-    <form method="post" action="/tutorial/Examples" >
-      <input type="hidden" name="mode" value="compose" />
-      <b>X-definition</b><br/>
-      <div class="A">
-        <div id="line-numbers"> </div>
-        <textarea id="textarea" style="width: 100%;" name="xdef">
-&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'>
-&lt;xd:declaration>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - the construction mode</div>
+
+    
+    <form method="post" action="../../../playground/Playground">
+      
+      <b>X-definition:</b><br>
+      
+         
+        <textarea name="xdef" rows="14" class="lined">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
+&lt;xd:declaration&gt;
 &lt;![CDATA[
- Element source = xparse("&lt;X>&lt;Y>&lt;B a='b'/>&lt;/Y>&lt;Y>&lt;C a='x'/>&lt;/Y>&lt;Y>&lt;B a='y'/>&lt;/Y>&lt;/X>");
-]]>
-&lt;/xd:declaration>  
-&lt;A>
-  &lt;xd:choice xd:script="occurs *; create xpath('//Y',source)"> 
-    &lt;B a="string" />
-    &lt;C a="string" />
-  &lt;/xd:choice>
-&lt;/A>
-&lt;/xd:def></textarea>
-      </div>
-      <input name="submit" value="Execute" type="submit"/>
-      <font style="background-color: lightgrey">
-        <i>&nbsp;(You can edit the X-definition above)</i>
-      </font>
+ Element source = xparse("&lt;X&gt;&lt;Y&gt;&lt;B a='b'/&gt;&lt;/Y&gt;&lt;Y&gt;&lt;C a='x'/&gt;&lt;/Y&gt;&lt;Y&gt;&lt;B a='y'/&gt;&lt;/Y&gt;&lt;/X&gt;");
+]]&gt;
+&lt;/xd:declaration&gt;  
+&lt;A&gt;
+  &lt;xd:choice xd:script="occurs *; create xpath('//Y',source)"&gt; 
+    &lt;B a="string" /&gt;
+    &lt;C a="string" /&gt;
+  &lt;/xd:choice&gt;
+&lt;/A&gt;
+&lt;/xd:def&gt;</textarea>
+      
+      <button name="mode" value="compose" type="submit">Compose</button>
+      
     </form>
+  
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLined()</script>
   </body>
 </html>
