@@ -107,6 +107,16 @@ public class TestExpr extends STester {
         }
     }
 
+    private String decompile(final String source, final String rule, final BNFGrammar g) {
+        parse(g, rule, source);
+        Object[] parsed = g.getParsedObjects();
+        String[] code = new String[parsed.length];
+        for (int i = 0; i < parsed.length; i++) {
+            code[i] = (String) parsed[i];
+        }
+        return TestExprDeCompiler.toSource(source, code);
+    }
+
     private static void print(final Object o) {System.out.print(o.toString());}
 
     /** Run test and print error information. */
@@ -349,6 +359,11 @@ if(true)return;
 "  else break;\n"+
 "  print(i);\n"+
 "}"));
+
+            assertEq("int i = 0;", decompile("int i=0;", "program", g));
+            assertEq("i += (sin(3.14)-2)/0.5;", decompile("i += (sin(3.14) - 2) / 0.5;", "program", g));
+            assertEq("int i = 0; i += (sin(3.14)-2)/0.5;", decompile("int i=0; i+=(sin(3.14)-2) / 0.5;", "program", g));
+//            System.out.println(decompile("int i = 0; print(i + 1)", "program", g));
         } catch (Exception ex) {fail(ex);}
     }
 
