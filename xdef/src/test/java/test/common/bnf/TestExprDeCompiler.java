@@ -9,13 +9,6 @@ import org.xdef.sys.Report;
  * @author Vaclav Trojan
  */
 public class TestExprDeCompiler {
-    /* Value types. */
-    static final int TYPE_VOID = 0;
-    static final int TYPE_BOOLEAN = 1;
-    static final int TYPE_INT = 2;
-    static final int TYPE_FLOAT = 3;
-    static final int TYPE_STRING = 4;
-    static final int TYPE_OBJECT = 5;
 
     /** Create source code from generated code.
      * @param source source text.
@@ -84,15 +77,14 @@ public class TestExprDeCompiler {
                     if (i + 1 < code.length && ((String)code[i + 1]).startsWith("name ")) {
                         ii = code[++i].toString().split(" ");
                         String name = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                        int type = ch == 'B' ? TYPE_BOOLEAN
-                            : ch == 'I' ? TYPE_INT
-                            : ch == 'F' ? TYPE_FLOAT
-                            : ch == 'S' ? TYPE_STRING
-                            : TYPE_OBJECT;
                         SourceItem val = new SourceItem("");
                         variables.put(name, val);
-                        val = new SourceItem(
-                            new String[] {"", "boolean", "int", "float", "String", "Object"} [type] + " " + name);
+                        String type = ch == 'B' ? "boolean"
+                            : ch == 'I' ? "int"
+                            : ch == 'F' ? "float"
+                            : ch == 'S' ? "String"
+                            : "Object";
+                        val = new SourceItem(type + " " + name);
                         stack.push(val);
                     }
                 }
