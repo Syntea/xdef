@@ -112,7 +112,6 @@ public class TestExpr extends STester {
     /** Run test and print error information. */
     @Override
     public void test() {
-        String s;
         BNFGrammar g;
         g = BNFGrammar.compile(null, new File(getDataDir() + "TestExpr.bnf"), null);
         g.setUserObject(this);
@@ -141,7 +140,8 @@ if(true)return;
             assertNull(test("true", g, "print(!(true&false));"));
             assertNull(test("-1abc", g, "print( - ( ( 3 + 3 ) / 5 ) + \"abc\" );"));
             assertNull(test("1.26abc", g, "print(((3 + 3.3)/5) + 'abc');"));
-            assertNull(test("2", g, "print( - 1 + 3 );"));
+            assertNull(test("\n", g, "println();"));
+            assertNull(test("2\n", g, "println( - 1 + 3 );"));
             assertNull(test("1", g, " print(  min ( 2 , 1 ) ) ; "));
             assertNull(test("1.0", g, "print(min(2.0,1.0));"));
             assertNull(test("1.0",  g, "print(min(2,1.0));"));
@@ -327,8 +327,8 @@ if(true)return;
             assertNull(test("", g, "for (int i=0;i<4;i++)if(i==3)switch(i){case 2: print(i);break;} else break;"));
             assertNull(test("2", g,"for(int i=0; i < 4; i++) if(i==3)break; else switch(i){case 2: print(i);break;}"));
             assertNull(test("2", g,"for(int i=0;i<4;i++)if(i==3)continue; else switch(i){case 2: print(i);continue;}"));
-            assertNull(test("01",g,
-                "for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
+            assertNull(test("91",g,
+                "for(int i = 0; i < 4; i++) if(i == 0) switch(i){case 0: print(9);break;} else {print(i); break;}"));
             assertNull(test("0122", g,
 "for(int i=0; i < 4; i++) {\n"+
 "  if(i==3) break;\n"+
