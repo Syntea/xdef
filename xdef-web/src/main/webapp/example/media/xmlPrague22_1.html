@@ -10,18 +10,14 @@
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
     <div class="title">X-definition - JSON, XON, YAML</div>
-
     
-<p>
-    </p><form method="post" action="../../playground/Playground">
-      <p>
-        See also JSON with an array of numbers
-        <a href="xmlPrague22_1_1.html"><b>here</b></a>).
-      </p>
+    <p>
+    See also JSON with an array of numbers <a href="xmlPrague22_1_1.html"><b>HERE</b></a>.
+    </p>
+
+    <form method="post" action="../../playground/Playground">
       <b>X-definition:</b>
-      
-         
-        <textarea name="xdef" rows="16" class="lined">
+      <textarea name="xdef" rows="16" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
   &lt;xd:json name="test"&gt;
     { "Book": [
@@ -37,11 +33,9 @@
   &lt;/xd:json&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
-      <b>Input data:</b> <i>(can be YAML, JSON, XON or XML format)</i>
-      
-         
-        <textarea name="data" rows="16" class="lined">
+      <b>JSON input data:</b>
+      <input name="dataFormat" value="json" type="hidden"/>
+      <textarea name="data" rows="16" class="lined">
 { "Book": [
      { "Title": "X-definition 4.2: JSON, YAML, Properties, CSV and XON",
        "Date": "2022-06"
@@ -57,15 +51,10 @@
   ]
 }
 </textarea>
-      
-      <input type="hidden" name="json" value="json">
-      <input name="view" value="Display as JSON" type="submit">
-      <input name="view" value="Display as YAML" type="submit">
-      <input name="view" value="Display as XON" type="submit">
-      <input name="view" value="Display as XML" type="submit">
-      <i>&nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b></i>
+      Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
+      (subset of json, xon, yaml, xml, csv, ini)<br/>
+      <button type="submit">Validate</button>
     </form>
-  
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
