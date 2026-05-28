@@ -32,11 +32,18 @@ public class TestExprDeCompiler {
         for (int i = 0; i < code.length; i++) {
             String item = code[i].toString();
             if (item.startsWith("info: ")) { // parsed position
-                if (!stack.isEmpty()) {
-                    result.append(stack.pop()._s);
-                    result.append("; ");
-                    stack.clear();
+                SourceItem[] items = new SourceItem[stack.size()];
+                stack.toArray(items);
+                for (SourceItem x: items) {
+                    String s = x._s;
+                    if (s.endsWith(" else")) {
+                        s = s.substring(0, s.length() - 6) + "; else ";
+                    } else if (!s.startsWith("if (")) {
+                        s += "; ";
+                    }
+                    result.append(s);
                 }
+                stack.clear();
                 continue;
             }
             String[] ii = ((String) code[i]).split(" ");
@@ -132,8 +139,12 @@ public class TestExprDeCompiler {
                     }
                 }
             } else if ("boolexpr".equals(item)) {  //???
-            } else if ("if".equals(item)) {  //???
-            } else if ("then".equals(item)) {  //???
+            } else if ("if".equals(item)) {
+            } else if ("if1".equals(item)) {
+                stack.peek()._s = "if (" + stack.peek()._s + ") ";
+            } else if ("else".equals(item)) {
+                stack.peek()._s += " else";
+            } else if ("endIf".equals(item)) {
             } else if ("nop".equals(item)) {  //???
             } else if ("jmptf".equals(item)) {  //???
             } else if ("jmp".equals(item)) {  //???

@@ -113,6 +113,10 @@ public class TestExpr extends STester {
         String[] code = new String[parsed.length];
         for (int i = 0; i < parsed.length; i++) {
             code[i] = (String) parsed[i];
+            if (_displayCode) {
+                System.out.printf("%3d: ", i);
+                System.out.println(parsed[i]);
+            }
         }
         return TestExprDeCompiler.toSource(source, code);
     }
@@ -128,9 +132,12 @@ public class TestExpr extends STester {
         try {
             g.trace(null);
 /**
-            _displayCode = true;
+           _displayCode = true;
+            assertEq("int i = 0; if (i==0) print(1+2);", decompile("int i=0; if(i == 0) print(1 + 2);", "program", g));
+            assertEq("int i = 0; if (i==0) print(1; else print(2);",
+                decompile("int i=0;if(i==0)print(1);else print(2);","program",g));
 //print((Math.sin(3.1) + 4)/(2*3 +9));
-            assertNull(test("0.269438710828886", g, "print((sin(3.1) + 4)/(2*3 +9));"));
+//            assertNull(test("0.269438710828886", g, "print((sin(3.1) + 4)/(2*3 +9));"));
 if(true)return;
 /**/
             assertNull(test("", g, ";"));
@@ -360,10 +367,14 @@ if(true)return;
 "  print(i);\n"+
 "}"));
 
+            assertEq("print(1+2);", decompile("print(1 + 2);", "program", g));
             assertEq("int i = 0;", decompile("int i=0;", "program", g));
             assertEq("i += (sin(3.14)-2)/0.5;", decompile("i += (sin(3.14) - 2) / 0.5;", "program", g));
+            assertEq("int i = 0; print(i+1);", decompile("int i=0; print(i + 1);", "program", g));
             assertEq("int i = 0; i += (sin(3.14)-2)/0.5;", decompile("int i=0; i+=(sin(3.14)-2) / 0.5;", "program", g));
-//            System.out.println(decompile("int i = 0; print(i + 1)", "program", g));
+            assertEq("int i = 0; if (i==0) print(1+2);", decompile("int i=0; if(i == 0) print(1 + 2);", "program", g));
+            assertEq("int i = 0; if (i==0) print(1; else print(2);",
+                decompile("int i=0;if(i==0)print(1);else print(2);", "program", g));
         } catch (Exception ex) {fail(ex);}
     }
 
