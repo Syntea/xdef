@@ -11,11 +11,11 @@
 
     <div class="title">Create database</div>
 
-    
+
     <form method="post" action="../../../playground/Derby">
       <b>X-definition:</b>
-      
-        
+
+
         <textarea name="xdef" rows="13" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="schema" &gt;
   &lt;xd:declaration scope = "local"&gt; external Service service; &lt;/xd:declaration&gt;
@@ -29,10 +29,10 @@
     &lt;/table&gt;
   &lt;/schema&gt;
 &lt;/xd:def&gt;</textarea>
-      
+
       <b>Input data:</b>
-      
-         
+
+
         <textarea name="data" rows="19" class="lined">
 &lt;schema name="BOOKS"&gt;
   &lt;table name="AUTHOR"&gt;
@@ -52,12 +52,12 @@
     FOREIGN KEY (IDTITLE) REFERENCES BOOKS.TITLE(IDTITLE)
   &lt;/table&gt;
 &lt;/schema&gt;</textarea>
-      
+
       <button type="submit">Validate</button>
       <input name="task" value="Create database" type="hidden">
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

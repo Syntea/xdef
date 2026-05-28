@@ -11,12 +11,12 @@
 
     <div class="title">X-definition — Construction mode</div>
 
-    
+
     <form method="post" action="../../../playground/Playground">
-      
+
       <b>X-definition:</b><br>
-      
-         
+
+
         <textarea name="xdef" rows="15" class="lined">
 &lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
 &lt;xd:declaration&gt;
@@ -24,19 +24,19 @@
   Element source =
     xparse("&lt;X&gt;&lt;Y&gt;&lt;B a='b'/&gt;&lt;C a='c'/&gt;&lt;/Y&gt;&lt;Y&gt;&lt;C a='x'/&gt;&lt;/Y&gt;&lt;Y&gt;&lt;B a='y'/&gt;&lt;/Y&gt;&lt;/X&gt;");
   ]]&gt;
-&lt;/xd:declaration&gt;  
+&lt;/xd:declaration&gt;
 &lt;A&gt;
-  &lt;xd:sequence xd:script="occurs *; create xpath('//Y', source)"&gt; 
+  &lt;xd:sequence xd:script="occurs *; create xpath('//Y', source)"&gt;
     &lt;B xd:script="occurs ?" a="string" /&gt;
     &lt;C xd:script="occurs ?" a="string" /&gt;
   &lt;/xd:sequence&gt;
 &lt;/A&gt;
 &lt;/xd:def&gt;</textarea>
-      
+
       <button name="mode" value="compose" type="submit">Compose</button>
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

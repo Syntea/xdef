@@ -23,11 +23,11 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 <textarea name="xdef" rows="20" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="anthill" >
   &lt;xd:declaration scope="local">
-    &lt;!-- xquery returns a string with position of anthill with more than one ant-soldiers or null --> 
+    &lt;!-- xquery returns a string with position of anthill with more than one ant-soldiers or null -->
     String qry = "for $i in (//anthill) return $i[count(//insect[caste/text()='soldier' and @location=$i/@position]) &gt; 1] /@position";
   &lt;/xd:declaration>
 
-  &lt;anthill locality="string(); create xquery(qry);"/> 
+  &lt;anthill locality="string(); create xquery(qry);"/>
 &lt;/xd:def>
 </textarea>
 

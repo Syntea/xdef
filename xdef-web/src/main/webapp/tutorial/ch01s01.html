@@ -20,7 +20,7 @@
       </div>
 
       <h2>1.1. X-definition and model of XML element</h2>
-      
+
 
       As a starting point, consider following XML element that describes a book:
 <pre><code class="language-xml">&lt;Book ISBN = "123456789"
@@ -61,7 +61,7 @@
       The X-definition with XML data model describing the above book will be of the form:
 <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"&gt;
   &lt;Book ISBN = "required int(10000000, 999999999); /* ISBN code - integer number in the given range */"
-        published = "optional gYear(); /* year of publishing (can be omitted). */" 
+        published = "optional gYear(); /* year of publishing (can be omitted). */"
         title = "required string(); /* any string */" &gt;
   &lt;/Book&gt;;
 &lt;/xd:def&gt;
@@ -69,7 +69,7 @@
       <p>
       Note: the possibility to write comments (<b>/*...*/</b>) in the X-script.
       </p>
-    
+
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

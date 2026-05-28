@@ -11,14 +11,14 @@
 
     <div class="title">X-definition - CSV format</div>
 
-    
+
     <form method="post" action="../playground/Playground">
       <p>
         Note the first line of input data contains names of columns in rows.
       </p>
       <b>X-definition:</b>
-      
-        
+
+
         <textarea name="xdef" rows="14" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
   &lt;xd:json name="test"&gt;
@@ -33,7 +33,7 @@
   &lt;/xd:json&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
+
       <b>Input data:</b>
       <label for="csvMode">Export header line</label>
       <span>
@@ -42,8 +42,8 @@
            <option value="no">No</option>
          </select>
       </span>
-      
-        
+
+
         <textarea name="data" rows="9" class="lined">
 Name, Email Address, Mobile Number
 John Smith, john.smith@smith.com, +1 2345 67 89 01
@@ -53,14 +53,14 @@ Somebody, ,
 Pamela Green, pamela-G@data.org, +49 123 456 789
 Mary Green, mg@data.org, +49 1234 567 890
 </textarea>
-              
+
       <button type="submit">Validate</button>
       <input type="hidden" name="csv" value="csv">
-      
+
       <i>&nbsp;You can edit <b>X-definition:</b> or <b>Input</b> window</i>
       <i>&nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b></i>
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

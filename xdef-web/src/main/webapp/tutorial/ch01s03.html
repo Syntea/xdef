@@ -20,7 +20,7 @@
       </div>
 
       <h2>1.3. X-script of elements and text nodes</h2>
-      
+
       <p>
         Now we will show how to specify child nodes of an element and how to write the X-script of XML element
         models. The X-script of an XML element model must be written in the special attribute "xd:script"
@@ -32,10 +32,10 @@
         author. Therefore, the quantifier of the "Author" element is specified as "occurs *" (i.e., no or
         multiple occurrences).
       </p>
-        However, the child element "Title" must be just one (i.e., it is mandatory): 
+        However, the child element "Title" must be just one (i.e., it is mandatory):
 <pre><code class="language-xml">
 &lt;Book ISBN="required int(10000000, 999999999);"
-      published="optional gYear();" &gt; 
+      published="optional gYear();" &gt;
   &lt;Author xd:script="occurs *;" &gt;
     required string(); /* name of author */"
   &lt;/Author&gt;
@@ -57,7 +57,7 @@
   &lt;/Title&gt;
 &lt;/Book&gt;
 </code></pre>
-    
+
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

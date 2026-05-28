@@ -20,22 +20,22 @@
       </div>
 
       <h2>3.2. Construction of data from previous slide</h2>
-      
+
 
       <p>
         You will notice that the X definition describes the document model to be created.
         The result is created from the input data as described in the "create" section of the X script.
       </p>
         Note the example below plots a trace of the input data according to the codel in
-        the X-definition:            
+        the X-definition:
 <pre><code class="language-xml">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" &gt;
   &lt;Contract ProcessedDate="required; create toString(now(),'yyyy-MM-dd HH:mm');"
       ConractId="required num(10); create from('@num');" &gt;
-    &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');" 
+    &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');"
         CompanyId="required num(8); create from('@cId');"
         Name     ="required string(1,30); create from('@name');" /&gt;
-    &lt;Holder xd:script="occurs 1; create from('Client[@role=\'2\']');" 
+    &lt;Holder xd:script="occurs 1; create from('Client[@role=\'2\']');"
         PersonalId="required string(10,11); create from('@personalId');"
         Firstname ="required string(1,30); create from('@firstname');"
         Lastname  ="required string(1,30); create from('@lastname');" /&gt;
@@ -54,7 +54,7 @@
       <p>
         You can try it <a href="ch03s02e00.html"><b>HERE</b></a>
       </p>
-    
+
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

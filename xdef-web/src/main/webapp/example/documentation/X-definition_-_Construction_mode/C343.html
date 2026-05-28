@@ -11,32 +11,32 @@
 
     <div class="title">X-definition — Construction mode</div>
 
-    
+
     <form method="post" action="../../../playground/Playground">
-      
+
       <b>X-definition:</b><br>
-      
-         
+
+
         <textarea name="xdef" rows="15" class="lined">
 &lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
 &lt;xd:declaration&gt;
   &lt;![CDATA[
   Element source = xparse("&lt;X name='John' surname='Smith'&gt;&lt;Salary&gt;1234&lt;/Salary&gt;&lt;/X&gt;");
   ]]&gt;
-&lt;/xd:declaration&gt;  
+&lt;/xd:declaration&gt;
 &lt;Person xd:script= "create source"
        name    = "string;"
        surname = "string;"&gt;
-  &lt;Salary&gt; 
+  &lt;Salary&gt;
     required int;
-  &lt;/Salary&gt; 
+  &lt;/Salary&gt;
 &lt;/Person&gt;
 &lt;/xd:def&gt;</textarea>
-      
+
       <button name="mode" value="compose" type="submit">Compose</button>
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

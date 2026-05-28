@@ -2,6 +2,7 @@ package org.xdef.web;
 
 import java.io.File;
 import java.sql.Connection;
+
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.xdef.XDFactory;
 import org.xdef.XDService;
@@ -26,7 +27,7 @@ public class TestDB {
         dbSource.setCreateDatabase("create");
         Connection con = dbSource.getConnection();
         con.close();
-        
+
         String url = "jdbc:derby:" + derby;
         String user = "myself";
         String password = "blabla";
@@ -47,7 +48,7 @@ public class TestDB {
 " FOREIGN KEY (IDTITLE) REFERENCES BOOKS.TITLE(IDTITLE))", null));
         service.close();
         service = XDFactory.createSQLService(url, user, password);
-        
+
         System.out.println(service.execute("SELECT AUTHOR FROM BOOKS.AUTHOR WHERE BOOKS.AUTHOR.AUTHOR = ?",
             new DefString("The Last Theorem")));
     DefSQLStatement insertAuthor = (DefSQLStatement) service.prepareStatement(

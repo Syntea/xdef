@@ -20,7 +20,7 @@
       </div>
 
       <h2>1.4. X-script sections and events</h2>
-      
+
         <p>
         The X-script of an element, attribute, or text node can contain several parts. Parts of an X-script
         is divided to different sections containing code which is executed in different situations.
@@ -57,12 +57,12 @@
         Example:
 <pre><code class="language-xml">&lt;Book xd:script="init outln('Book process started'); finally outln('end'); option ignoreComments, trimAttr, trimText"
       ISBN="int(10000000, 999999999); onTrue outln('ISBN is OK'); onFalse outln('ISBN error');"
-      published="optional gYear(); onAbsence outln('date missing');"&gt; 
+      published="optional gYear(); onAbsence outln('date missing');"&gt;
   &lt;Author xd:script="occurs *"&gt; string(); onTrue outln('Author: ' + getText()); &lt;/Author&gt;
   &lt;Title&gt; string(); onTrue outln('Title: ' + getText()); &lt;/Title&gt;
 &lt;/Book&gt;
 </code></pre>
-    
+
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

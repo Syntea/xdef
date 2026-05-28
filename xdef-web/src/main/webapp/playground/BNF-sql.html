@@ -34,7 +34,7 @@ Statement::= S? ( AlterIndex | AlterTable | Constraint | Create | CreateIndex
 
 /********************/
 S::= ([#9#10#13 ]+ | Comment)+ /* white spaces and comments */
-Comment::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/' 
+Comment::= '/*' ([^*+]+ | '*' - '*/')? ([^*]+ | '*' - '*/')* '*/'
    | ('--' | '//') $skipToNextLine
 QuotedName::= '"' ('""' | [^"])+ '"'
 Keywords::= 'ALL'% | 'AS'% | 'ASC'% | 'BETWEEN'% | 'BY'%
@@ -72,7 +72,7 @@ Condition::= (Operand (
    | (S? 'NOT'% S?)? S? 'LIKE'% S? Operand
    | (S? 'NOT'% S?)? S? 'BETWEEN'% S? Operand S? 'AND'% S? Operand
    | S? 'IS'% S? ('NOT'% S?)? S? 'NULL')? )
-   | S? 'NOT'% S? Expression 
+   | S? 'NOT'% S? Expression
    | S? '(' S? Expression S? ')'?
 Compare::= S? ('&lt;'S?'>' | '&lt;'S?'=' | '>'S?'=' | '=' | '&lt;' | '>' | '!'S?'=') S?
 TableExpressionItem ::= S? Name (S? '.' S? Name)? (S? 'AS'% S? Name)?

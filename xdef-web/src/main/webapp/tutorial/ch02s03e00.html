@@ -11,43 +11,43 @@
 
     <div class="title">The example of references and models of elements</div>
 
-    
+
     <form method="post" action="../playground/Playground">
       <p>Example of references and models of elements.</p>
       <b>X-definition:</b>
-      
-        
-        <textarea name="xdef" rows="14" class="lined">
-&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root = "Family"&gt;  
 
-&lt;Family&gt;  
-    &lt;Father   xd:script = "optional; ref Person;" /&gt;  
-    &lt;Mother   xd:script = "required; ref Person;" /&gt;  
-    &lt;Son      xd:script = "occurs *; ref Person;" /&gt;  
-    &lt;Daughter xd:script = "occurs *; ref Person;" /&gt;  
-&lt;/Family&gt;  
-  
-&lt;Person Firstname = "string();" Familyname = "string();" BirthDate = "date();" /&gt;  
-  
+
+        <textarea name="xdef" rows="14" class="lined">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root = "Family"&gt;
+
+&lt;Family&gt;
+    &lt;Father   xd:script = "optional; ref Person;" /&gt;
+    &lt;Mother   xd:script = "required; ref Person;" /&gt;
+    &lt;Son      xd:script = "occurs *; ref Person;" /&gt;
+    &lt;Daughter xd:script = "occurs *; ref Person;" /&gt;
+&lt;/Family&gt;
+
+&lt;Person Firstname = "string();" Familyname = "string();" BirthDate = "date();" /&gt;
+
 &lt;/xd:def&gt;
 </textarea>
-      
+
       <b>Input data:</b>
-      
-        
+
+
         <textarea name="data" rows="8" class="lined">
-&lt;Family&gt;  
-   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" /&gt;  
-   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" /&gt;  
-   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" /&gt;  
-   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" /&gt;  
+&lt;Family&gt;
+   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" /&gt;
+   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" /&gt;
+   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" /&gt;
+   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" /&gt;
 &lt;/Family&gt;
 </textarea>
-      
+
       <button type="submit">Validate</button>
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

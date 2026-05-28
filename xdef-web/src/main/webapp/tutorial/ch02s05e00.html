@@ -11,7 +11,7 @@
 
     <div class="title">Example of X-definition with groups</div>
 
-    
+
     <p>
       The example of X-definition with groups (see "xd:mixed" and "xd:choice"). This example validates the
       data version "Owner" with "Company" model.
@@ -20,13 +20,13 @@
     </p>
     <form method="post" action="../playground/Playground">
       <b>X-definition:</b>
-      
-        
+
+
         <textarea name="xdef" rows="24" class="lined">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="Family | Owner"&gt;  
-  &lt;Family&gt;  
-    &lt;Father   xd:script="optional; ref Person;" /&gt;  
-    &lt;Mother   xd:script="required; ref Person;" /&gt;  
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="Family | Owner"&gt;
+  &lt;Family&gt;
+    &lt;Father   xd:script="optional; ref Person;" /&gt;
+    &lt;Mother   xd:script="required; ref Person;" /&gt;
       &lt;xd:mixed&gt;
         &lt;Son      xd:script="occurs *; ref Person;" /&gt;
         &lt;Daughter xd:script="occurs *; ref Person;" /&gt;
@@ -37,30 +37,30 @@
   &lt;Owner&gt;
       &lt;xd:choice&gt;
         &lt;Person xd:script="ref Person;" /&gt;
-        &lt;Company name="string();" /&gt;  
+        &lt;Company name="string();" /&gt;
       &lt;/xd:choice&gt;
     &lt;Address xd:script="ref Address;" /&gt;
   &lt;/Owner&gt;
 
-  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" /&gt;  
+  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" /&gt;
   &lt;Address Street = "string(1,30)" Number = "optional int()" City = "string()" /&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
+
       <b>Input data:</b>
-      
-        
+
+
         <textarea name="data" rows="6" class="lined">
 &lt;Owner&gt;
-  &lt;Company name="Syntea software group a.s." /&gt; 
-  &lt;Address Street="Radlická"  Number="125" City="Praha" /&gt;  
+  &lt;Company name="Syntea software group a.s." /&gt;
+  &lt;Address Street="Radlická"  Number="125" City="Praha" /&gt;
 &lt;/Owner&gt;
 </textarea>
-      
+
       <button type="submit">Validate</button>
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

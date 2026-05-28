@@ -65,13 +65,13 @@ div.resizable iframe {
 
 span.error {
     color:              red;
-    font-weight:        bold;                 
+    font-weight:        bold;
 }
 
 /* VD - visibility delayed, see common.js */
 span.errorVD {
     color:              red;
-    font-weight:        bold;                 
+    font-weight:        bold;
     visibility:         hidden;
 }
 
@@ -165,7 +165,7 @@ textarea.lined {
     resize:             vertical;
     width:              100%;
     background-color:   white;
-    border:             0.1em solid #888; 
+    border:             0.1em solid #888;
     position:           relative;
     left:               30px;
 }

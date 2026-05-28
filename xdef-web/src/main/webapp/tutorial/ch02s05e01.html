@@ -11,19 +11,19 @@
 
     <div class="title">Example of X-definition with groups</div>
 
-    
+
     <form method="post" action="../playground/Playground">
       <p>
         The example of X-definition with groups and "Family" version of data.
       </p>
       <b>X-definition:</b>
-      
-        
+
+
         <textarea name="xdef" rows="24" class="lined">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="Family | Owner"&gt;  
-  &lt;Family&gt;  
-    &lt;Father   xd:script="optional; ref Person;" /&gt;  
-    &lt;Mother   xd:script="required; ref Person;" /&gt;  
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="Family | Owner"&gt;
+  &lt;Family&gt;
+    &lt;Father   xd:script="optional; ref Person;" /&gt;
+    &lt;Mother   xd:script="required; ref Person;" /&gt;
     &lt;xd:mixed&gt;
       &lt;Son      xd:script="occurs *; ref Person;" /&gt;
       &lt;Daughter xd:script="occurs *; ref Person;" /&gt;
@@ -34,33 +34,33 @@
   &lt;Owner&gt;
     &lt;xd:choice&gt;
       &lt;Person xd:script="ref Person;" /&gt;
-      &lt;Company name="string();" /&gt;  
+      &lt;Company name="string();" /&gt;
     &lt;/xd:choice&gt;
     &lt;Address xd:script="ref Address;" /&gt;
   &lt;/Owner&gt;
 
-  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" /&gt;  
+  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" /&gt;
   &lt;Address Street = "string(1,30)" Number = "optional int()" City = "string()" /&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
+
       <b>Input data:</b>
-      
-        
+
+
         <textarea name="data" rows="9" class="lined">
-&lt;Family&gt;  
-   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" /&gt;  
-   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" /&gt;  
-   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" /&gt;  
-   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" /&gt;  
+&lt;Family&gt;
+   &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13" /&gt;
+   &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18" /&gt;
+   &lt;Son      Firstname   = "Peter" Familyname = "Smith" BirthDate = "1997-01-18" /&gt;
+   &lt;Daughter Firstname   = "Mary"  Familyname = "Smith" BirthDate = "1998-12-11" /&gt;
    &lt;Address Street="Downing" Number="10" City="London"/&gt;
 &lt;/Family&gt;
 </textarea>
-      
+
       <button type="submit">Validate</button>
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
