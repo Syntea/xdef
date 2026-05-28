@@ -33,8 +33,7 @@
         multiple occurrences).
       </p>
         However, the child element "Title" must be just one (i.e., it is mandatory):
-<pre><code class="language-xml">
-&lt;Book ISBN="required int(10000000, 999999999);"
+<pre><code class="language-xml">&lt;Book ISBN="required int(10000000, 999999999);"
       published="optional gYear();" &gt;
   &lt;Author xd:script="occurs *;" &gt;
     required string(); /* name of author */"
@@ -46,8 +45,7 @@
 </code></pre>
         Since the default value of the quantifier is "required", note that the specification of this
         quantifier can be omitted:
-<pre><code class="language-xml">
-&lt;Book ISBN="int(0, 9999999999);"
+<pre><code class="language-xml">&lt;Book ISBN="int(0, 9999999999);"
       published="optional gYear();" &gt;
   &lt;Author xd:script="occurs *;" &gt; string(); &lt;/Author&gt;
     string();

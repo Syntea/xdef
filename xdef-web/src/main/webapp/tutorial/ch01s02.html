@@ -21,27 +21,38 @@
 
       <h2>1.2. Notation of quantifier (cardinality of the data item)</h2>
 
-      <p>The following table describes the possible forms of the quantifier:</p>
-<pre>
-occurs required exactly one occurrence (occurs 1)
-occurs optional zero or one occurrence (occurs 0..1)
-occurs ?        zero or one occurrence (occurs 0..1)
-occurs *        unlimited occurrence (occurs 0..*)
-occurs +        one or more occurrences (occurs 1..*)
-</pre>
-      Explicit forms of the quantifier:
-<pre>
-occurs n     exactly n occurrences
-occurs m..n  minimum m occurrences, maximum n occurrences
-occurs m..*  minimum m occurrences, maximum unlimited
-</pre>
+      The following table describes the possible forms of the quantifier:<dl>
+      <dt><code>occurs required</code></dt>
+      <dd>exactly one occurrence (<code>occurs 1</code>)</dd>
+      <dt><code>occurs optional</code></dt>
+      <dd>zero or one occurrence (<code>occurs 0..1</code>)</dd>
+      <dt><code>occurs ?</code></dt>
+      <dd>zero or one occurrence (<code>occurs 0..1</code>)</dd>
+      <dt><code>occurs *</code></dt>
+      <dd>unlimited occurrence (<code>occurs 0..*</code>)</dd>
+      <dt><code>occurs +</code></dt>
+      <dd>one or more occurrences (<code>occurs 1..*</code>)</dd>
+      </dl>
+
+      Explicit forms of the quantifier:<dl>
+      <dt><code>occurs n</code></dt>
+      <dd>exactly n occurrences</dd>
+      <dt><code>occurs m..n</code></dt>
+      <dd>minimum m occurrences, maximum n occurrences</dd>
+      <dt><code>occurs m..*</code></dt>
+      <dd>minimum m occurrences, maximum unlimited</dd>
+      </dl>
+
       <p>
-      The keyword "occurs" may by omitted. Following notations of the quantifier are equivalent:
-      &nbsp;"<code><b>occurs 10</b></code>"&nbsp; and &nbsp; "<code><b>10</b></code>".<br><br>
-      <i>Note that since the default value of the quantifier is " required ", its entry can be omitted. E.g:</i>
-      <br><code>&nbsp;&nbsp;<b>ISBN="required int(10000000, 999999999)"</b></code>
-      <br><i>can be written as:<br></i><code>&nbsp;&nbsp;<b>ISBN="int(10000000, 999999999)"</b></code>
+      The keyword "<code>occurs</code>" may by omitted. Following notations of the quantifier are equivalent:
+      "<code><b>occurs 10</b></code>" and "<code><b>10</b></code>".
+      </p><p>
+      Note that since the default value of the quantifier is "<code>required</code>", its entry can be omitted.
       </p>
+      E.g. followings are equivalent::<ul>
+        <li><code><b>ISBN="required int(10000000, 999999999)"</b></code></li>
+        <li><code><b>ISBN="int(10000000, 999999999)"</b></code></li>
+      </ul>
 
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>

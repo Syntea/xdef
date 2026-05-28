@@ -23,8 +23,7 @@
 
       <p>You can declare the data types (validation methods), methods and variables used in the X-script in
         the auxiliary element "xd:declaration" and refer to them by name:</p>
-<pre><code class="language-xml">
-&lt;xd:declaration&gt;
+<pre><code class="language-xml">&lt;xd:declaration&gt;
   type isbn int(10000000, 999999999);
   type published gYear();
   Date today = now(); /* actual date and time (when this X-definition started) */
@@ -38,12 +37,12 @@
 &lt;Book xd:script="init message('Started ' + today); finally message('Process finished');"
       ISBN="isbn();"
       published="optional published();" &gt;
-      &lt;Author xd:script="occurs *" &gt;
-        string()
-      &lt;/Author&gt;
-      &lt;Title&gt;
-        string()
-      &lt;/Title&gt;
+  &lt;Author xd:script="occurs *"&gt;
+    string()
+  &lt;/Author&gt;
+  &lt;Title&gt;
+    string()
+  &lt;/Title&gt;
 &lt;/Book&gt;
 </code></pre>
 
