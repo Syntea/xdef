@@ -107,12 +107,21 @@ public class TestExpr extends STester {
         }
     }
 
+    private String decompile(final String source, final String rule, final BNFGrammar g) {
+        parse(g, rule, source);
+        Object[] parsed = g.getParsedObjects();
+        String[] code = new String[parsed.length];
+        for (int i = 0; i < parsed.length; i++) {
+            code[i] = (String) parsed[i];
+        }
+        return TestExprDeCompiler.toSource(source, code);
+    }
+
     private static void print(final Object o) {System.out.print(o.toString());}
 
     /** Run test and print error information. */
     @Override
     public void test() {
-        String s;
         BNFGrammar g;
         g = BNFGrammar.compile(null, new File(getDataDir() + "TestExpr.bnf"), null);
         g.setUserObject(this);
@@ -141,13 +150,15 @@ if(true)return;
             assertNull(test("true", g, "print(!(true&false));"));
             assertNull(test("-1abc", g, "print( - ( ( 3 + 3 ) / 5 ) + \"abc\" );"));
             assertNull(test("1.26abc", g, "print(((3 + 3.3)/5) + 'abc');"));
-            assertNull(test("2", g, "print( - 1 + 3 );"));
+            assertNull(test("\n", g, "println();"));
+            assertNull(test("2\n", g, "println( - 1 + 3 );"));
             assertNull(test("1", g, " print(  min ( 2 , 1 ) ) ; "));
             assertNull(test("1.0", g, "print(min(2.0,1.0));"));
             assertNull(test("1.0",  g, "print(min(2,1.0));"));
             assertNull(test("1.0", g, "print(min(2.0,1));"));
             assertNull(test(String.valueOf(Math.sin(3.1)), g,"print(sin(3.1));"));
-            assertNull(test("0,269439", g, "printf('%f',(sin(3.1) + 4)/(2*3 +9));"));
+            assertNull(test(" ab\tcd ", g, "printf(' ab\tcd ');"));
+            assertNull(test("0.269439", g, "printf('%f',(sin(3.1) + 4)/(2*3 +9));"));
             assertNull(test(String.valueOf(Math.cos(3.1)), g,"print(cos(3.1));"));
             assertNull(test("true", g,"int i = 1; print(i==1 | i==3);"));
             assertNull(test("false", g,"int i = 1; print(i==1 & i==3);"));
@@ -270,6 +281,9 @@ if(true)return;
             assertEq(false, getVar("j"));
             assertEq(false, getVar("k"));
             assertEq(true, getVar("m"));
+            assertNull(test("", g, "i=true; j=\"a b c\"; k=-3.14; String s=i+j+k, t=toString(i);"));
+            assertEq("truea b c-3.14", getVar("s"));
+            assertEq("true", getVar("t"));
             assertNull(test("", g, "i=sin(3.14);"));
             assertEq(Math.sin(3.14), getVar("i"));
             assertNull(test("", g, "sin(3.14); i=1;"));
@@ -323,8 +337,8 @@ if(true)return;
             assertNull(test("", g, "for (int i=0;i<4;i++)if(i==3)switch(i){case 2: print(i);break;} else break;"));
             assertNull(test("2", g,"for(int i=0; i < 4; i++) if(i==3)break; else switch(i){case 2: print(i);break;}"));
             assertNull(test("2", g,"for(int i=0;i<4;i++)if(i==3)continue; else switch(i){case 2: print(i);continue;}"));
-            assertNull(test("01",g,
-                "for(int i=0;i<4;i++)if(i==0)switch(i){case 0:print(i);break;}else{print(i);break;}"));
+            assertNull(test("91",g,
+                "for(int i = 0; i < 4; i++) if(i == 0) switch(i){case 0: print(9);break;} else {print(i); break;}"));
             assertNull(test("0122", g,
 "for(int i=0; i < 4; i++) {\n"+
 "  if(i==3) break;\n"+
@@ -345,6 +359,11 @@ if(true)return;
 "  else break;\n"+
 "  print(i);\n"+
 "}"));
+
+            assertEq("int i = 0;", decompile("int i=0;", "program", g));
+            assertEq("i += (sin(3.14)-2)/0.5;", decompile("i += (sin(3.14) - 2) / 0.5;", "program", g));
+            assertEq("int i = 0; i += (sin(3.14)-2)/0.5;", decompile("int i=0; i+=(sin(3.14)-2) / 0.5;", "program", g));
+//            System.out.println(decompile("int i = 0; print(i + 1)", "program", g));
         } catch (Exception ex) {fail(ex);}
     }
 

@@ -9,13 +9,6 @@ import org.xdef.sys.Report;
  * @author Vaclav Trojan
  */
 public class TestExprDeCompiler {
-    /* Value types. */
-    static final int TYPE_VOID = 0;
-    static final int TYPE_BOOLEAN = 1;
-    static final int TYPE_INT = 2;
-    static final int TYPE_FLOAT = 3;
-    static final int TYPE_STRING = 4;
-    static final int TYPE_OBJECT = 5;
 
     /** Create source code from generated code.
      * @param source source text.
@@ -39,6 +32,11 @@ public class TestExprDeCompiler {
         for (int i = 0; i < code.length; i++) {
             String item = code[i].toString();
             if (item.startsWith("info: ")) { // parsed position
+                if (!stack.isEmpty()) {
+                    result.append(stack.pop()._s);
+                    result.append("; ");
+                    stack.clear();
+                }
                 continue;
             }
             String[] ii = ((String) code[i]).split(" ");
@@ -49,7 +47,7 @@ public class TestExprDeCompiler {
             if (level == 7) { // assignment
                 String s = stack.pop()._s;
                 String name = stack.pop()._s;
-                String assOp =  " " + new Operation(item.substring(3)).getOperator().trim() + "= ";
+                String assOp =  new Operation(item.substring(3)).getOperator().trim() + "=";
                 stack.push(new SourceItem(name + ' ' + assOp + ' ' + s));
             } else if (level == 6) { // unary
                 SourceItem x = stack.peek();
@@ -78,24 +76,10 @@ public class TestExprDeCompiler {
                 x._s = x._s + (item.startsWith("INC") ? "++" : "--");
             } else if (item.endsWith("type")) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                if ("boolean".equals(s) || "int".equals(s) || "float".equals(s)
-                    || "String".equals(s) || "Object".equals(s)) { // type decl
-                    char ch = item.charAt(0);
-                    if (i + 1 < code.length && ((String)code[i + 1]).startsWith("name ")) {
-                        ii = code[++i].toString().split(" ");
-                        String name = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                        int type = ch == 'B' ? TYPE_BOOLEAN
-                            : ch == 'I' ? TYPE_INT
-                            : ch == 'F' ? TYPE_FLOAT
-                            : ch == 'S' ? TYPE_STRING
-                            : TYPE_OBJECT;
-                        SourceItem val = new SourceItem("");
-                        variables.put(name, val);
-                        val = new SourceItem(
-                            new String[] {"", "boolean", "int", "float", "String", "Object"} [type] + " " + name);
-                        stack.push(val);
-                    }
-                }
+                ii = code[++i].toString().split(" ");
+                String name = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
+                variables.put(name, new SourceItem(""));
+                stack.push(new SourceItem(s + " " + name));
             } else if ("paramList".equals(item)) { // parameter list
                 stackOfStack.push(stack);
                 stackOfStack.push(new Stack<>());
@@ -159,8 +143,8 @@ public class TestExprDeCompiler {
             }
         }
         if (!stack.isEmpty()) {
-            result.append(stack.pop());
-            stack.clear();
+            result.append(stack.pop()._s);
+            result.append(";");
         }
         return result.toString().trim();
     }
