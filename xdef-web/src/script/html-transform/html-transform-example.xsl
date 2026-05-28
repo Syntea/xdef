@@ -112,6 +112,9 @@
 <xsl:template mode="content" match="h:input[@type = 'hidden' and @name = 'mode']">
 </xsl:template>
 
+<xsl:template mode="content" match="h:input[@type = 'submit' and @name = 'view' and @value='Display as html']">
+</xsl:template>
+
 <xsl:template mode="content" match="text()[. = 'X-definition']">
     <xsl:text>X-definition:</xsl:text>
 </xsl:template>
