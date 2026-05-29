@@ -28,23 +28,25 @@
       </p>
       Java code:
       <pre><code class="language-java">// 1. compile X-definition sources and generate X-components
-  File xdef =  ...; File data = ...;
-  XDPool xpool = XDFactory.compileXD(null, xdef);
-  XDDocument xdoc = xpool.createXDDocument("Test");
-  ... compile generated X-components ...
+File       xdef  = …;
+File       data  = …;
+XDPool     xpool = XDFactory.compileXD(null, xdef);
+XDDocument xdoc  = xpool.createXDDocument("Test");
+=== compile generated X-components ===
 
 // 2. parse the input data and get the instance of Xcopmponent
-  test.book.Book book = (test.book.Book) xdoc.parseXComponent(data, null, null);
-  System.out.println("Book: " + book.gettitle() + ", ISBN = " + book.getISBN());
+test.book.Book book = (test.book.Book) xdoc.parseXComponent(data, null, null);
+System.out.println("Book: " + book.gettitle() + ", ISBN = " + book.getISBN());
 </code></pre>
       The result XML document if the file with data is written:
       <pre><code class="language-xml">&lt;Book ISBN="123456789"
-      year="2020"
+      year  = "2020"
       title = "X-definitions" &gt;
   &lt;author&gt;Tomáš Šmíd&lt;/author&gt;
-&lt;/Book&gt;</code></pre>
+&lt;/Book&gt;
+</code></pre>
       <p>
-      you can get the instance of X-component from data by method
+      You can get the instance of X-component from data by method
       xparseXComponent from XDDocument.
       </p>
       The printed result will be:

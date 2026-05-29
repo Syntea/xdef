@@ -22,7 +22,7 @@
       Home = file(); finally outln("Home directory: " + getText());
       Authority = enum("MANAGER", "CLIENT", "UNREGISTRED"); finally outln("authority: " + getText());
       ReceiverSleep = optional int(1, 3600); /* default value is 10 */
-    [Server] %script = optional
+    [Server] optional
       RemoteServerURL = url()
       SeverIP = ipAddr()
       Signature = SHA1()

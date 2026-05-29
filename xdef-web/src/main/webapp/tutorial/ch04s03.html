@@ -30,9 +30,9 @@
 [User]
 Home = D:/TRS_Client/usr/Smith
 # authority(SECURITY | SOFTWARE | CLIENT | UNREGISTRED)
-Authority=CLIENT
+Authority = CLIENT
 [Server]
-RemoteServerURL=http://localhost:8080/TRS/TRSServer
+RemoteServerURL = http://localhost:8080/TRS/TRSServer
 SeverIP = 123.45.67.8
 Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
 </code></pre>
@@ -42,21 +42,21 @@ Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
       section "Server" are optional.
       </p>
       X-definition:
-      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS" &gt;
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS"&gt;
   &lt;xd:ini name="TRS"&gt;
     TRSUser = string(); /* user name */
     [User]
        Home = file(); /* user home directory */
        Authority = enum("MANAGER", "CLIENT", "UNREGISTRED"); finally outln("authority: " + getText());
        ReceiverSleep = optional int(1, 3600); /* default value is 10 */
-    [Server] %script = optional;
+    [Server] optional;
       RemoteServerURL = url();
       SeverIP = ipAddr();
       Signature = SHA1();
   &lt;/xd:ini&gt;
 &lt;/xd:def&gt;
 </code></pre>
-      
+
       <p>
       You can try it <a href="ch04s03e00.html"><b>HERE</b></a>.
       </p>
