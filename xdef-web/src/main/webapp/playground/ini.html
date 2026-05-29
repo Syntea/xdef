@@ -24,23 +24,23 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test">
 
   &lt;xd:ini name="test">
-TRSUser = string(); finally outln("TRS user: " + getText());
-[User]
-  Home = file(); finally outln("Home directory: " + getText());
-  Authority = enum("MANAGER","CLIENT","UNREGISTRED"); finally outln("Authority: " + getText());
-  ReceiverSleep = int(1, 3600)
-[Server]
-  RemoteServerURL = url()
-  SeverIP = ipAddr()
-  SendMailHost = domainAddr()
-  MailAddr = emailAddr()
-  Signature = SHA1()
+    TRSUser = string(); finally outln("TRS user: " + getText());
+    [User]
+      Home = file(); finally outln("Home directory: " + getText());
+      Authority = enum("MANAGER","CLIENT","UNREGISTRED"); finally outln("Authority: " + getText());
+      ReceiverSleep = int(1, 3600)
+    [Server]
+      RemoteServerURL = url()
+      SeverIP = ipAddr()
+      SendMailHost = domainAddr()
+      MailAddr = emailAddr()
+      Signature = SHA1()
   &lt;/xd:ini>
 
 &lt;/xd:def>
 </textarea>
 
-<b>INI input data:</b>
+<b>Input INI data:</b>
 <input name="dataFormat" value="ini" type="hidden"/>
 <textarea name="data" rows="19" class="lined">
 ############# TRS configuration #############

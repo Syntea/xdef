@@ -27,7 +27,7 @@
       so can this way access data declared in the model.
       </p>
       Let's have a simple X-definition:
-<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Book" &gt;
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Book" &gt;
   &lt;Book ISBN="int(100000000, 9999999999);"
       year = "gYear();"
       title = "string();" &gt;
@@ -38,9 +38,13 @@
   &lt;/xd:component&gt;
 &lt;/xd:def&gt;
 </code></pre>
+      <p>
       In the example was declared component "Book", which will be generated to
-      the package "test.book". It contains the following getters and setters in the Java source code:
-<pre><code class="language-java">package test.book;
+      the package "test.book". It contains the following getters and setters in the Java source code.
+      </p>
+      Generated Java code:
+      <pre><code class="language-java">package test.book;
+
 public class Book implements org.xdef.component.XComponent {
   public String getISBN() {...}
   public setISBN(String x) {...}
@@ -53,11 +57,10 @@ public class Book implements org.xdef.component.XComponent {
   ...
 </code></pre>
       <p>
-      Note that the instances of X-component class implements the interface java.io.Serializable, so
-      it is possible to write them to a stream and to get them back. This makes X-component usefull
+      Note that the instances of X-component class implements the interface <code>java.io.Serializable</code>, so
+      it is possible to write them to a stream and to get them back. This makes X-component useful
       as a general form of XML, JSON, or INI data.
       </p>
-
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

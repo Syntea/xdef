@@ -21,31 +21,30 @@
 
       <h2>4.4. CSV comma-separated values</h2>
 
+      <p>
       Let's have the data below in comma-separated values (CSV) format.
-      <br><br>
-      <i>
-      Note that the first row of data contains the column names in the
-      following rows.
-      <br><br>
+      </p><p>
+      Note that the first row of data contains the column names in the following rows.
+      </p><p>
       Also note that some values are not included in the row (e.g.,
       an email address or phone number may be omitted). Only the data in
       the column name (the first column) is required.
-      </i>
-      <br><br>
-      <font size="1">
-<pre>
-Name, Email Address, Mobile Number
+      </p>
+      Input CSV data:
+      <pre><code class="language-plaintext">Name, Email Address, Mobile Number
 John Smith, john.smith@smith.com, +1 2345 67 89 01
 , nobody@somewhere.org, +89 987 654 321
 Somebody, ,
 , , 98765412
 Pamela Green, pamela-G@data.org, +49 123 456 789
 Mary Green, mg@data.org, +49 1234 567 890
-</pre>
-      </font>
+</code></pre>
+      <p>
       The first line of CSV data contains names of columns of data items. Model
-      of CSV data is described as array of JSON/XON values:
-<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
+      of CSV data is described as array of JSON/XON values.
+      </p>
+      X-definition:
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
   &lt;xd:json name="test"&gt;
     [
       # header line:
@@ -58,8 +57,9 @@ Mary Green, mg@data.org, +49 1234 567 890
   &lt;/xd:json&gt;
 &lt;/xd:def&gt;
 </code></pre>
-      You can try it <a href="ch04s04e00.html"><b>HERE</b></a>
-
+      <p>
+      You can try it <a href="ch04s04e00.html"><b>HERE</b></a>.
+      </p>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

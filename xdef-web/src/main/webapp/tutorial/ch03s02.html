@@ -21,15 +21,14 @@
 
       <h2>3.2. Construction of data from previous slide</h2>
 
-
       <p>
-        You will notice that the X definition describes the document model to be created.
-        The result is created from the input data as described in the "create" section of the X script.
+      You will notice that the X definition describes the document model to be created.
+      The result is created from the input data as described in the "create" section of the X script.
+      </p><p>
+      Note the example below plots a trace of the input data according to the code in the X-definition.
       </p>
-        Note the example below plots a trace of the input data according to the codel in
-        the X-definition:
-<pre><code class="language-xml">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" &gt;
+      X-definition:
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" &gt;
   &lt;Contract ProcessedDate="required; create toString(now(),'yyyy-MM-dd HH:mm');"
       ConractId="required num(10); create from('@num');" &gt;
     &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');"
@@ -45,14 +44,15 @@
   &lt;/Contract&gt;
 &lt;/xd:def&gt;
 </code></pre>
+
       Input data:
-<pre><code class="language-xml">&lt;Contract num="0123456789"&gt;
+      <pre><code class="language-xml">&lt;Contract num="0123456789"&gt;
   &lt;Client role="1" name="Some Company Ltd" cId="12345678" /&gt;
   &lt;Client role="2" firstname="John" familyname="Smith" pId="311270/1234" /&gt;
   &lt;Client role="3" firstname="Fred" familyname="Brown" personalId="311270/1234" cId="87654321" /&gt;
 &lt;/Contract&gt;</code></pre>
       <p>
-        You can try it <a href="ch03s02e00.html"><b>HERE</b></a>
+      You can try it <a href="ch03s02e00.html"><b>HERE</b></a>.
       </p>
 
 
