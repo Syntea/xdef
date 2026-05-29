@@ -51,6 +51,10 @@ pre {
     background-color:   white;
 }
 
+div.technicalInfo {
+    margin-top:         2em;
+}
+
 div.resizable {
     resize:             vertical;
     overflow:           auto;
