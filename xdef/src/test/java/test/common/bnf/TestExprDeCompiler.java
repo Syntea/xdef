@@ -32,13 +32,14 @@ public class TestExprDeCompiler {
         for (int i = 0; i < code.length; i++) {
             String item = code[i].toString();
             if (item.startsWith("info: ")) { // parsed position
-                SourceItem[] items = new SourceItem[stack.size()];
-                stack.toArray(items);
-                for (SourceItem x: items) {
+                for (SourceItem x: stack.toArray(new SourceItem[0])) {
                     String s = x._s;
-                    if (s.endsWith(" else")) {
-                        s = s.substring(0, s.length() - 6) + "; else ";
-                    } else if (!s.startsWith("if (")) {
+                    if (s.endsWith(" else{") || s.endsWith(" else{")) {
+                        s = s.substring(0, s.length() - 6) + " else ";
+                    } else if (s.endsWith(" else")) {
+                        s = s.substring(0, s.length() - 5) + "; else ";
+                    } else if (!s.startsWith("if (") && !s.endsWith("}") && !s.startsWith("do ")
+                        && !s.startsWith("switch(") && !s.endsWith(") {") && !s.endsWith(": ")) {
                         s += "; ";
                     }
                     result.append(s);
@@ -108,24 +109,19 @@ public class TestExprDeCompiler {
                 stack.push(new SourceItem(s.toString()));
             } else if ("intConst".equals(item)) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                SourceItem x = new SourceItem(s);
-                stack.push(x);
+                stack.push(new SourceItem(s));
             } else if ("fltConst".equals(item)) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                SourceItem x = new SourceItem(s);
-                stack.push(x);
+                stack.push(new SourceItem(s));
             } else if ("boolConst".equals(item)) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                SourceItem x = new SourceItem(s);
-                stack.push(x);
+                stack.push(new SourceItem(s));
             } else if ("strConst".equals(item)) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                SourceItem x = new SourceItem(s);
-                stack.push(x);
+                stack.push(new SourceItem(s));
             } else if ("nullConst".equals(item)) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
-                SourceItem x = new SourceItem(s);
-                stack.push(x);
+                stack.push(new SourceItem(s));
             } else if ("name".equals(item)) {
                 String s = source.substring(Integer.parseInt(ii[1]), Integer.parseInt(ii[2]));
                 stack.push(new SourceItem(s));
@@ -138,13 +134,48 @@ public class TestExprDeCompiler {
                         result.append(Report.error("", "Stack item: " + stack.pop()).toString());
                     }
                 }
-            } else if ("boolexpr".equals(item)) {  //???
+            } else if ("blokStart".equals(item)) {
+                stack.peek()._s += "{";
+            } else if ("blok".equals(item)) {
+                stack.peek()._s += ";}";
             } else if ("if".equals(item)) {
             } else if ("if1".equals(item)) {
                 stack.peek()._s = "if (" + stack.peek()._s + ") ";
             } else if ("else".equals(item)) {
                 stack.peek()._s += " else";
+            } else if ("continue".equals(item)) {
+                stack.peek()._s += " continue; ";
+            } else if ("break".equals(item)) {
+                String s = stack.peek()._s;
+                if (!s.isEmpty() && !s.endsWith("}") && !s.endsWith(";") && !s.endsWith(") ")) {
+                    s += ";";
+                }
+                stack.peek()._s = s + " break; ";
             } else if ("endIf".equals(item)) {
+            } else if ("do".equals(item)) {  //???
+                stack.push(new SourceItem("do "));
+            } else if ("doExpr".equals(item)) {  //???
+                String s = stack.peek()._s;
+                if (!s.endsWith("}")) {
+                    s += ";";
+                }
+                stack.peek()._s = s + " while (";
+            } else if ("endDo".equals(item)) {  //???
+                stack.peek()._s += ")";
+            } else if ("switch".equals(item)) {  //???
+                stack.push(new SourceItem("switch("));
+            } else if ("switchBody".equals(item)) {  //???
+                stack.peek()._s += ") {";
+            } else if ("case".equals(item)) {  //???
+                stack.peek()._s = "case " + stack.peek()._s  + ": ";
+            } else if ("default".equals(item)) {  //???
+                stack.peek()._s += "dafault: ";
+            } else if ("endSwitch".equals(item)) {  //???
+                String s = stack.peek()._s;
+                if (!s.isEmpty() && !s.endsWith("}") && !s.endsWith(";")) {
+                    s += ";";
+                }
+                stack.peek()._s =  s + "}";
             } else if ("nop".equals(item)) {  //???
             } else if ("jmptf".equals(item)) {  //???
             } else if ("jmp".equals(item)) {  //???
@@ -154,28 +185,27 @@ public class TestExprDeCompiler {
             }
         }
         if (!stack.isEmpty()) {
-            result.append(stack.pop()._s);
-            result.append(";");
+            SourceItem[] items = new SourceItem[stack.size()];
+            stack.toArray(items);
+            for (int i = 0; i < items.length - 1; i++) {
+                result.append(items[i]._s);
+            }
+            String s = items[items.length - 1]._s;
+            if (!s.endsWith("}")) {
+                s += ';';
+            }
+            result.append(s);
         }
         return result.toString().trim();
     }
 
-    static void printCode(Object[] code) {
-        for (int i = 0; code != null && i < code.length; i++) {
-            System.out.printf("%3d: ", i);
-            System.out.println(code[i]);
-        }
-    }
-
     /** Contains information about operator. */
     private static final class Operation {
-        /** Level of operator */
-        final int _level;
-        /** String value of operator.*/
-        final String value;
+        private final int _level; // Level of operator
+        private final String value; //String value of operator
 
         /** Create this object from code item. */
-        Operation(final String item) {
+        private Operation(final String item) {
             char ch;
             int ndx = item.indexOf(' ');
             String code = ndx > 0 ? item.substring(0, ndx) : item;
@@ -216,9 +246,7 @@ public class TestExprDeCompiler {
                 value = "";
             }
         }
-
-        final int getLevel() {return _level;}
-
-        final String getOperator() {return value;}
+        private int getLevel() {return _level;}
+        private String getOperator() {return value;}
     }
 }

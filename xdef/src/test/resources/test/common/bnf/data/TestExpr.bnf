@@ -90,7 +90,8 @@ varcmd        ::= vardecl | assign | incdec
 simplecmd     ::= varcmd | method
 
 command       ::= S ( $info (( (simplecmd | do) )?  S ";" ) | (if | while | for | switch | break | continue) )
-blok          ::= S "{" command* S "}"
+blok          ::= S blokStart $rule
+blokStart         ::=  "{" $rule command* S "}"
 statement     ::= command | blok
 continue      ::= "continue" S ";" $rule
 break         ::= "break" S ";" $rule

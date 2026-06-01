@@ -133,9 +133,9 @@ public class TestExpr extends STester {
             g.trace(null);
 /**
            _displayCode = true;
-            assertEq("int i = 0; if (i==0) print(1+2);", decompile("int i=0; if(i == 0) print(1 + 2);", "program", g));
-            assertEq("int i = 0; if (i==0) print(1; else print(2);",
-                decompile("int i=0;if(i==0)print(1);else print(2);","program",g));
+//            assertEq("int i = 0; switch(i) {case 1: print(1); break; dafault: print(0);}",
+//                decompile("int i=0; switch(i) {case 1: print(1); break; default: print(0);}", "program", g));
+//            assertEq("if (true) {print(1);} else print(2);}", decompile("if(true){print(1);}else{print(2);}", "program", g));
 //print((Math.sin(3.1) + 4)/(2*3 +9));
 //            assertNull(test("0.269438710828886", g, "print((sin(3.1) + 4)/(2*3 +9));"));
 if(true)return;
@@ -366,15 +366,31 @@ if(true)return;
 "  else break;\n"+
 "  print(i);\n"+
 "}"));
-
             assertEq("print(1+2);", decompile("print(1 + 2);", "program", g));
+            assertEq("print(min(3, 14)); println('x');", decompile("print(min(3,14)); println('x');", "program", g));
+            assertEq("int i = 0; if (i==0) {print(1+2);}", decompile("int i=0; if(i==0){print(1 + 2);}", "program", g));
             assertEq("int i = 0;", decompile("int i=0;", "program", g));
             assertEq("i += (sin(3.14)-2)/0.5;", decompile("i += (sin(3.14) - 2) / 0.5;", "program", g));
             assertEq("int i = 0; print(i+1);", decompile("int i=0; print(i + 1);", "program", g));
             assertEq("int i = 0; i += (sin(3.14)-2)/0.5;", decompile("int i=0; i+=(sin(3.14)-2) / 0.5;", "program", g));
             assertEq("int i = 0; if (i==0) print(1+2);", decompile("int i=0; if(i == 0) print(1 + 2);", "program", g));
-            assertEq("int i = 0; if (i==0) print(1; else print(2);",
-                decompile("int i=0;if(i==0)print(1);else print(2);", "program", g));
+            assertEq("int i = 0; if (i==0) print(1); else print(2);",
+                decompile("int i=0;if(i==0)print(1);else print(2);","program",g));
+            assertEq("if (true) {print(1);} else print(2);}",
+                decompile("if(true){print(1);}else{print(2);}", "program", g));
+            assertEq("if (true) print(1); else print(2);", decompile("if(true)print(1);else print(2);", "program", g));
+            assertEq("int i = 1; do print(i); while (i++<2);",
+                decompile("int i=1;do print(i);while(i++<2);", "program", g));
+            assertEq("int i = 1; do {print(i);} while (i++<2);",
+                decompile("int i=1;do{print(i);}while(i++<2);", "program", g));
+            assertEq("int i = 1; int j = 1; do do print(j); while (i++<2); while (j++<2);",
+                decompile("int i=1; int j=1; do do print(j); while (i++ < 2); while (j++<2) ;", "program", g));
+            assertEq("int i = 1; do {if (i==1)  continue; print(i);} while (i++<2);",
+                decompile("int i=1; do {if (i == 1) continue; print(i);}while (i++ < 2);", "program", g));
+            assertEq("int i = 1; do {if (i==1)  break; print(i);} while (i++<2);",
+                decompile("int i=1; do {if (i == 1) break; print(i);}while (i++ < 2);", "program", g));
+            assertEq("int i = 0; switch(i) {case 1: print(1); break; dafault: print(0);}",
+                decompile("int i=0; switch(i) {case 1: print(1); break; default: print(0);}", "program", g));
         } catch (Exception ex) {fail(ex);}
     }
 
