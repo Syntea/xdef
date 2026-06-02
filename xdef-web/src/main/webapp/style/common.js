@@ -73,19 +73,19 @@ export function initPageBasicLinedHili(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function footVerActivate() {
-    $("#footVerPas").css("display", "none");
-    $("#footVerAct").css("display", "inline");
+export function footerVersionActivate() {
+    $("#footerVersionPas").css("display", "none");
+    $("#footerVersionAct").css("display", "inline");
 }
 
-export function footVerDeactivate() {
-    $("#footVerPas").css("display", "inline");
-    $("#footVerAct").css("display", "none");
+export function footerVersionDeactivate() {
+    $("#footerVersionPas").css("display", "inline");
+    $("#footerVersionAct").css("display", "none");
 }
 
-export function headLangActivate() {
-    $(".headLangPas").css("display", "none");
-    $(".headLangAct").css("display", "inline");
+export function headerLangActivate() {
+    $(".headerLangPas").css("display", "none");
+    $(".headerLangAct").css("display", "inline");
 }
 
 
@@ -98,6 +98,6 @@ window.initPageBasic            = initPageBasic;
 window.initPageBasicLined       = initPageBasicLined;
 window.initPageBasicHili        = initPageBasicHili;
 window.initPageBasicLinedHili   = initPageBasicLinedHili;
-window.footVerActivate          = footVerActivate;
-window.footVerDeactivate        = footVerDeactivate;
-window.headLangActivate         = headLangActivate;
+window.footerVersionActivate    = footerVersionActivate;
+window.footerVersionDeactivate  = footerVersionDeactivate;
+window.headerLangActivate       = headerLangActivate;
