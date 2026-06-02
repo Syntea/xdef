@@ -17,9 +17,12 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
+</div>
 <textarea name="xdef" rows="21" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" name = "Example" root = "test">
   &lt;xd:json name = "test">
@@ -45,14 +48,18 @@ Somebody, ,
 , , 98765412
 </textarea>
 
+<div>
 Process csv-header line:
 <select name="csvHeader">
     <option value="yes">yes</option>
-    <option value="no">no</option>
-</select><br/>
+    <option value="no" >no</option>
+</select>
+</div><div>
 Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
-(subset of json, xon, yaml, xml, csv, ini)<br/>
+(subset of json, xon, yaml, xml, csv, ini)
+</div><div>
 <button type="submit">Validate</button>
+</div>
 
 </form>
 

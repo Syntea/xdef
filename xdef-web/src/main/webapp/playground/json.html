@@ -17,9 +17,12 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
+</div>
 <textarea name="xdef" rows="21" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" name = "Example" root = "test">
    &lt;xd:json name = "test">
@@ -38,14 +41,17 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 &lt;/xd:def>
 </textarea>
 
-<b>Input data:</b> (json, xon, yaml data can be also in format "xon-xml")<br/>
+<div>
+<b>Input data:</b> (json, xon, yaml data can be also in format "xon-xml")
+</div><div>
 Format: <select name="dataFormat">
-    <option selected="selected">json</option>
-    <option>xon</option>
-    <option>yaml</option>
-    <option>csv</option>
-    <option>ini</option>
+    <option value="json" selected="selected">json</option>
+    <option value="xon">xon</option>
+    <option value="yaml">yaml</option>
+    <option value="csv">csv</option>
+    <option value="ini">ini</option>
 </select>
+</div>
 <textarea name="data" rows="20" class="lined">
 [
   { "Date": "2020-02-22"},
@@ -63,9 +69,12 @@ Format: <select name="dataFormat">
 ]
 </textarea>
 
+<div>
 Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
-(subset of json, xon, yaml, xml, csv, ini)<br/>
+(subset of json, xon, yaml, xml, csv, ini)
+</div><div>
 <button type="submit">Validate</button>
+</div>
 
 </form>
 

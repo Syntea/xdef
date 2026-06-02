@@ -67,6 +67,12 @@ export function initPageBasicHili(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
+export function initPageBasicLinedHili(completeFooter, completeHeader) {
+    $("textarea.lined").linenumbers();
+    hljs.highlightAll();
+    loadHeaderFooter(completeFooter, completeHeader);
+}
+
 export function footVerActivate() {
     $("#footVerPas").css("display", "none");
     $("#footVerAct").css("display", "inline");
@@ -91,6 +97,7 @@ setTimeout(function() { $(".errorVD").css("visibility", "visible"); }, 1000);
 window.initPageBasic            = initPageBasic;
 window.initPageBasicLined       = initPageBasicLined;
 window.initPageBasicHili        = initPageBasicHili;
+window.initPageBasicLinedHili   = initPageBasicLinedHili;
 window.footVerActivate          = footVerActivate;
 window.footVerDeactivate        = footVerDeactivate;
 window.headLangActivate         = headLangActivate;
