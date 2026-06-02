@@ -164,7 +164,7 @@ div.header ul.headerNav > li.headerLogo {
 
 /* based on jquery.textarea-with-linenumbers.css - edited */
 /*========================================================*/
-textarea.lined {
+textarea.linenumbers {
     display:            block;
     resize:             vertical;
     width:              100%;

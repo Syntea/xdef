@@ -18,7 +18,7 @@
 
     <form method="post" action="../../../playground/Playground">
       <b>X-definition:</b>
-      <textarea name="xdef" rows="13" class="lined">
+      <textarea name="xdef" rows="13" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
   &lt;xd:json name="test"&gt;
 { "Matrix" :
@@ -33,7 +33,7 @@
 </textarea>
       <b>JSON input data:</b>
       <input name="dataFormat" value="json" type="hidden"/>
-      <textarea name="data" rows="8" class="lined">
+      <textarea name="data" rows="8" class="linenumbers">
 { "Matrix" :
     [
        [ 1, -5, 3.14e-3  ],
@@ -51,6 +51,6 @@
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-    <script type="module">initPageBasicLined()</script>
+    <script type="module">initPageBasicLnums()</script>
   </body>
 </html>

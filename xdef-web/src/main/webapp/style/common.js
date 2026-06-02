@@ -57,8 +57,8 @@ export function initPageBasic(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function initPageBasicLined(completeFooter, completeHeader) {
-    $("textarea.lined").linenumbers();
+export function initPageBasicLnums(completeFooter, completeHeader) {
+    $("textarea.linenumbers").linenumbers();
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
@@ -67,8 +67,8 @@ export function initPageBasicHili(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function initPageBasicLinedHili(completeFooter, completeHeader) {
-    $("textarea.lined").linenumbers();
+export function initPageBasicLnumsHili(completeFooter, completeHeader) {
+    $("textarea.linenumbers").linenumbers();
     hljs.highlightAll();
     loadHeaderFooter(completeFooter, completeHeader);
 }
@@ -95,9 +95,9 @@ setTimeout(function() { $(".errorVD").css("visibility", "visible"); }, 1000);
 
 //exports to window
 window.initPageBasic            = initPageBasic;
-window.initPageBasicLined       = initPageBasicLined;
+window.initPageBasicLnums       = initPageBasicLnums;
 window.initPageBasicHili        = initPageBasicHili;
-window.initPageBasicLinedHili   = initPageBasicLinedHili;
+window.initPageBasicLnumsHili   = initPageBasicLnumsHili;
 window.footerVersionActivate    = footerVersionActivate;
 window.footerVersionDeactivate  = footerVersionDeactivate;
 window.headerLangActivate       = headerLangActivate;

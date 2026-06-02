@@ -23,7 +23,7 @@ string as XPATH expression.
       <b>X-definition:</b>
 
 
-        <textarea name="xdef" rows="17" class="lined">
+        <textarea name="xdef" rows="17" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" &gt;
   &lt;Contract ProcessedDate="required dateTime(); create now();"
        ConractId="required num(10); create from('@num');" &gt;
@@ -44,7 +44,7 @@ string as XPATH expression.
       <b>Input data:</b>
 
 
-        <textarea name="data" rows="16" class="lined">
+        <textarea name="data" rows="16" class="linenumbers">
 &lt;Contract num = "0123456789"&gt;
   &lt;Client role       = "1"
       name       = "Some Company Ltd"
@@ -69,6 +69,6 @@ string as XPATH expression.
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-    <script type="module">initPageBasicLined()</script>
+    <script type="module">initPageBasicLnums()</script>
   </body>
 </html>
