@@ -74,7 +74,9 @@ public class TestExprCompiler {
     static final byte METHOD_OP = PARAM_OP + 1;
     static final byte FUNCTION_OP = METHOD_OP + 1;
     static final byte COMMAND_OP = FUNCTION_OP + 1;
-    static final byte SWITCHBODY_OP = COMMAND_OP + 1;
+    static final byte BLOKSTART_OP = COMMAND_OP + 1;
+    static final byte BLOK_OP =BLOKSTART_OP + 1;
+    static final byte SWITCHBODY_OP = BLOK_OP + 1;
 
     /* Predefined functions and methods. */
     static final byte ABS = SWITCHBODY_OP + 10; //Math.abs(x)
@@ -171,6 +173,8 @@ public class TestExprCompiler {
         _codes.put("method", METHOD_OP);
         _codes.put("function", FUNCTION_OP);
         _codes.put("command", COMMAND_OP);
+        _codes.put("blokStart", BLOKSTART_OP);
+        _codes.put("blok", BLOK_OP);
         _codes.put("switchBody", SWITCHBODY_OP); //switch(){...}
 
         // predefined functions and methods
@@ -473,6 +477,8 @@ public class TestExprCompiler {
                     result[i] = new CodeItem(item, s);
                     continue;
                 }
+                case "blokStart": result[i] = new CodeItem("nop", 101); continue;
+                case "blok": result[i] = new CodeItem("nop", 100); continue;
                 case "name": result[i] = new CodeItem(item, s); continue;
                 default: result[i] = new CodeItem(item, item.endsWith("type")? s: null);
             }
