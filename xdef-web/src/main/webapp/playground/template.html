@@ -21,10 +21,13 @@ X-definition example of template model (construction mode).
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
-<textarea name="xdef" rows="24" class="lined">
+</div>
+<textarea name="xdef" rows="24" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" root="html" name="Example">
   &lt;!-- Note the value of the attribute script below is "template"
      so following element a template model. -->
@@ -41,30 +44,33 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
       &lt;/h2>
       &lt;h3>This is the example of template model in the construction mode.&lt;/h3>
       &lt;i> This text is taken from the text value of the element &amp;lt;Input&amp;gt;: &lt;/i>
-      &lt;h1> $$$script: create from("/Input/text()"); &lt;/h1>    
+      &lt;h1> $$$script: create from("/Input/text()"); &lt;/h1>
     &lt;/body>
   &lt;/html>
 &lt;/xd:def>
 </textarea>
 
 <b>Input data:</b>
-<textarea name="data" rows="10" class="lined">
+<textarea name="data" rows="10" class="linenumbers">
 &lt;Input>
   Hello world!
 &lt;/Input>
 </textarea>
 
-The model name: <input name="modelName" value="" type="text"/>
+<div>
+Compose a model with name: <input name="modelName" value="" type="text"/>
 and namespace: <input name="modelURI" value="" type="text"/>
-(enter if non-default model required)<br/>
+(enter if non-default model required)
+</div><div>
 <button name="mode" value="compose" type="submit">Compose from template</button>
+</div>
 
 </form>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined();</script>
+<script type="module">initPageBasicLnums();</script>
 
 </body>
 </html>

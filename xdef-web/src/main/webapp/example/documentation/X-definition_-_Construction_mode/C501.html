@@ -1,0 +1,43 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition — Construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition — Construction mode</div>
+
+    <form method="post" action="../../../playground/Playground">
+
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="16" class="linenumbers">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
+&lt;xd:declaration&gt;
+&lt;![CDATA[
+  Element source = xparse("&lt;X a='a'&gt;&lt;X&gt;&lt;X a='b'/&gt;&lt;/X&gt;&lt;X&gt;&lt;X a='c'/&gt;&lt;/X&gt;&lt;/X&gt;");
+]]&gt;
+&lt;/xd:declaration&gt;
+&lt;A xd:script="create source"&gt;
+  &lt;B xd:script="create from('@a')"&gt;
+    string; create from('text()');
+  &lt;/B&gt;
+  &lt;C xd:script="occurs *; create from('X/X')"&gt;
+    string; create from('@a');
+  &lt;/C&gt;
+&lt;/A&gt;
+&lt;/xd:def&gt;
+</textarea>
+
+      <button name="mode" value="compose" type="submit">Compose</button>
+
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

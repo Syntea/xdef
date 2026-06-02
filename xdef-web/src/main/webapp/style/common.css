@@ -5,7 +5,7 @@ body {
     background-color:   #e6f7ff;
 }
 
-code, input, textarea, button {
+code, input, select, option, button {
     font-size:          1rem;
 }
 
@@ -51,6 +51,10 @@ pre {
     background-color:   white;
 }
 
+div.technicalInfo {
+    margin-top:         2em;
+}
+
 div.resizable {
     resize:             vertical;
     overflow:           auto;
@@ -65,13 +69,13 @@ div.resizable iframe {
 
 span.error {
     color:              red;
-    font-weight:        bold;                 
+    font-weight:        bold;
 }
 
 /* VD - visibility delayed, see common.js */
 span.errorVD {
     color:              red;
-    font-weight:        bold;                 
+    font-weight:        bold;
     visibility:         hidden;
 }
 
@@ -89,7 +93,7 @@ div.footer {
     font-size:          0.8em;
 }
 
-span#footVerAct {
+span#footerVersionAct {
     display:            none;
 }
 
@@ -110,7 +114,7 @@ div.header {
     opacity:            0.9;
 }
 
-div.header div.headLang {
+div.header div.headerLang {
     text-align:         right;
     float:              right;
     margin-top:         0.5em;
@@ -119,40 +123,47 @@ div.header div.headLang {
     cursor:             pointer;
 }
 
-div.header div.headLang, div.header div.headLang select {
+div.header div.headerLang, div.header div.headerLang select {
     font-size:          85%;
 }
 
-div.header div.headLang img {
+div.header div.headerLang img {
     height:             1em;
 }
 
-.headLangAct {
+.headerLangAct {
     display:            none;
 }
 
-div.header div.headLogo {
-    position:           absolute;;
+div.header div.headerLogo {
+    position:           absolute;
 }
 
-div.header div.headLogo img {
+div.header div.headerLogo img {
     height:             4em;
+    transition:         transform .2s ease;
+    transform-origin:   top left;
+    transform:          scale(1);
 }
 
-div.header ul.headNav {
+div.header div.headerLogo:hover img {
+    transform:          scale(2);
+}
+
+div.header ul.headerNav {
     margin:             0;
     padding:            0;
     list-style-type:    none;
 }
 
-div.header ul.headNav > li {
+div.header ul.headerNav > li {
     height:             4em;
     display:            inline-flex;
     align-items:        center;
     padding-left:       3em;
 }
 
-div.header ul.headNav > li.headLogo {
+div.header ul.headerNav > li.headerLogo {
     padding-left:       0;
     width:              4em;
 }
@@ -160,12 +171,12 @@ div.header ul.headNav > li.headLogo {
 
 /* based on jquery.textarea-with-linenumbers.css - edited */
 /*========================================================*/
-textarea.lined {
+textarea.linenumbers {
     display:            block;
     resize:             vertical;
     width:              100%;
     background-color:   white;
-    border:             0.1em solid #888; 
+    border:             0.1em solid #888;
     position:           relative;
     left:               30px;
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Playground — create XML schema from X-definition</title>
-    <meta name="description" content="Playground — create XML schema from X-definition"/>
+    <title>Playground — Generate XML-schema (XSD) from X-definition</title>
+    <meta name="description" content="Playground — Generate XML-schema (XSD) from X-definition"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
@@ -13,14 +13,17 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">Playground — create XML schema from X-definition</div>
+<div class="title">Playground — Generate XML-schema (XSD) from X-definition</div>
 
 <form method="post" action="GenSchema">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdName" value="" type="text"/>
 (enter in case of X-definition collection)
-<textarea name="xdef" rows="25" class="lined">
+</div>
+<textarea name="xdef" rows="25" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Town">
 
   &lt;xd:declaration>
@@ -48,7 +51,7 @@ Name of root X-definition: <input name="xdName" value="" type="text"/>
 </textarea>
 
 <b>Input data:</b>
-<textarea name="data" rows="10" class="lined">
+<textarea name="data" rows="10" class="linenumbers">
 &lt;Town Name="New town">
   &lt;Street Name="Short">
     &lt;House Num="1">
@@ -67,7 +70,7 @@ Name of root X-definition: <input name="xdName" value="" type="text"/>
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined();</script>
+<script type="module">initPageBasicLnums();</script>
 
 </body>
 </html>

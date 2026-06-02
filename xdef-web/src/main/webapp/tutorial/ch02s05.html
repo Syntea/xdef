@@ -10,8 +10,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <div class="nav">
         <a href="ch02.html"><img src="style/first.gif" alt="Previous chapter"></a>
@@ -21,10 +20,9 @@
       </div>
 
       <h2>2.5. Example of X-definition with groups</h2>
-      
-    In the X-definition below, the groups "xd:mixed" and "xd:choice" are listed:
-<pre><code class="language-xml">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name =FO" xd:root="Family | Owner" &gt;
+
+      In the X-definition below, the groups "<code>xd:mixed</code>" and "<code>xd:choice</code>" are listed:
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name =FO" xd:root="Family | Owner" &gt;
   &lt;Family&gt;
       &lt;Father xd:script="optional; ref Person;" /&gt;
       &lt;Mother xd:script="required; ref Person;" /&gt;
@@ -34,7 +32,7 @@
         &lt;/xd:mixed&gt;
      &lt;Address xd:script="ref Address;" /&gt;
   &lt;/Family&gt;
-  
+
   &lt;Owner&gt;
       &lt;xd:choice&gt;
          &lt;Person  xd:script="ref Person;" /&gt;
@@ -42,13 +40,15 @@
       &lt;/xd:choice&gt;
     &lt;Address xd:script="ref Address;" /&gt;
   &lt;/Owner&gt;
-  
-  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" /&gt;  
+
+  &lt;Person Firstname="string();" Familyname="string();" BirthDate="date();" /&gt;
   &lt;Address Street="string(1,30);" Number="optional int();" City="string();" /&gt;
 &lt;/xd:def&gt;
 </code></pre>
-      You can try it <a href="ch02s05e00.html"><b>HERE</b></a>
-    
+      
+      <p>
+      You can try it <a href="ch02s05e00.html"><b>HERE</b></a>.
+      </p>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

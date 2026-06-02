@@ -17,17 +17,20 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
-<textarea name="xdef" rows="21" class="lined">
+</div>
+<textarea name="xdef" rows="21" class="linenumbers">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" name = "Example" root = "test">
   &lt;xd:json name = "test">
     [
       # header line:
       ["occurs 3..3 string();"],
       # CSV lines:
-      [ %script="*",
+      [ %script = "*",
         "? string()", "? emailAddr", "? telephone()"
       ]
     ]
@@ -35,9 +38,9 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 &lt;/xd:def>
 </textarea>
 
-<b>CSV input data:</b>
+<b>Input CSV data:</b>
 <input name="dataFormat" value="csv" type="hidden"/>
-<textarea name="data" rows="14" class="lined">
+<textarea name="data" rows="14" class="linenumbers">
 Name, Email Address, Mobile Number
 John Smith, john.smith@smith.com, +1 2345 67 89 01
 , nobody@somewhere.org, +89 987 654 321
@@ -45,21 +48,25 @@ Somebody, ,
 , , 98765412
 </textarea>
 
+<div>
 Process csv-header line:
 <select name="csvHeader">
     <option value="yes">yes</option>
-    <option value="no">no</option>
-</select><br/>
+    <option value="no" >no</option>
+</select>
+</div><div>
 Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
-(subset of json, xon, yaml, xml, csv, ini)<br/>
+(subset of json, xon, yaml, xml, csv, ini)
+</div><div>
 <button type="submit">Validate</button>
+</div>
 
 </form>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined();</script>
+<script type="module">initPageBasicLnums();</script>
 
 </body>
 </html>

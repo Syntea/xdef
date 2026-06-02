@@ -10,8 +10,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <div class="nav">
         <a href="ch03.html"><img src="style/first.gif" alt="Previous chapter"></a>
@@ -21,16 +20,16 @@
       </div>
 
       <h2>3.5. X-definition designed to combine both modes</h2>
-      
-<pre><code class="language-xml">
-&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"
-        xd:name="WeatherDisplay" xd:root="Weather" &gt;
+
+      X-definition:
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"
+        xd:name="WeatherDisplay" xd:root="Weather"&gt;
 
   &lt;xd:declaration&gt; float sum = 0; int num = 0; &lt;/xd:declaration&gt;
 
   &lt;Weather xd:script="finally returnElement(xcreate('html'));"
            date="optional date();" &gt;
-    &lt;Measurement xd:script="occurs *;" 
+    &lt;Measurement xd:script="occurs *;"
        temperature="float(-30.0, +50.0); /*limits of values*/ onTrue {num++; sum = parseFloat(getText());}"
        wind       ="float();"
        time       = "time();" /&gt;
@@ -49,9 +48,10 @@
 
 &lt;/xd:def&gt;
 </code></pre>
-      You can try it <a href="ch03s05e00.html"><b>HERE</b></a>
       
-    
+      <p>
+      You can try it <a href="ch03s05e00.html"><b>HERE</b></a>.
+      </p>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

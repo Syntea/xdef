@@ -10,8 +10,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <div class="nav">
         <a href="ch04.html"><img src="style/first.gif" alt="Previous chapter"></a>
@@ -21,35 +20,37 @@
       </div>
 
       <h2>4.1. JSON</h2>
-      
+
+      <p>
       In X-definition, you can describe the JSON data model in the "xd:json"
       element. The name of the model is in the "name" attribute. The model is
       described as text in JSON format. The X-script for the data values is
       written in place of the corresponding data value. The X-script for maps
-      and arrays is written as the value of "%script".<br>
-      JSON data:
-      <font size="1">
-<pre>{ "cities" : [
+      and arrays is written as the value of "%script".
+      </p>
+      Input JSON data:
+      <pre><code class="language-json">{ "cities": [
     { "from": ["Brussels",
         {"to": "London", "distance": 322},
-        {"to": "Paris", "distance": 265}
+        {"to": "Paris",  "distance": 265}
       ]
     },
     { "from": ["London",
         {"to": "Brussels", "distance": 322},
-        {"to": "Paris", "distance": 344}
+        {"to": "Paris",    "distance": 344}
       ]
     }
   ]
-}</pre></font>
+}
+</code></pre>
       The X-definition will be:
-<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies" &gt;
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies"&gt;
   &lt;xd:json name="test"&gt;
-    { "cities"  : [
-        { %script = "occurs 1..*;",
+    { "cities": [
+        { %script: "occurs 1..*;",
           "from": [ "string();",
-            { %script = "occurs 1..*;",
-              "to": "jstring();",  "distance": "int();"
+            { %script: "occurs 1..*;",
+              "to": "jstring();", "distance": "int();"
             }
           ]
         }
@@ -58,8 +59,10 @@
   &lt;/xd:json&gt;
 &lt;/xd:def&gt;
 </code></pre>
-      You can try it <a href="ch04s01e00.html"><b>HERE</b></a>
-    
+
+      <p>
+      You can try it <a href="ch04s01e00.html"><b>HERE</b></a>.
+      </p>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

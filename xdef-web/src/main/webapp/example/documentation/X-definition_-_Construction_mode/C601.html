@@ -1,0 +1,64 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition — Construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition — Construction mode</div>
+
+    <form method="post" action="../../../playground/Playground">
+
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="37" class="linenumbers">
+&lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root="Item"&gt;
+
+&lt;xd:declaration&gt;
+&lt;![CDATA[
+  String data =
+"&lt;Item id='0123456789'&gt;
+  &lt;Client role='1' company='NSomeCompany Ltd' cId = '12345678' /&gt;
+  &lt;Client role='2' name='Peter' surname= 'Brown' pId = '700231/1234' /&gt;
+  &lt;Client role='3' name='John' surname='Smith' pId='551204/2345' cId='87654321' /&gt;
+&lt;/Item&gt;";
+  Element source = xparse(data, "*");
+]]&gt;
+&lt;/xd:declaration&gt;
+
+&lt;Contract xd:script = "create source"
+    date = "required dateTime(); create now()"
+    number = "required num(10); create from('@id')" &gt;
+   &lt;Owner xd:script   = "create from('Client[@role=\'1\']')"
+      cId     = "required num(8)"
+      company = "required string(1,30)" /&gt;
+   &lt;Holder xd:script = "create from('Client[@role=\'2\']')"
+      pId     = "required string(10,11) "
+      name    = "required string(1,30)"
+      surname = "required string(1,30)" /&gt;
+   &lt;Policyholder xd:script = "create from('Client[@role=\'3\']')"
+      name = "required string(1,30); create from('@name') + ' ' + from('@surname')"
+      cId   = "required num(8)" /&gt;
+&lt;/Contract&gt;
+
+&lt;Item id='num(10)'&gt;
+  &lt;Client role = 'int()' company = 'string()' cId = 'num(8)' /&gt;
+  &lt;Client role = 'int()' name = 'string()' surname = 'string()' pId = 'string()' /&gt;
+  &lt;Client role = 'int()' name = 'string()' surname ='string()' pId = 'string()' cId = 'string()' /&gt;
+&lt;/Item&gt;
+
+&lt;/xd:def&gt;
+</textarea>
+
+      <button name="mode" value="compose" type="submit">Compose</button>
+
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

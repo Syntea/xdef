@@ -30,6 +30,4 @@ temp/
 /xdef/src/userdoc/data/examples/task*/output/
 /xdef/src/userdoc/data/examples/task*/errors/
 /xdef-web/src/main/resources/org/xdef/web/servlet/webapp/style
-/xdef-web/src/main/webapp-orig/style
-/xdef-web/src/main/webapp-orig/tutorial/style
 

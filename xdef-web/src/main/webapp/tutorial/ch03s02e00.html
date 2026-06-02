@@ -9,29 +9,28 @@
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
     <div class="title">Example of compose mode of X-definition</div>
 
-    
+
     <form method="post" action="../playground/Playground">
       <p>
 This example illustrates how to build an XML element from input data. Note that
 the structure of the input XML element and the structure of the output element
 are different. In this way it is possible to use the X-definition to transform
-XML input data. Note also that "<code>from</code>" methods have arguments with the 
+XML input data. Note also that "<code>from</code>" methods have arguments with the
 string as XPATH expression.
       </p>
       <b>X-definition:</b>
-      
-        
-        <textarea name="xdef" rows="17" class="lined">
+
+
+        <textarea name="xdef" rows="17" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="GenContract" &gt;
   &lt;Contract ProcessedDate="required dateTime(); create now();"
        ConractId="required num(10); create from('@num');" &gt;
-    &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');" 
+    &lt;Owner xd:script="occurs 1; create from('Client[@role=\'1\']');"
        CompanyId="required num(8); create from('@cId');"
        Name     ="required string(1,30); create from('@name');" /&gt;
-    &lt;Holder xd:script="occurs 1; create from('Client[@role=\'2\']');" 
+    &lt;Holder xd:script="occurs 1; create from('Client[@role=\'2\']');"
        PersonalId="required string(10,11); create from('@pId');"
        Firstname ="required string(1,30); create from('@firstname');"
        Lastname  ="required string(1,30); create from('@familyname');" /&gt;
@@ -41,11 +40,11 @@ string as XPATH expression.
   &lt;/Contract&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
+
       <b>Input data:</b>
-      
-        
-        <textarea name="data" rows="16" class="lined">
+
+
+        <textarea name="data" rows="16" class="linenumbers">
 &lt;Contract num = "0123456789"&gt;
   &lt;Client role       = "1"
       name       = "Some Company Ltd"
@@ -61,15 +60,15 @@ string as XPATH expression.
       cId        = "87654321" /&gt;
 &lt;/Contract&gt;
 </textarea>
-      
-      <button type="submit">Validate</button>
-      <input type="hidden" name="mode" value="compose">
-      
+
+      <button name="mode" value="compose" type="submit">Compose</button>
+
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-    <script type="module">initPageBasicLined()</script>
+    <script type="module">initPageBasicLnums()</script>
   </body>
 </html>

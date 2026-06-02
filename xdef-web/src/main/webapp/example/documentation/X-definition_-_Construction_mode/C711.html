@@ -1,0 +1,147 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition — Construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition — Construction mode</div>
+
+    <form method="post" action="../../../playground/Playground">
+
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="24" class="linenumbers">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xmlns='http://www.w3.org/1999/xhtml'&gt;
+  &lt;html xd:script='template'&gt;
+    &lt;head&gt;
+      &lt;title&gt; British monarchs &lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h2&gt; British monarchs: &lt;/h2&gt;
+      &lt;table border="create 'border'"&gt;
+        &lt;tr bgcolor="C0C0C0" xd:script='template'&gt;
+          &lt;td&gt;Monarch&lt;/td&gt;
+          &lt;td&gt;Reigned from&lt;/td&gt;
+          &lt;td&gt;Reigned to&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr xd:script='*; create from("//monarch").sort("reigned/start/text()")'&gt;
+          &lt;td bgcolor="fixed 'violet'"&gt;create from('name/text()')&lt;/td&gt;
+          &lt;td bgcolor="fixed 'yellow'"&gt;create from('reigned/start/text()')&lt;/td&gt;
+          &lt;td bgcolor="fixed 'lightgrey'"&gt;optional string(); create from('reigned/end/text()')&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+    &lt;/body&gt;
+   &lt;/html&gt;
+&lt;/xd:def&gt;
+</textarea>
+
+      <b>Input data:</b>
+      <textarea name="data" rows="95" class="linenumbers">
+&lt;monarchs&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Charles III&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;2022&lt;/start&gt;
+         &lt;end&gt;&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Victoria&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1837&lt;/start&gt;
+         &lt;end&gt;1901&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Anne&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1707&lt;/start&gt;
+         &lt;end&gt;1714&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George I&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1714&lt;/start&gt;
+         &lt;end&gt;1727&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George II&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1727&lt;/start&gt;
+         &lt;end&gt;1760&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George III&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1760&lt;/start&gt;
+         &lt;end&gt;1820&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George IV&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1820&lt;/start&gt;
+         &lt;end&gt;1830&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Wiliam IV&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1830&lt;/start&gt;
+         &lt;end&gt;1837&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Edward VII&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1901&lt;/start&gt;
+         &lt;end&gt;1910&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George V&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1910&lt;/start&gt;
+         &lt;end&gt;1936&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Edward VIII&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1936&lt;/start&gt;
+         &lt;end&gt;1936&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;George VI&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1936&lt;/start&gt;
+         &lt;end&gt;1952&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+   &lt;monarch&gt;
+      &lt;name&gt;Elizabeth II&lt;/name&gt;
+      &lt;reigned&gt;
+         &lt;start&gt;1952&lt;/start&gt;
+         &lt;end&gt;2022&lt;/end&gt;
+      &lt;/reigned&gt;
+   &lt;/monarch&gt;
+&lt;/monarchs&gt;
+</textarea>
+
+      <button name="mode" value="compose" type="submit">Compose</button>
+
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

@@ -22,7 +22,7 @@ You can also try the German version <a href="ch05s01e00.html"><b>HERE</b></a>.
 </p>
 
 <b>X-definition:</b>
-<textarea name="xdef" rows="26" class="lined">
+<textarea name="xdef" rows="26" class="linenumbers">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
   &lt;Book ISBN="int(10000000, 999999999);"
       year = "gYear();"
@@ -33,12 +33,14 @@ You can also try the German version <a href="ch05s01e00.html"><b>HERE</b></a>.
 
   /* All items in the model are in English version */
   &lt;xd:lexicon language='eng' default='yes'/>
-  &lt;xd:lexicon language='deu'> 
+
+  &lt;xd:lexicon language='deu'>
       Test#Book =         Buch
       Test#Book/@year =   Jahr
       Test#Book/@title =  Buchtitel
       Test#Book/Author =  Autor
   &lt;/xd:lexicon>
+
   &lt;xd:lexicon language='fra'>
       Test#Book =         Livre
       Test#Book/@year =   année
@@ -48,10 +50,13 @@ You can also try the German version <a href="ch05s01e00.html"><b>HERE</b></a>.
 &lt;/xd:def>
 </textarea>
 
-<b>Input data:</b><br>
+<div>
+<b>Input data:</b>
+</div><div>
 Language of data:
 <input name="langInp" value="fra" type="text"/>
-<textarea name="data" rows="10" class="lined">
+</div>
+<textarea name="data" rows="10" class="linenumbers">
 &lt;Livre ISBN = "123456789"
       année = "1992"
       titre = "Snow Crash"
@@ -60,17 +65,20 @@ Language of data:
 &lt;/Livre>
 </textarea>
 
+<div>
 Output language:
 <input name="langOut" value="" type="text"/>
-(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)<br/>
+(<b>""</b>, <b>"eng"</b>, <b>"deu"</b> or <b>"fra"</b>)
+</div><div>
 <button type="submit">Validate</button>
+</div>
 
 </form>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined()</script>
+<script type="module">initPageBasicLnums()</script>
 
 </body>
 </html>

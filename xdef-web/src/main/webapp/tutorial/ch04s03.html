@@ -10,8 +10,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <div class="nav">
         <a href="ch04.html"><img src="style/first.gif" alt="Previous chapter"></a>
@@ -21,40 +20,46 @@
       </div>
 
       <h2>4.3. Windows Properties, INI</h2>
-      
+
+      <p>
       Since the Properties format is syntactically a subset of the Windows INI
-      format, our example will be in the Windows INI format. Let's have the
-      following Windows INI data:
-      <font size="1">
-<pre>
-TRSUser = John Smith
+      format, our example will be in the Windows INI format.
+      </p>
+      Let's have the following Windows INI data:
+      <pre><code class="language-ini">TRSUser = John Smith
 [User]
 Home = D:/TRS_Client/usr/Smith
 # authority(SECURITY | SOFTWARE | CLIENT | UNREGISTRED)
-Authority=CLIENT
+Authority = CLIENT
 [Server]
-RemoteServerURL=http://localhost:8080/TRS/TRSServer
+RemoteServerURL = http://localhost:8080/TRS/TRSServer
 SeverIP = 123.45.67.8
-Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c</pre></font>
+Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
+</code></pre>
+      <p>
       The description of values of items in the data is specified as values of
       data items in the X-script language. Note that items "ReceiverSleep" and the
-      section "Server" are optional:
-<pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS" &gt;
+      section "Server" are optional.
+      </p>
+      X-definition:
+      <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="TRS"&gt;
   &lt;xd:ini name="TRS"&gt;
     TRSUser = string(); /* user name */
     [User]
        Home = file(); /* user home directory */
        Authority = enum("MANAGER", "CLIENT", "UNREGISTRED"); finally outln("authority: " + getText());
        ReceiverSleep = optional int(1, 3600); /* default value is 10 */
-    [Server] %script = optional;
+    [Server] optional;
       RemoteServerURL = url();
       SeverIP = ipAddr();
       Signature = SHA1();
   &lt;/xd:ini&gt;
 &lt;/xd:def&gt;
 </code></pre>
-      You can try it <a href="ch04s03e00.html"><b>HERE</b></a>
-    
+
+      <p>
+      You can try it <a href="ch04s03e00.html"><b>HERE</b></a>.
+      </p>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

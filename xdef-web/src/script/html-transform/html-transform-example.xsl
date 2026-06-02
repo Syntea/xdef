@@ -13,15 +13,19 @@
     indent="no"
     encoding="UTF-8"
 />
-<!--
-    omit-xml-declaration="yes"
-    doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
--->
+
+<xsl:param name="filename"/>
 
 
 <xsl:variable name="nl" select="'
 '" as="xs:string"/>
+<xsl:variable name="fnTok"      as="xs:string*"     select="tokenize($filename, '/')"/>
+<xsl:variable name="rootPath"   as="xs:string"      select="
+    string-join(
+        for $dir in subsequence($fnTok, 1, count($fnTok) - 1)
+            return '../'
+    )
+"/>
 
 
 
@@ -32,21 +36,18 @@
 
 
 <xsl:template match="h:html">
-    <xsl:variable name="nav"             select="h:body/h:div[@id='footer']"                        as="element(h:div)?"/>
-    <xsl:variable name="navIts"          select="$nav/*[self::h:a or self::h:img]"                  as="element()*"/>
-    <xsl:variable name="content"         select="h:body/node()"                                     as="node()*"/>
-    
+    <xsl:variable name="content"    as="node()*"        select="h:body/node()"/>
+
     <xsl:sequence xml:space="preserve"><html lang="en">
   <head>
     <title><xsl:sequence select="h:head/h:title/text()"/></title>
     <meta name="description" content="{h:head/h:meta[@name='description']/@content}"/>
-    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
-    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
-    <script type="module" src="../style/common.js"></script>
+    <link rel="icon" type="image/x-icon" href="{$rootPath}style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="{$rootPath}style/common.css"/>
+    <script type="module" src="{$rootPath}style/common.js"></script>
   </head>
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
-
 
     <div class="title"><xsl:sequence select="h:head/h:title/text()"/></div>
 
@@ -80,36 +81,54 @@
 </xsl:template>
 
 <xsl:template mode="content" match="h:form">
-    <form method="post" action="../playground/Playground">
+    <xsl:variable name="action" as="xs:string" select="
+        if      (ends-with(@action, 'Examples')) then concat($rootPath, 'playground/Playground')
+        else if (ends-with(@action, 'Derby'))    then concat($rootPath, 'playground/Derby')
+        else                                          @action
+    "/>
+    <form method="post" action="{$action}">
     <xsl:apply-templates mode="content" select="node()"/>
     </form>
 </xsl:template>
 
-<xsl:template mode="content" match="h:textarea[@name=('xdef', 'data')]">
+<xsl:template mode="content" match="h:textarea[@name = ('xdef', 'data')]">
     <textarea name="{@name}" rows="{count(tokenize(string-join(text()), '\n'))}" class="lined">
     <xsl:apply-templates mode="content" select="node()"/>
     </textarea>
 </xsl:template>
 
-<xsl:template mode="content" match="h:input[@type=('submit')]">
-    <button type="submit">Validate</button>
+<xsl:template mode="content" match="h:input[@type = 'submit' and @name != 'view']">
+    <xsl:variable name="mode" as="xs:string?" select="//h:input[@name = 'mode']/@value"/>
+    <xsl:choose>
+        <xsl:when test="$mode = 'compose'">
+            <button name="mode" value="compose" type="submit">Compose</button>
+        </xsl:when>
+        <xsl:otherwise>
+            <button type="submit">Validate</button>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<xsl:template mode="content" match="text()[.='X-definition']">
+<xsl:template mode="content" match="h:input[@type = 'hidden' and @name = 'mode']">
+</xsl:template>
+
+<xsl:template mode="content" match="h:input[@type = 'submit' and @name = 'view' and @value='Display as html']">
+</xsl:template>
+
+<xsl:template mode="content" match="text()[. = 'X-definition']">
     <xsl:text>X-definition:</xsl:text>
 </xsl:template>
 
-<xsl:template mode="content" match="text()[.='Input data']">
+<xsl:template mode="content" match="text()[. = 'Input data']">
     <xsl:text>Input data:</xsl:text>
 </xsl:template>
 
-<xsl:template mode="content" match="h:div[@class=('A', 'B') or @id=('line-numbers', 'line-numbers_1')]">
+<xsl:template mode="content" match="h:div[@class = ('A', 'B') or @id = ('line-numbers', 'line-numbers_1')]">
     <xsl:apply-templates mode="content" select="node()"/>
 </xsl:template>
 
-<xsl:template mode="content" match="h:font[starts-with(@style, 'background-color: lightgrey') = true()]">
+<xsl:template mode="content" match="h:font[starts-with(@style, 'background-color: lightgrey')]">
 </xsl:template>
-
 
 
 

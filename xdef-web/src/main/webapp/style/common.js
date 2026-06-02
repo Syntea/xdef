@@ -57,8 +57,8 @@ export function initPageBasic(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function initPageBasicLined(completeFooter, completeHeader) {
-    $("textarea.lined").linenumbers();
+export function initPageBasicLnums(completeFooter, completeHeader) {
+    $("textarea.linenumbers").linenumbers();
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
@@ -67,21 +67,39 @@ export function initPageBasicHili(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function footVerActivate() {
-    $("#footVerPas").css("display", "none");
-    $("#footVerAct").css("display", "inline");
+export function initPageBasicLnumsHili(completeFooter, completeHeader) {
+    $("textarea.linenumbers").linenumbers();
+    hljs.highlightAll();
+    loadHeaderFooter(completeFooter, completeHeader);
 }
 
-export function footVerDeactivate() {
-    $("#footVerPas").css("display", "inline");
-    $("#footVerAct").css("display", "none");
+export function footerVersionActivate() {
+    $("#footerVersionPas").css("display", "none");
+    $("#footerVersionAct").css("display", "inline");
 }
 
-export function headLangActivate() {
-    $(".headLangPas").css("display", "none");
-    $(".headLangAct").css("display", "inline");
+export function footerVersionDeactivate() {
+    $("#footerVersionPas").css("display", "inline");
+    $("#footerVersionAct").css("display", "none");
 }
 
+export function headerLangActivate() {
+    $(".headerLangPas").css("display", "none");
+    $(".headerLangAct").css("display", "inline");
+}
+
+export function setXdefLatestVersion() {
+    $.get("../XdefLatestVersion", function(version) {
+        $("span.xdefLatestVersion").text(version);
+        $("a.xdefLatestVersion").each(function() {
+            const root = $(this);
+            ["href", "title"].forEach(attrName => {
+                const value = root.attr(attrName);
+                if (value) root.attr(attrName, value.replaceAll("--.--.--", version));
+            });
+        });
+    });
+}
 
 //error-messages are usually invisible at the beginning not to flash on the page during loading.
 //  That's why it appears after a second. VD - visibility delayed
@@ -89,8 +107,10 @@ setTimeout(function() { $(".errorVD").css("visibility", "visible"); }, 1000);
 
 //exports to window
 window.initPageBasic            = initPageBasic;
-window.initPageBasicLined       = initPageBasicLined;
+window.initPageBasicLnums       = initPageBasicLnums;
 window.initPageBasicHili        = initPageBasicHili;
-window.footVerActivate          = footVerActivate;
-window.footVerDeactivate        = footVerDeactivate;
-window.headLangActivate         = headLangActivate;
+window.initPageBasicLnumsHili   = initPageBasicLnumsHili;
+window.footerVersionActivate    = footerVersionActivate;
+window.footerVersionDeactivate  = footerVersionDeactivate;
+window.headerLangActivate       = headerLangActivate;
+window.setXdefLatestVersion     = setXdefLatestVersion;

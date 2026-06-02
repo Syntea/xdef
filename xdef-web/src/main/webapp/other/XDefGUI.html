@@ -5,59 +5,68 @@
         <meta name="generator" content="DocBook XSL Stylesheets V1.71.1" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta http-equiv="Pragma" content="no-cache"/>
-        <meta http-equiv="Expires" content="-1"/>    
+        <meta http-equiv="Expires" content="-1"/>
         <title>XDefGUI</title>
     	<link rel="stylesheet" type="text/css" href="style/common.css"/>
     </head>
     <body>
-        <h1 style="text-align:center"><b>XDefGUI:  X-definition Editor and Debugger Guide</b></h1>
-1. Download the <a href="XDefGUI.zip"><b>XDefGUI.zip</b></a> file.<br/><br/>
+<h1 style="text-align:center"><b>XDefGUI:  X-definition Editor and Debugger Guide</b></h1>
 
+<p>
+1. Download the <a href="XDefGUI.zip"><b>XDefGUI.zip</b></a> file.
+</p><p>
 2.Unzip it to the <code><b>XdefGUI</b></code> directory, which contains
-the command file: <code><b>runProject.cmd</b></code>.<br/><br/>
-
+the command file: <code><b>runProject.cmd</b></code>.
+</p><p>
 3. In the projects directory there are subdirectories containing data for each
 project. The basic one is the <code><b>project.xml</b></code> file. It contains
 links to other files used in the project (X-definitions, input data, etc.).
 The X-definition describing the project file is <a href="XDefGUI-man.html"><b>here</b></a>.
 You start the corresponding project by specifying the subdirectory name as
-a parameter to the <code><b>runProject.cmd</b></code> command.<br/><br/>
-
+a parameter to the <code><b>runProject.cmd</b></code> command.
+</p><p>
 4. For example, start with the <code><b>compileXD</b></code> project, which
-contains the basic steps. Then call:<br/><br/>
+contains the basic steps. Then call:
+</p><p>
 <code><b>runProject.cmd</b></code> with the parameter <code><b>compileXD</b></code>.
 The <code><b>compileXD</b></code> project will compile the X-definitions that are
 in the <code><b>compileXD</b></code> directory with the filename
 <code><b>xdef*.xml</b></code> (there is only one X-definition, but there may
-be more like this).<br/><br/>
-This process<br/><br/>
+be more like this).
+</p><p>
+This process
+</p><p>
 - Displays the X-definition and if there are errors in it, it shows them and you
 can edit it. You can always get out of each window by pressing F10 (there you will
 see more options and you can e.g. save the corrected X-definition somewhere).
 You can always press F10 and the x key to get out of a window and go to the
-next step.<br/><br/>
+next step.
+</p><p>
 - X-definition will start in validation mode with the <code><b>data.xml</b></code>
 file (which is also in the project directory). You can set stop addresses and
 debug the process (by pressing F10 and selecting the appropriate option) before
 running the validation.
-- The result will be displayed and you can save it.<br/><br/>
+- The result will be displayed and you can save it.
+</p>
+5. Sample ready projects in the projects directory are:<ul>
+  <li><code><b>construct</b></code> Example of construction mode</li>
+  <li><code><b>extMethod</b></code> Example with external method</li>
+  <li><code><b>json</b></code> Example of validating JSON data.</li>
+  <li><code><b>test</b></code> Example of a more complex project</li>
+  <li><code><b>validate</b></code> Example of validation mode</li>
+</ul>
 
-5. Sample ready projects in the projects directory are:<br/><br/>
-- <code><b>construct</b></code> Example of construction mode<br/>
-- <code><b>extMethod</b></code> Example with external method<br/>
-- <code><b>json</b></code> Example of validating JSON data.<br/>
-- <code><b>test</b></code> Example of a more complex project<br/>
-- <code><b>validate</b></code> Example of validation mode<br/><br/>
-
+<p>
 6. A new project can be designed using the <code><b>genProjectFromXML.cmd</b></code>
 command. This will generate a project in the <code><b>newProject</b></code>
 directory with an X-definition generated from the XML data (which is
-displayed in a window that you can modify).<br/><br/>
-
+displayed in a window that you can modify).
+</p><p>
 7. Review the <code><b>project.xml</b></code> files that describe the project
-properties.<br/><br/>
-
-&nbsp;&nbsp;&nbsp;&nbsp; Enjoy it!
+properties.
+</p><p>
+Enjoy it!
+</p>
 <!--
 1. Stáhni si soubor <a href="XDefGUI.zip"><b>XDefGUI.zip</b></a>.<br/><br/>
 
@@ -70,7 +79,7 @@ soubory použité v projektu (X-definice, vstupní data atd.). X-definice popisu
 projektu je <a href="XDefGUI_1.html"><b>zde</b></a>. Příslušný projekt spustíš zadáním
 jména podadresáře jak parametr příkazu <code><b>runProject.cmd</b></code>.<br/>
 
-4. Začni např. s projektem <code><b>compileXD</b></code>, který obsahuje základni kroky. 
+4. Začni např. s projektem <code><b>compileXD</b></code>, který obsahuje základni kroky.
 Zavolej tedy: <br/>
 <code><b>runProject.cmd</b></code> s parametrem <code><b>compileXD</b></code><br/>
 

@@ -17,10 +17,13 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
-<textarea name="xdef" rows="26" class="lined">
+</div>
+<textarea name="xdef" rows="26" class="linenumbers">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
   &lt;Book ISBN="int(10000000, 999999999);"
       year = "gYear();"
@@ -31,12 +34,14 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 
   /* All items in the model are in English version */
   &lt;xd:lexicon language='eng' default='yes'/>
-  &lt;xd:lexicon language='deu'> 
+
+  &lt;xd:lexicon language='deu'>
       Test#Book =         Buch
       Test#Book/@year =   Jahr
       Test#Book/@title =  Buchtitel
       Test#Book/Author =  Autor
   &lt;/xd:lexicon>
+
   &lt;xd:lexicon language='fra'>
       Test#Book =         Livre
       Test#Book/@year =   année
@@ -46,10 +51,14 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 &lt;/xd:def>
 </textarea>
 
-<b>Input data:</b><br/>
-Language of data: <input name="langInp" value="deu" type="text"/>
+<div>
+<b>Input data:</b>
+</div><div>
+Language of data:
+<input name="langInp" value="deu" type="text"/>
 (language from X-lexicon)
-<textarea name="data" rows="10" class="lined">
+</div>
+<textarea name="data" rows="10" class="linenumbers">
 &lt;Buch ISBN = "123456789"
       Jahr = "1992"
       Buchtitel = "Snow Crash"
@@ -58,17 +67,19 @@ Language of data: <input name="langInp" value="deu" type="text"/>
 &lt;/Buch>
 </textarea>
 
-Output language:
-<input name="langOut" value="" type="text"/>
-((language from X-lexicon or empty to preserve language))<br/>
+<div>
+Output language: <input name="langOut" value="" type="text"/>
+(language from X-lexicon or empty to preserve language)
+</div><div>
 <button type="submit">Validate</button>
+</div>
 
 </form>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined()</script>
+<script type="module">initPageBasicLnums()</script>
 
 </body>
 </html>

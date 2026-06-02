@@ -1,0 +1,56 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition - JSON, XON, YAML</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - JSON, XON, YAML</div>
+
+    <p>
+    Arrays of numbers is possible use also in X-definition with the validation type "jlist".
+    See it at <a href="xmlPrague22_1_2.html"><b>HERE</b></a>.
+    </p>
+
+    <form method="post" action="../../../playground/Playground">
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="13" class="linenumbers">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
+  &lt;xd:json name="test"&gt;
+{ "Matrix" :
+    [
+       [ %script="occurs *",
+         "occurs 1..* jnumber();"
+       ]
+    ]
+}
+&lt;/xd:json&gt;
+&lt;/xd:def&gt;
+</textarea>
+      <b>JSON input data:</b>
+      <input name="dataFormat" value="json" type="hidden"/>
+      <textarea name="data" rows="8" class="linenumbers">
+{ "Matrix" :
+    [
+       [ 1, -5, 3.14e-3  ],
+       [ 999, null, 11, 12  ]
+    ]
+}
+</textarea>
+      <div>
+      Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
+      (subset of json, xon, yaml, xml, csv, ini)
+      </div><div>
+      <button type="submit">Validate</button>
+      </div>
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

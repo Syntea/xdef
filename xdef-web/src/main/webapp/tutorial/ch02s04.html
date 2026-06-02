@@ -10,8 +10,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <div class="nav">
         <a href="ch02.html"><img src="style/first.gif" alt="Previous chapter"></a>
@@ -21,12 +20,15 @@
       </div>
 
       <h2>2.4. Groups</h2>
+
+      <h3>Choice group "<b><code>xd:choice</code></b>"</h3>
       
-      <p>Choice group "<b>xd:choice</b>"<br>
-        Selection of one model from this group. The number of occurrences of this model in processed data must
-        correspond the quantifier from model.</p>
-<pre><code class="language-xml">
-&lt;Owner&gt;
+      <p>
+      Selection of one model from this group. The number of occurrences of this model in processed data must
+      correspond the quantifier from model.
+      </p>
+      Model:
+      <pre><code class="language-xml">&lt;Owner&gt;
    &lt;xd:choice&gt;
        &lt;Person  xd:script = "occurs 1; ref Person;" /&gt;
        &lt;Company xd:script = "occurs 1; ref Company;" /&gt;
@@ -34,11 +36,15 @@
    &lt;Address Street="string();" House="int();" Town="string();"/&gt;
 &lt;/Owner&gt;
 </code></pre>
-      <p>Mixed group "<b>xd:mixed</b>"<br>
-        The order of items in this group can be arbitrary. The total number of occurrences of each
-        object is defined by a quantifier of the model.</p>
-<pre><code class="language-xml">
-&lt;Family&gt;
+      
+      <h3>Mixed group "<b><code>xd:mixed</code></b>"</h3>
+
+      <p>
+      The order of items in this group can be arbitrary. The total number of occurrences of each
+      object is defined by a quantifier of the model.
+      </p>
+      Model:
+      <pre><code class="language-xml">&lt;Family&gt;
     &lt;Father  xd:script = "occurs ?; ref Person;" /&gt;
     &lt;Mother  xd:script = "occurs 1;    ref Person;" /&gt;
     &lt;xd:mixed&gt;
@@ -47,7 +53,7 @@
     &lt;/xd:mixed&gt;
 &lt;/Family&gt;
 </code></pre>
-    
+
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

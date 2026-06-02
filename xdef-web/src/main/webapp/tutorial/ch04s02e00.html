@@ -9,22 +9,19 @@
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
     <div class="title">X-definition - JSON</div>
 
-    
     <form method="post" action="../playground/Playground">
-      <b>X-definition:</b>
       
-        
-        <textarea name="xdef" rows="16" class="lined">
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="16" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Distancies"&gt;
   &lt;xd:json name="Distancies"&gt;
-    { "cities"  : [
-        { %script = "occurs 1..*;",
+    { "cities": [
+        { %script: "occurs 1..*;",
           "from": [ "string();",
-            { %script = "occurs 1..*;",
-              "to": "jstring();",  "distance": "int();"
+            { %script: "occurs 1..*;",
+              "to": "jstring();", "distance": "int();"
             }
           ]
         }
@@ -33,32 +30,25 @@
   &lt;/xd:json&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
-      <b>Input data:</b>
-      
-        
-        <textarea name="data" rows="11" class="lined">
+      <b>Input YAML data:</b>
+      <input name="dataFormat" value="yaml" type="hidden"/>
+      <textarea name="data" rows="11" class="linenumbers">
 cities:
 - from:
   - Brussels
   - {to: London, distance: 322}
-  - {to: Paris, distance: 265}
+  - {to: Paris,  distance: 265}
 - from:
   - London
   - {to: Brussels, distance: 322}
-  - {to: Paris, distance: 344}
+  - {to: Paris,    distance: 344}
 </textarea>
-              
-      <input type="hidden" name="json" value="json">
-      <button type="submit">Validate</button>
-      <i>
-          &nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b>
-      </i>
+      <input name="xonDisplayAs" value="json xon yaml xml" type="hidden"/>
+      <button type="submit">Validate</button> and display also as JSON, XON, XON-XML.
     </form>
-  
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-    <script type="module">initPageBasicLined()</script>
+    <script type="module">initPageBasicLnums()</script>
   </body>
 </html>

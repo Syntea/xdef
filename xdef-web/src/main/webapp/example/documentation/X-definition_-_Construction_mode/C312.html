@@ -1,0 +1,42 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition — Construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition — Construction mode</div>
+
+    <form method="post" action="../../../playground/Playground">
+
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="15" class="linenumbers">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
+&lt;xd:declaration&gt;
+  &lt;![CDATA[
+    /* Create the element as source data. */
+    Element source = xparse("&lt;X&gt;&lt;A/&gt;&lt;Y/&gt;&lt;Z/&gt;&lt;A/&gt;&lt;Z/&gt;&lt;/X&gt;");
+  ]]&gt;
+&lt;/xd:declaration&gt;
+&lt;A&gt;
+  &lt;xd:sequence&gt;
+    &lt;B xd:script="occurs 1..*; create xpath('/X/A', source)"/&gt;
+    &lt;C xd:script="occurs 1; create xpath('/X/Z[2]', source)"/&gt;
+  &lt;/xd:sequence&gt;
+&lt;/A&gt;
+&lt;/xd:def&gt;
+</textarea>
+
+      <button name="mode" value="compose" type="submit">Compose</button>
+
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

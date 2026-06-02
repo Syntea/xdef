@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Playground — create X-definition from data</title>
-    <meta name="description" content="Playground — create X-definition from data (XML, JSON, XON, YAML)"/>
+    <title>Playground — Generate X-definition from XON-like data</title>
+    <meta name="description" content="Playground — Generate X-definition from XON-like data (XML, JSON, XON, YAML)"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
@@ -13,13 +13,13 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">Playground — create X-definition from data</div>
+<div class="title">Playground — Generate X-definition from XON-like data</div>
 
 <form method="post" action="GenXdef">
 
-<b>Data</b> (XML, JSON, XON, YAML) from which the X-definition will be created:
-<textarea name="data" rows="20" class="lined">
-{ Contract: 123456789, 
+<b>Data</b> (XML, JSON, XON, YAML) from which the X-definition will be generated:
+<textarea name="data" rows="20" class="linenumbers">
+{ Contract: 123456789,
   Date: d2011-12-13,
   Description: "Lorem ipsum dolor sit amet.",
   Clients: [
@@ -47,7 +47,7 @@
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined();</script>
+<script type="module">initPageBasicLnums();</script>
 
 </body>
 </html>

@@ -15,6 +15,53 @@
 
 <div class="title">Playground result — ((status))</div>
 
+<h1>Request</h1>
+
+<form method="post" action="Playground">
+
+<b>X-definition:</b><br/>
+Name of root X-definition: <input name="xdefRoot" value="((xdefRoot))" type="text"/>
+(enter in case of X-definition collection)
+<textarea name="xdef" rows="((xdefLines))" class="linenumbers">((xdef))
+</textarea>
+
+<b>Input ((dataFormatUp))-data:</b><br/>
+<input name="dataFormat" value="((dataFormat))" type="hidden"/>
+<div style="display: ((langInp-disp))">
+Language of data:
+<input name="langInp" value="((langInp))" type="text"/>
+(language from X-lexicon)
+</div>
+<textarea name="data" rows="((dataLines))" class="linenumbers">((data))
+</textarea>
+
+<div style="display: ((model-disp))">
+Compose a model with name: <input name="modelName" value="((modelName))" type="text"/>
+and namespace: <input name="modelURI" value="((modelURI))" type="text"/>
+(enter if non-default model required)
+</div>
+<div style="display: ((csvHeader-disp))">
+Process csv-header line:
+<select name="csvHeader">
+    <option value="yes" ((csvHeader-selY))>yes</option>
+    <option value="no"  ((csvHeader-selN))>no</option>
+</select>
+</div>
+<div style="display: ((xonDisplayAs-disp))">
+Display XON-like result also as:
+<input name="xonDisplayAs" value="((xonDisplayAs))" type="text"/>
+</div>
+<div style="display: ((langOut-disp))">
+Output language:
+<input name="langOut" value="((langOut))" type="text"/>
+(language from X-lexicon or empty to preserve language)
+</div>
+<dov>
+<button name="mode" value="((mode))" type="submit">Re((mode))</button>
+</dov>
+
+</form>
+
 <h1>((title))</h1>
 
 <div style="display: ((message-disp))">
@@ -23,8 +70,8 @@
 </div>
 
 <div style="display: ((result-disp))">
-<h2>Result — format ((result-format))</h2>
-<pre class="output"><code class="language-((result-formatL))">((result))</code></pre>
+<h2>Result — format ((result-formatUp))</h2>
+<pre class="output"><code class="language-((result-hili))">((result))</code></pre>
 </div>
 
 <div style="display: ((display-html-disp))">
@@ -51,7 +98,7 @@
 
 <div style="display: ((display-csv-disp))">
 <h2>Display as CSV</h2>
-<pre class="output">((display-csv))</pre>
+<pre class="output"><code class="language-plaintext">((display-csv))</code></pre>
 </div>
 
 <div style="display: ((display-ini-disp))">
@@ -69,15 +116,21 @@
 <pre class="output">((stdout))</pre>
 </div>
 
+<div class="technicalInfo">
 <hr/>
 Technical info:<ul>
+    <li>consumed time total: <b>((timer-total))</b> (time to process X-definition, data and to assemble html-response)<ul>
+        <li>time to compile X-definition: <b>((timer-xdef))</b></li>
+        <li>time to process data: <b>((timer-process))</b> (time to parse and process input data)</li>
+    </ul></li>
     <li>processed by library X-definition: ((xdef-lib-id))</li>
 </ul>
+</div>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicHili()</script>
+<script type="module">initPageBasicLnumsHili()</script>
 
 </body>
 </html>

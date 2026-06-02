@@ -1,0 +1,66 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition - JSON, XON, YAML</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition - JSON, XON, YAML</div>
+
+    <p>
+    See also JSON with an array of numbers <a href="xmlPrague22_1_1.html"><b>HERE</b></a>.
+    </p>
+
+    <form method="post" action="../../../playground/Playground">
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="16" class="linenumbers">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
+  &lt;xd:json name="test"&gt;
+    { "Book": [
+         { "Title": "required string();",
+           "Date": "optional gYearMonth();" },
+         [  %script="optional",
+           {
+             "Author": ["occurs 1..*; required string();"]
+           }
+         ]
+      ]
+    }
+  &lt;/xd:json&gt;
+&lt;/xd:def&gt;
+</textarea>
+      <b>JSON input data:</b>
+      <input name="dataFormat" value="json" type="hidden"/>
+      <textarea name="data" rows="16" class="linenumbers">
+{ "Book": [
+     { "Title": "X-definition 4.2: JSON, YAML, Properties, CSV and XON",
+       "Date": "2022-06"
+     },
+     [
+       { "Author":
+          [
+            "Václav Trojan",
+            "Tomáš Šmíd"
+          ]
+        }
+     ]
+  ]
+}
+</textarea>
+      <div>
+      Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
+      (subset of json, xon, yaml, xml, csv, ini)
+      </div><div>
+      <button type="submit">Validate</button>
+      </div>
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

@@ -10,8 +10,7 @@
   <body>
       <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
-      <div class="title">X-definition tutorial</div>
+      <div class="title">X-definition Tutorial</div>
 
       <div class="nav">
         <a href="ch05.html"><img src="style/first.gif" alt="Previous chapter"></a>
@@ -21,37 +20,45 @@
       </div>
 
       <h2>5.1. What is X-lexicon?</h2>
-      
+
+      <p>
       X-definitions allow you to work with language mutations of XML objects.
       In the X-lexicon section it is possible to describe how to translate
-      attribute and element names in different language versions. Sample:
+      attribute and element names in different language versions.
+      </p>
+      Sample:
 <pre><code class="language-xml">&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test" root="Book" &gt;
   &lt;Book ISBN="int(10000000, 999999999);"
       year = "gYear();"
       title = "string();" &gt;
       &lt;Author xd:script="occurs *"&gt; string(); &lt;/Author&gt;
   &lt;/Book&gt;
-&lt;xd:lexicon language='eng' default='yes'&gt;
-/* All items in the model of Book are in English version. */
-&lt;/xd:lexicon&gt;
-&lt;xd:lexicon language='deu'&gt;
-/* German version */
-    Test#Book        = Buch
-    Test#Book/@year  = Jahr
-    Test#Book/@title = Titel
-    Test#Book/Author = Autor
-&lt;/xd:lexicon&gt;
-&lt;xd:lexicon language='fra'&gt;
-/* French version */
+  
+  &lt;xd:lexicon language='eng' default='yes'&gt;
+    /* All items in the model of Book are in English version. */
+  &lt;/xd:lexicon&gt;
+
+  &lt;xd:lexicon language='deu'&gt;
+    /* German version */
+      Test#Book        = Buch
+      Test#Book/@year  = Jahr
+      Test#Book/@title = Titel
+      Test#Book/Author = Autor
+  &lt;/xd:lexicon&gt;
+
+  &lt;xd:lexicon language='fra'&gt;
+    /* French version */
     Test#Book        = Livre
     Test#Book/@year  = année
     Test#Book/@title = titre
     Test#Book/Author = Auteur
   &lt;/xd:lexicon&gt;
-&lt;/xd:def&gt;</code></pre>
-      You can try it
-      <a href="ch05s01e00.html"><b>HERE</b></a>
-    
+&lt;/xd:def&gt;
+</code></pre>
+
+      <p>
+      You can try it <a href="ch05s01e00.html"><b>HERE</b></a>.
+      </p>
 
       <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

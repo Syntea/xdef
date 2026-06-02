@@ -9,15 +9,12 @@
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
     <div class="title">X-definition - INI/Properties</div>
 
-    
+
     <form method="post" action="../playground/Playground">
       <b>X-definition:</b>
-      
-        
-        <textarea name="xdef" rows="15" class="lined">
+      <textarea name="xdef" rows="15" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test"&gt;
   &lt;xd:ini name="test"&gt;
     TRSUser = string(); finally outln("User: " + getText());
@@ -25,18 +22,17 @@
       Home = file(); finally outln("Home directory: " + getText());
       Authority = enum("MANAGER", "CLIENT", "UNREGISTRED"); finally outln("authority: " + getText());
       ReceiverSleep = optional int(1, 3600); /* default value is 10 */
-    [Server] %script = optional
+    [Server] optional
       RemoteServerURL = url()
       SeverIP = ipAddr()
       Signature = SHA1()
   &lt;/xd:ini&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
-      <b>Input data:</b>
-      
-        
-        <textarea name="data" rows="13" class="lined">
+
+      <b>Input INI data:</b>
+      <input name="dataFormat" value="ini" type="hidden"/>
+      <textarea name="data" rows="13" class="linenumbers">
 ############# TRS configuration #############
 # TRS user name
 TRSUser = John Smith
@@ -49,15 +45,12 @@ RemoteServerURL=http://localhost:8080/TRS/TRSServer
 SeverIP = 123.45.67.8
 Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
 </textarea>
-              
-      <input type="hidden" name="ini" value="ini">
-      <button type="submit">Validate</button>
-      <i>&nbsp;You can edit both <b>X-definition:</b> and/or <b>Input data:</b></i>
+      <input name="xonDisplayAs" value="json xon yaml xml" type="hidden"/>
+      <button type="submit">Validate</button> and display also as JSON, XON, YAML, XON-XML.
     </form>
-  
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-    <script type="module">initPageBasicLined()</script>
+    <script type="module">initPageBasicLnums()</script>
   </body>
 </html>

@@ -17,10 +17,13 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
-<textarea name="xdef" rows="26" class="lined">
+</div>
+<textarea name="xdef" rows="26" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="root" >
   &lt;xd:BNFGrammar name = "base">
     S ::= [#9#10#13 ]+ /* white spaces */
@@ -47,7 +50,7 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 </textarea>
 
 <b>Input data:</b>
-<textarea name="data" rows="5" class="lined">
+<textarea name="data" rows="5" class="linenumbers">
 &lt;root>
   x = - abc + 3.14159 * - ( 2.3 - 3e-2 ) / 2 * 10e5
 &lt;/root>
@@ -60,7 +63,7 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined();</script>
+<script type="module">initPageBasicLnums();</script>
 
 </body>
 </html>

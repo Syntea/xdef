@@ -1,0 +1,42 @@
+<!DOCTYPE HTML><html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>X-definition — Construction mode</title>
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css">
+    <script type="module" src="../../../style/common.js"></script>
+  </head>
+  <body>
+    <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+    <div class="title">X-definition — Construction mode</div>
+
+    <form method="post" action="../../../playground/Playground">
+
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="15" class="linenumbers">
+&lt;xd:def xmlns:xd='http://www.xdef.org/xdef/4.2'&gt;
+&lt;xd:declaration&gt;
+  &lt;![CDATA[
+  Element source =
+    xparse("&lt;X&gt;&lt;Y&gt;&lt;B a='b'/&gt;&lt;C a='c'/&gt;&lt;/Y&gt;&lt;Y&gt;&lt;C a='x'/&gt;&lt;/Y&gt;&lt;Y&gt;&lt;B a='y'/&gt;&lt;/Y&gt;&lt;/X&gt;");
+  ]]&gt;
+&lt;/xd:declaration&gt;
+&lt;A&gt;
+  &lt;xd:sequence xd:script="occurs *; create xpath('//Y', source)"&gt;
+    &lt;B xd:script="occurs ?" a="string" /&gt;
+    &lt;C xd:script="occurs ?" a="string" /&gt;
+  &lt;/xd:sequence&gt;
+&lt;/A&gt;
+&lt;/xd:def&gt;
+</textarea>
+
+      <button name="mode" value="compose" type="submit">Compose</button>
+
+    </form>
+
+    <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+    <script type="module">initPageBasicLnums()</script>
+  </body>
+</html>

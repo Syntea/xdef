@@ -9,23 +9,19 @@
   <body>
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
-
     <div class="title">Example 4a — string delimiters</div>
 
-    
     <p>
-      This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
-      to <code><b>'</b></code> (the apostrophe) — see the section "finally" in the X-script.
+    This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
+    to <code><b>'</b></code> (the apostrophe) — see the section "finally" in the X-script.
     </p><p>
-      If you need to use a special character in a string you can specify XML entity or the
-      <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
+    If you need to use a special character in a string you can specify XML entity or the
+    <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
     </p>
 
     <form method="post" action="../playground/Playground">
-      <b>X-definition:</b><br>
-      
-        
-        <textarea name="xdef" rows="20" class="lined">
+      <div><b>X-definition:</b></div>
+      <textarea name="xdef" rows="20" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory"&gt;
   &lt;xd:declaration&gt;
     void message(String s) {
@@ -45,11 +41,9 @@
   &lt;/Inventory&gt;
 &lt;/xd:def&gt;
 </textarea>
-      
+
       <b>Input data:</b>
-      
-        
-        <textarea name="data" rows="13" class="lined">
+      <textarea name="data" rows="13" class="linenumbers">
 &lt;Inventory&gt;
   &lt;Book ISBN="123456789" published="2017"&gt;
     &lt;Author&gt;Jiří Kamenický&lt;/Author&gt;
@@ -62,14 +56,14 @@
   &lt;/Book&gt;
 &lt;/Inventory&gt;
 </textarea>
-      
+
       <button type="submit">Validate</button>
-      
+
     </form>
-  
+
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-    <script type="module">initPageBasicLined()</script>
+    <script type="module">initPageBasicLnums()</script>
   </body>
 </html>

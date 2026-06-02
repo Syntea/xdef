@@ -17,32 +17,35 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
-<textarea name="xdef" rows="21" class="lined">
+</div>
+<textarea name="xdef" rows="21" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="test">
 
   &lt;xd:ini name="test">
-TRSUser = string(); finally outln("TRS user: " + getText());
-[User]
-  Home = file(); finally outln("Home directory: " + getText());
-  Authority = enum("MANAGER","CLIENT","UNREGISTRED"); finally outln("Authority: " + getText());
-  ReceiverSleep = int(1, 3600)
-[Server]
-  RemoteServerURL = url()
-  SeverIP = ipAddr()
-  SendMailHost = domainAddr()
-  MailAddr = emailAddr()
-  Signature = SHA1()
+    TRSUser = string(); finally outln("TRS user: " + getText());
+    [User]
+      Home = file(); finally outln("Home directory: " + getText());
+      Authority = enum("MANAGER","CLIENT","UNREGISTRED"); finally outln("Authority: " + getText());
+      ReceiverSleep = optional int(1, 3600)
+    [Server] optional
+      RemoteServerURL = url()
+      SeverIP = ipAddr()
+      SendMailHost = domainAddr()
+      MailAddr = emailAddr()
+      Signature = SHA1()
   &lt;/xd:ini>
 
 &lt;/xd:def>
 </textarea>
 
-<b>INI input data:</b>
+<b>Input INI data:</b>
 <input name="dataFormat" value="ini" type="hidden"/>
-<textarea name="data" rows="19" class="lined">
+<textarea name="data" rows="19" class="linenumbers">
 ############# TRS configuration #############
 # TRS user name
 TRSUser = John Smith
@@ -59,16 +62,19 @@ MailAddr = jira@synth.cz
 Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c
 </textarea>
 
+<div>
 Display also as: <input name="xonDisplayAs" value="json xon yaml xml" type="text"/>
-(subset of json, xon, yaml, xml, csv, ini)<br/>
+(subset of json, xon, yaml, xml, csv, ini)
+</div><div>
 <button type="submit">Validate</button>
+</div>
 
 </form>
 
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLined();</script>
+<script type="module">initPageBasicLnums();</script>
 
 </body>
 </html>

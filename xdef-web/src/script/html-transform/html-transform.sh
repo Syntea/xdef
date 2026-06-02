@@ -8,7 +8,6 @@ xmlResVer=5.3.3
 #konstanty odvozene
 prgDir=$(dirname $(readlink -f $0))
 saxonPath=".m2/repository/net/sf/saxon/Saxon-HE/$saxonVersion/Saxon-HE-${saxonVersion}.jar"
-xslFile="${prgDir}/html-transform.xsl"
 cp="${HOME}/${saxonPath}:\
 ${HOME}/.m2/repository/org/xmlresolver/xmlresolver/${xmlResVer}/xmlresolver-${xmlResVer}.jar:\
 ${HOME}/.m2/repository/org/xmlresolver/xmlresolver/${xmlResVer}/xmlresolver-${xmlResVer}-data.jar\
@@ -29,23 +28,25 @@ fi
 
 
 #hlavni krok - transformace webapp
-#for i in tutorial/ch??.html
-#do
-#    echo "chX: file: $i"
-#    xmllint --html --xmlout --nodefdtd --recover $i | \
-#    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chX.xsl" -o:../webapp/$i -s:-
-#done
+if false; then
+for i in tutorial/ch??.html
+do
+    echo "tutorial-chX: file: $i"
+    xmllint --html --xmlout --nodefdtd --recover $i | \
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chX.xsl" -o:../webapp/$i -s:-
+done
 
-#for i in tutorial/ch??s??.html 
-#do
-#    echo "chXsY: file: $i"
-#    xmllint --html --xmlout --nodefdtd --recover $i | \
-#    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chXsY.xsl" -o:../webapp/$i -s:-
-#done
+for i in tutorial/ch??s??.html 
+do
+    echo "tutorial-chXsY: file: $i"
+    xmllint --html --xmlout --nodefdtd --recover $i | \
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-tutorial-chXsY.xsl" -o:../webapp/$i -s:-
+done
+fi
 
-for i in tutorial/ch??s??e??.html
+for i in tutorial/ch??s??e??.html `find example -name *html`
 do
     echo "example: file: $i"
     xmllint --html --xmlout --nodefdtd --recover $i | \
-    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-example.xsl" -o:../webapp/$i -s:-
+    java -cp "${cp}" "net.sf.saxon.Transform" -xsl:"${prgDir}/html-transform-example.xsl" -o:../webapp/$i -s:- filename=$i
 done
