@@ -11,13 +11,10 @@
 
     <div class="title">X-definition — Construction mode</div>
 
-
     <form method="post" action="../../../playground/Playground">
 
-      <b>X-definition:</b><br>
-
-
-        <textarea name="xdef" rows="10" class="lined">
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="10" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2"&gt;
 &lt;a&gt;
   &lt;b xd:script = "occurs *; create from('b/*/..')"
@@ -26,12 +23,11 @@
        y = "required string()" /&gt;
   &lt;/b&gt;
 &lt;/a&gt;
-&lt;/xd:def&gt;</textarea><br>
+&lt;/xd:def&gt;
+</textarea>
 
-      <b>Input data:</b><br>
-
-
-        <textarea name="data" rows="10" class="lined">
+      <b>Input data:</b>
+      <textarea name="data" rows="10" class="lined">
 &lt;a&gt;
   &lt;b x="1"&gt;
     &lt;c y="11"/&gt;
@@ -40,12 +36,12 @@
   &lt;b x="3"&gt;
     &lt;c y="33"/&gt;
   &lt;/b&gt;
-&lt;/a&gt;</textarea>
+&lt;/a&gt;
+</textarea>
 
       <button name="mode" value="compose" type="submit">Compose</button>
 
     </form>
-
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 

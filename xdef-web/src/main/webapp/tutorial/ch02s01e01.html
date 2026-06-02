@@ -11,20 +11,17 @@
 
     <div class="title">Example 4a — string delimiters</div>
 
-
     <p>
-      This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
-      to <code><b>'</b></code> (the apostrophe) — see the section "finally" in the X-script.
+    This example shows that you can change the use of string delimiters from <code><b>"</b></code> (the quote)
+    to <code><b>'</b></code> (the apostrophe) — see the section "finally" in the X-script.
     </p><p>
-      If you need to use a special character in a string you can specify XML entity or the
-      <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
+    If you need to use a special character in a string you can specify XML entity or the
+    <code><b>\</b></code> (the backslash) notation (you can try it <a href="ch02s01e02.html"><b>HERE</b></a>).
     </p>
 
     <form method="post" action="../playground/Playground">
-      <b>X-definition:</b><br>
-
-
-        <textarea name="xdef" rows="20" class="lined">
+      <div><b>X-definition:</b></div>
+      <textarea name="xdef" rows="20" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="Inventory"&gt;
   &lt;xd:declaration&gt;
     void message(String s) {
@@ -46,9 +43,7 @@
 </textarea>
 
       <b>Input data:</b>
-
-
-        <textarea name="data" rows="13" class="lined">
+      <textarea name="data" rows="13" class="lined">
 &lt;Inventory&gt;
   &lt;Book ISBN="123456789" published="2017"&gt;
     &lt;Author&gt;Jiří Kamenický&lt;/Author&gt;

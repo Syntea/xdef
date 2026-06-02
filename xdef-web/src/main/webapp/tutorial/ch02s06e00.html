@@ -17,12 +17,13 @@
       "Family" are references to models 'Person' and 'Address' in X-definition 'Models'.
     </p>
     <form method="post" action="../playground/Playground">
-      <b>X-definition:</b><br>
+      <div>
+      <b>X-definition:</b>
+      </div><div>
       Name of root X-definition: <input name="xdefRoot" value="Example" type="text">
       (enter in case of X-definition collection)
-
-
-        <textarea name="xdef" rows="25" class="lined">
+      </div>
+      <textarea name="xdef" rows="25" class="lined">
 &lt;xd:collection xmlns:xd="http://www.xdef.org/xdef/4.2"&gt;
 
 &lt;xd:def name="Example" xd:root="Family"&gt;
@@ -49,9 +50,7 @@
 </textarea>
 
       <b>Input data:</b>
-
-
-        <textarea name="data" rows="9" class="lined">
+      <textarea name="data" rows="9" class="lined">
 &lt;Family&gt;
    &lt;Father   Firstname   = "John"  Familyname = "Smith" BirthDate = "1971-07-13"/&gt;
    &lt;Mother   Firstname   = "Jane"  Familyname = "Smith" BirthDate = "1972-09-18"/&gt;

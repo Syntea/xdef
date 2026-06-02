@@ -17,9 +17,12 @@
 
 <form method="post" action="Playground">
 
-<b>X-definition:</b><br/>
+<div>
+<b>X-definition:</b>
+</div><div>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
+</div>
 <textarea name="xdef" rows="26" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" xd:name = "Test" xd:root = "Book">
   &lt;Book ISBN="int(10000000, 999999999);"
@@ -48,10 +51,13 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 &lt;/xd:def>
 </textarea>
 
-<b>Input data:</b><br/>
+<div>
+<b>Input data:</b>
+</div><div>
 Language of data:
 <input name="langInp" value="deu" type="text"/>
 (language from X-lexicon)
+</div>
 <textarea name="data" rows="10" class="lined">
 &lt;Buch ISBN = "123456789"
       Jahr = "1992"

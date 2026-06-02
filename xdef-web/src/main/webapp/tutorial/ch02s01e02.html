@@ -11,18 +11,16 @@
 
     <div class="title">Example 4b — string literals</div>
 
-
     <p>
-      This example shows how to specify special characters in a string. You can specify a reference to an
-      XML entity as "&amp;amp;", "&amp;lt;", "&amp;gt;", "&amp;apos;", "&amp;quot;", etc. However, you can
-      also use the <code><b>\</b></code> (the backslash) notation within the string. You can also express any
-      Unicode character as the notation "\uxxxx" (where xxxx are four hexadecimal digits).
+    This example shows how to specify special characters in a string. You can specify a reference to an
+    XML entity as "&amp;amp;", "&amp;lt;", "&amp;gt;", "&amp;apos;", "&amp;quot;", etc. However, you can
+    also use the <code><b>\</b></code> (the backslash) notation within the string. You can also express any
+    Unicode character as the notation "\uxxxx" (where xxxx are four hexadecimal digits).
     </p>
+
     <form method="post" action="../playground/Playground">
-      <b>X-definition:</b><br>
-
-
-        <textarea name="xdef" rows="15" class="lined">
+      <div><b>X-definition:</b></div>
+      <textarea name="xdef" rows="15" class="lined">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root = "Dummy"&gt;
   &lt;Dummy
     xd:script="finally {
@@ -39,9 +37,7 @@
 </textarea>
 
       <b>Input data:</b>
-
-
-        <textarea name="data" rows="3" class="lined">
+      <textarea name="data" rows="3" class="lined">
 &lt;Dummy/&gt;
 </textarea>
 

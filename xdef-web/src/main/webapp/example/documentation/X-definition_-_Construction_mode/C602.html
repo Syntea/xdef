@@ -10,13 +10,9 @@
     <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
     <div class="title">X-definition — Construction mode</div>
-
-
     <form method="post" action="../../../playground/Playground">
-      <b>X-definition:</b><br>
-
-
-        <textarea name="xdef" rows="25" class="lined">
+      <b>X-definition:</b>
+      <textarea name="xdef" rows="25" class="lined">
 &lt;xd:def xmlns:xd = "http://www.xdef.org/xdef/4.2" root = "Item"&gt;
 
 &lt;Contract date = "required dateTime(); create now()"
@@ -40,22 +36,21 @@
   &lt;Client role = 'int()' name = 'string()' surname ='string()' pId = 'string()' cId = 'string()' /&gt;
 &lt;/Item&gt;
 
-&lt;/xd:def&gt;</textarea>
+&lt;/xd:def&gt;
+</textarea>
 
       <b>Input data:</b>
-
-
-        <textarea name="data" rows="6" class="lined">
+      <textarea name="data" rows="6" class="lined">
 &lt;Item id='1234567890'&gt;
   &lt;Client role = '1' company = 'SomeCompany Ltd' cId = '12345678' /&gt;
   &lt;Client role = '2' name = 'Peter' surname = 'Brown' pId = '491112/010' /&gt;
   &lt;Client role = '3' name = 'John' surname = 'Smith' pId ='491112/010' cId = '12345678' /&gt;
-&lt;/Item&gt;</textarea>
+&lt;/Item&gt;
+</textarea>
 
       <button type="submit">Validate</button>
 
     </form>
-
 
     <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
