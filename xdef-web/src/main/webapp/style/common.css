@@ -136,11 +136,18 @@ div.header div.headerLang img {
 }
 
 div.header div.headerLogo {
-    position:           absolute;;
+    position:           absolute;
 }
 
 div.header div.headerLogo img {
     height:             4em;
+    transition:         transform .2s ease;
+    transform-origin:   top left;
+    transform:          scale(1);
+}
+
+div.header div.headerLogo:hover img {
+    transform:          scale(2);
 }
 
 div.header ul.headerNav {
