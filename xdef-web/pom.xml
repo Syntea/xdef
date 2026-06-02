@@ -150,6 +150,14 @@
                             <filtering>true</filtering>
                         </resource>
                         <resource>
+                            <targetPath>documentation</targetPath>
+                            <directory>../xdef/src/documentation</directory>
+                            <includes>
+                                <inlude>README.md</inlude>
+                                <inlude>*.pdf</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
                             <targetPath>javadoc</targetPath>
                             <directory>../xdef/target/reports/apidocs</directory>
                         </resource>
