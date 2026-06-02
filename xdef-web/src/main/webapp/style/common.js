@@ -88,6 +88,18 @@ export function headerLangActivate() {
     $(".headerLangAct").css("display", "inline");
 }
 
+export function setXdefLatestVersion() {
+    $.get("../XdefLatestVersion", function(version) {
+        $("span.xdefLatestVersion").text(version);
+        $("a.xdefLatestVersion").each(function() {
+            const root = $(this);
+            ["href", "title"].forEach(attrName => {
+                const value = root.attr(attrName);
+                if (value) root.attr(attrName, value.replaceAll("--.--.--", version));
+            });
+        });
+    });
+}
 
 //error-messages are usually invisible at the beginning not to flash on the page during loading.
 //  That's why it appears after a second. VD - visibility delayed
@@ -101,3 +113,4 @@ window.initPageBasicLnumsHili   = initPageBasicLnumsHili;
 window.footerVersionActivate    = footerVersionActivate;
 window.footerVersionDeactivate  = footerVersionDeactivate;
 window.headerLangActivate       = headerLangActivate;
+window.setXdefLatestVersion     = setXdefLatestVersion;
