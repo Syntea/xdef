@@ -371,9 +371,11 @@ public class TestExprCompiler {
             for (; j1 < code.length; j1++) {
                 if (result[j1] != null) continue;
                 if (compileStatement(j1, source, code, result) > j1) continue;
-                if (code[j1].startsWith("for1 ")) break;
+                if (code[j1].startsWith("for1 ") || code[j1].startsWith("for2 ")) {
+                    break;
+                }
             }
-            for (int k = j1 + 1; k < code.length; k++) {
+            for (int k = j1; k < code.length; k++) {
                 if (result[k] != null) continue;
                 if (compileStatement(k, source, code, result) > k) continue;
                 if (!code[k].startsWith("for2 ")) continue;
@@ -383,10 +385,15 @@ public class TestExprCompiler {
                     if (compileStatement(n, source, code, result) > n) continue;
                     String s = (String) code[n];
                     if (s.startsWith("for3 ")) {
-                        result[j] = new CodeItem("jmpf", n + 1);
-                        result[j+1] = new CodeItem("jmp", k + 1);
-                        result[k] = new CodeItem("jmp", c + 1);
-                        result[n] = new CodeItem("jmp", j + 2);
+                        if (j1 == k) { // for(...; ;...)
+                            result[j] = new CodeItem("jmp", k + 1);
+                            result[n] = new CodeItem("jmp", j + 1);
+                        } else {
+                            result[j] =  new CodeItem("jmpf", n + 1); // // for(...; ...; ...)
+                            result[j+1] = new CodeItem("jmp", k + 1);
+                            result[k] = new CodeItem("jmp", c + 1);
+                            result[n] = new CodeItem("jmp", j + 2);
+                        }
                         for (Integer x: breaks) {
                             result[x] = new CodeItem("jmp", n + 1);
                         }
