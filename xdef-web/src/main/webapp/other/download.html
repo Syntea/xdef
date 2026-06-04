@@ -13,42 +13,42 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">Download X-definition versions and documentation</div>
+<div class="title">Download versions and documentation</div>
 
 
-<h2>Download published versions</h2>
+<h2>Published X-definition versions</h2>
 
 Latest published release version <code><span class="enframed xdefLatestVersion">--.--.--</span></code>:<dl>
     <dt>download <span class="enframed"><a class="xdefLatestVersion"
             href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--"
             title="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--"
-        >latest release version</a></span>  from Central Maven Repository
+        >latest release version</a></span> from Central Maven Repository (www-directory)
     </dt>
-    <dd>file assets in a version package:<ul>
+    <dd>file assets in a version package (links lead to the latest release version):<ul>
             <li><code><a class="xdefLatestVersion"
                     href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.--.jar"
-                >xdef-<span class="xdefLatestVersion">--.--.--</span>.jar</a></code>
+                >xdef-{version}.jar</a></code>
                 — the java-library X-definition</li>
             <li id="fileAssetUserdoc"><code><a class="xdefLatestVersion"
                     href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---userdoc.zip"
-                >xdef-<span class="xdefLatestVersion">--.--.--</span>-userdoc.zip</a></code>
+                >xdef-{version}-userdoc.zip</a></code>
                 — complete user documentation and tutorial examples</li>
             <li><code><a class="xdefLatestVersion"
                     href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---javadoc.jar"
-                >xdef-<span class="xdefLatestVersion">--.--.--</span>-javadoc.jar</a></code>
+                >xdef-{version}-javadoc.jar</a></code>
                 — html-documentation of java source code generated from the java source code</li>
             <li><code><a class="xdefLatestVersion"
                     href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---sources.jar"
-                >xdef-<span class="xdefLatestVersion">--.--.--</span>-sources.jar</a></code>
-                — origin java source code</li>
+                >xdef-{version}-sources.jar</a></code>
+                — original java source code</li>
             <li><code><a class="xdefLatestVersion"
                     href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---src.zip"
-                >xdef-<span class="xdefLatestVersion">--.--.--</span>-src.zip</a></code>
+                >xdef-{version}-src.zip</a></code>
                 — java source code insertable directly into your source code,
                   very similar to <code>xdef-{version}-sources.jar</code></li>
             <li><code><a class="xdefLatestVersion"
                     href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.--.pom"
-                >xdef-<span class="xdefLatestVersion">--.--.--</span>.pom</a></code>
+                >xdef-{version}.pom</a></code>
                 — maven metadata of the package</li>
         </ul>
     </dd>
@@ -65,8 +65,11 @@ All published release versions:<dl>
         </li>
         <li>to download file assets of the published release version directly
             <br/>(after opening the link select the row with the required version and click on "Browse" there).
-            <br/> See also <a href="https://github.com/Syntea/xdef?tab=readme-ov-file#usage-in-other-projects">
-            README/"Usage in other projects"</a>
+        </li>
+        <li>see also <span class="enframed"><a
+                href="https://github.com/Syntea/xdef?tab=readme-ov-file#usage-in-other-projects"
+            >README/"Usage in other projects"</a></span> for how to use/download X-definition in your project
+            using maven-system
         </li>
     </ul></dd>
 </dl>
@@ -91,31 +94,34 @@ Related information:<dl>
 
 <h2>Download X-definition documentation</h2>
 
-Download individual documentation files:<ul>
-    <li><a href='../documentation/xdef-4.2.pdf'>
-        X-definition language description</a> (pdf)
-    </li>
-    <li><a href='../documentation/xdef-4.2_construction_mode.pdf'>
-        Introduction to construction mode of X-definition</a> (pdf)
-    </li>
-    <li><a href='../documentation/xdef-4.2_Programming.pdf'>
-        Introduction to X-definition Java programming</a> (pdf)
-    </li>
-    <li><a href='../documentation/xdef-4.2_Xcomponent.pdf'>
-        Introduction to X-definition X-component</a> (pdf)
-    </li>
-    <li><a href='../documentation/xdef-4.2_Lexicon.pdf'>
-        Introduction to X-definition X-lexicon</a> (pdf)
-    </li>
-    <li><a href='../documentation/xdef-4.2_manual.pdf'>
-        X-definition user manual</a> (pdf)
+Complete documentation related to the required version:<ul>
+    <li>download <a href="#fileAssetUserdoc"><code>xdef-{version}-userdoc.zip</code></a>
+        — see above the "userdoc" file asset of the required version package
     </li>
 </ul>
 
-Other related information:<ul>
-    <li>see <a href="#fileAssetUserdoc"><code>xdef-{version}-userdoc.zip</code></a>
-        — you can see complete documentation related to required version in the "userdoc" file asset
+Download individual documentation files (of version related to this web, see the page footer):<ul>
+    <li><a href='../documentation/xdef-4.2.pdf'>xdef-4.2.pdf</a>
+        — X-definition language description
     </li>
+    <li><a href='../documentation/xdef-4.2_construction_mode.pdf'>xdef-4.2_construction_mode.pdf</a>
+        — Introduction to construction mode of X-definition
+    </li>
+    <li><a href='../documentation/xdef-4.2_Programming.pdf'>xdef-4.2_Programming.pdf</a>
+        — Introduction to X-definition Java programming
+    </li>
+    <li><a href='../documentation/xdef-4.2_Xcomponent.pdf'>xdef-4.2_Xcomponent.pdf</a>
+        — Introduction to X-definition X-component
+    </li>
+    <li><a href='../documentation/xdef-4.2_Lexicon.pdf'>xdef-4.2_Lexicon.pdf</a>
+        — Introduction to X-definition X-lexicon
+    </li>
+    <li><a href='../documentation/xdef-4.2_manual.pdf'>xdef-4.2_manual.pdf</a>
+        — X-definition user manual
+    </li>
+</ul>
+
+Other documentation:<ul>
     <li><a href="https://github.com/Syntea/xdef/tree/main/xdef/src/documentation">
         documentation directory</a> — latest stable documentation on GitHub.com/Syntea/xdef (www)
     </li>
