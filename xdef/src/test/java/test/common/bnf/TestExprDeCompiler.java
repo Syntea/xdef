@@ -137,14 +137,22 @@ public class TestExprDeCompiler {
             } else if ("blokStart".equals(item)) {
                 stack.peek()._s += "{";
             } else if ("blok".equals(item)) {
-                stack.peek()._s += ";}";
+                String s = stack.peek()._s;
+                if (!s.isEmpty() && !s.endsWith("}") && !s.endsWith(";") && !s.endsWith(") ")) {
+                    s += ";";
+                }
+                stack.peek()._s = s + "}";
             } else if ("if".equals(item)) {
             } else if ("if1".equals(item)) {
                 stack.peek()._s = "if (" + stack.peek()._s + ") ";
             } else if ("else".equals(item)) {
                 stack.peek()._s += " else";
             } else if ("continue".equals(item)) {
-                stack.peek()._s += " continue; ";
+                String s = stack.peek()._s;
+                if (!s.isEmpty() && !s.endsWith("}") && !s.endsWith(";") && !s.endsWith(") ")) {
+                    s += ";";
+                }
+                stack.peek()._s = s + " continue;";
             } else if ("break".equals(item)) {
                 String s = stack.peek()._s;
                 if (!s.isEmpty() && !s.endsWith("}") && !s.endsWith(";") && !s.endsWith(") ")) {

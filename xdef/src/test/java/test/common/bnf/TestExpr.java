@@ -103,6 +103,7 @@ public class TestExpr extends STester {
             }
             return "'" + x + "', '" + y + "'\n" + TestExprCompiler.printCode(prog, code, pc);
         } catch (RuntimeException ex) {
+            ex.printStackTrace();
             return "'" + x + "', '?????'\n" + TestExprCompiler.printCode(prog, code, pc);
         }
     }
@@ -133,9 +134,11 @@ public class TestExpr extends STester {
             g.trace(null);
 /**
            _displayCode = true;
-//            assertEq("int i = 0; switch(i) {case 1: print(1); break; dafault: print(0);}",
-//                decompile("int i=0; switch(i) {case 1: print(1); break; default: print(0);}", "program", g));
-//            assertEq("if (true) {print(1);} else print(2);}", decompile("if(true){print(1);}else{print(2);}", "program", g));
+//int i=0; for(; ; i++){print(i); if(i==1) break; print(i);}
+//            assertNull(test("001", g, "int i=0; for(; i < 9; i++){print(i); if(i==1) break; print(i);}"));
+//            assertNull(test("0", g, "int i=0; for(; true;){print(i++); if(i==1) break; print(i);}"));
+            assertEq("int i = 1; do {if (i==1)  break; print(i); continue;} while (i++<2);",
+                decompile("int i=1; do {if (i == 1) break; print(i); continue;}while (i++ < 2);", "program", g));
 //print((Math.sin(3.1) + 4)/(2*3 +9));
 //            assertNull(test("0.269438710828886", g, "print((sin(3.1) + 4)/(2*3 +9));"));
 if(true)return;
@@ -344,7 +347,11 @@ if(true)return;
             assertNull(test("", g, "for (int i=0;i<4;i++)if(i==3)switch(i){case 2: print(i);break;} else break;"));
             assertNull(test("2", g,"for(int i=0; i < 4; i++) if(i==3)break; else switch(i){case 2: print(i);break;}"));
             assertNull(test("2", g,"for(int i=0;i<4;i++)if(i==3)continue; else switch(i){case 2: print(i);continue;}"));
-            assertNull(test("91",g,
+            assertNull(test("001", g, "int i=0; for(; i < 9; i++){print(i); if(i==1) break; print(i);}"));
+            assertNull(test("001", g, "int i=0; for(; ; i++){print(i); if(i==1) break; print(i);}"));
+            assertNull(test("0", g, "int i=0; for(;true;){print(i++); if(i==1) break; print(i);}"));
+            assertNull(test("011", g, "int i=0; for(; ;){print(i); if(i==1) break; print(++i);}"));
+         assertNull(test("91",g,
                 "for(int i = 0; i < 4; i++) if(i == 0) switch(i){case 0: print(9);break;} else {print(i); break;}"));
             assertNull(test("0122", g,
 "for(int i=0; i < 4; i++) {\n"+
@@ -385,8 +392,10 @@ if(true)return;
                 decompile("int i=1;do{print(i);}while(i++<2);", "program", g));
             assertEq("int i = 1; int j = 1; do do print(j); while (i++<2); while (j++<2);",
                 decompile("int i=1; int j=1; do do print(j); while (i++ < 2); while (j++<2) ;", "program", g));
-            assertEq("int i = 1; do {if (i==1)  continue; print(i);} while (i++<2);",
+            assertEq("int i = 1; do {if (i==1)  continue;print(i);} while (i++<2);",
                 decompile("int i=1; do {if (i == 1) continue; print(i);}while (i++ < 2);", "program", g));
+            assertEq("int i = 1; do {if (i==1)  break; print(i); continue;} while (i++<2);",
+                decompile("int i=1; do {if (i == 1) break; print(i); continue;}while (i++ < 2);", "program", g));
             assertEq("int i = 1; do {if (i==1)  break; print(i);} while (i++<2);",
                 decompile("int i=1; do {if (i == 1) break; print(i);}while (i++ < 2);", "program", g));
             assertEq("int i = 0; switch(i) {case 1: print(1); break; dafault: print(0);}",

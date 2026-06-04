@@ -112,19 +112,20 @@ public final class TestXdefToJSON extends XDTester {
     @Override
     public void test() {
 ////////////////////////////////////////////////////////////////////////////////
-        boolean T = false; // If the value is false, all tests are run; otherwise, only the first one is run
+        boolean T = false; // If it is false, all tests are run; otherwise, only the first one is run
+        boolean display = false; // If it is true, the generated JSON format is dislpayed
 ////////////////////////////////////////////////////////////////////////////////
         String xdef, data;
         try {
             xdef =
-"<xd:declaration xmlns:xd='"+_xdNS+"'>\n" +
+"<x:declaration xmlns:x='"+_xdNS+"'>\n" +
 "  type x string();\n" +
 "  type y int();\n" +
 "  type z xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
-"</xd:declaration>";
-            assertEq("", testXdefJson(xdef, null, false));
+"</x:declaration>";
+            assertEq("", testXdefJson(xdef, null, display));
             xdef =
-"<x:def xmlns:x='"+_xdNS+"' name='a' root='a' script='options ignoreEmptyAttributes'>\n"+
+"<x:def xmlns:x='"+_xdNS+"' x:name='a' x:root='a' x:script='options ignoreEmptyAttributes'>\n"+
 "  <a x:script='ref b'>\n"+
 "    <p/>\n"+
 "    <q/>\n"+
@@ -133,45 +134,37 @@ public final class TestXdefToJSON extends XDTester {
 "  <b attr=\"optional an(); default 'a123x'\"> <c/> </b>\n"+
 "</x:def>\n";
             data = "<a><c/><p/><q/></a>";
-            assertEq("", testXdefJson(xdef, null, false, data));
+            assertEq("", testXdefJson(xdef, null, display, data));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name = 'Example' xd:root = 'root'>\n" +
-"  <xd:declaration scope='local'>\n"+
-"     type myType $rrr.parse('intList');\n"+
-"  </xd:declaration>\n"+
-"\n"+
-"  <xd:BNFGrammar scope='local' xd:name=\"$rrr\" >\n"+
+"  <xd:declaration xd:scope='local'> type myType $rrr.parse('intList'); </xd:declaration>\n"+
+"  <xd:BNFGrammar xd:scope='local' xd:name=\"$rrr\" >\n"+
 "    S       ::= [#9#10#13 ]+ /*white spaces*/\n"+
 "    integer ::= [0-9]+\n"+
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "  </xd:BNFGrammar>\n"+
-"\n"+
-"  <xd:json name='root'>\n" +
+"  <xd:json xd:name='root'>\n" +
 "{ a: \"required myType()\" }\n"+
 "  </xd:json>\n"+
-"\n"+
-"  <xd:component>\n"+
-"    %class "+_package+".TestxTOJson2 %link Example#root;\n"+
-"  </xd:component>\n"+
+"  <xd:component> %class "+_package+".TestxTOJson2 %link Example#root; </xd:component>\n"+
 "</xd:def>";
             data = "{ \"a\":\"123, 456, 789\" }";
-            assertEq("", testXdefJson(xdef, "Example", false, data));
+            assertEq("", testXdefJson(xdef, "Example", display, data));
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"Example\" root=\"S2KF\">\n" +
 "  <xd:declaration>\n" +
-"    type  caseID            long(1,999_999_999); \n" +
-"    type  companyName       string(1,100); \n" +
-"    type  firstName         string(1,50); \n" +
-"    type  ico               string(1,14);\n" +
-"    type  lastName          string(1,50); \n" +
-"    type  phoneNum          string(1,18);\n" +
-"    type  rc                string(1,14);\n" +
-"    type  statusCode        enum('X', 'Y', 'Z');\n" +
-"    type  subjectType       enum('NP', 'LE', 'SEP');\n" +
-"    type  xsDate            xdatetime('yyyy-MM-dd'); \n" +
-"    type  xsDateTime        xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
+"    type  caseID       long(1,999_999_999); \n" +
+"    type  companyName  string(1,100); \n" +
+"    type  firstName    string(1,50); \n" +
+"    type  ico          string(1,14);\n" +
+"    type  lastName     string(1,50); \n" +
+"    type  phoneNum     string(1,18);\n" +
+"    type  rc           string(1,14);\n" +
+"    type  statusCode   enum('X', 'Y', 'Z');\n" +
+"    type  subjectType  enum('NP', 'LE', 'SEP');\n" +
+"    type  xsDate       xdatetime('yyyy-MM-dd'); \n" +
+"    type  xsDateTime   xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
 "  </xd:declaration>\n" +
-" \n" +
 "  <xd:json name=\"S2KF\">\n" +
 "{\n" +
 "    \"caseID\":             \"  caseID()\",\n" +
@@ -182,7 +175,6 @@ public final class TestXdefToJSON extends XDTester {
 "    \"owner\":              {\"%script\":  \"?; ref Subject\"},\n" +
 "}\n" +
 "  </xd:json>\n" +
-"\n" +
 "  <xd:json name=\"Subject\">\n" +
 "{\n" +
 "     \"subjectType\":       \"  subjectType()\",\n" +
@@ -195,17 +187,8 @@ public final class TestXdefToJSON extends XDTester {
 "     \"contacts\":   {\"%script\": \"ref Contact\"}\n" +
 "}\n" +
 "  </xd:json>\n" +
-"\n" +
-"  <xd:json name=\"Contact\">\n" +
-"{\n" +
-"     \"phoneNum\":  \"? phoneNum()\",\n" +
-"     \"emailAddr\": \"? emailAddr()\"\n" +
-"}\n" +
-"  </xd:json>\n" +
-"\n" +
-"  <xd:component>\n" +
-"    %class "+_package+".TestxTOJson3 %link Example#S2KF;\n" +
-"  </xd:component>\n" +
+"  <xd:json name=\"Contact\">{ \"phoneNum\": \"? phoneNum()\", \"emailAddr\": \"? emailAddr()\" } </xd:json>\n" +
+"  <xd:component> %class "+_package+".TestxTOJson3 %link Example#S2KF; </xd:component>\n" +
 "</xd:def>";
             data =
 "{\n" +
@@ -221,49 +204,40 @@ public final class TestXdefToJSON extends XDTester {
 "    \"contacts\": {\"phoneNum\": \"9988776655\"}\n" +
 "  }\n" +
 "}";
-            assertEq("", testXdefJson(xdef, "Example", false, data));
+            assertEq("", testXdefJson(xdef, "Example", display, data));
             xdef =
 "<xd:collection xmlns:xd='"+XDEF40_NS_URI+"'>\n" +
-"\n"+
 "<xd:def name='Example' root=\"A | B#B\">\n" +
 "  <xd:json name=\"A\">\n" +
-"{\"array\": [ {\"%script\":  \"2..3; ref B#Item\"}]}\n" +
+"    {\"array\": [ {\"%script\":  \"2..3; ref B#Item\"}]}\n" +
 "  </xd:json>\n" +
 "</xd:def>\n"+
-"\n"+
 "<xd:BNFGrammar xmlns:xd='"+XDEF41_NS_URI+"' name=\"base\">\n"+
 "  integer ::= [0-9]+\n"+
 "  S       ::= [#9#10#13 ]+ /*white spaces*/\n"+
 "  name ::= [A-Z] [a-z]+\n"+
 "</xd:BNFGrammar>\n"+
-"\n"+
 "<xd:BNFGrammar xd:name=\"$rrr\" xd:extends=\"base\" >\n"+
 "  intList  ::= integer (S? \",\" S? integer)*\n"+
 "  fullName ::= ([A-Z] \".\" S){1,2} name\n"+
 "</xd:BNFGrammar>\n"+
-"\n"+
 "<xd:declaration>\n"+
 "  type myType base.parse('name');\n"+
 "</xd:declaration>\n"+
-"\n"+
 "<xd:declaration xmlns:xd='"+XDEF40_NS_URI+"'>\n"+
 "  type name $rrr.parse('fullName');\n"+
 "  type list $rrr.parse('intList');\n"+
 "</xd:declaration>\n"+
-"\n"+
 "<xd:def name='B' root='B'>\n" +
 "  <xd:json name=\"Item\">\n" +
-"{\"element\": \"myType\"}\n" +
+"    {\"element\": \"myType\"}\n" +
 "  </xd:json>\n" +
-"\n"+
 "  <B a='? string()'> <C>string()</C> </B>\n"+
 "</xd:def>\n"+
-"\n"+
 "<xd:component xmlns:xd='"+XDEF42_NS_URI+"'>\n"+
 "  %class "+_package+".TestxTOJson4A %link Example#A;\n"+
 "  %class "+_package+".TestxTOJson4B %link B#B;\n"+
 "</xd:component>\n"+
-"\n"+
 "</xd:collection>";
             String[] dataList = new String[] {
 "{ \"array\": [\n"+
@@ -275,7 +249,7 @@ public final class TestXdefToJSON extends XDTester {
 "<B a='J. D. Wain'>\n" +
 "  <C>1, 23, 456</C>\n" +
 "</B>"};
-            assertEq("", testXdefJson(xdef, "Example", false, dataList));
+            assertEq("", testXdefJson(xdef, "Example", display, dataList));
         } catch (RuntimeException ex) {fail(ex); return;}
 if(T) return;
         try { // test all X-definitions from test/xdef/data/json directory
@@ -286,8 +260,8 @@ if(T) return;
                 String xdname = f.getName();
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
                 File[] files = SUtils.getFileGroup(xdefDataDir+xdname+"*.json");
-                String result = files == null || files.length == 0
-                    ? testXdefJson(f, xdname, false) : testXdefJson(f, xdname, false, files);
+                String result = files == null || files.length == 0 ? testXdefJson(f, xdname, false)
+                    : testXdefJson(f, xdname, display, files);
                  if (!result.isEmpty()) {
                      fail(xdname + "\n"  + result);
                  }
@@ -300,8 +274,8 @@ if(T) return;
                 }
                 xdname = xdname.substring(0, xdname.lastIndexOf('.'));
                 File[] files = SUtils.getFileGroup(xdefDataDir+xdname+"*.xml");
-                String result = files == null || files.length == 0
-                    ? testXdefJson(f, xdname, false) : testXdefJson(f, xdname, false, files);
+                String result = files == null || files.length == 0 ? testXdefJson(f, xdname, false)
+                    : testXdefJson(f, xdname, display, files);
                 if (!result.isEmpty()) {
                     fail(xdname + "\n"  + result);
                 }
