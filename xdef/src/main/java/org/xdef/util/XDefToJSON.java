@@ -120,15 +120,22 @@ public class XDefToJSON {
         StringBuilder sb = new StringBuilder();
         Map<String, Object> map = (Map) xd.get(0);
         String xdPrefix = xdName.substring(0, xdName.length() - 4);
-        String xdNamespace = (String) map.get(xdName);
+        String xdNamespace = (String) map.get("xmlns:" + xdPrefix);
         sb.append("<").append(xdPrefix).append(":def");
         sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'");
         if (xdNamespace == null || xdNamespace.isEmpty()) {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + map + "\"");
         }
         for (String key: map.keySet()) {
+            if (key.equals("xmlns:" +xdPrefix)) {
+                continue;
+            }
             if (key.startsWith(xdPrefix + ":")) {
                 if (key.endsWith(":def")) {
+                    String s = map.get(key).toString();
+                    if (!s.isEmpty()) {
+                        sb.append(" name='").append(map.get(key).toString().trim()).append("'");
+                    }
                     continue;
                 }
             } else if (key.equals("def")) {
@@ -257,28 +264,31 @@ public class XDefToJSON {
     private static String xdefToJson(final Element elem, String nsUri) {
         String xdPrefix = elem.getPrefix();
         StringBuilder sb = new StringBuilder();
-        sb.append("[\n");
-        sb.append("{\"").append(xdPrefix).append(":def\": \"").append(toJsonString(nsUri)).append("\"");
+        sb.append("[\n{ \"").append(xdPrefix).append(":def\": \"");
         NamedNodeMap nnm = elem.getAttributes();
-        int len = sb.length();
-        for (int i = 0; i < nnm.getLength(); i++) {
-            Node n = nnm.item(i);
-            if (!n.getNodeName().equals("xmlns:" + xdPrefix)) {
-                sb.append(",");
-                String s = attrToJSON(n);
-                if ((len += s.length() + 2) > 110) {
-                    sb.append("\n ");
-                    len = 2;
-                }
-                sb.append(" ").append(s);
-            }
+        Node n = nnm.getNamedItem(xdPrefix + ":name");
+        if (n == null) {
+            n = nnm.getNamedItem("name");
         }
-        sb.append("}");
-        Node n = getFirstChildElement(elem);
+        if (n != null) {
+            sb.append(n.getNodeValue());
+            nnm.removeNamedItem(n.getNodeName());
+        }
+        sb.append("\"");
+        sb.append(",\n  \"xmlns:").append(xdPrefix).append("\": \"").append(nsUri).append("\"");
+        n = nnm.getNamedItem("xmlns:" + xdPrefix);
+        if (n != null) {
+            nnm.removeNamedItem(n.getNodeName());
+        }
+        for (int i = 0; i < nnm.getLength(); i++) {
+            n = nnm.item(i);
+            sb.append(",\n  ").append(attrToJSON(n));
+        }
+        sb.append("},\n");
+        n = getFirstChildElement(elem);
         if (n == null) {
             return sb.append("\n]").toString();
         }
-        sb.append(",\n");
         while (n != null) {
             Element el = (Element) n;
             if (nsUri.equals(el.getNamespaceURI())) {
@@ -422,8 +432,8 @@ public class XDefToJSON {
             String key = (String) x;
             if (key.endsWith(":def")) {
                 return xdefToXml(items, key); // xd:def
-            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
-                || key.endsWith(":lexicon")) {
+            } else if (key.endsWith(":declaration") || key.endsWith(":component")
+                || key.endsWith(":BNFGrammar") || key.endsWith(":lexicon")) {
                 return textItemToXml(items, key);
             } else if (key.endsWith(":collection")) {
                 return collectionToXml(items, key);
