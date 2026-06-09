@@ -1,23 +1,25 @@
-# About X-definition
+# X-definition
 
-X-definition is registered technology of the Syntea software group a.s.,
-**for processing of the XML documents or JSON data**.
 
-For the purpose of
-**describing the structure of XML documents or JSON data, their validation, processing and creation**,
-this tool was developed by Syntea Software Group Inc. It allows the user to not only define
-the structure of XML documents or JSON data, but also to describe specifically
-their processing and construction.
+## About
+
+**X-definition** is a technology designed to describe the **validation, processing and construction** of data
+in **XML** format (as well as **JSON, YAML** and similar).
+
+X-definition is a technology designed by **Syntea software group a.s.** for professional description, validation,
+processing and creation of the structure of XML, JSON, YAML, INI and CSV documents. It allows the user
+not only to **define the structure of XML documents**, but also to specifically describe their
+**processing and construction**. X-definition also allows you to define and use code for **external user methods**.
 
 Homepage: <http://www.xdef.org>
 
-This project is an implementation for the platform Java 1.8+
+This project is implemented for the platform **Java 1.8+**
 (additional note: up to the version 41.0.4 for the platform Java 1.6+).
 
 
 ## License
 
-The source code for this project is licensed under
+This project is **Open Source Software (OSS)** licensed under
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0).
 
 
@@ -77,6 +79,7 @@ This is the complete X-definition file with the model of the XML data on the lef
 ```
 
 </td></tr></table>
+
 
 Example 2: **References**
 <table><tr style="vertical-align: top;"><td>
@@ -152,47 +155,37 @@ Model of the XML data:
 
 ## Annotation
 
-This document describes the programming language and the technology called
-“X‑definition“. X‑definition is designed for description and processing of
-data in the form of XML or JSON.
+X‑definition is designed for description and processing of data in the XML format and also JSON, YAML and similar.
 
-X-definition is a tool that provides the description of both the structure and
-the properties of data values in an XML document. Moreover, the X-definition
-allows the description of the processing of specified XML objects.
-Thus X‑definitions may replace existing technologies commonly used
-for XML validation - namely the DTD (Data Type Definition) or the XML schemas and
-Schematron. With X-definition it is also possible to describe the construction
-of XML documents (or the transformation of XML data). X-definitions provides 
-also generation of JAVA class objects similar way as JAXB technology.
- 
-X-definition enables the merging in one source of both the validation
-of XML documents and processing of data (i.e. using actions assigned
-to events when XML objects are processed). Compared to the “classical”
-technologies based on DTD and XML schemas, the advantage of X-definitions is
-(not only) higher readability and easier maintenance.  X‑definition has been
-designed for processing of XML data files of unlimited size, up to many gigabytes.
+X-definition is an open-source tool that describes the structure and properties of data values in an XML document.
+In addition, X-definition allows you to describe the processing and construction of XML objects. X-definition can
+thus replace existing technologies commonly used for XML validation - namely DTD (Data Type Definition), XML
+Schema (XSD), Schematron, and XSLT.
 
-A principal property of X-definition is maximum respect for the structure
-of the described data. The form of X‑definition is an XML document with a structure
-similar to the described XML data. This makes possible quickly and intuitively describe
-given XML data and its processing. In many cases it requires just to replace the values
-in the XML data by the description written in the X‑definition X‑script language.
-You can also gradually add to your X‑script required actions providing data
-processing. You can take a step-by-step approach to your work.
+X-definition allows you to combine XML document validation with data processing (by describing the actions
+assigned to each event when processing XML objects). Compared to technologies based on DTD and XML schema,
+the advantage of X-definition is (not only) higher readability and easier maintenance. X-definition was designed to
+handle XML data sets of virtually unlimited size beyond the size of working memory.
 
-It is assumed that the reader already knows the elementary principles of XML.
-To get the most out of this document, you should also have at least basic
-knowledge of the Java programming language.
+An important feature of X-definition is the maximum respect for the structure of the described data. The form of
+an X-definition is an XML document with a structure similar to the XML data being described. This allows a quick
+and intuitive description of the XML data and its processing.
 
-X‑definition technology enables also to generate the source code
-of Java classes representing XML elements described by X‑definition.
-Such class is called X‑component. You can use the instances of XML data
-in the form of X‑components in Java programs (similar way as in the JAXB
-technology).
+The properties of XML items (and the events that can occur during the process) are described by the X-script
+language. In most cases, it is sufficient to replace the values described in the XML data model with the X-script
+language in the X-definition. You can also incrementally add the required data processing actions to the X-script.
+X-definition technology also allows you to generate source code for classes representing XML elements described
+by an X-definition in Java. Such a class is called an X-component. Instances of XML data can be used in the form of
+X components (similar to JAXB technology).
 
-The term "X‑definition" we use in the two different meanings:
-either as a name of the programming language or as an XML element
-containing the code of X‑definition language.
+Starting with X-definition version 4.2, it is possible to validate and process data in JSON and YAML, Properties,
+Windows INI, and CSV (comma-separated values) formats in addition to XML. JSON data structure models are
+described by xd:json or xd:ini elements.
+
+The X-definition also allows language localization of the tag names of the described XML data. Different language
+versions can be described by elements in the xd:lexicon object.
+
+
 
 ## Documentation and online playground
 
