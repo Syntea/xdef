@@ -15,14 +15,14 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Determine latest version of X-definition z "Maven Central Repository"
  */
-public final class XdefLatestVersion extends AbstractMyServlet {
+public final class LatestVersion extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
 
     private static final String  xdefMvnUri = "https://repo1.maven.org/maven2/org/xdef/xdef/maven-metadata.xml";
     private static final Pattern release    = Pattern.compile("<release>(.*?)</release>");
 
     /** default constructor, calls super() only */
-    public XdefLatestVersion() {
+    public LatestVersion() {
         super();
     }
 
