@@ -13,40 +13,238 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">X-definice — Úvod</div>
+<div class="title">X-definice</div>
+
+<h1>Úvod</h1>
 
 <p>
-<b>X-definice<b> je technologie určená k popisu <b>validace, zpracování a konstrukce</b> dat ve formátu <b>XML</b>
+<b>X-definice</b> je technologie určená k popisu <b>validace, zpracování a konstrukce</b> dat ve formátu <b>XML</b>
 (a také <b>JSON, YAML</b> a podobné).
 </p><p>
 X-definition je technologie navržená společností <b>Syntea software group a.s.</b> pro profesionální
 popis, validaci, zpracování a tvorbu struktury dokumentů XML, JSON, YAML, INI a CSV.
 Umožňuje uživateli nejen <b>definovat strukturu XML-dokumentů</b>, ale také konkrétně popsat
 jejich <b>zpracování a konstrukci</b>.
-X-definition také umožňuje definovat a používat kód pro <b>externí uživatelské metody</b>.
+X-definition také umožňuje definovat a používat kód v <b>externích uživatelských metodách</b>.
 </p><p>
 Tento projekt je implementován pro platformu <b>Java 1.8+</b>
 (doplňující poznámka: až do verze 41.0.4 pro platformu Java 1.6+).
 </p>
 
-<h2>X-definition web sites</h2>
 
-Web sites:<ul>
-    <li><a href="../tutorial/">Tutorial</a></li>
-    <li><a href="../playground/">Playground-online</a></li>
-    <li><a href="../other/download.html">Download</a> — jar file, sources, documentation, examples</li>
-    <li><a href="https://github.com/Syntea/xdef">Project on GitHub.com</a></li>
+<h2>Licence</h2>
+
+Tento projekt je software s <b>otevřeným zdrojovým kódem</b> (Open Source Software — OSS) licencovaný pod licencí
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a>.
+
+
+<h2>Názorné základní příklady</h2>
+
+<div>
+Příklad 1: <b>Základní konstrukce</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+Přčdpokládejme následující XML data:
+<pre><code class="language-xml">&lt;Employee
+  FirstName = "Andrew"
+  LastName  = "Aardvark"
+  EnterDate = "1996-03-12"
+  Salary    = "21700"
+>
+  &lt;Address
+    Street = "Broadway"
+    Number = "255"
+    Town   = "Beverly Hills"
+    State  = "CA"
+    Zip    = "90210"
+  />
+  &lt;Competence>electrician&lt;/Competence>
+  &lt;Competence>carpenter&lt;/Competence>
+&lt;/Employee>
+
+
+
+
+
+
+</code></pre>
+</td><td>
+Toto je kompletní X-definice pro XML data vlevo:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Employee"
+>
+  &lt;Employee
+    FirstName = "required string()"
+    LastName  = "required string()"
+    EnterDate = "required date()"
+    Salary    = "optional decimal()"
+  >
+    &lt;Address
+      Street = "required string()"
+      Number = "required int()"
+      Town   = "required string()"
+      State  = "required string()"
+      Zip    = "required int()"
+    />
+    &lt;Competence xd:script = "occurs 1..5">
+      required string()
+    &lt;/Competence>
+  &lt;/Employee>
+&lt;/xd:def>
+</code></pre>
+</td></tr></table>
+
+<p>
+Vyzkoušejte si to na <a href="../example/media/xdef-web/intro-01-EssentialConcepts.html">"Pískovišti-online"</a>.
+</p>
+
+<div>
+Example 2: <b>References</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+XML data:
+<pre><code class="language-xml">&lt;Family>
+  &lt;Father
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "7107130345"
+    Salary     = "18800"
+  />
+  &lt;Mother
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "7653220029"
+    Salary     = "19400"
+  />
+  &lt;Son
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "9211090121"
+  />
+  &lt;Daughter
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "9655270067"
+  />
+  &lt;Residence
+    Street     = "Small"
+    Number     = "5"
+    Town       = "Big"
+    Zip        = "12300"
+  />
+&lt;/Family>
+</code></pre>
+</td><td>
+X-definice pro XML data vlevo:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Family"
+>
+  &lt;Family>
+    &lt;Father    xd:script = "occurs 0..1; ref Person"  />
+    &lt;Mother    xd:script = "occurs 1..1; ref Person"  />
+    &lt;Son       xd:script = "occurs 0..*; ref Person"  />
+    &lt;Daughter  xd:script = "occurs 0..*; ref Person " />
+    &lt;Residence xd:script = "occurs 1;    ref Address" />
+  &lt;/Family>
+  
+  &lt;Person
+    GivenName  = "string()" 
+    FamilyName = "string()" 
+    PersonalID = "long()"
+    Salary     = "optional int()"
+  />
+  &lt;Address
+    Street = "string()"
+    Number = "int()"
+    Town   = "string()"
+    Zip    = "int()"
+  />
+&lt;/xd:def>
+
+
+
+
+
+</code></pre>
+</td></tr></table>
+
+<p>
+Vyzkoušejte si to na <a href="../example/media/xdef-web/intro-02-References.html">"Pískovišti-online"</a>.
+</p>
+
+
+<h2>Anotace</h2>
+
+<p>
+X-definice je určena pro popis a zpracování dat ve formátu XML a také JSON, YAML a podobných formátech.
+</p><p>
+X-definice je open-source nástroj, který popisuje strukturu a vlastnosti datových hodnot v dokumentu XML.
+X-definice navíc umožňuje popsat zpracování a konstrukci objektů XML. X-definice tak může
+nahradit stávající technologie běžně používané pro validaci XML – konkrétně Data Type Definition (DTD),
+XML Schema (XSD), Schematron a Extensible Stylesheet Language Transformations (XSLT).
+</p><p>
+X-definice umožňuje kombinovat validaci dokumentů XML se zpracováním dat (popisem akcí
+přiřazených každé události při zpracování objektů XML). Ve srovnání s technologiemi založenými na DTD a schématu XML
+je výhodou X-definice (nejen) vyšší čitelnost a snadnější údržba. X-definice byla navržena tak, aby
+zvládala datové sady XML prakticky neomezené velikosti přesahující velikost pracovní paměti.
+</p><p>
+Důležitou vlastností X-definice je maximální respektování struktury popisovaných dat. Forma
+X-definice je XML dokument se strukturou podobnou popisovaným XML datům. To umožňuje rychlý
+a intuitivní popis XML dat a jejich zpracování.
+</p><p>
+Vlastnosti XML položek (a události, které mohou během procesu nastat) jsou popsány jazykem X-script.
+Ve většině případů stačí nahradit hodnoty popsané v datovém modelu XML jazykem X-script v X-definici.
+Do X-scriptu můžete také postupně přidávat požadované akce zpracování dat.
+Technologie X-definice také umožňuje generovat zdrojový kód pro třídy reprezentující XML prvky popsané
+X-definicí v Javě. Taková třída se nazývá X-komponenta. Instance XML dat lze použít ve formě
+X-komponent (podobně jako technologie JAXB).
+</p><p>
+Počínaje verzí X-definice 4.2 je možné kromě XML ověřovat a zpracovávat data ve formátech JSON a YAML, Properties,
+Windows INI a CSV (hodnoty oddělené čárkami). Modely datových struktur JSON jsou
+popsány elementy xd:json nebo xd:ini.
+</p><p>
+X-definice také umožňuje jazykovou lokalizaci názvů tagů popisovaných XML dat. Různé jazykové
+verze lze popsat elementy v objektu xd:lexicon.
+</p>
+
+
+
+<h2>Kam dále pokračovat</h2>
+
+<ul>
+    <li><a href="../tutorial/">Tutoriál</a>
+        — názorná výuková lekce
+    </li>
+    <li><a href="../other/download.html">Dokumentace</a>
+        — kompletní dokumentace
+    </li>
+    <li><a href="#Media">Média</a>
+        — články, přednášky, prezentace, videa
+    </li>
+    <li><a href="../other/download.html">Stáhnout</a>
+        — zkontrolujte publikované verze a stáhněte si jar, zdrojové kódy, dokumentaci a příklady
+    </li>
+    <li><a href="../playground/">Pískoviště</a>
+        — online pískoviště, spusťte si své experimenty s X-definicemi
+    </li>
+    <li><a href="https://github.com/Syntea/xdef">GitHub.com/Syntea/xdef</a>
+        — vývojový git-repozitář X-definice na GitHub.com
+    </li>
 </ul>
 
 
-<h2>Helper applications</h2>
 
-Helper applications:<ul>
-    <li><a href='../other/XDefGUI.html'>XDefGUI</a> — X-definition editor and debugger guide</li>
+<h1>Souvislosti</h1>
+
+Pomocné aplikace:<ul>
+    <li><a href='../other/download.html#HelperApplications'>XDefGUI</a> — editor pro X-definice a debugger</li>
 </ul>
 
 
-<h2 id="Media">Média</h2>
+
+<h1 id="Media">Média</h1>
 
 Články, přednášky, prezentace, videa:<ul>
     <li>dzone.com 2022-01:
@@ -89,7 +287,7 @@ Helper applications:<ul>
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasic()</script>
+<script type="module">initPageBasicHili()</script>
 
 </body>
 </html>

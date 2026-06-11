@@ -13,7 +13,9 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">X-definition Introduction</div>
+<div class="title">X-definition</div>
+
+<h1>Introduction</h1>
 
 <p>
 <b>X-definition</b> is a technology designed to describe the <b>validation, processing and construction</b> of data
@@ -23,27 +25,223 @@ X-definition is a technology designed by <b>Syntea software group a.s.</b> for p
 processing and creation of the structure of XML, JSON, YAML, INI and CSV documents. It allows the user
 not only to <b>define the structure of XML documents</b>, but also to specifically describe their
 <b>processing and construction</b>.
-X-definition also allows you to define and use code for <b>external user methods</b>.
+X-definition also allows you to define and use code in <b>external user methods</b>.
 </p><p>
 This project is implemented for the platform Java <b>1.8+</b>
 (additional note: up to the version 41.0.4 for the platform Java 1.6+).
 </p>
 
-<h1>X-definition web sites</h1>
 
-Web sites:<ul>
-    <li><a href="tutorial/">Tutorial</a></li>
-    <li><a href="playground/">Playground-online</a></li>
-    <li><a href="download.html">Download</a> — jar file, sources, documentation, examples</li>
-    <li><a href="https://github.com/Syntea/xdef">Project on GitHub.com</a></li>
+<h2>License</h2>
+
+This project is <b>Open Source Software (OSS)</b> licensed under
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 license</a>.
+
+
+<h2>Illustrative examples</h2>
+
+<div>
+Example 1: <b>Essential concepts</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+Let´s have the following XML data:
+<pre><code class="language-xml">&lt;Employee
+  FirstName = "Andrew"
+  LastName  = "Aardvark"
+  EnterDate = "1996-03-12"
+  Salary    = "21700"
+>
+  &lt;Address
+    Street = "Broadway"
+    Number = "255"
+    Town   = "Beverly Hills"
+    State  = "CA"
+    Zip    = "90210"
+  />
+  &lt;Competence>electrician&lt;/Competence>
+  &lt;Competence>carpenter&lt;/Competence>
+&lt;/Employee>
+
+
+
+
+
+
+</code></pre>
+</td><td>
+This is complete X-definition of the XML data on the left:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Employee"
+>
+  &lt;Employee
+    FirstName = "required string()"
+    LastName  = "required string()"
+    EnterDate = "required date()"
+    Salary    = "optional decimal()"
+  >
+    &lt;Address
+      Street = "required string()"
+      Number = "required int()"
+      Town   = "required string()"
+      State  = "required string()"
+      Zip    = "required int()"
+    />
+    &lt;Competence xd:script = "occurs 1..5">
+      required string()
+    &lt;/Competence>
+  &lt;/Employee>
+&lt;/xd:def>
+</code></pre>
+</td></tr></table>
+
+<p>
+You can try it on the <a href="example/media/xdef-web/intro-01-EssentialConcepts.html">"Playground-online"</a>.
+</p>
+
+<div>
+Example 2: <b>References</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+XML data:
+<pre><code class="language-xml">&lt;Family>
+  &lt;Father
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "7107130345"
+    Salary     = "18800"
+  />
+  &lt;Mother
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "7653220029"
+    Salary     = "19400"
+  />
+  &lt;Son
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "9211090121"
+  />
+  &lt;Daughter
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "9655270067"
+  />
+  &lt;Residence
+    Street     = "Small"
+    Number     = "5"
+    Town       = "Big"
+    Zip        = "12300"
+  />
+&lt;/Family>
+</code></pre>
+</td><td>
+X-definition of the XML data on the left:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Family"
+>
+  &lt;Family>
+    &lt;Father    xd:script = "occurs 0..1; ref Person"  />
+    &lt;Mother    xd:script = "occurs 1..1; ref Person"  />
+    &lt;Son       xd:script = "occurs 0..*; ref Person"  />
+    &lt;Daughter  xd:script = "occurs 0..*; ref Person " />
+    &lt;Residence xd:script = "occurs 1;    ref Address" />
+  &lt;/Family>
+  
+  &lt;Person
+    GivenName  = "string()" 
+    FamilyName = "string()" 
+    PersonalID = "long()"
+    Salary     = "optional int()"
+  />
+  &lt;Address
+    Street = "string()"
+    Number = "int()"
+    Town   = "string()"
+    Zip    = "int()"
+  />
+&lt;/xd:def>
+
+
+
+
+
+</code></pre>
+</td></tr></table>
+
+<p>
+You can try it on the <a href="example/media/xdef-web/intro-02-References.html">"Playground-online"</a>.
+</p>
+
+
+<h2>Annotation</h2>
+
+<p>
+X‑definition is designed for description and processing of data in the XML format and also JSON, YAML and similar.
+</p><p>
+X-definition is an open-source tool that describes the structure and properties of data values in an XML document.
+In addition, X-definition allows you to describe the processing and construction of XML objects. X-definition can
+thus replace existing technologies commonly used for XML validation — namely Data Type Definition (DTD),
+XML Schema (XSD), Schematron, and Extensible Stylesheet Language Transformations (XSLT).
+</p><p>
+X-definition allows you to combine XML document validation with data processing (by describing the actions
+assigned to each event when processing XML objects). Compared to technologies based on DTD and XML schema,
+the advantage of X-definition is (not only) higher readability and easier maintenance. X-definition was designed to
+handle XML data sets of virtually unlimited size beyond the size of working memory.
+</p><p>
+An important feature of X-definition is the maximum respect for the structure of the described data. The form of
+an X-definition is an XML document with a structure similar to the XML data being described. This allows a quick
+and intuitive description of the XML data and its processing.
+</p><p>
+The properties of XML items (and the events that can occur during the process) are described by the X-script
+language. In most cases, it is sufficient to replace the values described in the XML data model with the X-script
+language in the X-definition. You can also incrementally add the required data processing actions to the X-script.
+X-definition technology also allows you to generate source code for classes representing XML elements described
+by an X-definition in Java. Such a class is called an X-component. Instances of XML data can be used in the form of
+X-components (similar to JAXB technology).
+</p><p>
+Starting with X-definition version 4.2, it is possible to validate and process data in JSON and YAML, Properties,
+Windows INI, and CSV (comma-separated values) formats in addition to XML. JSON data structure models are
+described by xd:json or xd:ini elements.
+</p><p>
+The X-definition also allows language localization of the tag names of the described XML data. Different language
+versions can be described by elements in the xd:lexicon object.
+</p>
+
+
+
+<h2>Where to continue</h2>
+
+<ul>
+    <li><a href="tutorial/">Tutorial</a>
+        — illustrative lecture
+    </li>
+    <li><a href="other/download.html">Documentation</a>
+        — complete documentation
+    </li>
+    <li><a href="#Media">Media</a>
+        — articles, lectures, presentations, videos
+    </li>
+    <li><a href="other/download.html">Download</a>
+        — check published versions and download jar, sources, documentation, example files
+    </li>
+    <li><a href="playground/">Playground</a>
+        — playground online, run your X-definition experiments
+    </li>
+    <li><a href="https://github.com/Syntea/xdef">GitHub.com/Syntea/xdef</a>
+        — development git-repository of X-definition on GitHub.com
+    </li>
 </ul>
 
 
-<h1>Helper applications</h1>
 
-Helper applications:<ul>
-    <li><a href='other/XDefGUI.html'>XDefGUI</a> — X-definition editor and debugger guide</li>
+<h1>Consequences</h1>
+
+Helper Applications:<ul>
+    <li><a href='other/download.html#HelperApplications'>XDefGUI</a> — X-definition editor and debugger</li>
 </ul>
+
 
 
 <h1 id="Media">Media</h1>
@@ -89,7 +287,7 @@ Articles, lectures, presentations, videos:<ul>
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasic()</script>
+<script type="module">initPageBasicHili()</script>
 
 </body>
 </html>

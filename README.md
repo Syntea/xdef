@@ -9,7 +9,7 @@ in **XML** format (as well as **JSON, YAML** and similar).
 X-definition is a technology designed by **Syntea software group a.s.** for professional description, validation,
 processing and creation of the structure of XML, JSON, YAML, INI and CSV documents. It allows the user
 not only to **define the structure of XML documents**, but also to specifically describe their
-**processing and construction**. X-definition also allows you to define and use code for **external user methods**.
+**processing and construction**. X-definition also allows you to define and use code in **external user methods**.
 
 Homepage: <http://www.xdef.org>
 
@@ -25,7 +25,7 @@ This project is **Open Source Software (OSS)** licensed under
 
 ## Illustrative examples
 
-You can try the following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
+You can try the following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>.
 
 Example 1: **Essential concepts**
 <table><tr style="vertical-align: top;"><td>
@@ -48,10 +48,17 @@ Let´s have the following XML data:
   <Competence>electrician</Competence>
   <Competence>carpenter</Competence>
 </Employee>
+
+
+
+
+
+
+
 ```
 
 </td><td>
-This is the complete X-definition file with the model of the XML data on the left:
+This is complete X-definition of the XML data on the left:
 
 ```xml
 <xd:def
@@ -80,6 +87,7 @@ This is the complete X-definition file with the model of the XML data on the lef
 
 </td></tr></table>
 
+You can try it on the ["Playground-online"](http://www.xdef.org/example/media/xdef-web/intro-01-EssentialConcepts.html).
 
 Example 2: **References**
 <table><tr style="vertical-align: top;"><td>
@@ -119,7 +127,7 @@ XML data:
 ```
 
 </td><td>
-Model of the XML data:
+X-definition of the XML data:
 
 ```xml
 <xd:def
@@ -147,10 +155,17 @@ Model of the XML data:
     Zip    = "int()"
   />
 </xd:def>
+
+
+
+
+
+
 ```
 
 </td></tr></table>
 
+You can try it on the ["Playground-online"](http://www.xdef.org/example/media/xdef-web/intro-02-References.html).
 
 
 ## Annotation
@@ -159,8 +174,8 @@ X‑definition is designed for description and processing of data in the XML for
 
 X-definition is an open-source tool that describes the structure and properties of data values in an XML document.
 In addition, X-definition allows you to describe the processing and construction of XML objects. X-definition can
-thus replace existing technologies commonly used for XML validation - namely DTD (Data Type Definition), XML
-Schema (XSD), Schematron, and XSLT.
+thus replace existing technologies commonly used for XML validation — namely Data Type Definition (DTD),
+XML Schema (XSD), Schematron, and XML Stylesheet Language Transformations (XSLT).
 
 X-definition allows you to combine XML document validation with data processing (by describing the actions
 assigned to each event when processing XML objects). Compared to technologies based on DTD and XML schema,
@@ -193,7 +208,7 @@ For the **complete documentation** see the directory [xdef/src/documentation](/x
 For **the information about release versions** see file [xdef/changelog.md](/xdef/changelog.md).
 
 You can try your X-definition examples at the following **"Playground-online"**:
-  * guidepost of "Playground-online": <https://xdef.syntea.cz/tutorial/examples/online.html>
+  * guidepost of "Playground-online": <https://www.xdef.org/playground/>
 
 
 
@@ -209,7 +224,7 @@ Links:
       (SNAPSHOT www-browsing may be unavailable yet)
   * **information** about **release versions**:
     * [xdef/changelog.md](/xdef/changelog.md)
-  * **download** using maven system and **maven-commands directly**:
+  * **download** using **maven system** directly:
     * [xdef-download.sh](/administration/script-aux/xdef-download.sh)
 
 ## Package content

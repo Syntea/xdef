@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Example — References</title>
+    <meta name="description" content="Example — References"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css"/>
+    <script type="module" src="../../../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Example — References</div>
+
+<form method="post" action="../../../playground/Playground">
+
+<b>X-definition:</b>
+<textarea name="xdef" rows="26" class="linenumbers">
+&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Family"
+>
+  &lt;Family>
+    &lt;Father    xd:script = "occurs 0..1; ref Person"  />
+    &lt;Mother    xd:script = "occurs 1..1; ref Person"  />
+    &lt;Son       xd:script = "occurs 0..*; ref Person"  />
+    &lt;Daughter  xd:script = "occurs 0..*; ref Person " />
+    &lt;Residence xd:script = "occurs 1;    ref Address" />
+  &lt;/Family>
+  
+  &lt;Person
+    GivenName  = "string()" 
+    FamilyName = "string()" 
+    PersonalID = "long()"
+    Salary     = "optional int()"
+  />
+  &lt;Address
+    Street = "string()"
+    Number = "int()"
+    Town   = "string()"
+    Zip    = "int()"
+  />
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="31" class="linenumbers">
+&lt;Family>
+  &lt;Father
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "7107130345"
+    Salary     = "18800"
+  />
+  &lt;Mother
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "7653220029"
+    Salary     = "19400"
+  />
+  &lt;Son
+    GivenName  = "John"
+    FamilyName = "Smith"
+    PersonalID = "9211090121"
+  />
+  &lt;Daughter
+    GivenName  = "Jane"
+    FamilyName = "Smith"
+    PersonalID = "9655270067"
+  />
+  &lt;Residence
+    Street     = "Small"
+    Number     = "5"
+    Town       = "Big"
+    Zip        = "12300"
+  />
+&lt;/Family>
+</textarea>
+
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums()</script>
+
+</body>
+</html>
