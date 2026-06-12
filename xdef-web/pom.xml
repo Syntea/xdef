@@ -124,7 +124,6 @@
                             <includes>
                                 <inlude>changelog.md</inlude>
                             </includes>
-                            <filtering>true</filtering>
                         </resource>
                         <resource>
                             <targetPath>META-INF</targetPath>
@@ -155,6 +154,20 @@
                             <includes>
                                 <inlude>README.md</inlude>
                                 <inlude>*.pdf</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>other</targetPath>
+                            <directory>../xdef</directory>
+                            <includes>
+                                <inlude>changelog.md</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>other</targetPath>
+                            <directory>../administration/script-aux</directory>
+                            <includes>
+                                <inlude>xdef-download.sh</inlude>
                             </includes>
                         </resource>
                         <resource>

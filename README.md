@@ -205,10 +205,9 @@ versions can be described by elements in the xd:lexicon object.
 ## Documentation and online playground
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
-For **the information about release versions** see file [xdef/changelog.md](/xdef/changelog.md).
 
-You can try your X-definition examples at the following **"Playground-online"**:
-  * guidepost of "Playground-online": <https://www.xdef.org/playground/>
+You can try your X-definition examples and experiments at the following **"Playground-online"**:
+  * web-page "Playground-online": <https://www.xdef.org/playground/>
 
 
 
@@ -217,9 +216,9 @@ You can try your X-definition examples at the following **"Playground-online"**:
 ## Check and download available versions
 
 Links:
-  * **published release versions** from the **central maven repository**:
+  * **published release versions** from the **Central Maven Repository**:
     * <https://central.sonatype.com/artifact/org.xdef/xdef/versions>
-  * published **snapshot** versions from the central maven **snapshot** repository:
+  * published **snapshot** versions from the Central Maven **Snapshot** Repository:
     * <https://central.sonatype.com/repository/maven-snapshots/>
       (SNAPSHOT www-browsing may be unavailable yet)
   * **information** about **release versions**:
@@ -227,9 +226,9 @@ Links:
   * **download** using **maven system** directly:
     * [xdef-download.sh](/administration/script-aux/xdef-download.sh)
 
-## Package content
+## Version package content
 
-List of file assets:
+File assets in a version package:
   * _xdef-{version}.jar_            - the java-library X-definition
   * _xdef-{version}-userdoc.zip_    - complete user documentation and tutorial examples
   * _xdef-{version}-javadoc.jar_    - html-documentation of java source code generated from the java source code
@@ -241,11 +240,11 @@ List of file assets:
 ## Usage in your maven project
 
 Configure your file pom.xml:
-  * add the following `dependency` on a release version in the central maven repository:
+  * add the following `dependency` on a **release version** in the **Central Maven Repository**:
 
     ```xml
     <dependencies>
-        ...
+        …
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
@@ -253,21 +252,21 @@ Configure your file pom.xml:
         </dependency>
     <dependencies>
     ```
-  * or add the following `dependency` on a snapshot (or also release) version
-    in the central maven snapshot repository (it's necessary to add the following `repository`):
+  * or add the following `dependency` on a **snapshot** (or also release) **version**
+    in the Central Maven **Snapshot** Repository (it's necessary to add the following `repository`):
 
     ```xml
     <dependencies>
-        ...
+        …
         <dependency>
             <groupId>org.xdef</groupId>
             <artifactId>xdef</artifactId>
             <version>[snapshot (or also release) version]</version>
         </dependency>
     </dependencies>
-    ...
+    …
     <repositories>
-        ...
+        …
         <repository>
             <id>central-snapshot</id>
             <url>https://central.sonatype.com/repository/maven-snapshots</url>

@@ -88,10 +88,10 @@ export function headerLangActivate() {
     $(".headerLangAct").css("display", "inline");
 }
 
-export function setXdefLatestVersion() {
-    $.get("../XdefLatestVersion", function(version) {
-        $("span.xdefLatestVersion").text(version);
-        $("a.xdefLatestVersion").each(function() {
+export function setLatestVersion() {
+    $.get("../LatestVersion", function(version) {
+        $("span.latestVersion").text(version);
+        $("a.latestVersion").each(function() {
             const root = $(this);
             ["href", "title"].forEach(attrName => {
                 const value = root.attr(attrName);
@@ -113,4 +113,4 @@ window.initPageBasicLnumsHili   = initPageBasicLnumsHili;
 window.footerVersionActivate    = footerVersionActivate;
 window.footerVersionDeactivate  = footerVersionDeactivate;
 window.headerLangActivate       = headerLangActivate;
-window.setXdefLatestVersion     = setXdefLatestVersion;
+window.setLatestVersion         = setLatestVersion;

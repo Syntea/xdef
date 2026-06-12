@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Download X-definition versions and documentation</title>
+    <title>Download X-definition versions</title>
     <meta name="description" content="Download X-definition versions and documentation"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
@@ -13,86 +13,122 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">Download versions and documentation</div>
+<div class="title">Download versions and others</div>
 
 
 <h1>Published X-definition versions</h1>
 
-Latest published release version <code><span class="enframed xdefLatestVersion">--.--.--</span></code>:<dl>
-    <dt>download <span class="enframed"><a class="xdefLatestVersion"
+Latest published release version <code><span class="enframed latestVersion">--.--.--</span></code>:<dl>
+    <dt>download <span class="enframed"><a class="latestVersion"
             href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--"
             title="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--"
         >latest release version</a></span> from Central Maven Repository (www-directory)
     </dt>
-    <dd>file assets in a version package (links lead to the latest release version):<ul>
-            <li><code><a class="xdefLatestVersion"
-                    href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.--.jar"
-                >xdef-{version}.jar</a></code>
-                — the java-library X-definition</li>
-            <li id="fileAssetUserdoc"><code><a class="xdefLatestVersion"
-                    href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---userdoc.zip"
-                >xdef-{version}-userdoc.zip</a></code>
-                — complete user documentation and tutorial examples</li>
-            <li><code><a class="xdefLatestVersion"
-                    href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---javadoc.jar"
-                >xdef-{version}-javadoc.jar</a></code>
-                — html-documentation of java source code generated from the java source code</li>
-            <li><code><a class="xdefLatestVersion"
-                    href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---sources.jar"
-                >xdef-{version}-sources.jar</a></code>
-                — original java source code</li>
-            <li><code><a class="xdefLatestVersion"
-                    href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---src.zip"
-                >xdef-{version}-src.zip</a></code>
-                — java source code insertable directly into your source code,
-                  very similar to <code>xdef-{version}-sources.jar</code></li>
-            <li><code><a class="xdefLatestVersion"
-                    href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.--.pom"
-                >xdef-{version}.pom</a></code>
-                — maven metadata of the package</li>
-        </ul>
-    </dd>
 </dl>
 
-All published release versions:<dl>
+Other related links:<dl>
     <dt><span class="enframed"><a
             href="https://central.sonatype.com/artifact/org.xdef/xdef/versions"
             title="https://central.sonatype.com/artifact/org.xdef/xdef/versions"
         >all release versions</a></span> in Central Maven Repository
     </dt>
-    <dd>usage:<ul>
-        <li>to check published release versions
-        </li>
-        <li><div>
-            to download file assets of the published release version directly
-            </div><div>
-            (after opening the link select the row with the required version and click on "Browse" there).
-            </div>
-        </li>
-        <li>see also <span class="enframed"><a
-                href="https://github.com/Syntea/xdef?tab=readme-ov-file#usage-in-other-projects"
-            >README/"Usage in other projects"</a></span> for how to use/download X-definition in your project
-            using maven-system
-        </li>
-    </ul></dd>
-</dl>
-
-Related information:<dl>
-    <dt><a href="https://github.com/Syntea/xdef/blob/main/xdef/changelog.md">release versions information</a></dt>
+    <dd><div>
+        to check and download published release versions
+        </div><div>
+        (after opening the link select the row with the required version and click on "Browse" there)
+        </div>
+    </dd>
+    <dt><a href="changelog.md">release versions information</a></dt>
     <dd>so called change-log</dd>
     <dt><a href="https://github.com/Syntea/xdef/releases">release messages</a></dt>
-    <dd>derived messages on GitHub.com monitoring published versions.
+    <dd><dov>
+        from release versions derived messages on GitHub.com monitoring published versions.
+        </dov><div>
         You can subscribe to this messages by becoming a follower of the GitHub.com-repository
         "<a href="https://github.com/Syntea/xdef">Syntea/xdef</a>"
+        </div>
     </dd>
-    <dt>about published <b>snapshot</b> versions</dt>
-    <dd>there are managed snapshot versions also. For more information see
-        <a href="https://github.com/Syntea/xdef?tab=readme-ov-file#usage-in-other-projects">
-        README/"Usage in other projects"</a>
+    <dt>about <b>published snapshot versions</b></dt>
+    <dd>there are managed snapshot versions in Central Maven <b>Snapshot</b> Repository also, see chapter
+        <a href="#UsageInYourMavenProject">"Usage in your maven project"</a> below
     </dd>
+    <dt>download using maven system and maven-commands directly</dt>
+    <dd>run script <a href="xdef-download.sh">xdef-download.sh</a></dd>
     <dt>GitHub.com-repository <a href="https://github.com/Syntea/xdef">"Syntea/xdef"</a></dt>
-    <dd>repository with original source code etc.</dd>
+    <dd>git-repository with original source code etc.</dd>
 </dl>
+
+
+<h2 id="VersionPackageContent">Version package content</h2>
+
+File assets in a version package (see previous chapter, links below lead to the latest release version):<ul>
+    <li><code><a class="latestVersion"
+            href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.--.jar"
+        >xdef-{version}.jar</a></code>
+        — the java-library X-definition</li>
+    <li><code><a class="latestVersion"
+            href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---userdoc.zip"
+        >xdef-{version}-userdoc.zip</a></code>
+        — complete user documentation and tutorial examples</li>
+    <li><code><a class="latestVersion"
+            href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---javadoc.jar"
+        >xdef-{version}-javadoc.jar</a></code>
+        — html-documentation of java source code generated from the java source code</li>
+    <li><code><a class="latestVersion"
+            href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---sources.jar"
+        >xdef-{version}-sources.jar</a></code>
+        — original java source code</li>
+    <li><code><a class="latestVersion"
+            href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.---src.zip"
+        >xdef-{version}-src.zip</a></code>
+        — java source code insertable directly into your source code,
+          very similar to <code>xdef-{version}-sources.jar</code></li>
+    <li><code><a class="latestVersion"
+            href="https://repo1.maven.org/maven2/org/xdef/xdef/--.--.--/xdef---.--.--.pom"
+        >xdef-{version}.pom</a></code>
+        — maven metadata of the package</li>
+</ul>
+
+
+<h2 id="UsageInYourMavenProject">Usage in your maven project</h2>
+
+Configure your file <code>pom.xml</code>:<ul>
+    <li>
+    add the following <b>dependency</b> on a <b>release version</b> in the <b>Central Maven Repository</b>:
+    <pre><code class="language-xml">&lt;dependencies>
+    …
+    &lt;dependency>
+        &lt;groupId>org.&lt;/groupId>
+        &lt;artifactId>xdef&lt;/artifactId>
+        &lt;version>[release version]&lt;/version>
+    &lt;/dependency>
+&lt;dependencies>
+</code></pre>
+    </li><li>
+    or add the following <b>dependency</b> on a <b>snapshot</b> (or also release) <b>version</b>
+    in the Central Maven <b>Snapshot</b> Repository (it's necessary to add the following <b>repository</b>):
+    <pre><code class="language-xml">&lt;dependencies>
+    …
+    &lt;dependency>
+        &lt;groupId>org.xdef&lt;/groupId>
+        &lt;artifactId>xdef&lt;/artifactId>
+        &lt;version>[snapshot (or also release) version]&lt;/version>
+    &lt;/dependency>
+&lt;/dependencies>
+…
+&lt;repositories>
+    …
+    &lt;repository>
+        &lt;id>central-snapshot&lt;/id>
+        &lt;url>https://central.sonatype.com/repository/maven-snapshots&lt;/url>
+        &lt;releases>&lt;enabled>false&lt;/enabled>&lt;/releases>
+        &lt;snapshots>&lt;enabled>true&lt;/enabled>&lt;/snapshots>
+    &lt;/repository>
+&lt;/repositories>
+</code></pre>
+    </li>
+</ul>
+
 
 
 <h1 id="HelperApplications">Helper Applications</h1>
@@ -102,50 +138,12 @@ Helper Applications:<ul>
 </ul>
 
 
-<h1>X-definition documentation</h1>
-
-Complete documentation related to the required version:<ul>
-    <li>download <a href="#fileAssetUserdoc"><code>xdef-{version}-userdoc.zip</code></a>
-        — see above the "userdoc" file asset of the required version package
-    </li>
-</ul>
-
-Download individual documentation files (of version related to this web, see the page footer):<ul>
-    <li><a href='../documentation/xdef-4.2.pdf'>xdef-4.2.pdf</a>
-        — X-definition language description
-    </li>
-    <li><a href='../documentation/xdef-4.2_construction_mode.pdf'>xdef-4.2_construction_mode.pdf</a>
-        — Introduction to construction mode of X-definition
-    </li>
-    <li><a href='../documentation/xdef-4.2_Programming.pdf'>xdef-4.2_Programming.pdf</a>
-        — Introduction to X-definition Java programming
-    </li>
-    <li><a href='../documentation/xdef-4.2_Xcomponent.pdf'>xdef-4.2_Xcomponent.pdf</a>
-        — Introduction to X-definition X-component
-    </li>
-    <li><a href='../documentation/xdef-4.2_Lexicon.pdf'>xdef-4.2_Lexicon.pdf</a>
-        — Introduction to X-definition X-lexicon
-    </li>
-    <li><a href='../documentation/xdef-4.2_manual.pdf'>xdef-4.2_manual.pdf</a>
-        — X-definition user manual
-    </li>
-</ul>
-
-Other documentation:<ul>
-    <li><a href="https://github.com/Syntea/xdef/tree/main/xdef/src/documentation">
-        documentation directory</a> — latest stable documentation on GitHub.com/Syntea/xdef (www)
-    </li>
-    <li><a href="../javadoc/index.html">generated java-documentation</a> — of X-definition
-        (the package "org.xdef:xdef") (local sub-site)
-    </li>
-</ul>
-
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
 <script type="module">
-    initPageBasic();
-    setXdefLatestVersion();
+    initPageBasicHili();
+    setLatestVersion();
 </script>
 
 </body>
