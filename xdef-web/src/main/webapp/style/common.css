@@ -51,7 +51,19 @@ pre {
     background-color:   white;
 }
 
-div.technicalInfo {
+.pulldown {
+    line-height:        1.5em;
+    overflow:           hidden;
+    cursor:             pointer;
+    max-height:         2.3em; /* cca 1.5 line */
+    transition:         max-height 0.5s ease;
+}
+
+.pulldown.expanded {
+    max-height:         100em; /* large enough for full content */
+}
+    
+ div.technicalInfo {
     margin-top:         2em;
 }
 
