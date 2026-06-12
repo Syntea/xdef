@@ -150,7 +150,17 @@ public class XDefToJSON {
         for (int i = 1; i < xd.size(); i++) {
             Object o = xd.get(i);
             if (!(o instanceof Map)) {
-                throw new RuntimeException("Unexpected object " + i);
+                if (o instanceof List) {
+                    sb.append("<").append(xdPrefix).append(":json name=\"");
+                    List list = (List) o;
+                    map = (Map<String, Object>) list.get(0);
+                    sb.append((String)map.get(xdPrefix+":json")).append("\">\n");
+                    sb.append(toXmlString(XonUtils.toJsonString(list.get(1), true)));
+                    sb.append("\n</").append(xdPrefix).append(":json>\n");
+                    continue;
+                } else {
+                    throw new RuntimeException("Unexpected object " + i);
+                }
             }
             map = (Map<String, Object>) o;
             if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
@@ -172,11 +182,6 @@ public class XDefToJSON {
                 sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
             } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
                 sb.append(o.toString());
-            } else if (map.size() == 1) { // JSON model
-                String name = map.keySet().iterator().next();
-                sb.append("\n<").append(xdPrefix).append(":json name='").append(name).append("'>\n");
-                sb.append(toXmlString(XonUtils.toJsonString(map.get(name), true)));
-                sb.append("\n</").append(xdPrefix).append(":json>\n");
             } else { // declaration
                 throw new RuntimeException("Unexpected object: " + o);
             }
@@ -206,7 +211,7 @@ public class XDefToJSON {
                 sb.append(toXmlString(o.getValue().toString())).append("\"");
             }
         }
-        sb.append(">").append(toXmlString(xd.get(1).toString())).append("</").append(xdName).append(">\n");
+        sb.append(">").append(toXmlString(xd.get(1).toString())).append("</").append(xdName).append(">");
         return sb.toString();
     }
 
@@ -307,9 +312,10 @@ public class XDefToJSON {
                             n = el.getAttributeNode("name");
                         }
                         if (n != null) {
-                            sb.append("{ \"").append(n.getNodeValue()).append("\":");
-                            sb.append(removeTrailingSpaces(el.getTextContent()));
-                            sb.append("}");
+                            sb.append("[ { \"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue())
+                                .append("\"},\n");
+                            sb.append(el.getTextContent().trim());
+                            sb.append("\n]");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
                             throw new RuntimeException("Expected name of json model");
@@ -346,8 +352,8 @@ public class XDefToJSON {
         return sb.toString();
     }
 
-    /** Convert X-declaration XML to JSON.
-     * @param elem Element with X-definition.
+    /** Convert text item to JSON.
+     * @param elem Element with test.
      * @return string with JSON format.
      */
     private static String textItemToJson(final Element elem, final String nsURI) {
@@ -367,16 +373,20 @@ public class XDefToJSON {
                 sep = ", ";
             }
         }
-        sb.append(sep);
-        sb.append("\"").append(elem.getNodeName()).append("\": \"");
+        sb.append(sep).append("\"").append(elem.getNodeName()).append("\": \"");
         sb.append(toJsonString(nsURI)).append("\"},\n\"");
-        sb.append(SUtils.modifyString(elem.getTextContent(), "\"", "\\\"")).append("\"]");
-        return sb.toString();
+        String s = elem.getTextContent();
+        if (s.startsWith("\n")) {
+            s = s.substring(1);
+        }
+        if (s.endsWith("\n")) {
+            s = s.substring(0, s.length() - 1);
+        }
+        return sb.append(SUtils.modifyString(s, "\"", "\\\"")).append("\"]").toString();
     }
 
-
-    /** Convert X-declaration XML to JSON.
-     * @param elem Element with X-definition.
+    /** Convert cllection XML to JSON.
+     * @param elem Element with collection.
      * @return string with JSON format.
      */
     private static String collectionToJson(final Element elem, final String nsURI) {
@@ -432,8 +442,8 @@ public class XDefToJSON {
             String key = (String) x;
             if (key.endsWith(":def")) {
                 return xdefToXml(items, key); // xd:def
-            } else if (key.endsWith(":declaration") || key.endsWith(":component")
-                || key.endsWith(":BNFGrammar") || key.endsWith(":lexicon")) {
+            } else if (key.endsWith(":declaration") || key.endsWith(":component") || key.endsWith(":BNFGrammar")
+                || key.endsWith(":lexicon")) {
                 return textItemToXml(items, key);
             } else if (key.endsWith(":collection")) {
                 return collectionToXml(items, key);
