@@ -36,13 +36,14 @@ public final class TestXdefToJSON extends XDTester {
      * @return empty string if test is OK, otherwise, returns string with error message.
      */
     private String testXdefJson(final String xdef, final String name, final boolean display, final String... dataList) {
+        String xdef_JSON = null, xdef_XML = null;
         try {
             compile(xdef);
-            String xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
+            xdef_JSON = XDefToJSON.xmlXdefToJson(xdef);
             if (display) {
                 System.out.println(xdef_JSON);
             }
-            String xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
+            xdef_XML = XDefToJSON.jsonXdefToXml(xdef_JSON);
             if (display) {
                 System.out.println(xdef_XML);
             }
@@ -80,6 +81,9 @@ public final class TestXdefToJSON extends XDTester {
             }
             return ""; // OK
         } catch (RuntimeException ex) {
+            System.out.println(xdef);
+            System.out.println(xdef_JSON);
+            System.out.println(xdef_XML);
             return STester.printThrowable(ex);
         }
     }
