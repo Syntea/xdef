@@ -308,8 +308,8 @@ public class XDefToJSON {
                         if (n != null) {
                             sb.append("{ \"name\": \"").append(n.getNodeValue()).append("\",\n  \"");
                             sb.append(xdPrefix).append(":json\": ");
-                            String s = el.getTextContent().trim();
-                            sb.append(s).append("\n}");
+                            String s = el.getTextContent();
+                            sb.append(s).append("}");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
                             throw new RuntimeException("Expected name of json model");
