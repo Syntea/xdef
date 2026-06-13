@@ -120,6 +120,37 @@ public final class TestXdefToJSON extends XDTester {
         boolean display = false; // If it is true, the generated JSON format is dislpayed
 ////////////////////////////////////////////////////////////////////////////////
         String xdef, data;
+/**
+        try {
+            xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"Example\" root=\"Compositions\">\n" +
+"  <xd:json name=\"Compositions\">\n" +
+"    [\n" +
+"      { \"%script\": \"occurs 1..*;\",\n" +
+"         \"Name\": \"string()\",\n" +
+"         \"Style\": [ \"%oneOf\",\n" +
+"           \"string()\",\n" +
+"           [ \"occurs 2..* string()\" ]\n" +
+"         ]\n" +
+"      }\n" +
+"    ]\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+            data =
+"[\n" +
+"  {\n" +
+"    \"Name\": \"Beethoven, Symfonie No 5\",\n" +
+"    \"Style\": \"Classic\"\n" +
+"  },\n" +
+"  {\n" +
+"    \"Name\": \"A Day at the Races\",\n" +
+"    \"Style\": [\"jazz\", \"pop\" ]\n" +
+"  }\n" +
+"]";
+            assertEq("", testXdefJson(xdef, "Example", true, data));
+        } catch (RuntimeException ex) {fail(ex); return;}
+if(true) return;
+/**/
         try {
             xdef =
 "<x:declaration xmlns:x='"+_xdNS+"'>\n" +
