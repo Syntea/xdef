@@ -148,7 +148,7 @@ public final class TestXdefToJSON extends XDTester {
 "    intList ::= integer (S? \",\" S? integer)*\n"+
 "  </xd:BNFGrammar>\n"+
 "  <xd:json xd:name='root'>\n" +
-"{ a: \"required myType()\" }\n"+
+"  { a: \"required myType()\" }\n"+
 "  </xd:json>\n"+
 "  <xd:component> %class "+_package+".TestxTOJson2 %link Example#root; </xd:component>\n"+
 "</xd:def>";
@@ -170,17 +170,17 @@ public final class TestXdefToJSON extends XDTester {
 "    type  xsDateTime   xdatetime('yyyy-MM-dd[THH:mm:ss]'); \n" +
 "  </xd:declaration>\n" +
 "  <xd:json name=\"S2KF\">\n" +
-"{\n" +
+"  {\n" +
 "    \"caseID\":             \"  caseID()\",\n" +
 "    \"createdTime\":        \"  xsDateTime()\",\n" +
 "    \"modifiedTime\":       \"  xsDateTime()\",\n" +
 "    \"statusCode\":         \"  statusCode()\",\n" +
 "    \"holder\":             {\"%script\":  \"ref Subject\"},\n" +
 "    \"owner\":              {\"%script\":  \"?; ref Subject\"},\n" +
-"}\n" +
+"  }\n" +
 "  </xd:json>\n" +
 "  <xd:json name=\"Subject\">\n" +
-"{\n" +
+"  {\n" +
 "     \"subjectType\":       \"  subjectType()\",\n" +
 "     \"firstName\":         \"? firstName()\",\n" +
 "     \"lastName\":          \"? lastName()\",\n" +
@@ -189,9 +189,11 @@ public final class TestXdefToJSON extends XDTester {
 "     \"CIN\":               \"? ico()\",\n" +
 "     \"PIN\":               \"? rc()\",\n" +
 "     \"contacts\":   {\"%script\": \"ref Contact\"}\n" +
-"}\n" +
+"  }\n" +
 "  </xd:json>\n" +
-"  <xd:json name=\"Contact\">{ \"phoneNum\": \"? phoneNum()\", \"emailAddr\": \"? emailAddr()\" } </xd:json>\n" +
+"  <xd:json name=\"Contact\">\n" +
+"  { \"phoneNum\": \"? phoneNum()\", \"emailAddr\": \"? emailAddr()\" }\n" +
+"  </xd:json>\n" +
 "  <xd:component> %class "+_package+".TestxTOJson3 %link Example#S2KF; </xd:component>\n" +
 "</xd:def>";
             data =
