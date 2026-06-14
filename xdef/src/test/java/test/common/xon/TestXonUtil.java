@@ -52,10 +52,8 @@ public class TestXonUtil extends STester {
             o2 = XonUtils.xmlToXon(el);
             if (f.getName().endsWith(".json")) { // in XON it may differ
                 if (!XonUtils.xonEqual(o1, o2)) {
-                    return "XML conversion (XDEF)  -error- " + f.getName()
-                        + '\n' + KXmlUtils.nodeToString(el)
-                        + "\n" + XonUtils.toXonString(o1, true)
-                        + '\n' + XonUtils.toXonString(o2, true);
+                    return "XML conversion (XDEF)  -error- " + f.getName() + '\n' + KXmlUtils.nodeToString(el)
+                        + "\n" + XonUtils.toXonString(o1, true) + '\n' + XonUtils.toXonString(o2, true);
                 }
             }
         } catch (Exception ex) {
@@ -67,10 +65,8 @@ public class TestXonUtil extends STester {
             o2 = XonUtils.xmlToXon(el);
             Element e2 = XonUtils.xonToXmlW(o2);
             if (KXmlUtils.compareElements(el, e2, true).errors()) {
-                return "XML conversion (W3C)-error- " + f.getName() + ": "
-                    + KXmlUtils.compareElements(el, e2, true)
-                    + '\n' + KXmlUtils.nodeToString(el, true)
-                    + '\n' + KXmlUtils.nodeToString(e2, true);
+                return "XML conversion (W3C)-error- " + f.getName() + ": " + KXmlUtils.compareElements(el, e2, true)
+                    + '\n' + KXmlUtils.nodeToString(el, true) + '\n' + KXmlUtils.nodeToString(e2, true);
             }
             if (f.getName().endsWith(".json")) { // in XON it may differ
                 if (!XonUtils.xonEqual(o1, o2)) {
@@ -90,15 +86,12 @@ public class TestXonUtil extends STester {
             Element e2 = XonUtils.xonToXml(jx1);
             Object jx2 = XonUtils.xmlToXon(e2);
             if (KXmlUtils.compareElements(e1, e2, true).errors()) {
-                return "XML-error-:  "
-                    + KXmlUtils.compareElements(e1, e2, true)
-                    + '\n' + KXmlUtils.nodeToString(e1, true)
-                    + '\n' + KXmlUtils.nodeToString(e2, true);
+                return "XML-error-:  " + KXmlUtils.compareElements(e1, e2, true)
+                    + '\n' + KXmlUtils.nodeToString(e1, true) + '\n' + KXmlUtils.nodeToString(e2, true);
             }
             if (!XonUtils.xonEqual(jx1, jx2)) {
                 return "X JSON-error-:  \n" + XonUtils.toJsonString(jx1, true)
-                    + '\n' + XonUtils.toJsonString(jx2, true)
-                    + '\n' + KXmlUtils.nodeToString(e1, true);
+                    + '\n' + XonUtils.toJsonString(jx2, true) + '\n' + KXmlUtils.nodeToString(e1, true);
             }
             return KXmlUtils.nodeToString(e1) + '\n' + XonUtils.toJsonString(jx1, true);
         } catch (Exception ex) {
@@ -120,19 +113,17 @@ public class TestXonUtil extends STester {
     private static String testX1(Object o) {
         Element el = XonUtils.xonToXml(o);
         Object o1 = XonUtils.xmlToXon(el);
-        return XonUtils.xonEqual(o, o1) ? ""
-            : ("/n*** 12\n" + KXmlUtils.nodeToString(el, true) + "/n*** 12\n" + XonUtils.toXonString(o1, true));
+        return XonUtils.xonEqual(o, o1)
+            ? "" : ("/n*** 12\n" + KXmlUtils.nodeToString(el, true) + "/n*** 12\n" + XonUtils.toXonString(o1, true));
     }
 
-    private static String testXD(String s) {
-        return testXD1(XonUtils.parseXON(s));
-    }
+    private static String testXD(String s) {return testXD1(XonUtils.parseXON(s)); }
 
     private static String testXD1(Object o) {
         Element el = XonUtils.xonToXml(o);
         Object o1 = XonUtils.xmlToXon(el);
-        return XonUtils.xonEqual(o, o1) ? ""
-            : ("/n*** 22\n" + KXmlUtils.nodeToString(el, true) + "/n*** 22\n" + XonUtils.toXonString(o1, true));
+        return XonUtils.xonEqual(o, o1)
+            ? "" : ("/n*** 22\n" + KXmlUtils.nodeToString(el, true) + "/n*** 22\n" + XonUtils.toXonString(o1, true));
     }
 
     /** Run test and print error information. */
@@ -234,8 +225,7 @@ public class TestXonUtil extends STester {
         }
 
         // test XON (%encoding etc)
-        String s = (new File(getDataDir()).getAbsolutePath()
-            + File.separator).replace('\\', '/');
+        String s = (new File(getDataDir()).getAbsolutePath() + File.separator).replace('\\', '/');
         for (File f: SUtils.getFileGroup(s + "Test*.xon")) {
             assertEq("", testJParse(f));
         }
