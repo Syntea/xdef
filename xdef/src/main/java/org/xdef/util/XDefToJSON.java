@@ -269,7 +269,8 @@ public class XDefToJSON {
     private static String xmlXdefToJson(final Element elem, String nsUri) {
         String xdPrefix = elem.getPrefix();
         StringBuilder sb = new StringBuilder();
-        sb.append("[\n{ \"").append(xdPrefix).append(":def\": \"");
+        boolean wasNewLine = false;
+        sb.append("[ { \"").append(xdPrefix).append(":def\": \"");
         NamedNodeMap nnm = elem.getAttributes();
         Node n = nnm.getNamedItem(xdPrefix + ":name");
         if (n == null) {
@@ -298,11 +299,16 @@ public class XDefToJSON {
         }
         if (n != null) {
             sb.append(",\n  ").append(attrToJSON(n));
+            wasNewLine = true;
             nnm.removeNamedItem(n.getNodeName());
         }
         for (int i = 0; i < nnm.getLength(); i++) {
             n = nnm.item(i);
             sb.append(",\n  ").append(attrToJSON(n));
+            wasNewLine = true;
+        }
+        if (wasNewLine) {
+            sb.append("\n  ");
         }
         sb.append("},\n");
         n = getFirstChildElement(elem);
@@ -498,7 +504,7 @@ public class XDefToJSON {
      * <li>-h or --help: display help information.</li>
      * <li>-i or --input: pathname of the file with input data.</li>
      * <li>-o or --output: pathname of output file with converted data.</li>
-     * </ul>
+     * </ul>.
      * @throws Exception if an error occurs.
      */
     public static void main(String... args) throws Exception {
