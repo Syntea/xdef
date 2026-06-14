@@ -151,37 +151,39 @@ public class XDefToJSON {
         sb.append(">\n");
         for (int i = 1; i < xd.size(); i++) {
             Object o = xd.get(i);
-            if (o instanceof List) {
+            if (o instanceof List) { // xd:json
                 List list = (List) o;
                 map = (Map<String, Object>) list.get(0);
-                sb.append("\n<").append(xdPrefix).append(":json name=");
+                sb.append("\n  <").append(xdPrefix).append(":json name=");
                 sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true))).append(">\n");
-                sb.append(toXmlString(XonUtils.toJsonString(list.get(1), true)));
-                sb.append("\n</").append(xdPrefix).append(":json>");
-                continue;
-            }
-            map = (Map<String, Object>) o;
-            if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
-                sb.append("<").append(xdPrefix).append(":declaration");
-                sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
-                sb.append(">");
-                sb.append(toXmlString(o.toString())).append("</").append(xdPrefix).append(":declaration>\n");
-            } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
-                sb.append("\n<").append(xdPrefix).append(":component>");
-                sb.append(getAsXMLText(o));
-                sb.append("</").append(xdPrefix).append(":component>\n");
-            } else if ((o = map.get(xdPrefix + ":BNFGrammar")) != null) { // component
-                sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
-                sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
-                sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
-                sb.append(createXDeNamedvalue(map, xdPrefix, "extends"));
-                sb.append(">");
-                sb.append(getAsXMLText(o));
-                sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
-            } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
-                sb.append(o.toString());
-            } else { // declaration
-                throw new RuntimeException("Unexpected object: " + o);
+                StringBuilder sb1 = new StringBuilder();
+                XonUtils.objectToString(list.get(1), "  \n", sb1, false);
+                sb.append(toXmlString(sb1.toString()));
+                sb.append("\n  </").append(xdPrefix).append(":json>");
+            } else {
+                map = (Map<String, Object>) o;
+                if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
+                    sb.append("<").append(xdPrefix).append(":declaration");
+                    sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
+                    sb.append(">");
+                    sb.append(toXmlString(o.toString())).append("</").append(xdPrefix).append(":declaration>\n");
+                } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
+                    sb.append("\n<").append(xdPrefix).append(":component>");
+                    sb.append(getAsXMLText(o));
+                    sb.append("</").append(xdPrefix).append(":component>\n");
+                } else if ((o = map.get(xdPrefix + ":BNFGrammar")) != null) { // component
+                    sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
+                    sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
+                    sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
+                    sb.append(createXDeNamedvalue(map, xdPrefix, "extends"));
+                    sb.append(">");
+                    sb.append(getAsXMLText(o));
+                    sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
+                } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
+                    sb.append(o.toString());
+                } else { // declaration
+                    throw new RuntimeException("Unexpected object: " + o);
+                }
             }
         }
         sb.append("\n</").append(xdPrefix).append(":def>\n");

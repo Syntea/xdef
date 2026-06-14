@@ -403,6 +403,19 @@ public class XonUtils {
      */
     public static final String toJsonString(final Object x) {return toJsonString(x, false);}
 
+    /** Add the string created from XON/JSON object to StringBuilder.
+     * @param obj object to be converted to String.
+     * @param indent indentation of result,
+     * @param sb StringBuilder where to append the created string.
+     * @param xon if true then XON else if false JOSN source is generated.
+     */
+    public final static void objectToString(final Object obj,
+        final String indent,
+        final StringBuilder sb,
+        final boolean xon) {
+        XonToString.objectToString(obj, indent, sb, false);
+    }
+
     /** Create JSON string from object. Indentation depends on argument.
      * @param x JSON object.
      * @param indent if true then result will be indented.
@@ -410,7 +423,7 @@ public class XonUtils {
      */
     public static final String toJsonString(final Object x, boolean indent) {
         StringBuilder sb = new StringBuilder();
-        XonToString.objectToString(x, indent ? "\n" : null, sb, false);
+        objectToString(x, indent ? "\n" : null, sb, false);
         return sb.toString();
     }
 
@@ -421,7 +434,7 @@ public class XonUtils {
      */
     public static final String toXonString(final Object x,final boolean indent) {
         StringBuilder sb = new StringBuilder();
-        XonToString.objectToString(x, indent ? "\n" : null, sb, true);
+        objectToString(x, indent ? "\n" : null, sb, true);
         return sb.toString();
     }
 
@@ -431,7 +444,7 @@ public class XonUtils {
      */
     public static final String toXonString(final Object x) {
         StringBuilder sb = new StringBuilder();
-        XonToString.objectToString(x, null, sb, true);
+        objectToString(x, null, sb, true);
         return sb.toString();
     }
 
