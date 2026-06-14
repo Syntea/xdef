@@ -110,6 +110,8 @@ public class XDefToJSON {
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  JSON -> XML
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /** Convert JSON format of xd:def to XML.
      * @param json input JSON data.
@@ -149,6 +151,15 @@ public class XDefToJSON {
         sb.append(">\n");
         for (int i = 1; i < xd.size(); i++) {
             Object o = xd.get(i);
+            if (o instanceof List) {
+                List list = (List) o;
+                map = (Map<String, Object>) list.get(0);
+                sb.append("\n<").append(xdPrefix).append(":json name=");
+                sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true))).append(">\n");
+                sb.append(toXmlString(XonUtils.toJsonString(list.get(1), true)));
+                sb.append("\n</").append(xdPrefix).append(":json>");
+                continue;
+            }
             map = (Map<String, Object>) o;
             if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
                 sb.append("<").append(xdPrefix).append(":declaration");
@@ -167,18 +178,13 @@ public class XDefToJSON {
                 sb.append(">");
                 sb.append(getAsXMLText(o));
                 sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
-            } else if ((o = map.get(xdPrefix + ":json")) != null) { // JSON model
-                sb.append("\n<").append(xdPrefix).append(":json name=\"");
-                sb.append(map.get("name")).append("\">\n");
-                sb.append(toXmlString(XonUtils.toJsonString(o, true)));
-                sb.append("\n</").append(xdPrefix).append(":json>");
             } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
                 sb.append(o.toString());
             } else { // declaration
                 throw new RuntimeException("Unexpected object: " + o);
             }
         }
-        sb.append("</").append(xdPrefix).append(":def>\n");
+        sb.append("\n</").append(xdPrefix).append(":def>\n");
         return sb.toString();
     }
 
@@ -273,10 +279,25 @@ public class XDefToJSON {
             sb.append(n.getNodeValue());
             nnm.removeNamedItem(n.getNodeName());
         }
-        sb.append("\"");
-        sb.append(",\n  \"xmlns:").append(xdPrefix).append("\": \"").append(nsUri).append("\"");
+        sb.append("\", \"xmlns:").append(xdPrefix).append("\": \"").append(nsUri).append("\"");
         n = nnm.getNamedItem("xmlns:" + xdPrefix);
         if (n != null) {
+            nnm.removeNamedItem(n.getNodeName());
+        }
+        n = nnm.getNamedItem(xdPrefix + ":root");
+        if (n == null) {
+            n = nnm.getNamedItem("root");
+        }
+        if (n != null) {
+            sb.append(", \"root\": \"").append(n.getNodeValue()).append("\"");
+            nnm.removeNamedItem(n.getNodeName());
+        }
+        n = nnm.getNamedItem(xdPrefix + ":script");
+        if (n == null) {
+            n = nnm.getNamedItem("script");
+        }
+        if (n != null) {
+            sb.append(",\n  ").append(attrToJSON(n));
             nnm.removeNamedItem(n.getNodeName());
         }
         for (int i = 0; i < nnm.getLength(); i++) {
@@ -306,10 +327,13 @@ public class XDefToJSON {
                             n = el.getAttributeNode("name");
                         }
                         if (n != null) {
-                            sb.append("{ \"name\": \"").append(n.getNodeValue()).append("\",\n  \"");
-                            sb.append(xdPrefix).append(":json\": ");
+                            sb.append("[ {\"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue())
+                                .append("\"}, ");
                             String s = el.getTextContent();
-                            sb.append(s).append("}");
+                            while (s.charAt(s.length() -1) <= ' ') {
+                                s = s.substring(0, s.length() -1);
+                            }
+                            sb.append(s).append("\n]");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
                             throw new RuntimeException("Expected name of json model");
