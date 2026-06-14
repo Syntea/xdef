@@ -156,9 +156,7 @@ public class XDefToJSON {
                 map = (Map<String, Object>) list.get(0);
                 sb.append("\n  <").append(xdPrefix).append(":json name=");
                 sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true))).append(">\n");
-                StringBuilder sb1 = new StringBuilder();
-                XonUtils.objectToString(list.get(1), "  \n", sb1, false);
-                sb.append(toXmlString(sb1.toString()));
+                sb.append(toXmlString(XonUtils.objectToString(list.get(1), "  \n", false)));
                 sb.append("\n  </").append(xdPrefix).append(":json>");
             } else {
                 map = (Map<String, Object>) o;
