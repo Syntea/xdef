@@ -58,7 +58,7 @@ Let´s have the following XML data:
 ```
 
 </td><td>
-This is complete X-definition of the XML data on the left:
+This is complete X-definition describing the XML data on the left:
 
 ```xml
 <xd:def
@@ -127,7 +127,7 @@ XML data:
 ```
 
 </td><td>
-X-definition of the XML data:
+X-definition describing the XML data:
 
 ```xml
 <xd:def
