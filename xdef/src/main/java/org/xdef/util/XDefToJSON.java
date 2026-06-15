@@ -161,7 +161,7 @@ public class XDefToJSON {
             } else {
                 map = (Map<String, Object>) o;
                 if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
-                    sb.append("<").append(xdPrefix).append(":declaration");
+                    sb.append("\n<").append(xdPrefix).append(":declaration");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
                     sb.append(">");
                     sb.append(toXmlString(o.toString())).append("</").append(xdPrefix).append(":declaration>\n");
