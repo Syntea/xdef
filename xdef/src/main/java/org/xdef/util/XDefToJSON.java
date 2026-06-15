@@ -148,7 +148,7 @@ public class XDefToJSON {
             sb.append(toXmlString(s));
             sb.append("'");
         }
-        sb.append(">\n");
+        sb.append(">");
         for (int i = 1; i < xd.size(); i++) {
             Object o = xd.get(i);
             if (o instanceof List) { // xd:json
