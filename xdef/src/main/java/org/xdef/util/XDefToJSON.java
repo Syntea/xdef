@@ -164,7 +164,8 @@ public class XDefToJSON {
                     sb.append("\n<").append(xdPrefix).append(":declaration");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
                     sb.append(">");
-                    sb.append(toXmlString(o.toString())).append("</").append(xdPrefix).append(":declaration>");
+                    sb.append(toXmlString(removeTrailingSpaces(o.toString()))).append("</").append(xdPrefix)
+                        .append(":declaration>");
                 } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
                     sb.append("\n<").append(xdPrefix).append(":component>");
                     sb.append(getAsXMLText(o));
