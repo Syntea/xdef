@@ -342,7 +342,7 @@ public class XDefToJSON {
                             while (s.charAt(s.length() -1) <= ' ') {
                                 s = s.substring(0, s.length() -1);
                             }
-                            sb.append(s).append("  \n]");
+                            sb.append(s).append("\n  ]");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
                             throw new RuntimeException("Expected name of json model");
@@ -365,14 +365,14 @@ public class XDefToJSON {
                 }
             }
             //XML model
-            sb.append("{ \"").append(xdPrefix).append(":xml\": \"\n");
+            sb.append("  { \"").append(xdPrefix).append(":xml\": \"\n");
             String s = KXmlUtils.nodeToString(el, true);
             String t = " xmlns:" + xdPrefix + "=\"" + nsUri + "\"";
             int ndx = s.indexOf(t);
             if (ndx > 0) { // remove attribute xmlnd with X-definition namespac
                 s = s.substring(0, ndx) + s.substring(ndx + t.length());
             }
-            sb.append(toJsonString(s)).append("\n\"}");
+            sb.append(toJsonString(s)).append("\n\" }");
             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
         }
         sb.append("]");
