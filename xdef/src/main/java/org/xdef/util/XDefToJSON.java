@@ -164,11 +164,11 @@ public class XDefToJSON {
                     sb.append("\n<").append(xdPrefix).append(":declaration");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
                     sb.append(">");
-                    sb.append(toXmlString(o.toString())).append("</").append(xdPrefix).append(":declaration>\n");
+                    sb.append(toXmlString(o.toString())).append("</").append(xdPrefix).append(":declaration>");
                 } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
                     sb.append("\n<").append(xdPrefix).append(":component>");
                     sb.append(getAsXMLText(o));
-                    sb.append("</").append(xdPrefix).append(":component>\n");
+                    sb.append("</").append(xdPrefix).append(":component>");
                 } else if ((o = map.get(xdPrefix + ":BNFGrammar")) != null) { // component
                     sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
@@ -176,9 +176,10 @@ public class XDefToJSON {
                     sb.append(createXDeNamedvalue(map, xdPrefix, "extends"));
                     sb.append(">");
                     sb.append(getAsXMLText(o));
-                    sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
+                    sb.append("</").append(xdPrefix).append(":BNFGrammar>");
                 } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
-                    sb.append(o.toString());
+                    String s = o.toString().trim();
+                    sb.append("\n").append(s);
                 } else { // declaration
                     throw new RuntimeException("Unexpected object: " + o);
                 }
