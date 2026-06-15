@@ -335,14 +335,14 @@ public class XDefToJSON {
                         if (n != null) {
                             sb.append("  [ {\"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue())
                                 .append("\"}, ");
-                            Object x = XonUtils.parseXON(el.getTextContent());
-                            sb.append(toXmlString(XonUtils.objectToString(x, "    \n", false)));
-                            sb.append("\n  ]");
-//                            String s = el.getTextContent();
-//                            while (s.charAt(s.length() -1) <= ' ') {
-//                                s = s.substring(0, s.length() -1);
-//                            }
-//                            sb.append(s).append("\n]");
+//                            Object x = XonUtils.parseXON(el.getTextContent());
+//                            sb.append(toXmlString(XonUtils.objectToString(x, "    \n", false)));
+//                            sb.append("\n  ]");
+                            String s = el.getTextContent();
+                            while (s.charAt(s.length() -1) <= ' ') {
+                                s = s.substring(0, s.length() -1);
+                            }
+                            sb.append(s).append("  \n]");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
                             throw new RuntimeException("Expected name of json model");
