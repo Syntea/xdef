@@ -401,10 +401,11 @@ public class XonUtils {
      */
     public static final String toJsonString(final Object x) {return toJsonString(x, false);}
 
-    /** Add the string created from XON/JSON object to StringBuilder.
-     * @param obj object to be converted to String.
-     * @param indent indentation of result,
+    /** Create string from XON/JSON object.
+     * @param obj XON/JSON object to be converted to String.
+     * @param indent indentation string of result or null,
      * @param xon if true then XON else if false JOSN source is generated.
+     * @return created string from XON/JSON object.
      */
     public final static String objectToString(final Object obj, final String indent, final boolean xon) {
         StringBuilder sb = new StringBuilder();
