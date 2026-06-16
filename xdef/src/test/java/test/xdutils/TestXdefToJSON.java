@@ -124,6 +124,13 @@ public final class TestXdefToJSON extends XDTester {
         try {
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"Example\" root=\"Compositions\">\n" +
+"  <xd:declaration> type x int(); </xd:declaration>\n" +
+"  <xd:declaration>\n" +
+"    String s = null;\n" +
+"    String t = 'ab c';\n" +
+"    type p string();\n" +
+"  </xd:declaration>\n" +
+"\n" +
 "  <xd:json name=\"Compositions\">\n" +
 "    [\n" +
 "      { \"%script\": \"occurs 1..*;\",\n" +
@@ -135,6 +142,15 @@ public final class TestXdefToJSON extends XDTester {
 "      }\n" +
 "    ]\n" +
 "  </xd:json>\n" +
+"\n" +
+"  <B>\n" +
+"    <C/>\n" +
+"    p;\n" +
+"    <C/>\n" +
+"  </B>\n" +
+"\n" +
+"  <A a='p'/>\n" +
+"\n" +
 "</xd:def>";
             data =
 "[\n" +
@@ -149,7 +165,7 @@ public final class TestXdefToJSON extends XDTester {
 "]";
             assertEq("", testXdefJson(xdef, "Example", true, data));
         } catch (RuntimeException ex) {fail(ex); return;}
-if(true) return;
+//if(true) return;
 /**/
         try {
             xdef =
