@@ -22,11 +22,13 @@ public class XDefToJSON {
     private static String toXmlString(final String s) {return KXmlUtils.toXmlText(s, '<', false);}
 
     /** Modify string to JSON format. */
-    private static String toJsonString(final String s) {return SUtils.modifyString(s, "\"", "\\\"");}
+    private static String toJsonString(final String s) {
+        return SUtils.modifyString(SUtils.modifyString(s, "\r\n", "\n"), "\"", "\\\"");
+    }
 
     /** Remove trailing spaces, */
     private static String removeTrailingSpaces(final String s) {
-        String t = s;
+        String t = SUtils.modifyString(s, "\r\n", "\n");;
         int i;
         while ((i = t.length() - 1) >= 0 && t.charAt(i) <= ' ') {
             t = t.substring(0, i);
@@ -165,8 +167,8 @@ public class XDefToJSON {
                     sb.append("\n<").append(xdPrefix).append(":declaration");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
                     sb.append(">");
-                    sb.append(toXmlString(removeTrailingSpaces(o.toString()))).append("</").append(xdPrefix)
-                        .append(":declaration>");
+                    sb.append(toXmlString(removeTrailingSpaces(o.toString())))
+                        .append("\n</").append(xdPrefix).append(":declaration>");
                 } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
                     sb.append("\n<").append(xdPrefix).append(":component>");
                     sb.append(getAsXMLText(o));
