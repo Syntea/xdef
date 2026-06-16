@@ -27,8 +27,9 @@ public class XDefToJSON {
     /** Remove trailing spaces, */
     private static String removeTrailingSpaces(final String s) {
         String t = s;
-        while (t.endsWith(" ") || t.endsWith("\t")) {
-            t = t.substring(0, t.length() - 1);
+        int i;
+        while ((i = t.length() - 1) >= 0 && t.charAt(i) <= ' ') {
+            t = t.substring(0, i);
         }
         return t;
     }
