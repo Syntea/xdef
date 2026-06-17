@@ -1,6 +1,7 @@
 package org.xdef.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -120,7 +121,7 @@ public class XDefToJSON {
      * @param json input JSON data.
      * @return string with XML format.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "unchecked"})
     private static String jsonXdefToXml(final List xd, final String xdName) {
         StringBuilder sb = new StringBuilder();
         Map<String, Object> map = (Map) xd.get(0);
@@ -151,6 +152,9 @@ public class XDefToJSON {
             sb.append(toXmlString(s));
             sb.append("'");
         }
+        if (xd.size() == 1) {
+            return sb.append(" />").toString();
+        }
         sb.append(">\n");
         for (int i = 1; i < xd.size(); i++) {
             Object o = xd.get(i);
@@ -158,7 +162,8 @@ public class XDefToJSON {
                 List list = (List) o;
                 map = (Map<String, Object>) list.get(0);
                 sb.append("\n  <").append(xdPrefix).append(":json name=");
-                sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true))).append(">\n");
+                sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true)));
+                sb.append(">\n");
                 sb.append(toXmlString(XonUtils.objectToString(list.get(1), "    \n", false)));
                 sb.append("\n  </").append(xdPrefix).append(":json>\n");
             } else {
@@ -186,7 +191,7 @@ public class XDefToJSON {
                     sb.append(getAsXMLText(o));
                     sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
                 } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
-                    String s = o.toString().trim();
+                    String s = "  " + o.toString().trim();
                     sb.append("\n").append(removeTrailingSpaces(s)).append("\n");
                 } else { // declaration
                     throw new RuntimeException("Unexpected object: " + o);
@@ -278,7 +283,6 @@ public class XDefToJSON {
     private static String xmlXdefToJson(final Element elem, String nsUri) {
         String xdPrefix = elem.getPrefix();
         StringBuilder sb = new StringBuilder();
-//        boolean wasNewLine = false;
         sb.append("[ { \"").append(xdPrefix).append(":def\": \"");
         NamedNodeMap nnm = elem.getAttributes();
         Node n = nnm.getNamedItem(xdPrefix + ":name");
@@ -308,17 +312,12 @@ public class XDefToJSON {
         }
         if (n != null) {
             sb.append(",\n  ").append(attrToJSON(n));
-//            wasNewLine = true;
             nnm.removeNamedItem(n.getNodeName());
         }
         for (int i = 0; i < nnm.getLength(); i++) {
             n = nnm.item(i);
             sb.append(",\n  ").append(attrToJSON(n));
-//            wasNewLine = true;
         }
-//        if (wasNewLine) {
-//            sb.append("\n  ");
-//        }
         sb.append("},\n");
         n = getFirstChildElement(elem);
         if (n == null) {
@@ -346,8 +345,8 @@ public class XDefToJSON {
                             n = el.getAttributeNode("name");
                         }
                         if (n != null) {
-                            sb.append("\n  [ {\"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue())
-                                .append("\"}, ");
+                            sb.append("\n  [ {\"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue());
+                            sb.append("\"}, ");
                             sb.append(removeTrailingSpaces(el.getTextContent())).append("\n  ]");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
@@ -373,11 +372,16 @@ public class XDefToJSON {
             //XML model
             sb.append("\n  { \"").append(xdPrefix).append(":xml\": \"");
             String s = KXmlUtils.nodeToString(el, true);
-//            String t = " xmlns:" + xdPrefix + "=\"" + nsUri + "\"";
-//            int ndx = s.indexOf(t);
-//            if (ndx > 0) { // remove attribute xmlns with X-definition namespac
-//                s = s.substring(0, ndx) + s.substring(ndx + t.length());
-//            }
+            if (s.indexOf('\n') > 0) {
+                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.StringReader(s));
+                s = "";
+                String line;
+                try {
+                    while((line=br.readLine()) != null) {
+                       s += "    " + line + '\n';
+                    }
+                } catch (IOException ex) {} // never happens
+            }
             s = toJsonString(s);
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
                 sb.append("\n").append(s).append("\n  ");
