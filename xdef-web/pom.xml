@@ -144,7 +144,9 @@
                             <directory>src/main/webapp</directory>
                             <includes>
                                 <inlude>style/footer.html</inlude>
+                                <inlude>es/style/footer.html</inlude>
                                 <inlude>cs/style/footer.html</inlude>
+                                <inlude>eo/style/footer.html</inlude>
                             </includes>
                             <filtering>true</filtering>
                         </resource>

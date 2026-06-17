@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>X-definición — Introducción</title>
+    <meta name="description" content="X-definición — Introducción"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: ENCABEZADO NO CARGADO</span></div>
+
+
+
+<div class="title">X-definición</div>
+
+
+
+<h1>Introducción</h1>
+
+<p>
+<b>X-definición</b> es una Tecnología diseñada para describir la <b>validación, el procesamiento y la construcción</b>
+de datos en formato <b>XML</b> (también <b>JSON, YAML</b> y similares).
+</p><p>
+X-definición es una tecnología desarrollada por <b>Syntea Software Group a.s.</b>
+para la descripción, validación, procesamiento y creación profesional de estructuras de
+documentos XML, JSON, YAML, INI y CSV. Permite al usuario no solo <b>definir la estructura de los documentos XML</b>,
+sino también describir específicamente su <b>procesamiento y construcción</b>. X-definición también permite definir y
+utilizar código en <b>métodos externos de usuario</b>.
+</p><p>
+Este proyecto está implementado para la plataforma <b>Java 1.8+</b>
+(nota adicional: hasta la versión 41.0.4 para Java 1.6+).
+</p>
+
+
+
+<h2>Licencia</h2>
+
+Este proyecto es <b>Software de Código Abierto (OSS)</b> y está licenciado bajo la
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Licencia Apache 2.0</a>.
+
+
+<h2>Ejemplos básicos ilustrativos</h2>
+
+<div>
+Ejemplo 1: <b>Estructura básica</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+Supongamos los siguientes datos XML:
+<pre><code class="language-xml">&lt;Empleado
+  Nombre   = "Andrew"
+  Apellido = "Aardvark"
+  Ingreso  = "1996-03-12"
+  Salario  = "21700"
+>
+  &lt;Dirección
+    Calle  = "Broadway"
+    Número = "255"
+    Ciudad = "Beverly Hills"
+    Estado = "CA"
+    CódigoPostal = "90210"
+  />
+  &lt;Competencia>electricista&lt;/Competencia>
+  &lt;Competencia>carpintero&lt;/Competencia>
+&lt;Empleado>
+
+
+
+
+
+
+</code></pre>
+</td><td>
+Esta es la X-definición completa que describe los datos XML de la izquierda:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Empleado"
+>
+  &lt;Empleado
+    Nombre   = "required string()"
+    Apellido = "required string()"
+    Ingreso  = "required date()"
+    Salarios = "optional decimal()"
+  >
+    &lt;Dirección
+      Calle  = "required string()"
+      Número = "required int()"
+      Ciudad = "required string()"
+      Estado = "required string()"
+      CódigoPostal = "required int()"
+    />
+    &lt;Competencia xd:script = "occurs 1..5">
+      required string()
+    &lt;/Competencia>
+  &lt;/Empleado>
+&lt;/xd:def>
+</code></pre>
+</td></tr></table>
+
+<p>
+Pruébalo en <a href="../example/media/xdef-web/intro-01-EssentialConcepts.html">"Sandbox-online"</a>.
+</p>
+
+<div>
+Ejemplo 2: <b>Referencias</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+Datos XML:
+<pre><code class="language-xml">&lt;Familia>
+  &lt;Padre
+    Nombre     = "John"
+    Apellido   = "Smith"
+    IDPersonal = "7107130345"
+    Salario    = "18800"
+  />
+  &lt;Madre
+    Nombre     = "Jane"
+    Apellido   = "Smith"
+    IDPersonal = "7653220029"
+    Salario    = "19400"
+  />
+  &lt;Hijo
+    Nombre     = "John"
+    Apellido   = "Smith"
+    IDPersonal = "9211090121"
+  />
+  &lt;Hija
+    Nombre     = "Jane"
+    Apellido   = "Smith"
+    IDPersonal = "9655270067"
+  />
+  &lt;Residencia
+    Calle        = "Pequeña"
+    Número       = "5"
+    Ciudad       = "Grande"
+    CódigoPostal = "12300"
+  />
+&lt;/Familia>
+</code></pre>
+</td><td>
+X-definición que describe los datos XML de la izquierda:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Familia"
+>
+  &lt;Familia>
+    &lt;Padre      xd:script = "occurs 0..1; ref Persona" />
+    &lt;Madre      xd:script = "occurs 1..1; ref Persona" />
+    &lt;Hijo       xd:script = "occurs 0..*; ref Persona" />
+    &lt;Hija       xd:script = "occurs 0..*; ref Persona" />
+    &lt;Residencia xd:script = "occurs 1;    ref Dirección" />
+  &lt;/Familia>
+
+  &lt;Persona
+    Nombre     = "string()"
+    Apellido   = "string()"
+    IDPersonal = "long()"
+    Salario    = "opcional int()"
+  />
+  &lt;Dirección
+    Calle  = "string()"
+    Número = "int()"
+    Ciudad = "string()"
+    CódigoPostal = "int()"
+  />
+&lt;xd:def>
+
+
+
+
+
+</code></pre>
+</td></tr></table>
+
+<p>
+Pruébalo en <a href="../example/media/xdef-web/intro-02-References.html">"Sandbox-online"</a>.
+</p>
+
+
+
+<h2>Anotación</h2>
+
+<p>
+X-definición está diseñado para la descripción y el procesamiento de datos en formato XML,
+así como en JSON, YAML y formatos similares.
+</p><p>
+X-definición es una herramienta de código abierto que describe la estructura y las propiedades
+de los valores de datos en un documento XML.
+Además, X-definición permite describir el procesamiento y la construcción de objetos XML.
+Por lo tanto, X-definición puede reemplazar las tecnologías existentes comúnmente utilizadas para la validación XML,
+como la Definición de Tipos de Datos (Data Type Definition — DTD), el XML-Esquema (XML-Schema — XSD), Schematron y
+las Transformaciones del Lenguaje de Hojas de Estilo Extensibles
+(Extensible Stylesheet Language Transformations — XSLT).
+</p><p>
+X-definición permite combinar la validación de documentos XML con el procesamiento de datos
+(descripción de las acciones asignadas a cada evento al procesar objetos XML). En comparación
+con las tecnologías basadas en DTD y esquemas XML, la ventaja de X-definición radica (no solo)
+en una mayor legibilidad y un mantenimiento más sencillo. X-definición se diseñó para manejar conjuntos
+de datos XML de tamaño prácticamente ilimitado, que superan la capacidad de la memoria RAM.
+</p><p>
+Una característica importante de X-definición es el máximo respeto por la estructura de los datos descritos.
+El formato de una X-definición es un documento XML con una estructura similar a la de los datos XML descritos.
+Esto permite una descripción rápida e intuitiva de los datos XML y su procesamiento.
+Las propiedades de los elementos XML (y los eventos que pueden ocurrir durante el proceso) se describen
+en el lenguaje X-script.
+</p><p>
+En la mayoría de los casos, basta con reemplazar los valores descritos en el modelo de datos XML
+con el lenguaje X-script en la X-definición.
+También se pueden añadir gradualmente las acciones de procesamiento de datos necesarias al X-script.
+La tecnología X-definición también permite generar código fuente para clases que representan elementos XML descritos
+por la X-definición en Java. Dicha clase se denomina componente X. Las instancias de datos XML se pueden utilizar
+en forma de componentes X (similares a la tecnología JAXB).
+</p><p>
+A partir de X-definición 4.2, es posible validar y procesar datos en formatos JSON y YAML, propiedades,
+archivos INI de Windows y CSV (valores separados por comas), además de XML. Los modelos de estructura de datos JSON se describen mediante los elementos xd:json o xd:ini.
+</p><p>
+X-definición también permite la localización de idiomas para los nombres de etiquetas descritos en los datos XML.
+Las diferentes versiones de idioma se pueden describir mediante elementos del objeto xd:lexicon.
+<p>
+
+
+
+<h2>¿Qué hacer a continuación?</h2>
+
+<ul>
+    <li><a href="../tutorial/">Tutorial</a>
+        — tutorial visual
+    </li>
+    <li><a href="../other/documentation.html">Documentación</a>
+        — documentación completa
+    </li>
+    <li><a href="#Media">Medios</a>
+        — artículos, conferencias, presentaciones, vídeos
+    </li>
+    <li><a href="../playground/">Entorno de pruebas</a>
+        — entorno de pruebas en línea: realiza tus propios experimentos con definiciones X
+    </li>
+    <li><a href="../other/download.html">Descargar</a>
+        — encuentra versiones publicadas, descarga archivos JAR, códigos fuente, documentación y ejemplos
+    </li>
+    <li><a href="https://github.com/Syntea/xdef">GitHub.com/Syntea/xdef</a>
+        — desarrollo Git-repositorio de X-definición en GitHub.com
+    </li>
+</ul>
+
+
+
+<h1>Relacionado</h1>
+
+Aplicaciones auxiliares:<ul>
+<li><a href='../other/download.html#HelperApplications'>XDefGUI</a> — editor de X-definiciones y depurador</li>
+</ul>
+
+<h1 id="Media">Medios</h1>
+
+Artículos, conferencias, presentaciones, vídeos:<ul>
+    <li><div>
+        Syntea/X-Definición:
+        </div><div>
+        <b>Vídeo tutorial breve</b>:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=DgwtzLTPVvY" target="_">
+            <img src="../media/Syntea-X-definition-tutorial-screenshot.jpeg" width="386" height="233"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Praga 2022:
+        </div><div>
+        V. Trojan, T. Šmíd:
+        <a href="../media/XMLPrague2022-X-definition-presentation.pdf">
+            <b>X-definición 4.2</b>
+        </a> (pdf)
+        </div><div>
+        Enlace a la presentación de la conferencia:
+        <a href="https://www.xmlprague.cz/day2-2022/#xdef">anotación</a>
+        y grabación de vídeo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=8m02mXQp07E&list=PLQpqh98e9RgV8HrbmYWpLzYNSUSa3_Smb&index=11" target="_">
+            <img src="../media/XMLPrague2022-X-definition-screenshot.jpeg" width="386" height="234"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        dzone.com (enero de 2022):
+        </div><div>
+        <a href='https://dzone.com/articles/extracting-data-from-very-large-xml-files-with-x-d'>
+            <b>Extracción de datos de archivos XML muy grandes</b>
+        </a> (www)
+        </div>
+    </li>
+    <li><div>
+        sourceforge.net (abril de 2021):
+        </div><div>
+        <a href='https://sourceforge.net/p/x-definition-beginner-xml/wiki/Home/'>
+            <b>X-definición Beginner</b>
+        </a> (www)
+        </div>
+    </li>
+    <li><div>
+        XML Prague 2020:
+        </div><div>
+        V. Trojan, T. Šmíd:
+        <a href="../media/XMLPrague2020-X-definition-presentation.pdf">
+            <b>X-definición 3.1&rarr;4.0</b>
+        </a> (pdf)
+        </div><div>
+        Enlace a la ponencia:
+        <a href="https://www.xmlprague.cz/day3-2020/#xdef">anotación</a>
+        y grabación de vídeo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=NcmTyV59AG8&list=PLQpqh98e9RgURPOd2Y6Md-WZ1_MpAqFK8&index=16" target="_">
+            <img src="../media/XMLPrague2020-X-definition-screenshot.jpeg" width="386" height="222"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        ČVUT/FIT-Informatický vecer (2018-11):
+        </div><div>
+        J. Kamenický, V. Trojan:
+        <a href="../media/CVUT-FIT-InformatickyVecer-2018-11-X-definice(91594).PPTX">
+            <b>X-definición: procesamiento de datos y transformación</b>
+        </a> (pptx)
+        </div><div>
+        Enlace a la grabación de vídeo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=Miyvdqqgo54" target="_">
+            <img src="../media/CVUT-FIT-InformatickyVecer-2018-11-X-definice-screenshot.jpeg" width="386" height="236"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Praga 2017:
+        </div><div>
+        V. Trojan, J. Kocman:
+        <a href="../media/XMLPrague2017-X-definition-presentation.pdf">
+            <b>X-definición 2.0&rarr;3.1</b>
+        </a> (pdf)
+        </div><div>
+        Enlace a la ponencia de la conferencia:
+        <a href="https://www.xmlprague.cz/day3-2017/#xdef">anotación</a>
+        y grabación de vídeo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=jNN0XTWZVMU&list=PLQpqh98e9RgUcEmbXmI6RolisQaIRw9dm&index=11" target="_">
+            <img src="../media/XMLPrague2017-X-definition-screenshot.jpeg" width="386" height="219"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Praga 2009:
+        </div><div>
+        V. Trojan, J. Měska:
+        <a href="../media/XMLPrague2009-X-definition-presentation.ppt">
+            <b>Cómo Un perro y un gato hicieron un pastel</b>
+        </a> (ppt)
+        </div><div>
+        Enlace a la presentación de la conferencia:
+        <a href="https://archive.xmlprague.cz/2009/sessions.html#xdefinition">anotación</a>
+        y grabación de vídeo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=-IKPO_0E6iw&list=PLE616DA47460D46DA&index=11" target="_">
+            <img src="../media/XMLPrague2009-X-definition-screenshot.jpeg" width="386" height="219"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Praga 2007:
+        </div><div>
+        V. Trojan, J. Kamenický, J. Měska:
+        <a href="../media/XMLPrague2007-X-definition-presentation.pdf">
+            <b>¿Por qué no todo el mundo habla esperanto?</b>
+        </a> (pdf)
+        </div>
+    </li>
+    <li><div>
+        XML Praga 2006:
+        </div><div>
+        V. Trojan: <b>X-definición</b>
+        </div><div>
+        Enlace a la presentación de la conferencia:
+        <a href="https://archive.xmlprague.cz/2006/sessions.html#xdef">anotación</a>
+        </div>
+    </li>
+    <li><div>
+        XML Praga 2005:
+        </div><div>
+        V. Trojan:
+        <a href="../media/XMLPrague2005-X-definition-presentation.ppt">
+            <b>X-definición</b>
+        </a> (ppt)
+        </div><div>
+        Enlace a la presentación de la conferencia:
+        <a href="https://archive.xmlprague.cz/2005/sessions.html#trojan">anotación</a>
+        </div>
+    </li>
+</ul>
+
+
+
+<div id="footer"><span class="errorVD">ERROR: PIE DE PÁGINA NO CARGADO</span></div>
+
+<script type="module">initPageBasicHili()</script>
+
+</body>
+</html>
