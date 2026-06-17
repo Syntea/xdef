@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FAQ — Frequently Asked Questions</title>
+    <meta name="description" content="FAQ — Frequently Asked Questions"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">FAQ — Frequently Asked Questions</div>
+
+
+<h2>Question: What is an example of a minimal instance of Java validation?</h2>
+<div class="pulldown" onclick="this.classList.toggle('expanded')">
+Let’s assume that the validation X-definition is located on the path <code>C:/xdef/validation.xdef</code>
+and the xml document that we want to validate is on the path <code>C:/data/document.xml</code>.
+<pre><code class="language-java">package cz.syntea.skp.slp2.lp.epemog;
+import cz.syntea.common.xml.KXmlUtils;
+import cz.syntea.xd.XDDocument;
+import cz.syntea.xd.XDFactory;
+import cz.syntea.xd.XDPool;
+import org.w3c.dom.Element;
+import java.io.File;
+public class XdefValidate {
+    public static void main(String[] args) {
+        // creation of xdPool from xdefinition
+        XDPool xdPool = XDFactory.genXDPool(null, "C:/xdef/validation.xdef", null);
+        // obtain xdDocument from xdPool for one validation
+        XDDocument xdDocument = xdPool.createXDDocument();
+        // validation of the file content. If the content is not valid, it throws an error
+        Element result = xdDocument.xparse(new File("C:/data/document.xml"), null);
+        // print out the input as a string
+        System.out.println(KXmlUtils.nodeToString(result, true));
+    }
+}
+</code></pre>
+</div>
+
+
+<h2>Question: How can I obtain validation logs, without getting an error from the XDDocument.xparse() method?</h2>
+<div class="pulldown" onclick="this.classList.toggle('expanded')">
+An ArrayReporter object that can be used in the xparse method is used to store information about the xparse method.
+ArrayReporter saves information in text form at alert / error levels that can be further processed by the program.
+<pre><code class="language-java">package cz.syntea.skp.slp2.lp.epemog;
+import cz.syntea.common.sys.ArrayReporter;
+import cz.syntea.common.sys.Report;
+import cz.syntea.common.xml.KXmlUtils;
+import cz.syntea.xd.XDDocument;
+import cz.syntea.xd.XDFactory;
+import cz.syntea.xd.XDPool;
+import org.w3c.dom.Element;
+import java.io.File;
+public class XdefValidate {
+    public static void main(String[] args) {
+        // creation of xdPool from xdefinition
+        XDPool xdPool = XDFactory.genXDPool(null, "C:/xdef/validation.xdef", null);
+        // obtain xdDocument from xdPool for one validation
+        XDDocument xdDocument = xdPool.createXDDocument();
+        // validation of the file content. If the content is not valid, it throws an error
+        ArrayReporter reporter = new ArrayReporter();
+        Element result = xdDocument.xparse(new File("C:/data/document.xml"), reporter);
+        if (reporter.errorWarnings()) {
+            // print the protocol from the validation
+            Report rep;
+            while ((rep = reporter.getReport()) != null) {
+                System.err.println(rep.toString());
+            }
+            System.exit(-1);
+        }
+        // print the input xml
+        System.out.printf(KXmlUtils.nodeToString(result, true));
+    }
+}
+</code></pre>
+</div>
+
+
+<h2>Question: What are the differences between the script, the external method, and the declared method?</h2>
+<div class="pulldown" onclick="this.classList.toggle('expanded')">
+External methods and declared methods are Java code, the script is a custom xdefinition X-Script script.
+External methods are declared in Java classes in external files, and declared methods are defined
+in the xdefinition file using the xd:declaration keyword. In the latter case, it is then necessary to declare
+the method signatures in the xdefinition header under the keyword xd:methods. In this way, it is also possible
+to declare types or variables. X-Script is also declared within xdefinition under the keyword xd:script.
+It can call up embedded xdefinition methods, external, and declared methods.
+</div>
+
+
+<h2>Question: How can I access an xml document being processed from external methods?</h2>
+<div class="pulldown" onclick="this.classList.toggle('expanded')">
+We add the xnode parameter XXNode to the external method signature, which represents the object representation
+of the node in the xml document that is currently being processed.
+<pre><code class="language-java">public static void myPrint(XXNode xnode, String output) {
+    String lp = xnode.getXXElement().getAttribute("lp");
+    System.out.printf("Info=%s; Licence plate=%s", output, lp);
+}
+</code></pre>
+</div>
+
+
+<h2>Question: When validating xml, the standard data types introduced in xdefinition are not enough.
+    Can I define my own data type?
+</h2>
+<div class="pulldown" onclick="this.classList.toggle('expanded')">
+The x-definitionParser contains a large number of data types that can be used to describe the attributes and values
+of a node, but in some cases, it is appropriate to define your own data type, whether for a special purpose or
+for clarity of the xdefinition itself. New data types are defined using the keyword xd:declarations
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+  xd:name   = "Vehicles"
+  xd:root = "Vehicles">
+    &lt;Vehicles>
+        &lt;Car xd:script    = "occurs 0.."
+             Type         = "required carType()"
+             LicencePlate = "required lp(7)" />
+    &lt;/Vehicles>
+  &lt;xd:declaration>
+    /* own type derived from another */
+    type carType list('SEDAN', 'WAGON', 'HATCHBACK', 'SUV');
+    /* own type from scratch */
+    boolean lp(int len) {
+      String text = getText();
+      if (text.length() != len) {
+        return error(text + " does not meet the conditions. " + len +
+          " character are required.");
+      }
+      return true;
+    }
+  &lt;/xd:declaration>
+&lt;/xd:def>
+</code></pre>
+</div>
+
+
+<h2>Question: The X-Definition uses data types that do not fully match the data types in Java. For example,
+    the data type int or the int () method type in X-Script X-Definition is actually working with 64-bit integers and
+    so corresponds to the long data type in Java
+</h2>
+<div class="pulldown" onclick="this.classList.toggle('expanded')">
+This fact must be considered when implementing external methods and during handover of parameters between
+the X-Definition and the external method in the Java class. The solution is to redefine the parameter type
+from <code>int</code> to <code>long</code> in the external java function.
+</div>
+
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicHili()</script>
+
+</body>
+</html>

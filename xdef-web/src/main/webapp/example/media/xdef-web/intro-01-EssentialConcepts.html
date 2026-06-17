@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Example — Essential concepts</title>
+    <meta name="description" content="Example — Essential concepts"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css"/>
+    <script type="module" src="../../../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Example — Essential concepts</div>
+
+<form method="post" action="../../../playground/Playground">
+
+<b>X-definition:</b>
+<textarea name="xdef" rows="23" class="linenumbers">
+&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Employee"
+>
+  &lt;Employee
+    FirstName = "required string()"
+    LastName  = "required string()"
+    EnterDate = "required date()"
+    Salary    = "optional decimal()"
+  >
+    &lt;Address
+      Street = "required string()"
+      Number = "required int()"
+      Town   = "required string()"
+      State  = "required string()"
+      Zip    = "required int()"
+    />
+    &lt;Competence xd:script = "occurs 1..5">
+      required string()
+    &lt;/Competence>
+  &lt;/Employee>
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="17" class="linenumbers">
+&lt;Employee
+  FirstName = "Andrew"
+  LastName  = "Aardvark"
+  EnterDate = "1996-03-12"
+  Salary    = "21700"
+>
+  &lt;Address
+    Street = "Broadway"
+    Number = "255"
+    Town   = "Beverly Hills"
+    State  = "CA"
+    Zip    = "90210"
+  />
+  &lt;Competence>electrician</Competence>
+  &lt;Competence>carpenter</Competence>
+&lt;/Employee>
+</textarea>
+
+<button type="submit">Validate</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums()</script>
+
+</body>
+</html>

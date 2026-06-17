@@ -1,5 +1,6 @@
 <!DOCTYPE HTML><html lang="en">
-  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <head>
+    <meta charset="UTF-8"/>
     <title>Chapter 7.2 Example of using X-components in Java</title>
     <meta name="description" content="X-definition: Example of using X-components in Java">
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico">
@@ -32,9 +33,11 @@ File       xdef  = …;
 File       data  = …;
 XDPool     xpool = XDFactory.compileXD(null, xdef);
 XDDocument xdoc  = xpool.createXDDocument("Test");
-=== compile generated X-components ===
 
-// 2. parse the input data and get the instance of Xcopmponent
+// 2. compile generated X-components
+…
+
+// 3. parse the input data and get the instance of Xcopmponent
 test.book.Book book = (test.book.Book) xdoc.parseXComponent(data, null, null);
 System.out.println("Book: " + book.gettitle() + ", ISBN = " + book.getISBN());
 </code></pre>

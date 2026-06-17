@@ -31,8 +31,8 @@
         <servlet-class>org.xdef.web.servlet.Service</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>XdefLatestVersion</servlet-name>
-        <servlet-class>org.xdef.web.servlet.XdefLatestVersion</servlet-class>
+        <servlet-name>LatestVersion</servlet-name>
+        <servlet-class>org.xdef.web.servlet.LatestVersion</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -56,8 +56,8 @@
         <url-pattern>/Service</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>XdefLatestVersion</servlet-name>
-        <url-pattern>/XdefLatestVersion</url-pattern>
+        <servlet-name>LatestVersion</servlet-name>
+        <url-pattern>/LatestVersion</url-pattern>
     </servlet-mapping>
 
     <session-config>

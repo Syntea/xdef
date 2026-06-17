@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="eo">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Enkonduko al X-difino</title>
+    <meta name="description" content="Enkonduko al X-difino"/>
+    <link rel="icon" type="image/x-icon" href="style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+
+<div class="title">X-difino</div>
+
+
+
+<h1>Enkonduko</h1>
+
+<p>
+<b>X-difino</b> estas teknologio desegnita por priskribi la <b>validigon, prilaboradon kaj konstruadon</b> de datumoj
+en Formato <b>XML</b> (same kiel <b>JSON, YAML</b> kaj similaj).
+</p><p>
+X-definition estas teknologio desegnita de <b>Syntea software group a.s.</b> por profesia priskribo, validigo,
+prilaborado kaj kreado de la strukturo de XML, JSON, YAML, INI kaj CSV dokumentoj. Ĝi permesas al la uzanto
+ne nur <b>difini la strukturon de XML-dokumentoj</b>, sed ankaŭ specife priskribi ilian
+<b>prilaboradon kaj konstruadon</b>.
+X-definition ankaŭ permesas al vi difini kaj uzi kodon en <b>eksteraj uzantmetodoj</b>.
+</p><p>
+Ĉi tiu projekto estas efektivigita por la platformo Java <b>1.8+</b>
+(kroma noto: ĝis la versio 41.0.4 por la platformo Java 1.6+).
+</p>
+
+
+
+<h2>Licenco</h2>
+
+Ĉi tiu projekto estas <b>Malfermitkoda Programaro (OSS)</b> licencita sub
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 licenco</a>.
+
+
+
+<h2>Ilustraj ekzemploj</h2>
+
+<div>
+Ekzemplo 1: <b>Esencaj konceptoj</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+Ni havu la jenajn XML-datumojn:
+<pre><code class="language-xml">&lt;Dungito
+  Antaŭnomo   = "Andrew"
+  FamiliaNomo = "Aardvark"
+  Enigodato   = "1996-03-12"
+  Salajro     = "21700"
+>
+  &lt;Adreso
+    Strato   = "Broadway"
+    Numero   = "255"
+    Urbo     = "Beverly Hills"
+    Ŝtato    = "CA"
+    Poŝtkodo = "90210"
+  />
+  &lt;Kompetenteco>elektristo&lt;/Kompetenteco>
+  &lt;Kompetenteco>ĉarpentisto&lt;/Kompetenteco>
+&lt;/Dungito>
+
+
+
+
+
+
+</code></pre>
+</td><td>
+Jen kompleta X-difino priskribanta la XML-datumojn maldekstre:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Dungito"
+>
+  &lt;Dungito
+    Antaŭnomo   = "required string()"
+    FamiliaNomo = "required string()"
+    Enigodato   = "required date()"
+    Salajro     = "optional decimal()"
+  >
+    &lt;Adreso
+      Strato   = "required string()"
+      Numero   = "required int()"
+      Urbo     = "required string()"
+      Ŝtato    = "required string()"
+      Poŝtkodo = "required int()"
+    />
+    &lt;Kompetenteco xd:script = "occurs 1..5">
+      required string()
+    &lt;/Kompetenteco>
+  &lt;/Dungito>
+&lt;/xd:def>
+</code></pre>
+</td></tr></table>
+
+<p>
+Vi povas provi ĝin ĉe <a href="../example/media/xdef-web/intro-01-EssentialConcepts.html">"Ludejo-rete"</a>. </p>
+
+<div>
+Ekzemplo 2: <b>Referencoj</b>
+</div>
+<table><tr style="vertical-align: top;"><td>
+XML-datumoj:
+<pre><code class="language-xml">&lt;Familio>
+  &lt;Patro
+    DonaNomo    = "Johano"
+    FamiliaNomo = "Smith"
+    PersonaID   = "7107130345"
+    Salajro     = "18800"
+  />
+  &lt;Patrino
+    DonaNomo    = "Jane"
+    FamiliaNomo = "Smith"
+    PersonaID   = "7653220029"
+    Salajro     = "19400"
+  />
+  &lt;Filo
+    DonaNomo    = "Johano"
+    FamiliaNomo = "Smith"
+    PersonaID   = "9211090121"
+  />
+  &lt;Filino
+    DonaNomo    = "Jane"
+    FamiliaNomo = "Smith"
+    PersonaID   = "9655270067"
+  />
+  &lt;Loĝejo
+    Strato      = "Malgranda"
+    Numero      = "5"
+    Urbo        = "Granda"
+    Poŝtkodo    = "12300"
+  />
+&lt;/Familio>
+</code></pre>
+</td><td>
+X-difino priskribanta la XML-datumojn maldekstre:
+<pre><code class="language-xml">&lt;xd:def
+  xmlns:xd = "http://www.xdef.org/xdef/4.2"
+  xd:root  = "Familio"
+>
+  &lt;Familio>
+    &lt;Patro   xd:script = "occurs 0..1; ref Persono" />
+    &lt;Patrino xd:script = "occurs 1..1; ref Persono" />
+    &lt;Filo    xd:script = "occurs 0..*; ref Persono" />
+    &lt;Filino  xd:script = "occurs 0..*; ref Persono " />
+    &lt;Loĝejo  xd:skript = "occurs 1;    ref Adreso" />
+  &lt;/Familio>
+
+  &lt;Persono
+    DonaNomo    = "string()"
+    FamiliaNomo = "string()"
+    PersonaID   = "long()"
+    Salajro     = "optional int()"
+  />
+  &lt;Adreso
+    Strato   = "string()"
+    Numero   = "int()"
+    Urbo     = "string()"
+    Poŝtkodo = "int()"
+  />
+&lt;/xd:def>
+
+
+
+
+
+</code></pre>
+</td></tr></table>
+
+<p>
+Vi povas provi ĝin ĉe <a href="../example/media/xdef-web/intro-02-References.html">"Ludejo-rete"</a>.
+</p>
+
+
+
+<h2>Komentado</h2>
+
+<p>
+X-difino estas desegnita por priskribo kaj prilaborado de datumoj en la XML-formato kaj ankaŭ JSON, YAML kaj similaj.
+</p><p>
+X-difino estas malfermfonteca ilo, kiu priskribas la strukturon kaj ecojn de datenvaloroj en XML-dokumento.
+Krome, X-difino permesas al vi priskribi la prilaboradon kaj konstruadon de XML-objektoj. X-difino povas tiel
+anstataŭigi ekzistantajn teknologiojn ofte uzatajn por XML-validigo — nome Data Type Definition (DTD),
+XML Schema (XSD), Schematron, kaj Extensible Stylesheet Language Transformations (XSLT).
+</p><p>
+X-difino permesas al vi kombini XML-dokumentvalidigon kun datenprilaborado (priskribante la agojn
+asignitajn al ĉiu evento dum prilaborado de XML-objektoj). Kompare kun teknologioj bazitaj sur DTD kaj XML-skemo,
+la avantaĝo de X-difino estas (ne nur) pli alta legebleco kaj pli facila prizorgado. X-difino estis desegnita por
+pritrakti XML-datumarojn de preskaŭ senlima grandeco preter la grandeco de labormemoro.
+</p><p>
+Grava trajto de X-difino estas la maksimuma respekto por la strukturo de la priskribitaj datumoj. La formo de
+X-difino estas XML-dokumento kun strukturo simila al la XML-datumoj priskribitaj. Ĉi tio permesas rapidan
+kaj intuician priskribon de la XML-datumoj kaj ilia prilaborado.
+</p><p>
+La ecoj de XML-eroj (kaj la eventoj, kiuj povas okazi dum la procezo) estas priskribitaj per la X-skripta
+lingvo. En la plej multaj kazoj, sufiĉas anstataŭigi la valorojn priskribitajn en la XML-datummodelo per la X-skripta
+lingvo en la X-difino. Vi ankaŭ povas laŭgrade aldoni la bezonatajn datumprilaborajn agojn al la X-skripto.
+La teknologio X-difino ankaŭ permesas al vi generi fontkodon por klasoj reprezentantaj XML-elementojn priskribitajn
+de X-difino en Java. Tia klaso nomiĝas X-komponanto. Instancoj de XML-datumoj povas esti uzataj en la formo de
+X-komponantoj (simile al JAXB-teknologio).
+</p><p>
+Ekde X-difino versio 4.2, eblas validigi kaj prilabori datumojn en JSON kaj YAML, Ecoj,
+Windows INI, kaj CSV (komo-separitaj valoroj) formatoj aldone al XML. JSON-datenstrukturaj modeloj estas
+priskribitaj per <code>xd:json</code> aŭ <code>xd:ini</code> elementoj.
+</p><p>
+La X-difino ankaŭ permesas lingvan lokalizon de la etikednomoj de la priskribitaj XML-datumoj. Malsamaj lingvaj
+versioj povas esti priskribitaj per elementoj en la xd:lexicon objekto.
+</p>
+
+
+
+<h2>Kien daŭrigi</h2>
+
+<ul>
+    <li><a href="../tutorial/">Lernilo</a>
+        — ilustra prelego
+    </li>
+    <li><a href="../other/documentation.html">Dokumentaro</a>
+        — kompleta dokumentado
+    </li>
+    <li><a href="#Media">Amaskomunikilaro</a>
+        — artikoloj, prelegoj, prezentoj, filmetoj
+    </li>
+    <li><a href="../playground/">Sablejo</a>
+        — sablejo interrete, faru viajn X-difinajn eksperimentojn
+    </li>
+    <li><a href="../other/download.html">Elŝuti</a>
+        — kontrolu publikigitajn versiojn, elŝutu jar-dosieron, fontojn, dokumentadon, ekzemplojn
+    </li>
+    <li><a href="https://github.com/Syntea/xdef">GitHub.com/Syntea/xdef</a>
+        — disvolva git-deponejo de X-difino ĉe GitHub.com
+    </li>
+</ul>
+
+
+
+<h1>Rilataj</h1>
+
+Helpaj Aplikaĵoj:<ul>
+<li><a href='other/download.html#HelperApplications'>XDefGUI</a> — X-definition redaktilo kaj erarserĉilo</li>
+</ul>
+
+
+
+<h1 id="Media">Amaskomunikilaro</h1>
+
+Artikoloj, prelegoj, prezentoj, filmetoj:<ul>
+    <li><div>
+        Syntea/X-definition:
+        </div><div>
+        <b>Mallonga filmeto-lernilo</b>:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=DgwtzLTPVvY" target="_">
+            <img src="../media/Syntea-X-definition-tutorial-screenshot.jpeg" width="386" height="233"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2022:
+        </div><div>
+        V. Trojan, T. Šmíd:
+        <a href="../media/XMLPrague2022-X-definition-presentation.pdf">
+            <b>X-definition 4.2</b>
+        </a> (pdf)
+        </div><div>
+        ligilo al la konferenca sesio:
+        <a href="https://www.xmlprague.cz/day2-2022/#xdef">notado</a>
+        kaj videoregistraĵo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=8m02mXQp07E&list=PLQpqh98e9RgV8HrbmYWpLzYNSUSa3_Smb&index=11" target="_">
+            <img src="../media/XMLPrague2022-X-definition-screenshot.jpeg" width="386" height="234"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        dzone.com (2022-01):
+        </div><div>
+        <a href='https://dzone.com/articles/extracting-data-from-very-large-xml-files-with-x-d'>
+            <b>Eltirado de Datumoj El Tre Granda XML Dosieroj</b>
+        </a> (www)
+        </div>
+    </li>
+    <li><div>
+        sourceforge.net (2021-04):
+        </div><div>
+        <a href='https://sourceforge.net/p/x-definition-beginner-xml/wiki/Home/'>
+            <b>X-definition Beginner</b>
+        </a> (www)
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2020:
+        </div><div>
+        V. Trojan, T. Šmíd:
+        <a href="../media/XMLPrague2020-X-definition-presentation.pdf">
+            <b>X-definition 3.1&rarr;4.0</b>
+        </a> (pdf)
+        </div><div>
+        ligilo al la konferenca sesio:
+        <a href="https://www.xmlprague.cz/day3-2020/#xdef">komento</a>
+        kaj videoregistraĵo:
+        </div><div>
+            <a href="https://www.youtube.com/watch?v=NcmTyV59AG8&list=PLQpqh98e9RgURPOd2Y6Md-WZ1_MpAqFK8&index=16" target="_">
+        <img src="../media/XMLPrague2020-X-definition-screenshot.jpeg" width="386" height="222"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        CTU/FIT-Informatika Vespero (2018-11):
+        </div><div>
+        J. Kamenický, V. Trojan:
+        <a href="../media/CVUT-FIT-InformatickyVecer-2018-11-X-definice(91594).PPTX">
+            <b>X-difino — datumprilaborado kaj transformado</b>
+        </a> (pptx)
+        </div><div>
+        ligilo al videoregistraĵo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=Miyvdqqgo54" target="_">
+            <img src="../media/CVUT-FIT-InformatickyVecer-2018-11-X-definice-screenshot.jpeg" width="386" height="236"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2017:
+        </div><div>
+        V. Trojan, J. Kocman:
+        <a href="../media/XMLPrague2017-X-definition-presentation.pdf">
+            <b>X-definition 2.0&rarr;3.1</b>
+        </a> (pdf)
+        </div><div>
+        ligilo al la konferenca sesio:
+        <a href="https://www.xmlprague.cz/day3-2017/#xdef">notado</a>
+        kaj videoregistraĵo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=jNN0XTWZVMU&list=PLQpqh98e9RgUcEmbXmI6RolisQaIRw9dm&index=11" target="_">
+            <img src="../media/XMLPrague2017-X-definition-screenshot.jpeg" width="386" height="219"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2009:
+        </div><div>
+        V. Trojan, J.Měska:
+        <a href="../media/XMLPrague2009-X-definition-presentation.ppt">
+            <b>Kiel la hundo kaj kato kuiris kukon</b>
+        </a> (ppt)
+        </div><div>
+        ligilo al la konferenca sesio:
+        <a href="https://archive.xmlprague.cz/2009/sessions.html#xdefinition">notaĵo</a>
+        kaj videoregistraĵo:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=-IKPO_0E6iw&list=PLE616DA47460D46DA&index=11" target="_">
+            <img src="../media/XMLPrague2009-X-definition-screenshot.jpeg" width="386" height="219"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2007:
+        </div><div>
+        V. Trojan, J. Kamenický, J. Měska:
+        <a href="../media/XMLPrague2007-X-definition-presentation.pdf">
+            <b>Kial la Tuta Homaro Ne Parolas Esperanta</b>
+        </a> (pdf)
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2006:
+        </div><div>
+        V. Trojano: <b>X-difino</b>
+        </div><div>
+        ligilo al la konferenca sesio:
+        <a href="https://archive.xmlprague.cz/2006/sessions.html#xdef">notaĵo</a>
+        </div>
+    </li>
+    <li><div>
+        XML Prago 2005:
+        </div><div>
+        V. Trojano:
+        <a href="../media/XMLPrague2005-X-definition-presentation.ppt">
+            <b>X-difino</b>
+        </a> (ppt)
+        </div><div>
+        ligilo al la konferenca sesio:
+        <a href="https://archive.xmlprague.cz/2005/sessions.html#trojan">anotado</a>
+        </div>
+    </li>
+</ul>
+
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicHili()</script>
+
+</body>
+</html>

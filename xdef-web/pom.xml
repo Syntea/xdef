@@ -124,7 +124,6 @@
                             <includes>
                                 <inlude>changelog.md</inlude>
                             </includes>
-                            <filtering>true</filtering>
                         </resource>
                         <resource>
                             <targetPath>META-INF</targetPath>
@@ -145,7 +144,9 @@
                             <directory>src/main/webapp</directory>
                             <includes>
                                 <inlude>style/footer.html</inlude>
+                                <inlude>es/style/footer.html</inlude>
                                 <inlude>cs/style/footer.html</inlude>
+                                <inlude>eo/style/footer.html</inlude>
                             </includes>
                             <filtering>true</filtering>
                         </resource>
@@ -155,6 +156,20 @@
                             <includes>
                                 <inlude>README.md</inlude>
                                 <inlude>*.pdf</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>other</targetPath>
+                            <directory>../xdef</directory>
+                            <includes>
+                                <inlude>changelog.md</inlude>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <targetPath>other</targetPath>
+                            <directory>../administration/script-aux</directory>
+                            <includes>
+                                <inlude>xdef-download.sh</inlude>
                             </includes>
                         </resource>
                         <resource>
