@@ -139,7 +139,7 @@ div.header div.headerLang, div.header div.headerLang select {
     font-size:          85%;
 }
 
-div.header div.headerLang img {
+div.header div.headerLang img, div.header ul.headerNav img {
     height:             1em;
 }
 
