@@ -1,13 +1,15 @@
 <div class="header">
     <div class="headerLogo"><a href="${rootPath}./" title="Úvod"><img src="${rootPath}style/logo.png"/></a></div>
-    <div class="headerLang" title="Výběr jazyka - Čeština" onclick="headerLangActivate()">
+    <div class="headerLang" title="výběr jazyka - čeština" onclick="headerLangActivate()">
         <span class="headerLangPas">
             <img src="${rootPath}style/lang.svg"/>
         </span>
         <span class="headerLangAct">
             <select onchange="location = this.value">
-                <option value="${rootPath}../" title="angličtina" lang="en"                    >english</option>
-                <option value="${rootPath}./"  title="čeština"    lang="cs" selected="selected">čeština</option>
+                <option value="${rootPath}../"    title="angličtina"  lang="en"                    >english</option>
+                <option value="${rootPath}../es/" title="španělština" lang="es"                    >español</option>
+                <option value="${rootPath}./"     title="čeština"     lang="cs" selected="selected">čeština</option>
+                <option value="${rootPath}../eo/" title="esperanto"   lang="eo"                    >esperanto</option>
             </select>
         </span>
     </div>

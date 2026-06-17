@@ -2,11 +2,13 @@
     <div class="headerLogo">
         <a href="${rootPath}./" title="Enkonduko"><img src="${rootPath}style/logo.png" /></a>
     </div>
-    <div class="headerLang" title="Lingvoelekto - Ĉeĥa" onclick="headerLangActivate()">
+    <div class="headerLang" title="lingvoelekto - esperanto" onclick="headerLangActivate()">
         <span class="headerLangPas"> <img src="${rootPath}style/lang.svg" />
         </span> <span class="headerLangAct"> <select onchange="location = this.value">
-                <option value="${rootPath}../" title="angla" lang="en">angla</option>
-                <option value="${rootPath}./" title="Ĉeĥa" lang="cs" selected="selected">Ĉeĥa</option>
+                <option value="${rootPath}../"    title="angla"     lang="en"                    >english</option>
+                <option value="${rootPath}../es/" title="hispana"   lang="es"                    >español</option>
+                <option value="${rootPath}../cs"  title="ĉeĥa"      lang="cs"                    >čeština</option>
+                <option value="${rootPath}./"     title="esperanto" lang="eo" selected="selected">esperanto</option>
         </select>
         </span>
     </div>
@@ -20,9 +22,9 @@
                     src="${rootPath}../style/lang.svg" /></sup></span></li>
         <li><span><a href="${rootPath}../tutorial/">Lernilo</a> <sup><img
                     src="${rootPath}../style/lang.svg" /></sup></span></li>
-        <li><span><a href="${rootPath}../other/faq.html">Oftaj Demandoj</a> <sup><img
+        <li><span><a href="${rootPath}../other/faq.html">FAQ</a> <sup><img
                     src="${rootPath}../style/lang.svg" /></sup></span></li>
-        <li><span><a href="${rootPath}./#Amaskomunikiloj">Amaskomunikiloj</a> </span></li>
+        <li><span><a href="${rootPath}./#Media">Amaskomunikiloj</a> </span></li>
         <li><span><a href="https://www.syntea.cz/o-nas/">Syntea</a> </span></li>
     </ul>
 </div>
