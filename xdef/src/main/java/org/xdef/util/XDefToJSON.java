@@ -325,7 +325,7 @@ public class XDefToJSON {
         }
         while (n != null) {
             Element el = (Element) n;
-            if (nsUri.equals(el.getNamespaceURI())) {
+            if (nsUri.equals(n.getNamespaceURI())) {
                 switch (el.getLocalName()) {
                     case "declaration":
                         sb.append("\n  { ");
@@ -337,6 +337,20 @@ public class XDefToJSON {
                             sb.append("\n  ");
                         }
                         sb.append("\"}");
+                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
+                        continue;
+                    case "component":
+                        sb.append("\n  { \"").append(el.getTagName()).append("\": \"");
+                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\n \"}");
+                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
+                        continue;
+                    case "BNFGrammar":
+                        sb.append("\n  { ");
+                        addXDAttrToJSON(sb, el, "name");
+                        addXDAttrToJSON(sb, el, "scope");
+                        addXDAttrToJSON(sb, el, "extends");
+                        sb.append(" \"").append(el.getTagName()).append("\": \"");
+                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\n\" }");
                         sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         continue;
                     case "json":
@@ -353,20 +367,6 @@ public class XDefToJSON {
                             throw new RuntimeException("Expected name of json model");
                         }
                         continue;
-                    case "component":
-                        sb.append("\n  { \"").append(el.getTagName()).append("\": \"");
-                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\n \"}");
-                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
-                        continue;
-                    case "BNFGrammar":
-                        sb.append("\n  { ");
-                        addXDAttrToJSON(sb, el, "name");
-                        addXDAttrToJSON(sb, el, "scope");
-                        addXDAttrToJSON(sb, el, "extends");
-                        sb.append(" \"").append(el.getTagName()).append("\": \"");
-                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\n\" }");
-                        sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
-                        continue;
                 }
             }
             //XML model
@@ -378,7 +378,7 @@ public class XDefToJSON {
                 String line;
                 try {
                     while((line=br.readLine()) != null) {
-                       s += "    " + line + '\n';
+                       s += "  " + line + '\n';
                     }
                 } catch (IOException ex) {} // never happens
             }
@@ -419,16 +419,13 @@ public class XDefToJSON {
         sb.append(sep).append("\"").append(elem.getNodeName()).append("\": \"");
         sb.append(toJsonString(nsURI)).append("\"}, \"");
         String s = elem.getTextContent();
-//        if (s.startsWith("\n")) {
-//            s = s.substring(1);
-//        }
         if (s.endsWith("\n")) {
             s = s.substring(0, s.length() - 1);
         }
         return sb.append(SUtils.modifyString(s, "\"", "\\\"")).append("\"]").toString();
     }
 
-    /** Convert cllection XML to JSON.
+    /** Convert collection XML to JSON.
      * @param elem Element with collection.
      * @return string with JSON format.
      */
