@@ -69,10 +69,10 @@ public class XDefToJSON {
         return x;
     }
 
-    /** Create X-definition attribuge from given JSON map.
+    /** Create X-definition attribute from given JSON map.
      * @param map the map with named items.
-     * @param xdPrefix prexix of X-definition namespace.
-     * @param name local name of X-definition attribuge.
+     * @param xdPrefix prefix of X-definition namespace.
+     * @param name local name of X-definition attribute.
      * @return string with attribute declaration or the empty string.
      */
     private static String createXDeNamedvalue(final Map<String, Object> map, final String xdPrefix, final String name) {
@@ -112,6 +112,24 @@ public class XDefToJSON {
             sb.append(attrToJSON(attr)).append(", ");
         }
     }
+
+    private static String adLinePrefixes(final String s) {
+        if (s.indexOf('\n') < 0) {
+            return s;
+        }
+        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.StringReader(s));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try {
+            while((line=br.readLine()) != null) {
+                sb.append("  ").append(line).append('\n');
+            }
+        } catch (IOException ex) { // never happens
+            throw new RuntimeException(ex);
+        }
+        return sb.toString();
+    }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  JSON -> XML
@@ -163,9 +181,16 @@ public class XDefToJSON {
                 map = (Map<String, Object>) list.get(0);
                 sb.append("\n  <").append(xdPrefix).append(":json name=");
                 sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true)));
-                sb.append(">\n");
-                sb.append(toXmlString(XonUtils.objectToString(list.get(1), "    \n", false)));
-                sb.append("\n  </").append(xdPrefix).append(":json>\n");
+                sb.append(">");
+                String s = adLinePrefixes(toXmlString(XonUtils.toJsonString(list.get(1), true)));
+                if (s.endsWith("\n")) {
+                    sb.append('\n');
+                }
+                sb.append(s);
+                if (s.endsWith("\n")) {
+                    sb.append("  ");
+                }
+                sb.append("</").append(xdPrefix).append(":json>\n");
             } else {
                 map = (Map<String, Object>) o;
                 if ((o = map.get(xdPrefix + ":declaration")) != null) { // declaration
@@ -371,18 +396,7 @@ public class XDefToJSON {
             }
             //XML model
             sb.append("\n  { \"").append(xdPrefix).append(":xml\": \"");
-            String s = KXmlUtils.nodeToString(el, true);
-            if (s.indexOf('\n') > 0) {
-                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.StringReader(s));
-                s = "";
-                String line;
-                try {
-                    while((line=br.readLine()) != null) {
-                       s += "  " + line + '\n';
-                    }
-                } catch (IOException ex) {} // never happens
-            }
-            s = toJsonString(s);
+            String s = adLinePrefixes(toJsonString(KXmlUtils.nodeToString(el, true)));
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
                 sb.append("\n").append(s).append("\n  ");
             } else {

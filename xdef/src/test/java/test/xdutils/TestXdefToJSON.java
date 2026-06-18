@@ -123,14 +123,14 @@ public final class TestXdefToJSON extends XDTester {
 /**
         try {
             xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Example' root='Compositions'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Example' root='Compositions|A|B|X'>\n" +
 "\n" +
 "  <xd:declaration> String s = null;</xd:declaration>\n" +
 "\n" +
 "  <xd:declaration>\n" +
 "    String t = 'ab c';\n" +
 "    Datetime d = now();\n" +
-"    type p string();\n" +
+"    type x string();\n" +
 "  </xd:declaration>\n" +
 "\n" +
 "  <xd:json name=\"Compositions\">\n" +
@@ -143,11 +143,14 @@ public final class TestXdefToJSON extends XDTester {
 "  </xd:json>\n" +
 "\n" +
 "  <A>\n" +
-"    <B/>\n" +
-"    p;\n" +
+"    <B xd:script=\"ref B\"/>\n" +
+"    x;\n" +
 "  </A>\n" +
 "\n" +
-"  <B a=\"p;\"/>\n" +
+"  <B a=\"x;\"/>\n" +
+"\n" +
+"\n" +
+"  <xd:json name=\"X\"> \"x;\"</xd:json>\n" +
 "\n" +
 "</xd:def>";
             data =
