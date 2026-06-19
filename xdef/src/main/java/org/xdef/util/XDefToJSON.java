@@ -407,7 +407,7 @@ public class XDefToJSON {
                 }
             }
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                sb.append("\n  ").append(s.trim()).append("\n");
+                sb.append("\n  ").append(s.trim()).append("\n  ");
             } else {
                 sb.append(s);
             }
