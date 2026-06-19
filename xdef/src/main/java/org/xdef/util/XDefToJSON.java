@@ -216,8 +216,8 @@ public class XDefToJSON {
                     sb.append(getAsXMLText(o));
                     sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
                 } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
-                    String s = "  " + o.toString().trim();
-                    sb.append("\n").append(removeTrailingSpaces(s)).append("\n");
+                    String s = "\n  " + o.toString().trim();
+                    sb.append(removeTrailingSpaces(s)).append("\n");
                 } else { // declaration
                     throw new RuntimeException("Unexpected object: " + o);
                 }
@@ -407,7 +407,7 @@ public class XDefToJSON {
                 }
             }
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                sb.append("\n").append(s).append("  ");
+                sb.append("\n  ").append(s).append("  ");
             } else {
                 sb.append(s);
             }
