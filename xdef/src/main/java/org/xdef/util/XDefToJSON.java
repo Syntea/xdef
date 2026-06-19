@@ -386,7 +386,9 @@ public class XDefToJSON {
                         if (n != null) {
                             sb.append("\n  [ {\"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue());
                             sb.append("\"}, ");
-                            sb.append(removeTrailingSpaces(el.getTextContent())).append("\n  ]");
+                            s = removeTrailingSpaces(el.getTextContent());
+                            sb.append(s);
+                            sb.append(s.length() < 100 && s.indexOf('\n') < 0 ? "]" : "\n  ]");
                             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         } else {
                             throw new RuntimeException("Expected name of json model");
@@ -397,8 +399,15 @@ public class XDefToJSON {
             //XML model
             sb.append("\n  { \"").append(xdPrefix).append(":xml\": \"");
             String s = adLinePrefixes(toJsonString(KXmlUtils.nodeToString(el, true)));
+            int i1 = s.indexOf("xmlns:" + xdPrefix + "=\\\"");
+            if (i1 > 0) {
+                int i2 = s.indexOf("\"", i1 + xdPrefix.length() + 9);
+                if (i2 > 0) {
+                    s = s.substring(0, i1).trim() + s.substring(i2+1);
+                }
+            }
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                sb.append("\n").append(s).append("\n  ");
+                sb.append("\n").append(s).append("  ");
             } else {
                 sb.append(s);
             }
@@ -576,7 +585,7 @@ public class XDefToJSON {
                         err.append("input not exists or it is a directory: ").append(args[i]).append(".\n");
                     }
                     continue;
-                default: err.append("Switch error ").append(arg).append(".\n");
+                default: err.append("Command parameter error: ").append(arg).append(".\n");
             }
         }
         if (output == null) {
