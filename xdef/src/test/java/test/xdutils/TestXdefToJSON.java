@@ -120,7 +120,7 @@ public final class TestXdefToJSON extends XDTester {
         boolean display = false; // If it is true, the generated JSON format is dislpayed
 ////////////////////////////////////////////////////////////////////////////////
         String xdef, data;
-/**
+/**/
         try {
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Example' root='Compositions|A|B|X'>\n" +
@@ -134,12 +134,12 @@ public final class TestXdefToJSON extends XDTester {
 "  </xd:declaration>\n" +
 "\n" +
 "  <xd:json name=\"Compositions\">\n" +
-"    [\n" +
-"      { \"%script\": \"occurs 1..*;\",\n" +
-"        \"Name\": \"string()\",\n" +
-"        \"Style\": [\"%oneOf\", \"string()\", [\"occurs 2..* string()\"]]\n" +
-"      }\n" +
-"    ]\n" +
+"  [\n" +
+"    { \"%script\": \"occurs 1..*;\",\n" +
+"      \"Name\": \"string()\",\n" +
+"      \"Style\": [\"%oneOf\", \"string()\", [\"occurs 2..* string()\"]]\n" +
+"    }\n" +
+"  ]\n" +
 "  </xd:json>\n" +
 "\n" +
 "  <A>\n" +
@@ -150,7 +150,7 @@ public final class TestXdefToJSON extends XDTester {
 "  <B a=\"x;\"/>\n" +
 "\n" +
 "\n" +
-"  <xd:json name=\"X\"> \"x;\"</xd:json>\n" +
+"  <xd:json name=\"X\"> \"x();\"</xd:json>\n" +
 "\n" +
 "</xd:def>";
             data =

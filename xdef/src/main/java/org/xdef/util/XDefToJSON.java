@@ -385,7 +385,7 @@ public class XDefToJSON {
                         }
                         if (n != null) {
                             sb.append("\n  [ {\"").append(xdPrefix).append(":json\": \"").append(n.getNodeValue());
-                            sb.append("\"}, ");
+                            sb.append("\"},");
                             s = removeTrailingSpaces(el.getTextContent());
                             sb.append(s);
                             sb.append(s.length() < 100 && s.indexOf('\n') < 0 ? "]" : "\n  ]");
