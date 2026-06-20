@@ -419,6 +419,7 @@ public final class KXmlUtils extends KDOMUtils {
      * true the output is in canonical form (i.e. without document type, entity references, CDATA sections are
      * converted to text values). If argument comments is false all Comment nodes are ignored.
      * @param out output writer for result.
+     * @param encoding name of output code table.
      * @param node org.w3c.dom.Node to be converted.
      * @param lineStart null or the line prefix.
      * @param indentStep null or the indenting string.
