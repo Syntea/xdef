@@ -663,7 +663,7 @@ ININewLine ::= (#13 #10 | #10)+
 
 INIOctalDigit ::= [0-7]
 
-INIEscapedChar ::= "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
+INIEscapedChar ::= "\" ( INIOctalDigit | "n" | "r" | "t" | "f" | ":" | HexaDigit{4} )
 
 INIBaseChar ::= INISP | [ -Z^-~]
   /* ASCII characters without control characters, backslash, brackets */
