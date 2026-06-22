@@ -224,7 +224,7 @@ Links:
   * **information** about **release versions**:
     * [xdef/changelog.md](/xdef/changelog.md)
   * **download** using **maven system** directly:
-    * [xdef-download.sh](/administration/script-aux/xdef-download.sh)
+    * [xdef-download-maven.sh](/administration/script-aux/xdef-download-maven.sh)
 
 ## Version package content
 
