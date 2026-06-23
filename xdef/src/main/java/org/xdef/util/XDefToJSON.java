@@ -80,10 +80,7 @@ public class XDefToJSON {
         if (o == null) {
             o = map.get(name);
         }
-        if (o != null && !((String) o).isEmpty()) {
-            return " " + xdPrefix + ":" + name + "='" + o + "'";
-        }
-        return "";
+        return o != null && !((String) o).isEmpty() ? " " + xdPrefix + ":" + name + "='" + o + "'" : "";
     }
 
     /** Get given object as XML text. */
@@ -204,20 +201,16 @@ public class XDefToJSON {
                     }
                     sb.append("</").append(xdPrefix).append(":declaration>\n");
                 } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
-                    sb.append("\n<").append(xdPrefix).append(":component>");
-                    sb.append(getAsXMLText(o));
+                    sb.append("\n<").append(xdPrefix).append(":component>").append(getAsXMLText(o));
                     sb.append("</").append(xdPrefix).append(":component>\n");
                 } else if ((o = map.get(xdPrefix + ":BNFGrammar")) != null) { // component
                     sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
-                    sb.append(createXDeNamedvalue(map, xdPrefix, "extends"));
-                    sb.append(">");
-                    sb.append(getAsXMLText(o));
+                    sb.append(createXDeNamedvalue(map, xdPrefix, "extends")).append(">").append(getAsXMLText(o));
                     sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
                 } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
-                    String s = "\n  " + o.toString().trim();
-                    sb.append(removeTrailingSpaces(s)).append("\n");
+                    sb.append(removeTrailingSpaces("\n  " + o.toString().trim())).append("\n");
                 } else { // declaration
                     throw new RuntimeException("Unexpected object: " + o);
                 }
