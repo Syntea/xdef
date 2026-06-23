@@ -213,18 +213,22 @@ You can try your X-definition examples and experiments at the following **"Playg
 
 # Media
 
-Articles, lectures, presentations, videos:
-  * Syntea/X-definition:
-    <b>Short video tutorial</b>:
-    <a href="https://www.youtube.com/watch?v=DgwtzLTPVvY">
-        <img src="xdef-web/src/main/webapp/media/Syntea-X-definition-tutorial-screenshot.jpeg" width="386" height="233"/>
-    </a>
-
-    * <li><div>
+Articles, lectures, presentations, videos:<ul>
+    <li><div>
+        Syntea/X-definition:
+        </div><div>
+        <b>Short video tutorial</b>:
+        </div><div>
+        <a href="https://www.youtube.com/watch?v=DgwtzLTPVvY">
+            <img src="xdef-web/src/main/webapp/media/Syntea-X-definition-tutorial-screenshot.jpeg" width="386" height="233"/>
+        </a>
+        </div>
+    </li>
+    <li><div>
         XML Prague 2022:
         </div><div>
         V. Trojan, T. Šmíd:
-        <a href="media/XMLPrague2022-X-definition-presentation.pdf">
+        <a href="xdef-web/src/main/webapp/media/XMLPrague2022-X-definition-presentation.pdf">
             <b>X-definition 4.2</b>
         </a> (pdf)
         </div><div>
@@ -232,8 +236,8 @@ Articles, lectures, presentations, videos:
         <a href="https://www.xmlprague.cz/day2-2022/#xdef">annotation</a>
         and video recording:
         </div><div>
-        <a href="https://www.youtube.com/watch?v=8m02mXQp07E&list=PLQpqh98e9RgV8HrbmYWpLzYNSUSa3_Smb&index=11" target="_">
-            <img src="media/XMLPrague2022-X-definition-screenshot.jpeg" width="386" height="234"/>
+        <a href="https://www.youtube.com/watch?v=8m02mXQp07E&list=PLQpqh98e9RgV8HrbmYWpLzYNSUSa3_Smb&index=11">
+            <img src="xdef-web/src/main/webapp/media/XMLPrague2022-X-definition-screenshot.jpeg" width="386" height="234"/>
         </a>
         </div>
     </li>
@@ -257,7 +261,7 @@ Articles, lectures, presentations, videos:
         XML Prague 2020:
         </div><div>
         V. Trojan, T. Šmíd:
-        <a href="media/XMLPrague2020-X-definition-presentation.pdf">
+        <a href="xdef-web/src/main/webapp/media/XMLPrague2020-X-definition-presentation.pdf">
             <b>X-definition 3.1&rarr;4.0</b>
         </a> (pdf)
         </div><div>
@@ -265,8 +269,8 @@ Articles, lectures, presentations, videos:
         <a href="https://www.xmlprague.cz/day3-2020/#xdef">annotation</a>
         and video recording:
         </div><div>
-        <a href="https://www.youtube.com/watch?v=NcmTyV59AG8&list=PLQpqh98e9RgURPOd2Y6Md-WZ1_MpAqFK8&index=16" target="_">
-            <img src="media/XMLPrague2020-X-definition-screenshot.jpeg" width="386" height="222"/>
+        <a href="https://www.youtube.com/watch?v=NcmTyV59AG8&list=PLQpqh98e9RgURPOd2Y6Md-WZ1_MpAqFK8&index=16">
+            <img src="xdef-web/src/main/webapp/media/XMLPrague2020-X-definition-screenshot.jpeg" width="386" height="222"/>
         </a>
         </div>
     </li>
@@ -274,14 +278,14 @@ Articles, lectures, presentations, videos:
         CTU/FIT-Informatics Evening (2018-11):
         </div><div>
         J. Kamenický, V. Trojan:
-        <a href="media/CVUT-FIT-InformatickyVecer-2018-11-X-definice(91594).PPTX">
+        <a href="xdef-web/src/main/webapp/media/CVUT-FIT-InformatickyVecer-2018-11-X-definice(91594).PPTX">
             <b>X-definition — data processing and transformation</b>
         </a> (pptx)
         </div><div>
         link to video recording:
         </div><div>
-        <a href="https://www.youtube.com/watch?v=Miyvdqqgo54" target="_">
-            <img src="media/CVUT-FIT-InformatickyVecer-2018-11-X-definice-screenshot.jpeg" width="386" height="236"/>
+        <a href="https://www.youtube.com/watch?v=Miyvdqqgo54">
+            <img src="xdef-web/src/main/webapp/media/CVUT-FIT-InformatickyVecer-2018-11-X-definice-screenshot.jpeg" width="386" height="236"/>
         </a>
         </div>
     </li>
@@ -289,7 +293,7 @@ Articles, lectures, presentations, videos:
         XML Prague 2017:
         </div><div>
         V. Trojan, J. Kocman:
-        <a href="media/XMLPrague2017-X-definition-presentation.pdf">
+        <a href="xdef-web/src/main/webapp/media/XMLPrague2017-X-definition-presentation.pdf">
             <b>X-definition 2.0&rarr;3.1</b>
         </a> (pdf)
         </div><div>
@@ -297,8 +301,8 @@ Articles, lectures, presentations, videos:
         <a href="https://www.xmlprague.cz/day3-2017/#xdef">annotation</a>
         and video recording:
         </div><div>
-        <a href="https://www.youtube.com/watch?v=jNN0XTWZVMU&list=PLQpqh98e9RgUcEmbXmI6RolisQaIRw9dm&index=11" target="_">
-            <img src="media/XMLPrague2017-X-definition-screenshot.jpeg" width="386" height="219"/>
+        <a href="https://www.youtube.com/watch?v=jNN0XTWZVMU&list=PLQpqh98e9RgUcEmbXmI6RolisQaIRw9dm&index=11">
+            <img src="xdef-web/src/main/webapp/media/XMLPrague2017-X-definition-screenshot.jpeg" width="386" height="219"/>
         </a>
         </div>
     </li>
@@ -306,7 +310,7 @@ Articles, lectures, presentations, videos:
         XML Prague 2009:
         </div><div>
         V. Trojan, J.Měska:
-        <a href="media/XMLPrague2009-X-definition-presentation.ppt">
+        <a href="xdef-web/src/main/webapp/media/XMLPrague2009-X-definition-presentation.ppt">
             <b>How the dog and cat cooked a cake</b>
         </a> (ppt)
         </div><div>
@@ -314,8 +318,8 @@ Articles, lectures, presentations, videos:
         <a href="https://archive.xmlprague.cz/2009/sessions.html#xdefinition">annotation</a>
         and video recording:
         </div><div>
-        <a href="https://www.youtube.com/watch?v=-IKPO_0E6iw&list=PLE616DA47460D46DA&index=11" target="_">
-            <img src="media/XMLPrague2009-X-definition-screenshot.jpeg" width="386" height="219"/>
+        <a href="https://www.youtube.com/watch?v=-IKPO_0E6iw&list=PLE616DA47460D46DA&index=11">
+            <img src="xdef-web/src/main/webapp/media/XMLPrague2009-X-definition-screenshot.jpeg" width="386" height="219"/>
         </a>
         </div>
     </li>
@@ -323,7 +327,7 @@ Articles, lectures, presentations, videos:
         XML Prague 2007:
         </div><div>
         V. Trojan, J. Kamenický, J. Měska:
-        <a href="media/XMLPrague2007-X-definition-presentation.pdf">
+        <a href="xdef-web/src/main/webapp/media/XMLPrague2007-X-definition-presentation.pdf">
             <b>Why All of Humanity Does Not Speak Esperanto</b>
         </a> (pdf)
         </div>
@@ -341,7 +345,7 @@ Articles, lectures, presentations, videos:
         XML Prague 2005:
         </div><div>
         V. Trojan:
-        <a href="media/XMLPrague2005-X-definition-presentation.ppt">
+        <a href="xdef-web/src/main/webapp/media/XMLPrague2005-X-definition-presentation.ppt">
             <b>X-definition</b>
         </a> (ppt)
         </div><div>
