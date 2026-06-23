@@ -120,7 +120,7 @@ public final class TestXdefToJSON extends XDTester {
         boolean display = false; // If it is true, the generated JSON format is dislpayed
 ////////////////////////////////////////////////////////////////////////////////
         String xdef, data;
-/**/
+/**
         try {
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Example' root='Compositions|A|B|X'>\n" +
