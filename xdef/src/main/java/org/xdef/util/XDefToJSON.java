@@ -351,10 +351,11 @@ public class XDefToJSON {
                         sb.append("\"").append(el.getTagName()).append("\": \"");
                         String s = toJsonString(removeTrailingSpaces(el.getTextContent()));
                         sb.append(s);
-                        if (s.length() > 100 || s.indexOf('\n') >= 0) {
+                        sb.append("\"");
+                        if (s.indexOf('\n') >= 0 || s.length() >= 100) {
                             sb.append("\n  ");
                         }
-                        sb.append("\"}");
+                        sb.append("}");
                         sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         continue;
                     case "component":
@@ -391,7 +392,7 @@ public class XDefToJSON {
             }
             //XML model
             sb.append("\n  { \"").append(xdPrefix).append(":xml\": \"");
-            String s = adLinePrefixes(toJsonString(KXmlUtils.nodeToString(el, true)));
+            String s = adLinePrefixes(toJsonString(removeTrailingSpaces(KXmlUtils.nodeToString(el, true))));
             int i1 = s.indexOf("xmlns:" + xdPrefix + "=\\\"");
             if (i1 > 0) {
                 int i2 = s.indexOf("\"", i1 + xdPrefix.length() + 9);
@@ -400,11 +401,15 @@ public class XDefToJSON {
                 }
             }
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                sb.append("\n  ").append(s.trim()).append("\n  ");
+                sb.append("\n  ").append(s.trim());
             } else {
                 sb.append(s);
             }
-            sb.append("\"}");
+            sb.append("\"");
+            if (s.indexOf('\n') >= 0 || s.length() >= 100) {
+                sb.append("\n  ");
+            }
+            sb.append("}");
             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
         }
         sb.append("]");
