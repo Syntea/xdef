@@ -169,7 +169,7 @@
                             <targetPath>other</targetPath>
                             <directory>../administration/script-aux</directory>
                             <includes>
-                                <inlude>xdef-download.sh</inlude>
+                                <inlude>xdef-download-maven.sh</inlude>
                             </includes>
                         </resource>
                         <resource>
