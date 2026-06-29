@@ -162,14 +162,11 @@ final class CompileXonXdef extends XScriptParser {
         }
     }
 
-    /** Skip all blanks, comments and semicolons. */
-    private void skipSemiconsBlanksAndComments() {
-        for(;;) {
+    /** Skip all spaces, comments and semicolons. */
+    private void skipSemicolonsSpacesAndComments() {
+        do {
             skipSpacesAndComments();
-            if (!isChar(';')) {
-                return;
-            }
-        }
+        } while(isChar(';'));
     }
 
     /** Parse X-script and return occurrence and executive part (type declaration) in separate fields.
@@ -368,7 +365,7 @@ final class CompileXonXdef extends XScriptParser {
             if (isToken(X_ONEOF_DIRECTIVE)) {
                 pn2 = genXDElement(pn1, "choice", getPosition());
                 pn1.addChildNode(pn2);
-                skipSemiconsBlanksAndComments();
+                skipSemicolonsSpacesAndComments();
                 if (!eos()) {
                     setXDAttr(pn2, "script", new SBuffer(getUnparsedBufferPart(), getPosition()));
                     sections = parseXscript();
@@ -583,7 +580,7 @@ final class CompileXonXdef extends XScriptParser {
                 if (isToken(X_ONEOF_DIRECTIVE)) {
                     String s = getUnparsedBufferPart().trim();
                     pn = genXDElement(parent, "choice", ((JValue) jo).getPosition());
-                    skipSemiconsBlanksAndComments();
+                    skipSemicolonsSpacesAndComments();
                     if (!s.isEmpty()) {
                         int ndx = s.indexOf("ref ");
                         if (ndx >= 0) {
@@ -834,10 +831,26 @@ final class CompileXonXdef extends XScriptParser {
      * @return true if it is a section name.
      */
     private static boolean isSectionCommand(final char sym) {
-        return sym==VAR_SYM || sym==FINALLY_SYM || sym==CREATE_SYM || sym==ON_TRUE_SYM || sym==ON_FALSE_SYM
-            || sym==ON_ABSENCE_SYM || sym==ON_ILLEGAL_ATTR_SYM || sym==CREATE_SYM || sym==MATCH_SYM
-            || sym==ON_START_ELEMENT_SYM || sym==FINALLY_SYM || sym==FORGET_SYM || sym==INIT_SYM || sym==DEFAULT_SYM
-            || sym==FIXED_SYM || sym==REF_SYM || sym==ON_EXCESS_SYM || sym==OPTION_SYM || sym==OPTIONS_SYM;
+        switch(sym) {
+            case VAR_SYM:
+            case FINALLY_SYM:
+            case CREATE_SYM:
+            case ON_TRUE_SYM:
+            case ON_FALSE_SYM:
+            case ON_ABSENCE_SYM:
+            case ON_ILLEGAL_ATTR_SYM:
+            case MATCH_SYM:
+            case ON_START_ELEMENT_SYM:
+            case FORGET_SYM:
+            case INIT_SYM:
+            case DEFAULT_SYM:
+            case FIXED_SYM:
+            case REF_SYM:
+            case ON_EXCESS_SYM:
+            case OPTION_SYM:
+            case OPTIONS_SYM: return true;
+        }
+        return false;
     }
 
     /** Parse command which follows section.
