@@ -474,8 +474,7 @@ public class XPreCompiler implements PreCompiler {
     @Override
     public final void chkNestedElements(final PNode pnode) {
         for (PNode p: pnode.getChildNodes()) {
-            if (pnode._nsindex != 0 || !"declaration".equals(pnode._localName)
-                || !"macro".equals(p._localName)) {
+            if (pnode._nsindex != 0 || !"declaration".equals(pnode._localName) || !"macro".equals(p._localName)) {
                 error(p._name, XDEF.XDEF219); //Nested child elements are not allowed here
             }
         }
@@ -520,8 +519,7 @@ public class XPreCompiler implements PreCompiler {
                             if ("scope".equals(pa._localName)) {
                                 local = "local".equals(pa._value.getString());
                             } else {
-                                //Attribute '&{0}' not allowed here
-                                error(pa._value, XDEF.XDEF254, pa._localName);
+                                error(pa._value, XDEF.XDEF254, pa._localName);//Attribute '&{0}' not allowed here
                             }
                         }
                         for (PNode x : pnode.getChildNodes()) {
@@ -571,25 +569,25 @@ public class XPreCompiler implements PreCompiler {
      * @return the code generator.
      */
     @Override
-    public CompileCode getCodeGenerator() {return _g;}
+    public final CompileCode getCodeGenerator() {return _g;}
 
     /** Get sources of X-definitions.
      * @return array with sources of X-definitions.
      */
     @Override
-    public List<Object> getSources() {return _sources;}
+    public final List<Object> getSources() {return _sources;}
 
     /** Get list with included sources of X-definitions (URL or File).
      * @return list with included sources of X-definitions (URL or File).
      */
     @Override
-    public List<Object> getIncluded() {return _includeList;}
+    public final List<Object> getIncluded() {return _includeList;}
 
     /** Get prepared sources (PNodes) of X-definition items.
      * @return array with PNodes with X-definitions.
      */
     @Override
-    public List<PNode> getPXDefs() {return _xdefPNodes;}
+    public final List<PNode> getPXDefs() {return _xdefPNodes;}
 
     /** Get prepared sources (PNodes) of lexicon items.
      * @return array with PNodes.

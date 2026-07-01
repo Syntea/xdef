@@ -134,10 +134,7 @@ public interface PreCompiler {
      * @param remove if true the attribute is removed.
      * @return PAttr object or null.
      */
-    public PAttr getXdefAttr(final PNode pnode,
-        final String localName,
-        final boolean required,
-        final boolean remove);
+    public PAttr getXdefAttr(final PNode pnode, final String localName, final boolean required, final boolean remove);
 
     /** Prepare list of declared macros and expand macro references. */
     public void prepareMacros();

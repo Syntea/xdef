@@ -92,8 +92,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                         }
                         new URI(projectNS); // just to check projectNS form
                     } catch (RuntimeException | URISyntaxException ex) {
-                        //Attribute 'metaNamespace' must contain a valid URI
-                        error(ka.getPosition(), XDEF.XDEF253);
+                        error(ka.getPosition(), XDEF.XDEF253);//Attribute 'metaNamespace' must contain a valid URI
                     }
                     parsedElem.remove(ka);
                 } else {
@@ -157,7 +156,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                         if ((item._nsindex=nsndx) == XPreCompiler.NS_XDEF_INDEX
                             && "script".equals(item._localName)) {
                             XScriptParser xp = new XScriptParser(_actPNode._xmlVersion);
-                            xp.setSource(new SBuffer(value, ka.getPosition()),
+                            xp.setSource(new SBuffer(value,
+                                ka.getPosition()),
                                 _actPNode._xdef == null ? null : _actPNode._xdef.getName(),
                                 null,
                                 _actPNode._xmlVersion,
@@ -190,16 +190,14 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                     elem = _includeElement =
                         KXmlUtils.newDocument(nsuri, _actPNode._name.getString(), null).getDocumentElement();
                 } else {
-                    elem = _includeElement.getOwnerDocument().createElementNS(
-                        nsuri,_actPNode._name.getString());
+                    elem = _includeElement.getOwnerDocument().createElementNS(nsuri,_actPNode._name.getString());
                     _includeElement.appendChild(elem);
                 }
                 for (PAttr aval: _actPNode.getAttrs()) {
                     if (aval._nsindex < 0) {
                         elem.setAttribute(aval._name, aval._value.getString());
                     } else {
-                        elem.setAttributeNS(
-                            _pcomp.getNSURI(aval._nsindex), aval._name, aval._value.getString());
+                        elem.setAttributeNS(_pcomp.getNSURI(aval._nsindex), aval._name, aval._value.getString());
                     }
                 }
                 return;
@@ -236,8 +234,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                 for (PNode pn: _pcomp.getPXDefs()) {
                     if (defName.equals(pn._xdef.getName())) {
                         XScriptParser xp = new XScriptParser(_actPNode._xmlVersion);
-                        xp.setSource(_actPNode._name,
-                            _actPNode._xdef == null ? null : _actPNode._xdef.getName(),
+                        xp.setSource(_actPNode._name, _actPNode._xdef == null ? null : _actPNode._xdef.getName(),
                             null,
                             _actPNode._xmlVersion,
                             _actPNode._xpathPos);
@@ -530,8 +527,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                 StringParser.XML_CHAR_NAME_START && (c  < '0' && c > '9')) {
                 if (!wasColon && c == ':') { // allow one colon inside name
                     wasColon = true;
-                    if (i + 1 < name.length()
-                        && StringParser.getXmlCharType(name.charAt(++i), xmlVersion)
+                    if (i + 1 < name.length() && StringParser.getXmlCharType(name.charAt(++i), xmlVersion)
                             != StringParser.XML_CHAR_NAME_START) { //must follow name
                         continue;
                     }
