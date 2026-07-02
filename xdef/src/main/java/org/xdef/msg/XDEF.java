@@ -122,7 +122,7 @@ public interface XDEF {
     public static final long XDEF239 = 31159025721L;
     /** The name "&amp;{0}" already exists in the list&amp;{#SYS000} */
     public static final long XDEF240 = 31159025722L;
-    /** Required oneOf item is missing in the map&amp;{#SYS000} */
+    /** Required %oneOf item is missing in the map&amp;{#SYS000} */
     public static final long XDEF241 = 31159025723L;
     /** Specification of occurence of &amp;{0} group can not be higher then 1&amp;{#SYS000} */
     public static final long XDEF252 = 31159025724L;
