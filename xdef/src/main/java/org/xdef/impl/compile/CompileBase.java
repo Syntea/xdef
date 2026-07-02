@@ -353,6 +353,8 @@ import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT;
 import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT_END;
 import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT_START;
 import static org.xdef.impl.code.CodeTable.WRITE_TEXTNODE;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SError;
 
 /** Provides the implemented methods.
  * Declared literals and declared objects
@@ -373,7 +375,6 @@ public class CompileBase implements CodeTable, XDValueID {
     static final byte TEXTELEM_MODE = TEXT_MODE + ELEM_MODE;
     /** Compilation of actions in declaration section. */
     static final byte GLOBAL_MODE = 4;
-
     /** All modes. */
     static final byte ANY_MODE = 127;
     ////////////////////////////////////////////////////////////////////////////
@@ -500,8 +501,7 @@ public class CompileBase implements CodeTable, XDValueID {
             ((char) XD_INPUT) + ";XDInput;" +
             ((char) XD_OUTPUT) + ";XDOutput;" +
             ((char) XD_REPORT) + ";Report;" +
-            ((char) XD_XPATH) + ";KXpathExpr;" +
-                (XDFactory.isXQuerySupported() ? ((char) XD_XQUERY) + ";KXqueryExpr;" : "") +
+            ((char) XD_XPATH) + ";KXpathExpr;" + (XDFactory.isXQuerySupported()?((char) XD_XQUERY)+";KXqueryExpr;":"") +
             ((char) XD_PARSER) + ";XDParser;" +
             ((char) XD_PARSERESULT) + ";XDParseResult;" +
             ((char) XD_SERVICE) + ";XDService;" +
@@ -615,9 +615,8 @@ public class CompileBase implements CodeTable, XDValueID {
         parser(im, org.xdef.impl.parsers.XSParseInt.class, "int", "?xs:int");
         parser(im, org.xdef.impl.parsers.XSParseLong.class, "long", "?xs:long");
         parser(im, org.xdef.impl.parsers.XSParseShort.class, "short", "?xs:short");
-        parser(im, org.xdef.impl.parsers.XSParseUnsignedByte.class,
-            "unsignedByte","?xs:unsignedByte");
-        parser(im, org.xdef.impl.parsers.XSParseUnsignedInt.class,"unsignedInt","?xs:unsignedInt");
+        parser(im, org.xdef.impl.parsers.XSParseUnsignedByte.class, "unsignedByte", "?xs:unsignedByte");
+        parser(im, org.xdef.impl.parsers.XSParseUnsignedInt.class, "unsignedInt", "?xs:unsignedInt");
         parser(im, org.xdef.impl.parsers.XSParseUnsignedShort.class, "unsignedShort", "?xs:unsignedShort");
         im = genParserMetnod(0, 2, new short[] {XD_BIGINTEGER, XD_BIGINTEGER}, XD_BIGINTEGER,
             keyParam("base", XD_STRING, true, -1,false),
@@ -677,8 +676,7 @@ public class CompileBase implements CodeTable, XDValueID {
             keyParam("maxLength", XD_LONG, false,  1, false),
             keyParam("minLength", XD_LONG, false,  0, false),
             keyParam("pattern",XD_STRING,true,-1,false),
-            keyParam("whiteSpace", XD_STRING, false,  -1, false,
-                new DefString("replace"), new DefString("collapse")));
+            keyParam("whiteSpace", XD_STRING, false,  -1, false, new DefString("replace"), new DefString("collapse")));
         parser(im, org.xdef.impl.parsers.XSParseNormalizedString.class, "normalizedString", "?xs:normalizedString");
         im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
             keyParam("base", XD_STRING, true, -1,false),
@@ -745,16 +743,6 @@ public class CompileBase implements CodeTable, XDValueID {
         parser(im, org.xdef.impl.parsers.XDParseQNameList.class, "QNameList", "?QnameList");
         parser(im, org.xdef.impl.parsers.XDParseLanguages.class, "languages", "?ISOlanguages");
         parser(im, org.xdef.impl.parsers.XDParseCountries.class, "countries");
-//        im = genParserMetnod(0, 1, new short[] {XD_STRING}, XD_CONTAINER,
-//            keyParam("argument", XD_ANY, true, 1,false),
-//                keyParam("enumeration", XD_STRING, true, -1,false),
-//                keyParam("length", XD_LONG, false, -1,false),
-//                keyParam("maxLength", XD_LONG, false, -1,false),
-//                keyParam("minLength", XD_LONG, false, -1,false),
-//                keyParam("pattern",XD_STRING,true,-1,false),
-//                keyParam("separator", XD_STRING, true,  0, false),
-//                keyParam("whiteSpace", XD_STRING, false, -1, true, new DefString("collapse")));
-//        parser(im, org.xdef.impl.parsers.XDParseQNameURIList.class,"QNameURIList", "?QnameListURI");
         im = genParserMetnod(0, 2, new short[] {XD_DURATION,XD_DURATION}, XD_DURATION,
             keyParam("base", XD_STRING, true, -1,false),
             keyParam("enumeration", XD_DURATION, true,-1,false),
@@ -855,8 +843,6 @@ public class CompileBase implements CodeTable, XDValueID {
         parser(im,org.xdef.impl.parsers.XDParseFile.class, "file");
         parser(im,org.xdef.impl.parsers.XDParseFileList.class,"fileList");
         parser(im,org.xdef.impl.parsers.XDParseXDType.class, "xdType");
-//        parser(im,org.xdef.impl.parsers.XDParseUri.class, "uri");
-//        parser(im,org.xdef.impl.parsers.XDParseUriList.class, "uriList");
         parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
         parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
         parser(im,org.xdef.impl.parsers.XDParseDomainAddr.class, "domainAddr");
@@ -867,8 +853,7 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(UNIQUESET_BIND, XD_VOID, ELEM_MODE, 1, Integer.MAX_VALUE,X_UNIQUESET_M),"bindSet");
         method(ti, genInternalMethod(CLEAR_REPORTS, XD_VOID, TEXTELEM_MODE, 0, 0), "clearReports");
         method(ti, genInternalMethod(DEFAULT_ERROR, XD_BOOLEAN, TEXTELEM_MODE, 0, 0), "defaultError");
-        method(ti, genInternalMethod(PUT_ERROR, XD_BOOLEAN, ANY_MODE, 1, 4,
-            XD_ANY, XD_STRING, XD_STRING, XD_STRING), "error");
+        method(ti, genInternalMethod(PUT_ERROR, XD_BOOLEAN, ANY_MODE,1,4,XD_ANY,XD_STRING,XD_STRING,XD_STRING),"error");
         method(ti, genInternalMethod(GET_NUMOFERRORS, XD_LONG, TEXTELEM_MODE, 0, 0), "errors");
         method(ti, genInternalMethod(GET_NUMOFERRORWARNINGS, XD_LONG, TEXTELEM_MODE, 0, 0), "errorWarnings");
         method(ti, genInternalMethod(FORMAT_STRING, XD_STRING, ANY_MODE,1,Integer.MAX_VALUE,XD_ANY),"format");
@@ -908,8 +893,8 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(IS_DATETIME, XD_BOOLEAN,ANY_MODE, 1,2,XD_STRING,XD_STRING),"isDatetime");
         method(ti, genInternalMethod(IS_NUM, XD_BOOLEAN, ANY_MODE, 1, 1, XD_STRING), "isNumeric");
         method(ti, genInternalMethod(CREATE_ELEMENT, XD_ELEMENT, ANY_MODE, 0, 2, XD_STRING, XD_STRING), "newElement");
-        method(ti, genInternalMethod(CREATE_ELEMENTS, XD_CONTAINER,
-            ANY_MODE, 1, 3, XD_LONG, XD_STRING, XD_STRING), "newElements");
+        method(ti, genInternalMethod(CREATE_ELEMENTS, XD_CONTAINER, ANY_MODE, 1, 3, XD_LONG, XD_STRING, XD_STRING),
+            "newElements");
         method(ti, genInternalMethod(GET_NOW, XD_DATETIME, ANY_MODE, 0, 0), "now");
         method(ti, genInternalMethod(GET_OCCURRENCE, XD_LONG, TEXTELEM_MODE, 0, 0), "occurrence");
         method(ti, genInternalMethod(OUT_STREAM, XD_VOID, ANY_MODE, 1, 1, XD_STRING), "out");
@@ -923,8 +908,8 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(REMOVE_TEXT, XD_VOID, TEXT_MODE, 0, 0), "removeText");
         method(ti, genInternalMethod(WHITESPACES_S, XD_STRING, ANY_MODE, 1,1, XD_STRING),"removeWhiteSpaces");
         method(ti, genInternalMethod(REPLACE_S, XD_STRING, ANY_MODE, 3, 3, XD_STRING, XD_STRING, XD_STRING),"replace");
-        method(ti, genInternalMethod(REPLACEFIRST_S, XD_STRING,
-            ANY_MODE, 3, 3, XD_STRING, XD_STRING, XD_STRING), "replaceFirst");
+        method(ti, genInternalMethod(REPLACEFIRST_S, XD_STRING, ANY_MODE, 3, 3, XD_STRING, XD_STRING, XD_STRING),
+            "replaceFirst");
         method(ti, genInternalMethod(SET_ELEMENT, XD_VOID, TEXTELEM_MODE, 1, 1, XD_ANY), "returnElement");
         method(ti, genInternalMethod(SET_ATTR,XD_VOID, TEXTELEM_MODE, 2, 3, XD_STRING, XD_STRING, XD_STRING),"setAttr");
         method(ti, genInternalMethod(SET_ELEMENT, XD_VOID, TEXTELEM_MODE, 1, 1, XD_ANY), "setElement");
@@ -970,9 +955,9 @@ public class CompileBase implements CodeTable, XDValueID {
 // BNF GRAMMAR
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_BNFGRAMMAR;
-        method(ti, genInternalMethod(NEW_BNFGRAMAR, XD_BNFGRAMMAR, ANY_MODE,1,2,XD_STRING,XD_BNFGRAMMAR),"#");
-        method(ti, genInternalMethod(BNF_PARSE, XD_PARSERESULT,
-            ANY_MODE, 2, 3, XD_BNFGRAMMAR, XD_STRING, XD_STRING), "parse", "?check");
+        method(ti, genInternalMethod(NEW_BNFGRAMAR, XD_BNFGRAMMAR, ANY_MODE, 1, 2, XD_STRING,XD_BNFGRAMMAR), "#");
+        method(ti, genInternalMethod(BNF_PARSE, XD_PARSERESULT, ANY_MODE, 2, 3,
+            XD_BNFGRAMMAR, XD_STRING, XD_STRING), "parse", "?check");
         method(ti, genInternalMethod(GET_BNFRULE, XD_BNFRULE, ANY_MODE, 2,2, XD_BNFGRAMMAR,XD_STRING), "rule");
 ////////////////////////////////////////////////////////////////////////////////
 // BNF RULE
@@ -988,8 +973,8 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(BYTES_ADDBYTE, XD_VOID, ANY_MODE, 2, 2, XD_BYTES, XD_LONG), "add");
         method(ti, genInternalMethod(BYTES_CLEAR, XD_VOID, ANY_MODE, 1, 1, XD_BYTES), "clear");
         method(ti, genInternalMethod(BYTES_GETAT, XD_LONG, ANY_MODE, 2, 2, XD_BYTES, XD_LONG), "getAt");
-        method(ti, genInternalMethod(BYTES_INSERT, XD_VOID, ANY_MODE, 3,3,XD_BYTES,XD_LONG,XD_LONG),"insert");
-        method(ti, genInternalMethod(BYTES_REMOVE, XD_BYTES, ANY_MODE,2,3,XD_BYTES,XD_LONG,XD_LONG),"remove");
+        method(ti, genInternalMethod(BYTES_INSERT, XD_VOID, ANY_MODE, 3, 3, XD_BYTES,XD_LONG,XD_LONG),"insert");
+        method(ti, genInternalMethod(BYTES_REMOVE, XD_BYTES, ANY_MODE, 2, 3, XD_BYTES,XD_LONG,XD_LONG),"remove");
         method(ti, genInternalMethod(BYTES_SIZE, XD_LONG, ANY_MODE, 1, 1, XD_BYTES), "size");
         method(ti, genInternalMethod(BYTES_SETAT, XD_VOID, ANY_MODE, 3,3, XD_BYTES, XD_LONG,XD_LONG),"setAt");
         method(ti, genInternalMethod(BYTES_TO_BASE64, XD_STRING, ANY_MODE, 1, 1, XD_BYTES), "toBase64");
@@ -999,34 +984,33 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_CONTAINER;
         method(ti, genInternalMethod(NEW_CONTAINER, XD_CONTAINER, ANY_MODE, 0, Integer.MAX_VALUE), "#");
-        method(ti, genInternalMethod(CONTEXT_ADDITEM, XD_VOID, ANY_MODE, 2,2, XD_CONTAINER,XD_ANY),"addItem");
-        method(ti, genInternalMethod(CONTEXT_GETELEMENT_X, XD_ELEMENT,
-            ANY_MODE, 1, 2, XD_CONTAINER, XD_LONG), "getElement");
-        method(ti, genInternalMethod(CONTEXT_GETELEMENTS, XD_CONTAINER,
-            ANY_MODE, 1, 2, XD_CONTAINER, XD_STRING), "getElements");
-        method(ti, genInternalMethod(CONTEXT_ITEMTYPE, XD_LONG,
-            ANY_MODE, 2, 2, XD_CONTAINER, XD_LONG), "getItemType", "?itemType");
+        method(ti, genInternalMethod(CONTEXT_ADDITEM, XD_VOID, ANY_MODE, 2, 2, XD_CONTAINER,XD_ANY),"addItem");
+        method(ti, genInternalMethod(CONTEXT_GETELEMENT_X, XD_ELEMENT, ANY_MODE, 1, 2,
+            XD_CONTAINER, XD_LONG), "getElement");
+        method(ti, genInternalMethod(CONTEXT_GETELEMENTS, XD_CONTAINER, ANY_MODE, 1, 2,
+            XD_CONTAINER, XD_STRING), "getElements");
+        method(ti, genInternalMethod(CONTEXT_ITEMTYPE, XD_LONG, ANY_MODE, 2, 2,
+            XD_CONTAINER, XD_LONG), "getItemType", "?itemType");
         method(ti, genInternalMethod(CONTEXT_GETLENGTH, XD_LONG, ANY_MODE, 1, 1, XD_CONTAINER), "getLength");
         method(ti, genInternalMethod(GET_NAMEDVALUE, XD_ANY, ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "getNamedItem");
-        method(ti, genInternalMethod(GET_NAMEDITEMS, XD_CONTAINER,
-            ANY_MODE, 1, 1, XD_CONTAINER, XD_STRING), "getNamedItems");
-        method(ti, genInternalMethod(GET_NAMED_AS_STRING, XD_STRING, ANY_MODE,
-            2, 2, XD_CONTAINER, XD_STRING),"getNamedString", "?fromAttr");
+        method(ti, genInternalMethod(GET_NAMEDITEMS, XD_CONTAINER, ANY_MODE, 1, 1, XD_CONTAINER, XD_STRING),
+            "getNamedItems");
+        method(ti, genInternalMethod(GET_NAMED_AS_STRING, XD_STRING, ANY_MODE, 2, 2,
+            XD_CONTAINER, XD_STRING), "getNamedString", "?fromAttr");
         method(ti, genInternalMethod(CONTEXT_GETTEXT, XD_STRING,ANY_MODE,1,2,XD_CONTAINER,XD_LONG),"getText");
-        method(ti, genInternalMethod(HAS_NAMEDVALUE, XD_BOOLEAN,
-            ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "hasNamedItem");
+        method(ti, genInternalMethod(HAS_NAMEDVALUE, XD_BOOLEAN, ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING),
+            "hasNamedItem");
         method(ti, genInternalMethod(IS_EMPTY, XD_BOOLEAN, ANY_MODE, 1, 1, XD_CONTAINER), "isEmpty");
         method(ti, genInternalMethod(CONTEXT_ITEM, XD_ANY, ANY_MODE, 2, 2, XD_CONTAINER, XD_LONG), "item");
         method(ti, genInternalMethod(CONTEXT_REMOVEITEM, XD_ANY,ANY_MODE, 2, 2, XD_CONTAINER, XD_LONG), "removeItem");
-        method(ti, genInternalMethod(REMOVE_NAMEDVALUE, XD_VOID,
-            ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "removeNamedItem");
-        method(ti, genInternalMethod(CONTEXT_REPLACEITEM, XD_ANY,
-            ANY_MODE, 3, 3, XD_CONTAINER, XD_LONG, XD_ANY), "replaceItem");
+        method(ti, genInternalMethod(REMOVE_NAMEDVALUE, XD_VOID, ANY_MODE, 2, 2,
+            XD_CONTAINER, XD_STRING), "removeNamedItem");
+        method(ti, genInternalMethod(CONTEXT_REPLACEITEM, XD_ANY, ANY_MODE, 3, 3,
+            XD_CONTAINER, XD_LONG, XD_ANY), "replaceItem");
         method(ti, genInternalMethod(SET_NAMEDVALUE, XD_VOID, ANY_MODE, 2,3,XD_CONTAINER,XD_ANY,XD_ANY),"setNamedItem");
-        method(ti, genInternalMethod(CONTEXT_SORT, XD_CONTAINER,
-            ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_BOOLEAN),"sort");
-        method(ti, genInternalMethod(CONTEXT_TO_ELEMENT, XD_ELEMENT,
-            ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING), "toElement");
+        method(ti, genInternalMethod(CONTEXT_SORT, XD_CONTAINER,ANY_MODE,1,3,XD_CONTAINER,XD_STRING,XD_BOOLEAN),"sort");
+        method(ti, genInternalMethod(CONTEXT_TO_ELEMENT, XD_ELEMENT, ANY_MODE, 1, 3,
+            XD_CONTAINER, XD_STRING,XD_STRING), "toElement");
 ////////////////////////////////////////////////////////////////////////////////
 // CURRENCY
 ////////////////////////////////////////////////////////////////////////////////
@@ -1061,17 +1045,17 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(GET_ZONEOFFSET, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getZoneOffset");
         method(ti, genInternalMethod(GET_LASTDAYOFMONTH, XD_LONG, ANY_MODE,1,1,XD_DATETIME),"lastDayOfMonth");
         method(ti, genInternalMethod(SET_DAY, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setDay");
-        method(ti, genInternalMethod(SET_DAYTIMEMILLIS, XD_DATETIME,
-            ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setDaytimeMillis");
-        method(ti, genInternalMethod(SET_FRACTIONSECOND, XD_DATETIME,
-            ANY_MODE, 2, 2, XD_DATETIME,XD_DOUBLE),"setFractionalSecond");
+        method(ti, genInternalMethod(SET_DAYTIMEMILLIS, XD_DATETIME, ANY_MODE, 2, 2,
+            XD_DATETIME,XD_LONG), "setDaytimeMillis");
+        method(ti, genInternalMethod(SET_FRACTIONSECOND, XD_DATETIME, ANY_MODE, 2, 2,
+            XD_DATETIME,XD_DOUBLE), "setFractionalSecond");
         method(ti, genInternalMethod(SET_HOUR, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setHour");
-        method(ti, genInternalMethod(SET_MINUTE, XD_DATETIME, ANY_MODE, 2,2,XD_DATETIME,XD_LONG),"setMinute");
-        method(ti, genInternalMethod(SET_MILLIS, XD_DATETIME,
-            ANY_MODE, 2, 2, XD_DATETIME,XD_LONG),"setMillis","?setMillisecond");
+        method(ti, genInternalMethod(SET_MINUTE, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG),"setMinute");
+        method(ti, genInternalMethod(SET_MILLIS, XD_DATETIME, ANY_MODE, 2, 2,
+            XD_DATETIME,XD_LONG), "setMillis", "?setMillisecond");
         method(ti, genInternalMethod(SET_MONTH, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG),"setMonth");
-        method(ti, genInternalMethod(SET_NANOS, XD_DATETIME,
-            ANY_MODE, 2, 2, XD_DATETIME, XD_LONG), "setNanos","?setNanosecond");
+        method(ti, genInternalMethod(SET_NANOS, XD_DATETIME, ANY_MODE, 2, 2,
+            XD_DATETIME, XD_LONG), "setNanos", "?setNanosecond");
         method(ti, genInternalMethod(SET_SECOND, XD_DATETIME, ANY_MODE, 2,2,XD_DATETIME,XD_LONG),"setSecond");
         method(ti, genInternalMethod(SET_YEAR, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setYear");
         method(ti, genInternalMethod(SET_ZONEID, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_STRING), "setZoneName");
@@ -1105,21 +1089,21 @@ public class CompileBase implements CodeTable, XDValueID {
         ti = XD_ELEMENT;
         method(ti, genInternalMethod(NEW_ELEMENT, XD_ELEMENT, ANY_MODE, 1, 2, XD_STRING, XD_STRING), "#");
         method(ti, genInternalMethod(ELEMENT_ADDELEMENT, XD_VOID,ANY_MODE, 2, 2, XD_ELEMENT, XD_ELEMENT), "addElement");
-        method(ti, genInternalMethod(ELEMENT_ADDTEXT, XD_VOID, ANY_MODE, 2,2,XD_ELEMENT,XD_STRING),"addText");
+        method(ti, genInternalMethod(ELEMENT_ADDTEXT, XD_VOID, ANY_MODE, 2, 2, XD_ELEMENT, XD_STRING), "addText");
         method(ti, genInternalMethod(ELEMENT_CHILDNODES, XD_CONTAINER, ANY_MODE, 1, 1, XD_ELEMENT), "getChidNodes");
         method(ti, genInternalMethod(ELEMENT_ATTRS, XD_CONTAINER, ANY_MODE, 1,1, XD_ELEMENT),"getAttributes");
         method(ti, genInternalMethod(ELEMENT_NSURI, XD_STRING, ANY_MODE, 1, 1, XD_ELEMENT),"getNamespaceURI");
         method(ti, genInternalMethod(ELEMENT_NAME, XD_STRING, ANY_MODE, 1, 1, XD_ELEMENT), "getTagName");
         method(ti, genInternalMethod(ELEMENT_GETTEXT, XD_STRING, ANY_MODE, 1, 1, XD_ELEMENT), "getText");
-        method(ti, genInternalMethod(ELEMENT_GETATTR, XD_STRING, ANY_MODE, 2, 3,
-            XD_ELEMENT, XD_STRING, XD_STRING), "getAttribute", "?getAttr");
-        method(ti, genInternalMethod(ELEMENT_HASATTR, XD_BOOLEAN,
-            ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING), "hasAttribute");
+        method(ti, genInternalMethod(ELEMENT_GETATTR, XD_STRING, ANY_MODE, 2, 3, XD_ELEMENT, XD_STRING, XD_STRING),
+            "getAttribute", "?getAttr");
+        method(ti, genInternalMethod(ELEMENT_HASATTR, XD_BOOLEAN, ANY_MODE, 2, 3,
+            XD_ELEMENT, XD_STRING, XD_STRING), "hasAttribute");
         method(ti, genInternalMethod(IS_EMPTY, XD_BOOLEAN, ANY_MODE, 1, 1, XD_ELEMENT), "isEmpty");
-        method(ti, genInternalMethod(ELEMENT_SETATTR, XD_VOID,
-            ANY_MODE, 3, 4, XD_ELEMENT,XD_STRING,XD_STRING,XD_STRING), "setAttribute", "?setAttr");
-        method(ti, genInternalMethod(ELEMENT_TOCONTAINER, XD_CONTAINER,
-            ANY_MODE, 1, 1, XD_ELEMENT), "toContainer", "?toContext");
+        method(ti, genInternalMethod(ELEMENT_SETATTR, XD_VOID, ANY_MODE, 3, 4,
+            XD_ELEMENT, XD_STRING, XD_STRING, XD_STRING), "setAttribute", "?setAttr");
+        method(ti, genInternalMethod(ELEMENT_TOCONTAINER, XD_CONTAINER, ANY_MODE, 1, 1,
+            XD_ELEMENT), "toContainer", "?toContext");
         method(ti, genInternalMethod(ELEMENT_TOSTRING, XD_STRING, ANY_MODE, 1, 2, XD_ELEMENT, XD_BOOLEAN), "toString");
 ////////////////////////////////////////////////////////////////////////////////
 // EXCEPTION (internal)
@@ -1137,14 +1121,14 @@ public class CompileBase implements CodeTable, XDValueID {
 // GPS POSITION
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_GPSPOSITION;
-        method(ti, genInternalMethod(NEW_GPSPOSITION, XD_GPSPOSITION,
-            ANY_MODE, 2, 4, XD_DOUBLE, XD_DOUBLE, XD_ANY, XD_STRING), "#");
+        method(ti, genInternalMethod(NEW_GPSPOSITION, XD_GPSPOSITION, ANY_MODE, 2, 4,
+            XD_DOUBLE, XD_DOUBLE, XD_ANY, XD_STRING), "#");
         method(ti, genInternalMethod(GPS_LATITUDE, XD_DOUBLE, ANY_MODE, 1, 1, XD_GPSPOSITION), "latitude");
         method(ti, genInternalMethod(GPS_LONGITUDE, XD_DOUBLE, ANY_MODE, 1, 1, XD_GPSPOSITION), "longitude");
         method(ti, genInternalMethod(GPS_ALTITUDE, XD_DOUBLE, ANY_MODE, 1, 1, XD_GPSPOSITION), "altitude");
         method(ti, genInternalMethod(GPS_NAME, XD_STRING, ANY_MODE, 1, 1, XD_GPSPOSITION), "name");
-        method(ti, genInternalMethod(GPS_DISTANCETO, XD_DOUBLE,
-            ANY_MODE, 2, 2, XD_GPSPOSITION,  XD_GPSPOSITION), "distanceTo");
+        method(ti, genInternalMethod(GPS_DISTANCETO, XD_DOUBLE, ANY_MODE, 2, 2,
+            XD_GPSPOSITION,  XD_GPSPOSITION), "distanceTo");
 ////////////////////////////////////////////////////////////////////////////////
 // LOCALE
 ////////////////////////////////////////////////////////////////////////////////
@@ -1174,8 +1158,8 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_OUTPUT;
         method(ti, genInternalMethod(NEW_OUTSTREAM, XD_OUTPUT,GLOBAL_MODE, 1, 3, XD_STRING,XD_STRING,XD_BOOLEAN), "#");
-        method(ti, genInternalMethod(PUT_ERROR1, XD_BOOLEAN,
-            ANY_MODE, 2, 4, XD_OUTPUT, XD_STRING, XD_STRING, XD_STRING), "error");
+        method(ti, genInternalMethod(PUT_ERROR1, XD_BOOLEAN, ANY_MODE, 2, 4,
+            XD_OUTPUT, XD_STRING, XD_STRING, XD_STRING), "error");
         method(ti, genInternalMethod(GET_REPORT, XD_REPORT, ANY_MODE, 1, 1, XD_OUTPUT), "getLastError");
         method(ti, genInternalMethod(OUT1_STREAM, XD_VOID, ANY_MODE, 2, 2, XD_OUTPUT, XD_STRING), "out");
         method(ti, genInternalMethod(OUTLN1_STREAM, XD_VOID, ANY_MODE, 1, 2, XD_OUTPUT, XD_STRING), "outln");
@@ -1206,14 +1190,14 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(GET_PARSED_DURATION, XD_DURATION, ANY_MODE, 1, 1,XD_PARSERESULT), "durationValue");
         method(ti, genInternalMethod(GET_PARSED_DECIMAL, XD_DECIMAL, ANY_MODE, 1, 1, XD_PARSERESULT), "decimalValue");
         method(ti, genInternalMethod(GET_PARSED_LONG, XD_LONG, ANY_MODE, 1, 1, XD_PARSERESULT), "intValue");
-        method(ti, genInternalMethod(SET_PARSED_ERROR, XD_PARSERESULT,
-            ANY_MODE, 1, 4, XD_PARSERESULT, XD_STRING, XD_STRING, XD_STRING), "error", "?setError");
+        method(ti, genInternalMethod(SET_PARSED_ERROR, XD_PARSERESULT, ANY_MODE, 1, 4,
+            XD_PARSERESULT, XD_STRING, XD_STRING, XD_STRING), "error", "?setError");
         method(ti, genInternalMethod(GET_PARSED_DOUBLE, XD_DOUBLE, ANY_MODE,1,1,XD_PARSERESULT),"floatValue");
         method(ti, genInternalMethod(GET_PARSED_ERROR, XD_REPORT, ANY_MODE, 1, 1, XD_PARSERESULT),"getError");
         method(ti, genInternalMethod(GET_PARSED_STRING, XD_STRING, ANY_MODE, 1, 1, XD_PARSERESULT), "getParsedString");
         method(ti, genInternalMethod(GET_PARSED_VALUE, XD_ANY, ANY_MODE, 1, 1, XD_PARSERESULT), "getValue");
-        method(ti, genInternalMethod(SET_PARSED_STRING, XD_PARSERESULT,
-            ANY_MODE, 2, 2, XD_PARSERESULT, XD_STRING),"setParsedString");
+        method(ti, genInternalMethod(SET_PARSED_STRING, XD_PARSERESULT, ANY_MODE, 2, 2,
+            XD_PARSERESULT, XD_STRING), "setParsedString");
  //???
         method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID, ANY_MODE, 2, 2, XD_PARSERESULT, XD_ANY), "setValue");
 ////////////////////////////////////////////////////////////////////////////////
@@ -1248,8 +1232,8 @@ public class CompileBase implements CodeTable, XDValueID {
         ti = XD_REPORT;
         method(ti, genInternalMethod(NEW_REPORT, XD_REPORT, ANY_MODE, 1, 3, XD_STRING, XD_STRING, XD_STRING), "#");
         method(ti, genInternalMethod(REPORT_GETPARAM, XD_STRING, ANY_MODE, 2, 2, XD_REPORT, XD_STRING), "getParameter");
-        method(ti, genInternalMethod(REPORT_SETPARAM, XD_REPORT,
-            ANY_MODE, 3, 3, XD_REPORT, XD_STRING, XD_STRING), "setParameter");
+        method(ti, genInternalMethod(REPORT_SETPARAM, XD_REPORT, ANY_MODE, 3, 3,
+            XD_REPORT, XD_STRING, XD_STRING), "setParameter");
         method(ti, genInternalMethod(REPORT_SETTYPE, XD_REPORT, ANY_MODE, 2,2,XD_REPORT,XD_STRING),"setType");
         method(ti, genInternalMethod(REPORT_TOSTRING, XD_STRING, ANY_MODE, 1, 1, XD_REPORT), "toString");
 ////////////////////////////////////////////////////////////////////////////////
@@ -1259,10 +1243,10 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(DB_CLOSE, XD_VOID, ANY_MODE, 1, 1, XD_RESULTSET), "close");
         method(ti, genInternalMethod(DB_CLOSESTATEMENT, XD_VOID, ANY_MODE, 1, 1, XD_RESULTSET), "closeStatement");
         method(ti, genInternalMethod(GET_RESULTSET_COUNT, XD_LONG, TEXTELEM_MODE,1,1,XD_RESULTSET),"getCount");
-        method(ti, genInternalMethod(GET_RESULTSET_ITEM, XD_STRING,
-            TEXTELEM_MODE, 1, 2, XD_RESULTSET, XD_STRING), "getItem");
-        method(ti, genInternalMethod(HAS_RESULTSET_ITEM, XD_BOOLEAN,
-            TEXTELEM_MODE, 2, 2, XD_RESULTSET, XD_STRING), "hasItem");
+        method(ti, genInternalMethod(GET_RESULTSET_ITEM, XD_STRING, TEXTELEM_MODE, 1, 2,
+            XD_RESULTSET, XD_STRING), "getItem");
+        method(ti, genInternalMethod(HAS_RESULTSET_ITEM, XD_BOOLEAN, TEXTELEM_MODE, 2, 2,
+            XD_RESULTSET, XD_STRING), "hasItem");
         method(ti, genInternalMethod(HAS_RESULTSET_NEXT, XD_BOOLEAN, TEXTELEM_MODE, 1, 1, XD_RESULTSET),"hasNext");
         method(ti, genInternalMethod(DB_ISCLOSED, XD_BOOLEAN, ANY_MODE, 1, 1, XD_RESULTSET), "isClosed");
         method(ti, genInternalMethod(RESULTSET_NEXT, XD_BOOLEAN, TEXTELEM_MODE, 1, 1, XD_RESULTSET), "next");
@@ -1279,10 +1263,10 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(HAS_DBITEM, XD_BOOLEAN, ANY_MODE, 2, Integer.MAX_VALUE,
             XD_SERVICE, XD_STRING, XD_STRING), "hasItem"); //mode, min, max parameters
         method(ti, genInternalMethod(DB_ISCLOSED, XD_BOOLEAN, ANY_MODE, 1, 1, XD_SERVICE), "isClosed");
-        method(ti, genInternalMethod(DB_PREPARESTATEMENT, XD_STATEMENT,
-            ANY_MODE, 2, 2, XD_SERVICE, XD_STRING), "prepareStatement");
-        method(ti, genInternalMethod(GET_DBQUERY, XD_RESULTSET,
-            ANY_MODE, 2, Integer.MAX_VALUE, XD_SERVICE, XD_STRING, XD_STRING), "query");
+        method(ti, genInternalMethod(DB_PREPARESTATEMENT, XD_STATEMENT, ANY_MODE, 2, 2,
+            XD_SERVICE, XD_STRING), "prepareStatement");
+        method(ti, genInternalMethod(GET_DBQUERY, XD_RESULTSET, ANY_MODE, 2, Integer.MAX_VALUE,
+            XD_SERVICE, XD_STRING, XD_STRING), "query");
         method(ti, genInternalMethod(GET_DBQUERY_ITEM, XD_RESULTSET, ANY_MODE, 3, Integer.MAX_VALUE,
             XD_SERVICE, XD_STRING, XD_STRING), "queryItem"); //mode, min, max parameters
         method(ti, genInternalMethod(DB_ROLLBACK, XD_VOID, ANY_MODE, 1, 1, XD_SERVICE), "rollback");
@@ -1293,15 +1277,15 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_STATEMENT;
         method(ti, genInternalMethod(DB_CLOSE, XD_VOID, ANY_MODE, 1, 1, XD_STATEMENT), "close");
-        method(ti, genInternalMethod(DB_EXEC, XD_BOOLEAN, //execute
-            ANY_MODE, 1, Integer.MAX_VALUE, XD_STATEMENT, XD_STRING), "execute");
-        method(ti, genInternalMethod(HAS_DBITEM, XD_BOOLEAN,
-            ANY_MODE, 1, Integer.MAX_VALUE, XD_STATEMENT, XD_STRING), "hasItem");
+        method(ti, genInternalMethod(DB_EXEC, XD_BOOLEAN, ANY_MODE, 1, Integer.MAX_VALUE,
+            XD_STATEMENT, XD_STRING), "execute");
+        method(ti, genInternalMethod(HAS_DBITEM, XD_BOOLEAN, ANY_MODE, 1, Integer.MAX_VALUE,
+            XD_STATEMENT, XD_STRING), "hasItem");
         method(ti, genInternalMethod(DB_ISCLOSED, XD_BOOLEAN, ANY_MODE, 1, 1, XD_STATEMENT), "isClosed");
-        method(ti, genInternalMethod(GET_DBQUERY, XD_RESULTSET,
-            ANY_MODE, 1, Integer.MAX_VALUE, XD_STATEMENT, XD_STRING), "query");
-        method(ti, genInternalMethod(GET_DBQUERY_ITEM, XD_RESULTSET,
-            ANY_MODE, 2, Integer.MAX_VALUE, XD_STATEMENT, XD_STRING), "queryItem");
+        method(ti, genInternalMethod(GET_DBQUERY, XD_RESULTSET, ANY_MODE, 1, Integer.MAX_VALUE,
+            XD_STATEMENT, XD_STRING), "query");
+        method(ti, genInternalMethod(GET_DBQUERY_ITEM, XD_RESULTSET, ANY_MODE, 2, Integer.MAX_VALUE,
+            XD_STATEMENT, XD_STRING), "queryItem");
 ////////////////////////////////////////////////////////////////////////////////
 // STRING
 ////////////////////////////////////////////////////////////////////////////////
@@ -1316,8 +1300,8 @@ public class CompileBase implements CodeTable, XDValueID {
         method(ti, genInternalMethod(GET_BYTES_FROM_STRING, XD_BYTES, ANY_MODE, 1, 2, XD_STRING,XD_STRING), "getBytes");
         method(ti, genInternalMethod(GET_INDEXOFSTRING, XD_LONG, ANY_MODE, 2, 3,XD_STRING,XD_STRING,XD_LONG),"indexOf");
         method(ti, genInternalMethod(IS_EMPTY, XD_BOOLEAN, ANY_MODE, 1, 1, XD_STRING), "isEmpty");
-        method(ti, genInternalMethod(GET_LASTINDEXOFSTRING, XD_LONG,
-            ANY_MODE, 2, 3, XD_STRING, XD_STRING, XD_LONG), "lastIndexOf");
+        method(ti, genInternalMethod(GET_LASTINDEXOFSTRING, XD_LONG, ANY_MODE, 2, 3,
+            XD_STRING, XD_STRING, XD_LONG), "lastIndexOf");
         method(ti, genInternalMethod(GET_STRING_LENGTH, XD_LONG, ANY_MODE, 1, 1, XD_STRING), "length");
         method(ti, genInternalMethod(STARTSWITH, XD_BOOLEAN,ANY_MODE, 2,2, XD_STRING,XD_STRING),"startsWith");
         method(ti, genInternalMethod(STARTSWITHI, XD_BOOLEAN, ANY_MODE, 2, 2, XD_STRING, XD_STRING), "startsWithi");
@@ -1334,51 +1318,51 @@ public class CompileBase implements CodeTable, XDValueID {
 // X_UNIQUESET_KEY (part of key list)
 ////////////////////////////////////////////////////////////////////////////////
         ti = X_UNIQUESET_KEY;
-        method(ti, genInternalMethod(UNIQUESET_KEY_ID, XD_PARSERESULT,
-            TEXT_MODE, 1, 2, X_UNIQUESET_KEY, XD_PARSERESULT), "ID");
-        method(ti, genInternalMethod(UNIQUESET_KEY_SET, XD_PARSERESULT,
-            TEXT_MODE, 1, 2, X_UNIQUESET_KEY, XD_PARSERESULT), "SET");
-        method(ti, genInternalMethod(UNIQUESET_KEY_IDREF, XD_PARSERESULT,
-            TEXT_MODE, 1, 2, X_UNIQUESET_KEY, XD_PARSERESULT), "IDREF");
-        method(ti, genInternalMethod(UNIQUESET_KEY_CHKID, XD_PARSERESULT,
-            TEXT_MODE, 1, 2, X_UNIQUESET_KEY, XD_PARSERESULT), "CHKID");
-        method(ti, genInternalMethod(UNIQUESET_IDREFS, XD_PARSERESULT,
-            TEXT_MODE, 1, 2, X_UNIQUESET_KEY, XD_PARSERESULT), "IDREFS");
-        method(ti, genInternalMethod(UNIQUESET_CHKIDS, XD_PARSERESULT,
-            TEXT_MODE, 1, 2, X_UNIQUESET_KEY,XD_PARSERESULT), "CHKIDS");
+        method(ti, genInternalMethod(UNIQUESET_KEY_ID, XD_PARSERESULT, TEXT_MODE, 1, 2,
+            X_UNIQUESET_KEY, XD_PARSERESULT), "ID");
+        method(ti, genInternalMethod(UNIQUESET_KEY_SET, XD_PARSERESULT, TEXT_MODE, 1, 2,
+            X_UNIQUESET_KEY, XD_PARSERESULT), "SET");
+        method(ti, genInternalMethod(UNIQUESET_KEY_IDREF, XD_PARSERESULT, TEXT_MODE, 1, 2,
+            X_UNIQUESET_KEY, XD_PARSERESULT), "IDREF");
+        method(ti, genInternalMethod(UNIQUESET_KEY_CHKID, XD_PARSERESULT, TEXT_MODE, 1, 2,
+            X_UNIQUESET_KEY, XD_PARSERESULT), "CHKID");
+        method(ti, genInternalMethod(UNIQUESET_IDREFS, XD_PARSERESULT, TEXT_MODE, 1, 2,
+            X_UNIQUESET_KEY, XD_PARSERESULT), "IDREFS");
+        method(ti, genInternalMethod(UNIQUESET_CHKIDS, XD_PARSERESULT, TEXT_MODE, 1, 2,
+            X_UNIQUESET_KEY,XD_PARSERESULT), "CHKIDS");
 ////////////////////////////////////////////////////////////////////////////////
 // X_UNIQUESET_M (Multiple key uniqueset)
 ////////////////////////////////////////////////////////////////////////////////
         ti = X_UNIQUESET_M;
         method(ti, genInternalMethod(UNIQUESET_M_ID, XD_BOOLEAN, TEXTELEM_MODE, 1, 2,X_UNIQUESET_M),"ID");
         method(ti, genInternalMethod(UNIQUESET_M_SET, XD_BOOLEAN, TEXTELEM_MODE, 1, 2, X_UNIQUESET_M), "SET");
-        method(ti, genInternalMethod(UNIQUESET_M_IDREF, XD_VOID,
-            TEXTELEM_MODE, 1, 2, X_UNIQUESET_M,XD_PARSERESULT), "IDREF");
-        method(ti, genInternalMethod(UNIQUESET_M_CHKID, XD_VOID,
-            TEXTELEM_MODE, 1, 2, X_UNIQUESET_M, XD_PARSERESULT), "CHKID");
+        method(ti, genInternalMethod(UNIQUESET_M_IDREF, XD_VOID, TEXTELEM_MODE, 1, 2,
+            X_UNIQUESET_M,XD_PARSERESULT), "IDREF");
+        method(ti, genInternalMethod(UNIQUESET_M_CHKID, XD_VOID, TEXTELEM_MODE, 1, 2,
+            X_UNIQUESET_M, XD_PARSERESULT), "CHKID");
         method(ti, genInternalMethod(UNIQUESET_M_NEWKEY, XD_VOID, TEXTELEM_MODE, 1, 1, X_UNIQUESET_M), "NEWKEY");
         method(ti, genInternalMethod(UNIQUESET_CLOSE, XD_VOID, TEXTELEM_MODE, 1, 1, X_UNIQUESET_M), "CLEAR");
         method(ti, genInternalMethod(UNIQUESET_CHEKUNREF, XD_VOID, TEXTELEM_MODE, 1, 1, X_UNIQUESET_M), "checkUnref");
         method(ti, genInternalMethod(UNIQUESET_M_SIZE, XD_LONG, ANY_MODE, 1, 1, X_UNIQUESET_M), "size");
-        method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER,
-            ANY_MODE, 1, 1, X_UNIQUESET_M), "toContainer");
-        method(ti, genInternalMethod(UNIQUESET_GET_ACTUAL_KEY, XD_UNIQUESET_KEY,
-            ANY_MODE, 1, 1, X_UNIQUESET_M), "getActualKey");
+        method(ti, genInternalMethod(UNIQUESET_M_TOCONTAINER, XD_CONTAINER, ANY_MODE, 1, 1,
+            X_UNIQUESET_M), "toContainer");
+        method(ti, genInternalMethod(UNIQUESET_GET_ACTUAL_KEY, XD_UNIQUESET_KEY, ANY_MODE, 1, 1,
+            X_UNIQUESET_M), "getActualKey");
 ////////////////////////////////////////////////////////////////////////////////
 // UNIQUESET_KEY (key uniqueSet)
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_UNIQUESET_KEY;
-        method(ti, genInternalMethod(UNIQUESET_KEY_RESET, XD_VOID, ANY_MODE,1,1,XD_UNIQUESET_KEY),"resetKey");
+        method(ti, genInternalMethod(UNIQUESET_KEY_RESET, XD_VOID, ANY_MODE, 1, 1, XD_UNIQUESET_KEY), "resetKey");
 ////////////////////////////////////////////////////////////////////////////////
 // XML Writer (output XML stream)
 ////////////////////////////////////////////////////////////////////////////////
         ti = XD_XMLWRITER;
         method(ti, genInternalMethod(NEW_XMLWRITER, XD_XMLWRITER, ANY_MODE, 1, 3, XD_STRING, XD_STRING,XD_BOOLEAN),"#");
-        method(ti, genInternalMethod(SET_XMLWRITER_INDENTING, XD_VOID,
-            ANY_MODE, 2, 2, XD_XMLWRITER, XD_BOOLEAN), "setIndenting");
-        method(ti, genInternalMethod(WRITE_ELEMENT_START, XD_VOID,
-            ANY_MODE, 1, 2,XD_XMLWRITER, XD_ELEMENT),"writeElementStart");
-        method(ti, genInternalMethod(WRITE_ELEMENT_END, XD_VOID,ANY_MODE,1,1,XD_XMLWRITER),"writeElementEnd");
+        method(ti, genInternalMethod(SET_XMLWRITER_INDENTING, XD_VOID, ANY_MODE, 2, 2,
+            XD_XMLWRITER, XD_BOOLEAN), "setIndenting");
+        method(ti, genInternalMethod(WRITE_ELEMENT_START, XD_VOID, ANY_MODE, 1, 2,
+            XD_XMLWRITER, XD_ELEMENT), "writeElementStart");
+        method(ti, genInternalMethod(WRITE_ELEMENT_END, XD_VOID, ANY_MODE, 1, 1, XD_XMLWRITER), "writeElementEnd");
         method(ti, genInternalMethod(WRITE_ELEMENT, XD_VOID, ANY_MODE, 1, 2, XD_XMLWRITER, XD_ELEMENT), "writeElement");
         method(ti, genInternalMethod(WRITE_TEXTNODE, XD_VOID, ANY_MODE, 1, 2, XD_XMLWRITER, XD_STRING), "writeText");
         method(ti, genInternalMethod(CLOSE_XMLWRITER, XD_VOID, ANY_MODE, 1, 1, XD_XMLWRITER), "close");
@@ -1415,7 +1399,7 @@ public class CompileBase implements CodeTable, XDValueID {
                 PARSERS.put(name, c);
             }
         } catch (NoSuchMethodException | SecurityException ex) {
-            throw new Error("Internal error: " + ex);
+            throw new SError(SYS.SYS066, ex);//Internal error&amp;{0}{: }
         }
     }
 
@@ -1476,8 +1460,7 @@ public class CompileBase implements CodeTable, XDValueID {
         final short[] paramTypes,
         final short parsedResult,
         KeyParam... keyparams) {
-        return new InternalMethod(
-            LD_CONST, XD_PARSER, parsedResult, ANY_MODE, minPars, maxPars, paramTypes, keyparams);
+        return new InternalMethod(LD_CONST, XD_PARSER, parsedResult, ANY_MODE, minPars, maxPars, paramTypes, keyparams);
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1531,8 +1514,7 @@ public class CompileBase implements CodeTable, XDValueID {
      * @return type ID or XD_UNDEF.
      */
     static short getClassTypeID(final Class<?> clazz) {
-        if (clazz == null || clazz.equals(java.lang.Void.TYPE) ||
-            clazz.equals(java.lang.Void.class)) {
+        if (clazz == null || clazz.equals(java.lang.Void.TYPE) || clazz.equals(java.lang.Void.class)) {
             return XD_VOID;
         } else if (clazz.equals(Long.TYPE) || clazz.equals(Long.class) || clazz.equals(Integer.TYPE)
             || clazz.equals(Integer.class) || clazz.equals(Short.TYPE) || clazz.equals(Short.class)

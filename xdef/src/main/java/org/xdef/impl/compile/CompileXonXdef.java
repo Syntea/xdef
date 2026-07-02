@@ -539,7 +539,7 @@ final class CompileXonXdef extends XScriptParser {
                 if (sbf == null) {
                     sections.add("finally");
                     sections.add(new SBuffer(
-                        "if($oneOf==0) error('XDEF241','Required oneOf item is missing in the map');", pn1._name));
+                        "if($oneOf==0) error('XDEF241','Required %oneOf item is missing in the map');", pn1._name));
                 } else {
                     String s = sbf.getString();
                     if (!s.endsWith(";")) {
@@ -810,7 +810,7 @@ final class CompileXonXdef extends XScriptParser {
      * @param reporter report writer
      */
     final String genXdef(final PNode pn, final String format, final SBuffer name,final ReportWriter reporter){
-        XonModelParser jp = new XonModelParser(this);
+        XonModelParser jp = new XonModelParser();
         XonParsers xp = format.equals("xon") ? new XonReader(pn._value, jp) : new IniReader(pn._value, jp);
         xp.setReportWriter(reporter);
         xp.setXdefMode();
@@ -826,9 +826,9 @@ final class CompileXonXdef extends XScriptParser {
 ////////////////////////////////////////////////////////////////////////////////
 // X-script parser
 ////////////////////////////////////////////////////////////////////////////////
-    /** Check if id of parsed section name is a section name.
-     * @param sym ID of parsed section name.
-     * @return true if it is a section name.
+    /** Check if id of parsed symbol is a section.
+     * @param sym ID of parsed section.
+     * @return true if it is a section. Otherwise, return false.
      */
     private static boolean isSectionCommand(final char sym) {
         switch(sym) {
@@ -1031,11 +1031,7 @@ final class CompileXonXdef extends XScriptParser {
                         result += ';';
                     }
                     String s = ((SBuffer) o).getString();
-                    if (s.isEmpty()) {
-                        result += sectionName;
-                    } else {
-                        result += sectionName + ' ' + s;
-                    }
+                    result += s.isEmpty() ? sectionName : sectionName + ' ' + s;
                     wasOccurs = false;
                 }
             }
@@ -1108,7 +1104,7 @@ final class CompileXonXdef extends XScriptParser {
         private JObject _value;
 
         /** Create new instance of XonModelParser. */
-        XonModelParser(final CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
+        private XonModelParser() {_kinds.push(_kind = VALUE);}
 
         ////////////////////////////////////////////////////////////////////////
         // Implementation of JParser interface
