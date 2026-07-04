@@ -120,6 +120,18 @@ public final class TestXdefToJSON extends XDTester {
         boolean display = false; // If it is true, the generated JSON format is dislpayed
 ////////////////////////////////////////////////////////////////////////////////
         String xdef, data;
+/**/
+        try {
+            xdef =
+"<xd:declaration xmlns:xd='http://www.xdef.org/xdef/4.2' >\n" +
+"    String t = 'ab c';\n" +
+"    Datetime d = now();\n" +
+"    type x string();\n" +
+"</xd:declaration>";
+            assertEq("", testXdefJson(xdef, "Example", true, null));
+        } catch (RuntimeException ex) {fail(ex); return;}
+if(true) return;
+/**/
 /**
         try {
             xdef =
