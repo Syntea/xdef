@@ -241,7 +241,13 @@ public class XDefToJSON {
                 sb.append(toXmlString(o.getValue().toString())).append("\"");
             }
         }
-        sb.append(">").append(toXmlString(xd.get(1).toString())).append("</").append(xdName).append(">");
+        sb.append(">");
+        String s = toXmlString(xd.get(1).toString());
+        if (s.indexOf('\n') == 0 && s.lastIndexOf('\n') != s.length() - 1) {
+            s += "\n";
+        }
+        sb.append(s);
+        sb.append("</").append(xdName).append(">");
         return sb.toString();
     }
 
