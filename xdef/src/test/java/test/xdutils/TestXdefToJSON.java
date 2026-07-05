@@ -123,6 +123,18 @@ public final class TestXdefToJSON extends XDTester {
 /**
         try {
             xdef =
+"<xd:declaration xmlns:xd='http://www.xdef.org/xdef/4.2'>\r\n" +
+"    String t = 'ab c';\r\n" +
+"    Datetime d = now();\r\n" +
+"    type x string();\r\n" +
+"</xd:declaration>";
+            assertEq("", testXdefJson(xdef, "", true, null));
+        } catch (RuntimeException ex) {fail(ex); return;}
+if(true) return;
+/**/
+/**
+        try {
+            xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='Example' root='Compositions|A|B|X'>\n" +
 "\n" +
 "  <xd:declaration> String s = null;</xd:declaration>\n" +
