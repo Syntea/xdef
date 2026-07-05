@@ -242,9 +242,9 @@ public class XDefToJSON {
             }
         }
         sb.append(">");
+System.out.println("\"" + xd.get(1).toString() + "\"");
         String s = SUtils.modifyString(toXmlString(xd.get(1).toString()), "&#13;", "");
-        if (s.indexOf('\n') == 0 && s.lastIndexOf('\n') != s.length() - 1
-            || s.indexOf("\r\n") == 0 && s.lastIndexOf("\r\n") != s.length() - 2) {
+        if ((s.indexOf('\n') == 0 || s.indexOf("\r\n") == 0) && s.lastIndexOf('\n') != s.length() - 1) {
             s += "\n";
         } else if (s.indexOf('\n') > 0) {
             s = "\n  "+ s + "\n";
