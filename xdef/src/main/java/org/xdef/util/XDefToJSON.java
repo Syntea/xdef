@@ -20,21 +20,25 @@ import org.xdef.xon.XonUtils;
 public class XDefToJSON {
 
     /** Modify string to XML text format. */
-    private static String toXmlString(final String s) {return KXmlUtils.toXmlText(s, '<', false);}
+    private static String toXmlString(final String s) {
+        return KXmlUtils.toXmlText(
+            SUtils.modifyString(SUtils.modifyString(s, "\r\n", "\n"), "&#13;\n", "\n"), '<', false);
+    }
 
     /** Modify string to JSON format. */
     private static String toJsonString(final String s) {
-        return SUtils.modifyString(SUtils.modifyString(s, "\r\n", "\n"), "\"", "\\\"");
+        return SUtils.modifyString(
+            SUtils.modifyString(SUtils.modifyString(s, "\r\n", "\n"), "&#13;\n", "\n"), "\"", "\\\"");
     }
 
     /** Remove trailing spaces, */
     private static String removeTrailingSpaces(final String s) {
-        String t = SUtils.modifyString(s, "\r\n", "\n");;
-        int i;
-        while ((i = t.length() - 1) >= 0 && t.charAt(i) <= ' ') {
-            t = t.substring(0, i);
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) > ' ') {
+                return s.substring(0, i + 1);
+            }
         }
-        return t;
+        return s;
     }
 
     /** Get namespace URI of X-definition or return null.
@@ -163,9 +167,9 @@ public class XDefToJSON {
                 continue;
             }
             String s = toXmlString(map.get(key).toString());
-            sb.append(sb.length() + s.length() > 110 ? "\n  " : " ").append(key).append("='");
+            sb.append(sb.length() + s.length() > 110 ? "\n  " : " ").append(key).append("=\"");
             sb.append(toXmlString(s));
-            sb.append("'");
+            sb.append("\"");
         }
         if (xd.size() == 1) {
             return sb.append(" />").toString();
@@ -242,8 +246,8 @@ public class XDefToJSON {
             }
         }
         sb.append(">");
-        String s = SUtils.modifyString(toXmlString(xd.get(1).toString()), "&#13;", "");
-        if ((s.indexOf('\n') == 0 || s.indexOf("\r\n") == 0) && s.lastIndexOf('\n') != s.length() - 1) {
+        String s = toXmlString(xd.get(1).toString());
+        if (s.indexOf('\n') == 0 && s.lastIndexOf('\n') != s.length() - 1) {
             s += "\n";
         } else if (s.indexOf('\n') > 0) {
             s = "\n  "+ s + "\n";

@@ -81,10 +81,9 @@ public class XonObjParser implements XonParser {
         _kind = _kinds.peek();
         _value = _arrays.peek();
         _arrays.pop();
-        if (_kind == 2) {
-            _maps.peek().put(_names.pop(), _value);
-        } else if (_kind == 1) {
-            _arrays.peek().add(_value);
+        switch (_kind) {
+            case 1: _arrays.peek().add(_value); return;
+            case 2: _maps.peek().put(_names.pop(), _value);
         }
     }
 
@@ -103,10 +102,9 @@ public class XonObjParser implements XonParser {
         _kind = _kinds.peek();
         _value = _maps.peek();
         _maps.pop();
-        if (_kind == 2) {
-            _maps.peek().put(_names.pop(), _value);
-        } else if (_kind == 1) {
-            _arrays.peek().add(_value);
+        switch (_kind) {
+            case 1: _arrays.peek().add(_value); return;
+            case 2: _maps.peek().put(_names.pop(), _value);
         }
     }
 
