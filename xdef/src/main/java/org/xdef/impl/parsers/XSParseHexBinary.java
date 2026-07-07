@@ -35,14 +35,12 @@ public class XSParseHexBinary extends XSParseBase64Binary {
             p.nextChar();
         }
         if (quoted == 0 && !p.isChar(')') || quoted == 1 && !p.isChar('"')) {
-            //Incorrect value of '&{0}'&{1}{: }
-            p.errorWithString(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+            p.errorWithString(XDEF.XDEF809, parserName(), p.getSourceBuffer()); //Incorrect value of '&{0}'&{1}{: }
             return;
         }
         String s = p.getParsedBufferPartFrom(pos);
         if (s == null) {
-            //Incorrect value of '&{0}'&{1}{: }
-            p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
+            p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());//Incorrect value of '&{0}'&{1}{: }
             return;
         }
         p.setParsedValue(new DefBytes(baos.toByteArray(), false));

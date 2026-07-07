@@ -96,7 +96,7 @@ public final class XonReader extends StringParser implements XonParsers {
                 }
                 if (wasLineComment) {
                     while (!isNewLine() && !eos()) {
-                        sb.append(nextChar());
+                        sb.append(peekChar());
                     }
                 } else {
                     while (!isToken("*/") && !eos()) {
@@ -104,7 +104,7 @@ public final class XonReader extends StringParser implements XonParsers {
                             error(JSON.JSON015); //Unclosed comment
                             return;
                         }
-                        sb.append(nextChar());
+                        sb.append(peekChar());
                     }
                 }
             } else {
@@ -729,6 +729,7 @@ public final class XonReader extends StringParser implements XonParsers {
             _jp.putValue(jv);
         }
     }
+
     /** Parse XON/JSON source data.0
      * @param in Reader with XON/JSON source data.
      * @param sysId System ID of source position or null.
@@ -897,8 +898,7 @@ public final class XonReader extends StringParser implements XonParsers {
             String enc = "";
             if ((wasName = isChar('"')) && wasEq) {
                 while (!(wasName = isChar('"')) && !eos()) {
-                    enc += getCurrentChar(); // read charset name
-                    nextChar();
+                    enc += peekChar(); // read charset name
                 }
             }
             if (!wasEq || !wasName) { // write error message

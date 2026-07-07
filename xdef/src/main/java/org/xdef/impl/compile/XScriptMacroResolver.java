@@ -36,8 +36,8 @@ public class XScriptMacroResolver extends StringParser {
         StringBuilder sb = new StringBuilder(String.valueOf(p.peekChar()));
         char c;
         boolean wasColon = false;
-        while (StringParser.getXmlCharType(c = p.getCurrentChar(), _xmlVersion)
-            == StringParser.XML_CHAR_NAME_START || (c >= '0' && c <= '9') || (!wasColon && c == ':')) {
+        while (StringParser.getXmlCharType(c = p.getCurrentChar(), _xmlVersion) == StringParser.XML_CHAR_NAME_START
+            || (c >= '0' && c <= '9') || (!wasColon && c == ':')) {
             if (c == ':') { // we allow one colon inside the name
                 wasColon = true;
                 c = p.nextChar();
