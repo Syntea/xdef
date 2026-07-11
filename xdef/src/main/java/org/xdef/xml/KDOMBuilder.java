@@ -35,13 +35,10 @@ public class KDOMBuilder extends DocumentBuilder {
     private boolean _namespaceAware;
     private boolean _ignoreComments;
     private boolean _expandEntityReferences;
-    /** If this flag is true DTD validation is provided. */
-    private boolean _validate;
+    private boolean _validate; // If this flag is true DTD validation is provided.
     private boolean _ignoreElementContentWhitespace;
-    /** If true the parser will resolve XInclude nodes. By default the value of this is set to false. */
-    private boolean _resolveIncludes;
-    /** If true ignore unresolved entities (e.g. file not found). */
-    private boolean _ignoreUnresolvedEntities;
+    private boolean _resolveIncludes; //If true the parser esolves XInclude nodes. By default the value is set to false.
+    private boolean _ignoreUnresolvedEntities; // If true ignore unresolved entities (e.g. file not found). 
     private ArrayReporter _reporter;
 
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
@@ -53,10 +50,7 @@ public class KDOMBuilder extends DocumentBuilder {
         _namespaceAware = true;
         _expandEntityReferences = true;
         _ignoreComments = true;
-//		_validate = false;
         _resolveIncludes = true;
-//		_ignoreElementContentWhitespace = false;
-//		_ignoreUnresolvedEntities = false;
     }
 
     private void throwMsg(final SAXParseException ex, final byte type) {
@@ -151,17 +145,14 @@ public class KDOMBuilder extends DocumentBuilder {
                 _xBuilder.reset();
             }
             _xBuilder.setErrorHandler(new ErrorHandler() {
-
                 @Override
                 public void warning(SAXParseException ex) {
                     throwMsg(ex, Report.WARNING);
                 }
-
                 @Override
                 public void error(SAXParseException ex) {
                     throwMsg(ex, Report.ERROR);
                 }
-
                 @Override
                 public void fatalError(SAXParseException ex) {
                     throwMsg(ex, Report.FATAL);
@@ -206,8 +197,7 @@ public class KDOMBuilder extends DocumentBuilder {
         return _xBuilder.newDocument();
     }
 
-    /** Creates an XML Document object with empty root element created by document builder
-     * (see SetDOMImplementation).
+    /** Creates an XML Document object with empty root element created by document builder (see SetDOMImplementation).
      * @param nsURI namespace of created root element (or null).
      * @param qname qualified name of root element.
      * @param docType DocumentType object or null.
@@ -219,9 +209,9 @@ public class KDOMBuilder extends DocumentBuilder {
     }
 
     /** Specifies that the DOM parser code will convert CDATA nodes to Text nodes and append it to
-     * the adjacent (if any) text node. By default the value of this is set to true.
-     * @param coalescing true if the DOM parser will convert CDATA nodes
-     * to Text nodes and append it to the adjacent (if any) text node; false otherwise.
+     * the adjacent (if any) text node. By default it is true.
+     * @param coalescing true if the DOM parser converts CDATA nodes to text nodes and appends them to
+     * the adjacent (if any) text node; false otherwise.
      */
     public final void setCoalescing(final boolean coalescing) {_coalescing = coalescing;}
 
@@ -230,10 +220,8 @@ public class KDOMBuilder extends DocumentBuilder {
      */
     public final boolean isCoalescing() {return _coalescing;}
 
-    /** Specifies that the DOM parser will provide support
-     * for XML namespaces. By default the value of this is set to true.
-     * @param namespaceAware true if the DOM parser will provide
-     * support for XML namespaces; false otherwise.
+    /** Specifies that the DOM parser will provide support for XML namespaces. By default it is true.
+     * @param namespaceAware true if the DOM parser will provide support for XML namespaces; false otherwise.
      */
     public final void setNamespaceAware(final boolean namespaceAware) {_namespaceAware = namespaceAware;}
 
@@ -247,20 +235,17 @@ public class KDOMBuilder extends DocumentBuilder {
      * as 'ignorable whitespace') when parsing XML documents (see XML Rec 2.10). Note that only whitespace
      * which is directly contained within element content that has an element only content model
      * (see XML Rec 3.2.1) will be eliminated. Due to reliance on the content model this setting requires
-     * the parser to be in validating mode. By default the value of this is set to true.
-     * @param ignore true if the DOM parser must eliminate whitespace in the element content when parsing
-     * XML documents; false otherwise.
+     * the parser to be in validating mode. By default it is false.
+     * @param ignore if true the parser eliminates whitespace in the element content when parsing XML documents;
      */
-    public final void setIgnoringElementContentWhitespace(final boolean ignore) {
-        _ignoreElementContentWhitespace = ignore;
-    }
+    public final void setIgnoringElementContentWhitespace(final boolean ignore){_ignoreElementContentWhitespace=ignore;}
 
     /** Get value of ignoreWhitespace switch.
      * @return  value of ignoreWhitespace switch.
      */
     public final boolean isIgnoringElementContentWhitespace() {return _ignoreElementContentWhitespace;}
 
-    /** Set the XML parser will expand entity reference nodes. By default the value of this is set to true.
+    /** Set the XML parser will expand entity reference nodes. By default it is true.
      * @param x to be set to expandEntityReferences switch.
      */
     public final void setExpandEntityReferences(final boolean x) {_expandEntityReferences = x;}
@@ -270,8 +255,7 @@ public class KDOMBuilder extends DocumentBuilder {
      */
     public final boolean isExpandEntityReferences() {return _expandEntityReferences;}
 
-    /** Set the parser will ignore comments. By default
-     * the value of this is set to true.
+    /** Set the parser will ignore comments. By default it is true.
      * @param ignoreComents set the ignoreComments switch.
      */
     public final void setIgnoringComments(final boolean ignoreComents) {_ignoreComments = ignoreComents;}
@@ -281,9 +265,8 @@ public class KDOMBuilder extends DocumentBuilder {
      */
     public final boolean isIgnoringComments() {return _ignoreComments;}
 
-    /** Set the parser to resolve include nodes. By default
-     * the value of this is set to false.
-     * @param resolveIncludes set the resolveIncludes switch.
+    /** Set the parser to resolve include nodes. By default it is true.
+     * @param resolveIncludes value of the resolveIncludes switch.
      */
     public final void setXIncludeAware(final boolean resolveIncludes) {_resolveIncludes = resolveIncludes;}
 
@@ -293,7 +276,7 @@ public class KDOMBuilder extends DocumentBuilder {
     @Override
     public final boolean isXIncludeAware() {return _resolveIncludes;}
 
-    /** Set the parser to provide DTD validating. By default the value of this is set to false.
+    /** Set the parser to provide DTD validating. By default it is false.
      * @param validate set the validate switch.
      */
     public final void setValidating(final boolean validate) {_validate = validate;}
@@ -304,7 +287,7 @@ public class KDOMBuilder extends DocumentBuilder {
     @Override
     public final boolean isValidating() {return _validate;}
 
-    /** Set the parser to ignore unresolved entities. By default the value of this is set to false.
+    /** Set the parser to ignore unresolved entities. By default it is false.
      * @param x set the ignoreUnresolvedEntities switch.
      */
     public final void setIgnoreUnresolvedEntities(final boolean x) {_ignoreUnresolvedEntities = x;}
@@ -447,8 +430,7 @@ public class KDOMBuilder extends DocumentBuilder {
     /** Specify the {@link EntityResolver} to be used to resolve entities present in the XML document to be
      * parsed. Setting this to null will result in the underlying implementation using it's own default
      * implementation and behavior.
-     * @param entResolver The EntityResolver to be used to resolve entities present in the XML document
-     * to be parsed.
+     * @param entResolver The EntityResolver to be used to resolve entities present in the parsed XML document.
      */
     @Override
     public final void setEntityResolver(final EntityResolver entResolver) {
@@ -476,8 +458,8 @@ public class KDOMBuilder extends DocumentBuilder {
      * object. An IllegalArgumentException is thrown if the InputSource is null null.
      * @param is InputSource containing the content to be parsed.
      * @param close if true the input stream is closed after parsing.
-     * @exception IOException If any IO errors occur.
-     * @exception SAXException If any parse errors occur.
+     * @exception IOException If aN IO error occur.
+     * @exception SAXException If a parse error occur.
      * @see org.xml.sax.DocumentHandler
      * @return A new DOM Document object.
      */

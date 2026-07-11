@@ -43,8 +43,7 @@ public class XInputStream extends XAbstractInputStream {
         int count = encoding.charAt(1) - '0'; // bytes nead to read next
         encoding = encoding.substring(2);
         String s = "";
-        if (count > 0 && !"X-ISO-10646-UCS-4-2143".equals(encoding)
-            && !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
+        if (count > 0 && !"X-ISO-10646-UCS-4-2143".equals(encoding) && !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
             s = bytesToString(buf, 0, len, encoding);
             int i;
             while (s.length() < 2 && (i = readChar(in, encoding, buf, count, baos)) != -1) {

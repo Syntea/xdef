@@ -330,13 +330,13 @@ public final class XPool implements XDPool, Serializable {
      */
     final void setSource(final String source, final String sourceId) {
         if (getDisplayMode() == DISPLAY_TRUE && sourceId == null && (source.startsWith("?") || source.isEmpty())) {
-            if (source.length() <= 1) {
-                setSource(
-"<xd:def xmlns:xd='"+ XDConstants.XDEF42_NS_URI + "' root=\"a\" name=\"a\">\n"+
-"  <a/>\n"+
-"</xd:def>", "String[1]");
-                return;
-            } else {
+//            if (source.length() <= 1) {
+//                setSource(
+//"<xd:def xmlns:xd='"+ XDConstants.XDEF42_NS_URI + "' root=\"a\" name=\"a\">\n"+
+//"  <a/>\n"+
+//"</xd:def>", "String[1]");
+//                return;
+//            } else {
                 try {
                     String sid = "String_" + (++_stringItem);
                     String src = null;
@@ -355,7 +355,7 @@ public final class XPool implements XDPool, Serializable {
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
-            }
+//            }
         }
         String s = sourceId;
         if (source == null || source.isEmpty()) {

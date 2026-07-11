@@ -33,14 +33,13 @@ public final class XDSourceItem {
     private XDSourceItem() {_pos = -1;}
 
     /** Create new instance of this object from argument.
-     * @param o may be file, URL or string with the text.
+     * @param o may be file, URL or string with the source text.
      * @throws Exception if an error occurs.
      */
     public XDSourceItem(Object o) throws Exception {
         this();
         if (o instanceof File) {
-            _url = SUtils.getExtendedURL(((File) o).getCanonicalFile()
-                .toURI().toURL().toExternalForm());
+            _url = SUtils.getExtendedURL(((File) o).getCanonicalFile().toURI().toURL().toExternalForm());
         } else if (o instanceof URL) {
             _url = (URL) o;
         } else if ((o instanceof InputStream)) {
