@@ -38,7 +38,7 @@ public class KDOMBuilder extends DocumentBuilder {
     private boolean _validate; // If this flag is true DTD validation is provided.
     private boolean _ignoreElementContentWhitespace;
     private boolean _resolveIncludes; //If true the parser esolves XInclude nodes. By default the value is set to false.
-    private boolean _ignoreUnresolvedEntities; // If true ignore unresolved entities (e.g. file not found). 
+    private boolean _ignoreUnresolvedEntities; // If true ignore unresolved entities (e.g. file not found).
     private ArrayReporter _reporter;
 
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
