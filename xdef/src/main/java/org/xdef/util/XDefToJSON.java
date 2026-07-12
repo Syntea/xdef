@@ -204,10 +204,10 @@ public class XDefToJSON {
                     }
                     sb.append("</").append(xdPrefix).append(":declaration>\n");
                 } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
-                    sb.append("\n<").append(xdPrefix).append(":component>").append(getAsXMLText(o));
+                    sb.append("  \n<").append(xdPrefix).append(":component>").append(getAsXMLText(o));
                     sb.append("</").append(xdPrefix).append(":component>\n");
                 } else if ((o = map.get(xdPrefix + ":BNFGrammar")) != null) { // component
-                    sb.append("\n<").append(xdPrefix).append(":BNFGrammar");
+                    sb.append("  \n<").append(xdPrefix).append(":BNFGrammar");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
                     sb.append(createXDeNamedvalue(map, xdPrefix, "extends")).append(">").append(getAsXMLText(o));
