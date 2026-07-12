@@ -48,10 +48,7 @@ public class XonObjParser implements XonParser {
         }
         switch (_kind) {
             case 1: _arrays.peek().add(o); break;
-            case 2:
-                String name = _names.pop();
-                _maps.peek().put(name, o);
-                break;
+            case 2: _maps.peek().put(_names.pop(), o); break;
             default: _value = o;
         }
     }

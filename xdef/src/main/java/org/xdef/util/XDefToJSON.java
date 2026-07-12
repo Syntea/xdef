@@ -355,12 +355,13 @@ public class XDefToJSON {
         while (n != null) {
             Element el = (Element) n;
             if (nsUri.equals(n.getNamespaceURI())) {
+                String s;
                 switch (el.getLocalName()) {
                     case "declaration":
                         sb.append("\n  { ");
                         addXDAttrToJSON(sb, el, "scope");
                         sb.append("\"").append(el.getTagName()).append("\": \"");
-                        String s = toJsonString(removeTrailingSpaces(el.getTextContent()));
+                        s = toJsonString(removeTrailingSpaces(el.getTextContent()));
                         sb.append(s);
                         sb.append("\"");
                         if (s.indexOf('\n') >= 0 || s.length() >= 100) {
@@ -371,7 +372,13 @@ public class XDefToJSON {
                         continue;
                     case "component":
                         sb.append("\n  { \"").append(el.getTagName()).append("\": \"");
-                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\n \"}");
+                        s = toJsonString(removeTrailingSpaces(el.getTextContent()));
+                        sb.append(s);
+                        sb.append("\"");
+                        if (s.indexOf('\n') >= 0 || s.length() >= 100) {
+                            sb.append("\n  ");
+                        }
+                        sb.append("}");
                         sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         continue;
                     case "BNFGrammar":
@@ -380,7 +387,13 @@ public class XDefToJSON {
                         addXDAttrToJSON(sb, el, "scope");
                         addXDAttrToJSON(sb, el, "extends");
                         sb.append(" \"").append(el.getTagName()).append("\": \"");
-                        sb.append(toJsonString(removeTrailingSpaces(el.getTextContent()))).append("\n\" }");
+                        s = toJsonString(removeTrailingSpaces(el.getTextContent()));
+                        sb.append(s);
+                        sb.append("\"");
+                        if (s.indexOf('\n') >= 0 || s.length() >= 100) {
+                            sb.append("\n  ");
+                        }
+                        sb.append("}");
                         sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
                         continue;
                     case "json":
