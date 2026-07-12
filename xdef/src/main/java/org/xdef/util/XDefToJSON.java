@@ -176,13 +176,14 @@ public class XDefToJSON {
         sb.append(">\n");
         for (int i = 1; i < xd.size(); i++) {
             Object o = xd.get(i);
+            String s;
             if (o instanceof List) { // xd:json
                 List list = (List) o;
                 map = (Map<String, Object>) list.get(0);
                 sb.append("\n  <").append(xdPrefix).append(":json name=");
                 sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true)));
                 sb.append(">");
-                String s = adLinePrefixes(toXmlString(XonUtils.toJsonString(list.get(1), true)));
+                s = adLinePrefixes(toXmlString(XonUtils.toJsonString(list.get(1), true)));
                 if (s.endsWith("\n")) {
                     sb.append('\n');
                 }
@@ -197,20 +198,30 @@ public class XDefToJSON {
                     sb.append("\n  <").append(xdPrefix).append(":declaration");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
                     sb.append(">");
-                    String s = toXmlString(removeTrailingSpaces(o.toString()));
+                    s = toXmlString(removeTrailingSpaces(o.toString()));
                     sb.append(s);
                     if (s.length() > 100 || s.indexOf('\n') >= 0) {
                         sb.append("\n  ");
                     }
                     sb.append("</").append(xdPrefix).append(":declaration>\n");
                 } else if ((o = map.get(xdPrefix + ":component")) != null) { // component
-                    sb.append("  \n<").append(xdPrefix).append(":component>").append(getAsXMLText(o));
+                    sb.append("  \n<").append(xdPrefix).append(":component>");
+                    s = toXmlString(removeTrailingSpaces(getAsXMLText(o)));
+                    sb.append(s);
+                    if (s.length() > 100 || s.indexOf('\n') >= 0) {
+                        sb.append("\n  ");
+                    }
                     sb.append("</").append(xdPrefix).append(":component>\n");
                 } else if ((o = map.get(xdPrefix + ":BNFGrammar")) != null) { // component
                     sb.append("  \n<").append(xdPrefix).append(":BNFGrammar");
                     sb.append(createXDeNamedvalue(map, xdPrefix, "name"));
                     sb.append(createXDeNamedvalue(map, xdPrefix, "scope"));
-                    sb.append(createXDeNamedvalue(map, xdPrefix, "extends")).append(">").append(getAsXMLText(o));
+                    sb.append(createXDeNamedvalue(map, xdPrefix, "extends")).append(">");
+                    s = toXmlString(removeTrailingSpaces(getAsXMLText(o)));
+                    sb.append(s);
+                    if (s.length() > 100 || s.indexOf('\n') >= 0) {
+                        sb.append("\n  ");
+                    }
                     sb.append("</").append(xdPrefix).append(":BNFGrammar>\n");
                 } else if ((o = map.get(xdPrefix + ":xml")) != null) { // XML model
                     sb.append(removeTrailingSpaces("\n  " + o.toString().trim())).append("\n");
