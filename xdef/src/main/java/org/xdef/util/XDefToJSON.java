@@ -21,14 +21,12 @@ public class XDefToJSON {
 
     /** Modify string to XML text format. */
     private static String toXmlString(final String s) {
-        return KXmlUtils.toXmlText(
-            SUtils.modifyString(SUtils.modifyString(s, "\r\n", "\n"), "&#13;\n", "\n"), '<', false);
+        return KXmlUtils.toXmlText(SUtils.modifyString(SUtils.modifyString(s,"\r\n","\n"),"&#13;\n","\n"), '<', false);
     }
 
     /** Modify string to JSON format. */
     private static String toJsonString(final String s) {
-        return SUtils.modifyString(
-            SUtils.modifyString(SUtils.modifyString(s, "\r\n", "\n"), "&#13;\n", "\n"), "\"", "\\\"");
+        return SUtils.modifyString(SUtils.modifyString(SUtils.modifyString(s,"\r\n","\n"),"&#13;\n","\n"),"\"","\\\"");
     }
 
     /** Remove trailing spaces, */
@@ -151,7 +149,7 @@ public class XDefToJSON {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + map + "\"");
         }
         for (String key: map.keySet()) {
-            if (key.equals("xmlns:" +xdPrefix)) {
+            if (key.equals("xmlns:" + xdPrefix)) {
                 continue;
             }
             if (key.startsWith(xdPrefix + ":")) {
