@@ -57,8 +57,7 @@ class XonToString extends XonTools {
                 if (x instanceof Long) {
                     return num;
                 } else if (x instanceof Double) {
-                    return num.indexOf('.') < 0 && num.indexOf('e') < 0 && num.indexOf('E') < 0
-                        ? num + 'd' : num;
+                    return num.indexOf('.') < 0 && num.indexOf('e') < 0 && num.indexOf('E') < 0 ? num + 'd' : num;
                 } else if (x instanceof Float) {
                     return num + 'f';
                 } else if (x instanceof Byte) {
@@ -239,7 +238,7 @@ class XonToString extends XonTools {
         List<StringBuilder> items = new ArrayList<>();
         for (Object o: map.entrySet()) {
             StringBuilder sb1 = createNamedItem((Map.Entry) o, ind, xon);
-            if (items!=null && ind!=null && (sb1.indexOf("\n")>=0  || (itemsLen+=sb1.length()+1) + lineLen>=LINE_LEN)) {
+            if (items!=null && ind!=null && (sb1.indexOf("\n")>=0  || (itemsLen+=sb1.length()+1)+lineLen >= LINE_LEN)) {
                 items.add(sb1);
                 sb.append(' ');
                 for (StringBuilder x : items) {
@@ -304,23 +303,24 @@ class XonToString extends XonTools {
      * @return XON object converted to JSON.
      */
     final static Object xonToJson(final Object x) {
-        if (x==null||x instanceof String||x instanceof Boolean||x instanceof Number||x instanceof XonTools.JNull) {
+        if (x == null) 
+            return null;
+        if (x instanceof String || x instanceof Boolean || x instanceof Number || x instanceof XonTools.JNull)
             return x;
-        } else if (x instanceof Map) {
+        if (x instanceof Map)
             return xonMapToJson((Map) x);
-        } else if (x instanceof List) {
+        if (x instanceof List)
             return xonArrayToJson((List) x);
-        } else if (x instanceof byte[]) {
+        if (x instanceof byte[]) 
             return genXMLString(new String(SUtils.encodeBase64((byte[]) x)));
-        } else if (x instanceof File) {
+        if (x instanceof File)
             return ((File) x).getAbsolutePath();
-        } else if (x instanceof InetAddress) {
+        if (x instanceof InetAddress)
             return x.toString().substring(1);
-        } else if (x instanceof Currency) {
+        if (x instanceof Currency)
             return ((Currency) x).getCurrencyCode();
-        } else if (x instanceof XDTelephone) {
+        if (x instanceof XDTelephone)
             return "t\"" + x + "\"";
-        }
         return x.toString();
     }
 }
