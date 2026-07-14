@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
   * Fixed bug in JSON model of string not quoted value null.
-  * The JSON format for the X-definition has been modified and improved.
+  * The JSON format of the X-definition has been modified and improved.
 
 # Version 42.2.45, release-date 2026-05-19
   * Fixed a bug in the length check for X-definition `num` type values.
