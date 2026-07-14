@@ -275,8 +275,8 @@ public class TestJsonXdef extends XDTester {
                 result += (result.isEmpty() ? "" : "\n") + "Error X-component " + name + "\n" + printThrowable(ex);
             }
             try { // Test X-component.
-                xc = xp.createXDDocument("Test"+id).xparseXComponent(f,
-                    Class.forName("test.common.json.component.Test"+id), null);
+                xc = xp.createXDDocument("Test"+id)
+                    .xparseXComponent(f, Class.forName("test.common.json.component.Test"+id), null);
                 assertEq("", chkCompoinentSerializable(xc));
                 reporter.clear();
                 e = xc.toXml();
@@ -861,9 +861,8 @@ public class TestJsonXdef extends XDTester {
                 (XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
                 "jx$"+XonNames.X_ARRAY)).toXon()).isEmpty());
             assertEq(3,
-                ((List) ((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(
-                    xc, "jx$"+XonNames.X_MAP),
-                "jx$"+XonNames.X_ARRAY+"_1")).toXon()).size());
+                ((List) ((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
+                    "jx$"+XonNames.X_ARRAY+"_1")).toXon()).size());
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='z'>\n" +
 "  <xd:json name='z'> [\"* int();\"] </xd:json>\n" +
@@ -965,11 +964,7 @@ public class TestJsonXdef extends XDTester {
             }
             xdef = // test num in JSON
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:root=\"test\">\n" +
-"    <xd:json name = \"test\">\n" +
-"      {\n" +
-"          \"code\": \"num(4)\"\n" +
-"      }\n" +
-"    </xd:json>" +
+"    <xd:json name = \"test\"> { \"code\": \"num(4)\" }</xd:json>" +
 "  <xd:component> %class "+_package+".Kocman_XC_2 %link #test; </xd:component>\n" +
 "</xd:def>";
             xp = compile(xdef);
@@ -1159,15 +1154,15 @@ public class TestJsonXdef extends XDTester {
             assertTrue(XonUtils.xonEqual(x, xc.toXon()));
             xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xd:name=\"P5R_json\" xd:root=\"P5R\">\n" +
-"    <xd:json name=\"P5R\">\n" +
-"        {\n" +
-"            \"stavPoistenia\": \"jnumber()\"\n" +
-"            \"obj\"          : { \"%script\": \"ref MyObj\" },\n" +
-"        }\n" +
-"    </xd:json>\n" +
-"    <xd:json name = \"MyObj\">\n" +
-"        { \"a\": \"jstring()\" }\n" +
-"    </xd:json>\n" +
+"  <xd:json name=\"P5R\">\n" +
+"    {\n" +
+"      \"stavPoistenia\": \"jnumber()\"\n" +
+"      \"obj\"          : { \"%script\": \"ref MyObj\" },\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"  <xd:json name = \"MyObj\">\n" +
+"    { \"a\": \"jstring()\" }\n" +
+"  </xd:json>\n" +
 "</xd:def>";
             xp = XDFactory.compileXD(props, xdef);
             json = "{ \"stavPoistenia\": 123, \"obj\": { \"a\": \"ABC\" } }";
@@ -1178,8 +1173,9 @@ public class TestJsonXdef extends XDTester {
             xp = compile(
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='a'>\n" +
 "  <xd:json name='a'>\n" +
-"    {  \"%script\": \"finally now();\",\n"+
-"       \"a\":  \"int()\", \"b\":  \"string();\", \"c\": \"string();\",\n" +
+"    {\n"+
+"      \"%script\": \"finally now();\",\n"+
+"      \"a\":  \"int()\", \"b\":  \"string();\", \"c\": \"string();\",\n" +
 "    }\n" +
 "  </xd:json>\n" +
 "</xd:def>");
@@ -1189,7 +1185,7 @@ public class TestJsonXdef extends XDTester {
         try { // test options illegalJsonNull, acceptJsonNull
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
-"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int(); option illegalJsonNull\" } </xd:json>\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"string(); option illegalJsonNull\" } </xd:json>\n" +
 "</xd:def>";
             xp = compile(xdef);
             json = "{ \"stavPoistenia\": null }";

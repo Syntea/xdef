@@ -17,7 +17,11 @@ import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_REPLACE;
 import static org.xdef.XDParserAbstract.checkCharset;
 import static org.xdef.XDValueID.XD_STRING;
+import org.xdef.impl.XData;
+import org.xdef.impl.XDefinition;
+import org.xdef.impl.code.DefJNull;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonTools;
 
 /** Abstract parser of a strings.
  * @author Vaclav Trojan
@@ -186,6 +190,18 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
             s = "";
         }
         p.replaceParsedBufferFrom(pos0, s);
+        if (!quoted && xn != null && "null".equals(s) && xn.getXMElement().getXonMode() != 0) {
+            byte acceptJsonNull = xn.getXMNode() instanceof XData ? ((XData) xn.getXMNode())._acceptJsonNull : 0;
+            if (acceptJsonNull == 0) {
+                acceptJsonNull = ((XDefinition) xn.getXMDefinition())._acceptJsonNull;
+            }
+            if (acceptJsonNull == 'T') {
+                p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
+                p.setEos();
+                return; // null accepted
+            }
+            p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
+        }
         p.setParsedValue(s);
         checkPatterns(p);
         checkLength(p);
