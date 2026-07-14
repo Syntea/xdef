@@ -303,7 +303,7 @@ class XonToString extends XonTools {
      * @return XON object converted to JSON.
      */
     final static Object xonToJson(final Object x) {
-        if (x == null) 
+        if (x == null)
             return null;
         if (x instanceof String || x instanceof Boolean || x instanceof Number || x instanceof XonTools.JNull)
             return x;
@@ -311,7 +311,7 @@ class XonToString extends XonTools {
             return xonMapToJson((Map) x);
         if (x instanceof List)
             return xonArrayToJson((List) x);
-        if (x instanceof byte[]) 
+        if (x instanceof byte[])
             return genXMLString(new String(SUtils.encodeBase64((byte[]) x)));
         if (x instanceof File)
             return ((File) x).getAbsolutePath();

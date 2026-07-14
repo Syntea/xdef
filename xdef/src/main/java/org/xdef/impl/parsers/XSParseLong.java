@@ -66,7 +66,7 @@ public class XSParseLong extends XSAbstractParseComparable {
         long val;
         try {
             val = Long.parseLong(s = sign == '+' ? s.substring(1) : s);
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             p.error(XDEF.XDEF806, parserName(), s);//Value of '&{0}' is out of range&{1}{: }
             return;
         }

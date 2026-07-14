@@ -31,8 +31,7 @@ public class XSParseInt extends XSParseLong {
     @Override
     public void checkValue(final XDValue x) {
         if (x.longValue() < Integer.MIN_VALUE || x.longValue() > Integer.MAX_VALUE) {
-            //Incorrect range specification of &{0}
-            throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
+            throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME); //Incorrect range specification of &{0}
         }
     }
 
