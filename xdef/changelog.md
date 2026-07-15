@@ -1,5 +1,5 @@
 # Version ${version}, release-date ${release.date}
-  * Fixed bug in JSON model of string not quoted value null.
+  * Fixed bug in JSON model if not quoted string value is `null`.
   * JSON format of the X-definition has been changed and improved.
   * X-script option `acceptJsonNull` changed to `acceptNull` and `illegalJsonNull` chaged to `noNull`.
 
