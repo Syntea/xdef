@@ -71,8 +71,8 @@ public class TestXon extends XDTester {
      */
     private String testA(final String type, final String xon) {
         return testX(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' script='option acceptJsonNull'>\n" +
-"  <xd:json name='A'> [\"* " + type + "(); option acceptJsonNull\"] </xd:json>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' script='option acceptNull'>\n" +
+"  <xd:json name='A'> [\"* " + type + "(); option acceptNull\"] </xd:json>\n" +
 "  <xd:component> %class test.TestGJ" + type + " %link #A; </xd:component>\n</xd:def>", "", xon);
     }
 
@@ -83,7 +83,7 @@ public class TestXon extends XDTester {
      */
     private String testM(final String type, final String xon) {
         return testX(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' script='option acceptNull'>\n" +
 "<xd:json name='A'>{a:\"? " + type + "();\",b:\"? " + type + "();\",c:\"? " + type + "();\"}</xd:json>\n" +
 "<xd:component>%class test.TestGM" + type + " %link A</xd:component>\n</xd:def>", "", xon);
     }
@@ -169,7 +169,7 @@ public class TestXon extends XDTester {
 "}");
             assertTrue(XonUtils.xonEqual(o, xc.toXon()));
             genXComponent(xp = compile(
-"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a' script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a' script='option acceptNull'>\n" +
 "  <xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
 " <xd:json name='a'>\n" +
 "    [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
@@ -192,7 +192,7 @@ public class TestXon extends XDTester {
                     + "\n*****\n" + XonUtils.toXonString(x, true));
             }
             Properties props = new Properties();
-            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "acceptJsonNull");
+            props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "acceptNull");
             genXComponent(xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a'>\n" +
 "  <xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
@@ -602,7 +602,7 @@ public class TestXon extends XDTester {
             assertTrue(XonUtils.xonEqual(xi, xd.iparse(XonUtils.toIniString(xi), reporter)));
             assertNoErrorwarningsAndClear(reporter);
             genXComponent(xp = compile( //test CSV data with head line (column names)
-"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptNull'>\n" +
 "  <xd:component>%class "+_package+".CsvTest %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
@@ -663,7 +663,7 @@ public class TestXon extends XDTester {
                     + "*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
             }
             xd = compile(
-"<xd:def xmlns:xd='"+_xdNS+"' root = \"test\" xd:script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root = \"test\" xd:script='option acceptNull'>\n" +
 "  <xd:json name=\"test\">\n" +
 "[\n" +
 "  [\"occurs 2.. string();\"], # header line\n" +
@@ -687,7 +687,7 @@ public class TestXon extends XDTester {
             assertEq(null, ((List) ((List) o).get(2)).get(2));
             assertEq(3, ((List) ((List) o).get(2)).size());
             genXComponent(xp = compile( // no CSV head line with bames;
-"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptNull'>\n" +
 "  <xd:component>%class "+_package+".CsvTest1 %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
@@ -872,7 +872,7 @@ public class TestXon extends XDTester {
             assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
             assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
             genXComponent(xp = compile( // CSV with head
-"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptNull'>\n" +
 "  <xd:component>%class "+_package+".CsvTest %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "[\n" +
@@ -933,7 +933,7 @@ public class TestXon extends XDTester {
                     + "\n*** B *\n" + XonUtils.toXonString(o));
             }
             genXComponent(xp = compile( // no head;
-"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptJsonNull'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptNull'>\n" +
 "  <xd:component>%class "+_package+".CsvTest1 %link CSV</xd:component>\n" +
 "  <xd:json name=\"CSV\">\n" +
 "    [\n" +

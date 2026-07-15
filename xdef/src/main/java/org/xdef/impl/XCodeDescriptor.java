@@ -78,7 +78,7 @@ public abstract class XCodeDescriptor extends XNode {
     /** flag to set a text as CDATA section. */
     public byte _cdata; //0 not set 'T' or 'F'
     /** Flag to set JSON values null is accepted. */
-    public byte _acceptJsonNull; //0 not set 'T' or 'F'
+    public byte _acceptNull; //0 not set 'T' or 'F'
     ////////////////////////////////////////////////////////////////////////////
     // Variables
     ////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ public abstract class XCodeDescriptor extends XNode {
     public final void clearOptions() {
         _xonVersion = _ignoreComments = _attrWhiteSpaces = _textWhiteSpaces = _ignoreEmptyAttributes = _attrValuesCase
             = _textValuesCase = _trimAttr = _trimText = _moreElements = _moreText =  _moreAttributes
-            = _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = _acceptJsonNull = 0;
+            = _resolveEntities = _resolveIncludes = _acceptQualifiedAttr = _nillable = _cdata = _acceptNull = 0;
     }
 
     /** Copy all options from the given XCodeDescriptor to this object.
@@ -168,7 +168,7 @@ public abstract class XCodeDescriptor extends XNode {
             _moreText, //0 not set, 'T' or 'F'
             _nillable, //0 not set 'T' or 'F'
             _cdata, //0 not set 'T' or 'F'
-            _acceptJsonNull};//0 not set 'T' or 'F'
+            _acceptNull};//0 not set 'T' or 'F'
     }
 
     /** Set values of options from the array of bytes.
@@ -191,7 +191,7 @@ public abstract class XCodeDescriptor extends XNode {
         _moreText = bytes[13];
         _nillable = bytes[14];
         _cdata = bytes[15];
-        _acceptJsonNull = bytes[16];
+        _acceptNull = bytes[16];
     }
 
     /** Copy all actions from the given XCodeDescriptor to this object.

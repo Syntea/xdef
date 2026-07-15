@@ -1725,7 +1725,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
         boolean acceptQualifiedAttr = false;
         boolean nillable = false;
         boolean cdata = false;
-        boolean illegalNull = false;
+        boolean noNull = false;
         while (_sym == IDENTIFIER_SYM || _sym == FORGET_SYM) {
             if (_sym == FORGET_SYM) {
                 if (kind != XMELEMENT) {
@@ -1909,11 +1909,11 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
                         xel._clearReports = "clearReports".equals(_idName) ? (byte) 'T' : (byte) 'F';
                     }
                 }
-            } else if ("acceptJsonNull".equals(_idName) || "illegalJsonNull".equals(_idName)) {
-                if (illegalNull) {
+            } else if ("acceptNull".equals(_idName) || "noNull".equals(_idName)) {
+                if (noNull) {
                     error(XDEF.XDEF432,_idName);//Option &{0} redefinition
                 }
-                result._acceptJsonNull = "acceptJsonNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
+                result._acceptNull = "acceptNull".equals(_idName) ? (byte) 'T' : (byte) 'F';
             } else {
                 error(XDEF.XDEF433, _idName); //Unknown option '&{0}'
             }
