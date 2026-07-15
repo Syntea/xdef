@@ -191,11 +191,11 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
         }
         p.replaceParsedBufferFrom(pos0, s);
         if (!quoted && xn != null && "null".equals(s) && xn.getXMElement().getXonMode() != 0) {
-            byte acceptJsonNull = xn.getXMNode() instanceof XData ? ((XData) xn.getXMNode())._acceptJsonNull : 0;
-            if (acceptJsonNull == 0) {
-                acceptJsonNull = ((XDefinition) xn.getXMDefinition())._acceptJsonNull;
+            byte acceptNull = xn.getXMNode() instanceof XData ? ((XData) xn.getXMNode())._acceptNull : 0;
+            if (acceptNull == 0) {
+                acceptNull = ((XDefinition) xn.getXMDefinition())._acceptNull;
             }
-            if (acceptJsonNull == 'T') {
+            if (acceptNull == 'T') {
                 p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
                 p.setEos();
                 return; // null accepted
