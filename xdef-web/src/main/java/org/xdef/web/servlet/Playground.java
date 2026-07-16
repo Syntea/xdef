@@ -284,8 +284,7 @@ public final class Playground extends AbstractMyServlet {
         respHtml = SUtils.modifyFirst(respHtml,         "((modelName))",        rp.modelName);
         respHtml = SUtils.modifyFirst(respHtml,         "((modelURI))",         rp.modelURI);
         respHtml = SUtils.modifyFirst(respHtml,         "((csvHeader-disp))",   rp.dataFormat == XdDataFormat.csv ? "block" : "none");
-        respHtml = SUtils.modifyFirst(respHtml,         "((csvHeader-selY))",   "yes".equals(rp.csvHeader)  ? "selected=\"selected\"" : "");
-        respHtml = SUtils.modifyFirst(respHtml,         "((csvHeader-selN))",   !"yes".equals(rp.csvHeader) ? "selected=\"selected\"" : "");
+        respHtml = SUtils.modifyFirst(respHtml,         "((csvHeader-sel))",    "yes".equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
         respHtml = SUtils.modifyFirst(respHtml,         "((xonDisplayAs-disp))", !rp.xonDisplayAs.isEmpty() ? "block" : "none");
         respHtml = SUtils.modifyFirst(respHtml,         "((xonDisplayAs))",     rp.xonDisplayAs.stream().map(XdDataFormat::name) .collect(Collectors.joining(" ")));
         respHtml = SUtils.modifyFirst(respHtml,         "((langOut-disp))",     lexEx ? "block" : "none");
