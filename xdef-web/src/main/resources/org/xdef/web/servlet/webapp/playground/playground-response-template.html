@@ -43,9 +43,10 @@ and namespace: <input name="modelURI" value="((modelURI))" type="text"/>
 <div style="display: ((csvHeader-disp))">
 Process csv-header line:
 <select name="csvHeader">
-    <option value="yes" ((csvHeader-selY))>yes</option>
-    <option value="no"  ((csvHeader-selN))>no</option>
+    <option id="csvHeaderYes" value="yes">yes</option>
+    <option id="csvHeaderNo"  value="no" >no</option>
 </select>
+<script>document.getElementById("((csvHeader-sel))").selected = true;</script>
 </div>
 <div style="display: ((xonDisplayAs-disp))">
 Display XON-like result also as:

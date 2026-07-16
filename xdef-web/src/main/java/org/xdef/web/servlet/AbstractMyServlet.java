@@ -265,8 +265,10 @@ public abstract class AbstractMyServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods in new thread.
+    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods in new thread.
+     * Try to interrupt the new thread after 25s, but it's not functional (the new thread would control
+     * its interrupt-status frequently)
+     *
      * @param request servlet request.
      * @param response servlet response.
      * @throws ServletException if an error occurs.
@@ -283,17 +285,17 @@ public abstract class AbstractMyServlet extends HttpServlet {
             p.start();
             p.join(25000);
             if (!p.isFinished()) {
-                p.interrupt(); //???
+                p.interrupt(); //not functional, "p" don't check its interrupt-status frequently
                 ioex = new IOException("Interrupted - timeout");
                 ioex.setStackTrace(new StackTraceElement[0]);
             }
-            if (null != p.getException()) {
+            if (p.getException() != null) {
                 ioex = new IOException(p.getException().toString());
             }
         } catch (InterruptedException ex) {
             ioex = new IOException("Interrupted", ex);
         }
-        if (null != ioex) {
+        if (ioex != null) {
             throw ioex;
         }
     }
