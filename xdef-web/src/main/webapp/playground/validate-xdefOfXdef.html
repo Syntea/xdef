@@ -233,7 +233,7 @@ MacroParams ::= "(" S? Identifier (S? "," S? Identifier)* S? ")"
 
 Expression ::= Expr1 (S? "?" S? Expression S? ":" S? Expression)?
 
-OperatorLevel_1 ::= ("AND" | "AAND" | "&&" | "&") $rule
+OperatorLevel_1 ::= ("AND" | "AAND" | "&amp;&amp;" | "&amp;") $rule
 
 Expr1 ::= Expr2 (S? OperatorLevel_1 S? Expr2)*
 
@@ -389,7 +389,7 @@ ContinueStatement ::= "continue" $rule (S? Identifier)?
 AssignmentStatement ::= (Identifier S? ((AssignmentOperator S? Expression) |
   (("=" S? Identifier))+ S? (AssignmentOperator S? Expression)) | S? AssignmentOperator S? Expression)
 
-AssignmentOperator ::= (("|" | "OR" | "^" | "+" | "-" | "*" | "/" | "&" | "AND"
+AssignmentOperator ::= (("|" | "OR" | "^" | "+" | "-" | "*" | "/" | "&amp;" | "AND"
   | "%" | "&lt;&lt;" | "LSH" | ">>>"| "RRSH"  | ">>" | "RSH" )? "=") $rule
 
 VariableModifier ::= ("final" | "external") $rule S
