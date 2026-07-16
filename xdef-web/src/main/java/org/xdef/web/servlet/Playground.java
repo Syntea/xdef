@@ -314,7 +314,8 @@ public final class Playground extends AbstractMyServlet {
         for (XdDataFormat df : XdDataFormat.values()) {
             String  dfDisp   = null;
             boolean dfDispEx =
-                pp.result != null && pp.resultXon != null && rp.xonDisplayAs.contains(df) &&
+                pp.result != null && pp.resultXon != null &&
+                rp.xonDisplayAs.contains(df) && df != rp.dataFormat &&
                 (dfDisp = convertXon2Str(pp.resultXon, df)) != null
             ;
             respHtml = SUtils.modifyFirst(
@@ -539,7 +540,6 @@ public final class Playground extends AbstractMyServlet {
             dataFormat  = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
             mode        = mode.equals("compose") ? mode : "validate";
             csvHeader   = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
-            xonDisplayAs.remove(dataFormat);
         }
     }
 
