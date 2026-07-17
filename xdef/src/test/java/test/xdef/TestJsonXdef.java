@@ -497,8 +497,7 @@ public class TestJsonXdef extends XDTester {
             y = (XComponent) ((List) x).get(1);
             assertEq(13, XComponentUtil.get(y, XonNames.X_VALATTR));
         } catch (RuntimeException ex) {fail(ex);}
-        // If no errors were reported delete all generated data.
-        // Otherwise, leave them to be able to see the reason of errors.
+        // If no errors were reported delete all generated data. Otherwise, leave them to see the reason of errors.
         if (getFailCount() == 0) {
             clearTempDir(); // delete temporary files.
         }
@@ -512,9 +511,7 @@ public class TestJsonXdef extends XDTester {
 "      }\n" +
 "    }\n" +
 "  </xd:json>\n"+
-"  <xd:component>\n"+
-"    %class "+_package+".XonPerson %link Person#Person;\n"+
-"  </xd:component>\n"+
+"  <xd:component>%class "+_package+".XonPerson %link Person#Person;</xd:component>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
             json =
@@ -778,9 +775,7 @@ public class TestJsonXdef extends XDTester {
 "     x = ?int()\n" +
 "   [ F ] /*this is required section*/\n" +
 " </xd:ini>\n"+
-" <xd:component>\n" +
-"  %class "+_package+".TestINI %link TestINI#a" + ";\n" +
-" </xd:component>\n"+
+" <xd:component>%class "+_package+".TestINI %link TestINI#a" + ";</xd:component>\n"+
 "</xd:def>";
             ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[ E-F.G ]\nx=123\n[F]";
             genXComponent(xp = compile(xdef));
@@ -902,22 +897,19 @@ public class TestJsonXdef extends XDTester {
             xdef = // test data with different encodings
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
 "  <xd:json name=\"a\">\n" +
-"      # test encodings\n" +
-"      { \"ěščřžýáíéúůĺ %u@#$\": {\n" +
+"      { \"ěščřžýáíéúůĺ %u@#$\": { # test encodings\n" +
 "          é: \"string()\",\n" +
 "          \"§&amp;&lt;&gt;\": \"date()\",\n" +
 "          \"%\": [ \"*; string()\", { \"čřé\": \"string()\" } ]\n" +
 "        }\n" +
 "      }\n" +
 "  </xd:json>\n" +
-"  <xd:component>\n"+
-"    %class "+_package+".TestXonEncoding %link #a;\n"+
-"  </xd:component>\n"+
+"  <xd:component>%class "+_package+".TestXonEncoding %link #a;</xd:component>\n"+
 "</xd:def>";
             genXComponent(xp = compile(xdef));
             json =
 "{ \"ěščřžýáíéúůĺ %u@#$\" : {\n" +
-"     \"é\" : \"ĚŠČŘŽÝÁÍÉÚŮĹ\",\n" +
+"    \"é\" : \"ĚŠČŘŽÝÁÍÉÚŮĹ\",\n" +
 "    \"§&<>\" : d1990-01-01,\n" +
 "    \"%\" : [\"Ščř\", \"ŠŮÚ\", {čřé : \"%§\"}]\n" +
 "  }\n" +
@@ -1064,15 +1056,15 @@ public class TestJsonXdef extends XDTester {
 "    }\n" +
 "  </xd:json>\n" +
 "  <xd:component>\n" +
-"    %class "+_package+".Mates_A0 %link A; %interface "+_package+".Mates_A0_I %link A;\n" +
+"    %class "+_package+".Mates_A0 %link A;\n" +
+"    %interface "+_package+".Mates_A0_I %link A;\n" +
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='B' root='B'>\n" +
-"  <xd:json name='B'>\n" +
-"    { \"p\":  \"string()\" }\n" +
-"  </xd:json>\n" +
+"  <xd:json name='B'>{ \"p\":  \"string()\" }</xd:json>\n" +
 "  <xd:component>\n" +
-"    %class "+_package+".Mates_B0 %link B; %interface "+_package+".Mates_B0_I %link B;\n" +
+"    %class "+_package+".Mates_B0 %link B;\n" +
+"    %interface "+_package+".Mates_B0_I %link B;\n" +
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>");
@@ -1101,9 +1093,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:component> %class "+_package+".Mates_AX %link A; %interface "+_package+".Mates_AX_I %link A; </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='B' root='B'>\n" +
-"  <xd:json name='B'>\n" +
-"    { \"p\":  \"string()\", \"q\":  \"? string()\" }\n" +
-"  </xd:json>\n" +
+"  <xd:json name='B'>{ \"p\":  \"string()\", \"q\":  \"? string()\" }</xd:json>\n" +
 "  <xd:component> %class "+_package+".Mates_BX %link B; %interface "+_package+".Mates_BX_I %link B; </xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>");
@@ -1132,9 +1122,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:component> %class "+_package+".Mates_A %link A; %interface "+_package+".Mates_A_I %link A; </xd:component>\n" +
 "</xd:def>\n" +
 "<xd:def name='B' root='B'>\n" +
-"  <xd:json name='B'>\n" +
-"    { \"p\":  \"string()\", \"q\":  \"? string()\" }\n" +
-"  </xd:json>\n" +
+"  <xd:json name='B'>{ \"p\":  \"string()\", \"q\":  \"? string()\" }</xd:json>\n" +
 "  <xd:component> %class "+_package+".Mates_B %link B; %interface "+_package+".Mates_B_I %link B; </xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>");
@@ -1160,9 +1148,7 @@ public class TestJsonXdef extends XDTester {
 "      \"obj\"          : { \"%script\": \"ref MyObj\" },\n" +
 "    }\n" +
 "  </xd:json>\n" +
-"  <xd:json name = \"MyObj\">\n" +
-"    { \"a\": \"jstring()\" }\n" +
-"  </xd:json>\n" +
+"  <xd:json name = \"MyObj\"> { \"a\": \"jstring()\" } </xd:json>\n" +
 "</xd:def>";
             xp = XDFactory.compileXD(props, xdef);
             json = "{ \"stavPoistenia\": 123, \"obj\": { \"a\": \"ABC\" } }";
