@@ -1193,6 +1193,36 @@ public class TestJsonXdef extends XDTester {
             } else {
                 assertTrue(reporter.printToString().contains("XDEF809"));
             }
+           xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
+"  <xd:json name=\"P5R\"> { \"stavPoistenia\": [\" string(); option acceptNull\"] } </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "{ \"stavPoistenia\": [null] }";
+            jparse(xp, "", json, reporter);
+            if (reporter.errors()) {
+                fail(reporter);
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option acceptNull' >\n" +
+"  <xd:json name=\"P5R\"> {\"stavPoistenia\": [ \"%oneOf: required\", \"jnull\", [\"* string();\"] ]} </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "{ \"stavPoistenia\": [null] }";
+            jparse(xp, "", json, reporter);
+            if (reporter.errors()) {
+                fail(reporter);
+            }
+            json = "{ \"stavPoistenia\": [ \"a\", null, \"b\" ] }";
+            jparse(xp, "", json, reporter);
+            if (reporter.errors()) {
+                fail(reporter);
+            }
+            json = "{ \"stavPoistenia\": null }";
+            jparse(xp, "", json, reporter);
+            if (reporter.errors()) {
+                fail(reporter);
+            }
             xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"int();\" } </xd:json>\n" +

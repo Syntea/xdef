@@ -262,8 +262,11 @@ final class CompileXonXdef extends XScriptParser {
                 sections.add(matchItem);
             } else {
                 String s = matchItem.getString();
-                matchItem.setString(s.startsWith("{")
-                    ? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AAND " + s);
+//                matchItem.setString(s.startsWith("{")
+//                    ? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AND " + s);
+                if (s.startsWith("{")) {
+                    matchItem.setString("{if (!(" +matchexpr+ ")) return false;" + s.substring(1));
+                }
             }
             val = xsToString(sections);
         } else {
@@ -657,7 +660,16 @@ final class CompileXonXdef extends XScriptParser {
                         if (s.startsWith("ref ")) { // refence can't be in match expression!
                            error(sbs[1], XDEF.XDEF363, "ref");//'&{0}' is not allowed here&{#SYS000}
                         } else {
-                            addMatchExpression(pn1, s + ".parse((String)@" + X_VALATTR + ").matches()");
+                            s += ".parse((String)@" + X_VALATTR + ").matches()";
+                            List<Object> x = parseXscript(val.getValue());
+                            SBuffer y = findSection("option", x);
+                            if (y == null) {
+                                y = findSection("options", x);
+                            }
+                            if (y != null && y.getString().contains("acceptNull")) {
+                                s += " || \"null\".equals((String)@val)";
+                            }
+                            addMatchExpression(pn1, s);
                         }
                     }
                 }
