@@ -1170,6 +1170,26 @@ public class TestJsonXdef extends XDTester {
         } catch (RuntimeException ex) {fail(ex);}
         try { // test JSON options noNull, acceptNull
             xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R' script='option acceptNull'>\n" +
+"  <xd:json name=\"P5R\"> [\"* int()\"] </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "[null]";
+            jparse(xp, "", json, reporter);
+            if (reporter.errors()) {
+                fail(reporter);
+            }
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
+"  <xd:json name=\"P5R\"> [\"* int(); option acceptNull\"] </xd:json>\n" +
+"</xd:def>";
+            xp = compile(xdef);
+            json = "[null]";
+            jparse(xp, "", json, reporter);
+            if (reporter.errors()) {
+                fail(reporter);
+            }
+            xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='P5R'>\n" +
 "  <xd:json name=\"P5R\"> { \"stavPoistenia\": \"string(); option noNull\" } </xd:json>\n" +
 "</xd:def>";
