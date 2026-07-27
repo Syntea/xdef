@@ -100,51 +100,37 @@ public abstract class AbstractMyServlet extends HttpServlet {
      * @return converted data
      */
     private static final String preTextToHtml(final String preText, final boolean pre) {
-        StringBuilder sb = new StringBuilder(null == preText ? "" : preText.trim());
-        int i = 0;
-        while (i < sb.length()) {
-            char c = sb.charAt(i);
+        if (preText == null) {
+            return null;
+        }
 
+        StringBuilder sb = new StringBuilder(preText.length() * 2);
+        for (int i = 0; i < preText.length(); ++i) {
+            char c = preText.charAt(i);
             switch (c) {
-                case '\r':
-                    if (!pre) {
-                        sb.deleteCharAt(i);
-                        continue;
-                    }
-                    break;
                 case '\n':
-                    if (!pre) {
-                        sb.insert(i, "<br/>");
-                        i += 5;
-                    }
+                    sb.append(pre ? "\n" : "<br/>\n");
                     break;
                 case ' ':
-                    if (!pre) {
-                        sb.replace(i, i + 1, "&nbsp;");
-                        i += 5;
-                    }
+                    sb.append(pre ? " " : "&nbsp;");
                     break;
                 case '\t':
-                    if (!pre) {
-                        sb.replace(i, i + 1, "&nbsp;&nbsp;&nbsp;&nbsp;"); //four spaces
-                        i += 23;
-                    }
+                    sb.append(pre ? "\t" : "&nbsp;&nbsp;&nbsp;&nbsp;"); //four spaces
                     break;
-                case '<':
-                    sb.replace(i, i + 1, "&lt;");
-                    i += 3;
+                case '\r':
                     break;
                 case '&':
-                    sb.replace(i, i + 1, "&amp;");
-                    i += 4;
+                    sb.append("&amp;");
+                    break;
+                case '<':
+                    sb.append("&lt;");
                     break;
                 case '>':
-                    sb.replace(i, i + 1, "&gt;");
-                    i += 3;
+                    sb.append("&gt;");
                     break;
+                default:
+                    sb.append(c);
             }
-
-            ++i;
         }
 
         return sb.toString();
