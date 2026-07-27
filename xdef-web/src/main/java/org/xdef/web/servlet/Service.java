@@ -10,6 +10,7 @@ import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SException;
+import org.xdef.web.util.ServletUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
@@ -26,9 +27,44 @@ public final class Service extends AbstractMyServlet {
 
     private static final long serialVersionUID = 8846128427001680285L;
 
+    /** Base directory. */
+    protected File _baseDir = null;
+    /** Temporary directory for 100MB. */
+    protected File _tempDir100MB = null;
+    /** Temporary directory for 400MB. */
+    protected File _tempDir400MB = null;
+    /** Directory with data. */
+    protected File _dataDir = null;
+
+
     /** default constructor, calls super() only */
     public Service() {
         super();
+    }
+
+    /** Init this servlet. Set directories for temporary data. */
+    @Override
+    public void init() {
+        File f = new File("/opt/tutorial");
+        if (!f.exists() || !f.isDirectory()) {
+            throw new RuntimeException( "Directory /opt/tutorial is not available");
+        }
+        _baseDir = f;
+        f = new File(_baseDir, "temp100MB");
+        if (!f.exists() || !f.isDirectory()) {
+            throw new RuntimeException("Directory /opt/tutorial/temp100MB is not available");
+        }
+        _tempDir100MB = f;
+        f = new File(_baseDir, "temp400MB");
+        if (!f.exists() || !f.isDirectory()) {
+            throw new RuntimeException("Directory /opt/tutorial/temp400MB is not available");
+        }
+        _tempDir400MB = f;
+        f = new File(_baseDir, "data");
+        if (!f.exists() || !f.isDirectory()) {
+            throw new RuntimeException("Directory /opt/tutorial/data is not available");
+        }
+        _dataDir = f;
     }
 
     private static String getDirInfo(final File dir) {
@@ -133,7 +169,7 @@ public final class Service extends AbstractMyServlet {
                             out.println("ERROR: directory " + s + " is not alowed to delete");
                         } else {
                             File[] ff = new File[] {f};
-                            deleteFiles(ff);
+                            ServletUtil.deleteFiles(ff);
                             out.println(f.exists() ? "ERROR: Directory " + s + " can't delete"
                                 : "Directory " + s + " was deleted");
                         }

@@ -30,6 +30,7 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import org.xdef.sys.SUtils;
+import org.xdef.web.util.ServletUtil;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -51,7 +52,7 @@ public final class Playground extends AbstractMyServlet {
     //private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
     private static final String RESPONSE_HTML_TEMPL =
-        readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
+        ServletUtil.readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
 
     /** default constructor, calls super() only */
     public Playground() {
@@ -272,13 +273,13 @@ public final class Playground extends AbstractMyServlet {
         respHtml = SUtils.modifyFirst(respHtml,         "((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
 
         respHtml = SUtils.modifyFirst(respHtml,         "((xdefRoot))",         Optional.ofNullable(rp.xdefRoot).orElse(""));
-        respHtml = SUtils.modifyFirst(respHtml,         "((xdef))",             preTextToPreCont(rp.xdef));
+        respHtml = SUtils.modifyFirst(respHtml,         "((xdef))",             ServletUtil.preTextToPreCont(rp.xdef));
         respHtml = SUtils.modifyFirst(respHtml,         "((xdefLines))",        Integer.toString(rp.xdef.split("\n").length + 1));
         respHtml = SUtils.modifyFirst(respHtml,         "((dataFormat))",       rp.dataFormat.name());
         respHtml = SUtils.modifyFirst(respHtml,         "((dataFormatUp))",     rp.dataFormat.name().toUpperCase());
         respHtml = SUtils.modifyFirst(respHtml,         "((langInp-disp))",     lexEx ? "block" : "none");
         respHtml = SUtils.modifyFirst(respHtml,         "((langInp))",          rp.langInp);
-        respHtml = SUtils.modifyFirst(respHtml,         "((data))",             preTextToPreCont(rp.data));
+        respHtml = SUtils.modifyFirst(respHtml,         "((data))",             ServletUtil.preTextToPreCont(rp.data));
         respHtml = SUtils.modifyFirst(respHtml,         "((dataLines))",        Integer.toString(rp.data.split("\n").length + 1));
         respHtml = SUtils.modifyFirst(respHtml,         "((model-disp))",       "compose".equals(rp.mode) ? "block" : "none");
         respHtml = SUtils.modifyFirst(respHtml,         "((modelName))",        rp.modelName);
@@ -295,21 +296,21 @@ public final class Playground extends AbstractMyServlet {
         respHtml = SUtils.modifyFirst(respHtml,         "((title))",            pp.title);
         respHtml = SUtils.modifyFirst(respHtml,         "((message-disp))",     pp.message != null ? "block" : "none");
         if (pp.message != null) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((message))",          preTextToPreCont(pp.message));
+            respHtml = SUtils.modifyFirst(respHtml,     "((message))",          ServletUtil.preTextToPreCont(pp.message));
         }
         respHtml = SUtils.modifyFirst(respHtml,         "((result-disp))",      pp.result != null ? "block" : "none");
         if (pp.result != null) {
             respHtml = SUtils.modifyFirst(respHtml,     "((result-formatUp))",  rp.dataFormat.name().toUpperCase());
             respHtml = SUtils.modifyFirst(respHtml,     "((result-hili))",      dataHili);
-            respHtml = SUtils.modifyFirst(respHtml,     "((result))",           preTextToPreCont(pp.result));
+            respHtml = SUtils.modifyFirst(respHtml,     "((result))",           ServletUtil.preTextToPreCont(pp.result));
         }
         respHtml = SUtils.modifyFirst(respHtml,         "((display-html-disp))", resultIsHtml ? "block" : "none");
         if (resultIsHtml) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((display-html))",     htmlToAttrVal(pp.result));
+            respHtml = SUtils.modifyFirst(respHtml,     "((display-html))",     ServletUtil.htmlToAttrVal(pp.result));
         }
         respHtml = SUtils.modifyFirst(respHtml,         "((stdout-disp))",      stdOutputEx ? "block" : "none");
         if (stdOutputEx) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((stdout))",           preTextToPreCont(pp.stdOutput));
+            respHtml = SUtils.modifyFirst(respHtml,     "((stdout))",           ServletUtil.preTextToPreCont(pp.stdOutput));
         }
         for (XdDataFormat df : XdDataFormat.values()) {
             String  dfDisp   = null;
@@ -327,7 +328,7 @@ public final class Playground extends AbstractMyServlet {
                 respHtml = SUtils.modifyFirst(
                     respHtml,
                     "((display-" + df.toString() + "))",
-                    preTextToPreCont(dfDisp)
+                    ServletUtil.preTextToPreCont(dfDisp)
                 );
             }
         }
