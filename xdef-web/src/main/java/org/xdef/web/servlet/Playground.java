@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import java.util.stream.Stream;
 
 import javax.xml.namespace.QName;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xdef.XDBuilder;
 import org.xdef.XDConstants;
@@ -29,7 +32,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
-import org.xdef.sys.SUtils;
 import org.xdef.web.util.ServletUtil;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
@@ -49,7 +51,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public final class Playground extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
-    //private static final Logger logger = LoggerFactory.getLogger(Playground.class);
+
+    @SuppressWarnings("unused")
+    private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
     private static final String RESPONSE_HTML_TEMPL =
         ServletUtil.readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
@@ -269,48 +273,48 @@ public final class Playground extends AbstractMyServlet {
         ;
         String  dataHili = rp.dataFormat == XdDataFormat.csv ? "plaintext" : rp.dataFormat.name();
 
-        String respHtml = RESPONSE_HTML_TEMPL;
-        respHtml = SUtils.modifyFirst(respHtml,         "((xdef-lib-id))",      XDConstants.BUILD_IDENTIFIER);
+        Map<String, String> values = new HashMap<>();
+        values.put("xdef-lib-id",       XDConstants.BUILD_IDENTIFIER);
 
-        respHtml = SUtils.modifyFirst(respHtml,         "((xdefRoot))",         Optional.ofNullable(rp.xdefRoot).orElse(""));
-        respHtml = SUtils.modifyFirst(respHtml,         "((xdef))",             ServletUtil.preTextToPreCont(rp.xdef));
-        respHtml = SUtils.modifyFirst(respHtml,         "((xdefLines))",        Integer.toString(rp.xdef.split("\n").length + 1));
-        respHtml = SUtils.modifyFirst(respHtml,         "((dataFormat))",       rp.dataFormat.name());
-        respHtml = SUtils.modifyFirst(respHtml,         "((dataFormatUp))",     rp.dataFormat.name().toUpperCase());
-        respHtml = SUtils.modifyFirst(respHtml,         "((langInp-disp))",     lexEx ? "block" : "none");
-        respHtml = SUtils.modifyFirst(respHtml,         "((langInp))",          rp.langInp);
-        respHtml = SUtils.modifyFirst(respHtml,         "((data))",             ServletUtil.preTextToPreCont(rp.data));
-        respHtml = SUtils.modifyFirst(respHtml,         "((dataLines))",        Integer.toString(rp.data.split("\n").length + 1));
-        respHtml = SUtils.modifyFirst(respHtml,         "((model-disp))",       "compose".equals(rp.mode) ? "block" : "none");
-        respHtml = SUtils.modifyFirst(respHtml,         "((modelName))",        rp.modelName);
-        respHtml = SUtils.modifyFirst(respHtml,         "((modelURI))",         rp.modelURI);
-        respHtml = SUtils.modifyFirst(respHtml,         "((csvHeader-disp))",   rp.dataFormat == XdDataFormat.csv ? "block" : "none");
-        respHtml = SUtils.modifyFirst(respHtml,         "((csvHeader-sel))",    "yes".equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
-        respHtml = SUtils.modifyFirst(respHtml,         "((xonDisplayAs-disp))", !rp.xonDisplayAs.isEmpty() ? "block" : "none");
-        respHtml = SUtils.modifyFirst(respHtml,         "((xonDisplayAs))",     rp.xonDisplayAs.stream().map(XdDataFormat::name) .collect(Collectors.joining(" ")));
-        respHtml = SUtils.modifyFirst(respHtml,         "((langOut-disp))",     lexEx ? "block" : "none");
-        respHtml = SUtils.modifyFirst(respHtml,         "((langOut))",          rp.langOut);
-        respHtml = SUtils.modifyString(respHtml,        "((mode))",             rp.mode);
+        values.put("xdefRoot",          Optional.ofNullable(rp.xdefRoot).orElse(""));
+        values.put("xdef",              ServletUtil.preTextToPreCont(rp.xdef));
+        values.put("xdefLines",         Integer.toString(rp.xdef.split("\n").length + 1));
+        values.put("dataFormat",        rp.dataFormat.name());
+        values.put("dataFormatUp",      rp.dataFormat.name().toUpperCase());
+        values.put("langInp-disp",      lexEx ? "block" : "none");
+        values.put("langInp",           rp.langInp);
+        values.put("data",              ServletUtil.preTextToPreCont(rp.data));
+        values.put("dataLines",         Integer.toString(rp.data.split("\n").length + 1));
+        values.put("model-disp",        "compose".equals(rp.mode) ? "block" : "none");
+        values.put("modelName",         rp.modelName);
+        values.put("modelURI",          rp.modelURI);
+        values.put("csvHeader-disp",    rp.dataFormat == XdDataFormat.csv ? "block" : "none");
+        values.put("csvHeader-sel",     "yes".equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
+        values.put("xonDisplayAs-disp", !rp.xonDisplayAs.isEmpty() ? "block" : "none");
+        values.put("xonDisplayAs",      rp.xonDisplayAs.stream().map(XdDataFormat::name) .collect(Collectors.joining(" ")));
+        values.put("langOut-disp",      lexEx ? "block" : "none");
+        values.put("langOut",           rp.langOut);
+        values.put("mode",              rp.mode);
 
-        respHtml = SUtils.modifyString(respHtml,        "((status))",           pp.status);
-        respHtml = SUtils.modifyFirst(respHtml,         "((title))",            pp.title);
-        respHtml = SUtils.modifyFirst(respHtml,         "((message-disp))",     pp.message != null ? "block" : "none");
+        values.put("status",            pp.status);
+        values.put("title",             pp.title);
+        values.put("message-disp",      pp.message != null ? "block" : "none");
         if (pp.message != null) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((message))",          ServletUtil.preTextToPreCont(pp.message));
+            values.put("message",       ServletUtil.preTextToPreCont(pp.message));
         }
-        respHtml = SUtils.modifyFirst(respHtml,         "((result-disp))",      pp.result != null ? "block" : "none");
+        values.put("result-disp",       pp.result != null ? "block" : "none");
         if (pp.result != null) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((result-formatUp))",  rp.dataFormat.name().toUpperCase());
-            respHtml = SUtils.modifyFirst(respHtml,     "((result-hili))",      dataHili);
-            respHtml = SUtils.modifyFirst(respHtml,     "((result))",           ServletUtil.preTextToPreCont(pp.result));
+            values.put("result-formatUp", rp.dataFormat.name().toUpperCase());
+            values.put("result-hili",   dataHili);
+            values.put("result",        ServletUtil.preTextToPreCont(pp.result));
         }
-        respHtml = SUtils.modifyFirst(respHtml,         "((display-html-disp))", resultIsHtml ? "block" : "none");
+        values.put("display-html-disp", resultIsHtml ? "block" : "none");
         if (resultIsHtml) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((display-html))",     ServletUtil.htmlToAttrVal(pp.result));
+            values.put("display-html",  ServletUtil.htmlToAttrVal(pp.result));
         }
-        respHtml = SUtils.modifyFirst(respHtml,         "((stdout-disp))",      stdOutputEx ? "block" : "none");
+        values.put("stdout-disp",       stdOutputEx ? "block" : "none");
         if (stdOutputEx) {
-            respHtml = SUtils.modifyFirst(respHtml,     "((stdout))",           ServletUtil.preTextToPreCont(pp.stdOutput));
+            values.put("stdout",        ServletUtil.preTextToPreCont(pp.stdOutput));
         }
         for (XdDataFormat df : XdDataFormat.values()) {
             String  dfDisp   = null;
@@ -319,30 +323,22 @@ public final class Playground extends AbstractMyServlet {
                 rp.xonDisplayAs.contains(df) && df != rp.dataFormat &&
                 (dfDisp = convertXon2Str(pp.resultXon, df)) != null
             ;
-            respHtml = SUtils.modifyFirst(
-                respHtml,
-                "((display-" + df.toString() + "-disp))",
-                dfDispEx ? "block" : "none"
-            );
+            values.put("display-" + df + "-disp", dfDispEx ? "block" : "none");
             if (dfDispEx) {
-                respHtml = SUtils.modifyFirst(
-                    respHtml,
-                    "((display-" + df.toString() + "))",
-                    ServletUtil.preTextToPreCont(dfDisp)
-                );
+                values.put("display-" + df, ServletUtil.preTextToPreCont(dfDisp));
             }
         }
 
         //display timers
-        respHtml = SUtils.modifyFirst(respHtml,         "((timer-xdef))",
+        values.put("timer-xdef",
             pp.timerXdef    != null ? Long.toString(pp.timerXdef    - pp.timerStart) + " ms": "not started");
-        respHtml = SUtils.modifyFirst(respHtml,         "((timer-process))",
+        values.put("timer-process",
             pp.timerProcess != null ? Long.toString(pp.timerProcess - pp.timerXdef)  + " ms": "not started");
         //timer end
         long timerEnd = new Date().getTime();
-        respHtml = SUtils.modifyFirst(respHtml,         "((timer-total))",      Long.toString(timerEnd - pp.timerStart) + " ms");
+        values.put("timer-total",       Long.toString(timerEnd - pp.timerStart) + " ms");
 
-        return respHtml;
+        return ServletUtil.mustache(RESPONSE_HTML_TEMPL, values);
     }
 
     /** Returns a short description of this servlet.

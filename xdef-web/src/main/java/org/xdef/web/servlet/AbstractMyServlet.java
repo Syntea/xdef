@@ -32,6 +32,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @MultipartConfig
 public abstract class AbstractMyServlet extends HttpServlet {
     private static final long serialVersionUID = -8154631839408075000L;
+
     private static final Logger logger = LoggerFactory.getLogger(AbstractMyServlet.class);
 
     /** internal default X-definition reporter language */
@@ -43,18 +44,35 @@ public abstract class AbstractMyServlet extends HttpServlet {
     /** SManager used for reporting.*/
     static final SManager MANAGER = SManager.getInstance();
 
+
     static {
         //set X-definition report-language globally
         Report.setLanguage(reportLangDefault);
         logger.info("set X-definition report-language globally to: " + reportLangDefault);
     }
 
+
     /** default constructor, calls super() only */
     protected AbstractMyServlet() {
         super();
     }
 
-    /** Get listing from reporter.
+
+    /**
+     * Get parameter from servlet request.
+     *
+     * @param request servlet request.
+     * @param name name of parameter.
+     * @return trimmed value of parameter or an empty string.
+     */
+    public static final String getParam(final HttpServletRequest request, final String name) {
+        String result = request.getParameter(name);
+        return null == result ? "" : result.trim();
+    }
+
+    /**
+     * Get listing from reporter.
+     *
      * @param reporter reporter with error and warning messages
      * @param data string with source data
      * @param reportLang reporter language
@@ -97,17 +115,6 @@ public abstract class AbstractMyServlet extends HttpServlet {
         props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
         return props;
     }
-
-    /** Get parameter from servlet request.
-     * @param request servlet request.
-     * @param name name of parameter.
-     * @return trimmed value of parameter or an empty string.
-     */
-    public static final String getParam(final HttpServletRequest request, final String name) {
-        String result = request.getParameter(name);
-        return null == result ? "" : result.trim();
-    }
-
 
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -169,6 +176,8 @@ public abstract class AbstractMyServlet extends HttpServlet {
             throw ioex;
         }
     }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////
     // Abstract methods

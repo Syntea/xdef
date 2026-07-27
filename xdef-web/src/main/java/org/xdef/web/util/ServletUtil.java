@@ -3,7 +3,10 @@ package org.xdef.web.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,27 +121,32 @@ public abstract class ServletUtil {
         return sb.toString();
     }
 
-    /** Delete all files and subdirectories from argument.
-     * @param dir directory to be cleared.
-     */
-    public static final void clearDirectory(final File dir) {
-        if (dir != null && dir.isDirectory()) {
-            deleteFiles(dir.listFiles());
-        }
-    }
+    /** matches a "((key))" placeholder; a key is one or more of 'a'-'z', 'A'-'Z', '0'-'9', '_' or '-' */
+    private static final Pattern MUSTACHE_PLACEHOLDER = Pattern.compile("\\(\\(([a-zA-Z0-9_-]+)\\)\\)");
 
-    /** Delete all files and subdirectories from argument.
-     * @param files files and directories to be cleared.
+    /**
+     * Fill a "mustache"-like HTML template by replacing all "((key))" placeholders with values from the
+     * given map. A "((...))" sequence whose content is not a valid key, or whose key is not present in
+     * the map, is left untouched in the result.
+     *
+     * @param template HTML template (e.g. playground-response-template.html) with "((key))" placeholders.
+     * @param values map of placeholder keys (without the surrounding "((" / "))") to their replacement values.
+     * @return template with placeholders replaced.
      */
-    public static final void deleteFiles(final File[] files) {
-        for (File f: files) {
-            if (f.exists()) {
-                if (f.isDirectory()) {
-                    clearDirectory(f);
-                }
-                f.delete();
-            }
+    public static final String mustache(final String template, final Map<String, String> values) {
+        if (template == null) {
+            return null;
         }
+
+        Matcher       matcher = MUSTACHE_PLACEHOLDER.matcher(template);
+        StringBuilder sb      = new StringBuilder(template.length() * 2);
+        while (matcher.find()) {
+            String value = values.get(matcher.group(1));
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(value != null ? value : matcher.group()));
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
     }
 
     /** generates html-page with given title and body
@@ -179,6 +187,29 @@ public abstract class ServletUtil {
             .orElseThrow(() -> new RuntimeException(
                 "Non-existent resource \"" + resource + "\" by class " + clazz.getName()))
         ;
+    }
+
+    /** Delete all files and subdirectories from argument.
+     * @param dir directory to be cleared.
+     */
+    public static final void clearDirectory(final File dir) {
+        if (dir != null && dir.isDirectory()) {
+            deleteFiles(dir.listFiles());
+        }
+    }
+
+    /** Delete all files and subdirectories from argument.
+     * @param files files and directories to be cleared.
+     */
+    public static final void deleteFiles(final File[] files) {
+        for (File f: files) {
+            if (f.exists()) {
+                if (f.isDirectory()) {
+                    clearDirectory(f);
+                }
+                f.delete();
+            }
+        }
     }
 
 }

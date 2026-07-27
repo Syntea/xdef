@@ -8,9 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.xdef.web.servlet.Playground;
 
 /**
  * Test ServletUtil.
@@ -96,5 +103,70 @@ class ServletUtilTest {
     @Test
     void clearDirectoryOnNullIsNoOp() {
         ServletUtil.clearDirectory(null);
+    }
+
+    @Test
+    void mustacheReplacesAllOccurrencesOfEachPlaceholder() {
+        String template = "<title>((status))</title><div class=\"((status))\">((body))</div>";
+        Map<String, String> values = Map.of("status", "OK", "body", "hello");
+        assertEquals("<title>OK</title><div class=\"OK\">hello</div>", ServletUtil.mustache(template, values));
+    }
+
+    @Test
+    void mustacheLeavesUnknownPlaceholderUntouched() {
+        String template = "a((known))b((unknown))c";
+        assertEquals("aVALUEb((unknown))c", ServletUtil.mustache(template, Map.of("known", "VALUE")));
+    }
+
+    @Test
+    void mustacheHandlesAdjacentPlaceholders() {
+        assertEquals("XY", ServletUtil.mustache("((a))((b))", Map.of("a", "X", "b", "Y")));
+    }
+
+    @Test
+    void mustacheKeyAllowsLettersDigitsUnderscoreAndHyphen() {
+        assertEquals("VAL", ServletUtil.mustache("((a-b_c9))", Map.of("a-b_c9", "VAL")));
+    }
+
+    @Test
+    void mustacheDoesNotTreatNonKeyContentAsPlaceholder() {
+        // a space is not a valid key character - "((" here must be left as literal text,
+        // not gobbled up together with the unrelated "))" that follows much later
+        String template = "((not a key)) then ((real))";
+        Map<String, String> values = Map.of("not a key", "XXX", "real", "VALUE");
+        assertEquals("((not a key)) then VALUE", ServletUtil.mustache(template, values));
+    }
+
+    @Test
+    void mustacheOnNullTemplateReturnsNull() {
+        assertNull(ServletUtil.mustache(null, Map.of()));
+    }
+
+    @Test
+    void mustacheFillsRealPlaygroundTemplateCompletely() {
+        String template = ServletUtil.readRsrcAsString(
+            Playground.class, "webapp/playground/playground-response-template.html");
+
+        Set<String> keys = new HashSet<>();
+        Matcher m = Pattern.compile("\\(\\((.+?)\\)\\)").matcher(template);
+        while (m.find()) {
+            keys.add(m.group(1));
+        }
+        assertTrue(keys.contains("status"), "template is expected to use ((status)) more than once");
+        int statusPlaceholderCount = template.split(Pattern.quote("((status))"), -1).length - 1;
+        assertTrue(statusPlaceholderCount > 1, "expected ((status)) more than once, found "
+            + statusPlaceholderCount);
+
+        Map<String, String> values = new HashMap<>();
+        for (String key : keys) {
+            values.put(key, "[" + key + "]");
+        }
+
+        String filled = ServletUtil.mustache(template, values);
+
+        assertTrue(!filled.contains("(("), "unresolved placeholder left in: " + filled);
+        int statusOccurrences = filled.split(Pattern.quote("[status]"), -1).length - 1;
+        assertEquals(statusPlaceholderCount, statusOccurrences,
+            "every ((status)) occurrence in the template must be replaced");
     }
 }
