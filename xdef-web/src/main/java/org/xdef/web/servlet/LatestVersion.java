@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,8 +19,10 @@ import jakarta.servlet.http.HttpServletResponse;
 public final class LatestVersion extends AbstractMyServlet {
     private static final long serialVersionUID = 2277695929503402350L;
 
-    private static final String  xdefMvnUri = "https://repo1.maven.org/maven2/org/xdef/xdef/maven-metadata.xml";
-    private static final Pattern release    = Pattern.compile("<release>(.*?)</release>");
+    private static final String     xdefMvnUri      = "https://repo1.maven.org/maven2/org/xdef/xdef/maven-metadata.xml";
+    private static final Pattern    release         = Pattern.compile("<release>(.*?)</release>");
+    private static final HttpClient httpClient      = HttpClient.newHttpClient();
+    private static final Builder    httpRequestBldr = HttpRequest.newBuilder(URI.create(xdefMvnUri));
 
     /** default constructor, calls super() only */
     public LatestVersion() {
@@ -40,11 +43,8 @@ public final class LatestVersion extends AbstractMyServlet {
         String result;
 
         try {
-            String mvnMetadata = HttpClient.newHttpClient()
-                .send(
-                    HttpRequest.newBuilder(URI.create(xdefMvnUri)).build(),
-                    HttpResponse.BodyHandlers.ofString()
-                )
+            String mvnMetadata = httpClient
+                .send(httpRequestBldr.build(), HttpResponse.BodyHandlers.ofString())
                 .body()
             ;
 
