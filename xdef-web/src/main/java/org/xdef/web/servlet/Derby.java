@@ -321,7 +321,7 @@ public final class Derby extends AbstractMyServlet {
                     displayMsg(out,
                         "Error",
                         "Database creation error<br/>"+
-                            preStringToPre(STester.printThrowable(ex)));
+                            preTextToPreCont(STester.printThrowable(ex)));
                     return;
                 }
             } else {
@@ -367,7 +367,7 @@ public final class Derby extends AbstractMyServlet {
                 if (null == xp || !reporter.errorWarnings()) {
                     out.print("<html xmlns='http://www.w3.org/1999/xhtml'>"
                         + "<body><h1>Exception</h1><pre><tt><b>"
-                        + preStringToPre(STester.printThrowable(ex))
+                        + preTextToPreCont(STester.printThrowable(ex))
                         + "</b></tt></pre></body></html>");
                     return;
                 } else {
@@ -441,7 +441,7 @@ public final class Derby extends AbstractMyServlet {
                         service.close();
                         if (caw.size() > 0) {
                             stdOutput = "<h3>Output stream (System.out):</h3><pre><tt>"
-                                + preStringToPre(caw.toString()) + "</tt></pre>";
+                                + preTextToPreCont(caw.toString()) + "</tt></pre>";
                         }
                     }
                     if (reporter.errors()) {
@@ -453,7 +453,7 @@ public final class Derby extends AbstractMyServlet {
                         if (mode.equals("compose")) {
                             title = "Display database";
                             result = "<h3>Database as XML:</h3><pre><tt>"
-                                + preStringToPre(KXmlUtils.nodeToString(
+                                + preTextToPreCont(KXmlUtils.nodeToString(
                                     resultElement,true,false,true,110))
                                 + "</tt></pre>\n";
                         } else if (task.equals("finished")) {
@@ -479,7 +479,7 @@ public final class Derby extends AbstractMyServlet {
                         return;
                     }
                 }
-                result = preStringToPre(result);
+                result = preTextToPreCont(result);
             } catch (SRuntimeException ex) {
                 if ("SYS024".equals(ex.getMsgID())) {
                     reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
@@ -488,7 +488,7 @@ public final class Derby extends AbstractMyServlet {
                     reporter.putReport(Report.fatal(ex.getMsgID(),
                         ex.getReport().getText(), ex.getReport().getModification()));
                 }
-                displayMsg(out, "Input data error", preStringToPre(printReports(reporter,data)));
+                displayMsg(out, "Input data error", preTextToPreCont(printReports(reporter,data)));
                 reporter.reset();
                 return;
             }

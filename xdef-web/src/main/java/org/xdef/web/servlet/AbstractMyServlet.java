@@ -93,14 +93,14 @@ public abstract class AbstractMyServlet extends HttpServlet {
     }
 
     /**
-     * Create string from data which can be part of HTML
+     * Create string from preText which can be inserted into HTML
      *
-     * @param preStr pre-formatted string to be converted
+     * @param preText pre-formatted text to be converted
      * @param pre if true convert to as inside pre-element. Otherwise convert to as inside div-element
      * @return converted data
      */
-    private static final String preStringToHtml(final String preStr, final boolean pre) {
-        StringBuilder sb = new StringBuilder(null == preStr ? "" : preStr.trim());
+    private static final String preTextToHtml(final String preText, final boolean pre) {
+        StringBuilder sb = new StringBuilder(null == preText ? "" : preText.trim());
         int i = 0;
         while (i < sb.length()) {
             char c = sb.charAt(i);
@@ -151,33 +151,57 @@ public abstract class AbstractMyServlet extends HttpServlet {
     }
 
     /**
-     * see {@link #preStringToHtml(String, boolean)} with pre=true
+     * see {@link #preTextToHtml(String, boolean)} with pre=true
      *
-     * @param preStr pre-formatted string to be converted
+     * @param preText pre-formatted text to be converted
      * @return converted data
      */
-    public static final String preStringToPre(final String preStr) {
-    	return preStringToHtml(preStr, true);
+    public static final String preTextToPreCont(final String preText) {
+    	return preTextToHtml(preText, true);
     }
 
     /**
-     * see {@link #preStringToHtml(String, boolean)} with pre=false
+     * see {@link #preTextToHtml(String, boolean)} with pre=false
      *
-     * @param preStr pre-formatted string to be converted
+     * @param preText pre-formatted text to be converted
      * @return converted data
      */
-    public static final String preStringToDiv(final String preStr) {
-    	return preStringToHtml(preStr, false);
+    public static final String preTextToDivCont(final String preText) {
+    	return preTextToHtml(preText, false);
     }
 
     /**
-     * Create string from html-string which can be part of HTML-attribute
+     * Create string from html-string which can be inserted into HTML-quoted-attribute
      *
-     * @param htmlStr html-string to be converted
-     * @return converted data
+     * @param html html-string to be converted
+     * @return converted html-string
      */
-    public static final String htmlStringToAttr(final String htmlStr) {
-    	return htmlStr.replaceAll("&", "&amp;").replaceAll("\"", "&quot;");
+    public static final String htmlToAttrVal(final String html) {
+        if (html == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(html.length() * 2);
+        for (int i = 0; i < html.length(); ++i) {
+            char c = html.charAt(i);
+            switch (c) {
+                case '"':
+                    sb.append("&quot;");
+                    break;
+                case '&':
+                    sb.append("&amp;");
+                    break;
+                case '<':
+                    sb.append("&lt;");
+                    break;
+                case '>':
+                    sb.append("&gt;");
+                    break;
+                default:
+                    sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 
     /** Get parameter from servlet request.
