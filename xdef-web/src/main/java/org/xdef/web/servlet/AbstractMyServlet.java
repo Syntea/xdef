@@ -115,7 +115,7 @@ public abstract class AbstractMyServlet extends HttpServlet {
                 case '\n':
                     if (!pre) {
                         sb.insert(i, "<br/>");
-                        i += 6;
+                        i += 5;
                     }
                     break;
                 case ' ':
