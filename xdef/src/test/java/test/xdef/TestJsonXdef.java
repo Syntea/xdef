@@ -644,6 +644,33 @@ public class TestJsonXdef extends XDTester {
             json = "{}";
             jparse(xp, "", json, reporter);
             assertNoErrorwarningsAndClear(reporter);
+            xdef = // test onAbsence, onTrue
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root=\"CanonicalRequest\">\n" +
+"    <xd:declaration scope=\"local\">\n" +
+"     void addError(int x) {out('E: ' + x);}\n" +
+"     void addError(int x, String s) {out('E: ' + x + ', ' + s);}\n" +
+"    </xd:declaration>\n" +
+"    <xd:json name=\"CanonicalRequest\">\n" +
+"    { \"x\": \"required dateTime();\n" +
+"            onAbsence {addError(4202, 'xxx'); clearReports();}\n" +
+"            onTrue { if (getParsedDatetime() > now()) addError(4221); }\"\n" +
+"    }\n" +
+"    </xd:json>\n" +
+"</xd:def>\n";
+            xp = compile(xdef);
+            json = "{ \"x\" : \"2030-01-01T00:00:00\"}";
+            xd = xp.createXDDocument();
+            swr = new StringWriter();
+            xd.setStdOut(swr);
+            xd.jparse(json, reporter);
+            assertEq("E: 4221", swr.toString());
+            assertNoErrors(reporter);
+            json = "{}";
+            swr = new StringWriter();
+            xd.setStdOut(swr);
+            xd.jparse(json, reporter);
+            assertNoErrors(reporter);
+            assertEq("E: 4202, xxx", swr.toString());
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
 "  <xd:json name='json'> [{\"a\":\"boolean\"},\"string()\",\"int()\"] </xd:json>\n"+
@@ -852,8 +879,7 @@ public class TestJsonXdef extends XDTester {
             XComponentUtil.set(xc, XonNames.X_VALUE+"_5", list);
             assertEq(2, ((List) XComponentUtil.get(xc, "$"+XonNames.X_VALUE+"_5")).size());
             assertTrue(((XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP)).toXon() instanceof Map);
-            assertTrue(((List) ((XComponent) XComponentUtil.get(
-                (XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
+            assertTrue(((List) ((XComponent) XComponentUtil.get((XComponent)XComponentUtil.get(xc,"jx$"+XonNames.X_MAP),
                 "jx$"+XonNames.X_ARRAY)).toXon()).isEmpty());
             assertEq(3,
                 ((List) ((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(xc, "jx$"+XonNames.X_MAP),
