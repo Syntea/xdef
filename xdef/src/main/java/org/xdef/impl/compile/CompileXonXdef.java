@@ -314,7 +314,21 @@ final class CompileXonXdef extends XScriptParser {
                 }
                 sbf = parsedScript[1];
             }
-            if (sbocc != null) { // occurrence
+            //AI
+            List<Object> valueSections = parseXscript(sbf);
+            SBuffer onAbsence = removeSection("onAbsence", valueSections);
+            if (onAbsence != null) { // onAbsnece section
+                sbf = xsToString(valueSections);
+                String occText = sbocc.getString().trim();
+                if (!occText.isEmpty() && !occText.endsWith(";")) {
+                    occText += ';';
+                }
+                String absenceAction = onAbsence.getString();
+                occText += absenceAction.isEmpty() ? "onAbsence;" : ("onAbsence " + absenceAction + ';');
+                sbocc = new SBuffer(occText, sbocc);
+            }
+            //AI
+            if (sbocc != null) { // occurrence or onAbsence
                 setXDAttr(pn, "script", sbocc);
             }
             setAttr(pn, X_VALATTR, sbf);
