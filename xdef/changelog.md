@@ -2,7 +2,7 @@
   * Fixed bug in JSON model if not quoted string value is `null`.
   * JSON format of the X-definition has been changed and improved.
   * X-script option `acceptJsonNull` changed to `acceptNull` and `illegalJsonNull` chaged to `noNull`.
-  * Fixed bug the section `onAbsence` in Json model was ignored.
+  * Fixed bug in the section `onAbsence` in Json model was ignored.
 
 # Version 42.2.45, release-date 2026-05-19
   * Fixed a bug in the length check for X-definition `num` type values.

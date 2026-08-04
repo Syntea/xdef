@@ -658,19 +658,21 @@ public class TestJsonXdef extends XDTester {
 "    </xd:json>\n" +
 "</xd:def>\n";
             xp = compile(xdef);
-            json = "{ \"x\" : \"2030-01-01T00:00:00\"}";
             xd = xp.createXDDocument();
             swr = new StringWriter();
             xd.setStdOut(swr);
+            json = "{ \"x\" : \"2000-01-01T00:00:00\"}";
+            xd.jparse(json, reporter); //OK
+            assertNoErrors(reporter);
+            assertEq("", swr.toString());
+            json = "{ \"x\" : \"2030-01-01T00:00:00\"}";
             xd.jparse(json, reporter);
+            assertNoErrors(reporter);
             assertEq("E: 4221", swr.toString());
-            assertNoErrors(reporter);
             json = "{}";
-            swr = new StringWriter();
-            xd.setStdOut(swr);
             xd.jparse(json, reporter);
             assertNoErrors(reporter);
-            assertEq("E: 4202, xxx", swr.toString());
+            assertEq("E: 4221E: 4202, xxx", swr.toString());
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
 "  <xd:json name='json'> [{\"a\":\"boolean\"},\"string()\",\"int()\"] </xd:json>\n"+

@@ -512,6 +512,7 @@ public final class Test002 extends XDTester {
             }
         } catch (IOException | RuntimeException ex) {fail(ex);}
         try {
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <x:declaration xmlns:x='"+_xdNS+"'>\n"+
@@ -532,6 +533,7 @@ public final class Test002 extends XDTester {
             assertEq(swr.toString(), "XDOUT: ISDN_LDN - ISDN4202/DnSearch/@KodNdnDuvodLustrace\n");
             s = reporter.printToString("slk");
             assertTrue(s.contains("ISDN4202:") && s.contains("XDEF526:") && s.contains("riadok"), s);
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "true");
             xdef = // external methods
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A xd:script=\"finally {out(tab('a', 'b')); pp()}\" />\n"+

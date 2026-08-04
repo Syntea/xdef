@@ -1646,6 +1646,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                 if (xsel._onAbsence >= 0
                                     && (_selector._count == 0 || _selector._count < _selector.minOccurs())) {
                                     debugXPos(XDDebug.ONABSENCE);
+                                    if (_clearReports) {
+                                        clearTemporaryReporter();
+                                    }
                                     exec(xsel._onAbsence, (byte)'U');
                                 } else if (_selector._count <_selector.minOccurs()) {
                                     String s = _selector._kind == XMCHOICE
@@ -1712,6 +1715,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                                     XSelector xsel = (XSelector) getDefElement(_selector._begIndex);
                                     debugXPos(XDDebug.ONABSENCE);
                                     if (xsel._onAbsence >= 0) {
+                                        if (_clearReports) {
+                                            clearTemporaryReporter();
+                                        }
                                         exec(xsel._onAbsence, (byte)'U');
                                     }
                                 }
@@ -1779,6 +1785,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                             error(XDEF.XDEF555, xnode.getName().substring(1));
                             XSelector xsel = (XSelector) xnode;
                             if (xsel._onAbsence >= 0) {
+                                if (_clearReports) {
+                                    clearTemporaryReporter();
+                                }
                                 exec(xsel._onAbsence, (byte)'U');
                             }
                         }
@@ -1905,6 +1914,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
             error(XDEF.XDEF555, xsel.getName().substring(1)); //Minimum occurrence not reached for &{0}
             debugXPos(XDDebug.ONABSENCE);
             if (xsel._onAbsence>= 0) {
+                if (_clearReports) {
+                    clearTemporaryReporter();
+                }
                 exec(xsel._onAbsence, (byte)'U');
             }
         }
@@ -2453,6 +2465,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
                     if (!_attNames.contains(xatt.getName())) {
                         String uri = xatt.getNSUri(); // was not processed
                         _xPos = xPos +"/@" + xname;
+                        if (_clearReports) {
+                            clearTemporaryReporter();
+                        }
                         exec(xatt._onAbsence, (byte) 'A');
                         if (_data != null) {
                             checkDatatype(xatt, true);

@@ -443,6 +443,7 @@ public final class TestXdef extends XDTester {
                 assertEq("XDEF569", reporter.getReport().getMsgID());
             }
         }
+        setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");
         try {//check empty attribute in model
             xp = compile("<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=''/></xd:def>");
             xml = "<A a='a'></A>";
@@ -482,8 +483,7 @@ public final class TestXdef extends XDTester {
 "</xd:def>");
             assertEq("<a/>", parse(xp, null, "<a a='c'>d</a>", reporter));
             s = reporter.printToString();
-            assertTrue(s.contains("path=/a/text()")&& s.contains("XDEF527")
-                && !s.contains("X1") && !s.contains("X2"), s);
+            assertTrue(s.contains("path=/a/text()")&&s.contains("XDEF527")&&!s.contains("X1")&&!s.contains("X2"), s);
             assertEq("<a/>", parse(xp, null, "<a/>", reporter));
             s = reporter.printToString();
             assertTrue(s.contains("XDEF526") && s.contains("path=/a/text()")
@@ -924,6 +924,7 @@ public final class TestXdef extends XDTester {
             s = el.getAttribute("a");
             assertTrue("2".equals(s), "a = " + s);
         } catch (Exception ex) {fail(ex);}
+        setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "true");
         try { // test exception
             xp = compile( // check in the onIllegalRoot
 "<x:def xmlns:x ='"+_xdNS+"' root='a' x:script=\"onIllegalRoot throw new Exception('OK')\">\n"+
