@@ -874,17 +874,13 @@ public final class TestXdef extends XDTester {
             el = parse(xp, "", xml, reporter);
             assertNoErrorwarningsAndClear(reporter);
             s = el.getAttribute("date");
-            if (!"20080225T000000Z".equals(s)) {
-                fail(s);
-            }
+            assertTrue("20080225T000000Z".equals(s), s);
             xml = "<a date='20082502T000000Z'/>";
             parse(xp, "", xml, reporter);
             if ((rep = reporter.getReport()) == null) {
                 fail("error not reported");
             } else {
-                if (!"E02".equals(rep.getMsgID())) {
-                    fail(rep.toString());
-                }
+                assertTrue("E02".equals(rep.getMsgID()), rep.toString());
                 while ((rep = reporter.getReport()) != null) {
                     fail(rep.toString());
                 }
@@ -905,7 +901,7 @@ public final class TestXdef extends XDTester {
 "  <a a=\"required enum('A','B','C'); onFalse {out('error');} onAbsence {out('missing');}\n"+
 "       options ignoreEmptyAttributes, trimAttr\"/>\n"+
 "</xd:def>");
-            xml = "<a a = ' '/>";
+            xml = "<a a=' '/>";
             parse(xp, "", xml, reporter, swr = new StringWriter(), null, null);
             xp = compile( //errors reported
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
@@ -916,7 +912,7 @@ public final class TestXdef extends XDTester {
             assertNoErrorwarningsAndClear(reporter);
             setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, s); //reset previous value
             assertEq("missing", swr.toString());
-            xp = compile( //errors cleared due to XDPROPERTY_CLEAR_REPORTS is defaur (i.e. true)
+            xp = compile( //errors cleared due to XDPROPERTY_CLEAR_REPORTS is defaut (i.e. true)
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"required enum('A','B','C'); onFalse {out('error')}\n"+
 "       onAbsence {out('missing'); clearReports();} options ignoreEmptyAttributes,trimAttr\"/>\n"+
@@ -925,7 +921,7 @@ public final class TestXdef extends XDTester {
             assertNoErrorwarningsAndClear(reporter);
             assertEq("missing", swr.toString());
             xp = compile("<xd:def xmlns:xd='"+_xdNS+"' root='A'> <A a=\"int; onTrue setAttr('a', '2');\"/> </xd:def>");
-            xml = "<A a = '1'/>";
+            xml = "<A a='1'/>";
             el = parse(xp, "", xml, reporter);
             assertNoErrorwarningsAndClear(reporter);
             s = el.getAttribute("a");
@@ -973,9 +969,8 @@ public final class TestXdef extends XDTester {
 "  </root>\n"+
 "</xd:def>");
             xml = "<root><a/></root>";
-            el = parse(xp, "", xml, reporter);
+            assertEq(xml, parse(xp, "", xml, reporter));
             assertTrue(reporter.getErrorCount() == 1 && "XDEF527".equals(reporter.getReport().getMsgID()));
-            assertEq(xml,el);
             xp = compile(
 "<xd:def root ='root' xmlns:xd='"+_xdNS+"'>\n"+
 "<root xd:text=\"* string()\">\n"+
@@ -985,9 +980,8 @@ public final class TestXdef extends XDTester {
 "  </xd:choice>\n"+
 "</root>\n"+
 "</xd:def>");
-            el = parse(xp,"", xml, reporter);
+            assertEq(xml, parse(xp,"", xml, reporter));
             assertNoErrorwarningsAndClear(reporter);
-            assertEq(xml,el);
             xml = "<root>text1<a/>text2</root>";
             el = parse(xp, "", xml, reporter);
             assertNoErrorwarningsAndClear(reporter);
@@ -1164,9 +1158,7 @@ public final class TestXdef extends XDTester {
 "    int count = 0;\n"+
 "  </xd:declaration>\n"+
 "  <xd:declaration scope='global'>\n"+
-"    void testparams(String i, int j, Datetime k) {\n"+
-"      outln('testparams ' + i + ',' + j + ',' + k);\n"+
-"    }\n"+
+"    void testparams(String i, int j, Datetime k) {outln('testparams ' + i + ',' + j + ',' + k);}\n"+
 "    String myStringa() { return 'myString'; }\n"+
 "    String myString(String p) {return myStringa() + ' ' + p;}\n"+
 "    String myString() { return myString('xxx'); }\n"+
