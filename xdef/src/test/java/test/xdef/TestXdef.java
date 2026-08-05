@@ -443,7 +443,6 @@ public final class TestXdef extends XDTester {
                 assertEq("XDEF569", reporter.getReport().getMsgID());
             }
         }
-        setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");
         try {//check empty attribute in model
             xp = compile("<xd:def xmlns:xd='"+_xdNS+"' root='A'><A a=''/></xd:def>");
             xml = "<A a='a'></A>";
@@ -475,6 +474,9 @@ public final class TestXdef extends XDTester {
             xml = "<A a='aaa'/>";
             assertEq(xml, parse(xp, "", xml, reporter));
             assertTrue(reporter.errorWarnings());
+            xml = dataDir + "Test002_6.xml";
+            s = getProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS);
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");//don't clear temporary reports (true is default)
             xp = compile( // check onAbsence not invoked after attribute was deleted in onFalse section
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"int; onFalse setText((String)null); onAbsence error('X1','x')\">\n"+
@@ -482,6 +484,7 @@ public final class TestXdef extends XDTester {
 "  </a>\n"+
 "</xd:def>");
             assertEq("<a/>", parse(xp, null, "<a a='c'>d</a>", reporter));
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, s); // reset previous value
             s = reporter.printToString();
             assertTrue(s.contains("path=/a/text()")&&s.contains("XDEF527")&&!s.contains("X1")&&!s.contains("X2"), s);
             assertEq("<a/>", parse(xp, null, "<a/>", reporter));
@@ -895,18 +898,27 @@ public final class TestXdef extends XDTester {
             assertErrorsAndClear(reporter);
         } catch (RuntimeException ex) {fail(ex);}
         try {//ignoreEmptyAttributes
-            xp = compile( //errors
+            s = getProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS);
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");//don't clear temporary reports (true is default)
+            xp = compile( //errors reported
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <a a=\"required enum('A','B','C'); onFalse {out('error');} onAbsence {out('missing');}\n"+
 "       options ignoreEmptyAttributes, trimAttr\"/>\n"+
 "</xd:def>");
             xml = "<a a = ' '/>";
             parse(xp, "", xml, reporter, swr = new StringWriter(), null, null);
-            assertTrue(reporter.errorWarnings() && "XDEF526".equals(reporter.getReport().getMsgID()));
-            assertEq("missing", swr.toString());
-            xp = compile( //errors cleared
+            xp = compile( //errors reported
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <a a=\"required enum('A','B','C'); onFalse {out('error');clearReports();}\n"+
+"  <a a=\"required enum('A','B','C'); onFalse {out('error');} onAbsence {out('missing'); clearReports();}\n"+
+"       options ignoreEmptyAttributes, trimAttr\"/>\n"+
+"</xd:def>");
+            parse(xp, "", xml, reporter, swr = new StringWriter(), null, null);
+            assertNoErrorwarningsAndClear(reporter);
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, s); //reset previous value
+            assertEq("missing", swr.toString());
+            xp = compile( //errors cleared due to XDPROPERTY_CLEAR_REPORTS is defaur (i.e. true)
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
+"  <a a=\"required enum('A','B','C'); onFalse {out('error')}\n"+
 "       onAbsence {out('missing'); clearReports();} options ignoreEmptyAttributes,trimAttr\"/>\n"+
 "</xd:def>");
             parse(xp, "", "<a a=' '/>", reporter, swr = new StringWriter(), null, null);
@@ -924,7 +936,6 @@ public final class TestXdef extends XDTester {
             s = el.getAttribute("a");
             assertTrue("2".equals(s), "a = " + s);
         } catch (Exception ex) {fail(ex);}
-        setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "true");
         try { // test exception
             xp = compile( // check in the onIllegalRoot
 "<x:def xmlns:x ='"+_xdNS+"' root='a' x:script=\"onIllegalRoot throw new Exception('OK')\">\n"+
