@@ -1,3 +1,5 @@
+# Version ${version}, release-date ${release.date}
+
 # Version 42.2.46, release-date 2026-08-05
   * Fixed bug in JSON model if not quoted string value is `null`.
   * JSON format of the X-definition has been changed and improved.
