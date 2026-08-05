@@ -512,28 +512,30 @@ public final class Test002 extends XDTester {
             }
         } catch (IOException | RuntimeException ex) {fail(ex);}
         try {
-            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <x:declaration xmlns:x='"+_xdNS+"'>\n"+
 "    external method boolean test.xdef.Test002.unknown(XXData, XDValue[]);\n"+
 "    external method boolean test.xdef.Test002.known(XXData);\n"+
-"    boolean t1(){return unknown() OOR string(%pattern='[A-Z]{2}[0-9]{6}');}\n"+
-"    boolean t2(){return NOT known() ||string(%pattern='[A-Z]{2}[0-9]{6}');}\n"+
+"    boolean t1() {return unknown() OOR string(%pattern='[A-Z]{2}[0-9]{6}');}\n"+
+"    boolean t2() {return NOT known() || string(%pattern='[A-Z]{2}[0-9]{6}');}\n"+
 "  </x:declaration>\n"+
-"  <a a1=\"optional t1(); onFalse out('ERR1')\" a2=\"optional t2(); onFalse out('ERR2')\"/>\n"+
+"  <a a1=\"optional t1(); onFalse out('ERR1')\" a2=\"optional t2(); onFalse out('ERR2');\"/>\n"+
 "</xd:def>\n";
             xml = "<a a1='???' a2='???'/>";
             assertFalse(test(xdef, xml, "",'P', xml, ""));
             xml = "<a a1='AA999991' a2='AA999992'/>";
             assertFalse(test(xdef, xml, "",'P', xml, ""));
+
             xdef = dataDir + "Test002_6.xdef"; //test macros, errors etc.
             xml = dataDir + "Test002_6.xml";
+            s = getProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS);
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "false");//don't clear temporary reports (true is default)
             assertEq(xml, parse(xdef, "LDN", xml, reporter, swr = new StringWriter(), null, null));
+            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, s); //reset previous value
             assertEq(swr.toString(), "XDOUT: ISDN_LDN - ISDN4202/DnSearch/@KodNdnDuvodLustrace\n");
             s = reporter.printToString("slk");
             assertTrue(s.contains("ISDN4202:") && s.contains("XDEF526:") && s.contains("riadok"), s);
-            setProperty(XDConstants.XDPROPERTY_CLEAR_REPORTS, "true");
             xdef = // external methods
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A xd:script=\"finally {out(tab('a', 'b')); pp()}\" />\n"+
