@@ -472,14 +472,25 @@ public final class Playground extends XdefServletAbs {
         ini,
         ;
 
-        static XdDataFormat valueOfN(String val) {
+        /**
+         * convert string to {@link XdDataFormat}
+         * @param dataFormat    data-format as string
+         * @return converted <code>dataFormat</code> to {@link XdDataFormat}, if not exists returns <code>null</code>
+         */
+        static XdDataFormat valueOfN(String dataFormat) {
             try {
-                return XdDataFormat.valueOf(val);
+                return XdDataFormat.valueOf(dataFormat);
             } catch (IllegalArgumentException ex) {
                 return null;
             }
         }
 
+        /**
+         * convert string to {@link XdDataFormat}
+         * @param dataFormat    data-format as string
+         * @param defaultt      default value, if not <code>dataFormat</code> exists
+         * @return converted <code>dataFormat</code> to {@link XdDataFormat}, if not exists returns <code>defaultt</code>
+         */
         static XdDataFormat valueOfN(String val, XdDataFormat defaultt) {
             return Optional.ofNullable(XdDataFormat.valueOfN(val))
                 .orElse(defaultt)
