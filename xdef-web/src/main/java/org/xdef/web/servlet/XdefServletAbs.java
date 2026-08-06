@@ -10,9 +10,9 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xdef.XDConstants;
-import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
+import org.xdef.sys.SManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -41,12 +41,11 @@ public abstract class XdefServletAbs extends HttpServlet {
 
 
     static {
-        //set X-definition report-language globally synchronized
-        synchronized (Report.class) {
-            Report.setLanguage(reportLangDefault);
+        //set X-definition report-language globally
+        if (!reportLangDefault.equals(SManager.getLanguage())) {
+            SManager.setLanguage(reportLangDefault);
+            logger.info("set X-definition report-language globally to: " + reportLangDefault);
         }
-
-        logger.info("set X-definition report-language globally to: " + reportLangDefault);
     }
 
 
@@ -80,8 +79,9 @@ public abstract class XdefServletAbs extends HttpServlet {
         //process warnings
         props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
         //disable doctype, xinclude by security-reasons, prevent of (not functional):
-        // - XSS (Cross-Site Scripting) Attacks)
+        // - --XSS (Cross-Site Scripting) Attacks)-- (FIXME: doesn't prevent)
         // - XXE (XML eXternal Entity) injection?)
+        // - XINCLUDE (XML XINCLUDE feature)
         props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
         props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
 
