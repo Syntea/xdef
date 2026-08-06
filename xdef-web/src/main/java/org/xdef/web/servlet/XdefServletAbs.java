@@ -41,8 +41,11 @@ public abstract class XdefServletAbs extends HttpServlet {
 
 
     static {
-        //set X-definition report-language globally
-        Report.setLanguage(reportLangDefault);
+        //set X-definition report-language globally synchronized
+        synchronized (Report.class) {
+            Report.setLanguage(reportLangDefault);
+        }
+
         logger.info("set X-definition report-language globally to: " + reportLangDefault);
     }
 
