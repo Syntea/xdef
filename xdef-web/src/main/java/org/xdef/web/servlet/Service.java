@@ -23,18 +23,18 @@ import jakarta.servlet.http.Part;
  * @author Vaclav Trojan
  */
 @MultipartConfig
-public final class Service extends AbstractMyServlet {
+public final class Service extends XdefServletAbs {
 
     private static final long serialVersionUID = 8846128427001680285L;
 
     /** Base directory. */
-    protected File _baseDir = null;
+    protected File _baseDir         = null;
     /** Temporary directory for 100MB. */
-    protected File _tempDir100MB = null;
+    protected File _tempDir100MB    = null;
     /** Temporary directory for 400MB. */
-    protected File _tempDir400MB = null;
+    protected File _tempDir400MB    = null;
     /** Directory with data. */
-    protected File _dataDir = null;
+    protected File _dataDir         = null;
 
 
     /** default constructor, calls super() only */
@@ -112,48 +112,46 @@ public final class Service extends AbstractMyServlet {
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
         // This part we must synchronize to keep language settings for whole process of the X-definition.
-        synchronized(MANAGER) {
+        synchronized(Report.class) {
             Report.setLanguage("eng");
             String contentType = (contentType = req.getContentType()) == null ? "" : contentType;
             if (null != req.getParameter("fileDownLoad")) {
-                String s = getParam(req, "fileDownLoad");
+                String s = ServletUtil.getParam(req, "fileDownLoad");
                 File f = new File(new File(_baseDir, "data"), s);
                 if (!f.exists() || !f.isFile()) {
                     resp.getWriter().println("File " + s + " not exists");
                 } else if (f.length() > 100000000) { // 100MB max
                     resp.getWriter().println("File "+s+" is longer then 100MB");
                 } else {
-                    synchronized (MANAGER) {
-                        byte[] bytes;
+                    byte[] bytes;
+                    try {
+                        bytes = FUtils.readBytes(f);
+                    } catch (SException ex) {
+                        resp.getWriter().println("Error:  " + ex);
+                        return;
+                    }
+                    String chs = ServletUtil.getParam(req, "chset");
+                    if (!chs.isEmpty()) {
                         try {
-                            bytes = FUtils.readBytes(f);
-                        } catch (SException ex) {
+                            bytes = new String(bytes,"UTF-8").getBytes(chs);
+                        } catch (UnsupportedEncodingException ex) {
                             resp.getWriter().println("Error:  " + ex);
                             return;
                         }
-                        String chs = getParam(req, "chset");
-                        if (!chs.isEmpty()) {
-                            try {
-                                bytes = new String(bytes,"UTF-8").getBytes(chs);
-                            } catch (UnsupportedEncodingException ex) {
-                                resp.getWriter().println("Error:  " + ex);
-                                return;
-                            }
-                        }
-                        resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + f.getName() + "\";");
-                        try (ServletOutputStream os = resp.getOutputStream()) {
-                            os.write(bytes);
-                            os.flush();
-                            os.close();
-                        }
+                    }
+                    resp.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + f.getName() + "\";");
+                    try (ServletOutputStream os = resp.getOutputStream()) {
+                        os.write(bytes);
+                        os.flush();
+                        os.close();
                     }
                 }
                 return;
             }
             PrintWriter out = resp.getWriter();
             if (null != req.getParameter("fileDelete")) {
-                String s = getParam(req, "fileDelete");
+                String s = ServletUtil.getParam(req, "fileDelete");
                 if (s.isEmpty()) {
                     out.println("Error: No file selected.");
                     return;
@@ -224,25 +222,25 @@ public final class Service extends AbstractMyServlet {
 "  <body>     \n" +
 "    <form style='background: #EAFFFD' method=\"post\"\n" +
 "          action='Service' enctype='multipart/form-data'>");
-                if (!getParam(req, "upload").isEmpty()) {
+                if (!ServletUtil.getParam(req, "upload").isEmpty()) {
                     out.println(
 "      <b>Choose a file to upload:</b>\n" +
 "      <input name='uploadfile' type='file' />\n" +
 "      <br/>\n" +
 "      <input type=\"submit\" value=\"Upload\" />");
-                } else if (!getParam(req, "download").isEmpty()) {
+                } else if (!ServletUtil.getParam(req, "download").isEmpty()) {
                     out.println(
 "      <b>File name:</b>\n" +
 "      <input type=\"text\" name=\"fileDownLoad\" value=\"\"/>\n" +
 "      <input type=\"submit\" value=\"download\" />");
-                } else if (!getParam(req, "upload").isEmpty()) {
+                } else if (!ServletUtil.getParam(req, "upload").isEmpty()) {
                     out.println(
 "      <span style='font-family:\"Sylfaen\",\"serif\"'>\n" +
 "        <b>Directory/filename:</b>\n" +
 "        <input type=\"text\" name=\"fileUpload\" value=\"\"/>\n" +
 "      </span>\n"+
 "      <input type=\"submit\" value=\"upload\" />");
-                } else if (!getParam(req, "delete").isEmpty()) {
+                } else if (!ServletUtil.getParam(req, "delete").isEmpty()) {
                     out.println(
 "      <span style='font-family:\"Sylfaen\",\"serif\"'>\n" +
 "        <b>Directory/filename:</b>\n" +

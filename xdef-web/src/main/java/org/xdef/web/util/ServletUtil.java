@@ -11,17 +11,35 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.servlet.http.HttpServletRequest;
+
+
 /**
- * Abstract servlet used for servlet implementation.
- * <p>
- * It sets globally and localy X-definition report-language
- * (ISO-639 two letters or ISO-639-2 three letters, e.g. "eng", "ces", "slk").
+ * utilities for servlets, only static usage
  *
- * @author Vaclav Trojan
+ * @author Vaclav Trojan, sisma
  */
-public abstract class ServletUtil {
+public class ServletUtil {
+
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(ServletUtil.class);
+
+
+    /** only static usage */
+    private ServletUtil() {}
+
+
+    /**
+     * Get parameter from servlet request.
+     *
+     * @param request   servlet request.
+     * @param name      name of parameter.
+     * @return trimmed value of parameter or an empty string.
+     */
+    public static final String getParam(final HttpServletRequest request, final String name) {
+        String result = request.getParameter(name);
+        return null == result ? "" : result.trim();
+    }
 
     /**
      * Create string from preText which can be inserted into HTML

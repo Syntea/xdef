@@ -13,7 +13,6 @@ import org.xdef.XDConstants;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
-import org.xdef.sys.SManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -30,19 +29,15 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author Vaclav Trojan
  */
 @MultipartConfig
-public abstract class AbstractMyServlet extends HttpServlet {
+public abstract class XdefServletAbs extends HttpServlet {
     private static final long serialVersionUID = -8154631839408075000L;
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractMyServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(XdefServletAbs.class);
 
     /** internal default X-definition reporter language */
-    private static final String         reportLangDefault   = "eng";
-
+    private   static final  String      reportLangDefault   = "eng";
     /** default X-definition properties */
-    protected static final Properties   XdPropsDefault      = getXdPropsDefault();
-
-    /** SManager used for reporting.*/
-    static final SManager MANAGER = SManager.getInstance();
+    protected static final  Properties  XdPropsDefault      = getXdPropsDefault();
 
 
     static {
@@ -53,66 +48,40 @@ public abstract class AbstractMyServlet extends HttpServlet {
 
 
     /** default constructor, calls super() only */
-    protected AbstractMyServlet() {
+    protected XdefServletAbs() {
         super();
     }
 
 
     /**
-     * Get parameter from servlet request.
-     *
-     * @param request servlet request.
-     * @param name name of parameter.
-     * @return trimmed value of parameter or an empty string.
-     */
-    public static final String getParam(final HttpServletRequest request, final String name) {
-        String result = request.getParameter(name);
-        return null == result ? "" : result.trim();
-    }
-
-    /**
      * Get listing from reporter.
      *
-     * @param reporter reporter with error and warning messages
-     * @param data string with source data
-     * @param reportLang reporter language
+     * @param reporter  reporter with error and warning messages
+     * @param data      string with source data
      * @return string with listing form of source data
      */
-    public static final String printReports(final ReportReader reporter, final String data, String reportLang) {
+    public static final String printReports(final ReportReader reporter, final String data) {
         Writer writer = new CharArrayWriter();
         Reader car = new CharArrayReader(data.toCharArray());
         ReportPrinter.printListing(
             writer, car, reporter,
             null, 120, false,
-            getReportLang(reportLang)
+            reportLangDefault
         );
         return writer.toString();
-    }
-
-    /**
-     * see {@link #printReports(ReportReader, String, String)} with reportLang = reportLangDefault
-     * @param reporter see
-     * @param data see
-     * @return see
-     */
-    public static final String printReports(final ReportReader reporter, final String data) {
-        return printReports(reporter, data, reportLangDefault);
-    }
-
-    /**
-     * Derives X-definition reporter language, using default value
-     *
-     * @param reportLang user reporter language
-     * @return derived X-definition reporter language
-     */
-    public final static String getReportLang(String reportLang) {
-        return reportLang == null || reportLang.isEmpty() ? reportLangDefault : reportLang;
     }
 
     /** @return default X-definition properties */
     private static Properties getXdPropsDefault() {
         Properties props = new Properties();
+        //process warnings
         props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+        //disable doctype, xinclude by security-reasons, prevent of (not functional):
+        // - XSS (Cross-Site Scripting) Attacks)
+        // - XXE (XML eXternal Entity) injection?)
+        props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
+        props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
+
         return props;
     }
 
@@ -205,13 +174,13 @@ public abstract class AbstractMyServlet extends HttpServlet {
      * response.
      */
     private static class ProcReq extends Thread {
-        private final AbstractMyServlet _x;
+        private final XdefServletAbs _x;
         private final HttpServletRequest _request;
         private final HttpServletResponse _response;
         private boolean _finished = false;
         private Exception _exception = null;
 
-        ProcReq(final HttpServletRequest request, final HttpServletResponse response, AbstractMyServlet x) {
+        ProcReq(final HttpServletRequest request, final HttpServletResponse response, XdefServletAbs x) {
             _request = request;
             _response = response;
             _exception = null;

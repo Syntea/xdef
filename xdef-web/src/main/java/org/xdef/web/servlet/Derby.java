@@ -40,7 +40,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
-public final class Derby extends AbstractMyServlet {
+public final class Derby extends XdefServletAbs {
     private static final long serialVersionUID = -6985097379384362122L;
     private final static Map<String, Long> DBMAP = new HashMap<>();
     private final static String DBPASSW = "blabla"; // password for database.
@@ -270,14 +270,14 @@ public final class Derby extends AbstractMyServlet {
         throws ServletException,IOException{
         // This part we must synchronize to keep language settings etc
         // for whole process of the X-definition.
-        synchronized(MANAGER) {
+        synchronized(Report.class) {
             resp.setContentType("text/html;charset=UTF-8");
             resp.setCharacterEncoding("UTF-8");
             PrintWriter out = resp.getWriter();
             req.setCharacterEncoding("UTF-8");
-            String database = getParam(req, "database");
-            String task = getParam(req, "task");
-            String mode = getParam(req, "mode");
+            String database = ServletUtil.getParam(req, "database");
+            String task     = ServletUtil.getParam(req, "task");
+            String mode     = ServletUtil.getParam(req, "mode");
             String outHtml;
             if (database.isEmpty()) { // new database
                 if (!task.equals("Create database")) { // incorrect task
@@ -351,9 +351,9 @@ public final class Derby extends AbstractMyServlet {
             }
             Report.setLanguage("eng");
             ArrayReporter reporter = new ArrayReporter();
-            String xdef = getParam(req, "xdef");
-            String data = getParam(req, "data");
-            String xdName = getParam(req, "xdname");
+            String xdef   = ServletUtil.getParam(req, "xdef");
+            String data   = ServletUtil.getParam(req, "data");
+            String xdName = ServletUtil.getParam(req, "xdname");
             String result;
             String stdOutput = "";
             XDPool xp = null;
@@ -410,10 +410,10 @@ public final class Derby extends AbstractMyServlet {
                             String name;
                             String uri;
                             XMDefinition def =  xd.getXMDefinition();
-                            String mName = getParam(req, "mName");
+                            String mName = ServletUtil.getParam(req, "mName");
                             if (null!=mName&&!(mName = mName.trim()).isEmpty()){
                                 name = mName;
-                                String mURI = getParam(req, "mURI");
+                                String mURI = ServletUtil.getParam(req, "mURI");
                                 uri = null != mURI && !(mURI= mURI.trim()).isEmpty() ? mURI : null;
                             } else {
                                 XMElement[] x =xd.getXMDefinition().getModels();
@@ -458,7 +458,7 @@ public final class Derby extends AbstractMyServlet {
                                     resultElement,true,false,true,110))
                                 + "</tt></pre>\n";
                         } else if (task.equals("finished")) {
-                            if ("Drop database".equals(getParam(req,"submit"))){
+                            if ("Drop database".equals(ServletUtil.getParam(req,"submit"))){
                                 DBMAP.remove(database);
                                 displayMsg(out, "Database removed",
                                     "Database has been cleaned and removed from database list.");
