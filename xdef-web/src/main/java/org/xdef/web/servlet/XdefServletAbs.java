@@ -44,8 +44,9 @@ public abstract class XdefServletAbs extends HttpServlet {
         //set X-definition report-language globally
         if (!reportLangDefault.equals(SManager.getLanguage())) {
             SManager.setLanguage(reportLangDefault);
-            logger.info("set X-definition report-language globally to: " + reportLangDefault);
         }
+
+        logger.info("set X-definition report-language globally to: " + SManager.getLanguage());
     }
 
 
