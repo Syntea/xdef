@@ -36,6 +36,7 @@ public class PomInfo {
     private String gitCommitId         = null;
     private String gitCommitIdAbbrev   = null;
     private String gitCommitTime       = null;
+
     private static final String     POMINFOPROPSNAME = "pominfo.properties";
     /** singleton instance */
     public static final PomInfo     POMINFO          = new PomInfo();
@@ -85,8 +86,8 @@ public class PomInfo {
 
     /** @return detailed identifier of the build - artifact-name, version, git-commit-info (mainly unexpected values) */
     public String getBuildIdentifier() {
-        boolean tagOK    = ("version/" + getVersion()).equals(gitTags);
-        boolean branchOK = "main".equals(gitBranch) || "origin/main".equals(gitBranch);
+        boolean tagOK = ("version/" + getVersion()).equals(gitTags);
+
         return
             groupId + ":" + artifactId + ":" + version + " (" +
             (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
@@ -96,7 +97,7 @@ public class PomInfo {
                         ? ", tags: " + gitTags
                         : ", commit " + gitCommitIdAbbrev + " " + gitCommitTime
                     ) +
-                    (branchOK || gitBranch.isEmpty() ? "" : ", branch: " + gitBranch)
+                    (gitBranch.isEmpty() ? "" : ", branch: " + gitBranch)
                 )) +
                 (!"true".equals(gitDirty)        ? "" : ", dirty-commit")
             )) +
