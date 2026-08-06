@@ -56,7 +56,7 @@ public final class Playground extends XdefServletAbs {
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
-    private static final String RESPONSE_HTML_TEMPL =
+    private static final String responseHtmlTempl =
         ServletUtil.readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
 
     /** default constructor, calls super() only */
@@ -344,7 +344,7 @@ public final class Playground extends XdefServletAbs {
         long timerEnd = new Date().getTime();
         values.put("timer-total",       Long.toString(timerEnd - pp.timerStart) + " ms");
 
-        return ServletUtil.mustache(RESPONSE_HTML_TEMPL, values);
+        return ServletUtil.mustache(responseHtmlTempl, values);
     }
 
     /** Returns a short description of this servlet.
