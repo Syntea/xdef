@@ -28,10 +28,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 /** Servlet for execution of examples from tutorial.
  * @author Vaclav Trojan
  */
-public final class GenSchema extends AbstractMyServlet {
+public final class GenSchema extends XdefServletAbs {
 
     private static final long serialVersionUID = -7389516366202036753L;
 
@@ -52,14 +53,16 @@ public final class GenSchema extends AbstractMyServlet {
         resp.setContentType("text/html;charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");
         // This part we must synchronize to keep language settings for whole process of the X-definition.
-        synchronized(MANAGER) {
+        synchronized(Report.class) {
             Report.setLanguage("eng");
-            String view = getParam(req, "view");
-            String xdName = getParam(req, "xdName");
-            String xdef = getParam(req, "xdef");
-            String data = getParam(req, "data");
-            String schemaResult = getParam(req, "schemaResult");
-            String schema = getParam(req, "schema");
+
+            String view         = ServletUtil.getParam(req, "view");
+            String xdName       = ServletUtil.getParam(req, "xdName");
+            String xdef         = ServletUtil.getParam(req, "xdef");
+            String data         = ServletUtil.getParam(req, "data");
+            String schemaResult = ServletUtil.getParam(req, "schemaResult");
+            String schema       = ServletUtil.getParam(req, "schema");
+
             PrintWriter out = resp.getWriter();
             try {
                 if ("toSchema".equals(schema)) {

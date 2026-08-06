@@ -41,6 +41,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 /**
  * Servlet for execution "Playground-online".
  * <p>
@@ -49,7 +50,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Vaclav Trojan
  */
-public final class Playground extends AbstractMyServlet {
+public final class Playground extends XdefServletAbs {
     private static final long serialVersionUID = 2277695929503402350L;
 
     @SuppressWarnings("unused")
@@ -92,7 +93,7 @@ public final class Playground extends AbstractMyServlet {
     {
         ProcessParams pp = new ProcessParams();
 
-        String        data2Xd  = rp.data;
+        String        data4Xd  = rp.data;
         XDPool        xdPool   = null;
         ArrayReporter reporter = new ArrayReporter();
 
@@ -112,12 +113,12 @@ public final class Playground extends AbstractMyServlet {
                     pp.message = printReports(reporter, rp.xdef);
 
                 } else {
-                    String  mode2Xd;
+                    String  mode4Xd;
                     Element resultElement = null;
 
                     reporter.clear();
-                    CharArrayWriter caw = new CharArrayWriter();
-                    XDOutput stdout = XDFactory.createXDOutput(caw, false);
+                    CharArrayWriter caw    = new CharArrayWriter();
+                    XDOutput        stdout = XDFactory.createXDOutput(caw, false);
 
                     XDDocument xd = xdPool.createXDDocument(rp.xdefRoot);
 
@@ -126,71 +127,76 @@ public final class Playground extends AbstractMyServlet {
 
                     //xdef-process
                     if ("compose".equals(rp.mode)) {
-                        String name;
                         String uri;
+                        String name;
 
                         if (!rp.modelName.isEmpty()) {
-                            name = rp.modelName;
                             uri  = !rp.modelURI.isEmpty() ? rp.modelURI : null;
+                            name = rp.modelName;
                         } else {
                             XMElement[] x = xd.getXMDefinition().getModels();
-                            name = x[0].getName();
+
+                            if (x.length < 1) {
+                                throw new RuntimeException("Error: X-definition contains no models");
+                            }
+
                             uri  = x[0].getNSUri();
+                            name = x[0].getName();
                         }
 
-                        if (data2Xd.length() > 0) {
-                            Element el = KXmlUtils.parseXml(data2Xd).getDocumentElement();
+                        if (data4Xd.length() > 0) {
+                            Element      el  = KXmlUtils.parseXml(data4Xd).getDocumentElement();
                             xd.setXDContext(el);
-                            String n = el.getLocalName();
-                            String u = el.getNamespaceURI();
+                            String       u   = el.getNamespaceURI();
+                            String       n   = el.getLocalName();
                             XMDefinition def = xd.getXMDefinition();
 
-                            if (null != def && null != def.getModel(u, n)) {
-                                name = n;
+                            if (def != null && def.getModel(u, n) != null) {
                                 uri  = u;
+                                name = n;
                             }
                         }
 
-                        mode2Xd       = "compose";
+                        mode4Xd       = "compose";
                         resultElement = xd.xcreate(new QName(uri, name), reporter);
                     } else {
                         if (rp.dataFormat == XdDataFormat.json || rp.dataFormat == XdDataFormat.xon ||
                             rp.dataFormat == XdDataFormat.yaml
                         ) {
-                            if (data2Xd.startsWith("<") && data2Xd.endsWith(">")) { //XON in XML-format
-                                data2Xd = XonUtils.toJsonString(XonUtils.xmlToXon(data2Xd), true);
+                            if (data4Xd.startsWith("<") && data4Xd.endsWith(">")) { //XON in XML-format
+                                data4Xd = XonUtils.toJsonString(XonUtils.xmlToXon(data4Xd), true);
                             } else if (rp.dataFormat == XdDataFormat.json) { //JSON
-                                XonUtils.parseJSON(data2Xd);
+                                XonUtils.parseJSON(data4Xd);
                             } else if (rp.dataFormat == XdDataFormat.xon) { //XON
-                                data2Xd = XonUtils.toJsonString(XonUtils.parseXON(data2Xd), true);
+                                data4Xd = XonUtils.toJsonString(XonUtils.parseXON(data4Xd), true);
                             } else if (rp.dataFormat == XdDataFormat.yaml) { //YAML
-                                data2Xd = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data2Xd)), true);
+                                data4Xd = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data4Xd)), true);
                             }
 
-                            mode2Xd   = "validate-json";
-                            pp.resultXon = xd.jparse(data2Xd, reporter);
+                            mode4Xd   = "validate-json";
+                            pp.resultXon = xd.jparse(data4Xd, reporter);
                         } else if (rp.dataFormat == XdDataFormat.ini) {
-                            mode2Xd   = "validate-ini";
-                            pp.resultXon = xd.iparse(data2Xd, reporter);
+                            mode4Xd   = "validate-ini";
+                            pp.resultXon = xd.iparse(data4Xd, reporter);
                         } else if (rp.dataFormat == XdDataFormat.csv) {
-                            mode2Xd   = "validate-csv";
+                            mode4Xd   = "validate-csv";
                             pp.resultXon = xd.cparse(
-                                new StringReader(data2Xd),
+                                new StringReader(data4Xd),
                                 ',', // separator
                                 rp.csvHeader.equals("no"),
                                 null, // source name
                                 reporter
                             );
                         } else if (!rp.langOut.isEmpty()) {
-                            mode2Xd       = "translate";
-                            resultElement = xd.xtranslate(data2Xd, rp.langInp, rp.langOut, reporter);
+                            mode4Xd       = "translate";
+                            resultElement = xd.xtranslate(data4Xd, rp.langInp, rp.langOut, reporter);
                         } else {
                             if (!rp.langInp.isEmpty()) {
                                 xd.setLexiconLanguage(rp.langInp);
                                 xd.getLexiconLanguage();
                             }
-                            mode2Xd       = "validate";
-                            resultElement = xd.xparse(data2Xd, reporter);
+                            mode4Xd       = "validate";
+                            resultElement = xd.xparse(data4Xd, reporter);
                         }
                     }
                     caw.close();
@@ -202,14 +208,14 @@ public final class Playground extends AbstractMyServlet {
                     if (reporter.errors()) {
                         pp.status  = "Error";
                         pp.title   = "Input data error(s)";
-                        pp.message = printReports(reporter, data2Xd);
+                        pp.message = printReports(reporter, data4Xd);
                     } else {
                         pp.status = "OK";
-                        pp.title  = "Result — mode \"" + mode2Xd + "\"";
+                        pp.title  = "Result — mode \"" + mode4Xd + "\"";
 
                         if (reporter.errorWarnings()) {
                             //reporter contains some warnings
-                            pp.message = printReports(reporter, data2Xd);
+                            pp.message = printReports(reporter, data4Xd);
                         }
 
                         if (resultElement != null) {
@@ -246,7 +252,7 @@ public final class Playground extends AbstractMyServlet {
             }
             reporter.reset();
             pp.message =
-                printReports(reporter, data2Xd) +
+                printReports(reporter, data4Xd) +
                 "\n\nException:\n" +
                 STester.printThrowable(ex)
             ;
@@ -502,35 +508,35 @@ public final class Playground extends AbstractMyServlet {
      * </ul>
      */
     private static class RequestParams {
-        String xdefRoot;
-        String xdef;
-        XdDataFormat dataFormat;
-        String data;
-        String mode;
-        String langInp;
-        String langOut;
-        String modelName;
-        String modelURI;
-        List<XdDataFormat> xonDisplayAs;
-        String csvHeader;
+        String              xdefRoot;
+        String              xdef;
+        XdDataFormat        dataFormat;
+        String              data;
+        String              mode;
+        String              langInp;
+        String              langOut;
+        String              modelName;
+        String              modelURI;
+        List<XdDataFormat>  xonDisplayAs;
+        String              csvHeader;
 
         private RequestParams(HttpServletRequest req) {
             //request parameters: see javadoc
-            xdefRoot            = getParam(req, "xdefRoot");
-            xdef                = getParam(req, "xdef");
-            String dataFormatS  = getParam(req, "dataFormat").toLowerCase();
-            data                = getParam(req, "data");
-            mode                = getParam(req, "mode").toLowerCase();
-            langInp             = getParam(req, "langInp").toLowerCase();
-            langOut             = getParam(req, "langOut").toLowerCase();
-            modelName           = getParam(req, "modelName");
-            modelURI            = getParam(req, "modelURI");
-            xonDisplayAs        = Stream.of(getParam(req, "xonDisplayAs").toLowerCase().split("(\\s|,)+"))
+            xdefRoot            = ServletUtil.getParam(req, "xdefRoot");
+            xdef                = ServletUtil.getParam(req, "xdef");
+            String dataFormatS  = ServletUtil.getParam(req, "dataFormat").toLowerCase();
+            data                = ServletUtil.getParam(req, "data");
+            mode                = ServletUtil.getParam(req, "mode").toLowerCase();
+            langInp             = ServletUtil.getParam(req, "langInp").toLowerCase();
+            langOut             = ServletUtil.getParam(req, "langOut").toLowerCase();
+            modelName           = ServletUtil.getParam(req, "modelName");
+            modelURI            = ServletUtil.getParam(req, "modelURI");
+            xonDisplayAs        = Stream.of(ServletUtil.getParam(req, "xonDisplayAs").toLowerCase().split("(\\s|,)+"))
                 .map(xdfs -> XdDataFormat.valueOfN(xdfs))
                 .filter(xdf -> xdf != null)
                 .collect(Collectors.toList())
             ;
-            csvHeader           = getParam(req, "csvHeader").toLowerCase();
+            csvHeader           = ServletUtil.getParam(req, "csvHeader").toLowerCase();
 
             //process default values and conversions
             xdefRoot    = xdefRoot.isEmpty() ? null : xdefRoot;
