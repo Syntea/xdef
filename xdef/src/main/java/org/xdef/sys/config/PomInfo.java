@@ -90,12 +90,16 @@ public class PomInfo {
         return
             groupId + ":" + artifactId + ":" + version + " (" +
             (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
-            (gitCommitIdAbbrev.isEmpty() ? "" :
-                (tagOK || gitTags.isEmpty()      ? "" : ", tags: " + gitTags) +
-                (tagOK || !gitTags.isEmpty()     ? "" : ", commit " + gitCommitIdAbbrev + " " + gitCommitTime) +
-                (branchOK || gitBranch.isEmpty() ? "" : ", branch: " + gitBranch) +
+            (gitCommitIdAbbrev.isEmpty() ? "" : (
+                (tagOK ? "" : (
+                    (!gitTags.isEmpty()
+                        ? ", tags: " + gitTags
+                        : ", commit " + gitCommitIdAbbrev + " " + gitCommitTime
+                    ) +
+                    (branchOK || gitBranch.isEmpty() ? "" : ", branch: " + gitBranch)
+                )) +
                 (!"true".equals(gitDirty)        ? "" : ", dirty-commit")
-            ) +
+            )) +
             ")"
         ;
     }
