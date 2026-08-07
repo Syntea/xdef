@@ -67,12 +67,22 @@ public abstract class XdefServletAbs extends HttpServlet {
         Properties props = new Properties();
         //process warnings
         props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-        //disable doctype, xinclude by security-reasons, prevent of:
-        // - XXE (XML eXternal Entity) injection?) (FIXME: not functional)
+        //in XML disable doctype, xinclude by security-reasons, prevent of:
+        //1. XXE (XML eXternal Entity) injection?)
         //   for example: <!DOCTYPE r [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><r>&xxe;</r>
-        props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
-        // - XINCLUDE (XML XINCLUDE feature)
-        props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
+        //sax-parser: need to set
+        //DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+        //disable doctype:
+        //BUILDER_FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        //or if DOCTYPE must be enabled
+        //BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",          false);
+        //BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities",        false);
+        //BUILDER_FACTORY.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        //
+        //props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE); //(FIXME: not functional)
+        //
+        //2. XINCLUDE (XML XINCLUDE feature)
+        //props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE); //(FIXME: not functional)
 
         return props;
     }
