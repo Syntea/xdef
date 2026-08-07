@@ -2,7 +2,7 @@
 
 This is a directory with complete documentation.
 
-Original source code are doc-files. Pdf-files are generated from doc-files.
+Original source documentation files are docx-files. Distributed pdf-files are generated from docx-files.
 
 Description of individual files follow:
   * "xdef-4.2"

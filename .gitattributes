@@ -1,9 +1,25 @@
 #set the default behavior, in case people don't have core.autocrlf set
 * text=auto
 
-#shell-files will always have LF line endings on checkout
+#shell-files are LF-ending
 *.sh text eol=lf
 
-#cmd-files will always have CRLF line endings on checkout
+#cmd/bat-files are CRLF-ending
 *.cmd text eol=crlf
+*.bat text eol=crlf
 
+#modul xdef-web, web-text-files are LF-ending
+xdef-web/src/main/webapp/**/*.html                                  text eol=lf
+xdef-web/src/main/webapp/**/*.css                                   text eol=lf
+xdef-web/src/main/webapp/**/*.xml                                   text eol=lf
+xdef-web/src/main/webapp/**/*.svg                                   text eol=lf
+xdef-web/src/main/webapp/**/*.js                                    text eol=lf
+xdef-web/src/main/resources/org/xdef/web/servlet/webapp/**/*.html   text eol=lf
+xdef-web/src/main/resources/org/xdef/web/servlet/webapp/**/*.css    text eol=lf
+xdef-web/src/main/resources/org/xdef/web/servlet/webapp/**/*.xml    text eol=lf
+xdef-web/src/main/resources/org/xdef/web/servlet/webapp/**/*.svg    text eol=lf
+xdef-web/src/main/resources/org/xdef/web/servlet/webapp/**/*.js     text eol=lf
+
+#custom diff driver
+*.docx binary diff=word
+*.pdf  binary diff=pdf
