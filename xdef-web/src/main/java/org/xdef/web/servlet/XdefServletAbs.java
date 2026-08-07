@@ -13,6 +13,7 @@ import org.xdef.XDConstants;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.SManager;
+import org.xdef.sys.SRuntimeException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -34,19 +35,24 @@ public abstract class XdefServletAbs extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(XdefServletAbs.class);
 
-    /** internal default X-definition reporter language */
-    private   static final  String      reportLangDefault   = "eng";
     /** default X-definition properties */
     protected static final  Properties  XdPropsDefault      = getXdPropsDefault();
+    /** internal default X-definition reporter language */
+    private   static final  String      reportLangDefault   = "eng";
 
 
     static {
         //set X-definition report-language globally
-        if (!reportLangDefault.equals(SManager.getLanguage())) {
+        try {
             SManager.setLanguage(reportLangDefault);
+            logger.info("X-definition report-language set globally to: " + SManager.getLanguage());
+        } catch (SRuntimeException ex) {
+            SManager.setLanguage(SManager.getDefaultLanguage());
+            logger.warn(
+                "X-definition report-language set globally to: " + SManager.getLanguage() +
+                " (fallback: set to required language " + reportLangDefault + " failed: " + ex.getMessage() + ")"
+            );
         }
-
-        logger.info("set X-definition report-language globally to: " + SManager.getLanguage());
     }
 
 
@@ -56,37 +62,47 @@ public abstract class XdefServletAbs extends HttpServlet {
     }
 
 
-    /**
-     * Get listing from reporter.
-     *
-     * @param reporter  reporter with error and warning messages
-     * @param data      string with source data
-     * @return string with listing form of source data
-     */
-    public static final String printReports(final ReportReader reporter, final String data) {
-        Writer writer = new CharArrayWriter();
-        Reader car = new CharArrayReader(data.toCharArray());
-        ReportPrinter.printListing(
-            writer, car, reporter,
-            null, 120, false,
-            reportLangDefault
-        );
-        return writer.toString();
-    }
-
     /** @return default X-definition properties */
     private static Properties getXdPropsDefault() {
         Properties props = new Properties();
         //process warnings
         props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-        //disable doctype, xinclude by security-reasons, prevent of (not functional):
-        // - --XSS (Cross-Site Scripting) Attacks)-- (FIXME: doesn't prevent)
-        // - XXE (XML eXternal Entity) injection?)
-        // - XINCLUDE (XML XINCLUDE feature)
+        //disable doctype, xinclude by security-reasons, prevent of:
+        // - XXE (XML eXternal Entity) injection?) (FIXME: not functional)
+        //   for example: <!DOCTYPE r [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><r>&xxe;</r>
         props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
+        // - XINCLUDE (XML XINCLUDE feature)
         props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
 
         return props;
+    }
+
+    /**
+     * Get listing from reporter.
+     *
+     * @param reporter  reporter with error and warning messages
+     * @param data      string with source data
+     * @param language  reporter-language, <code>null</code> means default language
+     * @return string with listing form of source data
+     */
+    public static final String printReports(final ReportReader reporter, final String data, final String language) {
+        Writer writer = new CharArrayWriter();
+        Reader car = new CharArrayReader(data.toCharArray());
+        ReportPrinter.printListing(
+            writer, car, reporter,
+            null, 120, false,
+            language
+        );
+        return writer.toString();
+    }
+
+    /** see {@link #printReports(ReportReader, String, String)} with <code>language = null</code>
+     * @param reporter ...
+     * @param data ...
+     * @return ...
+     */
+    public static final String printReports(final ReportReader reporter, final String data) {
+        return printReports(reporter, data, null);
     }
 
     /** Handles the HTTP <code>GET</code> method.
