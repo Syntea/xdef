@@ -282,24 +282,24 @@ public final class Playground extends XdefServletAbs {
         Map<String, String> values = new HashMap<>();
         values.put("xdef-lib-id",       XDConstants.BUILD_IDENTIFIER);
 
-        values.put("xdefRoot",          Optional.ofNullable(rp.xdefRoot).orElse(""));
+        values.put("xdefRoot",          Optional.ofNullable(ServletUtil.htmlToAttrVal(rp.xdefRoot)).orElse(""));
         values.put("xdef",              ServletUtil.preTextToPreCont(rp.xdef));
         values.put("xdefLines",         Integer.toString(rp.xdef.split("\n").length + 1));
         values.put("dataFormat",        rp.dataFormat.name());
         values.put("dataFormatUp",      rp.dataFormat.name().toUpperCase());
         values.put("langInp-disp",      lexEx ? "block" : "none");
-        values.put("langInp",           rp.langInp);
+        values.put("langInp",           ServletUtil.htmlToAttrVal(rp.langInp));
         values.put("data",              ServletUtil.preTextToPreCont(rp.data));
         values.put("dataLines",         Integer.toString(rp.data.split("\n").length + 1));
         values.put("model-disp",        "compose".equals(rp.mode) ? "block" : "none");
-        values.put("modelName",         rp.modelName);
-        values.put("modelURI",          rp.modelURI);
+        values.put("modelName",         ServletUtil.htmlToAttrVal(rp.modelName));
+        values.put("modelURI",          ServletUtil.htmlToAttrVal(rp.modelURI));
         values.put("csvHeader-disp",    rp.dataFormat == XdDataFormat.csv ? "block" : "none");
         values.put("csvHeader-sel",     "yes".equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
         values.put("xonDisplayAs-disp", !rp.xonDisplayAs.isEmpty() ? "block" : "none");
         values.put("xonDisplayAs",      rp.xonDisplayAs.stream().map(XdDataFormat::name) .collect(Collectors.joining(" ")));
         values.put("langOut-disp",      lexEx ? "block" : "none");
-        values.put("langOut",           rp.langOut);
+        values.put("langOut",           ServletUtil.htmlToAttrVal(rp.langOut));
         values.put("mode",              rp.mode);
 
         values.put("status",            pp.status);
