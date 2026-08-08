@@ -297,7 +297,7 @@ public final class Playground extends XdefServletAbs {
         values.put("csvHeader-disp",    rp.dataFormat == XdDataFormat.csv ? "block" : "none");
         values.put("csvHeader-sel",     "yes".equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
         values.put("xonDisplayAs-disp", !rp.xonDisplayAs.isEmpty() ? "block" : "none");
-        values.put("xonDisplayAs",      rp.xonDisplayAs.stream().map(XdDataFormat::name) .collect(Collectors.joining(" ")));
+        values.put("xonDisplayAs",      rp.xonDisplayAs.stream().map(XdDataFormat::name).collect(Collectors.joining(" ")));
         values.put("langOut-disp",      lexEx ? "block" : "none");
         values.put("langOut",           ServletUtil.htmlToAttrVal(rp.langOut));
         values.put("mode",              rp.mode);
