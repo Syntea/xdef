@@ -59,10 +59,10 @@ expires in 30&thinsp;min of idle-time)
   &lt;Book title="string" ISBN="regex('\\d{8,10}')" issued="optional gYear()"
      xd:script="occurs *; onStartElement {
        if (ignored = isTitle.hasItem(toString(@title))) {
-         outln('Error: book \'' + @title + '\' already exists');
+         outln('ERROR: already exists: book \'' + @title + '\'');
        } else {
          insertTitle.execute(toString(@title),toString(@ISBN),toString(@issued));
-         outln('ISBN:'+@ISBN+'; '+@title);
+         outln('INFO: inserted: book \'' + @title + '\' ISBN: ' + @ISBN);
        }
      }"
   >
