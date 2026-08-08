@@ -48,7 +48,7 @@ public class ServletUtil {
     }
 
     /**
-     * Create string from preText which can be inserted into HTML
+     * Create string from preText which can be inserted into HTML.
      *
      * @param preText pre-formatted text to be converted
      * @param pre if true convert to as inside pre-element. Otherwise convert to as inside div-element
@@ -273,6 +273,7 @@ public class ServletUtil {
     }
 
     /**
+     * Converts XON to the format <code>outFormat</code>
      * @param xon       Xon input data
      * @param outFormat output format
      * @return          converted <code>xon</code> in format <code>outFormat</code>

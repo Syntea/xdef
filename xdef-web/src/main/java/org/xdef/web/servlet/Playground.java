@@ -61,7 +61,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public final class Playground extends XdefServletAbs {
     private static final long serialVersionUID = 2277695929503402350L;
 
-    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(Playground.class);
 
     private static final String responseHtmlTempl =
@@ -110,14 +109,14 @@ public final class Playground extends XdefServletAbs {
             throw new RuntimeException(ex);
         }
 
+        //stop db-sweeping thread
         dbCleanupTimer.shutdownNow();
 
         super.destroy();
     }
 
-    /** Returns a short description of this servlet.
-     * @return short description of this servlet.
-     */
+    /** see {@link XdefServletAbs#getServletInfo()}
+     * @return ... */
     @Override
     public final String getServletInfo() {
         return "This servlet executes a X-definition with given XML/XON data";
@@ -168,7 +167,7 @@ public final class Playground extends XdefServletAbs {
 
                 if (reporter.errorWarnings()) {
                     //incorrect X-definition
-                    pp.status  = "Error";
+                    pp.status  = CT.stError;
                     pp.title   = "X-definition error(s)";
                     pp.message = printReports(reporter, rp.xdef);
 
@@ -193,7 +192,7 @@ public final class Playground extends XdefServletAbs {
                     }
 
                     //xdef-process
-                    if ("compose".equals(rp.mode)) {
+                    if (CT.modeCompose.equals(rp.mode)) {
                         String uri;
                         String name;
 
@@ -224,7 +223,7 @@ public final class Playground extends XdefServletAbs {
                             }
                         }
 
-                        mode4Xd       = "compose";
+                        mode4Xd       = CT.modeCompose;
                         resultElement = xd.xcreate(new QName(uri, name), reporter);
                     } else {
                         if (rp.dataFormat == XdDataFormat.json || rp.dataFormat == XdDataFormat.xon ||
@@ -242,29 +241,29 @@ public final class Playground extends XdefServletAbs {
                                 );
                             }
 
-                            mode4Xd   = "validate-json";
+                            mode4Xd      = CT.modeValidate + "-" + XdDataFormat.json.name();
                             pp.resultXon = xd.jparse(data4Xd, reporter);
                         } else if (rp.dataFormat == XdDataFormat.ini) {
-                            mode4Xd   = "validate-ini";
+                            mode4Xd      = CT.modeValidate + "-" + XdDataFormat.ini.name();
                             pp.resultXon = xd.iparse(data4Xd, reporter);
                         } else if (rp.dataFormat == XdDataFormat.csv) {
-                            mode4Xd   = "validate-csv";
+                            mode4Xd      = CT.modeValidate + "-" + XdDataFormat.csv.name();
                             pp.resultXon = xd.cparse(
                                 new StringReader(data4Xd),
                                 ',', // separator
-                                rp.csvHeader.equals("no"),
+                                rp.csvHeader.equals(CT.lNo),
                                 null, // source name
                                 reporter
                             );
                         } else if (!rp.langOut.isEmpty()) {
-                            mode4Xd       = "translate";
+                            mode4Xd       = CT.modeTranslate;
                             resultElement = xd.xtranslate(data4Xd, rp.langInp, rp.langOut, reporter);
                         } else {
                             if (!rp.langInp.isEmpty()) {
                                 xd.setLexiconLanguage(rp.langInp);
                                 xd.getLexiconLanguage();
                             }
-                            mode4Xd       = "validate";
+                            mode4Xd       = CT.modeValidate;
                             resultElement = xd.xparse(data4Xd, reporter);
                         }
                     }
@@ -275,11 +274,11 @@ public final class Playground extends XdefServletAbs {
 
                     //create text result from xdef-process result
                     if (reporter.errors()) {
-                        pp.status  = "Error";
+                        pp.status  = CT.stError;
                         pp.title   = "Input data error(s)";
                         pp.message = printReports(reporter, data4Xd);
                     } else {
-                        pp.status = "OK";
+                        pp.status = CT.stOk;
                         pp.title  = "Result — mode \"" + mode4Xd + "\"";
 
                         if (reporter.errorWarnings()) {
@@ -310,7 +309,7 @@ public final class Playground extends XdefServletAbs {
                 throw ex;
             }
         } catch (SRuntimeException ex) {
-            pp.status = "Error";
+            pp.status = CT.stError;
             pp.title  = "Unexpected or fatal input data error(s)";
             if ("SYS024".equals(ex.getMsgID())) {
                 reporter.putReport(Report.fatal(XML.XML080, //XML parser was canceled by error&{0}{: }
@@ -326,7 +325,7 @@ public final class Playground extends XdefServletAbs {
                 STester.printThrowable(ex)
             ;
         } catch (Exception ex) {
-            pp.status  = "Error";
+            pp.status  = CT.stError;
             pp.title   = "Unhandled Exception";
             pp.message = STester.printThrowable(ex);
         } finally {
@@ -351,8 +350,8 @@ public final class Playground extends XdefServletAbs {
     private String assembleResponse(RequestParams rp, ProcessParams pp) {
         boolean stdOutputEx  = pp.stdOutput != null && !pp.stdOutput.isEmpty();
         boolean resultIsHtml = pp.result != null && rp.dataFormat == XdDataFormat.xml && pp.result.startsWith("<html");
-        boolean lexEx        = rp.mode.equals("validate") && (
-                                   !rp.langInp.isEmpty() || !rp.langOut.isEmpty() || rp.xdef.contains("lexicon")
+        boolean lexEx        = rp.mode.equals(CT.modeValidate) && (
+                                   !rp.langInp.isEmpty() || !rp.langOut.isEmpty() || rp.xdef.contains(CT.mwLexicon)
                                )
         ;
         String  dataHili = rp.dataFormat == XdDataFormat.csv ? "plaintext" : rp.dataFormat.name();
@@ -361,44 +360,44 @@ public final class Playground extends XdefServletAbs {
         values.put("xdef-lib-id",       XDConstants.BUILD_IDENTIFIER);
 
         values.put("xdefRoot",          Optional.ofNullable(ServletUtil.htmlToAttrVal(rp.xdefRoot)).orElse(""));
-        values.put("databaseName-disp", rp.databaseName != null ? "block" : "none");
+        values.put("databaseName-disp", rp.databaseName != null ? CT.cssDispBlock : CT.cssDispNone);
         values.put("databaseName",      ServletUtil.htmlToAttrVal(rp.databaseName));
         values.put("xdef",              ServletUtil.preTextToPreCont(rp.xdef));
         values.put("xdefLines",         Integer.toString(rp.xdef.split("\n").length + 1));
         values.put("dataFormat",        rp.dataFormat.name());
         values.put("dataFormatUp",      rp.dataFormat.name().toUpperCase());
-        values.put("langInp-disp",      lexEx ? "block" : "none");
+        values.put("langInp-disp",      lexEx ? CT.cssDispBlock : CT.cssDispNone);
         values.put("langInp",           ServletUtil.htmlToAttrVal(rp.langInp));
         values.put("data",              ServletUtil.preTextToPreCont(rp.data));
         values.put("dataLines",         Integer.toString(rp.data.split("\n").length + 1));
-        values.put("model-disp",        "compose".equals(rp.mode) ? "block" : "none");
+        values.put("model-disp",        CT.modeCompose.equals(rp.mode) ? CT.cssDispBlock : CT.cssDispNone);
         values.put("modelName",         ServletUtil.htmlToAttrVal(rp.modelName));
         values.put("modelURI",          ServletUtil.htmlToAttrVal(rp.modelURI));
-        values.put("csvHeader-disp",    rp.dataFormat == XdDataFormat.csv ? "block" : "none");
-        values.put("csvHeader-sel",     "yes".equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
-        values.put("xonDisplayAs-disp", !rp.xonDisplayAs.isEmpty() ? "block" : "none");
+        values.put("csvHeader-disp",    rp.dataFormat == XdDataFormat.csv ? CT.cssDispBlock : CT.cssDispNone);
+        values.put("csvHeader-sel",     CT.lYes.equals(rp.csvHeader)  ? "csvHeaderYes" : "csvHeaderNo");
+        values.put("xonDisplayAs-disp", !rp.xonDisplayAs.isEmpty() ? CT.cssDispBlock : CT.cssDispNone);
         values.put("xonDisplayAs",      rp.xonDisplayAs.stream().map(XdDataFormat::name).collect(Collectors.joining(" ")));
-        values.put("langOut-disp",      lexEx ? "block" : "none");
+        values.put("langOut-disp",      lexEx ? CT.cssDispBlock : CT.cssDispNone);
         values.put("langOut",           ServletUtil.htmlToAttrVal(rp.langOut));
         values.put("mode",              rp.mode);
 
         values.put("status",            pp.status);
         values.put("title",             pp.title);
-        values.put("message-disp",      pp.message != null ? "block" : "none");
+        values.put("message-disp",      pp.message != null ? CT.cssDispBlock : CT.cssDispNone);
         if (pp.message != null) {
             values.put("message",       ServletUtil.preTextToPreCont(pp.message));
         }
-        values.put("result-disp",       pp.result != null ? "block" : "none");
+        values.put("result-disp",       pp.result != null ? CT.cssDispBlock : CT.cssDispNone);
         if (pp.result != null) {
             values.put("result-formatUp", rp.dataFormat.name().toUpperCase());
             values.put("result-hili",   dataHili);
             values.put("result",        ServletUtil.preTextToPreCont(pp.result));
         }
-        values.put("display-html-disp", resultIsHtml ? "block" : "none");
+        values.put("display-html-disp", resultIsHtml ? CT.cssDispBlock : CT.cssDispNone);
         if (resultIsHtml) {
             values.put("display-html",  ServletUtil.htmlToAttrVal(pp.result));
         }
-        values.put("stdout-disp",       stdOutputEx ? "block" : "none");
+        values.put("stdout-disp",       stdOutputEx ? CT.cssDispBlock : CT.cssDispNone);
         if (stdOutputEx) {
             values.put("stdout",        ServletUtil.preTextToPreCont(pp.stdOutput));
         }
@@ -409,7 +408,7 @@ public final class Playground extends XdefServletAbs {
                 rp.xonDisplayAs.contains(df) && df != rp.dataFormat &&
                 (dfDisp = ServletUtil.convertXon2Str(pp.resultXon, df)) != null
             ;
-            values.put("display-" + df + "-disp", dfDispEx ? "block" : "none");
+            values.put("display-" + df + "-disp", dfDispEx ? CT.cssDispBlock : CT.cssDispNone);
             if (dfDispEx) {
                 values.put("display-" + df, ServletUtil.preTextToPreCont(dfDisp));
             }
@@ -428,6 +427,7 @@ public final class Playground extends XdefServletAbs {
     }
 
     /**
+     * assemble JDBC-URL string
      * @param dbName    name of the in-memory Derby database.
      * @param options   connection-url options
      * @return JDBC connection URL of the in-memory Derby database
@@ -440,7 +440,7 @@ public final class Playground extends XdefServletAbs {
     }
 
     /**
-     * shutdown any Playground database not used for at least {@link #dbTtlMinutes} minutes
+     * shutdown any dbLastUsed database not used for at least {@link #dbTtlMinutes} minutes
      */
     private static void expireOldDatabases() {
         long cutoff = System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(dbTtlMinutes);
@@ -454,13 +454,14 @@ public final class Playground extends XdefServletAbs {
     }
 
     /**
-     * physically shutdown the named in-memory Derby database, freeing its resources.
+     * physically shutdown the named in-memory Derby database, freeing its resources
      *
      * @param dbName database name.
      */
     private static void shutdownDatabase(final String dbName) {
         try {
             DriverManager.getConnection(genConnectionURL(dbName, "drop=true"));
+            logger.debug("database \"" + dbName + "\" was dropped");
         } catch (SQLException ex) {
             //Derby reports a successful in-memory database drop via a SQLException (SQLState 08006) -
             //this is the expected/documented outcome, not an error.
@@ -521,8 +522,8 @@ public final class Playground extends XdefServletAbs {
             xdefRoot            = xdefRoot    .isEmpty() ? null : xdefRoot;
             databaseName        = databaseName.isEmpty() ? null : databaseName;
             dataFormat          = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
-            mode                = mode.equals("compose") ? mode : "validate";
-            csvHeader           = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
+            mode                = mode.equals(CT.modeCompose) ? mode : CT.modeValidate;
+            csvHeader           = csvHeader.isEmpty() || csvHeader.equals(CT.lNo) ? CT.lNo : CT.lYes;
         }
     }
 
@@ -540,6 +541,30 @@ public final class Playground extends XdefServletAbs {
         Long    timerStart = new Date().getTime();
         Long    timerXdef;
         Long    timerProcess;
+    }
+
+    /** text constants */
+    private static class CT {
+        /** logical no */
+        private static final String lNo             = "no";
+        /** logical no */
+        private static final String lYes            = "yes";
+        /** status OK */
+        private static final String stOk            = "OK";
+        /** status Error */
+        private static final String stError         = "Error";
+        /** css style display value "block" */
+        private static final String cssDispBlock    = "block";
+        /** css style display value "none" */
+        private static final String cssDispNone     = "none";
+        /** form parameter "mode" value "validate" */
+        private static final String modeValidate    = "validate";
+        /** form parameter "mode" value "compose" */
+        private static final String modeCompose     = "compose";
+        /** form parameter "mode" value "translate" */
+        private static final String modeTranslate   = "translate";
+        /** mark-word "lexicon" for X-lexicon */
+        private static final String mwLexicon       = "lexicon";
     }
 
 }
