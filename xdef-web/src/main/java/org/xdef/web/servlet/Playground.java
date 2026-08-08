@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import javax.xml.namespace.QName;
 
+import org.apache.derby.jdbc.EmbeddedDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -83,6 +84,13 @@ public final class Playground extends XdefServletAbs {
     });
 
     static {
+        //register db-drivers
+        try {
+            DriverManager.registerDriver(new EmbeddedDriver());
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
         //start db-sweeping thread - with fixed rate 1min and initial delay 1min
         dbCleanupTimer.scheduleAtFixedRate(Playground::expireOldDatabases, 1, 1, TimeUnit.MINUTES);
     }
@@ -95,7 +103,15 @@ public final class Playground extends XdefServletAbs {
     /** Shut down the db-cleanup timer so its thread doesn't outlive a webapp redeploy. */
     @Override
     public void destroy() {
+        //deregister db-drivers
+        try {
+            DriverManager.deregisterDriver(new EmbeddedDriver());
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
         dbCleanupTimer.shutdownNow();
+
         super.destroy();
     }
 
@@ -502,11 +518,11 @@ public final class Playground extends XdefServletAbs {
             csvHeader           = ServletUtil.getParam(req, "csvHeader").toLowerCase();
 
             //process default values and conversions
-            xdefRoot        = xdefRoot    .isEmpty() ? null : xdefRoot;
-            databaseName    = databaseName.isEmpty() ? null : databaseName;
-            dataFormat      = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
-            mode            = mode.equals("compose") ? mode : "validate";
-            csvHeader       = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
+            xdefRoot            = xdefRoot    .isEmpty() ? null : xdefRoot;
+            databaseName        = databaseName.isEmpty() ? null : databaseName;
+            dataFormat          = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
+            mode                = mode.equals("compose") ? mode : "validate";
+            csvHeader           = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
         }
     }
 

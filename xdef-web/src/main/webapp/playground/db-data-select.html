@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground — Database-service: select data from database</title>
+    <meta name="description" content="Playground — Database-service: select data from database"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground — Database-service: select data from database</div>
+
+<p>
+Select data from the database.
+If the schema and tables don't exist yet, the form action ends with an non-existing schema error.
+</p>
+You can follow on:<ul>
+    <li><a href='db-data-insert.html'>insert data into the database</a></li>
+    <li><a href='db-data-select.html'>select data from the database</a></li>
+    <li><a href='db-drop.html'       >drop the database</a></li>
+</ul>
+
+<form method="post" action="Playground">
+
+<div>
+<b>X-definition:</b>
+</div><div>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
+(enter in case of X-definition collection)
+</div><div>
+Database name: <input name="databaseName" value="db21XFX31" type="text"/>
+(automatically completed your unique name of an database
+available to the X-definition as "external Service dbservice",
+expires in 30&thinsp;min of idle-time)
+</div>
+<textarea name="xdef" rows="33" class="linenumbers">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="query">
+  &lt;xd:declaration>
+    external Service dbservice;
+
+    String qry = "
+         SELECT AUTHOR
+         FROM BOOKS.AUTHOR, BOOKS.TITLE_AUTHOR, BOOKS.TITLE
+         WHERE
+           BOOKS.AUTHOR.IDAUTHOR = BOOKS.TITLE_AUTHOR.IDAUTHOR AND
+           BOOKS.TITLE.IDTITLE   = BOOKS.TITLE_AUTHOR.IDTITLE  AND
+           BOOKS.TITLE.IDTITLE   = ?
+         ORDER BY AUTHOR ASC
+    ";
+    ResultSet rs = dbservice.query('
+      SELECT *
+      FROM BOOKS.TITLE
+      ORDER BY TITLE ASC
+    ');
+  &lt;/xd:declaration>
+
+  &lt;Books>
+    &lt;Book xd:script="occurs *; create rs /*iterator for generation of Book*/"
+      title="string()"
+      ISBN="regex('\\d{8,10}')"
+      editor="optional string()"
+      issued="optional gYear()">
+      &lt;Author xd:script="occurs *; create dbservice.queryItem(qry, 'AUTHOR', rs.getItem('IDTITLE'));">
+        string();
+      &lt;/Author>
+    &lt;/Book>
+  &lt;/Books>
+&lt;/xd:def>
+</textarea>
+
+<button name="mode" value="compose" type="submit">Compose with database-service</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums();</script>
+
+</body>
+</html>
