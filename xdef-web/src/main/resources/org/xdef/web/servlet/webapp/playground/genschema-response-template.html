@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>XML schema</title>
+    <meta name="description" content="XML schema"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+<div class="title">XML schema</div>
+
+<form method="post" action="GenSchema">
+
+<b>Created XML schema</b>
+<textarea name="schemaResult" rows="((schemaLines))" class="linenumbers">((schemaResult))
+</textarea>
+
+<b>XML data</b>
+<textarea name="data" rows="((dataLines))" class="linenumbers">((data))
+</textarea>
+
+<input type="hidden" name="schema" value="checkSchema"/>
+<input name="view" value="Check created XML schema with XML data" type="submit"/>
+
+</form>
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums()</script>
+
+</body>
+</html>

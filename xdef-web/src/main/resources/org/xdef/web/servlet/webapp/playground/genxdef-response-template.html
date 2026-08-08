@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Validate data with created X-definition</title>
+    <meta name="description" content="Validate data with created X-definition"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+<div class="title">Validate data with created X-definition</div>
+
+<form method="post" action="Playground">
+
+<b>Created X-definition</b>
+<textarea name="xdef" rows="((xdefLines))" class="linenumbers">((xdef))
+</textarea>
+
+<b>Input data</b>
+<textarea name="data" rows="((dataLines))" class="linenumbers">((data))
+</textarea>
+
+((submit-control))
+
+<i>&nbsp;You can edit <b>Created X-definition</b> or <b>Input</b> window</i>
+
+</form>
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums()</script>
+
+</body>
+</html>
