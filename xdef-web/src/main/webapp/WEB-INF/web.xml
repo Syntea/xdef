@@ -48,10 +48,7 @@
         <url-pattern>/playground/GenSchema</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Derby</servlet-name>
-        <url-pattern>/playground/Derby</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
+        <!-- candidate to remove, temporary service to download, upload files -->
         <servlet-name>Service</servlet-name>
         <url-pattern>/Service</url-pattern>
     </servlet-mapping>
