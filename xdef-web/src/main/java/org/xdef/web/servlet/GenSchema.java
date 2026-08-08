@@ -83,8 +83,9 @@ public final class GenSchema extends XdefServletAbs {
      *
      * @param rp request parameters.
      * @return html-response
+     * @throws ServletException template process fails
      */
-    private String processToSchema(final RequestParams rp) {
+    private String processToSchema(final RequestParams rp) throws ServletException {
         XDPool xp = XDFactory.compileXD(null, rp.xdef);
         Map<String, Element> map = XdefToXsd.genSchema(xp, null, null, null, null, true, true);
         StringBuilder xd = new StringBuilder();
@@ -152,8 +153,9 @@ public final class GenSchema extends XdefServletAbs {
      * @param schemaResult generated XML schema.
      * @param data XML data to be validated against the schema.
      * @return html-response
+     * @throws ServletException template process fails
      */
-    private String assembleSchemaFormResponse(final String schemaResult, final String data) {
+    private String assembleSchemaFormResponse(final String schemaResult, final String data) throws ServletException  {
         Map<String, String> values = new HashMap<>();
         values.put("schemaResult", ServletUtil.preTextToPreCont(schemaResult));
         values.put("schemaLines",  Integer.toString(schemaResult.split("\n").length + 1));

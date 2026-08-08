@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -92,11 +91,11 @@ public final class Playground extends XdefServletAbs {
         try {
             DriverManager.registerDriver(dbDriver);
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            logger.warn("static: failed to register db-drivers", ex);
         }
 
         //start db-cleanup thread - with fixed rate 1min and initial delay 1min
-        dbCleanupTimer.scheduleAtFixedRate(Playground::expireOldDatabases, 1, 1, TimeUnit.MINUTES);
+        dbCleanupTimer.scheduleAtFixedRate(Playground::shutdownDatabasesOld, 1, 1, TimeUnit.MINUTES);
     }
 
     /** default constructor, calls super() only */
@@ -107,19 +106,22 @@ public final class Playground extends XdefServletAbs {
     /** destroy servlet resources */
     @Override
     public void destroy() {
-        //deregister db-driver
+        //deregister db-drivers
         try {
             DriverManager.deregisterDriver(dbDriver);
         } catch (SQLException ex) {
-            logger.warn("destroy(): failed to deregister the db-driver Derby", ex);
+            logger.warn("destroy(): failed to deregister db-drivers", ex);
         }
 
         //stop db-cleanup thread
         try {
             dbCleanupTimer.shutdownNow();
         } catch (RuntimeException ex) {
-            logger.warn("destroy(): failed to shut down the db-cleanup timer", ex);
+            logger.warn("destroy(): failed to shutdown the db-cleanup timer", ex);
         }
+
+        //shutdown all databases
+        shutdownDatabasesOld(true);
 
         super.destroy();
     }
@@ -155,9 +157,7 @@ public final class Playground extends XdefServletAbs {
         resp.getWriter().print(respHtml);
     }
 
-    private ProcessParams processRequest(RequestParams rp)
-        throws ServletException, IOException
-    {
+    private ProcessParams processRequest(RequestParams rp) {
         ProcessParams pp = new ProcessParams();
 
         String        data4Xd  = rp.data;
@@ -355,8 +355,9 @@ public final class Playground extends XdefServletAbs {
      * assemble html-response
      *
      * @return html-response
+     * @throws Exception template process fails
      */
-    private String assembleResponse(RequestParams rp, ProcessParams pp) {
+    private String assembleResponse(RequestParams rp, ProcessParams pp) throws ServletException {
         boolean stdOutputEx  = pp.stdOutput != null && !pp.stdOutput.isEmpty();
         boolean resultIsHtml = pp.result != null && rp.dataFormat == XdDataFormat.xml && pp.result.startsWith("<html");
         boolean lexEx        = rp.mode.equals(CT.modeValidate) && (
@@ -368,7 +369,7 @@ public final class Playground extends XdefServletAbs {
         Map<String, String> values = new HashMap<>();
         values.put("xdef-lib-id",       XDConstants.BUILD_IDENTIFIER);
 
-        values.put("xdefRoot",          Optional.ofNullable(ServletUtil.htmlToAttrVal(rp.xdefRoot)).orElse(""));
+        values.put("xdefRoot",          ServletUtil.htmlToAttrVal(rp.xdefRoot));
         values.put("databaseName-disp", rp.databaseName != null ? CT.cssDispBlock : CT.cssDispNone);
         values.put("databaseName",      ServletUtil.htmlToAttrVal(rp.databaseName));
         values.put("xdef",              ServletUtil.preTextToPreCont(rp.xdef));
@@ -448,38 +449,52 @@ public final class Playground extends XdefServletAbs {
         ;
     }
 
+    /** SQLState Derby reports on a successful in-memory database shutdown/drop (not an actual error). */
+    private static final String derbySQLStateSuccessfulDrop = "08006";
+
     /**
-     * shutdown any dbLastUsed database not used for at least {@link #dbTTL}
+     * shutdown any dbLastUsed database not used for at least {@link #dbTTL}. A database whose shutdown
+     * fails for an unexpected reason (e.g. still in use) is kept in {@link #dbLastUsed} so the next
+     * db-cleanup retries it, instead of being silently dropped from tracking while still alive in memory.
+     *
+     * @param all whether shutdown all databases, not only old
      */
-    private static void expireOldDatabases() {
-        logger.debug("expireOldDatabases(): started: dbs: " + dbLastUsed.toString());
+    private static void shutdownDatabasesOld(boolean all) {
+        logger.debug("shutdownDatabasesOld(): started: all: " + all + ", dbs: " + dbLastUsed.toString());
 
         long cutoff = System.currentTimeMillis() - dbTTL.toMillis();
-        dbLastUsed.entrySet().removeIf(e -> {
-            if (e.getValue() < cutoff) {
-                shutdownDatabase(e.getKey());
-                return true;
-            }
-            return false;
-        });
+        dbLastUsed.entrySet().removeIf(e -> (all || e.getValue() < cutoff) && shutdownDatabase(e.getKey()));
 
-        logger.debug("expireOldDatabases(): finished: dbs: " + dbLastUsed.toString());
+        logger.debug("shutdownDatabasesOld(): finished: dbs: " + dbLastUsed.toString());
+    }
+
+    /** see {@link #shutdownDatabasesOld(boolean)} with {@code all = false}*/
+    private static void shutdownDatabasesOld() {
+        shutdownDatabasesOld(false);
     }
 
     /**
-     * physically shutdown the named in-memory Derby database, freeing its resources
+     * physically shutdown the in-memory Derby database dbName, freeing its resources
      *
-     * @param dbName database name.
+     * @param dbName database name
+     * @return true if the database was (or already had been) successfully shutdown; false if the
+     *         shutdown failed for an unexpected reason and should be retried later.
      */
-    private static void shutdownDatabase(final String dbName) {
+    private static boolean shutdownDatabase(final String dbName) {
+        final String mtd = "shutdownDatabase(): ";
         try {
             DriverManager.getConnection(genConnectionURL(dbName, "drop=true"));
+            logger.debug(mtd + "dropping \"" + dbName +
+                "\" unexpectedly returned a live connection instead of throwing");
+            return true;
         } catch (SQLException ex) {
-            //Derby reports a successful in-memory database drop via a SQLException (SQLState 08006) -
-            //this is the expected/documented outcome, not an error.
+            if (derbySQLStateSuccessfulDrop.equals(ex.getSQLState())) {
+                logger.debug(mtd + "database \"" + dbName + "\" was dropped");
+                return true;
+            }
+            logger.debug(mtd + "failed to drop database \"" + dbName + "\", will retry later", ex);
+            return false;
         }
-
-        logger.debug("shutdownDatabase(): database \"" + dbName + "\" was dropped");
     }
 
 

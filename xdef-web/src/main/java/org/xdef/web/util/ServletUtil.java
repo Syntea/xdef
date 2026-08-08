@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +19,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
 
@@ -146,29 +149,42 @@ public class ServletUtil {
     }
 
     /** matches a "((key))" placeholder; a key is one or more of 'a'-'z', 'A'-'Z', '0'-'9', '_' or '-' */
-    private static final Pattern MUSTACHE_PLACEHOLDER = Pattern.compile("\\(\\(([a-zA-Z0-9_-]+)\\)\\)");
+    private static final Pattern mustachePlaceholder = Pattern.compile("\\(\\(([a-zA-Z0-9_-]+)\\)\\)");
 
     /**
-     * Fill a "mustache"-like HTML template by replacing all "((key))" placeholders with values from the
-     * given map. A "((...))" sequence whose content is not a valid key, or whose key is not present in
-     * the map, is left untouched in the result.
+     * Fill a "mustache"-like HTML template by replacing all "((key))" placeholder with values from the
+     * given map. Unknown key placeholder and value {@code null} is replaced by "".
+     * A "((...))" sequence whose content is not a valid key, is left untouched in the result.
      *
-     * @param template HTML template (e.g. playground-response-template.html) with "((key))" placeholders.
-     * @param values map of placeholder keys (without the surrounding "((" / "))") to their replacement values.
-     * @return template with placeholders replaced.
+     * @param template  HTML template with "((key))" placeholder
+     * @param values    map of placeholder keys (without the surrounding "((" / "))") to their replacement values
+     * @return template with placeholder replaced
+     * @throws ServletException any key in the value-map is not used in the template
      */
-    public static final String mustache(final String template, final Map<String, String> values) {
+    public static final String mustache(final String template, final Map<String, String> values)
+        throws ServletException
+    {
         if (template == null) {
             return null;
         }
 
-        Matcher       matcher = MUSTACHE_PLACEHOLDER.matcher(template);
-        StringBuilder sb      = new StringBuilder(template.length() * 2);
+        Set<String>   keyUnused  = new HashSet<>(values.keySet());
+        Matcher       matcher    = mustachePlaceholder.matcher(template);
+        StringBuilder sb         = new StringBuilder(template.length() * 2);
         while (matcher.find()) {
-            String value = values.get(matcher.group(1));
-            matcher.appendReplacement(sb, Matcher.quoteReplacement(value != null ? value : matcher.group()));
+            String key   = matcher.group(1);
+            String value = "";
+            if (values.containsKey(key)) {
+                value = Optional.ofNullable(values.get(key)).orElse("");
+                keyUnused.remove(key);
+            }
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(value));
         }
         matcher.appendTail(sb);
+
+        if (!keyUnused.isEmpty()) {
+            throw new ServletException("ServletUtil.mustache(): Error: any key unused: " + "unused-keys: " + keyUnused);
+        }
 
         return sb.toString();
     }

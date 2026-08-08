@@ -82,13 +82,14 @@ public final class GenXdef extends XdefServletAbs {
      * @param data input data (XML or JSON) from which the X-definition is generated.
      * @return html-response
      * @throws IOException if an error occurs.
+     * @throws ServletException template process fails
      */
-    private String assembleResponse(final String data) throws IOException {
-        Element el = GenXDefinition.genXdef(data.trim(), "Example");
+    private String assembleResponse(final String data) throws IOException, ServletException {
+        Element      el  = GenXDefinition.genXdef(data.trim(), "Example");
         StringWriter swr = new StringWriter();
         KXmlUtils.writeXml(swr, "UTF-8", el, " ", false, false, true);
         swr.close();
-        String xdef = '\n' + swr.toString().trim() + '\n';
+        String xdef        = '\n' + swr.toString().trim() + '\n';
         String trimmedData = data.trim();
 
         Map<String, String> values = new HashMap<>();
