@@ -3,14 +3,17 @@ package org.xdef.web.servlet;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,6 +28,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
+import org.xdef.XDService;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.msg.XML;
@@ -33,9 +37,9 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 import org.xdef.web.util.ServletUtil;
+import org.xdef.web.util.XdDataFormat;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
-import org.yaml.snakeyaml.Yaml;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +50,10 @@ import jakarta.servlet.http.HttpServletResponse;
  * Servlet for execution "Playground-online".
  * <p>
  * For example for playing users or for tester-users or
- * for tutorial examples or for other examples on internet
+ * for tutorial examples or for other examples on internet.
+ * <p>
+ * Handles in-memory derby-databases used in X-definitions. Creates them on first usage and shutdown them after 30min
+ * of idle-time by sweeping thread {@link #dbCleanupTimer} with fixed rate 1min and initial delay 1min.
  *
  * @author Vaclav Trojan
  */
@@ -59,9 +66,37 @@ public final class Playground extends XdefServletAbs {
     private static final String responseHtmlTempl =
         ServletUtil.readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
 
+    /** credentials for the optional in-memory Derby database - database-user */
+    private static final String             dbUser          = "myself";
+    /** credentials for the optional in-memory Derby database - password for the database-user */
+    private static final String             dbPassw         = "blabla";
+    /** how long an unused Playground database is kept alive before it is shut down. */
+    private static final long               dbTtlMinutes    = 30;
+    /** map database name -> time (millis) it was last used */
+    private static final Map<String, Long>  dbLastUsed      = new ConcurrentHashMap<>();
+
+    /** single background thread sweeping {@link #dbLastUsed} for expired databases once a minute */
+    private static final ScheduledExecutorService dbCleanupTimer = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread t = new Thread(r, "playground-db-cleanup");
+        t.setDaemon(true);
+        return t;
+    });
+
+    static {
+        //start db-sweeping thread - with fixed rate 1min and initial delay 1min
+        dbCleanupTimer.scheduleAtFixedRate(Playground::expireOldDatabases, 1, 1, TimeUnit.MINUTES);
+    }
+
     /** default constructor, calls super() only */
     public Playground() {
         super();
+    }
+
+    /** Shut down the db-cleanup timer so its thread doesn't outlive a webapp redeploy. */
+    @Override
+    public void destroy() {
+        dbCleanupTimer.shutdownNow();
+        super.destroy();
     }
 
     /** Returns a short description of this servlet.
@@ -104,6 +139,7 @@ public final class Playground extends XdefServletAbs {
         String        data4Xd  = rp.data;
         XDPool        xdPool   = null;
         ArrayReporter reporter = new ArrayReporter();
+        XDService     dbservice  = null;
 
         try {
             try {
@@ -127,11 +163,18 @@ public final class Playground extends XdefServletAbs {
                     reporter.clear();
                     CharArrayWriter caw    = new CharArrayWriter();
                     XDOutput        stdout = XDFactory.createXDOutput(caw, false);
-
-                    XDDocument xd = xdPool.createXDDocument(rp.xdefRoot);
-
+                    XDDocument      xd     = xdPool.createXDDocument(rp.xdefRoot);
                     xd.setProperties(XdPropsDefault);
                     xd.setStdOut(stdout);
+
+                    //make an in-memory database available to the X-definition as "external Service dbservice"
+                    if (rp.databaseName != null) {
+                        dbLastUsed.put(rp.databaseName, System.currentTimeMillis());
+                        dbservice = XDFactory.createSQLService(
+                            genConnectionURL(rp.databaseName, "create=true"), dbUser, dbPassw
+                        );
+                        xd.setVariable("dbservice", dbservice);
+                    }
 
                     //xdef-process
                     if ("compose".equals(rp.mode)) {
@@ -178,7 +221,9 @@ public final class Playground extends XdefServletAbs {
                             } else if (rp.dataFormat == XdDataFormat.xon) { //XON
                                 data4Xd = XonUtils.toJsonString(XonUtils.parseXON(data4Xd), true);
                             } else if (rp.dataFormat == XdDataFormat.yaml) { //YAML
-                                data4Xd = XonUtils.toJsonString(yamlToJson(XonUtils.parseYAML(data4Xd)), true);
+                                data4Xd = XonUtils.toJsonString(
+                                    ServletUtil.convertYamlToJson(XonUtils.parseYAML(data4Xd)), true
+                                );
                             }
 
                             mode4Xd   = "validate-json";
@@ -229,7 +274,7 @@ public final class Playground extends XdefServletAbs {
                         if (resultElement != null) {
                             pp.result = KXmlUtils.nodeToString(resultElement, true, false, true, 120);
                         } else if (pp.resultXon != null) {
-                            pp.result = convertXon2Str(pp.resultXon, rp.dataFormat);
+                            pp.result = ServletUtil.convertXon2Str(pp.resultXon, rp.dataFormat);
                         }
                     }
 
@@ -268,6 +313,15 @@ public final class Playground extends XdefServletAbs {
             pp.status  = "Error";
             pp.title   = "Unhandled Exception";
             pp.message = STester.printThrowable(ex);
+        } finally {
+            if (dbservice != null) {
+                try {
+                    dbservice.commit();
+                } catch (Exception ex) {
+                    //ignore commit errors on an already-failed/rolled-back dbservice
+                }
+                dbservice.close();
+            }
         }
 
         return pp;
@@ -291,6 +345,8 @@ public final class Playground extends XdefServletAbs {
         values.put("xdef-lib-id",       XDConstants.BUILD_IDENTIFIER);
 
         values.put("xdefRoot",          Optional.ofNullable(ServletUtil.htmlToAttrVal(rp.xdefRoot)).orElse(""));
+        values.put("databaseName-disp", rp.databaseName != null ? "block" : "none");
+        values.put("databaseName",      ServletUtil.htmlToAttrVal(rp.databaseName));
         values.put("xdef",              ServletUtil.preTextToPreCont(rp.xdef));
         values.put("xdefLines",         Integer.toString(rp.xdef.split("\n").length + 1));
         values.put("dataFormat",        rp.dataFormat.name());
@@ -335,7 +391,7 @@ public final class Playground extends XdefServletAbs {
             boolean dfDispEx =
                 pp.result != null && pp.resultXon != null &&
                 rp.xonDisplayAs.contains(df) && df != rp.dataFormat &&
-                (dfDisp = convertXon2Str(pp.resultXon, df)) != null
+                (dfDisp = ServletUtil.convertXon2Str(pp.resultXon, df)) != null
             ;
             values.put("display-" + df + "-disp", dfDispEx ? "block" : "none");
             if (dfDispEx) {
@@ -355,148 +411,46 @@ public final class Playground extends XdefServletAbs {
         return ServletUtil.mustache(responseHtmlTempl, values);
     }
 
-    /** Convert result of YAML parser to JSON.
-     * @param o result of YAML parser.
-     * @return JSON result.
+    /**
+     * @param dbName    name of the in-memory Derby database.
+     * @param options   connection-url options
+     * @return JDBC connection URL of the in-memory Derby database
      */
-    private static Object yamlToJson(final Object o) {
-        if (null == o) {
-            return null;
-        }
-        if (o instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<Object, Object> om     = (Map<Object, Object>)o;
-            Map<String, Object> result = new LinkedHashMap<>();
-            for (Map.Entry<Object, Object> en : om.entrySet()) {
-                result.put(
-                    (String)yamlToJson(en.getKey()),
-                    yamlToJson(en.getValue())
-                );
-            }
-            return result;
-        } else if (o instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<Object> ol     = (List<Object>)o;
-            List<Object> result = new ArrayList<>();
-            for (int i=0; i < ol.size(); i++ ) {
-                result.add(yamlToJson(ol.get(i)));
-            }
-            return result;
-        } else if (o instanceof byte[]) {
-            byte[] oba = (byte[])o;
-            return new String(oba, StandardCharsets.UTF_8);
-        }
-        return o;
-    }
-
-    private static String convertXon2Str(Object xon, XdDataFormat outFormat) {
-        if (outFormat == null) {
-            return null;
-        }
-
-        String result = null;
-
-        switch (outFormat) {
-            case json:
-                result = XonUtils.toJsonString(xon, true);
-                break;
-            case yaml:
-                Yaml yaml = new Yaml();
-                result = yaml.dump(XonUtils.xonToJson(xon));
-                break;
-            case csv:
-                if (xon instanceof List) {
-                    @SuppressWarnings("unchecked")
-                    List<Object> xonCsv = (List<Object>)xon;
-                    try {
-                        result = XonUtils.toCsvString(xonCsv);
-                    } catch (Exception ex) {
-                        //return null
-                    }
-                }
-                break;
-            case ini:
-                if (xon instanceof Map) {
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> xonIni = (Map<String, Object>)xon;
-                    try {
-                        result = XonUtils.toIniString(xonIni);
-                    } catch (Exception ex) {
-                        //return null
-                    }
-                }
-                break;
-            case xon:
-                result = XonUtils.toXonString(xon, true);
-                break;
-            case xml:
-                result = KXmlUtils.nodeToString(
-                    XonUtils.xonToXml(xon),
-                    true, false, true, 120
-                );
-                /* * /
-                //DBG:
-                result += "\n\n==json-xml==\n" + KXmlUtils.nodeToString(
-                    XonUtils.xonToXml(XonUtils.xonToJson(xon)),
-                    true, false, true, 120
-                );
-                if (xon instanceof List) {
-                    @SuppressWarnings("unchecked")
-                    List<Object> xonCsv = (List<Object>)xon;
-                    result += "\n\n==csv-xml==\n" + KXmlUtils.nodeToString(
-                        XonUtils.csvToXml(xonCsv),
-                        true, false, true, 120
-                    );
-                }
-                if (xon instanceof Map) {
-                    result += "\n\n==ini-xml==\n" + KXmlUtils.nodeToString(
-                        XonUtils.iniToXml(XonUtils.xonToJson(xon)),
-                        true, false, true, 120
-                    );
-                }
-                /**/
-                break;
-        }
-
-        return result;
-    }
-
-
-    /** list of X-definition input data formats */
-    private static enum XdDataFormat {
-        xml,
-        json,
-        xon,
-        yaml,
-        csv,
-        ini,
+    public static String genConnectionURL(final String dbName, final String options) {
+        return
+            "jdbc:derby:memory:" + dbName +
+            ((options == null || options.isEmpty()) ? "" : (";" + options))
         ;
+    }
 
-        /**
-         * convert string to {@link XdDataFormat}
-         * @param dataFormat    data-format as string
-         * @return converted <code>dataFormat</code> to {@link XdDataFormat}, if not exists returns <code>null</code>
-         */
-        static XdDataFormat valueOfN(String dataFormat) {
-            try {
-                return XdDataFormat.valueOf(dataFormat);
-            } catch (IllegalArgumentException ex) {
-                return null;
+    /**
+     * shutdown any Playground database not used for at least {@link #dbTtlMinutes} minutes
+     */
+    private static void expireOldDatabases() {
+        long cutoff = System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(dbTtlMinutes);
+        dbLastUsed.entrySet().removeIf(e -> {
+            if (e.getValue() < cutoff) {
+                shutdownDatabase(e.getKey());
+                return true;
             }
-        }
+            return false;
+        });
+    }
 
-        /**
-         * convert string to {@link XdDataFormat}
-         * @param dataFormat    data-format as string
-         * @param defaultt      default value, if not <code>dataFormat</code> exists
-         * @return converted <code>dataFormat</code> to {@link XdDataFormat}, if not exists returns <code>defaultt</code>
-         */
-        static XdDataFormat valueOfN(String val, XdDataFormat defaultt) {
-            return Optional.ofNullable(XdDataFormat.valueOfN(val))
-                .orElse(defaultt)
-            ;
+    /**
+     * physically shutdown the named in-memory Derby database, freeing its resources.
+     *
+     * @param dbName database name.
+     */
+    private static void shutdownDatabase(final String dbName) {
+        try {
+            DriverManager.getConnection(genConnectionURL(dbName, "drop=true"));
+        } catch (SQLException ex) {
+            //Derby reports a successful in-memory database drop via a SQLException (SQLState 08006) -
+            //this is the expected/documented outcome, not an error.
         }
     }
+
 
 
     /** request parameters */
@@ -505,6 +459,9 @@ public final class Playground extends XdefServletAbs {
         String              xdefRoot;
         /** X-definition (xml-format) */
         String              xdef;
+        /** name of an in-memory Derby database made available to the X-definition as "external Service dbservice"
+         * (empty = no database, "dbservice" variable is not set) */
+        String              databaseName;
         /** values: xml/"", json, xon, yaml, csv, ini */
         XdDataFormat        dataFormat;
         /** input data, in format "dataFormat", for dataFormat in json, xon, yaml, data can be in format "xon-xml" */
@@ -529,6 +486,7 @@ public final class Playground extends XdefServletAbs {
             //request parameters: see javadoc
             xdefRoot            = ServletUtil.getParam(req, "xdefRoot");
             xdef                = ServletUtil.getParam(req, "xdef");
+            databaseName        = ServletUtil.getParam(req, "databaseName");
             String dataFormatS  = ServletUtil.getParam(req, "dataFormat").toLowerCase();
             data                = ServletUtil.getParam(req, "data");
             mode                = ServletUtil.getParam(req, "mode").toLowerCase();
@@ -544,10 +502,11 @@ public final class Playground extends XdefServletAbs {
             csvHeader           = ServletUtil.getParam(req, "csvHeader").toLowerCase();
 
             //process default values and conversions
-            xdefRoot    = xdefRoot.isEmpty() ? null : xdefRoot;
-            dataFormat  = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
-            mode        = mode.equals("compose") ? mode : "validate";
-            csvHeader   = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
+            xdefRoot        = xdefRoot    .isEmpty() ? null : xdefRoot;
+            databaseName    = databaseName.isEmpty() ? null : databaseName;
+            dataFormat      = XdDataFormat.valueOfN(dataFormatS, XdDataFormat.xml);
+            mode            = mode.equals("compose") ? mode : "validate";
+            csvHeader       = csvHeader.isEmpty() || csvHeader.equals("no") ? "no" : "yes";
         }
     }
 

@@ -20,8 +20,15 @@
 <form method="post" action="Playground">
 
 <b>X-definition:</b><br/>
+<div>
 Name of root X-definition: <input name="xdefRoot" value="((xdefRoot))" type="text"/>
 (enter in case of X-definition collection)
+</div>
+<div style="display: ((databaseName-disp))">
+Database name: <input name="databaseName" value="((databaseName))" type="text"/>
+(optional, name of an in-memory database available to the X-definition as "external Service dbservice",
+expires in 30&thinsp;min of idle-time)
+</div>
 <textarea name="xdef" rows="((xdefLines))" class="linenumbers">((xdef))
 </textarea>
 
