@@ -15,7 +15,7 @@
 
 <div class="title">Playground — X-definition create and execute database</div>
 
-<form method="post" action="Derby">
+<form method="post" action="Playground">
 
 <div>
 <b>X-definition:</b>
@@ -25,13 +25,13 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 </div>
 <textarea name="xdef" rows="16" class="linenumbers">
 &lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Example" root="schema">
-  &lt;xd:declaration scope = "local"> external Service service; &lt;/xd:declaration>
-  &lt;schema name="string; onTrue service.execute('CREATE SCHEMA '+ getText());
+  &lt;xd:declaration scope = "local"> external Service dbservice; &lt;/xd:declaration>
+  &lt;schema name="string; onTrue dbservice.execute('CREATE SCHEMA '+ getText());
                         finally outln('Dabase schema created.')">
     &lt;table xd:script="occurs +" name = "string">
       string;
       onTrue try {
-        service.execute('CREATE TABLE '+xpath('../@name')+'.'+@name+' ('+getText()+')');
+        dbservice.execute('CREATE TABLE '+xpath('../@name')+'.'+@name+' ('+getText()+')');
       } catch (Exception ex) { error(toString(ex)); }
     &lt;/table>
   &lt;/schema>
@@ -60,8 +60,7 @@ Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 &lt;/schema>
 </textarea>
 
-<input name="task" value="Create database" type="hidden"/>
-<input name='submit' value='Create database schema' type='submit'/>
+<button type="submit">Validate with DB-service</button>
 
 </form>
 
