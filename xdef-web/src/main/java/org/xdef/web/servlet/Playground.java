@@ -64,6 +64,14 @@ public final class Playground extends XdefServletAbs {
         super();
     }
 
+    /** Returns a short description of this servlet.
+     * @return short description of this servlet.
+     */
+    @Override
+    public final String getServletInfo() {
+        return "This servlet executes a X-definition with given XML/XON data";
+    }
+
     /**
      * Processes requests.
      *
@@ -72,7 +80,7 @@ public final class Playground extends XdefServletAbs {
      * @throws IOException if an error occurs.
      */
     @Override
-    public final void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
+    protected final void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException, IOException
     {
         req.setCharacterEncoding("UTF-8");
@@ -347,14 +355,6 @@ public final class Playground extends XdefServletAbs {
         return ServletUtil.mustache(responseHtmlTempl, values);
     }
 
-    /** Returns a short description of this servlet.
-     * @return short description of this servlet.
-     */
-    @Override
-    public final String getServletInfo() {
-        return "This servlet executes a X-definition with given XML/XON data";
-    }
-
     /** Convert result of YAML parser to JSON.
      * @param o result of YAML parser.
      * @return JSON result.
@@ -499,36 +499,30 @@ public final class Playground extends XdefServletAbs {
     }
 
 
-    /**
-     * Request parameters:<ul>
-     *   <li>xdefRoot: name of root X-definition, in case of X-definition collection</li>
-     *   <li>xdef: X-definition (xml-format)</li>
-     *   <li>dataFormat: values: xml/"", json, xon, yaml, csv, ini</li>
-     *   <li>data: input data, in format "dataFormat",
-     *      for dataFormat in json, xon, yaml, data can be in format "xon-xml"
-     *   </li>
-     *   <li>mode: X-definition processing mode, values: validate/"", compose</li>
-     *   <li>langInp: value: language of input data (only for mode validate)</li>
-     *   <li>langOut: value: language of processed data (only for mode validate)</li>
-     *   <li>modelName</li>
-     *   <li>modelURI</li>
-     *   <li>xonDisplayAs: set of values: json, xon, yaml, xml, csv, ini (only for mode=validate and xon-like input
-     *      (i.e. json, xon, yaml, csv, ini))
-     *   </li>
-     *   <li>csvHeader: values: no/"", yes</li>
-     * </ul>
-     */
+    /** request parameters */
     private static class RequestParams {
+        /** name of root X-definition, in case of X-definition collection */
         String              xdefRoot;
+        /** X-definition (xml-format) */
         String              xdef;
+        /** values: xml/"", json, xon, yaml, csv, ini */
         XdDataFormat        dataFormat;
+        /** input data, in format "dataFormat", for dataFormat in json, xon, yaml, data can be in format "xon-xml" */
         String              data;
+        /** X-definition processing mode, values: validate/"", compose */
         String              mode;
+        /** value: language of input data (only for mode validate) */
         String              langInp;
+        /** value: language of processed data (only for mode validate) */
         String              langOut;
+        /** model-name, only for construction-mode */
         String              modelName;
+        /** model-URI, only for construction-mode */
         String              modelURI;
+        /** list of values: json, xon, yaml, xml, csv, ini (only for mode=validate and xon-like input
+         *                                                  (i.e. json, xon, yaml, csv, ini)) */
         List<XdDataFormat>  xonDisplayAs;
+        /** values: no/"", yes */
         String              csvHeader;
 
         private RequestParams(HttpServletRequest req) {

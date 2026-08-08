@@ -95,7 +95,7 @@ public abstract class XdefServletAbs extends HttpServlet {
      * @param language  reporter-language, <code>null</code> means default language
      * @return string with listing form of source data
      */
-    public static final String printReports(final ReportReader reporter, final String data, final String language) {
+    protected static final String printReports(final ReportReader reporter, final String data, final String language) {
         Writer writer = new CharArrayWriter();
         Reader car = new CharArrayReader(data.toCharArray());
         ReportPrinter.printListing(
@@ -111,9 +111,15 @@ public abstract class XdefServletAbs extends HttpServlet {
      * @param data ...
      * @return ...
      */
-    public static final String printReports(final ReportReader reporter, final String data) {
+    protected static final String printReports(final ReportReader reporter, final String data) {
         return printReports(reporter, data, null);
     }
+
+    /** see {@link HttpServlet#getServletInfo()}
+     * @return ...
+     */
+    @Override
+    public abstract String getServletInfo();
 
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -182,19 +188,13 @@ public abstract class XdefServletAbs extends HttpServlet {
     // Abstract methods
     ////////////////////////////////////////////////////////////////////////////////
 
-    /** Returns a short description of this servlet.
-     * @return short description of this servlet.
-     */
-    @Override
-    abstract public String getServletInfo();
-
     /** Processes requests.
      * @param req servlet request.
      * @param resp servlet response.
      * @throws ServletException if servlet error occurs.
      * @throws IOException if a IO error occurs.
      */
-    public abstract void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
+    protected abstract void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException;
 
 
