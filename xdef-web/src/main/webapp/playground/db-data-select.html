@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Playground — Database-service: select data from database</title>
-    <meta name="description" content="Playground — Database-service: select data from database"/>
+    <title>Playground — Database-service: select data from tables</title>
+    <meta name="description" content="Playground — Database-service: select data from tables"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
@@ -13,16 +13,16 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">Playground — Database-service: select data from database</div>
+<div class="title">Playground — Database-service: select data from tables</div>
 
 <p>
-Select data from the database.
-If the schema and tables don't exist yet, the form action ends with an non-existing schema error.
+Select data from the database tables.
+If the schema and tables don't exist yet, the X-definition ends with an non-existing schema error.
 </p>
 You can follow on:<ul>
-    <li><a href='db-data-insert.html'>insert data into the database</a></li>
-    <li><a href='db-data-select.html'>select data from the database</a></li>
-    <li><a href='db-drop.html'       >drop the database</a></li>
+    <li><a href='db-data-insert.html'>insert data into the tables</a></li>
+    <li><a href='db-data-select.html'>select data from the tables</a></li>
+    <li><a href='db-drop.html'       >drop the tables</a></li>
 </ul>
 
 <form method="post" action="Playground">
@@ -33,7 +33,7 @@ You can follow on:<ul>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
 </div><div>
-Database name: <input name="databaseName" value="db21XFX31" type="text"/>
+Database name: <input name="databaseName" value="" type="text" id="databaseName"/>
 (automatically completed your unique name of an database
 available to the X-definition as "external Service dbservice",
 expires in 30&thinsp;min of idle-time)
@@ -80,7 +80,7 @@ expires in 30&thinsp;min of idle-time)
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLnums();</script>
+<script type="module">initPageBasicLnums(); initFormFieldDatabaseName();</script>
 
 </body>
 </html>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Playground — Database-service: drop database</title>
-    <meta name="description" content="Playground — Database-service: drop database"/>
+    <title>Playground — Database-service: drop tables</title>
+    <meta name="description" content="Playground — Database-service: drop tables"/>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
@@ -13,14 +13,14 @@
 <div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
 
 
-<div class="title">Playground — Database-service: drop database</div>
+<div class="title">Playground — Database-service: drop tables</div>
 
 <p>
 Drop database schema and tables.
-If the schema and tables don't exist yet, the form action ends with an non-existing schema error.
+If the schema and tables don't exist yet, the X-definition ends with an non-existing schema error.
 </p>
-After drop of the database you can follow on:<ul>
-    <li><a href='db-create.html'>create the database</a></li>
+After drop of the tables you can follow on:<ul>
+    <li><a href='db-create.html'>create the tables</a></li>
 </ul>
 
 <form method="post" action="Playground">
@@ -31,7 +31,7 @@ After drop of the database you can follow on:<ul>
 Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
 (enter in case of X-definition collection)
 </div><div>
-Database name: <input name="databaseName" value="db21XFX31" type="text"/>
+Database name: <input name="databaseName" value="" type="text" id="databaseName"/>
 (automatically completed your unique name of an database
 available to the X-definition as "external Service dbservice",
 expires in 30&thinsp;min of idle-time)
@@ -66,7 +66,7 @@ expires in 30&thinsp;min of idle-time)
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">initPageBasicLnums();</script>
+<script type="module">initPageBasicLnums(); initFormFieldDatabaseName();</script>
 
 </body>
 </html>
