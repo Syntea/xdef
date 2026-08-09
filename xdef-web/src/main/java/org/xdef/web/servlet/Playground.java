@@ -44,20 +44,23 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
 /**
- * Servlet for execution "Playground-online".
+ * Servlet for execution online playground, called "Playground-online".
+ * For request parameters see {@link RequestParams}.
  * <p>
- * For example for playing users or for tester-users or
- * for tutorial examples or for other examples on internet.
+ * For examples, for playing users, for tester-users,
+ * for tutorial examples, for other examples on Internet.
  * <p>
- * Handles in-memory derby-databases used in X-definitions. Creates them on first usage and shutdown them after 30min
- * of idle-time by db-cleanup thread {@link #dbCleanupTimer} with fixed rate 1min and initial delay 1min.
+ * Handles in-memory derby-databases used in X-definitions. Databases are created on the first usage and
+ * shutdown after 30 minute of inactivity by thread "db-cleanup" {@link #dbCleanupTimer}
+ * with fixed rate 1 minute and initial delay 1 minute.
  *
- * @author Vaclav Trojan
+ * @author Vaclav Trojan, V.Sisma
  */
 public final class Playground extends XdefServletAbs {
     private static final long serialVersionUID = 2277695929503402350L;
@@ -86,6 +89,7 @@ public final class Playground extends XdefServletAbs {
         return t;
     });
 
+
     static {
         //register db-drivers
         try {
@@ -103,16 +107,10 @@ public final class Playground extends XdefServletAbs {
         super();
     }
 
+
     /** destroy servlet resources */
     @Override
     public void destroy() {
-        //deregister db-drivers
-        try {
-            DriverManager.deregisterDriver(dbDriver);
-        } catch (SQLException ex) {
-            logger.warn("destroy(): failed to deregister db-drivers", ex);
-        }
-
         //stop db-cleanup thread
         try {
             dbCleanupTimer.shutdownNow();
@@ -122,6 +120,13 @@ public final class Playground extends XdefServletAbs {
 
         //shutdown all databases
         shutdownDatabasesOld(true);
+
+        //deregister db-drivers
+        try {
+            DriverManager.deregisterDriver(dbDriver);
+        } catch (SQLException ex) {
+            logger.warn("destroy(): failed to deregister db-drivers", ex);
+        }
 
         super.destroy();
     }
@@ -157,7 +162,9 @@ public final class Playground extends XdefServletAbs {
         resp.getWriter().print(respHtml);
     }
 
-    private ProcessParams processRequest(RequestParams rp) {
+
+
+    private static ProcessParams processRequest(RequestParams rp) {
         ProcessParams pp = new ProcessParams();
 
         String        data4Xd  = rp.data;
@@ -178,7 +185,7 @@ public final class Playground extends XdefServletAbs {
                     //incorrect X-definition
                     pp.status  = CT.stError;
                     pp.title   = "X-definition error(s)";
-                    pp.message = printReports(reporter, rp.xdef);
+                    pp.message = printReports(reporter, rp.xdef, rp.lang);
 
                 } else {
                     String  mode4Xd;
@@ -276,7 +283,6 @@ public final class Playground extends XdefServletAbs {
                             resultElement = xd.xparse(data4Xd, reporter);
                         }
                     }
-                    caw.close();
 
                     //timer after xdef-processing
                     pp.timerProcess = new Date().getTime();
@@ -285,14 +291,14 @@ public final class Playground extends XdefServletAbs {
                     if (reporter.errors()) {
                         pp.status  = CT.stError;
                         pp.title   = "Input data error(s)";
-                        pp.message = printReports(reporter, data4Xd);
+                        pp.message = printReports(reporter, data4Xd, rp.lang);
                     } else {
                         pp.status = CT.stOk;
                         pp.title  = "Result — mode \"" + mode4Xd + "\"";
 
                         if (reporter.errorWarnings()) {
                             //reporter contains some warnings
-                            pp.message = printReports(reporter, data4Xd);
+                            pp.message = printReports(reporter, data4Xd, rp.lang);
                         }
 
                         if (resultElement != null) {
@@ -306,6 +312,7 @@ public final class Playground extends XdefServletAbs {
                     if (caw.size() > 0) {
                         pp.stdOutput = caw.toString();
                     }
+                    caw.close();
                 }
             } catch (Exception ex) {
                 if (pp.timerXdef == null) {
@@ -338,7 +345,7 @@ public final class Playground extends XdefServletAbs {
             }
             reporter.reset();
             pp.message =
-                printReports(reporter, data4Xd) +
+                printReports(reporter, data4Xd, rp.lang) +
                 "\n\nException:\n" +
                 STester.printThrowable(ex)
             ;
@@ -357,7 +364,7 @@ public final class Playground extends XdefServletAbs {
      * @return html-response
      * @throws Exception template process fails
      */
-    private String assembleResponse(RequestParams rp, ProcessParams pp) throws ServletException {
+    private static String assembleResponse(RequestParams rp, ProcessParams pp) throws ServletException {
         boolean stdOutputEx  = pp.stdOutput != null && !pp.stdOutput.isEmpty();
         boolean resultIsHtml = pp.result != null && rp.dataFormat == XdDataFormat.xml && pp.result.startsWith("<html");
         boolean lexEx        = rp.mode.equals(CT.modeValidate) && (
@@ -449,26 +456,23 @@ public final class Playground extends XdefServletAbs {
         ;
     }
 
-    /** SQLState Derby reports on a successful in-memory database shutdown/drop (not an actual error). */
-    private static final String derbySQLStateSuccessfulDrop = "08006";
-
     /**
      * shutdown any dbLastUsed database not used for at least {@link #dbTTL}. A database whose shutdown
      * fails for an unexpected reason (e.g. still in use) is kept in {@link #dbLastUsed} so the next
      * db-cleanup retries it, instead of being silently dropped from tracking while still alive in memory.
      *
-     * @param all whether shutdown all databases, not only old
+     * @param allAges whether shutdown all databases regardless of age, not only old
      */
-    private static void shutdownDatabasesOld(boolean all) {
-        logger.debug("shutdownDatabasesOld(): started: all: " + all + ", dbs: " + dbLastUsed.toString());
+    private static void shutdownDatabasesOld(boolean allAges) {
+        logger.debug("shutdownDatabasesOld(): started: allAges: " + allAges + ", dbs: " + dbLastUsed.toString());
 
         long cutoff = System.currentTimeMillis() - dbTTL.toMillis();
-        dbLastUsed.entrySet().removeIf(e -> (all || e.getValue() < cutoff) && shutdownDatabase(e.getKey()));
+        dbLastUsed.entrySet().removeIf(e -> (allAges || e.getValue() < cutoff) && shutdownDatabase(e.getKey()));
 
         logger.debug("shutdownDatabasesOld(): finished: dbs: " + dbLastUsed.toString());
     }
 
-    /** see {@link #shutdownDatabasesOld(boolean)} with {@code all = false}*/
+    /** see {@link #shutdownDatabasesOld(boolean)} with {@code allAges = false}*/
     private static void shutdownDatabasesOld() {
         shutdownDatabasesOld(false);
     }
@@ -484,7 +488,7 @@ public final class Playground extends XdefServletAbs {
         final String mtd = "shutdownDatabase(): ";
         try {
             DriverManager.getConnection(genConnectionURL(dbName, "drop=true"));
-            logger.debug(mtd + "dropping \"" + dbName +
+            logger.warn(mtd + "dropping \"" + dbName +
                 "\" unexpectedly returned a live connection instead of throwing");
             return true;
         } catch (SQLException ex) {
@@ -492,21 +496,53 @@ public final class Playground extends XdefServletAbs {
                 logger.debug(mtd + "database \"" + dbName + "\" was dropped");
                 return true;
             }
-            logger.debug(mtd + "failed to drop database \"" + dbName + "\", will retry later", ex);
+            logger.warn(mtd + "failed to drop database \"" + dbName + "\", will retry later", ex);
             return false;
         }
     }
 
+    /** SQLState Derby reports on a successful in-memory database shutdown/drop (not an actual error). */
+    private static final String derbySQLStateSuccessfulDrop = "08006";
+
+    /**
+     * determine the report/message language: the "lang" cookie (saved client-side when the user switches
+     * the site's language, see common.js), or else the browser's primary preferred language
+     * ({@code Accept-Language} request header), or else {@code null} (library default language).
+     *
+     * @param req servlet request
+     * @return language code (e.g. "cs", "en"), or {@code null} to use the library default
+     */
+    private static String detectLanguage(final HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("lang".equals(cookie.getName()) && !cookie.getValue().isEmpty()) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        String acceptLanguage = req.getHeader("Accept-Language");
+        if (acceptLanguage != null && !acceptLanguage.isEmpty()) {
+            String primary = acceptLanguage.split(",")[0].split(";")[0].split("-")[0].trim();
+            if (!primary.isEmpty()) {
+                return primary;
+            }
+        }
+
+        return null;
+    }
 
 
-    /** request parameters */
+
+    /** request parameters, see class-properties */
     private static class RequestParams {
         /** name of root X-definition, in case of X-definition collection */
         String              xdefRoot;
         /** X-definition (xml-format) */
         String              xdef;
-        /** name of an in-memory Derby database made available to the X-definition as "external Service dbservice"
-         * (empty = no database, "dbservice" variable is not set) */
+        /** name of an in-memory Derby database made available for X-definition as "external Service dbservice"
+         * (empty => no database, "dbservice" variable is not set) */
         String              databaseName;
         /** values: xml/"", json, xon, yaml, csv, ini */
         XdDataFormat        dataFormat;
@@ -514,19 +550,22 @@ public final class Playground extends XdefServletAbs {
         String              data;
         /** X-definition processing mode, values: validate/"", compose */
         String              mode;
-        /** value: language of input data (only for mode validate) */
+        /** value: language of input data (only for mode-validate) */
         String              langInp;
-        /** value: language of processed data (only for mode validate) */
+        /** value: language of processed data (only for mode-validate) */
         String              langOut;
-        /** model-name, only for construction-mode */
+        /** model-name, only for mode-construction */
         String              modelName;
-        /** model-URI, only for construction-mode */
+        /** model-URI, only for mode-construction */
         String              modelURI;
-        /** list of values: json, xon, yaml, xml, csv, ini (only for mode=validate and xon-like input
-         *                                                  (i.e. json, xon, yaml, csv, ini)) */
+        /** list of values: json, xon, yaml, xml, csv, ini (only for mode-validate and xon-like input
+         *    (i.e. json, xon, yaml, csv, ini)), see {@link XdDataFormat} */
         List<XdDataFormat>  xonDisplayAs;
         /** values: no/"", yes */
         String              csvHeader;
+        /** report/message language, see {@link #detectLanguage(HttpServletRequest)}
+         * ({@code null} => library default language) */
+        String              lang;
 
         /** regexp for value of parameter {@link #databaseName} */
         private static final Pattern databaseNameRE = Pattern.compile("[A-Za-z0-9_-]+");
@@ -549,6 +588,7 @@ public final class Playground extends XdefServletAbs {
                 .collect(Collectors.toList())
             ;
             csvHeader           = ServletUtil.getParam(req, "csvHeader").toLowerCase();
+            lang                = detectLanguage(req);
 
             //process default values and conversions
             xdefRoot            = xdefRoot    .isEmpty() ? null : xdefRoot;
@@ -573,7 +613,7 @@ public final class Playground extends XdefServletAbs {
         Long    timerProcess;
     }
 
-    /** text constants */
+    /** commonly used string constants */
     private static class CT {
         /** logical no */
         private static final String lNo             = "no";
