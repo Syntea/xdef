@@ -460,18 +460,18 @@ public final class Playground extends XdefServletAbs {
      * fails for an unexpected reason (e.g. still in use) is kept in {@link #dbLastUsed} so the next
      * db-cleanup retries it, instead of being silently dropped from tracking while still alive in memory.
      *
-     * @param all whether shutdown all databases, not only old
+     * @param allAges whether shutdown all databases regardless of age, not only old
      */
-    private static void shutdownDatabasesOld(boolean all) {
-        logger.debug("shutdownDatabasesOld(): started: all: " + all + ", dbs: " + dbLastUsed.toString());
+    private static void shutdownDatabasesOld(boolean allAges) {
+        logger.debug("shutdownDatabasesOld(): started: all: " + allAges + ", dbs: " + dbLastUsed.toString());
 
         long cutoff = System.currentTimeMillis() - dbTTL.toMillis();
-        dbLastUsed.entrySet().removeIf(e -> (all || e.getValue() < cutoff) && shutdownDatabase(e.getKey()));
+        dbLastUsed.entrySet().removeIf(e -> (allAges || e.getValue() < cutoff) && shutdownDatabase(e.getKey()));
 
         logger.debug("shutdownDatabasesOld(): finished: dbs: " + dbLastUsed.toString());
     }
 
-    /** see {@link #shutdownDatabasesOld(boolean)} with {@code all = false}*/
+    /** see {@link #shutdownDatabasesOld(boolean)} with {@code allAges = false}*/
     private static void shutdownDatabasesOld() {
         shutdownDatabasesOld(false);
     }
