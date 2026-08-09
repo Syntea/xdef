@@ -463,7 +463,7 @@ public final class Playground extends XdefServletAbs {
      * @param allAges whether shutdown all databases regardless of age, not only old
      */
     private static void shutdownDatabasesOld(boolean allAges) {
-        logger.debug("shutdownDatabasesOld(): started: all: " + allAges + ", dbs: " + dbLastUsed.toString());
+        logger.debug("shutdownDatabasesOld(): started: allAges: " + allAges + ", dbs: " + dbLastUsed.toString());
 
         long cutoff = System.currentTimeMillis() - dbTTL.toMillis();
         dbLastUsed.entrySet().removeIf(e -> (allAges || e.getValue() < cutoff) && shutdownDatabase(e.getKey()));
