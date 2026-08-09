@@ -9,17 +9,36 @@ import "./jquery.textarea-with-linenumbers.js"
 import { hljs } from './highlight.min.js'
 //import { hljs } from './highlight.js'
 
-//absolute path of the webapp root, derived from the location of this script "<webapp-root>/style/common.js")
+/** Absolute path of the webapp root, derived from the location of this script ("<webapp-root>/style/common.js") */
 const rootApp = new URL("..", import.meta.url).pathname;
 
+/**
+ * Rewrite "${rootPath}"-prefixed attributes (as inserted by loadHeaderFooter()) into real, resolved
+ * paths within the just-loaded header/footer fragment.
+ *
+ * @param {string} rootPath value to substitute for the "${rootPath}" placeholder
+ * @param {Array<{elem: string, attr: string}>} targets element/attribute pairs to rewrite,
+ *                                                      e.g. {elem: "a", attr: "href"}
+ */
 function replaceHtml(rootPath, targets) {
     targets.forEach((target) => {
         $(this).find(target.elem + "[" + target.attr + "]").each(function() {
-            $(this).attr(target.attr, $(this).attr(target.attr).replace("${rootPath}", rootPath));
+            $(this).attr(target.attr, $(this).attr(target.attr).replaceAll("${rootPath}", rootPath));
         })
     })
 }
 
+/**
+ * Load the shared header/footer fragments into the page's "#header"/"#footer" divs and rewrite their
+ * "${rootPath}"-prefixed links. The root is derived from the current page's own favicon location (not
+ * from rootApp/common.js's location), since each language subsite (cs/, es/, eo/, ...) has its own
+ * localized style/header.html + style/footer.html.
+ *
+ * @param {Function} [completeFooter] called as completeFooter(responseText, textStatus, jqXHR) after
+ *   the footer fragment has loaded and been rewritten.
+ * @param {Function} [completeHeader] called as completeHeader(responseText, textStatus, jqXHR) after
+ *   the header fragment has loaded and been rewritten.
+ */
 function loadHeaderFooter(completeFooter, completeHeader) {
     //location of the favicon
     const faviconHref = $('link[rel="icon"]').attr("href");
@@ -51,45 +70,80 @@ function loadHeaderFooter(completeFooter, completeHeader) {
             }
         }
     );
-};
+}
 
+/**
+ * Basic page init: load the shared header/footer.
+ *
+ * @param {Function} [completeFooter] see loadHeaderFooter().
+ * @param {Function} [completeHeader] see loadHeaderFooter().
+ */
 export function initPageBasic(completeFooter, completeHeader) {
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
+/**
+ * Page init for pages with line-numbered textareas: enables line numbers on all
+ * "textarea.linenumbers" elements, then loads the shared header/footer.
+ *
+ * @param {Function} [completeFooter] see loadHeaderFooter().
+ * @param {Function} [completeHeader] see loadHeaderFooter().
+ */
 export function initPageBasicLnums(completeFooter, completeHeader) {
     $("textarea.linenumbers").linenumbers();
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
+/**
+ * Page init for pages with syntax-highlighted code blocks: runs highlight.js over the page, then loads
+ * the shared header/footer.
+ *
+ * @param {Function} [completeFooter] see loadHeaderFooter().
+ * @param {Function} [completeHeader] see loadHeaderFooter().
+ */
 export function initPageBasicHili(completeFooter, completeHeader) {
     hljs.highlightAll();
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
+/**
+ * Page init combining initPageBasicLnums() and initPageBasicHili(): line numbers, syntax highlighting,
+ * then the shared header/footer.
+ *
+ * @param {Function} [completeFooter] see loadHeaderFooter().
+ * @param {Function} [completeHeader] see loadHeaderFooter().
+ */
 export function initPageBasicLnumsHili(completeFooter, completeHeader) {
     $("textarea.linenumbers").linenumbers();
     hljs.highlightAll();
     loadHeaderFooter(completeFooter, completeHeader);
 }
 
+/** Show the "active" footer version marker and hide the "passive" one. */
 export function footerVersionActivate() {
     $("#footerVersionPas").css("display", "none");
     $("#footerVersionAct").css("display", "inline");
 }
 
+/** Show the "passive" footer version marker and hide the "active" one. */
 export function footerVersionDeactivate() {
     $("#footerVersionPas").css("display", "inline");
     $("#footerVersionAct").css("display", "none");
 }
 
+/** Show the active-language marker(s) in the header and hide the passive one(s). */
 export function headerLangActivate() {
     $(".headerLangPas").css("display", "none");
     $(".headerLangAct").css("display", "inline");
 }
 
+/**
+ * Fetch the latest released X-definition version from the "LatestVersion" servlet and substitute it
+ * into every "span.latestVersion" text and every "--.--.--"  placeholder found in the href/title of
+ * elements matching "a.latestVersion".
+ */
 export function setLatestVersion() {
-    $.get("../LatestVersion", function(version) {
+    $.get(rootApp + "LatestVersion", function(version) {
         $("span.latestVersion").text(version);
         $("a.latestVersion").each(function() {
             const root = $(this);
@@ -101,11 +155,15 @@ export function setLatestVersion() {
     });
 }
 
-//init the form-field "databaseName" on the playground-pages, fill it from the "databaseName" cookie, or generate
-//a random value if there is none yet (only if fillEmpty is true), and save it back to the cookie only when
-//the field's form is submitted (so it reflects whatever value was actually sent, incl. hand-typed ones)
-//@param fillEmpty if true (default), an empty field is filled from the cookie or a random value;
-//                 if false, an empty field is left empty (the form is still wired to save on submit)
+/**
+ * Init the form-field "databaseName" on the Playground pages: fill it from the "databaseName" cookie,
+ * or generate a random value if there is none yet (only if fillEmpty is true), and save it back to the
+ * cookie only when the field's form is submitted with a non-empty value (so it reflects whatever value
+ * was actually sent, incl. hand-typed ones).
+ *
+ * @param {boolean} [fillEmpty=true] if true (default), an empty field is filled from the cookie or a
+ *   random value; if false, an empty field is left empty (the form is still wired to save on submit).
+ */
 export function initFormFieldDatabaseName(fillEmpty = true) {
     const input = document.getElementById("databaseName");
     if (!input) {
