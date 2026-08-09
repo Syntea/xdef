@@ -10,9 +10,10 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xdef.XDConstants;
-import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
+import org.xdef.sys.SManager;
+import org.xdef.sys.SRuntimeException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -34,16 +35,24 @@ public abstract class XdefServletAbs extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(XdefServletAbs.class);
 
-    /** internal default X-definition reporter language */
-    private   static final  String      reportLangDefault   = "eng";
     /** default X-definition properties */
     protected static final  Properties  XdPropsDefault      = getXdPropsDefault();
+    /** internal default X-definition reporter language */
+    private   static final  String      reportLangDefault   = "eng";
 
 
     static {
         //set X-definition report-language globally
-        Report.setLanguage(reportLangDefault);
-        logger.info("set X-definition report-language globally to: " + reportLangDefault);
+        try {
+            SManager.setLanguage(reportLangDefault);
+            logger.info("X-definition report-language set globally to: " + SManager.getLanguage());
+        } catch (SRuntimeException ex) {
+            SManager.setLanguage(SManager.getDefaultLanguage());
+            logger.warn(
+                "X-definition report-language set globally to: " + SManager.getLanguage() +
+                " (fallback: set to required language " + reportLangDefault + " failed: " + ex.getMessage() + ")"
+            );
+        }
     }
 
 
@@ -53,37 +62,64 @@ public abstract class XdefServletAbs extends HttpServlet {
     }
 
 
-    /**
-     * Get listing from reporter.
-     *
-     * @param reporter  reporter with error and warning messages
-     * @param data      string with source data
-     * @return string with listing form of source data
-     */
-    public static final String printReports(final ReportReader reporter, final String data) {
-        Writer writer = new CharArrayWriter();
-        Reader car = new CharArrayReader(data.toCharArray());
-        ReportPrinter.printListing(
-            writer, car, reporter,
-            null, 120, false,
-            reportLangDefault
-        );
-        return writer.toString();
-    }
-
     /** @return default X-definition properties */
     private static Properties getXdPropsDefault() {
         Properties props = new Properties();
         //process warnings
         props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-        //disable doctype, xinclude by security-reasons, prevent of (not functional):
-        // - XSS (Cross-Site Scripting) Attacks)
-        // - XXE (XML eXternal Entity) injection?)
-        props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
-        props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
+        //in XML disable doctype, xinclude by security-reasons, prevent of:
+        //1. XXE (XML eXternal Entity) injection?)
+        //   for example: <!DOCTYPE r [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><r>&xxe;</r>
+        //sax-parser: need to set
+        //DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+        //disable doctype:
+        //BUILDER_FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        //or if DOCTYPE must be enabled
+        //BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",          false);
+        //BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities",        false);
+        //BUILDER_FACTORY.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        //
+        //props.setProperty(XDConstants.XDPROPERTY_DOCTYPE,  XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE); //(FIXME: not functional)
+        //
+        //2. XINCLUDE (XML XINCLUDE feature)
+        //props.setProperty(XDConstants.XDPROPERTY_XINCLUDE, XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE); //(FIXME: not functional)
 
         return props;
     }
+
+    /**
+     * Get listing from reporter.
+     *
+     * @param reporter  reporter with error and warning messages
+     * @param data      string with source data
+     * @param language  reporter-language, <code>null</code> means default language
+     * @return string with listing form of source data
+     */
+    protected static final String printReports(final ReportReader reporter, final String data, final String language) {
+        Writer writer = new CharArrayWriter();
+        Reader car = new CharArrayReader(data.toCharArray());
+        ReportPrinter.printListing(
+            writer, car, reporter,
+            null, 120, false,
+            language
+        );
+        return writer.toString();
+    }
+
+    /** see {@link #printReports(ReportReader, String, String)} with <code>language = null</code>
+     * @param reporter ...
+     * @param data ...
+     * @return ...
+     */
+    protected static final String printReports(final ReportReader reporter, final String data) {
+        return printReports(reporter, data, null);
+    }
+
+    /** see {@link HttpServlet#getServletInfo()}
+     * @return ...
+     */
+    @Override
+    public abstract String getServletInfo();
 
     /** Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -152,19 +188,13 @@ public abstract class XdefServletAbs extends HttpServlet {
     // Abstract methods
     ////////////////////////////////////////////////////////////////////////////////
 
-    /** Returns a short description of this servlet.
-     * @return short description of this servlet.
-     */
-    @Override
-    abstract public String getServletInfo();
-
     /** Processes requests.
      * @param req servlet request.
      * @param resp servlet response.
      * @throws ServletException if servlet error occurs.
      * @throws IOException if a IO error occurs.
      */
-    public abstract void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
+    protected abstract void processRequest(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException,IOException;
 
 

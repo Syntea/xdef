@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Example — Database-service: insert data into tables</title>
+    <meta name="description" content="Example — Database-service: insert data into tables"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../../../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../../style/common.css"/>
+    <script type="module" src="../../../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Example — Database-service: insert data into tables</div>
+
+<p>
+Insert some data into the database tables.
+If the schema and tables don't exist yet, the X-definition ends with an non-existing schema error.
+</p>
+After data insertion into the tables you can follow on:<ul>
+    <li><a href='C231.html'>insert data into the tables</a></li>
+    <li><a href='C232.html'>select data from the tables</a></li>
+    <li><a href='C233.html'>drop the tables</a></li>
+</ul>
+
+<form method="post" action="../../../playground/Playground">
+
+<div>
+<b>X-definition:</b>
+</div><div>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
+(enter in case of X-definition collection)
+</div><div>
+Database name: <input name="databaseName" value="" type="text" id="databaseName"/>
+(automatically completes your unique database name available for X-definition as "external Service dbservice",
+database will be shut down in 30&thinsp;minutes of inactivity)
+</div>
+<textarea name="xdef" rows="43" class="linenumbers">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Books|Book">
+  &lt;xd:declaration>
+    external  Service dbservice;
+
+    boolean   ignored = false;
+
+    Statement isAuthor          = dbservice.prepareStatement("SELECT AUTHOR FROM BOOKS.AUTHOR WHERE BOOKS.AUTHOR.AUTHOR = ?");
+    Statement isTitle           = dbservice.prepareStatement("SELECT TITLE  FROM BOOKS.TITLE  WHERE BOOKS.TITLE.TITLE   = ?");
+    Statement insertAuthor      = dbservice.prepareStatement("INSERT INTO BOOKS.AUTHOR       (AUTHOR)              VALUES (?)");
+    Statement insertTitle       = dbservice.prepareStatement("INSERT INTO BOOKS.TITLE        (TITLE, ISBN, ISSUED) VALUES (?, ?, ?)");
+    Statement insertTitleAuthor = dbservice.prepareStatement("INSERT INTO BOOKS.TITLE_AUTHOR (IDAUTHOR, IDTITLE)
+                                                              VALUES (
+                                                                (SELECT IDAUTHOR FROM BOOKS.AUTHOR WHERE AUTHOR = ?),
+                                                                (SELECT IDTITLE  FROM BOOKS.TITLE  WHERE TITLE  = ?)
+                                                              )
+    ");
+  &lt;/xd:declaration>
+
+  &lt;Book title="string" ISBN="regex('\\d{8,10}')" issued="optional gYear()"
+     xd:script="occurs *; onStartElement {
+       if (ignored = isTitle.hasItem(toString(@title))) {
+         outln('ERROR: already exists: book \'' + @title + '\'');
+       } else {
+         insertTitle.execute(toString(@title),toString(@ISBN),toString(@issued));
+         outln('INFO: inserted: book \'' + @title + '\' ISBN: ' + @ISBN);
+       }
+     }"
+  >
+     &lt;Author xd:script="occurs *;">
+        optional string;
+        finally if (!ignored) {
+          String s = getText();
+          if (!isAuthor.hasItem(s)) insertAuthor.execute(s); /*new author*/
+          insertTitleAuthor.execute(s, xpath("../@title").toString());
+        }
+     &lt;/Author>
+  &lt;/Book>
+
+  &lt;Books>
+    &lt;Book xd:script="+; ref Book"/>
+  &lt;/Books>
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="10" class="linenumbers">
+&lt;Books>
+  &lt;Book issued='2008' ISBN='12345678' title='The Last Theorem'>
+    &lt;Author>Arthur C. Clarke&lt;/Author>
+  &lt;/Book>
+  &lt;Book issued='2007' ISBN='8345678191' title='The X-definition 3.1'>
+    &lt;Author>Jindřich Kocman&lt;/Author>
+    &lt;Author>Jiří Kamenický&lt;/Author>
+  &lt;/Book>
+&lt;/Books>
+</textarea>
+
+<button type="submit">Validate with database-service</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums(); initFormFieldDatabaseName();</script>
+
+</body>
+</html>

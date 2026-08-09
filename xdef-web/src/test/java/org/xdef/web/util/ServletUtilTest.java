@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.xdef.web.servlet.Playground;
 
+import jakarta.servlet.ServletException;
+
 /**
  * Test ServletUtil.
  *
@@ -106,44 +108,48 @@ class ServletUtilTest {
     }
 
     @Test
-    void mustacheReplacesAllOccurrencesOfEachPlaceholder() {
+    void mustacheReplacesAllOccurrencesOfEachPlaceholder() throws ServletException {
         String template = "<title>((status))</title><div class=\"((status))\">((body))</div>";
         Map<String, String> values = Map.of("status", "OK", "body", "hello");
         assertEquals("<title>OK</title><div class=\"OK\">hello</div>", ServletUtil.mustache(template, values));
     }
 
     @Test
-    void mustacheLeavesUnknownPlaceholderUntouched() {
+    void mustacheUnknownPlaceholderAndUnusedKeyThrows() throws ServletException {
         String template = "a((known))b((unknown))c";
-        assertEquals("aVALUEb((unknown))c", ServletUtil.mustache(template, Map.of("known", "VALUE")));
+        ServletException ex = assertThrows(ServletException.class,
+            () -> ServletUtil.mustache(template, Map.of("known", "VALUE", "unused", "VALUEX")));
+        assertTrue(ex.getMessage().contains("unused-keys: [unused]"));
     }
 
     @Test
-    void mustacheHandlesAdjacentPlaceholders() {
-        assertEquals("XY", ServletUtil.mustache("((a))((b))", Map.of("a", "X", "b", "Y")));
+    void mustacheHandlesAdjacentPlaceholders() throws ServletException {
+        Map<String, String> values = new HashMap<>(Map.of("a", "X", "b", "Y"));
+        values.put("n", null);
+        assertEquals("XY", ServletUtil.mustache("((a))((b))((n))((unknown))", values));
     }
 
     @Test
-    void mustacheKeyAllowsLettersDigitsUnderscoreAndHyphen() {
+    void mustacheKeyAllowsLettersDigitsUnderscoreAndHyphen() throws ServletException {
         assertEquals("VAL", ServletUtil.mustache("((a-b_c9))", Map.of("a-b_c9", "VAL")));
     }
 
     @Test
-    void mustacheDoesNotTreatNonKeyContentAsPlaceholder() {
+    void mustacheDoesNotTreatNonKeyContentAsPlaceholder() throws ServletException {
         // a space is not a valid key character - "((" here must be left as literal text,
         // not gobbled up together with the unrelated "))" that follows much later
         String template = "((not a key)) then ((real))";
-        Map<String, String> values = Map.of("not a key", "XXX", "real", "VALUE");
+        Map<String, String> values = Map.of("real", "VALUE");
         assertEquals("((not a key)) then VALUE", ServletUtil.mustache(template, values));
     }
 
     @Test
-    void mustacheOnNullTemplateReturnsNull() {
+    void mustacheOnNullTemplateReturnsNull() throws ServletException {
         assertNull(ServletUtil.mustache(null, Map.of()));
     }
 
     @Test
-    void mustacheFillsRealPlaygroundTemplateCompletely() {
+    void mustacheFillsRealPlaygroundTemplateCompletely() throws ServletException {
         String template = ServletUtil.readRsrcAsString(
             Playground.class, "webapp/playground/playground-response-template.html");
 

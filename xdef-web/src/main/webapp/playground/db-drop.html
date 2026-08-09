@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playground — Database-service: drop tables</title>
+    <meta name="description" content="Playground — Database-service: drop tables"/>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../style/common.css"/>
+    <script type="module" src="../style/common.js"></script>
+</head>
+<body>
+
+<div id="header"><span class="errorVD">ERROR: HEADER NOT LOADED</span></div>
+
+
+<div class="title">Playground — Database-service: drop tables</div>
+
+<p>
+Drop database schema and tables.
+If the schema and tables don't exist yet, the X-definition ends with an non-existing schema error.
+</p>
+After drop of the tables you can follow on:<ul>
+    <li><a href='db-create.html'>create the tables</a></li>
+</ul>
+
+<form method="post" action="Playground">
+
+<div>
+<b>X-definition:</b>
+</div><div>
+Name of root X-definition: <input name="xdefRoot" value="" type="text"/>
+(enter in case of X-definition collection)
+</div><div>
+Database name: <input name="databaseName" value="" type="text" id="databaseName"/>
+(automatically completes your unique database name available for X-definition as "external Service dbservice",
+database will be shut down in 30&thinsp;minutes of inactivity)
+</div>
+<textarea name="xdef" rows="12" class="linenumbers">
+&lt;xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="dropSchema">
+  &lt;xd:declaration>
+    external Service dbservice;
+  &lt;/xd:declaration>
+
+  &lt;dropSchema name="string; finally dbservice.execute('DROP SCHEMA ' + getText() + ' RESTRICT');">
+    &lt;table xd:script="occurs *;"
+           name="string; onTrue dbservice.execute('DROP TABLE ' + xpath('../../@name') + '.' + getText());"
+    />
+  &lt;/dropSchema>
+&lt;/xd:def>
+</textarea>
+
+<b>Input data:</b>
+<textarea name="data" rows="6" class="linenumbers">
+&lt;dropSchema name = "BOOKS">
+  &lt;table name = "TITLE_AUTHOR"/>
+  &lt;table name = "TITLE"/>
+  &lt;table name = "AUTHOR"/>
+&lt;/dropSchema>
+</textarea>
+
+<button type="submit">Validate with database-service</button>
+
+</form>
+
+
+<div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
+
+<script type="module">initPageBasicLnums(); initFormFieldDatabaseName();</script>
+
+</body>
+</html>

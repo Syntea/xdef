@@ -23,10 +23,7 @@
         <servlet-class>org.xdef.web.servlet.GenSchema</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Derby</servlet-name>
-        <servlet-class>org.xdef.web.servlet.Derby</servlet-class>
-    </servlet>
-    <servlet>
+        <!-- candidate to remove, temporary service to download, upload files -->
         <servlet-name>Service</servlet-name>
         <servlet-class>org.xdef.web.servlet.Service</servlet-class>
     </servlet>
@@ -48,10 +45,7 @@
         <url-pattern>/playground/GenSchema</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Derby</servlet-name>
-        <url-pattern>/playground/Derby</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
+        <!-- candidate to remove -->
         <servlet-name>Service</servlet-name>
         <url-pattern>/Service</url-pattern>
     </servlet-mapping>
