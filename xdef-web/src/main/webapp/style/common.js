@@ -138,6 +138,45 @@ export function headerLangActivate() {
 }
 
 /**
+ * Handle a change of the header's language-select: save the chosen language into the "lang" cookie (read
+ * server-side, e.g. by Playground, to localize X-definition report messages), then navigate to the
+ * selected language's page.
+ *
+ * @param {HTMLSelectElement} select the language-select element; the selected option's "lang" attribute
+ *   is the 2-letter language code, its value is the target URL.
+ */
+export function headerLangChange(select) {
+    const lang = select.options[select.selectedIndex].lang;
+    if (lang) {
+        document.cookie = "lang=" + encodeURIComponent(lang) + "; path=" + rootApp + "; max-age=31536000";
+    }
+    location = select.value;
+}
+
+/**
+ * Redirect from this (English) landing page to a localized "&lt;lang&gt;/index.html" landing page, based
+ * on the "lang" cookie (see headerLangChange()) or else the browser's preferred language(s). Does nothing
+ * if the resolved language is English, unset, or not one of the localized subsites.
+ */
+export function redirectToLangIndex() {
+    const supported = ["cs", "es", "eo"];
+
+    const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=([^;]*)/);
+    let   lang        = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
+
+    if (!lang) {
+        const browserLangs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+        lang = browserLangs.map(tag => tag.split("-")[0].toLowerCase()).find(l => supported.includes(l));
+    } else {
+        lang = lang.split("-")[0].toLowerCase();
+    }
+
+    if (supported.includes(lang)) {
+        location.replace(rootApp + lang + "/");
+    }
+}
+
+/**
  * Fetch the latest released X-definition version from the "LatestVersion" servlet and substitute it
  * into every "span.latestVersion" text and every "--.--.--"  placeholder found in the href/title of
  * elements matching "a.latestVersion".
@@ -196,5 +235,7 @@ window.initPageBasicLnumsHili       = initPageBasicLnumsHili;
 window.footerVersionActivate        = footerVersionActivate;
 window.footerVersionDeactivate      = footerVersionDeactivate;
 window.headerLangActivate           = headerLangActivate;
+window.headerLangChange             = headerLangChange;
+window.redirectToLangIndex          = redirectToLangIndex;
 window.setLatestVersion             = setLatestVersion;
 window.initFormFieldDatabaseName    = initFormFieldDatabaseName;

@@ -44,6 +44,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -184,7 +185,7 @@ public final class Playground extends XdefServletAbs {
                     //incorrect X-definition
                     pp.status  = CT.stError;
                     pp.title   = "X-definition error(s)";
-                    pp.message = printReports(reporter, rp.xdef);
+                    pp.message = printReports(reporter, rp.xdef, rp.lang);
 
                 } else {
                     String  mode4Xd;
@@ -282,7 +283,6 @@ public final class Playground extends XdefServletAbs {
                             resultElement = xd.xparse(data4Xd, reporter);
                         }
                     }
-                    caw.close();
 
                     //timer after xdef-processing
                     pp.timerProcess = new Date().getTime();
@@ -291,14 +291,14 @@ public final class Playground extends XdefServletAbs {
                     if (reporter.errors()) {
                         pp.status  = CT.stError;
                         pp.title   = "Input data error(s)";
-                        pp.message = printReports(reporter, data4Xd);
+                        pp.message = printReports(reporter, data4Xd, rp.lang);
                     } else {
                         pp.status = CT.stOk;
                         pp.title  = "Result — mode \"" + mode4Xd + "\"";
 
                         if (reporter.errorWarnings()) {
                             //reporter contains some warnings
-                            pp.message = printReports(reporter, data4Xd);
+                            pp.message = printReports(reporter, data4Xd, rp.lang);
                         }
 
                         if (resultElement != null) {
@@ -312,6 +312,7 @@ public final class Playground extends XdefServletAbs {
                     if (caw.size() > 0) {
                         pp.stdOutput = caw.toString();
                     }
+                    caw.close();
                 }
             } catch (Exception ex) {
                 if (pp.timerXdef == null) {
@@ -344,7 +345,7 @@ public final class Playground extends XdefServletAbs {
             }
             reporter.reset();
             pp.message =
-                printReports(reporter, data4Xd) +
+                printReports(reporter, data4Xd, rp.lang) +
                 "\n\nException:\n" +
                 STester.printThrowable(ex)
             ;
@@ -503,6 +504,35 @@ public final class Playground extends XdefServletAbs {
     /** SQLState Derby reports on a successful in-memory database shutdown/drop (not an actual error). */
     private static final String derbySQLStateSuccessfulDrop = "08006";
 
+    /**
+     * determine the report/message language: the "lang" cookie (saved client-side when the user switches
+     * the site's language, see common.js), or else the browser's primary preferred language
+     * ({@code Accept-Language} request header), or else {@code null} (library default language).
+     *
+     * @param req servlet request
+     * @return language code (e.g. "cs", "en"), or {@code null} to use the library default
+     */
+    private static String detectLanguage(final HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("lang".equals(cookie.getName()) && !cookie.getValue().isEmpty()) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        String acceptLanguage = req.getHeader("Accept-Language");
+        if (acceptLanguage != null && !acceptLanguage.isEmpty()) {
+            String primary = acceptLanguage.split(",")[0].split(";")[0].split("-")[0].trim();
+            if (!primary.isEmpty()) {
+                return primary;
+            }
+        }
+
+        return null;
+    }
+
 
 
     /** request parameters, see class-properties */
@@ -533,6 +563,9 @@ public final class Playground extends XdefServletAbs {
         List<XdDataFormat>  xonDisplayAs;
         /** values: no/"", yes */
         String              csvHeader;
+        /** report/message language, see {@link #detectLanguage(HttpServletRequest)}
+         * ({@code null} => library default language) */
+        String              lang;
 
         /** regexp for value of parameter {@link #databaseName} */
         private static final Pattern databaseNameRE = Pattern.compile("[A-Za-z0-9_-]+");
@@ -555,6 +588,7 @@ public final class Playground extends XdefServletAbs {
                 .collect(Collectors.toList())
             ;
             csvHeader           = ServletUtil.getParam(req, "csvHeader").toLowerCase();
+            lang                = detectLanguage(req);
 
             //process default values and conversions
             xdefRoot            = xdefRoot    .isEmpty() ? null : xdefRoot;
