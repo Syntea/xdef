@@ -262,8 +262,6 @@ final class CompileXonXdef extends XScriptParser {
                 sections.add(matchItem);
             } else {
                 String s = matchItem.getString();
-//                matchItem.setString(s.startsWith("{")
-//                    ? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1) : matchexpr + " AND " + s);
                 if (s.startsWith("{")) {
                     matchItem.setString("{if (!(" +matchexpr+ ")) return false;" + s.substring(1));
                 }
@@ -676,9 +674,9 @@ final class CompileXonXdef extends XScriptParser {
                         } else {
                             s += ".parse((String)@" + X_VALATTR + ").matches()";
                             List<Object> x = parseXscript(val.getValue());
-                            SBuffer y = findSection("option", x);
+                            SBuffer y = findSection("options", x);
                             if (y == null) {
-                                y = findSection("options", x);
+                                y = findSection("option", x); // this may be also used and it is recomended
                             }
                             if (y != null && y.getString().contains("acceptNull")) {
                                 s += " || \"null\".equals((String)@val)";
