@@ -110,13 +110,6 @@ public final class Playground extends XdefServletAbs {
     /** destroy servlet resources */
     @Override
     public void destroy() {
-        //deregister db-drivers
-        try {
-            DriverManager.deregisterDriver(dbDriver);
-        } catch (SQLException ex) {
-            logger.warn("destroy(): failed to deregister db-drivers", ex);
-        }
-
         //stop db-cleanup thread
         try {
             dbCleanupTimer.shutdownNow();
@@ -126,6 +119,13 @@ public final class Playground extends XdefServletAbs {
 
         //shutdown all databases
         shutdownDatabasesOld(true);
+
+        //deregister db-drivers
+        try {
+            DriverManager.deregisterDriver(dbDriver);
+        } catch (SQLException ex) {
+            logger.warn("destroy(): failed to deregister db-drivers", ex);
+        }
 
         super.destroy();
     }
@@ -487,7 +487,7 @@ public final class Playground extends XdefServletAbs {
         final String mtd = "shutdownDatabase(): ";
         try {
             DriverManager.getConnection(genConnectionURL(dbName, "drop=true"));
-            logger.debug(mtd + "dropping \"" + dbName +
+            logger.warn(mtd + "dropping \"" + dbName +
                 "\" unexpectedly returned a live connection instead of throwing");
             return true;
         } catch (SQLException ex) {
@@ -495,7 +495,7 @@ public final class Playground extends XdefServletAbs {
                 logger.debug(mtd + "database \"" + dbName + "\" was dropped");
                 return true;
             }
-            logger.debug(mtd + "failed to drop database \"" + dbName + "\", will retry later", ex);
+            logger.warn(mtd + "failed to drop database \"" + dbName + "\", will retry later", ex);
             return false;
         }
     }
