@@ -20,6 +20,7 @@ import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 
@@ -364,6 +365,35 @@ public class ServletUtil {
         }
 
         return result;
+    }
+
+    /**
+     * determine the report/message language: the "lang" cookie (saved client-side when the user switches
+     * the site's language, see common.js), or else the browser's primary preferred language
+     * ({@code Accept-Language} request header), or else {@code null} (library default language).
+     *
+     * @param req servlet request
+     * @return language code (e.g. "cs", "en"), or {@code null} to use the library default
+     */
+    public static String detectLanguage(final HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("lang".equals(cookie.getName()) && !cookie.getValue().isEmpty()) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        String acceptLanguage = req.getHeader("Accept-Language");
+        if (acceptLanguage != null && !acceptLanguage.isEmpty()) {
+            String primary = acceptLanguage.split(",")[0].split(";")[0].split("-")[0].trim();
+            if (!primary.isEmpty()) {
+                return primary;
+            }
+        }
+
+        return null;
     }
 
 }

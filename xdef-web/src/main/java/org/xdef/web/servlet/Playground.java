@@ -44,7 +44,6 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -284,6 +283,11 @@ public final class Playground extends XdefServletAbs {
                         }
                     }
 
+                    if (dbservice != null) {
+                        //commit db-service
+                        dbservice.commit();
+                    }
+
                     //timer after xdef-processing
                     pp.timerProcess = new Date().getTime();
 
@@ -325,11 +329,7 @@ public final class Playground extends XdefServletAbs {
                 throw ex;
             } finally {
                 if (dbservice != null) {
-                    try {
-                        dbservice.commit();
-                    } catch (Exception ex) {
-                        //ignore commit errors on an already-failed/rolled-back dbservice
-                    }
+                    //close db-service
                     dbservice.close();
                 }
             }
@@ -504,35 +504,6 @@ public final class Playground extends XdefServletAbs {
     /** SQLState Derby reports on a successful in-memory database shutdown/drop (not an actual error). */
     private static final String derbySQLStateSuccessfulDrop = "08006";
 
-    /**
-     * determine the report/message language: the "lang" cookie (saved client-side when the user switches
-     * the site's language, see common.js), or else the browser's primary preferred language
-     * ({@code Accept-Language} request header), or else {@code null} (library default language).
-     *
-     * @param req servlet request
-     * @return language code (e.g. "cs", "en"), or {@code null} to use the library default
-     */
-    private static String detectLanguage(final HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("lang".equals(cookie.getName()) && !cookie.getValue().isEmpty()) {
-                    return cookie.getValue();
-                }
-            }
-        }
-
-        String acceptLanguage = req.getHeader("Accept-Language");
-        if (acceptLanguage != null && !acceptLanguage.isEmpty()) {
-            String primary = acceptLanguage.split(",")[0].split(";")[0].split("-")[0].trim();
-            if (!primary.isEmpty()) {
-                return primary;
-            }
-        }
-
-        return null;
-    }
-
 
 
     /** request parameters, see class-properties */
@@ -567,9 +538,6 @@ public final class Playground extends XdefServletAbs {
          * ({@code null} => library default language) */
         String              lang;
 
-        /** regexp for value of parameter {@link #databaseName} */
-        private static final Pattern databaseNameRE = Pattern.compile("[A-Za-z0-9_-]+");
-
         private RequestParams(HttpServletRequest req) {
             //request parameters: see javadoc
             xdefRoot            = ServletUtil.getParam(req, "xdefRoot");
@@ -588,7 +556,7 @@ public final class Playground extends XdefServletAbs {
                 .collect(Collectors.toList())
             ;
             csvHeader           = ServletUtil.getParam(req, "csvHeader").toLowerCase();
-            lang                = detectLanguage(req);
+            lang                = ServletUtil.detectLanguage(req);
 
             //process default values and conversions
             xdefRoot            = xdefRoot    .isEmpty() ? null : xdefRoot;
@@ -597,6 +565,10 @@ public final class Playground extends XdefServletAbs {
             mode                = mode.equals(CT.modeCompose) ? mode : CT.modeValidate;
             csvHeader           = csvHeader.isEmpty() || csvHeader.equals(CT.lNo) ? CT.lNo : CT.lYes;
         }
+
+        /** regexp for value of parameter {@link #databaseName} */
+        private static final Pattern databaseNameRE = Pattern.compile("[A-Za-z0-9_-]{1,30}");
+
     }
 
 
