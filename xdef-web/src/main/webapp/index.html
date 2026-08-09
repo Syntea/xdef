@@ -2,6 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
+    <script>
+        //redirect to a localized landing page before anything renders, to avoid a flash of English content.
+        //kept as a synchronous, non-module, common.js-independent script so it runs before any parsing/rendering
+        //continues; must stay in sync with headerLangChange()'s cookie format in style/common.js.
+        (function() {
+            var supported = ["cs", "es", "eo"];
+            var match     = document.cookie.match(/(?:^|;\s*)lang=([^;]*)/);
+            var lang      = match ? decodeURIComponent(match[1]) : null;
+
+            if (!lang) {
+                var browserLangs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language];
+                for (var i = 0; i < browserLangs.length; i++) {
+                    var primary = browserLangs[i].split("-")[0].toLowerCase();
+                    if (supported.indexOf(primary) !== -1) {
+                        lang = primary;
+                        break;
+                    }
+                }
+            } else {
+                lang = lang.split("-")[0].toLowerCase();
+            }
+
+            if (lang && supported.indexOf(lang) !== -1) {
+                location.replace(lang + "/");
+            }
+        })();
+    </script>
     <title>X-definition Introduction</title>
 	<meta name="description" content="X-definition Introduction"/>
     <link rel="icon" type="image/x-icon" href="style/favicon.ico"/>
@@ -404,7 +431,7 @@ Articles, lectures, presentations related to events:<ul>
 
 <div id="footer"><span class="errorVD">ERROR: FOOTER NOT LOADED</span></div>
 
-<script type="module">redirectToLangIndex(); initPageBasicHili()</script>
+<script type="module">initPageBasicHili()</script>
 
 </body>
 </html>

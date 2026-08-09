@@ -154,29 +154,6 @@ export function headerLangChange(select) {
 }
 
 /**
- * Redirect from this (English) landing page to a localized "&lt;lang&gt;/index.html" landing page, based
- * on the "lang" cookie (see headerLangChange()) or else the browser's preferred language(s). Does nothing
- * if the resolved language is English, unset, or not one of the localized subsites.
- */
-export function redirectToLangIndex() {
-    const supported = ["cs", "es", "eo"];
-
-    const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=([^;]*)/);
-    let   lang        = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
-
-    if (!lang) {
-        const browserLangs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
-        lang = browserLangs.map(tag => tag.split("-")[0].toLowerCase()).find(l => supported.includes(l));
-    } else {
-        lang = lang.split("-")[0].toLowerCase();
-    }
-
-    if (supported.includes(lang)) {
-        location.replace(rootApp + lang + "/");
-    }
-}
-
-/**
  * Fetch the latest released X-definition version from the "LatestVersion" servlet and substitute it
  * into every "span.latestVersion" text and every "--.--.--"  placeholder found in the href/title of
  * elements matching "a.latestVersion".
@@ -236,6 +213,5 @@ window.footerVersionActivate        = footerVersionActivate;
 window.footerVersionDeactivate      = footerVersionDeactivate;
 window.headerLangActivate           = headerLangActivate;
 window.headerLangChange             = headerLangChange;
-window.redirectToLangIndex          = redirectToLangIndex;
 window.setLatestVersion             = setLatestVersion;
 window.initFormFieldDatabaseName    = initFormFieldDatabaseName;
