@@ -1,10 +1,7 @@
 package org.xdef.web.filter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -19,13 +16,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.WriteListener;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpServletResponseWrapper;
 
 /**
  * Bakes the shared header/footer fragments directly into static ".html" pages before they leave the
@@ -47,6 +41,11 @@ public final class HeaderFooterFilter implements Filter {
     /** language folder -&gt; ready-to-splice {@code <div id="footer">...</div>} markup */
     private final Map<String, String> footerByLang = new LinkedHashMap<>();
 
+    /** default constructor, calls super() only */
+    public HeaderFooterFilter() {
+        super();
+    }
+
     /** pre-load and pre-resolve header/footer markup for every language, once */
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
@@ -59,7 +58,7 @@ public final class HeaderFooterFilter implements Filter {
             footerByLang.put(lang, "<div id=\"footer\">" + loadFragment(ctx, lang, "footer.html", rootPath) + "</div>");
         }
 
-        logger.info("HeaderFooterFilter: pre-loaded header/footer for languages " + languages);
+        logger.info("init(): pre-loaded header/footer for languages " + languages);
     }
 
     /** read a "&lt;lang&gt;style/&lt;name&gt;" fragment and resolve its "${rootPath}" placeholders */
@@ -137,38 +136,5 @@ public final class HeaderFooterFilter implements Filter {
 
     @Override
     public void destroy() {}
-
-
-
-    /** buffers the wrapped response's body instead of sending it, so {@link #doFilter} can post-process it. */
-    private static final class BufferingResponseWrapper extends HttpServletResponseWrapper {
-
-        private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        private final ServletOutputStream   out    = new ServletOutputStream() {
-            @Override public void write(final int b)                                  { buffer.write(b); }
-            @Override public void write(final byte[] b, final int off, final int len) { buffer.write(b, off, len); }
-            @Override public boolean isReady()                                        { return true; }
-            @Override public void setWriteListener(final WriteListener listener)      {}
-        };
-        private final PrintWriter           writer =
-            new PrintWriter(new OutputStreamWriter(buffer, StandardCharsets.UTF_8), true)
-        ;
-
-        BufferingResponseWrapper(final HttpServletResponse response) {
-            super(response);
-        }
-
-        @Override public ServletOutputStream getOutputStream()                    { return out; }
-        @Override public PrintWriter         getWriter()                          { return writer; }
-        /** the real content-length is set by {@link HeaderFooterFilter#doFilter} once buffering is done */
-        @Override public void                setContentLength(final int len)      {}
-        /** see {@link #setContentLength(int)} */
-        @Override public void                setContentLengthLong(final long len) {}
-
-        byte[] getCapturedBytes() {
-            writer.flush();
-            return buffer.toByteArray();
-        }
-    }
 
 }

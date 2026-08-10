@@ -199,24 +199,6 @@ export function redirectToLangIndex() {
 }
 
 /**
- * Fetch the latest released X-definition version from the "LatestVersion" servlet and substitute it
- * into every "span.latestVersion" text and every "--.--.--"  placeholder found in the href/title of
- * elements matching "a.latestVersion".
- */
-export function setLatestVersion() {
-    $.get(rootApp + "LatestVersion", function(version) {
-        $("span.latestVersion").text(version);
-        $("a.latestVersion").each(function() {
-            const root = $(this);
-            ["href", "title"].forEach(attrName => {
-                const value = root.attr(attrName);
-                if (value) root.attr(attrName, value.replaceAll("--.--.--", version));
-            });
-        });
-    });
-}
-
-/**
  * Init the form-field "databaseName" on the Playground pages: fill it from the "databaseName" cookie,
  * or generate a random value if there is none yet (only if fillEmpty is true), and save it back to the
  * cookie only when the field's form is submitted with a non-empty value (so it reflects whatever value
@@ -259,5 +241,4 @@ window.footerVersionDeactivate      = footerVersionDeactivate;
 window.headerLangActivate           = headerLangActivate;
 window.headerLangChange             = headerLangChange;
 window.redirectToLangIndex          = redirectToLangIndex;
-window.setLatestVersion             = setLatestVersion;
 window.initFormFieldDatabaseName    = initFormFieldDatabaseName;

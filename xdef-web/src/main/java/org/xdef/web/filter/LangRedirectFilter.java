@@ -30,6 +30,11 @@ public final class LangRedirectFilter implements Filter {
     /** localized subsites this redirect targets */
     private static final List<String> supported = Arrays.asList("cs", "es", "eo");
 
+    /** default constructor, calls super() only */
+    public LangRedirectFilter() {
+        super();
+    }
+
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
         throws IOException, ServletException

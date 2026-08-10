@@ -20,6 +20,11 @@
         <filter-name>HeaderFooterFilter</filter-name>
         <filter-class>org.xdef.web.filter.HeaderFooterFilter</filter-class>
     </filter>
+    <filter>
+        <!-- bakes the latest released version into html-pages server-side (from a background-filled cache) -->
+        <filter-name>LatestVersionFilter</filter-name>
+        <filter-class>org.xdef.web.filter.LatestVersionFilter</filter-class>
+    </filter>
 
     <servlet>
         <servlet-name>Playground</servlet-name>
@@ -38,10 +43,6 @@
         <servlet-name>Service</servlet-name>
         <servlet-class>org.xdef.web.servlet.Service</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>LatestVersion</servlet-name>
-        <servlet-class>org.xdef.web.servlet.LatestVersion</servlet-class>
-    </servlet>
 
     <filter-mapping>
         <!-- mapped before HeaderFooterFilter: on redirect, that filter must not run at all -->
@@ -57,6 +58,12 @@
         <servlet-name>Playground</servlet-name>
         <servlet-name>GenXdef</servlet-name>
         <servlet-name>GenSchema</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <!-- only html-pages contain the version-placeholder -->
+        <filter-name>LatestVersionFilter</filter-name>
+        <url-pattern>/other/download.html</url-pattern>
+        <url-pattern>/other/documentation.html</url-pattern>
     </filter-mapping>
 
     <servlet-mapping>
@@ -75,10 +82,6 @@
         <!-- candidate to remove, see servlet Service -->
         <servlet-name>Service</servlet-name>
         <url-pattern>/Service</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>LatestVersion</servlet-name>
-        <url-pattern>/LatestVersion</url-pattern>
     </servlet-mapping>
 
     <session-config>
