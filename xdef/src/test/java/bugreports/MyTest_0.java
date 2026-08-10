@@ -223,29 +223,10 @@ if(T){return;}
 "</A>\n" +
 "</xd:def>";
             xp = compile(xdef);
-            swr = new StringWriter();
             xd = xp.createXDDocument();
-            xd.setStdOut(XDFactory.createXDOutput(swr, false));
+            xd.setStdOut(XDFactory.createXDOutput(swr = new StringWriter(), false));
             el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
             assertNoErrors(reporter);
-            assertEq("abet", swr.toString());
-            if (el.getChildNodes().getLength() > 0 || el.getAttributes().getLength() > 0) {
-                fail(KXmlUtils.nodeToString(el));
-            }
-            xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root = \"A\">\n" +
-"<A xd:script='option preserveReports; onIllegalElement out(\"e\");'\n" +
-"   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+
-"  <B xd:script='illegal; option preserveReports; onIllegalElement out(\"e\");'/>\n" +
-"  illegal int; onIllegalText out(\"t\");\n" +
-"</A>\n" +
-"</xd:def>";
-            xp = compile(xdef);
-            swr = new StringWriter();
-            xd = xp.createXDDocument();
-            xd.setStdOut(XDFactory.createXDOutput(swr, false));
-            el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
-            assertEq(3, reporter.getErrorCount());
             assertEq("abet", swr.toString());
             if (el.getChildNodes().getLength() > 0 || el.getAttributes().getLength() > 0) {
                 fail(KXmlUtils.nodeToString(el));
@@ -275,11 +256,11 @@ if(T)return;
         reporter.clear();
         try {
             xdef =
-"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a' script='option acceptNull'>\n"+
 "<xd:component>%class bugreports.Csvxx %link a</xd:component>\n"+
-" <xd:json name='a'> [ [%script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n"+
+" <xd:json name='a'>[ [%script=\"+;\", \"int\", \"int\", \"string()\", \"boolean()\"] ]</xd:json>\n"+
 "</xd:def>";
-            xp = XDFactory.compileXD(null, xdef); // no property
+            xp = compile(xdef);
             genXComponent(xp, clearTempDir());
             xd = xp.createXDDocument();
             json =

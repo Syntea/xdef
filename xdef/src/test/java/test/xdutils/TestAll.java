@@ -39,11 +39,9 @@ public class TestAll {
             fis = new FileOutputStream("testUtils.log");
             log = new PrintStream(fis);
         } catch (IOException ex) {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException x) {}
-            }
+            try {
+                fis.close();
+            } catch (IOException x) {}
             log = null;
         }
         XDTester[] tests = getTests();

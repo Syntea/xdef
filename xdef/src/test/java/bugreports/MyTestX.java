@@ -109,7 +109,7 @@ if(T)return;
 if(T) return;
         try {
             xp = compile(
-"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\" script='option acceptNull'>\n" +
 "<xd:component>%class "+_package+".Csvxx1 %link a</xd:component>\n" +
 " <xd:json name='a'> [ [ %script =\"+\", \"*; string()\"] ] </xd:json>\n" +
 "</xd:def>");
@@ -123,7 +123,7 @@ if(T) return;
                 fail(XonUtils.toXonString(o, true) + "\n*****\n" + XonUtils.toXonString(x, true));
             }
             xp = compile(
-"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\" script='option acceptNull'>\n" +
 "<xd:component>%class "+_package+".Csvxx2 %link a</xd:component>\n" +
 " <xd:json name='a'> [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n" +
 "</xd:def>");
@@ -137,7 +137,7 @@ if(T) return;
                 fail(XonUtils.toXonString(o, true) + "\n*****\n" + XonUtils.toXonString(x, true));
             }
             xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\" script='option acceptNull'>\n" +
 "<xd:component>%class "+_package+".Csvxx3 %link a</xd:component>\n" +
 " <xd:json name='a'> [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n" +
 "</xd:def>";

@@ -80,11 +80,12 @@ public class TestGenXdef extends XDTester {
     /** Run test and print error information. */
     @Override
     public void test() {
-        String dataDir = getDataDir() + "test/";
+        String dataDir = getDataDir();
         if (dataDir == null) {
             fail("Data directory is missing, test canceled");
             return;
         }
+        dataDir += "test/";
         Element el;
         String xdef;
         String xml;

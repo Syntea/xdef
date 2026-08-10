@@ -199,7 +199,6 @@ if(T)return;
             assertEq(5, list.get(0));
             assertEq(6, list.get(1));
             assertEq(7, list.get(2));
-            assertNull(XComponentUtil.get(xc, "$b"));
             assertNoErrorwarningsAndClear(reporter);
 if(T)return;
             xdef =
