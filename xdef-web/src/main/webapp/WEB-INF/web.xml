@@ -10,6 +10,17 @@
         <param-value>UTF-8</param-value>
     </context-param>
 
+    <filter>
+        <!-- redirects the default "/" landing page to a localized "lang/" one, before anything else runs -->
+        <filter-name>LangRedirectFilter</filter-name>
+        <filter-class>org.xdef.web.filter.LangRedirectFilter</filter-class>
+    </filter>
+    <filter>
+        <!-- bakes the shared header/footer into html-pages server-side, avoiding a visible pop-in -->
+        <filter-name>HeaderFooterFilter</filter-name>
+        <filter-class>org.xdef.web.filter.HeaderFooterFilter</filter-class>
+    </filter>
+
     <servlet>
         <servlet-name>Playground</servlet-name>
         <servlet-class>org.xdef.web.servlet.Playground</servlet-class>
@@ -32,6 +43,22 @@
         <servlet-class>org.xdef.web.servlet.LatestVersion</servlet-class>
     </servlet>
 
+    <filter-mapping>
+        <!-- mapped before HeaderFooterFilter: on redirect, that filter must not run at all -->
+        <filter-name>LangRedirectFilter</filter-name>
+        <url-pattern>/index.html</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <!-- maps to *.html and servlets - all contains headers+footers -->
+        <filter-name>HeaderFooterFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+        <servlet-name>Playground</servlet-name>
+        <servlet-name>GenXdef</servlet-name>
+        <servlet-name>GenSchema</servlet-name>
+    </filter-mapping>
+
     <servlet-mapping>
         <servlet-name>Playground</servlet-name>
         <url-pattern>/playground/Playground</url-pattern>
@@ -45,7 +72,7 @@
         <url-pattern>/playground/GenSchema</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <!-- candidate to remove -->
+        <!-- candidate to remove, see servlet Service -->
         <servlet-name>Service</servlet-name>
         <url-pattern>/Service</url-pattern>
     </servlet-mapping>

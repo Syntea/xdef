@@ -33,13 +33,26 @@ function replaceHtml(rootPath, targets) {
  * "${rootPath}"-prefixed links. The root is derived from the current page's own favicon location (not
  * from rootApp/common.js's location), since each language subsite (cs/, es/, eo/, ...) has its own
  * localized style/header.html + style/footer.html.
+ * <p>
+ * Whichever of "#header"/"#footer" was already baked in server-side (see HeaderFooterFilter.java, kicks in
+ * only when deployed behind that filter) is left untouched and not re-fetched; on plain static hosting
+ * (no filter) both still contain their "NOT LOADED" placeholder and get loaded exactly as before.
  *
  * @param {Function} [completeFooter] called as completeFooter(responseText, textStatus, jqXHR) after
- *   the footer fragment has loaded and been rewritten.
+ *   the footer fragment has loaded and been rewritten. Not called if the footer was already server-loaded.
  * @param {Function} [completeHeader] called as completeHeader(responseText, textStatus, jqXHR) after
- *   the header fragment has loaded and been rewritten.
+ *   the header fragment has loaded and been rewritten. Not called if the header was already server-loaded.
  */
 function loadHeaderFooter(completeFooter, completeHeader) {
+    const header       = $("div#header");
+    const footer       = $("div#footer");
+    const headerToLoad = header.find(".errorVD").length > 0;
+    const footerToLoad = footer.find(".errorVD").length > 0;
+
+    if (!headerToLoad && !footerToLoad) {
+        return;
+    }
+
     //location of the favicon
     const faviconHref = $('link[rel="icon"]').attr("href");
     //absolute path of the language-subsite root "<webapp-root>/lang/",
@@ -52,24 +65,28 @@ function loadHeaderFooter(completeFooter, completeHeader) {
         { elem: "option", attr: "value"}
     ];
 
-    $("div#header").load(
-        rootLang + "style/header.html",
-        function(responseText, textStatus, jqXHR) {
-            replaceHtml.call(this, rootLang, targets);
-            if (completeHeader) {
-                completeHeader.call(this, responseText, textStatus, jqXHR);
+    if (headerToLoad) {
+        header.load(
+            rootLang + "style/header.html",
+            function(responseText, textStatus, jqXHR) {
+                replaceHtml.call(this, rootLang, targets);
+                if (completeHeader) {
+                    completeHeader.call(this, responseText, textStatus, jqXHR);
+                }
             }
-        }
-    );
-    $("div#footer").load(
-        rootLang + "style/footer.html",
-        function(responseText, textStatus, jqXHR) {
-            replaceHtml.call(this, rootLang, targets);
-            if (completeFooter) {
-                completeFooter.call(this, responseText, textStatus, jqXHR);
+        );
+    }
+    if (footerToLoad) {
+        footer.load(
+            rootLang + "style/footer.html",
+            function(responseText, textStatus, jqXHR) {
+                replaceHtml.call(this, rootLang, targets);
+                if (completeFooter) {
+                    completeFooter.call(this, responseText, textStatus, jqXHR);
+                }
             }
-        }
-    );
+        );
+    }
 }
 
 /**
@@ -154,6 +171,34 @@ export function headerLangChange(select) {
 }
 
 /**
+ * Redirect from the default page "/" to a localized "lang/" page,
+ * based on the "lang" cookie (see headerLangChange()) or else the browser's preferred language(s).
+ * Does nothing if the resolved language is English, unset, or not one of the localized subsites.
+ * <p>
+ * The url's query-string and fragment are carried over to the localized page (e.g. "/?a=1#Media" -> "/cs/?a=1#Media").
+ * <p>
+ * Runs only where LangRedirectFilter.java does not (plain static hosting); behind that filter the redirect
+ * already happened server-side, so this page is never even reached.
+ */
+export function redirectToLangIndex() {
+    const supported = ["cs", "es", "eo"];
+
+    const cookieMatch = document.cookie.match(/(?:^|;\s*)lang=([^;]*)/);
+    let   lang        = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
+
+    if (!lang) {
+        const browserLangs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+        lang = browserLangs.map(tag => tag.split("-")[0].toLowerCase()).find(l => supported.includes(l));
+    } else {
+        lang = lang.split("-")[0].toLowerCase();
+    }
+
+    if (supported.includes(lang)) {
+        location.replace(rootApp + lang + "/" + location.search + location.hash);
+    }
+}
+
+/**
  * Fetch the latest released X-definition version from the "LatestVersion" servlet and substitute it
  * into every "span.latestVersion" text and every "--.--.--"  placeholder found in the href/title of
  * elements matching "a.latestVersion".
@@ -213,5 +258,6 @@ window.footerVersionActivate        = footerVersionActivate;
 window.footerVersionDeactivate      = footerVersionDeactivate;
 window.headerLangActivate           = headerLangActivate;
 window.headerLangChange             = headerLangChange;
+window.redirectToLangIndex          = redirectToLangIndex;
 window.setLatestVersion             = setLatestVersion;
 window.initFormFieldDatabaseName    = initFormFieldDatabaseName;
