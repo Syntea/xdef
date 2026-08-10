@@ -78,8 +78,6 @@ public final class Playground extends XdefServletAbs {
     /** how long an unused Playground database is kept alive before it is shut down. */
     private static final Duration           dbTTL           = Duration.ofMinutes(30);
 
-    //the db-resources below are per servlet-instance, so that they are set up in init() and torn down in
-    //  destroy() symmetrically - a static setup would not be repeated when a servlet-instance is recreated
     /** the exact Derby driver instance to de/registered */
     private final EmbeddedDriver            dbDriver        = new EmbeddedDriver();
     /** map database name -> time (millis) it was last used */
@@ -109,20 +107,20 @@ public final class Playground extends XdefServletAbs {
             logger.warn("init(): failed to register db-drivers", ex);
         }
 
-        //start db-cleanup thread - with fixed rate 1min and initial delay 1min
+        //start timer db-cleanup
         dbCleanupTimer.scheduleAtFixedRate(this::shutdownDatabasesOld, 1, 1, TimeUnit.MINUTES);
-        logger.info("init(): playground-db-cleanup thread started, rate 1min, initial delay 1min");
+        logger.info("init(): timer db-cleanup started, rate 1min, initial delay 1min");
     }
 
     /** destroy servlet resources */
     @Override
     public void destroy() {
-        //stop db-cleanup thread
+        //stop timer db-cleanup
         try {
             dbCleanupTimer.shutdownNow();
-            logger.info("destroy(): playground-db-cleanup thread stopped");
+            logger.info("destroy(): timer db-cleanup started stopped");
         } catch (RuntimeException ex) {
-            logger.warn("destroy(): failed to shutdown the db-cleanup timer", ex);
+            logger.warn("destroy(): failed to shutdown timer db-cleanup started", ex);
         }
 
         //shutdown all databases
@@ -273,9 +271,9 @@ public final class Playground extends XdefServletAbs {
                             mode4Xd      = CT.modeValidate + "-" + XdDataFormat.csv.name();
                             pp.resultXon = xd.cparse(
                                 new StringReader(data4Xd),
-                                ',', // separator
+                                ',', //separator
                                 rp.csvHeader.equals(CT.lNo),
-                                null, // source name
+                                null, //source name
                                 reporter
                             );
                         } else if (!rp.langOut.isEmpty()) {

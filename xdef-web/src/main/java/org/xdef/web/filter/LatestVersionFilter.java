@@ -177,8 +177,8 @@ public final class LatestVersionFilter implements Filter {
      * as there is none), and the error is never propagated, so that it cannot kill the refresh thread.
      */
     private void refreshLatestVersion() {
-        final String mtd                  = "refreshVersion(): ";
-        final String latesetVersionCached = getLatestVersionCached();
+        final String mtd                 = "refreshLatestVersion(): ";
+        final String latestVersionCached = getLatestVersionCached();
 
         try {
             HttpRequest request = HttpRequest.newBuilder(URI.create(xdefMvnUri))
@@ -189,14 +189,14 @@ public final class LatestVersionFilter implements Filter {
             String xdefMvnRelease = (String) xdefMvnRelXPath.evaluate(KXmlUtils.parseXml(xdefMvnStr), XPathConstants.STRING);
 
             if (xdefMvnRelease.isEmpty()) {
-                logger.warn(mtd + "no latest version found in " + xdefMvnUri + ", keeping \"" + latesetVersionCached + "\"");
+                logger.warn(mtd + "no latest version found in " + xdefMvnUri + ", keeping \"" + latestVersionCached + "\"");
                 return;
             }
 
             setLatestVersionCached(xdefMvnRelease);
             logger.debug(mtd + "version refreshed to \"" + xdefMvnRelease + "\"");
         } catch (IOException | InterruptedException | RuntimeException | XPathExpressionException ex) {
-            logger.warn(mtd + "failed to read the version, keeping \"" + latesetVersionCached + "\"", ex);
+            logger.warn(mtd + "failed to read the version, keeping \"" + latestVersionCached + "\"", ex);
         }
     }
 

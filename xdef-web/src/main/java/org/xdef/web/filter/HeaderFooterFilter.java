@@ -58,7 +58,7 @@ public final class HeaderFooterFilter implements Filter {
             footerByLang.put(lang, "<div id=\"footer\">" + loadFragment(ctx, lang, "footer.html", rootPath) + "</div>");
         }
 
-        logger.info("init(): pre-loaded header/footer for languages " + languages);
+        logger.info("init(): pre-loaded header/footer for " + languages.size() + " languages " + languages);
     }
 
     /** read a "&lt;lang&gt;style/&lt;name&gt;" fragment and resolve its "${rootPath}" placeholders */
