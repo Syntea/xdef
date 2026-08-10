@@ -85,6 +85,7 @@
 
         <saxon-he.version>12.9</saxon-he.version>
         <servlet-api.version>6.1.0</servlet-api.version>
+        <jsoup.version>1.23.1</jsoup.version>
         <derby.version>10.12.1.1</derby.version>
         <snakeyaml.version>1.29</snakeyaml.version>
         <slf4j.version>2.0.17</slf4j.version>
@@ -135,6 +136,11 @@
                 <artifactId>jakarta.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
             </dependency>        
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>

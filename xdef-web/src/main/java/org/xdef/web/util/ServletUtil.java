@@ -396,4 +396,17 @@ public class ServletUtil {
         return null;
     }
 
+    /**
+     * assemble JDBC-URL string for in-memory database Derby
+     * @param dbName    name of the in-memory Derby database.
+     * @param options   connection-url options
+     * @return JDBC connection URL of the in-memory Derby database
+     */
+    public static String getDerbyConnURL(final String dbName, final String options) {
+        return
+            "jdbc:derby:memory:" + dbName +
+            ((options == null || options.isEmpty()) ? "" : (";" + options))
+        ;
+    }
+
 }

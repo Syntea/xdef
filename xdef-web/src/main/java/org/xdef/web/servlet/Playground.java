@@ -3,6 +3,7 @@ package org.xdef.web.servlet;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -70,36 +71,25 @@ public final class Playground extends XdefServletAbs {
     private static final String             responseHtmlTempl =
         ServletUtil.readRsrcAsString(Playground.class, "webapp/playground/playground-response-template.html");
 
-    /** the exact Derby driver instance to de/registered */
-    private static final EmbeddedDriver     dbDriver        = new EmbeddedDriver();
     /** credentials for the optional in-memory Derby database - database-user */
     private static final String             dbUser          = "myself";
     /** credentials for the optional in-memory Derby database - password for the database-user */
     private static final String             dbPassw         = "blatla6738";
     /** how long an unused Playground database is kept alive before it is shut down. */
     private static final Duration           dbTTL           = Duration.ofMinutes(30);
+
+    /** the exact Derby driver instance to de/registered */
+    private final EmbeddedDriver            dbDriver        = new EmbeddedDriver();
     /** map database name -> time (millis) it was last used */
-    private static final Map<String, Long>  dbLastUsed      = new ConcurrentHashMap<>();
+    private final Map<String, Long>         dbLastUsed      = new ConcurrentHashMap<>();
 
     /** single background thread db-cleanup {@link #dbLastUsed} for expired databases once a minute */
-    private static final ScheduledExecutorService dbCleanupTimer = Executors.newSingleThreadScheduledExecutor(r -> {
+    private final ScheduledExecutorService  dbCleanupTimer  = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "playground-db-cleanup");
         t.setDaemon(true);
         return t;
     });
 
-
-    static {
-        //register db-drivers
-        try {
-            DriverManager.registerDriver(dbDriver);
-        } catch (SQLException ex) {
-            logger.warn("static: failed to register db-drivers", ex);
-        }
-
-        //start db-cleanup thread - with fixed rate 1min and initial delay 1min
-        dbCleanupTimer.scheduleAtFixedRate(Playground::shutdownDatabasesOld, 1, 1, TimeUnit.MINUTES);
-    }
 
     /** default constructor, calls super() only */
     public Playground() {
@@ -107,14 +97,30 @@ public final class Playground extends XdefServletAbs {
     }
 
 
+    /** init servlet resources */
+    @Override
+    public void init() throws ServletException {
+        //register db-drivers
+        try {
+            DriverManager.registerDriver(dbDriver);
+        } catch (SQLException ex) {
+            logger.warn("init(): failed to register db-drivers", ex);
+        }
+
+        //start timer db-cleanup
+        dbCleanupTimer.scheduleAtFixedRate(this::shutdownDatabasesOld, 1, 1, TimeUnit.MINUTES);
+        logger.info("init(): timer db-cleanup started, rate 1min, initial delay 1min");
+    }
+
     /** destroy servlet resources */
     @Override
     public void destroy() {
-        //stop db-cleanup thread
+        //stop timer db-cleanup
         try {
             dbCleanupTimer.shutdownNow();
+            logger.info("destroy(): timer db-cleanup started stopped");
         } catch (RuntimeException ex) {
-            logger.warn("destroy(): failed to shutdown the db-cleanup timer", ex);
+            logger.warn("destroy(): failed to shutdown timer db-cleanup started", ex);
         }
 
         //shutdown all databases
@@ -163,7 +169,7 @@ public final class Playground extends XdefServletAbs {
 
 
 
-    private static ProcessParams processRequest(RequestParams rp) {
+    private ProcessParams processRequest(RequestParams rp) {
         ProcessParams pp = new ProcessParams();
 
         String        data4Xd  = rp.data;
@@ -201,7 +207,7 @@ public final class Playground extends XdefServletAbs {
                     if (rp.databaseName != null) {
                         dbLastUsed.put(rp.databaseName, System.currentTimeMillis());
                         dbservice = XDFactory.createSQLService(
-                            genConnectionURL(rp.databaseName, "create=true"), dbUser, dbPassw
+                            ServletUtil.getDerbyConnURL(rp.databaseName, "create=true"), dbUser, dbPassw
                         );
                         xd.setVariable("dbservice", dbservice);
                     }
@@ -265,9 +271,9 @@ public final class Playground extends XdefServletAbs {
                             mode4Xd      = CT.modeValidate + "-" + XdDataFormat.csv.name();
                             pp.resultXon = xd.cparse(
                                 new StringReader(data4Xd),
-                                ',', // separator
+                                ',', //separator
                                 rp.csvHeader.equals(CT.lNo),
-                                null, // source name
+                                null, //source name
                                 reporter
                             );
                         } else if (!rp.langOut.isEmpty()) {
@@ -444,26 +450,13 @@ public final class Playground extends XdefServletAbs {
     }
 
     /**
-     * assemble JDBC-URL string
-     * @param dbName    name of the in-memory Derby database.
-     * @param options   connection-url options
-     * @return JDBC connection URL of the in-memory Derby database
-     */
-    public static String genConnectionURL(final String dbName, final String options) {
-        return
-            "jdbc:derby:memory:" + dbName +
-            ((options == null || options.isEmpty()) ? "" : (";" + options))
-        ;
-    }
-
-    /**
      * shutdown any dbLastUsed database not used for at least {@link #dbTTL}. A database whose shutdown
      * fails for an unexpected reason (e.g. still in use) is kept in {@link #dbLastUsed} so the next
      * db-cleanup retries it, instead of being silently dropped from tracking while still alive in memory.
      *
      * @param allAges whether shutdown all databases regardless of age, not only old
      */
-    private static void shutdownDatabasesOld(boolean allAges) {
+    private void shutdownDatabasesOld(boolean allAges) {
         logger.debug("shutdownDatabasesOld(): started: allAges: " + allAges + ", dbs: " + dbLastUsed.toString());
 
         long cutoff = System.currentTimeMillis() - dbTTL.toMillis();
@@ -473,7 +466,7 @@ public final class Playground extends XdefServletAbs {
     }
 
     /** see {@link #shutdownDatabasesOld(boolean)} with {@code allAges = false}*/
-    private static void shutdownDatabasesOld() {
+    private void shutdownDatabasesOld() {
         shutdownDatabasesOld(false);
     }
 
@@ -486,11 +479,11 @@ public final class Playground extends XdefServletAbs {
      */
     private static boolean shutdownDatabase(final String dbName) {
         final String mtd = "shutdownDatabase(): ";
-        try {
-            DriverManager.getConnection(genConnectionURL(dbName, "drop=true"));
-            logger.warn(mtd + "dropping \"" + dbName +
-                "\" unexpectedly returned a live connection instead of throwing");
-            return true;
+        //get dropping connection should throw otherwise not dropped, close returned live connection
+        try (Connection conn = DriverManager.getConnection(ServletUtil.getDerbyConnURL(dbName, "drop=true"))) {
+            logger.warn(mtd + "dropping \"" + dbName + "\" " +
+                "unexpectedly returned a live connection instead of throwing, drop will retry later");
+            return false;
         } catch (SQLException ex) {
             if (derbySQLStateSuccessfulDrop.equals(ex.getSQLState())) {
                 logger.debug(mtd + "database \"" + dbName + "\" was dropped");
