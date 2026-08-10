@@ -184,12 +184,41 @@ in [LangRedirectFilter.java](src/main/java/org/xdef/web/filter/LangRedirectFilte
 ``ServletUtil.detectLanguage()`` and in ``redirectToLangIndex()`` in
 [common.js](src/main/webapp/style/common.js). The javascript one is the authoritative one - without it the
 website does not work at all, the filters are only an optimization - so when they diverge, the result is
-"it flashes as before" or "it does not redirect", not a broken page. Still, at least the list itself could
-have a single source (e.g. a ``context-param`` in web.xml for java and one ``const`` in common.js with a
-cross-reference comment).
+"it flashes as before" or "it does not redirect", not a broken page. Still, at least the list itself can
+have a single source.
 
-The duplication itself cannot be removed completely: it is the price for the requirement that the pages
-**must work as plain static files too**, where no filter runs.
+**The way to do it: distribute the list from a maven-property by the resource-filtering**, which this
+project already uses for other things:
+  * a property in [pom.xml](pom.xml), e.g. ``<webapp.languages>cs,es,eo</webapp.languages>``
+  * **java**: add a line into
+    [buildinfo.properties](src/main/resources-filters/org/xdef/web/config/buildinfo.properties) (that
+    whole directory is filtered already) and read it the way
+    [BuildInfo.java](src/main/java/org/xdef/web/config/BuildInfo.java) reads the properties there
+  * **javascript**: put the constant into a **new small file ``style/common-consts.js``**, add only that
+    file to the filtered ``webResources`` of the war-plugin (today only the four ``footer.html`` files are
+    there) and import it into common.js, which is a module already:
+    * common-consts.js: ``export const supported = "${webapp.languages}".split(",");``
+    * common.js: ``import { supported } from "./common-consts.js"``
+
+Keeping the filtering away from the hand-written common.js is worth it: **javascript template-literals use
+the very same ``${...}`` syntax as the maven-filtering**. Today common.js contains no template-literal
+(only the literal ``"${rootPath}"`` in ``replaceHtml()``, and an unknown property is left untouched by the
+maven-resources-plugin, as the already filtered footer.html proves - there ``${project.version}`` gets
+replaced while ``${rootPath}`` stays as it is). But it is enough to write e.g. ``` `${lang}/index.html` ```
+one day and, if a property of that name exists, the build would silently rewrite the code. A tiny generated
+file cannot get into such a conflict, and it is also the natural place for any other build-time value
+needed in the javascript.
+
+What to expect when the filtering did not run, i.e. when developing directly from the source-code over
+the file-protocol: the javascript gets the list as one item ``"${webapp.languages}"``, no language matches
+and nothing is redirected. It is the same kind of degradation as the already filtered footer.html has
+(it shows the literal ``${project.version}`` in the source-code), and while developing it is rather welcome
+- one wants to see the page one opened. It does not break the "plain static files" principle either: that
+one is about **where the webapp is installed**, and what gets installed is the output of the build, i.e.
+the already filtered file. Only the raw source-tree stays unfiltered.
+
+The duplication of the resolving logic itself cannot be removed: it is the price for the requirement that
+the pages **must work as plain static files too**, where no filter runs.
 
 
 ## Pre-compile the "mustache" template
