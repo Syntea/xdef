@@ -67,11 +67,9 @@ public class TestAll {
             fis = new FileOutputStream("testCommon.log");
             log = new PrintStream(fis);
         } catch (IOException ex) {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException x) {}
-            }
+            try {
+                fis.close();
+            } catch (IOException x) {}
             log = null;
         }
         STester[] tests = getTests();

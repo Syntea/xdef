@@ -485,7 +485,7 @@ ElementScript ::= $info ElementExecutivePart* S?
 ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence | ElementVarSection
   | ElementMatchSection | ElementInitSection | ElementOnAbsenceSection | ElementOnExcessSection
   | ElementCreateSection | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
-  | ElementOnStartSection | ElementOnIllegalSection | ElementStructureCompare | ";")
+  | ElementOnStartSection | ElementOnIllegalSection | ElementStructureCompare | ElementOption | ";")
   /* Each item can be specified only once. If the occurrence is not specified, the implicit value is
     "required". The keyword "$$$script" can be specified only in the template model. */
 
@@ -534,7 +534,7 @@ ElementOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "trimText" | "noTrimText" | "resolveEntities" | "ignoreEntities"
   | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
   | "preserveTextCase" | "preserveAttrCase" | "acceptOther" | "ignoreOther"
-  | "nillable" | "noNillable" | "preserveReports" | "acceptNull" | "noNull"
+  | "nillable" | "noNillable" | "clearReports" | "preserveReports" | "acceptNull" | "noNull"
  
 /******************************************************************************/
 /* Script of the declaration part                                             */

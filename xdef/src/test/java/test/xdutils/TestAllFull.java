@@ -23,11 +23,9 @@ public class TestAllFull {
             fis = new FileOutputStream("testUtils.log");
             log = new PrintStream(fis);
         } catch (IOException ex) {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException x) {}
-            }
+            try {
+                fis.close();
+            } catch (IOException x) {}
             log = null;
         }
         String xdNS = XDTester._xdNS;
