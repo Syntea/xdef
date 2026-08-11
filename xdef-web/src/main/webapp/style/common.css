@@ -51,10 +51,29 @@ pre {
     background-color:   white;
 }
 
+/* list of the questions at the top of the FAQ-page - a link to each answer below, with the opening line
+   of that answer under it, cut off to a single line by the browser */
+.faqList {
+    margin-bottom:      2em;
+}
+
+.faqList > li {
+    margin-bottom:      0.7em;
+}
+
+.faqList .teaser {
+    display:            block;
+    white-space:        nowrap;
+    overflow:           hidden;
+    text-overflow:      ellipsis;
+    font-size:          0.9em;
+    color:              #555555;
+}
+
+/* shortened block, expanded/collapsed by its "pulldownIcon" control placed right above it */
 .pulldown {
     line-height:        1.5em;
     overflow:           hidden;
-    cursor:             pointer;
     max-height:         2.3em; /* cca 1.5 line */
     transition:         max-height 0.5s ease;
 }
@@ -62,7 +81,60 @@ pre {
 .pulldown.expanded {
     max-height:         100em; /* large enough for full content */
 }
-    
+
+/* expand/collapse control placed right above a "pulldown" (switched by togglePulldown() in common.js),
+   and the "expand all"/"collapse all" controls of the whole page - they look the same;
+   both are buttons, so that they can be operated by the keyboard too - stripped of their default look */
+.pulldownIcon,
+.pulldownAll button {
+    cursor:             pointer;
+    user-select:        none;
+    font-size:          0.9em;
+    color:              #1a6b96;
+    border:             none;
+    background:         none;
+    padding:            0;
+    font-family:        inherit;
+}
+
+.pulldownIcon:hover,
+.pulldownAll button:hover {
+    text-decoration:    underline;
+}
+
+/* the "expand all"/"collapse all" controls of a page with expandable blocks, see togglePulldownAll();
+   each of them is on its own line, so no gap between them is needed */
+.pulldownAll {
+    margin-bottom:      1.5em;
+}
+
+/* the native html alternative of the "pulldown" - the question itself is the expand/collapse control;
+   the question is the plain text of the summary, that is why the emphasis is put on the whole summary */
+details.pulldownDet {
+    margin-bottom:      0.8em; /* the details-elements have no gap between them of their own */
+}
+
+details.pulldownDet > summary {
+    cursor:             pointer;
+    font-weight:        bold;
+    font-size:          1.3em;
+}
+
+/* the teaser - the opening line of the answer, kept in the summary, so it shows in both states;
+   the font-size is put back to the one of the page, the summary around it is enlarged */
+details.pulldownDet > summary > span {
+    display:            block;
+    line-height:        1.5em;
+    font-weight:        normal;
+    font-size:          0.77em; /* 1/1.3 */
+}
+
+/* the teaser is cut off in the middle of a sentence, so it ends with an ellipsis - but only while
+   collapsed, once expanded the sentence goes on and the ellipsis would stand in the middle of it */
+details.pulldownDet[open] .ellipsis {
+    display:            none;
+}
+
  div.technicalInfo {
     margin-top:         2em;
 }

@@ -148,6 +148,103 @@ export function footerVersionDeactivate() {
     $("#footerVersionAct").css("display", "none");
 }
 
+/** look of the "button.pulldownIcon" control in both states of the block it belongs to, see togglePulldown() */
+const pulldownIconText = {
+    collapsed: { arrow: "▼", text: "expand"   },
+    expanded:  { arrow: "▲", text: "collapse" }
+};
+
+/** a little joke: the control gains one arrow on every toggle; having reached the upper count it starts
+ *  losing them again down to the lower one, and so on back and forth */
+const pulldownIconArrows = { min: 4, max: 20 };
+
+/**
+ * Expand a shortened "div.pulldown" block, or collapse it back, and switch its "button.pulldownIcon"
+ * control accordingly. Called from that control, which is placed right above the block (the block itself
+ * is not clickable, so that the text and the code samples in it can be selected and copied).
+ *
+ * @param {HTMLElement} elem the clicked element - the "button.pulldownIcon", or the "div.pulldown" itself.
+ */
+export function togglePulldown(elem) {
+    const pulldown = elem.classList.contains("pulldown") ? elem : elem.nextElementSibling;
+    if (!pulldown || !pulldown.classList.contains("pulldown")) {
+        return;
+    }
+
+    const expanded = pulldown.classList.toggle("expanded");
+    const icon     = pulldown.previousElementSibling;
+
+    animatePulldown(pulldown, expanded);
+
+    if (icon && icon.classList.contains("pulldownIcon")) {
+        const iconText = expanded ? pulldownIconText.expanded : pulldownIconText.collapsed;
+
+        //number of the arrows, going up and down between the two counts, see pulldownIconArrows;
+        //  kept aside from the text of the control, which carries the arrows and a word together
+        let step   = Number(icon.dataset.arrowStep) || 1;
+        let arrows = (Number(icon.dataset.arrows) || pulldownIconArrows.min) + step;
+        if (arrows >= pulldownIconArrows.max) {
+            arrows = pulldownIconArrows.max;
+            step   = -1;
+        } else if (arrows <= pulldownIconArrows.min) {
+            arrows = pulldownIconArrows.min;
+            step   = 1;
+        }
+        icon.dataset.arrowStep = step;
+        icon.dataset.arrows    = arrows;
+
+        icon.textContent = iconText.arrow.repeat(arrows) + " " + iconText.text;
+        //the control is a button, so it can tell its state to the assistive technologies
+        icon.setAttribute("aria-expanded", expanded);
+    }
+}
+
+/**
+ * Run the expand/collapse transition of a "div.pulldown" between its collapsed height and the real height
+ * of its content. The css alone can only transition to a fixed "max-height" large enough for any content,
+ * which makes the part of the transition between that value and the real height invisible - a delay before
+ * anything starts to move, the more striking the shorter the content is.
+ * <p>
+ * Once expanded, the limit is dropped altogether, so that the content is never cut off when it reflows
+ * (e.g. on a resize of the window). Collapsing therefore has to put the current height back first, and let
+ * the browser take it, before the collapsed value can be transitioned to.
+ *
+ * @param {HTMLElement} pulldown the block being expanded or collapsed.
+ * @param {boolean}     expanded whether the block is being expanded, or collapsed.
+ */
+function animatePulldown(pulldown, expanded) {
+    if (expanded) {
+        pulldown.style.maxHeight = pulldown.scrollHeight + "px";
+        //no limit after the transition has finished, unless it has been collapsed again meanwhile
+        pulldown.addEventListener("transitionend", () => {
+            if (pulldown.classList.contains("expanded")) {
+                pulldown.style.maxHeight = "none";
+            }
+        }, { once: true });
+    } else {
+        pulldown.style.maxHeight = pulldown.scrollHeight + "px";
+        void pulldown.offsetHeight;         //let the browser take that height, otherwise nothing animates
+        pulldown.style.maxHeight = "";      //back to the collapsed height given by the css
+    }
+}
+
+/**
+ * Expand, or collapse, all the expandable blocks of the page at once - both the "div.pulldown" ones
+ * (their controls are switched with them, see togglePulldown()) and the native "details" ones.
+ *
+ * @param {boolean} expand true to expand them all, false to collapse them all.
+ */
+export function togglePulldownAll(expand) {
+    document.querySelectorAll("div.pulldown").forEach(pulldown => {
+        if (pulldown.classList.contains("expanded") !== expand) {
+            togglePulldown(pulldown);
+        }
+    });
+    document.querySelectorAll("details").forEach(details => {
+        details.open = expand;
+    });
+}
+
 /** Show the active-language marker(s) in the header and hide the passive one(s). */
 export function headerLangActivate() {
     $(".headerLangPas").css("display", "none");
@@ -238,6 +335,8 @@ window.initPageBasicHili            = initPageBasicHili;
 window.initPageBasicLnumsHili       = initPageBasicLnumsHili;
 window.footerVersionActivate        = footerVersionActivate;
 window.footerVersionDeactivate      = footerVersionDeactivate;
+window.togglePulldown               = togglePulldown;
+window.togglePulldownAll            = togglePulldownAll;
 window.headerLangActivate           = headerLangActivate;
 window.headerLangChange             = headerLangChange;
 window.redirectToLangIndex          = redirectToLangIndex;
