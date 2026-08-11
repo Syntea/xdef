@@ -7,6 +7,8 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css"/>
+    <script type="module" src="style/common.js"></script>
 </head>
 <body>
 
@@ -16,9 +18,9 @@
 <div class="title">FAQ — Frequently Asked Questions</div>
 
 <div class="pulldownAll">
-All:
-<button type="button" onclick="togglePulldownAll(true)" >expand</button> or
-<button type="button" onclick="togglePulldownAll(false)">collapse</button>
+All expansions:
+<button class="pulldownIcon" type="button" onclick="togglePulldownAll()"
+        data-text="toggle">▼▲▼▲ toggle</button>
 </div>
 
 
@@ -27,8 +29,9 @@ All:
      The opening line of each answer is a part of its summary, so it is shown in both states - it is not
      repeated in the answer below. See faq3.html for the same page done by javascript -->
 
-<details class="pulldownDet">
+<details class="pulldownDet" id="minimalValidation">
 <summary>Question: What is an example of a minimal instance of Java validation?
+<a href="#minimalValidation">[perma-link]</a>
 <span>Let’s assume that the validation X-definition is located on the path <code>C:/xdef/validation.xdef</code>
 and the xml document that <span class="ellipsis">…</span></span>
 </summary>
@@ -56,8 +59,9 @@ public class XdefValidate {
 </details>
 
 
-<details class="pulldownDet">
+<details class="pulldownDet" id="validationLogs">
 <summary>Question: How can I obtain validation logs, without getting an error from the XDDocument.xparse() method?
+<a href="#validationLogs">[perma-link]</a>
 <span>An ArrayReporter object that can be used in the xparse method is used to store information about the
 xparse <span class="ellipsis">…</span></span>
 </summary>
@@ -97,8 +101,9 @@ public class XdefValidate {
 </details>
 
 
-<details class="pulldownDet">
+<details class="pulldownDet" id="scriptAndMethods">
 <summary>Question: What are the differences between the script, the external method, and the declared method?
+<a href="#scriptAndMethods">[perma-link]</a>
 <span>External methods and declared methods are Java code, the script is a custom xdefinition X-Script
 script. External <span class="ellipsis">…</span></span>
 </summary>
@@ -110,8 +115,9 @@ It can call up embedded xdefinition methods, external, and declared methods.</sp
 </details>
 
 
-<details class="pulldownDet">
+<details class="pulldownDet" id="accessFromMethods">
 <summary>Question: How can I access an xml document being processed from external methods?
+<a href="#accessFromMethods">[perma-link]</a>
 <span>We add the xnode parameter XXNode to the external method signature, which represents
 <span class="ellipsis">…</span></span>
 </summary>
@@ -124,9 +130,10 @@ It can call up embedded xdefinition methods, external, and declared methods.</sp
 </details>
 
 
-<details class="pulldownDet">
+<details class="pulldownDet" id="ownDataType">
 <summary>Question: When validating xml, the standard data types introduced in xdefinition are not enough.
 Can I define my own data type?
+<a href="#ownDataType">[perma-link]</a>
 <span>The x-definitionParser contains a large number of data types that can be used to describe the attributes
 and <span class="ellipsis">…</span></span>
 </summary>
@@ -159,10 +166,11 @@ for clarity of the xdefinition itself. New data types are defined using the keyw
 </details>
 
 
-<details class="pulldownDet">
+<details class="pulldownDet" id="dataTypesVsJava">
 <summary>Question: The X-Definition uses data types that do not fully match the data types in Java. For example,
 the data type int or the int () method type in X-Script X-Definition is actually working with 64-bit integers and
 so corresponds to the long data type in Java
+<a href="#dataTypesVsJava">[perma-link]</a>
 <span>This fact must be considered when implementing external methods and during handover of parameters
 <span class="ellipsis">…</span></span>
 </summary>

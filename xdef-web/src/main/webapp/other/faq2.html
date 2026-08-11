@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="../style/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../style/common.css"/>
     <script type="module" src="../style/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/common.css"/>
 </head>
 <body>
 
@@ -16,41 +17,41 @@
 <div class="title">FAQ — Frequently Asked Questions</div>
 
 
-<!-- an alternative of faq.html: instead of collapsing the answers, all of them are plain text here and
-     the questions are gathered in the list below - links to the answers, each with the opening line of
-     its answer, so that it can be seen right away whether the answer is the one looked for.
-     The find-in-page of the browser then works over the whole content and no javascript is needed -->
-<ul class="faqList">
-    <li><a href="#minimalValidation">What is an example of a minimal instance of Java validation?</a>
+<h1>List of questions</h1>
+
+<div class="faqList">
+    <div><a href="#minimalValidation">What is an example of a minimal instance of Java validation?</a>
         <span class="teaser">Let’s assume that the validation X-definition is located on the path
-            C:/xdef/validation.xdef and the xml document that we want to validate is on the path
-            C:/data/document.xml.</span>
-    </li>
-    <li><a href="#validationLogs">How can I obtain validation logs, without getting an error from the
+            <code>C:/xdef/validation.xdef</code> and the xml document that …</span>
+    </div>
+    <div><a href="#validationLogs">How can I obtain validation logs, without getting an error from the
             XDDocument.xparse() method?</a>
         <span class="teaser">An ArrayReporter object that can be used in the xparse method is used to store
-            information about the xparse method.</span>
-    </li>
-    <li><a href="#scriptAndMethods">What are the differences between the script, the external method,
+            information about the xparse …</span>
+    </div>
+    <div><a href="#scriptAndMethods">What are the differences between the script, the external method,
             and the declared method?</a>
         <span class="teaser">External methods and declared methods are Java code, the script is a custom
-            xdefinition X-Script script.</span>
-    </li>
-    <li><a href="#accessFromMethods">How can I access an xml document being processed from external
+            xdefinition X-Script script. External …</span>
+    </div>
+    <div><a href="#accessFromMethods">How can I access an xml document being processed from external
             methods?</a>
         <span class="teaser">We add the xnode parameter XXNode to the external method signature, which
-            represents the object representation of the node in the xml document.</span>
-    </li>
-    <li><a href="#ownDataType">Can I define my own data type, when the standard ones are not enough?</a>
-        <span class="teaser">Yes - new data types are defined using the keyword xd:declarations, whether
-            derived from another type or written from scratch.</span>
-    </li>
-    <li><a href="#dataTypesVsJava">Why do the data types of X-definition not fully match the data types
+            represents …</span>
+    </div>
+    <div><a href="#ownDataType">Can I define my own data type, when the standard ones are not enough?</a>
+        <span class="teaser">The x-definitionParser contains a large number of data types that can be used
+            to describe the attributes and …</span>
+    </div>
+    <div><a href="#dataTypesVsJava">Why do the data types of X-definition not fully match the data types
             in Java?</a>
         <span class="teaser">This fact must be considered when implementing external methods and during
-            handover of parameters between the X-Definition and the external method.</span>
-    </li>
-</ul>
+            handover of parameters …</span>
+    </div>
+</div>
+
+
+<h1>Details</h1>
 
 
 <h2 id="minimalValidation">Question: What is an example of a minimal instance of Java validation?</h2>
