@@ -172,9 +172,9 @@ public final class Playground extends XdefServletAbs {
     private ProcessParams processRequest(RequestParams rp) {
         ProcessParams pp = new ProcessParams();
 
-        String        data4Xd  = rp.data;
-        XDPool        xdPool   = null;
-        ArrayReporter reporter = new ArrayReporter();
+        String        data4Xd    = rp.data;
+        XDPool        xdPool     = null;
+        ArrayReporter reporter   = new ArrayReporter();
         XDService     dbservice  = null;
 
         try {
@@ -439,9 +439,9 @@ public final class Playground extends XdefServletAbs {
 
         //display timers
         values.put("timer-xdef",
-            pp.timerXdef    != null ? Long.toString(pp.timerXdef    - pp.timerStart) + " ms": "not started");
+            pp.timerXdef    != null ? Long.toString(pp.timerXdef    - pp.timerStart) + " ms" : "not started");
         values.put("timer-process",
-            pp.timerProcess != null ? Long.toString(pp.timerProcess - pp.timerXdef)  + " ms": "not started");
+            pp.timerProcess != null ? Long.toString(pp.timerProcess - pp.timerXdef)  + " ms" : "not started");
         //timer end
         long timerEnd = new Date().getTime();
         values.put("timer-total",       Long.toString(timerEnd - pp.timerStart) + " ms");
