@@ -323,7 +323,7 @@ public final class BNFGrammar {
      * @return compiled grammar.
      * @throws SRuntimeException if the reporter argument is null and an error occurs.
      */
-    public static BNFGrammar compile(final BNFGrammar g, final String source, 	final ReportWriter reporter)
+    public static BNFGrammar compile(final BNFGrammar g, final String source, final ReportWriter reporter)
         throws SRuntimeException {
         BNFCompiler compiler = new BNFCompiler();
         if (reporter != null) {
