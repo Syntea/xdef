@@ -19,23 +19,21 @@
 
 <div class="pulldownAll">
 All expansions:
-<button class="pulldownIcon" type="button" onclick="togglePulldownAll()"
-        data-text="toggle">▼▲▼▲ toggle</button>
+<button type="button" onclick="togglePulldownAll()">▼▲▼▲ toggle</button>
 </div>
 
 
-<!-- the questions are expanded/collapsed by the native html "details/summary" - no javascript is needed
-     for it at all, they are expanded by the keyboard and by the find-in-page of the browser as well.
-     The opening line of each answer is a part of its summary, so it is shown in both states - it is not
-     repeated in the answer below. See faq3.html for the same page done by javascript -->
+<!-- an alternative of faq.html: the questions are expanded/collapsed by javascript instead of by the
+     native "details/summary" - see togglePulldown() in common.js. The answer is shortened to its opening
+     line by the css, so the shortened line itself shows that there is more of it, and the control above
+     it grows by one arrow on every toggle - a little joke -->
 
-<details class="pulldownDet" id="minimalValidation">
-<summary>Question: What is an example of a minimal instance of Java validation?
-<a href="#minimalValidation">[perma-link]</a>
-<span>Let’s assume that the validation X-definition is located on the path <code>C:/xdef/validation.xdef</code>
-and the xml document that <span class="ellipsis">…</span></span>
-</summary>
-<span>we want to validate is on the path <code>C:/data/document.xml</code>.</span>
+<h2>Question: What is an example of a minimal instance of Java validation?</h2>
+<button class="pulldownIcon" type="button" onclick="togglePulldown(this)"
+        aria-expanded="false">▼▼▼▼ expand</button>
+<div class="pulldown">
+Let’s assume that the validation X-definition is located on the path <code>C:/xdef/validation.xdef</code>
+and the xml document that we want to validate is on the path <code>C:/data/document.xml</code>.
 <pre><code class="language-java">package cz.syntea.skp.slp2.lp.epemog;
 import cz.syntea.common.xml.KXmlUtils;
 import cz.syntea.xd.XDDocument;
@@ -56,17 +54,15 @@ public class XdefValidate {
     }
 }
 </code></pre>
-</details>
+</div>
 
 
-<details class="pulldownDet" id="validationLogs">
-<summary>Question: How can I obtain validation logs, without getting an error from the XDDocument.xparse() method?
-<a href="#validationLogs">[perma-link]</a>
-<span>An ArrayReporter object that can be used in the xparse method is used to store information about the
-xparse <span class="ellipsis">…</span></span>
-</summary>
-<span>method. ArrayReporter saves information in text form at alert / error levels that can be further processed
-by the program.</span>
+<h2>Question: How can I obtain validation logs, without getting an error from the XDDocument.xparse() method?</h2>
+<button class="pulldownIcon" type="button" onclick="togglePulldown(this)"
+        aria-expanded="false">▼▼▼▼ expand</button>
+<div class="pulldown">
+An ArrayReporter object that can be used in the xparse method is used to store information about the xparse method.
+ArrayReporter saves information in text form at alert / error levels that can be further processed by the program.
 <pre><code class="language-java">package cz.syntea.skp.slp2.lp.epemog;
 import cz.syntea.common.sys.ArrayReporter;
 import cz.syntea.common.sys.Report;
@@ -98,47 +94,45 @@ public class XdefValidate {
     }
 }
 </code></pre>
-</details>
+</div>
 
 
-<details class="pulldownDet" id="scriptAndMethods">
-<summary>Question: What are the differences between the script, the external method, and the declared method?
-<a href="#scriptAndMethods">[perma-link]</a>
-<span>External methods and declared methods are Java code, the script is a custom xdefinition X-Script
-script. External <span class="ellipsis">…</span></span>
-</summary>
-<span>methods are declared in Java classes in external files, and declared methods are defined
+<h2>Question: What are the differences between the script, the external method, and the declared method?</h2>
+<button class="pulldownIcon" type="button" onclick="togglePulldown(this)"
+        aria-expanded="false">▼▼▼▼ expand</button>
+<div class="pulldown">
+External methods and declared methods are Java code, the script is a custom xdefinition X-Script script.
+External methods are declared in Java classes in external files, and declared methods are defined
 in the xdefinition file using the xd:declaration keyword. In the latter case, it is then necessary to declare
 the method signatures in the xdefinition header under the keyword xd:methods. In this way, it is also possible
 to declare types or variables. X-Script is also declared within xdefinition under the keyword xd:script.
-It can call up embedded xdefinition methods, external, and declared methods.</span>
-</details>
+It can call up embedded xdefinition methods, external, and declared methods.
+</div>
 
 
-<details class="pulldownDet" id="accessFromMethods">
-<summary>Question: How can I access an xml document being processed from external methods?
-<a href="#accessFromMethods">[perma-link]</a>
-<span>We add the xnode parameter XXNode to the external method signature, which represents
-<span class="ellipsis">…</span></span>
-</summary>
-<span>the object representation of the node in the xml document that is currently being processed.</span>
+<h2>Question: How can I access an xml document being processed from external methods?</h2>
+<button class="pulldownIcon" type="button" onclick="togglePulldown(this)"
+        aria-expanded="false">▼▼▼▼ expand</button>
+<div class="pulldown">
+We add the xnode parameter XXNode to the external method signature, which represents the object representation
+of the node in the xml document that is currently being processed.
 <pre><code class="language-java">public static void myPrint(XXNode xnode, String output) {
     String lp = xnode.getXXElement().getAttribute("lp");
     System.out.printf("Info=%s; Licence plate=%s", output, lp);
 }
 </code></pre>
-</details>
+</div>
 
 
-<details class="pulldownDet" id="ownDataType">
-<summary>Question: When validating xml, the standard data types introduced in xdefinition are not enough.
-Can I define my own data type?
-<a href="#ownDataType">[perma-link]</a>
-<span>The x-definitionParser contains a large number of data types that can be used to describe the attributes
-and <span class="ellipsis">…</span></span>
-</summary>
-<span>values of a node, but in some cases, it is appropriate to define your own data type, whether for a special purpose or
-for clarity of the xdefinition itself. New data types are defined using the keyword xd:declarations</span>
+<h2>Question: When validating xml, the standard data types introduced in xdefinition are not enough.
+    Can I define my own data type?
+</h2>
+<button class="pulldownIcon" type="button" onclick="togglePulldown(this)"
+        aria-expanded="false">▼▼▼▼ expand</button>
+<div class="pulldown">
+The x-definitionParser contains a large number of data types that can be used to describe the attributes and values
+of a node, but in some cases, it is appropriate to define your own data type, whether for a special purpose or
+for clarity of the xdefinition itself. New data types are defined using the keyword xd:declarations
 <pre><code class="language-xml">&lt;xd:def
   xmlns:xd = "http://www.syntea.cz/xdef/2.0"
   xd:name   = "Vehicles"
@@ -163,21 +157,20 @@ for clarity of the xdefinition itself. New data types are defined using the keyw
   &lt;/xd:declaration>
 &lt;/xd:def>
 </code></pre>
-</details>
+</div>
 
 
-<details class="pulldownDet" id="dataTypesVsJava">
-<summary>Question: The X-Definition uses data types that do not fully match the data types in Java. For example,
-the data type int or the int () method type in X-Script X-Definition is actually working with 64-bit integers and
-so corresponds to the long data type in Java
-<a href="#dataTypesVsJava">[perma-link]</a>
-<span>This fact must be considered when implementing external methods and during handover of parameters
-<span class="ellipsis">…</span></span>
-</summary>
-<span>between the X-Definition and the external method in the Java class.
-The solution is to redefine the parameter type
-from <code>int</code> to <code>long</code> in the external java function.</span>
-</details>
+<h2>Question: The X-Definition uses data types that do not fully match the data types in Java. For example,
+    the data type int or the int () method type in X-Script X-Definition is actually working with 64-bit integers and
+    so corresponds to the long data type in Java
+</h2>
+<button class="pulldownIcon" type="button" onclick="togglePulldown(this)"
+        aria-expanded="false">▼▼▼▼ expand</button>
+<div class="pulldown">
+This fact must be considered when implementing external methods and during handover of parameters between
+the X-Definition and the external method in the Java class. The solution is to redefine the parameter type
+from <code>int</code> to <code>long</code> in the external java function.
+</div>
 
 
 
