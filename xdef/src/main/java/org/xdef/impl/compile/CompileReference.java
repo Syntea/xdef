@@ -157,9 +157,9 @@ final class CompileReference extends XNode {
             uri = getNSUri();
         }
         XElement xe = (XElement) xdef.getModel(uri, mName);
-        if (xe == null && getKind() <= 1 && uri != null && !uri.isEmpty()) { //AI
-            // "uses"/"implements" reference from a xd:json (XON) script: the referring node carries
-            // the XON namespace, but a xd:json root model itself is registered without a namespace -
+        if (xe == null && getKind() <= 1 && uri != null && !uri.isEmpty()) { //AI; uri == XDConstants.XON_NS_URI_W
+            // "uses"/"implements" reference from a xd:json script: the referring node carries
+            // the JSON namespace, but a xd:json root model itself is registered without a namespace -
             // retry unqualified so cross-file implements/uses can resolve xd:json root targets too.
             xe = (XElement) xdef.getModel(null, mName);
         }
