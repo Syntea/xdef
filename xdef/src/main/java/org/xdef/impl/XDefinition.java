@@ -11,8 +11,8 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
-import static org.xdef.model.XMNodeKind.XMDEFINITION;
-import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNode.XMDEFINITION;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
@@ -307,7 +307,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
     public final static XDefinition readXDefinition(final XDReader xr, final XPool xp, final List<XNode> list)
         throws IOException {
         SPosition sourcePos = xr.readSPosition();
-        if (xr.readShort() != XMDEFINITION.toShort()) {//must be X-definition
+        if (xr.readShort() != XMDEFINITION) {//must be X-definition
             //SObject reader: incorrect format of data&{0}{: }
             throw new SIOException(SYS.SYS039, "XMDefinition expected");
         }
@@ -330,7 +330,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
         len = xr.readLength();
         for (int i = 0; i < len; i++) {
             short kind = xr.readShort(); //always XElement
-            if (kind != XMELEMENT.toShort()) {
+            if (kind != XMELEMENT) {
                 //SObject reader: incorrect format of data&{}{: }
                 throw new SIOException(SYS.SYS039, "XMElement expected");
             }

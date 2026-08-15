@@ -37,8 +37,6 @@ import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNodeKind.XMELEMENT;
-import static org.xdef.model.XMNodeKind.XMTEXT;
 import org.xdef.model.XMVariable;
 import org.xdef.model.XMVariableTable;
 import org.xdef.proc.XXData;
@@ -165,9 +163,9 @@ public class MyTest_0 extends XDTester {
             printXMData(x);
         }
         for (XMNode x: xe.getChildNodeModels()) {
-            if (x.getKind() == XMTEXT) {
+            if (x.getKind() == XMNode.XMTEXT) {
                 printXMData((XMData) x);
-            } else if (x.getKind() == XMELEMENT) {
+            } else if (x.getKind() == XMNode.XMELEMENT) {
                 printXMData((XMElement) x);
             }
         }

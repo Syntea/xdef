@@ -52,10 +52,10 @@ import static org.xdef.XDValueID.XM_MODEL;
 import org.xdef.impl.XCodeDescriptor;
 import org.xdef.impl.XElement;
 import org.xdef.impl.code.DefBigInteger;
-import org.xdef.model.XMNodeKind;
-import static org.xdef.model.XMNodeKind.XMATTRIBUTE;
-import static org.xdef.model.XMNodeKind.XMELEMENT;
-import static org.xdef.model.XMNodeKind.XMTEXT;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMTEXT;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** XScriptParser - lexical parser for the symbols of XD script. Before parsing all macros are expanded.
  * @author  Vaclav Trojan
@@ -1707,7 +1707,7 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
      * @param result The object with options.
      */
     public void readOptionList(final XCodeDescriptor result) {
-        XMNodeKind kind = result.getKind(); //XMNode.XMDEFINITION, XMELEMENT, XMATTRIBUTE, XMTEXT ...
+        short kind = result.getKind(); //XMNode.XMDEFINITION, XMELEMENT, XMATTRIBUTE, XMTEXT ...
         boolean forget = false;
         boolean clearAdoptedForgets = false;
         boolean attrWhiteSpaces = false;

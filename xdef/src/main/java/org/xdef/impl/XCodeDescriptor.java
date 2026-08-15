@@ -2,7 +2,6 @@ package org.xdef.impl;
 
 import java.io.IOException;
 import org.xdef.XDPool;
-import org.xdef.model.XMNodeKind;
 
 /** Script code descriptor.
  * @author Vaclav Trojan
@@ -97,7 +96,7 @@ public abstract class XCodeDescriptor extends XNode {
     public XCodeDescriptor(final String name,
         final String nsUri,
         final XDPool xp,
-        final XMNodeKind kind) {
+        final short kind) {
         super(nsUri, name, xp, kind);
         setUnspecified(); // occurrence
         clearActions();
@@ -118,7 +117,7 @@ public abstract class XCodeDescriptor extends XNode {
      * @param kind The kind of object.
      * @param x XCodeDescriptor object from which this instance of XCodeDescriptor is created.
      */
-    public XCodeDescriptor(final String name, final String nsURI, final XMNodeKind kind, XCodeDescriptor x) {
+    public XCodeDescriptor(final String name, final String nsURI, final short kind, XCodeDescriptor x) {
         super(nsURI, name, x.getXDPool(), kind);
         _varsize = x._varsize;
         _vartable = x._vartable == null ? null : x._vartable.cloneTable();
@@ -312,7 +311,7 @@ public abstract class XCodeDescriptor extends XNode {
      * @throws IOException if an error occurs.
      */
     final void writeXCodeDescriptor(XDWriter xw) throws IOException {
-        xw.writeShort(getKind().toShort());
+        xw.writeShort(getKind());
         xw.writeString(getName());
         xw.writeString(getNSUri());
         // Occurrence
@@ -355,7 +354,7 @@ public abstract class XCodeDescriptor extends XNode {
      * @throws IOException if an error occurs.
      */
     final void readXCodeDescriptor(final XDReader xr) throws IOException {
-        // kind, namespace UR name already processed in the upper class!
+        // kind, namespace UR name already processed in the upper class
         setOccurrence(xr.readInt(), xr.readInt()); // read occurrence
         // Actions
         _init = xr.readInt(); // Init action.
