@@ -55,6 +55,7 @@ import org.xdef.sys.ArrayReporter;
 import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 import org.xdef.impl.parsers.XDParseCHKIDS;
 import org.xdef.impl.parsers.XSParseIDREFS;
+import org.xdef.model.XMNodeKind;
 
 /** Implementation of the model of attributes or text nodes.
  * @author Vaclav Trojan
@@ -73,7 +74,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
      * @param xp Refers to the XDefPool object.
      * @param kind <code>ATTRIBUTE</code> or <code>TEXT</code>.
      */
-    public XData(final String name, final String nsUri, final XDPool xp, final short kind) {
+    public XData(final String name, final String nsUri, final XDPool xp, final XMNodeKind kind) {
         super(name, nsUri, xp, kind);
         setOccurrence(1,1); // required ???
         _valueType = XD_STRING;
@@ -343,7 +344,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
     }
 
     // can't be final, can be overwritten!
-    static XData readXData(final XDReader xr, final short kind, final XDefinition xd) throws IOException {
+    static XData readXData(final XDReader xr, final XMNodeKind kind, final XDefinition xd) throws IOException {
         String name = xr.readString();
         String uri = xr.readString();
         XData x = new XData(name, uri, xd.getXDPool(), kind);

@@ -19,7 +19,6 @@ import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
-import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueID.XD_NULL;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XX_ATTR;
@@ -40,12 +39,14 @@ import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMCHOICE;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMMIXED;
-import static org.xdef.model.XMNode.XMSELECTOR_END;
-import static org.xdef.model.XMNode.XMSEQUENCE;
-import static org.xdef.model.XMNode.XMTEXT;
+import org.xdef.model.XMNodeKind;
+import static org.xdef.model.XMNodeKind.XMATTRIBUTE;
+import static org.xdef.model.XMNodeKind.XMCHOICE;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMMIXED;
+import static org.xdef.model.XMNodeKind.XMSELECTOR_END;
+import static org.xdef.model.XMNodeKind.XMSEQUENCE;
+import static org.xdef.model.XMNodeKind.XMTEXT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXData;
@@ -329,7 +330,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
         _actDefIndex = -1;
         while (_nextDefIndex < defLength) {
-            short kind;
+            XMNodeKind kind;
             switch (kind = (xn = _childList[_nextDefIndex]).getKind()) {
                 case XMTEXT: {
                     if (el == null) {// is text node
@@ -1633,7 +1634,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         // check remaining part of model.
         int nextDefIndex = _nextDefIndex;
         while (_nextDefIndex < _childList.length) {
-            short kind;
+            XMNodeKind kind;
             XNode xnode;
             switch (kind = (xnode = _childList[_nextDefIndex]).getKind()) {
                 case XMTEXT:
@@ -2884,7 +2885,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         if (xatt == null) {
             xatt = _xElement.getDefAttr("$attr", -1); // any attr
             if (xatt == null && _xElement._moreAttributes == 'T') { // more attributes
-                xatt = new XData(qname, nsURI, getXDPool(), XD_ATTR); // check not declared attributes
+                xatt = new XData(qname, nsURI, getXDPool(), XMATTRIBUTE); // check not declared attributes
             }
         }
         String adata;
@@ -3442,7 +3443,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         /** Address of "finally" method or -1 */
         int _finallyCode;
         /** Kind of selector */
-        short _kind;
+        XMNodeKind _kind;
         /** True if first item of sequence is selective */
         boolean _selective;
         /** True if selector is ignorable */

@@ -1,5 +1,7 @@
 package org.xdef.impl;
 
+import static org.xdef.model.XMNodeKind.XMMIXED;
+
 /** Implementation of mixture, choice or sequence.
  * @author Vaclav Trojan
  */

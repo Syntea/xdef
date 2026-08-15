@@ -5,16 +5,17 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMATTRIBUTE;
-import static org.xdef.model.XMNode.XMCHOICE;
-import static org.xdef.model.XMNode.XMCOMMENT;
-import static org.xdef.model.XMNode.XMDEFINITION;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMMIXED;
-import static org.xdef.model.XMNode.XMPI;
-import static org.xdef.model.XMNode.XMSELECTOR_END;
-import static org.xdef.model.XMNode.XMSEQUENCE;
-import static org.xdef.model.XMNode.XMTEXT;
+import org.xdef.model.XMNodeKind;
+import static org.xdef.model.XMNodeKind.XMATTRIBUTE;
+import static org.xdef.model.XMNodeKind.XMCHOICE;
+import static org.xdef.model.XMNodeKind.XMCOMMENT;
+import static org.xdef.model.XMNodeKind.XMDEFINITION;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMMIXED;
+import static org.xdef.model.XMNodeKind.XMPI;
+import static org.xdef.model.XMNodeKind.XMSELECTOR_END;
+import static org.xdef.model.XMNodeKind.XMSEQUENCE;
+import static org.xdef.model.XMNodeKind.XMTEXT;
 import org.xdef.model.XMOccurrence;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -27,7 +28,7 @@ import org.xdef.sys.SPosition;
  */
 public abstract class XNode implements XMNode {
     /** The "kind" of object. */
-    private final short _kind;
+    private final XMNodeKind _kind;
     /** Pool of definitions. */
     private final XPool _xp;
     /** Occurrence. */
@@ -36,11 +37,7 @@ public abstract class XNode implements XMNode {
     private String _name;
     /** NameSpace URI */
     private String _nsURI;
-
-    ////////////////////////////////////////////////////////////////////////////
-    // position (used in error reporting and debugging).
-    ////////////////////////////////////////////////////////////////////////////
-    /** Position in source. */
+    /** Position in source (used in error reporting and debugging).*/
     private SPosition _spos;
     /** Position in DefPool. */
     private String _xdpos;
@@ -51,7 +48,7 @@ public abstract class XNode implements XMNode {
      * @param xp XPool.
      * @param kind kind of node.
      */
-    public XNode(final String nsURI, final String name, final XDPool xp, final short kind) {
+    public XNode(final String nsURI, final String name, final XDPool xp, final XMNodeKind kind) {
         _occ = new XOccurrence();
         _name = name == null ? "" : name.intern();
         _nsURI = nsURI == null ? null : nsURI.intern();
@@ -76,11 +73,11 @@ public abstract class XNode implements XMNode {
 // XMNode interface
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Return the node kind
+    /** Get node kind.
      * @return kind of node.
      */
     @Override
-    public final short getKind() {return _kind;}
+    public final XMNodeKind getKind() {return _kind;}
 
     /** Get namespace URI.
      * @return namespace URI.
@@ -164,7 +161,7 @@ public abstract class XNode implements XMNode {
             case XMCOMMENT: return "XMCOMMENT: " + _name;
             case XMPI: return "XMPI: " + _name;
             case XMSELECTOR_END: return "XMSELECTOR_END: " + _name;
-            case XMSELECTOR_END + 1: return "REFERENCE: " + _name;
+            case XMREFERENCE: return "REFERENCE: " + _name;
         }
         return "???";
     }
@@ -178,9 +175,9 @@ public abstract class XNode implements XMNode {
 
     final static XNode readXNode(final XDReader xr, final XDefinition xd, final List<XNode> list)
         throws IOException {
-        short kind = xr.readShort();
+        XMNodeKind kind = XMNodeKind.fromShort(xr.readShort());
         switch (kind) {
-            case -1: return list.get(xr.readInt());
+            case XMUNDEFKIND: return list.get(xr.readInt());
             case XMATTRIBUTE: return XData.readXData(xr, XMATTRIBUTE, xd);
             case XMCOMMENT: return XComment.readXComment(xr, xd);
             case XMELEMENT: return XElement.readXElement(xr, xd, list);

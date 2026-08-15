@@ -36,10 +36,9 @@ import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMCHOICE;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMSELECTOR_END;
-import static org.xdef.model.XMNode.XMTEXT;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMMIXED;
+import static org.xdef.model.XMNodeKind.XMTEXT;
 import org.xdef.model.XMOccurrence;
 import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariable;
@@ -307,24 +306,24 @@ public class Xd2Xsd {
         int endIndex = xsel.getEndIndex();
         Element sel;
         switch (xsel.getKind()) {
-            case XMNode.XMSEQUENCE:
+            case XMSEQUENCE:
                 sel = genSequenceElement(parent);
                 setOccurrence(sel, xsel);
                 return genSequence(complt, sel, children, index, endIndex);
-            case XMNode.XMCHOICE:
+            case XMCHOICE:
                 sel = genSchemaElem(parent, "choice");
                 setOccurrence(sel, xsel);
                 return genSequence(complt, sel, children, index, endIndex);
-            case XMNode.XMMIXED: {
+            case XMMIXED: {
                 int min = 0;
                 int max = 0;
                 for (int i = index + 1; i < endIndex; i++) {
                     XMNode x = children[i];
                     switch (x.getKind()) {
-                        case XMNode.XMMIXED:
-                        case XMNode.XMCHOICE:
-                        case XMNode.XMSEQUENCE:
-                        case XMNode.XMELEMENT:
+                        case XMMIXED:
+                        case XMCHOICE:
+                        case XMSEQUENCE:
+                        case XMELEMENT:
                             XMOccurrence occ = x.getOccurence();
                             if (occ.minOccurs() > 0) {
                                 min++;
@@ -363,27 +362,26 @@ public class Xd2Xsd {
         for (; i < endIndex; i++) {
             XMNode x = children[i];
             switch (x.getKind()) {
-                case XMNode.XMELEMENT:
+                case XMELEMENT:
                     if (!x.getOccurence().isIllegal()) {
                         genElem(parent, (XMElement) x);
                     }
                     continue;
-                case XMNode.XMTEXT:
+                case XMTEXT:
                     if (!x.getOccurence().isIllegal()) {
                         complextype.setAttribute("mixed", "true");
                     }
                     continue;
-                case XMNode.XMMIXED:
-                case XMNode.XMCHOICE:
-                case XMNode.XMSEQUENCE: {
+                case XMMIXED:
+                case XMCHOICE:
+                case XMSEQUENCE: {
                     if (!x.getOccurence().isIllegal()) {
                         XMSelector xsel = (XMSelector) x;
                         i = genGroup(complextype, parent, xsel, children, i);
                     }
                     continue;
                 }
-                case XMNode.XMSELECTOR_END:
-                    return i + 1; // sholdn't happen!
+                case XMSELECTOR_END: return i + 1; // sholdn't happen!
             }
         }
         return i;
@@ -798,12 +796,12 @@ public class Xd2Xsd {
         }
         if (children.length > 0) {
             XMNode x = children[0];
-            if (x.getKind()==XMNode.XMMIXED && ((XMSelector) x).getEndIndex()==children.length-1) {
+            if (x.getKind() == XMMIXED && ((XMSelector) x).getEndIndex()==children.length-1) {
                 // try tu generate xs:all
                 boolean allPossible = true;
                 for (int i = 1; i < children.length; i++) {
                     XMNode y = children[i];
-                    if (y.getKind() == XMNode.XMELEMENT) {
+                    if (y.getKind() == XMELEMENT) {
                         XMOccurrence occ = y.getOccurence();
                         if (occ.minOccurs() > 1 || occ.maxOccurs() > 1) {
                             allPossible = false;
@@ -820,7 +818,7 @@ public class Xd2Xsd {
                     /* AK */
                     for (int i = 1; i < children.length; i++) {
                         XMNode y = children[i];
-                        if (y.getKind() == XMNode.XMELEMENT) {
+                        if (y.getKind() == XMELEMENT) {
                             if (!y.getOccurence().isIllegal()) {
                                 genElem(all, (XMElement) y);
                             }
@@ -831,9 +829,9 @@ public class Xd2Xsd {
                 }
             }
             switch (x.getKind()) {
-                case XMNode.XMCHOICE:
-                case XMNode.XMMIXED:
-                case XMNode.XMSEQUENCE:
+                case XMCHOICE:
+                case XMMIXED:
+                case XMSEQUENCE:
                     if (((XMSelector) x).getEndIndex() == children.length - 1) {
                         genGroup(complexType, complexType, (XMSelector) children[0], children, 0);
                         addAttrs(complexType, attrs);
@@ -887,7 +885,7 @@ public class Xd2Xsd {
             Element choice = null;
             for (XMNode child : children) {
                 switch (child.getKind()) {
-                    case XMNode.XMTEXT: complexType.setAttribute("mixed", "true"); break;
+                    case XMTEXT: complexType.setAttribute("mixed", "true"); break;
                     case XMCHOICE: choice = genSchemaElem(sequence, "choice"); sequence = choice; break;
                     case XMSELECTOR_END:
                         if (choice != null) {
@@ -1580,7 +1578,7 @@ public class Xd2Xsd {
         final String nameEl,
         final XMNode child) {
         String nameElement = nameEl.replace("_text", "_Text");
-        if (child.getKind() == XMNode.XMTEXT) {
+        if (child.getKind() == XMTEXT) {
             XMData xmData = (XMData) child;
             GenParser parserInfo = GenParser.genParser(xmData, _genXdateOutFormat);
             String complexName = getNameElement(child.getXDPosition());

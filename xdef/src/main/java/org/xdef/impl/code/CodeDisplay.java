@@ -55,14 +55,9 @@ import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMATTRIBUTE;
-import static org.xdef.model.XMNode.XMCHOICE;
-import static org.xdef.model.XMNode.XMDEFINITION;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMMIXED;
-import static org.xdef.model.XMNode.XMSELECTOR_END;
-import static org.xdef.model.XMNode.XMSEQUENCE;
-import static org.xdef.model.XMNode.XMTEXT;
+import static org.xdef.model.XMNodeKind.XMATTRIBUTE;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMTEXT;
 import org.xdef.model.XMStatementInfo;
 
 /** Display compiled objects.

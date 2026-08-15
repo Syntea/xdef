@@ -19,7 +19,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.impl.XElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
