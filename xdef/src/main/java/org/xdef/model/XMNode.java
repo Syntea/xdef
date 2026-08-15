@@ -8,6 +8,34 @@ import javax.xml.namespace.QName;
  * @author Vaclav Trojan
  */
 public interface XMNode extends XMOccurrence {
+    /** X-definition ID. */
+    public static final short XMUNDEF = 0;
+    /** X-definition ID. */
+    public static final short XMDEFINITION = 1;
+    /** Model of XML document ID - not used yet. */
+    public static final short XMDOCUMENT = 2;
+    /** Model of XML element ID. */
+    public static final short XMELEMENT = 3;
+    /** Model of Text ID. */
+    public static final short XMTEXT = 4;
+    /** Model of XML processing instruction ID. */
+    public static final short XMPI = 5;
+    /** Model of XML comment ID. */
+    public static final short XMCOMMENT = 6;
+    /** Model of XML attribute ID. */
+    public static final short XMATTRIBUTE = 7;
+    /** Start of the sequence of XML nodes ID.. */
+    public static final short XMSEQUENCE = 8;
+    /** Start of the choice group of XML nodes ID. */
+    public static final short XMCHOICE = 9;
+    /** Start of the mixed group of XML nodes ID. */
+    public static final short XMMIXED = 10;
+    /** End of a sequence of items ID. */
+    public static final short XMSELECTOR_END = 11;
+    /** Kind of XNode XReference */
+    public static final short XMREFERENCE = 12;
+    /** Kind of XNode  XINCLUDE */
+    public static final short XMINCLUDE = 13;
 
     /** Get name of model of the node.
      * @return name of node.
@@ -37,7 +65,7 @@ public interface XMNode extends XMOccurrence {
     /** Get kind of model (see values of constant fields).
      * @return the ID of node.
      */
-    public XMNodeKind getKind();
+    public short getKind();
 
     /** Get XMDefinition assigned to this node.
      * @return root XMdefinition node.

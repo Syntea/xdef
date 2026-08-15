@@ -3,9 +3,8 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.List;
 import org.xdef.model.XMDefinition;
-import org.xdef.model.XMNodeKind;
-import static org.xdef.model.XMNodeKind.XMCHOICE;
-import static org.xdef.model.XMNodeKind.XMMIXED;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMMIXED;
 import org.xdef.model.XMSelector;
 import org.xdef.sys.SUnsupportedOperationException;
 
@@ -44,7 +43,7 @@ public class XSelector extends XNode implements XMSelector {
     /* Creates a new instance of XSelector as the item of Xelement body.
      * @param kind The type of selector.
      */
-    public XSelector(final XMNodeKind kind) {
+    public XSelector(final short kind) {
         super(null, kind==XMMIXED ? "$mixed" : kind==XMCHOICE ? "$choice" : "$sequence", null, kind);
         _empty = false;
         _ignorable = true;
@@ -159,7 +158,7 @@ public class XSelector extends XNode implements XMSelector {
     final void setGroupAll(final boolean x) {_isAll = x;}
 
     /** read selector from reader.*/
-    static final XSelector readXSelector(final XDReader xr, final XMNodeKind kind) throws IOException {
+    static final XSelector readXSelector(final XDReader xr, final short kind) throws IOException {
         XSelector x;
         if (kind == XMMIXED) {
             x = new XMixed();
@@ -255,7 +254,7 @@ public class XSelector extends XNode implements XMSelector {
      */
     @Override
     public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
-        xw.writeShort(getKind().toShort());
+        xw.writeShort(getKind());
         xw.writeInt(minOccurs());
         xw.writeInt(maxOccurs());
         xw.writeBoolean(_emptyDeclared);

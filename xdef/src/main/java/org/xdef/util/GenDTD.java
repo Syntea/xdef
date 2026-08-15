@@ -30,10 +30,12 @@ import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.impl.parsers.XDParseEnum;
-import org.xdef.model.XMNodeKind;
-import static org.xdef.model.XMNodeKind.XMELEMENT;
-import static org.xdef.model.XMNodeKind.XMSELECTOR_END;
-import static org.xdef.model.XMNodeKind.XMTEXT;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 
 /** Generation of DTD from X-definitions.
  * Also provides main method for calling the program from command line.
@@ -310,7 +312,7 @@ public class GenDTD {
         for (XMNode childNode : childNodes) {
             dn = childNode;
             name = dn.getName();
-            XMNodeKind kind;
+            short kind;
             if ((kind = dn.getKind()) == XMTEXT) {
                 isMixed = true;
                 separator = selSeparator;
@@ -364,11 +366,11 @@ public class GenDTD {
                         sb.append(separator).append("\n          ");
                     }
                     for (int j = 0; true; j++) {
-                        XMNodeKind kind = childNodes[++i].getKind();
+                        short kind = childNodes[++i].getKind();
                         if (kind == XMSELECTOR_END) {
                             break;
                         }
-                        if (kind != XMELEMENT) {
+                        if (kind != XMNode.XMELEMENT) {
                             continue; //can be a text value
                         }
                         XMElement de = (XMElement)childNodes[i];

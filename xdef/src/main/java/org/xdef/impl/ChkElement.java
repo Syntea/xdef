@@ -39,14 +39,13 @@ import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import org.xdef.model.XMNodeKind;
-import static org.xdef.model.XMNodeKind.XMATTRIBUTE;
-import static org.xdef.model.XMNodeKind.XMCHOICE;
-import static org.xdef.model.XMNodeKind.XMELEMENT;
-import static org.xdef.model.XMNodeKind.XMMIXED;
-import static org.xdef.model.XMNodeKind.XMSELECTOR_END;
-import static org.xdef.model.XMNodeKind.XMSEQUENCE;
-import static org.xdef.model.XMNodeKind.XMTEXT;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXData;
@@ -330,7 +329,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         }
         _actDefIndex = -1;
         while (_nextDefIndex < defLength) {
-            XMNodeKind kind;
+            short kind;
             switch (kind = (xn = _childList[_nextDefIndex]).getKind()) {
                 case XMTEXT: {
                     if (el == null) {// is text node
@@ -1634,7 +1633,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         // check remaining part of model.
         int nextDefIndex = _nextDefIndex;
         while (_nextDefIndex < _childList.length) {
-            XMNodeKind kind;
+            short kind;
             XNode xnode;
             switch (kind = (xnode = _childList[_nextDefIndex]).getKind()) {
                 case XMTEXT:
@@ -3443,7 +3442,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         /** Address of "finally" method or -1 */
         int _finallyCode;
         /** Kind of selector */
-        XMNodeKind _kind;
+        short _kind;
         /** True if first item of sequence is selective */
         boolean _selective;
         /** True if selector is ignorable */

@@ -3,7 +3,6 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.List;
 import org.xdef.XDPool;
-import static org.xdef.model.XMNodeKind.XMPI;
 
 /** Implementation of the model of processing instruction.
  * @author Vaclav Trojan

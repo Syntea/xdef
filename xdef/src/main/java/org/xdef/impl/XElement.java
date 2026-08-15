@@ -15,12 +15,11 @@ import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import org.xdef.model.XMNodeKind;
-import static org.xdef.model.XMNodeKind.XMCHOICE;
-import static org.xdef.model.XMNodeKind.XMELEMENT;
-import static org.xdef.model.XMNodeKind.XMMIXED;
-import static org.xdef.model.XMNodeKind.XMSEQUENCE;
-import static org.xdef.model.XMNodeKind.XMTEXT;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
@@ -342,7 +341,8 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
         if (!x._reference) {
             len = xr.readLength();
             for (int i = 0; i < len; i++) {
-                XData xattr = XData.readXData(xr, XMNodeKind.fromShort(xr.readShort()), xd);
+                short kind = xr.readShort();
+                XData xattr = XData.readXData(xr, kind, xd);
                 x._attrs.put(xattr.getName(), xattr);
             }
             len = xr.readLength();
@@ -455,29 +455,29 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
                 return -1;
             }
             switch (ix.getKind()) {
-                case XMELEMENT:
+                case XMNode.XMELEMENT:
                     if (!((XElement) ix).compareElement((XElement) iy, rep, full)) {
                         //Child nodes differs: &{0} and &{1}
                         rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
                         return -1;
                     }
                     continue;
-                case XMATTRIBUTE:
-                case XMTEXT:
+                case XMNode.XMATTRIBUTE:
+                case XMNode.XMTEXT:
                     if (!((XData) ix).compareData((XData) iy, rep, full)){
                         return -1;
                     }
                     continue;
-                case XMCHOICE:
-                case XMMIXED:
-                case XMSEQUENCE:
+                case XMNode.XMCHOICE:
+                case XMNode.XMMIXED:
+                case XMNode.XMSEQUENCE:
                     if ((j=compareGroup(x, y, j+1, rep, full)) < 0) {
                         //Child nodes differs: &{0} and &{1}
                         rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
                         return -1;
                     }
                     continue;
-                case XMSELECTOR_END: return j + 1;
+                case XMNode.XMSELECTOR_END: return j + 1;
             }
         }
         return j;
@@ -602,7 +602,7 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
     }
 
     private static void genDataDigestInfo(final SObjectWriter xw, final XData x) throws Exception {
-        xw.writeShort(x.getKind().toShort());
+        xw.writeShort(x.getKind());
         xw.writeString(x.getName());
         xw.writeInt(x.minOccurs());
         xw.writeInt(x.maxOccurs());
@@ -619,7 +619,7 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             SObjectWriter xw = new SObjectWriter(baos);
-            xw.writeShort(XMELEMENT.toShort());
+            xw.writeShort(XMELEMENT);
             xw.writeString(xe.getName());
             xw.writeString(xe.getNSUri());
             xw.writeInt(xe.minOccurs());
@@ -633,12 +633,12 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
                 }
             }
             for (XNode x: xe._childNodes) {
-                XMNodeKind kind = x.getKind();
+                short kind = x.getKind();
                 switch (kind) {
                     case XMCHOICE:
                     case XMSEQUENCE:
                     case XMMIXED:
-                        xw.writeShort(kind.toShort());
+                        xw.writeShort(kind);
                         xw.writeInt(x.minOccurs());
                         xw.writeInt(x.maxOccurs());
                         continue;
@@ -646,13 +646,13 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
                         genDataDigestInfo(xw, (XData) x);
                         continue;
                     case XMELEMENT:
-                        xw.writeShort(kind.toShort());
+                        xw.writeShort(kind);
                         xw.writeInt(x.minOccurs());
                         xw.writeInt(x.maxOccurs());
                         xw.writeString(x.getName());
                         continue;
                     default:
-                        xw.writeShort(kind.toShort());
+                        xw.writeShort(kind);
                 }
             }
             xw.close();

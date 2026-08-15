@@ -167,7 +167,6 @@ public final class TestDTDTypes extends XDTester {
             } else {
                 assertEq("XDEF522", rep.getMsgID(), rep.toString());
             }
-            reporter.clear();
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A | X'>\n"+
 "  <xd:declaration> type t1 string(); uniqueSet u{t:t1}; uniqueSet v{t: int()}; </xd:declaration>\n"+
@@ -182,7 +181,7 @@ public final class TestDTDTypes extends XDTester {
             if ((rep = reporter.getReport()) == null) {
                 fail("Error not reported");
             } else {
-                assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("u GAMA"), rep.toString());
+                assertTrue(rep.toString().contains("XDEF522") && rep.toString().contains("#u GAMA"));
             }
             parse(xp, "", "<A><B b=\"'a''c'\"/><B b=\"'a''c' 'd'\"/><B a=\"a'c\"/><B a='d'/></A>", reporter);
             assertNoErrorwarningsAndClear(reporter);
@@ -194,9 +193,8 @@ public final class TestDTDTypes extends XDTester {
                 fail("Error not reported");
             } else {
                 String s = rep.toString();
-                assertTrue(s.contains("XDEF522") && s.contains("v ") && s.contains("124"), s);
+                assertTrue(s.contains("XDEF522") && s.contains("#v ") && s.contains("124"));
             }
-            reporter.clear();
 //CHKIDS
             xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a' >\n"+

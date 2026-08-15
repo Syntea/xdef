@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNodeKind.XMCOMMENT;
 
 /** Implementation of the model of XML comment.
  * @author Vaclav Trojan
