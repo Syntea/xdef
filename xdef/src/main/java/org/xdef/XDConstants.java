@@ -140,7 +140,7 @@ public interface XDConstants {
     /** URI of XON/JSON/INI XML X-definition conversion. */
     public static final String XON_NS_URI_XD = "http://www.xdef.org/xon/4.0";
     /** URI of XON/JSON/INI XML W3C like conversion*/
-    public static final String XON_NS_URI_W="http://www.xdef.org/xon/4.0/w";
+    public static final String XON_NS_URI_W = "http://www.xdef.org/xon/4.0/w";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information.

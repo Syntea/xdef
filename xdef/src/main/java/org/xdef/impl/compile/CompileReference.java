@@ -2,6 +2,7 @@ package org.xdef.impl.compile;
 
 import java.io.IOException;
 import java.util.List;
+import org.xdef.XDConstants;
 import org.xdef.impl.XDWriter;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.Report;
@@ -14,12 +15,13 @@ import org.xdef.impl.XNode;
 import org.xdef.impl.XSelector;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMDEFINITION;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
-import static org.xdef.model.XMNode.XMDEFINITION;
 import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMREFERENCE;
 import static org.xdef.model.XMNode.XMINCLUDE;
+import static org.xdef.model.XMNode.XMREFERENCE;
+import static org.xdef.model.XMNode.XMUNDEF;
 
 /** Provides an object for resolving references in X-definition source. This object is pseudo XNode and
  * will be replaced by referred object.
@@ -152,10 +154,10 @@ final class CompileReference extends XNode {
         String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
         XElement xe;
         String uri;
-        if (getKind() == XMDEFINITION && _parent.getXMDefinition() != xdef) { // uses or implements
-            xe = (XElement) xdef.getModel(uri = _parent.getNSUri(), mName);
-            if (xe == null && uri != null && !uri.isEmpty()) { //AI; uri == XDConstants.XON_NS_URI_W
-                // "uses"/"implements" reference from a xd:json script: the referring node carries
+        if ((getKind() == XMUNDEF || getKind() == XMDEFINITION) && _parent.getXMDefinition() != xdef) {
+            xe = (XElement) xdef.getModel(uri = _parent.getNSUri(), mName); // uses or implements
+            if (xe == null && getKind() == XMUNDEF && XDConstants.XON_NS_URI_W.equals(uri)) {
+                // "uses" or "implements" reference from a xd:json script: the referring node carries
                 // the JSON namespace, but a xd:json root model itself is registered without a namespace -
                 // retry unqualified so cross-file implements/uses can resolve xd:json root targets too.
                 xe = (XElement) xdef.getModel(null, mName);
