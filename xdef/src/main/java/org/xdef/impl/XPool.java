@@ -35,7 +35,7 @@ import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
 import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariableTable;
 import org.xdef.msg.SYS;
@@ -117,11 +117,10 @@ public final class XPool implements XDPool, Serializable {
     private TimeZone _defaultZone = null;
     /** Array with Charset mappings of legal values of parsed strings.*/
     private Charset[] _charsets;
-    /** List of options from properties. */
+    /** List of options from properties.*/
     private byte[] _options;
-///////////////////////////////////////////////////////////////////////////////////
-// Valid date parameters
-///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    // Valid date parameters
     /** Maximal accepted value of the year.*/
     private int _maxYear;
     /** Minimal accepted value of the year.*/
@@ -156,12 +155,14 @@ public final class XPool implements XDPool, Serializable {
         //debug mode
         _debugMode = (byte) readProperty(_props,
             XDConstants.XDPROPERTY_DEBUG,
-            new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE, XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
+            new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE,
+                XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
                 XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
         //showErrors display mode
         _displayMode = (byte) readProperty(_props,
             XDConstants.XDPROPERTY_DISPLAY,
-            new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE, XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
+            new String[] {XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE,
+                XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS,
                 XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE},
             XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
         _debugEditor = SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG_EDITOR);
@@ -169,7 +170,8 @@ public final class XPool implements XDPool, Serializable {
         //set DOCTYPE illegal
         _illegalDoctype = readProperty(_props,
             XDConstants.XDPROPERTY_DOCTYPE,
-            new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
+            new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
+                XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
                 XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;  //default is false
         //switch if the actullal reporter is cleared on invoked action
         _clearReports=readProperty(_props,XDConstants.XDPROPERTY_CLEAR_REPORTS,
@@ -1332,8 +1334,7 @@ public final class XPool implements XDPool, Serializable {
         _extClasses = new Class<?>[len];
         for (int i = 0; i < len; i++) {
             try {
-                _extClasses[i] =
-                    Class.forName(xr.readString(), false, Thread.currentThread().getContextClassLoader());
+                _extClasses[i] = Class.forName(xr.readString(), false, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException ex) {
                 throw new SRuntimeException(SYS.SYS039, ex);//SObject reader: incorrect format of data&{0}{: }
             }
@@ -1379,8 +1380,8 @@ public final class XPool implements XDPool, Serializable {
             try {
                 _code[i] = xr.readXD();
             } catch (IOException ex) {
-                throw new SRuntimeException(SYS.SYS039, //SObject reader: incorrect format of data&{0}{: }
-                    ex, "code["+i+"]; " + _code[i]);
+                //SObject reader: incorrect format of data&{0}{: }
+                throw new SRuntimeException(SYS.SYS039, ex, "code["+i+"]; "+_code[i]);
             }
         }
         _variables = XVariableTable.readXD(xr);
@@ -1405,7 +1406,7 @@ public final class XPool implements XDPool, Serializable {
             try {
                 _xdefs.put(xr.readString(), XDefinition.readXDefinition(xr, this, list));
             } catch (IOException ex) {
-                throw new SRuntimeException(SYS.SYS039, ex);//SObject reader: incorrect format of data&{0}{: }
+                throw new SRuntimeException(SYS.SYS039, ex); //SObject reader: incorrect format of data&{0}{: }
             }
         }
         //resolve root selections - references to models!

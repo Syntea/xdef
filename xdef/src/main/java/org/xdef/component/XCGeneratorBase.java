@@ -41,7 +41,8 @@ import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.model.XMData;
-import static org.xdef.model.XMNode.XMELEMENT;
+import org.xdef.model.XMNodeKind;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -1137,7 +1138,7 @@ class XCGeneratorBase {
         final XNode xe = nodes[index];
         String name = xe.getLocalName();
         String ns = xe.getNSUri();
-        short kind = xe.getKind();
+        XMNodeKind kind = xe.getKind();
         for ( int i = 0; i < nodes.length; i++) {
             if (i == index) {
                 continue; //skip the checked node itself;

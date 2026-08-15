@@ -23,7 +23,6 @@ import org.xdef.impl.XNode;
 import org.xdef.impl.XOccurrence;
 import org.xdef.impl.XSelector;
 import org.xdef.impl.XVariable;
-import org.xdef.model.XMNode;
 import java.util.Map;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
@@ -93,9 +92,12 @@ import static org.xdef.impl.compile.XScriptParser.UNIQUE_SET_SYM;
 import static org.xdef.impl.compile.XScriptParser.USES_SYM;
 import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
 import static org.xdef.impl.compile.XScriptParser.symToName;
-import static org.xdef.model.XMNode.XMREFERENCE;
 import static org.xdef.sys.SParser.NOCHAR;
 import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
+import org.xdef.model.XMNodeKind;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMREFERENCE;
+import static org.xdef.model.XMNodeKind.XMUNDEFKIND;
 
 /** Compiler of XD script of headers, elements and attributes.
  * @author Vaclav Trojan
@@ -202,7 +204,7 @@ final class CompileXScript extends CompileStatement {
      * @param parent parent model
      */
     final void genTemplateData(final XData sc, final XNode parent) {
-        if (parent != null && parent.getKind() == XMNode.XMELEMENT) {
+        if (parent != null && parent.getKind() == XMELEMENT) {
             XElement p = (XElement) parent;
             sc.copyOptions(p);
         } else {
@@ -564,7 +566,7 @@ final class CompileXScript extends CompileStatement {
      */
     final void genTemplateElement(final XElement sc, final XNode parent) {
         sc.clearActions();
-        if (parent != null && parent.getKind() == XMNode.XMELEMENT) {
+        if (parent != null && parent.getKind() == XMELEMENT) {
             XElement p = (XElement) parent;
             sc.copyOptions(p);
             sc._forget = p._forget;
@@ -718,7 +720,7 @@ final class CompileXScript extends CompileStatement {
                     _sym = UNDEF_SYM;
                 } else {
                     _implList.add(new CompileReference(_sym == IMPLEMENTS_SYM
-                        ? (short) 1 : (short) 0, xel, null, getParsedString(), getPosition()));
+                        ? XMNodeKind.XMDEFINITION : XMUNDEFKIND, xel, null, getParsedString(), getPosition()));
                 }
                 nextSymbol();
                 continue;

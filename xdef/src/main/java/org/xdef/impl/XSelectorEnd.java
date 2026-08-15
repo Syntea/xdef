@@ -3,6 +3,7 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.List;
 import org.xdef.model.XMDefinition;
+import static org.xdef.model.XMNodeKind.XMSELECTOR_END;
 import org.xdef.sys.SUnsupportedOperationException;
 
 /** End mark of selector.
@@ -73,6 +74,6 @@ public final class XSelectorEnd extends XNode {
      */
     @Override
     public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
-        xw.writeShort(getKind());
+        xw.writeShort(getKind().toShort());
     }
 }

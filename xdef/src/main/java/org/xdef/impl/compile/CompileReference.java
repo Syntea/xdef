@@ -14,12 +14,12 @@ import org.xdef.impl.XNode;
 import org.xdef.impl.XSelector;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMNode;
+import org.xdef.model.XMNodeKind;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMINCLUDE;
+import static org.xdef.model.XMNodeKind.XMREFERENCE;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
-import static org.xdef.model.XMNode.XMDEFINITION;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMREFERENCE;
-import static org.xdef.model.XMNode.XMINCLUDE;
 
 /** Provides an object for resolving references in X-definition source. This object is pseudo XNode and
  * will be replaced by referred object.
@@ -54,7 +54,7 @@ final class CompileReference extends XNode {
      * @param position source position where the reference was specified.
      * @throws SRuntimeException if an error occurs.
      */
-    CompileReference(final short kind,
+    CompileReference(final XMNodeKind kind,
         final XNode parent,
         final String nsURI,
         final String refName,
@@ -71,7 +71,7 @@ final class CompileReference extends XNode {
      * @param xsel XSelector object.
      * @throws SRuntimeException if an error occurs.
      */
-    CompileReference(final short kind,
+    CompileReference(final XMNodeKind kind,
         final XNode parent,
         final String nsURI,
         final String refName,
@@ -152,7 +152,7 @@ final class CompileReference extends XNode {
         String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
         XElement xe;
         String uri;
-        if (getKind() <= 1 && _parent.getXMDefinition() != xdef) { // uses or implements
+        if (getKind() == XMNodeKind.XMDEFINITION && _parent.getXMDefinition() != xdef) { // uses or implements
             xe = (XElement) xdef.getModel(uri = _parent.getNSUri(), mName);
             if (xe == null && uri != null && !uri.isEmpty()) { //AI; uri == XDConstants.XON_NS_URI_W
                 // "uses"/"implements" reference from a xd:json script: the referring node carries

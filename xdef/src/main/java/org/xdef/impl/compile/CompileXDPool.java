@@ -49,16 +49,17 @@ import org.xdef.impl.parsers.XDParseEnum;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMATTRIBUTE;
-import static org.xdef.model.XMNode.XMCHOICE;
-import static org.xdef.model.XMNode.XMDEFINITION;
-import static org.xdef.model.XMNode.XMELEMENT;
-import static org.xdef.model.XMNode.XMINCLUDE;
-import static org.xdef.model.XMNode.XMMIXED;
-import static org.xdef.model.XMNode.XMREFERENCE;
-import static org.xdef.model.XMNode.XMSELECTOR_END;
-import static org.xdef.model.XMNode.XMSEQUENCE;
-import static org.xdef.model.XMNode.XMTEXT;
+import org.xdef.model.XMNodeKind;
+import static org.xdef.model.XMNodeKind.XMATTRIBUTE;
+import static org.xdef.model.XMNodeKind.XMCHOICE;
+import static org.xdef.model.XMNodeKind.XMDEFINITION;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMINCLUDE;
+import static org.xdef.model.XMNodeKind.XMMIXED;
+import static org.xdef.model.XMNodeKind.XMREFERENCE;
+import static org.xdef.model.XMNodeKind.XMSELECTOR_END;
+import static org.xdef.model.XMNodeKind.XMSEQUENCE;
+import static org.xdef.model.XMNodeKind.XMTEXT;
 import org.xdef.model.XMVariable;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -228,8 +229,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
      * @param level The nesting level of new node.
      */
     private void addNode(final XNode parentNode, final XNode xNode, final int level, final SPosition pos) {
-        short parentKind = parentNode.getKind();
-        short nodeKind = xNode.getKind();
+        XMNodeKind parentKind = parentNode.getKind();
+        XMNodeKind nodeKind = xNode.getKind();
         if (parentKind == XMDEFINITION) { //"model" level
             if (nodeKind == XMELEMENT) {
                 ((XElement) xNode)._definition = (XDefinition) parentNode;
@@ -839,7 +840,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
     private void compileAttrs(final PNode pn, final String defName, final XNode xn, final boolean isAttlist) {
         XElement xel;
         XData xtxt;
-        short newKind;
+        XMNodeKind newKind;
         if ((newKind = xn.getKind()) == XMELEMENT) {
             xel = (XElement) xn;
             xtxt = null;
@@ -970,7 +971,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         SBuffer ref = pa == null ? null : pa._value;
         newNode.setXDPosition(xdef.getXDPosition()+'$' + pn._name.getString()
             + (ref != null ? "("+ref.getString()+")" : ""));
-        short kind = newNode.getKind();
+        XMNodeKind kind = newNode.getKind();
         if (kind == XMCHOICE || kind == XMMIXED || kind == XMSEQUENCE) {
             pa = _precomp.getXdefAttr(pn, "script", false, true);
             if (pa != null) {
@@ -1237,7 +1238,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         String xchildName = pnode._name.getString();
         XNode newNode;
         SBuffer sval;
-        short parentKind = parentNode.getKind();
+        XMNodeKind parentKind = parentNode.getKind();
         XElement xel;
         if (parentKind == XMELEMENT && (xel = (XElement) parentNode)._template) {
             if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
@@ -1450,7 +1451,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             }
             compileXChild(newNode, x, nodei, xdef, level + 1, xon);
         }
-        short newKind = newNode.getKind();
+        XMNodeKind newKind = newNode.getKind();
         if (level == 1) {
             if (newKind == XMELEMENT) {
                 if (!xdef.addModel((XElement) newNode)) {
@@ -1875,7 +1876,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         _precomp.putReport(Report.lightError(XDEF.XDEF229));
                     } else {
                         ArrayReporter rp =
-                            ((XElement) xn).compareModel((XElement) xref._parent, xref.getKind()==1);
+                            ((XElement) xn).compareModel((XElement) xref._parent, xref.getKind()==XMDEFINITION);
                         if (rp != null) {
                             Report rep;
                             while((rep = rp.getReport()) != null) {
@@ -2387,10 +2388,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         boolean selective = selectiveFlag;
         boolean notReported = true;
         boolean empty = true;
-        short selectorKind = selector == null ? XMSEQUENCE : selector.getKind();
+        XMNodeKind selectorKind = selector == null ? XMSEQUENCE : selector.getKind();
         for (int i = index; i < xel._childNodes.length; i++) {
             XNode xn = xel._childNodes[i];
-            short kind;
+            XMNodeKind kind;
             switch (kind = xn.getKind()) {
                 case XMTEXT: {
                     XData x;

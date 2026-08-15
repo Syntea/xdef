@@ -27,7 +27,7 @@ import org.xdef.impl.code.DefString;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNodeKind.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
