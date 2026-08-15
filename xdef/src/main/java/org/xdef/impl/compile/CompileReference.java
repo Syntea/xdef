@@ -152,7 +152,7 @@ final class CompileReference extends XNode {
         String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
         XElement xe;
         String uri;
-        if (getKind() <= 1 && _parent.getXMDefinition() != xdef) { // uses or implements
+        if (getKind() == XMDEFINITION && _parent.getXMDefinition() != xdef) { // uses or implements
             xe = (XElement) xdef.getModel(uri = _parent.getNSUri(), mName);
             if (xe == null && uri != null && !uri.isEmpty()) { //AI; uri == XDConstants.XON_NS_URI_W
                 // "uses"/"implements" reference from a xd:json script: the referring node carries
