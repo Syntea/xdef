@@ -7,42 +7,10 @@ import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import static org.xdef.impl.compile.XScriptParser.ASK_SYM;
-import static org.xdef.impl.compile.XScriptParser.BEG_SYM;
-import static org.xdef.impl.compile.XScriptParser.CONSTANT_SYM;
-import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
-import static org.xdef.impl.compile.XScriptParser.DDOT_SYM;
-import static org.xdef.impl.compile.XScriptParser.DEFAULT_SYM;
-import static org.xdef.impl.compile.XScriptParser.END_SYM;
-import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
-import static org.xdef.impl.compile.XScriptParser.FIXED_SYM;
-import static org.xdef.impl.compile.XScriptParser.FORGET_SYM;
-import static org.xdef.impl.compile.XScriptParser.IGNORE_SYM;
-import static org.xdef.impl.compile.XScriptParser.ILLEGAL_SYM;
-import static org.xdef.impl.compile.XScriptParser.INIT_SYM;
-import static org.xdef.impl.compile.XScriptParser.MATCH_SYM;
-import static org.xdef.impl.compile.XScriptParser.MUL_SYM;
-import static org.xdef.impl.compile.XScriptParser.OCCURS_SYM;
-import static org.xdef.impl.compile.XScriptParser.ON_ABSENCE_SYM;
-import static org.xdef.impl.compile.XScriptParser.ON_EXCESS_SYM;
-import static org.xdef.impl.compile.XScriptParser.ON_FALSE_SYM;
-import static org.xdef.impl.compile.XScriptParser.ON_ILLEGAL_ATTR_SYM;
-import static org.xdef.impl.compile.XScriptParser.ON_START_ELEMENT_SYM;
-import static org.xdef.impl.compile.XScriptParser.ON_TRUE_SYM;
-import static org.xdef.impl.compile.XScriptParser.OPTIONAL_SYM;
-import static org.xdef.impl.compile.XScriptParser.OPTIONS_SYM;
-import static org.xdef.impl.compile.XScriptParser.OPTION_SYM;
-import static org.xdef.impl.compile.XScriptParser.PLUS_SYM;
-import static org.xdef.impl.compile.XScriptParser.REF_SYM;
-import static org.xdef.impl.compile.XScriptParser.REQUIRED_SYM;
-import static org.xdef.impl.compile.XScriptParser.SEMICOLON_SYM;
-import static org.xdef.impl.compile.XScriptParser.UNDEF_SYM;
-import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
-import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
@@ -312,20 +280,18 @@ final class CompileXonXdef extends XScriptParser {
                 }
                 sbf = parsedScript[1];
             }
-            //AI
-            List<Object> valueSections = parseXscript(sbf);
+            List<Object> valueSections = parseXscript(sbf); //AI
             SBuffer onAbsence = removeSection("onAbsence", valueSections);
-            if (onAbsence != null) { // onAbsnece section
+            String absenceAction;
+            if (onAbsence != null && !(absenceAction = onAbsence.getString()).isEmpty()) { // onAbsnece section
                 sbf = xsToString(valueSections);
                 String occText = sbocc.getString().trim();
                 if (!occText.isEmpty() && !occText.endsWith(";")) {
                     occText += ';';
                 }
-                String absenceAction = onAbsence.getString();
-                occText += absenceAction.isEmpty() ? "onAbsence;" : ("onAbsence " + absenceAction + ';');
+                occText += "onAbsence " + absenceAction + ';'; // add "onAbsence" section to the "xd:script" attribute
                 sbocc = new SBuffer(occText, sbocc);
-            }
-            //AI
+            } //AI
             if (sbocc != null) { // occurrence or onAbsence
                 setXDAttr(pn, "script", sbocc);
             }
