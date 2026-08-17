@@ -1879,20 +1879,17 @@ public class TestXon extends XDTester {
             assertTrue(reporter.getErrorCount() == 1);
             reporter.clear();
         } catch (RuntimeException ex) {fail(ex);}
-        try { // test uses/implements in JSON models.
+        try { // test "uses"/"implements" in JSON models.
             xp = compile(new String[] {
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"CheckInsuranceP5RSample\" xd:root=\"CanonicalRequest\">\n" +
-"    <xd:json name=\"CanonicalRequest\">\n" +
-"        {\n" +
+"  <xd:json name=\"CanonicalRequest\">\n" +
+"    {\n" +
 "          \"request\" : {\n" +
 "            \"%script\" : \"required\",\n" +
-"            \"method\" : \"required eq('GET')\",\n" +
 "            \"pathParameters\" : \"required jnull()\",\n" +
 "            \"queryParameters\" : {\n" +
 "              \"%script\" : \"required\",\n" +
-"              \"vin\" : \"? regex('^.{1,26}$')\",\n" +
-"              \"spz\" : \"? regex('^.{1,12}$')\",\n" +
-"              \"cisloDokladu\" : \"? regex('^[A-Za-z]{2}[A-Za-z0-9][0-9]{5}$')\"\n" +
+"              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
 "            },\n" +
 "            \"headers\" : {\n" +
 "              \"%script\" : \"required\",\n" +
@@ -1917,22 +1914,19 @@ public class TestXon extends XDTester {
 "            \"traceId\" : \"required string()\",\n" +
 "            \"msgIdent\" : \"required string()\"\n" +
 "          }\n" +
-"        }\n" +
-"    </xd:json>\n" +
+"    }\n" +
+"  </xd:json>\n" +
 "</xd:def>",
 "<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"CheckInsuranceP5R\" xd:root=\"CanonicalRequest\">\n" +
-"    <xd:json name=\"CanonicalRequest\">\n" +
-"        {\n" +
+"  <xd:json name=\"CanonicalRequest\">\n" +
+"    {\n" +
 "          \"%script\" : \"uses CheckInsuranceP5RSample#CanonicalRequest; required\",\n" +
 "          \"request\" : {\n" +
 "            \"%script\" : \"required\",\n" +
-"            \"method\" : \"required eq('GET')\",\n" +
 "            \"pathParameters\" : \"required jnull()\",\n" +
 "            \"queryParameters\" : {\n" +
 "              \"%script\" : \"required\",\n" +
-"              \"vin\" : \"? regex('^.{1,26}$')\",\n" +
-"              \"spz\" : \"? regex('^.{1,12}$')\",\n" +
-"              \"cisloDokladu\" : \"? regex('^[A-Za-z]{2}[A-Za-z0-9][0-9]{5}$')\"\n" +
+"              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
 "            },\n" +
 "            \"headers\" : {\n" +
 "              \"%script\" : \"required\",\n" +
@@ -1957,14 +1951,13 @@ public class TestXon extends XDTester {
 "            \"traceId\" : \"required string()\",\n" +
 "            \"msgIdent\" : \"required string()\"\n" +
 "          }\n" +
-"        }\n" +
-"    </xd:json>\n" +
+"    }\n" +
+"  </xd:json>\n" +
 "</xd:def>"});
-            xd = xp.createXDDocument("CheckInsuranceP5RSample");
+            xd = xp.createXDDocument("CheckInsuranceP5R");
             json =
 "{\n" +
 "          \"request\" : {\n" +
-"            \"method\" : \"GET\",\n" +
 "            \"pathParameters\" : null,\n" +
 "            \"queryParameters\" : {\n" +
 "            },\n" +
