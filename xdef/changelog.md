@@ -1,5 +1,5 @@
 # Version ${version}, release-date ${release.date}
-  * A reference error in Script X related to the `uses` or “implements” section in JSON models has been fixed.
+  * A reference error in X-script related to the `uses` or “implements” section in JSON models has been fixed.
 
 # Version 42.2.46, release-date 2026-08-05
   * Fixed bug in JSON model if not quoted string value is `null`.
