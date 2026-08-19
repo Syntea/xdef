@@ -1880,19 +1880,49 @@ public class TestXon extends XDTester {
             reporter.clear();
         } catch (RuntimeException ex) {fail(ex);}
         try { // test "uses"/"implements" in JSON models.
-            xp = compile(new String[] {
-"<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"CheckInsuranceP5RSample\" xd:root=\"CanonicalRequest\">\n" +
+            xp = compile(
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def xd:name=\"CheckInsuranceP5RSample\" xd:root=\"CanonicalRequest\">\n" +
 "  <xd:json name=\"CanonicalRequest\">\n" +
-"    {\n" +
-"          \"request\" : {\n" +
-"            \"%script\" : \"required\",\n" +
+"    { \"request\" : { \"%script\" : \"required\",\n" +
 "            \"pathParameters\" : \"required jnull()\",\n" +
 "            \"queryParameters\" : {\n" +
 "              \"%script\" : \"required\",\n" +
 "              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
 "            },\n" +
-"            \"headers\" : {\n" +
+"            \"headers\" : { \"%script\" : \"required\",\n" +
+"              \"SKP-Request-Id\" : \"required regex('^[0-9]{1,19}$')\",\n" +
+"              \"SKP-Environment-Mode\" : \"required enum('DEV', 'TST', 'STD')\",\n" +
+"              \"SKP-StkEk-Id\" : \"required regex('^.{4,4}$')\",\n" +
+"              \"SKP-User-Id\" : \"required regex('^.{1,30}$')\"\n" +
+"            },\n" +
+"            \"body\" : \"required jnull()\"\n" +
+"      },\n" +
+"      \"routing\" : { \"%script\" : \"required\",\n" +
+"            \"service\" : \"required eq('P5R')\",\n" +
+"            \"operation\" : \"required eq('checkInsuranceP5R')\",\n" +
+"            \"apiVersion\" : \"required eq('2026/03')\",\n" +
+"            \"endpoint\" : \"required eq('/insurance-check')\"\n" +
+"      },\n" +
+"      \"processData\" : { \"%script\" : \"required\",\n" +
+"            \"idFlow\" : \"required long()\",\n" +
+"            \"idDefPartner\" : \"required long()\",\n" +
+"            \"traceId\" : \"required string()\",\n" +
+"            \"msgIdent\" : \"required string()\"\n" +
+"      }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>\n" +
+"<xd:def xd:name=\"example\" xd:root=\"CanonicalRequest\">\n" +
+"  <xd:json name=\"CanonicalRequest\">\n" +
+"        { \"%script\" : \"uses CheckInsuranceP5RSample#CanonicalRequest; required\",\n" +
+"          \"request\" : { \"%script\" : \"required\",\n" +
+"            \"pathParameters\" : \"required jnull()\",\n" +
+"            \"queryParameters\" : {\n" +
 "              \"%script\" : \"required\",\n" +
+"              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
+"            },\n" +
+"            \"headers\" : { \"%script\" : \"required\",\n" +
 "              \"SKP-Request-Id\" : \"required regex('^[0-9]{1,19}$')\",\n" +
 "              \"SKP-Environment-Mode\" : \"required enum('DEV', 'TST', 'STD')\",\n" +
 "              \"SKP-StkEk-Id\" : \"required regex('^.{4,4}$')\",\n" +
@@ -1900,64 +1930,25 @@ public class TestXon extends XDTester {
 "            },\n" +
 "            \"body\" : \"required jnull()\"\n" +
 "          },\n" +
-"          \"routing\" : {\n" +
-"            \"%script\" : \"required\",\n" +
+"          \"routing\" : { \"%script\" : \"required\",\n" +
 "            \"service\" : \"required eq('P5R')\",\n" +
 "            \"operation\" : \"required eq('checkInsuranceP5R')\",\n" +
 "            \"apiVersion\" : \"required eq('2026/03')\",\n" +
 "            \"endpoint\" : \"required eq('/insurance-check')\"\n" +
 "          },\n" +
-"          \"processData\" : {\n" +
-"            \"%script\" : \"required\",\n" +
+"          \"processData\" : { \"%script\" : \"required\",\n" +
 "            \"idFlow\" : \"required long()\",\n" +
 "            \"idDefPartner\" : \"required long()\",\n" +
 "            \"traceId\" : \"required string()\",\n" +
 "            \"msgIdent\" : \"required string()\"\n" +
 "          }\n" +
-"    }\n" +
+"        }\n" +
 "  </xd:json>\n" +
-"</xd:def>",
-"<xd:def xmlns:xd='"+_xdNS+"' xd:name=\"CheckInsuranceP5R\" xd:root=\"CanonicalRequest\">\n" +
-"  <xd:json name=\"CanonicalRequest\">\n" +
-"    {\n" +
-"          \"%script\" : \"uses CheckInsuranceP5RSample#CanonicalRequest; required\",\n" +
-"          \"request\" : {\n" +
-"            \"%script\" : \"required\",\n" +
-"            \"pathParameters\" : \"required jnull()\",\n" +
-"            \"queryParameters\" : {\n" +
-"              \"%script\" : \"required\",\n" +
-"              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
-"            },\n" +
-"            \"headers\" : {\n" +
-"              \"%script\" : \"required\",\n" +
-"              \"SKP-Request-Id\" : \"required regex('^[0-9]{1,19}$')\",\n" +
-"              \"SKP-Environment-Mode\" : \"required enum('DEV', 'TST', 'STD')\",\n" +
-"              \"SKP-StkEk-Id\" : \"required regex('^.{4,4}$')\",\n" +
-"              \"SKP-User-Id\" : \"required regex('^.{1,30}$')\"\n" +
-"            },\n" +
-"            \"body\" : \"required jnull()\"\n" +
-"          },\n" +
-"          \"routing\" : {\n" +
-"            \"%script\" : \"required\",\n" +
-"            \"service\" : \"required eq('P5R')\",\n" +
-"            \"operation\" : \"required eq('checkInsuranceP5R')\",\n" +
-"            \"apiVersion\" : \"required eq('2026/03')\",\n" +
-"            \"endpoint\" : \"required eq('/insurance-check')\"\n" +
-"          },\n" +
-"          \"processData\" : {\n" +
-"            \"%script\" : \"required\",\n" +
-"            \"idFlow\" : \"required long()\",\n" +
-"            \"idDefPartner\" : \"required long()\",\n" +
-"            \"traceId\" : \"required string()\",\n" +
-"            \"msgIdent\" : \"required string()\"\n" +
-"          }\n" +
-"    }\n" +
-"  </xd:json>\n" +
-"</xd:def>"});
-            xd = xp.createXDDocument("CheckInsuranceP5R");
+"</xd:def>\n" +
+"</xd:collection>");
+            xd = xp.createXDDocument("example");
             json =
-"{\n" +
-"          \"request\" : {\n" +
+"{         \"request\" : {\n" +
 "            \"pathParameters\" : null,\n" +
 "            \"queryParameters\" : {\n" +
 "            },\n" +
