@@ -375,7 +375,7 @@ public class XDefToJSON {
                         sb.append(s);
                         sb.append("\"");
                         if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                            sb.append("\n  ");
+                            sb.append("\n");
                         }
                         sb.append("}");
                         sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
@@ -386,7 +386,7 @@ public class XDefToJSON {
                         sb.append(s);
                         sb.append("\"");
                         if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                            sb.append("\n  ");
+                            sb.append("\n");
                         }
                         sb.append("}");
                         sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
@@ -457,7 +457,7 @@ public class XDefToJSON {
             }
             sb.append("\"");
             if (s.indexOf('\n') >= 0 || s.length() >= 100) {
-                sb.append("\n  ");
+                sb.append("\n");
             }
             sb.append("}");
             sb.append((n = getNextChildElement(el)) != null ? ",\n" : "\n");
