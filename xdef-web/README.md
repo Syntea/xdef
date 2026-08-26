@@ -221,6 +221,56 @@ The duplication of the resolving logic itself cannot be removed: it is the price
 the pages **must work as plain static files too**, where no filter runs.
 
 
+## FAQ-pages: fix the content of the answers
+
+Found by a review of [faq.html](src/main/webapp/other/faq.html) and verified against the sources of the
+core module ``xdef``. The same text is in [faq2.html](src/main/webapp/other/faq2.html) and
+[faq3.html](src/main/webapp/other/faq3.html) as well, so whichever of the three variants wins, the answers
+have to be fixed there.
+
+**The java-samples do not compile at all**, they come from the times of the old package-names:
+
+  1. **package-names that do not exist any more**: ``cz.syntea.xd.XDDocument``, ``.XDFactory``, ``.XDPool``
+     are now ``org.xdef.*``, ``cz.syntea.common.xml.KXmlUtils`` is ``org.xdef.xml.KXmlUtils`` and
+     ``cz.syntea.common.sys.ArrayReporter``, ``.Report`` are ``org.xdef.sys.*``. On top of that the samples
+     start with ``package cz.syntea.skp.slp2.lp.epemog;``, an internal package-name of some old project,
+     which makes no sense in a public example.
+  2. **``XDFactory.genXDPool(...)`` does not exist**: there is no such method in the whole core module, the
+     only place mentioning it is an outdated comment in its own ``package-info.java``. The method to use is
+     ``XDFactory.compileXD(Properties, String...)``, i.e. ``XDFactory.compileXD(null, "C:/xdef/validation.xdef")``.
+  3. **a bug in the sample itself**: ``System.out.printf(KXmlUtils.nodeToString(result, true))`` - a one
+     argument ``printf`` takes its string as a format, so as soon as the printed XML contains a ``%``, it
+     throws ``UnknownFormatConversionException``. The other sample correctly uses ``println``.
+  4. **an obsolete namespace**: the xml-sample uses ``http://www.syntea.cz/xdef/2.0``, while the rest of the
+     website uses ``http://www.xdef.org/xdef/4.2`` (20 occurrences).
+
+**The text does not match the samples**:
+
+  5. the text says "defined using the keyword **xd:declarations**", the sample right under it uses
+     ``<xd:declaration>`` (singular) - and so does the text of another answer on the same page.
+  6. "The **x-definitionParser** contains a large number of data types" - no such thing exists, it was
+     probably meant to be "X-definition".
+
+**The structure of the page**:
+
+  7. **faq.html has no heading at all** (no ``h1``, no ``h2``, no ``h3``): the questions are the plain text
+     of the summaries. So the page has no outline for the assistive technologies nor for the search engines,
+     although it is six chapters by its content. A ``<summary>`` may contain one heading element, so putting
+     an ``<h2>`` back inside it would fix that and the styling could stay on the summary.
+     (faq2.html has 2 ``h1`` + 6 ``h2``, faq3.html has 6 ``h2``.)
+  8. **the redundant "Question: "** at the beginning of each of the six questions: on a page named FAQ it
+     carries no information and it is the first thing on every line.
+
+**A detail**:
+
+  9. the ``meta`` description is literally the same as the ``title`` - a wasted place for the search engines,
+     a sentence about the content of the page would serve better.
+
+What is fine: the pages are valid XML (with the exception of the header, as the principle above requires),
+the menu links to the FAQ in all the language-versions, ``lang="en"`` fits, and the permanent links and the
+anchors of the questions all resolve.
+
+
 ## Pre-compile the "mustache" template
 
 ``ServletUtil.mustache()`` runs a regexp over the whole template on every request, although the template
