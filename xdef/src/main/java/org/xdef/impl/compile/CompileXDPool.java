@@ -517,7 +517,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
      * @return true if the attribute "scope" is "local".
      */
     private boolean isLocalScope(final PNode nodei, final boolean removeAttr) {
-        boolean local = nodei._xdef!=null && nodei._xdef.getXDVersion() >= XConstants.XD40;
+        boolean local = nodei._xdef != null && nodei._xdef.getXDVersion() >= XConstants.XD40;
         PAttr scope = _precomp.getXdefAttr(nodei, "scope", false, removeAttr);
         if (scope != null) {
             String s = scope._value.getString();
@@ -525,14 +525,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 case "global": return false; // OK, it is global anyay
                 case "local":
                     if (nodei._xdef == null) {
-                        //Attribute "scope" in declaration section is&{0}{ '}{'}.
-                        // It can be only "global"&{1}{ or }.
+                        //Attribute "scope" in declaration section is&{0}{ '}{'}. It can be only "global"&{1}{ or }.
                         error(scope._value, XDEF.XDEF221, s);
                         return false; // must be global
                     }
                     return true;
                 default:
-                    //Attribute "scope" in declaration section is&{0}{ '}{'}.It can be only "global"&{1}{ or }
+                    //Attribute "scope" in declaration section is&{0}{ '}{'}.It can be only "global"&{1}{ or }.
                     error(scope._value, XDEF.XDEF221, s, "'local'");
             }
         }
@@ -1179,10 +1178,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
      * @param xe Element to be changed.
      * @param nsOrig original namespace.
      * @param nsNew new namespace.
-     * @param hs HashSet with processed nodes (prevent unlimited recursive call).
+     * @param hset HashSet with processed nodes (prevent unlimited recursive call).
      */
-    private void changeModelNS(final XElement xe,final String nsOrig,final String nsNew,final Set<XNode> hs) {
-        if (!hs.add(xe)) {
+    private void changeModelNS(final XElement xe, final String nsOrig, final String nsNew, final Set<XNode> hset) {
+        if (!hset.add(xe)) {
             return; //already processed
         }
         // change attributes
@@ -1221,7 +1220,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         z.changeNS(nsNew);
                         z.setReference(false);
                         nodes[i] = z;
-                        changeModelNS((XElement) nodes[i], nsOrig, nsNew, hs);
+                        changeModelNS((XElement) nodes[i], nsOrig, nsNew, hset);
                     }
                 }
             }
@@ -1674,27 +1673,27 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         }
         boolean result = true;
         //check integrity of all X-definitions
-        Set<XNode> hs = new HashSet<>();
+        Set<XNode> hset = new HashSet<>();
         for (XDefinition x : _xdefs.values()) {
             for (XMElement xel: x.getModels()) {
-                result &= checkIntegrity((XElement) xel, 0, hs);
+                result &= checkIntegrity((XElement) xel, 0, hset);
             }
         }
         //process clearing of adopted forgets
-        hs.clear();
+        hset.clear();
         for (XDefinition x: _xdefs.values()) {
             for (XMElement xel: x.getModels()) {
-                clearAdoptedForgets((XElement) xel, false, hs);
+                clearAdoptedForgets((XElement) xel, false, hset);
             }
         }
-        hs.clear();
+        hset.clear();
         //update selectors
         for (XDefinition x : _xdefs.values()) {
             for (XMElement xel: x.getModels()) {
-                updateSelectors((XElement) xel, 0, null, false, false, hs);
+                updateSelectors((XElement) xel, 0, null, false, false, hset);
             }
         }
-        hs.clear(); //let's gc do the job
+        hset.clear(); //let's gc do the job
         //resolve root references for all XDefinitions
         for (PNode p: _xdefPNodes) {
             compileRootSelection(p);
@@ -2001,7 +2000,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     if (xmn instanceof XElement) {
                         y = (XElement) xmn;
                     } else {
-                        //Reference to element model expected&
+                        //Reference to element model expected
                         error(xref.getSPosition(), XDEF.XDEF213, xref.getXDPosition());
                     }
                 }
@@ -2145,8 +2144,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 xel._childNodes = y._childNodes;
                 if (nsOrig != null && nsNew != null && !nsOrig.equals(nsNew)) {
                     xel.setReference(false);
-                    // namespace of root element changed
-                    changeModelNS(xel, nsOrig, nsNew, new HashSet<>());
+                    changeModelNS(xel, nsOrig, nsNew, new HashSet<>()); // namespace of root element changed
                 } else {
                     xel.setReference((nsOrig == null || nsNew != null));
                 }
@@ -2172,8 +2170,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     && xel._childNodes[1].getKind() == XMMIXED
                     && xel._childNodes[lenx].getKind() == XMSELECTOR_END
                     && y._childNodes[0].getKind() == XMMIXED
-                        && y._childNodes[leny-1].getKind() == XMSELECTOR_END
-                    || leny <= 1 || lenx == 1 && leny == 1)) {
+                    && y._childNodes[leny-1].getKind() == XMSELECTOR_END || leny <= 1 || lenx == 1 && leny == 1)) {
                     if (lenx == 1 && leny == 1) {
                         childNodes = new XNode[4];
                         childNodes[0] = new XMixed();
@@ -2295,7 +2292,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             }
             y._childNodes = childNodes;
             childNodes = xel._childNodes;
-/**/
             if (leny == 1) {
                 xel._childNodes[i] = y._childNodes[0];
             }
@@ -2310,28 +2306,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             if (i < lenx - 1) {
                 copyChildNodes(childNodes,i+1,xel._childNodes,i+leny,lenx-i-1);
             }
-/**
-            XNode lastEnd = null;
-            if (i > 0) {
-                copyChildNodes(childNodes, 0, xel._childNodes, 0, i);
-            }
-            if (lenx > 0 && childNodes[0].getKind() == XMINCLUDE && leny > 1
-                && y._childNodes[leny - 1].getKind() == XMSELECTOR_END) {
-                copyChildNodes(y._childNodes, 0, xel._childNodes, i, leny-1);
-                lastEnd = y._childNodes[leny-1];
-            } else {
-                copyChildNodes(y._childNodes, 0, xel._childNodes, i, leny);
-            }
-            if (i < lenx - 1) {
-                if (lastEnd != null) {
-                    copyChildNodes(childNodes,i+1,xel._childNodes,i+leny-1,lenx-i-1);
-                    xel._childNodes[newLen - 1] = lastEnd;
-
-                } else {
-                    copyChildNodes(childNodes,i+1,xel._childNodes,i+leny,lenx-i-1);
-                }
-            }
-/**/
             lenx = newLen;
         }
         return result;
@@ -2340,18 +2314,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
     /** Check integrity of the node and resolve references.
      * @param xel the XElement.
      * @param level The recursion level.
-     * @param hs HashSet with processed nodes (prevent unlimited recursive call).
+     * @param hset HashSet with processed nodes (prevent unlimited recursive call).
      * @return true if check was successful.
      */
-    private boolean checkIntegrity(final XElement xel, final int level, final Set<XNode> hs) {
-        if (!hs.add(xel)) {
+    private boolean checkIntegrity(final XElement xel, final int level, final Set<XNode> hset) {
+        if (!hset.add(xel)) {
             return true; //already done
         }
-        boolean result = resolveReference(xel, level+1, xel.isSpecified(), hs);
+        boolean result = resolveReference(xel, level+1, xel.isSpecified(), hset);
         if (result) {
             for (XNode xn: xel._childNodes) {
-                if (xn.getKind() == XMELEMENT && !hs.contains(xn)) {
-                    result &= checkIntegrity((XElement) xn, level+1, hs);
+                if (xn.getKind() == XMELEMENT && !hset.contains(xn)) {
+                    result &= checkIntegrity((XElement) xn, level+1, hset);
                 } else if (xn.getKind() == XMTEXT) {
                     if (!xn.isSpecified()) {
                         xn.setOptional();
@@ -2371,7 +2345,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
      * @param selector selector or <i>null</i>.
      * @param ignorableFlag flag if the item can be ignored.
      * @param selectiveFlag flag if the item is selective in choice section.
-     * @param hs HashSet with processed nodes (revent unlimited recursive call).
+     * @param hset HashSet with processed nodes (revert unlimited recursive call).
      * @return index of last processed item.
      */
     private int updateSelectors(final XElement xel,
@@ -2379,8 +2353,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         final XSelector selector,
         final boolean ignorableFlag,
         final boolean selectiveFlag,
-        final Set<XNode> hs) {
-        hs.add(xel);
+        final Set<XNode> hset) {
+        hset.add(xel);
         Map<String, Integer> groupItems = new LinkedHashMap<>();
         boolean ignorable = ignorableFlag;
         boolean selective = selectiveFlag;
@@ -2428,8 +2402,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     int min;
                     XElement x;
                     min = (x = (XElement) xn).minOccurs();
-                    if (!hs.contains(x)) {
-                        updateSelectors(x, 0, null, false, false, hs);
+                    if (!hset.contains(x)) {
+                        updateSelectors(x, 0, null, false, false, hset);
                     }
                     if (selectorKind == XMCHOICE) {
                         ignorable |= min == 0;
@@ -2474,11 +2448,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 case XMSEQUENCE:
                 case XMMIXED: {
                     XSelector xs = (XSelector) xn;
-                    if (hs.add(xs)) { //not processed yet
+                    if (hset.add(xs)) { //not processed yet
                         xs.setBegIndex(i);
                         selective = kind==XMCHOICE||selective&&kind==XMSEQUENCE;
                         xs.setSelective(selective);
-                        i = updateSelectors(xel, i + 1, xs, kind == XMCHOICE || ignorable, selective, hs);
+                        i = updateSelectors(xel, i + 1, xs, kind == XMCHOICE || ignorable, selective, hset);
                         xs.setEndIndex(i);
                         if (i - xs.getBegIndex() <= 1) {
                             error(xs.getSPosition(), XDEF.XDEF325, //Empty group '&{0}' in X-definition '&{1}'
@@ -2518,10 +2492,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
     /** Clear adopted forgets.
      * @param xel XElement.
      * @param clear adopted clear flag.
-     * @param hs HashSet with processed nodes (revent unlimited recursive call).
+     * @param hset HashSet with processed nodes (revert unlimited recursive call).
      */
-    private void clearAdoptedForgets(final XElement xel, final boolean clear, final Set<XNode> hs) {
-        hs.add(xel);
+    private void clearAdoptedForgets(final XElement xel, final boolean clear, final Set<XNode> hset) {
+        hset.add(xel);
         boolean clr = clear | xel._clearAdoptedForgets == 'T';
         boolean newChildNodes = false;
         for (int i = 0; i < xel._childNodes.length; i++) {
@@ -2540,8 +2514,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         xel._childNodes[i] = xe;
                     }
                 }
-                if (!hs.contains(xe)) {
-                    clearAdoptedForgets(xe, clr, hs);
+                if (!hset.contains(xe)) {
+                    clearAdoptedForgets(xe, clr, hset);
                 }
             }
         }
