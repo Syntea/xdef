@@ -450,24 +450,20 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             PAttr pa = _precomp.getXdefAttr(pnode, "methods", false, true);
             if (pa!= null) {
                 if (pnode._xdVersion > XConstants.XD31) {
-                    reportDeprecated(//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                        pa._value, "Attribute \"methods\"", "<xd:declaration> external method { ... } ...");
+                    //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+                    reportDeprecated(pa._value, "Attribute \"methods\"","<xd:declaration> external method { ... } ...");
                 }
                 if (!_codeGenerator._ignoreUnresolvedExternals) {
                     _scriptCompiler.setSource(pa._value,
-                        _scriptCompiler._actDefName,
-                        pnode._xdef,
-                        pnode._xdVersion,
-                        pnode._nsPrefixes,
-                        pnode._xpathPos);
+                        _scriptCompiler._actDefName, pnode._xdef, pnode._xdVersion, pnode._nsPrefixes, pnode._xpathPos);
                     _scriptCompiler.compileExtMethods();
                 }
             }
             pa = _precomp.getXdefAttr(pnode, "classes", false, true);
             if (pa != null) {
                 if (pnode._xdVersion > XConstants.XD31) {
-                    reportDeprecated(pa._value,//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                        "Attribute \"classes\"", "<xd:declaration> external method ...");
+                    //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
+                    reportDeprecated(pa._value, "Attribute \"classes\"", "<xd:declaration> external method ...");
                 }
                 if (!_codeGenerator._ignoreUnresolvedExternals) {
                     String value = pa._value.getString();
@@ -479,12 +475,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     while (st.hasMoreTokens()) {
                         String clsname = st.nextToken();
                         if (!ht.containsKey(clsname)) {
-                            Class<?> clazz;
+                            Class<?> clazz = null;
                             try {
                                 clazz = Class.forName(clsname, false, _scriptCompiler.getClassLoader());
-                            } catch (ClassNotFoundException ex) {
-                                clazz = null;
-                            }
+                            } catch (ClassNotFoundException ex) {}
                             if (clazz != null) {
                                 ht.put(clazz.getName(), clazz);
                             } else {
@@ -707,7 +701,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         boolean local = isLocalScope(nodei, remove);
         String defName = nodei._xdef == null ? null : nodei._xdef.getName();
         _scriptCompiler.setSource(nodei._value,
-            defName, nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
+            defName,nodei._xdef, nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
         _scriptCompiler.compileDeclaration(local);
     }
 
@@ -718,7 +712,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         }
         SBuffer sName = pa._value;
         pa = _precomp.getXdefAttr(nodei, "extends", false, remove);
-        _scriptCompiler.compileBNFGrammar(sName, pa==null?null:pa._value, nodei, isLocalScope(nodei, remove));
+        _scriptCompiler.compileBNFGrammar(sName, pa == null ? null : pa._value, nodei, isLocalScope(nodei, remove));
     }
 
     /** Compile list of BNFs declaration and of variables/methods declaration.
@@ -758,8 +752,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         //Move all declarations of BNF grammars and variables from the list of X-definitions to the separated
         //lists of variable declarations and of BNF grammar declarations.
         for (PNode def : _xdefPNodes) {
-            //Since we are removing childnodes from X-definition we must process the childnodes list
-            //downwards! However, we insert the item to the first position of the created
+            //Since we are removing childnodes from X-definition we must process the childnodes list downwards!
+            //However, we insert the item to the first position of the created
             //list to assure the original sequence of items in the X-definition
             for (int j = def.getChildNodes().size() - 1;  j >= 0; j--) {
                 PNode nodei = def.getChildNodes().get(j);
@@ -770,7 +764,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 switch (nodeName) {
                     case "lexicon": _lexicon.add(nodei); break;
                     case "thesaurus": //XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
-                        reportDeprecated(nodei._name, "\"thesaurus\"","\"lexicon\"");
+                        reportDeprecated(nodei._name, "\"thesaurus\"", "\"lexicon\"");
                         _lexicon.add(nodei);
                         break;
                     case "BNFGrammar": _listBNF.add(0, nodei); break;
@@ -805,8 +799,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         _scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
         //Now compile all: BNF gramars, declarations, components, lexicon
         compileDeclarations(_listBNF, _listDecl, _listComponent);
-        //Clear all postdefines (should be already dleared, but who knows?)
-        _codeGenerator.clearPostdefines();
+        _codeGenerator.clearPostdefines(); //Clear all postdefines (should be already dleared, but who knows?)
     }
 
     /** Add the name of X-definition if it is not yet there. */
@@ -975,16 +968,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             if (pa != null) {
                 SBuffer sval = pa._value;
                 _scriptCompiler.setSource(sval,
-                    _scriptCompiler._actDefName,
-                    pn._xdef,
-                    pn._xdVersion,
-                    pn._nsPrefixes,
-                    pn._xpathPos);
+                    _scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
                 SBuffer s = _scriptCompiler.compileGroupScript(newNode);
                 if (s != null) {
                     if (ref != null) {
-                        //Reference can't be specified both in attributes 'ref' and 'script'
-                        error(ref, XDEF.XDEF117);
+                        error(ref, XDEF.XDEF117);//Reference can't be specified both in attributes 'ref' and 'script'
                     }
                     ref = s;
                 }
@@ -993,11 +981,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 if (pa != null) {
                     SBuffer sval = pa._value;
                     _scriptCompiler.setSource(sval,
-                        _scriptCompiler._actDefName,
-                        pn._xdef,
-                        pn._xdVersion,
-                        pn._nsPrefixes,
-                        pn._xpathPos);
+                        _scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
                     _scriptCompiler.nextSymbol();
                     newNode.setInitCode(_scriptCompiler.compileSection(ELEM_MODE, XD_VOID,	INIT_SYM));
                 }
@@ -1009,11 +993,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     }
                     XOccurrence occ = new XOccurrence();
                     _scriptCompiler.setSource(sval,
-                        _scriptCompiler._actDefName,
-                        pn._xdef,
-                        pn._xdVersion,
-                        pn._nsPrefixes,
-                        pn._xpathPos);
+                        _scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
                     _scriptCompiler.nextSymbol();
                     if (!_scriptCompiler.isOccurrenceInterval(occ)) {
                         error(sval, XDEF.XDEF429); //After 'occurs' is expected the interval
@@ -1027,11 +1007,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 if (pa != null) {
                     SBuffer sval = pa._value;
                     _scriptCompiler.setSource(sval,
-                        _scriptCompiler._actDefName,
-                        pn._xdef,
-                        pn._xdVersion,
-                        pn._nsPrefixes,
-                        pn._xpathPos);
+                        _scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
                     _scriptCompiler.nextSymbol();
                     newNode.setFinallyCode(_scriptCompiler.compileSection(ELEM_MODE, XD_VOID, FINALLY_SYM));
                 }
@@ -1039,11 +1015,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 if (pa != null) {
                     SBuffer sval = pa._value;
                     _scriptCompiler.setSource(sval,
-                        _scriptCompiler._actDefName,
-                        pn._xdef,
-                        pn._xdVersion,
-                        pn._nsPrefixes,
-                        pn._xpathPos);
+                        _scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
                     _scriptCompiler.nextSymbol();
                     newNode.setComposeCode(_scriptCompiler.compileSection(ELEM_MODE, XD_ANY, CREATE_SYM));
                 }
@@ -1051,11 +1023,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 if (pa != null) {
                     SBuffer sval = pa._value;
                     _scriptCompiler.setSource(sval,
-                        _scriptCompiler._actDefName,
-                        pn._xdef,
-                        pn._xdVersion,
-                        pn._nsPrefixes,
-                        pn._xpathPos);
+                        _scriptCompiler._actDefName, pn._xdef, pn._xdVersion, pn._nsPrefixes, pn._xpathPos);
                     _scriptCompiler.nextSymbol();
                     newNode.setMatchCode(_scriptCompiler.compileSection(ELEM_MODE, XD_BOOLEAN, MATCH_SYM));
                 }
@@ -1111,8 +1079,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 return null;
             }
             if (!pn.getChildNodes().isEmpty()) {
-                //Child nodes of the element 'xd:includeChildNodes' are not allowed
-                error(pn._name, XDEF.XDEF232);
+                error(pn._name, XDEF.XDEF232);//Child nodes of the element 'xd:includeChildNodes' are not allowed
             }
             name = canonizeReferenceName(ref.getString(), xdef);
             if (name == null) {
@@ -1257,7 +1224,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                             pnode._xdef,
                             pnode._xdVersion,
                             pnode._nsPrefixes,
-                            pnode._xpathPos+"/text()");
+                            pnode._xpathPos + "/text()");
                         _scriptCompiler.isSpaces();
                         if (_scriptCompiler.isToken("$$$script:")) {
                             _scriptCompiler.isSpaces();
@@ -1349,11 +1316,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     if (sval != null) {//XDEF998=&{0} is deprecated.&{1}{ Please use }{ instead.}
                         reportDeprecated(sval, "<xd:text xd:script=...","declaration of text value of model");
                         _scriptCompiler.setSource(sval,
-                            _scriptCompiler._actDefName,
-                            xdef,
-                            pnode._xdVersion,
-                            pnode._nsPrefixes,
-                            pnode._xpathPos);
+                            _scriptCompiler._actDefName, xdef, pnode._xdVersion, pnode._nsPrefixes, pnode._xpathPos);
                         _scriptCompiler.compileDataScript(xtext);
                     } else if (pnode._value != null) {
                         _scriptCompiler.setSource(pnode._value,
@@ -1465,8 +1428,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             _scriptCompiler.setSourceBuffer(pnode._value);
             _scriptCompiler.isSpaces();
             if (!_scriptCompiler.eos()) {
-                //Text value not allowed here
-                _scriptCompiler.lightError(XDEF.XDEF260, "&{xpath}" + pnode._xpathPos);
+                _scriptCompiler.lightError(XDEF.XDEF260, "&{xpath}" + pnode._xpathPos);//Text value not allowed here
             }
             pnode._value = null; //prevent repeated message
         }
@@ -1496,8 +1458,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
         PAttr pa = _precomp.getXdefAttr(pnode, "script", false, true);
         SBuffer sval = pa == null ? null : pa._value;
         if (sval != null) {
-            _scriptCompiler.setSource(
-                sval, defName, pnode._xdef._importLocal, def.getXDVersion(), pnode._xpathPos);
+            _scriptCompiler.setSource(sval, defName, pnode._xdef._importLocal, def.getXDVersion(), pnode._xpathPos);
             _scriptCompiler.compileXDHeader(def);
         }
         if (_xdefs.containsKey(def.getName())) {
@@ -1591,8 +1552,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                     if (ndx1 > 0) {// get nsURI assigned to the prefix
                         String prefix = refName.substring(ndx, ndx1);
                         if ((obj = pnode._nsPrefixes.get(prefix)) == null) {
-                            sval.putReport(Report.error(XDEF.XDEF257,//Namespace for prefix &{0} is undefined
-                                prefix), _scriptCompiler.getReportWriter());
+                            //Namespace for prefix &{0} is undefined
+                            sval.putReport(Report.error(XDEF.XDEF257, prefix), _scriptCompiler.getReportWriter());
                         }
                     } else {
                         obj = pnode._nsPrefixes.get("");
@@ -1614,8 +1575,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         xref.putTargetError(getReportWriter());
                     } else {
                         if (pnode._xdVersion < XConstants.XD40 && x.getName().endsWith("$choice")) {
-                            //Reference to "xd:choice" in the "xd:root" attribute is allowed in versions 4.0
-                            // and higher
+                            //Reference to "xd:choice" in the "xd:root" attribute is allowed in versions 4.0 and higher
                             _precomp.warning(pos, XDEF.XDEF803);
                         }
                         def._rootSelection.put(xref.getName(), x);
@@ -1756,8 +1716,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                                 s = s.substring(0, ndx);
                             }
                             if (!classNames.add(s)) {
-                                //Class name &{0} is used in other command
-                                error(en.getValue(), XDEF.XDEF383, s);
+                                error(en.getValue(), XDEF.XDEF383, s);//Class name &{0} is used in other command
                             }
                         }
                     }
@@ -1784,8 +1743,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                                 if (xm == null) {
                                     error(en1.getValue(), XDEF.XDEF353, key);//Unresolved reference &{0}
                                 } else if (typ != getTypeId(xdp.findModel(en1.getKey()))) {
-                                    //Types of items &{0},&{1} bound to class &{2} differs
-                                    error(en1.getValue(),
+                                    error(en1.getValue(), //Types of items &{0},&{1} bound to class &{2} differs
                                         XDEF.XDEF358, key, en1.getKey(), s.substring(ndx+7, s.indexOf(' ')));
                                 }
                             }
@@ -1832,8 +1790,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                                     s = item==null ? null : item.stringValue();
                                     if (!StringParser.chkJavaName(s)) {
                                         wasError = true;
-                                        //Type &{0} can't be converted toenumeration &{1} because value
-                                        //"&{2}" is not Java identifier
+                                        //Type &{0} can't be converted toenumeration &{1} because value "&{2}"
+                                        // is not Java identifier
                                         error(sbf, XDEF.XDEF382, name, clsname, s);
                                     }
                                 }
@@ -1872,8 +1830,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         //Comparing of models is skipped due to previous errors
                         _precomp.putReport(Report.lightError(XDEF.XDEF229));
                     } else {
-                        ArrayReporter rp =
-                            ((XElement) xn).compareModel((XElement) xref._parent, xref.getKind()==1);
+                        ArrayReporter rp = ((XElement) xn).compareModel((XElement) xref._parent, xref.getKind()==1);
                         if (rp != null) {
                             Report rep;
                             while((rep = rp.getReport()) != null) {
@@ -1956,14 +1913,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
     /** Resolve references.
      * @param xel the XElement.
      * @param level The recursion level.
-     * @param ignoreOccurrence if <i>true</i> the occurrence specification from referred object is ignored.
+     * @param ignoreOcc if <i>true</i> the occurrence specification from referred object is ignored.
      * @param ar node list.
      * @return true if reverence was resolved.
      */
-    private boolean resolveReference(final XElement xel,
-        final int level,
-        final boolean ignoreOccurrence,
-        final Set<XNode> hs) {
+    private boolean resolveReference(final XElement xel, final int level, final boolean ignoreOcc, final Set<XNode> hs){
         boolean result = true;
         int lenx;
         if ((lenx = xel._childNodes.length) > 0
@@ -1977,8 +1931,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
             }
             XElement y;
             if ((y = (XElement) x)==xel && lenx==1 && xel.getAttrs().length==0) {
-                //Self reference is not allowed: &{0}
-                error(xref.getSPosition(), XDEF.XDEF321, xref.getXDPosition());
+                error(xref.getSPosition(), XDEF.XDEF321, xref.getXDPosition());//Self reference is not allowed: &{0}
                 XNode[] childNodes = xel._childNodes;
                 int newLen = childNodes.length -1;
                 xel._childNodes = new XNode[newLen];
@@ -1990,7 +1943,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 //Too many nested references or reference loop in &{0}
                 error(xref.getSPosition(), XDEF.XDEF320, xref.getXDPosition());
                 return false;
-            } else if (!resolveReference(y, level+1, ignoreOccurrence && xel.isSpecified(), hs)) {
+            } else if (!resolveReference(y, level+1, ignoreOcc && xel.isSpecified(), hs)) {
                 return false;
             } else if (!checkIntegrity(y, level+1, hs)) {
                 return false;
@@ -2166,11 +2119,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 if ("map".equals(xel.getLocalName())
                     && XDConstants.XON_NS_URI_W.equals(xel.getNSUri())
                     && "map".equals(y.getLocalName()) && XDConstants.XON_NS_URI_W.equals(y.getNSUri())
-                    && (lenx > 1 && xel._childNodes[0].getKind() == XMREFERENCE
-                    && xel._childNodes[1].getKind() == XMMIXED
-                    && xel._childNodes[lenx].getKind() == XMSELECTOR_END
-                    && y._childNodes[0].getKind() == XMMIXED
-                    && y._childNodes[leny-1].getKind() == XMSELECTOR_END || leny <= 1 || lenx == 1 && leny == 1)) {
+                    && (lenx > 1
+                        && xel._childNodes[0].getKind() == XMREFERENCE
+                        && xel._childNodes[1].getKind() == XMMIXED && xel._childNodes[lenx].getKind() == XMSELECTOR_END
+                        && y._childNodes[0].getKind() == XMMIXED && y._childNodes[leny-1].getKind() == XMSELECTOR_END
+                        || leny <= 1 || lenx == 1 && leny == 1)) {
                     if (lenx == 1 && leny == 1) {
                         childNodes = new XNode[4];
                         childNodes[0] = new XMixed();
@@ -2200,7 +2153,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         copyChildNodes(y._childNodes, 0, childNodes, 0, leny);
                     }
                     if (lenx > 0 && leny > lenx && childNodes[leny-lenx].getKind() == XMSELECTOR_END) {
-                        XSelectorEnd xsel =  (XSelectorEnd) childNodes[leny-lenx]; // ends with XMSELECTOR_END?
+                        XSelectorEnd xsel =  (XSelectorEnd) childNodes[leny-lenx]; // ends with XMSELECTOR_END
                         childNodes[leny] = xsel; // move it ti te end
                         copyChildNodes(xel._childNodes, 1, childNodes, leny-lenx, lenx);
                     } else {
@@ -2241,7 +2194,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 continue;
             }
             XElement y = (XElement) x;
-            result &= resolveReference(y, level+1, ignoreOccurrence && xel.isSpecified(), hs);
+            result &= resolveReference(y, level+1, ignoreOcc && xel.isSpecified(), hs);
             int leny = y._childNodes.length;
             boolean isList = y.getName().endsWith("!list");
             y = new XElement(y); //create clone of an element
@@ -2252,22 +2205,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 XNode xn = y._childNodes[j];
                 switch (xn.getKind()) {
                     case XMELEMENT:
-                        if (isList && xref.isSpecified()) {
-                            XElement xe = (XElement) xn;
-                            if (xe.minOccurs() != xref.minOccurs() || xe.maxOccurs() != xref.maxOccurs()) {
-                                xe = new XElement(xe);
-                                xe.setOccurrence(xref);
-                                xn = xe;
+                        if (isList && xref.isSpecified()) { //XElement
+                            if (xn.minOccurs() != xref.minOccurs() || xn.maxOccurs() != xref.maxOccurs()) {
+                                xn = new XElement((XElement) xn);
+                                xn.setOccurrence(xref);
                             }
                         }
                         break;
                     case XMTEXT:
-                        if (isList && xref.isSpecified()) {
-                            XData xa = (XData) xn;
-                            if (xa.minOccurs() != xref.minOccurs() || xa.maxOccurs() != xref.maxOccurs()) {
-                                xa = new XData(xa);
-                                xa.setOccurrence(xref);
-                                xn = xa;
+                        if (isList && xref.isSpecified()) { //XData
+                            if (xn.minOccurs() != xref.minOccurs() || xn.maxOccurs() != xref.maxOccurs()) {
+                                xn = new XData((XData) xn);
+                                xn.setOccurrence(xref);
                             }
                         }
                         break;
@@ -2418,10 +2367,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         if ((j = groupItems.get(s)) != null && notReported) {
                             XElement y = (XElement) xel._childNodes[j];
                             if (y._match == -1) {// we accept items with match
-                                error(x.getSPosition(),
-                                    XDEF.XDEF234,//Ambiguous group '&{0}' (equal items) in X-definition '&{1}'
-                                    selectorKind==XMCHOICE ? "choice" : "mixed",
-                                    xel._definition.getName());
+                                error(x.getSPosition(),//Ambiguous group '&{0}' (equal items) in X-definition '&{1}'
+                                    XDEF.XDEF234, selectorKind==XMCHOICE ?"choice":"mixed", xel._definition.getName());
                                 notReported = false;
                             }
                         }
@@ -2432,8 +2379,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         XElement y = (XElement) xel._childNodes[i-1];
                         if (y.isSpecified() && y.maxOccurs() != y.minOccurs() && y._match==-1) {
                             if (y.maxOccurs() == Integer.MAX_VALUE) {
-                                //Ambiguous X-definition: previous element with same name has unlimited
-                                // occurrence
+                                //Ambiguous X-definition: previous element with same name has unlimited occurrence
                                 error(x.getSPosition(), XDEF.XDEF238);
                             } else if (!x.isSpecified() || x.minOccurs() > 0) {
                                 //Ambiguous X-definition: minimum occurrence must be zero
@@ -2455,8 +2401,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                         i = updateSelectors(xel, i + 1, xs, kind == XMCHOICE || ignorable, selective, hset);
                         xs.setEndIndex(i);
                         if (i - xs.getBegIndex() <= 1) {
-                            error(xs.getSPosition(), XDEF.XDEF325, //Empty group '&{0}' in X-definition '&{1}'
-                                xs.getName().substring(1), xel._definition.getName());
+                            error(xs.getSPosition(),//Empty group '&{0}' in X-definition '&{1}'
+                                XDEF.XDEF325, xs.getName().substring(1), xel._definition.getName());
                             xs.setIgnorable(ignorable = true);
                         }
                         if (xs.getKind() == XMCHOICE && xs.minOccurs() <= 0) {
