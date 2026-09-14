@@ -36,7 +36,7 @@ public class XDefToJSON {
                 return s.substring(0, i + 1);
             }
         }
-        return s;
+        return "";
     }
 
     /** Get namespace URI of X-definition or return null.
