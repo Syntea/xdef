@@ -224,7 +224,7 @@ public class XDefToJSON {
             s = "\n  "+ s + "\n";
         }
         sb.append(s);
-        sb.append("</").append(xdName).append(">");
+        sb.append("</").append(xdName).append(">\n");
         return sb.toString();
     }
 
