@@ -1,3 +1,5 @@
+# Version ${version}, release-date ${release.date}
+
 # Version 42.2.47, release-date 2026-09-21
   * A bug in script X related to the `uses` or “implements” section with references in JSON models has been fixed.
 
