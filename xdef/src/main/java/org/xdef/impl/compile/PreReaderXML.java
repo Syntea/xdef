@@ -351,8 +351,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                 _actPNode._value.appendToBuffer(sb);
             }
         }
-        if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX &&
-            "def".equals(_actPNode._localName)) {
+        if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX && "def".equals(_actPNode._localName)) {
             XScriptParser xparser = new XScriptParser(_actPNode._xmlVersion);
             xparser.setLineInfoFlag(true);
             xparser.setReportWriter(getReportWriter());
@@ -374,8 +373,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
                 break;
             }
         }
-        PNode pn = new PNode(name,
-            new SPosition(_actPNode._value), _actPNode, _actPNode._xdVersion, _actPNode._xmlVersion);
+        PNode pn = new PNode(name,new SPosition(_actPNode._value),_actPNode,_actPNode._xdVersion,_actPNode._xmlVersion);
         pn._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
         pn._nsindex = XPreCompiler.NS_XDEF_INDEX;
         pn._localName = "text";
@@ -474,8 +472,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
             }
         }
         if (_level == 0) {
-            //Text value not allowed here
-            lightError(_actPNode._value, XDEF.XDEF260);
+            lightError(_actPNode._value, XDEF.XDEF260);//Text value not allowed here
             _actPNode._value = null; //prevent repeated message
         } else {
             genTextNode(); //generate text node

@@ -132,7 +132,6 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
     public static final char CASE_SYM = 1108;
     public static final char FOR_SYM = 1109;
     public static final char RETURN_SYM = 1110;
-    public static final char DEF_SYM = 1111;
     public static final char DEFAULT_SYM = 1112;
     public static final char TRY_SYM = 1113;
     public static final char CATCH_SYM = 1114;
@@ -278,7 +277,6 @@ public class XScriptParser extends StringParser implements org.xdef.XDValueID {
         CASE_SYM + ";case;" +
         FOR_SYM + ";for;" +
         RETURN_SYM + ";return;" +
-        DEF_SYM + ";def;" +
         TRY_SYM + ";try;" +
         CATCH_SYM + ";catch;" +
         THROW_SYM + ";throw;" +

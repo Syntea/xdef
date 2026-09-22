@@ -1879,6 +1879,103 @@ public class TestXon extends XDTester {
             assertTrue(reporter.getErrorCount() == 1);
             reporter.clear();
         } catch (RuntimeException ex) {fail(ex);}
+        try { // test "uses"/"implements" in JSON models.
+            xp = compile(
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:def xd:name=\"CheckInsuranceP5RSample\" xd:root=\"CanonicalRequest\">\n" +
+"  <xd:json name=\"CanonicalRequest\">\n" +
+"    { \"request\" : { \"%script\" : \"required\",\n" +
+"            \"pathParameters\" : \"required jnull()\",\n" +
+"            \"queryParameters\" : {\n" +
+"              \"%script\" : \"required\",\n" +
+"              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
+"            },\n" +
+"            \"headers\" : { \"%script\" : \"required\",\n" +
+"              \"SKP-Request-Id\" : \"required regex('^[0-9]{1,19}$')\",\n" +
+"              \"SKP-Environment-Mode\" : \"required enum('DEV', 'TST', 'STD')\",\n" +
+"              \"SKP-StkEk-Id\" : \"required regex('^.{4,4}$')\",\n" +
+"              \"SKP-User-Id\" : \"required regex('^.{1,30}$')\"\n" +
+"            },\n" +
+"            \"body\" : \"required jnull()\"\n" +
+"      },\n" +
+"      \"routing\" : { \"%script\" : \"required\",\n" +
+"            \"service\" : \"required eq('P5R')\",\n" +
+"            \"operation\" : \"required eq('checkInsuranceP5R')\",\n" +
+"            \"apiVersion\" : \"required eq('2026/03')\",\n" +
+"            \"endpoint\" : \"required eq('/insurance-check')\"\n" +
+"      },\n" +
+"      \"processData\" : { \"%script\" : \"required\",\n" +
+"            \"idFlow\" : \"required long()\",\n" +
+"            \"idDefPartner\" : \"required long()\",\n" +
+"            \"traceId\" : \"required string()\",\n" +
+"            \"msgIdent\" : \"required string()\"\n" +
+"      }\n" +
+"    }\n" +
+"  </xd:json>\n" +
+"</xd:def>\n" +
+"<xd:def xd:name=\"example\" xd:root=\"CanonicalRequest\">\n" +
+"  <xd:json name=\"CanonicalRequest\">\n" +
+"        { \"%script\" : \"uses CheckInsuranceP5RSample#CanonicalRequest; required\",\n" +
+"          \"request\" : { \"%script\" : \"required\",\n" +
+"            \"pathParameters\" : \"required jnull()\",\n" +
+"            \"queryParameters\" : {\n" +
+"              \"%script\" : \"required\",\n" +
+"              \"vin\" : \"? regex('^.{1,26}$')\"\n" +
+"            },\n" +
+"            \"headers\" : { \"%script\" : \"required\",\n" +
+"              \"SKP-Request-Id\" : \"required regex('^[0-9]{1,19}$')\",\n" +
+"              \"SKP-Environment-Mode\" : \"required enum('DEV', 'TST', 'STD')\",\n" +
+"              \"SKP-StkEk-Id\" : \"required regex('^.{4,4}$')\",\n" +
+"              \"SKP-User-Id\" : \"required regex('^.{1,30}$')\"\n" +
+"            },\n" +
+"            \"body\" : \"required jnull()\"\n" +
+"          },\n" +
+"          \"routing\" : { \"%script\" : \"required\",\n" +
+"            \"service\" : \"required eq('P5R')\",\n" +
+"            \"operation\" : \"required eq('checkInsuranceP5R')\",\n" +
+"            \"apiVersion\" : \"required eq('2026/03')\",\n" +
+"            \"endpoint\" : \"required eq('/insurance-check')\"\n" +
+"          },\n" +
+"          \"processData\" : { \"%script\" : \"required\",\n" +
+"            \"idFlow\" : \"required long()\",\n" +
+"            \"idDefPartner\" : \"required long()\",\n" +
+"            \"traceId\" : \"required string()\",\n" +
+"            \"msgIdent\" : \"required string()\"\n" +
+"          }\n" +
+"        }\n" +
+"  </xd:json>\n" +
+"</xd:def>\n" +
+"</xd:collection>");
+            xd = xp.createXDDocument("example");
+            json =
+"{         \"request\" : {\n" +
+"            \"pathParameters\" : null,\n" +
+"            \"queryParameters\" : {\n" +
+"            },\n" +
+"            \"headers\" : {\n" +
+"              \"SKP-Request-Id\" : \"9\",\n" +
+"              \"SKP-Environment-Mode\" : \"TST\",\n" +
+"              \"SKP-StkEk-Id\" : \"1234\",\n" +
+"              \"SKP-User-Id\" : \"ab')\"\n" +
+"            },\n" +
+"            \"body\" : null\n" +
+"          },\n" +
+"          \"routing\" : {\n" +
+"            \"service\" : \"P5R\",\n" +
+"            \"operation\" : \"checkInsuranceP5R\",\n" +
+"            \"apiVersion\" : \"2026/03\",\n" +
+"            \"endpoint\" : \"/insurance-check\"\n" +
+"          },\n" +
+"          \"processData\" : {\n" +
+"            \"idFlow\" : 123456,\n" +
+"            \"idDefPartner\" : 789,\n" +
+"            \"traceId\" : \"ab cd\",\n" +
+"            \"msgIdent\" : \"ef gh\"\n" +
+"          }\n" +
+"}";
+            xd.jparse(json, reporter);
+            assertNoErrors(reporter);
+        } catch (RuntimeException ex) {fail(ex);}
 
         if (oldCodes != null) {
             setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);

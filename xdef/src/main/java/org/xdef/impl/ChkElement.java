@@ -19,7 +19,6 @@ import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
-import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueID.XD_NULL;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XX_ATTR;
@@ -40,6 +39,7 @@ import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
 import static org.xdef.model.XMNode.XMCHOICE;
 import static org.xdef.model.XMNode.XMELEMENT;
 import static org.xdef.model.XMNode.XMMIXED;
@@ -2884,7 +2884,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
         if (xatt == null) {
             xatt = _xElement.getDefAttr("$attr", -1); // any attr
             if (xatt == null && _xElement._moreAttributes == 'T') { // more attributes
-                xatt = new XData(qname, nsURI, getXDPool(), XD_ATTR); // check not declared attributes
+                xatt = new XData(qname, nsURI, getXDPool(), XMATTRIBUTE); // check not declared attributes
             }
         }
         String adata;
