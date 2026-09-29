@@ -95,14 +95,14 @@ public class XDefToJSON {
      * @param json input JSON data.
      * @return string with XML format.
      */
-    @SuppressWarnings({"unchecked", "unchecked"})
     private static String jsonXdefToXml(final List xd) {
         StringBuilder sb = new StringBuilder();
-        Map<String, Object> map = (Map) xd.get(0);
+        Map map = (Map) xd.get(0);
         String xdPrefix = "xd";
         String xdNamespace = XDEF42_NS_URI;
         String s;
-        for (String key:  map.keySet()) {
+        for (Object o: map.keySet()) {
+            String key = (String) o;
             if (key.startsWith("xmlns:")) {
                 if (XDEF41_NS_URI.equals(s = (String) map.get(key)) || XDEF42_NS_URI.equals(s)) {
                     xdPrefix = key.substring(6);
@@ -117,7 +117,8 @@ public class XDefToJSON {
         if (xdNamespace == null || xdNamespace.isEmpty()) {
             throw new RuntimeException("Incorrect X-definition namespace: \"" + map + "\"");
         }
-        for (String key: map.keySet()) {
+        for (Object o: map.keySet()) {
+            String key = (String) o;
             if (key.equals("xmlns:" + xdPrefix)) {
                 continue;
             }
@@ -144,7 +145,7 @@ public class XDefToJSON {
             Object o = xd.get(i);
             if (o instanceof List) { // xd:json
                 List list = (List) o;
-                map = (Map<String, Object>) list.get(0);
+                map = (Map) list.get(0);
                 if (map.containsKey("%json")) {
                     sb.append("\n  <").append(xdPrefix).append(":json name=");
                     sb.append(toXmlString(XonUtils.toJsonString(map.values().iterator().next(), true)));
@@ -162,7 +163,7 @@ public class XDefToJSON {
                     sb.append(jsonBNFToXml(list, s, xdPrefix));
                 }
             } else if (o instanceof Map) { // declaration or component or XML model
-                map = (Map<String, Object>) o;
+                map = (Map) o;
                 if ((o = map.get(s="%declaration")) != null || (o = map.get(s="%local_declaration")) != null) {
                     sb.append("\n  <").append(xdPrefix).append(":declaration");
                     if ("%local_declaration".equals(s)) {
@@ -203,17 +204,18 @@ public class XDefToJSON {
      * @param xdNamespace X-definition namespace URI.
      * @return string with XML format.
      */
-    @SuppressWarnings("unchecked")
     private static String jsonTextToXml(final List xd,final String key,final String xdPrefix,final String xdNamespace) {
         StringBuilder sb = new StringBuilder();
-        Map<String, Object> map = (Map) xd.get(0);
+        Map map = (Map) xd.get(0);
         String xdName = xdPrefix + ':' + key.substring(1);
         sb.append("<").append(xdName);
         sb.append(" xmlns:").append(xdPrefix).append("='").append(xdNamespace).append("'");
-        for (Map.Entry o: map.entrySet()) {
-            if (!key.equals(o.getKey())) {
-                sb.append(" ").append(o.getKey().toString()).append("=\"");
-                sb.append(toXmlString(o.getValue().toString())).append("\"");
+        for (Object o: map.entrySet()) {
+            Map.Entry e = (Map.Entry) o;
+            String s = (String) e.getKey();
+            if (!key.equals(e.getKey())) {
+                sb.append(" ").append(s).append("=\"");
+                sb.append(toXmlString(e.getValue().toString())).append("\"");
             }
         }
         sb.append(">");
@@ -261,10 +263,9 @@ public class XDefToJSON {
      * @para xdName name of item/
      * @return string with XML format.
      */
-    @SuppressWarnings("unchecked")
     private static String jsonCollectionToXml(final List xd, final String xdName) {
         StringBuilder sb = new StringBuilder();
-        Map<String, Object> map = (Map) xd.get(0);
+        Map map = (Map) xd.get(0);
         String xdPrefix = xdName.substring(0, xdName.indexOf(':'));
         String xdNamespace = (String) map.get(xdName);
         if (xdNamespace == null || xdNamespace.isEmpty()) {
@@ -272,7 +273,8 @@ public class XDefToJSON {
         }
         sb.append("<").append(xdName);
         sb.append(" xmlns:").append(xdPrefix).append("='").append(toXmlString(xdNamespace)).append("'");
-        for (String key : map.keySet()) {
+        for (Object o: map.keySet()) {
+            String key = (String) o;
             if (!key.startsWith(xdPrefix, 0) || !key.endsWith(":collection")) {
                 sb.append(" ").append(key).append("='").append(toXmlString(map.get(key).toString())).append("'");
             }
@@ -284,8 +286,8 @@ public class XDefToJSON {
         for (int i = 1; i < xd.size(); i++) {
             List list = (List) xd.get(i);
             map = (Map) list.get(0);
-            for (Object x : map.keySet()) {
-                String key = (String) x;
+            for (Object o : map.keySet()) {
+                String key = (String) o;
                 switch (key) {
                     case "%jdef": sb.append(jsonXdefToXml(list)); continue;
                     case "%declaration":
