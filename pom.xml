@@ -85,7 +85,7 @@
 
         <saxon-he.version>12.9</saxon-he.version>
         <servlet-api.version>6.1.0</servlet-api.version>
-        <jsoup.version>1.23.1</jsoup.version>
+        <jsoup.version>1.23.2</jsoup.version>
         <derby.version>10.12.1.1</derby.version>
         <snakeyaml.version>1.29</snakeyaml.version>
         <slf4j.version>2.0.17</slf4j.version>
