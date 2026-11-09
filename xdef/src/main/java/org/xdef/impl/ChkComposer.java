@@ -1117,13 +1117,15 @@ final class ChkComposer extends SReporter {
                             result = new DefBoolean(false);
                         } else if (result.getItemId() == XD_CONTAINER){
                             XDContainer c = (XDContainer) result;
-                            if (chkEl._selector == null ||
-                                chkEl._selector._kind == XMCHOICE) {
+                            if (chkEl._selector == null || chkEl._selector._kind == XMCHOICE) {
                                 if (!c.isEmpty()) {
                                     c.addXDItem(new DefBoolean(true));
                                 }
-                            } else {
-                                c.addXDItem(new DefBoolean(true));
+                            } else { // AI ??? (was c.addXDItem(new DefBoolean(true));)
+                                // mixed/sequence: the dummy item must carry the actual source element (as it does
+                                // outside a group, see execComposeElement), otherwise the create section of the
+                                // item (e.g. from('@A')) is evaluated against a fake <item>true</item> element
+                                c.addXDItem(sourceEl != null ? new DefElement(sourceEl) : new DefBoolean(true));
                             }
                         }
                     } else if (childChkEl._xElement._compose < 0 &&
