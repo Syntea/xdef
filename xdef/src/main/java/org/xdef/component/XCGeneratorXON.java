@@ -350,9 +350,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
      * @param varNames set with variable names.
      * @param getters where to generate getters.
      */
-    final void genNamedValueGetters(final List<String> keys,
-        final Set<String> varNames,
-        final StringBuilder getters) {
+    final void genNamedValueGetters(final List<String> keys, final Set<String> varNames, final StringBuilder getters) {
         String key = keys.get(0);
         String name = xmlToJavaName("get$" + XonTools.toXmlName(key));
         name = getUniqueName(getUniqueName(name, RESERVED_NAMES), varNames);

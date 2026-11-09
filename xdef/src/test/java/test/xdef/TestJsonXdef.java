@@ -1304,7 +1304,41 @@ public class TestJsonXdef extends XDTester {
             assertNoErrorwarnings(reporter);
         } catch (RuntimeException ex) {fail(ex);}
         System.getProperties().remove(XDConstants.XDPROPERTY_OPTIONS);
-
+        try { // AI ???
+            // create JSON from XML: the values of an object with more items (it is compiled to the group "mixed")
+            // are created from the source element (the create section was evaluated against a fake item before)
+            xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='Body'>\n" +
+"  <xd:json name='Body'>\n" +
+"    {\"body\": {\"%script\": \"create from('P')\",\n" +
+"       \"vin\": \"string; create from('@VIN')\",\n" +
+"       \"spz\": \"string; create from('@SPZ')\",\n" +
+"       \"count\": \"int; create from('@COUNT')\",\n" +
+"       \"none\": \"jvalue; create 'null'\"}}\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+            xp = XDFactory.compileXD(null, xdef);
+            xd = xp.createXDDocument();
+            xd.setXDContext(KXmlUtils.parseXml("<Body><P VIN='V1' SPZ='S1' COUNT='5'/></Body>").getDocumentElement());
+            o = xd.jcreate("Body", reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(XonUtils.parseXON("{body:{vin:\"V1\",spz:\"S1\",count:5,none:null}}"), o),
+                XonUtils.toJsonString(o, true));
+            xdef = // ???
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='Body'>\n" +
+"  <xd:json name='Body'>\n" +
+"{ \"%oneOf\": [\"m\", \"s\"],\n" +
+"  \"m\": \"? string(); create from('/P/@V')\",\n" +
+"  \"s\": \"string(); create from('/P/@S')\" }\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+            xp = XDFactory.compileXD(null, xdef);
+            xd = xp.createXDDocument();
+            xd.setXDContext(KXmlUtils.parseXml("<P V='V1' S='S1' C='5'/>").getDocumentElement());
+            o = xd.jcreate("Body", reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(o, XonUtils.parseJSON("{\"m\": \"V1\", \"s\": \"S1\"}")));
+        } catch (RuntimeException ex) {fail(ex);}
         clearTempDir(); // delete temporary files.
     }
 
