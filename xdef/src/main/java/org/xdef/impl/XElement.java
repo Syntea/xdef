@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -114,8 +115,7 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
     public final void setReference(boolean isref) {_reference = isref;}
 
     /** Get reference position if this model was created from other model (reference) or return null.
-     * @return reference position if this model was created from other model
-     * (reference) or return null.
+     * @return reference position if this model was created from other model (reference) or return null.
      */
     @Override
     public final String getReferencePos() {return _refPosition;}
@@ -274,7 +274,11 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    /** Write this XElement to XDWriter. */
+    /** Write this XElement to XDWriter.
+     * @param xw writer.
+     * @param list list of XNodes to be written.
+     * @throws IOException i an error occurs.
+     */
     @Override
     public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException{
         if (list.indexOf(this) < 1) {
@@ -326,6 +330,13 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
         }
     }
 
+    /** Read XElement from XDReader;
+     * @param xr Reader.
+     * @param xd XDefinition.
+     * @param list list where to add XElements.
+     * @return XElement read from reader.
+     * @throws IOException if an error occurs,
+     */
     final static XElement readXElement(final XDReader xr, final XDefinition xd, final List<XNode> list)
         throws IOException {
         String name = xr.readString();
@@ -438,13 +449,15 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
      * @param y model to be compared.
      * @param rep reporter where write error reports.
      * @param full if true, then names of both models must be equal (i.e. as "implements").
+     * @param pending list with pending models. (paramater added by AI ???)
      * @return true if structures are compatible.
      */
     private int compareGroup(final XNode[] x,
         final XNode[] y,
         final int i,
         final ArrayReporter rep,
-        final boolean full) {
+        final boolean full,
+        final List<XElement[]> pending) {
         int j = i;
         for (; j < x.length; j++) {
             XNode ix = x[j];
@@ -456,7 +469,7 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
             }
             switch (ix.getKind()) {
                 case XMNode.XMELEMENT:
-                    if (!((XElement) ix).compareElement((XElement) iy, rep, full)) {
+                    if (!((XElement) ix).compareElement((XElement) iy, rep, full, pending)) {
                         //Child nodes differs: &{0} and &{1}
                         rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
                         return -1;
@@ -471,7 +484,7 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
                 case XMNode.XMCHOICE:
                 case XMNode.XMMIXED:
                 case XMNode.XMSEQUENCE:
-                    if ((j=compareGroup(x, y, j+1, rep, full)) < 0) {
+                    if ((j=compareGroup(x, y, j+1, rep, full, pending)) < 0) {
                         //Child nodes differs: &{0} and &{1}
                         rep.error(XDEF.XDEF283, ix.getXDPosition(), iy.getXDPosition());
                         return -1;
@@ -487,18 +500,53 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
      * @param y model to be compared.
      * @param rep reporter where write error reports.
      * @param full if true, then names of both models must be equal (i.e. as "implements").
+     * @param pending list with pending models. (paramater added by AI ???)
      * @return true if structures are compatible.
      */
-    private boolean compareElement(final XElement y, final ArrayReporter reporter, final boolean full) {
-        return compareNameAndOccurrence(y, reporter) && compareElementStructure(y, reporter, full);
+    private boolean compareElement(final XElement y,
+        final ArrayReporter reporter,
+        final boolean full,
+        final List<XElement[]> pending) {
+        return compareNameAndOccurrence(y, reporter) && compareElementStructure(y, reporter, full, pending);
     }
 
     /** Compare structure of this element model with the model from argument.
      * @param y model to be compared.
      * @param full if true, then names of both models must be equal (i.e. as "implements").
+     * @param pending list with pending models. (paramater added by AI ???)
      * @return reporter with messages with differences, or returns null.
      */
-    private boolean compareElementStructure(final XElement y,final ArrayReporter reporter,final boolean full){
+    private boolean compareElementStructure(final XElement y,
+        final ArrayReporter reporter,
+        final boolean full,
+        final List<XElement[]> pending) {
+        // Recursive models (an element model referring directly or indirectly to itself): when the same pair of
+        // models is reached again while it is still being compared, the comparison of the pair is already in
+        // progress higher in the call stack and its result is decided there, so the cycle is not followed again.
+        for (XElement[] x : pending) { // AI ???
+            if (x[0] == this && x[1] == y) { // OK
+                return true;
+            }
+        }
+        pending.add(new XElement[] {this, y}); // add new XElement
+        try {
+            return compareElementStructureNoCycle(y, reporter, full, pending);
+        } finally {
+            pending.remove(pending.size() - 1);
+        }
+    }
+
+    /** Compare structure of this element model with the model from argument.
+     * @param y model to be compared.
+     * @param rep reporter where write error reports.
+     * @param full if true, then names of both models must be equal (i.e. as "implements").
+     * @param pending list with pending models. (paramater added by AI ???)
+     * @return true if structures are compatible.
+     */
+    private boolean compareElementStructureNoCycle(final XElement y,
+        final ArrayReporter reporter,
+        final boolean full,
+        final List<XElement[]> pending) {
         boolean result = compareNamespace(y, reporter);
         if (_nillable != y._nillable || _moreAttributes != y._moreAttributes ||
             _moreElements != y._moreElements || _moreText != y._moreText) {
@@ -546,7 +594,7 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
                 reporter.error(XDEF.XDEF283, getXDPosition(),y.getXDPosition());
                 return false;
             }
-            if (compareGroup(nx, ny, 0, reporter, full) < 0) {
+            if (compareGroup(nx, ny, 0, reporter, full, pending) < 0) {
                 return false;
             }
             return result;
@@ -571,8 +619,9 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
             reporter.error(XDEF.XDEF281, getXDPosition(), getXDPosition());
             return reporter;
         }
-        if  (full ? !compareElement(yy, reporter, full) :
-            !compareElementStructure(yy, reporter, full)) {
+        final List<XElement[]> pending = new ArrayList<>(); // AI ???
+        if  (full ? !compareElement(yy, reporter, full, pending)
+            : !compareElementStructure(yy, reporter, full, pending)) {
             //Models are differrent: &{0} and &{1}
             reporter.error(XDEF.XDEF282, getXDPosition(), y.getXDPosition());
             return reporter;
@@ -618,49 +667,45 @@ public final class XElement extends XCodeDescriptor implements XMElement, CodeTa
         }
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            SObjectWriter xw = new SObjectWriter(baos);
-            xw.writeShort(XMELEMENT);
-            xw.writeString(xe.getName());
-            xw.writeString(xe.getNSUri());
-            xw.writeInt(xe.minOccurs());
-            xw.writeInt(xe.maxOccurs());
-            if (xe._attrs != null) {
-                String[] names = new String[xe._attrs.size()];
-                xe._attrs.keySet().toArray(names);
-                Arrays.sort(names);
-                for (String name: names) {
-                    genDataDigestInfo(xw, xe._attrs.get(name));
+            try (SObjectWriter xw = new SObjectWriter(baos)) {
+                xw.writeShort(XMELEMENT);
+                xw.writeString(xe.getName());
+                xw.writeString(xe.getNSUri());
+                xw.writeInt(xe.minOccurs());
+                xw.writeInt(xe.maxOccurs());
+                if (xe._attrs != null) {
+                    String[] names = new String[xe._attrs.size()];
+                    xe._attrs.keySet().toArray(names);
+                    Arrays.sort(names);
+                    for (String name: names) {
+                        genDataDigestInfo(xw, xe._attrs.get(name));
+                    }
+                }
+                for (XNode x: xe._childNodes) {
+                    short kind = x.getKind();
+                    switch (kind) {
+                        case XMCHOICE:
+                        case XMSEQUENCE:
+                        case XMMIXED:
+                            xw.writeShort(kind);
+                            xw.writeInt(x.minOccurs());
+                            xw.writeInt(x.maxOccurs());
+                            continue;
+                        case XMTEXT: genDataDigestInfo(xw, (XData) x); continue;
+                        case XMELEMENT:
+                            xw.writeShort(kind);
+                            xw.writeInt(x.minOccurs());
+                            xw.writeInt(x.maxOccurs());
+                            xw.writeString(x.getName());
+                            continue;
+                        default: xw.writeShort(kind);
+                    }
                 }
             }
-            for (XNode x: xe._childNodes) {
-                short kind = x.getKind();
-                switch (kind) {
-                    case XMCHOICE:
-                    case XMSEQUENCE:
-                    case XMMIXED:
-                        xw.writeShort(kind);
-                        xw.writeInt(x.minOccurs());
-                        xw.writeInt(x.maxOccurs());
-                        continue;
-                    case XMTEXT:
-                        genDataDigestInfo(xw, (XData) x);
-                        continue;
-                    case XMELEMENT:
-                        xw.writeShort(kind);
-                        xw.writeInt(x.minOccurs());
-                        xw.writeInt(x.maxOccurs());
-                        xw.writeString(x.getName());
-                        continue;
-                    default:
-                        xw.writeShort(kind);
-                }
-            }
-            xw.close();
             MessageDigest md = MessageDigest.getInstance("SHA-256"); //was MD5
             md.update(baos.toByteArray());
             xe._digest = new String(SUtils.encodeHex(md.digest()), StandardCharsets.UTF_8);
         } catch (Exception ex) {
-
             throw new SRuntimeException(SYS.SYS066, ex.getMessage());//Internal error&{0}{: }
         }
     }
