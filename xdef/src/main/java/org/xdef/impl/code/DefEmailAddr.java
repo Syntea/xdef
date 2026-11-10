@@ -60,7 +60,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "QcontentSMTP::=  quoted_pair | qtextSMTP\n" +
 "Quoted_string::= '\"' QcontentSMTP* '\"'\n" +
 "Local_part::=    Dot_string | Quoted_string\n" + // MAY be case-sensitive
-"Mailbox::=       Local_part '@' ( address | Domain ) $rule\n"+
+"Mailbox::=       Local_part '-'? '@' ( address | Domain ) $rule\n"+
 "comment::=       ( commentList $rule ) FWS?\n"+
 "commentList::=   ( FWS? '(' commentPart* ')' )+\n"+
 "commentPart::=   ( (ASCIICHAR - [()]) | $letter )+ ( commentList)? $rule\n"+

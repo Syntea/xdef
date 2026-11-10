@@ -3,6 +3,7 @@
    the source element (the create section was evaluated against a fake item before).
  * Fixed bug in recursive models (refers to itself) compared with the model with "uses". The comparison of models ended
    with StackOverflowError.
+ * Fixed bug in emailAddr when local part of an email ends with dash (e.g. `abc-@g.org`).
 
 # Version 42.2.47, release-date 2026-09-21
   * A bug in script X related to the `uses` or `implements` section with references in JSON models has been fixed.

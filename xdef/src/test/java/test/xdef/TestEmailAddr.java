@@ -83,6 +83,7 @@ public class TestEmailAddr extends XDTester {
         assertTrue(parseEmail("#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t", "", "#!$%&'*+-/=?^_`{}|~.ÁŽúů@ex.t"));
         assertTrue(parseEmail("Joe.\\\\Blow@example.com.t", "", "Joe.\\\\Blow@example.com.t"));
         assertTrue(parseEmail("!\\\\\\@@v.z", "", "!\\\\\\@@v.z"));
+        assertTrue(parseEmail("ABC.D-@T-ONLINE.DE", "", "ABC.D-@T-ONLINE.DE"));
         // comment allowed before and after '@' ???
 //		assertTrue(parseEmail("john.smith(comment)@example.com", "comment", "john.smith@example.com"));
 //		assertTrue(parseEmail("john.smith@(comment)example.com", "comment", "john.smith@example.com"));
@@ -121,7 +122,7 @@ public class TestEmailAddr extends XDTester {
         assertFalse(parseEmail(".Joe.Blow@example.com", null, null)); // local part starts with '.'
         assertFalse(parseEmail("Joe.Blow.@example.com", null, null)); // local part ends with '.'
         assertFalse(parseEmail("-Joe.Blow@example.com", null, null)); // local part starts with '-'
-        assertFalse(parseEmail("Joe.Blow-@example.com", null, null)); // local part ends with '-'
+//        assertFalse(parseEmail("Joe.Blow-@example.com", null, null)); // local part ends with '-'
         assertFalse(parseEmail("Joe..Blow@example.com", null, null)); // '..' in local part
 //		assertFalse(parseEmail("Joe.-Blow@example.com", null, null)); // '.-' in local part
         assertFalse(parseEmail("E.F@z..cz", null, null)); // '..' in domain
