@@ -1,6 +1,8 @@
 # Version ${version}, release-date ${release.date}
  * Fixed bug in JSON from XML: where the values of an object with more items (e.g. the group `mixed`) are created from
    the source element (the create section was evaluated against a fake item before).
+ * Fixed bug in recursive models (refers to itself) compared with the model with "uses". The comparison of models ended
+   with StackOverflowError.
 
 # Version 42.2.47, release-date 2026-09-21
   * A bug in script X related to the `uses` or `implements` section with references in JSON models has been fixed.

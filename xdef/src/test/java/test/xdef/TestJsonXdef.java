@@ -1339,6 +1339,40 @@ public class TestJsonXdef extends XDTester {
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, XonUtils.parseJSON("{\"m\": \"V1\", \"s\": \"S1\"}")));
         } catch (RuntimeException ex) {fail(ex);}
+        try {
+            // recursive model (a level refers to itself) compared with the model it "uses"
+            // (the comparison of models ended with StackOverflowError before)
+            String pattern =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='P' root='Lvl'>\n" +
+"  <xd:json name='Lvl'>\n" +
+"    {\"name\": \"string()\", \"subs\": [\"%script: ?\", {\"%script\": \"*; ref Lvl\"}]}\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+            String impl =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' name='I' root='Lvl'>\n" +
+"  <xd:json name='Lvl'>\n" +
+"    {\"%script\": \"uses P#Lvl\", \"name\": \"string()\",\n" +
+"     \"subs\": [\"%script: ?\", {\"%script\": \"*; ref Lvl\"}]}\n" +
+"  </xd:json>\n" +
+"</xd:def>";
+            xp = XDFactory.compileXD(null, pattern, impl);
+            xd = xp.createXDDocument("I");
+            xd.jparse("{\"name\": \"a\", \"subs\": [{\"name\": \"b\", \"subs\": [{\"name\": \"c\"}]}]}", reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            xd = xp.createXDDocument("I");
+            xd.jparse("{\"name\": \"a\", \"subs\": [{\"name\": \"b\", \"subs\": [{\"x\": \"c\"}]}]}", reporter);
+            assertTrue(reporter.errorWarnings(), "error expected in the deepest level");
+            reporter.clear();
+            // a different recursive model must still be reported as different
+            impl = impl.replace("\"name\": \"string()\"", "\"name\": \"int()\"");
+            try {
+                XDFactory.compileXD(null, pattern, impl);
+                fail("models differ");
+            } catch (SRuntimeException ex) {
+                assertTrue(ex.getMessage().contains("XDEF"), ex.getMessage());
+            }
+        } catch (RuntimeException ex) {fail(ex);}
+
         clearTempDir(); // delete temporary files.
     }
 
