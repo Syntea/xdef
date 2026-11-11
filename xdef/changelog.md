@@ -1,4 +1,5 @@
 # Version ${version}, release-date ${release.date}
+.
 
 # Version 42.2.48, release-date 2026-11-11
  * Fixed bug in JSON from XML: where the values of an object with more items (e.g. the group `mixed`) are created from
