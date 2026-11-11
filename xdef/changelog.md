@@ -1,4 +1,4 @@
-# Version ${version}, release-date ${release.date}
+# Version 42.2.48, release-date 2026-11-11
  * Fixed bug in JSON from XML: where the values of an object with more items (e.g. the group `mixed`) are created from
    the source element (the create section was evaluated against a fake item before).
  * Fixed bug in recursive models (refers to itself) compared with the model with "uses". The comparison of models ended
