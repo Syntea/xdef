@@ -633,12 +633,12 @@ public abstract class XDTester extends STester {
         return checkExtObjects(XDFactory.compileXD(	_props, url, obj));
     }
 
-    public final XDPool compile(final File[] files, final Class... obj) {
+    public final XDPool compile(final File[] files, final Class<?> ... obj) {
         chkSyntax(files).checkAndThrowErrors();
         return checkExtObjects(XDFactory.compileXD(_props, files, obj));
     }
 
-    public final XDPool compile(final File file, final Class... obj) {
+    public final XDPool compile(final File file, final Class<?>... obj) {
         chkSyntax(file).checkAndThrowErrors();
         return checkExtObjects(XDFactory.compileXD(_props, file, obj));
     }
@@ -1699,7 +1699,7 @@ public abstract class XDTester extends STester {
     public final XComponent parseXC(final XDPool xp,
         final String dname,
         final String xml,
-        final Class clazz,
+        final Class<?> clazz,
         final ArrayReporter reporter) {
         return parseXC(xp.createXDDocument(dname), xml, clazz, reporter);
     }
@@ -1715,7 +1715,7 @@ public abstract class XDTester extends STester {
     public final XComponent parseXC(final XDPool xp,
         final String dname,
         final Element el,
-        final Class clazz,
+        final Class<?> clazz,
         final ArrayReporter reporter) {
         return parseXC(xp.createXDDocument(dname), el, clazz, reporter);
     }
@@ -1729,7 +1729,7 @@ public abstract class XDTester extends STester {
      */
     public final XComponent parseXC(final XDDocument xd,
         final String xml,
-        final Class clazz,
+        final Class<?> clazz,
         final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
@@ -1747,7 +1747,7 @@ public abstract class XDTester extends STester {
      */
     public final static XComponent parseXC(final XDDocument xd,
         final Element el,
-        final Class clazz,
+        final Class<?> clazz,
         final ArrayReporter reporter) {
         if (reporter != null) {
             reporter.clear();
