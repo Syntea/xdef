@@ -118,44 +118,44 @@
                             <targetPath>META-INF</targetPath>
                             <directory>.</directory>
                             <includes>
-                                <inlude>.flattened-pom.xml</inlude>
+                                <include>.flattened-pom.xml</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>META-INF</targetPath>
                             <directory>..</directory>
                             <includes>
-                                <inlude>README.md</inlude>
-                                <inlude>apache-license-2.0.md</inlude>
+                                <include>README.md</include>
+                                <include>apache-license-2.0.md</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>META-INF</targetPath>
                             <directory>../xdef</directory>
                             <includes>
-                                <inlude>changelog.md</inlude>
+                                <include>changelog.md</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>META-INF</targetPath>
                             <directory>target/classes/org/xdef/web/config</directory>
                             <includes>
-                                <inlude>buildinfo.properties</inlude>
+                                <include>buildinfo.properties</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>common</targetPath>
                             <directory>target/classes/org/xdef/web/config</directory>
                             <includes>
-                                <inlude>buildinfo.properties</inlude>
+                                <include>buildinfo.properties</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>.</targetPath>
                             <directory>src/main/webapp</directory>
                             <includes>
-                                <inlude>style/footer.html</inlude>
-                                <inlude>*/style/footer.html</inlude>
+                                <include>style/footer.html</include>
+                                <include>*/style/footer.html</include>
                             </includes>
                             <filtering>true</filtering>
                         </resource>
@@ -163,22 +163,22 @@
                             <targetPath>documentation</targetPath>
                             <directory>../xdef/src/documentation</directory>
                             <includes>
-                                <inlude>README.md</inlude>
-                                <inlude>*.pdf</inlude>
+                                <include>README.md</include>
+                                <include>*.pdf</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>other</targetPath>
                             <directory>../xdef</directory>
                             <includes>
-                                <inlude>changelog.md</inlude>
+                                <include>changelog.md</include>
                             </includes>
                         </resource>
                         <resource>
                             <targetPath>other</targetPath>
                             <directory>../administration/script-aux</directory>
                             <includes>
-                                <inlude>xdef-download-maven.sh</inlude>
+                                <include>xdef-download-maven.sh</include>
                             </includes>
                         </resource>
                         <resource>
