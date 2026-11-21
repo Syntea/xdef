@@ -2,9 +2,9 @@ package bugreports;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,6 +16,8 @@ import org.xdef.XDPool;
 import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
+import org.xdef.sys.SException;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xon.XonUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -27,13 +29,6 @@ import test.XDTester;
 public class Mates extends XDTester {
 
     public Mates() {super();}
-
-    private static Object parseYaml(String data) {
-        try (StringReader sr = new StringReader(data)) {
-            Yaml yaml = new Yaml();
-            return yaml.load(sr);
-        }
-    }
 
     private static Object yamlToJson(final Object o) {
         if (o == null) return null;
@@ -85,10 +80,10 @@ public class Mates extends XDTester {
             xp = compile(xdef);
             xd = xp.createXDDocument("SynPLscript");
             yaml = getSourceDir() + "/Mates.yaml";
-            Reader in = new InputStreamReader(new FileInputStream(yaml), "windows-1250");
-            x = new Yaml().load(in);
-            s = XonUtils.toJsonString(yamlToJson(x), true);
-            in.close();
+            try (Reader in = new InputStreamReader(new FileInputStream(yaml), "windows-1250")) {
+                x = new Yaml().load(in);
+                s = XonUtils.toJsonString(yamlToJson(x), true);
+            }
             json = getSourceDir() + "/Mates.json";
             FUtils.writeString(new File(json), s, "UTF-8");
             x = xd.jparse(json, reporter);
@@ -96,7 +91,7 @@ public class Mates extends XDTester {
             o = xd.yparse(yaml, reporter);
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(o, x), XonUtils.xonDiff(o, x));
-        } catch (Exception ex) {fail(ex);}
+        } catch (IOException | SException | SRuntimeException ex) {fail(ex);}
 if(T)return;
 
         clearTempDir(); // delete temporary files.
