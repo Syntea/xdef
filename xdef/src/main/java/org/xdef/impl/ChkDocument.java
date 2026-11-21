@@ -1873,7 +1873,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 o = new FileInputStream((File) o);
             }
             if (o instanceof InputStream) {
-                return jvalidate(XonUtils.parseYAML((InputStream) o), reporter);
+                return jparse(XonUtils.toXonString(XonUtils.parseYAML((InputStream) o)), reporter);
+//                return jvalidate(XonUtils.parseYAML((InputStream) o), reporter);
             }
             //Unsupported type of argument &{0}: &{1}
             throw new SRuntimeException(SYS.SYS037,"source",data.getClass());

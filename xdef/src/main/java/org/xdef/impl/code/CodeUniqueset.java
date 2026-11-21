@@ -9,6 +9,8 @@ import org.xdef.XDUniqueSet;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
+import static org.xdef.XDValueID.XD_UNIQUESET_KEY;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.UNIQUESET_KEY;
 import static org.xdef.XDValueType.XUNIQUESET_M;
@@ -334,7 +336,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
                 ParseItem keyItem = _parseItems[i];
                 result += (i > 0 ? "," : "") + keyItem.toString();
             }
-        } else {
+        } else if (_parseItems.length == 1) {
             result += "key" + _parseItems[0];
         }
         if (usv != null && usv._assignedValues != null && !usv._assignedValues.isEmpty()) {
