@@ -1,0 +1,93 @@
+SynPLscript:
+  Name: SD-Test_Scenario
+  SubjectRoleCode: SD
+  Version: "2026-06-01"
+  Desc: Testovaci WF Script SD
+
+  SysValues:
+    - SysValue: SynPL
+      Type: STRING
+      Value: SynPL version 0.2
+
+  Variables:
+    - { Variable: TaskID,                Type: STRING, Ref: Task@TaskID,          Desc: Identifikator ukolu }
+    - { Variable: TaskName,              Type: STRING, Ref: Task@TaskName,        Desc: Nazev ukolu }
+    - { Variable: TaskTypeIN,            Type: STRING, Value: testTaskType,       Desc: Id typu ukolu }
+    - { Variable: ProjectName,           Type: STRING, Ref: Project@ProjectName,  Desc: Nazev projektu }
+    - { Variable: SubjectRoleCode,       Type: STRING, Value: SD,                 Desc: "Kod role subjektu (IN, SD, SC)" }
+    - { Variable: RoleName_PM,           Type: STRING, Value: Projektovy manazer, Desc: Nazev role projektoveho manazera }
+    - { Variable: StatusName_Opened,     Type: STRING, Value: Opened,             Desc: Nazev stavu Opened }
+
+  UserRoles:
+    - { UserRole: "#WF", Desc: Automaticky WF skript }
+    - { UserRole: PM,    Desc: Projektovy vedouci poskytovatele }
+    - { UserRole: REP,   Desc: "Zakaznik, ktery task nahlasil" }
+
+  UsedFunctions:
+    - Name: cloneTask
+      Desc: Naklonovani tasku ze SD do IN
+      Params: |
+        newTaskType    - Nazev typu tasku pro interni klon
+        copyWfStatus   - Zda kopirovat stav
+        copyDoc        - Zda kopirovat dokumenty
+    - Name: setDefaultTaskAssignee
+      Desc: Zmena vlastnika tasku na vychoziho uzivatele pro danou roli
+      Params: |
+        TaskID          - Identifikator ukolu
+        ProjectName     - Nazev projektu
+        UserRoleName    - Nazev uzivatelske role
+        subjectRoleCode - Kod role subjektu (IN, SD, SC)
+
+  Statuses:
+    # status without ActionCode
+    - Status: INIT
+      IsSlaRunning: "N"
+      IsSlaEnding: "N"
+      IsSlaSettlement: "N"
+      Events:
+        - Event: Open
+          UserRoleAny: ["#WF", PM]
+          IsAssigneeAllowed: "Y"
+          ActionCode:
+            Async: "Y"
+            Code: |
+              def copyWfStatus = false
+              def copyDoc = true
+              cloneTask(TaskID, TaskName, TaskTypeIN, copyWfStatus, copyDoc)
+              if (TaskName == null) {
+                 setDefaultTaskAssignee(TaskID, ProjectName, RoleName_PM, SubjectRoleCode)
+              }
+          NextStatus: In Progress
+
+    - Status: In Progress
+      ActionCode:
+        Async: "N"
+        Code: |
+          setDefaultTaskAssignee(TaskID, ProjectName, RoleName_PM, SubjectRoleCode)
+      IsSlaRunning: "Y"
+      IsSlaEnding: "N"
+      IsSlaSettlement: "N"
+      ChangeLog: "Y"
+      Events:
+        # event without ActionCode
+        - Event: Ask customer
+          UserRoleAny: ["#WF", PM]
+          NextStatus: Solved
+
+    - Status: Solved
+      IsSlaRunning: "N"
+      IsSlaEnding: "Y"
+      IsSlaSettlement: "Y"
+      Events:
+        - Event: Accept
+          UserRoleAny: ["#WF", REP]
+          ActionCode:
+            Async: "Y"
+            Code: |
+              def note = "Zakaznik \"potvrdil\" reseni"
+              println(note)
+          NextStatus: Closed
+
+  EndStatuses:
+    - EndStatus: Closed
+      ChangeLog: "Y"

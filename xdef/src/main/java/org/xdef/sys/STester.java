@@ -354,7 +354,7 @@ public abstract class STester {
     public final void assertEq(final Character a1, final Character a2, final Object msg) {
         if (a1!=null && a2!=null && !a1.equals(a2) || a1==null && a2!=null || a1!=null && a2==null) {
             fail((msg != null ? msg.toString().trim() + '\n' : "")
-                +"a1='" + a1 + "'(" + ((int) a1) + "); a2='" + a2 + "'(" + ((int) a2) + ")");
+                + "a1='" + a1 + "'(" + ((int) a1) + "); a2='" + a2 + "'(" + ((int) a2) + ")");
         }
     }
     /** Check the integer values from parameters are equal.
@@ -505,9 +505,8 @@ public abstract class STester {
                 return (a2 instanceof BigInteger) ? a1.equals(a2) : a1.equals(new BigInteger(a2.toString()));
             } else if (a2 instanceof BigInteger) {
                 return (a1 instanceof BigInteger) ? a2.equals(a1) : a2.equals(new BigInteger(a1.toString()));
-            } else if ((a1 instanceof Byte || a1 instanceof Short || a1 instanceof Integer
-                || a1 instanceof Long) && (a2 instanceof Byte || a2 instanceof Short || a2 instanceof Integer
-                || a2 instanceof Long)) {
+            } else if ((a1 instanceof Byte || a1 instanceof Short || a1 instanceof Integer || a1 instanceof Long)
+                && (a2 instanceof Byte || a2 instanceof Short || a2 instanceof Integer || a2 instanceof Long)) {
                 return ((Number) a1).longValue() == ((Number) a2).longValue();
             } else if ((a1 instanceof Float || a1 instanceof Double)
                 && (a2 instanceof Float || a2 instanceof Double)) {
@@ -1061,11 +1060,10 @@ public abstract class STester {
             _resultInfo = "";
         }
         if (printOK && out != null) {
-            float duration =
-                ((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
+            float duration = ((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
             String s = "[INFO] " + (_errors == 0 ? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
-            s += _name + (_resultInfo.isEmpty()
-                ? "" : ", " + _resultInfo) + ", time=" + new DecimalFormat("0.00").format(duration) + "s";
+            s += _name + (_resultInfo.isEmpty() ? ""
+                : ", " + _resultInfo) + ", time=" + new DecimalFormat("0.00").format(duration) + "s";
             out.flush();
             System.err.flush();
             if (log != null) {
