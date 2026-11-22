@@ -1721,47 +1721,6 @@ public class TestXon extends XDTester {
             assertEq(2, XComponentUtil.getMap(xc).size());
             assertEq(0, XComponentUtil.get(xc, "$a"));
         } catch (RuntimeException ex) {fail(ex);}
-        try { // test YAML
-            xd = compile(
-"<xd:def xmlns:xd='"+_xdNS+"' root='test' name='A'>\n" +
-"  <xd:json name=\"test\">\n" +
-"    { \"cities\": [\n" +
-"        \"date();\",\n" +
-"        { \"%script\": \"occurs 1..*;\",\n" +
-"          \"from\": [\n" +
-"            \"string();\",\n" +
-"            { \"%script\": \"occurs 1..*; \",\n" +
-"              \"to\": \"jstring();\",\n" +
-"              \"distance\": \"int();\"\n" +
-"            }\n" +
-"    	  ]\n" +
-"        }\n" +
-"      ]\n" +
-"    }" +
-"  </xd:json>\n" +
-"</xd:def>").createXDDocument("A");
-            s =
-"cities:\n" +
-"- '2020-02-22'\n" +
-"- from:\n" +
-"  - Brussels\n" +
-"  - {to: London, distance: 322}\n" +
-"  - {to: Paris, distance: 265}\n" +
-"- from:\n" +
-"  - London\n" +
-"  - {to: Brussels, distance: 322}\n" +
-"  - {to: Paris, distance: 344}\n";
-            x = xd.yparse(s, reporter);
-            assertNoErrorwarningsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(x, xd.yparse(XonUtils.toYamlString(x), reporter)));
-            assertNoErrorwarningsAndClear(reporter);
-        } catch (RuntimeException ex) {
-            if (ex instanceof SRuntimeException && "JSON101".equals(((SRuntimeException) ex).getMsgID())) {
-                setResultInfo("YAML tests skipped; org.yaml.snakeyaml is not available");
-            } else {
-                fail(ex);
-            }
-        }
         try { // test jlist
             xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root='x'>\n" +
@@ -1980,6 +1939,385 @@ public class TestXon extends XDTester {
         if (oldCodes != null) {
             setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
         }
+
+//      Test YAML
+        try {
+            xd = compile(
+"<xd:def xmlns:xd='"+_xdNS+"' root='test' name='A'>\n" +
+"  <xd:json name=\"test\">\n" +
+"    { \"cities\": [\n" +
+"        \"date();\",\n" +
+"        { \"%script\": \"occurs 1..*;\",\n" +
+"          \"from\": [\n" +
+"            \"string();\",\n" +
+"            { \"%script\": \"occurs 1..*; \",\n" +
+"              \"to\": \"jstring();\",\n" +
+"              \"distance\": \"int();\"\n" +
+"            }\n" +
+"    	  ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }" +
+"  </xd:json>\n" +
+"</xd:def>").createXDDocument("A");
+            s = // YAML format
+"cities:\n" +
+"- '2020-02-22'\n" +
+"- from:\n" +
+"  - Brussels\n" +
+"  - {to: London, distance: 322}\n" +
+"  - {to: Paris, distance: 265}\n" +
+"- from:\n" +
+"  - London\n" +
+"  - {to: Brussels, distance: 322}\n" +
+"  - {to: Paris, distance: 344}\n";
+            x = xd.yparse(s, reporter);
+            assertNoErrorwarningsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(x, xd.yparse(XonUtils.toYamlString(x), reporter)));
+            assertNoErrorwarningsAndClear(reporter);
+        } catch (RuntimeException ex) {
+            if (ex instanceof SRuntimeException && "JSON101".equals(((SRuntimeException) ex).getMsgID())) {
+                setResultInfo("YAML tests skipped; org.yaml.snakeyaml is not available");
+            } else {
+                fail(ex);
+            }
+        }
+        try {
+            xp = compile(
+"<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xmlns:jx=\"http://www.xdef.org/json/nodes/4.2\">\n" +
+"    <xd:def impl-version =\"2026/06.01\" impl-date=\"2026-06-01\"\n" +
+"            xd:root      =\"SynPLscript\"\n" +
+"            name         =\"SynPLscript\">\n" +
+"        <xd:declaration scope = 'global'>\n" +
+"            type  functionName    jstring(1,30);\n" +
+"            type  code            jstring(1,9999);\n" +
+"            type  params          jstring(1,9999);\n" +
+"            type  async           enum('Y','N');\n" +
+"            type  changeLog       enum('Y','N');\n" +
+"            type  sla             enum('Y','N');\n" +
+"            type  isAllowed       enum('Y','N');\n" +
+"            type  desc            jstring(1,1000);\n" +
+"            type  eventName       jstring(1,30);\n" +
+"            type  functionDesc    jstring(1,9999);\n" +
+"            type  scriptVersion   xdatetime('yyyy-MM-dd');\n" +
+"            type  interval        regex('^[0-9]{1,3}[S|M|H|D]$');\n" +
+"            type  statusName      jstring(1,100);\n" +
+"            type  sysValue        jstring(1,100);\n" +
+"            type  userRole        jstring(1,30);\n" +
+"            type  valueType       enum('STRING', 'INTEGER', 'DECIMAL', 'DATE', 'DATETIME', 'INTERVAL');\n" +
+"            type  variableName    jstring(1,30);\n" +
+"            type  variableRef     jstring(1,255);\n" +
+"            type  wfScriptName    jstring(1,30);\n" +
+"            type  subjectRoleCode enum('IN','SD','SC');\n" +
+"\n" +
+"            uniqueSet variableSet    { variableName: variableName() }; /*duplicita proměnných*/\n" +
+"            uniqueSet paramSet       { paramName:  variableName() }; /*duplicita parametru v eventu*/\n" +
+"            uniqueSet statusSet      { statusName: statusName()   }; /*duplicita stavů*/\n" +
+"            uniqueSet eventStatusSet { statusName: statusName(); eventName: eventName()};/*duplicita eventů stavu*/\n"+
+"        </xd:declaration>\n" +
+"\n" +
+"        <xd:json name = \"SynPLscript\">\n" +
+"            {\n" +
+"                \"SynPLscript\" : {\n" +
+"                    \"Name\":             \"  wfScriptName()\",\n" +
+"                    \"SubjectRoleCode\" : \"  subjectRoleCode()\",\n" +
+"                    \"Version\":          \"  scriptVersion()\",\n" +
+"                    \"Desc\":             \"? desc()\",\n" +
+"                    \"Note\":             \"? desc()\",\n" +
+"                    \"SysValues\":        [ { \"%script\" :  \"occurs 0..*; ref SysValue#SysValue\"         } ],\n" +
+"                    \"Variables\":        [ { \"%script\" :  \"occurs 0..*; ref Variable#Variable\"         } ],\n" +
+"                    \"UserRoles\":        [ { \"%script\" :  \"occurs 0..*; ref UserRole#UserRole\"         } ],\n" +
+"                    \"UsedFunctions\":    [ { \"%script\" :  \"occurs 0..*; ref UsedFunction#UsedFunction\" } ],\n" +
+"                    \"Statuses\":         [ { \"%script\" :  \"occurs 1..*; ref Status#Status\"             } ],\n" +
+"                    \"EndStatuses\":      [ { \"%script\" :  \"occurs 1..*; ref EndStatus#EndStatus\"       } ]\n" +
+"                }\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"\n" +
+"        <xd:component>\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCSynPLscript  %link  SynPLscript#SynPLscript;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCSysValue     %link  SysValue#SysValue;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCVariable     %link  Variable#Variable;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCUserRole     %link  UserRole#UserRole;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCUsedFunction %link  UsedFunction#UsedFunction;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCStatus       %link  Status#Status;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCEvent        %link  Event#Event;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCEndStatus    %link  EndStatus#EndStatus;\n" +
+"            %class cz.syntea.synpl.server.model.xdef.workflow.XCActionCode   %link  ActionCode#ActionCode;\n" +
+"\n" +
+"            %bind SynPLscript %link SynPLscript#SynPLscript/jx:map/jx:map;\n" +
+"\n" +
+"            %bind Name    %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[1];\n" +
+"            %bind Version %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[2];\n" +
+"            %bind Desc    %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[3];\n" +
+"            %bind Note    %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[4];\n" +
+"\n" +
+"            %bind SysValues     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[1];\n" +
+"            %bind SysValue      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[1]/jx:map;\n" +
+"\n" +
+"            %bind Variables     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[2];\n" +
+"            %bind Variable      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[2]/jx:map;\n" +
+"\n" +
+"            %bind UserRoles     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[3];\n" +
+"            %bind UserRole      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[3]/jx:map;\n" +
+"\n" +
+"            %bind UsedFunctions %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[4];\n" +
+"            %bind UsedFunction  %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[4]/jx:map;\n" +
+"\n" +
+"            %bind Statuses      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5];\n" +
+"            %bind Status        %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map;\n" +
+"\n" +
+"            %bind EndStatuses   %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[6];\n" +
+"            %bind EndStatus     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[6]/jx:map;\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'SysValue'>\n" +
+"        <xd:json name='SysValue'>\n" +
+"            {\n" +
+"                \"SysValue\": \"  variableSet.variableName.ID()\",\n" +
+"                \"Type\":     \"  valueType()\",\n" +
+"                \"Value\":    \"  sysValue()\",\n" +
+"                \"Desc\":     \"? desc()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind SysValue  %link SysValue#SysValue/jx:map/$mixed/jx:item[1];\n" +
+"            %bind Type      %link SysValue#SysValue/jx:map/$mixed/jx:item[2];\n" +
+"            %bind Value     %link SysValue#SysValue/jx:map/$mixed/jx:item[3];\n" +
+"            %bind Desc      %link SysValue#SysValue/jx:map/$mixed/jx:item[4];\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'Variable'>\n" +
+"        <xd:json name='Variable'>\n" +
+"            {\n" +
+"                \"Variable\": \"  variableSet.variableName.ID()\",\n" +
+"                \"Type\":     \"  valueType()\",\n" +
+"                \"Ref\":      \"? variableRef()\",\n" +
+"                \"Value\":    \"? sysValue()\",\n" +
+"                \"Desc\":     \"? desc()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind Variable      %link Variable#Variable/jx:map/$mixed/jx:item[1];\n" +
+"            %bind Type          %link Variable#Variable/jx:map/$mixed/jx:item[2];\n" +
+"            %bind Ref           %link Variable#Variable/jx:map/$mixed/jx:item[3];\n" +
+"            %bind Value         %link Variable#Variable/jx:map/$mixed/jx:item[4];\n" +
+"            %bind Desc          %link Variable#Variable/jx:map/$mixed/jx:item[5];\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'UserRole'>\n" +
+"        <xd:json name='UserRole'>\n" +
+"            {\n" +
+"                \"UserRole\": \"  userRole()\",\n" +
+"                \"Desc\":     \"? desc()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind UserRole      %link UserRole#UserRole/jx:map/$mixed/jx:item[1];\n" +
+"            %bind Desc          %link UserRole#UserRole/jx:map/$mixed/jx:item[2];\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'UsedFunction'>\n" +
+"        <xd:json name='UsedFunction'>\n" +
+"            {\n" +
+"                \"Name\": \"   functionName()\",\n" +
+"                \"Desc\": \"?  functionDesc()\",\n" +
+"                \"Version\": \"? scriptVersion()\",\n" +
+"                \"Params\":  \"? code()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind Name        %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[1];\n" +
+"            %bind Desc        %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[2];\n" +
+"            %bind Version     %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[3];\n" +
+"            %bind Params      %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[4];\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'Status'>\n" +
+"        <xd:json name = 'Status'>\n" +
+"            {\n" +
+"                \"Status\":       \"  statusSet.statusName.ID()\",\n" +
+"                \"ActionCode\":   { \"%script\": \"0..1; ref ActionCode#ActionCode;\" },\n" +
+"                \"TimeOverStep\": \"? interval()\",\n" +
+"                \"IsSlaRunning\":     \"  sla()\",\n" +
+"                \"IsSlaEnding\":      \"  sla()\",\n" +
+"                \"IsSlaSettlement\":  \"  sla()\",\n" +
+"                \"IsSlaWorkStart\":   \"? sla()\",\n" +
+"                \"IsSlaFirstAction\": \"? sla()\",\n" +
+"                \"ChangeLog\":    \"? changeLog()\",\n" +
+"                \"Events\":       [ { \"%script\": \"1..*; ref Event#Event;\" } ]\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind Status       %link Status#Status/jx:map/$mixed/jx:item[1];\n" +
+"            %bind ActionCode   %link Status#Status/jx:map/$mixed/jx:map[1];\n" +
+"            %bind TimeOverStep %link Status#Status/jx:map/$mixed/jx:item[2];\n" +
+"            %bind ChangeLog    %link Status#Status/jx:map/$mixed/jx:item[3];\n" +
+"            %bind Events       %link Status#Status/jx:map/$mixed/jx:array[1];\n" +
+"            %bind Event        %link Status#Status/jx:map/$mixed/jx:array[1]/jx:map;\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'Event'>\n" +
+"        <xd:json name = 'Event'>\n" +
+"            {\n" +
+"                \"Event\":                 \" eventName()\",\n" +
+"                \"UserRoleAny\":           [\"occurs 1..* userRole()\"],\n" +
+"                \"ActionCode\":            { \"%script\": \"0..1; ref ActionCode#ActionCode;\" },\n" +
+"                \"NextStatus\":            \"? statusName()\",\n" +
+"                \"Desc\":                  \"? desc()\",\n" +
+"                \"IsAssigneeAllowed\":     \"? isAllowed()\",\n" +
+"                \"IsWatcherAllowed\":      \"? isAllowed()\",\n" +
+"                \"IsCollaboratorAllowed\": \"? isAllowed()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind Event                 %link Event#Event/jx:map/$mixed/jx:item[1];\n" +
+"            %bind UserRoleAny           %link Event#Event/jx:map/$mixed/jx:array[1];\n" +
+"            %bind ActionCode            %link Event#Event/jx:map/$mixed/jx:map[1];\n" +
+"            %bind NextStatus            %link Event#Event/jx:map/$mixed/jx:item[2];\n" +
+"            %bind Desc                  %link Event#Event/jx:map/$mixed/jx:item[3];\n" +
+"            %bind IsAssigneeAllowed     %link Event#Event/jx:map/$mixed/jx:item[4];\n" +
+"            %bind IsWatcherAllowed      %link Event#Event/jx:map/$mixed/jx:item[5];\n" +
+"            %bind isCollaboratorAllowed %link Event#Event/jx:map/$mixed/jx:item[6];\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'ActionCode'>\n" +
+"        <xd:json name = 'ActionCode'>\n" +
+"            {\n" +
+"                \"Async\": \"? async()\",\n" +
+"                \"Code\":  \"? code()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"    </xd:def>\n" +
+"\n" +
+"    <xd:def name = 'EndStatus'>\n" +
+"        <xd:json name = 'EndStatus'>\n" +
+"            {\n" +
+"                \"EndStatus\":  \" statusSet.statusName.ID()\",\n" +
+"                \"ActionCode\": { \"%script\": \"0..1; ref ActionCode#ActionCode;\" },\n" +
+"                \"ChangeLog\":  \"? changeLog()\"\n" +
+"            }\n" +
+"        </xd:json>\n" +
+"        <xd:component>\n" +
+"            %bind EndStatus       %link EndStatus#EndStatus/jx:map/$mixed/jx:item[1];\n" +
+"            %bind ActionCode      %link EndStatus#EndStatus/jx:map/$mixed/jx:map[1];\n" +
+"            %bind ChangeLog       %link EndStatus#EndStatus/jx:map/$mixed/jx:item[2];\n" +
+"        </xd:component>\n" +
+"    </xd:def>\n" +
+"</xd:collection>");
+            xd = xp.createXDDocument("SynPLscript");
+            s = // YAML format
+"SynPLscript:\n" +
+"  Name: SD-Test_Scenario\n" +
+"  SubjectRoleCode: SD\n" +
+"  Version: \"2026-06-01\"\n" +
+"  Desc: Testovaci WF Script SD\n" +
+"\n" +
+"  SysValues:\n" +
+"    - SysValue: SynPL\n" +
+"      Type: STRING\n" +
+"      Value: SynPL version 0.2\n" +
+"\n" +
+"  Variables:\n" +
+"    - { Variable: TaskID, Type: STRING, Ref: Task@TaskID, Desc: Identifikátor úkolu}\n" +
+"    - {Variable: TaskName, Type: STRING, Ref: Task@TaskName, Desc: Název úkolu}\n" +
+"    - {Variable: TaskTypeIN, Type: STRING, Value: testTaskType, Desc: Id typu úkolu}\n" +
+"    - {Variable: ProjectName, Type: STRING, Ref: Project@ProjectName, Desc: Název projektu}\n" +
+"    - {Variable: SubjectRoleCode, Type: STRING, Value: SD, Desc: \"Kód role subjektu (IN, SD, SC)\"}\n" +
+"    - {Variable: RoleName_PM, Type: STRING, Value: Projektovy manazer, Desc: Název role projektového manažera}\n" +
+"    - {Variable: StatusName_Opened, Type: STRING, Value: Opened, Desc: Název stavu Opened}\n" +
+"\n" +
+"  UserRoles:\n" +
+"    - { UserRole: \"#WF\", Desc: Automatický WF skript }\n" +
+"    - { UserRole: PM,      Desc: Projektový vedoucí poskytovatele }\n" +
+"    - { UserRole: REP,     Desc: \"Zákazník, který task nahlásil\" }\n" +
+"\n" +
+"  UsedFunctions:\n" +
+"    - Name: cloneTask\n" +
+"      Desc: Naklonovani tasku ze SD do IN\n" +
+"      Params: |\n" +
+"        newTaskType    - Název typu tasku pro interní klon\n" +
+"        copyWfStatus   - Zda kopírovat stav\n" +
+"        copyDoc        - Zda kopírovat dokumenty\n" +
+"    - Name: setDefaultTaskAssignee\n" +
+"      Desc: Změna vlastníka tasku na vychozího uživatele pro danou roli\n" +
+"      Params: |\n" +
+"        TaskID          - Identifikátor úkolu\n" +
+"        ProjectName     - Název projektu\n" +
+"        UserRoleName    - Název uživatelské role\n" +
+"        subjectRoleCode - Kód role subjektu (IN, SD, SC)\n" +
+"\n" +
+"  Statuses:\n" +
+"    # status without ActionCode\n" +
+"    - Status: INIT\n" +
+"      IsSlaRunning: \"N\"\n" +
+"      IsSlaEnding: \"N\"\n" +
+"      IsSlaSettlement: \"N\"\n" +
+"      Events:\n" +
+"        - Event: Open\n" +
+"          UserRoleAny: [\"#WF\", PM]\n" +
+"          IsAssigneeAllowed: \"Y\"\n" +
+"          ActionCode:\n" +
+"            Async: \"Y\"\n" +
+"            Code: |\n" +
+"              def copyWfStatus = false\n" +
+"              def copyDoc = true\n" +
+"              cloneTask(TaskID, TaskName, TaskTypeIN, copyWfStatus, copyDoc)\n" +
+"              if (TaskName == null) {\n" +
+"                 setDefaultTaskAssignee(TaskID, ProjectName, RoleName_PM, SubjectRoleCode)\n" +
+"              }\n" +
+"          NextStatus: In Progress\n" +
+"\n" +
+"    - Status: In Progress\n" +
+"      ActionCode:\n" +
+"        Async: \"N\"\n" +
+"        Code: |\n" +
+"          setDefaultTaskAssignee(TaskID, ProjectName, RoleName_PM, SubjectRoleCode)\n" +
+"      IsSlaRunning: \"Y\"\n" +
+"      IsSlaEnding: \"N\"\n" +
+"      IsSlaSettlement: \"N\"\n" +
+"      ChangeLog: \"Y\"\n" +
+"      Events:\n" +
+"        # event without ActionCode\n" +
+"        - Event: Ask customer\n" +
+"          UserRoleAny: [\"#WF\", PM]\n" +
+"          NextStatus: Solved\n" +
+"\n" +
+"    - Status: Solved\n" +
+"      IsSlaRunning: \"N\"\n" +
+"      IsSlaEnding: \"Y\"\n" +
+"      IsSlaSettlement: \"Y\"\n" +
+"      Events:\n" +
+"        - Event: Accept\n" +
+"          UserRoleAny: [\"#WF\", REP]\n" +
+"          ActionCode:\n" +
+"            Async: \"Y\"\n" +
+"            Code: |\n" +
+"              def note = \"Zákazník \\\"potvrdil\\\" řešení\"\n" +
+"              println(note)\n" +
+"          NextStatus: Closed\n" +
+"\n" +
+"  EndStatuses:\n" +
+"    - EndStatus: Closed\n" +
+"      ChangeLog: \"Y\"";
+            x = XonUtils.parseYAML(s);
+            json = XonUtils.toJsonString(x, true);
+            x = xd.jparse(json, reporter);
+            assertNoErrorsAndClear(reporter);
+            o = xd.yparse(s, reporter);
+            assertNoErrorsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(o, x), XonUtils.xonDiff(o, x));
+        } catch (RuntimeException ex) {fail(ex);}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         clearTempDir(); // clear temporary directory
     }
 
