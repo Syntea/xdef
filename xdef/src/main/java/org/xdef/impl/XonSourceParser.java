@@ -264,11 +264,12 @@ final class XonSourceParser implements XonParser, XParser {
     @Override
     public void xparse(final XDDocument chkDoc) {
         _chkDoc = (ChkDocument) chkDoc;
+        _chkDoc._scp.initscript();//Initialize variables and methods
         _doc = _chkDoc.getDocument();
         chkDoc.getReporter();
         _p.parse();
-        _chkDoc._xon = _chkEl._xonArray != null ? _chkEl._xonArray
-            : _chkEl._xonMap != null ? _chkEl._xonMap : _chkEl._xonValue;
+        _chkDoc._xon =
+            _chkEl._xonArray != null ? _chkEl._xonArray : _chkEl._xonMap != null ? _chkEl._xonMap : _chkEl._xonValue;
         _chkElemStack = null;
         _doc = null;
         _chkEl = null;
