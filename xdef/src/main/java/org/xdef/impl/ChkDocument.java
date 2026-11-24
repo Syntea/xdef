@@ -1892,7 +1892,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
     @Override
     public final XComponent yparseXComponent(final Object data,final Class<?> cls,final ReportWriter reporter)
         throws SRuntimeException {
-        return jparseXComponent(getSource(data), cls, null, reporter);
+        return yparseXComponent(getSource(data), cls, null, reporter);
     }
 
     /** Parse URL with YAML source and return XComponent as result.
@@ -1934,18 +1934,17 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 // version of XON/JSON to XML transormation
                 byte xonVer = (Byte) yClass.getDeclaredField("XON").get(null);
                 e = xonVer == XConstants.XON_MODE_W ? XonUtils.xonToXmlW(o) : XonUtils.xonToXml(o);
-            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException
-                | SecurityException ex) {
-                e = XonUtils.xonToXmlW(o); // X-definition transormation
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
+                e = XonUtils.xonToXmlW(o); // transormation of object to Xml W fromat
             }
             return xparseXComponent(e, yClass, reporter);
         }
         if (o instanceof String) {
-            return jparseXComponent(XonUtils.parseXON((String) o), yClass, reporter);
+            return jparseXComponent(XonUtils.parseYAML((String) o), yClass, reporter);
         } else if (o instanceof File) {
-            return jparseXComponent(XonUtils.parseXON((File) o), yClass,reporter);
+            return jparseXComponent(XonUtils.parseYAML((File) o), yClass,reporter);
         } else if (o instanceof InputStream) {
-            return jparseXComponent((InputStream)o, yClass, sourceId, reporter);
+            return jparseXComponent(XonUtils.parseYAML((InputStream)o), yClass, sourceId, reporter);
         } else if (o instanceof Document) {
             return jparseXComponent(XonUtils.xmlToXon(((Document) o).getDocumentElement()), yClass, reporter);
         } else if (o instanceof Element) {

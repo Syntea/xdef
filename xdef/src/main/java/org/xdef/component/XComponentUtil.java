@@ -848,18 +848,18 @@ public class XComponentUtil {
         return toXonXD(xc, new KNamespace());
     }
 
-    /** Invoke the method with name from argument from XComponent and return the value from method.
-     * @param xc where to find getter.
+    /** Invoke the method (getter) with name from argument from the class of object and return the value from method.
+     * @param obj object where to find getter.
      * @param name name of getter.
      * @return value returned by getter.
      */
-    public static final Object getx(final XComponent xc, final String name) {
-        Class<?> cls = xc.getClass();
+    public static final Object getx(final Object obj, final String name) {
+        Class<?> cls = obj.getClass();
         for (;;) {
             try {
                 Method m = cls.getDeclaredMethod(name);
                 m.setAccessible(true);
-                return m.invoke(xc);
+                return m.invoke(obj);
             } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
                 | SecurityException | InvocationTargetException ex) {
                 if ((cls = cls.getSuperclass()) == null) {
@@ -868,7 +868,7 @@ public class XComponentUtil {
             }
         }
         //Getter &{0} not found in class &{1}
-        throw new SRuntimeException(SYS.SYS104, name, xc.getClass().getName());
+        throw new SRuntimeException(SYS.SYS104, name, obj.getClass().getName());
     }
 
     /** Return value returned by getter from XComponent with name from argument.
@@ -891,20 +891,20 @@ public class XComponentUtil {
      */
     public static final Map getMap(final XComponent xc) {return (Map) getx(xc, "anyItem$");}
 
-    /** Invoke method with name and parameter from argument from XComponent (typically a setter).
-     * @param xc XComponent where to fine method.
+    /** Invoke method with name and parameter from argument from the class of object (typically a setter).
+     * @param obj object where to find method.
      * @param name name of method.
      * @param v value of parameter.
      */
-    public static final void setx(final XComponent xc, final String name, final Object v) {
-        Class<?> cls = xc.getClass();
+    public static final void setx(final Object obj, final String name, final Object v) {
+        Class<?> cls = obj.getClass();
         for (;;) {
             for (Method m: cls.getDeclaredMethods()) {
                 Class<?>[] params = m.getParameterTypes();
                 if ((name).equals(m.getName()) && params!=null && params.length==1) {
                     try {
                         m.setAccessible(true);
-                        m.invoke(xc, v);
+                        m.invoke(obj, v);
                         return;
                     } catch (IllegalAccessException | IllegalArgumentException | SecurityException
                         | InvocationTargetException ex) {
@@ -915,7 +915,7 @@ public class XComponentUtil {
                 break;
             }
         }
-        throw new SRuntimeException(SYS.SYS105, name, xc.getClass().getName());//Setter &{0} not found in class &{1}
+        throw new SRuntimeException(SYS.SYS105, name, obj.getClass().getName());//Setter &{0} not found in class &{1}
     }
 
     /** Invoke setter from XComponent with given value.

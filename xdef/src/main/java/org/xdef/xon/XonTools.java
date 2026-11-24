@@ -493,6 +493,19 @@ public class XonTools {
         return x.toString();// Boolean, Number, etc...
     }
 
+    /** Read value of Jstring.
+     * @param js JString format.
+     * @return the parsed string.
+     */
+    public static final String readJString(final String js) {
+        if (js != null && !js.isEmpty() && js.charAt(0) == '"') {
+            StringParser p = new StringParser(js);
+            p.setIndex(1);
+            return XonTools.readJString(p);
+        }
+        return js;
+    }
+
     /** Read value of XON/JSON string.
      * @param p parser where the string is on the actual position.
      * @return the parsed string.
