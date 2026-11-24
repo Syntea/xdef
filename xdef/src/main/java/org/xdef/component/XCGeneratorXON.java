@@ -437,7 +437,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
         if (max > 1) { // list of values
             String typ1 = "java.util.List<" + typ + ">";
             jGet = xe.getXonMode() != 0 && "String".equals(typ)
-                ? "org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())" : "y.get"+X_VALATTR+"()";
+                ? "org.xdef.xon.XonTools.readJString(y.get"+X_VALATTR+"())" : "y.get"+X_VALATTR+"()";
             if (keyAttr != null && keyAttr.getFixedValue() == null) {//%anyName
                 template =
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
@@ -606,11 +606,9 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t * @return value of text of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}(){"+LN+
-"\t\treturn _&{iname}==null? null: " +
-    ("String".equals(typ) && xe.getXonMode() != 0 ?
-    "org.xdef.xon.XonTools.jstringFromSource(_&{iname}.get"+X_VALATTR+"())"
-    : "_&{iname}.get"+X_VALATTR+"()") + ";" + LN
-+"\t}"+LN;
+"\t\treturn _&{iname}==null? null: "+ ("String".equals(typ) && xe.getXonMode() != 0
+    ? "org.xdef.xon.XonTools.readJString(_&{iname}.get"+X_VALATTR+"())"
+    : "_&{iname}.get"+X_VALATTR+"()") + ";" + LN +"\t}"+LN;
             getters.append(modify(template,
                 "&{name}", name,
                 "&{iname}", iname,

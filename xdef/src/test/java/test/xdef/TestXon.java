@@ -1984,7 +1984,7 @@ public class TestXon extends XDTester {
         }
         try {
             xp = compile(
-"<xd:collection xmlns:xd=\"http://www.xdef.org/xdef/4.2\" xmlns:jx=\"http://www.xdef.org/json/nodes/4.2\">\n" +
+"<xd:collection xmlns:xd='"+_xdNS+"' xmlns:jx=\"http://www.xdef.org/json/nodes/4.2\">\n" +
 "    <xd:def impl-version ='2026/06.01' impl-date='2026-06-01' root='SynPLscript' name='SynPLscript'>\n" +
 "        <xd:declaration scope = 'global'>\n" +
 "            type  functionName    jstring(1,30);\n" +
