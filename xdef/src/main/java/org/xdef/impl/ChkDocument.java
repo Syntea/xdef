@@ -173,8 +173,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
         XDefinition xd = new XDefinition("#", xp, XDConstants.XDEF42_NS_URI, null, XConstants.XD41);
         xp._xdefs.put("#", xd);
         setDateRestrictions(xd.getXDPool());
-        //create dummy X-definition - will be assigned from attribute
-        init(xd, null, new SReporter(), props, null);
+        init(xd, null, new SReporter(), props, null); //create dummy X-definition - will be assigned from attribute
         _scp = new XCodeProcessor(xd, new SReporter(), null, null);
     }
 
@@ -244,8 +243,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                     if (qn.equals(qxe)) {
                         return xe;
                     }
-                    if (!Q_ARRAY.equals(qxe) && !Q_MAP.equals(qxe)
-                        && !Q_VALUE.equals(qxe)) {
+                    if (!Q_ARRAY.equals(qxe) && !Q_MAP.equals(qxe) && !Q_VALUE.equals(qxe)) {
                         for (XNode x: xe._childNodes) { // find in childNodes
                             if (qn.equals(x.getQName())) {
                                 return (XElement) x;
@@ -303,7 +301,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 }
                 // try to find xd:any
                 for (XNode xe: ((XElement)x)._childNodes) {
-                    if (xe.getKind() == XMELEMENT && "$any".equals(xe.getName())){
+                    if (xe.getKind() == XMELEMENT && "$any".equals(xe.getName())) {
                         XElement xel = (XElement) xe;
                         if (_element != null && xel._match >= 0) {
                             ChkElement chkEl = new ChkElement(this, _element, xel, false);
@@ -329,10 +327,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 }
             } else {
                 String lockey = xe.getName();
-                if (lockey.endsWith("$any") && lockey.length() > 4) {
-                    // reference of the named any
-                    return ((XElement) xe)._childNodes.length == 0
-                        ? null : (XElement) ((XElement) xe)._childNodes[0];
+                if (lockey.endsWith("$any") && lockey.length() > 4) { // reference of the named any
+                    return ((XElement) xe)._childNodes.length == 0 ? null : (XElement) ((XElement) xe)._childNodes[0];
                 }
             }
         }
@@ -602,8 +598,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                             }
                         }
                     }
-                    if (_xComponent == null) {
-                        //Error in Java XComponent class for element&{0} :&{1}
+                    if (_xComponent == null) { //Error in Java XComponent class for element&{0} :&{1}
                         throw new SRuntimeException(XDEF.XDEF506, element.getNodeName(), className);
                     }
                 } catch (ClassNotFoundException | SecurityException | SRuntimeException ex) {
@@ -614,8 +609,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                     //Error in Java XComponent class for element &{0}: &{1}
                     throw new SRuntimeException(XDEF.XDEF506, ex, element.getNodeName(), className);
                 }
-            } else {
-                //Java XComponent class for element &{0} is not defined for root &{1}{ in X-definition }
+            } else { //Java XComponent class for element &{0} is not defined for root &{1}{ in X-definition }
                 throw new SRuntimeException(XDEF.XDEF505, _element.getNodeName(), _xdef.getName());
             }
         }
@@ -691,7 +685,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      * @return ChkElement object.
      */
     @Override
-    public final XXElement prepareRootXXElementNS(final String nsURI, final String qn, final boolean chkRoot){
+    public final XXElement prepareRootXXElementNS(final String nsURI, final String qn, final boolean chkRoot) {
         String uri = nsURI == null || nsURI.isEmpty() ? null : nsURI;
         try {
             Element root = _doc.createElementNS(uri, qn);
@@ -786,12 +780,13 @@ final class ChkDocument extends ChkNode implements XDDocument {
         XonSourceParser result;
         Object o = getSource(x);
         result = o instanceof String
-            ? new XonSourceParser(new StringReader((String) o), sysId == null ? "STRING" : sysId)
-            : o instanceof File ? new XonSourceParser((File) o)
-            : o instanceof URL ? new XonSourceParser((URL) o)
-            : o instanceof Reader ?  new XonSourceParser((Reader) o, sysId)
-            : o instanceof InputStream ? new XonSourceParser((InputStream) o, sysId)
-            : new XonSourceParser(o);// XON object: Map, List, simplevalue...
+            ? new XonSourceParser(new StringReader((String) o),
+                sysId == null ? "STRING" : sysId)
+                    : o instanceof File ? new XonSourceParser((File) o)
+                    : o instanceof URL ? new XonSourceParser((URL) o)
+                    : o instanceof Reader ?  new XonSourceParser((Reader) o, sysId)
+                    : o instanceof InputStream ? new XonSourceParser((InputStream) o, sysId)
+                    : new XonSourceParser(o);// XON object: Map, List, simplevalue...
         _reporter = new SReporter(reporter);
         _scp.setStdErr(new DefOutStream(reporter));
         _refNum = 0; // we must clear counter!
@@ -981,7 +976,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      */
     public final String getTextValue() {return null;}
 
-    /** Set text value to this node.
+    /** Set text value to this node (error).
      * @param text the text value to be set.
      */
     public final void setTextValue(final String text) {
@@ -1104,14 +1099,12 @@ final class ChkDocument extends ChkNode implements XDDocument {
     @Override
     public final void setLexiconLanguage(final String language) {
         XPool xp = (XPool) getXDPool();
-        if (xp._lexicon == null) {
-            //Can't set language &{0} because lexicon is not declared
+        if (xp._lexicon == null) { //Can't set language &{0} because lexicon is not declared
             throw new SRuntimeException(XDEF.XDEF141, language);
         }
         try {
             _sourceLanguageID = language == null ? -1 : xp._lexicon.getLanguageID(language);
-        } catch (Exception ex) {
-            //Can't set language &{0} because this language is not specified in lexicon
+        } catch (Exception ex) { //Can't set language &{0} because this language is not specified in lexicon
             throw new SRuntimeException(XDEF.XDEF142, language);
         }
     }
@@ -1184,8 +1177,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
      */
     public final void setDestLexiconLanguage(final String language) {
         XPool xp = (XPool) getXDPool();
-        if (xp._lexicon == null) {
-            //Can't set language of output &{0} because lexicon is not declared
+        if (xp._lexicon == null) {//Can't set language of output &{0} because lexicon is not declared
             throw new SRuntimeException(XDEF.XDEF141, language);
         }
         _destLanguageID = language == null ? -1 : xp._lexicon.getLanguageID(language);
@@ -1280,8 +1272,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
             } else if (o instanceof String) {
                 sourceId = "STRING";
                 r = new StringReader((String) o);
-            } else {
-                //Unsupported type of argument &{0}: &{1}
+            } else {//Unsupported type of argument &{0}: &{1}
                 throw new SRuntimeException(SYS.SYS037, "source", data.getClass());
             }
             return cparse(r, ',', false, sourceId, reporter);
@@ -1421,8 +1412,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
             e = (Element) source;
         } else if (source instanceof Document) {
             e = ((Document)source).getDocumentElement();
-        } else {
-            //Unsupported type of argument &{0}: &{1}
+        } else { //Unsupported type of argument &{0}: &{1}
             throw new SRuntimeException(SYS.SYS037,"source", source.getClass());
         }
         QName qName = KXmlUtils.getQName(e);
@@ -1560,8 +1550,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
             return getXon();
         }
         if (o == null || o instanceof Map || o instanceof List || o instanceof Number || o instanceof Boolean
-            || o instanceof SDatetime || o instanceof SDuration || o instanceof GPSPosition
-            || o instanceof Price) {
+            || o instanceof SDatetime || o instanceof SDuration || o instanceof GPSPosition || o instanceof Price) {
             _reporter = new SReporter(reporter);
             _scp.setStdErr(new DefOutStream(reporter));
             _refNum = 0; // we must clear counter!
@@ -1640,9 +1629,8 @@ final class ChkDocument extends ChkNode implements XDDocument {
         return xcreate(null, name, reporter);
     }
 
-    /** Run create mode - create element according to the X-definition model. If the parameter nsUri is not
-     * null then its assigned the model with given namespaceURI; in this case the parameter qname may be
-     * qualified with a prefix.
+    /** Run create mode - create element according to the X-definition model. If the parameter nsUri is not null then
+     * its assigned the model with given namespaceURI; in this case the parameter qname may be qualified with a prefix.
      * @param nsUri the namespace URI of result element (may be null).
      * @param name the name of model of required element (may contain prefix).
      * @param cls XComponent class (if null, then XComponent class
@@ -1786,8 +1774,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
             : (o instanceof File) ? new ChkParser(reporter, (File) o)
             : (o instanceof URL) ? new ChkParser(reporter, (URL) o)
             : (o instanceof InputStream) ? new ChkParser(reporter,(InputStream) o,sourceId) : null;
-        if (parser == null) {
-            // Input XML source is empty or doesn't exist.
+        if (parser == null) { // Input XML source is empty or doesn't exist.
             throw new SRuntimeException(Report.error(XDEF.XDEF578));
         }
         if (sourceId != null && !sourceId.isEmpty()) {
@@ -1873,7 +1860,7 @@ final class ChkDocument extends ChkNode implements XDDocument {
                 o = new FileInputStream((File) o);
             }
             if (o instanceof InputStream) {
-                return jvalidate(XonUtils.parseYAML((InputStream) o), reporter);
+                return jparse(XonUtils.toXonString(XonUtils.parseYAML((InputStream) o)), reporter);
             }
             //Unsupported type of argument &{0}: &{1}
             throw new SRuntimeException(SYS.SYS037,"source",data.getClass());
@@ -1911,34 +1898,6 @@ final class ChkDocument extends ChkNode implements XDDocument {
         _documentClosed = false;
         Class<?> yClass  = cls;
         Object o = getSource(data);
-        if (o==null || o instanceof Map || o instanceof List || o instanceof Number || o instanceof Boolean) {
-            if (yClass == null) {
-                for (String s: getXDPool().getXComponents().keySet()) {
-                    try {
-                        yClass = Class.forName(getXDPool().getXComponents().get(s)); // s is class name
-                        String jmodel = (String) yClass.getDeclaredField("XD_NAME").get(null);
-                        byte jVersion = (Byte) yClass.getDeclaredField("XON").get(null);
-                        if (jVersion > 0) {
-                            XElement xe = selectRoot(jmodel, XDConstants.XON_NS_URI_W, -1);
-                            if (xe != null && xe._xonVersion != 0) {
-                                break;
-                            }
-                        }
-                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-                        | NoSuchFieldException | SecurityException ex) {}
-                    yClass = null;
-                }
-            }
-            Element e;
-            try {
-                // version of XON/JSON to XML transormation
-                byte xonVer = (Byte) yClass.getDeclaredField("XON").get(null);
-                e = xonVer == XConstants.XON_MODE_W ? XonUtils.xonToXmlW(o) : XonUtils.xonToXml(o);
-            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
-                e = XonUtils.xonToXmlW(o); // transormation of object to Xml W fromat
-            }
-            return xparseXComponent(e, yClass, reporter);
-        }
         if (o instanceof String) {
             return jparseXComponent(XonUtils.parseYAML((String) o), yClass, reporter);
         } else if (o instanceof File) {
@@ -1947,11 +1906,9 @@ final class ChkDocument extends ChkNode implements XDDocument {
             return jparseXComponent(XonUtils.parseYAML((InputStream)o), yClass, sourceId, reporter);
         } else if (o instanceof Document) {
             return jparseXComponent(XonUtils.xmlToXon(((Document) o).getDocumentElement()), yClass, reporter);
-        } else if (o instanceof Element) {
-            return jparseXComponent(XonUtils.xmlToXon((Element) o),yClass,reporter);
+        } else {
+            return jparseXComponent(o,yClass,reporter);
         }
-        //Unsupported type of argument &{0}: &{1}
-        throw new SRuntimeException(SYS.SYS037, "source", o.getClass());
     }
 
     /** Get printable string from this object. */

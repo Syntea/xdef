@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -376,7 +377,7 @@ public class XonUtils {
      * @throws SRuntimeException if an error occurs.
      */
     public static final Object parseYAML(final InputStream in, final String sysId) throws SRuntimeException {
-        return parseYAML(new InputStreamReader(in, Charset.forName("UTF-8")), sysId == null ? "INPUTSTREAM" : sysId);
+        return parseYAML(new InputStreamReader(in, StandardCharsets.UTF_8), sysId == null ? "INPUTSTREAM" : sysId);
     }
 
 /*=****************************************************************************
