@@ -557,8 +557,8 @@ public class XComponentUtil {
                     } else {
                         result.put(key, o);
                     }
-                } catch (IllegalAccessException | IllegalArgumentException
-                    | NoSuchMethodException | SecurityException | InvocationTargetException ex) {}
+                } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
+                    | SecurityException | InvocationTargetException ex) {}
             } else if (methodName.startsWith("listOf$")) {
                 try {
                     x.setAccessible(true);
@@ -569,8 +569,8 @@ public class XComponentUtil {
                     String key = methodName.substring(7);
                     result.put(key, o);
                     break;
-                } catch (IllegalAccessException | IllegalArgumentException
-                    | SecurityException | InvocationTargetException ex) {}
+                } catch (IllegalAccessException | IllegalArgumentException | SecurityException
+                    | InvocationTargetException ex) {}
             } else if (x.getParameterTypes().length == 0
                 && methodName.startsWith("listOf" + XON_NS_PREFIX + "$")) {
                 String key;
@@ -597,8 +597,8 @@ public class XComponentUtil {
                             }
                         }
                     }
-                } catch (IllegalAccessException | IllegalArgumentException
-                    | NoSuchMethodException | SecurityException | InvocationTargetException ex) {}
+                } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
+                    | SecurityException | InvocationTargetException ex) {}
             }
         }
     }
@@ -630,8 +630,8 @@ public class XComponentUtil {
                 try {
                     x.setAccessible(true);
                     o = x.invoke(xc);
-                } catch (IllegalAccessException | IllegalArgumentException
-                    | SecurityException | InvocationTargetException ex) {
+                } catch (IllegalAccessException | IllegalArgumentException | SecurityException
+                    | InvocationTargetException ex) {
                     throw new RuntimeException("Can't access getter: " + x.getName());
                 }
                 if (o instanceof XComponent) {
@@ -735,8 +735,8 @@ public class XComponentUtil {
                 try {
                     m.setAccessible(true);
                     o = m.invoke(xc);
-                } catch (IllegalAccessException | IllegalArgumentException
-                    | SecurityException | InvocationTargetException ex) {
+                } catch (IllegalAccessException | IllegalArgumentException | SecurityException
+                    | InvocationTargetException ex) {
                     throw new RuntimeException("Can't access getter: " + m.getName());
                 }
                 if (!(o instanceof XComponent || o instanceof List || o instanceof Map)) {
@@ -907,8 +907,7 @@ public class XComponentUtil {
                         m.invoke(obj, v);
                         return;
                     } catch (IllegalAccessException | IllegalArgumentException | SecurityException
-                        | InvocationTargetException ex) {
-                    }
+                        | InvocationTargetException ex) {}
                 }
             }
             if ((cls = cls.getSuperclass()) == null) {

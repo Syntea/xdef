@@ -135,9 +135,11 @@ public class TestXon extends XDTester {
             assertNull(testA("jstring", "[ null, \"abc\", \"\" ]"));
             assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
             assertNull(testA("jstring", "[null, \"1\", \"true\", \"null\", \"\", \"a b\", \" a \nb \"]"));
-            assertNull(testX("<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A'><xd:json name='A'>" +
-"[\"* eq('ab')\"]</xd:json><xd:component>%class test.TestGJeq %link #A;</xd:component></xd:def>",
-                "", "[ null, \"ab\" ]"));
+            assertNull(testX(
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
+"  <xd:json name='A'>[\"* eq('ab')\"]</xd:json>\n" +
+"  <xd:component>%class test.TestGJeq %link #A;</xd:component>\n" +
+"</xd:def>", "", "[ null, \"ab\" ]"));
             // Map
             assertNull(testM("string", "{}"));
             assertNull(testM("int", "{a:null, b:1}"));
@@ -157,10 +159,7 @@ public class TestXon extends XDTester {
             assertEq(xml, xc.toXml());
             o = XonUtils.parseXON(
 "{\"n:X\" : [\n" +
-"    { a : d2021-12-30,\n" +
-"      t : d2020-12-11T01:01:01.01,\n" +
-"      \"xmlns:n\" : \"a.b\"\n" +
-"    },\n" +
+"    { a: d2021-12-30, t: d2020-12-11T01:01:01.01, \"xmlns:n\": \"a.b\" },\n" +
 "    1i,\n" +
 "    {\"n:Y\" : []},\n" +
 "    {\"n:Y\" : []},\n" +
@@ -171,14 +170,11 @@ public class TestXon extends XDTester {
             genXComponent(xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a' script='option acceptNull'>\n" +
 "  <xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
-" <xd:json name='a'>\n" +
-"    [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
-" </xd:json>\n" +
+" <xd:json name='a'> [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ] </xd:json>\n" +
 "</xd:def>"));
             xd = xp.createXDDocument();
             json =
-"[\n" +
-"  [1, 2, \"a\", true],\n" +
+"[ [1, 2, \"a\", true],\n" +
 "  [null, 1, \"a\t\n\\\"b\", false],\n" +
 "  [6, null, null, true],\n" +
 "  [null, null, null, null]\n" +
@@ -193,17 +189,10 @@ public class TestXon extends XDTester {
             }
             Properties props = new Properties();
             props.setProperty(XDConstants.XDPROPERTY_OPTIONS, "acceptNull");
-            genXComponent(xp = XDFactory.compileXD(props,
-"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a'>\n" +
-"  <xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
-" <xd:json name='a'>\n" +
-"    [ [ \"%script: +\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
-" </xd:json>\n" +
-"</xd:def>"));
-            xd = xp.createXDDocument();
-            o = xd.jparse(json, reporter);
+            genXComponent(xp);
+            o = xp.createXDDocument().jparse(json, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            xc = xd.jparseXComponent(json, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(o, x = xc.toXon())) {
                 fail(XonUtils.toXonString(o, true)
@@ -221,8 +210,7 @@ public class TestXon extends XDTester {
             y = jparse(xp, "", xon, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, y)) {
-                fail(XonUtils.xonDiff(o, y)
-                    + "\n***\n" + XonUtils.toXonString(y, true)
+                fail(XonUtils.xonDiff(o, y) + "\n***\n" + XonUtils.toXonString(y, true)
                     + "\n***\n" + XonUtils.toXonString(o, true));
             }
             xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
@@ -412,20 +400,19 @@ public class TestXon extends XDTester {
 "  <xd:component>%class "+_package+".Xona %link a</xd:component>\n" +
 "  <xd:json name='a'> [ [ \"%script: optional\", \"boolean();\", \"optional int();\" ] ] </xd:json>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
             json = "[ [ true, 123 ] ]";
-            o = xd.jparse(json, reporter);
+            o = xp.createXDDocument().jparse(json, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            xc = xd.jparseXComponent(json, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(o, (x = xc.toXon()))) {
                 fail(XonUtils.toXonString(o) + "\n***\n" + XonUtils.toXonString(x));
             }
             json = "[\n]";
-            o = xd.jparse(json, reporter);
+            o = xp.createXDDocument().jparse(json, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            xc = xd.jparseXComponent(json, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(o, (x = xc.toXon()))) {
@@ -445,7 +432,6 @@ public class TestXon extends XDTester {
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
             s =
 "[\n" +
 " [\"Name\", \"Email\", \"Mobile Number\"],\n" +
@@ -453,10 +439,10 @@ public class TestXon extends XDTester {
 " [\"Eva Kuž, Epor \\\"Prix\\\"\", \"ep@ema.cz\", null],\n" +
 " [\"Jivá\", null, null]\n" +
 "]";
-            o = xd.jparse(s, reporter);
+            o = xp.createXDDocument().jparse(s, reporter);
             assertNoErrorwarningsAndClear(reporter);
             genXComponent(xd.getXDPool());
-            xc = xd.jparseXComponent(s, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(s, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             assertTrue(XonUtils.xonEqual(o, x = xc.toXon()));
@@ -482,7 +468,7 @@ public class TestXon extends XDTester {
 "    [Server]\n" +
 "      IPAddr = ipAddr();\n" +
 "  </xd:ini>\n" +
-"</xd:def>").createXDDocument("A");
+"</xd:def>").createXDDocument();
             ini =
 "date = 2021-02-03\n" +
 "name = Jan Novak\n" +
@@ -502,7 +488,7 @@ public class TestXon extends XDTester {
 "parser.factor.1=string()\n" +
 "servertool.up=string()\n" +
 "  </xd:ini>\n" +
-"</xd:def>").createXDDocument("A");
+"</xd:def>").createXDDocument();
             ini =
 "#this is INI file comment\n" +
 "address=dhcp\1\n" +
@@ -515,7 +501,7 @@ public class TestXon extends XDTester {
             xi = xd.iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
-            xd = compile(
+            xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
 "proxy type=int(0,9)\n" +
@@ -527,7 +513,7 @@ public class TestXon extends XDTester {
 "[selfupdate]\n" +
 "version=ipAddr()\n" +
 "  </xd:ini>\n"  +
-"</xd:def>").createXDDocument("A");
+"</xd:def>");
             ini =
 "proxy type=0\n" +
 "hostaddr=\n" +
@@ -538,7 +524,7 @@ public class TestXon extends XDTester {
 "[ x.y ]\n" +
 "[selfupdate]\n" +
 "version=11.0.0.55";
-            xi = xd.iparse(ini, reporter);
+            xi = xp.createXDDocument().iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
             ini =
@@ -549,7 +535,7 @@ public class TestXon extends XDTester {
 "[ x.y ]\n" +
 "[selfupdate]\n" +
 "version=11.0.0.55";
-            xi = xd.iparse(ini, reporter);
+            xi = xp.createXDDocument().iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
             ini =
@@ -557,10 +543,10 @@ public class TestXon extends XDTester {
 "[ x.y ]\n" +
 "[selfupdate]\n" +
 "version=11.0.0.55";
-            xi = xd.iparse(ini, reporter);
+            xi = xp.createXDDocument().iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),XonUtils.parseINI(XonUtils.toIniString(xi))));
-            xd = compile(
+            xp = compile(
 "<xd:def xmlns:xd='"+_xdNS+"' root=\"TRSconfig\">\n" +
 "  <xd:ini xd:name=\"TRSconfig\">\n" +
 "    TRSUser = string()\n" +
@@ -576,7 +562,7 @@ public class TestXon extends XDTester {
 "      MailAddr = emailAddr()\n" +
 "      Signature = SHA1()\n" +
 "  </xd:ini>\n" +
-"</xd:def>").createXDDocument();
+"</xd:def>");
             ini =
 "############# TRS configuration #############\n" +
 "# TRS user name\n" +
@@ -597,9 +583,9 @@ public class TestXon extends XDTester {
 "SendMailHost = smtp.synth.cz\n" +
 "MailAddr = jira@synth.cz\n" +
 "Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c\n";
-            xi = xd.iparse(ini, reporter);
+            xi = xp.createXDDocument().iparse(ini, reporter);
             assertNoErrorwarningsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(xi, xd.iparse(XonUtils.toIniString(xi), reporter)));
+            assertTrue(XonUtils.xonEqual(xi, xp.createXDDocument().iparse(XonUtils.toIniString(xi), reporter)));
             assertNoErrorwarningsAndClear(reporter);
             genXComponent(xp = compile( //test CSV data with head line (column names)
 "<xd:def xmlns:xd='"+_xdNS+"' root='CSV' xd:script='option acceptNull'>\n" +
@@ -611,7 +597,6 @@ public class TestXon extends XDTester {
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
             s =
 "Name, Email, Mobile Number\n" +
 "abc, a@b.c, +1 2345 67 89 01\n" +
@@ -620,7 +605,7 @@ public class TestXon extends XDTester {
 "xyz,,\n" +
 ",,\n" +
 "xyz, , 123 456 789";
-            x = xd.cparse(new StringReader(s), null, reporter);
+            x = xp.createXDDocument().cparse(new StringReader(s), null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             s =
 "Name | Email | Mobile Number\n" +
@@ -630,12 +615,12 @@ public class TestXon extends XDTester {
 "xyz | |\n" +
 " | |\n" +
 "xyz | | 123 456 789";
-            o = xd.cparse(new StringReader(s), '|', false, null, reporter);
+            o = xp.createXDDocument().cparse(new StringReader(s), '|', false, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
             }
-            xc = xd.jparseXComponent(o, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(o, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
@@ -651,7 +636,7 @@ public class TestXon extends XDTester {
 " [null, null, null],\n" +
 " [\"xyz\", null, \"123 456 789\"]\n" +
 "]";
-            o = xd.jparse(s, reporter);
+            o = xp.createXDDocument().jparse(s, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail( "*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
@@ -695,7 +680,6 @@ public class TestXon extends XDTester {
 "]\n" +
 "  </xd:json>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
             s =
 "Name, Email, Mobile Number\n" +
 "abc, a@b.c, +1 2345 67 89 01\n" +
@@ -703,7 +687,7 @@ public class TestXon extends XDTester {
 "xyz,,\n" +
 ",,\n" +
 "xyz, , 123 456 789\n";
-            o = xd.cparse(new StringReader(s), ',', true, null, reporter);
+            o = xp.createXDDocument().cparse(new StringReader(s), ',', true, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             s =
 "abc | a@b.c | +1 2345 67 89 01\n" +
@@ -711,12 +695,12 @@ public class TestXon extends XDTester {
 "xyz | |\n" +
 " | |\n" +
 "xyz | | 123 456 789\n";
-            x = xd.cparse(new StringReader(s), '|', false, null, reporter);
+            x = xp.createXDDocument().cparse(new StringReader(s), '|', false, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
             }
-            xc = xd.jparseXComponent(o, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(o, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
@@ -730,7 +714,7 @@ public class TestXon extends XDTester {
 " [null, null, null],\n" +
 " [\"xyz\", null, \"123 456 789\"]\n" +
 "]";
-            o = xd.jparse(s, reporter);
+            o = xp.createXDDocument().jparse(s, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail( "*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
@@ -889,8 +873,7 @@ public class TestXon extends XDTester {
 "xyz,,\n" +
 ",,\n" +
 "xyz, , 123 456 789";
-            xd = xp.createXDDocument();
-            x = xd.cparse(new StringReader(s), null, reporter);
+            x = xp.createXDDocument().cparse(new StringReader(s), null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             s =
 "Name | Email | Mobile Number\n" +
@@ -900,12 +883,12 @@ public class TestXon extends XDTester {
 "xyz | |\n" +
 " | |\n" +
 "xyz | | 123 456 789";
-            o = xd.cparse(new StringReader(s), '|', false, null, reporter);
+            o = xp.createXDDocument().cparse(new StringReader(s), '|', false, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
             }
-            xc = xd.jparseXComponent(o, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(o, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
@@ -921,7 +904,7 @@ public class TestXon extends XDTester {
 " [null, null, null],\n" +
 " [\"xyz\", null, \"123 456 789\"]\n" +
 "]";
-            o = xd.jparse(s, reporter);
+            o = xp.createXDDocument().jparse(s, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail( "*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
@@ -948,8 +931,7 @@ public class TestXon extends XDTester {
 "xyz,,\n" +
 ",,\n" +
 "xyz, , 123 456 789\n";
-            xd = xp.createXDDocument();
-            o = xd.cparse(new StringReader(s), ',', true, null, reporter);
+            o = xp.createXDDocument().cparse(new StringReader(s), ',', true, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             s =
 "abc | a@b.c | +1 2345 67 89 01\n" +
@@ -957,12 +939,12 @@ public class TestXon extends XDTester {
 "xyz | |\n" +
 " | |\n" +
 "xyz | | 123 456 789\n";
-            x = xd.cparse(new StringReader(s), '|', false, null, reporter);
+            x = xp.createXDDocument().cparse(new StringReader(s), '|', false, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail("*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
             }
-            xc = xd.jparseXComponent(o, null, reporter);
+            xc = xp.createXDDocument().jparseXComponent(o, null, reporter);
             assertNoErrorwarningsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
             if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
@@ -976,7 +958,7 @@ public class TestXon extends XDTester {
 " [null, null, null],\n" +
 " [\"xyz\", null, \"123 456 789\"]\n" +
 "]";
-            o = xd.jparse(s, reporter);
+            o = xp.createXDDocument().jparse(s, reporter);
             assertNoErrorwarningsAndClear(reporter);
             if (!XonUtils.xonEqual(o, x)) {
                 fail( "*** A *\n" + XonUtils.toXonString(x) + "\n*** B *\n" + XonUtils.toXonString(o));
@@ -1049,10 +1031,9 @@ public class TestXon extends XDTester {
 "  <xd:json name='A'> { \"\\u0025anyName\": \"string();\" } </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_0_ %link A</xd:component>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
-            xd.jvalidate("{ \"%anyName\": \"xxx\" }", reporter); // item accepted
+            xp.createXDDocument().jvalidate("{ \"%anyName\": \"xxx\" }", reporter); // item accepted
             assertNoErrorsAndClear(reporter);
-            xd.jvalidate("{ \"x\": \"xxx\" }", reporter);  // illegal item
+            xp.createXDDocument().jvalidate("{ \"x\": \"xxx\" }", reporter);  // illegal item
             assertErrorsAndClear(reporter);
             genXComponent(xp = compile( // declaration of both "\\u0025anyName" item and %anyName in map
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
@@ -1061,8 +1042,7 @@ public class TestXon extends XDTester {
 "  </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_0 %link A</xd:component>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
-            xd.jvalidate("{ \"%anyName\": 1, \"x\": \"x\" }", reporter);
+            xp.createXDDocument().jvalidate("{ \"%anyName\": 1, \"x\": \"x\" }", reporter);
             assertNoErrorsAndClear(reporter);
             xp = compile(// declaration of anyName and  "%script", "%oneOf", "%anyName"
 "<xd:def xmlns:xd='"+_xdNS+"' name=\"X\" root=\"a\">\n" +
@@ -1076,18 +1056,16 @@ public class TestXon extends XDTester {
 "} ]\n" +
 " </xd:json>\n" +
 "</xd:def>");
-            xd = xp.createXDDocument();
-            jparse(xd, "[]", reporter);
+            jparse(xp.createXDDocument(), "[]", reporter);
             assertNoErrorsAndClear(reporter); //OK
-            jparse(xd, "[{ \"xyx\": \"xyx\" }]", reporter);
+            jparse(xp.createXDDocument(), "[{ \"xyx\": \"xyx\" }]", reporter);
             assertNoErrorsAndClear(reporter); //OK
-            jparse(xd, "[{ \"%script\": 0,  \"%anyName\": 1, \"%oneOf\": 2, \"xyx\": \"xyx\" }]", reporter);
+            jparse(xp.createXDDocument(),
+                "[{ \"%script\": 0,  \"%anyName\": 1, \"%oneOf\": 2, \"xyx\": \"xyx\" }]", reporter);
             assertNoErrorsAndClear(reporter); //OK
             genXComponent(xp = compile( // test %anyName
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <xd:json name='A'>\n" +
-"    { \"%anyName\": \"? int();\", x: \"? int();\" }\n" +
-"  </xd:json>\n" +
+"  <xd:json name='A'> { \"%anyName\": \"? int();\", x: \"? int();\" } </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_1 %link A</xd:component>\n" +
 "</xd:def>"));
             s = _package+".MyTestAny_1"; // c2lass name
@@ -1095,9 +1073,7 @@ public class TestXon extends XDTester {
             assertNull(testX(xp, "", s, "{\"x\" : 1, \"xxx\" : 2}"));
             genXComponent(xp = compile(// %anyName items and one named item
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"  <xd:json name='A'>\n" +
-"    { \"%anyName\": \"* int(); finally out('X'+getText())\", x: \"? int();\" }\n" +
-"  </xd:json>\n" +
+"  <xd:json name='A'> { \"%anyName\": \"* int(); finally out('X'+getText())\", x: \"? int();\" } </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_2 %link A</xd:component>\n" +
 "</xd:def>"));
             s = _package+".MyTestAny_2"; // c2lass name
@@ -1111,12 +1087,12 @@ public class TestXon extends XDTester {
             s = _package+".MyTestAny_3"; // class name
             assertNull(testX(xp, "", s, "{ \"x\": [] }"));
             assertNull(testX(xp, "", s, "{ \"x\": [1,2i] }"));
-            xd = (xp = compile( // %anyObj
+            xp = compile( // %anyObj
 "<xd:def xmlns:xd='"+_xdNS+"' root='Any'>\n" +
 "  <xd:json name=\"Any\"> \"%anyObj\" </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_4 %link Any</xd:component>\n" +
-"</xd:def>")).createXDDocument();
-            o = xd.jparse(json = "[\n" +
+"</xd:def>");
+            o = xp.createXDDocument().jparse(json = "[\n" +
 "  [6, 1, \"a\t\n\\\"b\", false],\n" +
 "  [6, null, null, true],\n" +
 "  [null, null, null, null]\n" +
@@ -1171,7 +1147,6 @@ public class TestXon extends XDTester {
 "  </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTestAny_6 %link A</xd:component>\n" +
 "</xd:def>"));
-            xd = xp.createXDDocument();
             json =
 "{ \"cities\" : [\n" +
 "    \"2020-02-22\",\n" +
@@ -1187,6 +1162,7 @@ public class TestXon extends XDTester {
 "    }\n" +
 "  ]\n" +
 "}";
+            xd = xp.createXDDocument();
             x = XonUtils.parseJSON(json);
             swr = new StringWriter();
             xd.setStdOut(XDFactory.createXDOutput(swr, false));
@@ -1212,6 +1188,7 @@ public class TestXon extends XDTester {
             if (!XonUtils.xonEqual(x, XonUtils.xonToJson(o))) {
                 fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
             }
+            xd = xp.createXDDocument();
             swr = new StringWriter();
             xd.setStdOut(XDFactory.createXDOutput(swr, false));
             xd.jparseXComponent(json, null, reporter);
@@ -1277,6 +1254,7 @@ public class TestXon extends XDTester {
             if (!XonUtils.xonEqual(x, XonUtils.xonToJson(o))) {
                 fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
             }
+            xd = xp.createXDDocument();
             swr = new StringWriter();
             xd.setStdOut(XDFactory.createXDOutput(swr, false));
             xd.jparseXComponent(json, null, reporter);
@@ -1370,6 +1348,7 @@ public class TestXon extends XDTester {
             assertNoErrorsAndClear(reporter);
             assertTrue(XonUtils.xonEqual(x,y));
             assertTrue(XonUtils.xonEqual(x, xd.getXon()));
+            xd = xp.createXDDocument();
             xc = xd.jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
             assertEq("", chkCompoinentSerializable(xc));
@@ -1772,31 +1751,30 @@ public class TestXon extends XDTester {
 "  </xd:json>\n" +
 "  <xd:component>%class "+_package+".oneOf_1 %link test</xd:component>\n" +
 "</xd:def>");
-            xd = xp.createXDDocument();
             genXComponent(xp);
             json = "{ \"a\": { \"event\":\"x\", \"c\":1 } }";
-            x = (xd.jparseXComponent(json, null, reporter)).toXon();
+            x = (xp.createXDDocument().jparseXComponent(json, null, reporter)).toXon();
             assertNoErrorsAndClear(reporter);  // OK
-            o = jparse(xd, json, reporter);
+            o = jparse(xp, "", json, reporter);
             assertNoErrorsAndClear(reporter); //OK
             assertEq(x, o);
             json = "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ] } }";
-            x = (xd.jparseXComponent(json, null, reporter)).toXon();
+            x = (xp.createXDDocument().jparseXComponent(json, null, reporter)).toXon();
             assertNoErrorsAndClear(reporter);  // OK
-            o = jparse(xd, json, reporter);
+            o = jparse(xp, "", json, reporter);
             assertNoErrorsAndClear(reporter); //OK
             assertEq(x, o);
             json = "{ \"a\": { \"event\":\"x\" } }"; // oneOf item is missing in map
-            jparse(xd, json, reporter);
+            jparse(xp, "", json, reporter);
             assertErrorsAndClear(reporter);  //XDEF241 Required item is missing in the map
             json = "{ \"a\": { \"event\":\"x\", \"b\": [ \"u\" ], \"c\":2 } }";
-            jparse(xd, json, reporter);
+            jparse(xp, "", json, reporter);
             assertErrorsAndClear(reporter); //XDEF507: Not allowed item "c" in map
-            jparse(xd, "{ \"a\": { \"event\":\"x\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
+            jparse(xp, "", "{ \"a\": { \"event\":\"x\", \"c\":3, \"b\": [ \"u\" ] } }", reporter);
             assertErrorsAndClear(reporter);  //XDEF507: Not allowed item "b" in map
         } catch (RuntimeException ex) {fail(ex);}
         try {
-            xd = compile(
+            xp = compile(
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='SynPLscript | A'>\n" +
 "  <xd:declaration>uniqueSet variableSet {variableName: string(2,30)};/*check duplicity*/</xd:declaration>\n" +
 "  <A>\n" +
@@ -1817,8 +1795,8 @@ public class TestXon extends XDTester {
 "    }\n" +
 "  }\n" +
 "  </xd:json>\n" +
-"</xd:def>").createXDDocument();
-            parse(xd,
+"</xd:def>");
+            parse(xp, "",
 "<A>\n" +
 "    <Variables name='SLA'/>\n" +
 "    <Status TimeOverStep='SLX' ChangeLog='Y'/>\n" +
@@ -1826,7 +1804,7 @@ public class TestXon extends XDTester {
 "</A>", reporter);
             assertTrue(reporter.getErrorCount() == 1);
             reporter.clear();
-            xd.jparse(
+            jparse(xp, "",
 "{\"SynPLscript\": {\n" +
 "   \"Variables\": [ {\"Variable\": \"SLA\" } ],\n" +
 "   \"Statuses\": [\n" +
@@ -1905,7 +1883,6 @@ public class TestXon extends XDTester {
 "  </xd:json>\n" +
 "</xd:def>\n" +
 "</xd:collection>");
-            xd = xp.createXDDocument("example");
             json =
 "{         \"request\" : {\n" +
 "            \"pathParameters\" : null,\n" +
@@ -1932,345 +1909,13 @@ public class TestXon extends XDTester {
 "            \"msgIdent\" : \"ef gh\"\n" +
 "          }\n" +
 "}";
-            xd.jparse(json, reporter);
+            xp.createXDDocument("example").jparse(json, reporter);
             assertNoErrors(reporter);
         } catch (RuntimeException ex) {fail(ex);}
 
         if (oldCodes != null) {
             setProperty(XDConstants.XDPROPERTY_STRING_CODES, oldCodes);
         }
-
-//      Test YAML
-        try {
-            xd = compile(
-"<xd:def xmlns:xd='"+_xdNS+"' root='test' name='A'>\n" +
-"  <xd:json name=\"test\">\n" +
-"    { \"cities\": [\n" +
-"        \"date();\",\n" +
-"        { \"%script\": \"occurs 1..*;\",\n" +
-"          \"from\": [\n" +
-"            \"string();\",\n" +
-"            { \"%script\": \"occurs 1..*; \",\n" +
-"              \"to\": \"jstring();\",\n" +
-"              \"distance\": \"int();\"\n" +
-"            }\n" +
-"    	  ]\n" +
-"        }\n" +
-"      ]\n" +
-"    }" +
-"  </xd:json>\n" +
-"</xd:def>").createXDDocument("A");
-            s = // YAML format
-"cities:\n" +
-"- '2020-02-22'\n" +
-"- from:\n" +
-"  - Brussels\n" +
-"  - {to: London, distance: 322}\n" +
-"  - {to: Paris, distance: 265}\n" +
-"- from:\n" +
-"  - London\n" +
-"  - {to: Brussels, distance: 322}\n" +
-"  - {to: Paris, distance: 344}\n";
-            x = xd.yparse(s, reporter);
-            assertNoErrorwarningsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(x, xd.yparse(XonUtils.toYamlString(x), reporter)));
-            assertNoErrorwarningsAndClear(reporter);
-        } catch (RuntimeException ex) {
-            if (ex instanceof SRuntimeException && "JSON101".equals(((SRuntimeException) ex).getMsgID())) {
-                setResultInfo("YAML tests skipped; org.yaml.snakeyaml is not available");
-            } else {
-                fail(ex);
-            }
-        }
-        try {
-            xp = compile(
-"<xd:collection xmlns:xd='"+_xdNS+"' xmlns:jx=\"http://www.xdef.org/json/nodes/4.2\">\n" +
-"    <xd:def impl-version ='2026/06.01' impl-date='2026-06-01' root='SynPLscript' name='SynPLscript'>\n" +
-"        <xd:declaration scope = 'global'>\n" +
-"            type  functionName    jstring(1,30);\n" +
-"            type  code            jstring(1,9999);\n" +
-"            type  params          jstring(1,9999);\n" +
-"            type  async           enum('Y','N');\n" +
-"            type  changeLog       enum('Y','N');\n" +
-"            type  sla             enum('Y','N');\n" +
-"            type  isAllowed       enum('Y','N');\n" +
-"            type  desc            jstring(1,1000);\n" +
-"            type  eventName       jstring(1,30);\n" +
-"            type  functionDesc    jstring(1,9999);\n" +
-"            type  scriptVersion   xdatetime('yyyy-MM-dd');\n" +
-"            type  interval        regex('^[0-9]{1,3}[S|M|H|D]$');\n" +
-"            type  statusName      jstring(1,100);\n" +
-"            type  sysValue        jstring(1,100);\n" +
-"            type  userRole        jstring(1,30);\n" +
-"            type  valueType       enum('STRING', 'INTEGER', 'DECIMAL', 'DATE', 'DATETIME', 'INTERVAL');\n" +
-"            type  variableName    jstring(1,30);\n" +
-"            type  variableRef     jstring(1,255);\n" +
-"            type  wfScriptName    jstring(1,30);\n" +
-"            type  subjectRoleCode enum('IN','SD','SC');\n" +
-"            uniqueSet variableSet    { variableName: variableName() }; /*duplicita proměnných*/\n" +
-"            uniqueSet paramSet       { paramName:  variableName() }; /*duplicita parametru v eventu*/\n" +
-"            uniqueSet statusSet      { statusName: statusName()   }; /*duplicita stavů*/\n" +
-"            uniqueSet eventStatusSet { statusName: statusName(); eventName: eventName()};/*duplicita eventů stavu*/\n"+
-"        </xd:declaration>\n" +
-"        <xd:json name = \"SynPLscript\">\n" +
-"            {  \"SynPLscript\" : {\n" +
-"                    \"Name\":             \"  wfScriptName()\",\n" +
-"                    \"SubjectRoleCode\" : \"  subjectRoleCode()\",\n" +
-"                    \"Version\":          \"  scriptVersion()\",\n" +
-"                    \"Desc\":             \"? desc()\",\n" +
-"                    \"Note\":             \"? desc()\",\n" +
-"                    \"SysValues\":        [ { \"%script\" :  \"occurs 0..*; ref SysValue#SysValue\"         } ],\n" +
-"                    \"Variables\":        [ { \"%script\" :  \"occurs 0..*; ref Variable#Variable\"         } ],\n" +
-"                    \"UserRoles\":        [ { \"%script\" :  \"occurs 0..*; ref UserRole#UserRole\"         } ],\n" +
-"                    \"UsedFunctions\":    [ { \"%script\" :  \"occurs 0..*; ref UsedFunction#UsedFunction\" } ],\n" +
-"                    \"Statuses\":         [ { \"%script\" :  \"occurs 1..*; ref Status#Status\"             } ],\n" +
-"                    \"EndStatuses\":      [ { \"%script\" :  \"occurs 1..*; ref EndStatus#EndStatus\"       } ]\n" +
-"                }\n" +
-"            }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCSynPLscript  %link  SynPLscript#SynPLscript;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCSysValue     %link  SysValue#SysValue;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCVariable     %link  Variable#Variable;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCUserRole     %link  UserRole#UserRole;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCUsedFunction %link  UsedFunction#UsedFunction;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCStatus       %link  Status#Status;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCEvent        %link  Event#Event;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCEndStatus    %link  EndStatus#EndStatus;\n" +
-"            %class cz.syntea.synpl.server.model.xdef.workflow.XCActionCode   %link  ActionCode#ActionCode;\n" +
-"            %bind SynPLscript %link SynPLscript#SynPLscript/jx:map/jx:map;\n" +
-"            %bind Name    %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[1];\n" +
-"            %bind Version %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[2];\n" +
-"            %bind Desc    %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[3];\n" +
-"            %bind Note    %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:item[4];\n" +
-"            %bind SysValues     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[1];\n" +
-"            %bind SysValue      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[1]/jx:map;\n" +
-"            %bind Variables     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[2];\n" +
-"            %bind Variable      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[2]/jx:map;\n" +
-"            %bind UserRoles     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[3];\n" +
-"            %bind UserRole      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[3]/jx:map;\n" +
-"            %bind UsedFunctions %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[4];\n" +
-"            %bind UsedFunction  %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[4]/jx:map;\n" +
-"            %bind Statuses      %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5];\n" +
-"            %bind Status        %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[5]/jx:map;\n" +
-"            %bind EndStatuses   %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[6];\n" +
-"            %bind EndStatus     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[6]/jx:map;\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'SysValue'>\n" +
-"        <xd:json name='SysValue'>\n" +
-"            {   \"SysValue\": \"  variableSet.variableName.ID()\",\n" +
-"                \"Type\":     \"  valueType()\",\n" +
-"                \"Value\":    \"  sysValue()\",\n" +
-"                \"Desc\":     \"? desc()\" }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind SysValue  %link SysValue#SysValue/jx:map/$mixed/jx:item[1];\n" +
-"            %bind Type      %link SysValue#SysValue/jx:map/$mixed/jx:item[2];\n" +
-"            %bind Value     %link SysValue#SysValue/jx:map/$mixed/jx:item[3];\n" +
-"            %bind Desc      %link SysValue#SysValue/jx:map/$mixed/jx:item[4];\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'Variable'>\n" +
-"        <xd:json name='Variable'>\n" +
-"            {   \"Variable\": \"  variableSet.variableName.ID()\",\n" +
-"                \"Type\":     \"  valueType()\",\n" +
-"                \"Ref\":      \"? variableRef()\",\n" +
-"                \"Value\":    \"? sysValue()\",\n" +
-"                \"Desc\":     \"? desc()\" }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind Variable      %link Variable#Variable/jx:map/$mixed/jx:item[1];\n" +
-"            %bind Type          %link Variable#Variable/jx:map/$mixed/jx:item[2];\n" +
-"            %bind Ref           %link Variable#Variable/jx:map/$mixed/jx:item[3];\n" +
-"            %bind Value         %link Variable#Variable/jx:map/$mixed/jx:item[4];\n" +
-"            %bind Desc          %link Variable#Variable/jx:map/$mixed/jx:item[5];\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'UserRole'>\n" +
-"        <xd:json name='UserRole'>\n" +
-"            {  \"UserRole\": \" userRole()\", \"Desc\": \"? desc()\" }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind UserRole      %link UserRole#UserRole/jx:map/$mixed/jx:item[1];\n" +
-"            %bind Desc          %link UserRole#UserRole/jx:map/$mixed/jx:item[2];\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'UsedFunction'>\n" +
-"        <xd:json name='UsedFunction'>\n" +
-"            {   \"Name\": \"   functionName()\",\n" +
-"                \"Desc\": \"?  functionDesc()\",\n" +
-"                \"Version\": \"? scriptVersion()\",\n" +
-"                \"Params\":  \"? code()\" }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind Name        %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[1];\n" +
-"            %bind Desc        %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[2];\n" +
-"            %bind Version     %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[3];\n" +
-"            %bind Params      %link UsedFunction#UsedFunction/jx:map/$mixed/jx:item[4];\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'Status'>\n" +
-"        <xd:json name = 'Status'>\n" +
-"            {   \"Status\":       \"  statusSet.statusName.ID()\",\n" +
-"                \"ActionCode\":   { \"%script\": \"0..1; ref ActionCode#ActionCode;\" },\n" +
-"                \"TimeOverStep\": \"? interval()\",\n" +
-"                \"IsSlaRunning\":     \"  sla()\",\n" +
-"                \"IsSlaEnding\":      \"  sla()\",\n" +
-"                \"IsSlaSettlement\":  \"  sla()\",\n" +
-"                \"IsSlaWorkStart\":   \"? sla()\",\n" +
-"                \"IsSlaFirstAction\": \"? sla()\",\n" +
-"                \"ChangeLog\":    \"? changeLog()\",\n" +
-"                \"Events\":       [ { \"%script\": \"1..*; ref Event#Event;\" } ]\n" +
-"            }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind Status       %link Status#Status/jx:map/$mixed/jx:item[1];\n" +
-"            %bind ActionCode   %link Status#Status/jx:map/$mixed/jx:map[1];\n" +
-"            %bind TimeOverStep %link Status#Status/jx:map/$mixed/jx:item[2];\n" +
-"            %bind ChangeLog    %link Status#Status/jx:map/$mixed/jx:item[3];\n" +
-"            %bind Events       %link Status#Status/jx:map/$mixed/jx:array[1];\n" +
-"            %bind Event        %link Status#Status/jx:map/$mixed/jx:array[1]/jx:map;\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'Event'>\n" +
-"        <xd:json name = 'Event'>\n" +
-"            {   \"Event\":                 \" eventName()\",\n" +
-"                \"UserRoleAny\":           [\"occurs 1..* userRole()\"],\n" +
-"                \"ActionCode\":            { \"%script\": \"0..1; ref ActionCode#ActionCode;\" },\n" +
-"                \"NextStatus\":            \"? statusName()\",\n" +
-"                \"Desc\":                  \"? desc()\",\n" +
-"                \"IsAssigneeAllowed\":     \"? isAllowed()\",\n" +
-"                \"IsWatcherAllowed\":      \"? isAllowed()\",\n" +
-"                \"IsCollaboratorAllowed\": \"? isAllowed()\"\n" +
-"            }\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind Event                 %link Event#Event/jx:map/$mixed/jx:item[1];\n" +
-"            %bind UserRoleAny           %link Event#Event/jx:map/$mixed/jx:array[1];\n" +
-"            %bind ActionCode            %link Event#Event/jx:map/$mixed/jx:map[1];\n" +
-"            %bind NextStatus            %link Event#Event/jx:map/$mixed/jx:item[2];\n" +
-"            %bind Desc                  %link Event#Event/jx:map/$mixed/jx:item[3];\n" +
-"            %bind IsAssigneeAllowed     %link Event#Event/jx:map/$mixed/jx:item[4];\n" +
-"            %bind IsWatcherAllowed      %link Event#Event/jx:map/$mixed/jx:item[5];\n" +
-"            %bind isCollaboratorAllowed %link Event#Event/jx:map/$mixed/jx:item[6];\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"    <xd:def name = 'ActionCode'>\n" +
-"        <xd:json name = 'ActionCode'>\n" +
-"            { \"Async\": \"? async()\", \"Code\": \"? code()\" }\n" +
-"        </xd:json>\n" +
-"    </xd:def>\n" +
-"\n" +
-"    <xd:def name = 'EndStatus'>\n" +
-"        <xd:json name = 'EndStatus'>\n" +
-"            {   \"EndStatus\":  \" statusSet.statusName.ID()\",\n" +
-"                \"ActionCode\": { \"%script\": \"0..1; ref ActionCode#ActionCode;\" },\n" +
-"                \"ChangeLog\":  \"? changeLog()\"}\n" +
-"        </xd:json>\n" +
-"        <xd:component>\n" +
-"            %bind EndStatus       %link EndStatus#EndStatus/jx:map/$mixed/jx:item[1];\n" +
-"            %bind ActionCode      %link EndStatus#EndStatus/jx:map/$mixed/jx:map[1];\n" +
-"            %bind ChangeLog       %link EndStatus#EndStatus/jx:map/$mixed/jx:item[2];\n" +
-"        </xd:component>\n" +
-"    </xd:def>\n" +
-"</xd:collection>");
-            s = // YAML format
-"SynPLscript:\n" +
-"  Name: SD-Test_Scenario\n" +
-"  SubjectRoleCode: SD\n" +
-"  Version: \"2026-06-01\"\n" +
-"  Desc: Testovaci WF Script SD\n" +
-"  SysValues:\n" +
-"    - SysValue: SynPL\n" +
-"      Type: STRING\n" +
-"      Value: SynPL version 0.2\n" +
-"  Variables:\n" +
-"    - { Variable: TaskID, Type: STRING, Ref: Task@TaskID, Desc: Identifikátor úkolu}\n" +
-"    - {Variable: TaskName, Type: STRING, Ref: Task@TaskName, Desc: Název úkolu}\n" +
-"    - {Variable: TaskTypeIN, Type: STRING, Value: testTaskType, Desc: Id typu úkolu}\n" +
-"    - {Variable: ProjectName, Type: STRING, Ref: Project@ProjectName, Desc: Název projektu}\n" +
-"    - {Variable: SubjectRoleCode, Type: STRING, Value: SD, Desc: \"Kód role subjektu (IN, SD, SC)\"}\n" +
-"    - {Variable: RoleName_PM, Type: STRING, Value: Projektovy manazer, Desc: Název role projektového manažera}\n" +
-"    - {Variable: StatusName_Opened, Type: STRING, Value: Opened, Desc: Název stavu Opened}\n" +
-"  UserRoles:\n" +
-"    - { UserRole: \"#WF\", Desc: Automatický WF skript }\n" +
-"    - { UserRole: PM,      Desc: Projektový vedoucí poskytovatele }\n" +
-"    - { UserRole: REP,     Desc: \"Zákazník, který task nahlásil\" }\n" +
-"  UsedFunctions:\n" +
-"    - Name: cloneTask\n" +
-"      Desc: Naklonovani tasku ze SD do IN\n" +
-"      Params: |\n" +
-"        newTaskType    - Název typu tasku pro interní klon\n" +
-"        copyWfStatus   - Zda kopírovat stav\n" +
-"        copyDoc        - Zda kopírovat dokumenty\n" +
-"    - Name: setDefaultTaskAssignee\n" +
-"      Desc: Změna vlastníka tasku na vychozího uživatele pro danou roli\n" +
-"      Params: |\n" +
-"        TaskID          - Identifikátor úkolu\n" +
-"        ProjectName     - Název projektu\n" +
-"        UserRoleName    - Název uživatelské role\n" +
-"        subjectRoleCode - Kód role subjektu (IN, SD, SC)\n" +
-"  Statuses:\n" +
-"    # status without ActionCode\n" +
-"    - Status: INIT\n" +
-"      IsSlaRunning: \"N\"\n" +
-"      IsSlaEnding: \"N\"\n" +
-"      IsSlaSettlement: \"N\"\n" +
-"      Events:\n" +
-"        - Event: Open\n" +
-"          UserRoleAny: [\"#WF\", PM]\n" +
-"          IsAssigneeAllowed: \"Y\"\n" +
-"          ActionCode:\n" +
-"            Async: \"Y\"\n" +
-"            Code: |\n" +
-"              def copyWfStatus = false\n" +
-"              def copyDoc = true\n" +
-"              cloneTask(TaskID, TaskName, TaskTypeIN, copyWfStatus, copyDoc)\n" +
-"              if (TaskName == null) {\n" +
-"                 setDefaultTaskAssignee(TaskID, ProjectName, RoleName_PM, SubjectRoleCode)\n" +
-"              }\n" +
-"          NextStatus: In Progress\n" +
-"    - Status: In Progress\n" +
-"      ActionCode:\n" +
-"        Async: \"N\"\n" +
-"        Code: |\n" +
-"          setDefaultTaskAssignee(TaskID, ProjectName, RoleName_PM, SubjectRoleCode)\n" +
-"      IsSlaRunning: \"Y\"\n" +
-"      IsSlaEnding: \"N\"\n" +
-"      IsSlaSettlement: \"N\"\n" +
-"      ChangeLog: \"Y\"\n" +
-"      Events:\n" +
-"        # event without ActionCode\n" +
-"        - Event: Ask customer\n" +
-"          UserRoleAny: [\"#WF\", PM]\n" +
-"          NextStatus: Solved\n" +
-"    - Status: Solved\n" +
-"      IsSlaRunning: \"N\"\n" +
-"      IsSlaEnding: \"Y\"\n" +
-"      IsSlaSettlement: \"Y\"\n" +
-"      Events:\n" +
-"        - Event: Accept\n" +
-"          UserRoleAny: [\"#WF\", REP]\n" +
-"          ActionCode:\n" +
-"            Async: \"Y\"\n" +
-"            Code: |\n" +
-"              def note = \"Zákazník \\\"potvrdil\\\" řešení\"\n" +
-"              println(note)\n" +
-"          NextStatus: Closed\n" +
-"  EndStatuses:\n" +
-"    - EndStatus: Closed\n" +
-"      ChangeLog: \"Y\"";
-            xd = xp.createXDDocument("SynPLscript");
-            o = xd.yparse(s, reporter);
-            assertNoErrorsAndClear(reporter);
-            // compare with parsed JSON
-            xd = xp.createXDDocument("SynPLscript");
-            x = xd.jparse(XonUtils.toJsonString(XonUtils.parseYAML(s), true), reporter);
-            assertNoErrorsAndClear(reporter);
-            assertTrue(XonUtils.xonEqual(o, x), XonUtils.xonDiff(o, x));
-        } catch (RuntimeException ex) {fail(ex);}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         clearTempDir(); // clear temporary directory
