@@ -51,6 +51,7 @@ public class TestAll {
             new TestXdefOfXdef(),
             new TestXmlWriter(),
             new TestXon(),
+            new TestYaml(),
         };
     }
 
