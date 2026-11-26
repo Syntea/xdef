@@ -142,7 +142,6 @@ public class TestYaml extends XDTester {
 "        <xd:component>\n" +
 "            %class "+_package+".mates.XCSynPLscript  %link  SynPLscript#SynPLscript;\n" +
 //"            %bind SynPLscript %link SynPLscript#SynPLscript/jx:map/jx:map;\n" +
-//"            %bind SysValues     %link SynPLscript#SynPLscript/jx:map/jx:map/$mixed/jx:array[1];\n" +
 "        </xd:component>\n" +
 "    </xd:def>\n" +
 "    <xd:def name = 'SysValue'>\n" +

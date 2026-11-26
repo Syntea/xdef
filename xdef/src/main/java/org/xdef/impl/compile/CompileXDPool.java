@@ -72,6 +72,9 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Compile X-definitions from source data.
  * @author Vaclav Trojan
@@ -315,15 +318,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 }
             } else if (result.startsWith("%bind")) {
                 ndx = result.indexOf(" %link ");
-                StringTokenizer st = new StringTokenizer(result.substring(ndx+7), "\t\n\r ,");
                 SBuffer sbf = new SBuffer(result.substring(6, ndx), spos);
+                String xonPrefix = "/" + XON_NS_PREFIX + ':';
+                String s = result.substring(ndx+7);
+                if (s.contains(xonPrefix+X_MAP) || s.contains(xonPrefix+X_ARRAY) | s.contains(xonPrefix+X_VALUE)) {
+                    //The %bind command must not contain a reference to an internal part of a JSON object: &{0}
+                    _scriptCompiler.error(spos, XDEF.XDEF365, s);
+                }
+                StringTokenizer st = new StringTokenizer(s, "\t\n\r ,");
                 while(st.hasMoreTokens()) {
-                    String s = st.nextToken();
-                    if (s.contains("/" + XON_NS_PREFIX + ':')) {
-                        //The %bind command must not contain a reference to an internal part of a JSON object: &{0}
-                        _scriptCompiler.error(spos, XDEF.XDEF365, sbf.getString());
-                    }
-                    if (_codeGenerator._binds.put(s,sbf) != null) {
+                    if (_codeGenerator._binds.put(st.nextToken(),sbf) != null) {
                         _scriptCompiler.error(spos, XDEF.XDEF355, sbf.getString());//Duplicity of reference &{0}
                     }
                 }
