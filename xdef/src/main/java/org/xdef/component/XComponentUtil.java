@@ -571,8 +571,7 @@ public class XComponentUtil {
                     break;
                 } catch (IllegalAccessException | IllegalArgumentException | SecurityException
                     | InvocationTargetException ex) {}
-            } else if (x.getParameterTypes().length == 0
-                && methodName.startsWith("listOf" + XON_NS_PREFIX + "$")) {
+            } else if (x.getParameterTypes().length == 0 && methodName.startsWith("listOf" + XON_NS_PREFIX + "$")) {
                 String key;
                 try {
                     x.setAccessible(true);
