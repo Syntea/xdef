@@ -213,7 +213,7 @@ public class TestYaml extends XDTester {
 "    </xd:def>\n" +
 "</xd:collection>");
             genXComponent(xp);
-            yaml = // YAML format
+            yaml =
 "SynPLscript:\n" +
 "  Name: SD-Test_Scenario\n" +
 "  SubjectRoleCode: SD\n" +
@@ -299,19 +299,20 @@ public class TestYaml extends XDTester {
 "  EndStatuses:\n" +
 "    - EndStatus: Closed\n" +
 "      ChangeLog: \"Y\"";
-            json = XonUtils.toJsonString(XonUtils.parseYAML(yaml), true); //convert parsed data to JSON format
             //test YAML
             o = xp.createXDDocument("SynPLscript").yparse(yaml, reporter);
             assertNoErrorsAndClear(reporter);
             assertEq(new SDatetime("2026-06-01"),((Map)((Map)o).get("SynPLscript")).get("Version"));
             xc = xp.createXDDocument("SynPLscript").yparseXComponent(yaml, null, reporter);
+            assertNoErrorsAndClear(reporter);
             assertEq(new SDatetime("2026-06-01"),
                 XComponentUtil.getx(XComponentUtil.getx(xc, "get$SynPLscript"), "get$Version"));
             assertTrue(XonUtils.xonEqual(o, x = xc.toXon()), XonUtils.xonDiff(o, x));
             //test JSON
+            json = XonUtils.toJsonString(XonUtils.parseYAML(yaml), true); //create JSON data from the parsed YAML data
             x = xp.createXDDocument("SynPLscript").jparse(json, reporter);
-            assertTrue(XonUtils.xonEqual(o, x), XonUtils.xonDiff(o, x));
             assertNoErrorsAndClear(reporter);
+            assertTrue(XonUtils.xonEqual(o, x), XonUtils.xonDiff(o, x)); // check it is same as parsed yaml object
             xc = xp.createXDDocument("SynPLscript").jparseXComponent(json, null, reporter);
             assertNoErrorsAndClear(reporter);
             assertEq(new SDatetime("2026-06-01"),
