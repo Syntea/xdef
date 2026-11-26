@@ -1,3 +1,5 @@
+# Version ${version}, release-date ${release.date}
+
 # Version 42.2.49, release-date 2026-11-26
  * Fixed bug in parsing YAML data
  * Fixed bug the internal conversion of JString format in X-component.
