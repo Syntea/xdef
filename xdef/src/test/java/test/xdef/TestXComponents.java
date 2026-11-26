@@ -116,8 +116,8 @@ public final class TestXComponents extends XDTester {
             assertEq("", chkCompoinentSerializable(xc));
             assertEq(xml, xc.toXml());
             assertEq("1", XComponentUtil.get((XComponent) XComponentUtil.get(xc, "B"),"b"));
-            assertEq("2", XComponentUtil.get((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(
-                xc, "C"),"B"), "b"));
+            assertEq("2",
+                XComponentUtil.get((XComponent) XComponentUtil.get((XComponent) XComponentUtil.get(xc, "C"),"B"), "b"));
             xdef = // GPSPosition, Price
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "  <xd:declaration\n>\n"+

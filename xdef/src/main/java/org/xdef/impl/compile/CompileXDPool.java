@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XON_NS_PREFIX;
 import org.xdef.XDContainer;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
@@ -317,7 +318,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
                 StringTokenizer st = new StringTokenizer(result.substring(ndx+7), "\t\n\r ,");
                 SBuffer sbf = new SBuffer(result.substring(6, ndx), spos);
                 while(st.hasMoreTokens()) {
-                    if (_codeGenerator._binds.put(st.nextToken(),sbf) != null) {
+                    String s = st.nextToken();
+                    if (s.contains("/" + XON_NS_PREFIX + ':')) {
+                        //The %bind command must not contain a reference to an internal part of a JSON object: &{0}
+                        _scriptCompiler.error(spos, XDEF.XDEF365, sbf.getString());
+                    }
+                    if (_codeGenerator._binds.put(s,sbf) != null) {
                         _scriptCompiler.error(spos, XDEF.XDEF355, sbf.getString());//Duplicity of reference &{0}
                     }
                 }
