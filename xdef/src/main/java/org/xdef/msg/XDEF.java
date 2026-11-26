@@ -232,7 +232,7 @@ public interface XDEF {
     public static final long XDEF363 = 31159025776L;
     /** Script section&amp;{0}{ '}{'} is not allowed here&amp;{#SYS000} */
     public static final long XDEF364 = 31159025777L;
-    /** The %bind command must not contain a reference to an internal part of a JSON object&amp;{#SYS000} */
+    /** The %bind command contains a reference to an internal part of a JSON object&amp;{#SYS000} */
     public static final long XDEF365 = 31159025778L;
     /** Argument &amp;{0} must be a directory */
     public static final long XDEF368 = 31159025779L;
